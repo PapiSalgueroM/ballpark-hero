@@ -1,0 +1,2434 @@
+{
+ "base": "http://localhost:4173",
+ "cases": [
+  {
+   "id": "vet-320",
+   "scen": "vet",
+   "w": 320,
+   "h": 568,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "first paint",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "stack",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "audit farewell-card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "audit agent-card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "agent dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "agent switch",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "international retire shows the comeback card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "return dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "return confirm",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell announce",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "reload keeps the three choices",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "saved farewell help is read only",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell season played to retirement",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [
+    "vet-320-top.jpg",
+    "vet-320-full.jpg",
+    "vet-320-agent-help.jpg",
+    "vet-320-agent-choices.jpg",
+    "vet-320-agent-choices-picked.jpg",
+    "vet-320-agent-review.jpg",
+    "vet-320-agent-saved.jpg",
+    "vet-320-intl-before-retire.jpg",
+    "vet-320-intl-panel.jpg",
+    "vet-320-return-card.jpg",
+    "vet-320-return-help.jpg",
+    "vet-320-return-review.jpg",
+    "vet-320-return-saved.jpg",
+    "vet-320-return-after-second-retire.jpg",
+    "vet-320-farewell-help.jpg",
+    "vet-320-farewell-review.jpg",
+    "vet-320-farewell-announced-top.jpg",
+    "vet-320-after-reload-top.jpg",
+    "vet-320-after-reload-full.jpg",
+    "vet-320-farewell-saved-help.jpg",
+    "vet-320-fw-0-newspaper.jpg",
+    "vet-320-fw-1-season_summary.jpg",
+    "vet-320-fw-2-ballon_dor.jpg",
+    "vet-320-fw-3-ballon_dor.jpg",
+    "vet-320-fw-4-rivalry_event.jpg",
+    "vet-320-fw-end-top.jpg"
+   ],
+   "m": {
+    "utilities-playing": [
+     {
+      "label": "Open the training ground",
+      "text": "🏋️TrainingDrill ready",
+      "util": "training",
+      "x": 12,
+      "y": 149,
+      "w": 144,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": "Open your phone",
+      "text": "📱Phone3 unread",
+      "util": "phone",
+      "x": 164,
+      "y": 149,
+      "w": 144,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": null,
+      "text": "Open your phoneBank, market, e",
+      "util": null,
+      "x": 29,
+      "y": 1771,
+      "w": 262,
+      "h": 53,
+      "pos": "static"
+     }
+    ],
+    "stack": {
+     "vh": 568,
+     "total": 15544,
+     "without": 15244,
+     "screens": 27.37,
+     "cards": {
+      "[data-farewell-plan]": {
+       "y": 384,
+       "h": 138,
+       "w": 296
+      },
+      "[data-agent-review-status]": {
+       "y": 1331,
+       "h": 138,
+       "w": 262
+      },
+      "[data-international-return-status]": null
+     },
+     "buttons": [
+      {
+       "t": "Next Season",
+       "w": 155,
+       "h": 48
+      },
+      {
+       "t": "Retire",
+       "w": 68,
+       "h": 48
+      },
+      {
+       "t": "Week by week: live the season ",
+       "w": 44,
+       "h": 48
+      }
+     ],
+     "bar": {
+      "mode": "floating",
+      "pos": "fixed",
+      "top": 484,
+      "bottom": 568
+     },
+     "next": {
+      "top": 502,
+      "bottom": 550,
+      "inView": true
+     }
+    },
+    "farewell-card": {
+     "rect": {
+      "x": 12,
+      "y": 384,
+      "w": 296,
+      "h": 138
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "farewell-card-text": "One last season?\n\nChoose your final year before hanging up your boots.\n\nPlan a farewell season",
+    "agent-card": {
+     "rect": {
+      "x": 29,
+      "y": 1331,
+      "w": 262,
+      "h": 138
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": false,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agent-card-text": "Your representation\n\n🧢 Cousin Ricky. Compare terms before your next deal.\n\nReview your agent",
+    "agentTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 1150,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 1150,
+       "y1": 1150,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 1150,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 1150,
+       "y1": 1150,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 1150,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 1150,
+       "y1": 1150,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 16,
+       "y": 16,
+       "w": 288,
+       "h": 536
+      },
+      "vw": 320,
+      "vh": 568,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [
+       {
+        "cls": "min-h-0 flex-1 space-y-3 overflow-y-auto text-xs l",
+        "sh": 419,
+        "ch": 358
+       }
+      ],
+      "docOverflowX": false
+     }
+    },
+    "agentChoices": {
+     "rect": {
+      "x": 16,
+      "y": 16,
+      "w": 288,
+      "h": 536
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [
+      {
+       "cls": "min-h-0 flex-1 space-y-3 overflow-y-auto text-xs l",
+       "sh": 809,
+       "ch": 358
+      }
+     ],
+     "docOverflowX": false
+    },
+    "agentChoicesText": "Review your representation\n\nCurrent: Cousin Ricky. Your current deal stays the same.\n\nThese are the terms used by the game for future deals and fees.\n\n🧢 Cousin Ricky (current)\n\nOffer wage factor\n0.95x\nIncome commission\n0%\nTransfer commission\n3%\n\n🦈 Marco De Luca\n\nOffer wage factor\n1.10x\nIncome commission\n5%\nTransfer commission\n8%\nChoose Marco De Luca\n\n👑 Zara Blackwood\n\nOffer wage factor\n1.25x\nIncome commission\n10%\nTransfer commission\n12%\nChoose Zara Blackwood\n\n🤝 No Agent\n\nOffer wage factor\n1.00x\nIncome commission\n0%\nTransfer commission\n0%\nChoose No Agent\nBack\n?\nReview switch\nClose",
+    "agentReview": {
+     "rect": {
+      "x": 16,
+      "y": 63,
+      "w": 288,
+      "h": 443
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agentSavedText": "Your representation\n\n🦈 Marco De Luca. Your representation choice is saved for this season.\n\nAgent review help",
+    "retireButton": {
+     "w": 262,
+     "h": 32
+    },
+    "intlPanelAudit": {
+     "text": " INTERNATIONAL CAREER ⭐ LEGEND ©️ Captain 126 Caps 77 Goals 19 Assists 🌍 4 World Cups, won 0 🏆 3 continental, won 2 🗂️ Tournaments 7 played out 🏆 World Cup 2034 England won it Retire from International Football 🚶",
+     "small": [
+      {
+       "t": "©️ Captain",
+       "size": 10
+      },
+      {
+       "t": "Caps",
+       "size": 9
+      },
+      {
+       "t": "Goals",
+       "size": 9
+      },
+      {
+       "t": "Assists",
+       "size": 9
+      },
+      {
+       "t": "Tournaments",
+       "size": 11
+      },
+      {
+       "t": "7 played out",
+       "size": 9
+      },
+      {
+       "t": "World Cup 2034",
+       "size": 11
+      },
+      {
+       "t": "England won it",
+       "size": 9
+      }
+     ],
+     "w": 296,
+     "h": 306
+    },
+    "returnCard": {
+     "rect": {
+      "x": 29,
+      "y": 215,
+      "w": 262,
+      "h": 138
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "returnCardText": "Your country again?\n\nMake yourself available again and earn your next squad place.\n\nNational-team comeback",
+    "returnTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 3315,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 3315,
+       "y1": 3315,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 3315,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 3315,
+       "y1": 3315,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 3315,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 3315,
+       "y1": 3315,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 16,
+       "y": 23,
+       "w": 288,
+       "h": 523
+      },
+      "vw": 320,
+      "vh": 568,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "returnReview": {
+     "rect": {
+      "x": 16,
+      "y": 123,
+      "w": 288,
+      "h": 323
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "returnSavedText": "Available for national-team selection\n\nYour choice is saved. Squad selection still decides who plays.\n\nInternational comeback help",
+    "returnAfterSecondRetire": "International plans already changed this season\n\nYour choice is saved. You are out of national-team selection again, and one comeback a season is the limit.\n\nInternational comeback help",
+    "farewellTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 203,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 203,
+       "y1": 203,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 203,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 203,
+       "y1": 203,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 203,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 203,
+       "y1": 203,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 16,
+       "y": 16,
+       "w": 288,
+       "h": 536
+      },
+      "vw": 320,
+      "vh": 568,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "farewellReview": {
+     "rect": {
+      "x": 16,
+      "y": 135,
+      "w": 288,
+      "h": 299
+     },
+     "vw": 320,
+     "vh": 568,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "farewellReviewText": "Announce your last season\n\n2036/37 is the proposed final year.\n\nLast season: 2036/37\n\nConfirming saves your announcement. You still choose when to play the year.\n\nYou can still retire immediately using Retire. You cannot extend this farewell into another playing year.\n\nBack\n?\nAnnounce last season\nClose",
+    "farewellAnnouncedText": "Your final season: 2036/37\n\nYour announcement is saved. Results and queued ceremonies come before retirement.\n\nFarewell season help",
+    "farewellCards": 1,
+    "afterReload": {
+     "farewell": [
+      "announced | Your final season: 2036/37 Your announcement is saved. Results and queued ceremonies come before retirement. Farewell se"
+     ],
+     "agent": [
+      "saved | Your representation 🦈 Marco De Luca. Your representation choice is saved for this season. Agent review help"
+     ],
+     "ret": [
+      "saved | International plans already changed this season Your choice is saved. You are out of national-team selection again, and "
+     ]
+    },
+    "utilities-after-reload": [
+     {
+      "label": "Open the training ground",
+      "text": "🏋️TrainingDrill ready",
+      "util": "training",
+      "x": 12,
+      "y": 149,
+      "w": 144,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": "Open your phone",
+      "text": "📱Phone3 unread",
+      "util": "phone",
+      "x": 164,
+      "y": 149,
+      "w": 144,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": null,
+      "text": "Open your phoneBank, market, e",
+      "util": null,
+      "x": 29,
+      "y": 1771,
+      "w": 262,
+      "h": 53,
+      "pos": "static"
+     }
+    ],
+    "farewellSavedConfirm": 0,
+    "farewellTrail": [
+     {
+      "i": 0,
+      "phase": "newspaper",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 1040,
+       "bottom": 1084,
+       "left": 12,
+       "right": 308,
+       "h": 44,
+       "label": "Continue to Season Summary →"
+      },
+      "vh": 568,
+      "total": 14811,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 156,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 164,
+        "right": 308,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 1,
+      "phase": "season_summary",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 932,
+       "bottom": 976,
+       "left": 34,
+       "right": 286,
+       "h": 44,
+       "label": "Continue →"
+      },
+      "vh": 568,
+      "total": 14765,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 156,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 164,
+        "right": 308,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 2,
+      "phase": "ballon_dor",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": null,
+      "vh": 568,
+      "total": 15206,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 156,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 164,
+        "right": 308,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 2,
+      "speech": "🐐 Declare yourself the greatest to ever do it"
+     },
+     {
+      "i": 3,
+      "phase": "ballon_dor",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 1319,
+       "bottom": 1359,
+       "left": 34,
+       "right": 286,
+       "h": 40,
+       "label": "Continue →"
+      },
+      "vh": 568,
+      "total": 15140,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 156,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 164,
+        "right": 308,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 4,
+      "phase": "rivalry_event",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 926,
+       "bottom": 966,
+       "left": 34,
+       "right": 286,
+       "h": 40,
+       "label": "Continue →"
+      },
+      "vh": 568,
+      "total": 14748,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 156,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 164,
+        "right": 308,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     }
+    ],
+    "endCounts": {
+     "farewell": 0,
+     "utilities": [
+      "phone"
+     ],
+     "next": 0
+    }
+   }
+  },
+  {
+   "id": "vet-390",
+   "scen": "vet",
+   "w": 390,
+   "h": 844,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "first paint",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "stack",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "audit farewell-card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "audit agent-card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "agent dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "agent switch",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "international retire shows the comeback card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "return dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "return confirm",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell announce",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "reload keeps the three choices",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "saved farewell help is read only",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell season played to retirement",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [
+    "vet-390-top.jpg",
+    "vet-390-full.jpg",
+    "vet-390-agent-help.jpg",
+    "vet-390-agent-choices.jpg",
+    "vet-390-agent-choices-picked.jpg",
+    "vet-390-agent-review.jpg",
+    "vet-390-agent-saved.jpg",
+    "vet-390-intl-before-retire.jpg",
+    "vet-390-intl-panel.jpg",
+    "vet-390-return-card.jpg",
+    "vet-390-return-help.jpg",
+    "vet-390-return-review.jpg",
+    "vet-390-return-saved.jpg",
+    "vet-390-return-after-second-retire.jpg",
+    "vet-390-farewell-help.jpg",
+    "vet-390-farewell-review.jpg",
+    "vet-390-farewell-announced-top.jpg",
+    "vet-390-after-reload-top.jpg",
+    "vet-390-after-reload-full.jpg",
+    "vet-390-farewell-saved-help.jpg",
+    "vet-390-fw-0-newspaper.jpg",
+    "vet-390-fw-1-season_summary.jpg",
+    "vet-390-fw-2-ballon_dor.jpg",
+    "vet-390-fw-3-ballon_dor.jpg",
+    "vet-390-fw-end-top.jpg"
+   ],
+   "m": {
+    "utilities-playing": [
+     {
+      "label": "Open the training ground",
+      "text": "🏋️TrainingDrill ready",
+      "util": "training",
+      "x": 12,
+      "y": 149,
+      "w": 179,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": "Open your phone",
+      "text": "📱Phone3 unread",
+      "util": "phone",
+      "x": 199,
+      "y": 149,
+      "w": 179,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": null,
+      "text": "Open your phoneBank, market, e",
+      "util": null,
+      "x": 29,
+      "y": 1708,
+      "w": 332,
+      "h": 53,
+      "pos": "static"
+     }
+    ],
+    "stack": {
+     "vh": 844,
+     "total": 13535,
+     "without": 13251,
+     "screens": 16.04,
+     "cards": {
+      "[data-farewell-plan]": {
+       "y": 384,
+       "h": 122,
+       "w": 366
+      },
+      "[data-agent-review-status]": {
+       "y": 1268,
+       "h": 138,
+       "w": 332
+      },
+      "[data-international-return-status]": null
+     },
+     "buttons": [
+      {
+       "t": "Next Season",
+       "w": 172,
+       "h": 48
+      },
+      {
+       "t": "Retire",
+       "w": 68,
+       "h": 48
+      },
+      {
+       "t": "Week by week: live the season ",
+       "w": 44,
+       "h": 48
+      }
+     ],
+     "bar": {
+      "mode": "floating",
+      "pos": "fixed",
+      "top": 760,
+      "bottom": 844
+     },
+     "next": {
+      "top": 778,
+      "bottom": 826,
+      "inView": true
+     }
+    },
+    "farewell-card": {
+     "rect": {
+      "x": 12,
+      "y": 384,
+      "w": 366,
+      "h": 122
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "farewell-card-text": "One last season?\n\nChoose your final year before hanging up your boots.\n\nPlan a farewell season",
+    "agent-card": {
+     "rect": {
+      "x": 29,
+      "y": 1268,
+      "w": 332,
+      "h": 138
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": false,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agent-card-text": "Your representation\n\n🧢 Cousin Ricky. Compare terms before your next deal.\n\nReview your agent",
+    "agentTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 949,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 949,
+       "y1": 949,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 949,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 949,
+       "y1": 949,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 949,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 949,
+       "y1": 949,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 16,
+       "y": 163,
+       "w": 358,
+       "h": 519
+      },
+      "vw": 390,
+      "vh": 844,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "agentChoices": {
+     "rect": {
+      "x": 16,
+      "y": 16,
+      "w": 358,
+      "h": 812
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [
+      {
+       "cls": "min-h-0 flex-1 space-y-3 overflow-y-auto text-xs l",
+       "sh": 681,
+       "ch": 634
+      }
+     ],
+     "docOverflowX": false
+    },
+    "agentChoicesText": "Review your representation\n\nCurrent: Cousin Ricky. Your current deal stays the same.\n\nThese are the terms used by the game for future deals and fees.\n\n🧢 Cousin Ricky (current)\n\nOffer wage factor\n0.95x\nIncome commission\n0%\nTransfer commission\n3%\n\n🦈 Marco De Luca\n\nOffer wage factor\n1.10x\nIncome commission\n5%\nTransfer commission\n8%\nChoose Marco De Luca\n\n👑 Zara Blackwood\n\nOffer wage factor\n1.25x\nIncome commission\n10%\nTransfer commission\n12%\nChoose Zara Blackwood\n\n🤝 No Agent\n\nOffer wage factor\n1.00x\nIncome commission\n0%\nTransfer commission\n0%\nChoose No Agent\nBack\n?\nReview switch\nClose",
+    "agentReview": {
+     "rect": {
+      "x": 16,
+      "y": 210,
+      "w": 358,
+      "h": 424
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agentSavedText": "Your representation\n\n🦈 Marco De Luca. Your representation choice is saved for this season.\n\nAgent review help",
+    "retireButton": {
+     "w": 332,
+     "h": 32
+    },
+    "intlPanelAudit": {
+     "text": " INTERNATIONAL CAREER ⭐ LEGEND ©️ Captain 126 Caps 77 Goals 19 Assists 🌍 4 World Cups, won 0 🏆 3 continental, won 2 🗂️ Tournaments 7 played out 🏆 World Cup 2034 England won it Retire from International Football 🚶",
+     "small": [
+      {
+       "t": "©️ Captain",
+       "size": 10
+      },
+      {
+       "t": "Caps",
+       "size": 9
+      },
+      {
+       "t": "Goals",
+       "size": 9
+      },
+      {
+       "t": "Assists",
+       "size": 9
+      },
+      {
+       "t": "Tournaments",
+       "size": 11
+      },
+      {
+       "t": "7 played out",
+       "size": 9
+      },
+      {
+       "t": "World Cup 2034",
+       "size": 11
+      },
+      {
+       "t": "England won it",
+       "size": 9
+      }
+     ],
+     "w": 366,
+     "h": 271
+    },
+    "returnCard": {
+     "rect": {
+      "x": 29,
+      "y": 353,
+      "w": 332,
+      "h": 138
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "returnCardText": "Your country again?\n\nMake yourself available again and earn your next squad place.\n\nNational-team comeback",
+    "returnTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 2988,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 2988,
+       "y1": 2988,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 2988,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 2988,
+       "y1": 2988,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 2988,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 2988,
+       "y1": 2988,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 16,
+       "y": 202,
+       "w": 358,
+       "h": 440
+      },
+      "vw": 390,
+      "vh": 844,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "returnReview": {
+     "rect": {
+      "x": 16,
+      "y": 282,
+      "w": 358,
+      "h": 280
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "returnSavedText": "Available for national-team selection\n\nYour choice is saved. Squad selection still decides who plays.\n\nInternational comeback help",
+    "returnAfterSecondRetire": "International plans already changed this season\n\nYour choice is saved. You are out of national-team selection again, and one comeback a season is the limit.\n\nInternational comeback help",
+    "farewellTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 49,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 49,
+       "y1": 49,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 49,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 49,
+       "y1": 49,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 49,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 49,
+       "y1": 49,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 16,
+       "y": 192,
+       "w": 358,
+       "h": 460
+      },
+      "vw": 390,
+      "vh": 844,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "farewellReview": {
+     "rect": {
+      "x": 16,
+      "y": 282,
+      "w": 358,
+      "h": 280
+     },
+     "vw": 390,
+     "vh": 844,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "farewellReviewText": "Announce your last season\n\n2036/37 is the proposed final year.\n\nLast season: 2036/37\n\nConfirming saves your announcement. You still choose when to play the year.\n\nYou can still retire immediately using Retire. You cannot extend this farewell into another playing year.\n\nBack\n?\nAnnounce last season\nClose",
+    "farewellAnnouncedText": "Your final season: 2036/37\n\nYour announcement is saved. Results and queued ceremonies come before retirement.\n\nFarewell season help",
+    "farewellCards": 1,
+    "afterReload": {
+     "farewell": [
+      "announced | Your final season: 2036/37 Your announcement is saved. Results and queued ceremonies come before retirement. Farewell se"
+     ],
+     "agent": [
+      "saved | Your representation 🦈 Marco De Luca. Your representation choice is saved for this season. Agent review help"
+     ],
+     "ret": [
+      "saved | International plans already changed this season Your choice is saved. You are out of national-team selection again, and "
+     ]
+    },
+    "utilities-after-reload": [
+     {
+      "label": "Open the training ground",
+      "text": "🏋️TrainingDrill ready",
+      "util": "training",
+      "x": 12,
+      "y": 149,
+      "w": 179,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": "Open your phone",
+      "text": "📱Phone3 unread",
+      "util": "phone",
+      "x": 199,
+      "y": 149,
+      "w": 179,
+      "h": 44,
+      "pos": "relative"
+     },
+     {
+      "label": null,
+      "text": "Open your phoneBank, market, e",
+      "util": null,
+      "x": 29,
+      "y": 1724,
+      "w": 332,
+      "h": 53,
+      "pos": "static"
+     }
+    ],
+    "farewellSavedConfirm": 0,
+    "farewellTrail": [
+     {
+      "i": 0,
+      "phase": "newspaper",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 1000,
+       "bottom": 1044,
+       "left": 12,
+       "right": 378,
+       "h": 44,
+       "label": "Continue to Season Summary →"
+      },
+      "vh": 844,
+      "total": 13171,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 191,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 199,
+        "right": 378,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 1,
+      "phase": "season_summary",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 1064,
+       "bottom": 1108,
+       "left": 34,
+       "right": 356,
+       "h": 44,
+       "label": "Continue →"
+      },
+      "vh": 844,
+      "total": 13297,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 191,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 199,
+        "right": 378,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 2,
+      "phase": "ballon_dor",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": null,
+      "vh": 844,
+      "total": 13557,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 191,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 199,
+        "right": 378,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 2,
+      "speech": "🐐 Declare yourself the greatest to ever do it"
+     },
+     {
+      "i": 3,
+      "phase": "ballon_dor",
+      "card": {
+       "top": 384,
+       "h": 138
+      },
+      "cont": {
+       "top": 1303,
+       "bottom": 1343,
+       "left": 34,
+       "right": 356,
+       "h": 40,
+       "label": "Continue →"
+      },
+      "vh": 844,
+      "total": 13507,
+      "u": [
+       {
+        "u": "training",
+        "top": 149,
+        "bottom": 193,
+        "left": 12,
+        "right": 191,
+        "pos": "relative"
+       },
+       {
+        "u": "phone",
+        "top": 149,
+        "bottom": 193,
+        "left": 199,
+        "right": 378,
+        "pos": "relative"
+       }
+      ],
+      "cards": 1
+     }
+    ],
+    "endCounts": {
+     "farewell": 0,
+     "utilities": [
+      "phone"
+     ],
+     "next": 0
+    }
+   }
+  },
+  {
+   "id": "vet-1280",
+   "scen": "vet",
+   "w": 1280,
+   "h": 900,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "first paint",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "stack",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "audit farewell-card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "audit agent-card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "agent dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "agent switch",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "international retire shows the comeback card",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "return dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "return confirm",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell dialog trial",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell announce",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "reload keeps the three choices",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "saved farewell help is read only",
+     "ok": true,
+     "v": null
+    },
+    {
+     "name": "farewell season played to retirement",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [
+    "vet-1280-top.jpg",
+    "vet-1280-full.jpg",
+    "vet-1280-agent-help.jpg",
+    "vet-1280-agent-choices.jpg",
+    "vet-1280-agent-choices-picked.jpg",
+    "vet-1280-agent-review.jpg",
+    "vet-1280-agent-saved.jpg",
+    "vet-1280-intl-before-retire.jpg",
+    "vet-1280-intl-panel.jpg",
+    "vet-1280-return-card.jpg",
+    "vet-1280-return-help.jpg",
+    "vet-1280-return-review.jpg",
+    "vet-1280-return-saved.jpg",
+    "vet-1280-return-after-second-retire.jpg",
+    "vet-1280-farewell-help.jpg",
+    "vet-1280-farewell-review.jpg",
+    "vet-1280-farewell-announced-top.jpg",
+    "vet-1280-after-reload-top.jpg",
+    "vet-1280-after-reload-full.jpg",
+    "vet-1280-farewell-saved-help.jpg",
+    "vet-1280-fw-0-newspaper.jpg",
+    "vet-1280-fw-1-season_summary.jpg",
+    "vet-1280-fw-2-ballon_dor.jpg",
+    "vet-1280-fw-3-rivalry_event.jpg",
+    "vet-1280-fw-end-top.jpg"
+   ],
+   "m": {
+    "utilities-playing": [
+     {
+      "label": "Open the training ground",
+      "text": "🏋️TrainingDrill ready",
+      "util": "training",
+      "x": 1208,
+      "y": 756,
+      "w": 56,
+      "h": 56,
+      "pos": "fixed"
+     },
+     {
+      "label": "Open your phone",
+      "text": "📱Phone3 unread",
+      "util": "phone",
+      "x": 1208,
+      "y": 824,
+      "w": 56,
+      "h": 56,
+      "pos": "fixed"
+     },
+     {
+      "label": null,
+      "text": "Open your phoneBank, market, e",
+      "util": null,
+      "x": 433,
+      "y": 1457,
+      "w": 686,
+      "h": 53,
+      "pos": "static"
+     }
+    ],
+    "stack": {
+     "vh": 900,
+     "total": 9693,
+     "without": 9425,
+     "screens": 10.77,
+     "cards": {
+      "[data-farewell-plan]": {
+       "y": 248,
+       "h": 122,
+       "w": 992
+      },
+      "[data-agent-review-status]": {
+       "y": 1062,
+       "h": 122,
+       "w": 686
+      },
+      "[data-international-return-status]": null
+     },
+     "buttons": [
+      {
+       "t": "Next Season",
+       "w": 661,
+       "h": 48
+      },
+      {
+       "t": "Retire",
+       "w": 68,
+       "h": 48
+      },
+      {
+       "t": "Week by week: live the season ",
+       "w": 181,
+       "h": 48
+      }
+     ],
+     "bar": {
+      "mode": "floating",
+      "pos": "fixed",
+      "top": 816,
+      "bottom": 900
+     },
+     "next": {
+      "top": 834,
+      "bottom": 882,
+      "inView": true
+     }
+    },
+    "farewell-card": {
+     "rect": {
+      "x": 144,
+      "y": 248,
+      "w": 992,
+      "h": 122
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "farewell-card-text": "One last season?\n\nChoose your final year before hanging up your boots.\n\nPlan a farewell season",
+    "agent-card": {
+     "rect": {
+      "x": 433,
+      "y": 1062,
+      "w": 686,
+      "h": 122
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": false,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agent-card-text": "Your representation\n\n🧢 Cousin Ricky. Compare terms before your next deal.\n\nReview your agent",
+    "agentTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 699,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 699,
+       "y1": 699,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 699,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 699,
+       "y1": 699,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 699,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 699,
+       "y1": 699,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 416,
+       "y": 220,
+       "w": 448,
+       "h": 460
+      },
+      "vw": 1280,
+      "vh": 900,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "agentChoices": {
+     "rect": {
+      "x": 416,
+      "y": 40,
+      "w": 448,
+      "h": 820
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agentChoicesText": "Review your representation\n\nCurrent: Cousin Ricky. Your current deal stays the same.\n\nThese are the terms used by the game for future deals and fees.\n\n🧢 Cousin Ricky (current)\n\nOffer wage factor\n0.95x\nIncome commission\n0%\nTransfer commission\n3%\n\n🦈 Marco De Luca\n\nOffer wage factor\n1.10x\nIncome commission\n5%\nTransfer commission\n8%\nChoose Marco De Luca\n\n👑 Zara Blackwood\n\nOffer wage factor\n1.25x\nIncome commission\n10%\nTransfer commission\n12%\nChoose Zara Blackwood\n\n🤝 No Agent\n\nOffer wage factor\n1.00x\nIncome commission\n0%\nTransfer commission\n0%\nChoose No Agent\nBack\n?\nReview switch\nClose",
+    "agentReview": {
+     "rect": {
+      "x": 416,
+      "y": 258,
+      "w": 448,
+      "h": 384
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "agentSavedText": "Your representation\n\n🦈 Marco De Luca. Your representation choice is saved for this season.\n\nAgent review help",
+    "retireButton": {
+     "w": 686,
+     "h": 32
+    },
+    "intlPanelAudit": {
+     "text": " INTERNATIONAL CAREER ⭐ LEGEND ©️ Captain 126 Caps 77 Goals 19 Assists 🌍 4 World Cups, won 0 🏆 3 continental, won 2 🗂️ Tournaments 7 played out 🏆 World Cup 2034 England won it Retire from International Football 🚶",
+     "small": [
+      {
+       "t": "©️ Captain",
+       "size": 10
+      },
+      {
+       "t": "Caps",
+       "size": 9
+      },
+      {
+       "t": "Goals",
+       "size": 9
+      },
+      {
+       "t": "Assists",
+       "size": 9
+      },
+      {
+       "t": "Tournaments",
+       "size": 11
+      },
+      {
+       "t": "7 played out",
+       "size": 9
+      },
+      {
+       "t": "World Cup 2034",
+       "size": 11
+      },
+      {
+       "t": "England won it",
+       "size": 9
+      }
+     ],
+     "w": 720,
+     "h": 271
+    },
+    "returnCard": {
+     "rect": {
+      "x": 433,
+      "y": 389,
+      "w": 686,
+      "h": 122
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "returnCardText": "Your country again?\n\nMake yourself available again and earn your next squad place.\n\nNational-team comeback",
+    "returnTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 2447,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 2447,
+       "y1": 2447,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 2447,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 2447,
+       "y1": 2447,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 2447,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 2447,
+       "y1": 2447,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 416,
+       "y": 250,
+       "w": 448,
+       "h": 401
+      },
+      "vw": 1280,
+      "vh": 900,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "returnReview": {
+     "rect": {
+      "x": 416,
+      "y": 310,
+      "w": 448,
+      "h": 280
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "returnSavedText": "Available for national-team selection\n\nYour choice is saved. Squad selection still decides who plays.\n\nInternational comeback help",
+    "returnAfterSecondRetire": "International plans already changed this season\n\nYour choice is saved. You are out of national-team selection again, and one comeback a season is the limit.\n\nInternational comeback help",
+    "farewellTrial": {
+     "closes": [
+      {
+       "how": "escape",
+       "y": 0,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 0,
+       "y1": 0,
+       "focusIn": true
+      },
+      {
+       "how": "back",
+       "y": 0,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 0,
+       "y1": 0,
+       "focusIn": true
+      },
+      {
+       "how": "x",
+       "y": 0,
+       "focus": true,
+       "body": {
+        "overflow": "visible",
+        "pe": "auto"
+       },
+       "y0": 0,
+       "y1": 0,
+       "focusIn": true
+      }
+     ],
+     "audit": {
+      "rect": {
+       "x": 416,
+       "y": 250,
+       "w": 448,
+       "h": 401
+      },
+      "vw": 1280,
+      "vh": 900,
+      "inside": true,
+      "small": [],
+      "tiny": [],
+      "off": [],
+      "scrollers": [],
+      "docOverflowX": false
+     }
+    },
+    "farewellReview": {
+     "rect": {
+      "x": 416,
+      "y": 310,
+      "w": 448,
+      "h": 280
+     },
+     "vw": 1280,
+     "vh": 900,
+     "inside": true,
+     "small": [],
+     "tiny": [],
+     "off": [],
+     "scrollers": [],
+     "docOverflowX": false
+    },
+    "farewellReviewText": "Announce your last season\n\n2036/37 is the proposed final year.\n\nLast season: 2036/37\n\nConfirming saves your announcement. You still choose when to play the year.\n\nYou can still retire immediately using Retire. You cannot extend this farewell into another playing year.\n\nBack\n?\nAnnounce last season\nClose",
+    "farewellAnnouncedText": "Your final season: 2036/37\n\nYour announcement is saved. Results and queued ceremonies come before retirement.\n\nFarewell season help",
+    "farewellCards": 1,
+    "afterReload": {
+     "farewell": [
+      "announced | Your final season: 2036/37 Your announcement is saved. Results and queued ceremonies come before retirement. Farewell se"
+     ],
+     "agent": [
+      "saved | Your representation 🦈 Marco De Luca. Your representation choice is saved for this season. Agent review help"
+     ],
+     "ret": [
+      "saved | International plans already changed this season Your choice is saved. You are out of national-team selection again, and "
+     ]
+    },
+    "utilities-after-reload": [
+     {
+      "label": "Open the training ground",
+      "text": "🏋️TrainingDrill ready",
+      "util": "training",
+      "x": 1208,
+      "y": 756,
+      "w": 56,
+      "h": 56,
+      "pos": "fixed"
+     },
+     {
+      "label": "Open your phone",
+      "text": "📱Phone3 unread",
+      "util": "phone",
+      "x": 1208,
+      "y": 824,
+      "w": 56,
+      "h": 56,
+      "pos": "fixed"
+     },
+     {
+      "label": null,
+      "text": "Open your phoneBank, market, e",
+      "util": null,
+      "x": 433,
+      "y": 1457,
+      "w": 686,
+      "h": 53,
+      "pos": "static"
+     }
+    ],
+    "farewellSavedConfirm": 0,
+    "farewellTrail": [
+     {
+      "i": 0,
+      "phase": "newspaper",
+      "card": {
+       "top": 248,
+       "h": 122
+      },
+      "cont": {
+       "top": 795,
+       "bottom": 839,
+       "left": 416,
+       "right": 1136,
+       "h": 44,
+       "label": "Continue to Season Summary →"
+      },
+      "vh": 900,
+      "total": 9540,
+      "u": [
+       {
+        "u": "training",
+        "top": 756,
+        "bottom": 812,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       },
+       {
+        "u": "phone",
+        "top": 824,
+        "bottom": 880,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 1,
+      "phase": "season_summary",
+      "card": {
+       "top": 248,
+       "h": 122
+      },
+      "cont": {
+       "top": 702,
+       "bottom": 746,
+       "left": 438,
+       "right": 1114,
+       "h": 44,
+       "label": "Continue →"
+      },
+      "vh": 900,
+      "total": 9510,
+      "u": [
+       {
+        "u": "training",
+        "top": 756,
+        "bottom": 812,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       },
+       {
+        "u": "phone",
+        "top": 824,
+        "bottom": 880,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 2,
+      "phase": "ballon_dor",
+      "card": {
+       "top": 248,
+       "h": 122
+      },
+      "cont": {
+       "top": 1034,
+       "bottom": 1074,
+       "left": 438,
+       "right": 1114,
+       "h": 40,
+       "label": "Continue →"
+      },
+      "vh": 900,
+      "total": 9797,
+      "u": [
+       {
+        "u": "training",
+        "top": 756,
+        "bottom": 812,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       },
+       {
+        "u": "phone",
+        "top": 824,
+        "bottom": 880,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       }
+      ],
+      "cards": 1
+     },
+     {
+      "i": 3,
+      "phase": "rivalry_event",
+      "card": {
+       "top": 248,
+       "h": 122
+      },
+      "cont": {
+       "top": 708,
+       "bottom": 748,
+       "left": 438,
+       "right": 1114,
+       "h": 40,
+       "label": "Continue →"
+      },
+      "vh": 900,
+      "total": 9472,
+      "u": [
+       {
+        "u": "training",
+        "top": 756,
+        "bottom": 812,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       },
+       {
+        "u": "phone",
+        "top": 824,
+        "bottom": 880,
+        "left": 1208,
+        "right": 1264,
+        "pos": "fixed"
+       }
+      ],
+      "cards": 1
+     }
+    ],
+    "endCounts": {
+     "farewell": 0,
+     "utilities": [
+      "phone"
+     ],
+     "next": 0
+    }
+   }
+  }
+ ]
+}

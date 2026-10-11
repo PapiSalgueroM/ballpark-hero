@@ -1,0 +1,18 @@
+tourn-320 steps 1 fails 0 pageerrors 0 shots 2
+suggest-320 steps 2 fails 0 pageerrors 0 shots 5
+oldsuggest-320 steps 2 fails 0 pageerrors 0 shots 5
+promise-320 steps 1 fails 0 pageerrors 0 shots 3
+tourn-390 steps 1 fails 0 pageerrors 0 shots 2
+suggest-390 steps 2 fails 0 pageerrors 0 shots 5
+oldsuggest-390 steps 2 fails 0 pageerrors 0 shots 5
+promise-390 steps 1 fails 0 pageerrors 0 shots 3
+pulse-390 steps 1 fails 1 pageerrors 0 shots 1
+pulse-390-rm steps 1 fails 2 pageerrors 0 shots 1
+tourn-1280 steps 1 fails 0 pageerrors 0 shots 2
+suggest-1280 steps 2 fails 0 pageerrors 0 shots 5
+oldsuggest-1280 steps 2 fails 0 pageerrors 0 shots 5
+promise-1280 steps 1 fails 0 pageerrors 0 shots 3
+MISS pulse-390 EXPECT the FINAL SEASON banner shows after announcing
+MISS pulse-390-rm EXPECT the FINAL SEASON banner shows after announcing
+MISS pulse-390-rm EXPECT reduced motion: the FINAL SEASON banner does not pulse :: null
+walk done: 14 cases, 3 misses, 0 page errors

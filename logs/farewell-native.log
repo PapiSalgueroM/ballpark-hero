@@ -1,0 +1,81 @@
+PASS 390-normal 77 checks
+PASS 390-suggestion 70 checks
+PASS 390-ban 67 checks
+PASS 390-prison 67 checks
+PASS 390-rehab 72 checks
+PASS 390-ceremonies 82 checks
+FAIL 1280-normal locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-farewell-dialog]') to be hidden
+    64 × locator resolved to visible <div role="dialog" tabindex="-1" id="radix-:r6:" data-state="open" data-farewell-dialog="true" aria-labelledby="radix-:r7:" aria-describedby="radix-:r8:" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-…>…</div>
+
+    at closeFarewell (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:52:23)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:96:297
+PASS 1280-suggestion 70 checks
+FAIL 1280-ban locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-farewell-dialog]') to be hidden
+    64 × locator resolved to visible <div role="dialog" tabindex="-1" id="radix-:r6:" data-state="open" data-farewell-dialog="true" aria-labelledby="radix-:r7:" aria-describedby="radix-:r8:" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-…>…</div>
+
+    at closeFarewell (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:52:23)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:96:297
+FAIL 1280-prison locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-farewell-dialog]') to be hidden
+    64 × locator resolved to visible <div role="dialog" tabindex="-1" id="radix-:r6:" data-state="open" data-farewell-dialog="true" aria-labelledby="radix-:r7:" aria-describedby="radix-:r8:" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-…>…</div>
+
+    at closeFarewell (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:52:23)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:96:297
+FAIL 1280-rehab locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-farewell-dialog]') to be hidden
+    64 × locator resolved to visible <div role="dialog" tabindex="-1" id="radix-:r6:" data-state="open" data-farewell-dialog="true" aria-labelledby="radix-:r7:" aria-describedby="radix-:r8:" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-…>…</div>
+
+    at closeFarewell (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:52:23)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:96:297
+FAIL 1280-ceremonies locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-farewell-dialog]') to be hidden
+    64 × locator resolved to visible <div role="dialog" tabindex="-1" id="radix-:r6:" data-state="open" data-farewell-dialog="true" aria-labelledby="radix-:r7:" aria-describedby="radix-:r8:" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-…>…</div>
+
+    at closeFarewell (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:52:23)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:96:297
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+5 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:133:117 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 5,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+5 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerFarewell.mjs:27:44
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 5,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
