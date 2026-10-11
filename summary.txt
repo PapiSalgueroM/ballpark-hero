@@ -1,0 +1,12 @@
+vitest-us exit=0 76s |    Duration  76.03s (transform 5.67s, setup 911ms, collect 14.03s, tests 95.35s, environment 6.30s, prepare 1.66s)
+innings-probe exit=0 1s | biggest inning of a team game, share by runs: 0: 5.1%, 1: 26.1%, 2: 30.0%, 3: 20.3%, 4: 10.1%, 5: 4.7%, 6: 2.1%, 7: 0.9%, 8: 0.4%, 9: 0.3%
+simUsSeasonLedger exit=0 5s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+tsc exit=0 93s | 
+ctl-mlbinnings exit=1 16s | simUsSeasonCentre: 58 checks, 2 failed (control mlbinnings)
+ctl-mlbcap exit=1 21s | simUsSeasonCentre: 58 checks, 1 failed (control mlbcap)
+ctl-ledger-mlbinnings exit=1 4s | simUsSeasonLedger: CONTROL mlbinnings FIRED, red at exactly M11
+ctl-mlbold exit=1 19s | simUsSeasonCentre: 58 checks, 1 failed (control mlbold)
+ctl-ledger-inningsleague exit=1 7s | simUsSeasonLedger: CONTROL inningsleague FIRED, red at exactly R2
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simUsSeasonCentre exit=0 135s | simUsSeasonCentre: 158 checks, 0 failed
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
