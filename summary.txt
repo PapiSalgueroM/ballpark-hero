@@ -1,0 +1,7 @@
+parity-oldfixture-EXPECT1 exit=1 45s | simUsBoardParity: 3 failures
+simUsCareerDeckC exit=1 46s | simUsCareerDeckC: 1 failure(s)
+record exit=0 52s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/usBoardFixture.new.json (2296639 bytes)
+simCareerSeasonTruth exit=0 0s | simCareerSeasonTruth: all green
+digests-sha exit=0 0s | c4b2664b8c3b04d4511e67c13baf6c088c0b43e43c6b5f70d52a713fd8728a7c  scripts/data/usBoardFixture.json
+simUsPostseason exit=0 12s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simUsSeasonCentre exit=0 62s | simUsSeasonCentre: 158 checks, 0 failed

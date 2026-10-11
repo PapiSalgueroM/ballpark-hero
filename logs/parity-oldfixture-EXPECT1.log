@@ -1,0 +1,28 @@
+A) the fixture is whole
+   recorded from a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e (not main: src differs from aa564f16019b9e821981d5c4e3e0262312c73b62)
+   nfl: 459 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 507 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [], failed [nfl, nba, mlb, nhl]
+   nfl click path step 59 (after "hub: Play the 2029 season"): the save differs first in phase, contractTalk; phase extension, fixture season; the markup differs under the same words ("Ryder Blaze · WRNew York Jets2029 · age 25OVR 78$3.1M x1⭐ St")
+   nfl click path step 60 (after "extension: Sign it: 4 more years at $13.3M"): the save differs first in phase, contractTalk
+   nfl click path step 84 (after "hub: Play the 2033 season"): the save differs first in phase, contractTalk; phase extension, fixture season; the markup differs under the same words ("Ryder Blaze · WRNew York Jets2033 · age 29OVR 81$13.3M x1⭐ S")
+   nba click path step 52 (after "hub: Play the 2029 season"): the save differs first in phase, contractTalk; phase extension, fixture season; the markup differs under the same words ("Trey Buckets · SGGolden State Warriors2029 · age 24OVR 80$2.")
+   nba click path step 53 (after "extension: Turn it down and play the year out"): the save differs first in contractTalk
+   nba click path step 100 (after "hub: Play the 2030 season"): the save differs first in phase, contractTalk; phase freeagency, fixture season; the screen reads "Trey Buckets · SGGolden State Warriors2030 · age 25OVR 82$2.5M x0🪑 Second unitCompare offers🖊️ Free agencyYour deal is up. Every franchise", fixture "Trey Buckets · SGGolden State Warriors2030 · age 25OVR 82$2.5M x0🪑 Second unit🖊️ Free 
+   mlb click path step 50 (after "hub: Play the 2031 season"): the save differs first in phase, contractTalk; phase extension, fixture season; the markup differs under the same words ("Ace Diamond · CFCincinnati Reds2031 · age 26OVR 76$0.8M x1⭐ ")
+   mlb click path step 51 (after "extension: Play the year out"): the save differs first in contractTalk
+   mlb click path step 56 (after "hub: Play the 2032 season"): the save differs first in phase, contractTalk; phase freeagency, fixture season; the screen reads "Ace Diamond · CFCincinnati Reds2032 · age 27OVR 78$0.8M x0⭐ EverydayCompare offers🖊️ Free agencyYour deal is up. Every club below is a real", fixture "Ace Diamond · CFCincinnati Reds2032 · age 27OVR 78$0.8M x0⭐ Everyday🖊️ Free agencyYour d
+   nhl click path step 21 (after "hub: Play the 2028 season"): the save differs first in phase, contractTalk; phase extension, fixture season; the markup differs under the same words ("Gordie Blaze · DCarolina Hurricanes2028 · age 21OVR 73$0.9M ")
+   nhl click path step 22 (after "extension: Play the year out"): the save differs first in contractTalk
+   nhl click path step 26 (after "hub: Play the 2029 season"): the save differs first in phase, contractTalk; phase freeagency, fixture season; the screen reads "Gordie Blaze · DCarolina Hurricanes2029 · age 22OVR 74$0.9M x0🪑 Fourth lineCompare offers🖊️ Free agencyYour deal is up. Every team below i", fixture "Gordie Blaze · DCarolina Hurricanes2029 · age 22OVR 74$0.9M x0🪑 Fourth line🖊️ Free agen
+  FAIL: the replay exited 1
+  FAIL: the replay passed [], not all four sports
+  FAIL: 140 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

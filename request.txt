@@ -1,0 +1,8 @@
+# Release AX d4 on 174be068: record the US board on the merged head into a scratch copy (the fixture in the tree is NOT touched), the replay against the old recording (expected red, for its first differing lines), and the five digests that must not move
+record: export TMPDIR=$(mktemp -d); node scripts/recordUsBoardFixture.mjs "$RC_OUT/usBoardFixture.new.json"
+parity-oldfixture-EXPECT1: export TMPDIR=$(mktemp -d); node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: export TMPDIR=$(mktemp -d); node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: export TMPDIR=$(mktemp -d); node scripts/simUsSeasonCentre.mjs
+simUsPostseason: export TMPDIR=$(mktemp -d); node scripts/simUsPostseason.mjs
+simCareerSeasonTruth: export TMPDIR=$(mktemp -d); CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
+digests-sha: sha256sum scripts/data/careerSeasonTruth.json scripts/data/usSeasonLayDigest.json scripts/data/usSeasonLawDigest.json scripts/data/usSeasonSeamDigest.json scripts/data/usCareerDeckCDigest.json scripts/data/usBoardFixture.json
