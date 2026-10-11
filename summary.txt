@@ -1,0 +1,10 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-units exit=0 14s | PASS farewell units: {"mode":"units","total":85,"files":[{"file":"soccerCareerFarewell.test.ts","passed":50},{"file":"soccerFarewellUi.test.tsx","passed":14},{"file":"soc
+farewell-outcomes exit=0 6s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-page-control exit=0 23s | PASS farewell page-control: {"mode":"page-control","baseline":13,"componentBaseline":14,"componentSourceControls":1,"pageSourceControls":2,"intendedFailures":[{"id":"anno
+farewell-native exit=0 241s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+brief-units exit=0 14s | Units: 87 actual passed assertions in all4 required files,0 skipped.
+brief-outcomes exit=0 6s | Outcomes:9 healthy groups,60 entire original/current state+RNG pairs,8 independently compiled effective exact faults,9 native fixture branches.
+brief-page-control exit=0 9s | Page source control:2 intended actual equality failures,4 unrelated page cases passed,6-case untouched copied baseline passed.
+brief-native exit=0 175s | Native: 1341 checks,27 journeys,90 whole-save pairs,90 raw reloads,81 exact post-startup read/engine RNG vectors,90 unfiltered startup value/stack observations,48 PNGs,20
