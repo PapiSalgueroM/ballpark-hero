@@ -1,0 +1,70 @@
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22ma wrong shape: it reads as no press room, the room is offered again and the next answer writes a fresh part
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22manother version: it reads as no press room, the room is offered again and the next answer writes a fresh part
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22mnull: it reads as no press room, the room is offered again and the next answer writes a fresh part
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22ma row whose season no longer matches: it reads as no press room, the room is offered again and the next answer writes a fresh part
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22ma settled promise whose settled row no longer matches: it reads as no press room, the room is offered again and the next answer writes a fresh part
+[31m[1mAssertionError[22m: no sentence about verifying: expected 'The saved Press Room record could not…' not to match /verified/i[39m
+
+[32m- Expected:[39m 
+/verified/i
+
+[31m+ Received:[39m 
+"The saved Press Room record could not be verified."
+
+[36m [2m❯[22m src/test/soccerPressRoomReadAsAbsent.test.tsx:[2m225:66[22m[39m
+    [90m223| [39m    expect(view.credibility, 'and credibility is the starting 50').toB…
+    [90m224| [39m    [34mexpect[39m(view[33m.[39mpromise)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m225| [39m    expect(view.reason ?? '', 'no sentence about verifying').not.toMat…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m226| [39m    [34mexpect[39m(view[33m.[39meligible[33m,[39m [32m'the room is offered again'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m227| [39m    [35mconst[39m next [33m=[39m [34manswerSoccerPress[39m(c[33m,[39m [32m'calm'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the tile is on the page again
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22manother version: the tile is on the page again
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22mnull: the tile is on the page again
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22ma row whose season no longer matches: the tile is on the page again
+[41m[1m FAIL [22m[49m src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22mpressRoom: a part that cannot be verified is read as absent[2m > [22ma settled promise whose settled row no longer matches: the tile is on the page again
+[31m[1mAssertionError[22m: the Press room tile is drawn: expected null not to be null[39m
+[36m [2m❯[22m src/test/soccerPressRoomReadAsAbsent.test.tsx:[2m241:54[22m[39m
+    [90m239| [39m    const view = render(<PressRoomTile career={c} onCareer={() => unde…
+    [90m240| [39m    const tile = view.container.querySelector('[data-press-room-open]'…
+    [90m241| [39m    [34mexpect[39m(tile[33m,[39m [32m'the Press room tile is drawn'[39m)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                                     [31m^[39m
+    [90m242| [39m    [34mexpect[39m(tile[33m![39m[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'Answer for your season'[39m)[33m;[39m
+    [90m243| [39m    [34mexpect[39m(tile[33m![39m[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'50/100'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m11 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 21:02:49
+[2m   Duration [22m 8.00s[2m (transform 1.26s, setup 56ms, collect 1.64s, tests 5.48s, environment 371ms, prepare 198ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > the journey of ruling C3 for the Press room%3A can natural play make the part unreadable > is NOT reached%3A every part the game writes stays readable through whole careers%2C a save and a load included,line=157,column=24::AssertionError: expected [ …(4) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "a ban year seed 31: after random_events, 17 seasons, phase random_events",%0A+   "a ban year seed 31: after a save and a load, after random_events",%0A+   "a ban year seed 31: after random_events, 17 seasons, phase random_events",%0A+   "a ban year seed 31: after a save and a load, after random_events",%0A+ ]%0A%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:157:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > a wrong shape%3A it reads as no press room%2C the room is offered again and the next answer writes a fresh part,line=225,column=66::AssertionError: no sentence about verifying: expected 'The saved Press Room record could not…' not to match /verified/i%0A%0A- Expected: %0A/verified/i%0A%0A+ Received: %0A"The saved Press Room record could not be verified."%0A%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:225:66%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > another version%3A it reads as no press room%2C the room is offered again and the next answer writes a fresh part,line=225,column=66::AssertionError: no sentence about verifying: expected 'The saved Press Room record could not…' not to match /verified/i%0A%0A- Expected: %0A/verified/i%0A%0A+ Received: %0A"The saved Press Room record could not be verified."%0A%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:225:66%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > null%3A it reads as no press room%2C the room is offered again and the next answer writes a fresh part,line=225,column=66::AssertionError: no sentence about verifying: expected 'The saved Press Room record could not…' not to match /verified/i%0A%0A- Expected: %0A/verified/i%0A%0A+ Received: %0A"The saved Press Room record could not be verified."%0A%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:225:66%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > a row whose season no longer matches%3A it reads as no press room%2C the room is offered again and the next answer writes a fresh part,line=225,column=66::AssertionError: no sentence about verifying: expected 'The saved Press Room record could not…' not to match /verified/i%0A%0A- Expected: %0A/verified/i%0A%0A+ Received: %0A"The saved Press Room record could not be verified."%0A%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:225:66%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > a settled promise whose settled row no longer matches%3A it reads as no press room%2C the room is offered again and the next answer writes a fresh part,line=225,column=66::AssertionError: no sentence about verifying: expected 'The saved Press Room record could not…' not to match /verified/i%0A%0A- Expected: %0A/verified/i%0A%0A+ Received: %0A"The saved Press Room record could not be verified."%0A%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:225:66%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > a wrong shape%3A the tile is on the page again,line=241,column=54::AssertionError: the Press room tile is drawn: expected null not to be null%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:241:54%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > another version%3A the tile is on the page again,line=241,column=54::AssertionError: the Press room tile is drawn: expected null not to be null%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:241:54%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > null%3A the tile is on the page again,line=241,column=54::AssertionError: the Press room tile is drawn: expected null not to be null%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:241:54%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > a row whose season no longer matches%3A the tile is on the page again,line=241,column=54::AssertionError: the Press room tile is drawn: expected null not to be null%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:241:54%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3A a part that cannot be verified is read as absent > a settled promise whose settled row no longer matches%3A the tile is on the page again,line=241,column=54::AssertionError: the Press room tile is drawn: expected null not to be null%0A ❯ src/test/soccerPressRoomReadAsAbsent.test.tsx:241:54%0A%0A
