@@ -1,0 +1,11 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-outcomes exit=0 6s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-native-1 exit=0 244s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+farewell-native-2 exit=0 243s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+farewell-native-3 exit=0 243s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+return-outcomes exit=0 5s | PASS international return outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":90,"readVectors":90,"sourceControls":6,"branches":4,"sourceHeld":true}
+return-native exit=0 109s | PASS international return native: {"mode":"native","checks":854,"journeys":12,"wholePairs":102,"postStartupExactVectors":90,"rawReloads":48,"unfilteredStartupObservations
+tsc exit=0 63s | 
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
