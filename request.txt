@@ -1,0 +1,16 @@
+# Release AW closing pass, final proof P-H3b: gate lane H3, part 2 (served, one at a time)
+#!serve
+#!playwright
+#!serial
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
+playSoccerCareerContracts: node scripts/playSoccerCareerContracts.mjs
+playSoccerCareerDiscipline: node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerFamily: node scripts/playSoccerCareerFamily.mjs
+playSoccerCareerLeagueWorld: node scripts/playSoccerCareerLeagueWorld.mjs
+playSoccerCareerOpponents: node scripts/playSoccerCareerOpponents.mjs
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playDraftNight: node scripts/playDraftNight.mjs
+playUsRivalLines: node scripts/playUsRivalLines.mjs
+playCareerHallLine: node scripts/playCareerHallLine.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
