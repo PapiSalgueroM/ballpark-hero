@@ -1,0 +1,8 @@
+simEra2015 exit=1 12s | simEra2015: 3 failures
+simEra2010 exit=1 12s | simEra2010: 1 failure
+simEra2005 exit=1 13s | simEra2005: 1 failure
+simStatsCentre exit=0 3s | ALL STATS CENTRE CHECKS PASSED
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simEraWorldTables exit=0 2s | simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.
+simEra2020 exit=1 9s | simEra2020: 5 failure(s).
+simEras exit=1 486s | 3 FAILURES
