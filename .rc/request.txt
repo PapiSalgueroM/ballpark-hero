@@ -1,0 +1,26 @@
+# Round 1212 fix pass, THE FINAL PROOF on the pushed head e85701bb: the type gate, the tests and harnesses touched or red, every control touched, the three fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts src/test/usSeasonMlb.test.ts src/test/usSeasonSlate.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+ctl-lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+ctl-seam: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+ctl-mlbfit: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbfit node scripts/simUsSeasonCentre.mjs
+ctl-mlbold: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbold node scripts/simUsSeasonCentre.mjs
+ctl-mlbinnings: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbinnings node scripts/simUsSeasonCentre.mjs
+ctl-mlbcap: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbcap node scripts/simUsSeasonCentre.mjs
+ctl-mlborder: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlborder node scripts/simUsSeasonCentre.mjs
+ctl-pathyear: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pathyear node scripts/simUsSeasonCentre.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+ctl-ledger-mlbinnings: US_LEDGER_CONTROL=mlbinnings node scripts/simUsSeasonLedger.mjs
+ctl-ledger-inningsleague: US_LEDGER_CONTROL=inningsleague node scripts/simUsSeasonLedger.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
