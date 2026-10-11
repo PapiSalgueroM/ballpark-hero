@@ -1,0 +1,11 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simLineupRecordPositions exit=0 3s | PASS simLineupRecordPositions
+edge-sha exit=0 0s | dd0e02e9c9218f12455fe4efc685cb5a6b01fb6e119140e6717e2d9f37aa249d  supabase/functions/validate-player/index.ts
+labels-pure exit=0 27s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+labels-browser exit=0 11s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+pm-fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+pm-units exit=0 22s | Units: 244 actual passed assertions in all7 required files.
+pm-outcomes exit=0 5s | Outcomes:6 healthy groups,27 entire original/current state+RNG pairs,6 effective exact copied failures,18 prepared fixture branches.
+pm-native exit=0 376s | Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.
+playUsMarketTalk exit=1 32s | playUsMarketTalk: 1 checks, 1 failed
+playUsMarketTalk-droptalk-EXPECT1 exit=2 32s | CONTROL droptalk: DID NOT FIRE as its own (failures: crash; the talk was taken off 0 saves).
