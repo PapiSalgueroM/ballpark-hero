@@ -51,16 +51,18 @@ const stop = code => { try { server.kill(); } catch { /* gone */ } process.exit(
 /** A phone on a save: the save is put down once (a reload keeps what the board wrote), Math.random is seeded. */
 async function open(slug, raw) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  await ctx.addInitScript(([k, v]) => {
+  await ctx.addInitScript(([k, v, route]) => {
     let a = 20261011;
     Math.random = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
     if (!sessionStorage.getItem('market-talk-seeded')) {
       sessionStorage.setItem('market-talk-seeded', '1');
       localStorage.setItem('cookie-consent', 'essential');
       localStorage.setItem(k, v);
+      /* a returning player: the first visit rules dialog (GameHelp) has been seen, so it does not stand over the hub */
+      localStorage.setItem('rules-gate-seen:' + route, '1');
       for (const s of ['nba', 'nfl', 'mlb', 'nhl']) localStorage.setItem(`seasonCentre:help:${s}`, '1');
     }
-  }, [SPORTS[slug].key, raw]);
+  }, [SPORTS[slug].key, raw, SPORTS[slug].route]);
   await ctx.route('**://*.supabase.co/**', r => { aborted += 1; return r.abort(); });
   const page = await ctx.newPage();
   await page.goto(`${BASE}${SPORTS[slug].route}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
