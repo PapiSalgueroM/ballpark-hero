@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { goalWeight } from '@/lib/clubManagerGoalWeight';
 import {
   BOOK_ROWS_PER_CLUB, bookClubGoals, bookRows, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal,
-  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, mineSheets, openBook, partialEleven, readBook, rowKey, takerOf,
+  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, mineSheets, openBook, openLateBook, partialEleven, readBook, rowKey, takerOf,
   type BookLineOf, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 
@@ -314,6 +314,58 @@ describe('the book', () => {
     expect(bookSalt(['A', 'B', 'C'])).toBe(bookSalt(['A', 'B', 'C']));
     expect(bookSalt(['A', 'B', 'C'])).not.toBe(bookSalt(['B', 'A', 'C']));
     expect(openBook('laliga|abc')).toEqual({ s: 'laliga|abc', c: {}, my: [] });
+  });
+});
+
+describe('a late book', () => {
+  const clubs = [{ club: 'Alpha', gf: 31 }, { club: 'Beta', gf: 0 }, { club: 'Gamma', gf: 18 }];
+  const late = (): LeagueBook => openLateBook(STAMP, 20, clubs, [['p-1', 9, 4], ['p-2', 0, 0], ['p-3', 0, 2]]);
+
+  it('opens holding the first law: every goal from before it is counted unnamed for its club', () => {
+    const book = late();
+    for (const c of clubs) expect(bookClubGoals(book, c.club)).toEqual({ rows: 0, og: 0, u: c.gf });
+    expect(book.r0).toBe(20);
+    expect(book.u0).toBe(49);
+    expect(book.my).toEqual([]);
+    /* Only the men who had a goal or an assist are written down. */
+    expect(book.b).toEqual([['p-1', 9, 4], ['p-3', 0, 2]]);
+    /* It is written to like any book, and the law goes on holding. */
+    creditDeal(book, 'Alpha', dealGoals('late|1', 3, XI, RULES));
+    const g = bookClubGoals(book, 'Alpha');
+    expect(g.rows + g.og + g.u).toBe(34);
+  });
+
+  it('is the same book after a JSON round trip, and both readers accept it', () => {
+    const book = late();
+    creditCleanSheet(book, 'Beta', XI[0], [XI[2]]);
+    creditMine(book, ['p-1']);
+    const text = JSON.stringify(book);
+    expect(text).not.toContain('null');
+    expect(JSON.stringify(roundTrip(book))).toBe(text);
+    expect(readBook(roundTrip(book), STAMP)).not.toBeNull();
+    expect(liveBook(roundTrip(book), STAMP)).not.toBeNull();
+    /* A book opened where a season starts carries none of the three fields. */
+    expect(Object.keys(fresh()).sort()).toEqual(['c', 'my', 's']);
+  });
+
+  it('is refused whole by the careful reader when one of its three fields is not its shape', () => {
+    const bad: Array<[string, (b: Record<string, unknown>) => void]> = [
+      ['a round under nought', b => { b.r0 = -1; }],
+      ['a round that is not whole', b => { b.r0 = 1.5; }],
+      ['a round as text', b => { b.r0 = '20'; }],
+      ['a baseline that is no list', b => { b.b = { 'p-1': [9, 4] }; }],
+      ['a baseline pair', b => { b.b = [['p-1', 9]]; }],
+      ['a baseline with a hole', b => { b.b = [['p-1', null, 4]]; }],
+      ['a baseline keyed by a number', b => { b.b = [[7, 9, 4]]; }],
+      ['an opening sum under nought', b => { b.u0 = -3; }],
+    ];
+    for (const [what, hurt] of bad) {
+      const raw = roundTrip(late()) as Record<string, unknown>;
+      hurt(raw);
+      expect(readBook(raw, STAMP), what).toBeNull();
+      /* The match week's reader is a stamp and a type check and does not look at them. */
+      expect(liveBook(raw, STAMP), what).not.toBeNull();
+    }
   });
 });
 

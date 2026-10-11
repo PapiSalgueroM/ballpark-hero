@@ -65,6 +65,18 @@ export interface LeagueBook {
    *  running engine, and a harness that sorts a save's keys before it normalises those ids
    *  (scripts/simCustomClubValues.mjs) read two identical saves as different when this was a map. */
   my: [id: string, cleanSheets: number][];
+  /** Round 1306, a LATE book only (openLateBook): the league round this book started recording at, as the
+   *  calendar counts rounds (from 0, so a screen prints r0 + 1). Absent on a book opened where a season
+   *  starts: that one holds the whole season (bookIsWhole in clubManagerLeagueBoards.ts). */
+  r0?: number;
+  /** A late book only: MY men's league goals and assists at the moment it opened, a list of
+   *  [player id, goals, assists] for the men who had any. A board counts everybody from r0, so one of
+   *  mine is read off his league line minus this. A list of triples, never a map by id (see `my`). */
+  b?: [id: string, goals: number, assists: number][];
+  /** A late book only: the rivals' goals it was opened with, all counted unnamed in their clubs' `u`.
+   *  Kept so "how much of the league is on record" can leave them out: they are from before the book,
+   *  not a gap in the data. */
+  u0?: number;
 }
 
 export interface BookRules {
@@ -88,6 +100,27 @@ export const BOOK_ROWS_PER_CLUB = 16;
 /** A fresh book for one season. */
 export function openBook(stamp: string): LeagueBook {
   return { s: stamp, c: {}, my: [] };
+}
+
+/**
+ * Round 1306. A book opened AFTER the season began, for a save that reached this round without one (a
+ * save from before the book, a hot seat run handed over, a book that no longer adds up). Every rival
+ * club gets its entry at once with the goals it has already scored counted unnamed, so the first law
+ * (rows + own goals + unnamed = goals for) holds from the first moment; `mine` is my men's league goals
+ * and assists as they stand. `round` is the league round the book starts recording at.
+ */
+export function openLateBook(
+  stamp: string, round: number, clubs: readonly { club: string; gf: number }[], mine: readonly (readonly [id: string, goals: number, assists: number])[],
+): LeagueBook {
+  const book: LeagueBook = { s: stamp, c: {}, my: [], r0: round, b: [], u0: 0 };
+  let before = 0;
+  for (const c of clubs) {
+    book.c[c.club] = { m: {}, og: 0, u: c.gf };
+    before += c.gf;
+  }
+  book.u0 = before;
+  book.b = mine.filter(t => t[1] > 0 || t[2] > 0).map((t): [string, number, number] => [t[0], t[1], t[2]]);
+  return book;
 }
 
 /** The salt of a league order: a 32 bit FNV-1a hash of the names, in base 36. */
@@ -132,6 +165,16 @@ export function readBook(raw: unknown, stamp: string): LeagueBook | null {
   }
   for (const pair of book.my as unknown[]) {
     if (!Array.isArray(pair) || pair.length !== 2 || typeof pair[0] !== 'string' || !isCount(pair[1])) return null;
+  }
+  /* Round 1306, the three fields of a late book: each absent, or exactly its shape. */
+  const late = book as { r0?: unknown; b?: unknown; u0?: unknown };
+  if (late.r0 !== undefined && !isCount(late.r0)) return null;
+  if (late.u0 !== undefined && !isCount(late.u0)) return null;
+  if (late.b !== undefined) {
+    if (!Array.isArray(late.b)) return null;
+    for (const t of late.b as unknown[]) {
+      if (!Array.isArray(t) || t.length !== 3 || typeof t[0] !== 'string' || !isCount(t[1]) || !isCount(t[2])) return null;
+    }
   }
   return book;
 }
@@ -374,6 +417,19 @@ export function bookRows(book: LeagueBook): BookLine[] {
     }
   }
   return out;
+}
+
+/**
+ * THE FIRST LAW, club by club: goals on rows + own goals + unnamed = the club's goals for in the table.
+ * `clubs` are the rival clubs with their goals for as the save's table has them. Only for a book the
+ * careful reader (readBook) has accepted: it walks every row.
+ */
+export function bookFits(book: LeagueBook, clubs: readonly { club: string; gf: number }[]): boolean {
+  for (const c of clubs) {
+    const g = bookClubGoals(book, c.club);
+    if (g.rows + g.og + g.u !== c.gf) return false;
+  }
+  return true;
 }
 
 /** The goals of a club as the book holds them: on rows, own goals, unnamed. Their sum is its goals for. */
