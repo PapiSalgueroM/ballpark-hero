@@ -1,0 +1,12 @@
+{
+  "name": "retry",
+  "file": "src/components/us-career/UsCareerBoard.tsx",
+  "from": "const pending = pendingSave.current;",
+  "to": "const pending = null;",
+  "intended": "refused played practice banks once and Retry saves exact gain without replay",
+  "baseline": "unchanged training rule preserves complete engine-created careers",
+  "originalSha256": "93d4f1997402db91c2b1289bab500ce93cb1e3717dd4ddeee232a7235a71d01c",
+  "normalizedSha256": "93d4f1997402db91c2b1289bab500ce93cb1e3717dd4ddeee232a7235a71d01c",
+  "copiedSha256": "0d2652af920c40e5c253bc383fc49df00b0e6c521ffb5fbc5730f6142cbdfc0f",
+  "copy": "copies/retry.tsx"
+}

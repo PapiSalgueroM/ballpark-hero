@@ -1,0 +1,14 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/home/runner/work/_temp/rc-out/files/save-retry/normal/vitest.config.mjs",
+    "--reporter=json",
+    "--outputFile.json=/home/runner/work/_temp/rc-out/files/save-retry/normal/vitest-report.json",
+    "--reporter=default"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null
+}

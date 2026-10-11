@@ -1,0 +1,14 @@
+simUsCareerPractice-reset exit=0 8s | simUsCareerPractice control reset: all four named outcomes rejected the defect, all four quiet restores passed
+simUsCareerActionConfirm exit=0 8s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsCareerSaveRetry exit=1 20s | Node.js v24.21.0
+simUsCareerActionConfirm-ownKey exit=0 8s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsCareerPractice exit=0 30s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+simCareerKeepPlaying-nomoneysave-EXPECT1 exit=1 102s | simCareerKeepPlaying: 1463 checks, 24 failures (control nomoneysave, red expected)
+simCareerKeepPlaying-nomoney-EXPECT1 exit=1 110s | simCareerKeepPlaying: 1469 checks, 79 failures (control nomoney, red expected)
+simCareerKeepPlaying exit=0 119s | simCareerKeepPlaying: 1463 checks, 0 failures
+simCareerKeepPlaying-noconvictionrow-EXPECT1 exit=1 102s | simCareerKeepPlaying: 1463 checks, 24 failures (control noconvictionrow, red expected)
+simExtension exit=0 0s | simExtension: green. The last year of a deal is a decision in all four games now.
+simCareerKeepPlaying-norehabrow-EXPECT1 exit=1 109s | simCareerKeepPlaying: 1471 checks, 137 failures (control norehabrow, red expected)
+simFreeAgency exit=0 2s | ALL FREE AGENCY CHECKS PASSED
+simCareerKeepPlaying-nomoneytrial-EXPECT1 exit=1 120s | simCareerKeepPlaying: 1463 checks, 32 failures (control nomoneytrial, red expected)
+simHarnessAnchors exit=1 39s | simHarnessAnchors: 1 failure(s)

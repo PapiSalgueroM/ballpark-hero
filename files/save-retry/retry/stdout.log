@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  20:29:58
+   Duration  1.35s (transform 146ms, setup 72ms, collect 0ms, tests 0ms, environment 527ms, prepare 142ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/save-retry/retry/vitest-report.json

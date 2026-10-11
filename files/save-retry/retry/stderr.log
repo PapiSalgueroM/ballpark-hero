@@ -1,0 +1,21 @@
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/usCareerSaveRetry.test.tsx [ src/test/usCareerSaveRetry.test.tsx ]
+Error: Failed to resolve import "react/jsx-dev-runtime" from "../../_temp/rc-out/files/save-retry/copies/retry.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /home/runner/work/_temp/rc-out/files/save-retry/copies/retry.tsx:1:59
+  1  |  import { jsxDEV as _jsxDEV, Fragment as _Fragment } from "react/jsx-dev-runtime";
+     |                                                            ^
+  2  |  import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+  3  |  import { toast } from 'sonner';
+ ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23
+ ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7
+ ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

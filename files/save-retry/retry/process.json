@@ -1,0 +1,16 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "/home/runner/work/_temp/rc-out/files/save-retry/retry/vitest.config.mjs",
+    "--reporter=json",
+    "--outputFile.json=/home/runner/work/_temp/rc-out/files/save-retry/retry/vitest-report.json",
+    "--reporter=default",
+    "-t",
+    "(unchanged training rule preserves complete engine-created careers$|(?:'NFL'|NFL) save recovery on the actual board refused played practice banks once and Retry saves exact gain without replay$)"
+  ],
+  "status": 1,
+  "signal": null,
+  "error": null
+}

@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   848 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   848 harnesses, 221 carry a multi line anchor into src, 253 normalised reads guard one
+   ok   221 harnesses are in scope, so the check is looking at something
+   FAIL simSoccerOpponentLabels.mjs reads src/components/soccer-career/SoccerSeasonCentre.tsx raw at line 57 and searches it with a multi line anchor (line 28), so on a CRLF checkout it matches nothing (4 raw reads in all)
+
+simHarnessAnchors: 1 failure(s)

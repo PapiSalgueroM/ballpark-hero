@@ -1,0 +1,15 @@
+# Release AX d2 on 174be068: the three US harnesses whose anchors PR217 moved, plain and with the fault of each moved row; simCareerKeepPlaying plain and its four moved controls (each must exit 1 on its own check); the two market engines PR217 wraps
+simUsCareerSaveRetry: export TMPDIR=$(mktemp -d); US_CAREER_SAVE_RETRY_ARTIFACTS="$RC_OUT/save-retry" node scripts/simUsCareerSaveRetry.mjs
+simUsCareerPractice: export TMPDIR=$(mktemp -d); node scripts/simUsCareerPractice.mjs
+simUsCareerPractice-reset: export TMPDIR=$(mktemp -d); US_CAREER_PRACTICE_CONTROL=reset node scripts/simUsCareerPractice.mjs
+simUsCareerActionConfirm: export TMPDIR=$(mktemp -d); node scripts/simUsCareerActionConfirm.mjs
+simUsCareerActionConfirm-ownKey: export TMPDIR=$(mktemp -d); US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs
+simCareerKeepPlaying: export TMPDIR=$(mktemp -d); node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-nomoney-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=nomoney node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-nomoneysave-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=nomoneysave node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-norehabrow-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=norehabrow node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-noconvictionrow-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=noconvictionrow node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-nomoneytrial-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=nomoneytrial node scripts/simCareerKeepPlaying.mjs
+simExtension: export TMPDIR=$(mktemp -d); node scripts/simExtension.mjs
+simFreeAgency: export TMPDIR=$(mktemp -d); node scripts/simFreeAgency.mjs
+simHarnessAnchors: export TMPDIR=$(mktemp -d); node scripts/simHarnessAnchors.mjs
