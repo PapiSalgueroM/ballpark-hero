@@ -42,6 +42,20 @@
  * the entry IS in the document on the NBA path (and the NFL's once bound) and
  * is proven inert for every other screen and every save byte. The fixture is
  * not re-recorded; the entry has its own tests (src/test/usSeasonCentreEntry.test.tsx).
+ * Release AX teaches the walker the market wheel BEFORE the wheel exists (the
+ * other lane's Rounds 1230 to 1234 render it INSTEAD of the talk card and the
+ * free agency window while a push's saved result is unseen). Three things, all
+ * inert on a tree with no wheel, which the byte for byte replay of the
+ * recording proves: next() presses Skip animation and then Continue on a
+ * wheel, with the tag 'market wheel: ', never Spin (a timer) and never a
+ * choice, so the walker's own stream does not move, and a wheel press does
+ * not count against the thirty moves a fixed save is played on; the Compare
+ * button inside the window is not a click candidate; and a save that holds
+ * contractTalk gets a hash for it, with four more named saves kept when a
+ * path offers them (the first save in each talk phase, the first with an
+ * unseen wheel, and the extension save with its talk cut to a stub). The new
+ * names stand at the END of the list, because each fixed save's walk is
+ * seeded by its place in it.
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -196,7 +210,7 @@ const textNow = () => {
 };
 const flush = () => act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
 
-interface Save { c?: Record<string, unknown>; phase?: string; teamQuality?: number | null; coach?: unknown }
+interface Save { c?: Record<string, unknown>; phase?: string; teamQuality?: number | null; coach?: unknown; contractTalk?: unknown }
 interface Step {
   /** What was done: the text of the button pressed, or MOUNT / REMOUNT. */
   a: string;
@@ -226,13 +240,15 @@ function fieldHashes(save: Save | null): Record<string, string> {
   out.phase = hash(JSON.stringify(save.phase ?? null));
   out.teamQuality = hash(JSON.stringify(save.teamQuality ?? null));
   out.coach = hash(JSON.stringify(save.coach ?? null));
+  /* Release AX: only a save that holds the field, so a save from before the saved talks reads as it did. */
+  if (save.contractTalk !== undefined) out.contractTalk = hash(JSON.stringify(save.contractTalk));
   return out;
 }
 
 /* ------------------------------ the walker ------------------------------ */
 
 const enabledButtons = (root: ParentNode): HTMLButtonElement[] =>
-  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry], section[data-us-programme-panel]')) as HTMLButtonElement[];
+  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry], section[data-us-programme-panel], [data-market-compare-open]')) as HTMLButtonElement[];
 const labelOf = (b: Element) => squash(b.textContent ?? '').slice(0, 60) || `(${b.getAttribute('aria-label') ?? 'button'})`;
 const byText = (root: ParentNode, re: RegExp) => enabledButtons(root).find(b => re.test(squash(b.textContent ?? '')));
 
@@ -264,6 +280,8 @@ class Walker {
   private lastPhase = 'none';
   /** How many careers this path has finished, and how long the one in play runs. */
   careers = 0;
+  /** Release AX: presses made on a market wheel, which are not moves of the walker's own. */
+  wheelPresses = 0;
 
   constructor(private Board: ComponentType, private saveKey: string, seed: number, private onStep?: (w: Walker) => void) {
     this.pick = mulberry32(seed ^ 0x5bd1e995);
@@ -348,6 +366,16 @@ class Walker {
       if (choice.querySelector('[data-rivalry-outcome]')) { await this.click(b[b.length - 1], 'rival outcome: '); return true; }
       this.cov.rivalryChoice += 1;
       await this.click(this.choose(b), 'rival choice: ');
+      return true;
+    }
+    /* Release AX: the market wheel stands in place of the talk card and the window, so it is read first.
+       Skip animation, then Continue: two presses a push, no timer and no choice of the walker's. */
+    const wheel = body.querySelector('[data-market-wheel]');
+    if (wheel) {
+      const press = wheel.querySelector<HTMLButtonElement>('[data-market-skip]') ?? wheel.querySelector<HTMLButtonElement>('[data-market-continue]');
+      if (!press) throw new Error('walker is lost on the market wheel: it shows neither Skip nor Continue');
+      this.wheelPresses += 1;
+      await this.click(press, 'market wheel: ');
       return true;
     }
     const ext = body.querySelector('[data-extension-talk]');
@@ -456,7 +484,10 @@ interface Fixture { header: Record<string, string>; sports: Record<string, Sport
    record. Every other save is one the current code just wrote, and a repair
    dropped from the restore would leave all of those green. */
 const LEGACY_SAVES = ['noRole', 'negNet', 'noCoachKey', 'coachPhaseNoCoach', 'retiredNoCoachKey'];
-const SAVE_NAMES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'beat', 'choice', 'suspended', 'dirty', ...LEGACY_SAVES];
+/* Release AX: the four market saves stand LAST. Each save's walk is seeded with its place in this list, whether
+   the save exists or not, so a name put in the middle would re-seed every save after it. */
+const MARKET_SAVES = ['extTalk', 'faTalk', 'wheel', 'extCut'];
+const SAVE_NAMES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'beat', 'choice', 'suspended', 'dirty', ...LEGACY_SAVES, ...MARKET_SAVES];
 /* The six the brief asks for must exist in every sport, and so must the old
    shapes, which are named edits of two of them. The other four are kept when
    the path happened to produce them (a rival beat, a rival choice) or can be
@@ -491,6 +522,12 @@ async function walkPath(Board: ComponentType, key: string, seed: number, saves: 
     if (w.careers === 0 && s.phase === 'coach') saves.coach = raw;
     if (!saves.beat && c.pendingRivalryEvent && !c.retired) saves.beat = raw;
     if (!saves.choice && c.pendingRivalryChoice && !c.retired) saves.choice = raw;
+    /* Release AX: a save taken inside each saved talk, and one whose wheel has not been seen yet. No board
+       before the saved talks writes either phase or the field, so none of these exists there. */
+    if (!saves.extTalk && s.phase === 'extension') saves.extTalk = raw;
+    if (!saves.faTalk && s.phase === 'freeagency') saves.faTalk = raw;
+    const talk = s.contractTalk as { wheel?: { seen?: unknown } } | null | undefined;
+    if (!saves.wheel && talk && talk.wheel && talk.wheel.seen === false) saves.wheel = raw;
   };
   const w = new Walker(Board, key, seed, capture);
   w.setCreateBudget(8);
@@ -521,6 +558,10 @@ async function walkPath(Board: ComponentType, key: string, seed: number, saves: 
     saves.coachPhaseNoCoach = editWhole(saves.retired, s => { s.phase = 'coach'; s.coach = null; });
     saves.retiredNoCoachKey = editWhole(saves.retired, s => { delete s.coach; });
   }
+  if (saves?.extTalk) {
+    /* Release AX: a talk that cannot be read (its kind and nothing else) is read as no talk at all. */
+    saves.extCut = editWhole(saves.extTalk, s => { s.contractTalk = { kind: 'extension' }; });
+  }
   return w;
 }
 
@@ -548,8 +589,15 @@ async function walkScreens(Board: ComponentType, key: string, seed: number, raw:
     const back = hubNow();
     if (back) await w.click(back, 'close: ');
   }
+  /* Release AX: a press on a market wheel is not one of the thirty, so a save that reaches a push is still
+     played on for thirty moves of its own. The cap only stops a wheel that never leaves the screen. */
   for (let i = 0; i < 30; i += 1) {
+    const wheelBefore = w.wheelPresses;
     if (!(await w.next(99))) break;
+    if (w.wheelPresses !== wheelBefore) {
+      if (w.wheelPresses > 60) throw new Error('walker is stuck on the market wheel');
+      i -= 1;
+    }
   }
   return w.steps;
 }
