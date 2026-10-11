@@ -1,0 +1,6 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simSoccerVeteranTalks exit=0 35s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+playSoccerVeteranTalks exit=0 153s | ok   strict geometry and three effective copied observation detectors
+simSoccerVeteranOffers exit=0 398s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms
+playSoccerResultsLayout exit=1 34s | Node.js v24.21.0
