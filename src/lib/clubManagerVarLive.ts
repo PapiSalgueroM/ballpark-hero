@@ -1,4 +1,4 @@
-/** Release AT: VAR ships dark.
+/** VAR in Club Manager: ON for goals since the fix pass of Round 1303 (it shipped dark from Release AT until then).
  *
  * Round 1181 built a review rule inside the match (src/lib/clubManagerVar.ts). Measured on the integrated
  * tree over 680 seeded matches, asking for reviews changed the score in 196 and the result in 85, and a
@@ -50,10 +50,13 @@
  *     (cmVarGoalLift in src/lib/clubManagerVar.ts), so those goals come on top and goals a match stays level
  *     (scripts/simCmVar.mjs, bands, and its control nolift). The entry is gone and the goal kind is on in the
  *     ledger: CM_VAR_KINDS is ['goal'].
- * The switch itself is the last commit of that pass: this line, the What's New entry, the lit rule in the unit
- * file, then the walk on the plain build. docs/audits/ROUND-1303-NOTES.md has the list.
+ * The switch itself was the last commit of that pass: this line reads true, the What's New entry is in, the unit
+ * file runs the lit rule (and its mode dark still proves what this line reading false plays), and the walk runs
+ * on the plain build. To take VAR out again, make this line false: nothing else has to move, and the game then
+ * plays the byte equal match it played before (the engine is asked for nothing). docs/audits/ROUND-1303-NOTES.md
+ * has the list.
  *
  * Kept in its own file with no import so the help text, which several harnesses render with a plain
  * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it.
  */
-export const CM_VAR_LIVE: boolean = false;
+export const CM_VAR_LIVE: boolean = true;

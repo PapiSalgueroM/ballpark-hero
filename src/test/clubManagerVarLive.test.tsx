@@ -104,12 +104,12 @@ async function booted() {
 }
 
 describe('Club Manager: VAR as this release ships it', () => {
-  it('the switch is off in this release, and the ledger plays the goal kind alone', () => {
-    expect(SHIPPED.CM_VAR_LIVE, 'CM_VAR_LIVE as src/lib/clubManagerVarLive.ts has it').toBe(false);
+  it('the switch is on in this release, and the ledger plays the goal kind alone', () => {
+    expect(SHIPPED.CM_VAR_LIVE, 'CM_VAR_LIVE as src/lib/clubManagerVarLive.ts has it').toBe(true);
     /* Round 1303 fix: the goal kind is on in the ledger (its owed entry goals-level closed in the engine) and
        penalties-total still holds the penalty kind, so the generated list is the goal kind alone. */
     expect(SHIPPED_RATES.CM_VAR_KINDS, 'the ledger plays the goal kind and holds the penalty kind (owed penalties-total)').toEqual(['goal']);
-    expect(RULE, 'the rule this file ran').toBe(MODE === '' ? 'dark' : RULE);
+    expect(RULE, 'the rule this file ran').toBe(MODE === '' ? 'lit' : RULE);
   });
 
   /* Round 1303, the lead's decision 2: what the game asks kickOff for is the ledger's list of kinds, never `true`

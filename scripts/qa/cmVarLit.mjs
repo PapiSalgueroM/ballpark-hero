@@ -1,18 +1,24 @@
-/* Release AT: VAR ships dark (src/lib/clubManagerVarLive.ts, CM_VAR_LIVE = false).
+/* Release AT shipped VAR dark (src/lib/clubManagerVarLive.ts, CM_VAR_LIVE = false). SINCE THE FIX PASS OF ROUND 1303
+ * THE COMMITTED TREE IS LIT, with the goal kind alone, so the plain build is what scripts/playCmVar.mjs walks and
+ * this script is no longer needed for that. It stays for the two builds that are NOT the committed one, staged IN
+ * A SCRATCH CHECKOUT (a CI runner), never in a tree somebody commits from:
  *
- * The browser walk scripts/playCmVar.mjs drives the real page and expects the page to ask the engine for
- * reviews, so it can only run against a build made with the switch on. This script turns the switch on or
- * off IN A SCRATCH CHECKOUT (a CI runner), never in a tree somebody commits from:
+ *   every kind staged (penalties by review included, the walk's penalty cases):
+ *     node scripts/qa/cmVarLit.mjs on all && node_modules/.bin/vite build && node scripts/playCmVar.mjs; s=$?;
+ *     git checkout -- src/lib/clubManagerVarLive.ts src/data/clubManagerVarRates.ts; exit $s
+ *   the dark build (what making the one constant false plays; playCmVar refuses it with exit 2, as it must):
+ *     node scripts/qa/cmVarLit.mjs off && node_modules/.bin/vite build && ...; git checkout -- src/lib/clubManagerVarLive.ts
  *
- *   node scripts/qa/cmVarLit.mjs on goal && node_modules/.bin/vite build && node scripts/playCmVar.mjs; s=$?;
- *   node scripts/qa/cmVarLit.mjs off; exit $s
+ * The walk drives the real page and expects the page to ask the engine for reviews, so it can only run against a
+ * build made with the switch on.
  *
  * Round 1303: the KIND of review is data too (CM_VAR_KINDS in the generated src/data/clubManagerVarRates.ts),
  * and while the rates ledger holds a kind the generated list leaves it out, so the switch alone lights nothing.
- * `on` therefore takes the kinds to stage: `on goal` is the game with the goal kind alone (what a ruling on owed
- * goals-level would light), `on all` stages every kind the engine plays (the whole walk, penalties by review
- * included), and a bare `on` turns the switch only and leaves the list as the ledger has it. `off` puts the
- * switch back and writes the list the ledgers give (scripts/genCmVarRates.mjs), so the tree is as committed.
+ * `on` therefore takes the kinds to stage: `on goal` is the game with the goal kind alone (the committed tree,
+ * since the ledger plays that kind), `on all` stages every kind the engine plays (the whole walk, penalties by
+ * review included), and a bare `on` turns the switch only and leaves the list as the ledger has it. `off` turns
+ * the switch off and writes the list the ledgers give (scripts/genCmVarRates.mjs): the dark build, which is one
+ * line away from the committed tree.
  *
  * It refuses to run unless the switch line and the kinds line are each in their file exactly once, so a renamed
  * or moved switch stops the walk loudly, not a walk that quietly tests a dark build.
