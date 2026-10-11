@@ -1,0 +1,14 @@
+# Round 1212 fix 2 on 8f06909a: the walks that drive the MLB Season Center or open the MLB hub, on a served build, with pictures, and the weight
+#!serve
+#!playwright
+#!serial
+playUsSeasonCentre: SHOTS=$RC_OUT ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-count-mlb: US_SEASON_PLAY_CONTROL=count SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playGames-mlb: ONLY=/mlb-my-career ENGINES=chromium node scripts/playGames.mjs
+sweepGames-mlb: ONLY=/mlb-my-career ENGINES=chromium SIZES=phone,desktop node scripts/sweepGames.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

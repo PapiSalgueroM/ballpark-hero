@@ -1,0 +1,11 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsSeasonCentre exit=0 243s | playUsSeasonCentre: 217 checks, 0 failed
+ctl-walk-count-mlb exit=1 83s | playUsSeasonCentre: 73 checks, 2 failed (control count)
+playCareerHub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playSeasonReveal exit=0 21s | ALL SEASON REVEAL WALK CHECKS PASSED
+playUsCareerSaveSeam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+simMobileChrome exit=0 203s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+playGames-mlb exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+sweepGames-mlb exit=0 600s | Swept 183 routes across 1 engines and 2 viewports (366 checks). 0 findings.
+playReducedMotion exit=0 45s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+sweepWeight exit=1 27s | sweepWeight: 13 failures
