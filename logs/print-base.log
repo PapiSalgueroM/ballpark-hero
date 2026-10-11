@@ -1,0 +1,8 @@
+36
+?? src/components/front-office/FrontOfficeOnePress.test.tsx
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 20:15:49
+[2m   Duration [22m 7.84s[2m (transform 1.83s, setup 89ms, collect 236ms, tests 6.34s, environment 498ms, prepare 209ms)[22m
+
+
+::error file=/tmp/base/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk off%3A one press of the final week > title%3A the save at the recap%2C the draft and the next season's hub is the base's,line=171,column=86::AssertionError: the title case of fifteen|desk off|title must take the title ending: expected 'ordinary' to be 'title' // Object.is equality%0A%0AExpected: "title"%0AReceived: "ordinary"%0A%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:171:86%0A%0A

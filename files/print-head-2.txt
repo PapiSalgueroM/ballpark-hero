@@ -1,0 +1,8 @@
+FO_ONE_PRESS|deep|desk off|fired|recap|b56f3204559a899c9cdc5b9d4deb319645fcd1e4
+FO_ONE_PRESS|deep|desk off|fired|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk on|fired|recap|6a62b5c27eaa8659d95839d409b09773ab26b6c6
+FO_ONE_PRESS|deep|desk on|fired|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|fifteen|desk off|fired|recap|cb1cd42e06c096ebe86fcb0aba44b84e680d3b12
+FO_ONE_PRESS|fifteen|desk off|fired|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk on|fired|recap|5d14fd946fa9e6adb2e34d622dec6a396453d5b3
+FO_ONE_PRESS|fifteen|desk on|fired|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC

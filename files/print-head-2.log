@@ -1,0 +1,34 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|phase fired|champion KC|his club ARI 3-14|trust 0
+FO_ONE_PRESS|fifteen|desk off|fired|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk off|fired|recap|cb1cd42e06c096ebe86fcb0aba44b84e680d3b12
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|phase fired|champion KC|his club ARI 3-14|trust 0
+FO_ONE_PRESS|fifteen|desk on|fired|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk on|fired|recap|5d14fd946fa9e6adb2e34d622dec6a396453d5b3
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|phase fired|champion SF|his club ARI 3-14|trust 0
+FO_ONE_PRESS|deep|desk off|fired|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk off|fired|recap|b56f3204559a899c9cdc5b9d4deb319645fcd1e4
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|phase fired|champion SF|his club ARI 3-14|trust 0
+FO_ONE_PRESS|deep|desk on|fired|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk on|fired|recap|6a62b5c27eaa8659d95839d409b09773ab26b6c6
+
+ [32m✓[39m src/components/front-office/FrontOfficeOnePress.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[33m9 skipped[39m[2m)[22m[33m 3388[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's [33m 2698[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[2m | [22m[33m9 skipped[39m[90m (13)[39m
+[2m   Start at [22m 20:15:42
+[2m   Duration [22m 5.20s[2m (transform 2.15s, setup 100ms, collect 280ms, tests 3.39s, environment 494ms, prepare 162ms)[22m
+
