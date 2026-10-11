@@ -1,0 +1,28 @@
+# Release AU proof, lane A, part 3 of 3: a plain build, three at a time
+#!build
+#!playwright
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simSound: node scripts/simSound.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simBoxingShowForecast: node scripts/simBoxingShowForecast.mjs
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
+simTycoonSaleReview: node scripts/simTycoonSaleReview.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simCareerWallShotFriendly: node scripts/simCareerWallShotFriendly.mjs
+simDartDraftPool: node scripts/simDartDraftPool.mjs
+simSeasonFamilySummary: node scripts/simSeasonFamilySummary.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerOpponents: node scripts/simSoccerCareerOpponents.mjs
+simTrophyCabinet: node scripts/simTrophyCabinet.mjs
+simStatDetectiveMotion: node scripts/simStatDetectiveMotion.mjs
+simSoccerCareerAmbitions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerSeasonHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
