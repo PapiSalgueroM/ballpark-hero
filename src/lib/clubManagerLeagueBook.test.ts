@@ -131,6 +131,39 @@ describe('dealGoals', () => {
     expect(dealGoals('nobody', 2, [{ n: 'Only Keeper', p: 'GK', r: 90 }], RULES).every(g => g.scorer === null)).toBe(true);
   });
 
+  it('gives the assist by the ASSIST weight over the other men: by line inside four standard deviations, and far from the goal weight\'s share', () => {
+    /* Round 1306. The test's own copy of the two tables: the scorer of an open play goal is s by the goal
+       weight, the assist goes to one of the others by the assist weight (0.6 of the goal weight plus 0.5).
+       A reviewer once dealt the assist by the goal weight and nothing went red; this can tell the two apart. */
+    const line = (m: BookMan): 'ATT' | 'MID' | 'DEF' => (['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(m.p) ? 'DEF' : ['CDM', 'CM', 'CAM', 'LM', 'RM'].includes(m.p) ? 'MID' : 'ATT');
+    const outfield = XI.filter(m => m.p !== 'GK');
+    const gw = (m: BookMan): number => goalWeight(m.p, m.r);
+    const shares = (aw: (m: BookMan) => number): Record<'ATT' | 'MID' | 'DEF', number> => {
+      const G = outfield.reduce((s, m) => s + gw(m), 0);
+      const A = outfield.reduce((s, m) => s + aw(m), 0);
+      const out = { ATT: 0, MID: 0, DEF: 0 };
+      for (const s of outfield) for (const a of outfield) if (a !== s) out[line(a)] += (gw(s) / G) * (aw(a) / (A - aw(s)));
+      return out;
+    };
+    const byRule = shares(m => gw(m) * 0.6 + 0.5);
+    const byGoalWeight = shares(gw);
+    const got = { ATT: 0, MID: 0, DEF: 0 };
+    let n = 0;
+    for (let i = 0; i < 6000; i += 1) {
+      for (const goal of dealGoals(`assist line|${i}`, 1, XI, RULES)) {
+        if (!goal.assist) continue;
+        expect(goal.kind).toBe('open');
+        got[line(goal.assist)] += 1;
+        n += 1;
+      }
+    }
+    expect(n).toBeGreaterThan(3000);
+    for (const l of ['ATT', 'MID', 'DEF'] as const) expect(Math.abs(got[l] - n * byRule[l])).toBeLessThan(4 * sd(n, byRule[l]));
+    /* The defenders are where the two tables part: the flat half point lifts them. */
+    expect(Math.abs(got.DEF - n * byGoalWeight.DEF)).toBeGreaterThan(4 * sd(n, byGoalWeight.DEF));
+    expect(Math.abs(got.ATT - n * byGoalWeight.ATT)).toBeGreaterThan(4 * sd(n, byGoalWeight.ATT));
+  });
+
   it('deals the assist of a goal a report already named on its own key, never to the scorer or a keeper', () => {
     const scorer = XI[10];
     let given = 0;

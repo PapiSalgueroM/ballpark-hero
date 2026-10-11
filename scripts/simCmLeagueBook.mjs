@@ -44,7 +44,11 @@
  *            inside four binomial standard deviations of the rule's share of the run's own counts; (iv)
  *            every goal is its own roll: of the matches a club with an eleven scored two or more in
  *            against another club, how often every goal went to one man, against what the harness's own
- *            table says for that eleven and that score, inside four standard deviations
+ *            table says for that eleven and that score, inside four standard deviations; (v) Round 1306,
+ *            WHO is given a rival's assist: of the assists clubs with an eleven were given in matches
+ *            between other clubs, the count on rows of forwards, midfielders and defenders against what
+ *            the harness's own copy of the goal table and of the assist table says for each eleven,
+ *            inside four binomial standard deviations
  *   oldsave  four saves with no book (the two committed fixtures, loaded through loadCareer, and two
  *            written in the run twenty entries into a season) finish their season on the candidate
  *            exactly as on the reference engines, entry by entry, with the same board and summary, and
@@ -114,6 +118,8 @@
  *   seasonstamp   the season's number is put back into the stamp     -> doors
  *   strip         the Hot Seat's strip of the book is taken out      -> dailies
  *   stripdeadline Deadline Day's strip is taken out                  -> dailies
+ *   assistgoalweight the assist is shared out by the GOAL table (the mutation a reviewer of Round 1229
+ *                 found nothing held)                                -> shapes (v)
  *   nofill        a partial eleven gets no empty shirt: every goal of a thin club lands on the men its
  *                 roster has                                         -> thin (iii)
  *   shirtrow      an empty shirt is given a row like any man         -> thin (ii)
@@ -205,6 +211,7 @@ const CONTROLS = {
   seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors' },
   strip: { patch: [{ file: HOT, from: '  delete s.leagueBook;', to: '' }], red: 'dailies' },
   stripdeadline: { patch: [{ file: DEADLINE, from: '    delete state0.leagueBook;', to: '' }], red: 'dailies' },
+  assistgoalweight: { patch: [{ file: BOOK, from: 'm => assistWeight(m.p, m.r), pick);', to: 'm => goalWeight(m.p, m.r), pick);' }], red: 'shapes' },
   nofill: { patch: [{ file: BOOK, from: '    for (let i = 0; i < open[line]; i += 1) outfield.push({ n: `?${++shirts}`, p: SHIRT_POS[line], r: rating, e: true });', to: '    void shirts;' }], red: 'thin' },
   shirtrow: { patch: [{ file: BOOK, from: '  if (man.e) return null;', to: '' }], red: 'thin' },
   thinsheet: { patch: [{ file: ENGINE, from: '    if (thin) creditCleanSheet(book, opp, thin.keeper, thinBacks(thin.outfield));', to: '    void thin;' }], red: 'thin' },
@@ -334,8 +341,10 @@ async function engine(label, root, patches = []) {
 const PURPOSE_FLOOR = 1.5;
 /** Section shapes (iv) is judged on at least this many matches: see MEASURED above. */
 const MULTI_FLOOR = 1000;
+/** Section shapes (v) is judged on at least this many assists between other clubs: see MEASURED, Round 1306. */
+const ASSIST_FLOOR = 1500;
 /** Section thin (iii) is judged on at least this many goals of clubs with no eleven: see MEASURED, Round 1306. */
-const THIN_FLOOR = 800;
+const THIN_FLOOR = 1200;
 
 /* ---------- the seeded stream, counted ---------- */
 function seeded(seed) {
@@ -363,6 +372,9 @@ const sha = text => createHash('sha256').update(text).digest('hex').slice(0, 24)
 const wBase = pos => (pos === 'ST' || pos === 'CF' ? 5 : pos === 'LW' || pos === 'RW' ? 3.6 : pos === 'CAM' ? 3
   : pos === 'LM' || pos === 'RM' ? 2.2 : pos === 'CM' ? 1.6 : pos === 'CDM' ? 0.9 : pos === 'GK' ? 0.02 : 0.55);
 const W = man => wBase(man.p) * Math.pow(man.r / 70, 2);
+/* Round 1306: the ASSIST table, typed out here too and for the same reason (shapes (v) judges who is given a
+   rival's assist against this copy, never against the module's assistWeight). */
+const AW = man => W(man) * 0.6 + 0.5;
 const BACKS = new Set(['CB', 'LB', 'RB', 'LWB', 'RWB']);
 const MIDS = new Set(['CDM', 'CM', 'CAM', 'LM', 'RM']);
 const lineOf = pos => (pos === 'GK' ? 'GK' : BACKS.has(pos) ? 'DEF' : MIDS.has(pos) ? 'MID' : 'ATT');
@@ -421,6 +433,25 @@ function expectedByLine(xi) {
   for (const m of outfield) out[lineOf(m.p)] += P_OPEN * W(m) / total;
   const t = takerLine(xi);
   if (t) out[t] += P_SET;
+  return out;
+}
+
+/**
+ * Round 1306, shapes (v). Who is given the assist of an open play goal of this eleven, by line: the scorer
+ * is one of the outfield men by the goal table, and the assist goes to one of the OTHER outfield men by the
+ * assist table. (A penalty, a direct free kick and an own goal carry no assist, so only open play goals
+ * enter, and their scorer is by the weight whatever the taker rule says.)
+ */
+function assistByLine(xi) {
+  const outfield = xi.filter(m => m.p !== 'GK');
+  const G = outfield.reduce((s, m) => s + W(m), 0);
+  const A = outfield.reduce((s, m) => s + AW(m), 0);
+  const out = { ATT: 0, MID: 0, DEF: 0 };
+  for (const s of outfield) {
+    for (const a of outfield) {
+      if (a !== s) out[lineOf(a.p)] += (W(s) / G) * (AW(a) / (A - AW(s)));
+    }
+  }
   return out;
 }
 
@@ -520,6 +551,9 @@ const tick = (section, n = 1) => checked.set(section, checked.get(section) + n);
 const newAcc = () => ({
   byLine: { ATT: 0, MID: 0, DEF: 0, GK: 0 }, rowGoals: 0, assists: 0, og: 0, u: 0, noXiClubWeeks: 0,
   aiObs: { ATT: 0, MID: 0, DEF: 0 }, aiExp: { ATT: 0, MID: 0, DEF: 0 }, aiGoals: 0,
+  /* Round 1306, shapes (v): the assists of clubs with an eleven in matches between other clubs, by the line
+     of the man given one, and what the harness's own two tables expect of that. */
+  asObs: { ATT: 0, MID: 0, DEF: 0 }, asExp: { ATT: 0, MID: 0, DEF: 0 }, asN: 0,
   seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0, reviews: 0, xiRows: 0, xiAssists: 0, xiOg: 0,
   race: { ATT: 0, MID: 0, DEF: 0, GK: 0, rivalGoals: 0 }, thin: {},
   /* Matches a club with an eleven scored two or more in against another club: how many, in how many every
@@ -735,6 +769,7 @@ function watcher(mod, label, acc, opts = {}) {
         acc.u += entry.u - prior.u;
         let roster = null;
         const got = { ATT: 0, MID: 0, DEF: 0, GK: 0 };
+        const gotA = { ATT: 0, MID: 0, DEF: 0, GK: 0 };
         /* The most goals one row gained in this entry. */
         let mostOnOneRow = 0;
         /* My opponent of this entry: what its rows gained, by name, for the comparison with the report. */
@@ -756,6 +791,7 @@ function watcher(mod, label, acc, opts = {}) {
           /* ... and he was not one of mine when it was written. */
           if (before.mine.has(name) && mineNow.has(name)) fail('names', `${label} ${where}: ${name} is in my squad and was credited for ${club}`);
           got[lineOf(pos)] += row[0] - old[0];
+          gotA[lineOf(pos)] += row[1] - old[1];
           mostOnOneRow = Math.max(mostOnOneRow, row[0] - old[0]);
           acc.byLine[lineOf(pos)] += row[0] - old[0];
           acc.rowGoals += row[0] - old[0];
@@ -787,6 +823,13 @@ function watcher(mod, label, acc, opts = {}) {
           const exp = expectedByLine(xi);
           for (const line of LINES) { acc.aiObs[line] += got[line]; acc.aiExp[line] += scored * exp[line]; }
           acc.aiGoals += scored;
+          /* Shapes (v): who was given the assists of this entry, against the harness's own two tables. */
+          const given = gotA.ATT + gotA.MID + gotA.DEF;
+          if (given > 0) {
+            const expA = assistByLine(xi);
+            for (const line of LINES) { acc.asObs[line] += gotA[line]; acc.asExp[line] += given * expA[line]; }
+            acc.asN += given;
+          }
           /* Every goal is its own roll: when the club scored two or more in this ONE match, did one man take
              them all, and how often should he by the harness's own table for this eleven and this score. */
           if (scored >= 2 && games === 1) {
@@ -1124,11 +1167,25 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   const zm = (acc.multi.one - acc.multi.exp) / Math.max(1e-9, Math.sqrt(acc.multi.vr));
   if (Math.abs(zm) > 4) fail('shapes', `one man took every goal in ${acc.multi.one} of ${acc.multi.n} matches a club scored two or more in, the weight says ${fmt(acc.multi.exp)} (z ${fmt(zm, 2)})`);
   if (acc.multi.n < MULTI_FLOOR) fail('shapes', `only ${acc.multi.n} matches with two or more goals by a club with an eleven: too few to judge on (floor ${MULTI_FLOOR})`);
+  /* (v) WHO IS GIVEN A RIVAL'S ASSIST (Round 1306). Check (iii) holds HOW MANY assists there are and nothing
+     held who gets them: with the assist dealt by the goal table the fleet and the unit file stayed green.
+     Of the assists clubs with an eleven were given in matches between other clubs, the count on rows of
+     forwards, midfielders and defenders against what the harness's own two tables say for each eleven. */
+  const zAssist = {};
+  for (const line of LINES) {
+    tick('shapes');
+    const p = acc.asExp[line] / Math.max(1, acc.asN);
+    zAssist[line] = (acc.asObs[line] - acc.asExp[line]) / Math.max(1e-9, sd(acc.asN, p));
+    if (Math.abs(zAssist[line]) > 4) fail('shapes', `${line}: given ${acc.asObs[line]} of ${acc.asN} assists between other clubs, the assist table says ${fmt(acc.asExp[line])} (z ${fmt(zAssist[line], 2)})`);
+  }
+  tick('shapes');
+  if (acc.asN < ASSIST_FLOOR) fail('shapes', `only ${acc.asN} assists between other clubs: too few to judge who is given one (floor ${ASSIST_FLOOR})`);
   const all = acc.byLine.ATT + acc.byLine.MID + acc.byLine.DEF + acc.byLine.GK;
   const pct = x => fmt(100 * x / Math.max(1, all));
   console.log(`shapes  credited rival goals ${all}: forwards ${pct(acc.byLine.ATT)}%, midfielders ${pct(acc.byLine.MID)}%, defenders ${pct(acc.byLine.DEF)}%, keepers ${acc.byLine.GK} goals`);
   console.log(`        between other clubs (${n} goals), dealt against the weight: ${LINES.map(l => `${l} ${acc.aiObs[l]} vs ${fmt(acc.aiExp[l])} (z ${fmt((acc.aiObs[l] - acc.aiExp[l]) / Math.max(1e-9, sd(n, acc.aiExp[l] / Math.max(1, n))), 2)})`).join(', ')}`);
   console.log(`        clubs with an eleven: assists ${acc.xiAssists} on ${acc.xiRows} credited goals = ${fmt(acc.xiAssists / Math.max(1, acc.xiRows), 3)} a goal (the rule ${fmt(P_ASSIST, 3)}, z ${fmt(za, 2)}); own goals ${acc.xiOg} of ${named} = ${fmt(100 * acc.xiOg / Math.max(1, named), 2)}% (the rule ${fmt(100 * P_OG, 2)}%, z ${fmt(zo, 2)}); every club: ${acc.assists} assists on ${acc.rowGoals} credited goals = ${fmt(acc.assists / Math.max(1, acc.rowGoals), 3)} a goal`);
+  console.log(`        who is given an assist, between other clubs (${acc.asN} assists), against the harness's own two tables: ${LINES.map(l => `${l} ${acc.asObs[l]} vs ${fmt(acc.asExp[l])} = ${fmt(100 * acc.asObs[l] / Math.max(1, acc.asN))}% vs ${fmt(100 * acc.asExp[l] / Math.max(1, acc.asN))}% (z ${fmt(zAssist[l], 2)})`).join(', ')}`);
   console.log(`        every goal its own roll: one man took every goal in ${acc.multi.one} of ${acc.multi.n} matches a club with an eleven scored two or more in = ${fmt(100 * acc.multi.one / Math.max(1, acc.multi.n))}% (the weight says ${fmt(100 * acc.multi.exp / Math.max(1, acc.multi.n))}%, z ${fmt(zm, 2)})`);
   console.log(`        unnamed goals ${acc.u} (club weeks with no named eleven: ${acc.noXiClubWeeks}); my league matches ${acc.myLeagueMatches}, reports whose lines did not add up to the score: ${acc.shortLines}`);
   for (const [league, t] of Object.entries(acc.thin)) {
@@ -1177,7 +1234,7 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   const boots = id => acc.seasons.filter(x => x.league === id).map(x => x.bootRival);
   const se = xs => { const m = mean(xs); return Math.sqrt(mean(xs.map(x => (x - m) ** 2)) / Math.max(1, xs.length)); };
   const [thinBoots, wholeBoots] = [boots('bundesliga2'), boots('bundesliga')];
-  if (thinBoots.length && wholeBoots.length) {
+  if (thinBoots.length > 1 && wholeBoots.length > 1) {
     const gap = mean(thinBoots) - mean(wholeBoots);
     console.log(`        best rival total, the thin league against the whole one of the same length: bundesliga2 ${fmt(mean(thinBoots), 2)} (${thinBoots.length} seasons, standard error ${fmt(se(thinBoots), 2)}), bundesliga ${fmt(mean(wholeBoots), 2)} (${wholeBoots.length}, ${fmt(se(wholeBoots), 2)}): ${fmt(gap, 2)}, ${fmt(gap / Math.max(1e-9, Math.hypot(se(thinBoots), se(wholeBoots))), 2)} standard errors`);
   }
@@ -1270,15 +1327,16 @@ const whole = s => sha(JSON.stringify(s));
     { name: 'the committed save of Round 1052 (Sevilla)', raw: fs.readFileSync(path.join(ROOT, 'scripts/data/cmOldSave1052Fixture.json'), 'utf8'), viaLoad: true, seed: 0x7001 },
     { name: 'the committed second tier save (Valencia)', raw: fs.readFileSync(path.join(ROOT, 'scripts/data/cmSecondTierOldSaveFixture.json'), 'utf8'), viaLoad: true, seed: 0x7002 },
   ];
-  /* And two written in this run by the reference engine itself: twenty entries into a season, then saved. */
-  const writer = await refs[refs.length - 1][1].again();
+  /* And two written in this run by the engine with the book out: twenty entries into a season, then saved.
+     (Never by the base commit: since Round 1306 the base is a commit that keeps a book itself.) */
+  const writer = await refs[0][1].again();
   for (const [club, seed] of [['Everton', 0x7003], ['Southampton', 0x7004]]) {
     const raw = onStream(seed, () => {
       let s = writer.cm.startCareer(club);
       for (let k = 0; k < 20; k++) s = writer.cm.playNextEntry(s, { skipHalftime: true }).state;
       return JSON.stringify(s);
     });
-    saves.push({ name: `${club}, twenty entries in, written by the ${refs[refs.length - 1][0]} engine`, raw, viaLoad: false, seed: seed + 16 });
+    saves.push({ name: `${club}, twenty entries in, written by the ${refs[0][0]} engine`, raw, viaLoad: false, seed: seed + 16 });
   }
   const followUps = [];
   for (const [refName, ref] of refs) {
