@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# Round 1302 second closing check (verifier): the page weights on the pushed head (the served dark build) and on the base origin/release-au-int 0757b2a9 built in the same job.
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight-head.log"; grep -a "gz over\|failures" /tmp/w.log | cut -c1-120 | head -40; echo "sweepWeight head exit $s"; exit $s
+weight-base: git worktree add -q /tmp/base 0757b2a9277e630e336e16c640e4f76a7d5c47f8 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && npm run build > /tmp/b.log 2>&1; echo "base build exit=$?"; (node scripts/lib/hostLikeServer.mjs dist 4199 > /tmp/srv.log 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 SWEEP_BASE=http://localhost:4199 BASE=http://localhost:4199 node scripts/sweepWeight.mjs > /tmp/w2.log 2>&1; s=$?; cp /tmp/w2.log "$RC_OUT/weight-base.log"; grep -a "gz over\|failures" /tmp/w2.log | cut -c1-120 | head -40; echo "sweepWeight base exit $s"; exit $s
