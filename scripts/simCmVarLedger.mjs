@@ -46,7 +46,12 @@ const EXPECT = {
   missing: /is not in the ledger/, extra: /the engine cannot play/, onesource: /stands on fewer than two publishers/,
   receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
   highest: /goalReview is not the stricter count/, names: /the help would name/, owedlive: /CM_VAR_LIVE is true while the rates ledger still owes/,
-  stage: /the help would name .*Australia Cup and kickOff/, unread: /notRead still lists FA Cup/,
+  /* stage asks for the Australia Cup named bare (a comma or the end of the list straight after it) INSIDE the list
+     of names: no name holds a colon and every key after "kickOff covers" does, so the match cannot run on into
+     the keys, where cup:Australia Cup always stands bare. It used to ask for the cup as the LAST name, which
+     stopped being true the day a later row said yes (the DFB-Pokal), and the control then ended "DID NOT FIRE"
+     on the very failure it exists to cause. */
+  stage: /the help would name [^:]*Australia Cup(?:,| and kickOff)/, unread: /notRead still lists FA Cup/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmVarLedger: unknown control ${CONTROL}`); process.exit(2); }
 
