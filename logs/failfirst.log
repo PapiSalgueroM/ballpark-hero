@@ -1,0 +1,30 @@
+AT ee8ac52d = ee8ac52d2 2026-10-11 Round 1304: simEra2020 section 10, red first: a manager sacked in a past season must be offered jobs by clubs of that season, and
+== simEra2020 at ee8ac52d2a exit=1
+   939 era-exclusive names checked against the 2026 market, 0 leaks
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+  FAIL: era2010: 99 of 119 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Arsenal; Charlton Athletic of today's EFL Championship rang the sacked manager of Arsenal; QPR of today's EFL Champi
+  FAIL: era2010: 20 of 119 job offers print a league, tier or budget that is not that season's, e.g. Blackburn Rovers as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 10m); Stoke City as EFL Championship, tier 4, 10m (that season: Premier League, tier 3, 10m)
+  FAIL: era2010: 50 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Barcelona to Millwall: the save reads Barcelona; Juventus to Portsmouth: the save reads Juventus; Nancy to Southampton: the save reads Nancy
+  FAIL: era2010: 24 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Derby County of today's EFL Championship; Bristol City of today's EFL Championship; Charlton Athletic of today's EFL Championship
+  FAIL: era2010: an old save's offer from Bournemouth, a club that season does not hold, was taken and the save reads Arsenal
+  FAIL: era2010: an old save's offer from Bournemouth is still on the out of work screen a week later
+  FAIL: era2015: 75 of 98 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Arsenal; Charlton Athletic of today's EFL Championship rang the sacked manager of Arsenal; Blackburn Rovers of today'
+  FAIL: era2015: 23 of 98 job offers print a league, tier or budget that is not that season's, e.g. Stoke City as EFL Championship, tier 4, 10m (that season: Premier League, tier 3, 19m); Norwich City as EFL Championship, tier 4, 12m (that season: Premier League, tier 4, 8m)
+  FAIL: era2015: 45 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Arsenal to Blackburn Rovers: the save reads Arsenal; Celta Vigo to QPR: the save reads Celta Vigo; Lazio to Wrexham: the save reads Lazio
+  FAIL: era2015: 24 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Derby County of today's EFL Championship; Bristol City of today's EFL Championship; Charlton Athletic of today's EFL Championship
+  FAIL: era2015: an old save's offer from Brentford, a club that season does not hold, was taken and the save reads Arsenal
+  FAIL: era2015: an old save's offer from Brentford is still on the out of work screen a week later
+  FAIL: era2005: 83 of 109 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Arsenal; QPR of today's EFL Championship rang the sacked manager of Barcelona; Millwall of today's EFL Championship 
+  FAIL: era2005: 26 of 109 job offers print a league, tier or budget that is not that season's, e.g. Charlton Athletic as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 8m); Blackburn Rovers as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 9m)
+  FAIL: era2005: 43 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Barcelona to Millwall: the save reads Barcelona; Hertha BSC to Stoke City: the save reads Hertha BSC; Sunderland to Albacete: the save reads Sunderland
+  FAIL: era2005: 24 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Stoke City of today's EFL Championship; Derby County of today's EFL Championship; Bristol City of today's EFL Championship
+  FAIL: era2005: an old save's offer from Bournemouth, a club that season does not hold, was taken and the save reads Arsenal
+  FAIL: era2005: an old save's offer from Bournemouth is still on the out of work screen a week later
+  FAIL: era2020: 85 of 103 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Manchester City; Charlton Athletic of today's EFL Championship rang the sacked manager of Manchester City; Blackburn
+  FAIL: era2020: 18 of 103 job offers print a league, tier or budget that is not that season's, e.g. Southampton as EFL Championship, tier 4, 20m (that season: Premier League, tier 3, 27m); Sheffield United as EFL Championship, tier 4, 14m (that season: Premier League, tier 3, 17m)
+  FAIL: era2020: 50 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Manchester City to Blackburn Rovers: the save reads Manchester City; Sevilla to QPR: the save reads Sevilla; Roma to Portsmouth: the save reads Roma
+  FAIL: era2020: 30 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Stoke City of today's EFL Championship; Derby County of today's EFL Championship; Bristol City of today's EFL Championship
+  FAIL: era2020: an old save's offer from Bournemouth, a club that season does not hold, was taken and the save reads Manchester City
+  FAIL: era2020: an old save's offer from Bournemouth is still on the out of work screen a week later
+closing line: simEra2020: 24 failure(s).
+DONE at ee8ac52d2a worst=1

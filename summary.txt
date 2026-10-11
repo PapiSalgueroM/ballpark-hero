@@ -1,0 +1,15 @@
+simEra2020 exit=0 20s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+failfirst exit=0 22s | DONE at ee8ac52d2a worst=1
+c20-modernjobs exit=1 5s | simEra2020: 20 failure(s).
+c20-takestale exit=1 6s | simEra2020: 4 failure(s).
+probeModern-era exit=1 2s | PROBE RED: 20 careers differ
+probeModern exit=0 7s | PROBE GREEN: every career is byte equal at every step
+simManagerAppealIsolation exit=0 50s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simJobMarket exit=0 1s | ALL JOB MARKET CHECKS PASSED
+simCmLeagueRules exit=0 62s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simManagerOffers exit=0 1s | ALL MANAGER OFFER CHECKS PASSED
+tsc exit=0 93s | 
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simManagerCareer exit=0 9s | ALL MANAGER CAREER CHECKS PASSED
+simCmApplications exit=0 64s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.

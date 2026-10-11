@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+failfirst: bash .rc/x/at.sh ee8ac52d simEra2020
+simEra2020: node scripts/simEra2020.mjs
+c20-modernjobs: SIM_ERA2020_CONTROL=modernjobs node scripts/simEra2020.mjs
+c20-takestale: SIM_ERA2020_CONTROL=takestale node scripts/simEra2020.mjs
+probeModern: node .rc/x/probeModern.mjs 4
+probeModern-era: PROBE_ERA=era2010 node .rc/x/probeModern.mjs 4
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simWilderness: node scripts/simWilderness.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simManagerOffers: node scripts/simManagerOffers.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs

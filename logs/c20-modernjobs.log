@@ -1,0 +1,63 @@
+   CONTROL modernjobs applied: the engine is edited as it is bundled, one line
+1) A fresh 2020 save is the real 2020 squad, untouched
+   Bayern Munich: 26 in squad, 26 bake rows, 0 mismatches, 0 generated
+   PSG: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Manchester City: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Barcelona: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them leak
+   939 era-exclusive names checked against the 2026 market, 0 leaks
+   2020 and now: 835 shared names, 10 listed pairs of two men, 0 unexplained
+   2020 and era2015: 573 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2010: 164 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2005: 32 shared names, 13 listed pairs of two men, 0 unexplained
+3) Boards talk 2020-21: the giants told to win it, the promoted told to stay up
+   98 club demands checked across the five 2020-21 leagues
+4) Full seasons play out plausibly in all five leagues
+   skipped: a control run plays no seasons
+5) The bake file tells the truth about itself
+   98 clubs, 1774 players (META says 1774 in 98), 256 window corrections
+   one man one club: 0 duplicates; window sample: 31 of 31 movers landed, 12 of 12 leavers gone
+   no record placed, so left where the year-2020 row has them: Valentino Lazaro at Newcastle (Gladbach by 2021), Cristiano Biraghi at Inter Milan (Fiorentina by 2021), Bas Dost at Eintracht Frankfurt (Club Brugge by 2021)
+6) The uplift is small, keeps the order, and leaves the rank and file alone
+   top 50, uplifted 2020 against modern, mean gap 0.12 (band +-0.5)
+7) The real 2020-21 Champions League field, eight groups into a round of 16
+   32 clubs, 19 with baked 2020-21 squads; winner Chelsea
+8) Every past season's market files a man under the league his club plays in that season
+   era2010: 1719 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 364)
+   era2015: 1627 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 356)
+   era2005: 1699 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 421)
+   era2020: 1745 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 331)
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+   the eras are read as era2010, era2015, era2005, era2020; 6 of 6 pinned clubs read the league they always have
+9) Every past season's news and bidding wars name clubs of that season
+   era2010: 466 deals in the news of 100 new saves, 0 bought by a club not of that season; 35 rivals in 60 negotiations, 0 not of that season
+   era2015: 419 deals in the news of 100 new saves, 0 bought by a club not of that season; 31 rivals in 60 negotiations, 0 not of that season
+   era2005: 472 deals in the news of 100 new saves, 0 bought by a club not of that season; 32 rivals in 60 negotiations, 0 not of that season
+   era2020: 435 deals in the news of 100 new saves, 0 bought by a club not of that season; 33 rivals in 60 negotiations, 0 not of that season
+10) Every past season's out of work market offers jobs at clubs of that season
+   era2010: 119 calls in 60 sackings, 99 from a club not of that season, 20 with a card of another season; 60 jobs taken, 50 did not move the manager; 30 floors, 24 not a small club of that season
+  FAIL: era2010: 99 of 119 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Arsenal; Charlton Athletic of today's EFL Championship rang the sacked manager of Arsenal; QPR of today's EFL Championship rang the sacked manager of Barcelona
+  FAIL: era2010: 20 of 119 job offers print a league, tier or budget that is not that season's, e.g. Blackburn Rovers as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 10m); Stoke City as EFL Championship, tier 4, 10m (that season: Premier League, tier 3, 10m)
+  FAIL: era2010: 50 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Barcelona to Millwall: nothing happened; Juventus to Portsmouth: nothing happened; Nancy to Southampton: nothing happened
+  FAIL: era2010: 24 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Derby County of today's EFL Championship; Bristol City of today's EFL Championship; Charlton Athletic of today's EFL Championship
+  FAIL: era2010: an old save's offer from Bournemouth is still on the out of work screen a week later
+   era2015: 98 calls in 60 sackings, 75 from a club not of that season, 23 with a card of another season; 60 jobs taken, 45 did not move the manager; 30 floors, 24 not a small club of that season
+  FAIL: era2015: 75 of 98 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Arsenal; Charlton Athletic of today's EFL Championship rang the sacked manager of Arsenal; Blackburn Rovers of today's EFL Championship rang the sacked manager of Arsenal
+  FAIL: era2015: 23 of 98 job offers print a league, tier or budget that is not that season's, e.g. Stoke City as EFL Championship, tier 4, 10m (that season: Premier League, tier 3, 19m); Norwich City as EFL Championship, tier 4, 12m (that season: Premier League, tier 4, 8m)
+  FAIL: era2015: 45 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Arsenal to Blackburn Rovers: nothing happened; Celta Vigo to QPR: nothing happened; Lazio to Wrexham: nothing happened
+  FAIL: era2015: 24 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Derby County of today's EFL Championship; Bristol City of today's EFL Championship; Charlton Athletic of today's EFL Championship
+  FAIL: era2015: an old save's offer from Brentford is still on the out of work screen a week later
+   era2005: 109 calls in 60 sackings, 83 from a club not of that season, 26 with a card of another season; 60 jobs taken, 43 did not move the manager; 30 floors, 24 not a small club of that season
+  FAIL: era2005: 83 of 109 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Arsenal; QPR of today's EFL Championship rang the sacked manager of Barcelona; Millwall of today's EFL Championship rang the sacked manager of Barcelona
+  FAIL: era2005: 26 of 109 job offers print a league, tier or budget that is not that season's, e.g. Charlton Athletic as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 8m); Blackburn Rovers as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 9m)
+  FAIL: era2005: 43 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Barcelona to Millwall: nothing happened; Hertha BSC to Stoke City: nothing happened; Sunderland to Albacete: nothing happened
+  FAIL: era2005: 24 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Stoke City of today's EFL Championship; Derby County of today's EFL Championship; Bristol City of today's EFL Championship
+  FAIL: era2005: an old save's offer from Bournemouth is still on the out of work screen a week later
+   era2020: 103 calls in 60 sackings, 85 from a club not of that season, 18 with a card of another season; 60 jobs taken, 50 did not move the manager; 30 floors, 30 not a small club of that season
+  FAIL: era2020: 85 of 103 job offers to a sacked manager come from a club that is not in that season's leagues, e.g. Hearts of today's Scottish Premiership rang the sacked manager of Manchester City; Charlton Athletic of today's EFL Championship rang the sacked manager of Manchester City; Blackburn Rovers of today's EFL Championship rang the sacked manager of Manchester City
+  FAIL: era2020: 18 of 103 job offers print a league, tier or budget that is not that season's, e.g. Southampton as EFL Championship, tier 4, 20m (that season: Premier League, tier 3, 27m); Sheffield United as EFL Championship, tier 4, 14m (that season: Premier League, tier 3, 17m)
+  FAIL: era2020: 50 of 60 jobs taken from the out of work screen did not put the manager at that club, e.g. Manchester City to Blackburn Rovers: nothing happened; Sevilla to QPR: nothing happened; Roma to Portsmouth: nothing happened
+  FAIL: era2020: 30 of 30 jobs the eight week floor opens are not at a small club of that season, e.g. Stoke City of today's EFL Championship; Derby County of today's EFL Championship; Bristol City of today's EFL Championship
+  FAIL: era2020: an old save's offer from Bournemouth is still on the out of work screen a week later
+
+simEra2020: 20 failure(s).
