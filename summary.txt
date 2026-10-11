@@ -1,0 +1,9 @@
+vitest-us exit=0 23s |    Duration  23.07s (transform 6.59s, setup 862ms, collect 11.39s, tests 39.74s, environment 4.37s, prepare 1.10s)
+seam-compare exit=0 29s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+ctl-mlbold exit=1 16s | simUsSeasonCentre: 55 checks, 1 failed (control mlbold)
+ctl-mlbstage exit=1 15s | simUsSeasonCentre: 55 checks, 3 failed (control mlbstage)
+tsc exit=0 95s | 
+ctl-stage exit=1 26s | simUsSeasonCentre: 136 checks, 3 failed (control stage)
+ctl-record exit=1 30s | simUsSeasonCentre: 136 checks, 8 failed (control record)
+simUsSeasonCentre exit=0 130s | simUsSeasonCentre: 154 checks, 0 failed
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
