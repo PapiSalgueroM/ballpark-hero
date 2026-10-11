@@ -70,6 +70,20 @@ const parsed = async (page, key) => JSON.parse((await saved(page, key)) || 'null
 const seasonsOf = s => s?.c?.seasons?.length ?? -1;
 const play = page => page.getByRole('button', { name: /^Play the [0-9]+ season$/ });
 const WEEK = '[data-season-centre-entry] [data-week-by-week]';
+/* Presses are DOM clicks, as in this lane's other US walks: a Playwright click scrolls the page first, and the
+   hub must not be moved by the walk that measures it. What sits under the button is printed, not assumed. */
+const press = async (page, sel) => {
+  await page.locator(sel).first().waitFor({ state: 'attached', timeout: 30000 });
+  return page.evaluate(q => { const el = document.querySelector(q); if (!el) return false; el.click(); return true; }, sel);
+};
+const pressPlay = page => page.evaluate(() => { const b = [...document.querySelectorAll('button')].find(x => /^Play the [0-9]+ season$/.test((x.textContent || '').trim())); if (!b) return false; b.click(); return true; });
+const under = (page, sel) => page.evaluate(q => {
+  const el = document.querySelector(q); if (!el) return 'no such element';
+  const r = el.getBoundingClientRect(); const y = r.top + r.height / 2;
+  if (y < 0 || y > window.innerHeight) return 'the button is outside the first screen (its centre at y ' + Math.round(y) + ' of ' + window.innerHeight + ')';
+  const top = document.elementFromPoint(r.left + r.width / 2, y);
+  return top === el || el.contains(top) ? 'the button itself' : top ? `<${top.tagName.toLowerCase()} ${[...top.attributes].slice(0, 3).map(a => a.name + '="' + a.value.slice(0, 30) + '"').join(' ')}>` : 'nothing';
+}, sel);
 const TALK = '[data-extension-talk]';
 const offerOf = page => page.evaluate(() => {
   const card = document.querySelector('[data-extension-talk]');
@@ -91,7 +105,8 @@ try {
       const week = page.locator(WEEK);
       check('past', await week.count() === 1 && start.phase === 'season' && start.contractTalk === undefined && start.c.contractYears === 1,
         `${tag}: the save is one main wrote in the last year of a deal (phase ${start.phase}, ${start.c.contractYears} year left, no talk) and the hub offers Week by week (${await week.count()})`);
-      await week.click();
+      console.log(`     ${tag}: under the centre of Week by week, the page not moved: ${await under(page, WEEK)}`);
+      await press(page, WEEK);
       await page.locator(TALK).waitFor({ state: 'visible', timeout: 30000 });
       const held = await parsed(page, key);
       const viewer = await page.locator('[data-us-season-centre]').count();
@@ -109,10 +124,10 @@ try {
       check('reload', back && JSON.stringify(after) === JSON.stringify(before) && (await saved(page, key)) === bytes,
         `${tag}: a reload lands on the same talk (talk on screen ${back}, the same offer ${after?.salary ?? 'none'} against ${before?.salary}, the same save bytes ${(await saved(page, key)) === bytes})`);
       if (back) {
-        await page.locator('[data-ext-decline]').click();
+        await press(page, '[data-ext-decline]');
         await play(page).waitFor({ state: 'visible', timeout: 15000 });
         const declined = await parsed(page, key);
-        await page.locator(WEEK).click();
+        await press(page, WEEK);
         const up = await page.locator('[data-us-season-centre]').waitFor({ state: 'visible', timeout: 60000 }).then(() => true, () => false);
         const played = await parsed(page, key);
         check('decline', up && seasonsOf(played) === seasonsOf(start) + 1 && seasonsOf(declined) === seasonsOf(start),
@@ -126,15 +141,15 @@ try {
     {
       const { ctx, page } = await open(slug, raw);
       await play(page).waitFor({ state: 'visible', timeout: 30000 });
-      await play(page).click();
+      await pressPlay(page);
       await page.locator(TALK).waitFor({ state: 'visible', timeout: 30000 });
       const held = await parsed(page, key);
       const sign = page.locator('[data-ext-sign]');
       const canSign = await sign.count() === 1;
-      if (canSign) await sign.click(); else await page.locator('[data-ext-decline]').click();
+      await press(page, canSign ? '[data-ext-sign]' : '[data-ext-decline]');
       await play(page).waitFor({ state: 'visible', timeout: 15000 });
       const signed = await parsed(page, key);
-      await play(page).click();
+      await pressPlay(page);
       const curtain = await page.locator('[data-season-reveal]').waitFor({ state: 'visible', timeout: 60000 }).then(() => true, () => false);
       const played = await parsed(page, key);
       check('sign', seasonsOf(held) === seasonsOf(start) && curtain && seasonsOf(played) === seasonsOf(start) + 1 && (!canSign || signed.c.contractYears > 1),
@@ -146,14 +161,11 @@ try {
     {
       const { ctx, page } = await open(slug, raw);
       await play(page).waitFor({ state: 'visible', timeout: 30000 });
-      await page.locator('[data-us-programme-open]').click();
-      await page.locator('[data-us-programme-start]').click();
-      await page.locator('[data-us-programme-tile]').first().click();
-      await page.locator('[data-us-programme-choice][aria-pressed="false"]:not([disabled])').first().click();
-      await page.locator('[data-us-programme-close]').click();
+      for (const sel of ['[data-us-programme-open]', '[data-us-programme-start]', '[data-us-programme-tile]', '[data-us-programme-choice][aria-pressed="false"]:not([disabled])', '[data-us-programme-close]']) await press(page, sel);
+      await page.locator('[data-us-programme="dialog"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => undefined);
       const planned = await parsed(page, key);
       const plan = JSON.stringify(planned.c.programme ?? null);
-      await play(page).click();
+      await pressPlay(page);
       await page.locator(TALK).waitFor({ state: 'visible', timeout: 30000 });
       const before = await offerOf(page);
       await page.reload({ waitUntil: 'domcontentloaded' });
@@ -166,7 +178,7 @@ try {
   }
 } catch (e) {
   failed += 1; failures.push('crash');
-  console.log(`FAIL the walk stopped: ${String(e?.stack ?? e).split('\n').slice(0, 4).join(' | ')}`);
+  console.log(`FAIL the walk stopped: ${String(e?.stack ?? e).split('\n').slice(0, 16).join(' | ')}`);
 }
 await browser.close();
 console.log(`     ${aborted} requests to the live database were aborted by the walk's own route`);
