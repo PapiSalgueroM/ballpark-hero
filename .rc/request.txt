@@ -1,0 +1,1 @@
+summer-12k: node scripts/simUsCareerSummer.mjs > $RC_OUT/summer-12k.log 2>&1; s=$?; grep "6) balance\|peak OVR\|median legacy\|Hall share\|headline\|6b\|ran in\|FAIL" $RC_OUT/summer-12k.log | cut -c1-170 | tail -32; tail -1 $RC_OUT/summer-12k.log; exit $s
