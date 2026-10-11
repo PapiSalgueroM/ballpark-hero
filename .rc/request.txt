@@ -1,0 +1,6 @@
+# Release AW closing pass, on the final head 046e38ae (the merge of origin/main, two board docs): the type gate, the one harness that reads a board doc, the script fence
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSafari: node scripts/simSafari.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+gitclean: git status --porcelain --untracked-files=no | wc -l
