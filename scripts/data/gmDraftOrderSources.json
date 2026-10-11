@@ -42,7 +42,7 @@
         "says": "Picks 15 to 30 go to the playoff clubs in reverse order of regular season record.",
         "reads": [
           { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "The order of selection of the first round (No. 15-30) and the entire second round (No. 31-60), is determined by reverse order of regular-season record." },
-          { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "The 2026 draft as it was picked, 15 to 30 by first owner: Portland, Phoenix, Philadelphia, Orlando, Toronto, Atlanta, Minnesota, Houston, Cleveland, New York, the Lakers, Denver, Boston, Detroit, San Antonio, Oklahoma City. That is the playoff clubs from the worst record (42-40) to the best (64-18) as the league's release prints the records. An observed order, not a sentence stating the rule." }
+          { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "The 2026 draft as it was picked, 15 to 30 by first owner: Portland, Phoenix, Philadelphia, Orlando, Toronto, Atlanta, Minnesota, Houston, Cleveland, New York, the Lakers, Denver, Boston, Detroit (this one slot is inferred, not printed: the page prints pick 28 as Minnesota's with no first owner, and pick 21 as Detroit's, from Minnesota), San Antonio, Oklahoma City. That is the playoff clubs from the worst record (42-40) to the best (64-18) as the league's release prints the records. An observed order, not a sentence stating the rule." }
         ]
       },
       "laterRounds": {

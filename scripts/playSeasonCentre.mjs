@@ -51,6 +51,15 @@
  * full watch" now also says that letting every moment play writes nothing.
  * Taking a moment is scripts/playSeasonMoments.mjs.
  *
+ * Release AU (Rounds 1197 to 1208): two things a player now meets on the way.
+ * An event choice with odds leaves a chance wheel on the save, which he answers
+ * where the choice is made: the driver below answers it there too (the call the
+ * wheel's own Continue makes), so the saves handed to the page are the saves a
+ * played career holds. And the Season Centre stops for a cup night between
+ * league games: the full watch and the two tours press through each one
+ * (scripts/lib/cupNightWalk.mjs), with the walker's rule checked on those
+ * screens like on every other, and the watch says how many it met.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playSeasonCentre.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
  * "playSeasonCentre: N checks, 0 failed" line and exit 0.
@@ -62,6 +71,7 @@ import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
 import { mulberry32 } from './lib/careerAwardsNightProbe.mjs';
+import { pressCupNight } from './lib/cupNightWalk.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -104,8 +114,8 @@ const WALK = walkerRule();
 check(WALK.actions.includes('Next Season') && WALK.actions.includes('Continue') && WALK.skip.includes('Retire'), `5. parsed the walker's ACTIONS (${WALK.actions.length} entries) and SKIP from its text`);
 
 /* ─── saves the game itself would write ─── */
-const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts' } });
-const { soccer, season: S, core: C } = B;
+const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', wheel: 'src/lib/careerChanceWheel.ts' } });
+const { soccer, season: S, core: C, wheel: WHEEL } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 const abil = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
 function step(s) {
@@ -121,7 +131,7 @@ function step(s) {
     case 'rivalry_event': return soccer.dismissRivalryEvent(s, CLUBS);
     case 'social_media_action': return soccer.dismissSocialMediaPhase(s, CLUBS);
     case 'moral_dilemma': { const n = soccer.applyMoralDilemmaChoice(s, 0); return n.phase === 'moral_dilemma' ? soccer.dismissMoralDilemma(n, CLUBS) : n; }
-    case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? soccer.applyEventChoice(s, 0, CLUBS) : { ...s, phase: 'playing', pendingEvents: [] }; }
+    case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? WHEEL.acknowledgeChanceWheel(soccer.applyEventChoice(s, 0, CLUBS)) : { ...s, phase: 'playing', pendingEvents: [] }; }
     case 'red_card_appeal_result': return soccer.dismissAppealResult(s, CLUBS);
     case 'rehab_choice': return soccer.applyRehabChoice(s, 0);
     case 'transfer_window': return soccer.stayAtClub(s);
@@ -250,6 +260,16 @@ async function walkerCheck(page, where) {
 
 const allErrors = [];
 let LET_PLAY = 0;
+let CUP_NIGHTS = 0;
+const CUP_LABELS = new Set();
+/** A cup night between two league games: one press of whatever it offers next (Release AU). */
+async function cupNight(page) {
+  const pressed = await pressCupNight(page);
+  if (!pressed) return false;
+  if (pressed.what === 'reveal') CUP_NIGHTS += 1;
+  CUP_LABELS.add(pressed.label);
+  return true;
+}
 const SCREEN_LABELS = new Set();
 let pickOnNew = 0, clashes = new Set();
 async function walkerAt(page, where) {
@@ -267,12 +287,12 @@ async function letPlay(page, where) {
 }
 /** Play on at Results speed until the review shows. */
 async function toReview(page, where) {
-  for (let i = 0; i < 140; i += 1) {
+  for (let i = 0; i < 280; i += 1) {
     if (await page.$('[data-review]')) return true;
     await letPlay(page, `${where} step ${i}`);
     await walkerAt(page, `${where} step ${i}`);
     await clickText(page, 'Results');
-    if (!(await clickText(page, '▶ Matchday')) && !(await clickText(page, '▶ League game'))) await clickText(page, '📋 Season review');
+    if (!(await clickText(page, '▶ Matchday')) && !(await clickText(page, '▶ League game')) && !(await cupNight(page))) await clickText(page, '📋 Season review');
   }
   return !!(await page.$('[data-review]'));
 }
@@ -308,6 +328,7 @@ try {
   const after = await savedString(X.page);
   check(after === sx, `2. the save is byte for byte the same after a full watch (${after === sx ? 'same' : 'changed'})`);
   check(LET_PLAY > 0, `2. that watch met his moments and let every one play (${LET_PLAY} offers)`);
+  check(CUP_NIGHTS > 0, `2. that watch met the season's cup nights and pressed through every one (${CUP_NIGHTS} nights; the bar said: ${[...CUP_LABELS].slice(0, 6).join(' | ')})`);
   allErrors.push(...X.errors, ...Y.errors);
   await X.ctx.close(); await Y.ctx.close();
 
@@ -403,7 +424,7 @@ try {
     await clickText(P.page, 'Results');
     let derbyShot = false, clinchShot = false;
     const tourSaw = [];
-    for (let i = 0; i < 40 && !(derbyShot && clinchShot); i += 1) {
+    for (let i = 0; i < 160 && !(derbyShot && clinchShot); i += 1) {
       await letPlay(P.page, `${tag} tour ${i}`);
       const kinds = await P.page.evaluate(() => document.querySelector('[data-poster]')?.getAttribute('data-poster') ?? '');
       tourSaw.push(kinds || '.');
@@ -417,7 +438,8 @@ try {
          now has a derby on matchday 19 and the halfway mark on 20, so it
          stopped five matchdays in and never saw the clinch on 36. A player
          presses the next matchday; so does the tour. */
-      if (!(await clickText(P.page, '⏩ To the next big game')) && !(await clickText(P.page, '▶ Matchday'))) break;
+      /* Release AU: and when a cup night is what comes next, he presses that. */
+      if (!(await clickText(P.page, '⏩ To the next big game')) && !(await clickText(P.page, '▶ Matchday')) && !(await cupNight(P.page))) break;
     }
     check(derbyShot && clinchShot, `the ${tag} tour reached a derby day and the title clinch`);
     if (!(derbyShot && clinchShot)) {

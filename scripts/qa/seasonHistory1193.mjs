@@ -9,6 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { inverseCareerNextTen } from '../lib/careerNextTenAttribution1197.mjs';
 assert(process.env.CI, 'Season history proof runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 /* Release AT: the base is the tree just before this round's own merge on the release line (f57763a6, Round 1192
@@ -28,7 +29,11 @@ export function withSeasonHistorySeed(seed, fn) {
   Date.now = () => 1791586800000;
   try { return { value: fn(), draws }; } finally { Math.random = random; Date.now = now; }
 }
-export async function bundleSeasonHistory({ original = false, patch } = {}) {
+export async function bundleSeasonHistory({ original = false, patch, without = [] } = {}) {
+  /* Release AU: `without` names the additions of Rounds 1197 to 1208 to take out of the COPY this bundle loads
+     (scripts/lib/careerNextTenAttribution1197.mjs), after a control's own patch. Only the groups that compare with
+     the base use such a bundle. */
+  const nextTen = [];
   const receipts = [], loaded = [], require = createRequire(path.join(ROOT, 'package.json'));
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'season-history-')), output = path.join(tmp, 'bundle.cjs');
   const stdin = "export * as soccer from './src/lib/soccerCareerEngine'; export * as reader from './src/lib/soccerSeasonCompetitions'; export * as ratings from './src/lib/careerSeasonRatings'; export * as fixtures from './src/test/fixtures/soccerSeasonCompetitions1173';" + (original ? '' : "export * as history from './src/lib/soccerCareerSeasonHistory';");
@@ -41,13 +46,15 @@ export async function bundleSeasonHistory({ original = false, patch } = {}) {
       source = source.replace(patch.from, patch.to); assert.notEqual(sha(source), before, patch.name + ': effective copied source change');
       receipts.push({ name: patch.name, file: rel, beforeSha256: before, afterSha256: sha(source), effective: true });
     }
+    if (!original && without.length) source = inverseCareerNextTen(rel, source, nextTen, without);
     loaded.push({ file: rel, beforeSha256: before, compiledSha256: sha(source), changed: before !== sha(source) });
     return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : rel.endsWith('.json') ? 'json' : 'ts' };
   }); } };
   try {
     await build({ stdin: { contents: stdin, resolveDir: ROOT, loader: 'ts' }, bundle: true, platform: 'node', format: 'cjs', outfile: output, alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin], define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' }, loader: { '.css': 'empty', '.svg': 'empty', '.png': 'empty', '.jpg': 'empty', '.webp': 'empty' }, logLevel: 'error' });
     if (patch) assert.equal(receipts.length, 1, 'Copied helper defect was loaded exactly once');
-    return { ...require(output), receipts, loaded };
+    if (!original) assert.deepEqual(nextTen.map(row => row.addition).sort(), [...without].sort(), 'Each addition of Rounds 1197 to 1208 asked for was taken out of the copy exactly once');
+    return { ...require(output), receipts, loaded, nextTen };
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 }
 // Independent raw-save oracle. This deliberately imports no production season readers.
@@ -112,12 +119,14 @@ const CONTROLS = [
   { name: 'input-mutation', file: HELPER, from: 'const rows = seasonHistoryRows(career);', to: 'career.overall = 1; const rows = seasonHistoryRows(career);', failed: ['read boundary'] },
   { name: 'weeks-as-matches', file: HELPER, from: 'suspensionMatches: count(row.suspensionMatches)', to: 'suspensionMatches: count(row.injuryWeeks)', failed: ['saved rows', 'comparison', 'availability'] },
 ];
-async function run(B, A, carrier, fixtures, dir) {
+/* Release AU: N is B with the chance wheel receipt, the opening tie and the recorded cup ground of Rounds 1197 to 1208
+   out of its copy; the engine baseline and the existing readers alone compare it with the base. */
+async function run(B, A, carrier, fixtures, dir, N = B) {
   const report = { head: git('rev-parse','HEAD'), tree: git('rev-parse','HEAD^{tree}'), baseHead: BASE, baseTree: BASE_TREE, cases: [], failed: [], counts: {}, receipts: B.receipts, loaded: B.loaded, originalLoaded: A.loaded };
   const group = async (name, fn) => { try { await fn(); report.cases.push({ name, passed: true }); console.log('PASS ' + name); } catch (error) { report.cases.push({ name, passed: false, errorName: error.name, error: String(error.stack || error) }); report.failed.push(name); console.log('FAIL ' + name + ': ' + error.message); } };
   await group('engine baseline', () => {
     const pairs = [];
-    for (let i=0;i<24;i++) { const input=copy(carrier);Object.assign(input,{phase:'playing',pendingSummary:null,pendingEvents:[],pendingBallonDor:null});const before=structuredClone(input),seed=1193100+i,original=withSeasonHistorySeed(seed,()=>A.soccer.advanceProSeason(copy(input),A.soccer.FALLBACK_CLUBS)),current=withSeasonHistorySeed(seed,()=>B.soccer.advanceProSeason(copy(input),B.soccer.FALLBACK_CLUBS));pairs.push({seed,input,original,current});assert.deepEqual(current,original);assert.deepEqual(input,before); }
+    for (let i=0;i<24;i++) { const input=copy(carrier);Object.assign(input,{phase:'playing',pendingSummary:null,pendingEvents:[],pendingBallonDor:null});const before=structuredClone(input),seed=1193100+i,original=withSeasonHistorySeed(seed,()=>A.soccer.advanceProSeason(copy(input),A.soccer.FALLBACK_CLUBS)),current=withSeasonHistorySeed(seed,()=>N.soccer.advanceProSeason(copy(input),N.soccer.FALLBACK_CLUBS));pairs.push({seed,input,original,current});assert.deepEqual(current,original);assert.deepEqual(input,before); }
     write(dir,'engine-pairs',pairs);report.counts.enginePairs=pairs.length;
   });
   await group('campaign baseline', () => {
@@ -125,7 +134,7 @@ async function run(B, A, carrier, fixtures, dir) {
     for(const item of campaigns(B,carrier))for(let i=0;i<32;i++){const seed=1193200+i,original=withSeasonHistorySeed(seed,()=>A.soccer.simulateUCL(copy(item.state),copy(item.row))),current=withSeasonHistorySeed(seed,()=>B.soccer.simulateUCL(copy(item.state),copy(item.row)));pairs.push({id:item.id,seed,input:item.state,row:item.row,original,current});assert.deepEqual(current,original);}
     write(dir,'campaign-pairs',pairs);report.counts.campaignPairs=pairs.length;
   });
-  await group('existing readers',()=>{const pairs=[];for(const item of fixtures){const ratingsOld=A.ratings.soccerRatingRows(item.career.seasons,item.career.position),ratingsNow=B.ratings.soccerRatingRows(item.career.seasons,item.career.position);assert.deepEqual(ratingsNow,ratingsOld);for(const row of item.career.seasons){const original=A.reader.savedSeasonCompetitions(copy(item.career),copy(row)),current=B.reader.savedSeasonCompetitions(copy(item.career),copy(row));pairs.push({id:item.id,year:row.year,original,current});assert.deepEqual(current,original);}}write(dir,'existing-reader-pairs',pairs);report.counts.readerPairs=pairs.length;});
+  await group('existing readers',()=>{const pairs=[];for(const item of fixtures){const ratingsOld=A.ratings.soccerRatingRows(item.career.seasons,item.career.position),ratingsNow=B.ratings.soccerRatingRows(item.career.seasons,item.career.position);assert.deepEqual(ratingsNow,ratingsOld);for(const row of item.career.seasons){const original=A.reader.savedSeasonCompetitions(copy(item.career),copy(row)),current=N.reader.savedSeasonCompetitions(copy(item.career),copy(row));pairs.push({id:item.id,year:row.year,original,current});assert.deepEqual(current,original);}}write(dir,'existing-reader-pairs',pairs);report.counts.readerPairs=pairs.length;});
   await group('saved rows',()=>{for(const item of fixtures){const expected=rawHistory(item.career),actual=B.history.seasonHistoryRows(copy(item.career));write(dir,item.id+'-rows',{input:item.career,expected,actual});assert.deepEqual(actual,expected);}report.counts.historyRows=fixtures.reduce((n,item)=>n+rawHistory(item.career).length,0);});
   await group('comparison',()=>{const observations=[];for(const item of fixtures)for(const [first,second]of[[1,2],[2,1],[3,4],[28,29]]){const expected=rawComparison(item.career,first,second),actual=B.history.compareSavedSeasons(copy(item.career),first,second);observations.push({id:item.id,first,second,expected,actual});write(dir,'comparisons',observations);assert.deepEqual(actual,expected);}write(dir,'comparisons',observations);report.counts.comparisons=observations.length;});
   await group('availability',()=>{const observations=[];for(const item of fixtures)for(const row of item.career.seasons){const expected=rawAvailability(row),actual=B.history.savedSeasonAvailability(copy(row));observations.push({id:item.id,year:row.year,expected,actual});write(dir,'availability',observations);assert.deepEqual(actual,expected);}write(dir,'availability',observations);report.counts.availabilityRows=observations.length;});
@@ -138,10 +147,11 @@ if(process.env.SEASON_HISTORY_IMPORT_ONLY!=='1'){
   assert.equal(git('rev-parse',BASE+'^{tree}'),BASE_TREE,'Exact unchanged AR source tree');
   const before=hashes(),A=await bundleSeasonHistory({original:true}),B=await bundleSeasonHistory();
   const recorded=JSON.parse(text('scripts/data/careerLeagueWorldSaves1100.json')).saves.find(save=>save.id==='ere').state,carrier=B.soccer.repairCareer(copy(recorded)),fixtures=historyFixtures(carrier);
-  const healthy=await run(B,A,carrier,fixtures,path.join(OUT,'healthy'));healthy.sourceBefore=before;healthy.sourceAfter=hashes();healthy.sourceHeld=JSON.stringify(before)===JSON.stringify(healthy.sourceAfter);write(path.join(OUT,'healthy'),'report',healthy);
+  const WITHOUT=['wheel','opening','ground'],N=await bundleSeasonHistory({without:WITHOUT});
+  const healthy=await run(B,A,carrier,fixtures,path.join(OUT,'healthy'),N);healthy.sourceBefore=before;healthy.sourceAfter=hashes();healthy.sourceHeld=JSON.stringify(before)===JSON.stringify(healthy.sourceAfter);write(path.join(OUT,'healthy'),'report',healthy);
   assert.equal(healthy.sourceHeld,true);assert.deepEqual(healthy.failed,[]);assert.equal(healthy.cases.length,9);write(OUT,'native-fixtures',{carrier,cases:fixtures});
   const controls=[];
-  if(process.env.SEASON_HISTORY_CONTROL==='all')for(const patch of CONTROLS){const faulty=await bundleSeasonHistory({patch}),result=await run(faulty,A,carrier,fixtures,path.join(OUT,patch.name));assert.deepEqual([...result.failed].sort(),[...patch.failed].sort(),patch.name+': exact intended failed groups');assert(result.cases.filter(row=>!row.passed).every(row=>row.errorName==='AssertionError'));assert.equal(result.cases.length,9);for(const name of['engine baseline','campaign baseline','existing readers'])assert(result.cases.find(row=>row.name===name).passed,patch.name+': independent AR contracts remain green');controls.push({name:patch.name,failed:result.failed,effective:faulty.receipts[0].effective,receipts:faulty.receipts});console.log('CONTROL FIRED('+patch.name+'): '+result.failed.join(', '));}
+  if(process.env.SEASON_HISTORY_CONTROL==='all')for(const patch of CONTROLS){const faulty=await bundleSeasonHistory({patch}),faultyN=await bundleSeasonHistory({patch,without:WITHOUT}),result=await run(faulty,A,carrier,fixtures,path.join(OUT,patch.name),faultyN);assert.deepEqual([...result.failed].sort(),[...patch.failed].sort(),patch.name+': exact intended failed groups');assert(result.cases.filter(row=>!row.passed).every(row=>row.errorName==='AssertionError'));assert.equal(result.cases.length,9);for(const name of['engine baseline','campaign baseline','existing readers'])assert(result.cases.find(row=>row.name===name).passed,patch.name+': independent AR contracts remain green');controls.push({name:patch.name,failed:result.failed,effective:faulty.receipts[0].effective,receipts:faulty.receipts});console.log('CONTROL FIRED('+patch.name+'): '+result.failed.join(', '));}
   write(OUT,'controls',{head:healthy.head,tree:healthy.tree,controls,sourceHeld:JSON.stringify(before)===JSON.stringify(hashes())});
   console.log('Season history: '+healthy.cases.length+' groups,24 full AR season pairs,192 full campaign/RNG pairs,'+controls.length+' effective controls; artifacts '+OUT);
 }
