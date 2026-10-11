@@ -1,0 +1,4 @@
+# Review (run lens) of Round 1212 on 1e1066fb: the finished screens of the Watch again seasons (reduced motion, last frames)
+#!serve
+#!playwright
+walk-final: WALK_ONLY=final node .rc/x/review-run-walk.mjs

@@ -1,0 +1,30 @@
+     save rookie: seed 41, CF PHI 2026 (now), 0 seasons; hub line: null
+     save pitcher: seed 1, SP COL 2026 (now), 0 seasons; hub line: 📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.
+     save oriole: seed 17, CF BAL 2026 (now), 0 seasons; hub line: 📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162.
+     save y2020: seed 1, SS ARI 2020 (y2004), 0 seasons; hub line: 📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.
+     save y2004short: seed 9, CF MIL 2004 (y2004), 0 seasons; hub line: 📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162.
+     save japan: seed 50, RF Yomiuri Giants 2026 (now), 0 seasons; hub line: 📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season.
+     save star: seed 68, SS COL 2031 (now), 5 seasons, last 2030 COL 160 games "Missed October" po undefined awards ["All-Star"]; hub line: null
+     save deep: seed 30, SS CLE 2028 (now), 2 seasons, last 2027 CLE 162 games "Lost the Championship Series" po 12 awards []; hub line: null
+     save plain: seed 3, 1B TOR 2027 (now), 1 seasons, last 2026 TOR 155 games "Missed October" po undefined awards []; hub line: null
+     save throwback: seed 2, LF FLA 2005 (y2004), 1 seasons, last 2004 FLA 80 games "Lost the Division Series" po 4 awards []; hub line: null
+     save hurt: seed 1, C COL 2027 (now), 1 seasons, last 2026 COL 74 games "Missed October" po undefined awards []; hub line: null
+     save older: seed 68, SS COL 2031 (now), 5 seasons, last 2030 COL 160 games "Missed October" po undefined awards ["All-Star"]; hub line: null
+     save misfit: seed 2, 3B PHI 2027 (now), 1 seasons, last 2026 PHI 80 games "Lost the Wild Card series" po 5 awards []; hub line: null
+     again-deep-390-rm: log 162 rows, 162 played, 172 for 640 (0.269), 19 HR, 67 RBI, 30 2B, 9 SB, 102-60; card {"games":162,"avg":0.269,"hr":19,"rbi":67,"doubles":30,"sb":9,"result":"Lost the Championship Series","awards":[],"po":12}
+     again-deep-390-rm: poster "HalfwayFirst half: 81 games, .279 with 8 home runs.Best so far: Game 13, L 4-13, 2 for 5 with a home run and 2 RBI"; tiles 162Games, .269AVG, 19HR, 67RBI; path PlayoffsWWild Card Seriesbeat another team 2-1WDivision Seriesbeat another team 3-0LChampionship Serieslost to another team 2-4Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR; record 102-60
+     again-deep-1280-rm: log 162 rows, 162 played, 172 for 640 (0.269), 19 HR, 67 RBI, 30 2B, 9 SB, 102-60; card {"games":162,"avg":0.269,"hr":19,"rbi":67,"doubles":30,"sb":9,"result":"Lost the Championship Series","awards":[],"po":12}
+     again-deep-1280-rm: poster "HalfwayFirst half: 81 games, .279 with 8 home runs.Best so far: Game 13, L 4-13, 2 for 5 with a home run and 2 RBI"; tiles 162Games, .269AVG, 19HR, 67RBI; path PlayoffsWWild Card Seriesbeat another team 2-1WDivision Seriesbeat another team 3-0LChampionship Serieslost to another team 2-4Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR; record 102-60
+     again-star-390-rm: log 162 rows, 160 played, 182 for 637 (0.286), 27 HR, 87 RBI, 37 2B, 49 SB, 59-103; card {"games":160,"avg":0.286,"hr":27,"rbi":87,"doubles":37,"sb":49,"result":"Missed October","awards":["All-Star"]}
+     again-star-390-rm: poster "HalfwayFirst half: 80 games, .270 with 17 home runs. You are an All-Star this year.Best so far: Game 25, W 8-3, 3 for 6 with 3 home runs and 4 RBI"; tiles 160Games, .286AVG, 27HR, 87RBI; path null; record 59-103
+     again-throwback-390-rm: log 162 rows, 80 played, 80 for 312 (0.256), 6 HR, 29 RBI, 12 2B, 0 SB, 86-76; card {"games":80,"avg":0.256,"hr":6,"rbi":29,"doubles":12,"sb":0,"result":"Lost the Division Series","awards":[],"po":4}
+     again-throwback-390-rm: poster "HalfwayFirst half: 36 games, .280 with 3 home runs.Best so far: Game 2, W 5-1, 3 for 4 with a home run and 1 RBI"; tiles 80Games, .256AVG, 6HR, 29RBI; path null; record 86-76
+     again-throwback-1280-rm: log 162 rows, 80 played, 80 for 312 (0.256), 6 HR, 29 RBI, 12 2B, 0 SB, 86-76; card {"games":80,"avg":0.256,"hr":6,"rbi":29,"doubles":12,"sb":0,"result":"Lost the Division Series","awards":[],"po":4}
+     again-throwback-1280-rm: poster "HalfwayFirst half: 36 games, .280 with 3 home runs.Best so far: Game 2, W 5-1, 3 for 4 with a home run and 1 RBI"; tiles 80Games, .256AVG, 6HR, 29RBI; path null; record 86-76
+     again-misfit-390-rm: log 162 rows, 80 played, 75 for 296 (0.253), 5 HR, 28 RBI, 11 2B, 0 SB, 85-77; card {"games":80,"avg":0.253,"hr":5,"rbi":28,"doubles":11,"sb":0,"result":"Lost the Wild Card series","awards":[],"po":5}
+     again-misfit-390-rm: poster "HalfwayFirst half: 46 games, .272 with 1 home run.Best so far: Game 67, W 5-4, 2 for 4 with a home run and 2 RBI"; tiles 80Games, .253AVG, 5HR, 28RBI; path null; record 85-77
+     again-older-390-rm: log 162 rows, 160 played, 173 for 605 (0.286), 27 HR, 87 RBI, 0 2B, 49 SB, 66-96; card {"games":160,"avg":0.286,"hr":27,"rbi":87,"sb":49,"result":"Missed October","awards":["All-Star"]}
+     again-older-390-rm: poster "HalfwayFirst half: 80 games, .278 with 12 home runs. You are an All-Star this year.Best so far: Game 42, L 8-9, 3 for 5 with a home run and 3 RBI"; tiles 160Games, .286AVG, 27HR, 87RBI; path null; record 66-96
+     again-hurt-1280-rm: log 162 rows, 74 played, 65 for 293 (0.222), 2 HR, 15 RBI, 12 2B, 1 SB, 77-85; card {"games":74,"avg":0.222,"hr":2,"rbi":15,"doubles":12,"sb":1,"result":"Missed October","awards":[]}
+     again-hurt-1280-rm: poster "HalfwayFirst half: 34 games, .211 with 0 home runs.Best so far: Game 63, W 8-2, 3 for 4 with 1 RBI"; tiles 74Games, .222AVG, 2HR, 15RBI; path null; record 77-85
+review-run-walk (final frames): 8 scenarios, 0 problems
