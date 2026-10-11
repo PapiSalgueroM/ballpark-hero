@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+sweepWeight exit=1 27s | sweepWeight: 3 failures
+playSeasonCentreMotion exit=1 133s | playSeasonCentreMotion: 78 checks, 1 failed
+playCmQuickSubs exit=0 12s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+playCmVar exit=0 599s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
