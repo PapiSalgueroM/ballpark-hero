@@ -1,0 +1,12 @@
+# Round 1212 step 4 on 0ed60fba: the copy fences that read the files this round touched, and the soccer Season Centre harnesses (untouched code, the brief's list E)
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
