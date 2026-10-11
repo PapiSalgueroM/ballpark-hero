@@ -1,0 +1,6 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+sim-as-committed exit=0 69s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+playCareerProgramme exit=0 130s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
+playSoccerSeasonCalendar exit=0 48s | Calendar native: 6 cases, 301 checks, 1 effective copied observation control
+cup-stream-control-expect-exit-1 exit=1 11s | control stream fired: sections 1 red, as it must
