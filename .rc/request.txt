@@ -1,0 +1,7 @@
+# verify 4 of Release AW part one on c9a1f86a: the WHOLE unit suite, the flagship weight, and simPrerender (red by construction on /whats-new until the release build)
+#!build
+#!serial
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > /tmp/va.log 2>&1; s=$?; grep -a -E "Test Files|Tests |FAIL " /tmp/va.log | tail -12; exit $s
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs > /tmp/fw.log 2>&1; s=$?; cp /tmp/fw.log "$RC_OUT/flagship.log"; grep -a -E "KB raw|modules" /tmp/fw.log | cut -c1-200; tail -1 /tmp/fw.log | cut -c1-200; exit $s
+simPrerender-EXPECT1: node scripts/simPrerender.mjs > /tmp/pr.log 2>&1; s=$?; cp /tmp/pr.log "$RC_OUT/simPrerender.log"; grep -a -E "FAIL|drops the entry" /tmp/pr.log | cut -c1-220 | head -20; tail -1 /tmp/pr.log | cut -c1-200; exit $s
+gitclean: test -z "$(git status --porcelain --untracked-files=no)" && echo clean
