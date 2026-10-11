@@ -1,0 +1,27 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+hall-nhl: node scripts/simCareerHall.mjs nhl 2000
+hall-nfl: node scripts/simCareerHall.mjs nfl 2000
+hall-nba: node scripts/simCareerHall.mjs nba 2000
+hall-mlb: node scripts/simCareerHall.mjs mlb 2000
+vitest: node_modules/.bin/vitest run src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/nbaOldSaveLines.test.ts src/test/careerHallV1Replay.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+summer-nhl: SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
+fresh-nhl-a: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=102-125 node scripts/simCareerHall.mjs nhl 2000
+fresh-nhl-b: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=126-149 node scripts/simCareerHall.mjs nhl 2000
+fresh-nhl-c: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=150-173 node scripts/simCareerHall.mjs nhl 2000
+fresh-nfl-a: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=102-125 node scripts/simCareerHall.mjs nfl 2000
+fresh-nfl-b: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=126-149 node scripts/simCareerHall.mjs nfl 2000
+fresh-nfl-c: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=150-173 node scripts/simCareerHall.mjs nfl 2000
+fresh-nba-a: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=102-125 node scripts/simCareerHall.mjs nba 2000
+fresh-nba-b: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=126-149 node scripts/simCareerHall.mjs nba 2000
+fresh-nba-c: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=150-173 node scripts/simCareerHall.mjs nba 2000
+fresh-mlb-a: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=102-125 node scripts/simCareerHall.mjs mlb 2000
+fresh-mlb-b: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=126-149 node scripts/simCareerHall.mjs mlb 2000
+fresh-mlb-c: SIM_SKIP_BOARD=1 SIM_FLEET_SEEDS=150-173 node scripts/simCareerHall.mjs mlb 2000
