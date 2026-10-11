@@ -199,6 +199,9 @@ afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 const BOUND: { name: string; Board: ComponentType; sport: UsCareerSport; pos: string }[] = [
   { name: 'NBA', Board: NbaMyCareerBoard, sport: NBA_CAREER_SPORT, pos: 'SG' },
   { name: 'NFL', Board: NflMyCareerBoard, sport: NFL_CAREER_SPORT, pos: 'QB' },
+  /* Round 1212: a hitter (pitchers are held). No seed of this block drafts him to the Orioles or the Yankees,
+     whose real 2026 season is held; those two have their own tests below. */
+  { name: 'MLB', Board: MlbMyCareerBoard, sport: MLB_CAREER_SPORT, pos: 'CF' },
 ].filter(b => !!b.sport.loadSeasonCentre);
 
 describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, sport, pos }) => {
@@ -215,7 +218,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(watch.focusOnContinue).toBe(watch.opened);
     expect(watch.noOverlay).toBeGreaterThan(0);
     expect(watch.opened + watch.noOverlay).toBe(12);
-  }, 60000);
+  }, 180000);
 
   it('CONTROL: one extra Math.random in the press makes the twin saves differ', async () => {
     /* the wrapped call is the entry's one call of the board's Play */
@@ -228,7 +231,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     ctl.extraDraw = false;
     expect(watch.saves[0]).toBe(play.saves[0]);
     expect(watch.saves.slice(1)).not.toEqual(play.saves.slice(1));
-  }, 60000);
+  }, 180000);
 
   it('keeps Play the first button, and the entry never says "Play the"', async () => {
     seedSave(sport, pos, `order|${sport.slug}`);
@@ -709,8 +712,8 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-season-centre-held]')).toBeNull();
     expect(q('[data-week-by-week]')).not.toBeNull();
   });
-  it('has the NBA and the NFL both bound, so neither arm above can drop out through its own filter', () => {
-    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL']);
+  it('has the NBA, the NFL and MLB all bound, so no arm above can drop out through its own filter', () => {
+    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL', 'MLB']);
   });
   it('says there is nothing to watch in a banned year', async () => {
     seedSave(NBA_CAREER_SPORT, 'SG', 'banned', 'now', c => { c.suspendedSeasons = 1; });
@@ -731,8 +734,70 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(playButton()).toBeDefined();
     expect(q('[data-season-centre-entry]')).toBeNull();
   });
-  it('still has MLB and the NHL unbound (they are number files for a later round)', () => {
-    expect(MLB_CAREER_SPORT.loadSeasonCentre).toBeUndefined();
-    expect(NHL_CAREER_SPORT.loadSeasonCentre).toBeUndefined();
+  /* Round 1212: with baseball bound the table above holds the NHL alone, and it will be empty when hockey is
+     bound. "A binding with no loader shows no entry" is therefore also held on a copy of a bound binding with
+     its loader taken away, which no later bind can empty. */
+  it('renders no entry at all for a binding whose loader is taken away', async () => {
+    const NO_LOADER: UsCareerSport = { ...MLB_CAREER_SPORT, loadSeasonCentre: undefined, seasonCentreHeld: undefined };
+    seedSave(MLB_CAREER_SPORT, 'CF', 'none|copy');
+    render(<MemoryRouter><UsCareerBoard sport={NO_LOADER} /></MemoryRouter>);
+    await flush();
+    expect(playButton()).toBeDefined();
+    expect(q('[data-season-centre-entry]')).toBeNull();
   });
+  it('has MLB bound and the NHL still unbound (hockey is the next round)', () => {
+    expect(MLB_CAREER_SPORT.loadSeasonCentre).toBeTypeOf('function');
+    expect(MLB_CAREER_SPORT.seasonCentreHeld).toBeTypeOf('function');
+    expect(NHL_CAREER_SPORT.loadSeasonCentre).toBeUndefined();
+    expect(UNBOUND.map(x => x[0])).toEqual(['NHL']);
+  });
+  /* Round 1212, baseball's own holds, each sentence typed here whole: a pitcher, a club a game short in the real
+     2026 season, a club outside the league, the 60 game season, and the Watch again link asking about the club
+     he played that season for. */
+  const mlbHub = async (pos: string, seed: string, eraId: string, change?: (c: UsCareerCore) => void) => {
+    seedSave(MLB_CAREER_SPORT, pos, seed, eraId, change);
+    render(<MemoryRouter><MlbMyCareerBoard /></MemoryRouter>);
+    await flush();
+    expect(playButton()).toBeDefined();
+    return q('[data-season-centre-held]')?.textContent ?? null;
+  };
+  it.each(['SP', 'RP'])('MLB: a saved %s sees the line for pitchers and no button', async pos => {
+    expect(await mlbHub(pos, `mlb-pitcher|${pos}`, 'now')).toBe('📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.');
+    expect(q('[data-week-by-week]')).toBeNull();
+  });
+  it('MLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not', async () => {
+    for (const team of ['BAL', 'NYY']) {
+      expect(await mlbHub('CF', `mlb-club|${team}`, 'now', c => { c.team = team; }), team).toBe('📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162.');
+      expect(q('[data-week-by-week]'), team).toBeNull();
+      cleanup();
+    }
+    expect(await mlbHub('CF', 'mlb-club|SEA', 'now', c => { c.team = 'SEA'; })).toBeNull();
+    expect(savedCareer(MLB_CAREER_SPORT).year).toBe(2026);
+    expect(q('[data-week-by-week]')).not.toBeNull();
+  });
+  it('MLB: a club outside the league is held, whatever the year', async () => {
+    expect(await mlbHub('CF', 'mlb-outside', 'now', c => { c.team = 'Yomiuri Giants'; c.year = 2031; })).toBe('📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season.');
+    expect(q('[data-week-by-week]')).toBeNull();
+  });
+  it('MLB: the 60 game season of 2020 is held for a throwback career', async () => {
+    expect(await mlbHub('CF', 'mlb-2020', 'y2004', c => { c.year = 2020; c.team = 'BOS'; })).toBe('📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.');
+    expect(q('[data-week-by-week]')).toBeNull();
+  });
+  it('MLB: Watch again asks about the club he played that season for', async () => {
+    /* an Oriole of 2026: after the season the hub offers the 2027 button and never the held 2026 again */
+    await mlbHub('CF', 'mlb-again|BAL', 'now', c => { c.team = 'BAL'; });
+    await click(playButton());
+    if ((await toHub(MLB_CAREER_SPORT)) === 'retired') throw new Error('retired after one season');
+    const c = savedCareer(MLB_CAREER_SPORT);
+    expect(c.seasons[0].team).toBe('BAL');
+    expect(c.seasons[0].year).toBe(2026);
+    expect(q('[data-watch-last]')).toBeNull();
+    /* the twin: the same career at a club whose 2026 was 162 games is offered its season again */
+    cleanup(); localStorage.clear(); resetCareerMomentsForTest();
+    await mlbHub('CF', 'mlb-again|BAL', 'now', c => { c.team = 'SEA'; });
+    await click(playButton());
+    if ((await toHub(MLB_CAREER_SPORT)) === 'retired') throw new Error('retired after one season');
+    expect(savedCareer(MLB_CAREER_SPORT).seasons[0].team).toBe('SEA');
+    expect(q('[data-watch-last]')!.textContent).toContain('Watch the 2026 season again');
+  }, 60000);
 });

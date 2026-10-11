@@ -115,9 +115,19 @@
  * position's own shape, a kicker's makes against the feed, his totals
  * against the curtain's numbers).
  *
+ * Round 1212 binds MLB: the same walk on /mlb-my-career with a center
+ * fielder (the feed is read inning by inning: "put N on the board" is N runs,
+ * a home run of his is a line that scores nothing by itself), a 162 game
+ * season in the Schedule and in the game log at both sizes, a shortstop's
+ * line on a phone, and at both sizes the hubs baseball holds for who is
+ * asking: a pitcher, and a hitter of a club that finished the real 2026
+ * season a game short. The time from the press to the first card is printed
+ * for every sport (measured, not asserted). SHOTS=<folder> saves the first
+ * card, a game at the final, the review and the held hubs as pictures.
+ *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 ENGINES=chromium node scripts/playUsSeasonCentre.mjs
- * (SPORTS=nba or nfl to scope). Green is the closing summary line AND exit 0.
+ * (SPORTS=nba, nfl or mlb to scope). Green is the closing summary line AND exit 0.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -134,7 +144,7 @@ const DIST = path.join(ROOT, process.env.DIST ?? 'dist');
 const PORT = Number(process.env.PORT ?? 4397);
 const BASE = `http://localhost:${PORT}`;
 const CONTROL = process.env.US_SEASON_PLAY_CONTROL ?? '';
-const ASKED = (process.env.SPORTS ?? 'nba,nfl').split(',').map(s => s.trim());
+const ASKED = (process.env.SPORTS ?? 'nba,nfl,mlb').split(',').map(s => s.trim());
 /* `feed`: how a line of the feed is read back into points (the reader lives in the page, below).
    `minLines` and `minScores`: the least a finished game shows (a basketball game has eight quarter
    lines; a football game has at least one scoring drive, so one line and two scores, 0-0 and the
@@ -148,10 +158,21 @@ const DEFS = {
     route: '/nfl-my-career', binding: 'NFL_CAREER_SPORT', file: 'src/lib/nflCareerSport.ts', pos: 'QB', words: 'The kick after is no good.', start: 'Kick off', held: { era: 'y2005', year: 2005 }, feed: 'nfl', minLines: 1, minScores: 2, minColumn: 30, games: 17, twice: 'YDS', starter: true,
     also: [{ pos: 'QB', line: /^\d+ YDS\d+ TD\d+ INT$/ }, { pos: 'K', line: /^\d\/\d FG(LONG \d+)?$/ }, { pos: 'LB', line: /^\d+ TKL/ }],
   },
+  /* Round 1212: baseball, a center fielder (pitchers are held). `starter`: the plain first draft of this
+     walk's seed is a bench Oriole of 2026, whose real season is held (161 games), so the walk takes the first
+     keyed draft that starts him, at a club whose 2026 season was 162 games. `words` is a line of the feed only
+     the number file holds. `heldAlso`: more hubs that must show a held line and no button, at both sizes: a
+     pitcher, and that plain first draft (a club a game short in the real 2026 season). */
+  mlb: {
+    route: '/mlb-my-career', binding: 'MLB_CAREER_SPORT', file: 'src/lib/mlbCareerSport.ts', pos: 'CF', words: 'You go deep', start: 'Play ball', held: { era: 'y2004', year: 2020 }, feed: 'mlb', minLines: 1, minScores: 2, minColumn: 20, games: 162, twice: 'RBI', starter: true,
+    also: [{ pos: 'SS', line: /^\d-\d/ }],
+    heldAlso: [{ pos: 'SP', plain: false, says: 'for pitchers yet' }, { pos: 'CF', plain: true, says: 'finished on 161 games' }],
+  },
 };
 /** Runs in the page: [side, points] of one feed line, or null for a line that scores nothing. */
 const READ_FEED = `(kind, us, text) => {
   if (kind === 'nba') { const m = /^(.*) put up (\\d+) in the /.exec(text); return m ? [m[1].includes(us) ? 'us' : 'them', Number(m[2])] : null; }
+  if (kind === 'mlb') { const m = /^\\S+ (.*) put (\\d+) on the board in /.exec(text); return m ? [m[1].includes(us) ? 'us' : 'them', Number(m[2])] : null; }
   const pts = text.includes('Touchdown') ? (text.includes('no good') ? 6 : text.includes('two point') ? 8 : 7) : text.includes('Field goal') ? 3 : text.includes('Safety') ? 2 : 0;
   if (!pts) return null;
   return [text.includes('! You ') || text.includes(', ' + us + '.') ? 'us' : 'them', pts];
@@ -181,13 +202,14 @@ function mulberry32(a) {
   return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 /** A save on the hub after `seasons` seasons (0: a rookie about to play his first). */
-function makeSave(slug, seasons, eraId = 'now', year = null, pos = DEFS[slug].pos) {
+function makeSave(slug, seasons, eraId = 'now', year = null, pos = DEFS[slug].pos, plain = false) {
   const SB = M[DEFS[slug].binding];
   const real = Math.random;
   /* Round 1147: a sport that asks for a starter (the NFL: a rookie quarterback who sits plays three or
      four games, and the walk wants to see his line) takes the first keyed draft that makes him one.
      Nothing is edited on the save: it is the save a player gets from that draft. */
-  const tries = DEFS[slug].starter && seasons === 0 ? 40 : 1;
+  /* Round 1212: `plain` asks for the first draft as it comes (a held hub wants no starter) */
+  const tries = DEFS[slug].starter && seasons === 0 && !plain ? 40 : 1;
   for (let n = 0; n < tries; n += 1) {
     const rng = mulberry32(1048 + seasons * 7 + (eraId === 'now' ? 0 : 91) + n * 1009);
     Math.random = rng;
@@ -701,6 +723,10 @@ async function walk(slug, vp) {
     console.log(`     the first press downloads ${after.length} chunks, ${(sizes.reduce((a, x) => a + x[1], 0) / 1024).toFixed(1)}K gz: ${sizes.map(([f, g]) => `${f} ${(g / 1024).toFixed(1)}K`).join(', ')}`);
   }
   check('same press', (await savedString(p, save.key)) === afterPlay, `${tag}: Play and Week by week saved the same bytes`);
+  /* Round 1212, measured and not asserted: how long the press takes to put the first card up (a 162 game season is derived in it) */
+  console.log(`     ${tag}: from the press to the first card ${atPress.ms} ms over ${atPress.frames} frames (${d.games} games derived)`);
+  const shot = async name => { if (!process.env.SHOTS) return; fs.mkdirSync(process.env.SHOTS, { recursive: true }); await p.screenshot({ path: path.join(process.env.SHOTS, `${name}-${slug}-${vp.width}.png`) }); };
+  await shot('first-card');
   const usFull = await p.evaluate(() => document.querySelector('[data-kickoff] .text-lg')?.textContent ?? '');
   check('agreement', await clickText(p, d.start), `${tag}: the first card offers "${d.start}"`);
 
@@ -724,6 +750,7 @@ async function walk(slug, vp) {
   }, [d.feed, usFull]) : null;
   if (clock) check('clock', clock.done && clock.n >= 20 && clock.scores >= d.minScores && clock.bad.length === 0, `${tag}: the score bug equals the feed on every sample (${clock.n} samples, ${clock.scores} scores${clock.bad.length ? `; ${clock.bad.join(' | ')}` : ''})`);
   else check('clock', false, `${tag}: no feed reader for this sport`);
+  await shot('game-final');
 
   const bug = await p.evaluate(() => {
     const c = document.querySelector('[data-match-clock]');
@@ -793,6 +820,7 @@ async function walk(slug, vp) {
   await clickText(p, 'Sim the rest');
   await p.waitForSelector('[data-review]', { timeout: 8000 }).catch(() => {});
   const tiles = await p.evaluate(() => [...document.querySelectorAll('[data-review-tile]')].map(el => [el.dataset.reviewTile, el.firstElementChild?.textContent ?? '']));
+  await shot('review');
   {
     /* the whole season in the game log: no row wraps, whoever the opponent is */
     if (phone) await p.evaluate(() => document.querySelector('[data-game-log-open]')?.click());
@@ -838,11 +866,22 @@ async function walk(slug, vp) {
     check('errors', C.errors.length === 0, `${tag}: reduced motion, no page error and no console error`);
     await C.ctx.close();
   }
+  /* Round 1212: the hubs a sport holds for who is asking (a position, a club), at both sizes */
+  for (const h of d.heldAlso ?? []) {
+    const saved = makeSave(slug, 0, 'now', null, h.pos, h.plain);
+    const H = await open(slug, saved, vp);
+    const got = await H.page.evaluate(() => ({ line: document.querySelector('[data-season-centre-held]')?.textContent ?? '', button: !!document.querySelector('[data-week-by-week]'), play: [...document.querySelectorAll('button')].some(b => /^Play the \d+ season/.test((b.textContent ?? '').trim())) }));
+    const who = JSON.parse(saved.value).c;
+    check('held', got.line.startsWith('📺') && got.line.includes(h.says) && !got.button && got.play, `${tag}: a ${h.pos} of the ${who.team} in ${who.year} sees a held line that says "${h.says}", no Week by week button, and Play still there ("${got.line.slice(0, 90)}")`);
+    if (process.env.SHOTS) { fs.mkdirSync(process.env.SHOTS, { recursive: true }); await H.page.screenshot({ path: path.join(process.env.SHOTS, `held-${slug}-${h.pos}-${vp.width}.png`) }); }
+    await H.ctx.close();
+  }
   if (phone) {
     /* a held year */
     const H = await open(slug, makeSave(slug, 0, d.held.era, d.held.year), vp);
     const held = await H.page.evaluate(() => ({ line: document.querySelector('[data-season-centre-held]')?.textContent ?? '', button: !!document.querySelector('[data-week-by-week]') }));
     check('held', held.line.startsWith('📺') && !held.button, `${tag}: the held year ${d.held.year} shows its line and no button ("${held.line.slice(0, 70)}")`);
+    if (process.env.SHOTS) { fs.mkdirSync(process.env.SHOTS, { recursive: true }); await H.page.screenshot({ path: path.join(process.env.SHOTS, `held-year-${slug}.png`) }); }
     await H.ctx.close();
 
     /* Release AN: storage is full. From the press on the browser refuses every write, the board plays
