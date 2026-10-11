@@ -1,0 +1,11 @@
+# Review (run lens) of Round 1212 on 1e1066fb: the whole vitest suite and the harnesses the builder ran only on an earlier commit or not at all
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs

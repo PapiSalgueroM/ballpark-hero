@@ -1,0 +1,10 @@
+simSeasonLaw exit=0 0s | simSeasonLaw: 14 checks, 0 failed
+simSeasonCentreAgreement exit=0 17s | simSeasonCentreAgreement: 24 checks, 0 failed
+simSeasonCentreNeutral exit=0 20s | simSeasonCentreNeutral: 36 checks, 0 failed
+simCareerRealism exit=0 5s | ALL CAREER REALISM CHECKS PASSED
+simSeasonCentreTable exit=0 10s | simSeasonCentreTable: 7 checks, 0 failed
+simAccessibility exit=0 0s | simAccessibility: all green
+simInventedNames exit=0 6s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNhlCareer exit=0 14s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+vitest-all exit=0 405s |    Duration  404.46s (transform 27.92s, setup 15.85s, collect 120.72s, tests 846.53s, environment 130.16s, prepare 26.56s)
+simCareerHall exit=1 652s | simCareerHall: RED
