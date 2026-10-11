@@ -10010,7 +10010,7 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
       next.note = `${next.rivalBidder} raised to ${money(next.rivalOffer)}.`;
     }
   } else if (!next.rivalBidder && next.stage >= 1 && Math.random() < 0.22) {
-    const spenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 5).map(c => c.name))
+    const spenders = actingClubsByLeague(career).flatMap(cs => cs.slice(0, 5).map(c => c.name))
       .filter(n => n !== career.clubName && n !== next.player.club);
     next.rivalBidder = pick(spenders);
     next.rivalOffer = Math.round(packageValue * (1.06 + Math.random() * 0.1) * 10) / 10;
@@ -10300,6 +10300,21 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
 }
 
 /* ---------- Round 94: the transfer status controls ---------- */
+
+/**
+ * Round 1304: the clubs that can ACT in this save's world, league by league,
+ * strongest first. A past season's world is that season's leagues and
+ * nothing else, which Round 146 already held for bids, approaches and job
+ * offers. The news feed's buyers and the rival of a negotiation read
+ * today's leagues in every era instead, so a 2010-11 save printed "Brentford
+ * sign Andres Iniesta from Barcelona" and a 2005-06 one could name a club
+ * that was not founded yet. Today's game reads exactly what it always read.
+ */
+function actingClubsByLeague(state: CareerState): ClubDef[][] {
+  const eraId = state.eraId;
+  if (eraId && isHistoricEra(eraId)) return (ERA_LEAGUES[eraId] ?? []).map(l => eraPlayableClubs(eraId, l.id));
+  return REAL_LEAGUES.map(l => playableClubs(l.id));
+}
 
 /** Every club that could plausibly come in for one of my players. */
 function buyerPool(state: CareerState): string[] {
@@ -10832,7 +10847,7 @@ function generateHeadlines(state: CareerState): void {
   const droppedClub = state.customClub && state.clubName === state.customClub.name
     ? state.customClub.replacedClub
     : null;
-  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id)).filter(c => c.name !== droppedClub);
+  const allClubs = actingClubsByLeague(state).flat().filter(c => c.name !== droppedClub);
   for (const mp of candidates) {
     const fee = Math.max(1, Math.round(mp.price * (0.9 + Math.random() * 0.25)));
     // Who could actually afford him. One player can eat a club's entire
