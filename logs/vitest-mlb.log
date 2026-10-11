@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1540[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 362[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonMlb.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 6699[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1114[2mms[22m[39m
+   [33m[2m✓[22m[39m the innings of a game[2m > [22mspreads a side's runs the way the score law draws an inning: they add up, the minimums hold, nothing passes nine [33m 2843[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 505[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 1911[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 03:26:46
+[2m   Duration [22m 9.87s[2m (transform 3.37s, setup 237ms, collect 6.69s, tests 8.28s, environment 1.92s, prepare 655ms)[22m
+

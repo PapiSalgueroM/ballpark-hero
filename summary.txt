@@ -1,0 +1,12 @@
+simUsSeasonLedger exit=0 5s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ctl-ledger-mlbinnings exit=1 4s | simUsSeasonLedger: CONTROL mlbinnings FIRED, red at exactly M11
+vitest-mlb exit=0 11s |    Duration  9.87s (transform 3.37s, setup 237ms, collect 6.69s, tests 8.28s, environment 1.92s, prepare 655ms)
+ctl-ledger-inningsleague exit=1 4s | simUsSeasonLedger: CONTROL inningsleague FIRED, red at exactly R2
+ctl-ledger-filled exit=1 4s | simUsSeasonLedger: CONTROL filled FIRED, red at exactly R5
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simLegalPages exit=0 1s | simLegalPages: all green
+simUsSeasonCentre-mlb0 exit=1 15s | simUsSeasonCentre: 55 checks, 5 failed (control mlblevel)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simMlbCareer exit=0 18s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simUsPostseason exit=0 19s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+tsc exit=0 60s | 
