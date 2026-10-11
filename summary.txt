@@ -1,0 +1,4 @@
+simAcademy exit=0 296s | ALL ACADEMY CHECKS PASSED
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simRoles exit=0 1080s | ALL ROLE CHECKS PASSED
+simPress exit=0 1653s | ALL PRESS AND TEAM TALK CHECKS PASSED
