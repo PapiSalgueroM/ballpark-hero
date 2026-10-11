@@ -1,0 +1,19 @@
+fx2Mut lineonce: applied to src/components/club-manager/LiveSimScreen.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 4960 ms: expected 'Foul by Jérémy Jacquet' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 5664 ms: expected 'Corner, left, Alexis Mac Allister' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 2112 ms: expected 'Shot: James Garner' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 2112 ms: expected 'Corner, right, Jack Grealish' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 2112 ms: expected 'Throw in, Arsenal' to be '' // Object.is equality[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[90m (39)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > the last minute of a half%2C a goal of mine at 44 and theirs ruled out at 45%3A the card never sits on my goal,line=183,column=99::AssertionError: th
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > two goals ruled out in back to back minutes (staged by hand)%3A each card on its own goal%2C the second not before its minute,line=183,column=99::Ass
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > an own goal the minute after a ruled out goal%3A the review first%2C then the own goal as an own goal,line=183,column=99::AssertionError: the line un
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a review in the same minute as the other side's 'injury' (a chance at the same place%3A false)%3A both are told%2C and the card sits over nothing,lin
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a review in extra time ('disallowed')%3A its own card%2C over nothing%2C on the score the engine has,line=183,column=99::AssertionError: the line und
+MUT lineonce: vitest exit 1
