@@ -156,6 +156,17 @@
  *              position and his club                             -> section 2
  *   pathyear   a playoff path is drawn before the 2022 season    -> section 4
  *   mlblevel   the score law hands back level games              -> section 7
+ * The fix pass of Round 1212 (2026-10-10), the innings of a game: the runs
+ * of a side are spread the way the score law draws an inning, and section 7
+ * measures it (the first cut shared them out by a clumpy weight with no cap
+ * an inning: a side scored in 20.6% of its innings and one team game in four
+ * held an inning of five or more).
+ *   mlbinnings the innings are spread at a sixth of the law's
+ *              share of scoring innings (lumpy again). Named:
+ *              the share of innings a side scores in; the share
+ *              of team games with an inning of five or more must
+ *              be red beside it                                  -> section 7
+ *   mlbcap     the law's cap of nine runs an inning is lifted    -> section 7
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -302,6 +313,10 @@ const CONTROLS = {
     { file: MLB, from: '    if (rng() < 0.5 + (home ? 0.02 : -0.02)) us += more; else them += more;', to: '    if (rng() < 0.5 + (home ? 0.02 : -0.02)) us += 0 * more; else them += 0 * more;' },
     { file: MLB, from: '    if (g.us === g.them) out.push(`game ${g.md}: level`);\n', to: '' },
   ] },
+  /* the fix pass of Round 1212: the innings spread lumpily again (a sixth of the law's share of scoring innings),
+     and the law's cap of nine runs an inning lifted */
+  mlbinnings: { section: 7, label: 'a side scores in', patches: [{ file: MLB, from: '    const runs = mlbSpreadRuns(nine, mins, q, rng);', to: '    const runs = mlbSpreadRuns(nine, mins, q / 6, rng);' }] },
+  mlbcap: { section: 7, label: 'more than nine runs', patches: [{ file: MLB, from: '  const cap = Math.max(INNING_RUNS_MAX, Math.ceil(total / n));', to: '  const cap = Math.max(INNING_RUNS_MAX, total);' }] },
   /* Round 1221: the digest's own control (run with US_SEASON_DIGEST=compare): a field goal ends one drive in a hundred more */
   lawdrift: { section: 'digest', patches: [{ file: NFL_SCORE, from: 'const FG_A_DRIVE = 0.1445;', to: 'const FG_A_DRIVE = 0.1545;' }] },
   /* Round 1300: the lay receipt's own control (run with US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay):
@@ -316,6 +331,7 @@ const CONTROL_SPORT = {
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
+  mlbinnings: 'mlb', mlbcap: 'mlb',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 if (CONTROL === 'lawdrift' ? DIGEST !== 'compare' : !!(CONTROL && DIGEST) && !DIGEST_CONTROLS.includes(CONTROL)) { console.error("the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run"); process.exit(2); }
@@ -1073,6 +1089,17 @@ const MLB_ONE_RUN = [0.22, 0.32];
 const MLB_EXTRA = [0.05, 0.11];
 const MLB_AB_GAME = [3.5, 4.0];
 const MLB_HITLESS = [0.2, 0.36];
+/* The fix pass of Round 1212, the innings of a game (FIVE_SET_NUMBERS). The runs of a side are spread by the
+   score law's own chances an inning (src/lib/season/mlb.ts mlbSpreadRuns). Measured on seed set 0 (40 careers,
+   241,704 team games): a side scores in 2.72 innings a team game, 30.3% of nine, against 20.6% under the first
+   cut; the biggest inning of a team game is five runs or more in 8.8% of team games, against 23.5%; a side with
+   four runs or more has all of them in one inning in 1.9%, against 21.2%; no inning over nine, against 1.5% of
+   team games. The bands have about two points of room on each side of the first and a point and a half of the
+   second; control `mlbinnings` lands 18.2% and 29.9%, and control `mlbcap` shows 184 team games with an inning
+   past nine at 16 careers. The real game, for the reader and never as a target (one source each, so not in the
+   ledger): about 27 to 29% of half innings bring a run and about 1% bring five or more. */
+const MLB_SCORING_INNINGS = [0.28, 0.325];
+const MLB_BIG_INNING = [0.07, 0.105];
 const OLD_SAVE_MIN = 25;
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
@@ -1110,7 +1137,7 @@ const NFL_GAME_CAPS = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackle
 /** A full season: he played 14 or more of the 17, so a game's share of his total means something. */
 const NFL_FULL = 14;
 /* Round 1212, baseball's section 7 numbers */
-const mlbSeen = { games: 0, level: 0, shut: 0, ten: 0, oneRun: 0, extra: 0, played: 0, ab: 0, hitless: 0, four: 0, allHis: 0, seasons: 0, oddOrder: 0 };
+const mlbSeen = { games: 0, level: 0, shut: 0, ten: 0, oneRun: 0, extra: 0, played: 0, ab: 0, hitless: 0, four: 0, allHis: 0, seasons: 0, oddOrder: 0, scoring: 0, five: 0, overNine: 0, oneFrame: 0, fourUp: 0 };
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 /* Round 1221, the digest mode: one running sha1 a sport and a seed set, fed every season in the order the
    fleet plays it with what the viewer is handed (see the header). Nothing is kept when the mode is off. */
@@ -1194,6 +1221,19 @@ function observe(c, line, who) {
       for (const v of [g.us, g.them]) { if (v === 0) mlbSeen.shut += 1; if (v >= 10) mlbSeen.ten += 1; }
       if (Math.abs(g.us - g.them) === 1) mlbSeen.oneRun += 1;
       if (g.events.some(e => e.min === 10)) mlbSeen.extra += 1;
+      /* the fix pass: how a side's runs are spread over its innings, read off the feed by the harness itself
+         (the mark after the ninth counts as one more inning it scores in) */
+      for (const side of ['us', 'them']) {
+        const by = new Map();
+        for (const e of g.events) if (e.kind === 'inning' && e.side === side) by.set(e.min, (by.get(e.min) ?? 0) + (e.pts ?? 0));
+        let most = 0;
+        for (const v of by.values()) if (v > most) most = v;
+        mlbSeen.scoring += by.size;
+        if (most >= 5) mlbSeen.five += 1;
+        if (most > 9) mlbSeen.overNine += 1;
+        const total = side === 'us' ? g.us : g.them;
+        if (total >= 4) { mlbSeen.fourUp += 1; if (by.size === 1) mlbSeen.oneFrame += 1; }
+      }
       if (!g.played) continue;
       mlbSeen.played += 1;
       mlbSeen.ab += g.line.ab ?? 0;
@@ -1578,6 +1618,12 @@ for (const slug of SPORTS) {
     check('7', abg >= MLB_AB_GAME[0] && abg <= MLB_AB_GAME[1], `mlb his at bats a game sit inside ${MLB_AB_GAME[0]} to ${MLB_AB_GAME[1]} (${abg.toFixed(3)})`);
     check('7', hitless >= MLB_HITLESS[0] && hitless <= MLB_HITLESS[1], `mlb games he played with no hit are ${(100 * MLB_HITLESS[0]).toFixed(0)} to ${(100 * MLB_HITLESS[1]).toFixed(0)}% (${share(mlbSeen.hitless, pl)})`);
     check('7', mlbSeen.seasons > 0 && mlbSeen.oddOrder === 0, `mlb no named season meets a club in back to back series (${mlbSeen.oddOrder} of ${mlbSeen.seasons})`);
+    /* the fix pass: the innings of a game */
+    const frames = mlbSeen.scoring / (9 * g2); const five = mlbSeen.five / g2;
+    console.log(`     innings a side scores in: ${(mlbSeen.scoring / g2).toFixed(2)} a team game (${share(mlbSeen.scoring, 9 * g2)} of nine); team games whose biggest inning is five or more: ${share(mlbSeen.five, g2)}; with four runs or more and all of them in one inning: ${share(mlbSeen.oneFrame, Math.max(1, mlbSeen.fourUp))}; an inning of more than nine: ${mlbSeen.overNine}`);
+    check('7', frames >= MLB_SCORING_INNINGS[0] && frames <= MLB_SCORING_INNINGS[1], `mlb a side scores in ${(100 * MLB_SCORING_INNINGS[0]).toFixed(1)} to ${(100 * MLB_SCORING_INNINGS[1]).toFixed(1)}% of nine innings a team game (${share(mlbSeen.scoring, 9 * g2)})`);
+    check('7', five >= MLB_BIG_INNING[0] && five <= MLB_BIG_INNING[1], `mlb the biggest inning of a team game is five runs or more in ${(100 * MLB_BIG_INNING[0]).toFixed(1)} to ${(100 * MLB_BIG_INNING[1]).toFixed(1)}% of team games (${share(mlbSeen.five, g2)})`);
+    check('7', mlbSeen.games > 0 && mlbSeen.overNine === 0, `mlb no inning holds more than nine runs, the score law's own cap (${mlbSeen.overNine} of ${g2} team games)`);
   }
   if (slug === 'nfl') {
     const lv = nflSeen.level / Math.max(1, nflSeen.games);
@@ -1739,6 +1785,9 @@ if (CONTROL) {
       note += `; ${wrong} seasons ${MLB_EVIDENCE[2]}`;
     }
     if (CONTROL === 'mlblevel') { ok = ok && mlbSeen.level > 0; note += `; ${mlbSeen.level} level games`; }
+    /* the fix pass: lumpy innings must turn the big inning band red beside the named one, and a lifted cap must show an inning past nine */
+    if (CONTROL === 'mlbinnings') { const big = labels.some(l => l.startsWith('mlb') && l.includes('the biggest inning of a team game')); ok = ok && big; note += `; the big inning band ${big ? 'is' : 'is NOT'} red beside it`; }
+    if (CONTROL === 'mlbcap') { ok = ok && mlbSeen.overNine > 0; note += `; ${mlbSeen.overNine} team games hold an inning of more than nine`; }
     if (CONTROL === 'poscore') {
       const wrong = seen.filter(r => r.p4.some(p => p.includes('prints a score'))).length;
       ok = ok && wrong > 0;

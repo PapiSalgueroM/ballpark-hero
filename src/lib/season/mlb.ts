@@ -81,16 +81,71 @@ const FORM_POWER = 0.5;
 const ORDER_TRIES = 40;
 const HOME_RUN_OF_SERIES = 4;
 
+/** The most runs the score law puts in one inning (this sim's own cap). */
+const INNING_RUNS_MAX = 9;
+
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const of = (g: DerivedGame, k: string): number => g.line[k] ?? 0;
 const thousandths = (v: number): number => Math.round(v * 1000);
+
+/** The share of its innings a side scores in when it averages `m` runs a game. */
+const scoringShare = (m: number): number => (Math.min(MEAN_CEILING, Math.max(MEAN_FLOOR, m)) / INNINGS) * (1 - RUN_ON);
 
 /** Runs in one inning for a side that scores in a share `q` of its innings. */
 function inningRuns(q: number, rng: Rng): number {
   if (rng() >= q) return 0;
   let runs = 1;
-  while (runs < 9 && rng() < RUN_ON) runs += 1;
+  while (runs < INNING_RUNS_MAX && rng() < RUN_ON) runs += 1;
   return runs;
+}
+
+/** The chance `inningRuns` gives an inning of exactly `k` runs, as a number
+ *  (the same law, read off instead of drawn). `cap` is the most an inning holds. */
+function inningChance(k: number, q: number, cap: number): number {
+  if (k === 0) return 1 - q;
+  return k < cap ? q * (1 - RUN_ON) * RUN_ON ** (k - 1) : q * RUN_ON ** (cap - 1);
+}
+
+/** A side's runs through its innings, drawn the way the score law draws them:
+ *  every inning by `inningRuns`'s own chances, given that the innings add up to
+ *  `total` and that inning `i` holds at least `mins[i]`. So the innings of a
+ *  game look like the innings the score came from: a side scores in about the
+ *  share of its innings the law gives it, and no inning passes the law's cap
+ *  (nine) while the total fits under it. One keyed draw an inning. null: the
+ *  minimums cannot hold the total. */
+export function mlbSpreadRuns(total: number, mins: readonly number[], q: number, rng: Rng): number[] | null {
+  const n = mins.length;
+  if (!Number.isInteger(total) || total < 0 || n < 1) return null;
+  /* a total that nine runs an inning could not hold (no score here is one) lifts the cap, so every score is laid out */
+  const cap = Math.max(INNING_RUNS_MAX, Math.ceil(total / n));
+  /* ways[i][t]: the law's chance that innings i to the last add up to t */
+  const ways: number[][] = Array.from({ length: n + 1 }, () => new Array<number>(total + 1).fill(0));
+  ways[n][0] = 1;
+  for (let i = n - 1; i >= 0; i -= 1) {
+    for (let t = 0; t <= total; t += 1) {
+      let p = 0;
+      for (let k = mins[i]; k <= Math.min(cap, t); k += 1) p += inningChance(k, q, cap) * ways[i + 1][t - k];
+      ways[i][t] = p;
+    }
+  }
+  if (!(ways[0][total] > 0)) return null;
+  const out: number[] = [];
+  let left = total;
+  for (let i = 0; i < n; i += 1) {
+    let at = rng() * ways[i][left];
+    let pick = -1;
+    for (let k = mins[i]; k <= Math.min(cap, left); k += 1) {
+      const w = inningChance(k, q, cap) * ways[i + 1][left - k];
+      if (!(w > 0)) continue;
+      pick = k;
+      at -= w;
+      if (at < 0) break;
+    }
+    if (pick < 0) return null;
+    out.push(pick);
+    left -= pick;
+  }
+  return out;
 }
 
 /** [his side, the other side] for a side `edge` runs a game stronger. Never
@@ -99,7 +154,7 @@ export function mlbScore(edge: number, home: boolean, rng: Rng, eraId: string | 
   const mean = MLB_SCORING[eraId ?? 'now'] ?? MLB_SCORING.now;
   const park = home ? HOME_RUNS : -HOME_RUNS;
   const side = (m: number): number => {
-    const q = (Math.min(MEAN_CEILING, Math.max(MEAN_FLOOR, m)) / INNINGS) * (1 - RUN_ON);
+    const q = scoringShare(m);
     let runs = 0;
     for (let i = 0; i < INNINGS; i += 1) runs += inningRuns(q, rng);
     return runs;
@@ -332,21 +387,20 @@ export function mlbAtBats(games: number, avg: number, extra: number, rng: Rng): 
   return null;
 }
 
-/** A weight that clumps: most innings (or games) get little, a few get a lot. */
-const clumpy = (rng: Rng): number => { const x = -Math.log(Math.max(rng(), 1e-9)); return x * x; };
-
 /** Was the game level after nine? Only a one run game can have been. */
 export function mlbWentExtra(g: DerivedGame): boolean {
   return g.events.some(e => e.min === EXTRA);
 }
 
 /** One game's innings as the clock's events: each side's runs by inning add up
- *  to the score; the home side does not bat in the ninth when it leads; a game
- *  sent past the ninth was level after nine and the winner scores the one run
- *  after it; a home run of his is in an inning his side scores in. null: the
- *  score cannot be laid out (it never should be: his home runs are under his
- *  team's runs by the core's own floor). */
-function layInnings(g: DerivedGame, extra: boolean, rng: Rng): SeasonEvent[] | null {
+ *  to the score and are spread the way the score law draws an inning
+ *  (`mlbSpreadRuns`, `q` the league's share of scoring innings); the home side
+ *  does not bat in the ninth when it leads; a game sent past the ninth was
+ *  level after nine and the winner scores the one run after it; a home run of
+ *  his is in an inning his side scores in. null: the score cannot be laid out
+ *  (it never should be: `finish` has already put his home runs inside his
+ *  team's runs). */
+function layInnings(g: DerivedGame, extra: boolean, q: number, rng: Rng): SeasonEvent[] | null {
   const usWon = g.us > g.them;
   const homeWon = g.home === usWon;
   const hr = g.played ? of(g, 'hr') : 0;
@@ -365,7 +419,7 @@ function layInnings(g: DerivedGame, extra: boolean, rng: Rng): SeasonEvent[] | n
     if (late > (extra && won ? 1 : 0)) return null;
     const slots = shuffled(Array.from({ length: innings }, (_, i) => i), rng).slice(0, inNine);
     const mins = Array.from({ length: innings }, (_, i) => (slots.includes(i) ? 1 : 0));
-    const runs = splitTotal(nine, Array.from({ length: innings }, () => clumpy(rng)), Array.from({ length: innings }, () => nine), mins);
+    const runs = mlbSpreadRuns(nine, mins, q, rng);
     if (!runs) return null;
     runs.forEach((pts, i) => {
       if (slots.includes(i)) events.push({ min: i + 1, kind: 'hr', side, mine: true });
@@ -382,7 +436,7 @@ function layInnings(g: DerivedGame, extra: boolean, rng: Rng): SeasonEvent[] | n
 }
 
 /** His at bats, hits and runs batted in for every game he played, and every game's innings. */
-function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boolean {
+function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng, ctx?: UsSeasonCtx): boolean {
   const avg = num(row.avg);
   const rbi = num(row.rbi);
   if (avg === null || rbi === null || !Number.isInteger(rbi) || rbi < 0) return false;
@@ -413,11 +467,13 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   if (driven.some((v, i) => v > room[i])) return false;
   if (!settle(driven, rbi, floor, room, i => (room[i] - driven[i]) * (hits[i] > 0 ? 1 : 0.25), rng)) return false;
   on.forEach((g, i) => { g.line.ab = ab[i]; g.line.h = hits[i]; g.line.rbi = driven[i]; });
+  /* the innings are spread by the score law's own chances, at the era's league mean */
+  const q = scoringShare(MLB_SCORING[ctx?.eraId ?? 'now'] ?? MLB_SCORING.now);
   for (const g of games) {
     /* drawn for every game, so the rule never moves another game's innings */
     const u = rng();
     const extra = Math.abs(g.us - g.them) === 1 && u < EXTRA_SHARE;
-    const events = layInnings(g, extra, rng);
+    const events = layInnings(g, extra, q, rng);
     if (!events) return false;
     g.events = events;
   }

@@ -8,7 +8,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { buildUsSeason, usBandOf, usBindOf, usPlayoffPath, type UsRow, type UsSeasonCtx } from '@/lib/season/us';
 import { deriveSeason, deriveSeasonOrWhy, disagreements, type DerivedGame } from '@/lib/season/core';
 import {
-  MLB_SEASON, mlbAtBats, mlbAvgText, mlbDeal, mlbDealProblems, mlbDealUnnamed, mlbOrderProblems, mlbScore, mlbSeriesList, mlbWentExtra,
+  MLB_SEASON, mlbAtBats, mlbAvgText, mlbDeal, mlbDealProblems, mlbDealUnnamed, mlbOrderProblems, mlbScore, mlbSeriesList, mlbSpreadRuns, mlbWentExtra,
 } from '@/lib/season/mlb';
 import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbSeasonHeld, mlbViewGames } from '@/lib/mlbSeasonHeld';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
@@ -56,6 +56,53 @@ describe('mlbScore', () => {
       expect(w, `edge ${edge}`).toBeGreaterThan(last);
       last = w;
     }
+  });
+});
+
+describe('the innings of a game', () => {
+  it('spreads a side\'s runs the way the score law draws an inning: they add up, the minimums hold, nothing passes nine', () => {
+    /* the league's share of scoring innings at the ledger's mean, by the law's own formula (4.48 over nine, times 0.58) */
+    const q = (MLB_SCORING.now / 9) * 0.58;
+    const rng = keyedRng('mlb-innings');
+    const seen = { innings: 0, scoring: 0, sides: 0, five: 0 };
+    for (let total = 0; total <= 30; total += 1) {
+      for (const n of [8, 9]) {
+        for (let k = 0; k < 400; k += 1) {
+          /* up to three innings that must hold a run (a home run of his is in an inning his side scores in) */
+          const forced = Math.min(total, n, k % 4);
+          const mins = Array.from({ length: n }, (_, i) => (i < forced ? 1 : 0));
+          const runs = mlbSpreadRuns(total, mins, q, rng)!;
+          expect(runs, `${total} over ${n}`).toHaveLength(n);
+          expect(runs.reduce((a, b) => a + b, 0), `${total} over ${n}`).toBe(total);
+          expect(runs.every((v, i) => Number.isInteger(v) && v >= mins[i] && v <= 9), `${total} over ${n}: ${runs.join(' ')}`).toBe(true);
+        }
+      }
+    }
+    /* at the scores the law itself hands out, a side scores in about the law's share of its innings and an
+       inning of five or more is rare (the first cut of this view put all the runs in one inning in one team
+       game in five with four runs or more) */
+    for (let i = 0; i < 6000; i += 1) {
+      const [us, them] = mlbScore(0, i % 2 === 0, rng, 'now');
+      for (const total of [us, them]) {
+        const runs = mlbSpreadRuns(total, new Array<number>(9).fill(0), q, rng)!;
+        seen.sides += 1;
+        seen.innings += 9;
+        seen.scoring += runs.filter(v => v > 0).length;
+        if (Math.max(...runs) >= 5) seen.five += 1;
+      }
+    }
+    expect(seen.scoring / seen.innings).toBeGreaterThan(0.27);
+    expect(seen.scoring / seen.innings).toBeLessThan(0.32);
+    expect(seen.five / seen.sides).toBeGreaterThan(0.06);
+    expect(seen.five / seen.sides).toBeLessThan(0.11);
+  });
+  it('lifts the cap only for a total nine runs an inning could not hold, and refuses minimums over the total', () => {
+    const rng = keyedRng('mlb-innings-cap');
+    const big = mlbSpreadRuns(90, new Array<number>(9).fill(0), 0.29, rng)!;
+    expect(big.reduce((a, b) => a + b, 0)).toBe(90);
+    expect(Math.max(...big)).toBe(10);
+    expect(mlbSpreadRuns(2, [1, 1, 1, 0, 0, 0, 0, 0, 0], 0.29, rng)).toBeNull();
+    expect(mlbSpreadRuns(0, new Array<number>(9).fill(0), 0.29, rng)).toEqual(new Array<number>(9).fill(0));
   });
 });
 
