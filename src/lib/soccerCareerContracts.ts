@@ -30,3 +30,9 @@ export function soccerExtensionQuote(career: ExtensionCareer, kind: 'extension' 
       : 'A shorter deal and lower wage reflect your age, level and latest season.',
   };
 }
+/** Apply the existing age and form policy to a new club's drawn terms. */
+export function soccerTransferTerms(career: ExtensionCareer, offeredWage: number, offeredYears: number) {
+  if (career.age < 30) return { wage: offeredWage, contractYears: offeredYears };
+  const quote = soccerExtensionQuote({ ...career, weeklyWage: offeredWage }, 'renewal');
+  return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };
+}

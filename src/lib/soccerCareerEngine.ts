@@ -4,7 +4,7 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';
 import { personalGoalMilestoneNews } from './soccerCareerMilestone';
-import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
+import { soccerExtensionQuote, soccerTransferTerms } from '@/lib/soccerCareerContracts';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
@@ -4450,7 +4450,7 @@ export function completeClubVerdictMove(prev: CareerState): CareerState {
   return moved;
 }
 
-function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
+function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, seasons: CareerState['seasons'], isDream = false): ContractOffer | null {
   const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
   if (candidates.length === 0) return null;
   const club = pickAcrossLeagues(candidates);
@@ -4458,7 +4458,8 @@ function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number
   let wage = wageForTier(tier, overall);
   if (isDream) wage = Math.round(wage * 0.65);
   const fee = realisticTransferFee(overall, age);
-  return { club, contractYears: rand(1, 5), wage, transferFee: fee, isDreamClub: isDream, isPayCut: isDream };
+  const terms = soccerTransferTerms({ age, overall, weeklyWage: wage, seasons }, wage, rand(1, 5));
+  return { club, contractYears: terms.contractYears, wage: terms.wage, transferFee: fee, isDreamClub: isDream, isPayCut: isDream };
 }
 
 /* ─── Round 257: the club gets an opinion ────────────────────────────────────
@@ -4589,7 +4590,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
          his rating would normally attract and the money is worse. */
       const tiers = [...new Set(getInterestedTiers(overall, age).map(t => Math.min(4, t + 1)))];
       for (let i = 0; i < 3 && offers.length < 3; i++) {
-        const offer = makeOffer(clubs, pick(tiers), overall, age, exclude, marketValue);
+        const offer = makeOffer(clubs, pick(tiers), overall, age, exclude, marketValue, state.seasons);
         if (!offer) continue;
         if (verdict.mode === "released") { offer.transferFee = 0; offer.isPayCut = true; }
         offer.wage = Math.round(offer.wage * (verdict.mode === "released" ? 0.7 : 0.85));
@@ -4598,7 +4599,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
       /* A released player with nowhere to go would be stuck on this screen
          forever, so the bottom of the pyramid always answers the phone. */
       if (verdict.mode === "released" && !offers.length) {
-        const last = makeOffer(clubs, 4, overall, age, exclude, 0);
+        const last = makeOffer(clubs, 4, overall, age, exclude, 0, state.seasons);
         if (last) {
           last.transferFee = 0;
           last.isPayCut = true;
@@ -4619,7 +4620,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   if (contractYearsLeft <= 1) {
     const offers: ContractOffer[] = [];
     for (let i = 0; i < rand(2, 4); i++) {
-      const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, 0);
+      const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, 0, state.seasons);
       if (offer) { offer.transferFee = 0; offer.wage = Math.round(offer.wage * 0.85); offers.push(offer); }
     }
     return { type: "contract_expiry", offers };
@@ -4629,15 +4630,15 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   const lastRating = lastSeason?.rating ?? 6;
 
   if (aboveLevel >= 10 && lastRating >= 7.5 && Math.random() < 0.30) {
-    const offerA = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
-    const offerB = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
+    const offerA = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue, state.seasons);
+    const offerB = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue, state.seasons);
     if (offerA && offerB) return { type: "bidding_war", offerA, offerB };
   }
 
   // Round 49: a super agent gets dream clubs to actually pick up the phone
   const dreamChance = state.agentId === "super" ? 0.25 : 0.15;
   if (overall >= 75 && Math.abs(overall - 80) <= 5 && currentClubTier > 1 && Math.random() < dreamChance) {
-    const dreamOffer = makeOffer(clubs, 1, overall, age, exclude, marketValue, true);
+    const dreamOffer = makeOffer(clubs, 1, overall, age, exclude, marketValue, state.seasons, true);
     if (dreamOffer) return { type: "dream_club", offer: dreamOffer };
   }
 
@@ -4656,7 +4657,8 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
         isHomegrown: true,
         isPayCut: true,
       };
-      return { type: "one_offer", offer: homecoming };
+      const terms = soccerTransferTerms(state, homecoming.wage, homecoming.contractYears);
+      return { type: "one_offer", offer: { ...homecoming, ...terms } };
     }
   }
 
@@ -4668,7 +4670,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   const interestChance = (aboveLevel >= 15 ? 0.7 : aboveLevel >= 5 ? 0.5 : aboveLevel >= 0 ? 0.3 : 0.1)
     + (banked > 0 ? 0.3 : 0);
   if (Math.random() < interestChance) {
-    const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
+    const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue, state.seasons);
     if (offer) return { type: "one_offer", offer };
   }
 
@@ -4680,7 +4682,7 @@ export function requestTransfer(state: CareerState, clubs: ClubData[]): Transfer
   clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1), (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
   if (Math.random() < 0.5) {
     const exclude = new Set<string>([state.currentClub]);
-    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
+    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue, state.seasons);
     return { type: "request_result", offer };
   }
   return { type: "request_result", offer: null };

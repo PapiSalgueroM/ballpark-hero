@@ -1,0 +1,168 @@
+name: Soccer veteran transfer terms
+on:
+  push:
+    branches: [codex/career-veteran-offers]
+    paths:
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerContracts.ts
+      - scripts/simSoccerVeteranOffers.mjs
+      - .github/workflows/career-veteran-offers.yml
+  pull_request:
+    paths:
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerContracts.ts
+      - scripts/simSoccerVeteranOffers.mjs
+      - .github/workflows/career-veteran-offers.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-veteran-offers-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and locked dependency preparation
+        run: |
+          mkdir -p career-veteran-offers-artifacts
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse 'f78037dcddea12c1a02586c7d5c0e185efb86121^{tree}')" = 1c9e7dcb11992442060cb162c288d0bcf37db0c2
+          git diff --exit-code f78037dcddea12c1a02586c7d5c0e185efb86121 HEAD -- src package.json package-lock.json scripts/lib ':!src/lib/soccerCareerEngine.ts' ':!src/lib/soccerCareerContracts.ts'
+          git rev-parse HEAD > career-veteran-offers-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > career-veteran-offers-artifacts/source-tree.txt
+          git archive --format=zip --output=career-veteran-offers-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > career-veteran-offers-artifacts/source-inventory.txt
+          sha256sum package.json package-lock.json > career-veteran-offers-artifacts/packages-before.txt
+          npm ci
+          DEPENDENCY_OUT=career-veteran-offers-artifacts/dependencies-before.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > career-veteran-offers-artifacts/packages-after-setup.txt
+          cmp career-veteran-offers-artifacts/packages-before.txt career-veteran-offers-artifacts/packages-after-setup.txt
+      - name: Actual app type gate
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-veteran-offers-artifacts/types.log
+      - name: Actual veteran method preflight, no final build credit
+        run: |
+          SOCCER_VETERAN_OFFERS_OUT=career-veteran-preflight-artifacts NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs 2>&1 | tee career-veteran-offers-artifacts/preflight-proof.log
+          du -sb -c career-veteran-preflight-artifacts career-veteran-offers-artifacts > career-veteran-offers-artifacts/preflight-artifact-size.log
+          test "$(du -sb -c career-veteran-preflight-artifacts career-veteran-offers-artifacts | tail -n1 | cut -f1)" -lt 500000000
+      - name: Retain complete preflight
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-veteran-offers-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            career-veteran-preflight-artifacts/
+            career-veteran-offers-artifacts/
+          retention-days: 5
+          if-no-files-found: error
+      - name: Full production SEO build
+        id: build
+        run: |
+          npm run build:seo 2>&1 | tee career-veteran-offers-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > career-veteran-offers-artifacts/generated-public.patch
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > career-veteran-offers-artifacts/generated-public-sha256.txt
+          tar -czf career-veteran-offers-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          sha256sum career-veteran-offers-artifacts/generated-public-and-lastmod.tar.gz > career-veteran-offers-artifacts/generated-public-archive-sha256.txt
+          sha256sum scripts/data/lastmod.json > career-veteran-offers-artifacts/generated-lastmod-sha256.txt
+      - name: Actual veteran offers, signed saves and copied-source controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          SOCCER_VETERAN_OFFERS_OUT=career-veteran-offers-artifacts/proof NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs 2>&1 | tee career-veteran-offers-artifacts/veteran-offers.log
+      - name: Retain post-build evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-veteran-offers-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-veteran-offers-artifacts/
+          retention-days: 5
+      - name: Related actual contract and career outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simSoccerContractMoves simContractPreview simContracts simCareerRealism simCareerRecordedStats simCareerLeagueWorld simCareerNoDeadEnd simCareerLife simCareerLifeCooldowns simCareerDecisionOutcome simCareerDilemmaTruth simCareerDilemmaReach simNoInventedQuotes simHarnessAnchors simCareerClubPool simCareerFallback simCareerAcademy simCareerEras; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-veteran-offers-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "career-veteran-offers-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-veteran-offers-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen rebuilt output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-veteran-offers-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "career-veteran-offers-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-veteran-offers-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Sources packages and installed dependencies held
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f career-veteran-offers-artifacts/generated-lastmod-sha256.txt ]; then sha256sum --check career-veteran-offers-artifacts/generated-lastmod-sha256.txt; fi
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json ':!scripts/data/lastmod.json' > career-veteran-offers-artifacts/source-held.log
+          sha256sum package.json package-lock.json > career-veteran-offers-artifacts/packages-final.txt
+          cmp career-veteran-offers-artifacts/packages-before.txt career-veteran-offers-artifacts/packages-final.txt
+          DEPENDENCY_OUT=career-veteran-offers-artifacts/dependencies-final.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          cmp career-veteran-offers-artifacts/dependencies-before.json career-veteran-offers-artifacts/dependencies-final.json
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS actual pinned Playwright1.64.0');
+          JS
+          du -sb career-veteran-offers-artifacts > career-veteran-offers-artifacts/artifact-size.log
+          test "$(du -sb career-veteran-offers-artifacts | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-veteran-offers-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-veteran-offers-artifacts/
+          retention-days: 5
+          if-no-files-found: error
