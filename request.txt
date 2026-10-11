@@ -1,0 +1,3 @@
+#!serial
+throwback-fleet: node .rc/x/mut.mjs ERA && SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000 > /tmp/tb.log 2>&1; c=$?; git checkout -- src scripts; grep -E "17 \(a\)|at or over from, pooled|FAIL|hallshare|careers, " /tmp/tb.log | cut -c1-330; echo "throwback-fleet: harness exit $c | $(tail -1 /tmp/tb.log | cut -c1-200)"
+tree-clean: test -z "$(git status --short -- src scripts)" && echo "tree-clean: nothing left mutated"
