@@ -1,0 +1,35 @@
+1) the closed form is the engine: 200,000 seasons per overall through each page's own sim
+   nba 90: 0 unbeaten of 200000 (mean 69.70 wins); closed form one run in 530,000 expects 0.4, band 0.0 to 3.4
+   nba 95: 320 unbeaten of 200000 (mean 75.76 wins); closed form one run in 610 expects 325.4, band 235.3 to 415.5
+   nba 99: 36714 unbeaten of 200000 (mean 80.31 wins); closed form one run in 5 expects 36779.6, band 35913.4 to 37645.9
+   nba 98.52: 21187 unbeaten of 200000 (mean 79.76 wins); closed form one run in 9 expects 21153.7, band 20466.0 to 21841.4
+   nhl 88: 46 unbeaten of 200000 (mean 74.05 wins); closed form one run in 3,900 expects 51.8, band 15.9 to 87.8
+   nhl 90: 801 unbeaten of 200000 (mean 76.61 wins); closed form one run in 250 expects 795.1, band 654.4 to 935.9
+   nhl 95: 30414 unbeaten of 200000 (mean 80.12 wins); closed form one run in 7 expects 30569.6, band 29765.0 to 31374.2
+   nhl 98.27: 73932 unbeaten of 200000 (mean 81.00 wins); closed form one run in 3 expects 74093.3, band 73013.4 to 75173.1
+   mlb 92: 155 unbeaten of 200000 (mean 154.89 wins); closed form one run in 1,300 expects 149.8, band 88.7 to 211.0
+   mlb 93: 585 unbeaten of 200000 (mean 156.24 wins); closed form one run in 330 expects 603.3, band 480.7 to 726.0
+   mlb 95: 4944 unbeaten of 200000 (mean 158.30 wins); closed form one run in 41 expects 4911.2, band 4565.1 to 5257.2
+   mlb 98.3: 28305 unbeaten of 200000 (mean 160.04 wins); closed form one run in 7 expects 28205.5, band 27427.3 to 28983.8
+   nfl 81.89: 162 unbeaten of 200000 (mean 11.15 wins); closed form one run in 1,200 expects 165.5, band 101.2 to 229.8
+   nfl 85: 2304 unbeaten of 200000 (mean 13.03 wins); closed form one run in 88 expects 2273.5, band 2036.4 to 2510.5
+   nfl 90: 44637 unbeaten of 200000 (mean 15.55 wins); closed form one run in 4 expects 44612.4, band 43681.5 to 45543.2
+   nfl 97.52: 130364 unbeaten of 200000 (mean 16.57 wins); closed form 7 runs in 10 expects 130583.0, band 129518.5 to 131647.4
+2) the numbers the copy prints
+   nba: real shot from 95; best 98.52 one in 9.45, median draft 87.86 one in 162,311,304
+   nba 94.5: At 94.5 overall an 82-0 season comes about one run in 1,200. The chase is the win total; a 95 plus roster is where unbeaten starts to be a real shot.
+   nhl: real shot from 89; best 98.27 one in 2.70, median draft 85.97 one in 206,310
+   nhl 88.5: At 88.5 overall an 82-0 season comes about one run in 1,800. The chase is the win total; an 89 plus lineup is where unbeaten starts to be a real shot.
+   mlb: real shot from 93; best 98.3 one in 7.09, median draft 79.59 one in 271,454,994,080,555,000,000,000,000,000,000
+   mlb 92.5: At 92.5 overall a 162-0 season comes about one run in 640. Rare, not impossible.
+   nfl: real shot from 83; best 97.52 one in 1.53, median draft 81.89 one in 1,209
+   nfl 82.5: At 82.5 overall a 17-0 season comes about one run in 700. Rare, not impossible.
+3) the best record store, per sport
+   per sport: round trip, worse never overwrites, equal keeps the first, better replaces, no leak, five hostile values fail closed
+4) the copy makes no promise the numbers contradict
+   nba: Spin the wheel of NBA history, draft one player per stop, and chase the best record you can. 82-0 takes a 95 plus roster and a lucky sim, and the odds are printed on every result.
+   nhl: Spin the wheel of hockey history, draft one player per stop, and chase the best record you can. 82-0 takes an 89 plus lineup and a lucky sim, and the odds are printed on every result.
+   mlb: Spin the wheel of baseball history, draft one player per stop, and chase 116 wins, the big league record. A perfect 162-0 needs a lineup the wheel almost never deals, and the odds are printed on every result.
+   nfl: Spin the wheel of NFL history, draft one player per stop, and chase the best record you can. 17-0 takes an 83 plus roster and a lucky sim, and the odds are printed on every result.
+
+simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
