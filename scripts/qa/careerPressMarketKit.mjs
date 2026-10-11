@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {build} from 'esbuild';
-export const ROOT=process.cwd(),BASE='faf0a5f3',NOW=1791658800000;
+export const ROOT=process.cwd(),BASE='934c29d9',NOW=1791658800000;
 export const OUT=path.resolve('career-press-market-artifacts');
 export const sha=v=>createHash('sha256').update(v).digest('hex');
 export const copy=v=>JSON.parse(JSON.stringify(v));
