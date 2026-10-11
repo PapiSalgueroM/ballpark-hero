@@ -137,3 +137,31 @@ describe('A farewell season is announced by one box on the page', () => {
     expect(boxes(mount(senior()))).toEqual({ announced: 0, available: 1, banner: false });
   });
 });
+
+/* Release AW closing pass, ruling C3: a plan that cannot be verified is read as absent. The commitment is the
+   flag the announcement set, so while it is true the card is not offered again and the page shows the one
+   FINAL SEASON banner it has always shown for that flag; with the flag off the card is offered again like to
+   any eligible player. The second case fails on the head before the ruling (the card stayed closed for good). */
+describe('A farewell plan that cannot be verified is read as absent on the page', () => {
+  const unverifiable = (saved: E.CareerState, flag: boolean): E.CareerState => {
+    const career = copy(saved);
+    (career as unknown as Record<string, unknown>).farewellSeason = { ...career.farewellSeason, version: 2 };
+    career.isFinalSeason = flag;
+    return career;
+  };
+  const banners = (view: ReturnType<typeof render>) => (view.container.textContent ?? '').split('FINAL SEASON').length - 1;
+
+  it('with the flag set by the announcement: the old banner shows, once, and the card is not offered again', () => {
+    const saved = unverifiable(announceSoccerFarewell(senior()), true);
+    expect(readSoccerFarewell(saved), 'the plan is past verifying').toBeNull();
+    const view = mount(saved);
+    expect(boxes(view)).toEqual({ announced: 0, available: 0, banner: true });
+    expect(banners(view)).toBe(1);
+  });
+
+  it('with the flag off: the card is offered again and there is no banner', () => {
+    const saved = unverifiable(announceSoccerFarewell(senior()), false);
+    expect(readSoccerFarewell(saved), 'the plan is past verifying').toBeNull();
+    expect(boxes(mount(saved))).toEqual({ announced: 0, available: 1, banner: false });
+  });
+});
