@@ -1,0 +1,469 @@
+{
+ "mode": "lit",
+ "rows": [
+  {
+   "id": "lit-390-how-to-play",
+   "shots": [
+    "lit-390-how-to-play-1-open.jpg",
+    "lit-390-how-to-play-2-var-paragraph.jpg",
+    "lit-390-how-to-play-3-paragraph-only.jpg"
+   ],
+   "notes": [],
+   "bad": [],
+   "mentionsVar": true,
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season. Right now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, Austrian Bundesliga, SuperSport HNL, Saudi Pro League, 2. Bundesliga, Danish Superliga, Super League Greece, Segunda División, Serie B, MLS Eastern Conference, MLS Western Conference, Brasileirão Série A, A-League Men, Russian Premier League, Champions League, KNVB Cup, Copa do Brasil, Australia Cup (the final only). A cup on that list has it from the round of 16 on unless the list says otherwise. Everything else plays without it, either because the real competition does not use it this season or because we could not confirm on two sources that it does, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals and penalties only. In Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. A foul the referee missed can become a penalty, and the kick is a real one that can go in, be saved or miss. You only see a review that changed the call, and it is rare. The numbers come from two published counts of one real season (Serie A 2017/18, its first with VAR), and we took the lower count each time: a goal ruled out about once in 13 matches, a penalty given about once in 11. It works both ways, for you and against you, and it does change results. Example: it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.",
+   "box": {
+    "x": 25,
+    "right": 365,
+    "height": 960,
+    "vw": 390,
+    "vh": 844,
+    "docWidth": 390
+   }
+  },
+  {
+   "id": "lit-1280-how-to-play",
+   "shots": [
+    "lit-1280-how-to-play-1-open.jpg",
+    "lit-1280-how-to-play-2-var-paragraph.jpg",
+    "lit-1280-how-to-play-3-paragraph-only.jpg"
+   ],
+   "notes": [],
+   "bad": [],
+   "mentionsVar": true,
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season. Right now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, Austrian Bundesliga, SuperSport HNL, Saudi Pro League, 2. Bundesliga, Danish Superliga, Super League Greece, Segunda División, Serie B, MLS Eastern Conference, MLS Western Conference, Brasileirão Série A, A-League Men, Russian Premier League, Champions League, KNVB Cup, Copa do Brasil, Australia Cup (the final only). A cup on that list has it from the round of 16 on unless the list says otherwise. Everything else plays without it, either because the real competition does not use it this season or because we could not confirm on two sources that it does, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals and penalties only. In Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. A foul the referee missed can become a penalty, and the kick is a real one that can go in, be saved or miss. You only see a review that changed the call, and it is rare. The numbers come from two published counts of one real season (Serie A 2017/18, its first with VAR), and we took the lower count each time: a goal ruled out about once in 13 matches, a penalty given about once in 11. It works both ways, for you and against you, and it does change results. Example: it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.",
+   "box": {
+    "x": 441,
+    "right": 839,
+    "height": 820,
+    "vw": 1280,
+    "vh": 900,
+    "docWidth": 1280
+   }
+  },
+  {
+   "id": "lit-390-motion-crowded-2219",
+   "seed": 2219,
+   "match": 2,
+   "shots": [
+    "lit-390-motion-crowded-2219-1-checking.jpg",
+    "lit-390-motion-crowded-2219-2-decided.jpg",
+    "lit-390-motion-crowded-2219-3-after.jpg",
+    "lit-390-motion-crowded-2219-4-whistle.jpg",
+    "lit-390-motion-crowded-2219-4b-interval.jpg"
+   ],
+   "notes": [],
+   "bad": [
+    "under the review card the pitch showed shot/wide (the rule of the repo test: nothing but a pass or the ruled out goal in its net)"
+   ],
+   "engine": {
+    "whistle": 49,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "shot:opp@47 Nicolas Jackson",
+     "shot:me@49 Brennan Johnson"
+    ],
+    "halfScore": "1-1"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "shot",
+    "phase": "wide",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "shot/wide"
+   ],
+   "scoresUnder": [
+    "me=1 opp=1"
+   ],
+   "story": [
+    "-|save/plant||me=1 opp=1|first",
+    "-|save/flight||me=1 opp=1|first",
+    "-|save/caught||me=1 opp=1|first",
+    "-|pass/pass||me=1 opp=1|first",
+    "-|shot/plant||me=1 opp=1|first",
+    "-|shot/flight||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "-|shot/plant||me=1 opp=1|first",
+    "-|shot/flight||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "checking|shot/wide||me=1 opp=1|first",
+    "decided|shot/wide||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-390-motion-crowded-2379",
+   "seed": 2379,
+   "match": 2,
+   "shots": [
+    "lit-390-motion-crowded-2379-1-checking.jpg",
+    "lit-390-motion-crowded-2379-2-decided.jpg",
+    "lit-390-motion-crowded-2379-3-after.jpg",
+    "lit-390-motion-crowded-2379-4-whistle.jpg",
+    "lit-390-motion-crowded-2379-4b-interval.jpg"
+   ],
+   "notes": [
+    "real goal opp Matty Cash at 50: scorer card NEVER shown (to 2.6 s into the interval)"
+   ],
+   "bad": [
+    "the real goal of Matty Cash at 50 never got its scorer card"
+   ],
+   "engine": {
+    "whistle": 50,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "shot:me@45 James Garner",
+     "save:opp@50 Johan Manzambi",
+     "goal:opp@50 Matty Cash"
+    ],
+    "halfScore": "0-2"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "pass",
+    "phase": "pass",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "pass/pass"
+   ],
+   "scoresUnder": [
+    "me=0 opp=1"
+   ],
+   "story": [
+    "-|save/plant||me=0 opp=1|first",
+    "-|save/flight||me=0 opp=1|first",
+    "-|save/caught||me=0 opp=1|first",
+    "-|pass/pass||me=0 opp=1|first",
+    "-|shot/plant||me=0 opp=1|first",
+    "-|shot/flight||me=0 opp=1|first",
+    "-|shot/wide||me=0 opp=1|first",
+    "-|pass/pass||me=0 opp=1|first",
+    "checking|pass/pass||me=0 opp=1|first",
+    "decided|pass/pass||me=0 opp=1|first",
+    "-|pass/pass||me=0 opp=1|first",
+    "-|goal/plant||me=0 opp=1|first",
+    "-|goal/flight||me=0 opp=1|first",
+    "-|goal/net||me=0 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-1280-motion-crowded-2219",
+   "seed": 2219,
+   "match": 2,
+   "shots": [
+    "lit-1280-motion-crowded-2219-1-checking.jpg",
+    "lit-1280-motion-crowded-2219-2-decided.jpg",
+    "lit-1280-motion-crowded-2219-3-after.jpg",
+    "lit-1280-motion-crowded-2219-4-whistle.jpg",
+    "lit-1280-motion-crowded-2219-4b-interval.jpg"
+   ],
+   "notes": [],
+   "bad": [
+    "under the review card the pitch showed shot/wide (the rule of the repo test: nothing but a pass or the ruled out goal in its net)"
+   ],
+   "engine": {
+    "whistle": 49,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "shot:opp@47 Nicolas Jackson",
+     "shot:me@49 Brennan Johnson"
+    ],
+    "halfScore": "1-1"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false,
+    "motion": "shot",
+    "phase": "wide",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "shot/wide"
+   ],
+   "scoresUnder": [
+    "me=1 opp=1"
+   ],
+   "story": [
+    "-|save/plant||me=1 opp=1|first",
+    "-|save/flight||me=1 opp=1|first",
+    "-|save/caught||me=1 opp=1|first",
+    "-|pass/pass||me=1 opp=1|first",
+    "-|shot/plant||me=1 opp=1|first",
+    "-|shot/flight||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "-|shot/plant||me=1 opp=1|first",
+    "-|shot/flight||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "checking|shot/wide||me=1 opp=1|first",
+    "decided|shot/wide||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-1280-motion-crowded-2379",
+   "seed": 2379,
+   "match": 2,
+   "shots": [
+    "lit-1280-motion-crowded-2379-1-checking.jpg",
+    "lit-1280-motion-crowded-2379-2-decided.jpg",
+    "lit-1280-motion-crowded-2379-3-after.jpg",
+    "lit-1280-motion-crowded-2379-4-whistle.jpg",
+    "lit-1280-motion-crowded-2379-4b-interval.jpg"
+   ],
+   "notes": [
+    "real goal opp Matty Cash at 50: scorer card NEVER shown (to 2.6 s into the interval)"
+   ],
+   "bad": [
+    "the real goal of Matty Cash at 50 never got its scorer card"
+   ],
+   "engine": {
+    "whistle": 50,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "shot:me@45 James Garner",
+     "save:opp@50 Johan Manzambi",
+     "goal:opp@50 Matty Cash"
+    ],
+    "halfScore": "0-2"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false,
+    "motion": "pass",
+    "phase": "pass",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "pass/pass"
+   ],
+   "scoresUnder": [
+    "me=0 opp=1"
+   ],
+   "story": [
+    "-|save/plant||me=0 opp=1|first",
+    "-|save/flight||me=0 opp=1|first",
+    "-|save/caught||me=0 opp=1|first",
+    "-|pass/pass||me=0 opp=1|first",
+    "-|shot/plant||me=0 opp=1|first",
+    "-|shot/flight||me=0 opp=1|first",
+    "-|shot/wide||me=0 opp=1|first",
+    "-|pass/pass||me=0 opp=1|first",
+    "checking|pass/pass||me=0 opp=1|first",
+    "decided|pass/pass||me=0 opp=1|first",
+    "-|pass/pass||me=0 opp=1|first",
+    "-|goal/plant||me=0 opp=1|first",
+    "-|goal/flight||me=0 opp=1|first",
+    "-|goal/net||me=0 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-390-reduced-plain-2460",
+   "seed": 2460,
+   "match": 1,
+   "shots": [
+    "lit-390-reduced-plain-2460-1-checking.jpg",
+    "lit-390-reduced-plain-2460-2-decided.jpg",
+    "lit-390-reduced-plain-2460-3-after.jpg",
+    "lit-390-reduced-plain-2460-5-match-help.jpg"
+   ],
+   "notes": [
+    "reduced motion: 0 animation(s) on the card, 0 running on the page when it opened; under the card: goal/net"
+   ],
+   "bad": [],
+   "engine": {
+    "whistle": 48,
+    "review": "disallowed me 9' Kiernan Dewsbury-Hall",
+    "chances": [
+     "shot:me@17 Jack Grealish",
+     "shot:opp@27 Alexander Isak",
+     "save:opp@32 Ryan Gravenberch",
+     "save:opp@45 Alexander Isak",
+     "shot:opp@46 Jeremie Frimpong"
+    ],
+    "halfScore": "0-0"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "goal",
+    "phase": "net",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "matchHelp": "Watching the match\nThe half you are watching has already been played by the game. You are seeing it back minute by minute.\nEvery goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.\nThe score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.\nA goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.\nVAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.\nTap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.\nPause, pick a speed, or Skip to the whistle. Tap a goal card to move on.\n\nWorked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.\n\nVAR example: At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0.",
+   "under": [
+    "goal/net"
+   ],
+   "scoresUnder": [
+    "me=0 opp=0"
+   ],
+   "story": [
+    "checking|goal/net||me=0 opp=0|first",
+    "decided|goal/net||me=0 opp=0|first",
+    "-|pass/pass||me=0 opp=0|first"
+   ]
+  },
+  {
+   "id": "lit-1280-reduced-plain-2460",
+   "seed": 2460,
+   "match": 1,
+   "shots": [
+    "lit-1280-reduced-plain-2460-1-checking.jpg",
+    "lit-1280-reduced-plain-2460-2-decided.jpg",
+    "lit-1280-reduced-plain-2460-3-after.jpg"
+   ],
+   "notes": [
+    "reduced motion: 0 animation(s) on the card, 0 running on the page when it opened; under the card: goal/net"
+   ],
+   "bad": [],
+   "engine": {
+    "whistle": 48,
+    "review": "disallowed me 9' Kiernan Dewsbury-Hall",
+    "chances": [
+     "shot:me@17 Jack Grealish",
+     "shot:opp@27 Alexander Isak",
+     "save:opp@32 Ryan Gravenberch",
+     "save:opp@45 Alexander Isak",
+     "shot:opp@46 Jeremie Frimpong"
+    ],
+    "halfScore": "0-0"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false,
+    "motion": "goal",
+    "phase": "net",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "under": [
+    "goal/net"
+   ],
+   "scoresUnder": [
+    "me=0 opp=0"
+   ],
+   "story": [
+    "checking|goal/net||me=0 opp=0|first",
+    "decided|goal/net||me=0 opp=0|first",
+    "-|pass/pass||me=0 opp=0|first"
+   ]
+  },
+  {
+   "id": "lit-390-reduced-crowded-2219",
+   "seed": 2219,
+   "match": 2,
+   "shots": [
+    "lit-390-reduced-crowded-2219-1-checking.jpg",
+    "lit-390-reduced-crowded-2219-2-decided.jpg",
+    "lit-390-reduced-crowded-2219-3-after.jpg",
+    "lit-390-reduced-crowded-2219-4-whistle.jpg",
+    "lit-390-reduced-crowded-2219-4b-interval.jpg"
+   ],
+   "notes": [
+    "reduced motion: 0 animation(s) on the card, 0 running on the page when it opened; under the card: shot/wide"
+   ],
+   "bad": [
+    "under the review card the pitch showed shot/wide (the rule of the repo test: nothing but a pass or the ruled out goal in its net)"
+   ],
+   "engine": {
+    "whistle": 49,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "shot:opp@47 Nicolas Jackson",
+     "shot:me@49 Brennan Johnson"
+    ],
+    "halfScore": "1-1"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "shot",
+    "phase": "wide",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "shot/wide"
+   ],
+   "scoresUnder": [
+    "me=1 opp=1"
+   ],
+   "story": [
+    "-|save/caught||me=1 opp=1|first",
+    "-|pass/pass||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "checking|shot/wide||me=1 opp=1|first",
+    "decided|shot/wide||me=1 opp=1|first",
+    "-|shot/wide||me=1 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  }
+ ]
+}
