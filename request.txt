@@ -1,0 +1,15 @@
+# reviewer us-board-recording, Release AX: THE BASE (origin/release-aw-int c9a1f86a) on the harnesses that read the US board files and stand in no gate list, so a red on the head can be told from a red the base already had
+#!serial
+b-sessionMarks: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simSessionMarks.mjs; s=$?; git checkout -q -; exit $s
+b-careerHub: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simCareerHub.mjs; s=$?; git checkout -q -; exit $s
+b-homeFront: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simHomeFront.mjs; s=$?; git checkout -q -; exit $s
+b-extMotion: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simExtensionResponseMotion.mjs; s=$?; git checkout -q -; exit $s
+b-extMotion-unreply: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs; s=$?; git checkout -q -; exit $s
+b-faFeedback: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simFreeAgencyFeedback.mjs; s=$?; git checkout -q -; exit $s
+b-faFeedback-restored: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs; s=$?; git checkout -q -; exit $s
+b-moneyApp: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simMoneyAppFeedback.mjs; s=$?; git checkout -q -; exit $s
+b-badgeMotion: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simCareerBadgeMotion.mjs; s=$?; git checkout -q -; exit $s
+b-seasonReview: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simCareerSeasonReview.mjs; s=$?; git checkout -q -; exit $s
+b-entryGuide: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simCareerEntryGuide.mjs; s=$?; git checkout -q -; exit $s
+b-decisionOutcome: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && node scripts/simCareerDecisionOutcome.mjs; s=$?; git checkout -q -; exit $s
+b-usCoachCareer: export TMPDIR=$(mktemp -d); git checkout -q --detach c9a1f86a && timeout 1500 node scripts/simUsCoachCareer.mjs; s=$?; git checkout -q -; exit $s

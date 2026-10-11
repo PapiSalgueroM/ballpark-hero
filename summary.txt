@@ -1,0 +1,13 @@
+b-sessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+b-careerHub exit=0 0s | simCareerHub: green. Nine games on the same boxes now, and every award has a year on it.
+b-homeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+b-extMotion exit=0 2s | simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.
+b-extMotion-unreply exit=0 1s | simExtensionResponseMotion unreply control: all three real-engine response checks rejected the removed binding; both opening-state checks stayed green.
+b-faFeedback exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+b-faFeedback-restored exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+b-moneyApp exit=0 2s | MoneyApp feedback: CRLF copied controls bind, original bytes held, owned temporary files cleaned. Native geometry/motion acceptance remains separate.
+b-badgeMotion exit=0 1s | simCareerBadgeMotion: six rendered evaluator, locked, earned, unlock, stable-node, previous-career and full-label checks passed.
+b-seasonReview exit=0 5s | simCareerSeasonReview normal: intended assertions and independent retirement baseline passed.
+b-entryGuide exit=0 4s | simCareerEntryGuide normal: intended guide outcomes and independent baseline passed.
+b-decisionOutcome exit=0 4s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+b-usCoachCareer exit=0 1s | PASS: ALL US COACHING CAREER CHECKS PASSED
