@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+# Round 1302 review (run lens), request W: the two Quick Sim walks this branch changes against the base (through Round 1218's closing fix) and that the builder did not run, on the build as it ships (dark), behind the other lane's offline transport and font cache.
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf.log 2>&1; s=$?; tail -6 /tmp/rf.log | cut -c1-400; echo "playCmRealFixtures exit $s"; exit $s
+playCmQuickSubs: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs > /tmp/qs.log 2>&1; s=$?; tail -6 /tmp/qs.log | cut -c1-400; echo "playCmQuickSubs exit $s"; exit $s

@@ -1,0 +1,7 @@
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/cm-real-fixture-artifacts/outcomes/native-later-season.json'
+}
+
+Node.js v24.21.0
+playCmRealFixtures exit 1
