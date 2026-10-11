@@ -1,0 +1,8 @@
+# Release AV proof, the rest of the gate's lane H1 (mkGateReqG.mjs): the home fold, the soft 404, the FAQ schema and the whole route sweep at two sizes, on a plain served build (the saved pages in it are the committed ones of Release AU)
+#!serve
+#!playwright
+#!serial
+playHomeFold: node scripts/playHomeFold.mjs
+playSoftFourOhFour: node scripts/playSoftFourOhFour.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+sweepGames: SIZES=phone,desktop node scripts/sweepGames.mjs
