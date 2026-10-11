@@ -1,0 +1,33 @@
+# verify 3 of Release AW part one on 046e38ae: rulings C2, C3, C4 with no build, one at a time (two lines put files back as an older commit has them and restore them)
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+c3-new: node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000
+c3-red-at-7c49d32c-EXPECT1: git worktree add -q /tmp/red 7c49d32c && ln -s "$PWD/node_modules" /tmp/red/node_modules && cd /tmp/red && node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/c3red.log 2>&1; s=$?; cp /tmp/c3red.log "$RC_OUT/c3-red.log"; grep -a -E "Test Files|Tests " /tmp/c3red.log | tail -2; exit $s
+c3-reverted-EXPECT1: for f in soccerAgentReview soccerInternationalReturn soccerCareerFarewell; do git show 7c49d32c:src/lib/$f.ts > src/lib/$f.ts; done; node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/c3rev.log 2>&1; s=$?; git checkout -- src/lib; test "$(git status --porcelain --untracked-files=no | wc -l)" = 0 || echo NOT-RESTORED; cp /tmp/c3rev.log "$RC_OUT/c3-reverted.log"; grep -a -E "Test Files|Tests " /tmp/c3rev.log | tail -2; exit $s
+sk-c3reverted-EXPECT1: for f in soccerAgentReview soccerInternationalReturn soccerCareerFarewell; do git show 7c49d32c:src/lib/$f.ts > src/lib/$f.ts; done; node scripts/simSaveKeeper.mjs; s=$?; git checkout -- src/lib; test "$(git status --porcelain --untracked-files=no | wc -l)" = 0 || echo NOT-RESTORED; exit $s
+pin: node scripts/simManagerAppealIsolation.mjs
+pin-sha: git show HEAD:src/lib/clubManager.ts | sha256sum | cut -c1-64; grep -a -c abd9e6690a77275900ffe23e9056b6396be92b63cd47791483e40bffd4724e5b scripts/fixtures/managerAppealIsolation1081/manifest.json
+damage: mkdir -p /tmp/sb5 && git archive 5ed04ae7cd9618141ea8db4600206fcec2feeb07 src | tar -x -C /tmp/sb5 && ln -s "$PWD/node_modules" /tmp/sb5/node_modules && SC_BASE=/tmp/sb5 SC_MODE=damage SC_N=5 node .rc/x/scProbe.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+sk-partbrief-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partbrief node scripts/simSaveKeeper.mjs
+sk-partagent-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partagent node scripts/simSaveKeeper.mjs
+sk-partreturn-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partreturn node scripts/simSaveKeeper.mjs
+sk-partfarewell-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+sk-partrow-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+sk-partrowus-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+livesimmotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+gencheck: node scripts/genCmVarRates.mjs --check
+litstatus: node scripts/qa/cmVarLit.mjs status
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simCmVarLedger-receipt-EXPECT1: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmVar-counted: CM_VAR_CONTROL=counted NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-bind-EXPECT1: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline-EXPECT1: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+gitclean: git status --porcelain --untracked-files=no | wc -l
