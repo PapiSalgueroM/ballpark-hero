@@ -188,6 +188,7 @@ repo, and none of the three changes a line the game runs.
   (the words, the clock under it, whether a review card is up with it), photographs it (`0-last-kick-card`) and
   asserts: the card names the scorer and his minute, the clock stands at the whistle's place with the half still
   on, no review card is up, and the card is down before the interval. The walk prints one line `LASTKICK` a case.
+  The read is the card's first frame; the picture waits for the card's rise to end, so it shows the card whole.
   Its negative control is the screen as it was before the fix (commit c06dc974's parent): on that build the same
   case must fail on this check.
 - **No case of the review screen test passes by failing.** The four cases about a penalty a review gives at a
@@ -207,7 +208,10 @@ Still open, and why:
   goal totals, so the table a takeover starts from is not biased. Threading the ask through the two takeovers
   touches `src/lib/clubManagerCalendar.ts` (read by 14 harnesses) and every walk that mirrors the hook: a round of
   its own.
-- **Page weight.** This round adds about 0.6K gzipped to each of the three Club Manager rows over its base (the
-  goal's own stoppage on the live screen, the kinds and the goal lift, the Help's list of competitions). The
-  budgets are the lead's and follow a release's own measurement.
+- **Page weight.** This round adds 0.4K to 0.5K gzipped to each of the three Club Manager rows over its base
+  (the goal's own stoppage on the live screen, the kinds and the goal lift, the Help's list of competitions).
+  Three trees built and measured on one runner (`r1303-fx2-w`), main, the Round 1302 base and this branch:
+  /club-manager 585.4K, 585.5K, 586.0K; /manager-hot-seat 602.8K, 602.8K, 603.3K; /deadline-day 612.9K, 613.0K,
+  613.4K, against budgets of 586K, 603K and 613K that round to the whole K. Green, by rounding. The budgets are
+  the lead's and follow a release's own measurement.
 - **`scripts/simEras.mjs`** is red on origin/main with the same three failures; it reads none of this round's files.
