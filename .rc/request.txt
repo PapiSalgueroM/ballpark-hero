@@ -1,0 +1,4 @@
+#!serial
+# Round 1212 closing check (verifier) on the pushed head e85701bb: the whole vitest suite, then the reviewer's Watch again mutation (finding 2)
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+mut-watch: node .rc/x/mutWatch.mjs && node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; echo "MUT watch vitest=$s"; [ $s -ne 0 ]
