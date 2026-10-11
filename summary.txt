@@ -1,0 +1,4 @@
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 73s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+hall-nhl-skip exit=0 65s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+tsc exit=0 112s | 
