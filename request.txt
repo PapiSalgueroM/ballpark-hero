@@ -1,0 +1,25 @@
+# Release AW closing pass, final proof P-CM3: ruling C2: Club Manager readers that are no gate line, part 3 (plain build, three at a time)
+#!build
+#!playwright
+simManagerXp: node scripts/simManagerXp.mjs
+simManagers: node scripts/simManagers.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simNationJob: node scripts/simNationJob.mjs
+simOpposition: node scripts/simOpposition.mjs
+simPromotion: node scripts/simPromotion.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs
+simSoccerConquest: node scripts/simSoccerConquest.mjs
+simSponsors: node scripts/simSponsors.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simStadiumTycoon: node scripts/simStadiumTycoon.mjs
+simTransfers: node scripts/simTransfers.mjs
+simUclField: node scripts/simUclField.mjs
+simUclFormatHistory: node scripts/simUclFormatHistory.mjs
+simUclLegMigration: node scripts/simUclLegMigration.mjs
+simUclLegs: node scripts/simUclLegs.mjs
+simUclPlaces: node scripts/simUclPlaces.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simWilderness: node scripts/simWilderness.mjs
+simWindow2026Bundesliga: node scripts/simWindow2026Bundesliga.mjs
+simWorld: node scripts/simWorld.mjs
+simYouthPadding: node scripts/simYouthPadding.mjs
