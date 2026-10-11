@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+lastkick: node .rc/x/mkLastKick.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/zzLastKickWalk.mjs > /tmp/lk.log 2>&1; s=$?; cp /tmp/lk.log "$RC_OUT/lk.log"; grep -E "^FIXTURE crowdedGoal|^CASE|^LASTKICK|^FAIL|^playCmVar|^mkLastKick" /tmp/lk.log | cut -c1-900 | tail -30; rm -f scripts/zzLastKickWalk.mjs; echo "lastkick exit $s"; exit $s
+clean: git status --porcelain --untracked-files=no | wc -l
