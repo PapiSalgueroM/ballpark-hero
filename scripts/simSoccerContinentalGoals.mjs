@@ -46,11 +46,11 @@ function replaceOnce(source, from, to, label) {
   return source.replace(from, to);
 }
 const productionPatches = [
-  ['  let totalPlayerGoals = 0;', '  let totalPlayerGoals = 0;\n  let removedKnockoutGoals = 0;'],
-  ['      const pg = legPlayerGoals(legs);', '      const rawPlayerGoals = legPlayerGoals(legs);\n      const pg = Math.min(rawPlayerGoals, gf);'],
-  ['      totalPlayerGoals += pg;', '      totalPlayerGoals += pg;\n      removedKnockoutGoals += rawPlayerGoals - pg;'],
+  ['  let totalPlayerGoals = 0;', ['  let totalPlayerGoals = 0;', '  let removedKnockoutGoals = 0;']],
+  ['      const pg = legPlayerGoals(legs);', ['      const rawPlayerGoals = legPlayerGoals(legs);', '      const pg = Math.min(rawPlayerGoals, gf);']],
+  ['      totalPlayerGoals += pg;', ['      totalPlayerGoals += pg;', '      removedKnockoutGoals += rawPlayerGoals - pg;']],
   ['  const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;',
-    '  const oldGoalTotal = totalPlayerGoals + removedKnockoutGoals;\n  const topScorerRoll = oldGoalTotal >= topScorerBar && Math.random() < 0.5;\n  const isTopScorer = totalPlayerGoals >= topScorerBar && topScorerRoll;'],
+    ['  const oldGoalTotal = totalPlayerGoals + removedKnockoutGoals;', '  const topScorerRoll = oldGoalTotal >= topScorerBar && Math.random() < 0.5;', '  const isTopScorer = totalPlayerGoals >= topScorerBar && topScorerRoll;']],
 ];
 const faults = [
   { id: 'remove-cap', from: '      const pg = Math.min(rawPlayerGoals, gf);', to: '      const pg = rawPlayerGoals;', groups: ['per-leg-cap', 'goal-total', 'award'] },
@@ -259,9 +259,9 @@ async function main() {
   assert.equal(git('rev-parse', BASE + '^{tree}').toString().trim(), BASE_TREE, 'exact original tree');
   const baseSource = lf(original(ENGINE).toString()), currentSource = lf(fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
   let declared = baseSource;
-  productionPatches.forEach(([from, to], index) => { declared = replaceOnce(declared, from, to, 'production hunk' + (index + 1)); });
+  productionPatches.forEach(([from, lines], index) => { declared = replaceOnce(declared, from, lines.join('\n'), 'production hunk' + (index + 1)); });
   assert.equal(declared, currentSource, 'only four declared production replacements');
-  report.production = { original: retain(baseSource), current: retain(currentSource), replacements: productionPatches };
+  report.production = { original: retain(baseSource), current: retain(currentSource), replacements: productionPatches.map(([from, lines]) => [from, lines.join('\n')]) };
   const definitions = [
     ['original-plain', { baseline: true }], ['original-observed', { baseline: true, observed: true }],
     ['current-plain', {}], ['healthy', { observed: true }], ...faults.map(fault => [fault.id, { observed: true, fault }]),
