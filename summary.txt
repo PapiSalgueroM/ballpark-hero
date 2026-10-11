@@ -1,0 +1,1 @@
+litwalk2 exit=1 243s | RESULT lit walk 2=1

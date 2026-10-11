@@ -1,0 +1,405 @@
+{
+ "mode": "lit",
+ "rows": [
+  {
+   "id": "lit-390-motion-realgoal-42322",
+   "seed": 42322,
+   "match": 2,
+   "shots": [
+    "lit-390-motion-realgoal-42322-1-checking.jpg",
+    "lit-390-motion-realgoal-42322-2-decided.jpg",
+    "lit-390-motion-realgoal-42322-3-after.jpg",
+    "lit-390-motion-realgoal-42322-4-whistle.jpg",
+    "lit-390-motion-realgoal-42322-4b-interval.jpg"
+   ],
+   "notes": [
+    "real goal me Merlin Röhl at 47: scorer card shown at sample 47, stage first",
+    "real goal me Brennan Johnson at 49: scorer card NEVER shown (to 2.6 s into the interval)"
+   ],
+   "bad": [
+    "the real goal of Brennan Johnson at 49 never got its scorer card"
+   ],
+   "engine": {
+    "whistle": 49,
+    "review": "disallowed opp 45+3' Alejandro Garnacho",
+    "chances": [
+     "shot:opp@46 Johan Manzambi",
+     "goal:me@47 Merlin Röhl",
+     "shot:opp@48 Nicolas Jackson",
+     "goal:me@49 Brennan Johnson"
+    ],
+    "halfScore": "2-0"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "goal",
+    "phase": "net",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "under": [
+    "goal/net"
+   ],
+   "scoresUnder": [
+    "me=1 opp=0"
+   ],
+   "story": [
+    "-|shot/plant||me=0 opp=0|first",
+    "-|shot/flight||me=0 opp=0|first",
+    "-|shot/wide||me=0 opp=0|first",
+    "-|goal/plant||me=0 opp=0|first",
+    "-|goal/flight||me=0 opp=0|first",
+    "-|goal/net|G:GOAL! Merlin Röhl 45+2'Evert|me=1 opp=0|first",
+    "-|goal/plant||me=1 opp=0|first",
+    "-|goal/flight||me=1 opp=0|first",
+    "-|goal/net||me=1 opp=0|first",
+    "checking|goal/net||me=1 opp=0|first",
+    "decided|goal/net||me=1 opp=0|first",
+    "-|goal/net||me=1 opp=0|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-1280-motion-realgoal-42322",
+   "seed": 42322,
+   "match": 2,
+   "shots": [
+    "lit-1280-motion-realgoal-42322-1-checking.jpg",
+    "lit-1280-motion-realgoal-42322-2-decided.jpg",
+    "lit-1280-motion-realgoal-42322-3-after.jpg",
+    "lit-1280-motion-realgoal-42322-4-whistle.jpg",
+    "lit-1280-motion-realgoal-42322-4b-interval.jpg"
+   ],
+   "notes": [
+    "real goal me Merlin Röhl at 47: scorer card shown at sample 47, stage first",
+    "real goal me Brennan Johnson at 49: scorer card NEVER shown (to 2.6 s into the interval)"
+   ],
+   "bad": [
+    "the real goal of Brennan Johnson at 49 never got its scorer card"
+   ],
+   "engine": {
+    "whistle": 49,
+    "review": "disallowed opp 45+3' Alejandro Garnacho",
+    "chances": [
+     "shot:opp@46 Johan Manzambi",
+     "goal:me@47 Merlin Röhl",
+     "shot:opp@48 Nicolas Jackson",
+     "goal:me@49 Brennan Johnson"
+    ],
+    "halfScore": "2-0"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false,
+    "motion": "goal",
+    "phase": "net",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "under": [
+    "goal/net"
+   ],
+   "scoresUnder": [
+    "me=1 opp=0"
+   ],
+   "story": [
+    "-|shot/plant||me=0 opp=0|first",
+    "-|shot/flight||me=0 opp=0|first",
+    "-|shot/wide||me=0 opp=0|first",
+    "-|goal/plant||me=0 opp=0|first",
+    "-|goal/flight||me=0 opp=0|first",
+    "-|goal/net|G:GOAL! Merlin Röhl 45+2'Evert|me=1 opp=0|first",
+    "-|goal/plant||me=1 opp=0|first",
+    "-|goal/flight||me=1 opp=0|first",
+    "-|goal/net||me=1 opp=0|first",
+    "checking|goal/net||me=1 opp=0|first",
+    "decided|goal/net||me=1 opp=0|first",
+    "-|goal/net||me=1 opp=0|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-390-reduced-realgoal-42322",
+   "seed": 42322,
+   "match": 2,
+   "shots": [
+    "lit-390-reduced-realgoal-42322-1-checking.jpg",
+    "lit-390-reduced-realgoal-42322-2-decided.jpg",
+    "lit-390-reduced-realgoal-42322-3-after.jpg",
+    "lit-390-reduced-realgoal-42322-4-whistle.jpg",
+    "lit-390-reduced-realgoal-42322-4b-interval.jpg"
+   ],
+   "notes": [
+    "real goal me Merlin Röhl at 47: scorer card shown at sample 23, stage first",
+    "real goal me Brennan Johnson at 49: scorer card NEVER shown (to 2.6 s into the interval)",
+    "reduced motion: 0 animation(s) on the card, 0 running on the page when it opened; under the card: goal/net"
+   ],
+   "bad": [
+    "the real goal of Brennan Johnson at 49 never got its scorer card"
+   ],
+   "engine": {
+    "whistle": 49,
+    "review": "disallowed opp 45+3' Alejandro Garnacho",
+    "chances": [
+     "shot:opp@46 Johan Manzambi",
+     "goal:me@47 Merlin Röhl",
+     "shot:opp@48 Nicolas Jackson",
+     "goal:me@49 Brennan Johnson"
+    ],
+    "halfScore": "2-0"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "goal",
+    "phase": "net",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "under": [
+    "goal/net"
+   ],
+   "scoresUnder": [
+    "me=1 opp=0"
+   ],
+   "story": [
+    "-|shot/wide||me=0 opp=0|first",
+    "-|goal/net|G:GOAL! Merlin Röhl 45+2'Evert|me=1 opp=0|first",
+    "-|goal/net||me=1 opp=0|first",
+    "checking|goal/net||me=1 opp=0|first",
+    "decided|goal/net||me=1 opp=0|first",
+    "-|goal/net||me=1 opp=0|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-390-motion-crowded-4670",
+   "seed": 4670,
+   "match": 2,
+   "shots": [
+    "lit-390-motion-crowded-4670-1-checking.jpg",
+    "lit-390-motion-crowded-4670-2-decided.jpg",
+    "lit-390-motion-crowded-4670-3-after.jpg",
+    "lit-390-motion-crowded-4670-4-whistle.jpg",
+    "lit-390-motion-crowded-4670-4b-interval.jpg"
+   ],
+   "notes": [],
+   "bad": [
+    "under the review card the pitch showed save/caught (the rule of the repo test: nothing but a pass or the ruled out goal in its net)"
+   ],
+   "engine": {
+    "whistle": 50,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "save:opp@45 Nicolas Jackson",
+     "shot:opp@45 João Gomes",
+     "save:me@46 Thierno Barry",
+     "shot:opp@48 Nicolas Jackson",
+     "save:me@49 Jack Grealish"
+    ],
+    "halfScore": "2-1"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "save",
+    "phase": "caught",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "save/caught"
+   ],
+   "scoresUnder": [
+    "me=2 opp=1"
+   ],
+   "story": [
+    "-|shot/plant||me=2 opp=1|first",
+    "-|shot/flight||me=2 opp=1|first",
+    "-|shot/wide||me=2 opp=1|first",
+    "-|pass/pass||me=2 opp=1|first",
+    "-|save/plant||me=2 opp=1|first",
+    "-|save/flight||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "-|pass/pass||me=2 opp=1|first",
+    "-|shot/plant||me=2 opp=1|first",
+    "-|shot/flight||me=2 opp=1|first",
+    "-|shot/wide||me=2 opp=1|first",
+    "-|save/plant||me=2 opp=1|first",
+    "-|save/flight||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "checking|save/caught||me=2 opp=1|first",
+    "decided|save/caught||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-1280-motion-crowded-4670",
+   "seed": 4670,
+   "match": 2,
+   "shots": [
+    "lit-1280-motion-crowded-4670-1-checking.jpg",
+    "lit-1280-motion-crowded-4670-2-decided.jpg",
+    "lit-1280-motion-crowded-4670-3-after.jpg",
+    "lit-1280-motion-crowded-4670-4-whistle.jpg",
+    "lit-1280-motion-crowded-4670-4b-interval.jpg"
+   ],
+   "notes": [],
+   "bad": [
+    "under the review card the pitch showed save/caught (the rule of the repo test: nothing but a pass or the ruled out goal in its net)"
+   ],
+   "engine": {
+    "whistle": 50,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "save:opp@45 Nicolas Jackson",
+     "shot:opp@45 João Gomes",
+     "save:me@46 Thierno Barry",
+     "shot:opp@48 Nicolas Jackson",
+     "save:me@49 Jack Grealish"
+    ],
+    "halfScore": "2-1"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false,
+    "motion": "save",
+    "phase": "caught",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "save/caught"
+   ],
+   "scoresUnder": [
+    "me=2 opp=1"
+   ],
+   "story": [
+    "-|shot/plant||me=2 opp=1|first",
+    "-|shot/flight||me=2 opp=1|first",
+    "-|shot/wide||me=2 opp=1|first",
+    "-|pass/pass||me=2 opp=1|first",
+    "-|save/plant||me=2 opp=1|first",
+    "-|save/flight||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "-|pass/pass||me=2 opp=1|first",
+    "-|shot/plant||me=2 opp=1|first",
+    "-|shot/flight||me=2 opp=1|first",
+    "-|shot/wide||me=2 opp=1|first",
+    "-|save/plant||me=2 opp=1|first",
+    "-|save/flight||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "checking|save/caught||me=2 opp=1|first",
+    "decided|save/caught||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  },
+  {
+   "id": "lit-390-reduced-crowded-4670",
+   "seed": 4670,
+   "match": 2,
+   "shots": [
+    "lit-390-reduced-crowded-4670-1-checking.jpg",
+    "lit-390-reduced-crowded-4670-2-decided.jpg",
+    "lit-390-reduced-crowded-4670-3-after.jpg",
+    "lit-390-reduced-crowded-4670-4-whistle.jpg",
+    "lit-390-reduced-crowded-4670-4b-interval.jpg"
+   ],
+   "notes": [
+    "reduced motion: 0 animation(s) on the card, 0 running on the page when it opened; under the card: save/caught"
+   ],
+   "bad": [
+    "under the review card the pitch showed save/caught (the rule of the repo test: nothing but a pass or the ruled out goal in its net)"
+   ],
+   "engine": {
+    "whistle": 50,
+    "review": "disallowed opp 45+4' Nicolas Jackson",
+    "chances": [
+     "save:opp@45 Nicolas Jackson",
+     "shot:opp@45 João Gomes",
+     "save:me@46 Thierno Barry",
+     "shot:opp@48 Nicolas Jackson",
+     "save:me@49 Jack Grealish"
+    ],
+    "halfScore": "2-1"
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false,
+    "motion": "save",
+    "phase": "caught",
+    "running": 0
+   },
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "under": [
+    "save/caught"
+   ],
+   "scoresUnder": [
+    "me=2 opp=1"
+   ],
+   "story": [
+    "-|shot/wide||me=2 opp=1|first",
+    "-|pass/pass||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "-|pass/pass||me=2 opp=1|first",
+    "-|shot/wide||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "checking|save/caught||me=2 opp=1|first",
+    "decided|save/caught||me=2 opp=1|first",
+    "-|save/caught||me=2 opp=1|first",
+    "-|null/null|||interval"
+   ],
+   "endScore": ""
+  }
+ ]
+}
