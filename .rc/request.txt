@@ -1,0 +1,6 @@
+# rAV-cm-w: reviewer cm, Release AV head 5ed04ae7. The reviewer's walk of Club Manager at 390 and 1280 in two leagues on the served build, the same saves opened by a build of origin/main for the Stats screen, and the weight sweep
+#!serve
+#!playwright
+#!serial
+walk: git worktree add -q --detach /tmp/wb aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --outDir /tmp/wb-dist > /tmp/wb-build.log 2>&1; tail -1 /tmp/wb-build.log) && ALT_DIST=/tmp/wb-dist node .rc/x/cmWalk.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
