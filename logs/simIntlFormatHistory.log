@@ -1,0 +1,14 @@
+1. the table is well formed
+2. every playable row adds up
+3. the table agrees with the ledger, 1990 to 2040
+4. tournamentForYear follows the table, 1990 to 2040
+5. the World Cup field mix adds up
+6. simulated tournaments play the shape
+   1872 tournaments played; 48 qualified from a confederation with no direct place
+7. 2026 to 2040 is what main shipped
+8. Club Manager national summers match main, seasons 1 to 40
+9. field mix and qualifying share follow the era
+10. Copa America guests follow the era
+11. a qualified nation with no direct place replaces the weakest finalist
+
+simIntlFormatHistory: 461 passed, 0 failed
