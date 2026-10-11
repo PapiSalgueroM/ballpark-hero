@@ -59,7 +59,7 @@ export const FLEET_CLUBS = [
   'Bayern Munich', 'Freiburg', 'Mainz', 'Augsburg', 'Union Berlin',
 ];
 
-const empty = () => ({ matches: 0, goals: 0, reviewableGoals: 0, fouls: 0, penalties: 0, ruledOut: 0, goalConfirmed: 0, penaltyConfirmed: 0, penaltyAwarded: 0, awardedScored: 0, matchesWithReview: 0, goalsOff: 0, resultMoved: 0 });
+const empty = () => ({ matches: 0, goals: 0, reviewableGoals: 0, fouls: 0, penalties: 0, ruledOut: 0, goalConfirmed: 0, penaltyConfirmed: 0, penaltyAwarded: 0, awardedScored: 0, matchesWithReview: 0, goalsOff: 0, penaltiesOff: 0, resultMoved: 0 });
 /** Walk every club one season per seed, reviews asked for at every kickoff. Returns the counts by the
  *  report's own competition (league, cup, uclGroup, uclKo), and the league counts seed by seed. */
 export function playFleet(cm, { seeds, clubs = FLEET_CLUBS, perClub = 60, reviews = true, paired = false }) {
@@ -85,7 +85,7 @@ export function playFleet(cm, { seeds, clubs = FLEET_CLUBS, perClub = 60, review
         const count = t => {
           t.matches += 1;
           t.goals += r.homeGoals + r.awayGoals;
-          if (off) { t.goalsOff += off.homeGoals + off.awayGoals; if (Math.sign(off.homeGoals - off.awayGoals) !== Math.sign(r.homeGoals - r.awayGoals)) t.resultMoved += 1; }
+          if (off) { t.goalsOff += off.homeGoals + off.awayGoals; t.penaltiesOff += (off.detail?.play ?? []).filter(e => e.kind === 'shot' && e.penalty).length; if (Math.sign(off.homeGoals - off.awayGoals) !== Math.sign(r.homeGoals - r.awayGoals)) t.resultMoved += 1; }
           t.reviewableGoals += scorers.filter(g => !g.penalty && !g.freeKick).length;
           t.fouls += play.filter(e => e.kind === 'foul').length;
           t.penalties += play.filter(e => e.kind === 'shot' && e.penalty).length;

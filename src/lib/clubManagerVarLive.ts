@@ -19,12 +19,21 @@
  *
  * The review fix of Round 1218 did the screen: a review never opens over an action, a goal that gets ruled out
  * is drawn first (src/test/clubManagerVarScreen.test.tsx), and scripts/playCmVar.mjs walks a lit build at 390
- * and 1280 on the real rates. It still left the switch off, for ONE reason, and scripts/simCmVarLedger.mjs
- * holds it: the lead asked for each rate on two publishers for two recent seasons, and the only season two
- * publishers counted is Serie A 2017-18. That is written under owed in scripts/data/cmVarRates.json. While
- * an owed entry is open this line must read false. The lead closes it (a second count, or a ruling written
- * into the entry), then this line, the What's New entry and the cases of the unit file follow.
- * docs/audits/ROUND-1218-NOTES.md has the whole list.
+ * and 1280 on the real rates. It still left the switch off.
+ *
+ * Round 1302 read all 48 competitions, played the screen cases (every goal a review rules out is drawn before
+ * its card now, with the clock stopped where the plan has no room for it) and gave penalties a band. The switch
+ * is still off, for TWO reasons, both written under owed in scripts/data/cmVarRates.json and printed by the
+ * generator in src/data/clubManagerVarRates.ts (CM_VAR_HOLDS). While either is open this line must read false,
+ * and two harnesses hold that (scripts/simCmVarLedger.mjs, control owedlive, and scripts/simCmVar.mjs):
+ *   recent-seasons: the lead asked for each rate on two publishers for two recent seasons, and the only season
+ *     two publishers counted is Serie A 2017-18. The lead closes this one, with a second count for two seasons
+ *     from 2022-23 on or with a ruling written into the entry.
+ *   penalties-total: with reviews on the engine gives 0.45 to 0.48 penalties a match, above the band real seasons
+ *     give (0.25 to 0.40). NO RULING CLOSES THIS ONE. Only the engine does: its penalties a match with reviews on
+ *     has to come inside the band. Marking the entry accepted does not pass simCmVar while it is outside.
+ * When both are closed: this line, the What's New entry and the cases of the unit file follow, then the lit
+ * walk. docs/audits/ROUND-1302-NOTES.md has the whole list (ROUND-1218-NOTES.md has the first half).
  *
  * Kept in its own file with no import so the help text, which several harnesses render with a plain
  * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it.

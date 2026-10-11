@@ -7,7 +7,7 @@
  *
  * A figure (a quantity in one competition in one season) is used only when two publishers counted it; the
  * stricter, lower count is the one derived from. Figures one publisher counted are on file and not read.
- * OWED (recent-seasons): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.
+ * OWED (recent-seasons, penalties-total): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.
  *
  * Goals ruled out after a review: Serie A 2017-18, counted by 2 publishers: 29 in 380 (pieri-seriea-2017-18) and 31 in 380 (agi-seriea-2017-18).
  *   The stricter count 29 in 380 (pieri-seriea-2017-18) = 0.076316 a match; the range runs to 0.081579.
@@ -19,15 +19,21 @@
  *   The engine awards 18.252 penalties a match per unit of rate (measured at 0.004 a foul).
  *   missedFoulReview = 0.089474 / 18.252 = 0.004902 a foul.
  * The kick: the engine's own penalty law, SHOOTOUT_BASE_RATE 0.76 and SHOOTOUT_SAVE_SHARE 0.65.
+ * All penalties of a season (Round 1302, the band a match with reviews on is held against): Serie A 2017-18, counted by 2 publishers: 120 in 380 (agi-seriea-2017-18) and 126 in 380 (pieri-seriea-2017-18).
+ *   0.315789 to 0.331579 a match. scripts/simCmVar.mjs holds the engine's total against it.
  */
 export const CM_VAR_RATES = { goalReview: 0.031938, overturn: 1, penaltyReview: 0, missedFoulReview: 0.004902, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
 
 /** Real football, a match: what the harness bands and the help text read. */
-export const CM_VAR_REAL = { goalsRuledOut: { low: 0.076316, high: 0.081579 }, penaltiesAwarded: { low: 0.089474, high: 0.092105 } } as const;
+export const CM_VAR_REAL = { goalsRuledOut: { low: 0.076316, high: 0.081579 }, penaltiesAwarded: { low: 0.089474, high: 0.092105 }, penaltiesTotal: { low: 0.315789, high: 0.331579 } } as const;
+
+/** Round 1302. What the rates ledger still owes (its open owed entries). While this list is not empty the
+ *  switch CM_VAR_LIVE stays false: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */
+export const CM_VAR_HOLDS: readonly string[] = ['recent-seasons', 'penalties-total'];
 
 /** The same competitions by the name the help text prints. */
-export const CM_VAR_COVERED_NAMES: readonly string[] = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1', 'Eredivisie', 'Primeira Liga', 'Scottish Premiership', 'Süper Lig', 'Belgian Pro League', 'Swiss Super League', 'Austrian Bundesliga', 'SuperSport HNL', 'Saudi Pro League', '2. Bundesliga', 'Champions League'];
+export const CM_VAR_COVERED_NAMES: readonly string[] = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1', 'Eredivisie', 'Primeira Liga', 'Scottish Premiership', 'Süper Lig', 'Belgian Pro League', 'Swiss Super League', 'Austrian Bundesliga', 'SuperSport HNL', 'Saudi Pro League', '2. Bundesliga', 'Danish Superliga', 'Super League Greece', 'Segunda División', 'Serie B', 'MLS Eastern Conference', 'MLS Western Conference', 'Brasileirão Série A', 'A-League Men', 'Russian Premier League', 'Champions League', 'KNVB Cup', 'Copa do Brasil', 'Australia Cup (the final only)', 'DFB-Pokal'];
 
 /** Competitions with reviews in 2026-27, by the engine's own key, to the first stage that has them
  *  ('all' for a league). A key that is not here plays without reviews. */
-export const CM_VAR_COVERAGE: Readonly<Record<string, string>> = { 'league:premier': 'all', 'league:laliga': 'all', 'league:seriea': 'all', 'league:bundesliga': 'all', 'league:ligue1': 'all', 'league:eredivisie': 'all', 'league:primeira': 'all', 'league:scottish': 'all', 'league:superlig': 'all', 'league:proleague': 'all', 'league:switzerland': 'all', 'league:austria': 'all', 'league:croatia': 'all', 'league:saudi': 'all', 'league:bundesliga2': 'all', 'ucl': 'group' };
+export const CM_VAR_COVERAGE: Readonly<Record<string, string>> = { 'league:premier': 'all', 'league:laliga': 'all', 'league:seriea': 'all', 'league:bundesliga': 'all', 'league:ligue1': 'all', 'league:eredivisie': 'all', 'league:primeira': 'all', 'league:scottish': 'all', 'league:superlig': 'all', 'league:proleague': 'all', 'league:switzerland': 'all', 'league:austria': 'all', 'league:croatia': 'all', 'league:saudi': 'all', 'league:bundesliga2': 'all', 'league:denmark': 'all', 'league:greece': 'all', 'league:segunda': 'all', 'league:serieb': 'all', 'league:mlsEast': 'all', 'league:mlsWest': 'all', 'league:brasileirao': 'all', 'league:aleague': 'all', 'league:russia': 'all', 'ucl': 'group', 'cup:KNVB Cup': 'R16', 'cup:Copa do Brasil': 'R16', 'cup:Australia Cup': 'F', 'cup:DFB-Pokal': 'R16' };

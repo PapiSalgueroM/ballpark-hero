@@ -7,6 +7,13 @@
  *   saved, a goal ruled out in the minute after a real goal (the card must never sit on that goal), two reviews
  *   in one half, leaving mid review and coming back, Skip during a review, reduced motion, the report's
  *   timeline rows, the match's own help and the How to Play paragraph, at 390 (touch) and 1280.
+ * Round 1302 added the cases nobody had walked, at both widths: a goal ruled out at the whistle and one a clock
+ * place before it (drawn before its card now), an own goal the minute after a ruled out goal (the review first,
+ * then the own goal with its mark), and a review in the same minute as the other side's injury and red card.
+ * The fix of Round 1302 (after its two reviews) added the end of a half that real chances fill (the clock stops for
+ * the ruled out goal there, at the whistle when nothing before it is free), the two late goals with reduced
+ * motion, and a stricter look under every card: a ruled out goal's card sits on THAT goal, in the net it went
+ * into, and on nothing else. Where the page stood is read inside the page at every change of the screen.
  * The matches are REAL halves of the engine on the shipped rates: the first three league matches of a fresh
  * 2026-27 Everton career (the career scripts/simCmVar.mjs uses), found by searching seeds. A review's id holds
  * the fixture, the minute and the man, so one fixture reviews only a handful of incidents: a saved penalty and a
@@ -75,7 +82,41 @@ const WANTED = {
   penaltySaved: { match: 2, hint: 2193, want: (feed, live) => reviewsOf(feed).find(v => { const k = kickOf(live, v); return v.review.decision === 'awarded' && alone(v, feed) && !!k && !k.goal && !!k.on; }) },
   goalBefore: { match: 1, hint: 1724, want: feed => { const all = reviewsOf(feed); return all.length === 1 && all[0].review.decision === 'disallowed' && all[0].minute >= 4 && all[0].minute <= 40 && !all[0].plus && feed.some(e => e.kind === 'goal' && place(e) === place(all[0]) - 1) ? all[0] : null; } },
   two: { match: 0, hint: 2453, want: feed => { const all = reviewsOf(feed); return all.length === 2 && all.every(r => r.minute >= 4 && r.minute <= 40 && !r.plus) && all[1].minute - all[0].minute >= 4 ? all[0] : null; } },
+  /* Round 1302: the cases nobody had walked. A goal ruled out in the last two clock places of the half with the
+     end of the half to itself (drawn before its card now), an own goal the minute after a ruled out goal, and a
+     review in the same minute as the other side's injury or red card. */
+  lateWhistle: { match: 1, hint: 1984, want: (feed, live) => lateRuledOut(feed, live, 0) },
+  lateBefore: { match: 1, hint: 2591, want: (feed, live) => lateRuledOut(feed, live, 1) },
+  ownGoal: { match: 1, hint: 1940, want: feed => { const all = reviewsOf(feed), r = all[0]; return all.length === 1 && r.review.decision === 'disallowed' && r.minute >= 4 && r.minute <= 38 && !r.plus && feed.some(e => e.kind === 'goal' && e.og && place(e) === place(r) + 1) ? r : null; } },
+  injury: { match: 0, hint: 3861, want: feed => besideOther(feed, 'injury') },
+  red: { match: 1, hint: 3827, want: feed => besideOther(feed, 'red') },
+  /* Round 1302 fix: the end of a half that real chances FILL (the two reviews of the round found the screen wrong
+     there: a card that said "goal ruled out" on a real goal in the net, or on a real shot's last picture). The
+     clock now stops for the ruled out goal, at the whistle when no instant before it is free. crowdedGoal: a real
+     goal is the last kick after it and the place before it is taken too (seed 42322 of league match 2).
+     crowdedShot: it is at the whistle's own place with a real chance one place before it (seed 6203). */
+  crowdedGoal: { match: 1, hint: 42322, want: (feed, live) => crowdedEnd(feed, live, (r, whistle, real) => place(r) === whistle - 1 && real.some(e => e.kind === 'goal' && place(e) === whistle) && real.some(e => place(e) === whistle - 2)) },
+  crowdedShot: { match: 1, hint: 6203, want: (feed, live) => crowdedEnd(feed, live, (r, whistle, real) => place(r) === whistle && !real.some(e => place(e) === whistle) && real.some(e => place(e) === whistle - 1)) },
 };
+/** The one review a half shows from 44' on, a goal ruled out in its last two clock places, in a half whose end has the shape asked for. */
+function crowdedEnd(feed, live, shape) {
+  const whistle = 45 + (live.added?.h1 ?? 0), late = reviewsOf(feed).filter(v => place(v) >= 44), r = late[0];
+  if (late.length !== 1 || r.review.decision !== 'disallowed' || place(r) < whistle - 1) return null;
+  return shape(r, whistle, feed.filter(e => isChance(e) && place(e) >= 44)) ? r : null;
+}
+/** The one review of a half, a goal ruled out `back` clock places before the whistle, with no chance in the last three places. */
+function lateRuledOut(feed, live, back) {
+  const all = reviewsOf(feed), whistle = 45 + (live.added?.h1 ?? 0), r = all[0];
+  return all.length === 1 && r.review.decision === 'disallowed' && place(r) === whistle - back && !feed.some(e => isChance(e) && place(e) >= whistle - 3) ? r : null;
+}
+/** The one review of a half, in the same minute as a line of this kind for the other side. */
+function besideOther(feed, kind) {
+  const all = reviewsOf(feed), r = all[0];
+  return all.length === 1 && r.minute >= 2 && r.minute <= 40 && !r.plus && feed.some(e => e.kind === kind && e.side !== r.side && place(e) === place(r)) ? r : null;
+}
+/* Round 1302 fix: there is no list of kinds whose ruled out goal must be seen going in before its card any more.
+   EVERY ruled out goal is drawn before its card (on the clock, or with the clock stopped), so the walk asks it of
+   every case whose review rules a goal out, and asks which net the ball is in under the card. */
 const fixtures = {};
 {
   const cm = await engine('search');
@@ -145,7 +186,13 @@ async function open(profile, motion, pre, seed) {
     const read = () => {
       const card = document.querySelector('[data-cm-var]'), pitch = document.querySelector('[data-cm-live-pitch]'), root = document.querySelector('[data-cm-live-stage]');
       return { card: card ? `${card.dataset.cmVar}:${card.dataset.cmVarId}` : 'none', motion: pitch?.dataset.cmMotion ?? null, phase: pitch?.dataset.cmMotionPhase ?? null,
-        goalCard: !!document.querySelector('[data-cm-goal-card]'), minute: root?.dataset.cmLiveMinute ?? null, y: Math.round(window.scrollY),
+        /* Round 1302 fix: WHICH net the ball is in (top is the opposition's, bottom is mine), and the stage. */
+        net: document.querySelector('.cm-live-net--top[data-cm-net="goal"]') ? 'top' : document.querySelector('.cm-live-net--bottom[data-cm-net="goal"]') ? 'bottom' : null, stage: root?.dataset.cmLiveStage ?? null,
+        /* The pill of a goal that has just been told ('me' or 'opp'; any other pill is 'none'). */
+        goalPill: !!document.querySelector('[data-cm-live-pill="me"], [data-cm-live-pill="opp"]'),
+        /* Round 1302 fix 2: the small line under the pitch. */
+        line: (document.querySelector('[data-cm-live-event]')?.textContent ?? '').trim(),
+        goalCard: !!document.querySelector('[data-cm-goal-card]'), goalText: document.querySelector('[data-cm-goal-card]')?.textContent ?? '', minute: root?.dataset.cmLiveMinute ?? null, y: Math.round(window.scrollY),
         score: [...document.querySelectorAll('[data-cm-live-stagebox] [data-cm-score-of]')].map(el => `${el.dataset.cmScoreOf}=${el.textContent}`).join(' ') };
     };
     new MutationObserver(() => {
@@ -177,7 +224,10 @@ const toHub = async w => { await w.page.goto(`${BASE}/club-manager`, { waitUntil
  *  the whistle must be the engine's own settlement of the same seeds, and the report's review rows must be whole. */
 async function finishMatch(w, row, check, id, cm, before, v, compare) {
   if (!(await w.page.locator('[data-cm-live-stage="interval"]').count())) {
-    await w.activate(w.page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Skip', exact: true }));
+    /* Round 1302: a review that closes at the whistle or a moment before it leaves no time to press Skip: the half
+       ends by itself and the button goes with it. Skip is pressed only while the first half is still running. */
+    const ended = /^(late|crowded)/.test(String(row.kind)) && await w.page.locator('[data-cm-live-stage="interval"]').waitFor({ timeout: 4000 }).then(() => true).catch(() => false);
+    if (!ended) await w.activate(w.page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Skip', exact: true })).catch(async error => { if (!(await w.page.locator('[data-cm-live-stage="interval"]').count())) throw error; });
     await w.page.locator('[data-cm-live-stage="interval"]').waitFor({ timeout: 30000 });
   }
   check((await w.page.locator('[data-cm-var]').count()) === 0, 'a review card is still up at the interval');
@@ -235,13 +285,20 @@ async function runCase(profile, motion, kind, variant) {
     const box = await card.evaluate(el => { const b = el.getBoundingClientRect(); return { text: el.innerText.replace(/\n/g, ' | '), x: Math.round(b.x), right: Math.round(b.right), top: Math.round(b.top), bottom: Math.round(b.bottom), vw: innerWidth, vh: innerHeight, animations: el.getAnimations({ subtree: true }).length, cut: [...el.querySelectorAll('p')].some(p => p.scrollWidth > p.clientWidth + 1) }; });
     const whereChecking = await w.where(), scoreChecking = await w.score();
     const minuteChecking = Number(await w.page.locator('[data-cm-live-stage]').getAttribute('data-cm-live-minute'));
+    const plusChecking = Number(await w.page.locator('[data-cm-live-stage]').getAttribute('data-cm-live-plus') ?? 0);
     row.shots.push(await w.shot(`${id}-1-checking`));
-    Object.assign(row, { card: box, scoreChecking, minuteChecking });
+    Object.assign(row, { card: box, scoreChecking, minuteChecking, plusChecking });
     check(box.x >= 0 && box.right <= box.vw && box.top >= 0 && box.bottom <= box.vh && !box.cut, `the card is not whole on the screen: ${JSON.stringify(box)}`);
     check(box.animations === 0, 'the card animates');
     check(box.text.includes(`${v.text}, ${club}, ${cm.minuteLabel(v)}`), `the card does not name the man, his club and the minute: ${box.text}`);
-    check(same(scoreChecking, prior), `the score under the card is ${JSON.stringify(scoreChecking)} and the engine has ${JSON.stringify(prior)} before the incident`);
+    /* Round 1302 fix: where real chances fill the end of the half the clock stops for the ruled out goal after the
+       last real action, which may be a real goal later than it (the last kick). Every real goal the screen has
+       shown is on the score by then: the score under the card is the engine's at the clock place the screen is at. */
+    const crowded = kind.startsWith('crowded'), under0 = crowded ? goalsBy(minuteChecking + plusChecking) : prior;
+    check(same(scoreChecking, under0), `the score under the card is ${JSON.stringify(scoreChecking)} and the engine has ${JSON.stringify(under0)} ${crowded ? `at the clock place the screen shows (${minuteChecking}+${plusChecking})` : 'before the incident'}`);
     check(minuteChecking >= v.minute, `the card opened at ${minuteChecking}', before the incident's own minute, ${v.minute}'`);
+    /* A goal ruled out in the last two clock places with the end of the half to itself: the clock under the card is at the minute the card prints. */
+    if (kind.startsWith('late')) check(minuteChecking + plusChecking === place(v), `the card of a ${cm.minuteLabel(v)} goal opened with the clock at ${minuteChecking}+${plusChecking}`);
     check(whereChecking.scrollY === whereBefore.scrollY && whereChecking.top === whereBefore.top, `the page moved when the card opened: ${JSON.stringify(whereBefore)} to ${JSON.stringify(whereChecking)}`);
     check(whereChecking.docWidth <= whereChecking.vw + 1, 'the match screen scrolls sideways');
     if (variant === 'plain') {
@@ -252,7 +309,12 @@ async function runCase(profile, motion, kind, variant) {
       check(decided.includes(ruledOut ? 'VAR: goal ruled out' : 'VAR: penalty awarded') && decided.includes(ruledOut ? 'No goal.' : `Penalty to ${club}.`), `the decision reads: ${decided}`);
       await card.waitFor({ state: 'hidden' });
       const whereAfter = await w.where();
-      check(whereAfter.scrollY === whereBefore.scrollY && whereAfter.top === whereBefore.top, 'the page moved when the card closed');
+      /* A review that closes at the whistle, or a moment before it, is followed by the interval's own screen, so the
+         measure taken from outside the page a moment later is not of the match screen. Those cases are measured
+         from INSIDE the page instead (below): where the page stood at every change of the screen while the card
+         was up, and at the first change after it closed when that is still the half. */
+      const endsHalf = kind.startsWith('late') || crowded;
+      if (!endsHalf) check(whereAfter.scrollY === whereBefore.scrollY && whereAfter.top === whereBefore.top, 'the page moved when the card closed');
       const want = goalsBy(place(v));
       if (kick?.goal) await w.page.waitForFunction(({ side, n }) => Number(document.querySelector(`[data-cm-live-stagebox] [data-cm-score-of="${side}"]`)?.textContent) === n, { side: v.side, n: want[v.side] }, { timeout: 20000 }).catch(() => check(false, 'the penalty a review gave never reached the score'));
       else await w.page.waitForTimeout(kick ? 1200 : 400);
@@ -262,9 +324,43 @@ async function runCase(profile, motion, kind, variant) {
       const mine = `:${v.review.id}`, opened = seen.findIndex(s => s.card.endsWith(mine)), closed = seen.map(s => s.card.endsWith(mine)).lastIndexOf(true);
       const under = seen.filter(s => s.card !== 'none');
       check(!under.some(s => s.goalCard), 'a goal card was up under a review card');
-      check(under.every(s => s.motion === 'pass' || (ruledOut && s.motion === 'goal' && s.phase === 'net')), `an action was in flight under the review card: ${JSON.stringify(under.find(s => !(s.motion === 'pass' || (ruledOut && s.motion === 'goal' && s.phase === 'net'))))}`);
+      /* Round 1302 fix: under the card of a ruled out goal the pitch shows THAT goal, its ball stopped in the net it
+         went into (a goal of mine in the top net, one of theirs in the bottom one), and under any other card no
+         action at all. The rule this replaces let any goal in any net pass under any ruled out card, and a quiet
+         pitch too: it could not see a card on somebody's real goal (league match 2, seed 42322). */
+      const nets = Object.fromEntries(reviewsOf(feed).filter(r => r.review.decision === 'disallowed').map(r => [r.review.id, r.side === 'me' ? 'top' : 'bottom']));
+      const rightUnder = s => { const own = nets[s.card.slice(s.card.indexOf(':') + 1)]; return own ? s.motion === 'goal' && s.phase === 'net' && s.net === own : s.motion === 'pass'; };
+      check(under.every(rightUnder), `the pitch under a review card is not what it must be (its own ruled out goal in its own net, or nothing): ${JSON.stringify(under.find(s => !rightUnder(s)))}`);
       check(new Set(under.filter(s => s.card.endsWith(mine)).map(s => s.score)).size === 1, 'the score moved while the review card was up');
-      if (kind === 'ruledOut') check(motion === 'reduce' ? under.some(s => s.motion === 'goal' && s.phase === 'net') : seen.slice(0, opened).some(s => s.motion === 'goal' && s.phase === 'flight'), 'the ruled out goal was not drawn before its review');
+      /* A pill that says GOAL for a real goal is never up with a card that rules a goal out (where the clock stops
+         at the whistle after a real last kick, the stoppage waits for that goal's pill to come down first). */
+      if (ruledOut) check(!under.some(s => s.goalPill), 'the pill of a real goal was up under the card of a ruled out goal');
+      /* Round 1302 fix 2: the small line under the pitch says nothing under the card of a ruled out goal. It kept
+         the last thing told (this walk's own pictures read "Throw in, Aston Villa" under a goal and the card that
+         rules it out). Asked of every sample under such a card but the one it opens on: a line told in that very
+         frame is taken off in the frame after. */
+      const idOf = s => s.card.slice(s.card.indexOf(':') + 1);
+      const lineUnder = seen.filter((s, i) => nets[idOf(s)] && i > 0 && idOf(seen[i - 1]) === idOf(s) && s.line !== '');
+      check(!lineUnder.length, `the line under the pitch says something under the card of a ruled out goal: ${JSON.stringify(lineUnder[0]?.line)}`);
+      /* Round 1302: the flight has to be the action right before the card (a sample is kept only when the screen
+         changes, so those are the last few), with no goal card of its own. An earlier real goal of the same half
+         does not count: the first lit walk of this round passed a late case on one. Asked of every ruled out goal. */
+      if (ruledOut) check(motion === 'reduce' || seen.slice(Math.max(0, opened - 8), opened).some(s => s.motion === 'goal' && s.phase === 'flight' && !s.goalCard), 'the ruled out goal was not drawn before its review');
+      /* The page did not move: at no change of the screen while the card was up, and not at the first change after it closed while the half was still on. */
+      const stood = seen.slice(opened, closed + 1), next = seen[closed + 1];
+      check(opened >= 0 && stood.every(s => s.y === stood[0].y) && (!next || next.stage !== 'first' || next.y === stood[0].y), `the page moved under the review card: ${JSON.stringify([...new Set([...stood, ...(next ? [next] : [])].map(s => `${s.stage}@${s.y}`))])}`);
+      if (kind === 'ownGoal') {
+        /* The own goal of the minute after: its card rises only after the review is over, with the own goal mark. */
+        const og = feed.find(e => e.kind === 'goal' && e.og && place(e) === place(v) + 1);
+        const rose = await w.page.waitForFunction(() => window.__seen.some(s => (s.goalText ?? '').includes('(O.G)')), null, { timeout: 20000 }).then(() => true).catch(() => false);
+        check(rose, 'the own goal of the minute after the review never got its card with the own goal mark');
+        if (rose) {
+          const all = await w.page.evaluate(() => window.__seen), at = all.findIndex(s => (s.goalText ?? '').includes('(O.G)'));
+          check(at > all.map(s => s.card.endsWith(mine)).lastIndexOf(true), 'the own goal card rose before the review was over');
+          check(all[at].goalText.includes(og.text), `the own goal card does not name the man who put it in: ${all[at].goalText}`);
+          row.shots.push(await w.shot(`${id}-6-own-goal`));
+        }
+      }
       if (ruledOut) check(seen[closed + 1]?.motion !== 'goal', 'the ruled out goal went on playing after its review');
       if (kick) check(seen.slice(closed + 1).some(s => s.motion === (kick.goal ? 'goal' : kick.on ? 'save' : 'shot') && s.phase !== 'plant'), 'the kick of the penalty a review gave was not played after the card');
       if (kick && !kick.goal) check(same(row.scoreAfter, prior), 'the score moved on a penalty that did not go in');
@@ -316,12 +412,16 @@ async function hubHelp(profile) {
   try {
     await toHub(w);
     await w.activate(w.page.getByRole('button', { name: 'How to play' }).first());
-    const para = w.page.locator('p', { hasText: "VAR in today's game" }).first();
+    /* Round 1302 fix: the VAR help is a block of short paragraphs now (it was one paragraph taller than a phone). */
+    const para = w.page.locator('[data-cm-help="var"]').first();
     await para.waitFor({ timeout: 10000 });
     await para.scrollIntoViewIfNeeded();
     row.text = await para.innerText();
-    const box = await para.evaluate(el => { const b = el.getBoundingClientRect(); return { x: Math.round(b.x), right: Math.round(b.right), vw: innerWidth, docWidth: document.documentElement.scrollWidth }; });
+    const box = await para.evaluate(el => { const b = el.getBoundingClientRect(); return { x: Math.round(b.x), right: Math.round(b.right), height: Math.round(b.height), vw: innerWidth, vh: innerHeight, docWidth: document.documentElement.scrollWidth, paragraphs: [...el.querySelectorAll(':scope > p')].map(p => Math.round(p.getBoundingClientRect().height)) }; });
+    row.box = box;
     if (!(box.x >= 0 && box.right <= box.vw && box.docWidth <= box.vw + 1)) row.fail.push(`the VAR paragraph does not fit the screen: ${JSON.stringify(box)}`);
+    if (!(box.paragraphs.length >= 5 && box.paragraphs.every(h => h > 0 && h < box.vh / 2))) row.fail.push(`the VAR help is not short paragraphs, each under half a screen: ${JSON.stringify(box)}`);
+    if (!row.text.includes("VAR in today's game")) row.fail.push('the VAR help lost its heading');
     for (const must of ['Premier League', 'Champions League', 'a clearly wrong second yellow', 'goals and penalties only', 'goes in first']) if (!row.text.includes(must)) row.fail.push(`the VAR paragraph does not say "${must}"`);
     if (row.text.includes('straight red cards')) row.fail.push('the VAR paragraph still states the protocol of before July 2026');
     row.shots.push(await w.shot(`${id}-1-var-paragraph`));
@@ -336,6 +436,11 @@ try {
   for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored', 'penaltySaved', 'goalBefore']) await runCase(profile, 'no-preference', kind, 'plain');
   for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored']) await runCase(profile, 'reduce', kind, 'plain');
   await runCase(PROFILES[0], 'no-preference', 'two', 'plain');
+  for (const profile of PROFILES) for (const kind of ['lateWhistle', 'lateBefore', 'ownGoal', 'injury', 'red']) await runCase(profile, 'no-preference', kind, 'plain');
+  /* Round 1302 fix: the crowded ends of a half, and the two late goals with reduced motion (nobody had walked either). */
+  for (const profile of PROFILES) for (const kind of ['crowdedGoal', 'crowdedShot']) await runCase(profile, 'no-preference', kind, 'plain');
+  for (const profile of PROFILES) for (const kind of ['lateWhistle', 'lateBefore']) await runCase(profile, 'reduce', kind, 'plain');
+  await runCase(PROFILES[0], 'reduce', 'crowdedGoal', 'plain');
   for (const variant of ['leave', 'skip']) for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored']) await runCase(profile, 'no-preference', kind, variant);
 } finally { await browser.close(); if (server) server.kill(); save(); }
 for (const line of failures.slice(0, 60)) console.log(`FAIL ${line.split('\n')[0].slice(0, 420)}`);

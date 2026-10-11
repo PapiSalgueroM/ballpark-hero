@@ -405,7 +405,12 @@ export function stagePitchInput(
       && (!settledReviews || !cmVarEventWaiting(e, liveFeed(live), settledReviews)))
       /* Round 1218 fix: the goal a review rules out is staged like any chance, whether its review has been shown
          or not (so the plan does not change under the review), unless the viewer opened after it or it comes
-         too late in the period to be played out before the whistle. */
+         too late in the period to be played out before the whistle.
+         Round 1302: the plan plays one action a clock place and, of two lines at one place, the later one, which
+         is always the real chance (the feed sorts a review before a shot, a save and a goal of its place). So a
+         ruled out goal never takes the pitch from a real chance here, and one the plan leaves out (a real chance
+         has its place, or it falls in the last two places of the period) is not lost either: the screen plays it
+         with the clock stopped, right before its card (see "the stoppage"). */
       .map(e => (isRuledOut(e) && placeOf(e) >= openedAt && placeOf(e) <= stageStop - RULED_OUT_ROOM ? ruledOutChance(e) : e)),
     span: { from, to: Math.max(from + BEAT_SPAN, stageStop) },
     kickoffs: [{ at: from, side: kicking }],
@@ -534,6 +539,15 @@ export function LiveSimScreen({
   const [goalMoment, setGoalMoment] = useState<GoalMoment | null>(null);
   const [reviewEvent, setReviewEvent] = useState<LiveFeedEvent | null>(null);
   const [settledReviews, setSettledReviews] = useState<Set<string>>(() => cmVarPlayedReviewIds(live ? liveFeed(live) : [], clock, stage));
+  /* Round 1302, THE STOPPAGE. A goal a review rules out is always drawn before its card. Where the plan has the
+     room, it plays on the clock (Round 1218). Where it has none (a real chance has its clock place, or it falls
+     in the last two places of the period) the match clock STOPS, the goal is played out on the pitch by this
+     little clock of its own (`t`, how far into the action it is), and its card opens with the ball in the net.
+     Nothing real is shortened, moved or left out for it, and the card never sits on another action's picture. */
+  const [stoppage, setStoppage] = useState<{ id: string; t: number } | null>(null);
+  const stopped = stoppage !== null;
+  /* True while the whistle of the period waits for such a goal and its review (the render sets it, like the cap). */
+  const whistleHeld = useRef(false);
   const reviewCap = useRef(Infinity);
   const holdRate = useRef(0);
   const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -558,7 +572,7 @@ export function LiveSimScreen({
   const orientation = sideways ? 'landscape' : 'portrait';
   /* Every stage change ends whatever was playing: a goal's card never rises in the wrong half, and an
      action that fired late (Skip) is not replayed when the next period opens. */
-  const clearAction = () => { setMotionEvent(null); setGoalMoment(null); setReviewEvent(null); };
+  const clearAction = () => { setMotionEvent(null); setGoalMoment(null); setReviewEvent(null); setStoppage(null); };
   const [picking, setPicking] = useState<string | null>(null);
   /* Round 670 review: the clock reached 90 and the engine has been asked
      about extra time; the next render reads its answer off the live match. */
@@ -566,6 +580,10 @@ export function LiveSimScreen({
   const rafRef = useRef<number | null>(null);
   const lastTs = useRef<number | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* Round 1302: true while the pill of a goal that has just been told is up. Set in the very tick the pill is
+     asked for (the state behind it lands a render later) and cleared by the pill's own timer. A stoppage does
+     not start under it: see where a stoppage starts. */
+  const goalPill = useRef(false);
   const finishedRef = useRef(false);
   const pausedBefore = useRef(false);
   /* The whistle takes the live match off the save in the same tick the report
@@ -595,7 +613,9 @@ export function LiveSimScreen({
   const finalOpp = report ? (report.home === career.clubName ? report.awayGoals : report.homeGoals) : null;
   const running = stage === 'first' || stage === 'second' || stage === 'extra';
   /* Round 670 review: no change while the engine is answering at 90. */
-  const canChange = running && !finished && !reviewEvent && !(stage === 'second' && askedAt90) && !!liveNow;
+  /* Round 1302: nor during a stoppage, nor once the clock is at the whistle (it can stand there for a moment now,
+     while a ruled out goal the whistle waits for is played and reviewed: the period is over for changes). */
+  const canChange = running && !finished && !reviewEvent && !stopped && clock < stageStop && !(stage === 'second' && askedAt90) && !!liveNow;
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
@@ -698,7 +718,7 @@ export function LiveSimScreen({
 
   /* ---- the clock: BASE_RATE sim minutes per real second, times speed ---- */
   useEffect(() => {
-    if (paused || !running || finished || reviewEvent) { lastTs.current = null; return; }
+    if (paused || !running || finished || reviewEvent || stopped) { lastTs.current = null; return; }
     const cap = stageStop;
     const step = (ts: number) => {
       if (lastTs.current === null) lastTs.current = ts;
@@ -711,11 +731,31 @@ export function LiveSimScreen({
     };
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [paused, running, finished, stage, speed, stageStop, reviewEvent]);
+  }, [paused, running, finished, stage, speed, stageStop, reviewEvent, stopped]);
+  /* Round 1302: the stoppage's own clock. It runs at the match's pace while the match clock stands still, stops
+     where the ball is in the net (the card opens there) and never passes it, so a slow frame cannot carry the
+     action past its own end. Pause holds it like everything else. */
+  const stoppageOpen = reducedMotion ? 0.01 : NET_AT + 0.004;
+  useEffect(() => {
+    if (!stopped || paused || !running || finished || reviewEvent) return;
+    let frame = 0;
+    let last: number | null = null;
+    const step = (ts: number) => {
+      if (last === null) last = ts;
+      const dt = Math.min(0.25, (ts - last) / 1000);
+      last = ts;
+      setStoppage(s => (s ? { ...s, t: Math.min(stoppageOpen, s.t + dt * BASE_RATE * speed) } : s));
+      frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [stopped, paused, running, finished, reviewEvent, speed, stoppageOpen]);
 
   /* Stage transitions off the clock. The whistle is called exactly once.
-     Round 781: at the end of each period's board, not on its last minute. */
+     Round 781: at the end of each period's board, not on its last minute.
+     Round 1302: and not while a ruled out goal of the period is still to be played and reviewed (the stoppage). */
   useEffect(() => {
+    if (whistleHeld.current) return;
     if (stage === 'first' && clock >= stageStop) {
       setClock(45);
       setStage('interval');
@@ -752,6 +792,7 @@ export function LiveSimScreen({
            night's score beside the banner often is not, so the engine says
            which (and gives the aggregate) rather than a line typed here. */
         setBanner({ segs: [{ t: 'Extra time' }], club: extraTimeCall(career, liveNow), tone: 'none' });
+        goalPill.current = false;
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
         bannerTimer.current = setTimeout(() => setBanner(null), 2600);
         return;
@@ -767,7 +808,8 @@ export function LiveSimScreen({
       setPicking(null);
       onSecondHalf();
     }
-  }, [clock, stage, stageStop, askedAt90, liveNow, career, onSecondHalf, onStartExtraTime, onMark]);
+    // settledReviews and stopped are here for the whistle that waited: it goes when the review that held it is over.
+  }, [clock, stage, stageStop, askedAt90, liveNow, career, onSecondHalf, onStartExtraTime, onMark, settledReviews, stopped]);
 
   /* Where the clock stands goes to the save when the page is hidden or
      leaves (a tab switch, the app going to the background, a reload), never
@@ -854,7 +896,11 @@ export function LiveSimScreen({
      (the rest of the half is drawn again then, and an action under it is rightly dropped). */
   // A tactics change can replace a future terminal chance during its wind-up.
   // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
-  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
+  /* Round 1302: a goal a review rules out may be played a little before its own place (in a stoppage just ahead of
+     the last kick's wind up). Its line is the screen's own (the engine keeps no shot for it), so it is not in the
+     feed: it stays committed for as long as the feed holds the review it belongs to. */
+  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event)
+    || feed.some(e => isRuledOut(e) && ruledOutKey(e) === motionEvent.key);
   const liveAction = running && !finished && motionStillCommitted ? motionEvent : null;
   /* Never from before the viewer opened: a last kick's wind up starts 1.05 before the whistle whenever the
      screen opens, and a match opened again inside it shows the men of the minute it opened at. */
@@ -923,8 +969,21 @@ export function LiveSimScreen({
        any other review (a penalty a review gives) opens at its own minute, so the foul is told first;
        no review opens while another action is still playing: it waits for that action to end;
        one due inside the last kick's wind up opens just before the wind up, and every review opens before
-       the whistle of its period. */
+       the whistle of its period.
+     Round 1302, the stoppage (see its state): a ruled out goal the plan does not stage is played with the clock
+     stopped, and THEN its card opens. The clock stops for it at the first instant from its own place on at which
+     nothing else is playing; ahead of a real last kick that is just before the wind up, so the kick is played
+     whole after it. When the rest of the period has no such instant (real chances run back to back to the
+     whistle, or the goal is at the whistle's own place) it stops AT the whistle: the last real action is over
+     and counted, the ruled out goal is played and reviewed, and only then does the period end. Before this a
+     card in that corner opened 0.05 before the whistle on whatever was there: on the last kick's real goal in
+     the net with the score not moved yet (league match 2, seed 42322), or on a real shot's last picture. */
   const nextRuledOutKey = nextReview && isRuledOut(nextReview) ? ruledOutKey(nextReview) : null;
+  /* Round 1302 fix 2: the goal a review is about to rule out is the action on the pitch, from its first frame until
+     its review is settled. The line under the pitch says nothing meanwhile (the effect below the banner effect). */
+  const ruledOutOn = !!nextRuledOutKey && motionEvent?.key === nextRuledOutKey;
+  /* The next review is a ruled out goal the clock stops for. */
+  const nextStopped = !!nextReview && isRuledOut(nextReview) && !ruledOutAt.has(nextReview.review!.id);
   const reviewOpensAt = (r: LiveFeedEvent): number => {
     const floor = Math.max(openedAt.current, stage === 'second' ? 46 : stage === 'extra' ? 90 : 0);
     const staged = ruledOutAt.get(r.review!.id);
@@ -935,29 +994,43 @@ export function LiveSimScreen({
        never on the same instant, so the goal is on the pitch (and its minute on the clock) when the card comes. */
     if (staged !== undefined) t = (playing ?? Math.max(staged, floor)) + (reducedMotion ? 0.01 : NET_AT + 0.004);
     else {
+      /* A ruled out goal the clock stops for: nothing of its own is played after its card, so it need not come
+         before the wind up when it sits at the whistle's own place. */
+      const stops = isRuledOut(r);
       t = placeOf(r);
       /* The last kick of a period is wound up ACTION_SPAN before the whistle. A review at the whistle's own place
          (the penalty it gives then IS the last kick) or one due inside a staged last kick's wind up opens just
          before that wind up, so the kick is played whole after it. */
       const atWhistle = r.minute === stageEnd && (r.plus ?? 0) === board;
       const lastKickStaged = plan.actions.some(a => placeOf(a.event) >= stageStop - 1e-6);
-      if ((atWhistle || lastKickStaged) && t > stageStop - ACTION_SPAN - 0.05) t = stageStop - ACTION_SPAN - 0.05;
+      if ((stops ? lastKickStaged && !atWhistle : atWhistle || lastKickStaged) && t > stageStop - ACTION_SPAN - 0.05) t = stageStop - ACTION_SPAN - 0.05;
       /* Never over an action still playing: it waits for that action to be over, a hair past its end (at its
          end to the frame, a goal's card and its last picture are still up). */
       const over = ACTION_SPAN + 0.01;
       for (const a of [...plan.actions].sort((x, y) => x.at - y.at)) if (a.at < t - 1e-6 && t < a.at + over) t = a.at + over;
-      if (liveAction && liveAction.at < t - 1e-6 && t < liveAction.at + over) t = liveAction.at + over;
+      if (liveAction && liveAction.key !== nextRuledOutKey && liveAction.at < t - 1e-6 && t < liveAction.at + over) t = liveAction.at + over;
+      /* No instant before the whistle with nothing playing: the clock stops for it at the whistle itself. */
+      if (stops && t > stageStop - 0.05) return Math.max(floor, stageStop);
     }
     return Math.max(floor, Math.min(t, stageStop - 0.05));
   };
   reviewCap.current = nextReview ? reviewOpensAt(nextReview) : Infinity;
+  whistleHeld.current = running && !finished && (stopped || (nextStopped && reviewCap.current >= stageStop - 1e-9));
   /* No slack here: the clock is set to exactly this value when it would pass it (see the clock's own step). With
      a thousandth of slack a frame that landed just short of a whole minute opened the review one minute early on
      the clock, before the foul was told. The walk met that on a phone. */
   const reviewDue = !!nextReview && clock >= reviewCap.current;
   useEffect(() => {
-    if (running && !finished && !reviewEvent && nextReview && reviewDue) setReviewEvent(nextReview);
-  }, [running, finished, reviewEvent, nextReview, reviewDue]);
+    if (!running || finished || reviewEvent || !nextReview || !reviewDue) return;
+    if (!nextStopped) { setReviewEvent(nextReview); return; }
+    /* The stoppage: first the goal (it starts further down, below the banner effect), and then, with its ball
+       in the net, the card. */
+    if (stoppage && stoppage.id === nextReview.review!.id && stoppage.t >= stoppageOpen - 1e-9) setReviewEvent(nextReview);
+  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, stoppageOpen]);
+  /* A stoppage never outlives its review: if the review is gone (settled by Skip, or the rest of the period was
+     drawn again without it), the match clock is let go at once. */
+  const stoppageStale = !!stoppage && nextReview?.review?.id !== stoppage.id;
+  useEffect(() => { if (stoppageStale) setStoppage(null); }, [stoppageStale]);
   /* The goal a review is about to rule out starts on the pitch when its turn comes, like any chance. Only the
      next review's: one review at a time. */
   useEffect(() => {
@@ -985,8 +1058,10 @@ export function LiveSimScreen({
          Round 1101: and a chance that waits its turn on the pitch fires when its action starts. */
       if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || firesAt(e) > clock) continue;
       if (!cmVarCanAnnounce(e, feed, settledReviews)) continue;
-      /* Round 1218 fix: a chance that would start in the very tick a review opens waits for the review to close. */
-      if (reviewDue && isChance(e) && firesAt(e) >= reviewCap.current - 1e-6) continue;
+      /* Round 1218 fix: a chance that would start in the very tick a review opens waits for the review to close.
+         Round 1302: not at the whistle, where nothing starts any more: the last kick's line is told on time, so the
+         list has its goal when the score does, before the ruled out goal the whistle is waiting for. */
+      if (reviewDue && reviewCap.current < stageStop - 1e-6 && isChance(e) && firesAt(e) >= reviewCap.current - 1e-6) continue;
       const key = `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
@@ -1077,13 +1152,35 @@ export function LiveSimScreen({
     if (big) {
       setBanner(big);
       if (bannerTimer.current) clearTimeout(bannerTimer.current);
-      bannerTimer.current = setTimeout(() => setBanner(null), 2600);
+      bannerTimer.current = setTimeout(() => { goalPill.current = false; setBanner(null); }, 2600);
+      goalPill.current = (big as Banner).tone !== 'none';
     }
     if (small) setEventLine(small);
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt, settledReviews, reviewDue]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
+  /* Round 1302 fix 2: the line under the pitch says nothing while a goal a review rules out is played and reviewed,
+     the rule a real goal has had since Round 1101. Before this the last small line told ("Throw in, Aston Villa")
+     sat under the ruled out goal and under its card. One rule for every way a line gets there: whatever is told
+     meanwhile (the list beside the pitch has it) is taken off the line again. The ruling itself ("VAR: goal ruled
+     out: ...") is told the moment the review is settled, and by then that goal is no longer the next review's. */
+  useEffect(() => { if (ruledOutOn && eventLine) setEventLine(null); }, [ruledOutOn, eventLine]);
+  /* Round 1302, where a stoppage starts: the goal a review rules out, from the frame on the screen, with the match
+     clock standing where it is. It is declared BELOW the banner effect on purpose. A real goal told in this very
+     commit (the last kick's, when the clock stops at the whistle) has just put its pill up there, and the
+     stoppage waits for that pill to come down (2.6 seconds): a pill that says GOAL for one side straight above a
+     card that says "goal ruled out" for the other is the misreading this fix exists to end. The pill's own timer
+     clears it, which brings this effect round again (`banner` is an input for that reason alone). */
+  useEffect(() => {
+    if (!running || finished || reviewEvent || !nextReview || !reviewDue || !nextStopped) return;
+    const id = nextReview.review!.id;
+    if ((stoppage && stoppage.id === id) || goalPill.current) return;
+    setStoppage({ id, t: 0 });
+    setMotionEvent({ event: { minute: nextReview.minute, ...(nextReview.plus ? { plus: nextReview.plus } : {}), side: nextReview.side, kind: 'goal', text: nextReview.text }, key: ruledOutKey(nextReview), at: clock });
+    // The clock stands still while this runs; the review, the stoppage and the pill are the inputs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, banner]);
 
   /* ---- the dots and the ball, off the shared pitch (Round 1101): the plan is built further up ---- */
   const sceneKey = pitchSceneKey(plan, clock);
@@ -1092,7 +1189,8 @@ export function LiveSimScreen({
   const scene = useMemo(() => pitchScene(plan, clock), [plan, sceneKey]);
   /* The part places roles; who each one is (his name, number, id, armband) is this screen's own. */
   const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);
-  const motion = useLiveSimMotion(scene, motionEvent, clock, running && !finished && motionStillCommitted);
+  /* Round 1302: in a stoppage the match clock stands still and the action on the pitch runs on the stoppage's own. */
+  const motion = useLiveSimMotion(scene, motionEvent, clock + (stoppage?.t ?? 0), running && !finished && motionStillCommitted);
 
   /* ---- the goal sequence (Round 1101), derived in render and never from effect state ---- */
   const goalPhase = goalWindow(liveAction, clock, reducedMotion);
@@ -1504,13 +1602,14 @@ export function LiveSimScreen({
                         const id = reviewEvent.review!.id;
                         setSettledReviews(previous => new Set([...previous, id]));
                         setReviewEvent(null);
+                        setStoppage(null);
                         /* Round 1218 fix: the goal that was just ruled out stops there. Nobody celebrates it. */
                         setMotionEvent(current => (current && current.key.startsWith('ruledout:') ? null : current));
                       }} />
                   )}
                   {/* event banner */}
                   {banner && (
-                    <div className={cn(
+                    <div data-cm-live-pill={banner.tone} className={cn(
                       /* Round 1101: under the six yard box, so the pill is never over a goal mouth. */
                       'absolute left-1/2 top-[8%] -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2 pointer-events-none text-center max-w-[92%]',
                       banner.tone === 'me' ? 'bg-emerald-500 text-black' : banner.tone === 'opp' ? 'bg-red-500 text-black' : 'bg-background/90 text-foreground border border-border',
@@ -1654,6 +1753,9 @@ export function LiveSimScreen({
                     onClick={() => {
                       setSettledReviews(previous => new Set([...previous, ...feed.filter(e => e.kind === 'var' && e.review && e.minute <= stageEnd).map(e => e.review!.id)]));
                       setReviewEvent(null);
+                      /* Round 1302: a ruled out goal that was being played when Skip was pressed stops with its review. */
+                      setStoppage(null);
+                      setMotionEvent(current => (current && current.key.startsWith('ruledout:') ? null : current));
                       setClock(stageStop);
                     }}
                     className="rounded-lg border border-border bg-card text-[11px] leading-tight font-bold text-foreground hover:border-primary/60 transition-colors inline-flex flex-col items-center justify-center"
