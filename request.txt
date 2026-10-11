@@ -1,0 +1,4 @@
+# Release AX review, facts-fences, part c: sweepWeight on the BASE (origin/release-aw-int c9a1f86a), built beside the head, to say whether the base is red the same way
+#!playwright
+#!serial
+weight-base: git worktree add -q /tmp/base c9a1f86a && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 | cut -c1-80 && (node_modules/.bin/vite build > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4199 > /dev/null 2>&1 &) && sleep 3 && SWEEP_OFFLINE=1 BASE=http://localhost:4199 SWEEP_BASE=http://localhost:4199 node scripts/sweepWeight.mjs 2>&1 | grep -E "FAIL|to the tenth|sweepWeight:"
