@@ -62,7 +62,8 @@ async function journey(test, width, height) {
         localStorage.setItem('soccerCareerSave', serialized);
       }
     }, JSON.stringify(fixture(test)));
-    await context.route(/supabase\.co/, route => route.abort());
+    // Recorded-save fixture isolation keeps requests on the existing local host.
+    await context.route('**/*', route => new URL(route.request().url()).origin === new URL(BASE).origin ? route.continue() : route.abort());
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(String(error).slice(0, 180)));

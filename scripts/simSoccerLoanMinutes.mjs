@@ -17,6 +17,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.SOCCER_LOAN_MINUTES_OUT || path.join(ROOT, 'soccer-loan-minutes-artifacts/proof'));
 const BASE = 'aa564f16019b9e821981d5c4e3e0262312c73b62';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
+const APPEARANCE = 'src/lib/soccerCareerAppearance.ts';
 const FIXTURE = 'scripts/data/careerLeagueWorldSaves1100.json';
 const require = createRequire(import.meta.url);
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
@@ -76,6 +77,17 @@ assert.equal(undoSource, currentSource, 'complete source undo');
 report.production = { baseRaw: save('sources/base-engine.raw.ts', baseRaw), currentRaw: save('sources/current-engine.raw.ts', currentRaw),
   baseLF: save('sources/base-engine.lf.ts', baseSource), currentLF: save('sources/current-engine.lf.ts', currentSource),
   fault: save('sources/remove-filter.ts', faultSource), undo: save('sources/undo.ts', undoSource), patch: put({ from, to, forward: 1, reverse: 1 }) };
+const baseAppearanceRaw = git('show', `${BASE}:${APPEARANCE}`), currentAppearanceRaw = fs.readFileSync(path.join(ROOT, APPEARANCE));
+const baseAppearanceSource = lf(baseAppearanceRaw.toString()), currentAppearanceSource = lf(currentAppearanceRaw.toString());
+const appearanceFrom = "  { id: \"cradle\", label: \"Baby Cradle\", emoji: \"👶\", line: \"rock the baby cradle for the newest member of the family\" },";
+const appearanceTo = "  { id: \"cradle\", label: \"Baby Cradle\", emoji: \"👶\", line: \"rock an imaginary baby cradle\" },";
+assert.equal(replaceOne(baseAppearanceSource, appearanceFrom, appearanceTo), currentAppearanceSource, 'one complete declared appearance edit');
+const appearanceUndo = replaceOne(currentAppearanceSource, appearanceTo, appearanceFrom);
+assert.equal(appearanceUndo, baseAppearanceSource, 'complete appearance source undo');
+report.appearance = { path: APPEARANCE, baseRaw: save('sources/base-appearance.raw.ts', baseAppearanceRaw), currentRaw: save('sources/current-appearance.raw.ts', currentAppearanceRaw),
+  baseLF: save('sources/base-appearance.lf.ts', baseAppearanceSource), currentLF: save('sources/current-appearance.lf.ts', currentAppearanceSource),
+  undo: save('sources/appearance-undo.ts', appearanceUndo), patch: put({ from: appearanceFrom, to: appearanceTo, forward: 1, reverse: 1 }),
+  servedByArm: { original: 'baseLF', current: 'currentLF', 'remove-filter': 'currentLF', undo: 'currentLF' } };
 const loadedCache = new Map();
 async function bundle(id, source) {
   const entry = `import * as E from '${ROOT.replaceAll('\\', '/')}/${ENGINE}';\nimport * as W from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerLeagueWorld.ts';\nimport * as A from '${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts';\nimport * as R from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerRole.ts';\nexport {E,W,A,R};\n`;
@@ -88,8 +100,11 @@ async function bundle(id, source) {
       if (!held) {
         const raw = fs.readFileSync(args.path); held = { raw, rel, base: rel.startsWith('src/') ? git('show', `${BASE}:${rel}`) : null }; loadedCache.set(rel, held);
       }
-      const served = rel === ENGINE ? source : lf(held.raw.toString());
-      if (held.base && rel !== ENGINE) assert.equal(served, lf(held.base.toString()), `unchanged loaded source ${rel}`);
+      const served = rel === ENGINE ? source : rel === APPEARANCE ? (id === 'original' ? baseAppearanceSource : currentAppearanceSource) : lf(held.raw.toString());
+      if (rel === APPEARANCE) {
+        assert.equal(lf(held.raw.toString()), currentAppearanceSource, 'exact current loaded appearance');
+        assert.equal(lf(held.base.toString()), baseAppearanceSource, 'exact AA loaded appearance');
+      } else if (held.base && rel !== ENGINE) assert.equal(served, lf(held.base.toString()), `unchanged loaded source ${rel}`);
       loaded.push({ path: rel, raw: save(`bundles/${id}/loaded/${rel}.raw`, held.raw), served: save(`bundles/${id}/loaded/${rel}.served`, served),
         base: held.base ? save(`bundles/${id}/loaded/${rel}.base`, held.base) : null,
         gitBlob: held.base ? git('rev-parse', `${BASE}:${rel}`).toString().trim() : null });

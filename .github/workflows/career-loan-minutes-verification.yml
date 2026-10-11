@@ -40,10 +40,15 @@ jobs:
           git diff --name-status aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > career-loan-minutes-artifacts/changed-source.txt
           node --input-type=module - <<'JS'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
-          const base='aa564f16019b9e821981d5c4e3e0262312c73b62',allowed=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerAppearance.ts','scripts/simSoccerLoanMinutes.mjs','.github/workflows/career-loan-minutes-verification.yml','docs/ROUND1283.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md'],changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          const base='aa564f16019b9e821981d5c4e3e0262312c73b62',allowed=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerAppearance.ts','scripts/simSoccerLoanMinutes.mjs','.github/workflows/career-loan-minutes-verification.yml','scripts/playSoccerCareerFamily.mjs','scripts/simSoccerContractMoves.mjs','docs/ROUND1283.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md'],changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
           fs.writeFileSync('career-loan-minutes-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));for(const file of changed)assert(allowed.includes(file),'undeclared change '+file);
-          for(const file of ['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs',...['simLoanSpell','simClubVerdict','simContracts','simContractPreview','simSoccerContractMoves','simSoccerCareerSaveRetry','simSoccerCareerSaveRecovery','simSeasonFamilySummary','simSeasonVerdict','playSoccerCareerFamily'].map(name=>'scripts/'+name+'.mjs')])assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString(),execFileSync('git',['rev-parse',base+':'+file]).toString(),file+' complete baseline hold');
-          for(const file of allowed.slice(0,4))assert(execFileSync('git',['cat-file','-s','HEAD:'+file]).toString().trim()>0,file+' committed source is nonempty');
+          for(const file of ['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs',...['simLoanSpell','simClubVerdict','simContracts','simContractPreview','simSoccerCareerSaveRetry','simSoccerCareerSaveRecovery','simSeasonFamilySummary','simSeasonVerdict'].map(name=>'scripts/'+name+'.mjs')])assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString(),execFileSync('git',['rev-parse',base+':'+file]).toString(),file+' complete baseline hold');
+          const relatedRepairs=[
+           {"file":"scripts/playSoccerCareerFamily.mjs","from":"    await context.route(/supabase\\.co/, route => route.abort());","to":"    // Recorded-save fixture isolation keeps requests on the existing local host.\n    await context.route('**/*', route => new URL(route.request().url()).origin === new URL(BASE).origin ? route.continue() : route.abort());"},
+           {"file":"scripts/simSoccerContractMoves.mjs","from":"assert.equal(B.contracts.soccerExtensionQuote(cameo).weeklyWage, 100000, 'an excellent cameo cannot earn a veteran raise');","to":"assert.equal(B.contracts.soccerExtensionQuote(cameo).weeklyWage, 100000, 'an excellent cameo cannot earn a veteran raise');\nconsole.log('ok   excellent two-appearance veteran cameo keeps the existing 100000 weekly wage');"}
+          ];
+          const occurrences=(source,needle)=>source.split(needle).length-1;for(const repair of relatedRepairs){const original=execFileSync('git',['show',base+':'+repair.file]).toString(),actual=execFileSync('git',['show','HEAD:'+repair.file]).toString();assert.equal(occurrences(original,repair.from),1,repair.file+' unique baseline repair anchor');assert.equal(occurrences(actual,repair.to),1,repair.file+' unique actual repair anchor');assert.equal(actual,original.replace(repair.from,repair.to),repair.file+' entire baseline forward');assert.equal(actual.replace(repair.to,repair.from),original,repair.file+' entire baseline undo');fs.writeFileSync('career-loan-minutes-artifacts/related-source-repair-bindings.json',JSON.stringify(relatedRepairs.map(row=>({file:row.file,from:row.from,to:row.to})),null,2));}
+          for(const file of allowed.slice(0,6))assert(execFileSync('git',['cat-file','-s','HEAD:'+file]).toString().trim()>0,file+' committed source is nonempty');
           JS
           git rev-parse HEAD > career-loan-minutes-artifacts/source-head.txt
           git rev-parse 'HEAD^{tree}' > career-loan-minutes-artifacts/source-tree.txt
@@ -162,7 +167,7 @@ jobs:
           include-hidden-files: true
           retention-days: 5
           if-no-files-found: error
-      - name: Unchanged loan contract verdict save and family checks
+      - name: Preserved loan contract verdict save and family assertions with fixture and output repairs
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
