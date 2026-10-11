@@ -1,0 +1,7 @@
+# Round 1212 step 3 again on cca4c5a4: the number file's tests after the held test fix, and the fences that read the new files
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-mlb: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentreScreens.test.tsx src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=300000
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
