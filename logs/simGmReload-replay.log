@@ -1,0 +1,32 @@
+1) The four boards, rendered: a reload on the recap draws the recap again and never replays the season
+   NEGATIVE CONTROL ON: NFL Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: NFL Front Office, full rosters renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: NBA Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: MLB Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: NHL Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   vitest exit 1, no tests
+   NFL Front Office: 0 green, 0 red. no REPRO line printed
+control cannot run: the rewritten NFL Front Office board did not load, so any red is a load error and not the check:
+ites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx ]
+Error: Failed to resolve import "./NbaRotationPanel" from "dist/.gm-control/NbaFrontOfficeBoard.control.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /home/runner/work/ballpark-hero/ballpark-hero/dist/.gm-control/NbaFrontOfficeBoard.control.tsx:2:33
+  1  |  import { jsxDEV as _jsxDEV, Fragment as _Fragment } from "react/jsx-dev-runtime";
+  2  |  import { useCallback, useEffect, useRef, useState } from 'react';
+  3  |  import { NbaRotationPanel } from './NbaRotationPanel';
+     |                                    ^
+  4  |  import { nbaSetRotationSlot, nbaAutoRotation } from '@/lib/nbaRotation';
+  5  |  import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
+ ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23
+ ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7
+ ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
