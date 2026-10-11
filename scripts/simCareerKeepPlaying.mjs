@@ -183,14 +183,17 @@ for (const [k, [from, to]] of Object.entries(ROWS)) BASELINE_SRC = swap(BASELINE
 /* the negative controls mutate the CURRENT engine */
 const RESUME = '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return playPendingProSeason(s, clubs);';
 const PUSH_LINE = '  s.events = [...s.events, "\u{1F4AA} Decided to push on, not ready to hang up the boots yet"];\n';
-const ACCEPT_HEAD = 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...prev };';
+/* Release AW: the farewell season (Rounds 1238 to 1240) put its guard between the head and the copy, so the anchor
+   carries that line and the control leaves it standing. The line the control changes is the same one as before. */
+const ACCEPT_GUARD = '  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;\n';
+const ACCEPT_HEAD = 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n' + ACCEPT_GUARD + '  const s = { ...prev };';
 const CONTROLS = {
   olddecline: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  s.phase = "playing";\n  return s;'],
   readvance: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return advanceProSeason({ ...s, phase: "playing" }, clubs);'],
   stuck: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return { ...playPendingProSeason(s, clubs), phase: "retirement_suggestion" };'],
   offphase: ['  if (prev.phase !== "retirement_suggestion" || prev.retired) {', '  if (prev.retired) {'],
   pushtwice: [PUSH_LINE, PUSH_LINE + PUSH_LINE],
-  acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
+  acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n' + ACCEPT_GUARD + '  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
   norehabrow: ROWS.rehab,
   zerorehab: ['      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };', '      const injuryRow: SeasonRecord = yearOutRow(s, null);'],
   noconvictionrow: ROWS.conviction,
