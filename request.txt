@@ -1,0 +1,8 @@
+# Release AW closing pass, final proof P-H1c: gate lane H1: the fold, the soft 404, the FAQ schema, the route sweep
+#!serve
+#!playwright
+#!serial
+playHomeFold: node scripts/playHomeFold.mjs
+playSoftFourOhFour: node scripts/playSoftFourOhFour.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+sweepGames: SIZES=phone,desktop node scripts/sweepGames.mjs
