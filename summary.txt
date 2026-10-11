@@ -1,0 +1,2 @@
+ref-dumps exit=0 474s | 192
+fleet-again exit=0 1s | fleet-again: the committed ledger is what the generator writes again from fresh reference runs, byte for byte

@@ -1,0 +1,3 @@
+#!serial
+ref-dumps: for s in nhl nfl nba mlb; do ( bash .rc/x/dumps.sh . /tmp/ref $s 2000 $(seq 30 77) | tail -1 ) & done; wait; ls /tmp/ref | grep -c "^rows-"
+fleet-again: set -o pipefail; MARKS_OUT=/tmp/fleet-out.json MARKS_FLEET=all node scripts/genCareerHallMarks.mjs /tmp/ref | tail -5 | cut -c1-260 && cmp /tmp/fleet-out.json scripts/data/careerHallMarks.json && echo "fleet-again: the committed ledger is what the generator writes again from fresh reference runs, byte for byte"
