@@ -1,0 +1,3 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsMarketTalk exit=1 3s | playUsMarketTalk: 1 checks, 2 failed
+playUsMarketTalk-droptalk-EXPECT1 exit=2 3s | CONTROL droptalk: DID NOT FIRE as its own (failures: past, crash; the talk was taken off 0 saves).
