@@ -1,0 +1,33 @@
+varlive exit=0 19s |       Tests  5 passed | 3 skipped (8)
+varlive-dark exit=0 6s |       Tests  5 passed | 3 skipped (8)
+varlive-lit exit=0 12s |       Tests  5 passed | 3 skipped (8)
+varlive-on exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR with the 
+varlive-switch exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR with the 
+varlive-off exit=1 11s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR lit%2C go
+varlive-allkinds exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR lit%2C go
+ledger exit=0 0s | simCmVarLedger: all 691 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+litstatus exit=0 0s | cmVarLit: CM_VAR_LIVE is on, the game is handed goal
+l-helprate exit=1 0s | simCmVarLedger control helprate: FIRED (the help states a number that is not the game's own in its VAR block (23, 306, 2023/24): the Help never states a real league's rat
+l-kindon exit=1 0s | simCmVarLedger control kindon: FIRED (the penalty kind is on in the ledger while an open owed entry holds it (penalties-total))
+l-owedlive exit=1 0s | simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: no kind of review is played (goal: held by control; penalty: held by penalt
+tsc exit=0 95s | 
+varscreen exit=0 160s |       Tests  46 passed (46)
+simCmVar exit=0 165s | simCmVar normal: actual review outcomes and full prior baseline passed.
+seedsB exit=0 172s | simCmVar normal: actual review outcomes and full prior baseline passed.
+seedsC exit=0 163s | simCmVar normal: actual review outcomes and full prior baseline passed.
+gap exit=0 61s | GAP {"seeds":[2,3,4],"clubs":144,"matches":4297,"goalsOn":2.7142,"goalsOff":2.7152,"ruledOut":352,"penaltyReviews":0,"resultMoved":263,"withReview":339,"ruledOutPerMatch"
+seedsD exit=0 154s | simCmVar normal: actual review outcomes and full prior baseline passed.
+v-nolift exit=0 133s | simCmVar nolift: CAUGHT by "With the goal kind alone reviews move goals a match by -0.0753, past the 0.05 the family allows a rule to move them, and the ledger does not h
+gap2 exit=0 66s | GAP {"seeds":[12,13,14],"clubs":144,"matches":4327,"goalsOn":2.7083,"goalsOff":2.7132,"ruledOut":328,"penaltyReviews":0,"resultMoved":271,"withReview":320,"ruledOutPerMat
+livemotion exit=0 67s |    Duration  66.58s (transform 2.49s, setup 75ms, collect 3.23s, tests 62.13s, environment 465ms, prepare 221ms)
+lm-lastkick exit=1 15s | simLiveSimMotion: control lastkick turned "a goal with the last kick of a period takes nothing off" red on an assertion (1 failed), as it must.
+lm-plain exit=0 70s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+lm-whistle exit=1 11s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+lm-terminal exit=1 19s | simLiveSimMotion: control terminal turned "terminal goal and save contact" red on an assertion (8 failed), as it must.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+gitclean exit=0 1s | 0
+simManagerAppealIsolation exit=0 48s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
