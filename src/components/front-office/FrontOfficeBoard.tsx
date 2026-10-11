@@ -407,6 +407,51 @@ export default function FrontOfficeBoard() {
     return pr ? { ...r, grade: gradeOf(pr) } : r;
   };
 
+  /* Round 1305: the season closes here and nowhere else. This is the body the
+     final week's press had from the champion's entry to its save, lifted out
+     as it stood so the round that lets a GM play the bracket round by round
+     closes a season through the same lines. `rounds` are the told rounds:
+     the recap shows them, the mandate reads their winners, the save keeps
+     them. It is declared above playWeek on purpose (harnesses read playWeek
+     as the text up to the next component level const). */
+  const closeSeason = (lg: LeagueState, rounds: PlayoffRound[], champ: string) => {
+    lg.champions.push({ season: lg.season, team: champ });
+    setPlayoffRounds(rounds);
+    setChampion(champ);
+    const won = champ === myTeam;
+    setWonTitleNow(won);
+    const newTitles = titles + (won ? 1 : 0);
+    const newSeasons = seasonsPlayed + 1;
+    setTitles(newTitles);
+    setSeasonsPlayed(newSeasons);
+    /* Round 180: ownership grades the season against the mandate. */
+    let newTrust = trust, nowFired = fired;
+    let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
+    let gradeVerdict: string | null = null;
+    if (mandate) {
+      const post = nflPostseason(rounds, myTeam);
+      const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
+      const applied = applyMandateResult(trust, grade);
+      newTrust = applied.trust;
+      nowFired = applied.fired;
+      gradeResult = grade.result;
+      setTrust(applied.trust);
+      setFired(applied.fired);
+      setGradeLine(grade.verdict);
+      gradeVerdict = grade.verdict;
+    }
+    /* Round 192: the room reacts to the season that actually happened.
+       A fired GM gets no presser (the door shuts with one shake), and a
+       quiet, mandate-met, no-news summer gets provably nothing. */
+    setPresser(buildGmPresser(NFL_WORDS, {
+      justHired: false, teamLabel: label(myTeam), fired: nowFired, wonTitle: won,
+      gradeResult, tradeLine: seasonTradeLine, seasonsPlayed: newSeasons,
+    }));
+    setPhase('recap');
+    setLeague(lg);
+    persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+  };
+
   const playWeek = () => {
     if (!league || !my) return;
     /* Round 828 follow up: a full roster over 53 cuts down before it plays,
@@ -470,41 +515,7 @@ export default function FrontOfficeBoard() {
       log = addToGmGameLog(log, lg.season, toldPlayoffs.flatMap(r => r.told)
         .filter(t => t.game.home === myTeam || t.game.away === myTeam).flatMap(t => (t.last ? [t.last] : [])));
       setGameLog(log);
-      lg.champions.push({ season: lg.season, team: champ });
-      setPlayoffRounds(toldRounds);
-      setChampion(champ);
-      const won = champ === myTeam;
-      setWonTitleNow(won);
-      const newTitles = titles + (won ? 1 : 0);
-      const newSeasons = seasonsPlayed + 1;
-      setTitles(newTitles);
-      setSeasonsPlayed(newSeasons);
-      /* Round 180: ownership grades the season against the mandate. */
-      let newTrust = trust, nowFired = fired;
-      let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
-      let gradeVerdict: string | null = null;
-      if (mandate) {
-        const post = nflPostseason(toldRounds, myTeam);
-        const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
-        const applied = applyMandateResult(trust, grade);
-        newTrust = applied.trust;
-        nowFired = applied.fired;
-        gradeResult = grade.result;
-        setTrust(applied.trust);
-        setFired(applied.fired);
-        setGradeLine(grade.verdict);
-        gradeVerdict = grade.verdict;
-      }
-      /* Round 192: the room reacts to the season that actually happened.
-         A fired GM gets no presser (the door shuts with one shake), and a
-         quiet, mandate-met, no-news summer gets provably nothing. */
-      setPresser(buildGmPresser(NFL_WORDS, {
-        justHired: false, teamLabel: label(myTeam), fired: nowFired, wonTitle: won,
-        gradeResult, tradeLine: seasonTradeLine, seasonsPlayed: newSeasons,
-      }));
-      setPhase('recap');
-      setLeague(lg);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds: toldRounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      closeSeason(lg, toldRounds, champ);
       return;
     }
     lg.week += 1;
