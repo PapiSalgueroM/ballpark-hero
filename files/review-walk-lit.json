@@ -1,0 +1,299 @@
+{
+ "lit": true,
+ "kinds": [
+  "goal"
+ ],
+ "h1": {
+  "seed": 5193,
+  "minute": 18,
+  "who": "Ryan Gravenberch"
+ },
+ "cases": [
+  {
+   "id": "390-howto",
+   "shots": [
+    "lit-390-howto-1.jpg"
+   ],
+   "fail": [],
+   "blocks": 1,
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season. | Right now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, Austrian Bundesliga, SuperSport HNL, Saudi Pro League, 2. Bundesliga, Danish Superliga, Super League Greece, Segunda División, Serie B, MLS Eastern Conference, MLS Western Conference, Brasileirão Série A, A-League Men, Russian Premier League, Champions League, KNVB Cup, Copa do Brasil, Australia Cup (the final only), DFB-Pokal. A cup on that list has it from the round of 16 on unless the list says otherwise. | Everything else plays without it, either because the real competition does not use it this season or because we could not confirm on two sources that it does, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026. | What gets reviewed. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals only: a review can rule a goal out, and it looks at nothing else. | In Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. You only see a review that changed the call, and it is rare. | How often. Rarely, and on purpose. We read the published season counts we could find, kept only what more than one publisher counts, and set the game at the cautious end of them, so a review changes fewer results, not more. In this game that is a goal ruled out about once in 13 matches. It works both ways, for you and against you, and it does change results. | Example: it is 0-0, the ball goes in, a check opens and the goal is ruled out. It stays 0-0, with no scorer and no shot on the stats. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again."
+  },
+  {
+   "id": "1280-howto",
+   "shots": [
+    "lit-1280-howto-1.jpg"
+   ],
+   "fail": [],
+   "blocks": 1,
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season. | Right now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, Austrian Bundesliga, SuperSport HNL, Saudi Pro League, 2. Bundesliga, Danish Superliga, Super League Greece, Segunda División, Serie B, MLS Eastern Conference, MLS Western Conference, Brasileirão Série A, A-League Men, Russian Premier League, Champions League, KNVB Cup, Copa do Brasil, Australia Cup (the final only), DFB-Pokal. A cup on that list has it from the round of 16 on unless the list says otherwise. | Everything else plays without it, either because the real competition does not use it this season or because we could not confirm on two sources that it does, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026. | What gets reviewed. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals only: a review can rule a goal out, and it looks at nothing else. | In Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. You only see a review that changed the call, and it is rare. | How often. Rarely, and on purpose. We read the published season counts we could find, kept only what more than one publisher counts, and set the game at the cautious end of them, so a review changes fewer results, not more. In this game that is a goal ruled out about once in 13 matches. It works both ways, for you and against you, and it does change results. | Example: it is 0-0, the ball goes in, a check opens and the goal is ruled out. It stays 0-0, with no scorer and no shot on the stats. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again."
+  },
+  {
+   "id": "390-motion",
+   "shots": [
+    "lit-390-motion-1-hub.jpg",
+    "lit-390-motion-2-match-help.jpg",
+    "lit-390-motion-3-h1-checking.jpg",
+    "lit-390-motion-4-h1-decided.jpg",
+    "lit-390-motion-5-h1-after.jpg",
+    "lit-390-motion-6-interval.jpg",
+    "lit-390-motion-7-h2-checking.jpg",
+    "lit-390-motion-8-h2-decided.jpg",
+    "lit-390-motion-9-h2-after.jpg",
+    "lit-390-motion-10-full-time.jpg",
+    "lit-390-motion-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [],
+   "matchHelp": "Watching the match | The half you are watching has already been played by the game. You are seeing it back minute by minute. | Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. | The score changes when the ball is in the net, not before. | A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head. | VAR here reviews goals only, and you only see a review that changed the call. A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats. | Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. | Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. | Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next. | VAR example: At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal.",
+   "h1Card": {
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844
+   },
+   "h1ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h1Decided": "VAR: goal ruled out | Ryan Gravenberch, Liverpool, 18' | No goal. The score does not change.",
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2Decided": "VAR: goal ruled out | Brennan Johnson, Everton, 48' | No goal. The score does not change.",
+   "h2ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "timeline": [
+    {
+     "clock": "18'",
+     "side": "opp",
+     "shown": "18'📺 VAR: goal ruled out: Ryan Gravenberch"
+    },
+    {
+     "clock": "48'",
+     "side": "me",
+     "shown": "📺 VAR: goal ruled out: Brennan Johnson48'"
+    }
+   ],
+   "cards": [
+    "checking:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "decided:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "checking:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal",
+    "decided:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal"
+   ]
+  },
+  {
+   "id": "390-reduced",
+   "shots": [
+    "lit-390-reduced-1-hub.jpg",
+    "lit-390-reduced-3-h1-checking.jpg",
+    "lit-390-reduced-4-h1-decided.jpg",
+    "lit-390-reduced-5-h1-after.jpg",
+    "lit-390-reduced-6-interval.jpg",
+    "lit-390-reduced-7-h2-checking.jpg",
+    "lit-390-reduced-8-h2-decided.jpg",
+    "lit-390-reduced-9-h2-after.jpg",
+    "lit-390-reduced-10-full-time.jpg",
+    "lit-390-reduced-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [],
+   "h1Card": {
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844
+   },
+   "h1ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h1Decided": "VAR: goal ruled out | Ryan Gravenberch, Liverpool, 18' | No goal. The score does not change.",
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2Decided": "VAR: goal ruled out | Brennan Johnson, Everton, 48' | No goal. The score does not change.",
+   "h2ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "timeline": [
+    {
+     "clock": "18'",
+     "side": "opp",
+     "shown": "18'📺 VAR: goal ruled out: Ryan Gravenberch"
+    },
+    {
+     "clock": "48'",
+     "side": "me",
+     "shown": "📺 VAR: goal ruled out: Brennan Johnson48'"
+    }
+   ],
+   "cards": [
+    "checking:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "decided:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "checking:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal",
+    "decided:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal"
+   ]
+  },
+  {
+   "id": "1280-motion",
+   "shots": [
+    "lit-1280-motion-1-hub.jpg",
+    "lit-1280-motion-2-match-help.jpg",
+    "lit-1280-motion-3-h1-checking.jpg",
+    "lit-1280-motion-4-h1-decided.jpg",
+    "lit-1280-motion-5-h1-after.jpg",
+    "lit-1280-motion-6-interval.jpg",
+    "lit-1280-motion-7-h2-checking.jpg",
+    "lit-1280-motion-8-h2-decided.jpg",
+    "lit-1280-motion-9-h2-after.jpg",
+    "lit-1280-motion-10-full-time.jpg",
+    "lit-1280-motion-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [],
+   "matchHelp": "Watching the match | The half you are watching has already been played by the game. You are seeing it back minute by minute. | Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. | The score changes when the ball is in the net, not before. | A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head. | VAR here reviews goals only, and you only see a review that changed the call. A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats. | Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. | Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. | Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next. | VAR example: At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal.",
+   "h1Card": {
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900
+   },
+   "h1ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h1Decided": "VAR: goal ruled out | Ryan Gravenberch, Liverpool, 18' | No goal. The score does not change.",
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2Decided": "VAR: goal ruled out | Brennan Johnson, Everton, 48' | No goal. The score does not change.",
+   "h2ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "timeline": [
+    {
+     "clock": "18'",
+     "side": "opp",
+     "shown": "18'📺 VAR: goal ruled out: Ryan Gravenberch"
+    },
+    {
+     "clock": "48'",
+     "side": "me",
+     "shown": "📺 VAR: goal ruled out: Brennan Johnson48'"
+    }
+   ],
+   "cards": [
+    "checking:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "decided:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "checking:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal",
+    "decided:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal"
+   ]
+  },
+  {
+   "id": "1280-reduced",
+   "shots": [
+    "lit-1280-reduced-1-hub.jpg",
+    "lit-1280-reduced-3-h1-checking.jpg",
+    "lit-1280-reduced-4-h1-decided.jpg",
+    "lit-1280-reduced-5-h1-after.jpg",
+    "lit-1280-reduced-6-interval.jpg",
+    "lit-1280-reduced-7-h2-checking.jpg",
+    "lit-1280-reduced-8-h2-decided.jpg",
+    "lit-1280-reduced-9-h2-after.jpg",
+    "lit-1280-reduced-10-full-time.jpg",
+    "lit-1280-reduced-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [],
+   "h1Card": {
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900
+   },
+   "h1ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h1Decided": "VAR: goal ruled out | Ryan Gravenberch, Liverpool, 18' | No goal. The score does not change.",
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreUnder": {
+    "me": 1,
+    "opp": 0
+   },
+   "h2Decided": "VAR: goal ruled out | Brennan Johnson, Everton, 48' | No goal. The score does not change.",
+   "h2ScoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "timeline": [
+    {
+     "clock": "18'",
+     "side": "opp",
+     "shown": "18'📺 VAR: goal ruled out: Ryan Gravenberch"
+    },
+    {
+     "clock": "48'",
+     "side": "me",
+     "shown": "📺 VAR: goal ruled out: Brennan Johnson48'"
+    }
+   ],
+   "cards": [
+    "checking:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "decided:2026:Everton:0:Liverpool:0:45:opp:18:0:Ryan Gravenberch:goal",
+    "checking:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal",
+    "decided:2026:Everton:0:Liverpool:45:90:me:48:0:Brennan Johnson:goal"
+   ]
+  }
+ ]
+}
