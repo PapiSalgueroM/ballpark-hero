@@ -1,0 +1,18 @@
+# Round 1212 step 4 (the bind) on 64e0f09c (release-au-int 611c3f4e merged): the type gate, the US tests, the harness on five seed sets, the receipts and every control
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts src/test/usSeasonMlb.test.ts src/test/usSeasonSlate.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=300000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+ctl-hits: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=hits node scripts/simUsSeasonCentre.mjs
+ctl-club: SPORTS=mlb US_SEASON_CONTROL=club node scripts/simUsSeasonCentre.mjs
+ctl-seam: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
