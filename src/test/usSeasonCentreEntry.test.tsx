@@ -135,8 +135,14 @@ async function toHub(sport: UsCareerSport, ext: 'sign' | 'decline' = 'sign'): Pr
     const market = body.querySelector('[data-fa-window]');
     if (dialog) { const b = buttons(dialog); await click(b[b.length - 1]); continue; }
     if (reveal) { const b = buttons(reveal); await click(b[b.length - 1]); continue; }
+    /* Release AX (the other lane's Rounds 1230 to 1234): a push shows the market wheel in place of the card until
+       its saved result is seen, and the free agency window gained a Compare button as its FIRST button, which
+       signs nothing and opens a view this walk does not know. The wheel is skipped and continued; Compare is
+       never the answer. */
+    const wheel = body.querySelector('[data-market-wheel]');
+    if (wheel) { await click((wheel.querySelector('[data-market-skip]') ?? wheel.querySelector('[data-market-continue]')) as HTMLElement); continue; }
     if (talk) { const b = buttons(talk); await click(ext === 'sign' ? b[0] : b[b.length - 1]); continue; }
-    if (market) { await click(buttons(market)[0]); continue; }
+    if (market) { await click(buttons(market).filter(b => !b.closest('[data-market-compare-open]'))[0]); continue; }
     if (playButton()) return 'hub';
     /* Round 1147: a decision's outcome card with many changes has a "Show all changes" toggle before its
        Continue; pressing the first button there only folds the list open and shut for ever */

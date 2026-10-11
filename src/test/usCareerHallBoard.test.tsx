@@ -233,6 +233,12 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
        branch that used to add a year. */
     vi.spyOn(Math, 'random').mockReturnValue(0.01);
     fireEvent.click(button('Push for more')!);
+    /* Release AX (the other lane's Rounds 1230 to 1234): a push now shows the market wheel in place of the window
+       until its saved result is seen. Skip animation, then Continue: neither draws, the result is on the save. */
+    await waitFor(() => expect(document.querySelector('[data-market-wheel]')).toBeTruthy());
+    fireEvent.click(document.querySelector('[data-market-skip]')!);
+    await waitFor(() => expect(document.querySelector('[data-market-continue]')).toBeTruthy());
+    fireEvent.click(document.querySelector('[data-market-continue]')!);
     await waitFor(() => expect(document.body.textContent).toContain('came up'));
     expect(terms().every(y => y === '1'), `offer lengths after a push ${terms().join(',')}`).toBe(true);
     vi.spyOn(Math, 'random').mockImplementation(mulberry32(47));
