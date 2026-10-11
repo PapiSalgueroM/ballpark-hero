@@ -1,8 +1,9 @@
 /* Round 1211: the real shape of the MLB season, 2004 to 2026, as a sourced
-   ledger. It is the data step for "MLB My Career, week by week": the binding
-   round folds these rows into src/data/usSeasonLengths.ts and
-   src/data/usLeagueShape.ts. NOTHING IMPORTS THIS FILE YET, and it imports
-   nothing.
+   ledger. It is the data step for "MLB My Career, week by week". Three files
+   read it: src/lib/usSeasonShape.ts (Round 1226: the engine plays these
+   lengths and October shapes), src/lib/mlbSeasonHeld.ts and
+   src/lib/season/mlb.ts (Round 1212: the game by game view and the hub's
+   line for a season it cannot show). It imports nothing.
 
    THE RULE. Every fact here was read on 2026-10-10 in two independent
    sources, neither of them a wiki. A fact that only one source gave is not
