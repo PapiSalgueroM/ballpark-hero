@@ -142,7 +142,11 @@ describe('Soccer Career saved farewell validation', () => {
     const raw = state.farewellSeason;
     expect(readSoccerFarewell(state)).toBeNull();
     expect(farewellSeasonComplete(state)).toBe(false);
-    expect(announceSoccerFarewell(state)).toBe(state);
+    /* Release AW, the fix pass after the closing check (this line moved by the desktop lane, owed back to this
+       file's lane): an unreadable plan is read as absent whatever the final season flag says, so a second
+       announcement is no longer refused. It writes a readable plan into a NEW save; the input keeps its raw payload. */
+    const again = announceSoccerFarewell(state);
+    expect(again).not.toBe(state); expect(readSoccerFarewell(again)).not.toBeNull();
     expect(state.farewellSeason).toBe(raw);
   });
 

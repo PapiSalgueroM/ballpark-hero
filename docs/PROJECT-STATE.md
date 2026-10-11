@@ -1,3 +1,116 @@
+## Release AV LIVE, 2026-10-11 16:02 EDT: nine rounds of this lane (MLB My Career week by week, the MLB and NHL seasons as long as the real ones, an NFL rival who plays your position, the league book kept in Club Manager, five libraries for the GM games and the Champions League)
+
+Claude lane (session G). main cbfa94fd, deployment dca21992-c335-4124-850a-e4ca1bd51fe7, entry index-BXY5no68.js (was index-CSV31ZtP.js, Release AU,
+published 02:50 on 2026-10-11). Proof at 16:03: x-deployment-id carries dca21992; /whats-new carries "watch your season game by game", "your rival finally plays your position" and "the season is as long as the real one", and no VAR entry; /, /soccer-career, /club-manager, /front-office and the four US My Careers answer 200; a browser read no console error on /mlb-my-career, /nhl-my-career and /club-manager. Tenth publish since 2026-10-08 (AL, AN, AO, AP, AQ, AR, AS, AT, AU, AV).
+
+What shipped (all of it this lane's; no pull request of the other lane is in this release):
+- Round 1212. MLB My Career: the Week by week button for every hitter. The season just played opens a game at a
+  time on the shared Season Center: a scoreboard by inning, the line at the plate, the record after every game,
+  the halfway mark with the All-Star call, and from 2022 the October rounds with each series score.
+- Rounds 1226 and 1301. The MLB and NHL career engines play the real season lengths: the NHL is 84 games from
+  2026-27, a throwback career plays 48 in 2012-13, 56 in 2020-21 and the 68 to 71 a club had played when 2019-20
+  stopped; MLB plays 60 in 2020 and the 161 or 163 a club really played. Counting stats and the Hall of Fame
+  case are read at a full season's pace (calibration 3, stamped on a career when it retires).
+- Round 1227. NFL My Career: the rival from your draft class has a season made by the same code as yours, at
+  your position, in a season as long as yours (a corner's rival no longer prints sacks, a kicker's has attempts).
+- Round 1229. Club Manager keeps a league book in the save: every rival goal goes to a named man, with assists
+  and clean sheets. Nothing prints it yet; Round B (boards and awards) reads it.
+- Libraries that nothing mounts yet: Round 1228 (the Champions League league phase: pots, draw, table, bracket),
+  Round 1224 (game day and bracket for the front offices), Round 1300 (the playoff deriver).
+- Round 1302. VAR's two ledgers finished (rates on three publishers, a coverage row for all 48 competitions) and
+  the review screen's defects fixed. VAR IS STILL OFF in this release. Round 1303 turns it on for goals; it is
+  closed and rides the next train.
+
+Found and fixed inside the train, by three adversarial reviewers and two fix passes (reports in
+C:\Users\antho\dukb-handoff\2026-10-10\results-g\, names ending -AV.md):
+1. MAJOR: the other lane's planning panel in the US careers typed its games targets on 162 and 82, so a 48, 56
+   or 60 game year printed a target the season could not hold and charged the miss. Every target and bonus
+   benchmark is carried to the season the club really plays, and the judge reads the season's own year (it read
+   the year after, wrong on main too beside a short NBA season). Held by scripts/simUsPlanSeason.mjs (19,638
+   checks, three controls).
+2. The Champions League pots and table compared names with a locale compare; both use one plain text compare.
+3. An NHL card that said "82 games" reads true in a short year.
+
+GATE ON GITHUB RUNNERS on 1661af1d (the integration head ede83172 plus three budget rows), seven lanes plus the live pass: lane A 81 of 81, the sweep and play lane 19 of 19, the two browser lanes 19 of 20 and 26 of 26 (playSoccerCareer check 6 on a blocked runner, green live), the other lane's walks 19 of 19, the live pass 14 of 14 (sent 13:06). Lane B 66 of 68 and lane C 60 of 61, three reds, each run down before the push: (1) simFlagshipWeight, the ceiling the lead had not raised yet (green on f65c6d60 with the measured 2700); (2) simUsCareerDeckC, "the seeded NHL draw changed on 4 of 1200 saves": the train's own fix 3 (41bc8793) reworded one result sentence and the digest hashes the logged sentence; bisected on a runner (green before fix 3 and on main, red from it), attribution proven (the old sentence put back is green against the old digest), re-recorded on a runner, five lines of the file; (3) simHalftime, an unseeded band ("the gain of 0.91 points is inside the noise"): three isolated runs on the head gained 3.29, 2.32 and 2.77 points and three on main 1.91, 3.00 and 3.05, six of six green, so it is not the release's. Two lines the lead had called wrongly were sent again and are green: playSaveKeeper with a base build from before the keeper (848 seconds) and simCmLeagueFixtures at 10, 10, 10. Two harnesses the release adds that the lists did not name ran green on the head: simUsPlanSeason (19,638 checks, its control fired) and simCmLeaguePhase. The committed head with the build output re-proven on a plain build, 20 of 20. The integrator and two fix passes had proven the gate's own lists before that: the type gate and the whole vitest suite (6,538 passed).
+Budgets moved, each with its measured cause in the row: /club-manager 587K, /manager-hot-seat 604K,
+/deadline-day 615K (the league book in the Club Manager engine those pages load). The flagship's raw size
+ceiling is 2700 KB (the page needs 2600.2; Round 1227 added 1,507 bytes to the rivalry chunk it shares with the
+US careers; the split that takes them out is written into the fence as owed). Build output: the saved page of /whats-new and its ledger line (five pages changed only their head tag order and stay as committed).
+
+Two lessons of this gate, written into every builder's and fixer's instructions since: a words only fix moves any
+digest that hashes logged sentences, and a grep for the old text cannot see a hash (run the gate's lane lists
+after every fix pass, not only what the fix touched); scripts/simHalftime.mjs draws its fleets unseeded and was
+red once in seven runs today on healthy code (a seed, or a wider fleet, is owed).
+
+Known and left for follow ups: scripts/simEras.mjs and four more era data harnesses are red on main and here the
+same way (in no gate list; a round is owed); baseball's and hockey's rival still prints the built in line
+(Round B of the rival); on a phone baseball's final card shows the last three innings of the list (the shared
+clock's row height); the summer cards that type a season's length (baseball's 162 card, the NHL fine of salary
+over 82); the Thrashers and the Phoenix Coyotes of 2019-20 play 82 games, as What's New says; a build from
+before this release drops a retired career's hallCal 3 stamp (it matters to a rollback only); the playoff
+deriver's format gate and the league book's assist share check are owed to the rounds that bind them.
+
+### For Codex
+1. Release AV is on main at cbfa94fd and live. It holds no pull request of yours. Your file
+   src/lib/usCareerProgramme.ts changed in it (commit 00e42b38: a season shape registry, bindUsProgrammeSeason,
+   targets carried to the real season, the judge's year) and src/lib/nhlCareerCorruption.ts lost one number in
+   one line: rebase anything open that touches them.
+2. RELEASE AW PART ONE is integrated on release-aw-int and is next: PR225, PR230, PR228, PR221, PR220, PR219,
+   PR218, and PR222 reduced to its InternationalPanel change (main moved the phone and training buttons in
+   Rounds 1188 to 1191, so nothing else of PR222 or PR218's older block was taken), plus this lane's Round 1303.
+   Do not push to those eight branches again; a follow up goes on a new branch from main after AW lands.
+   Your files its fixers edited are listed in results-g\fix-AW.md section 8 and fix2-AW.md section 6 (the money
+   line of the contract talk grouped, one FINAL SEASON banner, a flag in the comeback card, two help paragraphs,
+   the readers of playSoccerFarewell.mjs and playSoccerInternationalReturn.mjs).
+3. ONE RULING OF THE LEAD CHANGES YOUR READERS (it lands with AW): an agentReview, internationalReturn or
+   farewellSeason part that cannot be verified (a wrong shape, another version, a receipt whose source row no
+   longer matches) is read as ABSENT, as transferBrief already is, and no longer closes its card for the rest of
+   the career. The farewell commitment lives in isFinalSeason. Your unit cases that hold the old sentences move
+   with it. The save keeper (scripts/simSaveKeeper.mjs) gains a row a part: a new saved part of yours needs its
+   row in the same pull request from now on.
+4. THE NEXT TRAINS, planned by a scout and a critic today (briefs\draft-codex-train-AX.md and
+   critic-codex-train-AX.md in C:\Users\antho\dukb-handoff\2026-10-10): RELEASE AX is the careers leg, PR231
+   (5b5ed38e), PR232 (70c23d0e) and PR217 (459c0719), integrating now on release-ax-int: do not push to those
+   three branches again. The lead deploys the edge function validate-player for PR231 at publish. PR217 leaves
+   four stale anchors in three of your harnesses that its workflow never ran (simUsCareerSaveRetry two rows,
+   simUsCareerPractice, simUsCareerActionConfirm); the integrator moves them and lists them as owed. RELEASE
+   AY is the Club Manager leg, PR224 (6a09d716) and PR226 (1702e3ba), after this lane's Round 1304 lands (it
+   owns scripts/simEras.mjs and the five other era fences: do not edit them) and after three rulings the lead
+   owes on PR224 (a transfer ledger that is forgotten whole when one record cannot be read, an old save that
+   moves at its first deal, and what it writes into a Deadline Day).
+   NOT READY, held: PR233 (Formula Career). Before its READY note, rule with the lead on its engine: the race
+   weekend is the sport's own event, but the career around it binds to the shared career modules, the
+   contract market and the save keeper before a v1 ships, because a save shape is frozen the day it ships
+   (the owner's standing instruction: a new sport is data on a shared engine). Its completion is filed under
+   the typed driver name (useFormulaCareer.ts line 45): fix that first. PR234: its validator refuses the WHOLE
+   save when the new part is malformed; by item 3 a part that cannot be verified is read as absent.
+   PLEASE CLOSE PR210, PR195 and PR194: each head is an ancestor of main.
+5. HELD, with the way back: PR223 and PR227 build a second modern Champions League beside this lane's Round 1228
+   (src/lib/uclLeaguePhase.ts, on main now: pots, draw, table, bracket) and are red by their own account on
+   three finance bands. PR223 comes back as the BIND of Round 1228's draw, table and bracket into Club Manager,
+   in its own train, and PR227's forecast then reads that. PR229 goes back to you: it makes the continental top
+   scorer award about three times rarer, two harnesses are red, it has no receipt, and it writes into
+   docs/SHIP-PIPELINE.md (the lead's file).
+6. THREE DUPLICATES ARRIVED in your last fourteen drafts: two chance wheels, two farewell season modules and two
+   different things called a promise. One module a concept, please; the integrator kept one of each and listed
+   what it dropped in results-g\finish-AW.md.
+7. YOUR PROOFS should read their base from an environment variable. Several pin the base tree by hash and go
+   red, for no fault of the code, the day main moves under them; the integrators re-pointed five.
+8. STILL OWED, unchanged: confirm the recorded ground rule of commit 4c8c92ef (Release AU's record, item 3);
+   TrophyCabinet.tsx and the comeback card print a nationality with no flag; the NHL guide's 82 games (84 from
+   2026-27 in the engine now); the guides say nothing of the Season Center in MLB My Career or of the five new
+   Soccer Career mechanics; nine minors of AW's reviews (results-g\fix2-AW.md section 4.3).
+9. VAR goes on for goals with AW (Round 1303): do not flip CM_VAR_LIVE or edit src/data/clubManagerVarRates.ts.
+10. THIS LANE'S ROUNDS IN FLIGHT AND THE FILES THEY HOLD: Round 1304 (the six era fences: scripts/simEra2005,
+   simEra2010, simEra2015, simEra2020, simEras, simStatsCentre, and the cause in src/lib/clubManagerEras.ts or
+   the market build of clubManager.ts); Round 1305 (the front offices: THIS LANE CLAIMS the four front office
+   boards, FrontOfficeBoard.tsx, NbaFrontOfficeBoard.tsx and the MLB and NHL boards, the shared draft night and
+   game day cards and src/lib/frontOffice.ts for the Game Day rounds 1305 to 1309); Round 1306 (Club Manager's
+   league book, Round B1: src/lib/clubManagerLeagueBook.ts, the book lines of clubManager.ts, three lines of
+   src/lib/managerHotSeat.ts). From Release AX's walker commit until it reports its recording taken,
+   scripts/data/usBoardFixture.json belongs to that integration. This lane's next round numbers are 1307 to
+   1349.
+
 ## Release AU LIVE, 2026-10-11 02:50 EDT: ten Soccer Career planning systems, cup nights and a named starting eleven from the other lane, a planning panel in the four US My Careers, and eight rounds of this lane (a save you cannot lose, the draft night, an own goal drawn as one, the real fixture list in nine more leagues)
 
 Claude lane (session G). main 0dbbb371, deployment aa7795c9-3689-43e8-93bf-4787cbfb694c, entry index-CSV31ZtP.js (was index-pUtEpMvo.js, Release AT,

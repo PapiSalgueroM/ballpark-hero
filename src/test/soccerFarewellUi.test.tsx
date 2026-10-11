@@ -131,11 +131,11 @@ describe('Soccer farewell season controls', () => {
     ['retired', (career: E.CareerState) => { career.retired = true; career.phase = 'retired'; }],
     ['unrecorded year', (career: E.CareerState) => { career.seasons = []; }],
     /* Release AW, the lead's ruling C3 (this row moved by the desktop lane, owed back to this file's lane): a
-       plan that cannot be verified is read as absent, and the commitment is the save's own final season flag.
-       With the flag set by the announcement the card is not offered again, which this row holds; with the flag
-       off it is offered again, held by src/test/soccerSavePartsReadAsAbsent.test.ts and by the page cases of
-       src/test/soccerFarewellOneBanner.test.tsx (this file's case count is pinned by its kit's checker). */
-    ['malformed optional plan on a save whose final season is announced', (career: E.CareerState) => { career.farewellSeason = { version: 1 } as E.CareerState['farewellSeason']; career.isFinalSeason = true; }],
+       plan that cannot be verified is read as absent, whatever the final season flag says, so on an eligible
+       save the card is offered again; that is held by src/test/soccerSavePartsReadAsAbsent.test.ts and by the
+       page cases of src/test/soccerFarewellOneBanner.test.tsx. What this row holds (this file's case count is
+       pinned by its kit's checker): an unreadable plan opens nothing the other rules close. */
+    ['malformed optional plan on a save the age rule closes', (career: E.CareerState) => { career.farewellSeason = { version: 1 } as E.CareerState['farewellSeason']; career.isFinalSeason = true; career.age = 29; career.seasons[0].age = 29; }],
   ])('hides the announcement for %s without mutating the save', (_name, change) => {
     const career = senior(); change(career); const before = JSON.stringify(career);
     const onAnnounce = vi.fn(); render(<FarewellSeasonCard career={career} onAnnounce={onAnnounce} />);

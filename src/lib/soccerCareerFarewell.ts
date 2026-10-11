@@ -52,12 +52,13 @@ export function farewellEligibility(career: CareerState): SoccerFarewellEligibil
   if (held) return { eligible: false, year: held.year, reason: 'Your farewell year is already saved.' };
   /* Release AW, the lead's ruling C3: a plan that cannot be verified (a wrong shape, another version, a source
      row that no longer matches, a season row past the farewell year) is read as ABSENT, never as "closed for
-     this career". The commitment is not in the part, it is the save's own isFinalSeason flag, which the
-     announcement sets with the plan: while that flag is true the card is not offered again and the page shows
-     its one FINAL SEASON banner. With the flag off the card is offered like to any eligible player and a new
-     announcement overwrites the unreadable part. The engine reads the flag for nothing but one event's weight:
-     only a readable plan ends a career, exactly as before. */
-  if (career.farewellSeason !== undefined && career.isFinalSeason === true) return unavailable('Your final season is already announced.');
+     this career": from here on this function answers exactly what it answers the same save with the part
+     taken out, and a new announcement overwrites the unreadable part.
+     The closing pass first kept the card closed while the save's isFinalSeason flag was true, because the
+     ruling took that flag for the commitment. It is not one: the engine reads the flag for one event's weight
+     and nothing else, only a readable plan ends a career, and nothing ever clears the flag. So that clause
+     left a player whose plan could not be read with a FINAL SEASON banner, no card and a career that played
+     on for good, while a save with the flag and no part at all was offered the card. No flag is read here. */
   if (career.retired || (career.phase !== 'playing' && career.phase !== 'retirement_suggestion')) return unavailable('Choose a farewell year between seasons or at a retirement suggestion.');
   if (!integer(career.age, 30, 44)) return unavailable('A farewell year is available from age 30.');
   const seasons = career.seasons;
