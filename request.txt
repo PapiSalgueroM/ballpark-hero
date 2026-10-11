@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/test/usProgrammeCardTruth.test.ts src/lib/usCareerProgramme.test.ts src/test/usCareerProgrammeUi.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/careerStory.test.tsx src/test/careerChanceWheelUi.test.tsx src/lib/careerChanceWheel.test.ts src/test/soccerClubStartingElevenUi.test.tsx src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+c-partrow: SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+c-partrowus: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
+awards: node scripts/simCareerAwardsNight.mjs
+brands: node scripts/simCareerSocialBrands.mjs
+finish: node scripts/simCareerLeagueFinish.mjs
+programme: node scripts/simCareerProgramme.mjs
+storage: node scripts/simStorageWrites.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+digest-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+us-season: node scripts/simUsSeasonCentre.mjs

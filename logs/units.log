@@ -1,0 +1,51 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1750[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerProgramme.test.ts [2m([22m[2m55 tests[22m[2m)[22m[33m 374[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 122079 bytes, save without story 106636
+[save parts] seed 9748: rest 61936 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+[save parts] seed 9748: opening cup ties 1978 bytes over 18 seasons, chance wheel 149 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 105625 bytes, save without story 87926
+[save parts] seed 9749: rest 74528 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+[save parts] seed 9749: opening cup ties 1967 bytes over 18 seasons, chance wheel 164 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 144287 bytes, save without story 123225
+[save parts] seed 9750: rest 79485 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+[save parts] seed 9750: opening cup ties 2276 bytes over 21 seasons, chance wheel 136 bytes
+
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 2415[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mshows the actual rules and worked example before the choice tiles [33m 390[2mms[22m[39m
+ [32m✓[39m src/test/usProgrammeCardTruth.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 517[2mms[22m[39m
+ [32m✓[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 6152[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list [33m 1533[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual false ballot out of newspaper, summary, timeline and cabinet until its list [33m 751[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma win offers the speech once, then shows what it did, and Continue leaves [33m 834[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22man old save holding a ceremony from a past season is not offered a speech for it [33m 316[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the tournament winner's speech[2m > [22mstays on the card, shows what it really moved, a second tap does nothing, Continue leaves [33m 815[2mms[22m[39m
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 6375[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 481[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9742: every line kept, in order, once [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 491[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 435[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound [33m 498[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 1067[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 852[2mms[22m[39m
+ [32m✓[39m src/lib/careerChanceWheel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/test/careerChanceWheelUi.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 833[2mms[22m[39m
+   [33m[2m✓[22m[39m chance wheel reveal[2m > [22mshows rules, true odds and an example before spinning [33m 369[2mms[22m[39m
+ [32m✓[39m src/test/soccerClubStartingElevenUi.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1184[2mms[22m[39m
+   [33m[2m✓[22m[39m club Starting 11 names positions and ratings[2m > [22mshows every full name and exact existing position and rating in the 2022 squad [33m 408[2mms[22m[39m
+   [33m[2m✓[22m[39m club Starting 11 names positions and ratings[2m > [22moffers an explicit Starting 11 control and keeps Back and reopened rules available [33m 320[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m229 passed[39m[22m[90m (229)[39m
+[2m   Start at [22m 00:52:58
+[2m   Duration [22m 17.74s[2m (transform 7.30s, setup 1.01s, collect 18.00s, tests 19.78s, environment 6.79s, prepare 2.08s)[22m
+

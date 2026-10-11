@@ -1,0 +1,15 @@
+simSaveKeeper exit=0 8s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+c-partrow exit=1 8s | simSaveKeeper control partrow: FIRED. Section 1 is red.
+units exit=0 18s |    Duration  17.74s (transform 7.30s, setup 1.01s, collect 18.00s, tests 19.78s, environment 6.79s, prepare 2.08s)
+c-partrowus exit=1 6s | simSaveKeeper control partrowus: FIRED. Section 1 is red.
+brands exit=0 36s | ALL SOCIAL AND BRAND CHECKS PASSED
+finish exit=0 18s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+tsc exit=0 95s | 
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+rival exit=0 19s | No rival product names found. 0 findings.
+awards exit=0 106s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+quotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+programme exit=0 91s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+digest-compare exit=0 25s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+us-season exit=0 19s | simUsSeasonCentre: 98 checks, 0 failed
