@@ -1,0 +1,2 @@
+genCareerHallMarks: wrote ../../../../../tmp/fleet-out.json (the fleet of nfl, nba, mlb, nhl)
+fleet-again: the committed ledger is what the generator writes again from fresh reference runs, byte for byte
