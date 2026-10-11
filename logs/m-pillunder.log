@@ -1,0 +1,7 @@
+fxMut pillunder: applied to src/components/club-manager/LiveSimScreen.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the pill of Brennan Johnson's goal was never up before the ruled out goal was played: expected false to be true // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…')%3A it is drawn%2C in its own net%2C and not
+MUT pillunder: vitest exit 1

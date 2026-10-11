@@ -1,0 +1,7 @@
+fxMut committed: applied to src/components/club-manager/LiveSimScreen.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: what the pitch shows under the card of a ruled out goal at 4544 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…')%3A it is drawn%2C in its own net%2C and not
+MUT committed: vitest exit 1
