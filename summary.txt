@@ -1,0 +1,17 @@
+rival exit=0 16s | simUsRivalSense: 14 checks, 0 failed (full size)
+tsc exit=0 56s | 
+parity exit=1 37s | simUsBoardParity: 3 failures
+ledger exit=0 2s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+nbasense exit=1 117s | simNbaAwardsSense: 191 checks, 9 failed (full size), 117s
+digest exit=0 36s |    Duration  35.72s (transform 2.20s, setup 388ms, collect 6.67s, tests 47.06s, environment 2.58s, prepare 644ms)
+simNflCareer exit=0 1s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simNbaCareer exit=0 13s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simMlbCareer exit=0 12s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNhlCareer exit=0 9s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+rivalryEvents exit=0 4s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+simNflTruth exit=0 42s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+hall-nfl exit=0 148s | simCareerHall nfl: all 34 checks green
+hall-nba exit=0 220s | simCareerHall nba: all 34 checks green
+hall-mlb exit=0 207s | simCareerHall mlb: all 34 checks green
+rival-prove exit=0 673s | simUsRivalSense: 47 checks, 0 failed (full size)
+hall-nhl exit=0 270s | simCareerHall nhl: all 35 checks green

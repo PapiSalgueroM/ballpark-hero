@@ -1,0 +1,18 @@
+# Release AV, after merge f (Round 1227 on Rounds 1226 and 1301): the merged tree, decision 2. Head a1e4f86b.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rival: node scripts/simUsRivalSense.mjs
+rival-prove: RIVAL_PROVE=f6dfa9b3 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+nbasense: SENSE_PROVE_1149=808dbbdc SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+ledger: node scripts/simUsSeasonLedger.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
