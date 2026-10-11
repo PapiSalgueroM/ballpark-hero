@@ -1,0 +1,2 @@
+# Round 1212 step 0c: the whole vitest suite on the seam
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000

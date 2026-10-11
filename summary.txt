@@ -1,0 +1,1 @@
+vitest-all exit=1 546s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s
