@@ -1,0 +1,14 @@
+AT 269ef5ea = 269ef5ead 2026-10-11 Round 1304: simEra2020 section 9, red first: a past season's news and bidding wars must name clubs of that season, and on this en
+== simEra2020 at 269ef5eadd exit=1
+   939 era-exclusive names checked against the 2026 market, 0 leaks
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+  FAIL: era2010: 106 of 469 deals in the news are bought by a club that is not in that season's leagues, e.g. Al-Hilal sign Lassana Diarra from Real Madrid; Coventry City sign Michael Ballack from Bayer Leverkusen; Fenerbahçe sign Franck Ribéry from Bayern Munich
+  FAIL: era2010: 30 of 37 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Altach for Arjen Robben of Bayern Munich; Middlesbrough for Didier Drogba of Chelsea; Metz for Alex of Chelsea
+  FAIL: era2015: 72 of 428 deals in the news are bought by a club that is not in that season's leagues, e.g. Fenerbahçe sign Sergio Ramos from Real Madrid; Al-Hilal sign Ander Herrera from Manchester United; Leeds United sign Pierre-Emerick Aubameyang from Borussia Dortmund
+  FAIL: era2015: 26 of 33 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Middlesbrough for Gonzalo Higuaín of Napoli; Anderlecht for Ángel Di María of PSG; Al-Ahli for Alexis Sánchez of Arsenal
+  FAIL: era2005: 99 of 472 deals in the news are bought by a club that is not in that season's leagues, e.g. Rangers sign Alessandro Del Piero from Juventus; Bournemouth sign Ruud van Nistelrooy from Manchester United; Torino sign Deco from Barcelona
+  FAIL: era2005: 29 of 34 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Rapid Wien for Andrea Pirlo of AC Milan; Al-Nassr for Aimo Diana of Sampdoria; Chicago Fire for Aimo Diana of Sampdoria
+  FAIL: era2020: 27 of 440 deals in the news are bought by a club that is not in that season's leagues, e.g. Nottingham Forest sign Marc-André ter Stegen from Barcelona; Galatasaray sign Jorginho from Chelsea; Nottingham Forest sign Cristiano Ronaldo from Juventus
+  FAIL: era2020: 21 of 32 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Aris for Harry Kane of Tottenham; Twente for Alisson of Liverpool; Aris for Ángel Di María of PSG
+closing line: simEra2020: 8 failure(s).
+DONE at 269ef5eadd worst=1
