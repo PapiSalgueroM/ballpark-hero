@@ -9,8 +9,9 @@
  *   past      with a talk due, Week by week cannot play past it: the press opens the talk, the viewer does not
  *             open and no season is on the save
  *   reload    a reload lands on the same talk: the same offer, the same save bytes
- *   decline   after Decline both ways play the season: Week by week opens the viewer on a played season
- *   sign      after Sign the Play button plays the season
+ *   sign      Sign puts the years on the deal, takes the talk off the save and returns to the hub; Week by week
+ *             then plays the season it could not play past the talk, and the viewer opens on it
+ *   decline   Decline is "play the year out": it plays the season by itself, and the curtain is on screen
  *   plan      the planning panel (the season programme): a plan is prepared, Play opens the talk, and after a
  *             reload the talk is open again with the plan still on the save
  * Every request to supabase.co is aborted and counted.
@@ -82,7 +83,15 @@ const under = (page, sel) => page.evaluate(q => {
   const r = el.getBoundingClientRect(); const y = r.top + r.height / 2;
   if (y < 0 || y > window.innerHeight) return 'the button is outside the first screen (its centre at y ' + Math.round(y) + ' of ' + window.innerHeight + ')';
   const top = document.elementFromPoint(r.left + r.width / 2, y);
-  return top === el || el.contains(top) ? 'the button itself' : top ? `<${top.tagName.toLowerCase()} ${[...top.attributes].slice(0, 3).map(a => a.name + '="' + a.value.slice(0, 30) + '"').join(' ')}>` : 'nothing';
+  if (top === el || el.contains(top)) return 'the button itself';
+  if (!top) return 'nothing';
+  /* something else is on top: say what it reads and which fixed or sticky box holds it */
+  let box = 'no fixed or sticky ancestor';
+  for (let n = top; n; n = n.parentElement) {
+    const p = getComputedStyle(n).position;
+    if (p === 'fixed' || p === 'sticky') { box = `${p} <${n.tagName.toLowerCase()} ${[...n.attributes].slice(0, 2).map(a => a.name + '="' + a.value.slice(0, 50) + '"').join(' ')}>`; break; }
+  }
+  return `<${top.tagName.toLowerCase()}> reading "${(top.textContent || '').trim().slice(0, 50)}", inside ${box}; the button's box is ${Math.round(r.left)},${Math.round(r.top)} ${Math.round(r.width)}x${Math.round(r.height)} in a ${window.innerWidth}x${window.innerHeight} window`;
 }, sel);
 const TALK = '[data-extension-talk]';
 const offerOf = page => page.evaluate(() => {
@@ -123,37 +132,35 @@ try {
       const after = back ? await offerOf(page) : null;
       check('reload', back && JSON.stringify(after) === JSON.stringify(before) && (await saved(page, key)) === bytes,
         `${tag}: a reload lands on the same talk (talk on screen ${back}, the same offer ${after?.salary ?? 'none'} against ${before?.salary}, the same save bytes ${(await saved(page, key)) === bytes})`);
-      if (back) {
-        await press(page, '[data-ext-decline]');
+      /* Sign returns to the hub; Week by week then plays the season it could not play past the talk. A club
+         that made no offer leaves only "play the year out", which is journey B's subject, so it is said and
+         not counted here. */
+      if (back && await page.locator('[data-ext-sign]').count() === 1) {
+        await press(page, '[data-ext-sign]');
         await play(page).waitFor({ state: 'visible', timeout: 15000 });
-        const declined = await parsed(page, key);
+        const signed = await parsed(page, key);
         await press(page, WEEK);
         const up = await page.locator('[data-us-season-centre]').waitFor({ state: 'visible', timeout: 60000 }).then(() => true, () => false);
         const played = await parsed(page, key);
-        check('decline', up && seasonsOf(played) === seasonsOf(start) + 1 && seasonsOf(declined) === seasonsOf(start),
-          `${tag}: after Decline, Week by week plays the season and opens the viewer (viewer ${up}, seasons ${seasonsOf(start)} then ${seasonsOf(played)})`);
-      }
+        check('sign', up && seasonsOf(played) === seasonsOf(start) + 1 && seasonsOf(signed) === seasonsOf(start) && signed.c.contractYears > 1 && signed.contractTalk === undefined,
+          `${tag}: Sign put ${signed.c.contractYears} years on the deal and took the talk off the save, and Week by week then played the season and opened the viewer (viewer ${up}, seasons ${seasonsOf(start)} then ${seasonsOf(played)})`);
+      } else if (back) console.log(`     ${tag}: the club made no offer on this save, so there is nothing to sign in journey A`);
       await ctx.close();
     }
     if (CONTROL) continue;
 
-    /* B: Play first, Sign, then Play plays the season. */
+    /* B: Play first, then Decline, which plays the year out by itself. */
     {
       const { ctx, page } = await open(slug, raw);
       await play(page).waitFor({ state: 'visible', timeout: 30000 });
       await pressPlay(page);
       await page.locator(TALK).waitFor({ state: 'visible', timeout: 30000 });
       const held = await parsed(page, key);
-      const sign = page.locator('[data-ext-sign]');
-      const canSign = await sign.count() === 1;
-      await press(page, canSign ? '[data-ext-sign]' : '[data-ext-decline]');
-      await play(page).waitFor({ state: 'visible', timeout: 15000 });
-      const signed = await parsed(page, key);
-      await pressPlay(page);
+      await press(page, '[data-ext-decline]');
       const curtain = await page.locator('[data-season-reveal]').waitFor({ state: 'visible', timeout: 60000 }).then(() => true, () => false);
       const played = await parsed(page, key);
-      check('sign', seasonsOf(held) === seasonsOf(start) && curtain && seasonsOf(played) === seasonsOf(start) + 1 && (!canSign || signed.c.contractYears > 1),
-        `${tag}: Play opened the talk with nothing played, ${canSign ? `Sign put ${signed.c.contractYears} years on the deal` : 'the club made no offer, so the year is played out'}, and Play then played the season (curtain ${curtain}, seasons ${seasonsOf(start)} then ${seasonsOf(played)})`);
+      check('decline', seasonsOf(held) === seasonsOf(start) && held.phase === 'extension' && curtain && seasonsOf(played) === seasonsOf(start) + 1,
+        `${tag}: Play opened the talk with nothing played (saved phase ${held.phase}), and Decline played the year out (curtain ${curtain}, seasons ${seasonsOf(start)} then ${seasonsOf(played)})`);
       await ctx.close();
     }
 
