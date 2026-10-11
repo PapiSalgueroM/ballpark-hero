@@ -59,6 +59,10 @@ export interface UclLeagueSlate {
   fallback?: true;
 }
 
+/** Release AV: names are compared as plain text, never by locale (localeCompare orders accented and mixed case
+ *  names by the device's language), so one seed draws one slate and one table on every device. */
+const byText = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+
 /** The pots: the holders first, then by the strength handed in, then by name. Null unless the field is 36
  *  different clubs. */
 export function leaguePhasePots(field: readonly string[], holder: string | null, strengthOf: (club: string) => number): string[][] | null {
@@ -66,7 +70,7 @@ export function leaguePhasePots(field: readonly string[], holder: string | null,
   if (field.length !== clubs || new Set(field).size !== clubs) return null;
   const strength = new Map(field.map(c => [c, strengthOf(c)]));
   const order = [...field].sort((a, b) => Number(b === holder) - Number(a === holder)
-    || (strength.get(b) as number) - (strength.get(a) as number) || a.localeCompare(b));
+    || (strength.get(b) as number) - (strength.get(a) as number) || byText(a, b));
   return Array.from({ length: pots }, (_, p) => order.slice(p * potSize, (p + 1) * potSize));
 }
 
@@ -157,7 +161,7 @@ export function sortedLeaguePhaseTable<T extends LeaguePhaseRow>(rows: readonly 
     for (const step of LEAGUE_PHASE_STEPS) {
       if (lines[x][step] !== lines[y][step]) return lines[y][step] - lines[x][step];
     }
-    return rows[x].club.localeCompare(rows[y].club);
+    return byText(rows[x].club, rows[y].club);
   });
   return order.map(i => rows[i]);
 }
