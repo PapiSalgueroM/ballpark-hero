@@ -204,14 +204,16 @@ describe('Soccer international return real page actions', () => {
     expect(read()).toEqual(expected); expect(localStorage.getItem(KEY)).toBe(raw);
     expect(localStorage.getItem(OTHER)).toBe('held other career');
   });
-  it('preserves a malformed optional receipt without resetting the career or exposing a new action', () => {
+  /* Release AW, the lead's ruling C3 (moved by the desktop lane, owed back to this file's lane): a receipt that
+     cannot be verified is read as absent. Loading the page neither resets the career nor rewrites the saved
+     field, and the comeback is offered again like to any player who has not used it this season. */
+  it('reads a malformed optional receipt as absent: the career is kept whole and the comeback is offered again', () => {
     const saved = senior(); saved.internationalReturn = { version: 1 } as E.CareerState['internationalReturn'];
-    const values = tape(), view = mount(saved), raw = localStorage.getItem(KEY), before = read();
-    const mutation = vi.spyOn(R, 'makeInternationallyAvailable'), callback = pageAction.return;
-    expect(callback).toBeTypeOf('function'); act(() => { callback!(); });
+    const values = tape(), mutation = vi.spyOn(R, 'makeInternationallyAvailable'), view = mount(saved), raw = localStorage.getItem(KEY), before = read();
     expect(read()).toEqual(before); expect(localStorage.getItem(KEY)).toBe(raw); expect(mutation).not.toHaveBeenCalled();
     expect(read().internationalReturn).toEqual(saved.internationalReturn); expect(values).toEqual([]);
-    expect(view.queryByRole('button', { name: 'National-team comeback' })).toBeNull();
+    expect(R.readInternationalReturn(before)).toBeNull(); expect(R.internationalReturnEligibility(before).available).toBe(true);
+    expect(view.container.querySelector('[data-international-return-open]')).not.toBeNull();
   });
   it('leaves queued saved season results held until their existing flow is finished', () => {
     const saved = senior(); saved.pendingSummary = copy(saved.seasons[saved.seasons.length - 1]);

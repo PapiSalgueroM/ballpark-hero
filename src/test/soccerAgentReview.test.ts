@@ -185,24 +185,32 @@ describe('Soccer Career deliberate agent review', () => {
     ['unknown new agent', value => { value.toAgent = 'unknown'; }],
     ['same identities', value => { value.fromAgent = 'shark'; }],
   ];
-  it.each(malformed)('fails closed and preserves a malformed %s receipt', (_, alter) => {
+  /* Release AW, the lead's ruling C3 (moved from "fails closed" by the desktop lane, owed back to this file's
+     lane): a receipt that cannot be verified is read as ABSENT. It never closes the review for the career;
+     the once a season rule falls back to "not used this season" and the next review overwrites it. */
+  it.each(malformed)('reads a malformed %s receipt as absent and lets a new review overwrite it', (_, alter) => {
     const c = changeCareerAgent(career(), 'shark');
     alter(c.agentReview as unknown as Record<string, unknown>);
     const before = clone(c);
     vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('Malformed review drew randomness'); });
     expect(readAgentReview(c)).toBeNull();
-    expect(agentReviewEligibility(c).available).toBe(false);
-    expect(changeCareerAgent(c, 'super')).toBe(c);
+    expect(agentReviewEligibility(c).available).toBe(true);
+    const next = changeCareerAgent(c, 'super');
+    expect(next).not.toBe(c);
+    expect(readAgentReview(next)).toMatchObject({ version: 1, sourceCount: c.seasons.length, fromAgent: 'shark', toAgent: 'super' });
+    expect(agentReviewEligibility(next).available).toBe(false);
     expect(c).toEqual(before);
   });
 
-  it.each([{ payload: null }, { payload: undefined }, { payload: [] }, { payload: 'unknown' }])('holds an explicitly malformed optional payload $payload', ({ payload }) => {
+  it.each([{ payload: null }, { payload: undefined }, { payload: [] }, { payload: 'unknown' }])('reads an explicitly malformed optional payload $payload as absent', ({ payload }) => {
     const c = career();
     (c as unknown as Record<string, unknown>).agentReview = payload;
     const before = clone(c);
     expect(readAgentReview(c)).toBeNull();
-    expect(agentReviewEligibility(c).available).toBe(false);
-    expect(changeCareerAgent(c, 'shark')).toBe(c);
+    expect(agentReviewEligibility(c).available).toBe(true);
+    const next = changeCareerAgent(c, 'shark');
+    expect(next).not.toBe(c);
+    expect(readAgentReview(next)).toMatchObject({ version: 1, sourceCount: c.seasons.length, fromAgent: 'cousin', toAgent: 'shark' });
     expect(c).toEqual(before);
   });
 
@@ -246,7 +254,15 @@ describe('Soccer Career deliberate agent review', () => {
     if (kind === 'current age behind') c.age = 26;
     const before = clone(c);
     expect(readAgentReview(c)).toBeNull();
-    expect(changeCareerAgent(c, 'super')).toBe(c);
+    /* Release AW, ruling C3: the receipt is never verified against contradictory history, and an unverifiable
+       receipt is read as absent. Where the saved rows still end on a finished senior season of the player's
+       own age the review is open again and a new receipt replaces the old one; where they do not, the ordinary
+       "finish the current senior season first" rule keeps it closed, as before. */
+    const open = kind === 'year gap' || kind === 'count gap';
+    expect(agentReviewEligibility(c).available).toBe(open);
+    const next = changeCareerAgent(c, 'super');
+    if (open) expect(readAgentReview(next)).toMatchObject({ version: 1, sourceCount: c.seasons.length, fromAgent: 'shark', toAgent: 'super' });
+    else expect(next).toBe(c);
     expect(c).toEqual(before);
   });
 

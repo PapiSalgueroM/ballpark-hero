@@ -189,11 +189,18 @@ describe('Soccer voluntary international availability', () => {
     expect(next.seasons).toBe(c.seasons);
   });
 
-  it('does not reset cooldown for an appended duplicate year', () => {
+  /* Release AW, the lead's ruling C3 (moved by the desktop lane, owed back to this file's lane): a duplicated
+     year makes the receipt unverifiable, and an unverifiable receipt is read as absent. That hands back one
+     use in that season, the cost the ruling accepts; the new receipt then holds the once a season rule. */
+  it('reads the receipt as absent once an appended duplicate year contradicts it', () => {
     const c = retireFromInternational(makeInternationallyAvailable(career()));
     c.seasons = [...c.seasons, { ...c.seasons[c.seasons.length - 1] }];
-    expect(internationalReturnEligibility(c).available).toBe(false);
-    expect(makeInternationallyAvailable(c)).toBe(c);
+    expect(readInternationalReturn(c)).toBeNull();
+    expect(internationalReturnEligibility(c).available).toBe(true);
+    const next = makeInternationallyAvailable(c);
+    expect(readInternationalReturn(next)).toMatchObject({ version: 1, sourceCount: c.seasons.length, sourceYear: 2028 });
+    expect(internationalReturnEligibility(next).available).toBe(false);
+    expect(makeInternationallyAvailable(next)).toBe(next);
   });
 
   it.each(['missing year', 'unchanged age', 'extra count', 'current age behind'] as const)('rejects contradictory receipt chronology: %s', kind => {
@@ -206,7 +213,15 @@ describe('Soccer voluntary international availability', () => {
     if (kind === 'current age behind') c.age = 34;
     const before = clone(c);
     expect(readInternationalReturn(c)).toBeNull();
-    expect(makeInternationallyAvailable(c)).toBe(c);
+    /* Release AW, ruling C3: the receipt is never verified against contradictory chronology, and an
+       unverifiable receipt is read as absent. Where the saved rows still end on a finished senior season of
+       the player's own age the change is open again and a new receipt replaces the old one; where they do
+       not, the ordinary "finish the current senior season first" rule keeps it closed, as before. */
+    const open = kind === 'missing year' || kind === 'extra count';
+    expect(internationalReturnEligibility(c).available).toBe(open);
+    const next = makeInternationallyAvailable(c);
+    if (open) expect(readInternationalReturn(next)).toMatchObject({ version: 1, sourceCount: c.seasons.length, nationality: c.nationality });
+    else expect(next).toBe(c);
     expect(c).toEqual(before);
   });
 
@@ -226,22 +241,31 @@ describe('Soccer voluntary international availability', () => {
     ['future caps', held => { held.caps = 1000; }],
     ['nonfinite caps', held => { held.caps = Infinity; }],
   ];
-  it.each(corruptReceipt)('fails closed without repairing the %s receipt', (_, alter) => {
+  /* Release AW, the lead's ruling C3 (moved from "fails closed" by the desktop lane, owed back to this file's
+     lane): a receipt that cannot be verified is read as ABSENT. It never closes the comeback for the career;
+     the once a season rule falls back to "not used this season" and the next honest change overwrites it.
+     Nothing repairs or deletes the saved field in place: the input is left as it was. */
+  it.each(corruptReceipt)('reads the %s receipt as absent and lets a new change overwrite it', (_, alter) => {
     const c = retireFromInternational(makeInternationallyAvailable(career()));
     alter(c.internationalReturn as unknown as Record<string, unknown>);
     const before = clone(c);
     expect(readInternationalReturn(c)).toBeNull();
-    expect(internationalReturnEligibility(c).available).toBe(false);
-    expect(makeInternationallyAvailable(c)).toBe(c);
+    expect(internationalReturnEligibility(c).available).toBe(true);
+    const next = makeInternationallyAvailable(c);
+    expect(next).not.toBe(c);
+    expect(readInternationalReturn(next)).toEqual({ version: 1, sourceCount: c.seasons.length, sourceYear: 2028, sourceAge: 34, nationality: c.nationality, caps: c.intStats.caps });
+    expect(internationalReturnEligibility(next).available).toBe(false);
     expect(c).toEqual(before);
   });
 
-  it.each([{ payload: null }, { payload: undefined }, { payload: 'legacy payload' }, { payload: [] }, { payload: {} }])('preserves malformed optional data $payload without allowing the action', ({ payload }) => {
+  it.each([{ payload: null }, { payload: undefined }, { payload: 'legacy payload' }, { payload: [] }, { payload: {} }])('reads malformed optional data $payload as absent and allows the action', ({ payload }) => {
     const c = career();
     (c as unknown as Record<string, unknown>).internationalReturn = payload;
     const before = clone(c);
     expect(readInternationalReturn(c)).toBeNull();
-    expect(makeInternationallyAvailable(c)).toBe(c);
+    const next = makeInternationallyAvailable(c);
+    expect(next).not.toBe(c);
+    expect(readInternationalReturn(next)).toEqual({ version: 1, sourceCount: c.seasons.length, sourceYear: 2028, sourceAge: 34, nationality: c.nationality, caps: c.intStats.caps });
     expect(c).toEqual(before);
   });
 

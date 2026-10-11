@@ -307,10 +307,14 @@ describe('Soccer farewell real page actions', () => {
     expect(read().pendingWorldCup).toBeNull(); expect(read().seasons).toEqual(before.seasons);
     expect(read().age).toBe(before.age);
   });
+  /* Release AW, the lead's ruling C3 (one assertion moved by the desktop lane, owed back to this file's lane):
+     a plan that cannot be verified is read as absent. On a save that never set the final season flag the
+     card is offered again like to any eligible player; the saved field is kept and Next Season plays as before. */
   it('holds malformed optional data while the original Next Season remains playable', () => {
     const saved = senior(); saved.farewellSeason = { version: 1 } as E.CareerState['farewellSeason'];
     const view = mount(saved), before = read();
-    expect(readSoccerFarewell(before)).toBeNull(); expect(view.container.querySelector('[data-farewell-open]')).toBeNull();
+    expect(before.isFinalSeason).toBe(false);
+    expect(readSoccerFarewell(before)).toBeNull(); expect(view.container.querySelector('[data-farewell-open]')).not.toBeNull();
     const expectedDraws = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS));
     const actualDraws = tape(); fireEvent.click(nextButton(view));
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws);

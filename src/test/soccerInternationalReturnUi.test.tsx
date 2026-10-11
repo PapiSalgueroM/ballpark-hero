@@ -137,12 +137,20 @@ describe('Soccer international return controls', () => {
     ['no saved rows', career => { career.seasons = []; }],
     ['no senior source row', career => { career.seasons[career.seasons.length - 1].type = 'youth'; }],
     ['source age mismatch', career => { career.seasons[career.seasons.length - 1].age = career.age - 1; }],
-    ['malformed optional receipt', career => { career.internationalReturn = { version: 1 } as E.CareerState['internationalReturn']; }],
   ])('renders no comeback for %s and leaves the complete input unchanged', (_name, change) => {
     const career = senior(); change(career); const raw = JSON.stringify(career), onReturn = vi.fn();
     render(<InternationalReturnCard career={career} onReturn={onReturn} />);
     expect(document.querySelector('[data-international-return-open]')).toBeNull();
     expect(document.querySelector('[data-international-return-status]')).toBeNull();
+    expect(JSON.stringify(career)).toBe(raw); expect(onReturn).not.toHaveBeenCalled();
+  });
+  /* Release AW, the lead's ruling C3 (moved out of the list above by the desktop lane, owed back to this
+     file's lane): a receipt that cannot be verified is read as absent, so the comeback is offered again. */
+  it('offers the comeback again for a malformed optional receipt and leaves the complete input unchanged', () => {
+    const career = senior(); career.internationalReturn = { version: 1 } as E.CareerState['internationalReturn'];
+    const raw = JSON.stringify(career), onReturn = vi.fn();
+    render(<InternationalReturnCard career={career} onReturn={onReturn} />);
+    expect(document.querySelector('[data-international-return-open]')).toBeEnabled();
     expect(JSON.stringify(career)).toBe(raw); expect(onReturn).not.toHaveBeenCalled();
   });
 });

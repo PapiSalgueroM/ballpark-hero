@@ -130,7 +130,12 @@ describe('Soccer farewell season controls', () => {
     ['forced health boundary', (career: E.CareerState) => { career.overall = 49; }],
     ['retired', (career: E.CareerState) => { career.retired = true; career.phase = 'retired'; }],
     ['unrecorded year', (career: E.CareerState) => { career.seasons = []; }],
-    ['malformed optional plan', (career: E.CareerState) => { career.farewellSeason = { version: 1 } as E.CareerState['farewellSeason']; }],
+    /* Release AW, the lead's ruling C3 (this row moved by the desktop lane, owed back to this file's lane): a
+       plan that cannot be verified is read as absent, and the commitment is the save's own final season flag.
+       With the flag set by the announcement the card is not offered again, which this row holds; with the flag
+       off it is offered again, held by src/test/soccerSavePartsReadAsAbsent.test.ts and by the page cases of
+       src/test/soccerFarewellOneBanner.test.tsx (this file's case count is pinned by its kit's checker). */
+    ['malformed optional plan on a save whose final season is announced', (career: E.CareerState) => { career.farewellSeason = { version: 1 } as E.CareerState['farewellSeason']; career.isFinalSeason = true; }],
   ])('hides the announcement for %s without mutating the save', (_name, change) => {
     const career = senior(); change(career); const before = JSON.stringify(career);
     const onAnnounce = vi.fn(); render(<FarewellSeasonCard career={career} onAnnounce={onAnnounce} />);

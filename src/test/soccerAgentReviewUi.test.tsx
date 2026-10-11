@@ -163,11 +163,19 @@ describe('Soccer agent review controls', () => {
     { label: 'no saved rows', change: (c: E.CareerState) => { c.seasons = []; } },
     { label: 'no senior source row', change: (c: E.CareerState) => { c.seasons[c.seasons.length - 1].type = 'youth'; } },
     { label: 'source age mismatch', change: (c: E.CareerState) => { c.age += 1; } },
-    { label: 'malformed optional receipt', change: (c: E.CareerState) => { c.agentReview = { version: 1 } as E.CareerState['agentReview']; } },
   ])('renders no voluntary review for $label and leaves the complete input unchanged', ({ change }) => {
     const career = senior(); change(career); const before = JSON.stringify(career), onChange = vi.fn();
     expect(agentReviewEligibility(career).available).toBe(false); render(<AgentReviewCard career={career} onChange={onChange} />);
     expect(document.querySelector('[data-agent-review-open]')).toBeNull(); expect(document.querySelector('[data-agent-review-dialog]')).toBeNull();
+    expect(JSON.stringify(career)).toBe(before); expect(onChange).not.toHaveBeenCalled();
+  });
+  /* Release AW, the lead's ruling C3 (moved out of the list above by the desktop lane, owed back to this
+     file's lane): a receipt that cannot be verified is read as absent, so the review is offered again. */
+  it('offers the voluntary review again for a malformed optional receipt and leaves the complete input unchanged', () => {
+    const career = senior(); career.agentReview = { version: 1 } as E.CareerState['agentReview'];
+    const before = JSON.stringify(career), onChange = vi.fn();
+    expect(agentReviewEligibility(career).available).toBe(true); render(<AgentReviewCard career={career} onChange={onChange} />);
+    expect(document.querySelector('[data-agent-review-open]')).toBeEnabled();
     expect(JSON.stringify(career)).toBe(before); expect(onChange).not.toHaveBeenCalled();
   });
 });

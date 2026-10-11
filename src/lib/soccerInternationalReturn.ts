@@ -68,10 +68,11 @@ export function internationalReturnEligibility(career: CareerState): Internation
     || career.pendingWorldCup != null || career.pendingTournament != null || career.pendingRivalryEvent != null) {
     return blocked('Finish the current season decisions and ceremonies first.');
   }
+  /* Release AW, the lead's ruling C3: a receipt that cannot be verified (a wrong shape, another version, a
+     source row that no longer matches) is read as ABSENT. It no longer closes the comeback for the rest of the
+     career: the once a season rule falls back to "not used this season" and the next honest change overwrites
+     the unreadable receipt. The saved field itself is never rewritten or deleted on load. */
   const held = readInternationalReturn(career);
-  if (Object.prototype.hasOwnProperty.call(career, 'internationalReturn') && !held) {
-    return blocked('The saved availability change could not be verified.');
-  }
   if (held && (career.seasons.length <= held.sourceCount || latest.year <= held.sourceYear)) {
     return blocked('You already changed your international plans this season.');
   }

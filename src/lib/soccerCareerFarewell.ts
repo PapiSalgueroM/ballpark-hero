@@ -50,7 +50,14 @@ export function farewellEligibility(career: CareerState): SoccerFarewellEligibil
   const unavailable = (reason: string): SoccerFarewellEligibility => ({ eligible: false, year: null, reason });
   const held = readSoccerFarewell(career);
   if (held) return { eligible: false, year: held.year, reason: 'Your farewell year is already saved.' };
-  if (career.farewellSeason !== undefined) return unavailable('This saved farewell plan cannot be verified.');
+  /* Release AW, the lead's ruling C3: a plan that cannot be verified (a wrong shape, another version, a source
+     row that no longer matches, a season row past the farewell year) is read as ABSENT, never as "closed for
+     this career". The commitment is not in the part, it is the save's own isFinalSeason flag, which the
+     announcement sets with the plan: while that flag is true the card is not offered again and the page shows
+     its one FINAL SEASON banner. With the flag off the card is offered like to any eligible player and a new
+     announcement overwrites the unreadable part. The engine reads the flag for nothing but one event's weight:
+     only a readable plan ends a career, exactly as before. */
+  if (career.farewellSeason !== undefined && career.isFinalSeason === true) return unavailable('Your final season is already announced.');
   if (career.retired || (career.phase !== 'playing' && career.phase !== 'retirement_suggestion')) return unavailable('Choose a farewell year between seasons or at a retirement suggestion.');
   if (!integer(career.age, 30, 44)) return unavailable('A farewell year is available from age 30.');
   const seasons = career.seasons;

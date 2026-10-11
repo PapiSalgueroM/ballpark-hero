@@ -197,13 +197,15 @@ describe('Soccer agent review real page actions', () => {
     expect(mutation).not.toHaveBeenCalled(); expect(staleValues).toEqual([]);
     expect(read()).toEqual(expected); expect(localStorage.getItem(KEY)).toBe(raw); expect(localStorage.getItem(OTHER)).toBe('held other career');
   });
-  it('preserves a malformed optional receipt without resetting the career or exposing another choice', () => {
+  /* Release AW, the lead's ruling C3 (moved by the desktop lane, owed back to this file's lane): a receipt that
+     cannot be verified is read as absent. Loading the page neither resets the career nor rewrites the saved
+     field, and the review is offered again like to any player who has not used it this season. */
+  it('reads a malformed optional receipt as absent: the career is kept whole and the review is offered again', () => {
     const saved = senior(); saved.agentReview = { version: 1 } as E.CareerState['agentReview'];
-    const values = tape(), view = mount(saved), raw = localStorage.getItem(KEY), before = read();
-    const mutation = vi.spyOn(R, 'changeCareerAgent'), callback = pageAction.change;
-    if (callback) act(() => { callback('shark'); callback('super'); });
+    const values = tape(), mutation = vi.spyOn(R, 'changeCareerAgent'), view = mount(saved), raw = localStorage.getItem(KEY), before = read();
     expect(read()).toEqual(before); expect(read().agentReview).toEqual(saved.agentReview); expect(localStorage.getItem(KEY)).toBe(raw);
-    expect(values).toEqual([]); expect(mutation).not.toHaveBeenCalled(); expect(view.container.querySelector('[data-agent-review-open]')).toBeNull();
+    expect(R.readAgentReview(before)).toBeNull(); expect(R.agentReviewEligibility(before).available).toBe(true);
+    expect(values).toEqual([]); expect(mutation).not.toHaveBeenCalled(); expect(view.container.querySelector('[data-agent-review-open]')).not.toBeNull();
   });
   it('leaves queued saved season results held until their existing flow is finished', () => {
     const saved = senior(); saved.phase = 'season_summary'; saved.pendingSummary = saved.seasons[saved.seasons.length - 1];
