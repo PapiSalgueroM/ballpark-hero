@@ -1,0 +1,6 @@
+#!serial
+rec-main: git worktree add -q /tmp/main f78037dcddea12c1a02586c7d5c0e185efb86121 && ln -s "$PWD/node_modules" /tmp/main/node_modules && R="$PWD" && cd /tmp/main && node "$R/.rc/x/saves.mjs" record main /tmp/saves 2000
+rec-r1226: git worktree add -q /tmp/r1226 2c86ecc7e0317e61739f9af0a9008700a8ddd555 && ln -s "$PWD/node_modules" /tmp/r1226/node_modules && R="$PWD" && cd /tmp/r1226 && node "$R/.rc/x/saves.mjs" record r1226 /tmp/saves 2000
+sizes: ls -la /tmp/saves | tail -9
+check: node .rc/x/saves.mjs check /tmp/saves r1226
+check-teeth: node .rc/x/mut.mjs A && RC_OUT= node .rc/x/saves.mjs check /tmp/saves r1226 | cut -c1-600; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "check-teeth: with calibration 2 edited in place the check exits $s (1 is caught)"; test $s -eq 1

@@ -1,0 +1,5 @@
+rec-main exit=0 18s | saves record: done (main)
+rec-r1226 exit=0 19s | saves record: done (r1226)
+sizes exit=0 0s | -rw-r--r--  1 runner runner 20860646 Oct 11 05:04 r1226-nhl.json
+check exit=1 24s | saves check: 16000 saves read, 6 sets BROKEN
+check-teeth exit=0 23s | check-teeth: with calibration 2 edited in place the check exits 1 (1 is caught)

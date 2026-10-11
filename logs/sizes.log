@@ -1,0 +1,9 @@
+drwxrwxrwt 18 root   root       4096 Oct 11 05:04 ..
+-rw-r--r--  1 runner runner 20260274 Oct 11 05:04 main-mlb.json
+-rw-r--r--  1 runner runner 22959676 Oct 11 05:04 main-nba.json
+-rw-r--r--  1 runner runner 18436847 Oct 11 05:03 main-nfl.json
+-rw-r--r--  1 runner runner 20278027 Oct 11 05:04 main-nhl.json
+-rw-r--r--  1 runner runner 20242682 Oct 11 05:04 r1226-mlb.json
+-rw-r--r--  1 runner runner 22959677 Oct 11 05:04 r1226-nba.json
+-rw-r--r--  1 runner runner 18436848 Oct 11 05:04 r1226-nfl.json
+-rw-r--r--  1 runner runner 20860646 Oct 11 05:04 r1226-nhl.json
