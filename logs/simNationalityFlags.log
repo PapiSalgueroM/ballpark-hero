@@ -1,0 +1,8 @@
+simNationalityFlags
+   OWED (a bare print this harness knows about and does not fail on): src/components/soccer-career/TrophyCabinet.tsx:175 {career.nationality}, owner the other lane (Soccer Career), listed 2026-10-10
+1. Flags: 72 print sites across 36 files, every one with a flag on its line or the line before, bar 1 owed (16 Round 453 sites pinned)
+2. Codes: 3120 nationality literals in src/data and src/lib, none a three letter code; WEDGES (5 three letter shorts) stays inside dartDraft.ts, unreferenced by any page or component
+   groups as placed: picker UEFA 52, CONMEBOL 10, CONCACAF 15, CAF 34, AFC 22, OFC 1; market UEFA 49, CONMEBOL 10, CONCACAF 22, CAF 41, AFC 19, OFC 4
+3. Confederations: 134 picker nations and 145 market nationalities each in exactly one of six groups (picker: UEFA 52, CONMEBOL 10, CONCACAF 15, CAF 34, AFC 22, OFC 1); the market is today's world, 4 past worlds and 2 gathered league maps nationalityOf reads (CM_ALEAGUE_NATIONALITIES 299 rows, CM_RUSSIA_NATIONALITIES 402 rows); grouped in SoccerCareer's picker and TransferScreen's filter
+
+simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
