@@ -37,6 +37,7 @@ import { cupCalendar, CUP_CALENDAR_NOTE } from '@/lib/soccerSeasonCalendar';
 import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
 import { soccerCardLine } from '@/lib/soccerDiscipline';
 import { readLeagueWorldSeason } from '@/lib/soccerCareerLeagueWorld';
+import { belgian2025OpponentLabels } from '@/lib/season/belgianOpponentLabels';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -177,6 +178,7 @@ const RESUME_GAME = 'soccer';
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
 function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null, color: string): CentreModel {
+  const display = belgian2025OpponentLabels(row, s);
   const occasion: Record<string, string> = {};
   for (const d of readSeasonDerbies(row)) occasion[d.rival] = d.name;
   const finish = ctx.finish;
@@ -207,12 +209,12 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   return {
     season: s,
     words: SOCCER.words,
-    names: s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),
+    names: display?.names ?? s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),
     occasion,
     header: { club: row.club, seasonLabel: `${row.year}/${String(row.year + 1).slice(-2)}`, league: leagueName, loanFrom: row.onLoanFrom ?? null },
     frameLine: s.mode === 'table' ? `${s.teams} clubs · ${s.games.length} matchdays · 3 points for a win` : null,
     lastSeason: last ? (last.finish === 1 ? `Last season: champions with ${last.club}` : `Last season: ${ordinal(last.finish)} with ${last.club}`) : null,
-    resultsWhy: s.mode === 'table' ? null : ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS,
+    resultsWhy: s.mode === 'table' ? null : [ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS, display?.note].filter(Boolean).join(' '),
     derbyBefore: { w: ctx.derbyBefore.w, d: ctx.derbyBefore.d, l: ctx.derbyBefore.l },
     review: {
       tiles: [
