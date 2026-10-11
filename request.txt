@@ -1,0 +1,1 @@
+nfl-bal-seed11: SIM_SPORTS=nfl SIM_SECTIONS=6 SIM_SEED=11 node scripts/simUsCareerSummer.mjs
