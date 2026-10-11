@@ -11,7 +11,7 @@ import { gzipSync } from 'node:zlib';
 assert(process.env.CI, 'Actual gameplay proof runs only in Actions');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(ROOT, process.env.SOCCER_VETERAN_TALKS_OUT || '.tmp-fx/soccer-veteran-talks');
-const BASE = 'f3c32fcb7937b80f5be3ac67152c781dd4cc4a8c', BASE_TREE = '89e22cb9828cea7ecd734f9662e13424b4fed9b3';
+const BASE = '40f75cd8351ebd28723431a238dbe2467bc39c5c', BASE_TREE = 'b63f33b6998ca32d5c245a662988b9f07d659cb6';
 const ENGINE = 'src/lib/soccerCareerEngine.ts', CONTRACTS = 'src/lib/soccerCareerContracts.ts';
 const ENV_EXPRESSION = '{"DEV":false,"PROD":true,"MODE":"production"}';
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
