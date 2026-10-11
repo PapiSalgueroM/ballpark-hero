@@ -1,0 +1,4 @@
+FAIL the walk stopped: locator.waitFor: Timeout 30000ms exceeded. | Call log: |   - waiting for getByRole('button', { name: /^Play the [0-9]+ season$/ }) to be visible | 
+     1 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 0 checks, 1 failed (control droptalk)
+CONTROL droptalk: DID NOT FIRE as its own (failures: crash; the talk was taken off 0 saves).

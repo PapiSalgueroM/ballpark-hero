@@ -1,0 +1,4 @@
+ok   past: nfl 390x844: the save is one main wrote in the last year of a deal (phase season, 1 year left, no talk) and the hub offers Week by week (1)
+FAIL the walk stopped: locator.click: Timeout 30000ms exceeded. | Call log: |   - waiting for locator('[data-season-centre-entry] [data-week-by-week]') |     - locator resolved to <button type="button" data-week-by-week="true" aria-label="Week by week: watch the 2031 season game by game" class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-bold text-foreground hover:bg-muted/40">📺 Week by week</button>
+     1 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 1 checks, 1 failed
