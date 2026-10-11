@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
