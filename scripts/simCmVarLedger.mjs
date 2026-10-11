@@ -6,12 +6,17 @@
  * It plays no match. What it holds:
  *   1. every rates row is a real reading: a known publisher, an https url that is not a wiki, the lines it was
  *      read from, and every figure printed in one of those lines;
- *   2. a quantity the engine models has a FIGURE (that quantity in one competition in one season) that two
- *      publishers on two hosts each counted, the generated rates are the stricter (lower) of those counts over
- *      the engine figure (recomputed here from the rows alone, so a generator that read the higher count fails),
- *      every figure belongs to a declared quantity, and what the lead asked for and the pages do not give (two
- *      seasons from 2022-23 on, each on two publishers) is written under owed: while an owed entry is open the
- *      switch CM_VAR_LIVE must be false;
+ *   2. a rate the engine models meets THE STANDARD FOR A SIMULATION RATE (Round 1303, the lead's decision 1): two
+ *      independent publishers on two hosts each hold a reading of it (one full season of a top division under
+ *      review, in any league), EVERY reading on file agrees within a factor of two, and the generated rate is the
+ *      LOWEST reading over the engine figure (recomputed here from the rows alone, so a generator that read a
+ *      higher count, or left a reading out to make the rest agree, fails). One publisher is THIN and refused,
+ *      however many seasons it counted. The rates receipt says in plain words that the publishers count different
+ *      leagues or seasons. The season total of penalties is a band, not a rate, and keeps Round 1218's rule (one
+ *      competition in one season that two publishers each counted). Every figure belongs to a declared quantity,
+ *      and what the pages or the engine do not give yet is written under owed: while an owed entry is open the
+ *      switch CM_VAR_LIVE must be false, or, when the entry names the kinds of review it holds, those kinds must
+ *      be off;
  *   3. the competitions file names every competition the engine can play exactly once and none it cannot
  *      (the keys are read off REAL_LEAGUES and the rules table of the bundled engine), a yes or a no
  *      stands on two publishers on two hosts, and the competitions the help names are the ones kickOff covers;
@@ -23,7 +28,10 @@
  * reason: CM_VAR_LEDGER_CONTROL=thin | wiki | figure | missing | extra | onesource | receipt | handedit |
  * highest (the rate read off the higher count) | names (the help names a league kickOff does not cover) |
  * owedlive (the switch on while the ledger still owes) | stage (Round 1302: a cup with reviews in its final only
- * named as if every round had them) | unread (Round 1302: a competition put back on the not read list).
+ * named as if every round had them) | unread (Round 1302: a competition put back on the not read list) |
+ * disagree (Round 1303: one more reading of goals ruled out, more than twice the lowest on file) | receiptsilent
+ * (Round 1303: the receipt no longer says its publishers count different leagues and seasons). thin, since Round
+ * 1303, leaves goals ruled out with three seasons of ONE outlet: seasons do not make a second publisher.
  * Round 1302 also holds that every competition is a row: nothing in notRead, and an unknown row says what was
  * looked for.
  * A control that fires ends "FIRED" and exits 1. One that changes nothing or is not caught exits 3.
@@ -35,14 +43,15 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { settle, derive, stampedReceipts, generatedSource, LEDGERS } from './genCmVarRates.mjs';
+import { settle, settleRate, AGREE, derive, stampedReceipts, generatedSource, LEDGERS } from './genCmVarRates.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
 const CONTROL = process.env.CM_VAR_LEDGER_CONTROL || '';
 const EXPECT = {
-  thin: /goalsRuledOut is modelled but THIN/, wiki: /is a wiki/, figure: /is not printed in its literals/,
+  thin: /goalsRuledOut is modelled but THIN/, disagree: /goalsRuledOut is modelled and its readings do not agree within a factor of two/,
+  receiptsilent: /does not say that the publishers of goalsRuledOut count different leagues or seasons/, wiki: /is a wiki/, figure: /is not printed in its literals/,
   missing: /is not in the ledger/, extra: /the engine cannot play/, onesource: /stands on fewer than two publishers/,
   receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
   highest: /goalReview is not the stricter count/, names: /the help would name/, owedlive: /CM_VAR_LIVE is true while the rates ledger still owes/,
@@ -68,7 +77,14 @@ const rates = JSON.parse(text('scripts/data/cmVarRates.json'));
 const comps = JSON.parse(text('scripts/data/cmVarCompetitions.json'));
 let receiptTwist = s => s;
 let changed = false;
-if (CONTROL === 'thin') { const n = rates.rows.length; rates.rows = rates.rows.filter(r => r.publisher !== 'pieri'); changed = rates.rows.length < n; }
+/* thin: goals ruled out left with one publisher's readings (three seasons of one outlet): still THIN, however many seasons. */
+if (CONTROL === 'thin') { const n = rates.rows.length; rates.rows = rates.rows.filter(r => typeof r.figures.goalsRuledOut !== 'number' || r.publisher === 'espn'); changed = rates.rows.length < n && rates.rows.some(r => typeof r.figures.goalsRuledOut === 'number'); }
+/* disagree (Round 1303): one more reading of goals ruled out, more than twice the lowest on file. The standard refuses
+   the quantity: it does not drop the reading that does not fit. */
+if (CONTROL === 'disagree') { const row = rates.rows.find(r => r.id === 'espn-pl-2022-23'); if (row) { rates.rows.push({ ...row, id: 'control-high', figures: { goalsRuledOut: 58 }, literal: ['Leading to disallowed goals: 58'] }); changed = true; } }
+/* receiptsilent (Round 1303): the rates receipt no longer says its publishers count different leagues and seasons. */
+let standardTwist = s => s;
+if (CONTROL === 'receiptsilent') { standardTwist = s => s.replaceAll(', who count DIFFERENT leagues and seasons', ''); changed = standardTwist(text('scripts/data/cmVarRates.receipt.json')) !== text('scripts/data/cmVarRates.receipt.json'); }
 if (CONTROL === 'wiki') { const was = rates.rows[0].url; rates.rows[0].url = 'https://en.wikipedia.org/wiki/Video_assistant_referee'; changed = was !== rates.rows[0].url; }
 if (CONTROL === 'figure') { const row = rates.rows.find(r => r.figures.goalsRuledOut === 47); if (row) { row.figures.goalsRuledOut = 48; changed = true; } }
 if (CONTROL === 'missing') { const n = comps.rows.length; comps.rows = comps.rows.filter(r => r.key !== 'league:premier'); changed = comps.rows.length < n; }
@@ -114,42 +130,37 @@ for (const row of rates.rows) {
   }
 }
 
-/* 2. Behind everything the engine models: a figure two publishers each counted, and the stricter count of it. */
-const rowOf = id => rates.rows.find(r => r.id === id);
+/* 2. Behind every rate the engine models: THE STANDARD FOR A SIMULATION RATE (Round 1303, the lead's decision 1),
+   recomputed HERE from the rows alone and not through the generator's settleRate(). A reading is one publisher's
+   count of one full season (section 1 holds each row to a 20 or an 18 club season). The quantity is used when two
+   publishers on two hosts each hold a reading and the highest reading is at most twice the lowest, over EVERY
+   reading on file. The target is the lowest reading. */
+const ownRate = quantity => {
+  const rows = rates.rows.filter(r => typeof r.figures[quantity] === 'number');
+  const per = rows.map(r => r.figures[quantity] / r.matches);
+  const low = Math.min(...per), high = Math.max(...per);
+  return { rows, publishers: new Set(rows.map(r => r.publisher)).size, hosts: new Set(rows.map(r => hostOf(r.url))).size, low, high,
+    agrees: per.length > 0 && low > 0 && high <= AGREE * low, different: new Set(rows.map(r => `${r.competition}|${r.season}`)).size > 1 };
+};
+ok(AGREE === 2, `the standard lets the readings of a rate lie a factor of two apart, and the generator allows ${AGREE}`);
 for (const [name, q] of Object.entries(rates.quantities)) {
-  const s = settle(rates, name);
   if (q.modelled) {
-    ok(s.used, `${name} is modelled but THIN (${s.why ?? ''})`);
-    for (const f of s.confirmed) {
-      const rows = f.readings.map(r => rowOf(r.id));
-      ok(new Set(rows.map(r => r.publisher)).size >= 2 && new Set(rows.map(r => hostOf(r.url))).size >= 2, `${name}, ${f.key}: used and not counted by two publishers on two hosts`);
-      ok(new Set(rows.map(r => r.matches)).size === 1, `${name}, ${f.key}: its publishers do not agree on the matches of the season`);
-    }
-    if (s.used) ok(s.low > 0 && s.low <= s.high && s.target.perMatch === s.low, `${name}: the target is not the lowest reading`);
+    const own = ownRate(name), s = settleRate(rates, name);
+    const two = own.publishers >= 2 && own.hosts >= 2;
+    ok(two, `${name} is modelled but THIN (${own.publishers} publisher(s) on ${own.hosts} host(s) counted it, a rate needs two)`);
+    ok(!two || own.agrees, `${name} is modelled and its readings do not agree within a factor of two (${n6(own.low)} to ${n6(own.high)} a match)`);
+    ok(s.used === (two && own.agrees), `${name}: the generator reads the standard another way than this harness (${s.used ? 'used' : `refused: ${s.why}`})`);
+    if (s.used) ok(s.low === own.low && s.high === own.high && s.target.perMatch === own.low && s.readings.length === own.rows.length, `${name}: the target is not the lowest of every reading on file`);
   } else ok(typeof q.why === 'string' && q.why.length > 20, `${name} is not modelled and does not say why`);
 }
-/* 2b. The stricter reading, recomputed HERE from the rows alone and not through the generator's settle(): the
-   lowest count among the competition seasons that two publishers on two hosts counted. The generated rate is
-   that, over the engine figure. A generator that read the higher count, or a figure one publisher counted, fails. */
-const ownLow = quantity => {
-  const groups = new Map();
-  for (const row of rates.rows) if (typeof row.figures[quantity] === 'number') {
-    const k = `${row.competition}|${row.season}`;
-    groups.set(k, [...(groups.get(k) ?? []), row]);
-  }
-  let low = Infinity;
-  for (const rows of groups.values()) {
-    if (new Set(rows.map(r => r.publisher)).size < 2 || new Set(rows.map(r => hostOf(r.url))).size < 2) continue;
-    for (const r of rows) low = Math.min(low, r.figures[quantity] / r.matches);
-  }
-  return low;
-};
+/* 2b. The generated rate is the LOWEST reading over the engine figure. A generator that read a higher one fails. */
+const ownLow = quantity => ownRate(quantity).low;
 const derived = deriveTwist(derive());
 const engineNow = JSON.parse(text('scripts/data/cmVarEngine.json'));
 ok(derived.rates.goalReview === n6(ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch),
-  `goalReview is not the stricter count of a figure two publishers counted, over the engine figure (${derived.rates.goalReview} against ${n6(ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch)})`);
+  `goalReview is not the stricter count, the lowest reading on file over the engine figure (${derived.rates.goalReview} against ${n6(ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch)})`);
 ok(derived.rates.missedFoulReview === n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate),
-  `missedFoulReview is not the stricter count of a figure two publishers counted, over the engine figure (${derived.rates.missedFoulReview} against ${n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate)})`);
+  `missedFoulReview is not the stricter count, the lowest reading on file over the engine figure (${derived.rates.missedFoulReview} against ${n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate)})`);
 /* 2b2. Round 1302, decision 4: the season total of penalties, the band a match with reviews on is held against
    (scripts/simCmVar.mjs plays it), stands on a figure two publishers counted like everything else that is read. */
 ok(settle(rates, 'penaltiesTotal').used, 'penaltiesTotal, the band of all penalties a match, is not counted by two publishers for one season');
@@ -227,6 +238,11 @@ for (const { ledger, receipt } of LEDGERS) {
   ok(JSON.parse(text(receipt)).sha256 === want, `${receipt} does not carry the hash of ${ledger}`);
 }
 for (const { file, body } of stampedReceipts()) ok(text(file) === body, `${file} is not what the generator writes`);
+/* Round 1303, the lead's decision 1: the receipt states plainly that the publishers count different leagues or
+   seasons. Whether they do is worked out here from the rows; the sentence is read off the receipt on disk. */
+const ratesReceipt = JSON.parse(standardTwist(text('scripts/data/cmVarRates.receipt.json')));
+ok(typeof ratesReceipt.standard?.rule === 'string' && /two independent publishers/.test(ratesReceipt.standard.rule) && /factor of 2/.test(ratesReceipt.standard.rule) && /lowest/.test(ratesReceipt.standard.rule), 'the rates receipt does not state the standard a rate stands on');
+for (const [name, q] of Object.entries(rates.quantities)) if (q.modelled && ownRate(name).different) ok(/who count DIFFERENT leagues and seasons/.test(ratesReceipt.standard?.[name] ?? ''), `the rates receipt does not say that the publishers of ${name} count different leagues or seasons`);
 ok(generatedTwist(text('src/data/clubManagerVarRates.ts')) === generatedSource(), 'src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator)');
 const engineFigures = JSON.parse(text('scripts/data/cmVarEngine.json'));
 ok(engineFigures.provisional === false && /^[0-9a-f]{7,40}$/.test(engineFigures.head ?? '') && (engineFigures.runner ?? '').length > 3 && engineFigures.leagueMatches >= 3000,
@@ -237,8 +253,8 @@ const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
 for (const file of LEDGERS.flatMap(l => [l.ledger, l.receipt])) ok(!DASHES.some(d => text(file).includes(d)), `${file} holds a banned dash`);
 
 for (const f of fails.slice(0, 40)) console.log(`FAIL ${f}`);
-const used = Object.keys(rates.quantities).filter(q => settle(rates, q).used);
-console.log(`simCmVarLedger: ${rates.rows.length} rate rows from ${Object.keys(rates.publishers).length} publishers, counted by two: ${used.join(', ')}.`);
+const used = Object.entries(rates.quantities).filter(([name, q]) => (q.modelled ? settleRate(rates, name) : settle(rates, name)).used).map(([name]) => name);
+console.log(`simCmVarLedger: ${rates.rows.length} rate rows from ${Object.keys(rates.publishers).length} publishers. Rates that meet the standard (two publishers within a factor of ${AGREE}): ${used.filter(n => rates.quantities[n].modelled).join(', ') || 'none'}. Figures two publishers counted: ${used.filter(n => !rates.quantities[n].modelled).join(', ') || 'none'}.`);
 if (openOwed.length) console.log(`simCmVarLedger: OWED and open, so the switch must stay off: ${openOwed.map(o => `${o.id} (have ${o.have ?? '?'} of ${o.need ?? '?'})`).join(', ')}.`);
 console.log(`simCmVarLedger: ${engineKeys.length} competitions of the engine (${leagueKeys.length} leagues, ${cupKeys.length} cups, the Champions League), yes: ${yes.join(', ') || 'none'}.`);
 if (CONTROL) {

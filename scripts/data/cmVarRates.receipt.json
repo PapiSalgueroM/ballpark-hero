@@ -8,9 +8,16 @@
   "limits": [
     "No copy of a page was kept, so there is no snapshot hash. A reader who doubts a figure opens the url and finds the literal.",
     "The Premier League rows are one journalist's tally of overturned decisions. The league publishes no split of its own that was found.",
-    "The Serie A row is the first season under review (2017-18), before semi automated offside. It is the lowest reading of goals ruled out and so it sets that target.",
+    "THE PUBLISHERS COUNT DIFFERENT LEAGUES AND SEASONS: the Premier League 2022-23 to 2024-25 by one outlet, Serie A 2017-18 by two (a former referee and a news agency), Ligue 1 2023-24 by the league itself, the Bundesliga 2025-26 by one outlet. No season from 2022-23 on is counted by two publishers: six readers looked on 2026-10-10 and found none. The lead's standard of Round 1303 (2026-10-11) allows that for a simulation rate, a parameter of the match engine that no screen prints as a statistic of a real league, as long as two independent publishers agree within a factor of two, and asks that this receipt says so. The standard block below is written by the generator from the rows.",
+    "Goals ruled out is derived from the lowest reading on file, the French league's own count of Ligue 1 2023-24 (23 in 306). The two counts of Serie A 2017-18, that league's first season under review and before semi automated offside, sit just above it. The highest reading (the Premier League 2022-23 by one outlet) is 1.93 times the lowest, so the game rules out about half as many goals as that English season did.",
+    "Penalties awarded is derived the same way from its lowest reading, and that kind of review is not played by the game: see owed penalties-total in the ledger.",
     "Matches a season is arithmetic on the league's size, not a figure read on the page, except where the literal prints it."
   ],
   "checkedBy": "scripts/simCmVarLedger.mjs",
-  "sha256": "e5c179960ef0f46458ce22c649990291288fa81e6fd444e0027b4e0e01bed03d"
+  "sha256": "84f6c695346601c2342bce77f2d8c8a541b47062422ad4091335a58ff71ef45f",
+  "standard": {
+    "rule": "A simulation rate stands on at least two independent publishers, each counting at least one full season of a top division under video review, whose per match figures agree within a factor of 2. It is derived from the lowest of them. No screen prints a rate as a statistic of a real league.",
+    "goalsRuledOut": "goals ruled out after a review, per match: 6 readings by 4 publishers, who count DIFFERENT leagues and seasons (Ligue 1 2023-24; Serie A 2017-18; Premier League 2024-25; Premier League 2023-24; Premier League 2022-23): 23 in 306 (lfp-ligue1-2023-24), 29 in 380 (pieri-seriea-2017-18), 31 in 380 (agi-seriea-2017-18), 47 in 380 (espn-pl-2024-25), 50 in 380 (espn-pl-2023-24), 55 in 380 (espn-pl-2022-23). The highest is 1.926 times the lowest, inside the factor of 2 the standard allows. Derived from the LOWEST, 23 in 306 (lfp-ligue1-2023-24).",
+    "penaltiesAwarded": "penalties awarded after a review, per match: 7 readings by 5 publishers, who count DIFFERENT leagues and seasons (Premier League 2024-25; Premier League 2022-23; Premier League 2023-24; Ligue 1 2023-24; Serie A 2017-18; Bundesliga 2025-26): 25 in 380 (espn-pl-2024-25), 26 in 380 (espn-pl-2022-23), 28 in 380 (espn-pl-2023-24), 23 in 306 (lfp-ligue1-2023-24), 34 in 380 (agi-seriea-2017-18), 35 in 380 (pieri-seriea-2017-18), 40 in 306 (ligainsider-bundesliga-2025-26). The highest is 1.987 times the lowest, inside the factor of 2 the standard allows. Derived from the LOWEST, 25 in 380 (espn-pl-2024-25)."
+  }
 }

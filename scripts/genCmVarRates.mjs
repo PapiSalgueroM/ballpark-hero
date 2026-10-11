@@ -10,10 +10,14 @@
  *      scripts/data/cmVar*.receipt.json      each receipt carries the sha256 of the ledger it vouches for
  *
  * THE ARITHMETIC (every step is in the generated file's header with its numbers):
- *   A FIGURE is one quantity in one competition in one season. It is USED when two publishers each counted it
- *   (the lead's decision 1: a figure with one source is THIN and is not used). Where the two differ the
- *   STRICTER, lower count is taken. A quantity's target is the lowest per match figure among its used
- *   figures, its range runs from there to the highest count among them. One publisher's figures are never read.
+ *   THE STANDARD FOR A SIMULATION RATE (Round 1303, the lead's decision 1; settleRate below). A READING is one
+ *   publisher's own count of a quantity over one full season of a top division under video review. A rate's
+ *   quantity is USED when at least two independent publishers each hold a reading AND every reading on file
+ *   agrees within a factor of two (AGREE). The publishers may count different leagues or seasons. The target is
+ *   the LOWEST reading, the stricter one; the range runs from there to the highest. A quantity one publisher
+ *   counted is THIN and refused, and so is one whose readings do not agree: none is left out to make the rest fit.
+ *   The season total of penalties is a band, not a rate, and keeps Round 1218's rule (settle below): a FIGURE,
+ *   one quantity in one competition in one season, that two publishers each counted, the lower count first.
  *   goals:      the engine draws goals, then a review may take one away. A goal can be reviewed when it is
  *               not a penalty and not a direct free kick. So
  *                 ruledOutPerGoal = target goals ruled out a match / reviewable drawn goals a match (engine)
@@ -74,12 +78,50 @@ export function settle(rates, quantity) {
   return { quantity, used: true, readings: all, figures, confirmed, figure, target: strict[0], low: strict[0].perMatch, high: loose.at(-1).perMatch };
 }
 
+/** Round 1303. How far apart the readings of a rate may lie: the highest at most this many times the lowest. */
+export const AGREE = 2;
+/** Round 1303, THE STANDARD FOR A SIMULATION RATE (the lead's decision 1). USED when two independent publishers
+ *  each hold a reading (one full season of a top division under review, in any league) and EVERY reading on file
+ *  agrees within a factor of AGREE; the target is the LOWEST reading. THIN with one publisher, and refused when
+ *  the readings do not agree: no reading is dropped to make the rest agree. */
+export function settleRate(rates, quantity) {
+  const all = [...readings(rates, quantity)].sort((a, b) => a.perMatch - b.perMatch || a.id.localeCompare(b.id));
+  const publishers = [...new Set(all.map(r => r.publisher))];
+  const hosts = new Set(all.map(r => new URL(rates.rows.find(x => x.id === r.id).url).host.replace(/^www\./, '')));
+  if (publishers.length < 2 || hosts.size < 2) return { quantity, used: false, why: `${publishers.length} publisher(s) on ${hosts.size} host(s) counted it, a rate needs two`, readings: all, publishers };
+  const target = all[0], top = all.at(-1), spread = top.perMatch / target.perMatch;
+  if (!(target.perMatch > 0) || spread > AGREE) return { quantity, used: false, why: `its readings do not agree within a factor of two: ${top.count} in ${top.matches} (${top.id}) is ${spread.toFixed(3)} times ${target.count} in ${target.matches} (${target.id})`, readings: all, publishers };
+  /* different: do the publishers count more than one league or season? The receipt has to say so when they do. */
+  const different = new Set(all.map(r => { const row = rates.rows.find(x => x.id === r.id); return `${row.competition}|${row.season}`; })).size > 1;
+  return { quantity, used: true, readings: all, publishers, target, top, low: target.perMatch, high: top.perMatch, spread, different };
+}
+
 /** The receipts as they should read: each with the hash of its ledger. */
 export function stampedReceipts() {
   return LEDGERS.map(({ ledger, receipt }) => {
     const current = JSON.parse(text(receipt));
-    return { file: receipt, body: `${JSON.stringify({ ...current, sha256: sha(text(ledger)) }, null, 2)}\n` };
+    /* Round 1303: the rates receipt says, in plain words and for each rate, whose readings it stands on and
+       that they count different leagues or seasons when they do. Written here, so it cannot go stale. */
+    const standard = ledger === 'scripts/data/cmVarRates.json' ? { standard: standardLines(JSON.parse(text(ledger))) } : {};
+    return { file: receipt, body: `${JSON.stringify({ ...current, ...standard, sha256: sha(text(ledger)) }, null, 2)}\n` };
   });
+}
+
+const frac = t => `${t.count} in ${t.matches} (${t.id})`;
+/** Round 1303. One plain sentence a rate: how many readings by how many publishers, that they count different
+ *  leagues or seasons when they do, every reading, and the one derived from. */
+export function standardLine(rates, s) {
+  const label = rates.quantities[s.quantity]?.label ?? s.quantity;
+  if (!s.used) return `${label}: REFUSED, ${s.why}.`;
+  const seasons = [...new Set(s.readings.map(r => { const row = rates.rows.find(x => x.id === r.id); return `${row.competition} ${row.season}`; }))];
+  return `${label}: ${s.readings.length} readings by ${s.publishers.length} publishers${s.different ? ', who count DIFFERENT leagues and seasons' : ', who count the same league and season'} (${seasons.join('; ')}): ${s.readings.map(frac).join(', ')}. The highest is ${s.spread.toFixed(3)} times the lowest, inside the factor of ${AGREE} the standard allows. Derived from the LOWEST, ${frac(s.target)}.`;
+}
+export function standardLines(rates) {
+  const modelled = Object.entries(rates.quantities).filter(([, q]) => q.modelled).map(([name]) => name);
+  return {
+    rule: `A simulation rate stands on at least two independent publishers, each counting at least one full season of a top division under video review, whose per match figures agree within a factor of ${AGREE}. It is derived from the lowest of them. No screen prints a rate as a statistic of a real league.`,
+    ...Object.fromEntries(modelled.map(name => [name, standardLine(rates, settleRate(rates, name))])),
+  };
 }
 
 const GENERATED = 'src/data/clubManagerVarRates.ts';
@@ -106,8 +148,8 @@ export function derive() {
   const rates = JSON.parse(text('scripts/data/cmVarRates.json'));
   const comps = JSON.parse(text('scripts/data/cmVarCompetitions.json'));
   const engine = JSON.parse(text('scripts/data/cmVarEngine.json'));
-  const goals = settle(rates, 'goalsRuledOut'), pens = settle(rates, 'penaltiesAwarded');
-  if (!goals.used || !pens.used) throw new Error('genCmVarRates: a modelled quantity is THIN, nothing can be derived');
+  const goals = settleRate(rates, 'goalsRuledOut'), pens = settleRate(rates, 'penaltiesAwarded');
+  if (!goals.used || !pens.used) throw new Error(`genCmVarRates: a modelled quantity does not meet the standard for a rate, nothing can be derived (${[goals, pens].filter(s => !s.used).map(s => `${s.quantity}: ${s.why}`).join('; ')})`);
   /* Round 1302, decision 4: all the penalties of a season, the band a match with reviews on is held against. */
   const total = settle(rates, 'penaltiesTotal');
   if (!total.used) throw new Error('genCmVarRates: the season total of penalties is THIN, the band has nothing to stand on');
@@ -127,7 +169,8 @@ export function derive() {
 
 export function generatedSource() {
   const d = derive(), g = d.goals, p = d.pens, e = d.engine;
-  const frac = t => `${t.count} in ${t.matches} (${t.id})`;
+  /* Round 1303: a rate's readings, every one, the lowest first, and whether they count different leagues or seasons. */
+  const every = s => `${s.readings.length} readings by ${s.publishers.length} publishers${s.different ? ', who count DIFFERENT leagues and seasons' : ''}: ${s.readings.map(frac).join(', ')}`;
   /* The used figure as both of its publishers count it, the stricter first. */
   const both = s => `${s.figure.competition} ${s.figure.season}, counted by ${s.figure.readings.length} publishers: ${[...s.figure.readings].sort((a, b) => a.count - b.count || a.id.localeCompare(b.id)).map(frac).join(' and ')}`;
   const open = (JSON.parse(text('scripts/data/cmVarRates.json')).owed ?? []).filter(o => o.state === 'open');
@@ -139,17 +182,19 @@ export function generatedSource() {
     ' *     cmVarEngine.json (the engine, measured on a runner).',
     e.provisional ? ' * PROVISIONAL: the engine figures below are not measured yet. Nothing may ship on this file.' : ` * Engine figures: ${e.leagueMatches} league matches, runner result ${e.runner}, head ${e.head}.`,
     ' *',
-    ' * A figure (a quantity in one competition in one season) is used only when two publishers counted it; the',
-    ' * stricter, lower count is the one derived from. Figures one publisher counted are on file and not read.',
+    ' * THE STANDARD FOR A RATE (Round 1303): a rate is a parameter of the match engine, never printed as a statistic',
+    ' * of a real league. It stands on at least two independent publishers, each counting at least one full season of',
+    ` * a top division under video review, whose per match figures agree within a factor of ${AGREE}, and it is derived`,
+    ' * from the LOWEST of them. A quantity one publisher counted, or whose readings do not agree, is refused.',
     ...(open.length ? [` * OWED (${open.map(o => o.id).join(', ')}): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.`] : []),
     ' *',
-    ` * Goals ruled out after a review: ${both(g)}.`,
-    ` *   The stricter count ${frac(g.target)} = ${n6(g.low)} a match; the range runs to ${n6(g.high)}.`,
+    ` * Goals ruled out after a review: ${every(g)}.`,
+    ` *   The highest is ${g.spread.toFixed(3)} times the lowest. The lowest, ${frac(g.target)} = ${n6(g.low)} a match, is derived from; the range runs to ${n6(g.high)}.`,
     ` *   The engine draws ${e.reviewableGoalsPerMatch} goals a match a review can look at (no penalty, no direct free kick).`,
     ` *   goalReview = ${n6(g.low)} / ${e.reviewableGoalsPerMatch} = ${d.rates.goalReview} a goal. overturn = 1 and penaltyReview = 0: no publisher`,
     ' *   counts reviews that end with the call standing by kind of call, so the game shows none.',
-    ` * Penalties awarded after a review: ${both(p)}.`,
-    ` *   The stricter count ${frac(p.target)} = ${n6(p.low)} a match; the range runs to ${n6(p.high)}.`,
+    ` * Penalties awarded after a review: ${every(p)}.`,
+    ` *   The highest is ${p.spread.toFixed(3)} times the lowest. The lowest, ${frac(p.target)} = ${n6(p.low)} a match, is derived from; the range runs to ${n6(p.high)}.`,
     ` *   The engine awards ${e.awardsPerMatchPerUnitRate} penalties a match per unit of rate (measured at ${e.probeRate} a foul).`,
     ` *   missedFoulReview = ${n6(p.low)} / ${e.awardsPerMatchPerUnitRate} = ${d.rates.missedFoulReview} a foul.`,
     ` * The kick: the engine's own penalty law, SHOOTOUT_BASE_RATE ${d.law.scores} and SHOOTOUT_SAVE_SHARE ${d.law.onTarget}.`,
