@@ -1,0 +1,15 @@
+vitest-us exit=0 74s |    Duration  73.00s (transform 5.77s, setup 836ms, collect 14.89s, tests 92.31s, environment 6.01s, prepare 1.83s)
+ctl-absix exit=1 19s | simUsSeasonCentre: 58 checks, 2 failed (control absix)
+tsc exit=0 97s | 
+ctl-hits exit=1 17s | simUsSeasonCentre: 58 checks, 2 failed (control hits)
+simUsSeasonCentre exit=0 128s | simUsSeasonCentre: 158 checks, 0 failed
+ctl-rbi exit=1 22s | simUsSeasonCentre: 58 checks, 2 failed (control rbi)
+law-compare exit=0 26s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+seam-compare exit=0 27s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+simUsSeasonLedger exit=0 4s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+lay-compare exit=3 30s | simUsSeasonCentre digest compare: NOT COMPARED, 10 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)
+ctl-absix-five exit=1 94s | simUsSeasonCentre: 66 checks, 2 failed (control absix)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simMlbCareer exit=0 20s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simUsPostseason exit=0 20s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simUsBoardParity exit=0 49s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.

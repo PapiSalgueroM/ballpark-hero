@@ -1,0 +1,19 @@
+1) the link: every wrapper hands the shared board its own binding
+   4 wrappers read, 0 problems
+2) the weight rule: no sport in the shared files, only its own in a binding
+   29 files read (25 shared, 4 bindings), 0 problems
+3) the weight rule can fail: planted imports
+   fired: the board imports an NBA engine -> "src/components/us-career/UsCareerBoard.tsx: imports @/lib/nbaMyCareer, NBA code in a file all four routes load"
+   fired: the board loads MLB code on demand -> "src/components/us-career/UsCareerBoard.tsx: imports @/lib/mlbMyCareer, MLB code in a file all four routes load"
+   fired: the descriptor imports NHL content by a suffix name -> "src/lib/usCareerSport.ts: imports ./conquestDataNhl, NHL code in a file all four routes load"
+   fired: the NFL binding imports an NHL module -> "src/lib/nflCareerSport.ts: imports @/lib/nhlMyCareer, NHL code in the NFL binding"
+   fired: the Season Center host imports the NBA number file -> "src/components/us-career/season/UsSeasonCentreHost.tsx: imports @/lib/season/nba, NBA code in a file all four routes load"
+   spared: a type-only import of another sport (erased, loads nothing)
+   spared: the NFL binding importing more NFL code
+4) the link can fail: mutated wrappers in a scratch copy
+   fired: the NBA wrapper stops importing the shared board -> "src/components/nba-my-career/NbaMyCareerBoard.tsx: does not import the shared board"
+   fired: the MLB wrapper renders the board with the NBA binding -> "src/components/mlb-my-career/MlbMyCareerBoard.tsx: does not render the shared board with its own binding"
+   fired: the NHL wrapper imports NFL code -> "src/components/nhl-my-career/NhlMyCareerBoard.tsx: imports NFL code, so this route would load another sport"
+   fired: the NFL wrapper stops importing its own binding -> "src/components/nfl-my-career/NflMyCareerBoard.tsx: does not import its own binding"
+
+simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
