@@ -1,0 +1,10 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playStorageBlocked exit=0 267s | playStorageBlocked: 826 checks, 0 failed
+playUsSeasonCentre exit=0 224s | playUsSeasonCentre: 217 checks, 0 failed
+playCareerSquad exit=0 146s | playCareerSquad: 181 checks, 0 failed
+playCollegeGridFirstTap exit=0 28s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+playGridCls exit=0 30s | playGridCls: green. The boards hold their ground; the network only fills them in.
+playCmDataOnDemand exit=0 27s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+playTycoonGearFit exit=0 7s | PASS gear fit: 3 widths, full collection, real equipment and persisted upgrade, save failure and Back. /home/runner/work/_temp/t-playTycoonGearFit/dukb-tycoon-gear-fit-UP
+playTycoonSetPieceFit exit=0 25s | playTycoonSetPieceFit: green, six actual built-page cases and six durable goals.
+playUsCareerSaveSeam exit=0 31s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed

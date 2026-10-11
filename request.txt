@@ -1,0 +1,13 @@
+# Release AW closing pass, final proof P-H2b: gate lane H2, part 2 (served, one at a time)
+#!serve
+#!playwright
+#!serial
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs
+playCareerSquad: node scripts/playCareerSquad.mjs
+playCollegeGridFirstTap: node scripts/playCollegeGridFirstTap.mjs
+playGridCls: node scripts/playGridCls.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playTycoonGearFit: node scripts/playTycoonGearFit.mjs
+playTycoonSetPieceFit: node scripts/playTycoonSetPieceFit.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
