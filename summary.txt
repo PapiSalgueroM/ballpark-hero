@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+moments exit=0 64s | playCareerMoments: 34 checks, 0 failed
+rm-green exit=0 45s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+squad-green exit=0 159s | playCareerSquad: 181 checks, 0 failed
+keeper-walk exit=0 840s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.

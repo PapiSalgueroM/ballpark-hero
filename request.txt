@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+moments: node scripts/playCareerMoments.mjs
+rm-green: node scripts/playReducedMotion.mjs
+squad-green: ENGINES=chromium SHOTS=/tmp/squad-final node scripts/playCareerSquad.mjs
+keeper-walk: git worktree add -q /tmp/base 09df145a && git -C /tmp/base rev-parse --short HEAD && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
