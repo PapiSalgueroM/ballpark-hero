@@ -1,0 +1,16 @@
+# REVIEW-run Round 1306, head b7943c61: the unit files under mutations m1 to m10 (the first pass never ran them), and five more mutations on every gate
+v-m1: bash .rc/x/mutrun2.sh m1 c9a1f86a v
+v-m2: bash .rc/x/mutrun2.sh m2 c9a1f86a v
+v-m3: bash .rc/x/mutrun2.sh m3 c9a1f86a v
+v-m4: bash .rc/x/mutrun2.sh m4 c9a1f86a v
+v-m5: bash .rc/x/mutrun2.sh m5 c9a1f86a v
+v-m6: bash .rc/x/mutrun2.sh m6 c9a1f86a v
+v-m7: bash .rc/x/mutrun2.sh m7 c9a1f86a v
+v-m8: bash .rc/x/mutrun2.sh m8 c9a1f86a v
+v-m9: bash .rc/x/mutrun2.sh m9 c9a1f86a v
+v-m10: bash .rc/x/mutrun2.sh m10 c9a1f86a v
+m6b: bash .rc/x/mutrun2.sh m6b c9a1f86a all
+m11: bash .rc/x/mutrun2.sh m11 c9a1f86a all
+m13: bash .rc/x/mutrun2.sh m13 c9a1f86a all
+m16: bash .rc/x/mutrun2.sh m16 c9a1f86a all
+m17: bash .rc/x/mutrun2.sh m17 c9a1f86a all
