@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+agent-units exit=0 16s | PASS agent review units: {"mode":"units","total":129,"files":[{"file":"soccerAgentReview.test.ts","passed":83},{"file":"soccerAgentReviewUi.test.tsx","passed":28},{"file"
+agent-outcomes exit=0 9s | PASS agent review outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":120,"readVectors":120,"sourceControls":7,"branches":4,"sourceHeld":true}
+agent-page-control exit=0 19s | PASS agent review page-control: {"mode":"page-control","pageBaseline":10,"componentBaseline":28,"sourceControls":2,"intendedFailures":[{"id":"page-double-callback","faile
+agent-native exit=2 335s | Node.js v24.21.0
+return-units exit=0 16s | PASS international return units: {"mode":"units","total":122,"files":[{"file":"soccerInternationalReturn.test.ts","passed":83},{"file":"soccerInternationalReturnUi.test.t
+return-outcomes exit=0 6s | PASS international return outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":90,"readVectors":90,"sourceControls":6,"branches":4,"sourceHeld":true}
+return-page-control exit=0 20s | PASS international return page-control: {"mode":"page-control","pageBaseline":10,"componentBaseline":21,"sourceControls":2,"intendedFailures":[{"id":"page-double-callback
+return-native exit=0 110s | PASS international return native: {"mode":"native","checks":854,"journeys":12,"wholePairs":102,"postStartupExactVectors":90,"rawReloads":48,"unfilteredStartupObservations
