@@ -30,6 +30,10 @@
  * version numbers two of those parts carry, only exist on a save that has been
  * played. Seeds 0 and 1, the pair the browser walk plants, are played hub
  * saves in every game; a US career's seeds 2 and 3 are the road to the draft.
+ * Release AW closing pass (2026-10-11): Soccer Career's seed 2 is a veteran's
+ * hub that holds an agent review, a national team comeback and an announced
+ * farewell season, and its seed 3 is a transfer window with a brief filed
+ * (see soccerVeteran and soccerWindow in the bundle below).
  *
  * Imported by a harness as a function; nothing is built at import time.
  */
@@ -69,6 +73,11 @@ const ENTRY = `
 import * as SOC from './src/lib/soccerCareerEngine';
 import { isSoccerCareerSave } from './src/lib/soccerCareerSave';
 import * as PROG from './src/lib/soccerCareerProgramme';
+import * as BRIEF from './src/lib/soccerCareerTransferBrief';
+import * as AGENT from './src/lib/soccerAgentReview';
+import * as INTL from './src/lib/soccerInternationalReturn';
+import * as FARE from './src/lib/soccerCareerFarewell';
+import { AGENTS } from './src/lib/soccerCareerLife';
 import { careerStep } from './scripts/lib/careerStep.mjs';
 import * as USP from './src/lib/usCareerProgramme';
 import { createUsCareerProspect, loadUsCareerProspect } from './src/lib/usCareerProspect';
@@ -141,6 +150,69 @@ const soccerPlayed = seed => {
   if (!c.programme || !c.programme.plan) throw new Error('Soccer Career seed ' + seed + ': chooseProgramme did not keep the plan on the save');
   return JSON.stringify(c);
 };
+/* Release AW closing pass (ruling C4). Four more parts of the Soccer Career save carry a version number one
+   level down (transferBrief, agentReview, internationalReturn, farewellSeason) and no save above holds one:
+   they are written late in a career or in the middle of a transfer window. Two more played saves, made by
+   the calls the page itself makes:
+     seed 2 of 4  a veteran's hub. The career is played until a hub from age 30 where the player has caps and
+                  an agent; there he reviews his agent (changeCareerAgent), retires from his national team and
+                  makes himself available again (retireFromInternational, makeInternationallyAvailable) and
+                  announces his farewell season (announceFarewellSeason). Three parts on one save.
+     seed 3 of 4  a transfer window. The career is played until a window whose situation takes a brief, and
+                  a brief for minutes is filed (setTransferBrief, the call of AgentBrief.tsx). A brief only
+                  lives inside its window, which is why it cannot sit on the hub save beside the other three.
+   Each tries a bounded list of careers and throws when none gets there, so a fixture can never quietly lose
+   its parts. */
+const SOCCER_PART_TRIES = 60;
+const soccerCareerFor = (seed, attempt) => SOC.initCareer(
+  'Real Save ' + seed, NATIONS[(seed + attempt) % NATIONS.length], SOCCER_POS[(seed + attempt) % SOCCER_POS.length],
+  'modern', flat(58), 58, 2020, SOC.FALLBACK_CLUBS, null, 86 + (attempt % 8),
+);
+const veteranParts = (c, clubs) => {
+  if (!AGENT.agentReviewEligibility(c).available || !c.intStats || !(c.intStats.caps >= 1) || !FARE.farewellEligibility(c).eligible) return null;
+  const target = AGENTS.find(agent => agent.id !== c.agentId);
+  let s = target ? AGENT.changeCareerAgent(c, target.id) : c;
+  if (!AGENT.readAgentReview(s)) return null;
+  if (s.internationalCareer !== false || s.intStats.isRetired !== true) s = SOC.retireFromInternational(s);
+  if (!INTL.internationalReturnEligibility(s).available) return null;
+  s = INTL.makeInternationallyAvailable(s);
+  if (!INTL.readInternationalReturn(s)) return null;
+  s = SOC.announceFarewellSeason(s, clubs);
+  if (!FARE.readSoccerFarewell(s) || !AGENT.readAgentReview(s) || !INTL.readInternationalReturn(s)) return null;
+  return s;
+};
+const soccerVeteran = seed => {
+  const clubs = SOC.FALLBACK_CLUBS;
+  for (let attempt = 0; attempt < SOCCER_PART_TRIES; attempt += 1) {
+    Math.random = mulberry32(seed * 1000 + 211 + attempt);
+    let c = soccerCareerFor(seed, attempt);
+    for (let g = 0; g < 2500 && !c.retired; g += 1) {
+      if (c.phase === 'playing' && c.age >= 30) {
+        const held = veteranParts(c, clubs);
+        if (held) return JSON.stringify(held);
+      }
+      c = careerStep(SOC, c, clubs);
+    }
+  }
+  throw new Error('Soccer Career seed ' + seed + ': no career of ' + SOCCER_PART_TRIES + ' reached a hub from age 30 with caps and an agent, so the fixture holds no agentReview, internationalReturn and farewellSeason');
+};
+const soccerWindow = seed => {
+  const clubs = SOC.FALLBACK_CLUBS;
+  const played = s => (s.seasons || []).filter(r => r.type === 'playing').length;
+  for (let attempt = 0; attempt < SOCCER_PART_TRIES; attempt += 1) {
+    Math.random = mulberry32(seed * 1000 + 733 + attempt);
+    let c = soccerCareerFor(seed, attempt);
+    for (let g = 0; g < 2500 && !c.retired; g += 1) {
+      if (c.phase === 'transfer_window' && played(c) >= SOCCER_SEASONS) {
+        const filed = BRIEF.setTransferBrief(c, 'minutes');
+        if (filed !== c && BRIEF.readTransferBrief(filed, SOC.projectLeagueApps)) return JSON.stringify(filed);
+      }
+      c = careerStep(SOC, c, clubs);
+    }
+  }
+  throw new Error('Soccer Career seed ' + seed + ': no career of ' + SOCCER_PART_TRIES + ' reached a transfer window that takes a brief, so the fixture holds no transferBrief');
+};
+const soccerSave = seed => (seed % 4 === 2 ? soccerVeteran(seed) : seed % 4 === 3 ? soccerWindow(seed) : soccerPlayed(seed));
 const US_SEASONS = 2;
 const usPick = (sport, seed) => {
   const pos = sport.create.positions[seed % sport.create.positions.length];
@@ -193,7 +265,7 @@ export function makeSaves(seed, rebuildClubs) {
   const realRandom = Math.random;
   Math.random = mulberry32(seed + 11);
   try {
-    out['/soccer-career'] = soccerPlayed(seed);
+    out['/soccer-career'] = soccerSave(seed);
     /* Club Manager draws from its own stream, so the length of the career above cannot move it. */
     Math.random = mulberry32(seed + 12);
     store.clear();
@@ -258,12 +330,80 @@ export const accepts = {
  * the save holds is still the plan the hub shows.
  */
 const prospectRead = sport => raw => { try { return loadUsCareerProspect(sport, JSON.parse(raw).prospect) !== null; } catch { return false; } };
+const parsed = (raw, fn) => { try { return fn(JSON.parse(raw)); } catch { return false; } };
+/* Release AW closing pass (ruling C4): a route can hold a version number on several parts, so the readers are
+   keyed by the part's path as PART_VERSIONS writes it. The four new parts export their readers. */
 export const partReads = {
-  '/soccer-career': raw => { try { return PROG.programmeOptions(JSON.parse(raw)).some(view => view.choice !== null); } catch { return false; } },
-  '/nfl-my-career': prospectRead(NFL_CAREER_SPORT),
-  '/nba-my-career': prospectRead(NBA_CAREER_SPORT),
-  '/mlb-my-career': prospectRead(MLB_CAREER_SPORT),
-  '/nhl-my-career': prospectRead(NHL_CAREER_SPORT),
+  '/soccer-career': {
+    'programme.version': raw => parsed(raw, s => PROG.programmeOptions(s).some(view => view.choice !== null)),
+    'transferBrief.version': raw => parsed(raw, s => BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null),
+    'agentReview.version': raw => parsed(raw, s => AGENT.readAgentReview(s) !== null),
+    'internationalReturn.version': raw => parsed(raw, s => INTL.readInternationalReturn(s) !== null),
+    'farewellSeason.version': raw => parsed(raw, s => FARE.readSoccerFarewell(s) !== null),
+  },
+  '/nfl-my-career': { 'prospect.v': prospectRead(NFL_CAREER_SPORT) },
+  '/nba-my-career': { 'prospect.v': prospectRead(NBA_CAREER_SPORT) },
+  '/mlb-my-career': { 'prospect.v': prospectRead(MLB_CAREER_SPORT) },
+  '/nhl-my-career': { 'prospect.v': prospectRead(NHL_CAREER_SPORT) },
+};
+
+/**
+ * What a row of PART_VERSIONS means by "absent" (the lead's ruling C3 of Release AW): a part the reader cannot
+ * verify is read as if it were not there, and the next honest write of that part overwrites it. Each function
+ * takes a real save whose part carries ANOTHER version number and answers null when the game does exactly that,
+ * or the sentence that did not hold. The actions are the game's own (the calls the page makes).
+ */
+const sameAnswer = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const without = (s, key) => { const o = { ...s }; delete o[key]; return o; };
+export const partAbsent = {
+  '/soccer-career': {
+    'transferBrief.version': raw => {
+      const s = JSON.parse(raw);
+      if (BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null) return 'the brief is still read';
+      const next = BRIEF.setTransferBrief(s, 'level');
+      if (next === s || !BRIEF.readTransferBrief(next, SOC.projectLeagueApps) || next.transferBrief.version !== 1) return 'a new brief did not overwrite the unreadable one';
+      return null;
+    },
+    'agentReview.version': raw => {
+      const s = JSON.parse(raw);
+      if (AGENT.readAgentReview(s) !== null) return 'the receipt is still read';
+      const now = AGENT.agentReviewEligibility(s);
+      if (!sameAnswer(now, AGENT.agentReviewEligibility(without(s, 'agentReview')))) return 'the review is not judged as on the same save without the part (' + now.reason + ')';
+      if (!now.available) return 'the review stays closed (' + now.reason + ')';
+      const target = AGENTS.find(agent => agent.id !== s.agentId);
+      const next = AGENT.changeCareerAgent(s, target.id);
+      if (next === s || !AGENT.readAgentReview(next)) return 'a new review did not overwrite the unreadable receipt';
+      return null;
+    },
+    'internationalReturn.version': raw => {
+      const s = JSON.parse(raw);
+      if (INTL.readInternationalReturn(s) !== null) return 'the receipt is still read';
+      const now = INTL.internationalReturnEligibility(s);
+      if (!sameAnswer(now, INTL.internationalReturnEligibility(without(s, 'internationalReturn')))) return 'the comeback is not judged as on the same save without the part (' + now.reason + ')';
+      const again = SOC.retireFromInternational(s);
+      const open = INTL.internationalReturnEligibility(again);
+      if (!open.available) return 'after retiring from the national team again the comeback stays closed (' + open.reason + ')';
+      const next = INTL.makeInternationallyAvailable(again);
+      if (next === again || !INTL.readInternationalReturn(next)) return 'a new comeback did not overwrite the unreadable receipt';
+      return null;
+    },
+    /* The farewell's commitment is the save's own isFinalSeason flag: with it set the card is not offered
+       again, with it off the card is offered like to any eligible player and a new announcement overwrites. */
+    'farewellSeason.version': raw => {
+      const s = JSON.parse(raw);
+      if (FARE.readSoccerFarewell(s) !== null) return 'the plan is still read';
+      if (FARE.farewellSeasonComplete(s)) return 'an unreadable plan still completes a farewell season';
+      if (s.isFinalSeason !== true) return 'the fixture did not keep the flag the announcement set';
+      const now = FARE.farewellEligibility(s);
+      if (now.eligible || now.reason !== 'Your final season is already announced.') return 'with the flag set the card is offered again, or closed for another reason (' + now.reason + ')';
+      const off = { ...s, isFinalSeason: false };
+      const open = FARE.farewellEligibility(off);
+      if (!open.eligible) return 'with the flag off the card stays closed (' + open.reason + ')';
+      const next = FARE.announceSoccerFarewell(off);
+      if (next === off || !FARE.readSoccerFarewell(next) || next.isFinalSeason !== true) return 'a new announcement did not overwrite the unreadable plan';
+      return null;
+    },
+  },
 };
 `;
 
@@ -271,7 +411,8 @@ export const partReads = {
  * Bundles the engines once (esbuild, into `tmpDir`) and returns:
  *   fleet    { '/route': [raw save, one per seed] } for all 21 games
  *   accepts  { '/route': raw => boolean } for the games with a pure loader
- *   partReads { '/route': raw => boolean } for the games that keep a version number on a part of the save
+ *   partReads { '/route': { 'part.path': raw => boolean } } for the games that keep a version number on a part of the save
+ *   partAbsent { '/route': { 'part.path': raw => null | string } } for the parts a reader treats as absent when it cannot verify them
  * Throws when an engine refuses to start; a caller prints and exits.
  */
 export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
@@ -295,5 +436,5 @@ export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
     const one = mod.makeSaves(seed, rebuildClubs);
     for (const [route, raw] of Object.entries(one)) (fleet[route] ??= []).push(raw);
   }
-  return { fleet, accepts: mod.accepts, partReads: mod.partReads };
+  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent };
 }

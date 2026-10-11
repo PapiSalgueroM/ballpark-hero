@@ -367,6 +367,18 @@ describe('Live simcast motion', () => {
     expectWhistle(mounted, cap, false);
     // The next frame crosses the cap even when float addition lands just below it.
     await step(48);
+    if (fixture.event.kind === 'goal') {
+      /* Round 1303 fix (finding 6 of Round 1302): a goal that is the last kick of a period gets its scorer card
+         like every other goal, and the whistle waits for the card (1.8 seconds at the 2x a match opens at). The
+         goal is counted the moment the clock reaches the whistle, as before. */
+      expectWhistle(mounted, cap, false);
+      expect(readScore(mounted.container)).toBe(scoreAt(career, cap));
+      expect(mounted.container.querySelector('[data-cm-goal-card]')?.textContent ?? '', 'the last kick of the period got no scorer card').toContain(fixture.event.text);
+      expect(pitch.getAttribute('data-cm-motion-phase')).toBe('net');
+      await step(1500);
+      expectWhistle(mounted, cap, false);
+      await step(500);
+    }
     expectWhistle(mounted, cap, true);
     expect(readScore(mounted.container)).toBe(scoreAt(career, cap));
     expect(mounted.container.querySelector('[data-cm-motion]')?.getAttribute('data-cm-motion') ?? 'pass').toBe('pass');

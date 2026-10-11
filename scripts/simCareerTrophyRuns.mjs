@@ -10,6 +10,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
+import { inverseVeteranPay, VETERAN_PAY_ADDITIONS } from './lib/careerVeteranPay1262.mjs';
 import { JSDOM } from 'jsdom';
 assert(process.env.CI, 'Run this proof only in remote CI');
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -34,7 +35,8 @@ export async function bundleTrophyRuns({ original = false, patch, without = [] }
   /* Release AU: `without` names the additions of Rounds 1197 to 1208 to take out of the COPY this bundle loads
      (scripts/lib/careerNextTenAttribution1197.mjs), after a control's own patch. Only the groups that compare with
      the base use such a bundle. */
-  const nextTen = [];
+  /* Release AW: the same copies take the veteran pay of Rounds 1262 to 1264 out too (scripts/lib/careerVeteranPay1262.mjs). */
+  const nextTen = [], veteranPay = [];
   const receipts = [], loaded = [], require = createRequire(path.join(ROOT, 'package.json'));
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'trophy-runs-')), output = path.join(tmp, 'bundle.cjs');
   const stdin = `export * as soccer from './src/lib/soccerCareerEngine'; export * as reader from './src/lib/soccerSeasonCompetitions'; export * as fixtures from './src/test/fixtures/soccerSeasonCompetitions1173'; ${original ? '' : "import * as React from 'react'; import { renderToStaticMarkup } from 'react-dom/server'; import { TrophyClubCampaign } from './src/components/soccer-career/TrophyCabinet'; export * as cabinet from './src/components/soccer-career/TrophyCabinet'; export const renderCampaign=(career,row)=>renderToStaticMarkup(React.createElement(TrophyClubCampaign,{career,row}));"}`;
@@ -47,7 +49,7 @@ export async function bundleTrophyRuns({ original = false, patch, without = [] }
       const before = sha(source); source = source.replace(patch.from, patch.to); assert.notEqual(sha(source), before, `${patch.name}: effective copied source change`);
       receipts.push({ name: patch.name, file: rel, beforeSha256: before, afterSha256: sha(source), effective: true });
     }
-    if (!original && without.length) source = inverseCareerNextTen(rel, source, nextTen, without);
+    if (!original && without.length) source = inverseVeteranPay(rel, inverseCareerNextTen(rel, source, nextTen, without), veteranPay);
     loaded.push({ file: rel, beforeSha256: sourceBeforeSha256, compiledSha256: sha(source), changed: sourceBeforeSha256 !== sha(source) });
     return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : rel.endsWith('.json') ? 'json' : 'ts' };
   }); } };
@@ -55,7 +57,8 @@ export async function bundleTrophyRuns({ original = false, patch, without = [] }
     await build({ stdin: { contents: stdin, resolveDir: ROOT, loader: 'tsx' }, bundle: true, platform: 'node', format: 'cjs', jsx: 'automatic', outfile: output, alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin], define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' }, loader: { '.css': 'empty', '.svg': 'empty', '.png': 'empty', '.jpg': 'empty', '.webp': 'empty' }, logLevel: 'error' });
     if (patch) assert.equal(receipts.length, 1, 'Copied product control was loaded exactly once');
     if (!original) assert.deepEqual(nextTen.map(row => row.addition).sort(), [...without].sort(), 'Each addition of Rounds 1197 to 1208 asked for was taken out of the copy exactly once');
-    return { ...require(output), receipts, loaded, nextTen };
+    if (!original) assert.deepEqual(veteranPay.map(row => row.addition).sort(), without.length ? [...VETERAN_PAY_ADDITIONS].sort() : [], 'The veteran pay of Release AW was taken out of every copy that is compared with the base, once, and out of no other');
+    return { ...require(output), receipts, loaded, nextTen, veteranPay };
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 }
 // The oracle below derives display fields directly from saved games, independently of the production reader.

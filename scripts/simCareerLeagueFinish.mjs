@@ -66,6 +66,9 @@ import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs
    (the wheel alone moves this recording: remote check rAU-sc-engine-mut). See
    scripts/lib/careerNextTenAttribution1197.mjs. */
 import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
+/* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. Both attribution
+   bundles take that out of a copy of the contracts file too: scripts/lib/careerVeteranPay1262.mjs. */
+import { VETERAN_PAY_ADDITIONS, veteranPayOutPlugin } from './lib/careerVeteranPay1262.mjs';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -107,7 +110,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeagu
   'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -184,11 +187,13 @@ async function attributionEngine() {
   const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
   const attributed = inverseCareerStoryRole(inverseCareerDevelopment(before, proof.attribution), proof.storyRoleAttribution);
   assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
-  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs');
+  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [];
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${file.replaceAll('\\', '/')}';\n`);
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin()] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut)] });
+  assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The attributed bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
+  proof.veteranPayAttribution.push(...veteranOut);
   const attributedEngine = await import(pathToFileURL(out).href);
   assert.equal(JSON.stringify(attributedEngine.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Attribution keeps the complete club pool');
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -224,9 +229,11 @@ function bothOutPlugin() {
 async function bothOutEngine() {
   const entry = path.join(WORK, 'bothOutEntry.mjs'), out = path.join(WORK, 'bothOutBundle.mjs');
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
-  const both = bothOutPlugin();
+  const both = bothOutPlugin(), veteranOut = [];
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), both.plugin] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut), both.plugin] });
+  assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The historical bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
+  proof.veteranPayAttribution.push(...veteranOut);
   const mod = await import(pathToFileURL(out).href);
   assert(both.seen().includes(ENGINE_REL), 'The train was taken out of the engine the bundle loaded');
   assert.equal(JSON.stringify(mod.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Taking the train and the development edits out keeps the complete club pool');

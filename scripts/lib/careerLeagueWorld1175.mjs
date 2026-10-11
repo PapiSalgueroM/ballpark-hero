@@ -8,7 +8,9 @@ export const careerLeagueWorld1175Attribution = [
   { file: 'src/lib/season/soccer.ts',
     from: '    const fixedMissed = fixedOf(row, ctx).filter(f => !f.played).length;\n    const room = Math.min(severe ? M : M - block, M - fixedMissed);',
     to: '    const room = severe ? M : M - block;' },
-  { file: engine, from: "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\n", to: '' },
+  /* Release AW: Rounds 1235 to 1237 (the agent brief) add clubKeyOf to this import, and their own functions read it,
+     so the line that comes out is the merged one and that one name stays imported. */
+  { file: engine, from: "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\n", to: "import { clubKeyOf } from './soccerCareerLeagueWorld';\n" },
   { file: engine, from: '  /** The career\'s simulated field and champion, held for this season only. */\n  leagueWorld?: LeagueWorldSeason;\n', to: '' },
   { file: engine, from: '  /** Membership for the next unplayed future season. Absent on older saves. */\n  leagueWorld?: CareerLeagueWorld;\n', to: '' },
   { file: engine, from: '  const pool = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1);', to: '  const pool = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);' },

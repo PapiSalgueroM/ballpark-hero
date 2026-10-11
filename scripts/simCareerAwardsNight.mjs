@@ -216,6 +216,9 @@ import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs
    takes them out of the copied files the historical bundle loads, so the recording made before them still
    replays: scripts/lib/careerNextTenAttribution1197.mjs. */
 import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
+/* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. The attributed bundle
+   takes that out of a copy of the contracts file too, at its one condition: scripts/lib/careerVeteranPay1262.mjs. */
+import { VETERAN_PAY_FILE, VETERAN_PAY_ADDITIONS, inverseVeteranPay } from './lib/careerVeteranPay1262.mjs';
 
 /* Release AT: two attributions meet in section 1. Release AQ replays the old fixture with the Soccer
    Career train (Rounds 1169 to 1178) taken out through these four lists. Rounds 1185 and 1187 replay it
@@ -390,7 +393,7 @@ function sourceHashes() {
   return result;
 }
 const proof = { control: CONTROL, base: careerDevelopmentBaseReceipt(), sourceBefore: sourceHashes(), sourceAfter: null,
-  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
+  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
 const writeProof = (file, value) => fs.writeFileSync(path.join(ARTIFACTS, file), JSON.stringify(value, null, 2));
 
 /* The actual original tree is loaded independently. The sole page append is
@@ -454,10 +457,14 @@ async function attributedAwardsBundle() {
   const wheelAuthored = fs.readFileSync(path.join(ROOT, NEXT_TEN_WHEEL_FILE), 'utf8').replaceAll('\r\n', '\n');
   const wheelInverse = inverseCareerNextTen(NEXT_TEN_WHEEL_FILE, wheelAuthored, proof.nextTenAttribution, ['wheel']);
   assert.equal(proof.nextTenAttribution.length, 2, 'The copied engine and the copied wheel each receive the Rounds 1197 to 1208 inverse once');
+  /* The veteran pay lives in the contracts file, so that file is patched whole the same way. */
+  const contractsAuthored = fs.readFileSync(path.join(ROOT, VETERAN_PAY_FILE), 'utf8').replaceAll('\r\n', '\n');
+  const contractsInverse = inverseVeteranPay(VETERAN_PAY_FILE, contractsAuthored, proof.veteranPayAttribution);
+  assert.equal(proof.veteranPayAttribution.length, VETERAN_PAY_ADDITIONS.length, 'The copied contracts file receives the veteran pay inverse of Release AW once for each addition');
   fs.writeFileSync(path.join(ARTIFACTS, 'current-engine.ts'), authored);
   fs.writeFileSync(path.join(ARTIFACTS, 'controlled-engine.ts'), controlled);
   fs.writeFileSync(path.join(ARTIFACTS, 'attributed-engine.ts'), inverse);
-  return bundleAwardsNight(ROOT, { patches: [...TRAIN_OUT.filter(p => p.file !== file), ...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }, { file: NEXT_TEN_WHEEL_FILE, from: wheelAuthored, to: wheelInverse }] });
+  return bundleAwardsNight(ROOT, { patches: [...TRAIN_OUT.filter(p => p.file !== file), ...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }, { file: NEXT_TEN_WHEEL_FILE, from: wheelAuthored, to: wheelInverse }, { file: VETERAN_PAY_FILE, from: contractsAuthored, to: contractsInverse }] });
 }
 
 /* Observe assignments of the probe's existing seeded generators. A wrapper

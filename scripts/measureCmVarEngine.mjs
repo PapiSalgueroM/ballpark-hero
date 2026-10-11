@@ -10,6 +10,8 @@
  * The measure plays league matches with reviews asked for on PROBE rates: no goal is reviewed (so the goals
  * counted are the goals the engine draws before any review), and a missed foul is reviewed at a small known
  * rate. From it: reviewable goals a match, and penalties awarded a match per unit of rate.
+ * Round 1303 fix: and every goal the engine draws a match (goalsPerMatch), for the record: the generated file's
+ * header prints it beside the goals a review can look at. No rate is derived from it.
  */
 import './lib/offlineTransport.cjs';
 import fs from 'node:fs';
@@ -57,6 +59,8 @@ if (L.ruledOut || L.goalConfirmed || L.penaltyConfirmed) { console.log('measureC
 const measured = {
   seeds, leagueMatches: L.matches,
   reviewableGoalsPerMatch: round(L.reviewableGoals / L.matches, 4),
+  /* Round 1303 fix: every goal the engine draws a match, the penalties the probe's reviews gave taken out. */
+  goalsPerMatch: round((L.goals - L.awardedScored) / L.matches, 4),
   foulsPerMatch: round(L.fouls / L.matches, 3),
   probeRate: PROBE, awardsAtProbeRate: L.penaltyAwarded,
   awardsPerMatchPerUnitRate: round(L.penaltyAwarded / L.matches / PROBE, 3),

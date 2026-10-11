@@ -13,7 +13,7 @@ import { SOCCER_CONTRACT_1177_BASELINE_PATCHES } from './lib/soccerContractBasel
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SOCCER_CONTRACT_CONTROL || '';
 const controls = {
-  age: { file: 'src/lib/soccerCareerContracts.ts', from: 'if (career.age < 30)', to: 'if (career.age < 130)' },
+  age: { file: 'src/lib/soccerCareerContracts.ts', from: 'if (career.age < 30) {', to: 'if (career.age < 130) {' },
   elite: { file: 'src/lib/soccerCareerContracts.ts', from: 'career.overall >= 90 && form !== undefined && form >= 8 && (last?.apps ?? 0) >= 20',
     to: 'career.overall >= 85 && form !== undefined && form >= 7.5' },
   move: SOCCER_CONTRACT_1177_BASELINE_PATCHES[2],
@@ -50,6 +50,7 @@ for (const age of [19, 25, 29]) for (const seed of [1, 7, 1177]) {
   state.contractYearsLeft = 0;
   assert.equal(JSON.stringify(seeded(current.stayAtClub, state, seed)), JSON.stringify(seeded(old.soccer.stayAtClub, state, seed)), 'young renewal keeps every field and the same RNG draw');
 }
+console.log('ok   nine young age/seed pairs retain all saved fields across 18 original extension and renewal actions');
 for (const [age, overall, rating, wage, years] of [[32, 76, 6.4, 90000, 2], [38, 76, 6.4, 80000, 1], [38, 90, 8.2, 105000, 1], [38, 85, 7.5, 100000, 1], [32, 82, 7.2, 100000, 2]]) {
   const state = subject(age, overall, rating);
   const bytes = JSON.stringify(state);
@@ -76,6 +77,7 @@ console.log('ok   full old-save loading and younger deals unchanged; exact older
 const cameo = subject(38, 90, 8.2);
 Object.assign(cameo.seasons.at(-1), { apps: 2 });
 assert.equal(B.contracts.soccerExtensionQuote(cameo).weeklyWage, 100000, 'an excellent cameo cannot earn a veteran raise');
+console.log('ok   two excellent cameo appearances do not qualify a veteran for a wage rise');
 
 for (const age of [21, 26]) {
   const state = subject(age, 66, 5.9);
