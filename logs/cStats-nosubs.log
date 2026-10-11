@@ -1,0 +1,21 @@
+1) Every split sums back to the season line
+   CONTROL nosubs applied: the 103 men who came on are not counted, the reading before Round 1146
+   26 players reconciled, worst rating drift 0.00
+  FAIL: 664 total apps across 51 matches with 0 men coming on, expected 561
+  FAIL: league: 494 apps for 38 matches and 0 men coming on
+  FAIL: cup: 27 apps for 2 matches and 0 men coming on
+  FAIL: ucl: 143 apps for 11 matches and 0 men coming on
+  FAIL: nobody came on all season, so the appearances of a substitute were never counted
+   51 matches -> 664 appearances: 11 starters a match plus 0 men who came on, in every bucket
+2) The club record by competition reconciles
+   47 fixtures: 38 league, 1 cup, 8 Europe
+3) An old save grows splits without corrupting totals
+  FAIL: season apps went wrong after the strip
+  FAIL: splits hold 78 apps, expected 66 (post-update matches only, their 0 substitutes included)
+   14 stripped fixtures still bucket by label, 6 new ones carry the type
+4) The splits reset with the season
+   clean books on day one of season two
+5) Copy check
+   StatsScreen.tsx checked
+
+7 FAILURES
