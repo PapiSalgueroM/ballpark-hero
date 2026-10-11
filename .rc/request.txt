@@ -1,0 +1,17 @@
+# Release AW closing pass, final proof P-H3a: gate lane H3, part 1 (served, one at a time)
+#!serve
+#!playwright
+#!serial
+simMobileChrome: node scripts/simMobileChrome.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simSoccerCareerRecords: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs
+playCareerLeagueWorld: node scripts/playCareerLeagueWorld.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playCareerMoments: node scripts/playCareerMoments.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playAutocompleteRace: node scripts/playAutocompleteRace.mjs
+playLineupValidator: node scripts/playLineupValidator.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+playSoccerCareerAwardReveal: node scripts/playSoccerCareerAwardReveal.mjs
