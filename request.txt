@@ -1,0 +1,3 @@
+# Release AU proof: the type gate and the WHOLE unit suite
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
