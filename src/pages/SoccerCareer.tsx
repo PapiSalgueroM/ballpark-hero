@@ -72,7 +72,7 @@ import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransf
    any line the game draws, so a wage slip, an event consequence and a
    transfer fee all follow the same chosen currency. Display only: every
    number in the save stays in euros. */
-import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
+import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
 /* Round 262: the squad you are actually in. Display only, and it renders
    nothing at all when we have no honest answer for that club and season. */
 import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
@@ -1191,7 +1191,7 @@ export default function SoccerCareer() {
     const result = applyEventChoice(career, choiceIndex, clubs);
     setCareer(result);
     const consequence = soccerEventChoiceConsequence(career, event.id, choiceIndex, event.choices[choiceIndex].consequence);
-    toast(event.id === 16 && choiceIndex === 1 ? money(consequence) : consequence);
+    toast(event.id === 16 && choiceIndex === 1 ? moneyLine(consequence) : consequence);
   };
 
   const handleDismissDebut = () => {
@@ -2641,7 +2641,7 @@ function RandomEventCard({ career, event, remaining, onChoice }: { career: Caree
               <span className="text-lg">{choice.emoji}</span>
               <span className="font-bold text-sm">{choice.label}</span>
             </div>
-            <div className="text-[11px] mt-1 opacity-80 ml-8">{money(soccerEventChoiceConsequence(career, event.id, idx, choice.consequence))}</div>
+            <div className="text-[11px] mt-1 opacity-80 ml-8">{moneyLine(soccerEventChoiceConsequence(career, event.id, idx, choice.consequence))}</div>
           </button>
         ))}
       </div>
@@ -4447,7 +4447,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {validChanceWheel(career.chanceWheel) && !career.chanceWheel.seen && onCareerPatch && (
             <CentreMountBoundary what="chance wheel" onClose={() => onCareerPatch(acknowledgeChanceWheel)}>
               <Suspense fallback={null}>
-                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel.title === 'Contract negotiation' ? { ...career.chanceWheel, hit: money(career.chanceWheel.hit), miss: money(career.chanceWheel.miss) } : career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
+                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel.title === 'Contract negotiation' ? { ...career.chanceWheel, hit: moneyLine(career.chanceWheel.hit), miss: moneyLine(career.chanceWheel.miss) } : career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
               </Suspense>
             </CentreMountBoundary>
           )}

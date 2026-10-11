@@ -155,6 +155,25 @@ export function localizeMoney(text: string, cur: Currency = getCurrency()): stri
 }
 
 /**
+ * Release AW fix pass: localizeMoney for a line that carries a whole euro
+ * amount with no unit, such as the contract talk from 30 ("Wage €280997/wk").
+ *
+ * In euros localizeMoney hands a line back exactly as typed, which is right
+ * for "€800k" and wrong for six bare digits: every other big number in the
+ * careers has had its commas since Round 1085, and the contract review prints
+ * this very figure as "€232,229/wk" one screen away. So this converts first
+ * and then groups any euro amount of four digits or more that is still bare.
+ * A converted amount never is: it comes back shortened to k or M. The saved
+ * text and the engine's own string stay as they are, in euros, ungrouped:
+ * this is display only, like everything else in this file.
+ */
+const BARE_EUROS = /€(\d{4,})(?![\d.kMB])/g;
+
+export function localizeMoneyGrouped(text: string, cur: Currency = getCurrency()): string {
+  return localizeMoney(text, cur).replace(BARE_EUROS, (_full, digits: string) => `€${digits.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`);
+}
+
+/**
  * The one line every screen showing converted money prints, so nobody ever
  * mistakes these figures for a live rate.
  */
