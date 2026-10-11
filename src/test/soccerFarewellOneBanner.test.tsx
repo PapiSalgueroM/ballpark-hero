@@ -138,10 +138,12 @@ describe('A farewell season is announced by one box on the page', () => {
   });
 });
 
-/* Release AW closing pass, ruling C3: a plan that cannot be verified is read as absent. The commitment is the
-   flag the announcement set, so while it is true the card is not offered again and the page shows the one
-   FINAL SEASON banner it has always shown for that flag; with the flag off the card is offered again like to
-   any eligible player. The second case fails on the head before the ruling (the card stayed closed for good). */
+/* Release AW closing pass, ruling C3: a plan that cannot be verified is read as absent. With the flag off the
+   card is offered again like to any eligible player (that case fails on the head before the ruling: the card
+   stayed closed for good). With the flag the announcement set, the page shows the one FINAL SEASON banner it
+   has always shown for that flag, and since the fix pass after the closing check the card is offered again
+   beside it: the engine never ended a career by the flag alone, so a closed card left that player a banner and
+   no way to the farewell it names. That is the page of a save that holds the flag and no part at all. */
 describe('A farewell plan that cannot be verified is read as absent on the page', () => {
   const unverifiable = (saved: E.CareerState, flag: boolean): E.CareerState => {
     const career = copy(saved);
@@ -151,11 +153,19 @@ describe('A farewell plan that cannot be verified is read as absent on the page'
   };
   const banners = (view: ReturnType<typeof render>) => (view.container.textContent ?? '').split('FINAL SEASON').length - 1;
 
-  it('with the flag set by the announcement: the old banner shows, once, and the card is not offered again', () => {
+  it('with the flag set by the announcement: the old banner shows, once, and the card is offered again beside it', () => {
     const saved = unverifiable(announceSoccerFarewell(senior()), true);
     expect(readSoccerFarewell(saved), 'the plan is past verifying').toBeNull();
     const view = mount(saved);
-    expect(boxes(view)).toEqual({ announced: 0, available: 0, banner: true });
+    expect(boxes(view)).toEqual({ announced: 0, available: 1, banner: true });
+    expect(banners(view)).toBe(1);
+  });
+
+  it('the same save with the part taken out is the same page: the banner once and the card offered (this one never changed)', () => {
+    const saved = unverifiable(announceSoccerFarewell(senior()), true);
+    delete (saved as unknown as Record<string, unknown>).farewellSeason;
+    const view = mount(saved);
+    expect(boxes(view)).toEqual({ announced: 0, available: 1, banner: true });
     expect(banners(view)).toBe(1);
   });
 
