@@ -1,0 +1,10 @@
+vitest-us exit=0 42s |    Duration  41.22s (transform 3.46s, setup 626ms, collect 9.11s, tests 51.26s, environment 3.55s, prepare 970ms)
+tsc exit=0 49s | 
+seam-compare exit=0 14s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simUsSeasonCentre exit=0 67s | simUsSeasonCentre: 148 checks, 0 failed
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
+simUsBoardParity exit=0 37s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simHarnessAnchors exit=0 28s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-seam exit=1 13s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control seam)
