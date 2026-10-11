@@ -1,0 +1,18 @@
+# Release AX d7 step 2 and d8 on 1287864f: the ruling green, the keeper row and its control, the fleet of careers that never answer (base = commit c), the eight recorded career harnesses with nothing composed
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+press-units: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/soccerPressRoomReadAsAbsent.test.tsx src/lib/soccerCareerPress.test.ts src/test/soccerPressRoomUi.test.tsx src/test/soccerSavePartsReadAsAbsent.test.ts --testTimeout=300000
+simSaveKeeper: export TMPDIR=$(mktemp -d); node scripts/simSaveKeeper.mjs
+simSaveKeeper-partpress-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partpress node scripts/simSaveKeeper.mjs
+simSaveKeeper-partfarewell-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+pressNeutral: export TMPDIR=$(mktemp -d); git worktree add -q /tmp/base-c 934c29d9 && node .rc/x/pressNeutral.mjs /tmp/base-c 150
+simCareerAwardsNight: export TMPDIR=$(mktemp -d); node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: export TMPDIR=$(mktemp -d); node scripts/simCareerSocialBrands.mjs
+simCareerLeagueFinish: export TMPDIR=$(mktemp -d); node scripts/simCareerLeagueFinish.mjs
+simSoccerCareerDevelopment: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerSeasonHistory: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simCareerKeepPlaying: export TMPDIR=$(mktemp -d); node scripts/simCareerKeepPlaying.mjs
+simCareerProgramme: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simSoccerCareerAmbitions: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs

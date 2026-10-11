@@ -1,0 +1,17 @@
+simSaveKeeper exit=0 8s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSaveKeeper-partpress-EXPECT1 exit=1 7s | simSaveKeeper control partpress: FIRED. Section 1 is red.
+press-units exit=0 16s |    Duration  15.11s (transform 2.61s, setup 414ms, collect 9.03s, tests 11.93s, environment 2.97s, prepare 1.11s)
+simSaveKeeper-partfarewell-EXPECT1 exit=1 7s | simSaveKeeper control partfarewell: FIRED. Section 1 is red.
+pressNeutral exit=0 61s | pressNeutral: 150 careers, 26259 steps, 2842 season rows, 150 played to retirement; 0 failure(s). Every save after every step and every draw count is the base engine's: t
+tsc exit=0 100s | 
+simCareerSocialBrands exit=0 37s | ALL SOCIAL AND BRAND CHECKS PASSED
+simSoccerCareerDevelopment exit=0 5s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerLeagueFinish exit=0 22s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerAwardsNight exit=0 101s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerTrophyRuns exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerSeasonHistory exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simSoccerDerbyHistory exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simCareerStoryRole exit=0 53s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simSoccerCareerAmbitions exit=0 3s | simSoccerCareerAmbitions: all 16 paired careers, exact target results, future rewards once and seven actual interruption paths passed
+simCareerProgramme exit=0 80s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+simCareerKeepPlaying exit=0 101s | simCareerKeepPlaying: 1463 checks, 0 failures
