@@ -18,6 +18,7 @@ import {
   acceptOffer, FALLBACK_CLUBS, initCareer, projectLeagueApps, repairCareer, requestTransferDecision,
   type CareerState,
 } from '@/lib/soccerCareerEngine';
+import { soccerTransferTerms } from '@/lib/soccerCareerContracts';
 import { chooseProgramme, nextProgrammeYear, programmePromiseBroken, settleSoccerProgramme } from '@/lib/soccerCareerProgramme';
 import { readTransferBrief, setTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';
 
@@ -131,5 +132,52 @@ describe('A broken appearance promise grants the transfer request, with or witho
     const answered = run(() => requestTransferDecision(filed, FALLBACK_CLUBS));
     expect(answered.draws).toEqual([0.9]);
     expect(transferBriefResult(answered.value, projectLeagueApps)?.status).toBe('no_interest');
+  });
+});
+
+/* Release AW fix pass, review sc-engine finding 2: nothing held the other seam of the same function.
+ *
+ * Since Rounds 1262 to 1264 a new club's wage follows age and form from 30 (soccerTransferTerms). The brief's
+ * request path makes its own offer, one function below the plain request's, and the merge hands it the
+ * player's seasons so that an offer that answers a brief gets the same terms. A mutation that handed it no
+ * seasons (a veteran's form never reaches the quote) survived every test and harness of the tree. These
+ * cases hold it through the engine's own functions: one request, one tape of draws, and players who differ
+ * only in their age or in the rating of the season just played.
+ */
+const ACCEPTING = [0.1, 0.1, 0.2, 0.3, 0.25, 0.3, 0.4];
+/** The window of windowAfter with the level brief filed, for a player of overall 82 of the given age and form. */
+function briefWindow(age: number, lastRating: number): CareerState {
+  const base = windowAfter(30, false);
+  const count = base.seasons.length;
+  const seasons = base.seasons.map((row, index) => ({ ...row, age: age - count + index, rating: index === count - 1 ? lastRating : row.rating }));
+  const filed = setTransferBrief({ ...base, age, overall: 82, seasons }, 'level');
+  expect(readTransferBrief(filed, projectLeagueApps)?.priority, 'the brief is really filed for this window').toBe('level');
+  return filed;
+}
+function briefOffer(state: CareerState) {
+  const { value, draws } = run(() => requestTransferDecision(state, FALLBACK_CLUBS), ACCEPTING);
+  const result = transferBriefResult(value, projectLeagueApps);
+  expect(result?.status, 'an accepting coin and a club that fits: the brief is answered with an offer').toBe('offered');
+  return { offer: result!.offer!, draws };
+}
+
+describe('An offer that answers a brief follows age and form, like every other new club offer', () => {
+  it('a 34 year old after a 6.4 season is offered 80 percent of what his 29 year old twin is offered', () => {
+    const veteran = briefWindow(34, 6.4);
+    const old = briefOffer(veteran), young = briefOffer(briefWindow(29, 6.4));
+    /* A real twin: the same draws pick the same club and the same years, and under 30 the drawn wage stands. */
+    expect(old.draws).toEqual(young.draws);
+    expect(old.offer.club.name).toBe(young.offer.club.name);
+    expect(old.offer.contractYears).toBe(young.offer.contractYears);
+    const drawn = young.offer.wage;
+    expect(drawn).toBeGreaterThanOrEqual(80000);
+    expect(old.offer.wage).toBe(soccerTransferTerms(veteran, drawn, young.offer.contractYears).wage);
+    expect(old.offer.wage).toBe(Math.round(drawn * 0.8));
+  });
+
+  it('the same veteran after a 7.2 season keeps the drawn wage: it is his own last season the quote reads', () => {
+    const drawn = briefOffer(briefWindow(29, 6.4)).offer.wage;
+    expect(briefOffer(briefWindow(34, 7.2)).offer.wage).toBe(drawn);
+    expect(briefOffer(briefWindow(29, 7.2)).offer.wage).toBe(drawn);
   });
 });
