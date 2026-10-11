@@ -1,0 +1,47 @@
+FAIL 320-playing: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 320-summary: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 320-retired: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 390-playing: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 390-summary: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 390-retired: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 1280-playing: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+route._innerFulfill: Fetch response has been disposed
+    at route._innerContinue (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:163:27)
+    at async /home/runner/work/ballpark-hero/ballpark-hero/node_modules/playwright-core/lib/coreBundle.js:61310:11 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,14 @@
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/outcomes/native-fixtures.json'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playDerbyHistory1195.mjs:25:30 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/outcomes/native-fixtures.json'
+}
+
+Node.js v24.21.0
