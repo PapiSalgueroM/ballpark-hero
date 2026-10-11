@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+# Round 1303 review (run lens): my own walk of a live match, both halves, on the build AS IT SHIPS (dark), 390 and 1280, motion and reduced motion.
+walk: node .rc/x/reviewWalk.mjs > /tmp/walk.log 2>&1; s=$?; cp /tmp/walk.log "$RC_OUT/walk-dark.log"; grep -a "^reviewWalk\|^CASE\|^HELP\|^FAIL" /tmp/walk.log | cut -c1-700 | tail -40; echo "RESULT dark walk=$s"; exit $s
