@@ -1,0 +1,23 @@
+# Release AV proof, Round 1302: simCmVar, each control its own line
+simCmVar: node scripts/simCmVar.mjs
+cmvar-announce: CM_VAR_CONTROL=announce node scripts/simCmVar.mjs
+cmvar-awards: CM_VAR_CONTROL=awards node scripts/simCmVar.mjs
+cmvar-counted: CM_VAR_CONTROL=counted node scripts/simCmVar.mjs
+cmvar-decorative: CM_VAR_CONTROL=decorative node scripts/simCmVar.mjs
+cmvar-disabled: CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs
+cmvar-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+cmvar-historic: CM_VAR_CONTROL=historic node scripts/simCmVar.mjs
+cmvar-oldgoalreview: CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs
+cmvar-oldmissedfoul: CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs
+cmvar-oldoverturn: CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs
+cmvar-oldpenaltyontarget: CM_VAR_CONTROL=oldpenaltyontarget node scripts/simCmVar.mjs
+cmvar-oldpenaltyreview: CM_VAR_CONTROL=oldpenaltyreview node scripts/simCmVar.mjs
+cmvar-oldpenaltyscores: CM_VAR_CONTROL=oldpenaltyscores node scripts/simCmVar.mjs
+cmvar-past: CM_VAR_CONTROL=past node scripts/simCmVar.mjs
+cmvar-penalty: CM_VAR_CONTROL=penalty node scripts/simCmVar.mjs
+cmvar-penaltyband: CM_VAR_CONTROL=penaltyband node scripts/simCmVar.mjs
+cmvar-resolution: CM_VAR_CONTROL=resolution node scripts/simCmVar.mjs
+cmvar-resume: CM_VAR_CONTROL=resume node scripts/simCmVar.mjs
+cmvar-reveal: CM_VAR_CONTROL=reveal node scripts/simCmVar.mjs
+cmvar-streamfoul: CM_VAR_CONTROL=streamfoul node scripts/simCmVar.mjs
+cmvar-streamgoal: CM_VAR_CONTROL=streamgoal node scripts/simCmVar.mjs
