@@ -1,0 +1,300 @@
+{
+  "controls": [],
+  "rows": [
+    {
+      "id": "320-current",
+      "ok": false,
+      "checks": 60,
+      "failed": [
+        "unchanged: initial-load: complete state and every saved byte"
+      ],
+      "error": "locator.waitFor: Timeout 30000ms exceeded. | Call log:",
+      "utilities": [
+        {
+          "name": "newspaper-Continue",
+          "align": "end",
+          "phase": "newspaper",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-212 144x44",
+            "Open your phone:relative@164,-212 144x44"
+          ],
+          "targets": [
+            "12,524 296x44"
+          ]
+        },
+        {
+          "name": "newspaper-Continue",
+          "align": "center",
+          "phase": "newspaper",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-474 144x44",
+            "Open your phone:relative@164,-474 144x44"
+          ],
+          "targets": [
+            "12,262 296x44"
+          ]
+        },
+        {
+          "name": "summary-cup-note",
+          "align": "end",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,80 144x44",
+            "Open your phone:relative@164,80 144x44"
+          ],
+          "targets": [
+            "34,539 252x15"
+          ]
+        },
+        {
+          "name": "summary-cup-note",
+          "align": "center",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-183 144x44",
+            "Open your phone:relative@164,-183 144x44"
+          ],
+          "targets": [
+            "34,276 252x15"
+          ]
+        },
+        {
+          "name": "summary-Continue",
+          "align": "end",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,32 144x44",
+            "Open your phone:relative@164,32 144x44"
+          ],
+          "targets": [
+            "34,522 252x44"
+          ]
+        },
+        {
+          "name": "summary-Continue",
+          "align": "center",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-228 144x44",
+            "Open your phone:relative@164,-228 144x44"
+          ],
+          "targets": [
+            "34,262 252x44"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "390-current",
+      "ok": false,
+      "checks": 60,
+      "failed": [
+        "unchanged: initial-load: complete state and every saved byte"
+      ],
+      "error": "locator.waitFor: Timeout 30000ms exceeded. | Call log:",
+      "utilities": [
+        {
+          "name": "newspaper-Continue",
+          "align": "end",
+          "phase": "newspaper",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,123 179x44",
+            "Open your phone:relative@199,123 179x44"
+          ],
+          "targets": [
+            "12,800 366x44"
+          ]
+        },
+        {
+          "name": "newspaper-Continue",
+          "align": "center",
+          "phase": "newspaper",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-277 179x44",
+            "Open your phone:relative@199,-277 179x44"
+          ],
+          "targets": [
+            "12,400 366x44"
+          ]
+        },
+        {
+          "name": "summary-cup-note",
+          "align": "end",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,149 179x44",
+            "Open your phone:relative@199,149 179x44"
+          ],
+          "targets": [
+            "34,608 322x15"
+          ]
+        },
+        {
+          "name": "summary-cup-note",
+          "align": "center",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-45 179x44",
+            "Open your phone:relative@199,-45 179x44"
+          ],
+          "targets": [
+            "34,414 322x15"
+          ]
+        },
+        {
+          "name": "summary-Continue",
+          "align": "end",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,149 179x44",
+            "Open your phone:relative@199,149 179x44"
+          ],
+          "targets": [
+            "34,639 322x44"
+          ]
+        },
+        {
+          "name": "summary-Continue",
+          "align": "center",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-90 179x44",
+            "Open your phone:relative@199,-90 179x44"
+          ],
+          "targets": [
+            "34,400 322x44"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1280-current",
+      "ok": false,
+      "checks": 1,
+      "failed": [],
+      "error": "locator.waitFor: Timeout 30000ms exceeded. | Call log:",
+      "utilities": []
+    },
+    {
+      "id": "320-original-history",
+      "ok": false,
+      "checks": 61,
+      "failed": [
+        "unchanged: initial-load: complete state and every saved byte",
+        "history-names: Full saved competition and champion names have no hidden/truncated text",
+        "history-names: Full saved competition and champion names have no hidden/truncated text"
+      ],
+      "error": "locator.waitFor: Timeout 30000ms exceeded. | Call log:",
+      "utilities": [
+        {
+          "name": "newspaper-Continue",
+          "align": "end",
+          "phase": "newspaper",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-212 144x44",
+            "Open your phone:relative@164,-212 144x44"
+          ],
+          "targets": [
+            "12,524 296x44"
+          ]
+        },
+        {
+          "name": "newspaper-Continue",
+          "align": "center",
+          "phase": "newspaper",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-474 144x44",
+            "Open your phone:relative@164,-474 144x44"
+          ],
+          "targets": [
+            "12,262 296x44"
+          ]
+        },
+        {
+          "name": "summary-cup-note",
+          "align": "end",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,80 144x44",
+            "Open your phone:relative@164,80 144x44"
+          ],
+          "targets": [
+            "34,539 252x15"
+          ]
+        },
+        {
+          "name": "summary-cup-note",
+          "align": "center",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-183 144x44",
+            "Open your phone:relative@164,-183 144x44"
+          ],
+          "targets": [
+            "34,276 252x15"
+          ]
+        },
+        {
+          "name": "summary-Continue",
+          "align": "end",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,32 144x44",
+            "Open your phone:relative@164,32 144x44"
+          ],
+          "targets": [
+            "34,522 252x44"
+          ]
+        },
+        {
+          "name": "summary-Continue",
+          "align": "center",
+          "phase": "season_summary",
+          "disjoint": true,
+          "painted": true,
+          "positions": [
+            "Open the training ground:relative@12,-228 144x44",
+            "Open your phone:relative@164,-228 144x44"
+          ],
+          "targets": [
+            "34,262 252x44"
+          ]
+        }
+      ]
+    }
+  ]
+}

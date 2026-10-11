@@ -1,0 +1,14 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-units exit=0 12s | PASS farewell units: {"mode":"units","total":85,"files":[{"file":"soccerCareerFarewell.test.ts","passed":50},{"file":"soccerFarewellUi.test.tsx","passed":14},{"file":"soc
+farewell-outcomes exit=0 5s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-page-control exit=0 19s | PASS farewell page-control: {"mode":"page-control","baseline":13,"componentBaseline":14,"componentSourceControls":1,"pageSourceControls":2,"intendedFailures":[{"id":"anno
+farewell-native exit=2 342s | Node.js v24.21.0
+brief-units exit=0 11s | Units: 87 actual passed assertions in all4 required files,0 skipped.
+brief-outcomes exit=0 5s | Outcomes:9 healthy groups,60 entire original/current state+RNG pairs,8 independently compiled effective exact faults,9 native fixture branches.
+brief-page-control exit=0 7s | Page source control:2 intended actual equality failures,4 unrelated page cases passed,6-case untouched copied baseline passed.
+brief-native exit=2 23s | Node.js v24.21.0
+layout-units exit=0 5s | PASS actual nonempty recorded-facts and phone suites: 20 assertions, no skipped/pending/todo cases
+layout-native-variant exit=1 173s | 320-original-history: ok=false checks=61 failed=3 first: unchanged: initial-load: complete state and every saved byte error: locator.waitFor: Timeout 30000ms exceeded. | 
+vitest-promise exit=0 3s |    Duration  1.85s (transform 812ms, setup 39ms, collect 1.13s, tests 164ms, environment 225ms, prepare 98ms)
+mut-promise-EXPECT-RED exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.tsx,title=src/test/soccerTransferBriefPromise.test.tsx > A broken appe
