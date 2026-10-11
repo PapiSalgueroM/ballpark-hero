@@ -1,0 +1,6 @@
+# reviewer us-board-recording, Release AX on 72f54789: one mutation of my own in the runner's checkout (a reload forgets a seen push, so the one push can be asked again), asked of this lane's recording and of the other lane's unit files. Each line restores src.
+#!serial
+forget-parity: export TMPDIR=$(mktemp -d); node .rc/x/mutForget.mjs && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src; git status --short | head -3; exit $s
+forget-units: export TMPDIR=$(mktemp -d); node .rc/x/mutForget.mjs && node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketUi.test.tsx src/lib/usCareerMarket.test.ts --testTimeout=300000; s=$?; git checkout -- src; exit $s
+forget-lane-units: export TMPDIR=$(mktemp -d); node .rc/x/mutForget.mjs && node_modules/.bin/vitest run src/test/usCareerHallBoard.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000; s=$?; git checkout -- src; exit $s
+plain-units: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketUi.test.tsx src/lib/usCareerMarket.test.ts src/test/usCareerHallBoard.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000
