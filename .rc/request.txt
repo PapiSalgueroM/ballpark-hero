@@ -1,0 +1,21 @@
+# Round 1306, the served request: the weight rows (candidate and base), the three routes played, every walk that reads the engine or drives Club Manager
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add -q /tmp/wbase 8d3f54c6 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && node_modules/.bin/vite build --outDir /tmp/wbase-dist > /tmp/wbase-build.log 2>&1; tail -1 /tmp/wbase-build.log) && (node scripts/lib/hostLikeServer.mjs /tmp/wbase-dist 4180 > /tmp/wbase-serve.log 2>&1 & echo $! > /tmp/wbase.pid) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180 node scripts/sweepWeight.mjs; s=$?; kill $(cat /tmp/wbase.pid) 2>/dev/null; exit $s
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playCmQuickSubs: node scripts/playCmQuickSubs.mjs
+playLeagueTableFit: node scripts/playLeagueTableFit.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playInboxCard: node scripts/playInboxCard.mjs
+playClubManagerNewCountries: node scripts/playClubManagerNewCountries.mjs
+playClubManager: node scripts/playClubManager.mjs
+playClubManagerSaveLeave: node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: node scripts/playClubManagerSlots.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
