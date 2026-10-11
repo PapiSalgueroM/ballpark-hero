@@ -1,0 +1,10 @@
+# Release AW closing pass, final proof P-X: rulings C3 and C4: the damaged saves probe, the tests of the ruling, the save keeper with its six part controls
+damage: mkdir -p /tmp/sb5 && git archive 5ed04ae7cd9618141ea8db4600206fcec2feeb07 src | tar -x -C /tmp/sb5 && ln -s "$PWD/node_modules" /tmp/sb5/node_modules && SC_BASE=/tmp/sb5 SC_MODE=damage SC_N=5 node .rc/x/scProbe.mjs
+c3-new: node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+sk-partbrief-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partbrief node scripts/simSaveKeeper.mjs
+sk-partagent-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partagent node scripts/simSaveKeeper.mjs
+sk-partreturn-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partreturn node scripts/simSaveKeeper.mjs
+sk-partfarewell-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+sk-partrow-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+sk-partrowus-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
