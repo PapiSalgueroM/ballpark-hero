@@ -398,6 +398,14 @@ export function stagePitchInput(
   const first: PitchSide = live.home === false ? 'opp' : 'me';
   const kicking: PitchSide = stage === 'second' ? (first === 'me' ? 'opp' : 'me') : first;
   const share = stage === 'first' ? live.possH1 : live.possH2 ?? live.possH1;
+  /* Round 1302: a goal ruled out in the last two clock places of the period is drawn too, when it has those
+     places to itself: no chance of the feed (shown yet or not) and no other ruled out goal from the place before
+     it to the whistle. Then the plan plays it on time (one place before the whistle) or winds it up to end at the
+     whistle (at the whistle's own place), and either way its ball is in the net before the period ends. Where it
+     shares those places with a real chance it is left out as before: a goal that counts for nothing must never
+     take the pitch from one that is real. */
+  const period = liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi);
+  const lateRoom = (e: LiveFeedEvent): boolean => !period.some(o => o !== e && (isChance(o) || isRuledOut(o)) && placeOf(o) >= placeOf(e) - 1);
   return {
     mine, theirs,
     feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi
@@ -405,8 +413,9 @@ export function stagePitchInput(
       && (!settledReviews || !cmVarEventWaiting(e, liveFeed(live), settledReviews)))
       /* Round 1218 fix: the goal a review rules out is staged like any chance, whether its review has been shown
          or not (so the plan does not change under the review), unless the viewer opened after it or it comes
-         too late in the period to be played out before the whistle. */
-      .map(e => (isRuledOut(e) && placeOf(e) >= openedAt && placeOf(e) <= stageStop - RULED_OUT_ROOM ? ruledOutChance(e) : e)),
+         too late in the period to be played out before the whistle (Round 1302: and does not have the end of
+         the period to itself, see above). */
+      .map(e => (isRuledOut(e) && placeOf(e) >= openedAt && (placeOf(e) <= stageStop - RULED_OUT_ROOM || lateRoom(e)) ? ruledOutChance(e) : e)),
     span: { from, to: Math.max(from + BEAT_SPAN, stageStop) },
     kickoffs: [{ at: from, side: kicking }],
     possession: (share ?? 50) / 100,
