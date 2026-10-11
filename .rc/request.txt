@@ -1,0 +1,16 @@
+# Release AW part one, final proof, the gate list part H2c (the same lines as Release AV's proof request rAV-H2c, so each line compares with the base)
+#!serve
+#!playwright
+#!serial
+playSoccerCareerAwardReveal: node scripts/playSoccerCareerAwardReveal.mjs
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
+playSoccerCareerContracts: node scripts/playSoccerCareerContracts.mjs
+playSoccerCareerDiscipline: node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerFamily: node scripts/playSoccerCareerFamily.mjs
+playSoccerCareerLeagueWorld: node scripts/playSoccerCareerLeagueWorld.mjs
+playSoccerCareerOpponents: node scripts/playSoccerCareerOpponents.mjs
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playSaveKeeper: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+playDraftNight: node scripts/playDraftNight.mjs
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts/font-cache && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
