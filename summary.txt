@@ -1,0 +1,9 @@
+old-screen exit=1 60s | OLD SCREEN (8aa3a7bc): vitest exit 1
+m-latestaged exit=1 61s | MUT latestaged: vitest exit 1
+m-committed exit=1 61s | MUT committed: vitest exit 1
+m-nohold exit=1 56s | MUT nohold: vitest exit 1
+m-cardalone exit=1 56s | MUT cardalone: vitest exit 1
+m-capearly exit=1 59s | MUT capearly: vitest exit 1
+m-linelate exit=0 59s | MUT linelate: vitest exit 0
+m-othernet exit=1 60s | MUT othernet: vitest exit 1
+clean exit=0 0s | tree after the mutations: 0 changed path(s)

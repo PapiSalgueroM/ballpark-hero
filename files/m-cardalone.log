@@ -1,0 +1,214 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+ [31m❯[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m28 tests[22m[2m | [22m[31m10 failed[39m[2m)[22m[33m 52967[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 1395[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 1991[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 1522[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 2932[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 1704[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 1286[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 5031[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 622[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 1725[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 2617[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends[39m[33m 1253[2mms[22m[39m
+[31m     → the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends[39m[33m 2208[2mms[22m[39m
+[31m     → what the pitch shows under the card of a ruled out goal at 4848 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net[39m[33m 1138[2mms[22m[39m
+[31m     → the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net[39m[33m 1877[2mms[22m[39m
+[31m     → what the pitch shows under the card of a ruled out goal at 4848 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1804[2mms[22m[39m
+[31m     → the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1596[2mms[22m[39m
+[31m     → the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way[39m[33m 1883[2mms[22m[39m
+[31m     → the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1547[2mms[22m[39m
+[31m     → the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1836[2mms[22m[39m
+[31m     → what the pitch shows under the card of a ruled out goal at 3744 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 2216[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 2084[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 2051[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing[39m[33m 1708[2mms[22m[39m
+[31m     → what the pitch shows under the card of a ruled out goal at 1040 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1747[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 2042[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 2336[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 2408[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 10 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+[31m[1mAssertionError[22m: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   "2026:Everton:1:Aston Villa:0:45:opp:48:0:Alejandro Garnacho:goal",[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m toTheWhistle src/test/clubManagerVarScreen.test.tsx:[2m406:68[22m[39m
+    [90m404| [39m    const frames = await run(mounted, maxMs, fs => fs[fs.length - 1].s…
+    [90m405| [39m    const last = frames.map(cardUp).lastIndexOf(true), whistle = frame…
+    [90m406| [39m    expect(order(frames), 'the review was not shown exactly once').toE…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m407| [39m    expect(whistle, 'the half never ended, or ended under the review c…
+    [90m408| [39m    [34mexpect[39m(frames[whistle][33m.[39mscore)[33m.[39m[34mtoBe[39m([34mscoreBy[39m(h[33m.[39mfeed[33m,[39m h[33m.[39mwhistle))[33m;[39m
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m437:30[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+[31m[1mAssertionError[22m: what the pitch shows under the card of a ruled out goal at 4848 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+
+Expected: [32m"[7mgoal/net[27m in the [7mbottom[27m net"[39m
+Received: [31m"[7mpass/pass[27m in the [7mnull[27m net"[39m
+
+[36m [2m❯[22m nothingUnder src/test/clubManagerVarScreen.test.tsx:[2m173:142[22m[39m
+    [90m171| [39m    expect(f.goalCard, `a goal card under the review card at ${f.ms} m…
+    [90m172| [39m    [35mconst[39m own [33m=[39m nets[33m.[39m[35mget[39m(f[33m.[39mcardId[33m![39m)[33m;[39m
+    [90m173| [39m    if (own) expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `w…
+    [90m   | [39m                                                                                                                                             [31m^[39m
+    [90m174| [39m    else expect(`${f.motion}/${f.phase}`, `an action under the review …
+    [90m175| [39m  }
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m439:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net
+[31m[1mAssertionError[22m: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   "2026:Everton:1:Aston Villa:0:45:opp:48:0:Alejandro Garnacho:goal",[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m toTheWhistle src/test/clubManagerVarScreen.test.tsx:[2m406:68[22m[39m
+    [90m404| [39m    const frames = await run(mounted, maxMs, fs => fs[fs.length - 1].s…
+    [90m405| [39m    const last = frames.map(cardUp).lastIndexOf(true), whistle = frame…
+    [90m406| [39m    expect(order(frames), 'the review was not shown exactly once').toE…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m407| [39m    expect(whistle, 'the half never ended, or ended under the review c…
+    [90m408| [39m    [34mexpect[39m(frames[whistle][33m.[39mscore)[33m.[39m[34mtoBe[39m([34mscoreBy[39m(h[33m.[39mfeed[33m,[39m h[33m.[39mwhistle))[33m;[39m
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m456:24[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net
+[31m[1mAssertionError[22m: what the pitch shows under the card of a ruled out goal at 4848 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+
+Expected: [32m"[7mgoal/net[27m in the [7mbottom[27m net"[39m
+Received: [31m"[7mpass/pass[27m in the [7mnull[27m net"[39m
+
+[36m [2m❯[22m nothingUnder src/test/clubManagerVarScreen.test.tsx:[2m173:142[22m[39m
+    [90m171| [39m    expect(f.goalCard, `a goal card under the review card at ${f.ms} m…
+    [90m172| [39m    [35mconst[39m own [33m=[39m nets[33m.[39m[35mget[39m(f[33m.[39mcardId[33m![39m)[33m;[39m
+    [90m173| [39m    if (own) expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `w…
+    [90m   | [39m                                                                                                                                             [31m^[39m
+    [90m174| [39m    else expect(`${f.motion}/${f.phase}`, `an action under the review …
+    [90m175| [39m  }
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m458:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   "2026:Everton:1:Aston Villa:0:45:opp:48:0:Alejandro Garnacho:goal",[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m toTheWhistle src/test/clubManagerVarScreen.test.tsx:[2m406:68[22m[39m
+    [90m404| [39m    const frames = await run(mounted, maxMs, fs => fs[fs.length - 1].s…
+    [90m405| [39m    const last = frames.map(cardUp).lastIndexOf(true), whistle = frame…
+    [90m406| [39m    expect(order(frames), 'the review was not shown exactly once').toE…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m407| [39m    expect(whistle, 'the half never ended, or ended under the review c…
+    [90m408| [39m    [34mexpect[39m(frames[whistle][33m.[39mscore)[33m.[39m[34mtoBe[39m([34mscoreBy[39m(h[33m.[39mfeed[33m,[39m h[33m.[39mwhistle))[33m;[39m
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m500:39[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: what the pitch shows under the card of a ruled out goal at 3744 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+
+Expected: [32m"[7mgoal/net[27m in the [7mbottom[27m net"[39m
+Received: [31m"[7mpass/pass[27m in the [7mnull[27m net"[39m
+
+[36m [2m❯[22m nothingUnder src/test/clubManagerVarScreen.test.tsx:[2m173:142[22m[39m
+    [90m171| [39m    expect(f.goalCard, `a goal card under the review card at ${f.ms} m…
+    [90m172| [39m    [35mconst[39m own [33m=[39m nets[33m.[39m[35mget[39m(f[33m.[39mcardId[33m![39m)[33m;[39m
+    [90m173| [39m    if (own) expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `w…
+    [90m   | [39m                                                                                                                                             [31m^[39m
+    [90m174| [39m    else expect(`${f.motion}/${f.phase}`, `an action under the review …
+    [90m175| [39m  }
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m502:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing
+[31m[1mAssertionError[22m: what the pitch shows under the card of a ruled out goal at 1040 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality[39m
+
+Expected: [32m"[7mgoal/net[27m in the [7mbottom[27m net"[39m
+Received: [31m"[7mpass/pass[27m in the [7mnull[27m net"[39m
+
+[36m [2m❯[22m nothingUnder src/test/clubManagerVarScreen.test.tsx:[2m173:142[22m[39m
+    [90m171| [39m    expect(f.goalCard, `a goal card under the review card at ${f.ms} m…
+    [90m172| [39m    [35mconst[39m own [33m=[39m nets[33m.[39m[35mget[39m(f[33m.[39mcardId[33m![39m)[33m;[39m
+    [90m173| [39m    if (own) expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `w…
+    [90m   | [39m                                                                                                                                             [31m^[39m
+    [90m174| [39m    else expect(`${f.motion}/${f.phase}`, `an action under the review …
+    [90m175| [39m  }
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m583:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m10 failed[39m[22m[2m | [22m[1m[32m18 passed[39m[22m[90m (28)[39m
+[2m   Start at [22m 03:37:19
+[2m   Duration [22m 55.62s[2m (transform 1.53s, setup 43ms, collect 1.97s, tests 52.97s, environment 255ms, prepare 112ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out 'at the whistle' is drawn before its card%2C at its own minute%2C and its review closes before the half ends,line=406,column=68::AssertionError: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "2026:Everton:1:Aston Villa:0:45:opp:48:0:Alejandro Garnacho:goal",%0A- ]%0A+ []%0A%0A ❯ toTheWhistle src/test/clubManagerVarScreen.test.tsx:406:68%0A ❯ src/test/clubManagerVarScreen.test.tsx:437:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out 'one clock place before the whistle' is drawn before its card%2C at its own minute%2C and its review closes before the half ends,line=173,column=142::AssertionError: what the pitch shows under the card of a ruled out goal at 4848 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality%0A%0AExpected: "goal/net in the bottom net"%0AReceived: "pass/pass in the null net"%0A%0A ❯ nothingUnder src/test/clubManagerVarScreen.test.tsx:173:142%0A ❯ src/test/clubManagerVarScreen.test.tsx:439:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > reduced motion%2C a goal ruled out 'at the whistle'%3A the card opens at its own minute on the ball in the net,line=406,column=68::AssertionError: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "2026:Everton:1:Aston Villa:0:45:opp:48:0:Alejandro Garnacho:goal",%0A- ]%0A+ []%0A%0A ❯ toTheWhistle src/test/clubManagerVarScreen.test.tsx:406:68%0A ❯ src/test/clubManagerVarScreen.test.tsx:456:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > reduced motion%2C a goal ruled out 'one clock place before the whistle'%3A the card opens at its own minute on the ball in the net,line=173,column=142::AssertionError: what the pitch shows under the card of a ruled out goal at 4848 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality%0A%0AExpected: "goal/net in the bottom net"%0AReceived: "pass/pass in the null net"%0A%0A ❯ nothingUnder src/test/clubManagerVarScreen.test.tsx:173:142%0A ❯ src/test/clubManagerVarScreen.test.tsx:458:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=406,column=68::AssertionError: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "2026:Everton:1:Aston Villa:0:45:opp:48:0:Alejandro Garnacho:goal",%0A- ]%0A+ []%0A%0A ❯ toTheWhistle src/test/clubManagerVarScreen.test.tsx:406:68%0A ❯ src/test/clubManagerVarScreen.test.tsx:500:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=406,column=68::AssertionError: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "2026:Everton:1:Aston Villa:0:45:opp:49:0:Nicolas Jackson:goal",%0A- ]%0A+ []%0A%0A ❯ toTheWhistle src/test/clubManagerVarScreen.test.tsx:406:68%0A ❯ src/test/clubManagerVarScreen.test.tsx:500:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real chance has its own place%2C one …')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=406,column=68::AssertionError: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "2026:Everton:1:Aston Villa:0:45:opp:49:0:Nicolas Jackson:goal",%0A- ]%0A+ []%0A%0A ❯ toTheWhistle src/test/clubManagerVarScreen.test.tsx:406:68%0A ❯ src/test/clubManagerVarScreen.test.tsx:500:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=406,column=68::AssertionError: the review was not shown exactly once: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "2026:Everton:1:Aston Villa:0:45:opp:49:0:Nicolas Jackson:goal",%0A- ]%0A+ []%0A%0A ❯ toTheWhistle src/test/clubManagerVarScreen.test.tsx:406:68%0A ❯ src/test/clubManagerVarScreen.test.tsx:500:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=173,column=142::AssertionError: what the pitch shows under the card of a ruled out goal at 3744 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality%0A%0AExpected: "goal/net in the bottom net"%0AReceived: "pass/pass in the null net"%0A%0A ❯ nothingUnder src/test/clubManagerVarScreen.test.tsx:173:142%0A ❯ src/test/clubManagerVarScreen.test.tsx:502:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a review in the same minute as the other side's 'injury' (a chance at the same place%3A true)%3A both are told%2C and the card sits over nothing,line=173,column=142::AssertionError: what the pitch shows under the card of a ruled out goal at 1040 ms: expected 'pass/pass in the null net' to be 'goal/net in the bottom net' // Object.is equality%0A%0AExpected: "goal/net in the bottom net"%0AReceived: "pass/pass in the null net"%0A%0A ❯ nothingUnder src/test/clubManagerVarScreen.test.tsx:173:142%0A ❯ src/test/clubManagerVarScreen.test.tsx:583:5%0A%0A
