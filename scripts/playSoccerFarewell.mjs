@@ -48,7 +48,12 @@ try{for(const width of [320,390,1280])for(const fixture of fixtures){const id=wi
   return{trigger,before,dialog};
  }
  async function closeFarewell(opened,escape=false){
-  if(escape)await page.keyboard.press('Escape');else await activate(opened.dialog.locator('[data-farewell-cancel]'));
+  // Release AW: the dialog library ignores an Escape that reaches it before the open dialog has rendered as the top layer. Measured on two
+  // runners (rAW-f2-p1, rAW-f2-p2) with this walk's own steps between a keyboard open and the Escape, about 22 ms: 34 of 80 were ignored,
+  // each with no other layer on the page and nothing else taking the key, and a second Escape closed every one. Nobody presses Escape that
+  // soon after Enter, but the bound plan step of this walk did, and it went red about every second run at 1280. So the keyboard close now
+  // waits for the measured, settled dialog first, like the first Escape of a journey always did.
+  if(escape){await measure('before-escape',opened.dialog,['[data-farewell-cancel]','[data-farewell-help-open]','[data-farewell-dialog] > button:last-child']);await page.keyboard.press('Escape');}else await activate(opened.dialog.locator('[data-farewell-cancel]'));
   await opened.dialog.waitFor({state:'hidden'});await page.waitForFunction(()=>document.querySelector('[data-farewell-open]')===document.activeElement,null,{timeout:2000});
   const value={before:opened.before,after:await bodyState(),focus:await opened.trigger.evaluate(e=>e===document.activeElement)};row.restorations.push(value);
   check(returnFailures(value).length===0,'Back or Escape restores exact opener body and click-time page');return value;
