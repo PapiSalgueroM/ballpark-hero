@@ -1,0 +1,6 @@
+# Reviewer sc-screens, Release AW part one: Soccer Career's new screens played at 320, 390 and 1280 on the served build of 64d87aed
+#!serve
+#!playwright
+walkA: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-a.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-a.log 2>&1; cp .tmp-fx/rv/fx-a.json $RC_OUT/fixtures.json; FIXTURES=.tmp-fx/rv/fx-a.json REPORT=walk-a ONLY_S=vet node .rc/x/walk.mjs
+walkB: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-b.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-b.log 2>&1; FIXTURES=.tmp-fx/rv/fx-b.json REPORT=walk-b ONLY_S=oldvet,young node .rc/x/walk.mjs
+walkC: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-c.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-c.log 2>&1; FIXTURES=.tmp-fx/rv/fx-c.json REPORT=walk-c ONLY_S=offer,brief,oldbrief,talk node .rc/x/walk.mjs
