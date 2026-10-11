@@ -1,0 +1,2 @@
+tsc exit=0 117s | 
+vitest-all exit=1 660s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > 'NFL' My Career%3A watching
