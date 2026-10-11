@@ -1,0 +1,11 @@
+oldvet-320 steps 14 fails 0 pageerrors 0 shots 23
+young-320 steps 1 fails 0 pageerrors 0 shots 1
+oldyoung-320 steps 1 fails 0 pageerrors 0 shots 1
+oldvet-390 steps 14 fails 1 pageerrors 0 shots 24
+young-390 steps 1 fails 0 pageerrors 0 shots 1
+oldyoung-390 steps 1 fails 0 pageerrors 0 shots 1
+oldvet-1280 steps 14 fails 0 pageerrors 0 shots 24
+young-1280 steps 1 fails 0 pageerrors 0 shots 1
+oldyoung-1280 steps 1 fails 0 pageerrors 0 shots 1
+MISS oldvet-390 EXPECT the farewell season ends in retirement :: {"phase":"ballon_dor","retired":false,"seasons":17}
+walk done: 9 cases, 1 misses, 0 page errors

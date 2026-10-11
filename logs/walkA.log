@@ -1,0 +1,7 @@
+vet-320 steps 14 fails 1 pageerrors 0 shots 24
+vet-390 steps 14 fails 1 pageerrors 0 shots 24
+vet-1280 steps 14 fails 1 pageerrors 0 shots 24
+MISS vet-320 EXPECT the farewell season ends in retirement :: {"phase":"ballon_dor","retired":false,"seasons":17}
+MISS vet-390 EXPECT the farewell season ends in retirement :: {"phase":"ballon_dor","retired":false,"seasons":17}
+MISS vet-1280 EXPECT the farewell season ends in retirement :: {"phase":"ballon_dor","retired":false,"seasons":17}
+walk done: 3 cases, 3 misses, 0 page errors
