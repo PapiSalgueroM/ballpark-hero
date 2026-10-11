@@ -1,0 +1,113 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  23:28:44
+   Duration  861ms (transform 43ms, setup 52ms, collect 0ms, tests 0ms, environment 302ms, prepare 138ms)
+
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/extensionResponseMotion.test.tsx [ src/test/extensionResponseMotion.test.tsx ]
+Error: Failed to resolve import "./MarketChanceWheel" from ".sim-control/extension-motion-Qr8NMi/ExtensionCard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/extension-motion-Qr8NMi/ExtensionCard.tsx:29:30
+  24 |  import { cn } from '@/lib/utils';
+  25 |  import motion from '@/components/us-career/ExtensionMotion.module.css';
+  26 |  import MarketChanceWheel from './MarketChanceWheel';
+     |                                 ^
+  27 |  export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline, wheel, onWheelContinue, odds }) {
+  28 |      const root = useRef(null);
+ ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23
+ ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7
+ ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: 
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  23:28:44
+   Duration  861ms (transform 43ms, setup 52ms, collect 0ms, tests 0ms, environment 302ms, prepare 138ms)
+
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/extensionResponseMotion.test.tsx [ src/test/extensionResponseMotion.test.tsx ]
+Error: Failed to resolve import "./MarketChanceWheel" from ".sim-control/extension-motion-Qr8NMi/ExtensionCard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/extension-motion-Qr8NMi/ExtensionCard.tsx:29:30
+  24 |  import { cn } from '@/lib/utils';
+  25 |  import motion from '@/components/us-career/ExtensionMotion.module.css';
+  26 |  import MarketChanceWheel from './MarketChanceWheel';
+     |                                 ^
+  27 |  export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline, wheel, onWheelContinue, odds }) {
+  28 |      const root = useRef(null);
+ ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23
+ ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7
+ ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simExtensionResponseMotion.mjs:40:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '\n' +
+    ' RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero\n' +
+    '\n' +
+    '\n' +
+    ' Test Files  1 failed (1)\n' +
+    '      Tests  no tests\n' +
+    '   Start at  23:28:44\n' +
+    '   Duration  861ms (transform 43ms, setup 52ms, collect 0ms, tests 0ms, environment 302ms, prepare 138ms)\n' +
+    '\n' +
+    '\n' +
+    '\n' +
+    '⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n' +
+    '\n' +
+    ' FAIL  src/test/extensionResponseMotion.test.tsx [ src/test/extensionResponseMotion.test.tsx ]\n' +
+    'Error: Failed to resolve import "./MarketChanceWheel" from ".sim-control/extension-motion-Qr8NMi/ExtensionCard.tsx". Does the file exist?\n' +
+    '  Plugin: vite:import-analysis\n' +
+    '  File: /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/extension-motion-Qr8NMi/ExtensionCard.tsx:29:30\n' +
+    "  24 |  import { cn } from '@/lib/utils';\n" +
+    "  25 |  import motion from '@/components/us-career/ExtensionMotion.module.css';\n" +
+    "  26 |  import MarketChanceWheel from './MarketChanceWheel';\n" +
+    '     |                                 ^\n' +
+    '  27 |  export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline, wheel, onWheelContinue, odds }) {\n' +
+    '  28 |      const root = useRef(null);\n' +
+    ' ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41\n' +
+    ' ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16\n' +
+    ' ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23\n' +
+    ' ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39\n' +
+    ' ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7\n' +
+    ' ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18\n' +
+    ' ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27\n' +
+    '\n' +
+    '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n' +
+    '\n',
+  expected: /3 failed.*2 passed/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

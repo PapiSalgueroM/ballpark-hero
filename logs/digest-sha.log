@@ -1,0 +1,8 @@
+3ad6af2c08b3fe245bbcd3903f66bbe11a21ea25334eaf7e44d97f5ddbd3ff88  scripts/data/careerSeasonTruth.json
+52d58c3da2ac07c25cd3d6dd2830d6bddcb525245549fb06ae34ba0d8087c1d9  scripts/data/usSeasonLayDigest.json
+9a57a88325b657bc1408a2a8a9f248850129587661f0b7910b63bad5983158f4  scripts/data/usSeasonLawDigest.json
+98b8c06a682e13629d95140a1cd336b399d333a6f1b96de73414078adb1d8239  scripts/data/usSeasonSeamDigest.json
+a9dd32235ef7ec5978af5845eb747b1eb3b8751e9871a5f20d1bc0f2e3100914  scripts/data/usCareerDeckCDigest.json
+53688ed719be432976432670f00d7748a4589439f97a3c8ee895c903c25a757f  scripts/data/careerPreDraftDigest.json
+ scripts/data/usBoardFixture.json | 1494 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 1232 insertions(+), 262 deletions(-)

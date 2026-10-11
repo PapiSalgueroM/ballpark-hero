@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 13
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simFreeAgencyFeedback.mjs:84:82 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 13,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

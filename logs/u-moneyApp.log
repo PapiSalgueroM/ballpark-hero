@@ -1,0 +1,8 @@
+MoneyApp feedback:19/19 focused cases passed with the actual shared component and real moneyAct engine; none skipped.
+MoneyApp feedback: all four sport descriptors retain exact deposit payloads, balances, unchanged transfer wealth and newest signed statement.
+MoneyApp feedback: actual withdrawals, two trade fees, holding units, winning/losing card outcomes, seed and one-sitting rule remain exact.
+MoneyApp feedback: fresh/recovered accounts, passive prop clones and declined actions stay quiet; local intent cannot survive a later unrelated update.
+MoneyApp feedback: identical capped-ledger transactions produce one new receipt and only actually changed balances/latest committed entry get finite cues.
+MoneyApp feedback: returning to Account does not replay a statement cue; an actual new Account action still earns a new one.
+MoneyApp feedback: existing account controls, market/back/shop navigation and focus stay intact; source CSS bounds motion at600ms and declares a visible reduced-motion state.
+MoneyApp feedback: CRLF copied controls bind, original bytes held, owned temporary files cleaned. Native geometry/motion acceptance remains separate.

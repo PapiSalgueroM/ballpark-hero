@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/gameLawNfl.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 769[2mms[22m[39m
+   [33m[2m✓[22m[39m nflMinutePicker[2m > [22mwhere the hour has room, keeps lines out of back to back minutes and a side's drives three minutes apart [33m 315[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 23:28:34
+[2m   Duration [22m 2.09s[2m (transform 437ms, setup 54ms, collect 570ms, tests 769ms, environment 306ms, prepare 127ms)[22m
+
