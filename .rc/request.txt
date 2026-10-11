@@ -1,0 +1,5 @@
+# verify 3 of Release AW part one on 046e38ae: the save keeper walk with its base arm (the gate invocation, a base built from before the keeper)
+#!serve
+#!playwright
+#!serial
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
