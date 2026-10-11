@@ -1,0 +1,26 @@
+# Round 1306 step (a): the measurement, and which neighbours are green on the base (head 566053fc = base + a measuring mode in one harness)
+measure: TMPDIR=$(mktemp -d) BOOK_MEASURE=leagues node scripts/simCmLeagueBook.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+book-default: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBook.mjs
+book-full: TMPDIR=$(mktemp -d) BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+simAwardRaces: TMPDIR=$(mktemp -d) node scripts/simAwardRaces.mjs
+simStatsCentre: TMPDIR=$(mktemp -d) node scripts/simStatsCentre.mjs
+simCmOwnGoals: TMPDIR=$(mktemp -d) node scripts/simCmOwnGoals.mjs
+simLiveMatch: TMPDIR=$(mktemp -d) node scripts/simLiveMatch.mjs
+simCmVar: TMPDIR=$(mktemp -d) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmRealFixtures: TMPDIR=$(mktemp -d) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmLeagueRules: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+simCmShootoutOrder: TMPDIR=$(mktemp -d) node scripts/simCmShootoutOrder.mjs
+simManagerAppealIsolation: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+simCustomClubValues: TMPDIR=$(mktemp -d) node scripts/simCustomClubValues.mjs
+saveSize-0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSaveSize.mjs
+saveSize-1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: TMPDIR=$(mktemp -d) node scripts/simDailyDeals.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
+simManagerHotSeat: TMPDIR=$(mktemp -d) node scripts/simManagerHotSeat.mjs
+simDeadlineDay: TMPDIR=$(mktemp -d) node scripts/simDeadlineDay.mjs
