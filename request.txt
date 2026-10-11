@@ -1,0 +1,6 @@
+#!serial
+a-head: node_modules/.bin/vite build --outDir /tmp/r3a > /tmp/r3a.log 2>&1; s=$?; tail -2 /tmp/r3a.log; node .rc/x/r3measure.mjs /tmp/r3a head; exit $s
+b-noboot: node .rc/x/r3mut.mjs noboot && node_modules/.bin/vite build --outDir /tmp/r3b > /tmp/r3b.log 2>&1; s=$?; git checkout -- src; node .rc/x/r3measure.mjs /tmp/r3b noboot; exit $s
+c-stub: node .rc/x/r3mut.mjs stub && node_modules/.bin/vite build --outDir /tmp/r3c > /tmp/r3c.log 2>&1; s=$?; git checkout -- src; node .rc/x/r3measure.mjs /tmp/r3c stub; exit $s
+d-base: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/r3d > /tmp/r3d.log 2>&1); s=$?; node .rc/x/r3measure.mjs /tmp/r3d base-main; exit $s
+e-clean: git status --short | wc -l

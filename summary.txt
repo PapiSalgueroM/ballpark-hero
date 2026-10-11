@@ -1,0 +1,5 @@
+a-head exit=0 30s | R3 head: entry index-9mS5S1Pj.js raw 794366 B, gzip 240948 B (235.30 K); keeper journal key in it: true; card words in it: true
+b-noboot exit=0 31s | R3 noboot: entry index-DwgUSJnP.js raw 791049 B, gzip 239976 B (234.35 K); keeper journal key in it: true; card words in it: true
+c-stub exit=0 31s | R3 stub: entry index-wEsM7OU_.js raw 790138 B, gzip 239680 B (234.06 K); keeper journal key in it: false; card words in it: true
+d-base exit=0 31s | R3 base-main: entry index-Q9OVxNaQ.js raw 787832 B, gzip 239053 B (233.45 K); keeper journal key in it: false; card words in it: true
+e-clean exit=0 0s | 0
