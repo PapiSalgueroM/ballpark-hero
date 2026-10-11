@@ -1,0 +1,14 @@
+# Review (run lens) of Round 1212 on 1e1066fb: the round own browser walk and every one of its controls on baseball
+#!serve
+#!playwright
+#!serial
+playUsSeasonCentre: SHOTS=$RC_OUT ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-write-mlb: US_SEASON_PLAY_CONTROL=write SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-static-mlb: US_SEASON_PLAY_CONTROL=static SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-count-mlb: US_SEASON_PLAY_CONTROL=count SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-cover-mlb: US_SEASON_PLAY_CONTROL=cover SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-playfirst-mlb: US_SEASON_PLAY_CONTROL=playfirst SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-nohandover-mlb: US_SEASON_PLAY_CONTROL=nohandover SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-noaction-mlb: US_SEASON_PLAY_CONTROL=noaction SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-raw-mlb: US_SEASON_PLAY_CONTROL=raw SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-column-mlb: US_SEASON_PLAY_CONTROL=column SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs

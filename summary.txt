@@ -1,0 +1,11 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsSeasonCentre exit=0 231s | playUsSeasonCentre: 217 checks, 0 failed
+ctl-walk-write-mlb exit=1 81s | playUsSeasonCentre: 73 checks, 6 failed (control write)
+ctl-walk-static-mlb exit=1 76s | playUsSeasonCentre: 73 checks, 6 failed (control static)
+ctl-walk-count-mlb exit=1 83s | playUsSeasonCentre: 73 checks, 2 failed (control count)
+ctl-walk-cover-mlb exit=1 81s | playUsSeasonCentre: 73 checks, 2 failed (control cover)
+ctl-walk-playfirst-mlb exit=1 64s | playUsSeasonCentre: 10 checks, 5 failed (control playfirst)
+ctl-walk-nohandover-mlb exit=1 100s | playUsSeasonCentre: 73 checks, 2 failed (control nohandover)
+ctl-walk-noaction-mlb exit=1 80s | playUsSeasonCentre: 73 checks, 2 failed (control noaction)
+ctl-walk-raw-mlb exit=1 96s | playUsSeasonCentre: 73 checks, 4 failed (control raw)
+ctl-walk-column-mlb exit=2 0s | control column refused: the NFL clock's wide column is in 1 chunks (expected once in one), nfl walked: false
