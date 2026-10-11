@@ -75,8 +75,8 @@ jobs:
           cp.spawn=function(command,args,options){
            const child=nativeSpawn.call(this,command,args,options),file=path.basename(args?.[0]??'');
            if(command===process.execPath&&path.dirname(path.resolve(args?.[0]??''))===path.resolve('scripts')&&names.includes(file)){
-            const index=children.length,base=path.join(out,'children',String(index).padStart(4,'0')+'-'+file),environment=Object.fromEntries(['SIM_NETWORK','ENGINES','TZ','NODE_OPTIONS','BASE','SWEEP_BASE','PORT','FORMULA_EVIDENCE_DIR','FORMULA_CAREER_OUT','FORMULA_CAREER_BROWSER_OUT','FORMULA_CAREER_INPUT'].map(key=>[key,options?.env?.[key]??null])),row={file,args,cwd:options?.cwd??null,environment,stdout:base+'.stdout.log',stderr:base+'.stderr.log',stdoutBytes:0,stderrBytes:0,chunks:[],exitCode:null,signal:null};children.push(row);fs.writeFileSync(row.stdout,'');fs.writeFileSync(row.stderr,'');
-            child.stdout.on('data',data=>{row.chunks.push({stream:'stdout',start:row.stdoutBytes,bytes:data.length});fs.appendFileSync(row.stdout,data);row.stdoutBytes+=data.length;});child.stderr.on('data',data=>{row.chunks.push({stream:'stderr',start:row.stderrBytes,bytes:data.length});fs.appendFileSync(row.stderr,data);row.stderrBytes+=data.length;});child.on('close',(code,signal)=>{row.exitCode=code;row.signal=signal;});
+            const index=children.length,base=path.join(out,'children',String(index).padStart(4,'0')+'-'+file),environment=Object.fromEntries(['SIM_NETWORK','ENGINES','TZ','NODE_OPTIONS','BASE','SWEEP_BASE','PORT','ONLY','FORMULA_EVIDENCE_DIR','FORMULA_CAREER_OUT','FORMULA_CAREER_BROWSER_OUT','FORMULA_CAREER_INPUT'].map(key=>[key,options?.env?.[key]??null])),row={file,sourceSha256:discovery.find(row=>row.file===file).sha256,startedAt:Date.now(),closedAt:null,args,cwd:options?.cwd??null,environment,stdout:base+'.stdout.log',stderr:base+'.stderr.log',stdoutBytes:0,stderrBytes:0,chunks:[],exitCode:null,signal:null};children.push(row);fs.writeFileSync(row.stdout,'');fs.writeFileSync(row.stderr,'');
+            child.stdout.on('data',data=>{row.chunks.push({stream:'stdout',start:row.stdoutBytes,bytes:data.length});fs.appendFileSync(row.stdout,data);row.stdoutBytes+=data.length;});child.stderr.on('data',data=>{row.chunks.push({stream:'stderr',start:row.stderrBytes,bytes:data.length});fs.appendFileSync(row.stderr,data);row.stderrBytes+=data.length;});child.on('close',(code,signal)=>{row.exitCode=code;row.signal=signal;row.closedAt=Date.now();});
            }return child;
           };syncBuiltinESMExports();process.on('exit',code=>fs.writeFileSync(path.join(out,'process.json'),JSON.stringify({runnerExit:code,children},null,2)));await import(pathToFileURL(path.resolve('scripts/runAllSims.mjs')).href);
           JS
@@ -87,6 +87,33 @@ jobs:
           const failures=classifications.filter(x=>x.verdict!=='PASS');fs.writeFileSync(path.join(out,'scope.json'),JSON.stringify({expected:discovery.expected,actual:processes.children.map(x=>x.file),classifications,failures,internalOmissions:omissions,qualification:'Internal omissions are retained and receive no live or database coverage credit.'},null,2));
           assert.equal(discovery.network,'offline');assert.equal(discovery.browser,true);assert.equal(hash(fs.readFileSync('scripts/runAllSims.mjs')),discovery.runnerSha256);assert.deepEqual(processes.children.map(x=>x.file).sort(),[...discovery.expected].sort());assert.deepEqual(classifications.map(x=>x.file).sort(),[...discovery.expected].sort());assert.equal(failures.length,0,'FAIL, EMPTY or SKIP results are unwaived');assert.equal(processes.runnerExit,0);for(const row of processes.children){assert.equal(row.exitCode,0,row.file);assert.equal(row.signal,null,row.file);}
           console.log('PASS exact unchanged runner coverage: '+classifications.length+' named results, with no FAIL, EMPTY or SKIP');
+          JS
+          cat > formula-career-artifacts/helpers/check-formula.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex'),read=file=>JSON.parse(fs.readFileSync(file,'utf8')),root=path.resolve('formula-career-artifacts'),runner=path.join(root,'full-suite-runner'),discovery=read(path.join(runner,'discovery.json')),processes=read(path.join(runner,'process.json')),scope=read(path.join(runner,'scope.json'));
+          assert.deepEqual(discovery.selected,[],'full suite has no ONLY filter');
+          const records=[];
+          for(const file of ['simFormulaCareer.mjs','playFormulaCareer.mjs']){
+           const sources=discovery.discovery.filter(row=>row.file===file),children=processes.children.filter(row=>row.file===file),classified=scope.classifications.filter(row=>row.file===file);
+           assert.equal(sources.length,1,file+' exact discovery');assert.equal(children.length,1,file+' invoked exactly once');assert.equal(classified.length,1,file+' classified once');assert.equal(classified[0].verdict,'PASS');
+           const child=children[0];assert.equal(child.sourceSha256,sources[0].sha256);assert.equal(child.sourceSha256,hash(fs.readFileSync('scripts/'+file)));assert.deepEqual(child.args,[path.resolve('scripts',file)]);assert.equal(path.resolve(child.cwd),process.cwd());assert.equal(child.exitCode,0);assert.equal(child.signal,null);
+           assert.equal(child.environment.ONLY,null);assert.equal(child.environment.FORMULA_EVIDENCE_DIR,null);assert.equal(child.environment.FORMULA_CAREER_OUT,'formula-career-artifacts/proof');assert.equal(child.environment.FORMULA_CAREER_BROWSER_OUT,'formula-career-artifacts/browser');assert.equal(child.environment.FORMULA_CAREER_INPUT,'formula-career-artifacts/proof');assert.equal(child.environment.SIM_NETWORK,'offline');assert.equal(child.environment.ENGINES,'chromium');
+           assert(Number.isFinite(child.startedAt)&&Number.isFinite(child.closedAt)&&child.closedAt>=child.startedAt);records.push({file,child,classification:classified[0]});
+          }
+          assert(records[0].child.closedAt<=records[1].child.startedAt,'complete pure child precedes actual browser child');
+          const pure=read(path.join(root,'proof/report.json')),browser=read(path.join(root,'browser/report.json'));
+          assert.equal(pure.status,'pass');assert.deepEqual(pure.failures,[]);assert.equal(browser.status,'pass');assert.deepEqual(browser.errors,[]);
+          const ids=[];for(let seed=1;seed<=8;seed++)for(const approach of ['careful','steady','attack'])for(const training of ['pace','rotate'])ids.push(seed+'-'+approach+'-'+training);
+          assert.deepEqual(pure.population.map(row=>row.id),ids);assert.deepEqual(pure.careers.map(row=>row.id),ids);assert(pure.careers.every(row=>row.measurements.starts===480));
+          for(const [key,value]of Object.entries({careers:48,races:23040,probeCases:39,sourceFaults:18,bundles:21,globalValues:0,observationControls:3}))assert.equal(pure.counts[key],value,key);
+          assert.equal(pure.probes.length,39);assert(pure.probes.every(row=>row.errors.length===0));assert.equal(pure.controls.length,18);for(const row of pure.controls){assert.deepEqual(row.actual,row.expected);assert(row.changedIds.length>0);}
+          assert.deepEqual(pure.observationControls.map(row=>row.id),['missing-output','input-mutation','missing-private']);for(const row of pure.observationControls){assert.deepEqual(row.actual,row.expected);assert.equal(row.original,row.undo);assert.notEqual(row.original,row.fault);}
+          assert.equal(pure.wholeUndo.compiledEqual,true);assert.equal(pure.ledgerCodec.wholeUndo,true);assert.deepEqual(pure.ledgerCodec.actual,['whole-state']);assert.deepEqual(pure.ledgerCodec.expected,['whole-state']);
+          assert.deepEqual(browser.cases.map(row=>[row.width,row.height]),[[320,568],[390,844],[1280,900]]);assert(browser.cases.every(row=>row.status==='pass'&&row.errors.length===0));
+          for(const row of browser.cases)assert.deepEqual(row.controls.map(control=>control.id),['healthy-read','effective-complete-read-fault','empty-attribute-equivalence','effective-complete-action-fault','final-drain']);
+          assert.equal(browser.input.report.sha256,hash(fs.readFileSync(path.join(root,'proof/report.json'))));assert.equal(browser.input.manifest.sha256,hash(fs.readFileSync(path.join(root,'proof/objects.json'))));
+          const report={status:'pass',records,pureReportSha256:hash(fs.readFileSync(path.join(root,'proof/report.json'))),browserReportSha256:hash(fs.readFileSync(path.join(root,'browser/report.json'))),population:ids,counts:pure.counts,browserCounts:browser.counts,qualification:'Execution and complete report provenance guard. Independent full outcome, source, stream and physical audits remain required; no duplicate execution is claimed.'};fs.writeFileSync(path.join(root,'single-formula-execution.json'),JSON.stringify(report,null,2));
+          console.log('PASS one actual full Formula Career pure invocation and one actual browser invocation');
           JS
           cat > formula-career-artifacts/helpers/generated.mjs <<'JS'
           import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
@@ -141,34 +168,12 @@ jobs:
           tar -czf formula-career-artifacts/dist.tar.gz dist
           sha256sum formula-career-artifacts/generated-public-and-lastmod.tar.gz formula-career-artifacts/dist.tar.gz > formula-career-artifacts/generated-archive-sha256.txt
           git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > formula-career-artifacts/post-build-source-held.log
-      - name: Actual Formula Career compiled method and copied-source controls
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          mkdir -p formula-career-artifacts/focused-runner
-          failed=0
-          FORMULA_EVIDENCE_DIR=formula-career-artifacts/proof FORMULA_RUNNER_DIR=formula-career-artifacts/focused-runner ONLY=simFormulaCareer NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/focused-runner/runner.log || failed=1
-          FORMULA_RUNNER_DIR=formula-career-artifacts/focused-runner node formula-career-artifacts/helpers/check-runner.mjs || failed=1
-          node --input-type=module - <<'JS' || failed=1
-          import fs from 'node:fs';import assert from 'node:assert/strict';const report=JSON.parse(fs.readFileSync('formula-career-artifacts/proof/report.json','utf8'));assert.equal(report.status,'pass');
-          JS
-          exit "$failed"
-      - name: Actual saved Formula Career browser journeys
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          mkdir -p formula-career-artifacts/browser-runner
-          failed=0
-          FORMULA_EVIDENCE_DIR=formula-career-artifacts/browser FORMULA_CAREER_INPUT=formula-career-artifacts/proof FORMULA_RUNNER_DIR=formula-career-artifacts/browser-runner ONLY=playFormulaCareer NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/browser-runner/runner.log || failed=1
-          FORMULA_RUNNER_DIR=formula-career-artifacts/browser-runner node formula-career-artifacts/helpers/check-runner.mjs || failed=1
-          node --input-type=module - <<'JS' || failed=1
-          import fs from 'node:fs';import assert from 'node:assert/strict';const report=JSON.parse(fs.readFileSync('formula-career-artifacts/browser/report.json','utf8'));assert.equal(report.status,'pass');
-          JS
-          exit "$failed"
       - name: Early complete evidence size guard
         if: ${{ !cancelled() }}
         run: |
           du -sb formula-career-artifacts > formula-career-artifacts/early-artifact-size.log
           test "$(du -sb formula-career-artifacts | cut -f1)" -lt 500000000
-      - name: Retain focused post-build evidence
+      - name: Retain complete source setup and build evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
@@ -182,8 +187,9 @@ jobs:
         run: |
           mkdir -p formula-career-artifacts/full-suite-runner
           failed=0
-          env -u ONLY -u FORMULA_EVIDENCE_DIR FORMULA_CAREER_OUT=formula-career-artifacts/full-suite/proof FORMULA_CAREER_BROWSER_OUT=formula-career-artifacts/full-suite/browser FORMULA_CAREER_INPUT=formula-career-artifacts/full-suite/proof FORMULA_RUNNER_DIR=formula-career-artifacts/full-suite-runner NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/full-suite-runner/runner.log || failed=1
+          env -u ONLY -u FORMULA_EVIDENCE_DIR FORMULA_CAREER_OUT=formula-career-artifacts/proof FORMULA_CAREER_BROWSER_OUT=formula-career-artifacts/browser FORMULA_CAREER_INPUT=formula-career-artifacts/proof FORMULA_RUNNER_DIR=formula-career-artifacts/full-suite-runner NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/full-suite-runner/runner.log || failed=1
           FORMULA_RUNNER_DIR=formula-career-artifacts/full-suite-runner node formula-career-artifacts/helpers/check-runner.mjs || failed=1
+          node formula-career-artifacts/helpers/check-formula.mjs || failed=1
           exit "$failed"
       - name: All fifteen rebuilt output readers with complete child output
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
