@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-libs: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts src/lib/gmGameScore.test.ts src/lib/gmGameDay.test.ts src/lib/gmBracket.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs > $RC_OUT/simGmGameDay.log 2>&1; s=$?; grep -E "the board.s way|FAIL" $RC_OUT/simGmGameDay.log | cut -c1-420; tail -1 $RC_OUT/simGmGameDay.log; exit $s
+ctl-bindold: GM_GAMEDAY_CONTROL=bindold node scripts/simGmGameDay.mjs > $RC_OUT/ctl-bindold.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-bindold.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-bindold.log | cut -c1-260; exit $s
+ctl-bindstream: GM_GAMEDAY_CONTROL=bindstream node scripts/simGmGameDay.mjs > $RC_OUT/ctl-bindstream.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-bindstream.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-bindstream.log | cut -c1-260; exit $s
+ctl-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs > $RC_OUT/ctl-static.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-static.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-static.log | cut -c1-260; exit $s
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs > $RC_OUT/ctl-mounted.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-mounted.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-mounted.log | cut -c1-260; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
