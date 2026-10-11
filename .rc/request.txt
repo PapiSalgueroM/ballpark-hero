@@ -1,0 +1,2 @@
+# Round 1212 fix pass on e85701bb: the whole vitest suite on the final head
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
