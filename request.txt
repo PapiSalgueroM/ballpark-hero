@@ -1,0 +1,7 @@
+# Release AV, the walk control that threw in rAV-W1 (playfirst: "the entry's wait is in 0 chunks"), on head 7037e28d: what the built chunks hold for the entry's wait, the control as it is, and the control with its anchor reading a minified name that holds a dollar sign (in the runner's copy only, restored in the same line).
+#!serve
+#!playwright
+#!serial
+what-the-build-holds: grep -o -h -E 'await [A-Za-z0-9_$.]{1,14}\.ready\([A-Za-z0-9_$.]{1,14}\)' dist/assets/*.js | sort | uniq -c; echo "chunks that hold it:"; grep -l -E 'await [A-Za-z0-9_$.]{1,14}\.ready\(' dist/assets/*.js | xargs -n1 basename
+playfirst-asis: US_SEASON_PLAY_CONTROL=playfirst SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playfirst-patched: node .rc/x/patchPlayfirst.mjs && US_SEASON_PLAY_CONTROL=playfirst SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs; s=$?; git checkout -q -- scripts/playUsSeasonCentre.mjs; exit $s

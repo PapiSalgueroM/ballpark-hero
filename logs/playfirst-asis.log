@@ -1,0 +1,12 @@
+SKIPPED nba: not asked for (SPORTS)
+SKIPPED nfl: not asked for (SPORTS)
+viewer chunk UsSeasonCentre-DvLT6TEv.js (6.4K raw); the cover lives in usCareerSeasonReview-dEHSTcJR.js
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsSeasonCentre.mjs:274
+  if (where.length !== 1 || (textOf(where[0]).match(re) ?? []).length !== 2) throw new Error(`control playfirst refused: the entry's wait is in ${where.length} chunks (${where.map(f => (textOf(f).match(re) ?? []).length).join(', ')} times)`);
+                                                                                   ^
+
+Error: control playfirst refused: the entry's wait is in 0 chunks ( times)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsSeasonCentre.mjs:274:84
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
