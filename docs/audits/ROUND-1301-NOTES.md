@@ -258,9 +258,10 @@ reroll in a hundred. `TOL` is untouched; baseball's 8,000 (Round 1226) stands.
 
 **But 16,000 is too long for a gate line, so the default is 12,000.** The football child takes 64 minutes on a
 runner by itself at 16,000 where it took 29 at 8,000, and one command of a remote check is cut at 70 minutes
-(`timeout 4200` in the kit's `run.sh`). `BAL_DEFAULT.nfl` is 12,000. Measured there on `SIM_SEED=7`
-(`r1301-s4-nfl12-seed7`, 2,887 s, 48 minutes for the child alone): median legacy +3.0 percent (1.0 to 5.7), 1.8
-points inside the bound; peak OVR +0.08 (0.03 to 0.13), Hall share +0.12 points (-0.41 to 0.64), headline awards
+(`timeout 4200` in the kit's `run.sh`). `BAL_DEFAULT.nfl` is 12,000. Measured there on the default seeds
+(`r1301-summer-nfl`, the whole football line, 2,949 s): median legacy +2.5 percent (0.0 to 5.3), 2.2 points inside
+the bound. And on `SIM_SEED=7` (`r1301-s4-nfl12-seed7`, 2,887 s, 48 minutes for the child alone): +3.0 percent
+(1.0 to 5.7), 1.8 points inside; peak OVR +0.08 (0.03 to 0.13), Hall share +0.12 points (-0.41 to 0.64), headline awards
 -1.9 percent (-5.4 to 1.6). A reroll is red there about one time in twenty five (one in ten at 8,000, about one
 in two hundred at 16,000). The stronger size is measured and one variable away (`SIM_BALANCE_CAREERS=16000`)
 for a gate that gives the football balance a longer clock.
@@ -273,8 +274,9 @@ round: with all three sports at 8,000 Round 1226 measured the whole harness at 3
 minutes, `r1226-y-sum` and `r1226-summer-full`), because the three balance children share about two cores on a
 runner (alone they take 29, 46 and 41 minutes). So the gate has to run it one sport a line, each on a runner of
 its own: `SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs`, and the same for nba, mlb and nhl. Every section
-runs for the sport named (`r1301-s4-nhl` is that line for the NHL: green, 369 s). The football line at the new
-default was sent (`r1301-summer-nfl`); the closing report says whether it came back.
+runs for the sport named: `r1301-s4-nhl` is that line for the NHL (green, 369 s) and `r1301-summer-nfl` is that
+line for football at the new default (green, 2,949 s, 49 minutes: "Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11,
+12 held"). The basketball and baseball lines were not run alone by this round (their sizes did not change).
 
 The NHL part of the same harness, whole, on this round's head (`r1301-s4-nhl`, `SIM_SPORTS=nhl`): green, and its
 balance on calibration 3 reads peak +0.13 (0.01 to 0.25), median legacy +1.8 percent (-0.3 to 3.8), Hall share

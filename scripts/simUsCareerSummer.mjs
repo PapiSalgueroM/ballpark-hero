@@ -161,8 +161,9 @@
      a runner by itself (measured three times: 3864, 3848 and 3871 s), where
      8000 took 29, and one command of a remote check is cut at 70 minutes.
      So the NFL runs 12000 a seed by default (BAL_DEFAULT below; the bound
-     is untouched). Measured at 12000, SIM_SEED=7, this tree: +3.0% [1.0,
-     5.7], inside by 1.8, 48 minutes for the child alone (2887 s). A reroll
+     is untouched). Measured at 12000 on this tree: the default seeds +2.5%
+     [0.0, 5.3], inside by 2.2; SIM_SEED=7 +3.0% [1.0, 5.7], inside by 1.8;
+     48 minutes for the child alone (2907 and 2887 s). A reroll
      goes red there about one time in twenty five (one in ten at 8000,
      about one in two hundred at 16000). A gate that gives the NFL balance
      a longer clock should set SIM_BALANCE_CAREERS=16000 for it.
