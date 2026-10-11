@@ -1,0 +1,29 @@
+1) A fresh 2015 save is the real 2015 squad, untouched
+   25 in squad, 0 mismatches, 0 generated
+   Bayern Munich: 23 in squad, 23 bake rows, 0 mismatches
+   PSG: 21 in squad, 21 bake rows, 0 mismatches
+2) Three worlds (2026, 2015, 2010), and none of them leak
+  FAIL: 2015-only Hiroki Sakai is on the 2026 market
+  FAIL: 2015-only Mathew Leckie is on the 2026 market
+  FAIL: 2015-only Tom Lawrence is on the 2026 market
+   1434 era-exclusive names checked against the 2026 market, 4 leaks
+   225 names exist in 2015 and 2026: 19 verified namesakes, 0 unexplained
+   569 names exist in 2010 and 2015: 5 allowlisted, 0 unexplained
+3) Boards talk 2015: title for Barcelona, survival talk for August Leicester
+   98 club demands checked across the five 2015 leagues
+4) Full seasons play out plausibly in all five leagues
+   Barcelona finishes: 2,1,1,1,2,2 · Las Palmas finishes: 20,20,20,20,20,20
+   Bayern finishes: 1,2,1,1,1,1 · PSG finishes: 1,1,1,1,1,1 · GFC Ajaccio finishes: 17,19,17,19,18,11
+   means: Bayern 1.17, PSG 1.00, GFC Ajaccio 16.83
+5) The bake file tells the truth about itself
+   meta says 1659 players / 98 clubs; file holds 1659 / 98
+   big five accounting: Bundesliga 292, Ligue 1 253, 0 names at two clubs
+6) Legends rate like legends; pre-title Leicester stay honest
+   2015 Messi 98, 2015 Ronaldo 98, modern best 94
+7) A three league save from before Round 899 plays on and grows in the summer
+   season one world: laliga2015 38,premier2015 38 · season two world: bundesliga2015 34/18,laliga2015 38/20,ligue12015 38/20,premier2015 38/20
+7b) A save holding the old long Champions League names rates them as 2015-16
+   Paris Saint-Germain: strength 86 (PSG reads 86), association France
+   Borussia Mönchengladbach: strength 81 (Gladbach reads 81), association Germany
+
+simEra2015: 3 failures

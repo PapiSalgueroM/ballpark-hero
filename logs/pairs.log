@@ -1,0 +1,9 @@
+simGmCalendar head=9a4322219331 main=9a4322219331 SAME lines=7
+simGmDealTableFixture head=0fec9ab273a4 main=0fec9ab273a4 SAME lines=3
+simGmStaff head=c607bdae6772 main=c607bdae6772 SAME lines=17
+simEra2005 head=fda911aae0cf main=fda911aae0cf SAME lines=2
+simEra2010 head=6cf2033e9014 main=6cf2033e9014 SAME lines=2
+simEra2015 head=7e5eeef15862 main=7e5eeef15862 SAME lines=4
+simEra2020 head=07baa20f5f3e main=07baa20f5f3e SAME lines=6
+simSafari head=dcb34c3c2b5b main=dcb34c3c2b5b SAME lines=3
+pairs that differ: 0

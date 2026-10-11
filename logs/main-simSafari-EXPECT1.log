@@ -1,0 +1,3 @@
+  FAIL: src/hooks/useTransferPathGuidance.test.ts: regex lookbehind, a parse error in Safari before 16.4
+  FAIL: src/components/club-manager/LiveSimMotion.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+simSafari: 2 failures

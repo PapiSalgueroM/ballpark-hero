@@ -1,0 +1,3 @@
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekI
+simGmCalendar: 6 failure(s)
