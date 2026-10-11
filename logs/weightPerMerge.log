@@ -1,0 +1,11 @@
+base 7037e28d | exit=1 |   /soccer-career      808K gz over  45 files (budget 808K, 808.1K to the tenth) | sweepWeight: 3 failures
+a 70d28387 | exit=1 |   /soccer-career      808K gz over  45 files (budget 808K, 808.1K to the tenth) | sweepWeight: 3 failures
+b 22f00fa0 | exit=1 |   /soccer-career      808K gz over  45 files (budget 808K, 808.1K to the tenth) | sweepWeight: 3 failures
+c 9e3d3d9b | exit=1 |   /soccer-career      808K gz over  45 files (budget 808K, 808.4K to the tenth) | sweepWeight: 3 failures
+d 347b4918 | exit=1 |   /soccer-career      811K gz over  45 files (budget 808K, 811.1K to the tenth) | sweepWeight: 4 failures
+e 540c87db | exit=1 |   /soccer-career      813K gz over  45 files (budget 808K, 813.3K to the tenth) | sweepWeight: 4 failures
+f 464a08dc | exit=1 |   /soccer-career      816K gz over  45 files (budget 808K, 815.8K to the tenth) | sweepWeight: 4 failures
+g a24cb16c | exit=1 |   /soccer-career      819K gz over  45 files (budget 808K, 819.1K to the tenth) | sweepWeight: 4 failures
+h 16eb38f4 | exit=1 |   /soccer-career      819K gz over  45 files (budget 808K, 819.2K to the tenth) | sweepWeight: 4 failures
+head 64d87aed | exit=1 |   /soccer-career      819K gz over  45 files (budget 808K, 819.1K to the tenth) | sweepWeight: 4 failures
+weightPerMerge: done
