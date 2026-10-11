@@ -255,7 +255,7 @@ let entries = 0, sackings = 0, pressAnswers = 0, seasonsPlayed = 0;
 const falls = [];
 const fanSamples = [];   // [fan value, last ten PPG]
 const fanMoves = { W: [], D: [], L: [] };
-const keptStates = { mid: [], end: [], promiseProbes: [] };
+const keptStates = { mid: [], end: [], promiseProbes: [], pendingPress: [] };
 let keptSkipped = 0;
 
 function ppgLastTen(s) {
@@ -306,6 +306,7 @@ function playCareer(tag, start, seasons, opts = {}) {
       if (s.sacked) { sackings += 1; break; }
       if (r.kind === 'seasonOver') break;
       if (s.press?.pending) {
+        if (opts.sample && season === 1) keptStates.pendingPress.push(clone(s));
         s = mouthy(s);
         pressAnswers += 1;
         holdMeter(`${tag} s${season} e${guard} after the press`, s);
@@ -398,6 +399,25 @@ for (const base of [...keptStates.mid, ...keptStates.promiseProbes]) {
   handshakes += 1;
   if (!(s.boardConfidence > 0) || s.sacked) fail(`a summer handshake from 3 left the board on ${s.boardConfidence} (sacked=${s.sacked})`);
   holdMeter(`handshake probe ${s0.clubName}`, s);
+}
+/* Round 1256: keep the genuine first-season question before its answer.
+   Fixed week-eight and week-twelve bases can miss every disliked option.
+   These copies run after the original career loops and are press-only:
+   the promise, handshake and desk bases above stay exactly as they were. */
+for (const base of keptStates.pendingPress) {
+  const q = base.press.pending;
+  for (let i = 0; i < q.options.length; i++) {
+    const o = q.options[i];
+    const s0 = clone(base);
+    s0.boardConfidence = 0.5;
+    const s = answerPress(s0, i);
+    pressProbes += 1;
+    if ((o.board ?? 0) < 0) pressNegative += 1;
+    const expected = Math.min(100, Math.max(1, 0.5 + o.board));
+    if (s.boardConfidence !== expected) fail(`a genuine press answer ("${o.label}", board ${o.board}) from 0.5 left the board on ${s.boardConfidence}, not ${expected}`);
+    if (s.sacked) fail(`a genuine press answer sacked ${s0.clubName} ("${o.label}")`);
+    holdMeter(`genuine press probe ${s0.clubName} option ${i}`, s);
+  }
 }
 console.log(`   ${pressProbes} press answers from half a point (${pressNegative} of them the board disliked) and ${handshakes} handshakes from three: none reached zero`);
 if (pressNegative < 3) fail(`only ${pressNegative} press options the board dislike were probed, the floor was barely exercised`);
