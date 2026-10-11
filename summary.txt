@@ -1,0 +1,7 @@
+tsc exit=0 61s | 
+vitest-mlb exit=0 11s |    Duration  11.14s (transform 3.37s, setup 322ms, collect 6.49s, tests 14.90s, environment 1.35s, prepare 484ms)
+simUsSeasonCentre exit=0 79s | simUsSeasonCentre: 158 checks, 0 failed
+ctl-absix exit=1 13s | simUsSeasonCentre: 58 checks, 2 failed (control absix)
+lay-compare exit=3 19s | simUsSeasonCentre digest compare: NOT COMPARED, 10 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)
+simUsSeasonLedger exit=0 3s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simUsBoardParity exit=0 40s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
