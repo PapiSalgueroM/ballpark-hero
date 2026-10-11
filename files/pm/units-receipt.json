@@ -1,0 +1,34 @@
+{
+  "observed": [
+    {
+      "file": "src/lib/soccerCareerPress.test.ts",
+      "passed": 78
+    },
+    {
+      "file": "src/test/soccerPressRoomUi.test.tsx",
+      "passed": 13
+    },
+    {
+      "file": "src/lib/usCareerMarket.test.ts",
+      "passed": 53
+    },
+    {
+      "file": "src/test/usCareerMarketUi.test.tsx",
+      "passed": 17
+    },
+    {
+      "file": "src/test/usCareerMarketBoard.test.tsx",
+      "passed": 10
+    },
+    {
+      "file": "src/test/usCareerSummer.test.tsx",
+      "passed": 40
+    },
+    {
+      "file": "src/test/usCareerSaveRetry.test.tsx",
+      "passed": 33
+    }
+  ],
+  "passed": 244,
+  "failed": 0
+}
