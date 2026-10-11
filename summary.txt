@@ -1,0 +1,11 @@
+simDraftNight exit=1 0s | simDraftNight: 2 FAILURES
+simNbaDraftCapital exit=0 1s | NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+simGmReload exit=0 5s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simFoHub exit=0 0s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+simSaveKeeper exit=0 3s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simGmGameDay exit=0 20s | simGmGameDay: 188 checks, 0 failed
+simNflGmDesk exit=0 21s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simGmDraftOrder exit=0 5s | simGmDraftOrder: green. 603120 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+simGmDeskHost exit=0 28s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
