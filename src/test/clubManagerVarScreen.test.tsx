@@ -333,7 +333,10 @@ describe('Club Manager: the review screen', () => {
   }, 120000);
 
   it('a penalty a review gives that is saved: the save is drawn after the card and the score stays', async () => {
-    const h = half(2, 2193, awardedAlone('saved'));
+    /* Round 1303: the penalty rate fell with the ledger's standard (0.004902 to 0.003605 a foul) and a review's id
+       holds the fixture, the minute and the man, so the first four matches of this career hold no saved penalty
+       by review any more (120,000 first halves, runner result r1303-scan). The tenth entry does (r1303-scan2). */
+    const h = half(9, 1832, awardedAlone('saved'));
     const v = h.review, id = v.review!.id, before = scoreBy(h.feed, place(v) - 1);
     expect(scoreBy(h.feed, place(v))).toBe(before);
     const mounted = openAt(h, v.minute - 1);
@@ -677,7 +680,9 @@ describe('Club Manager: the review screen', () => {
     { what: 'a real goal is the last kick after it and a real goal has the place before it', match: 1, hint: 10321, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
     { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
     { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
-    { what: 'two places before the whistle, a real chance at its place and one after', match: 2, hint: 8615, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
+    /* Round 1303: on the lower penalty rate the half this row stood on (match 3, seed 8615) holds no review. A scan of
+       200,000 first halves of entries 5 to 24 (runner result r1303-scan2) found one half of this shape: entry 11, seed 2022. */
+    { what: 'two places before the whistle, a real chance at its place and one after', match: 10, hint: 2022, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
   ];
   type AwardedRun = { h: Half; frames: Frame[]; last: number; whistle: number };
   const awardedRuns = new Map<number, AwardedRun>();

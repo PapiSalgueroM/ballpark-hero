@@ -1,5 +1,5 @@
 import { keyedRng } from '@/lib/keyedRng';
-import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE } from '@/data/clubManagerVarRates';
+import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE, CM_VAR_KINDS } from '@/data/clubManagerVarRates';
 
 /** Round 1218: the rates and the coverage are DERIVED from real football by scripts/genCmVarRates.mjs
  * (scripts/data/cmVarRates.json, cmVarCompetitions.json) and read from the generated module. No rate is typed here.
@@ -14,7 +14,33 @@ export interface CmVarDecision {
   /** 'ruled_out' since Round 1218: one publisher splits why goals are ruled out, so the card names no reason. */
   reason: 'offside' | 'attacking_foul' | 'handball' | 'ruled_out' | 'clear' | 'penalty_stands' | 'missed_foul';
 }
-export { CM_VAR_GAME_RATES };
+export { CM_VAR_GAME_RATES, CM_VAR_KINDS };
+
+/** Round 1303 (the lead's decision 2). The KINDS of review the engine can play: a goal ruled out, a penalty given.
+ *  Which of them the GAME plays is data: scripts/data/cmVarRates.json (kinds, and what its owed entries hold),
+ *  through the generator, as CM_VAR_KINDS. Turning a kind on is a line of that ledger, never an edit here. */
+export type CmVarKind = 'goal' | 'penalty';
+export const CM_VAR_ALL_KINDS: readonly CmVarKind[] = ['goal', 'penalty'];
+/** What a caller hands kickOff. A LIST asks for those kinds and is saved with the match (the game asks with
+ *  CM_VAR_KINDS, see cmVarGameAsk). `true` stages every kind the engine can play and saves no list: the tests
+ *  and the harnesses ask that way, the game never does (scripts/simCmVar.mjs holds that at the source). */
+export type CmVarAsk = boolean | readonly CmVarKind[];
+export function cmVarKindsAsked(ask: CmVarAsk | undefined): CmVarKind[] {
+  if (ask === true) return [...CM_VAR_ALL_KINDS];
+  return ask ? CM_VAR_ALL_KINDS.filter(kind => ask.includes(kind)) : [];
+}
+/** The kinds a match in play reviews: the list it was kicked off with. A match with reviews and no list was
+ *  kicked off with every kind staged (no save in the wild holds one: the switch was never on before the list). */
+export function cmVarKindsOf(live: { varReviews?: true; varKinds?: readonly CmVarKind[] }): CmVarKind[] {
+  if (!live.varReviews) return [];
+  const saved = live.varKinds;
+  return saved ? CM_VAR_ALL_KINDS.filter(kind => saved.includes(kind)) : [...CM_VAR_ALL_KINDS];
+}
+/** What the game itself asks kickOff for, at both places it kicks a match off: the kinds the ledger has on, and
+ *  nothing at all while the switch is off or no kind is on. */
+export function cmVarGameAsk(switchOn: boolean, kinds: readonly CmVarKind[] = CM_VAR_KINDS): { varReviews?: readonly CmVarKind[] } {
+  return switchOn && kinds.length > 0 ? { varReviews: kinds } : {};
+}
 
 const CUP_STAGES = ['R16', 'QF', 'SF', 'F'], UCL_STAGES = ['group', 'R16', 'QF', 'SF', 'F'];
 /** Does this competition use reviews at this stage in 2026-27? key is league:<id>, cup:<cup name> or ucl.

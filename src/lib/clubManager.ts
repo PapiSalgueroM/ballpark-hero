@@ -1,7 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
-import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, type CmVarDecision } from '@/lib/clubManagerVar';
+import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
@@ -2429,6 +2429,10 @@ export type NextFixtureInfo =
 export interface LiveMatch {
   /** Simplified reviews enabled only by a new modern Club Manager kickoff. */
   varReviews?: true;
+  /** Round 1303: the kinds of review this match was kicked off with (a goal ruled out, a penalty given), so a
+   *  match saved mid way keeps exactly those whatever a later build plays. Saved when the caller asked with a
+   *  list, which is how the game asks. No list on a match with reviews: every kind (a staged match). */
+  varKinds?: CmVarKind[];
   /** Index into the calendar, so resuming knows which fixture this is. */
   week: number;
   myGoals: number;
@@ -14790,7 +14794,9 @@ function drawSegment(
   const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
   const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
   const reviewKey = `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}:${from}:${to}`;
-  const myReview = live.varReviews ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
+  /* Round 1303: each kind of review is played only when the match was kicked off with it. */
+  const reviewKinds = cmVarKindsOf(live);
+  const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
   if (myReview) me.goals = myReview.goals;
   const oppStart = oppAt(live, from);
   const byMinute = clockOrder;
@@ -14832,7 +14838,7 @@ function drawSegment(
     fixExits(oppCards, [], oppGoals, hi);
   }
   markOppSetPieceGoals(oppGoals);
-  const theirReview = live.varReviews ? settleGoalReviews(oppGoals, 'opp', reviewKey) : null;
+  const theirReview = reviewKinds.includes('goal') ? settleGoalReviews(oppGoals, 'opp', reviewKey) : null;
   if (theirReview) oppGoals = theirReview.goals;
   if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
   else live.h2Opp = [...(live.h2Opp ?? []), ...oppGoals].sort(byMinute);
@@ -14865,9 +14871,10 @@ function drawSegment(
       const p = [...(oppAt(live, minute) ?? [])].sort((a, b) => oppShotWeight(b) - oppShotWeight(a) || a.n.localeCompare(b.n))[0];
       return p ? { name: p.n } : null;
     };
-    const awards = awardReviewedPenalties(play, reviewKey, takerAt, [...me.goals, ...oppGoals, ...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? [])]);
-    play.splice(0, play.length, ...awards.play);
-    for (const goal of awards.goals) {
+    const penaltyKind = reviewKinds.includes('penalty');
+    const awards = penaltyKind ? awardReviewedPenalties(play, reviewKey, takerAt, [...me.goals, ...oppGoals, ...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? [])]) : null;
+    if (awards) play.splice(0, play.length, ...awards.play);
+    for (const goal of awards?.goals ?? []) {
       if (goal.side === 'me' && goal.id) {
         const scorer: MyGoalLine = { id: goal.id, name: goal.name, minute: goal.minute, penalty: true };
         me.goals.push(scorer);
@@ -14878,7 +14885,7 @@ function drawSegment(
         if (half === 1) live.h1Opp!.push(scorer); else live.h2Opp!.push(scorer);
       }
     }
-    play.push(...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? []), ...awards.reviews, ...penaltyReviews(play, reviewKey));
+    play.push(...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? []), ...(awards?.reviews ?? []), ...(penaltyKind ? penaltyReviews(play, reviewKey) : []));
     if (half === 1) { live.h1My!.sort(clockOrder); live.h1Opp!.sort(clockOrder); }
     else { live.h2My!.sort(clockOrder); live.h2Opp!.sort(clockOrder); }
   }
@@ -17588,7 +17595,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: boolean }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
      Round 1072, with nobody making changes. Manager Hot Seat passes it: its
@@ -17749,7 +17756,9 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  * point where the manager gets to manage: a real half, a real score, and a
  * dressing room where changing something changes what happens next.
  */
-function kickOff(state: CareerState, entry: CalendarEntry, varReviews = false): LiveMatch {
+function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false): LiveMatch {
+  /* Round 1303: the kinds of review the caller asked for (the game asks with the ledger's list, CM_VAR_KINDS). */
+  const varKinds = cmVarKindsAsked(varReviews);
   const fx = fixtureFor(state, entry)!;
   /* Round 505: the eleven WITH their slots, because the strength reads a
      man in his slot now. */
@@ -17769,9 +17778,9 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews = false): 
   const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
   const live: LiveMatch = {
     /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
-    ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID)
+    ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
       && cmVarCovers(entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
-        entry.type === 'cup' ? entry.cupRound : entry.type === 'uclGroup' ? 'group' : entry.uclRound) ? { varReviews: true as const } : {}),
+        entry.type === 'cup' ? entry.cupRound : entry.type === 'uclGroup' ? 'group' : entry.uclRound) ? { varReviews: true as const, ...(varReviews === true ? {} : { varKinds }) } : {}),
     week: state.week,
     myGoals: 0,
     oppGoals: 0,

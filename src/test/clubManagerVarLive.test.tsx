@@ -30,7 +30,15 @@ vi.mock('@/lib/completions', () => ({
 }));
 
 const CONTROL = process.env.CM_VAR_LIVE_CONTROL === 'on';
-if (CONTROL) vi.doMock('@/lib/clubManagerVarLive', () => ({ CM_VAR_LIVE: true }));
+/* Round 1303: `switch` turns the switch on and leaves the kinds as the ledger has them. While the ledger plays no
+   kind of review the game then still asks for nothing, so every case below stays GREEN under it: the switch alone
+   lights nothing. The day the ledger plays a kind this mode goes red like `on`, and the cases become the lit rule. */
+const SWITCH_ONLY = process.env.CM_VAR_LIVE_CONTROL === 'switch';
+if (CONTROL || SWITCH_ONLY) vi.doMock('@/lib/clubManagerVarLive', () => ({ CM_VAR_LIVE: true }));
+/* Round 1303: the kind of review is data (CM_VAR_KINDS, generated from the rates ledger) and the list is empty
+   while the ledger holds both kinds, so the switch alone would ask for nothing and `on` could not go red. The
+   control therefore also hands the game the goal kind, the way the generated list will once the ledger plays it. */
+if (CONTROL) vi.doMock('@/data/clubManagerVarRates', async () => ({ ...(await vi.importActual<Record<string, unknown>>('@/data/clubManagerVarRates')), CM_VAR_KINDS: ['goal'] }));
 
 const { useClubManager } = await import('@/hooks/useClubManager');
 const { playNextEntry } = await import('@/lib/clubManager');
@@ -77,7 +85,18 @@ async function booted() {
 
 describe('Club Manager: VAR ships dark', () => {
   it('the switch is off in this release', () => {
-    expect(CONTROL ? !CM_VAR_LIVE : CM_VAR_LIVE, 'CM_VAR_LIVE must be false until the VAR round sources its rates').toBe(false);
+    expect(CONTROL || SWITCH_ONLY ? !CM_VAR_LIVE : CM_VAR_LIVE, 'CM_VAR_LIVE must be false while the rates ledger plays no kind of review').toBe(false);
+  });
+
+  /* Round 1303, the lead's decision 2: what the game asks kickOff for is the ledger's list of kinds, never `true`
+     (which stages every kind the engine can play, and is how the cases below ask the engine what it WOULD review). */
+  it('the game asks for the kinds of review the ledger plays, and for nothing while the switch is off or no kind is played', async () => {
+    const { cmVarGameAsk, CM_VAR_KINDS } = await import('@/lib/clubManagerVar');
+    expect(cmVarGameAsk(false, ['goal'])).toEqual({});
+    expect(cmVarGameAsk(true, [])).toEqual({});
+    expect(cmVarGameAsk(true, ['goal'])).toEqual({ varReviews: ['goal'] });
+    expect(cmVarGameAsk(true)).toEqual(CM_VAR_KINDS.length ? { varReviews: CM_VAR_KINDS } : {});
+    if (!CONTROL) expect(CM_VAR_KINDS, 'the ledger holds both kinds of review (owed goals-level and penalties-total), so the generated list is empty').toEqual([]);
   });
 
   it('a live kick off through the hook asks for no review', async () => {
@@ -95,6 +114,7 @@ describe('Club Manager: VAR ships dark', () => {
     expect(asked.kind).toBe('halftime');
     expect(asked.state.live?.varReviews, 'this save is not one the engine reviews, so the case proves nothing').toBe(true);
     expect('varReviews' in api.career.live, 'the saved match carries the review opt in').toBe(false);
+    expect('varKinds' in api.career.live, 'the saved match carries a list of kinds of review').toBe(false);
     r.unmount();
   }, 180000);
 

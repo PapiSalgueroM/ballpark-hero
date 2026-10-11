@@ -60,7 +60,8 @@ export const FLEET_CLUBS = [
 ];
 
 const empty = () => ({ matches: 0, goals: 0, reviewableGoals: 0, fouls: 0, penalties: 0, ruledOut: 0, goalConfirmed: 0, penaltyConfirmed: 0, penaltyAwarded: 0, awardedScored: 0, matchesWithReview: 0, goalsOff: 0, penaltiesOff: 0, resultMoved: 0 });
-/** Walk every club one season per seed, reviews asked for at every kickoff. Returns the counts by the
+/** Walk every club one season per seed, reviews asked for at every kickoff (reviews: true stages every kind the
+ *  engine plays, a list such as ['goal'] asks for those kinds, Round 1303). Returns the counts by the
  *  report's own competition (league, cup, uclGroup, uclKo), and the league counts seed by seed. */
 export function playFleet(cm, { seeds, clubs = FLEET_CLUBS, perClub = 60, reviews = true, paired = false }) {
   const out = { byKind: { league: empty(), cup: empty(), uclGroup: empty(), uclKo: empty() }, careers: 0, seeds: seeds.length, perSeed: [] };
@@ -71,7 +72,7 @@ export function playFleet(cm, { seeds, clubs = FLEET_CLUBS, perClub = 60, review
       out.careers += 1;
       let played = 0;
       for (let i = 0; i < 400 && played < perClub; i++) {
-        const res = seeded(seed * 100003 + c * 7919 + i, () => cm.playNextEntry(state, { skipHalftime: true, noCoach: true, ...(reviews ? { varReviews: true } : {}) }));
+        const res = seeded(seed * 100003 + c * 7919 + i, () => cm.playNextEntry(state, { skipHalftime: true, noCoach: true, ...(reviews ? { varReviews: reviews } : {}) }));
         if (res.kind === 'seasonOver' || res.state?.sacked) break;
         /* paired: the same match from the same save and seed with no review asked for, so the goal gap is the
            reviews' own doing and not two different samples. */

@@ -56,7 +56,27 @@ const clone = value => JSON.parse(JSON.stringify(value));
    And the penalty band's headroom (0.20) is the other bands', not one measured for that quantity: without reviews
    the engine sits at 0.3597 to 0.3821 a match against the band's top of 0.3979, a margin of 4 percent that is
    printed on every run and not asserted. It decides nothing while penalties-total is open; the day somebody
-   closes that entry, that margin has to be measured on several fleets before it is trusted. */
+   closes that entry, that margin has to be measured on several fleets before it is trusted.
+   Round 1303 (the lead's decision 1: a rate stands on the LOWEST of every reading two publishers or more give within
+   a factor of two). The goal rate is 0.031456 a goal now (target 0.0752 a match, 23 in 306) and the ledger's range
+   for goals ruled out runs to 0.1447, so the band is 0.0601 to 0.1737: the low edge is the one that works, the top
+   edge only stops a rate that more than doubles. The penalty rate is 0.003605 a foul (target 0.0658 a match).
+   MEASURED again on the new rates, ten fleets of 3,917 to 4,060 league matches (runner result r1303-gap, the goal
+   kind alone, the same ten sets of six seeds as above):
+     goals ruled out a match   0.0713 0.0770 0.0794 0.0720 0.0779 0.0838 0.0704 0.0781 0.0700 0.0662
+       mean 0.0746, standard deviation 0.0054; the low edge lies 2.7 of those under the mean, and the lowest fleet
+       (0.0662) is 10 percent above it. The default seeds give 0.0713.
+     goals a match moved by    -0.0671 -0.0750 -0.0789 -0.0740 -0.0740 -0.0876 -0.0739 -0.0751 -0.0700 -0.0660
+       mean -0.0743: EVERY fleet is outside goalGap (0.05), the nearest by a third. A goal a review rules out is a
+       goal fewer, and with the penalty kind off nothing gives one back (the staged pair sits at -0.0189 because a
+       review's penalties put about 0.05 back). So the goal kind ALONE is outside the family's band by its own
+       design value, not by sampling, and the ledger holds it (owed goals-level) until the lead rules or the engine
+       changes. The bands outcome plays both fleets and is red when the ledger and the measured engine disagree
+       (controls goalslevel and playsgoal).
+     results moved             2.6 to 3.6 percent of league matches (about one in 32); 6.4 to 8.2 percent have a
+       goal ruled out (about one in 14).
+   The KINDS outcome (decision 2) holds that the engine plays a kind only in a match kicked off with it and that
+   the list is saved with the match (controls kindgoal, kindpenalty, kindsaved). */
 const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.20, goalGap: 0.05, scoredShare: 0.10 };
 const BASE = 'c33d013965aa33b87f5db23e2ca270be6fcd977c';
 /** One seeded stretch on a fixed clock: the fleet's own function (scripts/lib/cmVarFleet.mjs), under the name the walk imports. */
@@ -97,6 +117,7 @@ const titles = {
   baseline: 'preserves the full prior default match and old live or historical kickoff behavior',
   bands: 'holds every review outcome a match inside the range real football gives, on the generated rates',
   coverage: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
+  kinds: 'plays a kind of review only in a match kicked off with it and saves the list with the match',
   stream: 'deals every review from its own keyed generator and never from the match stream',
 };
 const controls = {
@@ -127,6 +148,15 @@ const controls = {
   /* Round 1302: the generated rates no longer say the ledger holds the switch for the season total of penalties,
      while the engine is outside that band. */
   penaltyband: { file: rates, from: "'penalties-total'", to: "'penalties-total-let-go'", test: 'bands' },
+  /* Round 1303: the generated rates no longer say the ledger holds the goal kind for what it does to goals a match. */
+  goalslevel: { file: rates, from: "'goals-level'", to: "'goals-level-let-go'", test: 'bands' },
+  /* Round 1303: the game handed the goal kind while the ledger holds it. */
+  playsgoal: { file: rates, from: /CM_VAR_KINDS: readonly \('goal' \| 'penalty'\)\[\] = \[[^\]]*\]/, to: "CM_VAR_KINDS: readonly ('goal' | 'penalty')[] = ['goal']", test: 'bands' },
+  /* Round 1303, the kinds: the engine reviewing goals in a match kicked off without the goal kind, giving penalties in
+     one kicked off without the penalty kind, and kicking off without saving the list. */
+  kindgoal: { file: engine, from: "  const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;", to: "  const myReview = live.varReviews ? settleGoalReviews(me.goals, 'me', reviewKey) : null;", test: 'kinds' },
+  kindpenalty: { file: engine, from: "    const penaltyKind = reviewKinds.includes('penalty');", to: '    const penaltyKind = true;', test: 'kinds' },
+  kindsaved: { file: engine, from: '...(varReviews === true ? {} : { varKinds }) }', to: '...(varReviews === true ? {} : {}) }', test: 'kinds' },
 };
 async function main() {
   const control = process.env.CM_VAR_CONTROL || '';
@@ -158,7 +188,7 @@ async function main() {
     async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates])) {
       const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), ratesLeaf = path.join(folder, `${name}-rates.ts`), output = path.join(folder, `${name}.cjs`);
       await writeFile(ratesLeaf, ratesSource);
-      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers } from '@/lib/clubManagerVar';\nexport { CM_VAR_REAL, CM_VAR_HOLDS } from '@/data/clubManagerVarRates';\n`);
+      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGameAsk, CM_VAR_KINDS } from '@/lib/clubManagerVar';\nexport { CM_VAR_REAL, CM_VAR_HOLDS, CM_VAR_ACCEPTED } from '@/data/clubManagerVarRates';\n`);
       await writeFile(leaf, varSource);
       await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, '@': path.join(root, 'src') } });
       return () => { delete require.cache[require.resolve(output)]; return require(output); };
@@ -438,6 +468,57 @@ async function main() {
         assert.deepEqual([staged.cmVarCovers('league:premier'), staged.cmVarCovers('league:championship'), staged.cmVarCovers('cup:FA Cup'), staged.cmVarCovers('toString'), staged.cmVarCovers('league:atlantis')], [true, false, false, false, false]);
         metrics.coverage = { met, leavesOut, historicKey: oldKey };
       },
+      /* Round 1303, the lead's decision 2: the KIND of review is data, and the engine plays a kind only in a match
+         kicked off with it. On the fixture rates, where both kinds are frequent, over 60 first halves of the fresh
+         Everton career and their second halves:
+           a list is saved with the match in the engine's own order, `true` (a staged match) saves none and plays
+           every kind, an empty list asks for nothing at all (the same save as a caller that does not ask);
+           the goal kind alone shows no penalty review and rules out exactly the goals every kind rules out;
+           the penalty kind alone shows no goal review;
+           a match closed at half time (a JSON round trip) plays its second half on the list it was kicked off with;
+           and the game's own ask (cmVarGameAsk) is the generated list, and nothing while the switch is off or the
+           list is empty. Never `true`: that is how a harness stages every kind. */
+      kinds() {
+        const pre = fresh(cm);
+        const idsOf = (play, incident) => play.filter(e => e.kind === 'var' && e.review?.incident === incident).map(e => e.review.id).sort();
+        const t = { halves: 0, goalReviews: 0, penaltyReviews: 0, secondHalfGoal: 0, secondHalfPenalty: 0 };
+        for (let seed = 1700; seed < 1760; seed++) {
+          const kick = ask => withCmVarSeed(seed, () => cm.playNextEntry(clone(pre), ask === undefined ? {} : { varReviews: ask }));
+          const all = kick(true), goal = kick(['goal']), pen = kick(['penalty']), both = kick(['penalty', 'goal']), none = kick([]), plain = kick(undefined);
+          assert.equal(all.kind, 'halftime'); assert.equal(goal.kind, 'halftime'); assert.equal(pen.kind, 'halftime');
+          t.halves += 1;
+          assert.equal(all.state.live.varReviews, true);
+          assert.equal('varKinds' in all.state.live, false, 'A staged match (asked with true) saves no list');
+          assert.deepEqual(goal.state.live.varKinds, ['goal'], 'A match kicked off with the goal kind saves that list');
+          assert.deepEqual(pen.state.live.varKinds, ['penalty'], 'A match kicked off with the penalty kind saves that list');
+          assert.deepEqual(both.state.live.varKinds, ['goal', 'penalty'], 'The list is saved in the engine order whatever order it was asked in');
+          assert.equal('varReviews' in plain.state.live, false);
+          assert.deepEqual(none.state, plain.state, 'An empty list asks for nothing: the same save as a caller that does not ask');
+          const A = all.state.live.h1Play, G = goal.state.live.h1Play, P = pen.state.live.h1Play;
+          t.goalReviews += idsOf(A, 'goal').length; t.penaltyReviews += idsOf(A, 'penalty').length;
+          assert.deepEqual(both.state.live.h1Play, A, 'Asking for both kinds by name is the match a staged ask plays');
+          assert.deepEqual(idsOf(G, 'penalty'), [], 'The goal kind alone shows no penalty review');
+          assert.deepEqual(idsOf(G, 'goal'), idsOf(A, 'goal'), 'The goal kind alone reviews exactly the goals every kind reviews');
+          assert.deepEqual(idsOf(P, 'goal'), [], 'The penalty kind alone shows no goal review');
+          assert.equal(G.some(e => e.kind === 'shot' && e.review?.decision === 'awarded'), false, 'The goal kind alone plays no kick a review gave');
+          /* A save closed at half time and opened again: the second half plays the saved list. */
+          const finish = stop => withCmVarSeed(seed + 7000, () => cm.resumeMatch(clone(stop.state)));
+          const second = play => play.filter(e => e.minute > 45);
+          const gDone = finish(goal), pDone = finish(pen), aDone = finish(all);
+          assert.deepEqual(idsOf(second(gDone.report.detail.play), 'penalty'), [], 'The second half of a match kicked off with the goal kind shows no penalty review');
+          assert.deepEqual(idsOf(second(pDone.report.detail.play), 'goal'), [], 'The second half of a match kicked off with the penalty kind shows no goal review');
+          t.secondHalfGoal += idsOf(second(aDone.report.detail.play), 'goal').length; t.secondHalfPenalty += idsOf(second(aDone.report.detail.play), 'penalty').length;
+        }
+        assert.ok(t.goalReviews >= 5 && t.penaltyReviews >= 5 && t.secondHalfGoal >= 5 && t.secondHalfPenalty >= 5, 'The sample holds both kinds of review in both halves, so the cases above are not empty: ' + JSON.stringify(t));
+        /* The game's own ask. */
+        assert.deepEqual(cm.cmVarGameAsk(false, ['goal']), {}, 'The game asks for nothing while the switch is off');
+        assert.deepEqual(cm.cmVarGameAsk(true, []), {}, 'The game asks for nothing while no kind is played');
+        assert.deepEqual(cm.cmVarGameAsk(true, ['goal']), { varReviews: ['goal'] }, 'The game asks for the kinds it is handed');
+        assert.deepEqual(cm.cmVarGameAsk(true), cm.CM_VAR_KINDS.length ? { varReviews: cm.CM_VAR_KINDS } : {}, 'Left to itself the game asks for the generated list');
+        assert.deepEqual([cm.cmVarKindsAsked(true), cm.cmVarKindsAsked(false), cm.cmVarKindsAsked(undefined), cm.cmVarKindsAsked(['penalty', 'goal', 'offside'])], [['goal', 'penalty'], [], [], ['goal', 'penalty']]);
+        assert.deepEqual([cm.cmVarKindsOf({}), cm.cmVarKindsOf({ varReviews: true }), cm.cmVarKindsOf({ varReviews: true, varKinds: ['goal'] }), cm.cmVarKindsOf({ varKinds: ['goal'] })], [[], ['goal', 'penalty'], ['goal'], []]);
+        metrics.kinds = { ...t, gamePlays: cm.CM_VAR_KINDS };
+      },
       /* Round 1218. The generated rates themselves, on a fleet of league matches in the leagues whose row says
          yes (scripts/lib/cmVarFleet.mjs: 20 clubs, one season a seed). Each outcome a match must sit inside the
          range real football gives it in scripts/data/cmVarRates.json, wider by BANDS.headroom on each side.
@@ -482,6 +563,34 @@ async function main() {
         metrics.bands.penaltiesTotalBand = { low: r4(band.low * (1 - BANDS.headroom)), high: r4(band.high * (1 + BANDS.headroom)), inside: insideTotal, held };
         assert.ok(insideTotal || held, `Penalties a match with reviews on ${r4(total)} (without: ${r4(totalOff)}) is outside real football's ${r4(band.low)} to ${r4(band.high)} (headroom ${BANDS.headroom}) and the ledger does not hold the switch for it (owed penalties-total)`);
         assert.ok(!(insideTotal && held), `Penalties a match with reviews on ${r4(total)} is inside real football's ${r4(band.low)} to ${r4(band.high)} (headroom ${BANDS.headroom}): the ledger's owed entry penalties-total is stale, take it out`);
+        /* Round 1303, the lead's decisions 2 and 6. THE GOAL KIND ALONE, which is what the game would play with
+           penalties by review off: the same fleet again, asked for the goal kind only, each match beside the same
+           match without reviews. Its goals ruled out a match must sit inside real football's range like the staged
+           fleet's, and it must give no penalty. And GOALS A MATCH: a review that rules a goal out takes a goal away
+           and, with the penalty kind off, nothing gives one back, so the goal kind alone moves goals a match by
+           about the goals it rules out (0.075 at the ledger's lowest reading), which is past the 0.05 the family
+           allows a rule to move them (BANDS.goalGap). MEASURED, see the header. So the same rule as for penalties:
+           outside the band the ledger must say so in an owed entry (goals-level), open (the goal kind is held off)
+           or accepted with the lead's ruling written into it; inside the band an open entry is stale. And the list
+           the game is handed (the generated CM_VAR_KINDS) may not hold a kind the measured engine is outside its
+           band for. Never a wider band. */
+        const goalOnly = playFleet(real, { seeds, paired: true, reviews: ['goal'] });
+        const G = goalOnly.byKind.league, perG = n => n / G.matches;
+        const ruledG = perG(G.ruledOut), gapG = (G.goals - G.goalsOff) / G.matches;
+        metrics.bands.goalKindAlone = { leagueMatches: G.matches, ruledOut: G.ruledOut, ruledOutPerMatch: r4(ruledG), awarded: G.penaltyAwarded, goalsPerMatchOn: r4(perG(G.goals)), goalsPerMatchOff: r4(perG(G.goalsOff)),
+          goalGap: r4(gapG), resultMoved: G.resultMoved, matchesWithReview: G.matchesWithReview, penaltiesPerMatch: r4(perG(G.penalties)), penaltiesPerMatchOff: r4(perG(G.penaltiesOff)) };
+        assert.ok(G.matches >= 3000, `The goal kind's fleet played ${G.matches} league matches, fewer than 3,000`);
+        assert.equal(G.penaltyAwarded + G.penaltyConfirmed + G.goalConfirmed, 0, 'With the goal kind alone a review only ever rules a goal out');
+        assert.ok(inside(ruledG, d.goals), `With the goal kind alone, goals ruled out a match ${r4(ruledG)} is outside real football's ${r4(d.goals.low)} to ${r4(d.goals.high)} (headroom ${BANDS.headroom})`);
+        const accepted = real.CM_VAR_ACCEPTED, plays = real.CM_VAR_KINDS;
+        assert.ok(Array.isArray(accepted) && Array.isArray(plays), 'The generated rates carry the rulings the ledger holds and the kinds the game plays');
+        const insideGap = Math.abs(gapG) <= BANDS.goalGap, heldGoal = holds.includes('goals-level'), ruledGoal = accepted.includes('goals-level');
+        metrics.bands.goalKindAlone.level = { band: BANDS.goalGap, inside: insideGap, held: heldGoal, accepted: ruledGoal };
+        metrics.bands.gamePlays = plays;
+        assert.ok(insideGap || heldGoal || ruledGoal, `With the goal kind alone reviews move goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows a rule to move them, and the ledger neither holds the goal kind for it nor carries a ruling (owed goals-level)`);
+        assert.ok(!(insideGap && heldGoal), `With the goal kind alone reviews move goals a match by ${r4(gapG)}, inside the ${BANDS.goalGap} the family allows: the ledger's owed entry goals-level is stale, take it out`);
+        assert.ok(!plays.includes('goal') || insideGap || ruledGoal, `The game plays the goal kind while it moves goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows, with no ruling in the ledger`);
+        assert.ok(!plays.includes('penalty') || insideTotal, `The game plays the penalty kind while penalties a match with reviews on (${r4(total)}) is outside real football's ${r4(band.low)} to ${r4(band.high)}`);
       },
       /* Round 1218 fix (review finding 6, fix-AT section 7 item 3). A review is dealt from its own keyed generator,
          never from the match's random stream. Each helper is called inside a seeded stretch: the stream's next two
@@ -532,6 +641,7 @@ async function main() {
     if (control) console.log(`simCmVar ${control}: CAUGHT by "${String(rows.find(r => r.status === 'failed')?.message).split('\n')[0].slice(0, 220)}"`);
     if (metrics.bands) console.log(`simCmVar bands: ${JSON.stringify(metrics.bands)}`);
     if (metrics.coverage) console.log(`simCmVar coverage: ${JSON.stringify(metrics.coverage)}`);
+    if (metrics.kinds) console.log(`simCmVar kinds: ${JSON.stringify(metrics.kinds)}`);
     if (metrics.stream) console.log(`simCmVar stream: ${JSON.stringify(metrics.stream)}`);
     console.log(`simCmVar ${control || 'normal'}: actual review outcomes and full prior baseline passed.`);
   } finally {

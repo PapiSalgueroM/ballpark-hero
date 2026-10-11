@@ -32,6 +32,10 @@
  * disagree (Round 1303: one more reading of goals ruled out, more than twice the lowest on file) | receiptsilent
  * (Round 1303: the receipt no longer says its publishers count different leagues and seasons). thin, since Round
  * 1303, leaves goals ruled out with three seasons of ONE outlet: seasons do not make a second publisher.
+ * Round 1303, the kinds (section 2d and 6): kindon (a kind an open owed entry holds, switched on in the ledger) |
+ * kindline (the generated file hands kickOff a kind the ledger does not play) | gametrue (the hook asks the engine
+ * with varReviews: true, which stages every kind, and not with the ledger's list). owedlive, since Round 1303, is
+ * the switch on while no kind of review is played.
  * Round 1302 also holds that every competition is a row: nothing in notRead, and an unknown row says what was
  * looked for.
  * A control that fires ends "FIRED" and exits 1. One that changes nothing or is not caught exits 3.
@@ -55,6 +59,7 @@ const EXPECT = {
   missing: /is not in the ledger/, extra: /the engine cannot play/, onesource: /stands on fewer than two publishers/,
   receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
   highest: /goalReview is not the stricter count/, names: /the help would name/, owedlive: /CM_VAR_LIVE is true while the rates ledger still owes/,
+  kindon: /kind is on in the ledger while an open owed entry holds it/, kindline: /CM_VAR_KINDS on disk plays/, gametrue: /hands the engine varReviews: true/,
   /* stage asks for the Australia Cup named bare (a comma or the end of the list straight after it) INSIDE the list
      of names: no name holds a colon and every key after "kickOff covers" does, so the match cannot run on into
      the keys, where cup:Australia Cup always stands bare. It used to ask for the cup as the LAST name, which
@@ -102,11 +107,19 @@ if (CONTROL === 'names') { deriveTwist = d => ({ ...d, names: [...d.names, 'EFL 
 if (CONTROL === 'stage') { deriveTwist = d => ({ ...d, names: d.names.map(n => n.replace(' (the final only)', '')) }); const d = derive(); changed = JSON.stringify(deriveTwist(d).names) !== JSON.stringify(d.names); }
 /* unread: a competition taken out of the rows and put back on the not read list. */
 if (CONTROL === 'unread') { const n = comps.rows.length; comps.rows = comps.rows.filter(r => r.key !== 'cup:FA Cup'); comps.notRead.cups = [...comps.notRead.cups, 'FA Cup']; changed = comps.rows.length < n; }
+/* kindon (Round 1303): a kind an open owed entry holds, switched on in the ledger. */
+if (CONTROL === 'kindon') { const held = (rates.owed ?? []).find(o => o.state === 'open' && Array.isArray(o.holds) && rates.kinds?.[o.holds[0]]?.on === false); if (held) { rates.kinds[held.holds[0]].on = true; changed = true; } }
+/* kindline (Round 1303): the generated file hands kickOff a kind the ledger does not play. */
+if (CONTROL === 'kindline') { const before = generatedTwist; generatedTwist = s => before(s).replace(/^(export const CM_VAR_KINDS: readonly \('goal' \| 'penalty'\)\[\] = )\[[^\]]*\];$/m, "$1['goal', 'penalty'];"); changed = generatedTwist(text('src/data/clubManagerVarRates.ts')) !== text('src/data/clubManagerVarRates.ts'); }
+/* gametrue (Round 1303): the hook's first kickoff asks the engine the way a harness stages every kind. */
+let hookTwist = s => s;
+if (CONTROL === 'gametrue') { hookTwist = s => s.replace('...cmVarGameAsk(CM_VAR_LIVE)', '...(CM_VAR_LIVE ? { varReviews: true } : {})'); changed = hookTwist(text('src/hooks/useClubManager.ts')) !== text('src/hooks/useClubManager.ts'); }
 /* owedlive: the switch read as on, with something still owed. */
 let switchTwist = s => s;
 if (CONTROL === 'owedlive') {
   switchTwist = s => s.replace(/^export const CM_VAR_LIVE: boolean = (true|false);$/m, 'export const CM_VAR_LIVE: boolean = true;');
-  if (!(rates.owed ?? []).some(o => o.state === 'open')) rates.owed = [...(rates.owed ?? []), { id: 'control', state: 'open', rule: 'An entry this control put here so that something is owed.' }];
+  /* Round 1303: an open entry that names no kind holds every kind, so no kind is played whatever else the ledger says. */
+  rates.owed = [...(rates.owed ?? []), { id: 'control', state: 'open', rule: 'An entry this control put here so that something is owed.' }];
   changed = /^export const CM_VAR_LIVE: boolean = true;$/m.test(switchTwist(text('src/lib/clubManagerVarLive.ts')));
 }
 if (CONTROL && !changed) { console.log(`simCmVarLedger control ${CONTROL}: ABORTED, the control changed nothing.`); process.exit(3); }
@@ -183,7 +196,31 @@ if (recentOwed) {
 const openOwed = owed.filter(o => o.state === 'open');
 const switchLine = /^export const CM_VAR_LIVE: boolean = (true|false);$/m.exec(switchTwist(text('src/lib/clubManagerVarLive.ts')));
 ok(!!switchLine, 'the switch line of src/lib/clubManagerVarLive.ts was not found');
-ok(!(switchLine?.[1] === 'true' && openOwed.length > 0), `CM_VAR_LIVE is true while the rates ledger still owes: ${openOwed.map(o => o.id).join(', ')}`);
+/* 2d. Round 1303, the lead's decision 2: the KIND of review is data. Recomputed here from the ledger alone and not
+   through the generator's kindsOf(). A kind is PLAYED when its line under kinds says on, its rate meets the standard
+   and no open owed entry holds it (an entry holds the kinds it names under holds, every kind when it names none).
+   On and held at once is refused, so turning a kind on is closing what holds it first. The switch is on only with
+   a kind to play. */
+const KINDS = ['goal', 'penalty'], KIND_QUANTITY = { goal: 'goalsRuledOut', penalty: 'penaltiesAwarded' };
+ok(!!rates.kinds && JSON.stringify(Object.keys(rates.kinds).filter(k => k !== 'what').sort()) === JSON.stringify([...KINDS].sort()), 'the kinds block of the rates ledger does not name exactly the kinds the engine plays (goal, penalty)');
+for (const o of owed) ok(o.holds === undefined || (Array.isArray(o.holds) && o.holds.length > 0 && o.holds.every(k => KINDS.includes(k))), `owed ${o.id}: holds names a kind the engine does not play`);
+const heldBy = kind => openOwed.filter(o => !Array.isArray(o.holds) || o.holds.includes(kind)).map(o => o.id);
+const ownPlayed = [];
+for (const kind of KINDS) {
+  const line = rates.kinds?.[kind] ?? {};
+  ok(typeof line.on === 'boolean' && line.quantity === KIND_QUANTITY[kind] && typeof line.why === 'string' && line.why.length > 20, `kinds.${kind}: no on, another quantity than the engine reviews, or no why`);
+  const own = ownRate(KIND_QUANTITY[kind]), meets = own.publishers >= 2 && own.hosts >= 2 && own.agrees;
+  ok(!(line.on === true && heldBy(kind).length > 0), `the ${kind} kind is on in the ledger while an open owed entry holds it (${heldBy(kind).join(', ')})`);
+  ok(!(line.on === true && !meets), `the ${kind} kind is on in the ledger and its rate does not meet the standard`);
+  if (line.on === true && meets && heldBy(kind).length === 0) ownPlayed.push(kind);
+}
+ok(JSON.stringify(derived.played) === JSON.stringify(ownPlayed), `the kinds the generator plays (${(derived.played ?? []).join(', ') || 'none'}) are not the kinds the ledger has on and nothing holds (${ownPlayed.join(', ') || 'none'})`);
+/* The line on disk, read as text: what kickOff is handed by the game. */
+const kindsLine = /^export const CM_VAR_KINDS: readonly \('goal' \| 'penalty'\)\[\] = \[([^\]]*)\];$/m.exec(generatedTwist(text('src/data/clubManagerVarRates.ts')));
+ok(!!kindsLine, 'the generated rates file has no CM_VAR_KINDS line');
+const kindsOnDisk = kindsLine ? [...kindsLine[1].matchAll(/'([a-z]+)'/g)].map(m => m[1]) : [];
+ok(JSON.stringify(kindsOnDisk) === JSON.stringify(ownPlayed), `CM_VAR_KINDS on disk plays ${kindsOnDisk.join(', ') || 'no kind'} and the ledger plays ${ownPlayed.join(', ') || 'no kind'}`);
+ok(!(switchLine?.[1] === 'true' && ownPlayed.length === 0), `CM_VAR_LIVE is true while the rates ledger still owes: no kind of review is played (${KINDS.map(k => `${k}: ${heldBy(k).length ? `held by ${heldBy(k).join(', ')}` : rates.kinds?.[k]?.on === true ? 'on' : 'off in the ledger'}`).join('; ')})`);
 
 /* 3. Every competition the engine can play, exactly once, and none it cannot. */
 const store = new Map();
@@ -248,6 +285,24 @@ const engineFigures = JSON.parse(text('scripts/data/cmVarEngine.json'));
 ok(engineFigures.provisional === false && /^[0-9a-f]{7,40}$/.test(engineFigures.head ?? '') && (engineFigures.runner ?? '').length > 3 && engineFigures.leagueMatches >= 3000,
   'scripts/data/cmVarEngine.json is provisional, or does not say where it was measured, or stands on fewer than 3,000 league matches');
 
+/* 6. Round 1303: the GAME never stages every kind. varReviews: true is how a harness asks the engine for every
+   kind it can play; the game asks with the ledger's list, through cmVarGameAsk, at both places the hook kicks a
+   match off. Read off the CODE: comments are taken out first, and src/test is not the game. */
+const codeOf = source => source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+const sourcesUnder = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(e => e.isDirectory() ? sourcesUnder(dir + '/' + e.name) : /\.(ts|tsx)$/.test(e.name) ? [dir + '/' + e.name] : []);
+const gameFiles = ['src/hooks', 'src/lib', 'src/components', 'src/pages'].flatMap(sourcesUnder);
+ok(gameFiles.length > 200 && gameFiles.includes('src/hooks/useClubManager.ts') && gameFiles.includes('src/lib/clubManager.ts'), 'the walk over the game source found too few files to say anything');
+const STAGES_ALL = /varReviews\s*:\s*true(?!\s+as\s+const)/;
+for (const file of gameFiles) {
+  let source; try { source = text(file); } catch { continue; }
+  if (file === 'src/hooks/useClubManager.ts') source = hookTwist(source);
+  if (!source.includes('varReviews')) continue;
+  ok(!STAGES_ALL.test(codeOf(source)), file + ' hands the engine varReviews: true, which stages every kind of review: the game asks with cmVarGameAsk');
+}
+const hookCode = codeOf(hookTwist(text('src/hooks/useClubManager.ts')));
+ok(hookCode.split('cmVarGameAsk(CM_VAR_LIVE)').length - 1 === 2 && hookCode.split('varReviews').length - 1 === 0, 'the hook does not ask for reviews through cmVarGameAsk(CM_VAR_LIVE) at exactly its two kickoffs');
+ok(/varReviews: true as const, \.\.\.\(varReviews === true \? \{\} : \{ varKinds \}\)/.test(codeOf(text('src/lib/clubManager.ts'))), 'kickOff does not save the list of kinds it was asked for with the match');
+
 /* 5. No dash of the two banned kinds, in the ledgers, the receipts or this harness's own messages. */
 const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
 for (const file of LEDGERS.flatMap(l => [l.ledger, l.receipt])) ok(!DASHES.some(d => text(file).includes(d)), `${file} holds a banned dash`);
@@ -255,7 +310,7 @@ for (const file of LEDGERS.flatMap(l => [l.ledger, l.receipt])) ok(!DASHES.some(
 for (const f of fails.slice(0, 40)) console.log(`FAIL ${f}`);
 const used = Object.entries(rates.quantities).filter(([name, q]) => (q.modelled ? settleRate(rates, name) : settle(rates, name)).used).map(([name]) => name);
 console.log(`simCmVarLedger: ${rates.rows.length} rate rows from ${Object.keys(rates.publishers).length} publishers. Rates that meet the standard (two publishers within a factor of ${AGREE}): ${used.filter(n => rates.quantities[n].modelled).join(', ') || 'none'}. Figures two publishers counted: ${used.filter(n => !rates.quantities[n].modelled).join(', ') || 'none'}.`);
-if (openOwed.length) console.log(`simCmVarLedger: OWED and open, so the switch must stay off: ${openOwed.map(o => `${o.id} (have ${o.have ?? '?'} of ${o.need ?? '?'})`).join(', ')}.`);
+if (openOwed.length) console.log(`simCmVarLedger: OWED and open: ${openOwed.map(o => `${o.id} holds ${Array.isArray(o.holds) ? o.holds.join(' and ') : 'every kind'}`).join(', ')}. Kinds of review the game plays: ${ownPlayed.join(', ') || 'none, so the switch must stay off'}.`);
 console.log(`simCmVarLedger: ${engineKeys.length} competitions of the engine (${leagueKeys.length} leagues, ${cupKeys.length} cups, the Champions League), yes: ${yes.join(', ') || 'none'}.`);
 if (CONTROL) {
   const hit = fails.find(f => EXPECT[CONTROL].test(f));

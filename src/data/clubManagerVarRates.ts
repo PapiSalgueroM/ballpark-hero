@@ -9,7 +9,8 @@
  * of a real league. It stands on at least two independent publishers, each counting at least one full season of
  * a top division under video review, whose per match figures agree within a factor of 2, and it is derived
  * from the LOWEST of them. A quantity one publisher counted, or whose readings do not agree, is refused.
- * OWED (penalties-total): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.
+ * OWED (goals-level holds goal, penalties-total holds penalty): see owed in scripts/data/cmVarRates.json. A kind an open entry holds is not played.
+ * KINDS (Round 1303): goal not played (off in the ledger; held by goals-level), penalty not played (off in the ledger; held by penalties-total). No kind is played, so CM_VAR_LIVE stays false.
  *
  * Goals ruled out after a review: 6 readings by 4 publishers, who count DIFFERENT leagues and seasons: 23 in 306 (lfp-ligue1-2023-24), 29 in 380 (pieri-seriea-2017-18), 31 in 380 (agi-seriea-2017-18), 47 in 380 (espn-pl-2024-25), 50 in 380 (espn-pl-2023-24), 55 in 380 (espn-pl-2022-23).
  *   The highest is 1.926 times the lowest. The lowest, 23 in 306 (lfp-ligue1-2023-24) = 0.075163 a match, is derived from; the range runs to 0.144737.
@@ -29,9 +30,18 @@ export const CM_VAR_RATES = { goalReview: 0.031456, overturn: 1, penaltyReview: 
 /** Real football, a match: what the harness bands and the help text read. */
 export const CM_VAR_REAL = { goalsRuledOut: { low: 0.075163, high: 0.144737 }, penaltiesAwarded: { low: 0.065789, high: 0.130719 }, penaltiesTotal: { low: 0.315789, high: 0.331579 } } as const;
 
-/** Round 1302. What the rates ledger still owes (its open owed entries). While this list is not empty the
- *  switch CM_VAR_LIVE stays false: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */
-export const CM_VAR_HOLDS: readonly string[] = ['penalties-total'];
+/** Round 1303 (the lead's decision 2). The kinds of review the game asks kickOff for: the kinds the ledger
+ *  has on (kinds in scripts/data/cmVarRates.json), each on a rate that meets the standard and held by no open
+ *  owed entry. Turning a kind on is a line of that ledger and a run of the generator, never an edit here.
+ *  While this list is empty the switch CM_VAR_LIVE stays false. */
+export const CM_VAR_KINDS: readonly ('goal' | 'penalty')[] = [];
+
+/** Round 1302. What the rates ledger still owes (its open owed entries). An open entry holds the kinds of
+ *  review it names: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */
+export const CM_VAR_HOLDS: readonly string[] = ['goals-level', 'penalties-total'];
+
+/** Round 1303. The owed entries a ruling closed: each carries who ruled, when and in what words in the ledger. */
+export const CM_VAR_ACCEPTED: readonly string[] = ['recent-seasons'];
 
 /** The same competitions by the name the help text prints. */
 export const CM_VAR_COVERED_NAMES: readonly string[] = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1', 'Eredivisie', 'Primeira Liga', 'Scottish Premiership', 'Süper Lig', 'Belgian Pro League', 'Swiss Super League', 'Austrian Bundesliga', 'SuperSport HNL', 'Saudi Pro League', '2. Bundesliga', 'Danish Superliga', 'Super League Greece', 'Segunda División', 'Serie B', 'MLS Eastern Conference', 'MLS Western Conference', 'Brasileirão Série A', 'A-League Men', 'Russian Premier League', 'Champions League', 'KNVB Cup', 'Copa do Brasil', 'Australia Cup (the final only)', 'DFB-Pokal'];

@@ -96,6 +96,21 @@ export function settleRate(rates, quantity) {
   return { quantity, used: true, readings: all, publishers, target, top, low: target.perMatch, high: top.perMatch, spread, different };
 }
 
+/** Round 1303, the lead's decision 2. The kinds of review the engine can play, in the engine's own order. */
+export const KIND_NAMES = ['goal', 'penalty'];
+/** Which kinds the ledger has on, and which the GAME plays. A kind is played when its line under kinds says on,
+ *  its rate meets the standard and no open owed entry holds it. An open entry holds the kinds it names under
+ *  holds; one that names none holds every kind. On and held at once is refused by scripts/simCmVarLedger.mjs. */
+export function kindsOf(rates) {
+  const open = (rates.owed ?? []).filter(o => o.state === 'open');
+  return KIND_NAMES.map(name => {
+    const line = rates.kinds?.[name] ?? {};
+    const heldBy = open.filter(o => !Array.isArray(o.holds) || o.holds.includes(name)).map(o => o.id);
+    const standard = typeof line.quantity === 'string' && rates.quantities?.[line.quantity]?.modelled === true && settleRate(rates, line.quantity).used === true;
+    return { name, on: line.on === true, quantity: line.quantity ?? null, heldBy, standard, played: line.on === true && standard && heldBy.length === 0 };
+  });
+}
+
 /** The receipts as they should read: each with the hash of its ledger. */
 export function stampedReceipts() {
   return LEDGERS.map(({ ledger, receipt }) => {
@@ -154,12 +169,16 @@ export function derive() {
   const total = settle(rates, 'penaltiesTotal');
   if (!total.used) throw new Error('genCmVarRates: the season total of penalties is THIN, the band has nothing to stand on');
   const holds = (rates.owed ?? []).filter(o => o.state === 'open').map(o => o.id);
+  /* Round 1303: the owed entries a ruling closed (state accepted, with who ruled, when and in what words). */
+  const accepted = (rates.owed ?? []).filter(o => o.state === 'accepted').map(o => o.id);
+  /* Round 1303, decision 2: the kinds of review the game plays. */
+  const kinds = kindsOf(rates);
   const law = penaltyLaw();
   /* ONE list: the competitions kickOff covers and the names the help prints are the same rows, in the same order. */
   const covered = comps.rows.filter(r => r.verdict === 'yes');
   const coverage = Object.fromEntries(covered.map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
   return {
-    engine, goals, pens, total, holds, law, coverage, names: covered.map(helpName),
+    engine, goals, pens, total, holds, accepted, kinds, played: kinds.filter(k => k.played).map(k => k.name), law, coverage, names: covered.map(helpName),
     rates: {
       goalReview: n6(goals.low / engine.reviewableGoalsPerMatch), overturn: 1, penaltyReview: 0,
       missedFoulReview: n6(pens.low / engine.awardsPerMatchPerUnitRate), penaltyScores: law.scores, penaltyOnTarget: law.onTarget,
@@ -186,7 +205,8 @@ export function generatedSource() {
     ' * of a real league. It stands on at least two independent publishers, each counting at least one full season of',
     ` * a top division under video review, whose per match figures agree within a factor of ${AGREE}, and it is derived`,
     ' * from the LOWEST of them. A quantity one publisher counted, or whose readings do not agree, is refused.',
-    ...(open.length ? [` * OWED (${open.map(o => o.id).join(', ')}): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.`] : []),
+    ...(open.length ? [` * OWED (${open.map(o => `${o.id} holds ${Array.isArray(o.holds) ? o.holds.join(' and ') : 'every kind'}`).join(', ')}): see owed in scripts/data/cmVarRates.json. A kind an open entry holds is not played.`] : []),
+    ` * KINDS (Round 1303): ${d.kinds.map(k => `${k.name} ${k.played ? 'PLAYED' : `not played (${[k.on ? '' : 'off in the ledger', k.standard ? '' : 'its rate does not meet the standard', k.heldBy.length ? `held by ${k.heldBy.join(', ')}` : ''].filter(Boolean).join('; ')})`}`).join(', ')}.${d.played.length ? '' : ' No kind is played, so CM_VAR_LIVE stays false.'}`,
     ' *',
     ` * Goals ruled out after a review: ${every(g)}.`,
     ` *   The highest is ${g.spread.toFixed(3)} times the lowest. The lowest, ${frac(g.target)} = ${n6(g.low)} a match, is derived from; the range runs to ${n6(g.high)}.`,
@@ -206,9 +226,18 @@ export function generatedSource() {
     '/** Real football, a match: what the harness bands and the help text read. */',
     `export const CM_VAR_REAL = { goalsRuledOut: { low: ${n6(g.low)}, high: ${n6(g.high)} }, penaltiesAwarded: { low: ${n6(p.low)}, high: ${n6(p.high)} }, penaltiesTotal: { low: ${n6(d.total.low)}, high: ${n6(d.total.high)} } } as const;`,
     '',
-    '/** Round 1302. What the rates ledger still owes (its open owed entries). While this list is not empty the',
-    ' *  switch CM_VAR_LIVE stays false: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */',
+    "/** Round 1303 (the lead's decision 2). The kinds of review the game asks kickOff for: the kinds the ledger",
+    ' *  has on (kinds in scripts/data/cmVarRates.json), each on a rate that meets the standard and held by no open',
+    ' *  owed entry. Turning a kind on is a line of that ledger and a run of the generator, never an edit here.',
+    ' *  While this list is empty the switch CM_VAR_LIVE stays false. */',
+    `export const CM_VAR_KINDS: readonly ('goal' | 'penalty')[] = ${JSON.stringify(d.played).replaceAll('"', "'").replaceAll("','", "', '")};`,
+    '',
+    '/** Round 1302. What the rates ledger still owes (its open owed entries). An open entry holds the kinds of',
+    ' *  review it names: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */',
     `export const CM_VAR_HOLDS: readonly string[] = ${JSON.stringify(d.holds).replaceAll('"', "'").replaceAll("','", "', '")};`,
+    '',
+    '/** Round 1303. The owed entries a ruling closed: each carries who ruled, when and in what words in the ledger. */',
+    `export const CM_VAR_ACCEPTED: readonly string[] = ${JSON.stringify(d.accepted).replaceAll('"', "'").replaceAll("','", "', '")};`,
     '',
     '/** The same competitions by the name the help text prints. */',
     `export const CM_VAR_COVERED_NAMES: readonly string[] = ${JSON.stringify(d.names).replaceAll('"', "'").replaceAll("','", "', '")};`,
