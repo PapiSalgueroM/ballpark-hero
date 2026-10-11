@@ -1,0 +1,4 @@
+forget-parity exit=0 45s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+forget-units exit=0 5s |    Duration  4.01s (transform 1.83s, setup 205ms, collect 2.92s, tests 1.52s, environment 1.26s, prepare 434ms)
+forget-lane-units exit=0 16s |    Duration  15.72s (transform 2.41s, setup 101ms, collect 4.78s, tests 19.38s, environment 649ms, prepare 168ms)
+plain-units exit=0 17s |    Duration  16.34s (transform 2.50s, setup 426ms, collect 7.20s, tests 22.75s, environment 1.99s, prepare 399ms)
