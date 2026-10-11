@@ -1,0 +1,12 @@
+prep exit=0 0s | 72f547895 Release AX, d6: the walk is a returning player (the first visit rules dialog is marked seen)
+c-replay exit=0 32s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+c-record exit=0 32s | cmpSports: EQUAL in all 4 sports
+d-record exit=0 38s | cmpSports: EQUAL in all 4 sports
+d-replay-old-EXPECT1 exit=1 33s | simUsBoardParity: 3 failures
+head-record exit=0 38s | cmpSports: EQUAL in all 4 sports
+head-replay exit=0 37s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+head-wheel exit=0 0s | simUsBoardParity control wheel: green. The control turned its own sport red for its own reason.
+head-talk exit=0 37s | simUsBoardParity control talk: green. The control turned its own sports red for its own reason.
+floor-nosave-EXPECT1 exit=1 0s | simUsBoardParity: 1 failure
+floor-nophase-EXPECT1 exit=1 0s | simUsBoardParity: 1 failure
+after exit=0 0s | e31d58d1075fb5ee6928be163e611954a76827a8e9dca9fef24c71c8d50c8252  scripts/data/usBoardFixture.json

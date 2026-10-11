@@ -1,0 +1,3 @@
+fxMut nophase: 20 nba path steps moved from freeagency to season
+  FAIL: nba: no step of the recorded path is saved in the freeagency phase
+simUsBoardParity: 1 failure

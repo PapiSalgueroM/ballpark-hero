@@ -1,0 +1,3 @@
+fxMut nosave: removed nba save "wheel" and its screens
+  FAIL: nba: no fixed save or no screens for the saved talks wheel
+simUsBoardParity: 1 failure

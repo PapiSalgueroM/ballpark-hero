@@ -1,0 +1,14 @@
+recording from 934c29d949fceb8ed29e30f11cfd26d5e48bec57 (not main: src differs from f65c6d6039aa0fef3049891994b5cf4bc8573d71)
+  nfl: 459 clicks on the path, 24 seasons, 15 fixed saves, 685 screen steps
+  nba: 507 clicks on the path, 24 seasons, 15 fixed saves, 705 screen steps
+  mlb: 449 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+  nhl: 415 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+recordUsBoardFixture: wrote ../../../../../tmp/rv/c-rec.json (1870889 bytes)
+A /tmp/rv/old.json sha256 c4b2664b8c3b04d4511e67c13baf6c088c0b43e43c6b5f70d52a713fd8728a7c recordedFrom a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e (not main: src differs from aa564f16019b9e821981d5c4e3e0262312c73b62)
+B /tmp/rv/c-rec.json sha256 833d5d885ffe809455c331edf7692cc4c863744372ad38275ed79e7ac18a6f6e recordedFrom 934c29d949fceb8ed29e30f11cfd26d5e48bec57 (not main: src differs from f65c6d6039aa0fef3049891994b5cf4bc8573d71)
+nfl: EQUAL path 459/459 saves 15/15 {"coverage":true,"ssrCreate":true,"saveNames":true,"saveBytes":true,"path":true,"screens":true}
+nba: EQUAL path 507/507 saves 15/15 {"coverage":true,"ssrCreate":true,"saveNames":true,"saveBytes":true,"path":true,"screens":true}
+mlb: EQUAL path 449/449 saves 15/15 {"coverage":true,"ssrCreate":true,"saveNames":true,"saveBytes":true,"path":true,"screens":true}
+nhl: EQUAL path 415/415 saves 15/15 {"coverage":true,"ssrCreate":true,"saveNames":true,"saveBytes":true,"path":true,"screens":true}
+header apart from recordedFrom: equal
+cmpSports: EQUAL in all 4 sports
