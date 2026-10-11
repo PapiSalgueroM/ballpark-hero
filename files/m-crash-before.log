@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m46 tests[22m[2m | [22m[33m42 skipped[39m[2m)[22m[33m 6405[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real goal is the last kick after it…') [33m 4066[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real chance shares its place and an…') [33m 2336[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[2m | [22m[33m42 skipped[39m[90m (46)[39m
+[2m   Start at [22m 15:43:01
+[2m   Duration [22m 9.00s[2m (transform 1.49s, setup 44ms, collect 1.91s, tests 6.41s, environment 253ms, prepare 62ms)[22m
+

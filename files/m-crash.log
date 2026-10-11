@@ -1,0 +1,82 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m46 tests[22m[2m | [22m[31m2 failed[39m[2m | [22m[33m42 skipped[39m[2m)[22m[33m 6376[2mms[22m[39m
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed')
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded')
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real goal is the last kick after it…') [33m 3992[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real chance shares its place and an…') [33m 2374[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…')[39m[32m 8[2mms[22m[39m
+[31m     → probe: a crash in a helper, nothing to do with the defect[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real chance shares its place and an…')[39m[32m 0[2mms[22m[39m
+[31m     → probe: a crash in a helper, nothing to do with the defect[39m
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742)
+   [2m[90m↓[39m[22m Club Manager: the match help follows the kinds of review the match was kicked off with[2m > [22ma match that reviews goals only says so, and says nothing of a penalty by review
+   [2m[90m↓[39m[22m Club Manager: the match help follows the kinds of review the match was kicked off with[2m > [22ma match kicked off with every kind says both, and one nobody asked a review in says nothing about VAR
+   [2m[90m↓[39m[22m Club Manager: the match help follows the kinds of review the match was kicked off with[2m > [22mno help of a match names a season or prints a figure about reviews
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…')
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real chance shares its place and an…')
+[31m[1mError[22m: probe: a crash in a helper, nothing to do with the defect[39m
+[36m [2m❯[22m kickPlayed src/test/clubManagerVarScreen.test.tsx:[2m725:35[22m[39m
+    [90m723| [39m  /** The kick the card gave, played out between the card and the whis…
+    [90m724| [39m  [35mconst[39m kickPlayed [33m=[39m ({ frames[33m,[39m last[33m,[39m whistle }[33m:[39m [33mAwardedRun[39m) [33m=>[39m {
+    [90m725| [39m    if (frames.length >= 0) throw new Error('probe: a crash in a helpe…
+    [90m   | [39m                                  [31m^[39m
+    [90m726| [39m    [35mconst[39m after [33m=[39m frames[33m.[39m[34mslice[39m(last [33m+[39m [34m1[39m[33m,[39m whistle)[33m;[39m
+    [90m727| [39m    return after.some(f => f.motion === 'goal' && f.phase === 'flight'…
+[90m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m760:12[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[2m | [22m[33m42 skipped[39m[90m (46)[39m
+[2m   Start at [22m 15:42:51
+[2m   Duration [22m 8.95s[2m (transform 1.48s, setup 43ms, collect 1.89s, tests 6.38s, environment 257ms, prepare 131ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > KNOWN OPEN%2C dark%3A the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…'),line=725,column=35::Error: probe: a crash in a helper, nothing to do with the defect%0A ❯ kickPlayed src/test/clubManagerVarScreen.test.tsx:725:35%0A ❯ src/test/clubManagerVarScreen.test.tsx:760:12%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > KNOWN OPEN%2C dark%3A the kick of a penalty a review gives is not played out ('a real chance shares its place and an…'),line=725,column=35::Error: probe: a crash in a helper, nothing to do with the defect%0A ❯ kickPlayed src/test/clubManagerVarScreen.test.tsx:725:35%0A ❯ src/test/clubManagerVarScreen.test.tsx:760:12%0A%0A

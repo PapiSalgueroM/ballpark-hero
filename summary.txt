@@ -1,0 +1,5 @@
+m-clean exit=0 10s | unmutated exit 0
+m-mended exit=1 13s | mended exit 1 (1 is the mutation caught)
+m-crash exit=1 10s | crash exit 1 (1 is the mutation caught)
+m-crash-before exit=0 10s | the same crash on the test file as e449365f had it: exit 0 (0 is the hole: marked fails read the crash as green)
+clean exit=0 0s | 0
