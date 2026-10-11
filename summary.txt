@@ -1,0 +1,12 @@
+base exit=0 1s | 611c3f4e1 Release AU fix, group A (the wheel): the inbox beats harness leaves th
+armA exit=0 5s | varProbe: A HOLDS (showing a review or skipping it is the same match)
+armC exit=0 3s | ARM C HOLDS: off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488 on both trees
+armC-fleet exit=0 17s | ARM C HOLDS over the fleet: FLEET digest 647837df4d9733a113c9c719f6b8af4f8af8af437cd4755adde092070c96af9b on both trees
+old-saves exit=0 2s | OLD SAVES HOLD: 12 digest lines equal on both trees
+cmvar-all exit=0 204s | simCmVar: 12 actual outcomes and 21 effective controls passed.
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 23s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 1s | simStorageWrites: all green (owed: 12)
+simLegalPages exit=0 0s | simLegalPages: all green
+simNoInventedQuotes exit=0 11s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 76s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
