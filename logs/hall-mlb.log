@@ -1,0 +1,7 @@
+  19 (b) Hall share 36.4 -> 37.4 percent; legacy score median 425 -> 429, mean 499.9 -> 516.4 (points paid)
+  15 (e) calibration 3 as recorded: the table and the rules equal the recording; 0 of 26 recorded saves are told something else on 3 (9 of them with a standout)
+  17 (a) marks, this run's one seed (printed, never the check): 22 standout cells; at or over from, pooled 9.60 percent; at or over to, pooled 0.83 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature e6be8614d630
+        at or over from, pooled 9.99 percent (band 9.17 to 10.62: the reference's 9.89 over 48 seeds, 0.73 from seed to seed); at or over to, pooled 0.97 percent (band 0.75 to 1.16: the reference's 0.95, 0.20 from seed to seed); read against the marks of calibration 2 (the reference was read against 2)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 9.99 percent (band 9.17 to 10.62); at or over to, pooled 0.97 percent (band 0.75 to 1.16)
+simCareerHall mlb: all 34 checks green

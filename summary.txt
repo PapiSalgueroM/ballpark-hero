@@ -1,0 +1,16 @@
+tsc exit=0 93s | 
+hall-nfl exit=0 300s | simCareerHall nfl: all 34 checks green
+hall-nba exit=0 406s | simCareerHall nba: all 34 checks green
+vitest exit=0 60s |    Duration  59.12s (transform 3.88s, setup 742ms, collect 12.69s, tests 72.21s, environment 5.40s, prepare 1.40s)
+simHarnessAnchors exit=0 56s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 32s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simStorageWrites exit=0 7s | simStorageWrites: all green (owed: 12)
+hall-nhl exit=0 682s | simCareerHall nhl: all 35 checks green
+simUsCareerActionConfirm exit=0 24s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsSeasonLedger exit=0 10s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+hall-mlb exit=0 468s | simCareerHall mlb: all 34 checks green
+simUsBoardParity exit=0 104s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNhlCareer exit=0 19s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simNflTruth exit=0 51s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+simNbaAwardsSense exit=0 156s | simNbaAwardsSense: 171 checks, 0 failed (full size), 155s
