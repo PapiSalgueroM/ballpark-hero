@@ -1,0 +1,66 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varscreen-again: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-switch: CM_VAR_LIVE_CONTROL=switch node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+litstatus: node scripts/qa/cmVarLit.mjs status
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-stage: CM_VAR_LEDGER_CONTROL=stage node scripts/simCmVarLedger.mjs
+l-unread: CM_VAR_LEDGER_CONTROL=unread node scripts/simCmVarLedger.mjs
+l-disagree: CM_VAR_LEDGER_CONTROL=disagree node scripts/simCmVarLedger.mjs
+l-receiptsilent: CM_VAR_LEDGER_CONTROL=receiptsilent node scripts/simCmVarLedger.mjs
+l-kindon: CM_VAR_LEDGER_CONTROL=kindon node scripts/simCmVarLedger.mjs
+l-kindline: CM_VAR_LEDGER_CONTROL=kindline node scripts/simCmVarLedger.mjs
+l-gametrue: CM_VAR_LEDGER_CONTROL=gametrue node scripts/simCmVarLedger.mjs
+simCmVar: CM_VAR_ARTIFACTS=/tmp/cmv-normal node scripts/simCmVar.mjs
+v-counted: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-counted CM_VAR_CONTROL=counted node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-decorative: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-decorative CM_VAR_CONTROL=decorative node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-penalty: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-penalty CM_VAR_CONTROL=penalty node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-awards: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-awards CM_VAR_CONTROL=awards node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-resolution: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-resolution CM_VAR_CONTROL=resolution node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-past: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-past CM_VAR_CONTROL=past node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-reveal: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-reveal CM_VAR_CONTROL=reveal node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-resume: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-resume CM_VAR_CONTROL=resume node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-announce: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-announce CM_VAR_CONTROL=announce node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-disabled: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-disabled CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-everywhere: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-everywhere CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-historic: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-historic CM_VAR_CONTROL=historic node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-streamgoal: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-streamgoal CM_VAR_CONTROL=streamgoal node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-streamfoul: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-streamfoul CM_VAR_CONTROL=streamfoul node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-oldgoalreview: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldgoalreview CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-oldoverturn: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldoverturn CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-oldpenaltyreview: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldpenaltyreview CM_VAR_CONTROL=oldpenaltyreview node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-oldmissedfoul: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldmissedfoul CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-oldpenaltyscores: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldpenaltyscores CM_VAR_CONTROL=oldpenaltyscores node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-oldpenaltyontarget: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldpenaltyontarget CM_VAR_CONTROL=oldpenaltyontarget node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-penaltyband: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-penaltyband CM_VAR_CONTROL=penaltyband node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-goalslevel: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-goalslevel CM_VAR_CONTROL=goalslevel node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-playsgoal: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-playsgoal CM_VAR_CONTROL=playsgoal node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-kindgoal: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-kindgoal CM_VAR_CONTROL=kindgoal node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-kindpenalty: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-kindpenalty CM_VAR_CONTROL=kindpenalty node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+v-kindsaved: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-kindsaved CM_VAR_CONTROL=kindsaved node scripts/simCmVar.mjs 2>&1 | grep -a 'CAUGHT\|Error\|ABORT' | cut -c1-330
+seedsB: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-sb CM_VAR_BANDS_SEEDS=11,12,13,14,15,16 node scripts/simCmVar.mjs 2>&1 | grep -a 'bands:\|normal:\|Error' | cut -c1-1500
+seedsC: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-sc CM_VAR_BANDS_SEEDS=401,402,403,404,405,406 node scripts/simCmVar.mjs 2>&1 | grep -a 'bands:\|normal:\|Error' | cut -c1-1500
+seedsD: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-sd CM_VAR_BANDS_SEEDS=7001,7002,7003,7004,7005,7006 node scripts/simCmVar.mjs 2>&1 | grep -a 'bands:\|normal:\|Error' | cut -c1-1500
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+deals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+deals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+lm-plain: node scripts/simLiveSimMotion.mjs
