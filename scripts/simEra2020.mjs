@@ -84,7 +84,13 @@
  *   18, 11 and 6. Section 8 now pins the shipped order of the eras itself
  *   and the six clubs the fallback still serves in two or more eras.
  *
- * Eleven negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder,
+ *   9. THE NEWS AND THE BIDDING WARS (Round 1304, a real defect): in every
+ *      past season the club that buys in the news, and the rival of a
+ *      negotiation, is a club of that season's leagues. Before the round
+ *      both were drawn from today's leagues: 304 of 1809 deals and 106 of
+ *      136 rivals on these seeds (the numbers are at the section).
+ *
+ * Thirteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -137,11 +143,21 @@ const engineEdit = (name, anchor, to, why) => ({
     });
   },
 });
-const plugins = process.env.SIM_ERA2020_CONTROL === 'eraorder'
-  ? [engineEdit('eraorder', ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {', 'leagueOf has no fixed era order to remove')]
-  : process.env.SIM_ERA2020_CONTROL === 'shiporder'
-    ? [engineEdit('shiporder', SHIP_ORDER_ANCHOR, SHIP_ORDER_BROKEN, 'the line that types the shipped order is not in the engine as this control knows it')]
-    : [];
+/* Controls modernnews and modernwar (Round 1304, section 9) put today's clubs
+   back where a past season's news and its bidding wars pick a club, one line
+   each: the engine as it was before the round. */
+const NEWS_ANCHOR = '  const allClubs = actingClubsByLeague(state).flat().filter(c => c.name !== droppedClub);';
+const NEWS_BROKEN = '  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id)).filter(c => c.name !== droppedClub);';
+const WAR_ANCHOR = '    const spenders = actingClubsByLeague(career).flatMap(cs => cs.slice(0, 5).map(c => c.name))';
+const WAR_BROKEN = '    const spenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 5).map(c => c.name))';
+const ENGINE_CONTROLS = {
+  eraorder: [ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {', 'leagueOf has no fixed era order to remove'],
+  shiporder: [SHIP_ORDER_ANCHOR, SHIP_ORDER_BROKEN, 'the line that types the shipped order is not in the engine as this control knows it'],
+  modernnews: [NEWS_ANCHOR, NEWS_BROKEN, 'the news does not pick its buyer from this save\'s own world on the line this control knows'],
+  modernwar: [WAR_ANCHOR, WAR_BROKEN, 'the bidding war does not pick its rival from this save\'s own world on the line this control knows'],
+};
+const engineControl = ENGINE_CONTROLS[process.env.SIM_ERA2020_CONTROL ?? ''];
+const plugins = engineControl ? [engineEdit(process.env.SIM_ERA2020_CONTROL, ...engineControl)] : [];
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', plugins });
 const { engine: cm, eras: ER, e20: E20, e15: E15, e10: E10, e05: E05, modern: MOD, baked: BAKED } = await import(pathToFileURL(BUNDLE).href);
 fs.rmSync(ENTRY, { force: true });
@@ -152,7 +168,9 @@ const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,
   buildBoardObjectives, ERA_LEAGUES, ERA_UCL_FIELDS, eraPlayableClubs, worldSeasonLabel,
   eraUclHasR16, uclFirstKoRound, careerLeagueOf, leagueOf, eraLeagueOf,
+  startNegotiation, makeOffer,
 } = cm;
+const REAL_RANDOM_1304 = Math.random;
 const { ERA2020_ROSTERS, ERA2020_META, ERA2020_PARTIAL } = E20;
 /* Round 1304: the modern world is the joined one, the same object both
    engine files read, so a league that joins the game joins this harness.
@@ -206,9 +224,16 @@ const BAND_THIN = 14;
                   retyped oldest season first as it is bundled: section 8's
                   pin on the shipped order and its club pins must fail,
                   while the reversal test, which only asks that the order
-                  not hang on the object, still passes. */
+                  not hang on the object, still passes.
+     modernnews   (Round 1304) the news picks its buying club from today's
+                  leagues again, as the engine is bundled: section 9's
+                  "bought by a club that is not in that season's leagues"
+                  must fail in every era.
+     modernwar    (Round 1304) the rival of a negotiation is picked from
+                  today's leagues again, as the engine is bundled: section
+                  9's "rivals ... not in that season's leagues" must fail. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder', 'modernnews', 'modernwar'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -758,6 +783,74 @@ console.log('8) Every past season\'s market files a man under the league his clu
     else pinned += 1;
   }
   console.log(`   the eras are read as ${order.join(', ')}; ${pinned} of ${Object.keys(PINS).length} pinned clubs read the league they always have`);
+}
+
+/* ---------- 9. The news and the bidding wars name clubs of that season ---------- */
+console.log('9) Every past season\'s news and bidding wars name clubs of that season');
+{
+  /* Round 1304, a real defect and not a stale check. Found on a picture of
+     the 2010-11 market: "Brentford sign Andres Iniesta from Barcelona for
+     56m" under Around the league. The men of a past season were always that
+     season's (section 2), but the club that BUYS in the news feed, and the
+     rival who "just entered the race" in a negotiation, were drawn from
+     today's leagues with today's budgets in every era, so a 2005-06 save
+     could print a club that was not founded yet, and a rival who closes the
+     deal goes into Latest Transfers as well. Round 146 already held the
+     rule for bids, approaches and job offers ("a 2010 manager cannot be
+     poached by a 2026 club"); these two places never got it.
+     What this reads: for every past season, the transfer log of freshly
+     started saves (every deal the opening window's news printed) and the
+     rival of seeded negotiations, each against the clubs of that season's
+     leagues. Nothing is played. Controls modernnews and modernwar put
+     today's clubs back as the engine is bundled, one line each, and the
+     matching sentence must fail.
+     MEASURED 2026-10-11 on the base engine (f65c6d60), these seeds: of the
+     deals in the news, 304 of 1809 were bought by a club not of that season
+     (2010-11: 106 of 469, 2015-16: 72 of 428, 2005-06: 99 of 472, 2020-21:
+     27 of 440; "Al-Hilal sign Lassana Diarra from Real Madrid", "Bournemouth
+     sign Ruud van Nistelrooy from Manchester United"), and so were 106 of
+     the 136 rivals (30 of 37, 26 of 33, 29 of 34, 21 of 32; "Chicago Fire
+     for Aimo Diana of Sampdoria"). The fixed engine's own counts are on the
+     line each era prints. The floors are about half of the fewest deals and
+     the fewest rivals these seeds gave an era on either engine. */
+  const NEWS_SEEDS = 100, WAR_SEEDS = 60, NEWS_FLOOR = 210, WAR_FLOOR = 16;
+  for (const eraId of Object.keys(ERA_LEAGUES)) {
+    const leagues = ERA_LEAGUES[eraId];
+    const clubs = new Set(leagues.flatMap(l => l.clubs));
+    let deals = 0;
+    const strangers = [];
+    for (let i = 0; i < NEWS_SEEDS; i++) {
+      Math.random = seeded(9001 + i * 7919);
+      const lg = leagues[i % leagues.length];
+      const save = startCareer(lg.clubs[i % lg.clubs.length], eraId);
+      for (const t of save.transferLog ?? []) {
+        deals += 1;
+        if (!clubs.has(t.to)) strangers.push(`${t.to} sign ${t.name} from ${t.from}`);
+      }
+    }
+    let wars = 0;
+    const rivals = [];
+    for (let i = 0; i < WAR_SEEDS; i++) {
+      Math.random = seeded(12007 + i * 7919);
+      const save = startCareer(leagues[i % leagues.length].clubs[0], eraId);
+      const target = buildMarket(save).find(m => m.price >= 2 && m.price * 1.2 <= save.budget);
+      if (!target) continue;
+      let talk = startNegotiation(save, target);
+      for (let r = 0; talk && talk.negotiation?.status === 'open' && talk.negotiation.phase === 'fee' && !talk.negotiation.rivalBidder && r < 8; r++) {
+        talk = makeOffer(talk, Math.round(talk.negotiation.theirAsk * 0.8 * 10) / 10);
+      }
+      const rival = talk?.negotiation?.rivalBidder;
+      if (!rival) continue;
+      wars += 1;
+      if (!clubs.has(rival)) rivals.push(`${rival} for ${target.name} of ${target.club}`);
+    }
+    console.log(`   ${eraId}: ${deals} deals in the news of ${NEWS_SEEDS} new saves, ${strangers.length} bought by a club not of that season; ${wars} rivals in ${WAR_SEEDS} negotiations, ${rivals.length} not of that season`);
+    if (deals < NEWS_FLOOR) fail(`${eraId}: only ${deals} deals in the news of ${NEWS_SEEDS} new saves (floor ${NEWS_FLOOR}); the buyer check has too little to read`);
+    if (wars < WAR_FLOOR) fail(`${eraId}: only ${wars} rivals in ${WAR_SEEDS} negotiations (floor ${WAR_FLOOR}); the rival check has too little to read`);
+    if (strangers.length) fail(`${eraId}: ${strangers.length} of ${deals} deals in the news are bought by a club that is not in that season's leagues, e.g. ${strangers.slice(0, 3).join('; ')}`);
+    if (rivals.length) fail(`${eraId}: ${rivals.length} of ${wars} rivals in a negotiation are clubs that are not in that season's leagues, e.g. ${rivals.slice(0, 3).join('; ')}`);
+  }
+  Math.random = REAL_RANDOM_1304;
 }
 
 console.log('');
