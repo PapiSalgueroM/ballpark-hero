@@ -253,7 +253,7 @@ describe('Club Manager: the review screen', () => {
 
   it.each([
     { call: 'disallowed', match: 1, hint: 1724 },
-    { call: 'awarded', match: 2, hint: 1894 },
+    { call: 'awarded', match: 2, hint: 2099 },
   ])('a review never opens over another action: the goal of the minute before is in and counted first ($call)', async ({ call, match, hint }) => {
     const h = half(match, hint, feed => {
       const all = reviewsOf(feed);
@@ -763,7 +763,7 @@ describe('Club Manager: the review screen', () => {
   }, 180000);
 
   it.each([
-    { what: 'injury', match: 2, hint: 3046, says: 'Injury: ', shared: false },
+    { what: 'injury', match: 2, hint: 8058, says: 'Injury: ', shared: false },
     { what: 'injury', match: 0, hint: 3861, says: 'Injury: ', shared: true },
     { what: 'red', match: 1, hint: 3827, says: 'RED CARD! ', shared: false },
   ] as const)("a review in the same minute as the other side's $what (a chance at the same place: $shared): both are told, and the card sits over nothing", async ({ what, match, hint, says, shared }) => {
