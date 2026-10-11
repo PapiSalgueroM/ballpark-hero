@@ -1,0 +1,53 @@
+1) A fresh 2020 save is the real 2020 squad, untouched
+   Bayern Munich: 26 in squad, 26 bake rows, 0 mismatches, 0 generated
+   PSG: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Manchester City: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Barcelona: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them leak
+   939 era-exclusive names checked against the 2026 market, 0 leaks
+   2020 and now: 835 shared names, 10 listed pairs of two men, 0 unexplained
+   2020 and era2015: 573 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2010: 164 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2005: 32 shared names, 13 listed pairs of two men, 0 unexplained
+3) Boards talk 2020-21: the giants told to win it, the promoted told to stay up
+   98 club demands checked across the five 2020-21 leagues
+4) Full seasons play out plausibly in all five leagues
+   skipped: a control run plays no seasons
+5) The bake file tells the truth about itself
+   98 clubs, 1774 players (META says 1774 in 98), 256 window corrections
+   one man one club: 0 duplicates; window sample: 31 of 31 movers landed, 12 of 12 leavers gone
+   no record placed, so left where the year-2020 row has them: Valentino Lazaro at Newcastle (Gladbach by 2021), Cristiano Biraghi at Inter Milan (Fiorentina by 2021), Bas Dost at Eintracht Frankfurt (Club Brugge by 2021)
+6) The uplift is small, keeps the order, and leaves the rank and file alone
+   top 50, uplifted 2020 against modern, mean gap 0.12 (band +-0.5)
+7) The real 2020-21 Champions League field, eight groups into a round of 16
+   CONTROL nofield applied: section 7 sees an empty field
+  FAIL: Chelsea is not in the 2020-21 field, where it reached the winner
+  FAIL: Manchester City is not in the 2020-21 field, where it reached the runner_up
+  FAIL: Real Madrid is not in the 2020-21 field, where it reached the semi_final
+  FAIL: PSG is not in the 2020-21 field, where it reached the semi_final
+  FAIL: Liverpool is not in the 2020-21 field, where it reached the quarter_final
+  FAIL: Bayern Munich is not in the 2020-21 field, where it reached the quarter_final
+  FAIL: Borussia Dortmund is not in the 2020-21 field, where it reached the quarter_final
+  FAIL: Porto is not in the 2020-21 field, where it reached the quarter_final
+  FAIL: Barcelona is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: RB Leipzig is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: Atlético Madrid is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: Lazio is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: Atalanta is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: Gladbach is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: Juventus is not in the 2020-21 field, where it reached the round_of_16
+  FAIL: Sevilla is not in the 2020-21 field, where it reached the round_of_16
+   0 clubs, 0 with baked 2020-21 squads; winner undefined
+  FAIL: the 2020-21 field holds 0 clubs
+  FAIL: 0 field clubs have baked squads, the five leagues sent nineteen
+  FAIL: the field's finishes read 0,0,0,0,0,0, a real season is 1,1,2,4,8,16
+  FAIL: the 2020-21 winner is not Chelsea
+8) Every past season's market files a man under the league his club plays in that season
+   era2010: 1719 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 364)
+   era2015: 1628 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 356)
+   era2005: 1699 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 421)
+   era2020: 1744 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 331)
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+   the eras are read as era2010, era2015, era2005, era2020; 6 of 6 pinned clubs read the league they always have
+
+simEra2020: 20 failure(s).
