@@ -1,0 +1,9 @@
+# Release AW part one, FINAL PROOF on the last commit, the gate list part H1b (the same lines as Release AV's proof request rAV-H1b, so each line compares with the base)
+#!serve
+#!playwright
+#!serial
+playGames-buzzer-beater: ONLY=/buzzer-beater node scripts/playGames.mjs
+playGames-cage-clash: ONLY=/cage-clash node scripts/playGames.mjs
+playGames-stat-detective: ONLY=/stat-detective node scripts/playGames.mjs
+playGames-dart-draft: ONLY=/dart-draft node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
