@@ -1,4 +1,4 @@
-# Round 1303: Club Manager, VAR for goals. What was built, what was measured, and why the switch is still off
+# Round 1303: Club Manager, VAR for goals. What was built, what was measured, and how the switch came on (section 6)
 
 Read `docs/audits/ROUND-1218-NOTES.md` and `docs/audits/ROUND-1302-NOTES.md` first: this round stands on both.
 
@@ -113,3 +113,63 @@ in a scratch checkout.
   any frame; seed 1860, theirs at 45+3, none; seed 1773, goals at 45+2 and 45+3, one goal drawn of the two. Each
   case is green while the defect is there and goes red the day it is mended, and then it becomes a plain case.
 - The two orderings Round 1302 chose knowingly (seed 1987, seed 42322) and its minors are as it left them.
+
+## 6. The fix pass (after the two adversarial reviews): the switch is ON for goals
+
+Sections 3 and 5 above are the round as the builder left it, kept as the record. Two reviews called both open items
+major, and a fix pass closed them. What changed, in the order it was pushed:
+
+- **`goals-level` is closed in the engine, the third of the three ways its own entry named.** The engine's goals are
+  calibrated on goals that COUNTED, and real football's counted goals are already net of reviews, so taking 2.8
+  percent out again counted the review twice (both reviewers said so). A match that reviews goals now draws them
+  `1 / (1 - goalReview x overturn)` times as often (`cmVarGoalLift` in `src/lib/clubManagerVar.ts`, one factor on the
+  two Poisson means in `drawSegment`). A goal a review can look at is ruled out at `goalReview` = 0.030501 a DRAWN
+  goal (0.075163 over the 2.3891 reviewable goals a match the engine counts, then `x / (1 + x)`); a penalty or a
+  direct free kick, which no review looks at, is taken back at the same rate with no review. A match that does not
+  review goals is not touched: the factor is exactly 1 and the default path is byte equal. The entry is out of the
+  ledger, the goal kind is on, `CM_VAR_KINDS` is `['goal']`.
+  Measured on ten fleets of about 4,000 league matches (`r1303-fx-c`): goals a match moved by -0.0118 to 0.0106,
+  mean 0.0007, against the band of 0.05; goals ruled out 0.0699 to 0.0808 a match, mean 0.0751 (target 0.0752);
+  penalties a match level. The run review's own fleet, which shares no code with the harness, agrees
+  (`r1303-fx-d`: 2.7142 with against 2.7152 without over 4,297 matches). Controls `nolift`, `liftkind`, `liftpens`.
+  One thing to know: a lit match is not "the dark match with a goal taken out". The lift changes the first draw of
+  the half, so the match of a seed with reviews is another match from its first goal on; 5.9 to 7.0 percent of
+  league matches end with another result than the same seed without reviews. Nobody can see the other match, and
+  the totals are level.
+- **Finding 6 is mended on the live match screen** (`goalStop` in `LiveSimScreen.tsx`): a real goal has a stoppage
+  of its own where the pitch had no room for it. The last kick of a period that is a goal gets its scorer card with
+  the whistle waiting; a goal in the clock place before a last kick is played whole, clock stopped, before that
+  kick is wound up. Skip and a tap on the card end it. The three cases marked `fails` are plain cases, with a
+  reduced motion case and a Skip case beside them, and one of Round 1302's five open penalty rows closed on the way
+  (seed 2287: the kick of a penalty a review gives in the place before a last kick is played now). Four cases still
+  pass by failing, all four about a penalty a review gives at a crowded end (seeds 10321 and 6428). Runner
+  `r1303-fx-e`: the screen file, `liveSimMotion` (93), `simLiveSimMotion` with its twelve controls, eight screen
+  harnesses.
+- **The lit rule is a standing case** (`src/test/clubManagerVarLive.test.tsx`): a live kickoff, a Quick Sim and the
+  fast forward through the real hook play the goal kind alone. Modes `dark` and `lit` run either rule on any build;
+  controls `on`, `switch`, `off`, `allkinds` must go red. The mutation every gate let through (the fast forward
+  handing the engine a boolean) is caught by it (`r1303-fx-h`), and so is the match help telling of a penalty by
+  review, by three cases on the real screen.
+- **The Help never states a real league's rate** is held at source level, by shape and by default
+  (`scripts/simCmVarLedger.mjs` section 7, control `helprate`), and the four copies of the list of kinds are tied
+  (section 6b).
+- **Two halves of the screen test moved with the lift** (hints 1894 to 2099 and 3046 to 8058 on league match 3) and
+  **the Round 1081 manifest pin followed the engine file** again; each in its own commit with its proof.
+- **The switch.** `CM_VAR_LIVE` is true, one What's New entry (goals only, the listed competitions, from the next
+  kickoff), and the walk runs on the plain build. To take VAR out again, make that one line false.
+
+Still open after the fix pass:
+
+- **Penalties by review** stay off: `penalties-total` is open, and the four cases marked `fails`.
+- **The generator refuses both rates if the penalty readings stop agreeing** (they agree by 0.65 percent). Not
+  changed: teaching the generator, the ledger harness and simCmVar a "no penalty rate" state is a design choice for
+  the round that turns penalties on.
+- **Two paths kick off without asking**: the previous manager's weeks before a mid season takeover (`playRunIn`)
+  and `simToDate` (no caller). Nobody watches those matches and, with the lift, asking or not asking leaves the same
+  goal totals; left as they are.
+- **For the other lane and the lead**: the guide in `src/data/gameContent` for Club Manager says nothing about VAR
+  yet (theirs to write: goals only, the listed competitions, from the next kickoff, rare, both ways).
+  `.github/workflows/career-next-batch.yml` runs `scripts/playCmVar.mjs` on its own build with the offline
+  transport: that walk refused a dark build with exit 2, and it runs on the plain build now, so that step has a
+  real walk to pass from this round on; nothing in the file has to change. The saved page of `/club-manager` and of `/whats-new`, the
+  sitemap dates and the page weight budgets are the lead's at release.
