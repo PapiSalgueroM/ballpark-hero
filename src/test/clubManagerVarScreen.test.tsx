@@ -519,6 +519,12 @@ describe('Club Manager: the review screen', () => {
     /* The score does not move under the card, and no goal lands on it afterwards unless an action was played after. */
     expect(new Set(frames.slice(first, last + 1).map(f => f.score)).size, 'the score moved under the review card').toBe(1);
     if (!runs.some(r => r.from > last)) expect(frames[first].score, 'a goal counted after the card with nothing played in between').toBe(scoreBy(h.feed, h.whistle));
+    /* A real goal at the clock place the card opens at is on the score by then, and has been told too (the last
+       kick's line is not kept back for the review the whistle is waiting for). */
+    const shown = frames[first].minute + frames[first].plus;
+    for (const g of h.feed.filter(e => e.kind === 'goal' && !e.og && !e.penalty && !e.freeKick && place(e) === shown)) {
+      expect(frames[first].text, `the real goal of ${g.text} at ${place(g)} is on the score and was not told before the card opened`).toContain(`GOAL! ${g.text}`);
+    }
     console.info(`clubManagerVarScreen: the crowded end was found on seed ${h.seed}, whistle ${h.whistle}, review at ${place(v)}, card at ${frames[first].minute + frames[first].plus}, played ${runs.map(r => r.kind).join(' ')}`);
   }, 240000);
 
