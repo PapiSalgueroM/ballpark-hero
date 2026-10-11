@@ -1,0 +1,22 @@
+# Release AX, final proof, gate part G1: the lines of the gate lists that Release AW's proof files did not carry (the readers of dist on a plain build, and four sims of Release AV)
+#!build
+simAdsense: export TMPDIR=$(mktemp -d); node scripts/simAdsense.mjs
+simHeadTags: export TMPDIR=$(mktemp -d); node scripts/simHeadTags.mjs
+simHiddenPages: export TMPDIR=$(mktemp -d); node scripts/simHiddenPages.mjs
+simHubs: export TMPDIR=$(mktemp -d); node scripts/simHubs.mjs
+simIndexNow: export TMPDIR=$(mktemp -d); node scripts/simIndexNow.mjs
+simIndexing: export TMPDIR=$(mktemp -d); node scripts/simIndexing.mjs
+simInternalLinks: export TMPDIR=$(mktemp -d); node scripts/simInternalLinks.mjs
+simPrerender: export TMPDIR=$(mktemp -d); node scripts/simPrerender.mjs
+simPrerenderBoot: export TMPDIR=$(mktemp -d); node scripts/simPrerenderBoot.mjs
+simRetiredRoutes: export TMPDIR=$(mktemp -d); node scripts/simRetiredRoutes.mjs
+simSchema: export TMPDIR=$(mktemp -d); node scripts/simSchema.mjs
+simSitemap: export TMPDIR=$(mktemp -d); node scripts/simSitemap.mjs
+simSnapshotAssets: export TMPDIR=$(mktemp -d); node scripts/simSnapshotAssets.mjs
+simCmLeagueBook: export TMPDIR=$(mktemp -d); node scripts/simCmLeagueBook.mjs
+simCmLeaguePhase: export TMPDIR=$(mktemp -d); node scripts/simCmLeaguePhase.mjs
+simGmGameDay: export TMPDIR=$(mktemp -d); node scripts/simGmGameDay.mjs
+simUsPlanSeason: export TMPDIR=$(mktemp -d); node scripts/simUsPlanSeason.mjs
+simUsPostseason: export TMPDIR=$(mktemp -d); node scripts/simUsPostseason.mjs
+simUsRivalSense: export TMPDIR=$(mktemp -d); node scripts/simUsRivalSense.mjs
+simBrand: export TMPDIR=$(mktemp -d); pip3 install --quiet fonttools pillow && node scripts/simBrand.mjs
