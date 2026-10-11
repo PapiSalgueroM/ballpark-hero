@@ -6737,6 +6737,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     : continentalOpponents(FALLBACK_CLUBS, cupFor.confederation, uclYear, state.currentClub);
   const matches: UCLKnockoutMatch[] = [];
   let totalPlayerGoals = 0;
+  let removedKnockoutGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
   const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
 
@@ -6814,8 +6815,10 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const ga = uclLegGoals(clamp(UCL_BASE_LAMBDA - edge - venue, 0.25, 3.4));
       aggFor += gf;
       aggAgainst += ga;
-      const pg = legPlayerGoals(legs);
+      const rawPlayerGoals = legPlayerGoals(legs);
+      const pg = Math.min(rawPlayerGoals, gf);
       totalPlayerGoals += pg;
+      removedKnockoutGoals += rawPlayerGoals - pg;
       legRows.push({ opponent, round, leg, home, goalsFor: gf, goalsAgainst: ga, playerGoals: pg, won: false });
     }
 
@@ -6896,7 +6899,9 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
      as common as before. One goal lower (0.3 a night) overshoots, at 0.67%,
      0.56% and 0.33%. */
   const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
-  const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;
+  const oldGoalTotal = totalPlayerGoals + removedKnockoutGoals;
+  const topScorerRoll = oldGoalTotal >= topScorerBar && Math.random() < 0.5;
+  const isTopScorer = totalPlayerGoals >= topScorerBar && topScorerRoll;
 
   return {
     qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer, competition, cup: cupFor.cup,
