@@ -1,0 +1,2 @@
+   FAIL  /soccer-career: PART_VERSIONS says readSoccerFarewell (src/lib/soccerCareerFarewell.ts) reads farewellSeason.version as absent with another number, but the farewell is not judged as on the same save without the part (Your final season is already announced.)
+simSaveKeeper: RED in section(s) 1.

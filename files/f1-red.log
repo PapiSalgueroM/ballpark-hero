@@ -1,0 +1,173 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/red[39m
+
+ [31m❯[39m src/test/soccerSavePartsReadAsAbsent.test.ts [2m([22m[2m20 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 166[2mms[22m[39m
+   [32m✓[39m agentReview: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the review is offered again and a new write succeeds[32m 7[2mms[22m[39m
+   [32m✓[39m agentReview: a part that cannot be verified is read as absent[2m > [22manother version: the review is offered again and a new write succeeds[32m 3[2mms[22m[39m
+   [32m✓[39m agentReview: a part that cannot be verified is read as absent[2m > [22mnull: the review is offered again and a new write succeeds[32m 4[2mms[22m[39m
+   [32m✓[39m agentReview: a part that cannot be verified is read as absent[2m > [22ma receipt whose source row no longer matches: the review is offered again and a new write succeeds[32m 3[2mms[22m[39m
+   [32m✓[39m internationalReturn: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the comeback is offered again and a new write succeeds[32m 4[2mms[22m[39m
+   [32m✓[39m internationalReturn: a part that cannot be verified is read as absent[2m > [22manother version: the comeback is offered again and a new write succeeds[32m 5[2mms[22m[39m
+   [32m✓[39m internationalReturn: a part that cannot be verified is read as absent[2m > [22mnull: the comeback is offered again and a new write succeeds[32m 4[2mms[22m[39m
+   [32m✓[39m internationalReturn: a part that cannot be verified is read as absent[2m > [22ma receipt whose source row no longer matches: the comeback is offered again and a new write succeeds[32m 4[2mms[22m[39m
+   [32m✓[39m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag off, a wrong shape: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 5[2mms[22m[39m
+   [32m✓[39m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag off, another version: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 4[2mms[22m[39m
+   [32m✓[39m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag off, null: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 4[2mms[22m[39m
+   [32m✓[39m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag off, a receipt whose source row no longer matches: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 5[2mms[22m[39m
+[31m   [31m×[31m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, a wrong shape: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part[39m[32m 11[2mms[22m[39m
+[31m     → the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }[39m
+[31m   [31m×[31m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, another version: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part[39m[32m 5[2mms[22m[39m
+[31m     → the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }[39m
+[31m   [31m×[31m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, null: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part[39m[32m 5[2mms[22m[39m
+[31m     → the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }[39m
+[31m   [31m×[31m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, a receipt whose source row no longer matches: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part[39m[32m 4[2mms[22m[39m
+[31m     → the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2028, …(1) }[39m
+   [32m✓[39m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mthe flag alone ends nothing: with no readable plan the summary of that year does not retire the player[32m 7[2mms[22m[39m
+[31m   [31m×[31m farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mthe way out the flag never gave: announced again over the unreadable plan, that year ends the career as any farewell year does[39m[32m 36[2mms[22m[39m
+[31m     → a readable plan was written over the unreadable one: expected null not to be null[39m
+   [32m✓[39m the journey of ruling C3: announce a farewell, play the year, retire, then carry on[2m > [22mis NOT reachable: after a farewell retirement no step adds a season row, so the plan stays readable for good[32m 28[2mms[22m[39m
+[31m   [31m×[31m the journey of ruling C3: announce a farewell, play the year, retire, then carry on[2m > [22mbuilt by hand (a row past the farewell year on a career that plays on): the plan is read as absent and the card is offered again[39m[32m 15[2mms[22m[39m
+[31m     → the ruling for this journey: offered again when the player is eligible, with the flag as the engine leaves it: expected { eligible: false, year: null, …(1) } to match object { eligible: true, year: 2031 }
+(1 matching property omitted from actual)[39m
+ [31m❯[39m src/test/soccerFarewellOneBanner.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 392[2mms[22m[39m
+   [32m✓[39m A farewell season is announced by one box on the page[2m > [22mon the playing screen an announced plan shows its card and no second banner[32m 147[2mms[22m[39m
+   [32m✓[39m A farewell season is announced by one box on the page[2m > [22mon the season summary of the final year the card is still the only one[32m 91[2mms[22m[39m
+   [32m✓[39m A farewell season is announced by one box on the page[2m > [22ma player of 34 with no plan is offered the farewell once and told nothing yet[32m 43[2mms[22m[39m
+[31m   [31m×[31m A farewell plan that cannot be verified is read as absent on the page[2m > [22mwith the flag set by the announcement: the old banner shows, once, and the card is offered again beside it[39m[32m 42[2mms[22m[39m
+[31m     → expected { announced: +0, available: +0, …(1) } to deeply equal { announced: +0, available: 1, …(1) }[39m
+   [32m✓[39m A farewell plan that cannot be verified is read as absent on the page[2m > [22mthe same save with the part taken out is the same page: the banner once and the card offered (this one never changed)[32m 34[2mms[22m[39m
+   [32m✓[39m A farewell plan that cannot be verified is read as absent on the page[2m > [22mwith the flag off: the card is offered again and there is no banner[32m 35[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 7 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell plan that cannot be verified is read as absent on the page[2m > [22mwith the flag set by the announcement: the old banner shows, once, and the card is offered again beside it
+[31m[1mAssertionError[22m: expected { announced: +0, available: +0, …(1) } to deeply equal { announced: +0, available: 1, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "announced": 0,[22m
+[32m-   "available": 1,[39m
+[31m+   "available": 0,[39m
+[2m    "banner": true,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerFarewellOneBanner.test.tsx:[2m160:25[22m[39m
+    [90m158| [39m    expect(readSoccerFarewell(saved), 'the plan is past verifying').to…
+    [90m159| [39m    [35mconst[39m view [33m=[39m [34mmount[39m(saved)[33m;[39m
+    [90m160| [39m    expect(boxes(view)).toEqual({ announced: 0, available: 1, banner: …
+    [90m   | [39m                        [31m^[39m
+    [90m161| [39m    [34mexpect[39m([34mbanners[39m(view))[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m162| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, a wrong shape: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, another version: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, null: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part
+[31m[1mAssertionError[22m: the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "eligible": true,[39m
+[32m-   "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts.",[39m
+[32m-   "year": 2029,[39m
+[31m+   "eligible": false,[39m
+[31m+   "reason": "Your final season is already announced.",[39m
+[31m+   "year": null,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m172:94[22m[39m
+    [90m170| [39m    [35mconst[39m eligibility [33m=[39m [34mfarewellEligibility[39m(c)[33m;[39m
+    [90m171| [39m    [34mexpect[39m(eligibility[33m.[39mreason)[33m.[39mnot[33m.[39m[34mtoMatch[39m([33mSENTENCE[39m)[33m;[39m
+    [90m172| [39m    expect(eligibility, 'the one rule: the answer of the same save wit…
+    [90m   | [39m                                                                                             [31m^[39m
+    [90m173| [39m    expect(eligibility).toMatchObject({ eligible: true, year: latest.y…
+    [90m174| [39m    [35mconst[39m next [33m=[39m [34mannounceSoccerFarewell[39m(c)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mflag set by the announcement, a receipt whose source row no longer matches: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part
+[31m[1mAssertionError[22m: the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2028, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "eligible": true,[39m
+[32m-   "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts.",[39m
+[32m-   "year": 2028,[39m
+[31m+   "eligible": false,[39m
+[31m+   "reason": "Your final season is already announced.",[39m
+[31m+   "year": null,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m172:94[22m[39m
+    [90m170| [39m    [35mconst[39m eligibility [33m=[39m [34mfarewellEligibility[39m(c)[33m;[39m
+    [90m171| [39m    [34mexpect[39m(eligibility[33m.[39mreason)[33m.[39mnot[33m.[39m[34mtoMatch[39m([33mSENTENCE[39m)[33m;[39m
+    [90m172| [39m    expect(eligibility, 'the one rule: the answer of the same save wit…
+    [90m   | [39m                                                                                             [31m^[39m
+    [90m173| [39m    expect(eligibility).toMatchObject({ eligible: true, year: latest.y…
+    [90m174| [39m    [35mconst[39m next [33m=[39m [34mannounceSoccerFarewell[39m(c)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, whatever the flag says[2m > [22mthe way out the flag never gave: announced again over the unreadable plan, that year ends the career as any farewell year does
+[31m[1mAssertionError[22m: a readable plan was written over the unreadable one: expected null not to be null[39m
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m208:77[22m[39m
+    [90m206| [39m    [35mconst[39m again [33m=[39m [34mannounceSoccerFarewell[39m(c)[33m;[39m
+    [90m207| [39m    [35mconst[39m plan [33m=[39m [34mreadSoccerFarewell[39m(again)[33m![39m[33m;[39m
+    [90m208| [39m    expect(plan, 'a readable plan was written over the unreadable one'…
+    [90m   | [39m                                                                            [31m^[39m
+    [90m209| [39m    const played = run(41, () => advanceProSeason(clone(again), FALLBA…
+    [90m210| [39m    expect(farewellSeasonComplete(played), 'the announced year was pla…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mthe journey of ruling C3: announce a farewell, play the year, retire, then carry on[2m > [22mbuilt by hand (a row past the farewell year on a career that plays on): the plan is read as absent and the card is offered again
+[31m[1mAssertionError[22m: the ruling for this journey: offered again when the player is eligible, with the flag as the engine leaves it: expected { eligible: false, year: null, …(1) } to match object { eligible: true, year: 2031 }
+(1 matching property omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "eligible": true,[39m
+[32m-   "year": 2031,[39m
+[31m+   "eligible": false,[39m
+[31m+   "year": null,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m283:8[22m[39m
+    [90m281| [39m    expect(carried.isFinalSeason, 'as the engine leaves it: nothing cl…
+    [90m282| [39m    expect(farewellEligibility(carried), 'the ruling for this journey:…
+    [90m283| [39m      [33m.[39m[34mtoMatchObject[39m({ eligible[33m:[39m [35mtrue[39m[33m,[39m year[33m:[39m last[33m.[39myear [33m+[39m [34m2[39m })[33m;[39m
+    [90m   | [39m       [31m^[39m
+    [90m284| [39m    expect(farewellEligibility(carried)).toEqual(farewellEligibility(b…
+    [90m285| [39m    [35mconst[39m again [33m=[39m [34mannounceSoccerFarewell[39m(carried)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 22:08:27
+[2m   Duration [22m 3.32s[2m (transform 1.71s, setup 105ms, collect 3.43s, tests 558ms, environment 638ms, prepare 307ms)[22m
+
+
+::error file=/tmp/red/src/test/soccerFarewellOneBanner.test.tsx,title=src/test/soccerFarewellOneBanner.test.tsx > A farewell plan that cannot be verified is read as absent on the page > with the flag set by the announcement%3A the old banner shows%2C once%2C and the card is offered again beside it,line=160,column=25::AssertionError: expected { announced: +0, available: +0, …(1) } to deeply equal { announced: +0, available: 1, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "announced": 0,%0A-   "available": 1,%0A+   "available": 0,%0A    "banner": true,%0A  }%0A%0A ❯ src/test/soccerFarewellOneBanner.test.tsx:160:25%0A%0A
+
+::error file=/tmp/red/src/test/soccerSavePartsReadAsAbsent.test.ts,title=src/test/soccerSavePartsReadAsAbsent.test.ts > farewellSeason%3A a plan that cannot be verified is read as absent%2C whatever the flag says > flag set by the announcement%2C a wrong shape%3A judged exactly as the save with no part%2C offered again%2C overwritten%2C and played as the save with no part,line=172,column=94::AssertionError: the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "eligible": true,%0A-   "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts.",%0A-   "year": 2029,%0A+   "eligible": false,%0A+   "reason": "Your final season is already announced.",%0A+   "year": null,%0A  }%0A%0A ❯ src/test/soccerSavePartsReadAsAbsent.test.ts:172:94%0A%0A
+
+::error file=/tmp/red/src/test/soccerSavePartsReadAsAbsent.test.ts,title=src/test/soccerSavePartsReadAsAbsent.test.ts > farewellSeason%3A a plan that cannot be verified is read as absent%2C whatever the flag says > flag set by the announcement%2C another version%3A judged exactly as the save with no part%2C offered again%2C overwritten%2C and played as the save with no part,line=172,column=94::AssertionError: the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "eligible": true,%0A-   "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts.",%0A-   "year": 2029,%0A+   "eligible": false,%0A+   "reason": "Your final season is already announced.",%0A+   "year": null,%0A  }%0A%0A ❯ src/test/soccerSavePartsReadAsAbsent.test.ts:172:94%0A%0A
+
+::error file=/tmp/red/src/test/soccerSavePartsReadAsAbsent.test.ts,title=src/test/soccerSavePartsReadAsAbsent.test.ts > farewellSeason%3A a plan that cannot be verified is read as absent%2C whatever the flag says > flag set by the announcement%2C null%3A judged exactly as the save with no part%2C offered again%2C overwritten%2C and played as the save with no part,line=172,column=94::AssertionError: the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2029, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "eligible": true,%0A-   "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts.",%0A-   "year": 2029,%0A+   "eligible": false,%0A+   "reason": "Your final season is already announced.",%0A+   "year": null,%0A  }%0A%0A ❯ src/test/soccerSavePartsReadAsAbsent.test.ts:172:94%0A%0A
+
+::error file=/tmp/red/src/test/soccerSavePartsReadAsAbsent.test.ts,title=src/test/soccerSavePartsReadAsAbsent.test.ts > farewellSeason%3A a plan that cannot be verified is read as absent%2C whatever the flag says > flag set by the announcement%2C a receipt whose source row no longer matches%3A judged exactly as the save with no part%2C offered again%2C overwritten%2C and played as the save with no part,line=172,column=94::AssertionError: the one rule: the answer of the same save with the part taken out: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: true, year: 2028, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "eligible": true,%0A-   "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts.",%0A-   "year": 2028,%0A+   "eligible": false,%0A+   "reason": "Your final season is already announced.",%0A+   "year": null,%0A  }%0A%0A ❯ src/test/soccerSavePartsReadAsAbsent.test.ts:172:94%0A%0A
+
+::error file=/tmp/red/src/test/soccerSavePartsReadAsAbsent.test.ts,title=src/test/soccerSavePartsReadAsAbsent.test.ts > farewellSeason%3A a plan that cannot be verified is read as absent%2C whatever the flag says > the way out the flag never gave%3A announced again over the unreadable plan%2C that year ends the career as any farewell year does,line=208,column=77::AssertionError: a readable plan was written over the unreadable one: expected null not to be null%0A ❯ src/test/soccerSavePartsReadAsAbsent.test.ts:208:77%0A%0A
+
+::error file=/tmp/red/src/test/soccerSavePartsReadAsAbsent.test.ts,title=src/test/soccerSavePartsReadAsAbsent.test.ts > the journey of ruling C3%3A announce a farewell%2C play the year%2C retire%2C then carry on > built by hand (a row past the farewell year on a career that plays on)%3A the plan is read as absent and the card is offered again,line=283,column=8::AssertionError: the ruling for this journey: offered again when the player is eligible, with the flag as the engine leaves it: expected { eligible: false, year: null, …(1) } to match object { eligible: true, year: 2031 }%0A(1 matching property omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "eligible": true,%0A-   "year": 2031,%0A+   "eligible": false,%0A+   "year": null,%0A  }%0A%0A ❯ src/test/soccerSavePartsReadAsAbsent.test.ts:283:8%0A%0A

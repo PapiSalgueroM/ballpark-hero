@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerSavePartsReadAsAbsent.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 285[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellOneBanner.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 399[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 22:08:22
+[2m   Duration [22m 3.38s[2m (transform 1.76s, setup 115ms, collect 3.46s, tests 684ms, environment 678ms, prepare 277ms)[22m
+

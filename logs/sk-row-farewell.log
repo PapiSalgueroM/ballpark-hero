@@ -1,0 +1,1 @@
+   ok    /soccer-career: 1 of 4 real saves hold 1 at farewellSeason.version, a PART of the save; readSoccerFarewell (src/lib/soccerCareerFarewell.ts) reads the part as absent with another number there (asked: one down refused, one up refused; then the game behaves as with no part and a new write overwrites it), and the keeper makes no copy before a step of it
