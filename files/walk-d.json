@@ -1,0 +1,1071 @@
+{
+ "base": "http://localhost:4173",
+ "cases": [
+  {
+   "id": "motion-390",
+   "scen": "motion",
+   "w": 390,
+   "h": 844,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "what moves when a dialog opens",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [],
+   "m": {
+    "motion": {
+     "farewell": {
+      "animationName": "enter",
+      "animationDuration": "0.15s",
+      "transitionDuration": "0.2s",
+      "running": [
+       {
+        "name": "enter",
+        "ms": 150,
+        "state": "running"
+       }
+      ],
+      "media": false
+     },
+     "agent": {
+      "animationName": "enter",
+      "animationDuration": "0.15s",
+      "transitionDuration": "0.2s",
+      "running": [
+       {
+        "name": "enter",
+        "ms": 150,
+        "state": "running"
+       }
+      ],
+      "media": false
+     },
+     "pageAnimations": []
+    }
+   }
+  },
+  {
+   "id": "motion-390-rm",
+   "scen": "motion",
+   "w": 390,
+   "h": 844,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "what moves when a dialog opens",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [],
+   "m": {
+    "motion": {
+     "farewell": {
+      "animationName": "enter",
+      "animationDuration": "1e-06s",
+      "transitionDuration": "1e-06s",
+      "running": [],
+      "media": true
+     },
+     "agent": {
+      "animationName": "enter",
+      "animationDuration": "1e-06s",
+      "transitionDuration": "1e-06s",
+      "running": [],
+      "media": true
+     },
+     "pageAnimations": []
+    }
+   }
+  },
+  {
+   "id": "kbd-1280",
+   "scen": "kbd",
+   "w": 1280,
+   "h": 900,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "keyboard open and close, 30 rounds",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [],
+   "m": {
+    "rounds": [
+     {
+      "i": 0,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 1,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 1,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 2,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 2,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 3,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 3,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 4,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 4,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 5,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 5,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 6,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 6,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 7,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 7,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 8,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 8,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 9,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 9,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 10,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 10,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 11,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 11,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 12,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 12,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 13,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 13,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 14,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 14,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 15,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 15,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 16,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 16,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 17,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 17,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 18,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 18,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 19,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 19,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 20,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 20,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 21,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 21,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 22,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 22,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 23,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 23,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 24,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 24,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 25,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 25,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 26,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 26,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 27,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 27,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 28,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 28,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 29,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 29,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 30,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "kbdslow-1280",
+   "scen": "kbdslow",
+   "w": 1280,
+   "h": 900,
+   "fixture": "vet",
+   "facts": {
+    "phase": "playing",
+    "age": 31,
+    "overall": 93,
+    "weeklyWage": 255452,
+    "club": "Marseille",
+    "tier": 2,
+    "nationality": "France",
+    "agentId": "cousin",
+    "contractYearsLeft": 2,
+    "seasons": 16,
+    "lastRow": {
+     "type": "playing",
+     "year": 2035,
+     "age": 31,
+     "rating": 8.4,
+     "apps": 36,
+     "club": "Marseille"
+    },
+    "intl": {
+     "career": true,
+     "caps": 126,
+     "retired": false
+    },
+    "situation": null,
+    "offers": [],
+    "events": [],
+    "wheel": {
+     "title": "It Started With The Left Sock",
+     "chance": 0.25,
+     "roll": 0.6429996262304485,
+     "hit": "Ritual falls apart",
+     "miss": "Ritual continues",
+     "result": false,
+     "seen": true
+    },
+    "extension": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "renewal": {
+     "weeklyWage": 280997,
+     "contractYears": 2,
+     "rationale": "Your elite level and latest season earn a raise on a shorter deal."
+    },
+    "wageDemand": {
+     "weeklyWage": 280997,
+     "hit": "Wage €280997/wk",
+     "consequence": "50% chance: Wage €280997/wk or relationship damaged",
+     "event": "📝 Pushed for more, got a raise!"
+    },
+    "hasParts": [],
+    "eligible": {
+     "farewell": {
+      "eligible": true,
+      "year": 2036,
+      "reason": "Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."
+     },
+     "agent": {
+      "available": true,
+      "reason": "Your choice applies to future deals and income. Existing contracts stay the same."
+     },
+     "ret": {
+      "available": false,
+      "reason": "You must have retired from international football before making yourself available again."
+     }
+    }
+   },
+   "steps": [
+    {
+     "name": "keyboard open and close, 30 rounds",
+     "ok": true,
+     "v": null
+    }
+   ],
+   "fails": [],
+   "errors": [],
+   "console": [],
+   "shots": [],
+   "m": {
+    "rounds": [
+     {
+      "i": 0,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 1,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 1,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 2,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 2,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 3,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 3,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 4,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 4,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 5,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 5,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 6,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 6,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 7,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 7,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 8,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 8,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 9,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 9,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 10,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 10,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 11,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 11,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 12,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 12,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 13,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 13,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 14,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 14,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 15,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 15,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 16,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 16,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 17,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 17,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 18,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 18,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 19,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 19,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 20,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 20,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 21,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 21,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 22,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 22,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 23,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 23,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 24,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 24,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 25,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 25,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 26,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 26,
+      "how": "enter-x",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 27,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 27,
+      "how": "space-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 28,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 28,
+      "how": "enter-back",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 29,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     },
+     {
+      "i": 29,
+      "how": "escape",
+      "opened": true,
+      "closed": true,
+      "opensDelta": 1,
+      "opens": 30,
+      "active": "opener",
+      "dialogs": 0,
+      "state": null
+     }
+    ]
+   }
+  }
+ ]
+}
