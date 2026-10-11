@@ -1,0 +1,25 @@
+# Release AW closing pass, final proof P-B1: gate lane B, part 1 (plain build, three at a time)
+#!build
+#!playwright
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAdsense: node scripts/simAdsense.mjs
+simBrand: pip3 install --quiet fonttools pillow && node scripts/simBrand.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simHubs: node scripts/simHubs.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simIndexing: node scripts/simIndexing.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simPrerender: node scripts/simPrerender.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simRetiredRoutes: node scripts/simRetiredRoutes.mjs
+simSchema: node scripts/simSchema.mjs
+simSitemap: node scripts/simSitemap.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
