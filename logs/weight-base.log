@@ -1,0 +1,8 @@
+base build exit 0
+  FAIL: /club-manager: 55K against a 586K budget, so the budget is stale and should be lowered in this round
+  FAIL: /manager-hot-seat: 82K against a 603K budget, so the budget is stale and should be lowered in this round
+  FAIL: /deadline-day: 82K against a 613K budget, so the budget is stale and should be lowered in this round
+   /club-manager        55K gz over  39 files (budget 586K, 54.5K to the tenth)
+   /manager-hot-seat    82K gz over  41 files (budget 603K, 81.5K to the tenth)
+   /deadline-day        82K gz over  45 files (budget 613K, 82.1K to the tenth)
+sweepWeight on the base r1302 846fe9e6 exit 1 (read the rows, the exit is not this round's)

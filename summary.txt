@@ -1,0 +1,7 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playCmVar exit=0 594s | playCmVar exit 0
+weight exit=0 25s | sweepWeight exit 0
+weight-base exit=0 54s | sweepWeight on the base r1302 846fe9e6 exit 1 (read the rows, the exit is not this round's)
+lk-control exit=1 329s | lk-control exit 1 (1 is the control firing: the screen as it was before c06dc974)
+clean exit=0 0s | 0
