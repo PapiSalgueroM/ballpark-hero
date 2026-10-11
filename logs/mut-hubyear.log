@@ -1,0 +1,24 @@
+MUTATION hubyear APPLIED to src/components/us-career/season/UsSeasonCentreEntry.tsx
+simUsSeasonCentre: 148 checks, 0 failed
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005
+[31m[1mAssertionError[22m: expected '📺 No week by week this season: the g…' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mnever offers Watch again for a held season, and offers it for the open one after it
+[31m[1mAssertionError[22m: expected '📺 Week by week starts with the 2021 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mhands the held function his position and his club, and shows its line with no button
+[31m[1mAssertionError[22m: expected [ 2025, undefined, …(1) ] to deeply equal [ 2026, undefined, …(1) ][39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not
+[31m[1mAssertionError[22m: BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the 60 game season of 2020 is held for a throwback career
+[31m[1mAssertionError[22m: expected null to be '📺 No week by week this season: the r…' // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m117 passed[39m[22m[90m (123)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > holds an NFL throwback career until 2021%3A the held line and no button in 2005,line=6
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > never offers Watch again for a held season%2C and offers it for the open one after it,
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > hands the held function his position and his club%2C and shows its line with no button
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A the Orioles and the Yankees of 2026 are held in the words of the ledger%2C and 
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A the 60 game season of 2020 is held for a throwback career,line=783,column=94::A
+ src/components/us-career/season/UsSeasonCentreEntry.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT hubyear harness=0 vitest=1

@@ -1,0 +1,11 @@
+MUTATION shape APPLIED to src/lib/season/mlb.ts
+simUsSeasonCentre: 148 checks, 0 failed
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22ma season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings
+[31m[1mAssertionError[22m: C now 2026: expected false to be true // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m122 passed[39m[22m[90m (123)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > a season derived from its saved line > lands every hitter position on the save in both eras%3A the sums%2C the average%2C the innings,line=229,column=38::AssertionError: C now
+ src/lib/season/mlb.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT shape harness=0 vitest=1

@@ -1,0 +1,4 @@
+mut-shape exit=0 80s | MUT shape harness=0 vitest=1
+mut-slate exit=0 79s | MUT slate harness=0 vitest=1
+mut-short exit=0 80s | MUT short harness=1 vitest=1
+mut-hubyear exit=0 79s | MUT hubyear harness=0 vitest=1

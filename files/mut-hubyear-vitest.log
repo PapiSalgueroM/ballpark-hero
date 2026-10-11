@@ -1,0 +1,204 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1363[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 400[2mms[22m[39m
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 815[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 592[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonMlb.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 4326[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1066[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 686[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 2320[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 7201[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2095[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 527[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 25[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 35[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 83[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 40[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 35[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 13[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 16[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 18[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 42[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 52[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 16[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 42[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 18[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 76[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 974[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 313[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 9[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 29[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 61[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 31[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 23[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 13[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 15[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 16[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 38[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 27[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 16[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 25[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 17[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 60[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1158[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 446[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 9[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 38[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 86[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 62[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 26[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 12[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 12[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 18[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 63[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 65[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 18[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 56[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 19[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 90[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays[39m[32m 15[2mms[22m[39m
+[31m     → Cannot read properties of null (reading 'textContent')[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005[39m[32m 13[2mms[22m[39m
+[31m     → expected '📺 No week by week this season: the g…' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mnever offers Watch again for a held season, and offers it for the open one after it[39m[32m 9[2mms[22m[39m
+[31m     → expected '📺 Week by week starts with the 2021 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mhands the held function his position and his club, and shows its line with no button[39m[32m 11[2mms[22m[39m
+[31m     → expected [ 2025, undefined, …(1) ] to deeply equal [ 2026, undefined, …(1) ][39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mholds one club and not another through the same function[32m 14[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhas the NBA, the NFL and MLB all bound, so no arm above can drop out through its own filter[32m 0[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22msays there is nothing to watch in a banned year[32m 7[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mNHL My Career renders no entry at all[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mrenders no entry at all for a binding whose loader is taken away[32m 8[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhas MLB bound and the NHL still unbound (hockey is the next round)[32m 0[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: a saved SP sees the line for pitchers and no button[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: a saved RP sees the line for pitchers and no button[32m 8[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not[39m[32m 9[2mms[22m[39m
+[31m     → BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: a club outside the league is held, whatever the year[32m 15[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the 60 game season of 2020 is held for a throwback career[39m[32m 10[2mms[22m[39m
+[31m     → expected null to be '📺 No week by week this season: the r…' // Object.is equality[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: Watch again asks about the club he played that season for[32m 83[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'textContent')[39m
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m622:14[22m[39m
+    [90m620| [39m    [34mrender[39m([33m<[39m[33mMemoryRouter[39m[33m>[39m[33m<[39m[33mNbaMyCareerBoard[39m [33m/[39m[33m>[39m[33m<[39m[33m/[39m[33mMemoryRouter[39m[33m>[39m)[33m;[39m
+    [90m621| [39m    [35mawait[39m [34mflush[39m()[33m;[39m
+    [90m622| [39m    expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonH…
+    [90m   | [39m             [31m^[39m
+    [90m623| [39m    [34mexpect[39m([34mq[39m([32m'[data-week-by-week]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m624| [39m    [34mexpect[39m([34mplayButton[39m())[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005
+[31m[1mAssertionError[22m: expected '📺 No week by week this season: the g…' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+
+Expected: [32m"📺 [7mW[27meek by week [7mstarts with the 2021 season: the real 2005 season had 16 games and the week by week view is built for 17[27m."[39m
+Received: [31m"📺 [7mNo w[27meek by week [7mthis season: the game has no verified length for the real 2004 season[27m."[39m
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m632:57[22m[39m
+    [90m630| [39m    [35mawait[39m [34mflush[39m()[33m;[39m
+    [90m631| [39m    [34mexpect[39m([34msavedCareer[39m([33mNFL_CAREER_SPORT[39m)[33m.[39myear)[33m.[39m[34mtoBe[39m([34m2005[39m)[33m;[39m
+    [90m632| [39m    expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonH…
+    [90m   | [39m                                                        [31m^[39m
+    [90m633| [39m    expect(q('[data-season-centre-held]')!.textContent).toContain('sta…
+    [90m634| [39m    [34mexpect[39m([34mq[39m([32m'[data-week-by-week]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mnever offers Watch again for a held season, and offers it for the open one after it
+[31m[1mAssertionError[22m: expected '📺 Week by week starts with the 2021 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+
+Expected: [32m"📺 Week by week starts with the 2021 season: the real 20[7m20[27m season had 16 games and the week by week view is built for 17."[39m
+Received: [31m"📺 Week by week starts with the 2021 season: the real 20[7m19[27m season had 16 games and the week by week view is built for 17."[39m
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m663:59[22m[39m
+    [90m661| [39m      [35mawait[39m [34mflush[39m()[33m;[39m
+    [90m662| [39m      [90m/* 2020: held, and nothing played yet */[39m
+    [90m663| [39m      expect(q('[data-season-centre-held]')!.textContent).toBe(usSeaso…
+    [90m   | [39m                                                          [31m^[39m
+    [90m664| [39m      [34mexpect[39m([34mq[39m([32m'[data-watch-last]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m665| [39m      [35mif[39m ([33m![39m([35mawait[39m [34mplayOn[39m([34m2020[39m))) [35mcontinue[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mhands the held function his position and his club, and shows its line with no button
+[31m[1mAssertionError[22m: expected [ 2025, undefined, …(1) ] to deeply equal [ 2026, undefined, …(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,7 +1,7 @@[39m
+[2m  [[22m
+[32m-   2026,[39m
+[31m+   2025,[39m
+[2m    undefined,[22m
+[2m    {[22m
+[2m      "pos": "SG",[22m
+[2m      "team": "NYK",[22m
+[2m    },[22m
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m699:22[22m[39m
+    [90m697| [39m    [34mexpect[39m([34mq[39m([32m'[data-week-by-week]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m698| [39m    [34mexpect[39m([34mplayButton[39m())[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m699| [39m    expect(asked[0]).toEqual([c.year, c.eraId, { pos: 'SG', team: c.te…
+    [90m   | [39m                     [31m^[39m
+    [90m700| [39m  })[33m;[39m
+    [90m701| [39m  it('holds one club and not another through the same function', async…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not
+[31m[1mAssertionError[22m: BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162."
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m770:92[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the 60 game season of 2020 is held for a throwback career
+[31m[1mAssertionError[22m: expected null to be '📺 No week by week this season: the r…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162."
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m783:94[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m117 passed[39m[22m[90m (123)[39m
+[2m   Start at [22m 02:16:21
+[2m   Duration [22m 10.95s[2m (transform 3.49s, setup 256ms, collect 6.52s, tests 13.70s, environment 1.68s, prepare 342ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > shows the held line and no button in a year whose real length is not the one the career plays,line=622,column=14::TypeError: Cannot read properties of null (reading 'textContent')%0A ❯ src/test/usSeasonCentreEntry.test.tsx:622:14%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > holds an NFL throwback career until 2021%3A the held line and no button in 2005,line=632,column=57::AssertionError: expected '📺 No week by week this season: the g…' to be '📺 Week by week starts with the 2021 …' // Object.is equality%0A%0AExpected: "📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and the week by week view is built for 17."%0AReceived: "📺 No week by week this season: the game has no verified length for the real 2004 season."%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:632:57%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > never offers Watch again for a held season%2C and offers it for the open one after it,line=663,column=59::AssertionError: expected '📺 Week by week starts with the 2021 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality%0A%0AExpected: "📺 Week by week starts with the 2021 season: the real 2020 season had 16 games and the week by week view is built for 17."%0AReceived: "📺 Week by week starts with the 2021 season: the real 2019 season had 16 games and the week by week view is built for 17."%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:663:59%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > hands the held function his position and his club%2C and shows its line with no button,line=699,column=22::AssertionError: expected [ 2025, undefined, …(1) ] to deeply equal [ 2026, undefined, …(1) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,7 +1,7 @@%0A  [%0A-   2026,%0A+   2025,%0A    undefined,%0A    {%0A      "pos": "SG",%0A      "team": "NYK",%0A    },%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:699:22%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A the Orioles and the Yankees of 2026 are held in the words of the ledger%2C and another club that year is not,line=770,column=92::AssertionError: BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality%0A%0A- Expected: %0A"📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162."%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:770:92%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A the 60 game season of 2020 is held for a throwback career,line=783,column=94::AssertionError: expected null to be '📺 No week by week this season: the r…' // Object.is equality%0A%0A- Expected: %0A"📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162."%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:783:94%0A%0A

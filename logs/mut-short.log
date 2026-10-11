@@ -1,0 +1,23 @@
+MUTATION short APPLIED to src/lib/mlbSeasonHeld.ts
+FAIL 2 mlb the hub's held line is there exactly when the binding holds the season: 80 of 4621; 2006: line no, build held || 2015: line no, build held || 2016: line no, build held
+FAIL 2 mlb the line the binding hands the hub is the ledger's own line for this sport: 80 of 4621; 2006: binding null, ledger "📺 No week by week this season: in the real 2006 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162." || 2015: binding null, ledger "📺 No week by week this season: in the real 2015 season your club 
+FAIL 2 mlb every 2026 season of the Orioles or the Yankees is held and its line says 161 (14)
+simUsSeasonCentre: 148 checks, 3 failed
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not
+[31m[1mAssertionError[22m: BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: Watch again asks about the club he played that season for
+[31m[1mAssertionError[22m: expected <button type="button" …(2)></button> to be null[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words
+[31m[1mAssertionError[22m: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so
+[31m[1mAssertionError[22m: 2004 TBD: expected true to be false // Object.is equality[39m
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m119 passed[39m[22m[90m (123)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A the Orioles and the Yankees of 2026 are held in the words of the ledger%2C and 
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A Watch again asks about the club he played that season for,line=794,column=36::A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > holds the short season%2C a club a game short%2C a club on 163 and a club outside the league%2C each in its
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > agrees with the ledger row by row%2C and the build is held exactly when the hub says so,line=180,column=57:
+ src/lib/mlbSeasonHeld.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT short harness=1 vitest=1

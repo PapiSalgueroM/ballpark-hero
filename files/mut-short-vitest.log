@@ -1,0 +1,186 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1426[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 359[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center with MLB bound[2m > [22mwalks a CF season from the first pitch card to the review: innings on the clock, his line, the record and his totals [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 783[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 517[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonMlb.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 4244[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1084[2mms[22m[39m
+   [32m✓[39m mlbScore[2m > [22mgives the stronger side more of the wins, step by step[32m 28[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals the league formula for every one of the 30 clubs, in series that never run into one another[32m 95[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22msays what is wrong with a schedule that is not the formula[32m 2[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals a throwback season as unnamed series of three, half of them at home[32m 9[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 585[2mms[22m[39m
+   [32m✓[39m the at bats and hits a batting average allows[2m > [22mnever hands him fewer hits than his home runs and doubles[32m 1[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mholds pitchers and no hitter[32m 1[2mms[22m[39m
+[31m   [31m×[31m held, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words[39m[32m 16[2mms[22m[39m
+[31m     → the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[31m   [31m×[31m held, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so[39m[32m 10[2mms[22m[39m
+[31m     → 2004 TBD: expected true to be false // Object.is equality[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mlays out nothing for a line the engine played on another length, whatever the ledger says[32m 14[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 2364[2mms[22m[39m
+   [32m✓[39m a season derived from its saved line[2m > [22mopens an older line with no doubles and no on base percentage, and holds a line with no average to the plain tile[32m 5[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mreads the result words of every year from the engine, and bands a result by the round it ended in[32m 9[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws a path from 2022 on, round by round, whose scores add up to the saved games, and names nobody[32m 14[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws no path before 2022 and says why, in a throwback season and for a result the year cannot hold[32m 1[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mlabels the clock inning by inning and words every line of the feed[32m 0[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mprints his line, the halfway sentence with and without an All-Star, and a help sheet with no dash in it[32m 2[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 7339[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2185[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 564[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 22[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 36[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 69[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 41[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 40[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 13[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 18[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 17[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 45[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 65[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 16[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 35[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 16[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 66[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 956[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 316[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 10[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 31[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 58[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 30[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 22[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 13[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 14[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 16[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 39[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 27[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 17[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 27[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 18[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 59[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1176[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 434[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 9[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 40[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 89[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 78[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 26[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 12[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 18[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 18[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 52[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 61[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 21[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 50[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 19[2mms[22m[39m
+   [32m✓[39m 'MLB' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 91[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mnever offers Watch again for a held season, and offers it for the open one after it[32m 69[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhands the held function his position and his club, and shows its line with no button[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mholds one club and not another through the same function[32m 15[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhas the NBA, the NFL and MLB all bound, so no arm above can drop out through its own filter[32m 0[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22msays there is nothing to watch in a banned year[32m 8[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mNHL My Career renders no entry at all[32m 13[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mrenders no entry at all for a binding whose loader is taken away[32m 8[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhas MLB bound and the NHL still unbound (hockey is the next round)[32m 0[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: a saved SP sees the line for pitchers and no button[32m 8[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: a saved RP sees the line for pitchers and no button[32m 9[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not[39m[32m 15[2mms[22m[39m
+[31m     → BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: a club outside the league is held, whatever the year[32m 16[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the 60 game season of 2020 is held for a throwback career[32m 10[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: Watch again asks about the club he played that season for[39m[32m 43[2mms[22m[39m
+[31m     → expected <button type="button" …(2)></button> to be null[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not
+[31m[1mAssertionError[22m: BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162."
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m770:92[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mMLB: Watch again asks about the club he played that season for
+[31m[1mAssertionError[22m: expected <button type="button" …(2)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  class="ml-1 inline-flex min-h-11 items-center px-3 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"
+  data-watch-last="true"
+  type="button"
+>
+  ↺ Watch the 2026 season again
+</button>
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m794:36[22m[39m
+    [90m792| [39m    [34mexpect[39m(c[33m.[39mseasons[[34m0[39m][33m.[39mteam)[33m.[39m[34mtoBe[39m([32m'BAL'[39m)[33m;[39m
+    [90m793| [39m    [34mexpect[39m(c[33m.[39mseasons[[34m0[39m][33m.[39myear)[33m.[39m[34mtoBe[39m([34m2026[39m)[33m;[39m
+    [90m794| [39m    [34mexpect[39m([34mq[39m([32m'[data-watch-last]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m795| [39m    /* the twin: the same career at a club whose 2026 was 162 games is…
+    [90m796| [39m    [34mcleanup[39m()[33m;[39m localStorage[33m.[39m[34mclear[39m()[33m;[39m [34mresetCareerMomentsForTest[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words
+[31m[1mAssertionError[22m: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[36m [2m❯[22m src/test/usSeasonMlb.test.ts:[2m157:45[22m[39m
+    [90m155| [39m    /* 2026: the Orioles and the Yankees finished on 161, and nobody e…
+    [90m156| [39m    [34mexpect[39m([34mmlbRealGames[39m([34m2026[39m[33m,[39m [32m'BAL'[39m[33m,[39m [32m'now'[39m))[33m.[39m[34mtoBe[39m([34m161[39m)[33m;[39m
+    [90m157| [39m    expect(mlbHeldLine(2026, 'BAL', 'now')).toContain('📺 No week by w…
+    [90m   | [39m                                            [31m^[39m
+    [90m158| [39m    expect(mlbHeldLine(2026, 'BAL', 'now')).toContain(', and the week …
+    [90m159| [39m    expect(mlbHeldLine(2026, 'NYY', 'now')).toBe(mlbHeldLine(2026, 'BA…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so
+[31m[1mAssertionError[22m: 2004 TBD: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/usSeasonMlb.test.ts:[2m180:57[22m[39m
+    [90m178| [39m        [35mconst[39m real [33m=[39m group [33m?[39m group[33m.[39mgames [33m:[39m season[33m.[39mgames[33m;[39m
+    [90m179| [39m        [35mconst[39m line [33m=[39m [34mmlbHeldLine[39m(season[33m.[39myear[33m,[39m team[33m,[39m eraId)[33m;[39m
+    [90m180| [39m        expect(line === null, `${season.year} ${team}`).toBe(real === …
+    [90m   | [39m                                                        [31m^[39m
+    [90m181| [39m        [35mconst[39m b [33m=[39m [34mbuild[39m([33mROW[39m({ year[33m:[39m season[33m.[39myear[33m,[39m team })[33m,[39m [32m'CF'[39m[33m,[39m eraId)[33m;[39m
+    [90m182| [39m        [34mexpect[39m(b[33m.[39mok[33m,[39m [32m`[39m[36m${[39mseason[33m.[39myear[36m}[39m[32m [39m[36m${[39mteam[36m}[39m[32m`[39m)[33m.[39m[34mtoBe[39m(line [33m===[39m [35mnull[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m119 passed[39m[22m[90m (123)[39m
+[2m   Start at [22m 02:15:02
+[2m   Duration [22m 11.13s[2m (transform 3.65s, setup 257ms, collect 6.69s, tests 13.79s, environment 1.75s, prepare 359ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A the Orioles and the Yankees of 2026 are held in the words of the ledger%2C and another club that year is not,line=770,column=92::AssertionError: BAL: expected null to be '📺 No week by week this season: in th…' // Object.is equality%0A%0A- Expected: %0A"📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162."%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:770:92%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > MLB%3A Watch again asks about the club he played that season for,line=794,column=36::AssertionError: expected <button type="button" …(2)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="ml-1 inline-flex min-h-11 items-center px-3 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"%0A  data-watch-last="true"%0A  type="button"%0A>%0A  ↺ Watch the 2026 season again%0A</button>%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:794:36%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > holds the short season%2C a club a game short%2C a club on 163 and a club outside the league%2C each in its own true words,line=157,column=45::AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string%0A ❯ src/test/usSeasonMlb.test.ts:157:45%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > agrees with the ledger row by row%2C and the build is held exactly when the hub says so,line=180,column=57::AssertionError: 2004 TBD: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/usSeasonMlb.test.ts:180:57%0A%0A

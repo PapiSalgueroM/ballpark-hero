@@ -1,0 +1,11 @@
+MUTATION slate APPLIED to src/lib/season/mlb.ts
+simUsSeasonCentre: 148 checks, 0 failed
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22mlays out nothing for a line the engine played on another length, whatever the ledger says
+[31m[1mAssertionError[22m: expected { …(12) } to be null[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m122 passed[39m[22m[90m (123)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > lays out nothing for a line the engine played on another length%2C whatever the ledger says,line=193,column
+ src/lib/season/mlb.ts | 1 -
+ 1 file changed, 1 deletion(-)
+MUT slate harness=0 vitest=1
