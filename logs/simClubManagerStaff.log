@@ -1,0 +1,23 @@
+1) Day one staff come from stature, four men per club, every one inside 1 to 10
+   846 clubs checked (52 tier 1 all on 7 or more, 422 floor budget all on 2 or less), 16 men re-opened identically; Real Madrid 9/8/8/8 on 22/20/20/20k, Wrexham 1/1/1/1 on 5/5/5/5k
+2) The staff wage reaches the ledger and the fees leave the kitty for what the desk quoted
+   Everton: 68k a week on the four inside a 167k staff line, ledger 9.02m over 54 weeks against 9.02m owed
+   Everton: pay off 0.42m and a 2.2m replacement both left the kitty to the pound and both sit on the books' Staff fees line (2.62m)
+3) Each effect runs the right way, on every position, and stays bounded
+   15 positions in the union, 12 owned by one coach and 3 split between the two; 45 exact developmentRate readings, each coach moving only his own unit by x1.099
+   the clamp: 3456 grid readings all min(2.6, rate times multiplier); 462 short changed by the ceiling (342 of them on it before the coach arrived)
+   the card: 10368 counts, 2016 who would be short changed as regulars counted and nobody else; 1092 of them not yet short changed on today's apps; 1008 short changed men turning 30 left out
+   growth: mean drift of 82 players with headroom across 10 clubs, level 1 1.549 vs level 10 1.720 (1.110x, multiplier 1.099x)
+   scouting: 256 weeks played twice on the same draws over 8 clubs, 70 of them bringing a report home (79 boys); mean ceiling 75.27 at lead scout 1 against 81.19 at 10, mean paired lift +6.00, thinnest week +6.00 (the desk adds 6 before the 93 cap)
+4) Every effect is exactly neutral at level 1 and on an empty chair, and the desk charges an idle club nothing
+   40 readings at level 1 and on an empty chair, all exactly neutral; 3 effects counted off the source; the clamp and myMatchStrength read on the comment stripped engine; three idle seasons spent 0m
+5) A rival can come for every post, the deadline takes the man, and the match limit binds
+   every post drew a rival (first approach after attack 62w, defence 1w, goalkeeping 7w, scout 26w at level 10); 3 approaches in 26 weeks, 2 matched then refused; 0 approaches over three seasons of level 5 men; the summer hands 2 back
+6) Three men from outside plus your own academy, and the promoted man really grows
+   4 shortlists of four; the academy man is free with 6 levels of room; a promotion at level 3 grew to 6 of 6 in 3 of eight summers, wage 9k to 16k
+7) A save from before the desk, and a mangled block, both open on the club's day one men
+   13 wreckages repaired to Osian Kettleby:6/Piet Vandeley:5/Fabbio Lammert:6/Gethin Drenthe:6; a save with no staff key played a season and paid 8.96m; a garbage block loads through loadCareer; stay keeps, move drops
+8) Every name the desk can print, against every real player the worlds carry
+   400 possible staff names, 0 belong to any of the 8633 real men in the worlds; 400 names emitted across 162 clubs, all off the two banks; 810 staff rooms and shortlists with no two men sharing either half of a name; 0 dashes in the round's 3 new files
+
+simClubManagerStaff: PASS. Four made up men who cost what the desk says, lift only their own half of the pitch, tax nobody who ignores them, and can be taken off you.

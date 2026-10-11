@@ -1,0 +1,14 @@
+1) Sports group in the house order and empty sports get no box
+   order soccer,mlb,nba,nhl,cricket; empty wire produces no groups
+2) Inside a sport: live first, then kickoffs soonest first, then finals freshest first
+   live-1,up-early,up-late,final-new,final-old
+3) The dwell clock is bounded on both ends
+   0 games 5000ms, 1 game 5000ms, 40 games 14000ms
+4) Hostile rows group without throwing
+   2 groups from garbage, no throw
+5) The owner's banned strip content stays off the wire, read from the code not the comments
+   10 banned shapes scanned, 0 present; LIVE chip and red dot present
+
+6) Round 414: every polled sport is tagged and hubbed, and the crawl is between his two complaints
+   9 polled sports, all tagged and hubbed; crawl 75 px/s
+simTicker: green. The wire carries the day's games and nothing about the site.
