@@ -197,6 +197,32 @@
                        runAllSims never sets it.
      SIM_DUMP_ROWS=f   one row a career (totals, awards, both scores) to f,
                        the input of scripts/genCareerHallMarks.mjs.
+     SIM_FLEET_DIR=d   (Round 1301) the folder the fleet of section 17 (a)
+                       keeps its row files in. A job that runs the harness
+                       several times on ONE tree (a run and its controls) may
+                       name one folder so the fleet is played once; the run
+                       prints how many files it reused. Never a folder from
+                       another job or another tree.
+     SIM_FLEET_SEEDS=a-b  (Round 1301) plays seeds a to b as the fleet in
+                       place of the ledger's check seeds, against the same
+                       reference: the out of sample confirmation (78-101).
+     ROUND 1301, CALIBRATION 3 AND THE FLEET. HALL_CALIBRATION is 3. The NHL
+     has a table of its own for it (the marks measured on the 84 game season,
+     the ledger's block calibrations.3); football, basketball and baseball
+     read 3 on their calibration 2 table. Section 15 (e) holds calibration 3
+     to its recording (scripts/data/careerHallV3.json; control v3drift).
+     Controls marked `cur` edit the table of today's calibration only.
+     Section 17 (a) is decided on a fleet of seeds against a band from a
+     reference fleet, never on this run's one seed: its comment has the rule
+     (what turns it red, the way back, who may record the reference again).
+     Controls markdrift, todrift, statsup, statsdown, and oldmarks (the NHL).
+     Measured 2026-10-10 on GitHub runners (this round's notes have every
+     number): 72 seeds a sport, the pooled share at or over from, mean and
+     deviation from seed to seed: nhl 10.39 and 0.55 (12.69 against the old
+     marks), nfl 10.37 and 0.68, nba 9.74 and 0.46, mlb 9.92 and 0.65. Every
+     total times 1.02 moves the check fleet to nhl 13.19, nfl 12.65, nba
+     11.58, mlb 12.73 percent: red in every sport. A child of 2,000 careers
+     is 3 to 4 seconds on a runner.
      15. v1         (a) every save of src/test/fixtures/careerHallV1.json
                     (recorded by scripts/recordCareerHallV1.mjs on the base's
                     code, none stamped) reads today the legacy and the Hall
@@ -304,6 +330,9 @@
    recipe and the rule for each band). Measured 2026-10-07, the default seed
    and SIM_SEED 1 to 5, 2000 careers a run (2750 in baseball for the marks,
    the first 2000 of each run for the bands), the board skipped:
+     (Round 1301: the three marks bands below, one seed against the six runs
+     the marks were cut on, are history. They stay in the ledger for the
+     record and [marks] no longer reads them: it reads the fleet, above.)
      marks: at least 1,500 pooled careers a position. A cell's share at or
        over from: nfl 6.4 to 15.2 percent, nba 6.3 to 14.5, mlb 5.0 to 17.0,
        nhl 7.5 to 13.0 (band: that envelope widened a quarter each side).
@@ -420,9 +449,10 @@ import './lib/seedRandom.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { pathToFileURL, fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 
 const SELF = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(SELF), '..');
@@ -494,18 +524,18 @@ const CONTROLS = {
   jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
   eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
   // Round 1051, sections 15 on. v1drift: the first award weight of the sport's calibration 1 table plus one.
-  below: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V2: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) - 1}` },
+  below: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V\d: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) - 1}` },
   nostandout: { file: 'careerHallOfFame.ts', from: 'LEGACY_GAME_RULES = { standoutTop: 300,', to: 'LEGACY_GAME_RULES = { standoutTop: 0,' },
   // One from mark halved (the first standout of the sport's table).
-  markdrift: { file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)/, to: (m, a, n) => `${a}${Number(n) / 2}` },
+  markdrift: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)/, to: (m, a, n) => `${a}${Number(n) / 2}` },
   // Every to mark of the sport times 0.9.
   todrift: { file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/g, to: (m, a, n, b) => `${a}${Number(n) * 0.9}${b}` },
   // One to mark set to its from mark plus one.
-  noramp: { file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)(, to: )([\d.]+)/, to: (m, a, n, b) => `${a}${n}${b}${Number(n) + 1}` },
+  noramp: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)(, to: )([\d.]+)/, to: (m, a, n, b) => `${a}${n}${b}${Number(n) + 1}` },
   // A family planted where the half rule gives none: a catcher's steals, a point guard's rebounds, a linebacker's sacks, a defenceman's goals.
-  catchersteals: { file: `${SPORT}MyCareer.ts`, re: { mlb: /(\n    C: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nba: /(\n    PG: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nfl: /(\n    LB: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nhl: /(\n    D: \{\s+terms: \[[^\n]*\],\s+standout: \[)/ }[SPORT], to: (m, a) => `${a} { stat: '${{ mlb: 'sb', nba: 'reb', nfl: 'sacks', nhl: 'goals' }[SPORT]}', from: 30, to: 40, label: 'planted' },` },
+  catchersteals: { cur: true, file: `${SPORT}MyCareer.ts`, re: { mlb: /(\n    C: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nba: /(\n    PG: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nfl: /(\n    LB: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nhl: /(\n    D: \{\s+terms: \[[^\n]*\],\s+standout: \[)/ }[SPORT], to: (m, a) => `${a} { stat: '${{ mlb: 'sb', nba: 'reb', nfl: 'sacks', nhl: 'goals' }[SPORT]}', from: 30, to: 40, label: 'planted' },` },
   // The base emptied at one position (football's tight end, baseball's reliever; basketball and hockey have no base).
-  nobase: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    TE: \{\s+terms: \[)[^\n]*(\],)/, mlb: /(\n    RP: \{\s+terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})[^\n]*(\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => `${a}${b}` },
+  nobase: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    TE: \{\s+terms: \[)[^\n]*(\],)/, mlb: /(\n    RP: \{\s+terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})[^\n]*(\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => `${a}${b}` },
   // The example's push typed as a literal instead of read off the rule.
   examplelie: { file: 'careerHallOfFame.ts', from: 'const top = n.top ?? LEGACY_GAME_RULES.standoutTop;', to: 'const top = 250;' },
   // The card's line switched off.
@@ -519,29 +549,48 @@ const CONTROLS = {
   // Section 18, the other side of the band: the push switched off, so an anchor who is in on the push alone falls out (the same edit as nostandout, aimed at the anchors).
   standoutgone: { file: 'careerHallOfFame.ts', from: 'LEGACY_GAME_RULES = { standoutTop: 300,', to: 'LEGACY_GAME_RULES = { standoutTop: 0,' },
   // Section 18, the decisions themselves: one push the real anchors took out or cut is put back whole (football: the kicker's field goals planted again; baseball: the left fielder's steals back to the full size). It refuses in a sport whose anchors decided nothing.
-  decisionback: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    K: \{\s+terms: \[\],)/, mlb: /(\{ stat: 'sb', from: [\d.]+, to: [\d.]+, label: 'steals'), top: \d+( \})/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => (SPORT === 'nfl' ? `${a} standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }],` : `${a}${b}`) },
+  decisionback: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    K: \{\s+terms: \[\],)/, mlb: /(\{ stat: 'sb', from: [\d.]+, to: [\d.]+, label: 'steals'), top: \d+( \})/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => (SPORT === 'nfl' ? `${a} standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }],` : `${a}${b}`) },
   // Section 18, the base's side of "the anchors may only make things smaller": the edge rusher's base five times its size (every per divided by five). Two real later men
   // the base alone reads later in the raw reading (out on 1) go first, so they are moved past their real ballot. Football only: no other sport holds a real never or later
   // man at a base position (the reliever's base is gone, basketball and hockey have none), and there it refuses.
-  basebig: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    EDGE: \{\s+terms: \[\{ stat: 'sacks', per: )2\.5( \}, \{ stat: 'tackles', per: )41( \}, \{ stat: 'forcedFum', per: )1\.3( \}\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b, c, d) => `${a}0.5${b}8.2${c}0.26${d}` },
+  basebig: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    EDGE: \{\s+terms: \[\{ stat: 'sacks', per: )2\.5( \}, \{ stat: 'tackles', per: )41( \}, \{ stat: 'forcedFum', per: )1\.3( \}\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b, c, d) => `${a}0.5${b}8.2${c}0.26${d}` },
   // Section 19 (a), for every sport: a base term planted at a position the ledger gives none (a point guard's assists, a kicker's field goals, the reliever's saves back, a defenceman's assists).
-  plantbase: { file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
+  plantbase: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
   // Section 17 (d): every paying family added up instead of the best one taken.
   twofamilies: { file: 'careerHallOfFame.ts', from: 'if (credit > 0 && (!standout || credit > standout.credit)) standout = { stat: s.stat, label: s.label, total, credit };', to: 'if (credit > 0) standout = { stat: s.stat, label: s.label, total, credit: credit + (standout ? standout.credit : 0) };' },
   // Section 15 (d): one to mark of the calibration 2 table plus one (too small to move a recorded save: the recorded table itself must catch it).
   v2drift: { file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/, to: (m, a, n, b) => `${a}${Number(n) + 1}${b}` },
+  // Section 15 (e), Round 1301: the same on the table of calibration 3 (the NHL's own table; elsewhere the calibration 2 table, which 3 reads).
+  v3drift: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/, to: (m, a, n, b) => `${a}${Number(n) + 1}${b}` },
+  // Section 17 (a), Round 1301, the NHL only (elsewhere it never reaches its file and refuses): the marks cut on the 82 game season put back, so a career retiring today is read on calibration 2 again.
+  oldmarks: { file: 'nhlMyCareer.ts', from: '2: NHL_LEGACY_V2, 3: NHL_LEGACY_V3 };', to: '2: NHL_LEGACY_V2, 3: NHL_LEGACY_V2 };' },
+  // Section 17 (a), Round 1301: every career total of the fleet times 1.02, and divided by it (done in memory where the fleet is read; the string below only has to be there).
+  statsup: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
+  statsdown: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   // Section 18 (c): the ballot draws its first call against the wrong side of the chance.
   ballotflip: { file: 'careerHallOfFame.ts', from: 'if (rng() >= firstBallotChance(cand.score, lines)) {', to: 'if (rng() >= 1 - firstBallotChance(cand.score, lines)) {' },
   // Section 19 (b): calibration 2 pays every season double, so the Hall fills past its ceiling.
-  seasonbig: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V2: LegacyWeights = \{\s+awards: \{[^}]*\},\s+season: )(\d+)/, to: (m, a, n) => `${a}${Number(n) * 2}` },
+  seasonbig: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V\d: LegacyWeights = \{\s+awards: \{[^}]*\},\s+season: )(\d+)/, to: (m, a, n) => `${a}${Number(n) * 2}` },
   // Sections 15 (c) and 20: the stamp writes nothing, so a career the loops retire is read on calibration 1.
   nostamp: { file: 'careerHallOfFame.ts', from: 'if (c.retired && c.hallCal === undefined) c.hallCal = HALL_CALIBRATION;', to: 'if (false) c.hallCal = HALL_CALIBRATION;' },
   // The ledger with one source host swapped for a wiki (done in memory where the ledger is read).
-  anchorwiki: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2;', to: 'export type HallCalibration = 1 | 2;' },
+  anchorwiki: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   calflip: { file: 'careerHallOfFame.ts', from: 'return c.retired ? 1 : HALL_CALIBRATION;', to: 'return HALL_CALIBRATION;' },
   v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
+/* Round 1301. The table a career retiring today is read on, by its name in the
+   sport's own file: the last entry of its <SPORT>_LEGACY_WEIGHTS map (the NHL's
+   is NHL_LEGACY_V3; football, basketball and baseball map calibration 3 to
+   their V2 table, so theirs is still V2). A control marked `cur` edits that
+   table and nothing before it in the file: the source is cut at the table's
+   declaration and the control's string is looked for from there on, so in the
+   NHL a mark of calibration 2 (which no career retiring today reads) is never
+   the one that moves. */
+const SPORT_SRC = readFileSync(path.join(ROOT, 'src/lib', E.file), 'utf8');
+const CUR_TABLE = (SPORT_SRC.match(/_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = \{([^}]*)\}/)?.[1] ?? '').split(',').map(s => s.split(':')[1]?.trim()).filter(Boolean).at(-1);
+const CUR_ANCHOR = `const ${CUR_TABLE}: LegacyWeights = {`;
+if (!CUR_TABLE || SPORT_SRC.split(CUR_ANCHOR).length !== 2) { console.error(`simCareerHall ${SPORT}: cannot find the table of today's calibration in ${E.file} (read "${CUR_TABLE}"), refusing to run`); process.exit(2); }
 let controlFired = false;
 const controlPlugin = {
   name: 'control',
@@ -550,11 +599,14 @@ const controlPlugin = {
     const ctl = CONTROLS[CONTROL];
     b.onLoad({ filter: /\.tsx?$/ }, args => {
       if (path.basename(args.path) !== ctl.file) return undefined;
-      const src = readFileSync(args.path, 'utf8');
+      const whole = readFileSync(args.path, 'utf8');
+      const at = ctl.cur ? whole.indexOf(CUR_ANCHOR) : 0;
+      if (at < 0) throw new Error(`control ${CONTROL}: its string is not in ${ctl.file}, refusing to run`);
+      const kept = whole.slice(0, at), src = whole.slice(at);
       const hit = ctl.re ? ctl.re.test(src) : src.includes(ctl.from);
       if (!hit) throw new Error(`control ${CONTROL}: its string is not in ${ctl.file}, refusing to run`);
       controlFired = true;
-      return { contents: ctl.re ? src.replace(ctl.re, ctl.to) : src.replace(ctl.from, ctl.to), loader: args.path.endsWith('x') ? 'tsx' : 'ts' };
+      return { contents: kept + (ctl.re ? src.replace(ctl.re, ctl.to) : src.replace(ctl.from, ctl.to)), loader: args.path.endsWith('x') ? 'tsx' : 'ts' };
     });
   },
 };
@@ -1332,12 +1384,13 @@ for (const e of v1Saves) {
    then a deliberate change is recorded again with SIM_RECORD_V2=1, a run
    that never ends green. */
 const V2_FILE = path.join(ROOT, 'scripts/data/careerHallV2.json');
-const toldOn2 = e => {
-  const save = { ...JSON.parse(JSON.stringify(e.save)), retired: true, hallCal: 2 };
+const toldOn = cal => e => {
+  const save = { ...JSON.parse(JSON.stringify(e.save)), retired: true, hallCal: cal };
   const l = eng.LEGACY(save);
   const { weighs: _copy, ...hall } = eng.hallRecordFor(HALL, save);
   return { id: e.id, score: l.score, hof: l.hof, standout: l.standout ?? null, hall };
 };
+const toldOn2 = toldOn(2);
 const v2Now = { table: eng.WEIGHTS[2], readings: v1Saves.map(toldOn2) };
 const v2RulesNow = { standoutTop: eng.LEGACY_GAME_RULES.standoutTop, standoutCap: eng.LEGACY_GAME_RULES.standoutCap };
 const RECORD_V2 = process.env.SIM_RECORD_V2 === '1';
@@ -1354,6 +1407,32 @@ const v2Was = V2_RECORDED?.sports?.[SPORT];
 const v2TableSame = Boolean(v2Was) && sameJson(v2Was.table, v2Now.table) && sameJson(V2_RECORDED.rules, v2RulesNow);
 const v2ReadMiss = v2Was ? v2Now.readings.filter((r, i) => !sameJson(r, v2Was.readings[i])).length + Math.abs(v2Now.readings.length - v2Was.readings.length) : v2Now.readings.length;
 console.log(`  15 (d) calibration 2 as recorded: the table and the rules ${v2TableSame ? 'equal' : 'DIFFER FROM'} the recording; ${v2ReadMiss} of ${v2Now.readings.length} recorded saves are told something else on 2 (${v2Now.readings.filter(r => r.standout).length} of them with a standout)${RECORD_V2 ? '; RECORDED ON THIS RUN' : ''}`);
+
+/* 15 (e), Round 1301. The calibration 3 recording (scripts/data/careerHallV3.json),
+   the same promise for the next calibration: the sport's calibration 3 table
+   whole, and what each save of the version 1 fixture is told when it is
+   stamped 3. Football, basketball and baseball read 3 on their calibration 2
+   table, so their recording of 3 is their recording of 2 line for line; the
+   NHL's holds the marks measured on the 84 game season. Recorded with
+   SIM_RECORD_V3=1 (a run that never ends green); once the release that first
+   ships calibration 3 is out it is never recorded again, and a later change
+   is calibration 4 beside it. */
+const V3_FILE = path.join(ROOT, 'scripts/data/careerHallV3.json');
+const v3Now = { table: eng.WEIGHTS[3], readings: v1Saves.map(toldOn(3)) };
+const RECORD_V3 = process.env.SIM_RECORD_V3 === '1';
+if (RECORD_V3) {
+  if (CONTROL || CAL1) { console.error('SIM_RECORD_V3 records the tree as it is: no control, no SIM_CAL'); process.exit(2); }
+  const file = existsSync(V3_FILE) ? JSON.parse(readFileSync(V3_FILE, 'utf8')) : { sports: {} };
+  file.sports[SPORT] = v3Now;
+  const body = Object.keys(ENGINES).filter(s => file.sports[s]).map(s => `    ${JSON.stringify(s)}: {\n      "table": ${JSON.stringify(file.sports[s].table)},\n      "readings": [\n${file.sports[s].readings.map(r => `        ${JSON.stringify(r)}`).join(',\n')}\n      ]\n    }`).join(',\n');
+  const note = 'Round 1301: calibration 3 of the Hall of Fame legacy score as recorded, for section 15 (e) of scripts/simCareerHall.mjs. Per sport: the calibration 3 table whole, and what each save of src/test/fixtures/careerHallV1.json is told when stamped 3. Football, basketball and baseball read calibration 3 on their calibration 2 table; the NHL table holds the standout marks measured on the 84 game season. Written by SIM_RECORD_V3=1 node scripts/simCareerHall.mjs <sport>; never edited by hand. Once the release that first ships calibration 3 is out, never recorded again: a career retired on calibration 3 keeps the ballot it was told, so a later change is calibration 4.';
+  writeFileSync(V3_FILE, `{\n  "note": ${JSON.stringify(note)},\n  "rules": ${JSON.stringify(v2RulesNow)},\n  "sports": {\n${body}\n  }\n}\n`);
+}
+const V3_RECORDED = existsSync(V3_FILE) ? JSON.parse(readFileSync(V3_FILE, 'utf8')) : null;
+const v3Was = V3_RECORDED?.sports?.[SPORT];
+const v3TableSame = Boolean(v3Was) && sameJson(v3Was.table, v3Now.table) && sameJson(V3_RECORDED.rules, v2RulesNow);
+const v3ReadMiss = v3Was ? v3Now.readings.filter((r, i) => !sameJson(r, v3Was.readings[i])).length + Math.abs(v3Now.readings.length - v3Was.readings.length) : v3Now.readings.length;
+console.log(`  15 (e) calibration 3 as recorded: the table and the rules ${v3TableSame ? 'equal' : 'DIFFER FROM'} the recording; ${v3ReadMiss} of ${v3Now.readings.length} recorded saves are told something else on 3 (${v3Now.readings.filter(r => r.standout).length} of them with a standout)${RECORD_V3 ? '; RECORDED ON THIS RUN' : ''}`);
 
 /* 15 (b). Calibration 1 is the Round 123 formula: the four one line formulas
    restated here, independent of the tables, against legacyOf stamped 1 on
@@ -1378,28 +1457,133 @@ const MARKS = JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/careerHallMa
    and each is recorded with its reason and its counts in the anchors file. */
 const DECISIONS = (JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/careerHallAnchors.json'), 'utf8')).decisions ?? []).filter(d => d.sport === SPORT);
 const decided = (pos, kind, stat, action) => DECISIONS.some(d => d.pos === pos && d.kind === kind && (kind === 'base' || d.stat === stat) && d.action === action);
-const ML = MARKS.sports[SPORT];
+/* Round 1301. A sport's marks are those of the latest calibration that
+   measured it again: the ledger's first block (`sports`) is calibration 2,
+   and a later calibration that moved a sport's marks adds a block of its own
+   under `calibrations` (the NHL on 3). A sport no later calibration moved
+   reads the first block, and its table of today must then BE its calibration
+   2 table, the same object (17 (b) holds that). */
+const MARKS_CAL = (() => { for (let cal = eng.HALL_CALIBRATION; cal > 2; cal -= 1) if (MARKS.calibrations?.[String(cal)]?.sports?.[SPORT]) return cal; return 2; })();
+const ML = MARKS_CAL === 2 ? MARKS.sports[SPORT] : MARKS.calibrations[String(MARKS_CAL)].sports[SPORT];
 const TOP = eng.LEGACY_GAME_RULES.standoutTop, CAP = eng.LEGACY_GAME_RULES.standoutCap;
 const tableCells = E.positions.flatMap(pos => (W2.positions[pos]?.standout ?? []).map(s => ({ pos, s })));
 const inBand = (x, b) => x >= b.lo && x <= b.hi;
 
 /* 17 (a). The marks, the tripwire for a later round that moves an engine's
-   stats: the share of a position's careers at or over a from mark (about one
-   in ten by construction), per cell and pooled, and the pooled share at or
-   over a to mark. Never a per cell check on to (a count of 0 to 5). */
+   stats (Round 1301 rewrote the statistic; the old one was a coin toss).
+
+   WHAT IS READ. The pooled share of careers at or over a from mark (about one
+   in ten by construction), and at or over a to mark (about one in a hundred),
+   over a CHECK FLEET: the seeds the ledger names (SIM_SEED 6 to 29, never a
+   seed the marks were cut on), 2,000 careers a seed, each played by a child
+   of this harness as a measuring run and read against THIS run's table. One
+   seed is never the check: its numbers are printed and judged by nothing.
+
+   THE BAND. The ledger's `fleet` block holds a REFERENCE fleet of 48 further
+   seeds (30 to 77), recorded by scripts/genCareerHallMarks.mjs (MARKS_FLEET)
+   on the tree of the round that recorded it: the mean of a seed's pooled
+   share and its deviation from seed to seed. The band is that mean plus and
+   minus z (4) deviations of a seed times the root of (1/K + 1/R): the error
+   of the difference between a mean of K check seeds and a mean of R
+   reference seeds. With K 24 and R 48 that is one deviation of a seed. A
+   reroll that changes which careers a seed plays, and nothing else, leaves
+   it about one time in several thousand; it is never a bound on one seed.
+
+   WHAT TURNS IT RED. The engine's career totals moved since the reference
+   was recorded (a round that lifts every total by two percent does, in every
+   sport: the statsup control), or the table's marks are not the marks the
+   reference was read against (markdrift, todrift, and oldmarks in the NHL).
+
+   THE WAY BACK, when a round moved an engine's stats on purpose: a NEW
+   calibration for that sport, never an edit of a shipped one: a table beside
+   the last, its marks derived with MARKS_CALIBRATION, its own recording
+   (15 (e)), and the reference recorded again against the new marks. Round
+   1301 did exactly that for the NHL (calibration 3, the 84 game season).
+
+   WHO MAY RECORD THE REFERENCE AGAIN WITH THE MARKS KEPT: only a round that
+   names the stat move it made, shows its own reference fleet still reads
+   about one in ten (8 to 12 percent at or over from), and carries the lead's
+   ruling in its brief. Never a round that only wants this check green.
+
+   Each cell's fleet share is printed with its distance from the reference
+   in fleet errors, and a cell further than five is named; cells are for the
+   reader and decide nothing (a count at or over to in one cell is 0 to 5). */
 let fromHits = 0, toHits = 0, cellN = 0;
-const cellOut = [];
 for (const { pos, s } of tableCells) {
   const mine = rows.filter(r => r.pos === pos);
-  const over = mine.filter(r => (r.t[s.stat] ?? 0) >= s.from).length;
-  const cellShare = mine.length ? over / mine.length : 0;
-  if (!inBand(cellShare, ML.bands.fromCell)) cellOut.push(`${pos} ${s.stat} ${(100 * cellShare).toFixed(1)}`);
-  fromHits += over; toHits += mine.filter(r => (r.t[s.stat] ?? 0) >= s.to).length; cellN += mine.length;
+  fromHits += mine.filter(r => (r.t[s.stat] ?? 0) >= s.from).length; toHits += mine.filter(r => (r.t[s.stat] ?? 0) >= s.to).length; cellN += mine.length;
 }
 const fromPooled = cellN ? fromHits / cellN : 0, toPooled = cellN ? toHits / cellN : 0;
-const fromOk = cellOut.length === 0 && inBand(fromPooled, ML.bands.fromPooled);
-const toOk = inBand(toPooled, ML.bands.toPooled);
-console.log(`  17 (a) marks: ${tableCells.length} standout cells; at or over from, pooled ${(100 * fromPooled).toFixed(2)} percent (band ${(100 * ML.bands.fromPooled.lo).toFixed(2)} to ${(100 * ML.bands.fromPooled.hi).toFixed(2)}), cells out of ${(100 * ML.bands.fromCell.lo).toFixed(1)} to ${(100 * ML.bands.fromCell.hi).toFixed(1)}: [${cellOut.join(', ')}]; at or over to, pooled ${(100 * toPooled).toFixed(2)} percent (band ${(100 * ML.bands.toPooled.lo).toFixed(2)} to ${(100 * ML.bands.toPooled.hi).toFixed(2)})`);
+console.log(`  17 (a) marks, this run's one seed (printed, never the check): ${tableCells.length} standout cells; at or over from, pooled ${(100 * fromPooled).toFixed(2)} percent; at or over to, pooled ${(100 * toPooled).toFixed(2)} percent`);
+
+const FLEET = MARKS.fleet ?? null;
+const FL = FLEET?.sports?.[SPORT] ?? null;
+/* The controls that aim at [marks] or must leave it green. Any other control is judged on its own check, so it plays no fleet. */
+const FLEET_CONTROLS = ['markdrift', 'todrift', 'nostandout', 'oldmarks', 'statsup', 'statsdown'];
+/* A measuring run (a child of the fleet, or a row dump for the generator) plays no fleet of its own. */
+const MEASURING = Boolean(process.env.SIM_DUMP_ROWS) || process.env.SIM_FLEET_CHILD === '1';
+const fleetRuns = !MEASURING && (!CONTROL || FLEET_CONTROLS.includes(CONTROL));
+/* statsup and statsdown: every career total of the fleet lifted, or lowered, by two percent in memory. */
+const STATS_STEP = 1.02;
+const fleetScale = CONTROL === 'statsup' ? STATS_STEP : CONTROL === 'statsdown' ? 1 / STATS_STEP : 1;
+let fleetOk = false, fleetDetail = 'the fleet was not played on this run';
+if (fleetRuns && !FL) fleetDetail = `the ledger holds no fleet band for ${SPORT}: record one (MARKS_FLEET, the header of scripts/genCareerHallMarks.mjs)`;
+if (fleetRuns && FL) {
+  /* SIM_FLEET_SEEDS=a-b plays another fleet against the same reference (the out of sample confirmation). */
+  const span = (process.env.SIM_FLEET_SEEDS || '').split('-').map(Number);
+  const seeds = span.length === 2 && span.every(Number.isInteger) && span[1] >= span[0] ? Array.from({ length: span[1] - span[0] + 1 }, (_, i) => span[0] + i) : FLEET.checkSeeds;
+  const dir = process.env.SIM_FLEET_DIR || mkdtempSync(path.join(os.tmpdir(), `career-hall-fleet-${SPORT}-`));
+  mkdirSync(dir, { recursive: true });
+  const fileOf = seed => path.join(dir, `rows-${SPORT}-${seed}.json`);
+  const readRows = seed => { try { const r = JSON.parse(readFileSync(fileOf(seed), 'utf8')); return Array.isArray(r) && r.length === FLEET.careers ? r : null; } catch { return null; } };
+  const todo = seeds.filter(s => !readRows(s));
+  const reused = seeds.length - todo.length;
+  const child = seed => new Promise(resolve => {
+    const tmp = path.join(dir, `tmp-${seed}`);
+    mkdirSync(tmp, { recursive: true });
+    /* Its own temp folder (two bundling runs sharing one mix trees), and no control: a row's totals come from the engine's seasons, never from the marks. */
+    const env = { ...process.env, SIM_SKIP_BOARD: '1', SIM_SEED: String(seed), SIM_DUMP_ROWS: fileOf(seed), SIM_FLEET_CHILD: '1', TMPDIR: tmp, TEMP: tmp, TMP: tmp };
+    for (const k of ['SIM_CONTROL', 'SIM_CAL', 'SIM_RECORD_V2', 'SIM_RECORD_V3', 'SIM_FLEET_DIR', 'SIM_FLEET_SEEDS']) delete env[k];
+    const p = spawn(process.execPath, [SELF, SPORT, String(FLEET.careers)], { env, cwd: ROOT, stdio: 'ignore' });
+    p.on('close', code => resolve(code));
+    p.on('error', () => resolve(-1));
+  });
+  let next = 0;
+  const codes = {};
+  await Promise.all(Array.from({ length: Math.min(4, todo.length) }, async () => { while (next < todo.length) { const s = todo[next]; next += 1; codes[s] = await child(s); } }));
+  /* Runtime does not prove a fleet ran: every seed must have left a full row file, and a child must have ended as a measuring run does (exit 3). */
+  const hash = createHash('sha256');
+  const bySeed = [], bad = [];
+  for (const s of seeds) {
+    const r = readRows(s);
+    if (!r || (s in codes && codes[s] !== 3)) { bad.push(`${s}${s in codes ? ` (exit ${codes[s]})` : ''}`); continue; }
+    hash.update(readFileSync(fileOf(s)));
+    bySeed.push(r);
+  }
+  const K = bySeed.length, R = FLEET.refSeeds.length;
+  const err = sd => sd * Math.sqrt(1 / K + 1 / R);
+  const bandOf = m => ({ lo: Math.max(0, m.mean - FLEET.z * err(m.sd)), hi: m.mean + FLEET.z * err(m.sd) });
+  let fa = 0, fb = 0, fn = 0;
+  const cellNotes = [], far = [];
+  for (const { pos, s } of tableCells) {
+    let n = 0, a = 0, b = 0;
+    for (const run of bySeed) for (const r of run) if (r.pos === pos) { const t = (r.t[s.stat] ?? 0) * fleetScale; n += 1; if (t >= s.from) a += 1; if (t >= s.to) b += 1; }
+    fa += a; fb += b; fn += n;
+    const ref = FL.cells.find(c => c.pos === pos && c.stat === s.stat);
+    const off = ref && n ? (a / n - ref.mean) / err(ref.sd) : Number.NaN;
+    cellNotes.push(`${pos} ${s.stat} ${(100 * a / Math.max(1, n)).toFixed(1)} (${Number.isNaN(off) ? 'no reference' : `${off >= 0 ? '+' : ''}${off.toFixed(1)}`})`);
+    if (!(Math.abs(off) <= 5)) far.push(`${pos} ${s.stat}`);
+  }
+  const fleetFrom = fn ? fa / fn : 0, fleetTo = fn ? fb / fn : 0;
+  const bFrom = bandOf(FL.fromPooled), bTo = bandOf(FL.toPooled);
+  fleetOk = bad.length === 0 && K === seeds.length && K >= 10 && inBand(fleetFrom, bFrom) && inBand(fleetTo, bTo);
+  const p2 = x => (100 * x).toFixed(2);
+  console.log(`  17 (a) marks, the fleet: ${seeds.length} seeds (${seeds[0]} to ${seeds.at(-1)}${process.env.SIM_FLEET_SEEDS ? ', NOT THE CHECK FLEET OF THE LEDGER' : ''}), ${FLEET.careers} careers a seed, ${fn ? bySeed.reduce((t, r) => t + r.length, 0) : 0} rows, ${todo.length} played and ${reused} reused, signature ${hash.digest('hex').slice(0, 12)}${bad.length ? `; SEEDS WITH NO FULL ROW FILE [${bad.join(', ')}]` : ''}${fleetScale !== 1 ? `; every total times ${fleetScale.toFixed(4)} (${CONTROL})` : ''}`);
+  console.log(`        at or over from, pooled ${p2(fleetFrom)} percent (band ${p2(bFrom.lo)} to ${p2(bFrom.hi)}: the reference's ${p2(FL.fromPooled.mean)} over ${R} seeds, ${p2(FL.fromPooled.sd)} from seed to seed); at or over to, pooled ${p2(fleetTo)} percent (band ${p2(bTo.lo)} to ${p2(bTo.hi)}: the reference's ${p2(FL.toPooled.mean)}, ${p2(FL.toPooled.sd)} from seed to seed); read against the marks of calibration ${MARKS_CAL} (the reference was read against ${FL.calibration})`);
+  console.log(`        cells, the fleet's share and its distance from the reference in fleet errors: ${cellNotes.join(', ')}; further than 5 (named for the reader, decides nothing): [${far.join(', ')}]`);
+  fleetDetail = `the fleet of ${K} seeds: at or over from, pooled ${p2(fleetFrom)} percent (band ${p2(bFrom.lo)} to ${p2(bFrom.hi)}); at or over to, pooled ${p2(fleetTo)} percent (band ${p2(bTo.lo)} to ${p2(bTo.hi)})${bad.length ? `; ${bad.length} seeds left no full row file` : ''}`;
+  if (FL.calibration !== MARKS_CAL) { fleetOk = false; fleetDetail += `; THE REFERENCE WAS READ AGAINST CALIBRATION ${FL.calibration}, NOT ${MARKS_CAL}: record it again (MARKS_FLEET)`; }
+}
 
 /* 17 (b). The table is the ledger, exactly: the list is the half rule both
    ways (a family is on a position's list if and only if its from mark is
@@ -1407,7 +1591,8 @@ console.log(`  17 (a) marks: ${tableCells.length} standout cells; at or over fro
    not excluded by hand), every mark and label is the ledger's, every ramp
    clears the floor, and a family's own top may only be smaller than the rule's. */
 const halfMiss = [];
-const famsAll = Object.keys(ML.positions[E.positions[0]].families).filter(f => !(f in MARKS.excluded[SPORT]));
+if (eng.WEIGHTS[eng.HALL_CALIBRATION] !== eng.WEIGHTS[MARKS_CAL]) halfMiss.push(`the table of calibration ${eng.HALL_CALIBRATION} is not the table the ledger's block of calibration ${MARKS_CAL} measured (a new table needs a block of its own)`);
+const famsAll =Object.keys(ML.positions[E.positions[0]].families).filter(f => !(f in MARKS.excluded[SPORT]));
 const onTable = new Set(tableCells.map(c => `${c.pos}:${c.s.stat}`));
 for (const f of famsAll) {
   const largest = Math.max(...E.positions.map(p => ML.positions[p].families[f].from));
@@ -1423,7 +1608,8 @@ for (const { pos, s } of tableCells) {
   const m = ML.positions[pos]?.families[s.stat];
   if (!m || s.stat in MARKS.excluded[SPORT]) { halfMiss.push(`${pos} ${s.stat} is not a family of the ledger`); continue; }
   if (s.from !== m.from || s.to !== m.to || s.label !== MARKS.labels[SPORT][s.stat]) halfMiss.push(`${pos} ${s.stat} off the ledger's marks`);
-  if (!(s.to >= s.from * MARKS.rules.rampFloor)) halfMiss.push(`${pos} ${s.stat} ramp under the floor`);
+  // Round 1301: the generator's own allowance (its sigUp rounds a floor up less 1e-9). 720 times 1.10 is 792.0000000000001 in a double, and 792 is the floor.
+  if (!(s.to >= s.from * MARKS.rules.rampFloor - 1e-9)) halfMiss.push(`${pos} ${s.stat} ramp under the floor`);
   // A family's own top exists only where the anchors halved it, and is exactly half.
   if ((s.top !== undefined) !== decided(pos, 'standout', s.stat, 'halved') || (s.top !== undefined && s.top !== TOP / 2)) halfMiss.push(`${pos} ${s.stat} top ${s.top} against the anchors' decisions`);
   const perSeason = s.from / Math.max(1, ML.positions[pos].medianSeasons);
@@ -1818,11 +2004,12 @@ const checks = [
   ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
   ['v1replay', v1ReplayMiss === 0 && v1Saves.length >= 16, `${v1ReplayMiss} readings of ${v1Saves.length} recorded saves differ from the version 1 recording`],
   ['v2replay', v2TableSame && v2ReadMiss === 0 && v2Now.readings.length >= 16, `calibration 2 against its recording: the table and the rules ${v2TableSame ? 'equal' : 'differ'}, ${v2ReadMiss} of ${v2Now.readings.length} recorded saves told something else (a shipped calibration is never edited: add calibration 3)`],
+  ['v3replay', v3TableSame && v3ReadMiss === 0 && v3Now.readings.length >= 16, `calibration 3 against its recording: the table and the rules ${v3TableSame ? 'equal' : 'differ'}, ${v3ReadMiss} of ${v3Now.readings.length} recorded saves told something else (a shipped calibration is never edited: add calibration 4)`],
   ['v1formula', v1FormulaMiss === 0 && careers.length > 0, `${v1FormulaMiss} of ${careers.length} engine careers score off the Round 123 formula on calibration 1`],
   ['calrule', calRuleMiss === 0 && stampedEngine === (CAL1 ? 0 : careers.length), `${calRuleMiss} readings off the calibration rule; ${stampedEngine} of ${careers.length} engine careers stamped`],
   ['boardstamp', boardScoreMiss === 0 && boardRetired.length > 0 && boardStamped === (CAL1 ? 0 : boardRetired.length), `${boardStamped} of ${boardRetired.length} retired board careers stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`],
   ['neverbelow', ruleAMiss.length === 0 && belowMiss === 0 && rows.length > 0, `calibration 2 drops or changes [${ruleAMiss.join(', ')}] of calibration 1; ${belowMiss} of ${rows.length} careers score lower, lose a tier or leave the Hall on 2 (${movedUp} moved up)`],
-  ['marks', tableCells.length > 0 && fromOk && toOk, `at or over from: pooled ${(100 * fromPooled).toFixed(2)} percent, ${cellOut.length} cells out of band [${cellOut.join(', ')}]; at or over to: pooled ${(100 * toPooled).toFixed(2)} percent`],
+  ['marks', tableCells.length > 0 && fleetOk, fleetDetail],
   ['halfrule', halfMiss.length === 0 && tableCells.length > 0, `${halfMiss.length} cells off the half rule, the ledger's marks or the ramp floor [${halfMiss.slice(0, 4).join('; ')}]`],
   ['standoutgain', gN > 0 && pooledGain >= ML.outcome.pooledGain.floor && standoutGain >= ML.outcome.standoutGain.floor, `top 5 percent by family: ${gIn1} -> ${gIn2} of ${gN} in the Hall, a gain of ${(100 * pooledGain).toFixed(1)} points (needs ${(100 * ML.outcome.pooledGain.floor).toFixed(1)}); owed to the standout alone ${(100 * standoutGain).toFixed(1)} points (needs ${(100 * ML.outcome.standoutGain.floor).toFixed(1)})`],
   ['standoutcap', capMiss === 0 && paidCareers > 0, `${capMiss} careers off the restated score on 2 (one family, capped); the standout paid on ${paidCareers}`],
@@ -1835,7 +2022,8 @@ const checks = [
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
 ];
 const BOARD_CHECKS = ['identity', 'ends', 'once', 'seek', 'deckJersey', 'era', 'balance', 'boardstamp'];
-const shown = SKIP_BOARD ? checks.filter(c => !BOARD_CHECKS.includes(c[0])) : checks;
+/* Round 1301: [marks] is decided on the fleet, so a run that plays none (a measuring run, or a control aimed at another check) does not judge it. */
+const shown = checks.filter(c => !(SKIP_BOARD && BOARD_CHECKS.includes(c[0])) && !(c[0] === 'marks' && !fleetRuns));
 for (const [name, ok, detail] of shown) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = shown.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
@@ -1845,6 +2033,9 @@ if (CONTROL) {
     examplelie: 'words', nocardline: 'words', clausealways: 'words', wholesheet: 'words', standoutbig: 'anchors', standoutgone: 'anchors', decisionback: 'anchors', basebig: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
     below: 'neverbelow', markdrift: 'marks', todrift: 'marks', noramp: 'halfrule', catchersteals: 'halfrule', nobase: 'base',
     twofamilies: 'standoutcap', ballotflip: 'anchorcalls', seasonbig: 'hallshare', v2drift: 'v2replay',
+    // Round 1301. In the NHL calibration 3 has a table of its own, so its drift must leave the recording of 2 alone.
+    v3drift: SPORT === 'nhl' ? { red: ['v3replay'], green: ['v2replay'] } : 'v3replay',
+    oldmarks: 'marks', statsup: 'marks', statsdown: 'marks',
     // The board loop's own stamp check only exists on a run that plays the board loop.
     nostamp: SKIP_BOARD ? 'calrule' : ['calrule', 'boardstamp'],
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
@@ -1859,6 +2050,10 @@ if (CONTROL) {
 }
 if (RECORD_V2) {
   console.log(`simCareerHall ${SPORT}: CALIBRATION 2 RECORDED INTO scripts/data/careerHallV2.json, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : 'nothing red'})`);
+  process.exit(3);
+}
+if (RECORD_V3) {
+  console.log(`simCareerHall ${SPORT}: CALIBRATION 3 RECORDED INTO scripts/data/careerHallV3.json, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : 'nothing red'})`);
   process.exit(3);
 }
 if (SKIP_BOARD) {

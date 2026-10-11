@@ -412,30 +412,33 @@ describe('Round 1051: the legacy scorer, the calibration and the words', () => {
   });
 
   it('hallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today\'s', () => {
-    expect(HALL_CALIBRATION).toBe(2);
+    expect(HALL_CALIBRATION).toBe(3);
     expect(hallCalibrationOf({ retired: true })).toBe(1);
-    expect(hallCalibrationOf({ retired: false })).toBe(2);
-    expect(hallCalibrationOf({})).toBe(2);
+    expect(hallCalibrationOf({ retired: false })).toBe(3);
+    expect(hallCalibrationOf({})).toBe(3);
+    // Round 1301: a career stamped 2 reads 2 for good, whatever today's calibration is.
     expect(hallCalibrationOf({ retired: true, hallCal: 2 })).toBe(2);
+    expect(hallCalibrationOf({ retired: true, hallCal: 3 })).toBe(3);
     expect(hallCalibrationOf({ retired: false, hallCal: 1 })).toBe(1);
     expect(hallCalibrationOf({ retired: true, hallCal: 7 })).toBe(1);
-    expect(hallCalibrationOf({ retired: false, hallCal: 'x' })).toBe(2);
+    expect(hallCalibrationOf({ retired: false, hallCal: 'x' })).toBe(3);
   });
 
-  it('sanitizeHallCal takes exactly the whole numbers 1 and 2', () => {
+  it('sanitizeHallCal takes exactly the whole numbers 1, 2 and 3', () => {
     expect(sanitizeHallCal(1)).toBe(1);
     expect(sanitizeHallCal(2)).toBe(2);
-    for (const junk of [3, 0, -1, '2', 1.5, null, undefined, {}, [], true, Number.NaN]) expect(sanitizeHallCal(junk), String(junk)).toBeUndefined();
+    expect(sanitizeHallCal(3)).toBe(3);
+    for (const junk of [4, 0, -1, '2', 1.5, null, undefined, {}, [], true, Number.NaN]) expect(sanitizeHallCal(junk), String(junk)).toBeUndefined();
   });
 
   it('stampHallCalibration writes today\'s calibration on a retired, unstamped career and nothing else', () => {
-    const live: { retired?: boolean; hallCal?: 1 | 2 } = { retired: false };
+    const live: { retired?: boolean; hallCal?: 1 | 2 | 3 } = { retired: false };
     stampHallCalibration(live);
     expect('hallCal' in live).toBe(false);
-    const done: { retired?: boolean; hallCal?: 1 | 2 } = { retired: true };
+    const done: { retired?: boolean; hallCal?: 1 | 2 | 3 } = { retired: true };
     stampHallCalibration(done);
-    expect(done.hallCal).toBe(2);
-    const old: { retired?: boolean; hallCal?: 1 | 2 } = { retired: true, hallCal: 1 };
+    expect(done.hallCal).toBe(3);
+    const old: { retired?: boolean; hallCal?: 1 | 2 | 3 } = { retired: true, hallCal: 1 };
     stampHallCalibration(old);
     expect(old.hallCal).toBe(1);
   });

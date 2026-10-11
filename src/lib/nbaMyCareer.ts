@@ -1207,7 +1207,8 @@ const NBA_LEGACY_V2: LegacyWeights = {
     '*': { terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM] },
   },
 };
-export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2 };
+/* Round 1301: calibration 3 moved the NHL marks only. Here 3 is the calibration 2 table itself, the same object. */
+export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2, 3: NBA_LEGACY_V2 };
 
 /* Round 1103 (the fix pass of 2026-10-08): the standout marks Round 1051 measured on the OLD stat line, frozen
    here as that round committed them (e313f183). Nobody can play an old line season any more, so they can never
@@ -1264,7 +1265,8 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
      1 is the Round 123 formula to the last bit: its table has no such term. On calibration 2 the standout
      marks follow the line the career was played on (nbaLegacyTableFor). */
   const cal = hallCalibrationOf(c);
-  const read = legacyRead(cal === 2 ? nbaLegacyTableFor(c) : NBA_LEGACY_WEIGHTS[cal], {
+  // Round 1301: calibration 3 is calibration 2 here (the same table), so it follows the line the same way.
+  const read = legacyRead(cal >= 2 ? nbaLegacyTableFor(c) : NBA_LEGACY_WEIGHTS[cal], {
     pos: c.pos, seasons: c.seasons.length,
     awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas },
     totals: t,

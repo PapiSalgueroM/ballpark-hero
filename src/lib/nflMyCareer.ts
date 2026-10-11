@@ -1224,7 +1224,8 @@ const NFL_LEGACY_V2: LegacyWeights = {
     '*': { terms: [] },
   },
 };
-export const NFL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NFL_LEGACY_V1, 2: NFL_LEGACY_V2 };
+/* Round 1301: calibration 3 moved the NHL marks only. Here 3 is the calibration 2 table itself, the same object. */
+export const NFL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NFL_LEGACY_V1, 2: NFL_LEGACY_V2, 3: NFL_LEGACY_V2 };
 
 export function legacyOf(c: CareerState): Legacy {
   const totals = careerTotals(c);

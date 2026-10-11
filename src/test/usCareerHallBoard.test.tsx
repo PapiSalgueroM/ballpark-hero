@@ -257,7 +257,7 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     const after = read(sport).c as UsCareerCore & Record<string, unknown>;
     const before = copy(c) as UsCareerCore & Record<string, unknown>;
     // Round 1051: the save that retires a career also stamps its legacy calibration.
-    expect(after.hallCal).toBe(2);
+    expect(after.hallCal).toBe(HALL_CALIBRATION);
     for (const k of ['retired', 'retirement', 'summer', 'hallCal']) { delete after[k]; delete before[k]; }
     expect(after, 'nothing but the end and the dropped summer changed').toEqual(before);
   });
@@ -384,8 +384,8 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     const after = read(sport).c as UsCareerCore;
     expect(after.retired).toBe(true);
     expect(after.hallCal).toBe(HALL_CALIBRATION);
-    expect(HALL_CALIBRATION).toBe(2);
-    expect(hallCalibrationOf(after)).toBe(2);
+    expect(HALL_CALIBRATION).toBe(3);
+    expect(hallCalibrationOf(after)).toBe(3);
     // The retired screen reads the stamped career: its legacy is the saved one's.
     await waitFor(() => expect(document.body.textContent).toContain(`${c.name} retires`));
     expect(document.body.textContent).toContain(sport.legacyOf(after).verdict);

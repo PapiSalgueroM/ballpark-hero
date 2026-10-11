@@ -3324,5 +3324,941 @@
     "baseCredit": {}
    }
   }
+ },
+ "calibrations": {
+  "3": {
+   "note": "Round 1301: calibration 3, the marks of nhl measured again. Written by MARKS_CALIBRATION=3 node scripts/genCareerHallMarks.mjs <dir> from the pooled careers of six measuring runs of scripts/simCareerHall.mjs on the engine of that round, by the rules above; never edited by hand. A sport this block does not list keeps the block of the calibration before it. In this block a key ending in 2 (hallShare2, medianScore2) reads calibration 3, the calibration of the day it was measured, and a key ending in 1 reads calibration 1.",
+   "round": 1301,
+   "why": "Round 1226 made the NHL play the season the league really plays (84 games from 2026-27), so a skater's career totals run about 84 over 82 of what the calibration 2 marks were cut on, and about one career in eight cleared a from mark where the design says one in ten.",
+   "seeds": [
+    "base",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+   ],
+   "sports": {
+    "nhl": {
+     "careers": 12000,
+     "runs": [
+      2000,
+      2000,
+      2000,
+      2000,
+      2000,
+      2000
+     ],
+     "positions": {
+      "C": {
+       "n": 2400,
+       "medianSeasons": 20,
+       "hallShare1": 28.2,
+       "medianScore1": 343,
+       "families": {
+        "goals": {
+         "median": 601,
+         "p90": 954,
+         "p99": 1125,
+         "from": 954,
+         "to": 1130,
+         "floored": false
+        },
+        "assists": {
+         "median": 833,
+         "p90": 1005,
+         "p99": 1156,
+         "from": 1010,
+         "to": 1160,
+         "floored": false
+        },
+        "points": {
+         "median": 1472,
+         "p90": 1862,
+         "p99": 2130,
+         "from": 1860,
+         "to": 2130,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1577,
+         "p90": 1786,
+         "p99": 1821,
+         "from": 1790,
+         "to": 1970,
+         "floored": true
+        }
+       }
+      },
+      "LW": {
+       "n": 2400,
+       "medianSeasons": 19,
+       "hallShare1": 29.2,
+       "medianScore1": 362,
+       "families": {
+        "goals": {
+         "median": 635,
+         "p90": 891,
+         "p99": 1075,
+         "from": 891,
+         "to": 1080,
+         "floored": false
+        },
+        "assists": {
+         "median": 781,
+         "p90": 959,
+         "p99": 1115,
+         "from": 959,
+         "to": 1120,
+         "floored": false
+        },
+        "points": {
+         "median": 1441,
+         "p90": 1766,
+         "p99": 2035,
+         "from": 1770,
+         "to": 2040,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1534,
+         "p90": 1747,
+         "p99": 1815,
+         "from": 1750,
+         "to": 1930,
+         "floored": true
+        }
+       }
+      },
+      "RW": {
+       "n": 2400,
+       "medianSeasons": 20,
+       "hallShare1": 27.5,
+       "medianScore1": 350,
+       "families": {
+        "goals": {
+         "median": 689,
+         "p90": 858,
+         "p99": 991,
+         "from": 858,
+         "to": 991,
+         "floored": false
+        },
+        "assists": {
+         "median": 794,
+         "p90": 956,
+         "p99": 1068,
+         "from": 956,
+         "to": 1070,
+         "floored": false
+        },
+        "points": {
+         "median": 1483,
+         "p90": 1795,
+         "p99": 2038,
+         "from": 1800,
+         "to": 2040,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1565,
+         "p90": 1767,
+         "p99": 1818,
+         "from": 1770,
+         "to": 1950,
+         "floored": true
+        }
+       }
+      },
+      "D": {
+       "n": 2400,
+       "medianSeasons": 20,
+       "hallShare1": 27.3,
+       "medianScore1": 348,
+       "families": {
+        "goals": {
+         "median": 270,
+         "p90": 349,
+         "p99": 402,
+         "from": 349,
+         "to": 402,
+         "floored": false
+        },
+        "assists": {
+         "median": 941,
+         "p90": 1121,
+         "p99": 1255,
+         "from": 1120,
+         "to": 1260,
+         "floored": false
+        },
+        "points": {
+         "median": 1203,
+         "p90": 1457,
+         "p99": 1644,
+         "from": 1460,
+         "to": 1640,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1611,
+         "p90": 1780,
+         "p99": 1819,
+         "from": 1780,
+         "to": 1960,
+         "floored": true
+        }
+       }
+      },
+      "G": {
+       "n": 2400,
+       "medianSeasons": 21,
+       "hallShare1": 36.8,
+       "medianScore1": 410,
+       "families": {
+        "goals": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "assists": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "points": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "wins": {
+         "median": 656,
+         "p90": 720,
+         "p99": 765,
+         "from": 720,
+         "to": 792,
+         "floored": true
+        },
+        "games": {
+         "median": 1303,
+         "p90": 1374,
+         "p99": 1396,
+         "from": 1370,
+         "to": 1510,
+         "floored": true
+        }
+       }
+      }
+     },
+     "standouts": {
+      "C": [
+       "goals",
+       "assists",
+       "points"
+      ],
+      "LW": [
+       "goals",
+       "assists",
+       "points"
+      ],
+      "RW": [
+       "goals",
+       "assists",
+       "points"
+      ],
+      "D": [
+       "assists",
+       "points"
+      ],
+      "G": [
+       "wins"
+      ]
+     },
+     "base": {},
+     "nearHalf": [],
+     "bands": {
+      "defaultCareers": 2000,
+      "fromCell": {
+       "lo": 0.0431,
+       "hi": 0.1594,
+       "measuredLo": 0.0625,
+       "measuredHi": 0.14,
+       "cells": 72
+      },
+      "fromPooled": {
+       "lo": 0.0819,
+       "hi": 0.1202,
+       "measured": [
+        0.0915,
+        0.1106,
+        0.1038,
+        0.0948,
+        0.0977,
+        0.0985
+       ]
+      },
+      "toPooled": {
+       "lo": 0.0053,
+       "hi": 0.0107,
+       "measured": [
+        0.0088,
+        0.0092,
+        0.0092,
+        0.0067,
+        0.0094,
+        0.0094
+       ]
+      }
+     },
+     "outcome": {
+      "topShare": 0.05,
+      "covered": 0.9,
+      "pooledGain": {
+       "measured": [
+        0.15,
+        0.1667,
+        0.225,
+        0.23,
+        0.2,
+        0.1667
+       ],
+       "floor": 0.075
+      },
+      "standoutGain": {
+       "measured": [
+        0.075,
+        0.0875,
+        0.0625,
+        0.1167,
+        0.0708,
+        0.075
+       ],
+       "floor": 0.0313
+      },
+      "hallShare1": [
+       0.2855,
+       0.2915,
+       0.304,
+       0.302,
+       0.3115,
+       0.293
+      ],
+      "hallShare2": [
+       0.2985,
+       0.307,
+       0.3155,
+       0.3155,
+       0.3215,
+       0.305
+      ],
+      "hallCeiling": 0.3445,
+      "newlyIn": [
+       26,
+       31,
+       23,
+       27,
+       20,
+       24
+      ],
+      "medianScore1": [
+       364,
+       364,
+       363,
+       357,
+       370,
+       352
+      ],
+      "medianScore2": [
+       366,
+       367,
+       369,
+       363,
+       372,
+       354
+      ],
+      "meanScore1": [
+       441.8,
+       445.2,
+       445.1,
+       443.3,
+       452.2,
+       440.6
+      ],
+      "meanScore2": [
+       458.4,
+       466.3,
+       465,
+       461.5,
+       471,
+       459.9
+      ],
+      "baseCredit": {}
+     }
+    }
+   }
+  }
+ },
+ "fleet": {
+  "note": "Round 1301: the fleet band of the [marks] check (scripts/simCareerHall.mjs, section 17 (a), which has the rule: what turns it red, the way back, who may record this again). Written by MARKS_FLEET=<sports> node scripts/genCareerHallMarks.mjs <dir> from measuring runs of the reference seeds; never edited by hand. Per sport: the calibration whose marks were read, and the mean and the deviation from seed to seed of the pooled share at or over from, at or over to, and of each cell. lo and hi are the band for a check fleet of checkSeeds: the mean plus and minus z deviations times the root of (1 / check seeds + 1 / reference seeds). Shares are fractions.",
+  "round": 1301,
+  "careers": 2000,
+  "checkSeeds": [
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29
+  ],
+  "refSeeds": [
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57,
+   58,
+   59,
+   60,
+   61,
+   62,
+   63,
+   64,
+   65,
+   66,
+   67,
+   68,
+   69,
+   70,
+   71,
+   72,
+   73,
+   74,
+   75,
+   76,
+   77
+  ],
+  "z": 4,
+  "sports": {
+   "nfl": {
+    "calibration": 2,
+    "fromPooled": {
+     "mean": 0.10298,
+     "sd": 0.0074,
+     "lo": 0.09558,
+     "hi": 0.11038,
+     "min": 0.08708,
+     "max": 0.11877
+    },
+    "toPooled": {
+     "mean": 0.00992,
+     "sd": 0.0023,
+     "lo": 0.00763,
+     "hi": 0.01222,
+     "min": 0.00554,
+     "max": 0.016
+    },
+    "cells": [
+     {
+      "pos": "QB",
+      "stat": "passYds",
+      "mean": 0.095,
+      "sd": 0.01908
+     },
+     {
+      "pos": "QB",
+      "stat": "passTd",
+      "mean": 0.09483,
+      "sd": 0.01768
+     },
+     {
+      "pos": "RB",
+      "stat": "rushYds",
+      "mean": 0.09942,
+      "sd": 0.01808
+     },
+     {
+      "pos": "RB",
+      "stat": "rushTd",
+      "mean": 0.11492,
+      "sd": 0.01985
+     },
+     {
+      "pos": "WR",
+      "stat": "rec",
+      "mean": 0.09408,
+      "sd": 0.01737
+     },
+     {
+      "pos": "WR",
+      "stat": "recYds",
+      "mean": 0.0875,
+      "sd": 0.01779
+     },
+     {
+      "pos": "TE",
+      "stat": "rec",
+      "mean": 0.094,
+      "sd": 0.02013
+     },
+     {
+      "pos": "TE",
+      "stat": "recYds",
+      "mean": 0.09317,
+      "sd": 0.01889
+     },
+     {
+      "pos": "TE",
+      "stat": "recTd",
+      "mean": 0.09675,
+      "sd": 0.01954
+     },
+     {
+      "pos": "LB",
+      "stat": "tackles",
+      "mean": 0.11342,
+      "sd": 0.0196
+     },
+     {
+      "pos": "LB",
+      "stat": "picks",
+      "mean": 0.1135,
+      "sd": 0.01726
+     },
+     {
+      "pos": "CB",
+      "stat": "picks",
+      "mean": 0.12233,
+      "sd": 0.02051
+     },
+     {
+      "pos": "CB",
+      "stat": "passDef",
+      "mean": 0.11983,
+      "sd": 0.01721
+     }
+    ]
+   },
+   "nba": {
+    "calibration": 2,
+    "fromPooled": {
+     "mean": 0.09705,
+     "sd": 0.00454,
+     "lo": 0.09251,
+     "hi": 0.10158,
+     "min": 0.08688,
+     "max": 0.10563
+    },
+    "toPooled": {
+     "mean": 0.00965,
+     "sd": 0.00173,
+     "lo": 0.00792,
+     "hi": 0.01138,
+     "min": 0.00583,
+     "max": 0.01313
+    },
+    "cells": [
+     {
+      "pos": "PG",
+      "stat": "pts",
+      "mean": 0.09995,
+      "sd": 0.01491
+     },
+     {
+      "pos": "PG",
+      "stat": "ast",
+      "mean": 0.10354,
+      "sd": 0.01257
+     },
+     {
+      "pos": "SG",
+      "stat": "pts",
+      "mean": 0.09948,
+      "sd": 0.01542
+     },
+     {
+      "pos": "SG",
+      "stat": "reb",
+      "mean": 0.09714,
+      "sd": 0.01516
+     },
+     {
+      "pos": "SG",
+      "stat": "ast",
+      "mean": 0.08818,
+      "sd": 0.01568
+     },
+     {
+      "pos": "SF",
+      "stat": "pts",
+      "mean": 0.10432,
+      "sd": 0.01091
+     },
+     {
+      "pos": "SF",
+      "stat": "reb",
+      "mean": 0.0876,
+      "sd": 0.01498
+     },
+     {
+      "pos": "SF",
+      "stat": "ast",
+      "mean": 0.09651,
+      "sd": 0.01271
+     },
+     {
+      "pos": "PF",
+      "stat": "pts",
+      "mean": 0.09766,
+      "sd": 0.01518
+     },
+     {
+      "pos": "PF",
+      "stat": "reb",
+      "mean": 0.09729,
+      "sd": 0.01373
+     },
+     {
+      "pos": "C",
+      "stat": "pts",
+      "mean": 0.09469,
+      "sd": 0.01375
+     },
+     {
+      "pos": "C",
+      "stat": "reb",
+      "mean": 0.09823,
+      "sd": 0.01325
+     }
+    ]
+   },
+   "mlb": {
+    "calibration": 2,
+    "fromPooled": {
+     "mean": 0.09894,
+     "sd": 0.00726,
+     "lo": 0.09167,
+     "hi": 0.1062,
+     "min": 0.08425,
+     "max": 0.11725
+    },
+    "toPooled": {
+     "mean": 0.00953,
+     "sd": 0.00202,
+     "lo": 0.0075,
+     "hi": 0.01155,
+     "min": 0.00475,
+     "max": 0.01325
+    },
+    "cells": [
+     {
+      "pos": "SP",
+      "stat": "wins",
+      "mean": 0.10623,
+      "sd": 0.0234
+     },
+     {
+      "pos": "SP",
+      "stat": "so",
+      "mean": 0.09947,
+      "sd": 0.02492
+     },
+     {
+      "pos": "C",
+      "stat": "hr",
+      "mean": 0.09753,
+      "sd": 0.0231
+     },
+     {
+      "pos": "C",
+      "stat": "rbi",
+      "mean": 0.09707,
+      "sd": 0.02545
+     },
+     {
+      "pos": "1B",
+      "stat": "hr",
+      "mean": 0.09295,
+      "sd": 0.02102
+     },
+     {
+      "pos": "1B",
+      "stat": "rbi",
+      "mean": 0.08368,
+      "sd": 0.01825
+     },
+     {
+      "pos": "2B",
+      "stat": "rbi",
+      "mean": 0.09936,
+      "sd": 0.01992
+     },
+     {
+      "pos": "3B",
+      "stat": "hr",
+      "mean": 0.09833,
+      "sd": 0.0253
+     },
+     {
+      "pos": "3B",
+      "stat": "rbi",
+      "mean": 0.09661,
+      "sd": 0.02272
+     },
+     {
+      "pos": "SS",
+      "stat": "hr",
+      "mean": 0.09799,
+      "sd": 0.02236
+     },
+     {
+      "pos": "SS",
+      "stat": "rbi",
+      "mean": 0.10806,
+      "sd": 0.02273
+     },
+     {
+      "pos": "SS",
+      "stat": "sb",
+      "mean": 0.10565,
+      "sd": 0.01921
+     },
+     {
+      "pos": "LF",
+      "stat": "hr",
+      "mean": 0.10027,
+      "sd": 0.01948
+     },
+     {
+      "pos": "LF",
+      "stat": "rbi",
+      "mean": 0.09833,
+      "sd": 0.01832
+     },
+     {
+      "pos": "LF",
+      "stat": "sb",
+      "mean": 0.10531,
+      "sd": 0.0138
+     },
+     {
+      "pos": "CF",
+      "stat": "hr",
+      "mean": 0.09638,
+      "sd": 0.02034
+     },
+     {
+      "pos": "CF",
+      "stat": "rbi",
+      "mean": 0.09398,
+      "sd": 0.02121
+     },
+     {
+      "pos": "CF",
+      "stat": "sb",
+      "mean": 0.10188,
+      "sd": 0.01726
+     },
+     {
+      "pos": "RF",
+      "stat": "hr",
+      "mean": 0.08656,
+      "sd": 0.02266
+     },
+     {
+      "pos": "RF",
+      "stat": "rbi",
+      "mean": 0.09692,
+      "sd": 0.01809
+     },
+     {
+      "pos": "DH",
+      "stat": "hr",
+      "mean": 0.10451,
+      "sd": 0.02135
+     },
+     {
+      "pos": "DH",
+      "stat": "rbi",
+      "mean": 0.10958,
+      "sd": 0.02133
+     }
+    ]
+   },
+   "nhl": {
+    "calibration": 3,
+    "fromPooled": {
+     "mean": 0.10395,
+     "sd": 0.00554,
+     "lo": 0.0984,
+     "hi": 0.10949,
+     "min": 0.09292,
+     "max": 0.11396
+    },
+    "toPooled": {
+     "mean": 0.00988,
+     "sd": 0.00204,
+     "lo": 0.00784,
+     "hi": 0.01192,
+     "min": 0.00542,
+     "max": 0.01354
+    },
+    "cells": [
+     {
+      "pos": "C",
+      "stat": "goals",
+      "mean": 0.10333,
+      "sd": 0.0115
+     },
+     {
+      "pos": "C",
+      "stat": "assists",
+      "mean": 0.10375,
+      "sd": 0.01365
+     },
+     {
+      "pos": "C",
+      "stat": "points",
+      "mean": 0.10286,
+      "sd": 0.01229
+     },
+     {
+      "pos": "LW",
+      "stat": "goals",
+      "mean": 0.10844,
+      "sd": 0.01563
+     },
+     {
+      "pos": "LW",
+      "stat": "assists",
+      "mean": 0.10339,
+      "sd": 0.01218
+     },
+     {
+      "pos": "LW",
+      "stat": "points",
+      "mean": 0.10526,
+      "sd": 0.01541
+     },
+     {
+      "pos": "RW",
+      "stat": "goals",
+      "mean": 0.09979,
+      "sd": 0.00981
+     },
+     {
+      "pos": "RW",
+      "stat": "assists",
+      "mean": 0.1037,
+      "sd": 0.01406
+     },
+     {
+      "pos": "RW",
+      "stat": "points",
+      "mean": 0.10458,
+      "sd": 0.01043
+     },
+     {
+      "pos": "D",
+      "stat": "assists",
+      "mean": 0.10328,
+      "sd": 0.01667
+     },
+     {
+      "pos": "D",
+      "stat": "points",
+      "mean": 0.10297,
+      "sd": 0.01756
+     },
+     {
+      "pos": "G",
+      "stat": "wins",
+      "mean": 0.10599,
+      "sd": 0.01393
+     }
+    ]
+   }
+  }
  }
 }

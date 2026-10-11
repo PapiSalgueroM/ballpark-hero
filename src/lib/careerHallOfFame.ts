@@ -49,9 +49,10 @@
    the voters weigh a career is a new table and a bump of HALL_CALIBRATION:
    careers already retired keep the legacy and the ballot they were told,
    and only careers that retire afterwards are read on the new one. Never
-   edit a calibration that has shipped: add calibration 3 beside it. The
-   version 1 recording (src/test/fixtures/careerHallV1.json), the
-   calibration 2 recording (scripts/data/careerHallV2.json, the four tables
+   edit a calibration that has shipped: add the next one beside it (Round
+   1301 added calibration 3 that way). The version 1 recording
+   (src/test/fixtures/careerHallV1.json), the calibration 2 and 3 recordings
+   (scripts/data/careerHallV2.json and careerHallV3.json, the four tables
    whole) and section 15 of scripts/simCareerHall.mjs hold that promise.
 
    ERA TRUTH (Round 1039). HallRules.verifiedFromClass is the first class
@@ -193,11 +194,21 @@ export const HALL_GAME_RULES = {
    retired on: the board stamps it (hallCal, one optional save key) at the
    moment a career retires, and a retired save with no stamp is calibration 1,
    the Round 123 formulas to the last bit. So a later calibration never
-   re-tells a retired player's legacy or his ballot. */
+   re-tells a retired player's legacy or his ballot.
 
-export type HallCalibration = 1 | 2;
+   CALIBRATION 3 (Round 1301). Round 1226 made the NHL play the season the
+   league really plays (84 games from 2026-27), so a skater's career totals
+   run about 84 over 82 of what the calibration 2 marks were measured on, and
+   about one career in eight cleared a standout mark where the design says
+   one in ten. The NHL's marks were measured again on that engine as a new
+   table beside the old one (NHL_LEGACY_V3 in nhlMyCareer.ts). The calibration
+   is one number for the whole Hall, so football, basketball and baseball
+   read 3 as well: their calibration 3 IS their calibration 2 table, the same
+   object, and no mark of theirs moved. A career stamped 2 reads 2 for good. */
+
+export type HallCalibration = 1 | 2 | 3;
 /** The calibration a career retiring today is judged on. */
-export const HALL_CALIBRATION: HallCalibration = 2;
+export const HALL_CALIBRATION: HallCalibration = 3;
 
 /** One production term: the career total of `stat`, divided by `per`. */
 export interface LegacyTerm { stat: string; per: number }
