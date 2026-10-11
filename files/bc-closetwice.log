@@ -1,0 +1,380 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score
+FO_GAMEDAY week 6: his game SEA 37, ARI 6; the lowest loser of the sixteen is on 6
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 1710ms
+   → "fifteen|desk off|ordinary|recap" is not what the base wrote: expected 'a0d054700968fa661eceedb36529d1a76bd2a…' to be 'ff8e20c90f42f580d957626ba4c3c417b27f5…' // Object.is equality
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score 258ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record
+FO_GAMEDAY adopted at week 9: the log reads 1-1, the league's record is 3-7
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 532ms
+   → "fifteen|desk off|title|recap" is not what the base wrote: expected '24598c56c8c42ecfc9caeff8af94b6a2b1011…' to be 'd4df88f7b41aa21058edc729bf5de651bbc1b…' // Object.is equality
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > the next press appends in week order, and a remount keeps the log 179ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record 95ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 145ms
+   → "fifteen|desk off|fired|recap" is not what the base wrote: expected 'adfbcd1da333c8efd520bad42069b2e118fac…' to be 'cb1cd42e06c096ebe86fcb0aba44b84e680d3…' // Object.is equality
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 237ms
+   → "fifteen|desk on|ordinary|recap" is not what the base wrote: expected '4b21065ee1e5d364a3bd8d7346a468fdec1c0…' to be 'adc56f8f21309bc0b42ab03351f2240d9470e…' // Object.is equality
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log 541ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > draws the recap again after a reload and does not replay the season 402ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores
+FO_GAMEDAY one press: his club ARI played 1 playoff games; the log holds w17, NFC Divisional
+FO_GAMEDAY one press: the lowest loser of the thirteen saved playoff finals is on 13
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 207ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > opens an older recap save on the draft instead of the final week 58ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+FO_GAMEDAY desk on: the edge of his staff is 1.0266666666666666; told with it 37-6, without it 37-6; the log holds 37-6
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise > abandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club 341ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores 54ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included 47ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 218ms
+   → "fifteen|desk on|title|recap" is not what the base wrote: expected '4b9e731dc5bc805fb3602b724669c4acd23ee…' to be '1aed044af9bbacff211e119701f9bdbad62d7…' // Object.is equality
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > refuses to run the final week twice for one season 87ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 192ms
+   → "fifteen|desk on|fired|recap" is not what the base wrote: expected '3aaab11c7d42e272bf1e0b9b8ca1863ed9665…' to be '5d14fd946fa9e6adb2e34d622dec6a396453d…' // Object.is equality
+ × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 248ms
+   → expected [ { season: 2026, team: 'KC' }, …(1) ] to have a length of 1 but got 2
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 225ms
+   → "deep|desk off|ordinary|recap" is not what the base wrote: expected 'e2f9a77a48be0b2e5c1cba47cd84dd88a8664…' to be '780b9786e272e5c31a0787860e2dce284e8e0…' // Object.is equality
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > REPRO: what a reload on the recap lets the player do today
+NFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > draws the recap again after a reload and does not replay the season 212ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 171ms
+   → "deep|desk off|title|recap" is not what the base wrote: expected '1d112e48e529568ec990df57e0748aa1c1e54…' to be '4e2fbdd208d2c78733988af5f0fbeb223bd71…' // Object.is equality
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > REPRO: what a reload on the recap lets the player do today 145ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > opens an older recap save on the draft instead of the final week 88ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 160ms
+   → "deep|desk off|fired|recap" is not what the base wrote: expected '6184e91abd8826c8be4d93a908e1e6e9b611f…' to be 'b56f3204559a899c9cdc5b9d4deb319645fcd…' // Object.is equality
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 211ms
+   → "deep|desk on|ordinary|recap" is not what the base wrote: expected '143da964ad191bac75e5bb4dea0a7ad396cc5…' to be '843979bfcea96ac1fbad31f8f28d676b50bbd…' // Object.is equality
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 213ms
+   → "deep|desk on|title|recap" is not what the base wrote: expected 'b98f6e0cb79aa8fa7dc723a74cd9f186f0009…' to be 'c3f77605c067bf38825a44b180a0eec83df3a…' // Object.is equality
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 195ms
+   → "deep|desk on|fired|recap" is not what the base wrote: expected '8bb83e4e87352955f5ad1aa94759a659d410e…' to be '6a62b5c27eaa8659d95839d409b09773ab26b…' // Object.is equality
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > the record > is complete, or is being printed 0ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > refuses to run the final week twice for one season 92ms
+ × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > plays the next season after the draft: the record refuses only the closed one 582ms
+   → expected [ { season: 2026, team: 'SF' }, …(1) ] to have a length of 1 but got 2
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > draws the recap again after a reload and does not replay the season 138ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 78ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > opens an older recap save on the draft instead of the final week 76ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > refuses to run the final week twice for one season 56ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+MLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 129ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > draws the recap again after a reload and does not replay the season 70ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 45ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > opens an older recap save on the draft instead of the final week 42ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > refuses to run the final week twice for one season 25ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 98ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > draws the recap again after a reload and does not replay the season 57ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 41ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > opens an older recap save on the draft instead of the final week 15ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > refuses to run the final week twice for one season 26ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 88ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "fifteen|desk off|ordinary|recap" is not what the base wrote: expected 'a0d054700968fa661eceedb36529d1a76bd2a…' to be 'ff8e20c90f42f580d957626ba4c3c417b27f5…' // Object.is equality
+
+Expected: "ff8e20c90f42f580d957626ba4c3c417b27f5be9"
+Received: "a0d054700968fa661eceedb36529d1a76bd2a2fc"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "fifteen|desk off|title|recap" is not what the base wrote: expected '24598c56c8c42ecfc9caeff8af94b6a2b1011…' to be 'd4df88f7b41aa21058edc729bf5de651bbc1b…' // Object.is equality
+
+Expected: "d4df88f7b41aa21058edc729bf5de651bbc1b23b"
+Received: "24598c56c8c42ecfc9caeff8af94b6a2b10115c2"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "fifteen|desk off|fired|recap" is not what the base wrote: expected 'adfbcd1da333c8efd520bad42069b2e118fac…' to be 'cb1cd42e06c096ebe86fcb0aba44b84e680d3…' // Object.is equality
+
+Expected: "cb1cd42e06c096ebe86fcb0aba44b84e680d3b12"
+Received: "adfbcd1da333c8efd520bad42069b2e118facab3"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "fifteen|desk on|ordinary|recap" is not what the base wrote: expected '4b21065ee1e5d364a3bd8d7346a468fdec1c0…' to be 'adc56f8f21309bc0b42ab03351f2240d9470e…' // Object.is equality
+
+Expected: "adc56f8f21309bc0b42ab03351f2240d9470e375"
+Received: "4b21065ee1e5d364a3bd8d7346a468fdec1c0248"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "fifteen|desk on|title|recap" is not what the base wrote: expected '4b9e731dc5bc805fb3602b724669c4acd23ee…' to be '1aed044af9bbacff211e119701f9bdbad62d7…' // Object.is equality
+
+Expected: "1aed044af9bbacff211e119701f9bdbad62d7a4e"
+Received: "4b9e731dc5bc805fb3602b724669c4acd23ee463"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "fifteen|desk on|fired|recap" is not what the base wrote: expected '3aaab11c7d42e272bf1e0b9b8ca1863ed9665…' to be '5d14fd946fa9e6adb2e34d622dec6a396453d…' // Object.is equality
+
+Expected: "5d14fd946fa9e6adb2e34d622dec6a396453d5b3"
+Received: "3aaab11c7d42e272bf1e0b9b8ca1863ed966536e"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "deep|desk off|ordinary|recap" is not what the base wrote: expected 'e2f9a77a48be0b2e5c1cba47cd84dd88a8664…' to be '780b9786e272e5c31a0787860e2dce284e8e0…' // Object.is equality
+
+Expected: "780b9786e272e5c31a0787860e2dce284e8e0385"
+Received: "e2f9a77a48be0b2e5c1cba47cd84dd88a8664704"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "deep|desk off|title|recap" is not what the base wrote: expected '1d112e48e529568ec990df57e0748aa1c1e54…' to be '4e2fbdd208d2c78733988af5f0fbeb223bd71…' // Object.is equality
+
+Expected: "4e2fbdd208d2c78733988af5f0fbeb223bd715eb"
+Received: "1d112e48e529568ec990df57e0748aa1c1e54aef"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "deep|desk off|fired|recap" is not what the base wrote: expected '6184e91abd8826c8be4d93a908e1e6e9b611f…' to be 'b56f3204559a899c9cdc5b9d4deb319645fcd…' // Object.is equality
+
+Expected: "b56f3204559a899c9cdc5b9d4deb319645fcd1e4"
+Received: "6184e91abd8826c8be4d93a908e1e6e9b611f592"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "deep|desk on|ordinary|recap" is not what the base wrote: expected '143da964ad191bac75e5bb4dea0a7ad396cc5…' to be '843979bfcea96ac1fbad31f8f28d676b50bbd…' // Object.is equality
+
+Expected: "843979bfcea96ac1fbad31f8f28d676b50bbd15e"
+Received: "143da964ad191bac75e5bb4dea0a7ad396cc54a1"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "deep|desk on|title|recap" is not what the base wrote: expected 'b98f6e0cb79aa8fa7dc723a74cd9f186f0009…' to be 'c3f77605c067bf38825a44b180a0eec83df3a…' // Object.is equality
+
+Expected: "c3f77605c067bf38825a44b180a0eec83df3af81"
+Received: "b98f6e0cb79aa8fa7dc723a74cd9f186f0009ca3"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/14]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: "deep|desk on|fired|recap" is not what the base wrote: expected '8bb83e4e87352955f5ad1aa94759a659d410e…' to be '6a62b5c27eaa8659d95839d409b09773ab26b…' // Object.is equality
+
+Expected: "6a62b5c27eaa8659d95839d409b09773ab26b6c6"
+Received: "8bb83e4e87352955f5ad1aa94759a659d410e99a"
+
+ ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:204:56
+    202|   if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    203|   expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    204|   expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+       |                                                        ^
+    205| }
+    206| 
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:257:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/14]⎯
+
+ FAIL  src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one
+AssertionError: expected [ { season: 2026, team: 'KC' }, …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx:290:39
+    288|       expect(read().league[c.periodKey]).toBe(2);
+    289|       expect(read().seasonsPlayed).toBe(1);
+    290|       expect(read().league.champions).toHaveLength(1);
+       |                                       ^
+    291|     });
+    292|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/14]⎯
+
+ FAIL  src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > plays the next season after the draft: the record refuses only the closed one
+AssertionError: expected [ { season: 2026, team: 'SF' }, …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx:290:39
+    288|       expect(read().league[c.periodKey]).toBe(2);
+    289|       expect(read().seasonsPlayed).toBe(1);
+    290|       expect(read().league.champions).toHaveLength(1);
+       |                                       ^
+    291|     });
+    292|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/14]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  14 failed | 31 passed (45)
+   Start at  20:58:54
+   Duration  6.67s (transform 2.44s, setup 188ms, collect 4.71s, tests 8.84s, environment 1.37s, prepare 498ms)
+

@@ -1,0 +1,237 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score
+FO_GAMEDAY week 6: his game SEA 37, ARI 6; the lowest loser of the sixteen is on 6
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score 260ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record
+FO_GAMEDAY adopted at week 9: the log reads 1-1, the league's record is 3-7
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 3720ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > the next press appends in week order, and a remount keeps the log 270ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record 86ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log 661ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 638ms
+   → expected [ 'ARI', 'SF', 7, +0, 'ARI' ] to deeply equal [ 'ARI', 'SF', 30, 27, 'ARI' ]
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores
+FO_GAMEDAY one press: his club ARI played 1 playoff games; the log holds w17, NFC Divisional
+
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > draws the recap again after a reload and does not replay the season 478ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+FO_GAMEDAY desk on: the edge of his staff is 1.0266666666666666; told with it 37-6, without it 37-6; the log holds 37-6
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise > abandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club 391ms
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores 88ms
+   → expected [ 'ARI', 'GB', 13, 35, 'GB' ] to deeply equal [ 'ARI', 'GB', 19, 30, 'GB' ]
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included 62ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 233ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 316ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 175ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > opens an older recap save on the draft instead of the final week 43ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > refuses to run the final week twice for one season 44ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 171ms
+   → expected [ 'ARI', 'GB', 20, 14, 'ARI' ] to deeply equal [ 'ARI', 'GB', 30, 19, 'ARI' ]
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 229ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > REPRO: what a reload on the recap lets the player do today
+NFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > draws the recap again after a reload and does not replay the season 210ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > REPRO: what a reload on the recap lets the player do today 178ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 108ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > opens an older recap save on the draft instead of the final week 101ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 464ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 230ms
+   → expected [ 'ARI', 'DAL', 13, 6, 'ARI' ] to deeply equal [ 'ARI', 'DAL', 30, 20, 'ARI' ]
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 254ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > refuses to run the final week twice for one season 144ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > plays the next season after the draft: the record refuses only the closed one 1042ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > draws the recap again after a reload and does not replay the season 285ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 812ms
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 400ms
+   → expected [ 'ARI', 'DAL', 13, 6, 'ARI' ] to deeply equal [ 'ARI', 'DAL', 30, 20, 'ARI' ]
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 256ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > opens an older recap save on the draft instead of the final week 234ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 506ms
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > the record > is complete, or is being printed 0ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > refuses to run the final week twice for one season 169ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 228ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+MLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > draws the recap again after a reload and does not replay the season 140ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 81ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > opens an older recap save on the draft instead of the final week 61ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > refuses to run the final week twice for one season 43ms
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 148ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > draws the recap again after a reload and does not replay the season 80ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 59ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > opens an older recap save on the draft instead of the final week 29ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > refuses to run the final week twice for one season 27ms
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 158ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores
+AssertionError: expected [ 'ARI', 'GB', 13, 35, 'GB' ] to deeply equal [ 'ARI', 'GB', 19, 30, 'GB' ]
+
+- Expected
++ Received
+
+  [
+    "ARI",
+    "GB",
+-   19,
+-   30,
++   13,
++   35,
+    "GB",
+  ]
+
+ ❯ forEach src/components/front-office/FrontOfficeGameDay.test.tsx:277:10
+    275|     his.forEach((x, k) => {
+    276|       expect([playoff[k].home, playoff[k].away, playoff[k].homeScore, …
+    277|         .toEqual([x.g.home, x.g.away, x.g.homeScore, x.g.awayScore, x.…
+       |          ^
+    278|       expect(nflIsRegular(playoff[k])).toBe(false);
+    279|     });
+ ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:275:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: expected [ 'ARI', 'SF', 7, +0, 'ARI' ] to deeply equal [ 'ARI', 'SF', 30, 27, 'ARI' ]
+
+- Expected
++ Received
+
+  [
+    "ARI",
+    "SF",
+-   30,
+-   27,
++   7,
++   0,
+    "ARI",
+  ]
+
+ ❯ forEach src/components/front-office/FrontOfficeOnePress.test.tsx:267:74
+    265|           his.forEach((x: any, k: number) => {
+    266|             const e = log!.games[k + 1];
+    267|             expect([e.home, e.away, e.homeScore, e.awayScore, e.winner…
+       |                                                                          ^
+    268|           });
+    269|           if (ending === 'title') expect(log!.games[log!.games.length …
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:265:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: expected [ 'ARI', 'GB', 20, 14, 'ARI' ] to deeply equal [ 'ARI', 'GB', 30, 19, 'ARI' ]
+
+- Expected
++ Received
+
+  [
+    "ARI",
+    "GB",
+-   30,
+-   19,
++   20,
++   14,
+    "ARI",
+  ]
+
+ ❯ forEach src/components/front-office/FrontOfficeOnePress.test.tsx:267:74
+    265|           his.forEach((x: any, k: number) => {
+    266|             const e = log!.games[k + 1];
+    267|             expect([e.home, e.away, e.homeScore, e.awayScore, e.winner…
+       |                                                                          ^
+    268|           });
+    269|           if (ending === 'title') expect(log!.games[log!.games.length …
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:265:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+ FAIL  src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+AssertionError: expected [ 'ARI', 'DAL', 13, 6, 'ARI' ] to deeply equal [ 'ARI', 'DAL', 30, 20, 'ARI' ]
+
+- Expected
++ Received
+
+  [
+    "ARI",
+    "DAL",
+-   30,
+-   20,
++   13,
++   6,
+    "ARI",
+  ]
+
+ ❯ forEach src/components/front-office/FrontOfficeOnePress.test.tsx:267:74
+    265|           his.forEach((x: any, k: number) => {
+    266|             const e = log!.games[k + 1];
+    267|             expect([e.home, e.away, e.homeScore, e.awayScore, e.winner…
+       |                                                                          ^
+    268|           });
+    269|           if (ending === 'title') expect(log!.games[log!.games.length …
+ ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:265:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  5 failed | 40 passed (45)
+   Start at  20:59:08
+   Duration  10.84s (transform 4.14s, setup 345ms, collect 8.56s, tests 14.32s, environment 1.95s, prepare 1.02s)
+

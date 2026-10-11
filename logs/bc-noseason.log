@@ -1,0 +1,10 @@
+/home/runner/work/ballpark-hero/ballpark-hero/dist/.r1305/Board.noseason.tsx
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next seas
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season'
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season'
+ × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > draws the recap again after a reload and does not replay the season 266ms
+ × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 157ms
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next seaso
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's
+ × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 266ms
+red rows 19, green rows 26; vitest exit 1 (1 wanted)

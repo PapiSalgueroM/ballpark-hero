@@ -1,0 +1,10 @@
+/home/runner/work/ballpark-hero/ballpark-hero/dist/.r1305/Board.nolog.tsx
+ × src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next seas
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a footbal
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > the next press appends in week order, and a remount keeps the log 200ms
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: i
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise > abandon in the middle of a season and start again: the new save h
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they a
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff inclu
+red rows 19, green rows 26; vitest exit 1 (1 wanted)

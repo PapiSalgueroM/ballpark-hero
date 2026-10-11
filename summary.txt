@@ -1,0 +1,17 @@
+vitest-board exit=0 12s |    Duration  11.16s (transform 3.53s, setup 283ms, collect 6.33s, tests 17.15s, environment 2.35s, prepare 879ms)
+simGmReload exit=0 7s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simGmGameDay exit=0 44s | simGmGameDay: 303 checks, 0 failed
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simNflGmDesk exit=0 25s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simFoHub exit=0 0s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simGmReload-replay exit=0 9s | control "replay": 5 failure(s) fired as expected on all four boards, the check works
+tsc exit=0 77s | 
+bc-closetwice exit=0 7s | red rows 14, green rows 31; vitest exit 1 (1 wanted)
+simNflGmDesk-boardedges exit=0 28s | simNflGmDesk: control boardedges fired (1 failures, as it should)
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+bc-noseason exit=0 9s | red rows 19, green rows 26; vitest exit 1 (1 wanted)
+bc-titles exit=0 11s | red rows 4, green rows 41; vitest exit 1 (1 wanted)
+bc-enginescores exit=0 12s | red rows 5, green rows 40; vitest exit 1 (1 wanted)
+bc-nolog exit=0 10s | red rows 19, green rows 26; vitest exit 1 (1 wanted)
+bc-summerkeeps exit=0 7s | red rows 8, green rows 37; vitest exit 1 (1 wanted)
