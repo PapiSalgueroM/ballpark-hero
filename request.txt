@@ -1,0 +1,11 @@
+# Release AV fix pass, served: the other lane's walk of the plan card (its sim first, it writes the file the walk reads), the weight sweep and the flagship fence, then the reviewer's own walk again for the plan card pictures of a short year.
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+playCareerProgramme: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+chunks: for f in dist/assets/usSeasonShape*.js dist/assets/UsCareerBoard*.js dist/assets/NflMyCareer*.js dist/assets/NbaMyCareer*.js; do [ -f "$f" ] && echo "$f raw $(wc -c < "$f") gz $(gzip -9c "$f" | wc -c)"; done; echo "who names the season shape chunk:"; grep -l "usSeasonShape" dist/assets/*.js
+walk: R="$PWD"; git worktree add -q --detach /tmp/base aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$R/node_modules" /tmp/base/node_modules && (cd /tmp/base && node "$R/.rc/x/uscWalk.mjs" makesaves /tmp/old.json) && node .rc/x/uscWalk.mjs walk /tmp/old.json

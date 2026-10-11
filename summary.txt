@@ -1,0 +1,8 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerProgramme-forwalk exit=0 57s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+playCareerProgramme exit=0 125s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
+sweepWeight exit=1 27s | sweepWeight: 3 failures
+simFlagshipWeight exit=1 1s | simFlagshipWeight: 1 failure
+chunks exit=0 0s | dist/assets/mlb-DaURblgh.js
+walk exit=0 206s | uscWalk: 0 failed, 80 notes; screenshots in /home/runner/work/_temp/rc-out/files
