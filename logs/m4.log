@@ -1,0 +1,8 @@
+mut m4: APPLIED in src/lib/clubManagerLeagueBook.ts
+ src/lib/clubManagerLeagueBook.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+vitest tail: 
+default tail: simCmLeagueBook: 3 FAILURE(S) (50s)
+full tail: simCmLeagueBook: 3 FAILURE(S) (158s)
+MUT m4 vitest=127 default=1 full=1
+MUT m4 KILLED

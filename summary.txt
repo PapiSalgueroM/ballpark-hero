@@ -1,0 +1,5 @@
+m2 exit=1 269s | MUT m2 KILLED
+m1 exit=1 284s | MUT m1 KILLED
+m3 exit=1 287s | MUT m3 KILLED
+m4 exit=1 211s | MUT m4 KILLED
+m5 exit=1 205s | MUT m5 KILLED

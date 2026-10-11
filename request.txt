@@ -1,0 +1,6 @@
+# REVIEW-run Round 1306, head b7943c61: mutations m1 to m5, each in its own worktree, the unit files and both fleets
+m1: bash .rc/x/mutrun.sh m1 c9a1f86a
+m2: bash .rc/x/mutrun.sh m2 c9a1f86a
+m3: bash .rc/x/mutrun.sh m3 c9a1f86a
+m4: bash .rc/x/mutrun.sh m4 c9a1f86a
+m5: bash .rc/x/mutrun.sh m5 c9a1f86a
