@@ -1,0 +1,17 @@
+# Release AW closing pass: the red Club Manager readers that are no gate line, on origin/main (aa564f16) and on the head before Round 1303 was merged (bad382b9), to say whose each red is
+#!serial
+arms: git worktree add -q /tmp/main aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/main/node_modules && git worktree add -q /tmp/pre bad382b9 && ln -s "$PWD/node_modules" /tmp/pre/node_modules && (cd /tmp/main && node_modules/.bin/vite build > /tmp/main-build.log 2>&1; tail -1 /tmp/main-build.log) && (cd /tmp/pre && node_modules/.bin/vite build > /tmp/pre-build.log 2>&1; tail -1 /tmp/pre-build.log)
+main-simGmCalendar: cd /tmp/main && node scripts/simGmCalendar.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simGmCalendar: cd /tmp/pre && node scripts/simGmCalendar.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+main-simGmDealTableFixture: cd /tmp/main && node scripts/simGmDealTableFixture.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simGmDealTableFixture: cd /tmp/pre && node scripts/simGmDealTableFixture.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+main-simGmStaff: cd /tmp/main && node scripts/simGmStaff.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simGmStaff: cd /tmp/pre && node scripts/simGmStaff.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+main-simEra2005: cd /tmp/main && node scripts/simEra2005.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simEra2005: cd /tmp/pre && node scripts/simEra2005.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+main-simEra2010: cd /tmp/main && node scripts/simEra2010.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simEra2010: cd /tmp/pre && node scripts/simEra2010.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+main-simEra2015: cd /tmp/main && node scripts/simEra2015.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simEra2015: cd /tmp/pre && node scripts/simEra2015.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+main-simEra2020: cd /tmp/main && node scripts/simEra2020.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
+pre-simEra2020: cd /tmp/pre && node scripts/simEra2020.mjs 2>&1 | grep -a -i -m3 'fail' | cut -c1-200; exit ${PIPESTATUS[0]}
