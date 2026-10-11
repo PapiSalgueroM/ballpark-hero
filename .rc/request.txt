@@ -1,0 +1,11 @@
+# Release AW closing pass, final proof P-VAR: ruling C2: the VAR unit files, one control of each VAR harness, simDailyDeals with both controls, the pin harness
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+livesimmotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+gencheck: node scripts/genCmVarRates.mjs --check
+litstatus: node scripts/qa/cmVarLit.mjs status
+simCmVarLedger-receipt-EXPECT1: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+simCmVar-counted-EXPECT1: CM_VAR_CONTROL=counted NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simDailyDeals-bind-EXPECT1: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline-EXPECT1: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+gitclean: git status --porcelain --untracked-files=no | wc -l
