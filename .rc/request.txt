@@ -1,0 +1,6 @@
+# Release AX d6: the saved talk walk, plain and its control
+#!build
+#!playwright
+#!serial
+playUsMarketTalk: node scripts/playUsMarketTalk.mjs
+playUsMarketTalk-droptalk-EXPECT1: US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs
