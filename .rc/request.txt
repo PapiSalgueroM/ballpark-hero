@@ -1,0 +1,57 @@
+# Release AV proof, Rounds 1300, 1224 and 1228 (three libraries nothing imports): each harness, each control its own line
+simUsPostseason: node scripts/simUsPostseason.mjs
+post-allhome: US_POST_CONTROL=allhome node scripts/simUsPostseason.mjs
+post-clinch: US_POST_CONTROL=clinch node scripts/simUsPostseason.mjs
+post-drop: US_POST_CONTROL=drop node scripts/simUsPostseason.mjs
+post-onesrc: US_POST_CONTROL=onesrc node scripts/simUsPostseason.mjs
+post-open: US_POST_CONTROL=open node scripts/simUsPostseason.mjs
+post-stream: US_POST_CONTROL=stream node scripts/simUsPostseason.mjs
+post-sum: US_POST_CONTROL=sum node scripts/simUsPostseason.mjs
+post-thin: US_POST_CONTROL=thin node scripts/simUsPostseason.mjs
+post-tries: US_POST_CONTROL=tries node scripts/simUsPostseason.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+gm-ceiling: GM_GAMEDAY_CONTROL=ceiling node scripts/simGmGameDay.mjs
+gm-enginedrift: GM_GAMEDAY_CONTROL=enginedrift node scripts/simGmGameDay.mjs
+gm-lawmax: GM_GAMEDAY_CONTROL=lawmax node scripts/simGmGameDay.mjs
+gm-level: GM_GAMEDAY_CONTROL=level node scripts/simGmGameDay.mjs
+gm-lowmax: GM_GAMEDAY_CONTROL=lowmax node scripts/simGmGameDay.mjs
+gm-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+gm-offbyone: GM_GAMEDAY_CONTROL=offbyone node scripts/simGmGameDay.mjs
+gm-olddraw: GM_GAMEDAY_CONTROL=olddraw node scripts/simGmGameDay.mjs
+gm-outofturn: GM_GAMEDAY_CONTROL=outofturn node scripts/simGmGameDay.mjs
+gm-pairing: GM_GAMEDAY_CONTROL=pairing node scripts/simGmGameDay.mjs
+gm-random: GM_GAMEDAY_CONTROL=random node scripts/simGmGameDay.mjs
+gm-refuse: GM_GAMEDAY_CONTROL=refuse node scripts/simGmGameDay.mjs
+gm-stream: GM_GAMEDAY_CONTROL=stream node scripts/simGmGameDay.mjs
+gm-strict: GM_GAMEDAY_CONTROL=strict node scripts/simGmGameDay.mjs
+gm-tries: GM_GAMEDAY_CONTROL=tries node scripts/simGmGameDay.mjs
+gm-twopaths: GM_GAMEDAY_CONTROL=twopaths node scripts/simGmGameDay.mjs
+gm-unkeyed: GM_GAMEDAY_CONTROL=unkeyed node scripts/simGmGameDay.mjs
+gm-validator: GM_GAMEDAY_CONTROL=validator node scripts/simGmGameDay.mjs
+gm-winner: GM_GAMEDAY_CONTROL=winner node scripts/simGmGameDay.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+ucl-absentpot: CM_LEAGUE_PHASE_CONTROL=absentpot node scripts/simCmLeaguePhase.mjs
+ucl-cap: CM_LEAGUE_PHASE_CONTROL=cap node scripts/simCmLeaguePhase.mjs
+ucl-capsource: CM_LEAGUE_PHASE_CONTROL=capsource node scripts/simCmLeaguePhase.mjs
+ucl-const: CM_LEAGUE_PHASE_CONTROL=const node scripts/simCmLeaguePhase.mjs
+ucl-feed: CM_LEAGUE_PHASE_CONTROL=feed node scripts/simCmLeaguePhase.mjs
+ucl-figure: CM_LEAGUE_PHASE_CONTROL=figure node scripts/simCmLeaguePhase.mjs
+ucl-flipseed: CM_LEAGUE_PHASE_CONTROL=flipseed node scripts/simCmLeaguePhase.mjs
+ucl-freebracket: CM_LEAGUE_PHASE_CONTROL=freebracket node scripts/simCmLeaguePhase.mjs
+ucl-gdonly: CM_LEAGUE_PHASE_CONTROL=gdonly node scripts/simCmLeaguePhase.mjs
+ucl-lie: CM_LEAGUE_PHASE_CONTROL=lie node scripts/simCmLeaguePhase.mjs
+ucl-ninth: CM_LEAGUE_PHASE_CONTROL=ninth node scripts/simCmLeaguePhase.mjs
+ucl-ninthdirect: CM_LEAGUE_PHASE_CONTROL=ninthdirect node scripts/simCmLeaguePhase.mjs
+ucl-nosearch: CM_LEAGUE_PHASE_CONTROL=nosearch node scripts/simCmLeaguePhase.mjs
+ucl-onesource: CM_LEAGUE_PHASE_CONTROL=onesource node scripts/simCmLeaguePhase.mjs
+ucl-order: CM_LEAGUE_PHASE_CONTROL=order node scripts/simCmLeaguePhase.mjs
+ucl-points: CM_LEAGUE_PHASE_CONTROL=points node scripts/simCmLeaguePhase.mjs
+ucl-pot: CM_LEAGUE_PHASE_CONTROL=pot node scripts/simCmLeaguePhase.mjs
+ucl-receipt: CM_LEAGUE_PHASE_CONTROL=receipt node scripts/simCmLeaguePhase.mjs
+ucl-sameassoc: CM_LEAGUE_PHASE_CONTROL=sameassoc node scripts/simCmLeaguePhase.mjs
+ucl-shapefigure: CM_LEAGUE_PHASE_CONTROL=shapefigure node scripts/simCmLeaguePhase.mjs
+ucl-steps: CM_LEAGUE_PHASE_CONTROL=steps node scripts/simCmLeaguePhase.mjs
+ucl-thinused: CM_LEAGUE_PHASE_CONTROL=thinused node scripts/simCmLeaguePhase.mjs
+ucl-twoaday: CM_LEAGUE_PHASE_CONTROL=twoaday node scripts/simCmLeaguePhase.mjs
+ucl-wiki: CM_LEAGUE_PHASE_CONTROL=wiki node scripts/simCmLeaguePhase.mjs
+vitest-libs: node_modules/.bin/vitest run src/lib/gmBracket.test.ts src/lib/gmGameDay.test.ts src/lib/gmGameScore.test.ts src/lib/leagueSlate.test.ts src/lib/uclLeaguePhase.test.ts src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts --testTimeout=300000 --hookTimeout=300000
