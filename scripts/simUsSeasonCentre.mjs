@@ -1199,7 +1199,15 @@ const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7, mlb: 0.7 };
    five seed sets on runner r1212-fx1 (608,472 games): 4.556 against 4.48 and 4.885 against 4.81 (0.076 and 0.075
    over), shut out 4.2%, one run 26.3%, past the ninth 7.9%, at bats 3.754, no hit 26.3%. Each band now sits
    about fifteen to twenty times the spread between sets on each side of its number: still no coin toss (the
-   controls at 16 careers and one seed set stay inside them), and a law a point or two off is red. */
+   controls at 16 careers and one seed set stay inside them), and a law a point or two off is red.
+   THE SECOND FIX PASS (2026-10-11), a sixth at bat. MEASURED on the five seed sets on runner r1212-f2-a
+   (469,598 games he played, 3,756 derived seasons). Under the old cap (control `absix`, every game may hold
+   six): 6,278 games on six at bats (1.3%), 5,208 of them in a game his side scores under 7 (under 10 in a home
+   win), in 2,491 of the 3,756 seasons, some of them games his side is shut out in. Under the rule: 1,077 games
+   on six at bats (0.2%), 1 of them in such a game, and that one is his own line's (home runs and doubles that
+   add up to six, which the rule lets stand). His at bats a game (3.753), the share with no hit (26.3%) and the
+   one refused season of 3,757 are what they were. The rule is a count of zero in the independent checker of
+   section 3, not a band: the section 7 line prints the two numbers so a later round can read them. */
 const MLB_RUNS_OVER = [0, 0.16];
 const MLB_SHUTOUT = [0.034, 0.05];
 const MLB_ONE_RUN = [0.245, 0.282];

@@ -183,3 +183,39 @@ not this round's.
 Still owed after the fix pass (beside the list above): the words of the held line for a club stay long (they
 are the ledger's own and are typed whole in the tests and the harness); the guide sentences are the other
 lane's; the saved page of What's New is redrawn at the release build.
+
+## The second fix pass (2026-10-11, after the closing check)
+
+Two things changed, each its own commit; the other five items of the closing check are the lead's or another
+round's and are listed in the closing report (dukb-handoff/2026-10-10/results-g/fix2-1212.md).
+
+1241bdac: the headers of src/data/usSeasonLedgerMlb.ts and src/data/usSeasonLedgerNhl.ts no longer say that
+nothing imports them. Comments only. Neither file is an input of the law or the lay receipt.
+
+8f06909a: a sixth at bat only in a game his side scores enough in. A best game of "4 for 6" was seen in a 3-0
+win that ended in nine. The at bats of a game had one cap, six, whatever his side scored, and a day with a home
+run and a double starts two at bats up, so the sixes landed on his best days whatever the score. The rule now,
+this sim's own: six at bats only where his side scores seven, or ten in a home win (it does not bat in a ninth
+it leads); five in every other game; never fewer than his own home runs and doubles need. The thinking behind
+seven and ten: a side's trips to the plate are its outs, its runs and the men it leaves on; the first batter's
+sixth trip is the 46th; twelve left on is a generous ceiling. `mlbAtBatsCap` in src/lib/season/mlb.ts, read by
+`finish` and by the bind's `check`.
+
+Measured on the five seed sets (runner r1212-f2-a, 469,598 games he played, 3,756 derived seasons):
+- the old cap (control `absix`): 6,278 games on six at bats (1.3 percent), 5,208 of them in a game his side
+  scores too few for a sixth, in 2,491 of 3,756 seasons (two seasons in three), some in games his side is shut
+  out in;
+- the rule: 1,077 games on six at bats (0.2 percent), 1 of them in such a game, and that one is his own line's
+  (home runs and doubles that add up to six).
+His at bats a game (3.753), the share of games with no hit (26.3 percent), runs a team game and the one
+refused season of 3,757 did not move. simUsSeasonCentre: 158 checks, 0 failed. Control `absix` is RED AT THE
+NAMED CHECK (the independent checker; 502 seasons on seed set 0, 2,491 on the five). The seam receipt and the
+law receipt still say 11 digests, 0 moved: the NBA and the NFL do not read this file.
+
+What moves for a player: a season in which the old cap dealt such a six is drawn with other at bats, hits and
+RBI game by game (the sums are the saved line's either way). Nothing is stored, so no save moves.
+
+Owed, seen while fixing and not built: one game in 469,598 holds three home runs and three doubles of his in a
+game his side scores under seven. That is the season core's spread of the two sums (each capped at three a
+game, neither looking at the other), not the at bats; a rule for extra base hits in one game would be its own
+small round.
