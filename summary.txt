@@ -1,0 +1,1 @@
+simAcademy exit=0 225s | ALL ACADEMY CHECKS PASSED
