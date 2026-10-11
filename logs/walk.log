@@ -1,0 +1,20 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+
+=== 390x844, reduced motion off ===
+  ok    390-motion S1: in the job at Crystal Palace, a whole book that fits
+  ok    390-motion S1: week 3, the book is whole and fits (82 goals on rows, 0 unnamed)
+  FAIL: 390-motion S1: the Stats desk shows words the round says it does not show yet: League leaders
+  ok    390-motion S1: the Stats desk shows the Golden boot and nothing new (37255 characters)
+  FAIL: 390-motion S2: the old save could not play a week: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYE
+  FAIL: 390-motion S2: the old save's book after a week does not fit ({"has":false})
+  FAIL: 390-motion S2: a live match could not be played through: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYE
+<anonymous_script>:1
+undefined
+^
+
+SyntaxError: "undefined" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:175:104
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:175:294
+
+Node.js v24.21.0
