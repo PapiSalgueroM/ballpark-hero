@@ -1,0 +1,5 @@
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simSoccerDerbyHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerSeasonHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
