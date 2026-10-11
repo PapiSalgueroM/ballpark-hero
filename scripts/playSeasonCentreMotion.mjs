@@ -26,6 +26,24 @@
  *  B1i Interrupted: a second table arrives 150 ms into a flight. The second
  *     flight's first frame has every row at the FIRST table's true top, its
  *     last frame at the second's, and nothing is left behind.
+ *     THE SAME ORDER ARRIVING MID FLIGHT (Release AW) is judged by its own
+ *     rule, because it starts no second flight: the wrapper's effect hangs on
+ *     the joined keys, so "a new array with the same keys is the same table"
+ *     and the flight in the air must simply carry on. Until Release AW this
+ *     check assumed every pair of tables changes the order; the first sampled
+ *     season that held two tables in one order (Probe 14 2036 Man City, tables
+ *     22 and 23) turned it red on a healthy component, with four rows read 29
+ *     and 58 px from table 22's places: they were the FIRST flight's rows,
+ *     held at its own time 0. Such a pair is now counted apart and held to
+ *     this: the transitions on the rows after the table arrives are the very
+ *     objects that were in the air before it (none cut, none started); held
+ *     at time 0, a row of that flight is within 1 px of where TABLE K had it
+ *     and every other row is at rest in table k + 1; finished, every row is
+ *     in place with nothing left. So that this rule is exercised on every run
+ *     and not only when the probe happens to deal such a pair, each case is
+ *     run a second time with table k + 1 handed in again as a new array.
+ *     Measured 2026-10-11 on a runner: the numbers are printed by the two
+ *     check lines (cases, flights in the air, pairs of the season itself).
  *  B2 Moves are real: the share of one matchday steps in which at least one
  *     row carried a transform clears a floor (below), so a run that slides
  *     nothing cannot pass.
@@ -57,6 +75,9 @@
  *   count       a row starts from half its true distance       -> B1 red
  *   firstmount  the wrapper mounts holding a made up order     -> B3 red
  *   nosnap      the reduced motion read is forced to false     -> B4 red
+ *   samecut     the wrapper answers every new array, the same keys
+ *               included, so the flight in the air is cut      -> B1i red
+ *               (its same order check and no other check of part B)
  *   pitchside   every goal is laid out at his club's attacking end -> B5 red
  *   pitchqueue  only the last goal of a step is kept (the code before the
  *               review)                                         -> B5 red
@@ -162,6 +183,7 @@ const CONTROLS = {
   count: { file: SHIFT_UI, from: '        if (Math.abs(was - top) >= 1) plan.push({ row, dy: was - top, fade: false });', to: '        if (Math.abs(was - top) >= 1) plan.push({ row, dy: (was - top) / 2, fade: false });' },
   firstmount: { file: SHIFT_UI, from: '  const held = useRef<Held | null>(null);', to: '  const held = useRef<Held | null>({ order: order.slice().reverse(), tops: new Map(order.map((k, i) => [k, (order.length - 1 - i) * 28])), slide: true, width: Number.NaN });' },
   pitchside: { file: 'src/components/season-centre/MiniPitch.tsx', from: "  const us = !goal || goal.side === 'us';", to: '  const us = true;' },
+  samecut: { file: SHIFT_UI, from: '  }, [joined, slide]);', to: '  }, [order, slide]);' },
   nosnap: { file: SHIFT_UI, from: "const reducedNow = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;", to: 'const reducedNow = () => false;' },
   pitchqueue: { file: 'src/components/season-centre/MiniPitch.tsx', from: '    const arrived = goals.filter(g => g.min > was.shown && g.min <= shown);', to: '    const arrived = goals.filter(g => g.min > was.shown && g.min <= shown).slice(-1);' },
 };
@@ -424,45 +446,82 @@ if (want('B1') || want('B2') || want('B3')) {
 /* B1i: a second table lands 150 ms into a flight */
 if (want('B1i')) {
   const cut = { n: 0, flew: 0, first: 0, last: 0, left: 0, maxFirst: 0 };
+  /* the same order arriving mid flight: there is no second flight to judge, the first one has to carry on */
+  const same = { n: 0, natural: 0, flew: 0, restarted: 0, first: 0, last: 0, left: 0, maxFirst: 0 };
+  const orderOf = (S, k) => JSON.stringify(S.tables[k].map(r => r.club));
   for (const L of [LAYOUTS[1], LAYOUTS[3]]) {
     const { ctx, page } = await barePage(L.w, L.h, L.wrap, false);
     for (let si = 0; si < SEASONS.length; si += 1) for (const k of [2, 7, 13, 21]) {
       const S = SEASONS[si];
       if (k + 2 > S.M) continue;
-      const got = await page.evaluate(([i, kk, c]) => {
-        const S2 = __S[i];
-        __bare.mount(S2, kk, c);
-        __bare.show(S2, kk + 1, c);
-        const flying = __anims();
-        for (const a of flying) a.currentTime = 150;
-        __bare.still(S2, kk + 1, c);
-        const mid = __still();
-        const first = __first(i, kk + 2, c);
-        __bare.still(S2, kk + 2, c);
-        const target = __still();
-        __finish();
-        return { flying: flying.length, mid, first, target };
-      }, [si, k, L.compact]);
-      const last = await page.evaluate(() => __settled());
-      cut.n += 1;
-      if (got.flying > 0) cut.flew += 1;
-      const was = topsBy(got.mid.rows), now = topsBy(got.target.rows);
-      for (const r of got.first.rows) if (was.has(r.club)) {
-        const dev = Math.abs(r.top - was.get(r.club));
-        if (dev > cut.maxFirst) cut.maxFirst = dev;
-        if (dev > 1) { cut.first += 1; note('B1i', `${L.id} ${S.tag} from ${k}: ${r.club} starts the second flight ${dev.toFixed(2)} px from its place in table ${k + 1}`); }
+      /* the pair the season gives (table k + 2), then table k + 1 handed in a second time: a new array, the same keys */
+      for (const k3 of [k + 2, k + 1]) {
+        const got = await page.evaluate(([i, kk, kn, c]) => {
+          const S2 = __S[i];
+          __bare.still(S2, kk, c);
+          const began = __still();
+          __bare.mount(S2, kk, c);
+          __bare.show(S2, kk + 1, c);
+          const flying = __anims();
+          for (const a of flying) a.currentTime = 150;
+          /* a flight is the rows' own transform and opacity transitions; a colour easing inside a cell is not one */
+          const flightOf = list => list.filter(a => a.effect.target.matches('[data-club]') && (a.transitionProperty === 'transform' || a.transitionProperty === 'opacity'));
+          const flight = flightOf(flying);
+          const inAir = [...new Set(flight.map(a => a.effect.target.dataset.club ?? ''))];
+          __bare.still(S2, kk + 1, c);
+          const mid = __still();
+          /* window.__first, written out so the transitions it pauses can be told from the ones already in the air */
+          __bare.show(S2, kn, c);
+          const after = __anims();
+          for (const a of after) { a.pause(); a.currentTime = 0; }
+          const first = __live();
+          first.anims = after.length;
+          const flightAfter = flightOf(after);
+          const kept = flightAfter.length === flight.length && flightAfter.every(a => flight.includes(a));
+          __bare.still(S2, kn, c);
+          const target = __still();
+          __finish();
+          return { flying: flying.length, inAir, kept, began, mid, first, target };
+        }, [si, k, k3, L.compact]);
+        const last = await page.evaluate(() => __settled());
+        const was = topsBy(got.mid.rows), now = topsBy(got.target.rows);
+        const sameOrder = orderOf(S, k + 1) === orderOf(S, k3);
+        const tally = sameOrder ? same : cut;
+        tally.n += 1;
+        if (got.flying > 0) tally.flew += 1;
+        if (!sameOrder) {
+          for (const r of got.first.rows) if (was.has(r.club)) {
+            const dev = Math.abs(r.top - was.get(r.club));
+            if (dev > cut.maxFirst) cut.maxFirst = dev;
+            if (dev > 1) { cut.first += 1; note('B1i', `${L.id} ${S.tag} from ${k}: ${r.club} starts the second flight ${dev.toFixed(2)} px from its place in table ${k + 1}`); }
+          }
+        } else {
+          if (k3 !== k + 1) same.natural += 1;
+          if (!got.kept) { same.restarted += 1; note('B1i', `${L.id} ${S.tag} from ${k}: table ${k3} holds the order of table ${k + 1}, and the flight in the air was not left alone (${got.flying} transitions before it, ${got.first.anims} after)`); }
+          /* held at its own time 0 a row of the first flight is where table k had it; a row that was not flying is at rest */
+          const began = topsBy(got.began.rows);
+          for (const r of got.first.rows) {
+            const from = got.inAir.includes(r.club) ? began : was;
+            if (!from.has(r.club)) continue;
+            const dev = Math.abs(r.top - from.get(r.club));
+            if (dev > same.maxFirst) same.maxFirst = dev;
+            if (dev > 1) { same.first += 1; note('B1i', `${L.id} ${S.tag} from ${k}: table ${k3} holds the order of table ${k + 1}, and ${r.club} is ${dev.toFixed(2)} px from where the first flight has it at its start`); }
+          }
+        }
+        for (const r of last.rows) {
+          if (!(Math.abs(r.top - (now.get(r.club) ?? Number.NaN)) <= 1)) tally.last += 1;
+          if (r.style.trim() !== '') tally.left += 1;
+        }
+        if (last.shifting || last.anims > 0) tally.left += 1;
       }
-      for (const r of last.rows) {
-        if (!(Math.abs(r.top - (now.get(r.club) ?? Number.NaN)) <= 1)) cut.last += 1;
-        if (r.style.trim() !== '') cut.left += 1;
-      }
-      if (last.shifting || last.anims > 0) cut.left += 1;
     }
     await ctx.close();
   }
   for (const n of notes.filter(x => x.startsWith('B1i'))) console.log(`   ${n}`);
   check(cut.n >= 30 && cut.flew >= cut.n * 0.5, `B1i. a flight was in the air when the second table landed in ${cut.flew} of ${cut.n} cases (floor half)`);
   check(cut.first === 0 && cut.last === 0 && cut.left === 0, `B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (${cut.first} bad starts, ${cut.last} bad ends, ${cut.left} leftovers; largest start deviation ${cut.maxFirst.toFixed(3)} px)`);
+  check(same.n >= 30 && same.flew >= same.n * 0.5, `B1i. the same order came again with a flight in the air in ${same.flew} of ${same.n} cases (floor half; ${same.natural} of them are two tables of the season itself, the rest table k + 1 handed in twice)`);
+  check(same.restarted === 0 && same.first === 0 && same.last === 0 && same.left === 0, `B1i. the same order arriving mid flight starts nothing: the first flight is left alone, still begins where table k had its rows and ends in place, nothing left (${same.restarted} cut or restarted, ${same.first} bad starts, ${same.last} bad ends, ${same.left} leftovers; largest start deviation ${same.maxFirst.toFixed(3)} px)`);
 }
 
 /* B4: reduced motion snaps */
