@@ -1,0 +1,5 @@
+# Release AW closing pass, final proof P-S: simUsCareerSummer, a sport a line
+summer-nfl: SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+summer-nba: SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+summer-mlb: SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
+summer-nhl: SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
