@@ -1,0 +1,13 @@
+# Release AV: the two walks of the other lane that were red in rAV-H4 (playCmRealFixtures, playDraftDetectiveReports), each run again alone with its evidence, then both on main's own build (aa564f16) in the same job, to say whether main is red the same way.
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+realfix-sim: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+realfix-walk: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/realfix-walk.log 2>&1; s=$?; tail -5 /tmp/realfix-walk.log | cut -c1-300; cp cm-real-fixture-artifacts/native/report.json $RC_OUT/realfix-report.json 2>/dev/null; cp cm-real-fixture-artifacts/native/*failure*.png $RC_OUT/ 2>/dev/null; node .rc/x/realfixReport.mjs cm-real-fixture-artifacts/native/report.json; echo "walk exit $s"; exit $s
+detective: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs; s=$?; cp .tmp-fx/draft-detective-shots/detective-*.png $RC_OUT/ 2>/dev/null; exit $s
+detective-again: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs
+main-build: git worktree add -q --detach /tmp/m aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/m/node_modules && cp -r .tmp-fx/font-cache /tmp/m-font-cache && cd /tmp/m && npm run build > /tmp/m-build.log 2>&1; s=$?; tail -2 /tmp/m-build.log | cut -c1-200; exit $s
+main-realfix-sim: cd /tmp/m && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+main-realfix-walk: cd /tmp/m && FREE_KICK_FONT_CACHE=/tmp/m-font-cache NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/m-realfix-walk.log 2>&1; s=$?; tail -5 /tmp/m-realfix-walk.log | cut -c1-300; node "$OLDPWD/.rc/x/realfixReport.mjs" cm-real-fixture-artifacts/native/report.json; echo "walk exit $s"; exit $s
+main-detective: cd /tmp/m && env -u BASE -u SWEEP_BASE NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs

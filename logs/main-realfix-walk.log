@@ -1,0 +1,10 @@
+playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved states and source bytes held.
+cases 6, passed 6; controls 2; source held true
+CASE 390-real: passed; console errors 0; asset errors 0; shots 390-real-calendar-overview.png 390-real-calendar-sources.png 390-real-calendar.png 390-real-help.png 390-real-result.png
+CASE 390-legacy: passed; console errors 0; asset errors 0; shots 390-legacy-calendar-overview.png 390-legacy-calendar.png 390-legacy-help.png 390-legacy-result.png
+CASE 390-later: passed; console errors 0; asset errors 0; shots 390-later-calendar-overview.png 390-later-calendar.png 390-later-help.png 390-later-result.png
+CASE 1280-real: passed; console errors 0; asset errors 0; shots 1280-real-calendar-overview.png 1280-real-calendar-sources.png 1280-real-calendar.png 1280-real-help.png 1280-real-result.png
+CASE 1280-legacy: passed; console errors 0; asset errors 0; shots 1280-legacy-calendar-overview.png 1280-legacy-calendar.png 1280-legacy-help.png 1280-legacy-result.png
+CASE 1280-later: passed; console errors 0; asset errors 0; shots 1280-later-calendar-overview.png 1280-later-calendar.png 1280-later-help.png 1280-later-result.png
+report keys: sourceBefore, forwardedExternalRequests, sourceAfter, sourceHeld
+walk exit 0

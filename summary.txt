@@ -1,0 +1,10 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+realfix-sim exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+realfix-walk exit=0 17s | walk exit 0
+detective exit=0 9s | playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
+detective-again exit=1 10s | playDraftDetectiveReports: 39 checks, 1 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
+main-build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+main-realfix-sim exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+main-realfix-walk exit=0 15s | walk exit 0
+main-detective exit=1 11s | playDraftDetectiveReports: 39 checks, 1 failed. Screenshots and evidence: /tmp/m/.tmp-fx/draft-detective-shots
