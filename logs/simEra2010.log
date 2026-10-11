@@ -1,0 +1,25 @@
+1) A fresh 2010 save is the real 2010 squad, untouched
+   27 in squad, 0 mismatches, 0 generated
+   AC Milan: 23 in squad, 0 mismatches, 0 generated
+   Borussia Dortmund: 21 in squad, 0 mismatches, 0 generated
+   Lille: 18 in squad, 0 mismatches, 0 generated
+2) The two worlds cannot leak into each other
+  FAIL: 2010-only Wendel is on the 2026 market
+   1716 era-exclusive names checked against the 2026 market, 1 leaks
+   35 names exist in both worlds: 10 verified namesakes, 0 unexplained
+3) Boards talk 2010: title for Barcelona, survival for Blackpool, no Conference League
+   98 club demands checked across the 2010 leagues; told to win the title: Chelsea, Manchester United, Manchester City, Liverpool, Barcelona, Real Madrid, Sevilla, Atlético Madrid, Inter Milan, AC Milan, Juventus, Roma, Bayern Munich, Bayer Leverkusen, Wolfsburg, Hamburg, Lyon, Marseille
+4) Full seasons play out plausibly in all five leagues
+   Barcelona finishes: 1,2,2,1,1,2 · Blackpool finishes: 20,20,20,20,20,20
+   AC Milan finishes: 1,2,1,4,1,1 · Bayern finishes: 2,2,2,1,1,3 · Marseille finishes: 1,4,6,2,1,2 · Cesena finishes: 19,19,20,20,20,20
+   means: AC Milan 1.67, Bayern 1.83, Marseille 2.67, Cesena 19.67
+5) The bake file tells the truth about itself
+   meta says 1751 players / 98 clubs; file holds 1751 / 98
+   one man one club: 0 names twice · window sample: 29 of 29 landed · 98 league clubs, 0 without a bake key
+6) The era uplift: giants above the modern best, order preserved
+   prime Messi 97, prime Ronaldo 97, modern best 94
+   1643 sub-pivot players verified untouched, values identical throughout
+7) A two league save from before Round 901 plays on and grows in the summer
+   season one world: premier2010 38 · season two world: bundesliga2010 34/18,ligue12010 38/20,premier2010 38/20,seriea2010 38/20
+
+simEra2010: 1 failure
