@@ -1,0 +1,14 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkEraMarket exit=0 187s | walkEraMarket: green. Each market on screen holds only men of its own season.
+playEra2005 exit=0 11s | playEra2005: green. The 2005-06 branch plays like a person would find it.
+playEra2010 exit=0 7s | playEra2010: green. A person can walk into 2010 and find it real.
+playEra2015 exit=0 18s | playEra2015: green. The 2015-16 branch plays like a person would find it.
+playEra2020 exit=0 18s | playEra2020: green. The 2020-21 branch plays like a person would find it.
+playNationalities exit=0 21s | playNationalities: green. The filter narrows to real nations and every flag is the right man's.
+playClubManagerSlots exit=0 10s | playClubManagerSlots: green
+playCmDataOnDemand exit=0 26s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+playReleaseClause exit=0 15s | playReleaseClause: green. The desk is on the wall and the door opens and shuts like the engine promised.
+playSponsors exit=0 15s | playSponsors: green. The desk offers three real deals and pays for the one you take.
+playWilderness exit=0 50s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+playClubManager exit=0 268s | Played Club Manager through its own screens. 0 findings.
+playDealDesk exit=0 14s | playDealDesk: green. The desk opens, the meter reads the typed number, the fee table hands off to the terms table without signing anybody, and meeting his terms closes it

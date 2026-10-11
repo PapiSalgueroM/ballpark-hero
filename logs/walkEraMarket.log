@@ -1,0 +1,52 @@
+== 2005-06: Real Madrid
+  PASS  2005-06: the summer window is open and the market renders
+   around the league: 4 deals, bought by Barcelona, Valencia, Atlético Madrid, Chelsea
+  PASS  2005-06: every club that buys in Around the league is a club of that season (0 not)
+   120 views, 1608 different men read off the screen (5 leagues), 0 tagged MADE UP
+  PASS  2005-06: the walk read a real share of the market (1608 men)
+  PASS  2005-06: every man without the MADE UP tag is in that season's squads (0 strangers)
+  PASS  2005-06: every real man is listed at a club of that season (0 off)
+  PASS  2005-06: 16 men who exist only in other seasons were searched by name and none is listed (none found; e.g. Wesley Sneijder, Gonzalo Higuaín, Alexandre Pato)
+  PASS  2005-06: no real page errors (clean)
+== 2010-11: Manchester United
+  PASS  2010-11: the summer window is open and the market renders
+   around the league: 4 deals, bought by Sevilla, Liverpool, Arsenal, Wolfsburg
+  PASS  2010-11: every club that buys in Around the league is a club of that season (0 not)
+   120 views, 1636 different men read off the screen (5 leagues), 0 tagged MADE UP
+  PASS  2010-11: the walk read a real share of the market (1636 men)
+  PASS  2010-11: every man without the MADE UP tag is in that season's squads (0 strangers)
+  PASS  2010-11: every real man is listed at a club of that season (0 off)
+  PASS  2010-11: 16 men who exist only in other seasons were searched by name and none is listed (none found; e.g. Andriy Shevchenko, Ronaldo, David Beckham)
+  PASS  2010-11: no real page errors (clean)
+== 2015-16: Bayern Munich
+  PASS  2015-16: the summer window is open and the market renders
+   around the league: 4 deals, bought by Borussia Dortmund, Juventus, Wolfsburg, Schalke 04
+  PASS  2015-16: every club that buys in Around the league is a club of that season (0 not)
+   120 views, 1546 different men read off the screen (5 leagues), 0 tagged MADE UP
+  PASS  2015-16: the walk read a real share of the market (1546 men)
+  PASS  2015-16: every man without the MADE UP tag is in that season's squads (0 strangers)
+  PASS  2015-16: every real man is listed at a club of that season (0 off)
+  PASS  2015-16: 16 men who exist only in other seasons were searched by name and none is listed (none found; e.g. Ronaldinho, Thierry Henry, Andriy Shevchenko)
+  PASS  2015-16: no real page errors (clean)
+== 2020-21: PSG
+  PASS  2020-21: the summer window is open and the market renders
+   around the league: 5 deals, bought by Inter Milan, RB Leipzig, Real Madrid, RB Leipzig, Everton
+  PASS  2020-21: every club that buys in Around the league is a club of that season (0 not)
+   120 views, 1666 different men read off the screen (5 leagues), 0 tagged MADE UP
+  PASS  2020-21: the walk read a real share of the market (1666 men)
+  PASS  2020-21: every man without the MADE UP tag is in that season's squads (0 strangers)
+  PASS  2020-21: every real man is listed at a club of that season (0 off)
+  PASS  2020-21: 16 men who exist only in other seasons were searched by name and none is listed (none found; e.g. Ronaldinho, Thierry Henry, Andriy Shevchenko)
+  PASS  2020-21: no real page errors (clean)
+== 2026-27: Arsenal
+  PASS  2026-27: the summer window is open and the market renders
+   around the league: 3 deals, bought by Brighton, Manchester City, Inter Milan
+  PASS  2026-27: every club that buys in Around the league is a club of that season (0 not)
+   560 views, 4859 different men read off the screen (27 leagues), 0 tagged MADE UP
+  PASS  2026-27: the walk read a real share of the market (4859 men)
+  PASS  2026-27: every man without the MADE UP tag is in that season's squads (0 strangers)
+  PASS  2026-27: every real man is listed at a club of that season (0 off)
+  PASS  2026-27: 16 men who exist only in other seasons were searched by name and none is listed (none found; e.g. Ronaldinho, Thierry Henry, Andriy Shevchenko)
+  PASS  2026-27: no real page errors (clean)
+
+walkEraMarket: green. Each market on screen holds only men of its own season.
