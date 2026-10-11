@@ -7,6 +7,9 @@
  *   saved, a goal ruled out in the minute after a real goal (the card must never sit on that goal), two reviews
  *   in one half, leaving mid review and coming back, Skip during a review, reduced motion, the report's
  *   timeline rows, the match's own help and the How to Play paragraph, at 390 (touch) and 1280.
+ * Round 1302 added the cases nobody had walked, at both widths: a goal ruled out at the whistle and one a clock
+ * place before it (drawn before its card now), an own goal the minute after a ruled out goal (the review first,
+ * then the own goal with its mark), and a review in the same minute as the other side's injury and red card.
  * The matches are REAL halves of the engine on the shipped rates: the first three league matches of a fresh
  * 2026-27 Everton career (the career scripts/simCmVar.mjs uses), found by searching seeds. A review's id holds
  * the fixture, the minute and the man, so one fixture reviews only a handful of incidents: a saved penalty and a
@@ -75,7 +78,27 @@ const WANTED = {
   penaltySaved: { match: 2, hint: 2193, want: (feed, live) => reviewsOf(feed).find(v => { const k = kickOf(live, v); return v.review.decision === 'awarded' && alone(v, feed) && !!k && !k.goal && !!k.on; }) },
   goalBefore: { match: 1, hint: 1724, want: feed => { const all = reviewsOf(feed); return all.length === 1 && all[0].review.decision === 'disallowed' && all[0].minute >= 4 && all[0].minute <= 40 && !all[0].plus && feed.some(e => e.kind === 'goal' && place(e) === place(all[0]) - 1) ? all[0] : null; } },
   two: { match: 0, hint: 2453, want: feed => { const all = reviewsOf(feed); return all.length === 2 && all.every(r => r.minute >= 4 && r.minute <= 40 && !r.plus) && all[1].minute - all[0].minute >= 4 ? all[0] : null; } },
+  /* Round 1302: the cases nobody had walked. A goal ruled out in the last two clock places of the half with the
+     end of the half to itself (drawn before its card now), an own goal the minute after a ruled out goal, and a
+     review in the same minute as the other side's injury or red card. */
+  lateWhistle: { match: 1, hint: 1984, want: (feed, live) => lateRuledOut(feed, live, 0) },
+  lateBefore: { match: 1, hint: 2591, want: (feed, live) => lateRuledOut(feed, live, 1) },
+  ownGoal: { match: 1, hint: 1940, want: feed => { const all = reviewsOf(feed), r = all[0]; return all.length === 1 && r.review.decision === 'disallowed' && r.minute >= 4 && r.minute <= 38 && !r.plus && feed.some(e => e.kind === 'goal' && e.og && place(e) === place(r) + 1) ? r : null; } },
+  injury: { match: 0, hint: 3861, want: feed => besideOther(feed, 'injury') },
+  red: { match: 1, hint: 3827, want: feed => besideOther(feed, 'red') },
 };
+/** The one review of a half, a goal ruled out `back` clock places before the whistle, with no chance in the last three places. */
+function lateRuledOut(feed, live, back) {
+  const all = reviewsOf(feed), whistle = 45 + (live.added?.h1 ?? 0), r = all[0];
+  return all.length === 1 && r.review.decision === 'disallowed' && place(r) === whistle - back && !feed.some(e => isChance(e) && place(e) >= whistle - 3) ? r : null;
+}
+/** The one review of a half, in the same minute as a line of this kind for the other side. */
+function besideOther(feed, kind) {
+  const all = reviewsOf(feed), r = all[0];
+  return all.length === 1 && r.minute >= 2 && r.minute <= 40 && !r.plus && feed.some(e => e.kind === kind && e.side !== r.side && place(e) === place(r)) ? r : null;
+}
+/** Kinds whose ruled out goal must be seen going in before its card. */
+const DRAWN_FIRST = new Set(['ruledOut', 'lateWhistle', 'lateBefore', 'ownGoal']);
 const fixtures = {};
 {
   const cm = await engine('search');
@@ -145,7 +168,7 @@ async function open(profile, motion, pre, seed) {
     const read = () => {
       const card = document.querySelector('[data-cm-var]'), pitch = document.querySelector('[data-cm-live-pitch]'), root = document.querySelector('[data-cm-live-stage]');
       return { card: card ? `${card.dataset.cmVar}:${card.dataset.cmVarId}` : 'none', motion: pitch?.dataset.cmMotion ?? null, phase: pitch?.dataset.cmMotionPhase ?? null,
-        goalCard: !!document.querySelector('[data-cm-goal-card]'), minute: root?.dataset.cmLiveMinute ?? null, y: Math.round(window.scrollY),
+        goalCard: !!document.querySelector('[data-cm-goal-card]'), goalText: document.querySelector('[data-cm-goal-card]')?.textContent ?? '', minute: root?.dataset.cmLiveMinute ?? null, y: Math.round(window.scrollY),
         score: [...document.querySelectorAll('[data-cm-live-stagebox] [data-cm-score-of]')].map(el => `${el.dataset.cmScoreOf}=${el.textContent}`).join(' ') };
     };
     new MutationObserver(() => {
@@ -252,7 +275,8 @@ async function runCase(profile, motion, kind, variant) {
       check(decided.includes(ruledOut ? 'VAR: goal ruled out' : 'VAR: penalty awarded') && decided.includes(ruledOut ? 'No goal.' : `Penalty to ${club}.`), `the decision reads: ${decided}`);
       await card.waitFor({ state: 'hidden' });
       const whereAfter = await w.where();
-      check(whereAfter.scrollY === whereBefore.scrollY && whereAfter.top === whereBefore.top, 'the page moved when the card closed');
+      /* A review that closes a moment before the whistle is followed by the interval's own screen: not measured there. */
+      if (!kind.startsWith('late')) check(whereAfter.scrollY === whereBefore.scrollY && whereAfter.top === whereBefore.top, 'the page moved when the card closed');
       const want = goalsBy(place(v));
       if (kick?.goal) await w.page.waitForFunction(({ side, n }) => Number(document.querySelector(`[data-cm-live-stagebox] [data-cm-score-of="${side}"]`)?.textContent) === n, { side: v.side, n: want[v.side] }, { timeout: 20000 }).catch(() => check(false, 'the penalty a review gave never reached the score'));
       else await w.page.waitForTimeout(kick ? 1200 : 400);
@@ -264,7 +288,19 @@ async function runCase(profile, motion, kind, variant) {
       check(!under.some(s => s.goalCard), 'a goal card was up under a review card');
       check(under.every(s => s.motion === 'pass' || (ruledOut && s.motion === 'goal' && s.phase === 'net')), `an action was in flight under the review card: ${JSON.stringify(under.find(s => !(s.motion === 'pass' || (ruledOut && s.motion === 'goal' && s.phase === 'net'))))}`);
       check(new Set(under.filter(s => s.card.endsWith(mine)).map(s => s.score)).size === 1, 'the score moved while the review card was up');
-      if (kind === 'ruledOut') check(motion === 'reduce' ? under.some(s => s.motion === 'goal' && s.phase === 'net') : seen.slice(0, opened).some(s => s.motion === 'goal' && s.phase === 'flight'), 'the ruled out goal was not drawn before its review');
+      if (DRAWN_FIRST.has(kind)) check(motion === 'reduce' ? under.some(s => s.motion === 'goal' && s.phase === 'net') : seen.slice(0, opened).some(s => s.motion === 'goal' && s.phase === 'flight'), 'the ruled out goal was not drawn before its review');
+      if (kind === 'ownGoal') {
+        /* The own goal of the minute after: its card rises only after the review is over, with the own goal mark. */
+        const og = feed.find(e => e.kind === 'goal' && e.og && place(e) === place(v) + 1);
+        const rose = await w.page.waitForFunction(() => window.__seen.some(s => (s.goalText ?? '').includes('(O.G)')), null, { timeout: 20000 }).then(() => true).catch(() => false);
+        check(rose, 'the own goal of the minute after the review never got its card with the own goal mark');
+        if (rose) {
+          const all = await w.page.evaluate(() => window.__seen), at = all.findIndex(s => (s.goalText ?? '').includes('(O.G)'));
+          check(at > all.map(s => s.card.endsWith(mine)).lastIndexOf(true), 'the own goal card rose before the review was over');
+          check(all[at].goalText.includes(og.text), `the own goal card does not name the man who put it in: ${all[at].goalText}`);
+          row.shots.push(await w.shot(`${id}-6-own-goal`));
+        }
+      }
       if (ruledOut) check(seen[closed + 1]?.motion !== 'goal', 'the ruled out goal went on playing after its review');
       if (kick) check(seen.slice(closed + 1).some(s => s.motion === (kick.goal ? 'goal' : kick.on ? 'save' : 'shot') && s.phase !== 'plant'), 'the kick of the penalty a review gave was not played after the card');
       if (kick && !kick.goal) check(same(row.scoreAfter, prior), 'the score moved on a penalty that did not go in');
@@ -336,6 +372,7 @@ try {
   for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored', 'penaltySaved', 'goalBefore']) await runCase(profile, 'no-preference', kind, 'plain');
   for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored']) await runCase(profile, 'reduce', kind, 'plain');
   await runCase(PROFILES[0], 'no-preference', 'two', 'plain');
+  for (const profile of PROFILES) for (const kind of ['lateWhistle', 'lateBefore', 'ownGoal', 'injury', 'red']) await runCase(profile, 'no-preference', kind, 'plain');
   for (const variant of ['leave', 'skip']) for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored']) await runCase(profile, 'no-preference', kind, variant);
 } finally { await browser.close(); if (server) server.kill(); save(); }
 for (const line of failures.slice(0, 60)) console.log(`FAIL ${line.split('\n')[0].slice(0, 420)}`);
