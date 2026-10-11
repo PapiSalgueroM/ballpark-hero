@@ -1,0 +1,43 @@
+# Review (run lens) of Round 1212 on 1e1066fb: the type gate, the US tests, the harness, the receipts, the fences, and every control on its own line
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts src/test/usSeasonMlb.test.ts src/test/usSeasonSlate.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=300000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+ctl-mlbstage: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbstage node scripts/simUsSeasonCentre.mjs
+ctl-mlbformula: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbformula node scripts/simUsSeasonCentre.mjs
+ctl-series: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=series node scripts/simUsSeasonCentre.mjs
+ctl-hits: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=hits node scripts/simUsSeasonCentre.mjs
+ctl-rbi: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=rbi node scripts/simUsSeasonCentre.mjs
+ctl-allstar: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=allstar node scripts/simUsSeasonCentre.mjs
+ctl-pitcher: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pitcher node scripts/simUsSeasonCentre.mjs
+ctl-club: SPORTS=mlb US_SEASON_CONTROL=club node scripts/simUsSeasonCentre.mjs
+ctl-outside: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=outside node scripts/simUsSeasonCentre.mjs
+ctl-mlbwho: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbwho node scripts/simUsSeasonCentre.mjs
+ctl-pathyear: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pathyear node scripts/simUsSeasonCentre.mjs
+ctl-mlblevel: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlblevel node scripts/simUsSeasonCentre.mjs
+ctl-seam: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+ctl-length: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+ctl-record: US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+ctl-names: US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+ctl-conf: US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+ctl-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+ctl-stream: US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+ctl-static: US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+ctl-nflheld: US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+ctl-stage: US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+ctl-sum: US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+ctl-lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
