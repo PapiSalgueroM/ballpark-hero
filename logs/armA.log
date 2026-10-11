@@ -1,0 +1,5 @@
+{"clubs":8,"perClub":50,"matches":345,"offDigest":"93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488","A":{"compared":345,"reportEqual":345,"scoreEqual":345,"scorersEqual":345,"cardsEqual":345,"drawsEqual":345,"nextEqual":345,"tableEqual":345,"notCompared":0,"firstDifference":null},"B
+varProbe full: 345 matches over 8 clubs; off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488
+A (reviews on, live path against quick path): 345 of 345 whole reports equal; score 345, scorers 345, cards 345, table row 345, draw count 345, next three draws 345; 0 not compared
+B (reviews on against off, same save and seed): 307 of 345 whole reports equal; score differs in 27, result (W, D, L) in 12, scorers in 31, cards in 9, draw count in 27, next three draws in 27; 38 matches had a review (40 reviews: 20 goals ruled out, 0 goals confirmed, 0 penalties confirmed, 20 pena
+varProbe: A HOLDS (showing a review or skipping it is the same match)
