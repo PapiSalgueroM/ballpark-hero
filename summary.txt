@@ -1,0 +1,12 @@
+m-ratingblind exit=1 66s | simCmLeagueBook: 1 FAILURE(S) (66s)
+m-ratingblind-unit exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBook.test.ts,title=src/lib/clubManagerLeagueBook.test.ts > dealGoals > shares the open
+m-assistrandom exit=1 25s | simCmLeagueBook: 20 FAILURE(S) (25s)
+m-thinkey exit=1 66s | simCmLeagueBook: 2 FAILURE(S) (66s)
+m-thinkey-unit exit=0 2s |    Duration  1.31s (transform 62ms, setup 34ms, collect 61ms, tests 717ms, environment 201ms, prepare 78ms)
+m-assistgoalweight exit=0 67s | simCmLeagueBook: green, 7 sections, 27 careers x 2 seasons (67s)
+m-assistgoalweight-unit exit=0 2s |    Duration  1.33s (transform 62ms, setup 33ms, collect 62ms, tests 733ms, environment 205ms, prepare 119ms)
+m-coverall exit=1 61s | Node.js v24.21.0
+m-coverall-unit exit=0 62s |    Duration  61.18s (transform 1.41s, setup 62ms, collect 3.11s, tests 59.75s, environment 451ms, prepare 220ms)
+m-coverstage exit=1 64s | Node.js v24.21.0
+m-coverstage-ledger exit=0 0s | simCmVarLedger: all 658 checks passed.
+clean exit=0 0s | 0

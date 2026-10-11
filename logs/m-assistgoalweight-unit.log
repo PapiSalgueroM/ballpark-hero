@@ -1,0 +1,12 @@
+cmMut: assistgoalweight applied to src/lib/clubManagerLeagueBook.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 733[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 447[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 10:47:07
+[2m   Duration [22m 1.33s[2m (transform 62ms, setup 33ms, collect 62ms, tests 733ms, environment 205ms, prepare 119ms)[22m
+

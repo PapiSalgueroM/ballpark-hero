@@ -1,0 +1,44 @@
+cmMut: ratingblind applied to src/lib/clubManagerLeagueBook.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [31m❯[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 751[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mdeals the same goals for the same key, every time, and another key deals others[32m 4[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mrolls every goal of one match on its own: two or three goals are one man's only as often as the weights say[32m 89[2mms[22m[39m
+[31m   [31m×[31m dealGoals[2m > [22mshares the open play goals by the weight, each man inside four binomial standard deviations[39m[32m 28[2mms[22m[39m
+[31m     → expected 122.39268674758551 to be less than 88.51010783829[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 442[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mgives a penalty and a direct free kick to the taker when the rule says so, and by the weight when not[32m 93[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mbreaks a level taker by the name as plain text, and never names a keeper[32m 0[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mdeals the assist of a goal a report already named on its own key, never to the scorer or a keeper[32m 84[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mkeeps the first law after every credit: rows + own goals + unnamed = goals dealt[32m 5[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mis the same book after a JSON round trip, after every kind of credit, and readBook accepts it[32m 2[2mms[22m[39m
+   [32m✓[39m the book[2m > [22msends a new scorer past the row cap to the unnamed count, and still gives a keeper his row[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mgives two men with one name two rows when their positions differ[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mreads a damaged book, or the book of another season, as no book[32m 1[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mnever throws in a match week on a club entry or a row that is not one, and leaves it as it found it[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22msalts by the order of the league, so two orders of the same clubs deal apart[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBook.test.ts[2m > [22mdealGoals[2m > [22mshares the open play goals by the weight, each man inside four binomial standard deviations
+[31m[1mAssertionError[22m: expected 122.39268674758551 to be less than 88.51010783829[39m
+[36m [2m❯[22m src/lib/clubManagerLeagueBook.test.ts:[2m81:56[22m[39m
+    [90m 79| [39m    [35mfor[39m ([35mconst[39m m [35mof[39m outfield) {
+    [90m 80| [39m      [35mconst[39m p [33m=[39m [34mgoalWeight[39m(m[33m.[39mp[33m,[39m m[33m.[39mr) [33m/[39m total[33m;[39m
+    [90m 81| [39m      expect(Math.abs((got.get(m.n) ?? 0) - open * p)).toBeLessThan(4 …
+    [90m   | [39m                                                       [31m^[39m
+    [90m 82| [39m    }
+    [90m 83| [39m    [34mexpect[39m(got[33m.[39m[35mget[39m([32m'Striker'[39m)[33m![39m)[33m.[39m[34mtoBeGreaterThan[39m(got[33m.[39m[35mget[39m([32m'Winger'[39m)[33m![39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 10:44:23
+[2m   Duration [22m 1.42s[2m (transform 78ms, setup 74ms, collect 114ms, tests 793ms, environment 496ms, prepare 229ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBook.test.ts,title=src/lib/clubManagerLeagueBook.test.ts > dealGoals > shares the open play goals by the weight%2C each man inside four binomial standard deviations,line=81,column=56::AssertionError: expected 122.39268674758551 to be less than 88.51010783829%0A ❯ src/lib/clubManagerLeagueBook.test.ts:81:56%0A%0A

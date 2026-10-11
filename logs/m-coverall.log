@@ -1,0 +1,56 @@
+cmMut: coverall applied to src/lib/clubManagerVar.ts
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in\n' +
++       '\n' +
++       'true !== false\n',
++     stack: 'AssertionError [ERR_ASSERTION]: Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in\n' +
++       '\n' +
++       'true !== false\n' +
++       '\n' +
++       '    at walk (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:384:22)\n' +
++       '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:401:37)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:524:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:550:46',
++     status: 'failed',
++     title: 'asks for reviews only where the competition uses them and plays the same match everywhere else'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:535:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:550:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in\n' +
+        '\n' +
+        'true !== false\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in\n' +
+        '\n' +
+        'true !== false\n' +
+        '\n' +
+        '    at walk (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:384:22)\n' +
+        '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:401:37)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:524:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:550:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

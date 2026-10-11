@@ -1,0 +1,14 @@
+# rAV-cm-c2: reviewer cm, Release AV head 5ed04ae7. Six mutations of the runner's own checkout, one at a time, each restored in its own line. Exit 0 on a mutated line means the mutation SURVIVED
+#!serial
+m-ratingblind: node .rc/x/cmMut.mjs ratingblind && BOOK_FLEET=full node scripts/simCmLeagueBook.mjs; s=$?; git checkout -- src scripts; exit $s
+m-ratingblind-unit: node .rc/x/cmMut.mjs ratingblind && node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerGoalWeight.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-assistrandom: node .rc/x/cmMut.mjs assistrandom && node scripts/simCmLeagueBook.mjs; s=$?; git checkout -- src scripts; exit $s
+m-thinkey: node .rc/x/cmMut.mjs thinkey && BOOK_FLEET=full node scripts/simCmLeagueBook.mjs; s=$?; git checkout -- src scripts; exit $s
+m-thinkey-unit: node .rc/x/cmMut.mjs thinkey && node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-assistgoalweight: node .rc/x/cmMut.mjs assistgoalweight && BOOK_FLEET=full node scripts/simCmLeagueBook.mjs; s=$?; git checkout -- src scripts; exit $s
+m-assistgoalweight-unit: node .rc/x/cmMut.mjs assistgoalweight && node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-coverall: node .rc/x/cmMut.mjs coverall && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+m-coverall-unit: node .rc/x/cmMut.mjs coverall && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-coverstage: node .rc/x/cmMut.mjs coverstage && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+m-coverstage-ledger: node .rc/x/cmMut.mjs coverstage && node scripts/simCmVarLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short -- src scripts | wc -l
