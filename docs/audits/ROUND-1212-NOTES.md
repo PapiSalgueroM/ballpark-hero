@@ -133,3 +133,53 @@ drawn, 589 playoff seasons before 2022 with none, 0 whose saved games do not fit
   opponents. Series by series stops and a "next series" jump in the shared viewer (after PR216's viewer work).
 - Pitchers' game lines (the season core needs win and loss marks). The NHL bind (Round B).
 - The saved page of What's New is redrawn at the release build.
+
+## The fix pass (2026-10-10, after the two adversarial reviews)
+
+Head before it: 1e1066fb. Two reviews (one that runs things, one that reads) found three majors and ten minors.
+Every commit below is one fix, pushed on its own; the full account with every command, exit code and number is
+C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1212.md.
+
+- 97f3bf7a, the innings (major). A side's runs were shared over its innings by a clumpy weight with a cap of
+  the side's whole total: a side scored in 20.6 percent of its innings, one team game in four held an inning of
+  five or more, and an inning of ten to twenty three runs could be printed. `mlbSpreadRuns` now draws every
+  inning by the score law's own chances given the total (cap nine, one keyed draw an inning, so no score, line
+  or record moved). Five seed sets: 30.3 percent of nine, 8.9 percent, 0 of 1,216,944 team games over nine.
+  Harness section 7 holds all three; controls `mlbinnings` and `mlbcap`.
+- 6c18910b, an older save's first exit (major). The live engine writes "Lost the Wild Card series" in every
+  year; read by the year's own ladder that word had no band before 2022, so Watch again laid such a season out
+  around .500 beside a playoff exit. One optional bind member, `olderBand`, gives it a first exit's 84 to 95
+  wins; the line under the review says why there is no path. Baseball has an older save twin in the harness now
+  (`mlbOldTwin`): 332 twins on the five sets, 0 refused, median 89 wins; control `mlbold`. A line with no
+  playoff games at all reads "your season card holds no playoff games".
+- 5581c383, nine innings (major, a record defect: the fact was true). Recorded on the league's glossary and
+  rulebook (one source: the league), Britannica Students and ESPN; `MLB_GAME_RULES.innings` is 9 and the number
+  file reads it. The ledger harness holds it (check M11; controls `mlbinnings` and `inningsleague`).
+- b76dfb3a, the order of the series and the bands (minors). A club no longer comes round again one series
+  later (76.5 percent of named seasons before, 0 after) and no more than three series run in one park (the
+  longest homestand went from 12 games at the median to 10). Every derived season of baseball is a new draw of
+  the same saved line. Two checks and control `mlborder`. The six older bands were narrowed to about fifteen to
+  twenty times the seed set spread around the five set numbers.
+- 156ee0fc stale comments; df12471a the playoff line ("7 games", one optional view member `postLabels`);
+  b041529a the Watch again test moves him to another club both ways (the reviewer's mutation is red against it
+  now); 868fdcb0 What's New's last sentence; 50b52b0d the walk's review picture waits for the reveal; 14d883c0
+  the held line set snug on a phone (the words unchanged).
+
+Five seed sets on the head of the fixes (runner r1212-fx4a, 14d883c0): simUsSeasonCentre 156 checks, 0 failed.
+4,621 MLB seasons; 3,757 open; 3,756 derived; 1 refused. Runs a team game 4.556 against 4.48 and 4.885 against
+4.81; shut out 4.2 percent; one run games 26.4; past the ninth 7.9; at bats 3.753; no hit 26.3; a side scores
+in 30.3 percent of nine innings; biggest inning five or more 8.9 percent; no inning over nine; no club again
+one series later; no series past three in one park. All 18 controls run there are RED AT THE NAMED CHECK.
+The seam receipt still says 11 digests, 0 moved, so nothing the NBA and NFL Season Centers are handed moved.
+
+Re-record: scripts/data/usSeasonLawDigest.json (Round 1221's receipt, in no gate) is taken again at the end of
+this pass, because three of its bundled inputs are no longer the record's (src/lib/season/us.ts and
+src/data/usLeagueShape.ts are this round's seam, src/lib/careerRival.ts came with Round 1226). Proven on runner
+r1212-fx-law: with those three put back the old record replays green (11 digests, 0 moved), with this round's
+two put back it stops on careerRival.ts alone, and a fresh print of the head equals the old record in all 42
+values. scripts/data/usSeasonLayDigest.json (Round 1300's) is left for the lead: ten inputs moved, nine of them
+not this round's.
+
+Still owed after the fix pass (beside the list above): the words of the held line for a club stay long (they
+are the ledger's own and are typed whole in the tests and the harness); the guide sentences are the other
+lane's; the saved page of What's New is redrawn at the release build.
