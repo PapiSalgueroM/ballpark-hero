@@ -55,6 +55,52 @@ who he played in October (the path shows rounds and scores and names nobody).
 8. A control run of the harness may name its own sport alone (`SPORTS=mlb US_SEASON_CONTROL=hits`). The gate
    run still refuses to skip a bound sport.
 
+## Proof, all on GitHub runners (result names; each line was read)
+
+- The base (60188732): r1212-base and r1212-base-walk. Green except sweepWeight (13 failures on the base, the
+  release line's own; /nfl-my-career 476.9K against a budget of 469) and, in the whole vitest suite
+  (r1212-0c-all), two Soccer Career tests that were red on the base and on release-au-int 20f2f475 too
+  (r1212-3 ran them on all three trees). The release line fixed both later.
+- The seam (5a1fe0d7): r1212-0c. Type gate 0, the US tests 0, the harness 98 checks 0 failed, the seam receipt
+  "11 digests, 0 moved", the NBA and NFL screens equal to the recording made on the base.
+- The number file (cca4c5a4): r1212-1 and r1212-3b. The truth digest (58 keys) and the board replay are green
+  with no re-record: the engine's draws did not move.
+- The bind (0ed60fba): r1212-4a (type gate, nine US test files, the harness "148 checks, 0 failed" on five seed
+  sets, the seam receipt 0 moved, the board replay, the weight rule, the fences), r1212-4d (the copy fences and
+  soccer's Season Centre harnesses), r1212-4b (the whole vitest suite: only the base's two reds).
+- The merged head (64e0f09c, the release line at 611c3f4e merged in): r1212-5a (the same set, all green, the
+  seam receipt still 0 moved) and r1212-5b (the whole vitest suite: 431 files passed, 2 skipped, 6,356 tests
+  passed, exit 0).
+
+The controls, each run once on r1212-4a, each exit 1, each closing with its own red line:
+
+    control mlbstage: RED AT THE NAMED CHECK (section 1); sections red: 1, 4; 330 seasons carry the unknown result, 330 of them shown with no band and no path
+    control mlbformula: RED AT THE NAMED CHECK (section 5); sections red: 5; its named check "follows the formula" is among the reds; 337 seasons meet a division rival off the formula
+    control series: RED AT THE NAMED CHECK (section 5); sections red: 5; its named check "follows the formula" is among the reds; 337 seasons are not played in series
+    control hits: RED AT THE NAMED CHECK (section 3); sections red: 3; its named check "independent checker" is among the reds; 741 seasons show hits that do not round to the saved average
+    control rbi: RED AT THE NAMED CHECK (section 3); sections red: 3; its named check "independent checker" is among the reds; 617 seasons show more RBI than his team has runs
+    control allstar: RED AT THE NAMED CHECK (section 3); sections red: 3; its named check "independent checker" is among the reds; 650 seasons print the All-Star sentence with no award on the line
+    control pitcher: RED AT THE NAMED CHECK (section 2); sections red: 2, 3; its named check "every pitcher's season is held" is among the reds
+    control club: RED AT THE NAMED CHECK (section 2); sections red: 2; its named check "every 2026 season of the Orioles or the Yankees is held" is among the reds
+    control outside: RED AT THE NAMED CHECK (section 2); sections red: 2; its named check "at a club outside the league is held" is among the reds
+    control mlbwho: RED AT THE NAMED CHECK (section 2); sections red: 2; its named check "the hub's held line is there exactly when the binding holds the season" is among the reds
+    control pathyear: RED AT THE NAMED CHECK (section 4); sections red: 4; its named check "playoff path follows" is among the reds; 38 seasons draw a path before the ledger holds the rounds
+    control mlblevel: RED AT THE NAMED CHECK (section 7); sections red: 3, 7; its named check "no game is level" is among the reds; 11631 level games
+    control seam: RED AT THE NAMED CHECK (the season digest of every sport moved on every seed set of this run; the careers, the counts and the stray draws held)
+
+The older controls whose shared code this round touched fired too (static, length, stage, poscore, nflheld,
+stream).
+
+## Measured (five seed sets, 40 careers a set, r1212-4a)
+
+4,621 MLB seasons; 3,757 open; 3,756 derived; 1 refused (in finish). No repair in 86.2 percent. Runs a team
+game 4.56 against the ledger's 4.48 (present day) and 4.89 against 4.81 (throwback). A side shut out in 4.2
+percent of team games, one run games 26.3 percent, games past the ninth 7.9 percent, his at bats a game 3.754,
+hitless games 26.3 percent. Held: 50 seasons at the club outside the league, 14 seasons of the Orioles or the
+Yankees of 2026, 118 hitter seasons at a club not on 162 (outside 2020), 126 seasons of 2020. Playoff paths: 966
+drawn, 589 playoff seasons before 2022 with none, 0 whose saved games do not fit. The twin save test in vitest
+(12 presses each way at 162 games) took 2.5 seconds.
+
 ## Owed, not built here
 
 - To the other lane (guide, src/data/gameContent/baseball.ts, the /mlb-my-career guide): the two sentences the

@@ -247,7 +247,10 @@ if (CONTROL === 'write') {
      An observer runs in the same task as the commit that puts the viewer on the page, so the marker is on
      the save before the walk reads it. */
   once(textOf(VIEWER), 'data-us-season-centre', "the viewer's marker");
-  served.set(VIEWER, `try{const o=new MutationObserver(()=>{if(!document.querySelector("[data-us-season-centre]"))return;o.disconnect();try{for(const k of ["nba-my-career-save-v1","nfl-my-career-save-v1"]){const v=JSON.parse(localStorage.getItem(k)||"null");if(v){v.c.centreSeen=1;localStorage.setItem(k,JSON.stringify(v));}}}catch(e){}});o.observe(document.documentElement,{childList:true,subtree:true});}catch(e){}\n${textOf(VIEWER)}`);
+  /* Round 1212: the save keys are the walked sports' own (they were typed for the NBA and the NFL, so on
+     baseball the control wrote to nobody's save and did not fire: seen on a runner the day MLB was bound) */
+  const saveKeys = JSON.stringify(SPORTS.map(s => M[DEFS[s].binding].saveKey));
+  served.set(VIEWER, `try{const o=new MutationObserver(()=>{if(!document.querySelector("[data-us-season-centre]"))return;o.disconnect();try{for(const k of ${saveKeys}){const v=JSON.parse(localStorage.getItem(k)||"null");if(v){v.c.centreSeen=1;localStorage.setItem(k,JSON.stringify(v));}}}catch(e){}});o.observe(document.documentElement,{childList:true,subtree:true});}catch(e){}\n${textOf(VIEWER)}`);
   console.log('CONTROL write: the served viewer chunk writes centreSeen onto the save when the viewer opens');
 }
 if (CONTROL === 'count') {

@@ -71,7 +71,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     resultsWhy: named ? null : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: {
-      tiles: [['Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, x.value])],
+      tiles: [['Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
       finishLine: `${record} · ${row.teamResult}`,
       championLine: null,
       /* no trophy emoji here: the title card draws its own */

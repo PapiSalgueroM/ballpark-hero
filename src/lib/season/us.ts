@@ -75,6 +75,9 @@ export interface UsSeasonView {
   noPathNote?(row: UsRow): string | null;
   /** The board's review labels by their short tile label ('Points per game' to 'PPG'); a label not here prints as it is. */
   tileLabels: Record<string, string>;
+  /** Round 1212: how a review tile's number is printed, by the board's own label; absent: as the board's review
+   *  prints it. Baseball prints a batting average the way the season card does (.276, never 0.276). */
+  tileText?(label: string, value: string): string;
   /** The "?" sheet. `named`: opponents are named this season. `opp`: a team of
    *  this season that is not his, for the worked example; absent when nobody is named. */
   help(named: boolean, opp?: string): UsHelp;

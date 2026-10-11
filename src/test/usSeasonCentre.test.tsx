@@ -318,7 +318,11 @@ describe('the US Season Center with MLB bound', () => {
     expect(review.querySelector('[data-review-tile="Games"]')!.textContent).toContain(String(line.games));
     expect(review.querySelector('[data-review-tile="HR"]')!.textContent).toContain(String(line.hr));
     expect(review.querySelector('[data-review-tile="RBI"]')!.textContent).toContain(String(line.rbi));
-    expect(review.querySelector('[data-review-tile="AVG"]')).not.toBeNull();
+    /* the average reads as the season card prints it (.276), never with the board review's leading zero */
+    const avgTile = review.querySelector('[data-review-tile="AVG"]')!.textContent!;
+    expect(avgTile).toContain((row as unknown as { avg: number }).avg.toFixed(3).slice(1));
+    expect(avgTile).not.toContain('0.');
+    expect(MLB_CAREER_SPORT.statLine(row as never, pos)).toContain((row as unknown as { avg: number }).avg.toFixed(3).slice(1));
     act(() => { fireEvent.click(document.querySelector('[data-centre-exit]')!); });
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(JSON.stringify(career)).toBe(saved);

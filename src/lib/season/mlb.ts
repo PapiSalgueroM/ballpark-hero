@@ -581,6 +581,8 @@ export const MLB_SEASON: UsSeasonBind = {
       return `First half: ${so.apps === 1 ? '1 game' : `${so.apps} games`}, ${mlbAvgText(so.h ?? 0, so.ab ?? 0)} with ${hr === 1 ? '1 home run' : `${hr} home runs`}.${star}`;
     },
     tileLabels: { 'Batting average': 'AVG', 'Home runs': 'HR', 'Runs batted in': 'RBI' },
+    /* the season card and every line of this view print an average as .276; the board's review holds 0.276 */
+    tileText: (label, value) => (label === 'Batting average' && value.startsWith('0.') ? value.slice(1) : value),
     groupWords: ['Division', 'League'],
     noPathNote,
     help: (named, opp) => usHelp({
