@@ -1,0 +1,2 @@
+# Round 1212 on e8b676d7: the whole vitest suite on the final code
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
