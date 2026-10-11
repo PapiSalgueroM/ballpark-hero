@@ -4741,7 +4741,9 @@ export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): C
   const pool = transferBriefPool(prev, clubs);
   const candidates = transferBriefCandidates(prev, pool, projectLeagueApps);
   const option = previewTransferBrief(prev, pool, projectLeagueApps).options.find(row => row.id === brief.priority)!;
-  if (Math.random() >= 0.5) {
+  /* Release AW: the same rule as requestTransfer above. The coin is drawn first, as the plain request draws
+     it, and a club that broke its appearance promise answers whatever it shows. */
+  if (Math.random() >= 0.5 && !programmePromiseBroken(prev)) {
     return storeTransferBriefResult(prev, { status: 'no_interest', offer: null,
       eligibleCount: option.eligibleCount, matchingCount: option.matchingCount, projection: option.projection });
   }

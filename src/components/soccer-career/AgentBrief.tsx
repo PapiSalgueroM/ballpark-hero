@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { projectLeagueApps, transferBriefPreview, type CareerState, type ClubData } from '@/lib/soccerCareerEngine';
 import { readTransferBrief, setTransferBrief, type TransferBriefPriority } from '@/lib/soccerCareerTransferBrief';
+/* Release AW: a club that broke its appearance promise always answers a transfer request (the season plan's
+   rule, kept on the brief's path too), so the rules below may not promise a coin toss to that player. */
+import { programmePromiseBroken } from '@/lib/soccerCareerProgramme';
 
 const HELP_KEY = 'soccer-transfer-brief-help-v1';
 const descriptions: Record<TransferBriefPriority, string> = {
@@ -61,7 +64,7 @@ export default function AgentBrief({ career, clubs, onCareer }: {
         <div className="min-h-0 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {help ? <div data-transfer-brief-help className="space-y-3">
             <p>Pick a priority, save the brief, then use Request transfer in the window. Saving a brief does not request a move.</p>
-            <p>The response chance stays 50%. Your agent searches clubs already eligible for your age and rating in this save's next season.</p>
+            <p>{programmePromiseBroken(career) ? 'Your club broke its appearance promise, so this request gets a response for sure.' : 'The response chance stays 50%.'} Your agent searches clubs already eligible for your age and rating in this save's next season.</p>
             <p>Minutes uses the same league appearance bands as the season engine. Club level uses the game's tiers, with tier 1 the highest. Home uses your nationality country.</p>
             <p>Example: two eligible clubs project 8 to 16 and 20 to 30 league games. Minutes targets the second club. Injuries and selection can still change your season.</p>
             <p>No matching clubs means no offer. A saved response cannot be rolled again by reloading. Club-arranged sales and loans still follow the club's decision.</p>

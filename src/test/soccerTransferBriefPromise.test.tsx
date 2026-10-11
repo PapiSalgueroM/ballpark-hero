@@ -11,7 +11,9 @@
  * last two cases are the other half: with the promise met, or with no plan at all, the coin still decides,
  * so the rule cannot be satisfied by granting everything.
  */
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import AgentBrief from '@/components/soccer-career/AgentBrief';
 import {
   acceptOffer, FALLBACK_CLUBS, initCareer, projectLeagueApps, repairCareer, requestTransferDecision,
   type CareerState,
@@ -52,7 +54,31 @@ function run<T>(action: () => T, values = REFUSING): { value: T; draws: number[]
   });
   try { return { value: action(), draws }; } finally { random.mockRestore(); }
 }
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
+beforeEach(() => localStorage.clear());
+
+/** The brief's rules as a player first reads them (the storage is empty, so the rules come before the choices). */
+async function rulesText(career: CareerState): Promise<string> {
+  render(<AgentBrief career={career} clubs={FALLBACK_CLUBS} onCareer={() => {}} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Brief your agent' }));
+  await screen.findByRole('dialog', { name: 'Your transfer brief' });
+  return document.querySelector('[data-transfer-brief-help]')?.textContent ?? '';
+}
+
+describe('The brief tells the player the chance that is really used', () => {
+  it('a player whose club broke its promise is told the request gets a response, not a coin toss', async () => {
+    const text = await rulesText(windowAfter(17, true));
+    expect(text).toContain('Your club broke its appearance promise, so this request gets a response for sure.');
+    expect(text).not.toContain('50%');
+  });
+  it('every other player still reads the 50 percent rule', async () => {
+    expect(await rulesText(windowAfter(30, true))).toContain('The response chance stays 50%.');
+    cleanup();
+    const text = await rulesText(windowAfter(17, false));
+    expect(text).toContain('The response chance stays 50%.');
+    expect(text).not.toContain('broke its appearance promise');
+  });
+});
 
 describe('A broken appearance promise grants the transfer request, with or without an agent brief', () => {
   it('the fixture is a real broken promise: 17 league games against 18 promised, fit all year', () => {
