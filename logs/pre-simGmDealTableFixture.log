@@ -1,0 +1,3 @@
+  FAIL: section B no longer replays (720 lines recorded, 720 now)
+  FAIL: section C no longer replays (101 lines recorded, 126 now)
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording

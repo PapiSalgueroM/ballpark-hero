@@ -1,0 +1,15 @@
+arms exit=0 62s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+main-simGmCalendar exit=1 1s |   FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8
+pre-simGmCalendar exit=1 1s |   FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8
+main-simGmDealTableFixture exit=1 1s | simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+pre-simGmDealTableFixture exit=1 1s | simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+main-simGmStaff exit=1 3s |   FAIL: PSG nines: line 5 of 74 differs
+pre-simGmStaff exit=1 3s |   FAIL: PSG nines: line 5 of 74 differs
+main-simEra2005 exit=1 12s | simEra2005: 1 failure
+pre-simEra2005 exit=1 13s | simEra2005: 1 failure
+main-simEra2010 exit=1 13s | simEra2010: 1 failure
+pre-simEra2010 exit=1 14s | simEra2010: 1 failure
+main-simEra2015 exit=1 10s |   FAIL: 2015-only Tom Lawrence is on the 2026 market
+pre-simEra2015 exit=1 11s |   FAIL: 2015-only Tom Lawrence is on the 2026 market
+main-simEra2020 exit=1 8s |   FAIL: 2020-only Jhon Córdoba is on the 2026 market
+pre-simEra2020 exit=1 9s |   FAIL: 2020-only Jhon Córdoba is on the 2026 market
