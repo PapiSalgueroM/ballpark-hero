@@ -38,6 +38,13 @@
  * second halves). Two in one minute is on the lead's list all the same, so ONE case is staged by hand and says so:
  * a real ruled out goal's review copied onto the other side in the same minute. Every other case is a half the
  * engine drew, untouched.
+ * The second fix pass of Round 1302 added three things. The small line under the pitch says nothing while a ruled
+ * out goal is played and reviewed (`nothingUnder` asks it under every such card; it kept the last thing told). A
+ * SECOND case staged by hand, the same copy one minute later: two goals ruled out in back to back minutes. And the
+ * awarded twin of the crowded ends, on four halves a scan found: a penalty a review gives where real chances fill
+ * the end of a half. Three of those four are wrong on the screen as it stands and are kept as cases marked
+ * `fails`, open and unreachable today (see the comment above LATE_AWARDED). So: two cases staged by hand, five
+ * marked `fails`, and every other case a half the engine drew, untouched, that must pass.
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -354,7 +361,7 @@ describe('Club Manager: the review screen', () => {
     nothingUnder(frames, ruledOutIds(h.feed));
   }, 240000);
 
-  /* Round 1302 fix. THE ONE CASE STAGED BY HAND. The engine holds no two reviews in one minute (none in 15,000
+  /* Round 1302 fix. THE FIRST OF TWO CASES STAGED BY HAND. The engine holds no two reviews in one minute (none in 15,000
      halves searched), and the lead's list asks for it, so this takes a real half with one goal of mine ruled out
      and copies that review onto the other side in the same minute, by one of their men on the pitch. Nothing else
      is typed. The plan has room for one action at that place, so one of the two goals is played on the clock and
