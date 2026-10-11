@@ -1,0 +1,6 @@
+# Release AV, follow up 4 on head 7037e28d: the weight sweep on this head and on main's own build (aa564f16) in one job, with three rows added IN THE RUNNER'S COPY ONLY (the US My Career pages that have no row), so each row over has its number on both trees. Nothing is committed.
+#!serve
+#!playwright
+#!serial
+sweep-head-more: node .rc/x/addWeightRows.mjs && SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/sw-head.log 2>&1; grep -E "^   /" /tmp/sw-head.log | tee $RC_OUT/sweep-head.txt | cut -c1-90; git checkout -q -- scripts/sweepWeight.mjs; tail -1 /tmp/sw-head.log
+sweep-main-more: R=$PWD && git worktree add -q --detach /tmp/m3 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$R/node_modules" /tmp/m3/node_modules && cd /tmp/m3 && npm run build > /tmp/m3-build.log 2>&1; (node scripts/lib/hostLikeServer.mjs dist 4199 > /tmp/m3-server.log 2>&1 &); sleep 4; node $R/.rc/x/addWeightRows.mjs && SWEEP_OFFLINE=1 BASE=http://localhost:4199 SWEEP_BASE=http://localhost:4199 node scripts/sweepWeight.mjs > /tmp/sw-main.log 2>&1; grep -E "^   /" /tmp/sw-main.log | tee $RC_OUT/sweep-main.txt | cut -c1-90; tail -1 /tmp/sw-main.log
