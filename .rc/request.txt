@@ -1,0 +1,5 @@
+simAcademy: node scripts/simAcademy.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simEras: node scripts/simEras.mjs
