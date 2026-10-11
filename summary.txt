@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playLiveMatchFit exit=0 140s | playLiveMatchFit exit 0
+simCmRealFixtures-forwalk exit=0 4s | simCmRealFixtures exit 0
+playCmRealFixtures exit=0 23s | playCmRealFixtures exit 0
+playCmQuickSubs exit=0 12s | playCmQuickSubs exit 0
+playCmVar-dark exit=2 0s | playCmVar on the dark build exit 2 (2 is the refusal it must give)
+weight exit=1 26s | sweepWeight exit 1
+playClubManagerNewCountries exit=0 55s | playClubManagerNewCountries exit 0
