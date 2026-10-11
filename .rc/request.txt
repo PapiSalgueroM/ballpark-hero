@@ -1,0 +1,12 @@
+# Release AV, after merge g (Round 1212 on Rounds 1226, 1300, 1301, 1227) and the board recording retaken: the merged tree, decision 2. Head 5db0724b.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+parity: node scripts/simUsBoardParity.mjs
+season-centre: node scripts/simUsSeasonCentre.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonCentreScreens.test.tsx src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonSlate.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx --testTimeout=300000 --hookTimeout=300000
+season-ledger: node scripts/simUsSeasonLedger.mjs
+postseason: node scripts/simUsPostseason.mjs
+rival: node scripts/simUsRivalSense.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+ctl-absix: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=absix node scripts/simUsSeasonCentre.mjs
