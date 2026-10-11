@@ -1,0 +1,14 @@
+  ok   superlig ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   superlig calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   superlig settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  superlig bye: the neutral-only probe can only stand in the Premier League
+  ok   superlig world: settles the actual world league round through the same real fixture resolver
+  ok   superlig eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   superlig takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   superlig unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   superlig legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   superlig future: refuses stale keys in later seasons, other years and changed league membership
+  ok   superlig rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   superlig baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   superlig uncopied: passes the whole base comparison with untouched current source under every copied fault
+simCmRealFixtures normal superlig: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 980654facb2d41a6c9ddc029c43710178b9d49b8.

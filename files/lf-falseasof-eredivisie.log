@@ -1,0 +1,15 @@
+simCmLeagueFixtures: 10 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig
+NEGATIVE CONTROL ON: falseasof on a copy of eredivisie, sections EH must go red and nothing else
+A) shape: green for 10 ledger(s)
+B) no club twice in a matchday: green for 10 ledger(s)
+C) each pair once at each ground: green for 10 ledger(s)
+D) the game's own clubs: green for 10 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for eredivisie
+  FAIL: eredivisie: source 1 says it is a release day copy of the list, and its parser and the stamps it recorded do not bear that out (came out unknown, last changed unknown)
+F) two independent sources: green for 10 ledger(s)
+G) nothing excluded got in: green for 10 ledger(s)
+H) the game's registry: RED for eredivisie
+  FAIL: eredivisie: the registry says the order is {"stoodOn":"10 October 2026"} and the receipt bears out null
+I) frozen: green for 10 ledger(s)
+J) Help tells the truth: green for 10 ledger(s)
+CONTROL falseasof FIRED as expected on eredivisie: sections EH went red for eredivisie and nothing else

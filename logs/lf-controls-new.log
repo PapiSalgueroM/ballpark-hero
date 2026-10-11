@@ -1,0 +1,8 @@
+takeoverform:bundesliga exit=1 CONTROL takeoverform FIRED as expected on bundesliga: sections J went red for help and nothing else
+takeoverhelp:ligue2 exit=1 CONTROL takeoverhelp FIRED as expected on ligue2: sections J went red for help and nothing else
+falsewords:seriea exit=1 CONTROL falsewords FIRED as expected on seriea: sections HJ went red for seriea and nothing else
+falsewords:superlig exit=1 CONTROL falsewords FIRED as expected on superlig: sections HJ went red for superlig and nothing else
+newsexample:championship exit=1 CONTROL newsexample FIRED as expected on championship: sections J went red for championship and nothing else
+wrongasof:eredivisie exit=1 CONTROL wrongasof FIRED as expected on eredivisie: sections HJ went red for eredivisie and nothing else
+falseasof:eredivisie exit=1 CONTROL falseasof FIRED as expected on eredivisie: sections EH went red for eredivisie and nothing else
+unregistered:laliga exit=1 CONTROL unregistered FIRED as expected on laliga: sections HJ went red for laliga and nothing else

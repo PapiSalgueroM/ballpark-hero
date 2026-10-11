@@ -1,0 +1,26 @@
+PASS real fixtures laliga normal
+simCmRealFixtures normal laliga: 12 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga venues
+simCmRealFixtures venues laliga: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga card
+simCmRealFixtures card laliga: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga settlement
+simCmRealFixtures settlement laliga: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+SKIP real fixtures laliga bye: the neutral-only probe can only stand in the Premier League
+PASS real fixtures laliga world
+simCmRealFixtures world laliga: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga edited
+simCmRealFixtures edited laliga: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga legacy
+simCmRealFixtures legacy laliga: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga future
+simCmRealFixtures future laliga: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga rollover
+simCmRealFixtures rollover laliga: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga silent
+simCmRealFixtures silent laliga: the copied fault failed exactly its own outcome (unloaded) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga handover
+simCmRealFixtures handover laliga: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+PASS real fixtures laliga jobmove
+simCmRealFixtures jobmove laliga: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
+simCmRealFixtures laliga: 12 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc029c43710178b9d49b8.

@@ -1,0 +1,14 @@
+  ok   ligue2 ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   ligue2 calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   ligue2 settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  ligue2 bye: the neutral-only probe can only stand in the Premier League
+  ok   ligue2 world: settles the actual world league round through the same real fixture resolver
+  ok   ligue2 eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   ligue2 takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   ligue2 unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   ligue2 legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   ligue2 future: refuses stale keys in later seasons, other years and changed league membership
+  ok   ligue2 rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   ligue2 baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   ligue2 uncopied: passes the whole base comparison with untouched current source under every copied fault
+simCmRealFixtures normal ligue2: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 980654facb2d41a6c9ddc029c43710178b9d49b8.

@@ -1,0 +1,22 @@
+  oldsaves premier: RED (Arsenal, Hull City; 2 seeds each, three stages)
+  oldsaves championship: RED (West Ham, Lincoln City; 2 seeds each, three stages)
+  oldsaves laliga: RED (Real Madrid, Málaga; 2 seeds each, three stages)
+  oldsaves seriea: RED (Inter Milan, Frosinone; 2 seeds each, three stages)
+  oldsaves bundesliga: RED (Bayern Munich, Elversberg; 2 seeds each, three stages)
+  oldsaves eredivisie: RED (Ajax, Excelsior; 2 seeds each, three stages)
+  oldsaves primeira: RED (Porto, Nacional; 2 seeds each, three stages)
+  oldsaves superlig: RED (Galatasaray, Erzurumspor; 2 seeds each, three stages)
+  oldsaves bundesliga2: RED (Wolfsburg, Dynamo Dresden; 2 seeds each, three stages)
+  oldsaves ligue2: RED (Nantes, Dunkerque; 2 seeds each, three stages)
+oldsaves: RED for premier, championship, laliga, seriea, bundesliga, eredivisie, primeira, superlig, bundesliga2, ligue2 (132 saves)
+  FAIL premier: Arsenal seed 41, week 0: base {"bytes":"0c5db4b0ae1221896cde","draws":"0,1299,1303,1398,484","season":1,"week":4}, candidate {"bytes":"480ae96454c2ff3cfcf7","draws":"0,1314,1320,1396,484","season":1,"week":4}
+  FAIL championship: West Ham seed 41, week 0: base {"bytes":"32b6d3702c3d334598e3","draws":"0,1106,942,1052,1444","season":1,"week":5}, candidate {"bytes":"3a34db7d25056a888dec","draws":"0,1147,825,1002,1273","season":1,"week":5}
+  FAIL laliga: Real Madrid seed 41, week 0: base {"bytes":"069354fafb36cf75de35","draws":"0,1422,1303,1369,442","season":1,"week":4}, candidate {"bytes":"4a5773d9ea140b4588d8","draws":"0,1288,1245,1307,493","season":1,"week":4}
+  FAIL seriea: Inter Milan seed 41, week 0: base {"bytes":"452d18d7385b7e1cca2d","draws":"0,1324,1346,1366,474","season":1,"week":4}, candidate {"bytes":"95dbf41bf65a3341663b","draws":"0,1299,1348,1403,450","season":1,"week":4}
+  FAIL bundesliga: Bayern Munich seed 41, week 0: base {"bytes":"957132b49d6b43cfb62c","draws":"0,1360,1515,1433,448","season":1,"week":4}, candidate {"bytes":"7a4db68296a20e7789f1","draws":"0,1320,1334,1372,467","season":1,"week":4}
+  FAIL eredivisie: Ajax seed 41, week 0: base {"bytes":"149c8ea1d4e8cf1a9b3c","draws":"0,1353,1335,1322,1322","season":1,"week":5}, candidate {"bytes":"2533135ae2d5f07552e3","draws":"0,1297,1432,1333,1402","season":1,"week":5}
+  FAIL primeira: Porto seed 41, week 0: base {"bytes":"30546d8d52544feb4047","draws":"0,1305,1365,1349,468","season":1,"week":4}, candidate {"bytes":"79760c31a90aca418274","draws":"0,1288,1334,1351,487","season":1,"week":4}
+  FAIL superlig: Galatasaray seed 41, week 0: base {"bytes":"587545fd8ead4a8f9bcc","draws":"0,1289,1414,1514,493","season":1,"week":4}, candidate {"bytes":"f3a06ae2f26d15a421f1","draws":"0,1301,1336,1473,443","season":1,"week":4}
+  FAIL bundesliga2: Wolfsburg seed 41, week 0: base {"bytes":"1c6ec35d3def3a530417","draws":"0,1363,1301,1338,1363","season":1,"week":5}, candidate {"bytes":"003570b6543d62621f61","draws":"0,1358,1334,1337,1368","season":1,"week":5}
+  FAIL ligue2: Nantes seed 41, week 0: base {"bytes":"cff642198839d3213ad1","draws":"0,1372,1309,1248,1341","season":1,"week":5}, candidate {"bytes":"2c1fc689672becc0e057","draws":"0,1345,1383,1182,1385","season":1,"week":5}
+simCmFixtureFleet: CONTROL keyless FIRED: section oldsaves went red for exactly its 10 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig) and no other
