@@ -1,0 +1,6 @@
+# Release AW part one, reviewer facts-fences, request D: the two fences of request A that need Chromium and a build (request A sent them without either, so they could not start), on the pushed head 64d87aed
+#!build
+#!playwright
+#!serial
+simResultMoment: node scripts/simResultMoment.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
