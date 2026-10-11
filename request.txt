@@ -1,0 +1,21 @@
+# Round 1212 step 4 (the bind) on 0ed60fba: the walks of the US Season Center and of the MLB hub on a served build, and the weights
+#!serve
+#!playwright
+#!serial
+weigh: node .rc/x/weigh.mjs
+playUsSeasonCentre: SHOTS=$RC_OUT ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playFreeAgency: ENGINES=chromium node scripts/playFreeAgency.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playGames-mlb: ONLY=/mlb-my-career ENGINES=chromium node scripts/playGames.mjs
+sweepGames-mlb: ONLY=/mlb-my-career ENGINES=chromium SIZES=phone,desktop node scripts/sweepGames.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+ctl-walk-static: US_SEASON_PLAY_CONTROL=static SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-write: US_SEASON_PLAY_CONTROL=write SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-count: US_SEASON_PLAY_CONTROL=count SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
