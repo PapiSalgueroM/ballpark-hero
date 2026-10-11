@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+rm-green: node scripts/playReducedMotion.mjs
+rm-wheelcut: RC_OUT=/tmp/rm-wheelcut REDUCED_MOTION_CONTROL=wheelcut node scripts/playReducedMotion.mjs
+rm-noguard: RC_OUT=/tmp/rm-noguard REDUCED_MOTION_CONTROL=noguard node scripts/playReducedMotion.mjs
+rm-noblanket: RC_OUT=/tmp/rm-noblanket REDUCED_MOTION_CONTROL=noblanket node scripts/playReducedMotion.mjs
+squad-green: ENGINES=chromium SHOTS=$RC_OUT/squad node scripts/playCareerSquad.mjs; s=$?; find $RC_OUT/squad -type f ! -name '*-eleven-*' -delete; exit $s
+squad-midword: ENGINES=chromium SHOTS=/tmp/squad-midword CAREER_SQUAD_PLAY_CONTROL=midword node scripts/playCareerSquad.mjs
+moments: node scripts/playCareerMoments.mjs
