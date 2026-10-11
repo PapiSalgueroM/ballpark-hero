@@ -1,0 +1,6 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmLeagueFixtures exit=0 9s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simDraftNight-head exit=1 0s | simDraftNight: 2 FAILURES
+simDraftNight-main exit=1 1s | simDraftNight: 2 FAILURES
+playCmQuickSubs exit=0 12s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+playSaveKeeper exit=0 832s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.

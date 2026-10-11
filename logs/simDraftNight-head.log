@@ -1,0 +1,16 @@
+1) The order is 1 to n, and exactly one pick is the player own
+   6 runs checked, every one ordered and with one owner
+2) The steps are exactly the picks the engine made, no more and no fewer
+   4 runs compared against their own input, every pick accounted for
+3) A malformed pick yields an empty or shortened run, never a throw
+   10 malformed inputs handled without a throw
+4) Picks land in order, and the whole run stays short enough not to be a wait
+   9 picks, step 400ms, lead 180ms, whole run 3780ms
+   40 rivals capped to 9 steps at 3780ms
+5) All four front offices build a reveal and capture the rival picks
+  FAIL: NBA does not hand the captured rivals to buildDraftNight, so the picks it collected go nowhere
+   3 of 4 boards capture the rival picks, hand them over and render the reveal
+  FAIL: only 3 of 4 front offices show draft night
+   the card is shared and honours prefers-reduced-motion
+
+simDraftNight: 2 FAILURES
