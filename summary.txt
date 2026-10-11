@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-outcomes exit=0 7s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-native exit=2 142s | Node.js v24.21.0
