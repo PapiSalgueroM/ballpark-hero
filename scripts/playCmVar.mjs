@@ -324,7 +324,14 @@ async function runCase(profile, motion, kind, variant) {
       const n = side => Number(document.querySelector(`[data-cm-live-stagebox] [data-cm-score-of="${side}"]`)?.textContent);
       if (!goalCard || n('me') !== me || n('opp') !== opp) return null;
       return { text: goalCard.innerText.replace(/\n/g, ' | '), minute: Number(stageEl?.dataset.cmLiveMinute), plus: Number(stageEl?.dataset.cmLivePlus ?? 0), stage: stageEl?.dataset.cmLiveStage ?? null, reviewCardUp: document.querySelectorAll('[data-cm-var]').length };
-    }, goalsBy(whistlePlace), { timeout: 150000 }).then(async handle => ({ ...(await handle.jsonValue()), shot: await w.shot(`${id}-0-last-kick-card`) })).catch(error => ({ error: String(error).slice(0, 200) }));
+    }, goalsBy(whistlePlace), { timeout: 150000 }).then(async handle => {
+      const read = await handle.jsonValue();
+      /* The picture is for a person to look at, and the card rises (cm-rise): the first run of this case caught it
+         in its first frame, almost clear. So the shot waits for the rise to end. `solid` says the card was still
+         up then; it is told, not asserted (how long a card is held is the screen test's to hold, not a walk's). */
+      const solid = await w.page.evaluate(() => { const c = document.querySelector('[data-cm-goal-card]'); return c ? Promise.all(c.getAnimations().map(a => a.finished)).then(() => !!document.querySelector('[data-cm-goal-card]'), () => false) : false; }).catch(() => false);
+      return { ...read, solid, shot: await w.shot(`${id}-0-last-kick-card`) };
+    }).catch(error => ({ error: String(error).slice(0, 200) }));
     await w.page.waitForFunction(rid =>document.querySelector('[data-cm-var]')?.dataset.cmVarId === rid, v.review.id, { timeout: 120000 });
     const card = w.page.locator('[data-cm-var]');
     const box = await card.evaluate(el => { const b = el.getBoundingClientRect(); return { text: el.innerText.replace(/\n/g, ' | '), x: Math.round(b.x), right: Math.round(b.right), top: Math.round(b.top), bottom: Math.round(b.bottom), vw: innerWidth, vh: innerHeight, animations: el.getAnimations({ subtree: true }).length, cut: [...el.querySelectorAll('p')].some(p => p.scrollWidth > p.clientWidth + 1) }; });
