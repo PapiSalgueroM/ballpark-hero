@@ -1,0 +1,17 @@
+vitest-us exit=0 62s |    Duration  61.77s (transform 6.03s, setup 1.06s, collect 14.22s, tests 77.73s, environment 5.69s, prepare 1.67s)
+tsc exit=0 88s | 
+seam-compare exit=0 26s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsSeasonCentre exit=0 108s | simUsSeasonCentre: 148 checks, 0 failed
+simMlbCareer exit=0 18s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simUsBoardParity exit=0 57s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simUsSeasonLedger exit=0 4s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simUsPostseason exit=0 19s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-hits exit=1 16s | simUsSeasonCentre: 50 checks, 1 failed (control hits)
+ctl-seam exit=1 20s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control seam)
+ctl-club exit=1 55s | simUsSeasonCentre: 58 checks, 3 failed (control club)
