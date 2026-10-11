@@ -1,0 +1,2 @@
+tsc exit=0 64s | 
+varscreen exit=1 86s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the revie
