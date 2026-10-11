@@ -1,0 +1,14 @@
+#!serial
+pre1035: bash .rc/x/at.sh 709e103f simEra2005 simEra2010 simEra2015 simEra2020
+at1035: bash .rc/x/at.sh b777801d simEra2005 simEra2010 simEra2015 simEra2020
+preSerieB: bash .rc/x/at.sh fc30942e simEra2020
+atSerieB: bash .rc/x/at.sh 9e9af21b simEra2020
+preLigue2: bash .rc/x/at.sh 3d412fcd simEra2020
+atLigue2: bash .rc/x/at.sh fa77f447 simEra2020
+atSegunda: bash .rc/x/at.sh d557a8ae simEra2020
+pre1052: bash .rc/x/at.sh 0bdc970d simEra2005 simEra2010 simEra2015 simEra2020
+at1052: bash .rc/x/at.sh 5010ae3f simEra2005 simEra2010 simEra2015 simEra2020
+statsPre1072: bash .rc/x/at.sh ba13dc2e^ simStatsCentre
+statsAt1072: bash .rc/x/at.sh ba13dc2e simStatsCentre
+statsPre1146: bash .rc/x/at.sh 6b3e01ca simStatsCentre
+statsAt1146: bash .rc/x/at.sh 21fe2c06 simStatsCentre
