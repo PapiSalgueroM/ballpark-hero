@@ -1,0 +1,29 @@
+#!serial
+attr-oldengine-olddigest: git show cbfa94fda6b5ffad32e927a6f89117da92f67f6c:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 269ef5ea:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+attr-oldengine-newdigest: git show cbfa94fda6b5ffad32e927a6f89117da92f67f6c:src/lib/clubManager.ts > src/lib/clubManager.ts && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+attr-newengine-olddigest: git show 269ef5ea:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+fam1-2005-head: node .rc/x/fam.mjs 1000003 simEra2005 && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2005-base: node .rc/x/fam.mjs 1000003 simEra2005 base && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2010-head: node .rc/x/fam.mjs 1000003 simEra2010 && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2010-base: node .rc/x/fam.mjs 1000003 simEra2010 base && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2015-head: node .rc/x/fam.mjs 1000003 simEra2015 && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2015-base: node .rc/x/fam.mjs 1000003 simEra2015 base && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2020-head: node .rc/x/fam.mjs 1000003 simEra2020 && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+fam1-2020-base: node .rc/x/fam.mjs 1000003 simEra2020 base && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2005-head: node .rc/x/fam.mjs 2000003 simEra2005 && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2005-base: node .rc/x/fam.mjs 2000003 simEra2005 base && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2010-head: node .rc/x/fam.mjs 2000003 simEra2010 && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2010-base: node .rc/x/fam.mjs 2000003 simEra2010 base && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2015-head: node .rc/x/fam.mjs 2000003 simEra2015 && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2015-base: node .rc/x/fam.mjs 2000003 simEra2015 base && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2020-head: node .rc/x/fam.mjs 2000003 simEra2020 && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+fam2-2020-base: node .rc/x/fam.mjs 2000003 simEra2020 base && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2005-head: node .rc/x/fam.mjs 3000017 simEra2005 && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2005-base: node .rc/x/fam.mjs 3000017 simEra2005 base && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2010-head: node .rc/x/fam.mjs 3000017 simEra2010 && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2010-base: node .rc/x/fam.mjs 3000017 simEra2010 base && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2015-head: node .rc/x/fam.mjs 3000017 simEra2015 && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2015-base: node .rc/x/fam.mjs 3000017 simEra2015 base && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2020-head: node .rc/x/fam.mjs 3000017 simEra2020 && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+fam3-2020-base: node .rc/x/fam.mjs 3000017 simEra2020 base && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short -- src scripts | head -5; git diff --quiet -- src scripts

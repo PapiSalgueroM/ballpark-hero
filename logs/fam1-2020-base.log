@@ -1,0 +1,47 @@
+FAMILY 1000003 applied to scripts/simEra2020.mjs on the base engine
+1) A fresh 2020 save is the real 2020 squad, untouched
+   Bayern Munich: 26 in squad, 26 bake rows, 0 mismatches, 0 generated
+   PSG: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Manchester City: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Barcelona: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them leak
+   939 era-exclusive names checked against the 2026 market, 0 leaks
+   2020 and now: 835 shared names, 10 listed pairs of two men, 0 unexplained
+   2020 and era2015: 573 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2010: 164 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2005: 32 shared names, 13 listed pairs of two men, 0 unexplained
+3) Boards talk 2020-21: the giants told to win it, the promoted told to stay up
+   98 club demands checked across the five 2020-21 leagues
+4) Full seasons play out plausibly in all five leagues
+   Bayern 1,3,2,1,1,1 (mean 1.50) · PSG 1,1,4,1,2,2 (mean 1.83)
+   Manchester City 4,3,4,3,1,2 (mean 2.83) · Crotone 20,19,20,20,18,20 (mean 19.50)
+5) The bake file tells the truth about itself
+   98 clubs, 1774 players (META says 1774 in 98), 256 window corrections
+   one man one club: 0 duplicates; window sample: 31 of 31 movers landed, 12 of 12 leavers gone
+   no record placed, so left where the year-2020 row has them: Valentino Lazaro at Newcastle (Gladbach by 2021), Cristiano Biraghi at Inter Milan (Fiorentina by 2021), Bas Dost at Eintracht Frankfurt (Club Brugge by 2021)
+6) The uplift is small, keeps the order, and leaves the rank and file alone
+   top 50, uplifted 2020 against modern, mean gap 0.12 (band +-0.5)
+7) The real 2020-21 Champions League field, eight groups into a round of 16
+   32 clubs, 19 with baked 2020-21 squads; winner Chelsea
+8) Every past season's market files a man under the league his club plays in that season
+   era2010: 1720 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 364)
+   era2015: 1628 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 356)
+   era2005: 1698 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 421)
+   era2020: 1745 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 331)
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+   the eras are read as era2010, era2015, era2005, era2020; 6 of 6 pinned clubs read the league they always have
+9) Every past season's news and bidding wars name clubs of that season
+   era2010: 453 deals in the news of 100 new saves, 98 bought by a club not of that season; 33 rivals in 60 negotiations, 23 not of that season
+  FAIL: era2010: 98 of 453 deals in the news are bought by a club that is not in that season's leagues, e.g. Galatasaray sign Zlatan Ibrahimović from AC Milan; Real Betis sign Sergio Busquets from Barcelona; Flamengo sign Javi Martínez from Athletic Club
+  FAIL: era2010: 23 of 33 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Bahia for Arjen Robben of Bayern Munich; Genk for Andy Johnson of Fulham; Nantes for Alex of Chelsea
+   era2015: 436 deals in the news of 100 new saves, 76 bought by a club not of that season; 33 rivals in 60 negotiations, 24 not of that season
+  FAIL: era2015: 76 of 436 deals in the news are bought by a club that is not in that season's leagues, e.g. Galatasaray sign Karim Benzema from Real Madrid; Benfica sign Jackson Martínez from Atlético Madrid; Palmeiras sign Jordan Henderson from Liverpool
+  FAIL: era2015: 24 of 33 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Heidenheim for Gonzalo Higuaín of Napoli; Club Brugge for Ángel Di María of PSG; Porto for Alexis Sánchez of Arsenal
+   era2005: 453 deals in the news of 100 new saves, 102 bought by a club not of that season; 37 rivals in 60 negotiations, 24 not of that season
+  FAIL: era2005: 102 of 453 deals in the news are bought by a club that is not in that season's leagues, e.g. Al-Qadsiah sign John Arne Riise from Liverpool; Galatasaray sign Patrick Vieira from Juventus; Ipswich Town sign Johan Micoud from Werder Bremen
+  FAIL: era2005: 24 of 37 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Bahia for Andrea Pirlo of AC Milan; América for Didier Drogba of Chelsea; Holstein Kiel for Andrea Pirlo of AC Milan
+   era2020: 439 deals in the news of 100 new saves, 37 bought by a club not of that season; 35 rivals in 60 negotiations, 27 not of that season
+  FAIL: era2020: 37 of 439 deals in the news are bought by a club that is not in that season's leagues, e.g. Brentford sign Nicolas Pépé from Arsenal; Sunderland sign Rodrygo from Real Madrid; Brentford sign Houssem Aouar from Lyon
+  FAIL: era2020: 27 of 35 rivals in a negotiation are clubs that are not in that season's leagues, e.g. Vancouver Whitecaps for Lionel Messi of Barcelona; América for Alisson of Liverpool; AGF for Ángel Di María of PSG
+
+simEra2020: 8 failure(s).
