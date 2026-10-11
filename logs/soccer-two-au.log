@@ -1,0 +1,545 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/au[39m
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 122079 bytes, save without story 106636
+[save parts] seed 9748: rest 64276 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 105625 bytes, save without story 87926
+[save parts] seed 9749: rest 76872 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 144287 bytes, save without story 123225
+[save parts] seed 9750: rest 82143 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+
+ [31m❯[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4853[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once[32m 279[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9742: every line kept, in order, once[32m 172[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9743: every line kept, in order, once[32m 141[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 371[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22ma signing and a loan add to the season log instead of writing over it[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career: old and damaged stories[2m > [22ma save with no story loads empty, shows this season only, and starts its story here[32m 89[2mms[22m[39m
+   [32m✓[39m Soccer Career: old and damaged stories[2m > [22ma damaged story resets alone[32m 25[2mms[22m[39m
+   [32m✓[39m Soccer Career: old and damaged stories[2m > [22ma season longer than the cap keeps the cap and counts the rest[32m 12[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 378[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 337[2mms[22m[39m
+[31m   [31m×[31m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound[39m[33m 390[2mms[22m[39m
+[31m     → what the save held before the train still fits the bound it had then: expected 82143 to be less than 80000[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 629[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 506[2mms[22m[39m
+ [31m❯[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 8290[2mms[22m[39m
+[31m   [31m×[31m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list[39m[33m 4992[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name `/Continue to Season Summary/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "Manager talks":
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:r8:"[31m
+    [33maria-labelledby[31m=[32m"radix-:r7:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl [&>button]:hidden"[31m
+    [33mdata-career-chance-wheel[31m=[32m"true"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:r6:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Manager talks":
+  [36m<h2[31m
+    [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[31m
+    [33mid[31m=[32m"radix-:r7:"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+    [33mid[31m=[32m"radix-:r8:"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33maria-live[31m=[32m"polite"[31m
+    [33mclass[31m=[32m"rounded-lg bg-muted p-3 font-bold"[31m
+    [33mdata-wheel-result[31m=[32m"true"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[31m
+    [33mdata-wheel-spin[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Show result":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[31m
+    [33mdata-wheel-skip[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Close":
+  [36m<button[31m
+    [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mdata-scroll-locked[31m=[32m"1"[31m
+  [33mstyle[31m=[32m"pointer-events: none;"[31m
+[36m>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<nav[31m
+        [33mclass[31m=[32m"w-full bg-background/95 border-b border-border/40"[31m
+        [33mdata-site-chrome[31m=[32m""[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]"[31m
+        [36m>[31m
+          [36m<a[31m
+            [33mclass[31m=[32m"order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity lg:justify-self-start"[31m
+            [33mdata-discover[31m=[32m"true"[31m
+            [33mhref[31m=[32m"/"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase"[31m
+            [36m>[31m
+              [0mDoUKnowBall[0m
+            [36m</span>[31m
+          [36m</a>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Go back"[31m
+            [33mclass[31m=[32m"order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33mclass[31m=[32m"lucide lucide-arrow-left w-4 h-4"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"m12 19-7-7 7-7"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M19 12H5"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [36m<span>[31m
+              [0mBack[0m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"order-3 lg:order-2 w-full lg:w-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-5 lg:justify-self-center"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"inline-flex items-center gap-1.5 rounded-lg bg-surface-2 border border-border px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"[31m
+            [36m>[31m
+              [36m<svg[31m
+                [33mclass[31m=[32m"lucide lucide-user-plus w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"24"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"24"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[31m
+                [36m/>[31m
+                [36m<circle[31m
+                  [33mcx[31m=[32m"9"[31m
+                  [33mcy[31m=[32m"7"[31m
+                  [33mr[31m=[32m"4"[31m
+                [36m/>[31m
+                [36m<line[31m
+                  [33mx1[31m=[32m"19"[31m
+                  [33mx2[31m=[32m"19"[31m
+                  [33my1[31m=[32m"8"[31m
+                  [33my2[31m=[32m"14"[31m
+                [36m/>[31m
+                [36m<line[31m
+                  [33mx1[31m=[32m"22"[31m
+                  [33mx2[31m=[32m"16"[31m
+                  [33my1[31m=[32m"11"[31m
+                  [33my2[31m=[32m"11"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"hidden sm:inline"[31m
+              [36m>[31m
+                [0mSign up to track your stats[0m
+              [36m</span>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sm:hidden"[31m
+              [36m>[31m
+                [0mTrack stats[0m
+              [36m</span>[31m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</nav>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span...[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual false ballot out of newspaper, summary, timeline and cabinet until its list [33m 392[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma win offers the speech once, then shows what it did, and Continue leaves [33m 417[2mms[22m[39m
+   [32m✓[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma lost ceremony offers no speech, just Continue[32m 140[2mms[22m[39m
+   [32m✓[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22man old save holding a ceremony from a past season is not offered a speech for it[32m 218[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the tournament winner's speech[2m > [22mstays on the card, shows what it really moved, a second tap does nothing, Continue leaves [33m 530[2mms[22m[39m
+   [32m✓[39m Soccer Career: the tournament winner's speech[2m > [22ma pre Round 124 World Cup save gets the same speech, once, and a corrupt speech reads as none[32m 98[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerAwardsNightCard.test.tsx[2m > [22mSoccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name `/Continue to Season Summary/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "Manager talks":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:r8:"[39m
+    [33maria-labelledby[39m=[32m"radix-:r7:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl [&>button]:hidden"[39m
+    [33mdata-career-chance-wheel[39m=[32m"true"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:r6:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Manager talks":
+  [36m<h2[39m
+    [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[39m
+    [33mid[39m=[32m"radix-:r7:"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+    [33mid[39m=[32m"radix-:r8:"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"rounded-lg bg-muted p-3 font-bold"[39m
+    [33mdata-wheel-result[39m=[32m"true"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[39m
+    [33mdata-wheel-spin[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Show result":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[39m
+    [33mdata-wheel-skip[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Close":
+  [36m<button[39m
+    [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mdata-scroll-locked[39m=[32m"1"[39m
+  [33mstyle[39m=[32m"pointer-events: none;"[39m
+[36m>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<nav[39m
+        [33mclass[39m=[32m"w-full bg-background/95 border-b border-border/40"[39m
+        [33mdata-site-chrome[39m=[32m""[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m"order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity lg:justify-self-start"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase"[39m
+            [36m>[39m
+              [0mDoUKnowBall[0m
+            [36m</span>[39m
+          [36m</a>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Go back"[39m
+            [33mclass[39m=[32m"order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-arrow-left w-4 h-4"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"m12 19-7-7 7-7"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M19 12H5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<span>[39m
+              [0mBack[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"order-3 lg:order-2 w-full lg:w-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-5 lg:justify-self-center"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"inline-flex items-center gap-1.5 rounded-lg bg-surface-2 border border-border px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-user-plus w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[39m
+                [36m/>[39m
+                [36m<circle[39m
+                  [33mcx[39m=[32m"9"[39m
+                  [33mcy[39m=[32m"7"[39m
+                  [33mr[39m=[32m"4"[39m
+                [36m/>[39m
+                [36m<line[39m
+                  [33mx1[39m=[32m"19"[39m
+                  [33mx2[39m=[32m"19"[39m
+                  [33my1[39m=[32m"8"[39m
+                  [33my2[39m=[32m"14"[39m
+                [36m/>[39m
+                [36m<line[39m
+                  [33mx1[39m=[32m"22"[39m
+                  [33mx2[39m=[32m"16"[39m
+                  [33my1[39m=[32m"11"[39m
+                  [33my2[39m=[32m"11"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"hidden sm:inline"[39m
+              [36m>[39m
+                [0mSign up to track your stats[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sm:hidden"[39m
+              [36m>[39m
+                [0mTrack stats[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</nav>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span...
+[90m [2m❯[22m Object.getElementError ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/test/careerAwardsNightCard.test.tsx:[2m206:26[22m[39m
+    [90m204| [39m    [34mexpect[39m(timeline[33m.[39mtextContent)[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'🏅'[39m)[33m;[39m
+    [90m205| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m([34mreadSave[39m()[33m![39m[33m.[39mpendingBallonDor))[33m.[39m[34mtoBe[39m(ballot)[33m;[39m
+    [90m206| [39m    fireEvent.click(view.getByRole('button', { name: /Continue to Seas…
+    [90m   | [39m                         [31m^[39m
+    [90m207| [39m    [35mawait[39m [34mtick[39m([34m60[39m)[33m;[39m
+    [90m208| [39m    const summary = view.getByRole('heading', { name: 'Season Summary'…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerStory.test.tsx[2m > [22mSoccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[31m[1mAssertionError[22m: what the save held before the train still fits the bound it had then: expected 82143 to be less than 80000[39m
+[36m [2m❯[22m src/test/careerStory.test.tsx:[2m299:92[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m18 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 00:08:54
+[2m   Duration [22m 13.91s[2m (transform 3.08s, setup 204ms, collect 8.54s, tests 13.14s, environment 1.07s, prepare 500ms)[22m
+
+
+::error file=/tmp/au/src/test/careerAwardsNightCard.test.tsx,title=src/test/careerAwardsNightCard.test.tsx > Soccer Career%3A the Ballon d'Or ceremony card > keeps the actual true ballot out of newspaper%2C summary%2C timeline and cabinet until its list,line=206,column=26::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/Continue to Season Summary/`%0A%0AHere are the accessible roles:%0A%0A  dialog:%0A%0A  Name "Manager talks":%0A  <div%0A    aria-describedby="radix-:r8:"%0A    aria-labelledby="radix-:r7:"%0A    class="fixed left-[50%25] top-[50%25] z-50 translate-x-[-50%25] translate-y-[-50%25] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%25-1.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl [&>button]:hidden"%0A    data-career-chance-wheel="true"%0A    data-state="open"%0A    id="radix-:r6:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "Manager talks":%0A  <h2%0A    class="text-lg font-semibold leading-none tracking-tight outline-none"%0A    id="radix-:r7:"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p%0A    class="text-sm text-muted-foreground"%0A    id="radix-:r8:"%0A  />%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    aria-live="polite"%0A    class="rounded-lg bg-muted p-3 font-bold"%0A    data-wheel-result="true"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  button:%0A%0A  Name "Spin the wheel":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"%0A    data-wheel-spin="true"%0A  />%0A%0A  Name "Show result":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg border px-3 text-sm"%0A    data-wheel-skip="true"%0A  />%0A%0A  Name "Close":%0A  <button%0A    class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A    type="button"%0A  />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  data-scroll-locked="1"%0A  style="pointer-events: none;"%0A>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A  >%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <nav%0A        class="w-full bg-background/95 border-b border-border/40"%0A        data-site-chrome=""%0A      >%0A        <div%0A          class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]"%0A        >%0A          <a%0A            class="order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity lg:justify-self-start"%0A            data-discover="true"%0A            href="/"%0A          >%0A            <span%0A              class="text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase"%0A            >%0A              DoUKnowBall%0A            </span>%0A          </a>%0A          <button%0A            aria-label="Go back"%0A            class="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"%0A          >%0A            <svg%0A              class="lucide lucide-arrow-left w-4 h-4"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="m12 19-7-7 7-7"%0A              />%0A              <path%0A                d="M19 12H5"%0A              />%0A            </svg>%0A            <span>%0A              Back%0A            </span>%0A          </button>%0A          <div%0A            class="order-3 lg:order-2 w-full lg:w-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-5 lg:justify-self-center"%0A          >%0A            <button%0A              class="inline-flex items-center gap-1.5 rounded-lg bg-surface-2 border border-border px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"%0A            >%0A              <svg%0A                class="lucide lucide-user-plus w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold"%0A                fill="none"%0A                height="24"%0A                stroke="currentColor"%0A                stroke-linecap="round"%0A                stroke-linejoin="round"%0A                stroke-width="2"%0A                viewBox="0 0 24 24"%0A                width="24"%0A                xmlns="http://www.w3.org/2000/svg"%0A              >%0A                <path%0A                  d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"%0A                />%0A                <circle%0A                  cx="9"%0A                  cy="7"%0A                  r="4"%0A                />%0A                <line%0A                  x1="19"%0A                  x2="19"%0A                  y1="8"%0A                  y2="14"%0A                />%0A                <line%0A                  x1="22"%0A                  x2="16"%0A                  y1="11"%0A                  y2="11"%0A                />%0A              </svg>%0A              <span%0A                class="hidden sm:inline"%0A              >%0A                Sign up to track your stats%0A              </span>%0A              <span%0A                class="sm:hidden"%0A              >%0A                Track stats%0A              </span>%0A            </button>%0A          </div>%0A        </div>%0A      </nav>%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span...%0A ❯ Object.getElementError ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ src/test/careerAwardsNightCard.test.tsx:206:26%0A%0A
+
+::error file=/tmp/au/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save small > the longest career on seed 9750 plus ten dugout seasons stays under the bound,line=299,column=92::AssertionError: what the save held before the train still fits the bound it had then: expected 82143 to be less than 80000%0A ❯ src/test/careerStory.test.tsx:299:92%0A%0A

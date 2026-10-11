@@ -1,0 +1,50 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usSeasonMlb.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 5302[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1126[2mms[22m[39m
+   [32m✓[39m mlbScore[2m > [22mgives the stronger side more of the wins, step by step[32m 24[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals the league formula for every one of the 30 clubs, in series that never run into one another[32m 95[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22msays what is wrong with a schedule that is not the formula[32m 2[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals a throwback season as unnamed series of three, half of them at home[32m 18[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 759[2mms[22m[39m
+   [32m✓[39m the at bats and hits a batting average allows[2m > [22mnever hands him fewer hits than his home runs and doubles[32m 1[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mholds pitchers and no hitter[32m 1[2mms[22m[39m
+[31m   [31m×[31m held, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words[39m[32m 15[2mms[22m[39m
+[31m     → expected '📺 No week by week this season: in th…' to be '📺 No week by week this season: the r…' // Object.is equality[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so[32m 78[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mlays out nothing for a line the engine played on another length, whatever the ledger says[32m 7[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 3130[2mms[22m[39m
+   [32m✓[39m a season derived from its saved line[2m > [22mopens an older line with no doubles and no on base percentage, and holds a line with no average to the plain tile[32m 9[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mreads the result words of every year from the engine, and bands a result by the round it ended in[32m 16[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws a path from 2022 on, round by round, whose scores add up to the saved games, and names nobody[32m 13[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws no path before 2022 and says why, in a throwback season and for a result the year cannot hold[32m 1[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mlabels the clock inning by inning and words every line of the feed[32m 1[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mprints his line, the halfway sentence with and without an All-Star, and a help sheet with no dash in it[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words
+[31m[1mAssertionError[22m: expected '📺 No week by week this season: in th…' to be '📺 No week by week this season: the r…' // Object.is equality[39m
+
+Expected: [32m"📺 No week by week this season: the real 2020 season [7mhad 60 games[27m and the week by week view is built for 162."[39m
+Received: [31m"📺 No week by week this season:[7m in[27m the real 2020 season [7myour club finished on 58 games, two short of the 60 on the schedule that year,[27m and the week by week view is built for 162."[39m
+
+[36m [2m❯[22m src/test/usSeasonMlb.test.ts:[2m152:47[22m[39m
+    [90m150| [39m    [34mexpect[39m([34mmlbViewGames[39m())[33m.[39m[34mtoBe[39m([34m162[39m)[33m;[39m
+    [90m151| [39m    [90m/* 2020: 60 games for every club */[39m
+    [90m152| [39m    expect(mlbHeldLine(2020, 'DET', 'y2004')).toBe('📺 No week by week…
+    [90m   | [39m                                              [31m^[39m
+    [90m153| [39m    /* 2026: the Orioles and the Yankees finished on 161, and nobody e…
+    [90m154| [39m    [34mexpect[39m([34mmlbRealGames[39m([34m2026[39m[33m,[39m [32m'BAL'[39m[33m,[39m [32m'now'[39m))[33m.[39m[34mtoBe[39m([34m161[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 00:08:33
+[2m   Duration [22m 8.67s[2m (transform 1.10s, setup 123ms, collect 1.50s, tests 5.30s, environment 775ms, prepare 542ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > holds the short season%2C a club a game short%2C a club on 163 and a club outside the league%2C each in its own true words,line=152,column=47::AssertionError: expected '📺 No week by week this season: in th…' to be '📺 No week by week this season: the r…' // Object.is equality%0A%0AExpected: "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162."%0AReceived: "📺 No week by week this season: in the real 2020 season your club finished on 58 games, two short of the 60 on the schedule that year, and the week by week view is built for 162."%0A%0A ❯ src/test/usSeasonMlb.test.ts:152:47%0A%0A

@@ -1,0 +1,5 @@
+vitest-mlb exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sen
+soccer-two-head exit=1 18s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s
+soccer-two-base exit=1 17s | ::error file=/tmp/base/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save small > the longest career on seed 97
+soccer-two-au exit=1 16s | ::error file=/tmp/au/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save small > the longest career on seed 9750
+tsc exit=0 75s | 
