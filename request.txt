@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ui-units: node_modules/.bin/vitest run src/test/careerChanceWheelUi.test.tsx src/test/soccerClubStartingElevenUi.test.tsx src/lib/careerChanceWheel.test.ts --testTimeout=300000 --hookTimeout=120000
+squad-green: ENGINES=chromium SHOTS=$RC_OUT/squad node scripts/playCareerSquad.mjs; s=$?; find $RC_OUT/squad -type f ! -name '*-eleven-*' -delete; exit $s
+squad-midword: ENGINES=chromium SHOTS=/tmp/squad-midword CAREER_SQUAD_PLAY_CONTROL=midword node scripts/playCareerSquad.mjs
+squad-ellipsis: ENGINES=chromium SHOTS=/tmp/squad-ellipsis CAREER_SQUAD_PLAY_CONTROL=ellipsis node scripts/playCareerSquad.mjs

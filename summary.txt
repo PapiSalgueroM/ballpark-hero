@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 58s | 
+ui-units exit=0 4s |    Duration  2.83s (transform 1.27s, setup 155ms, collect 1.99s, tests 685ms, environment 1.26s, prepare 475ms)
+squad-green exit=0 158s | playCareerSquad: 181 checks, 0 failed
+squad-midword exit=1 157s | playCareerSquad (control midword, 35 edits served): 181 checks, 10 failed
+squad-ellipsis exit=1 157s | playCareerSquad (control ellipsis, 70 edits served): 181 checks, 10 failed
