@@ -1,0 +1,8 @@
+mut m7: APPLIED in src/lib/clubManagerLeagueBoards.ts
+ src/lib/clubManagerLeagueBoards.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+vitest tail: 
+default tail: simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (65s)
+full tail: simCmLeagueBook: green, 9 sections, 27 careers x 2 seasons (211s)
+MUT m7 vitest=127 default=0 full=0
+MUT m7 KILLED

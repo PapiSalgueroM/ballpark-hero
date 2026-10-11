@@ -1,0 +1,5 @@
+m7 exit=1 279s | MUT m7 KILLED
+m8 exit=1 284s | MUT m8 KILLED
+m6 exit=1 290s | MUT m6 KILLED
+m9 exit=1 211s | MUT m9 KILLED
+m10 exit=1 209s | MUT m10 KILLED

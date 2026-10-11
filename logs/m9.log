@@ -1,0 +1,8 @@
+mut m9: APPLIED in src/lib/clubManager.ts
+ src/lib/clubManager.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+vitest tail: 
+default tail: simCmLeagueBook: 4 FAILURE(S) (49s)
+full tail: simCmLeagueBook: 4 FAILURE(S) (159s)
+MUT m9 vitest=127 default=1 full=1
+MUT m9 KILLED
