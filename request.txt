@@ -1,0 +1,2 @@
+# Release AV fix pass: the whole unit suite on the pushed head.
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
