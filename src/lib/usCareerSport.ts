@@ -311,7 +311,8 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
    *  mount a binding without it and play the old board draw for draw. */
   hall?: UsHallSport<C>;
   /** Round 1048: the Season Center's numbers for this sport (src/lib/season/us.ts), loaded when he first
-   *  watches a season. Optional: a binding without it shows no button, which is MLB and the NHL today. */
+   *  watches a season. Optional: a binding without it shows no button, which is the NHL today (baseball
+   *  was bound in Round 1212). */
   loadSeasonCentre?: () => Promise<UsSeasonBind>;
   /** Round 1048: why the coming season has no game by game view (its real length is not the one this
    *  career plays), or null. Tiny and eager, from src/data/usSeasonLengths.ts. Absent: never held.

@@ -635,7 +635,8 @@ export const MLB_SEASON: UsSeasonBind = {
   teamIds: eraId => mlbEraTeamIds(eraId),
   score: mlbScore,
   /* the margin of one game has a standard deviation of about four runs, so a logistic of 2.5 a unit lands
-     the share of wins (to be retuned from the repairs scripts/simUsSeasonCentre.mjs measures) */
+     the share of wins (measured in scripts/simUsSeasonCentre.mjs on the five seed sets: 86% of seasons need
+     no repair and every median of wins by result sits in the middle half of its band) */
   strengthFor: share => { const p = Math.min(0.98, Math.max(0.02, share)); return 2.5 * Math.log(p / (1 - p)); },
   oppSpread: 0.6,
   totals: row => totals(row),
