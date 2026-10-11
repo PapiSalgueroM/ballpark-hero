@@ -13,7 +13,7 @@ import { SOCCER_CONTRACT_1177_BASELINE_PATCHES } from './lib/soccerContractBasel
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SOCCER_CONTRACT_CONTROL || '';
 const controls = {
-  age: { file: 'src/lib/soccerCareerContracts.ts', from: 'if (career.age < 30)', to: 'if (career.age < 130)' },
+  age: { file: 'src/lib/soccerCareerContracts.ts', from: 'if (career.age < 30) {', to: 'if (career.age < 130) {' },
   elite: { file: 'src/lib/soccerCareerContracts.ts', from: 'career.overall >= 90 && form !== undefined && form >= 8 && (last?.apps ?? 0) >= 20',
     to: 'career.overall >= 85 && form !== undefined && form >= 7.5' },
   move: SOCCER_CONTRACT_1177_BASELINE_PATCHES[2],
