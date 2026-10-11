@@ -1,0 +1,7 @@
+# Release AU fix 2: the motion walk after the helper's stop rule, and the competitions walk on the recorded ground rule
+#!build
+#!playwright
+#!serial
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
+playSeasonCentre: SHOTS=$RC_OUT/centre node scripts/playSeasonCentre.mjs
