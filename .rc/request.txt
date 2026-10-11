@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentreScreens.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+ctl-mlbold: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbold node scripts/simUsSeasonCentre.mjs
+ctl-mlbstage: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbstage node scripts/simUsSeasonCentre.mjs
+ctl-stage: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+ctl-record: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
