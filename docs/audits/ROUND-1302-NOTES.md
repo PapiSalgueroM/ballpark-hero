@@ -47,14 +47,22 @@ penalty rate is a balance decision outside this round's files.
 `scripts/data/cmVarCompetitions.json` has a row for every competition a modern save can play, and nothing is
 left on a not read list (the ledger harness fails if anything is, control `unread`).
 
-- **Yes, on two publishers on two hosts each: 28.** The 15 leagues and the Champions League of Round 1218, and
+- **Yes, on two publishers on two hosts each: 29.** The 15 leagues and the Champions League of Round 1218, and
   from this round the Danish Superliga, Super League Greece, the Segunda División, Serie B, both MLS
-  conferences, the Brasileirão, the A-League Men and the Russian Premier League; the KNVB Cup and the Copa do
-  Brasil from the round of 16; the Australia Cup in its final only (the help prints "the final only").
+  conferences, the Brasileirão, the A-League Men and the Russian Premier League; the KNVB Cup, the Copa do
+  Brasil and (since the fix pass, see below) the DFB-Pokal from the round of 16; the Australia Cup in its final
+  only (the help prints "the final only").
 - **No: 2.** The EFL Championship (the agency story and the BBC's own report) and Ligue 2 (two newspapers).
-- **Unknown: 18.** Liga MX and 17 domestic cups. Each row's note says what the search found. Most cups have
+- **Unknown: 17.** Liga MX and 16 domestic cups. Each row's note says what the search found. Most cups have
   not said yet for 2026-27 (the FA Cup pages speak of 2025-26), or their guides do not name the video
   assistant. An unknown row plays without reviews.
+- **The DFB-Pokal moved from unknown to yes in the fix pass.** The round's one search found nothing and its note
+  said nobody names the video assistant. The read review's one search found an agency sentence that does. The
+  fixer read it (dpa, carried by Volksstimme, 2026-08-20: in future from the second round, until now from the
+  round of 16) and then found and read the federation's own page for the 2026/2027 cup season (dfb.de: "Der
+  VAR wird ab der 2. Runde im DFB-Pokal eingesetzt."). Two independent publishers, so by the ledger's own rule
+  the row says yes, from the round of 16, the first stage the engine plays. A row turning on with data alone
+  is how the ledger is meant to work; with the switch off it changes nothing a player sees.
 - Three rules were added to the ledger: a competition that plays a calendar year is read for 2026; a source
   with no date of its own says what the date on file is (`publishedNote`); a cup that starts later than the
   round of 16 is named in the help with its stage.
@@ -70,9 +78,8 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
   rewrites of one federation release, and Greece's are two write ups of one seminar (the ledger's fourth rule
   counts such a pair once, so a strict reader would call both rows one source short); Ligue 2's two newspapers
   were read on sites that carry them; the Saudi row's second source names the opening round, not the season.
-  And the unknown rows had one search each: the DFB-Pokal note says nobody names the video assistant, and the
-  reviewer's one search found two regional papers that do (from the second round on), nearly word for word the
-  same, so probably one agency text, which still leaves that row one source short.
+  And the unknown rows had one search each. One more search settled the DFB-Pokal (above), so the other 16 cups
+  and Liga MX may well be settled by a second search too: nobody has made it.
 
 ## 4. The review screen
 
@@ -140,7 +147,8 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
    Until it does, a switch may only turn on goals ruled out, and that needs a rate of its own for the penalty
    kind to be zero, which the generator does not write today (both kinds are derived or neither).
 3. Then the switch commit of Round 1218's closing fix (`origin/r1218-cm-var-switch`, three files), the What's
-   New entry reworded for 28 competitions, and the lit walk on the plain build.
+   New entry reworded for the competitions the ledger then says yes for (29 today; the help prints the list
+   from the generated file, so nobody types it), and the lit walk on the plain build.
 4. Still open on the screen, none of it reachable while the switch is off:
    - A review in a second half and one in extra time are held by the jsdom test only. The lit walk plays first
      halves. Two reviews in one minute are played nowhere (the engine gave none in 15,000 halves).
