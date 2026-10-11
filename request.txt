@@ -1,0 +1,2 @@
+# Release AX merge d (PR217) on ad4c38f0: the type gate
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
