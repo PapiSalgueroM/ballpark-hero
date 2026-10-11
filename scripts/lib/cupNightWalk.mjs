@@ -24,11 +24,17 @@
  *                               screen. Returns { what, label } with what one of
  *                               'open', 'reveal', 'on', or null when the screen
  *                               holds none of them.
- * throughCupNights(page, each)  presses until none of the three is left: the
- *                               league (or the review) is on the stage again.
- *                               `each(press)` runs on every cup night right after
- *                               its result is shown, so a walk can measure that
- *                               screen too. Returns { nights, presses, labels }.
+ * throughCupNights(page, each, open)
+ *                               presses through the cup nights that stand before
+ *                               the next league game and STOPS there: the last
+ *                               press is the one that puts the league (or the
+ *                               review) back on the stage, and a cup night that
+ *                               comes after that league game is left alone. With
+ *                               `open` false it only finishes a cup night that is
+ *                               already on the stage and never opens one from the
+ *                               bar. `each(press)` runs on every cup night right
+ *                               after its result is shown, so a walk can measure
+ *                               that screen too. Returns { nights, presses, labels }.
  *
  * Reads no network, edits no save, runs nothing at import time.
  */
@@ -36,7 +42,7 @@ export const CUP_OPEN = '[data-centre-next-cup]';
 export const CUP_REVEAL = '[data-calendar-cup-reveal]';
 export const CUP_ON = '[data-calendar-cup-continue]';
 
-export async function pressCupNight(page, settleMs = 150) {
+export async function pressCupNight(page, settleMs = 150, allowed = ['reveal', 'on', 'open']) {
   const pressed = await page.evaluate(order => {
     const root = document.querySelector('[data-season-centre]');
     if (!root) return null;
@@ -49,15 +55,16 @@ export async function pressCupNight(page, settleMs = 150) {
       }
     }
     return null;
-  }, [[CUP_REVEAL, 'reveal'], [CUP_ON, 'on'], [CUP_OPEN, 'open']]);
+  }, [[CUP_REVEAL, 'reveal'], [CUP_ON, 'on'], [CUP_OPEN, 'open']].filter(([, what]) => allowed.includes(what)));
   if (pressed) await page.waitForTimeout(settleMs);
   return pressed;
 }
 
-export async function throughCupNights(page, each = null, limit = 80) {
+export async function throughCupNights(page, each = null, open = true, limit = 80) {
   const out = { nights: 0, presses: 0, labels: [] };
   for (let i = 0; i < limit; i += 1) {
-    const pressed = await pressCupNight(page);
+    /* the bar's own cup button is only ever the FIRST press: after it, the stage holds the cup night */
+    const pressed = await pressCupNight(page, 150, open && i === 0 ? ['reveal', 'on', 'open'] : ['reveal', 'on']);
     if (!pressed) break;
     out.presses += 1;
     out.labels.push(pressed.label);
@@ -65,6 +72,8 @@ export async function throughCupNights(page, each = null, limit = 80) {
       out.nights += 1;
       if (each) await each(pressed);
     }
+    /* "on" either shows the next cup night (its result still hidden) or puts the league back: stop on the league */
+    if (pressed.what === 'on' && !(await page.$(`[data-season-centre] ${CUP_REVEAL}`))) break;
   }
   return out;
 }

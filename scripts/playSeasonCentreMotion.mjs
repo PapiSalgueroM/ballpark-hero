@@ -973,8 +973,8 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
      then on) and the last of those presses is the one that starts the next league matchday. Each cup night's screen
      is held to the floors and to the walker rule like every other screen of the Season Centre. */
   const cups = { nights: 0, labels: new Set() };
-  async function cupNights(page, where) {
-    const through = await throughCupNights(page, async () => { await floorsAt(page, `cup night ${where}`); await walkerAt(page, `cup night ${where}`); });
+  async function cupNights(page, where, open = true) {
+    const through = await throughCupNights(page, async () => { await floorsAt(page, `cup night ${where}`); await walkerAt(page, `cup night ${where}`); }, open);
     cups.nights += through.nights;
     for (const l of through.labels) cups.labels.add(l);
     return through.presses > 0;
@@ -1208,7 +1208,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       /* on to a poster, then the review */
       await clickText(p, '▶ Matchday 4');
       /* a cup night that came after league game 3 is still to be seen: the resume shows it first */
-      await cupNights(p, `after the resume ${tag}`);
+      await cupNights(p, `after the resume ${tag}`, false);
       if (await p.$('[data-poster]')) { await floorsAt(p, `poster ${tag}`); await clickText(p, '▶ Matchday 4'); }
       await fullTime(p, 4);
       if (await clickText(p, '⏩ To the next big game')) { if (await p.$('[data-poster]')) await floorsAt(p, `poster ${tag}`); }
