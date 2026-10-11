@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+usTalkFleet exit=0 11s | usTalkFleet: 3200 careers, 52019 seasons, 11911 extension talks (3974 with no offer), 11293 free agency windows (1158 in a farewell season), 27181 pushes; 0 talk(s) the r
+simUsCareerRecovery exit=0 5s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+simSoccerCareerSaveRetry exit=0 10s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+simCareerParity exit=0 10s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simDailySaveHardening exit=0 60s | simDailySaveHardening: part all green
+playUsCareerSaveSeam exit=0 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+playStorageBlocked exit=0 271s | playStorageBlocked: 826 checks, 0 failed
