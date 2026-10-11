@@ -1,0 +1,63 @@
+#!build
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simPlayerAutocompleteInteraction: node scripts/simPlayerAutocompleteInteraction.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+simApproaches: node scripts/simApproaches.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCalendar: node scripts/simCalendar.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simFinance: node scripts/simFinance.mjs
+simUclField: node scripts/simUclField.mjs
+simUclLegs: node scripts/simUclLegs.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simNationalities: node scripts/simNationalities.mjs
+simPromotion: node scripts/simPromotion.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simNationJob: node scripts/simNationJob.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simYouthPadding: node scripts/simYouthPadding.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simUclLegMigration: node scripts/simUclLegMigration.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cmWorldIdentity1052.test.ts src/test/academyFilters.test.tsx src/test/calendarCurrentDate.test.tsx src/test/contractPreview.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHomeFront: node scripts/simHomeFront.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simTicker: node scripts/simTicker.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
