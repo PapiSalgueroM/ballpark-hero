@@ -1,0 +1,14 @@
+r1226 default-era seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 12.08 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 1.21 percent (band 0.27 to 1.69)
+r1226 default-era seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 13.44 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C goals 14.5, LW assists 15.8, RW assists 18.3, RW points 15.5]; at or over to, 
+r1226 default-era seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 12.81 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [RW goals 15.5, RW points 15.3, D assists 14.8]; at or over to, pooled 1.21 perce
+r1226 default-era seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 11.54 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 1.06 percent (band 0.27 to 1.69)
+r1226 default-era seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 12.23 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C assists 14.8, LW goals 14.8]; at or over to, pooled 1.46 percent (band 0.27 to
+r1226 default-era seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 12.35 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 1.48 percent (band 0.27 to 1.69)
+mut ERA: 1 edits made in src/lib/nhlMyCareer.ts
+r1226 throwback-era seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 5.83 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [LW assists 5.8, LW points 6.0, RW goals 4.3, RW assists 3.8, RW points 5.3, D ass
+r1226 throwback-era seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 5.46 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [LW assists 5.5, RW goals 4.0, RW assists 5.0, RW points 4.5, D assists 3.8, D poi
+r1226 throwback-era seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 4.75 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C goals 5.0, C assists 3.3, C points 3.8, LW points 5.5, RW goals 4.0, RW points 
+r1226 throwback-era seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 5.48 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C assists 6.0, LW points 5.3, RW goals 4.5, RW assists 5.3, RW points 5.0, D assi
+r1226 throwback-era seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 4.73 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C assists 3.3, C points 4.8, LW assists 4.8, RW goals 4.8, RW assists 5.3, RW poi
+r1226 throwback-era seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 4.58 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C assists 3.0, LW goals 4.0, LW assists 3.0, LW points 3.5, RW goals 4.5, RW assi
+tb-old r1226: done

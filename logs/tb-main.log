@@ -1,0 +1,14 @@
+main default-era seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 10.35 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.88 percent (band 0.27 to 1.69)
+main default-era seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 10.17 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.96 percent (band 0.27 to 1.69)
+main default-era seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 9.33 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.69 percent (band 0.27 to 1.69)
+main default-era seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 9.58 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.79 percent (band 0.27 to 1.69)
+main default-era seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 10.85 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [RW points 14.5]; at or over to, pooled 0.90 percent (band 0.27 to 1.69)
+main default-era seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 9.73 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.94 percent (band 0.27 to 1.69)
+mut ERA: 1 edits made in src/lib/nhlMyCareer.ts
+main throwback-era seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 11.00 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C goals 14.8]; at or over to, pooled 1.04 percent (band 0.27 to 1.69)
+main throwback-era seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 9.90 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 1.02 percent (band 0.27 to 1.69)
+main throwback-era seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 9.35 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.71 percent (band 0.27 to 1.69)
+main throwback-era seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 10.06 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.90 percent (band 0.27 to 1.69)
+main throwback-era seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 9.29 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.77 percent (band 0.27 to 1.69)
+main throwback-era seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 9.23 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.96 percent (band 0.27 to 1.69)
+tb-old main: done
