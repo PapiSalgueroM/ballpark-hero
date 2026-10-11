@@ -14,7 +14,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
-import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -32,6 +32,8 @@ const say = (ok, what) => {
 const OWEN_CHECK = 'Michael Owen is at 2005 Newcastle (the window correction, visible in the UI)';
 const SHEARER_CHECK = 'Alan Shearer is in the squad';
 const DROP = ['Michael Owen', 'Alan Shearer'];
+const LEAK_CHECK = 'no 2026 player leaked into 2005';
+let planted = false;
 const tally = { swaps: 0 };
 const stillNamed = new Set();
 if (ERA_CONTROL === 'drop') {
@@ -132,7 +134,12 @@ const browser = await chromium.launch();
   say(/Alan Shearer/.test(room.squad), SHEARER_CHECK);
   const body2 = await page.locator('body').textContent();
   for (const n of DROP) if ((body2 ?? '').includes(n)) stillNamed.add(n);
-  say(!/Haaland/.test(body2 ?? ''), 'no 2026 player leaked into 2005');
+  /* Round 1304: read off the game, not the whole body. The guide under the game names Haaland as a 2020-21
+     Dortmund man since Round 971, and this line had been red on that sentence ever since. ERA_CONTROL=ghost
+     writes the name into the squad panel and this check, and only it, must go red. */
+  if (ERA_CONTROL === 'ghost') planted = await plantGhost(page, 'Erling Haaland');
+  const leaked = await namedInGame(page, 'Haaland');
+  say(leaked.length === 0, LEAK_CHECK + (leaked.length ? ` (written in the game at ${leaked.slice(0, 3).join(' | ')})` : ''));
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the England walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
   await page.close();
@@ -141,6 +148,7 @@ const browser = await chromium.launch();
 await browser.close();
 console.log('');
 if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2005', failed, [OWEN_CHECK, SHEARER_CHECK], tally, [...stillNamed]));
+if (ERA_CONTROL === 'ghost') process.exit(judgeGhostControl('playEra2005', failed, LEAK_CHECK, planted));
 if (failures > 0) {
   console.error(`playEra2005: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

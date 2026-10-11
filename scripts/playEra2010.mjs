@@ -15,7 +15,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
-import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -94,7 +94,13 @@ say(room.listed, 'the Squad tab listed the squad');
 say(/Wayne Rooney/.test(room.squad), ROONEY_CHECK);
 const body2 = await page.locator('body').textContent();
 const stillNamed = /Rooney/.test(body2 ?? '') ? ['Wayne Rooney'] : [];
-say(!/Bruno Fernandes/.test(body2 ?? ''), 'no 2026 player leaked into 2010');
+/* Round 1304: read off the game, not the whole body. The guide under the game names Bruno Fernandes as a 2020-21
+   Manchester United man since Round 971, and this line had been red on that sentence ever since. ERA_CONTROL=ghost
+   writes the name into the squad panel and this check, and only it, must go red. */
+const LEAK_CHECK = 'no 2026 player leaked into 2010';
+const planted = ERA_CONTROL === 'ghost' ? await plantGhost(page, 'Bruno Fernandes') : false;
+const leaked = await namedInGame(page, 'Bruno Fernandes');
+say(leaked.length === 0, LEAK_CHECK + (leaked.length ? ` (written in the game at ${leaked.slice(0, 3).join(' | ')})` : ''));
 
 const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
 say(pageErrors.length === 0, `no real page errors (${pageErrors.length ? pageErrors[0] : 'clean'})`);
@@ -102,6 +108,7 @@ say(pageErrors.length === 0, `no real page errors (${pageErrors.length ? pageErr
 await browser.close();
 console.log('');
 if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2010', failed, [ROONEY_CHECK], tally, stillNamed));
+if (ERA_CONTROL === 'ghost') process.exit(judgeGhostControl('playEra2010', failed, LEAK_CHECK, planted));
 if (failures > 0) {
   console.error(`playEra2010: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

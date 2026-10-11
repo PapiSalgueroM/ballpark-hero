@@ -38,7 +38,69 @@ import { fileURLToPath } from 'node:url';
 
 const DIST = path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..'), 'dist');
 export const ERA_CONTROL = process.env.ERA_CONTROL || '';
+if (ERA_CONTROL && !['drop', 'ghost'].includes(ERA_CONTROL)) { console.error(`ERA_CONTROL=${ERA_CONTROL} is not a control the era walks know`); process.exit(2); }
 const DROPPED = 'Control Dropped';
+
+/**
+ * Round 1304: where a name is written in the GAME, which is the page without
+ * its guide. Each era walk ended on "no 2026 player leaked into this season",
+ * read off the whole page body, the one read Round 672 left on the body. Since
+ * Round 971 the guide under the game says what 2020-21 is ("Haaland and
+ * Bellingham at Dortmund ... Bruno Fernandes at Manchester United"), and the
+ * guide stays on the page, so the 2005, 2010 and 2015 walks went red on a
+ * sentence about another season while the dressing room was clean. This walks
+ * the page's text nodes, leaves out the guide (data-seo-content) and anything
+ * that is not shown as text, and hands back where the name is written, so a
+ * real leak is reported with its place and the guide can name whom it likes.
+ */
+export async function namedInGame(page, name) {
+  return page.evaluate(n => {
+    const out = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+      const text = t.textContent ?? '';
+      if (!text.includes(n)) continue;
+      const el = t.parentElement;
+      if (!el || el.closest('[data-seo-content], script, style, noscript, template')) continue;
+      out.push(`<${el.tagName.toLowerCase()}> "${text.trim().slice(0, 70)}"`);
+    }
+    return out;
+  }, name);
+}
+
+/**
+ * ERA_CONTROL=ghost (Round 1304): write a name into the Squad tab's own panel,
+ * as a leak into the dressing room would. True when it was written. The
+ * walk's "no 2026 player leaked" check must then go red, and only it.
+ */
+export async function plantGhost(page, name) {
+  return page.evaluate(n => {
+    const tab = [...document.querySelectorAll('[role="tab"]')].find(t => (t.textContent ?? '').trim() === 'Squad');
+    const panel = tab ? document.getElementById(tab.getAttribute('aria-controls') ?? '') : null;
+    if (!panel) return false;
+    const s = document.createElement('span');
+    s.setAttribute('data-era-control', 'ghost');
+    s.textContent = n;
+    panel.appendChild(s);
+    return true;
+  }, name);
+}
+
+/** The verdict on a ghost control run. `target` is the leak check's label as the walk words it. */
+export function judgeGhostControl(harness, failed, target, planted) {
+  if (!planted) {
+    console.error(`${harness} control: RED. The name was never written into the squad panel, so a red run would be red for some other reason.`);
+    return 1;
+  }
+  const hit = failed.filter(t => t.startsWith(target));
+  const collateral = failed.filter(t => !t.startsWith(target));
+  if (hit.length === 1 && collateral.length === 0) {
+    console.error(`${harness} control: green. A 2026 name written into the squad panel was reported by the leak check and by nothing else (${hit[0]}). Exiting non zero, because a run with findings fails.`);
+  } else {
+    console.error(`${harness} control: RED. Expected exactly the leak check red, got ${hit.length} of it and ${collateral.length} other(s): ${collateral.join('; ') || 'none'}.`);
+  }
+  return 1;
+}
 
 /* The shape of one era data row in the built chunk: {n:"Michael Owen",p:"ST",... */
 const rowNeedle = name => `{n:${JSON.stringify(name)},`;
