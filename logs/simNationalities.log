@@ -1,0 +1,13 @@
+1) Coverage is total, and the maps hold nothing but world names
+   now: 4389 entries over 4395 names
+   era2020: 1774 entries over 1774 names
+   era2015: 1658 entries over 1659 names
+   era2010: 1751 entries over 1751 names
+   era2005: 1727 entries over 1727 names
+2) The same name wears the right flag in each world
+3) The famous pins agree with undisputed public record
+4) No nationality without a FLAG_CODES entry
+5) nationalityOf: made-up men get null, unknown eras fall back to now
+6) No em or en dash anywhere in the shipped map
+
+simNationalities: green. Every real player carries his real flag, and no name wears the wrong one.
