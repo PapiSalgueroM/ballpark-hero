@@ -1,0 +1,21 @@
+# Reviewer sc-engine, Release AW part one, head 64d87aed: mutations of a pay or contract rule on the runner's checkout (each line mutates, runs the train's own check, puts the file back), then three control suites nobody ran on this head
+#!serial
+mB-brief-units-HOLE-IF-0: node .rc/x/scMut.mjs B && node_modules/.bin/vitest run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerCareerContracts.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mB-brief-outcomes-HOLE-IF-0: node .rc/x/scMut.mjs B && CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs; s=$?; git checkout -- src scripts; exit $s
+mC-brief-units-EXPECT-RED: node .rc/x/scMut.mjs C && node_modules/.bin/vitest run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mC-brief-outcomes-EXPECT-RED: node .rc/x/scMut.mjs C && CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs; s=$?; git checkout -- src scripts; exit $s
+mD-talks-EXPECT-RED: node .rc/x/scMut.mjs D && CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs; s=$?; git checkout -- src scripts; exit $s
+mE-awards-EXPECT-RED: node .rc/x/scMut.mjs E && node scripts/simCareerAwardsNight.mjs; s=$?; git checkout -- src scripts; exit $s
+mE-social-EXPECT-RED: node .rc/x/scMut.mjs E && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout -- src scripts; exit $s
+mE-story-EXPECT-RED: node .rc/x/scMut.mjs E && node scripts/simCareerStoryRole.mjs; s=$?; git checkout -- src scripts; exit $s
+mF-awards-EXPECT-RED: node .rc/x/scMut.mjs F && node scripts/simCareerAwardsNight.mjs; s=$?; git checkout -- src scripts; exit $s
+mF-social-EXPECT-RED: node .rc/x/scMut.mjs F && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout -- src scripts; exit $s
+mF-story-EXPECT-RED: node .rc/x/scMut.mjs F && node scripts/simCareerStoryRole.mjs; s=$?; git checkout -- src scripts; exit $s
+mA-offers-EXPECT-RED: node .rc/x/scMut.mjs A && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs; s=$?; git checkout -- src scripts; exit $s
+mA-contractmoves: node .rc/x/scMut.mjs A && node scripts/simSoccerContractMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-check: git status --short -- src scripts | head -5; test -z "$(git status --porcelain -- src scripts)"
+storyrole-controls-all: CAREER_STORY_ROLE_CONTROL=all node scripts/simCareerStoryRole.mjs
+development-controls-all: CAREER_DEVELOPMENT_CONTROL=all node scripts/simSoccerCareerDevelopment.mjs
+trophy-controls-all: CI=1 CAREER_TROPHY_RUNS_CONTROL=all node scripts/simCareerTrophyRuns.mjs
+talks-plain: CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs
+brief-outcomes-plain: CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
