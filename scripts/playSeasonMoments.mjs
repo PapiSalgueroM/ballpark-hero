@@ -74,6 +74,14 @@
  * walks run: used fails 3 in every walk and 7, 6 and 10 in walk B; fixtures
  * fails 10 on the three phone walks only; label fails 9 only.
  *
+ * Release AU (Rounds 1197 to 1208): an event choice with odds leaves a chance
+ * wheel on the save, which a player answers where the choice is made, so the
+ * driver below answers it there too (the call the wheel's own Continue makes);
+ * and on the way to a moment's matchday the Season Centre now stops for cup
+ * nights between league games, which the walk presses through
+ * (scripts/lib/cupNightWalk.mjs). The matchday each moment stops on, and the
+ * byte for byte compares, are what they were.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playSeasonMoments.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
  * "playSeasonMoments: N checks, 0 failed" line and exit 0.
@@ -86,6 +94,7 @@ import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
 import { mulberry32 } from './lib/careerAwardsNightProbe.mjs';
+import { pressCupNight } from './lib/cupNightWalk.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -138,8 +147,9 @@ check(ACTIONS.includes('Next') && ACTIONS.includes('Continue'), `9. parsed the w
 const B = await bundleAwardsNight(ROOT, { extra: {
   season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts',
   ledger: 'src/lib/season/momentsSave.ts', drills: 'src/lib/careerDrills.ts', through: 'src/lib/throughBallDrill.ts',
+  wheel: 'src/lib/careerChanceWheel.ts',
 } });
-const { soccer, season: S, core: C, moments: M, ledger: L, drills: D, through: T } = B;
+const { soccer, season: S, core: C, moments: M, ledger: L, drills: D, through: T, wheel: WHEEL } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 const abil = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
 function step(s) {
@@ -155,7 +165,7 @@ function step(s) {
     case 'rivalry_event': return soccer.dismissRivalryEvent(s, CLUBS);
     case 'social_media_action': return soccer.dismissSocialMediaPhase(s, CLUBS);
     case 'moral_dilemma': { const n = soccer.applyMoralDilemmaChoice(s, 0); return n.phase === 'moral_dilemma' ? soccer.dismissMoralDilemma(n, CLUBS) : n; }
-    case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? soccer.applyEventChoice(s, 0, CLUBS) : { ...s, phase: 'playing', pendingEvents: [] }; }
+    case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? WHEEL.acknowledgeChanceWheel(soccer.applyEventChoice(s, 0, CLUBS)) : { ...s, phase: 'playing', pendingEvents: [] }; }
     case 'red_card_appeal_result': return soccer.dismissAppealResult(s, CLUBS);
     case 'rehab_choice': return soccer.applyRehabChoice(s, 0);
     case 'transfer_window': return soccer.stayAtClub(s);
@@ -272,14 +282,18 @@ async function openCentre(page) {
   await page.waitForSelector('[data-kickoff]', { timeout: 30000 }).catch(() => {});
   return page.evaluate(() => document.querySelector('[data-kickoff-moments]')?.textContent ?? '');
 }
-/** Walk at Results speed to the next moment's offer card (or the review). */
+let CUP_NIGHTS = 0;
+/** Walk at Results speed to the next moment's offer card (or the review), through any cup night on the way. */
 async function toOffer(page) {
   await clickText(page, '▶ Kick off');
   for (let i = 0; i < 150; i += 1) {
     if (await page.$('[data-moment-offer]')) return true;
     if (await page.$('[data-review]')) return false;
     await clickText(page, 'Results');
-    if (!(await clickText(page, '▶ Matchday')) && !(await clickText(page, '▶ League game'))) await clickText(page, '📋 Season review');
+    if ((await clickText(page, '▶ Matchday')) || (await clickText(page, '▶ League game'))) continue;
+    const cup = await pressCupNight(page);
+    if (cup) { if (cup.what === 'reveal') CUP_NIGHTS += 1; continue; }
+    await clickText(page, '📋 Season review');
   }
   return false;
 }
@@ -513,6 +527,7 @@ try {
   check(bad.length === 0, `9. no label on the offer, the board or the verdict starts with a walker action (${JSON.stringify([...new Set(bad)])})`);
   check(allErrors.length === 0, `no page error on any walk (${allErrors.slice(0, 2).join(' | ')})`);
   console.log(`outcomes: ${outcomes.join('; ')}`);
+  console.log(`cup nights pressed through on the way to a moment, over all walks: ${CUP_NIGHTS}`);
 } catch (e) {
   failed += 1;
   console.log(`FAIL the harness threw: ${String(e && e.stack ? e.stack : e).slice(0, 600)}`);

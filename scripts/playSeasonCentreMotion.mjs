@@ -130,6 +130,12 @@
  * build ever words that line differently the control refuses to run, it
  * never passes quietly. Screenshots go to SHOTS (or RC_OUT, else .tmp-fx/shots).
  *
+ * Release AU (Rounds 1197 to 1208), part C: an event choice with odds leaves a chance wheel on the save, which a
+ * player answers where the choice is made, so the saves made here are answered there too (the call the wheel's own
+ * Continue makes); and the Season Centre now stops for a cup night between two league games. The walk presses through
+ * each one (scripts/lib/cupNightWalk.mjs), holds its screen to the floors of C6 and the walker rule of C5, and says how
+ * many it met. What it measures after each league matchday is what it measured before.
+ *
  * Needs dist built (the stylesheet and the site) and Chromium. Scope with ONLY=B1,B3 (any C runs all of part C).
  * Every page blocks the live database before anything loads.
  * Run: ENGINES=chromium MSYS_NO_PATHCONV=1 node scripts/playSeasonCentreMotion.mjs
@@ -143,6 +149,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
+import { throughCupNights } from './lib/cupNightWalk.mjs';
 import { probeAwardsNight, mulberry32 } from './lib/careerAwardsNightProbe.mjs';
 
 const { chromium } = pw;
@@ -169,7 +176,7 @@ const notes = [];
 const note = (id, msg) => { if (notes.filter(n => n.startsWith(id)).length < 4) notes.push(`${id}: ${msg}`); };
 
 /* ---- the tables, from node ---- */
-const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts', comps: 'src/lib/soccerSeasonCompetitions.ts', world: 'src/lib/soccerCareerLeagueWorld.ts' } });
+const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts', comps: 'src/lib/soccerSeasonCompetitions.ts', world: 'src/lib/soccerCareerLeagueWorld.ts', wheel: 'src/lib/careerChanceWheel.ts' } });
 const CLUBS = B.soccer.FALLBACK_CLUBS;
 const found = [];
 const seen = new Set();
@@ -181,7 +188,7 @@ probeAwardsNight(B, {
     if (!RESULTS_ONLY && s.phase === 'playing' && row && row.type === 'playing' && row.apps > 0) {
       const ctx = B.season.buildSoccerSeasonCtx(s, CLUBS, row);
       const d = ctx.mode !== 'table' ? B.core.deriveSeason(B.season.SOCCER, row, ctx) : null;
-      if (d && d.mode !== 'table' && d.games.length >= 6) RESULTS_ONLY = { save: JSON.stringify(s), name: s.playerName, at: s.seasons.length - 1, row, M: d.games.length };
+      if (d && d.mode !== 'table' && d.games.length >= 6) RESULTS_ONLY = { save: JSON.stringify(B.wheel.acknowledgeChanceWheel(s)), name: s.playerName, at: s.seasons.length - 1, row, M: d.games.length };
     }
     if (!['newspaper', 'season_summary', 'rehab_choice'].includes(s.phase)) return;
     if (!row || row.type !== 'playing' || !(row.apps > 0)) return;
@@ -737,7 +744,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       case 'rivalry_event': return soccer.dismissRivalryEvent(s, CLUBS);
       case 'social_media_action': return soccer.dismissSocialMediaPhase(s, CLUBS);
       case 'moral_dilemma': { const n = soccer.applyMoralDilemmaChoice(s, 0); return n.phase === 'moral_dilemma' ? soccer.dismissMoralDilemma(n, CLUBS) : n; }
-      case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? soccer.applyEventChoice(s, 0, CLUBS) : { ...s, phase: 'playing', pendingEvents: [] }; }
+      case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? B.wheel.acknowledgeChanceWheel(soccer.applyEventChoice(s, 0, CLUBS)) : { ...s, phase: 'playing', pendingEvents: [] }; }
       case 'red_card_appeal_result': return soccer.dismissAppealResult(s, CLUBS);
       case 'rehab_choice': return soccer.applyRehabChoice(s, 0);
       case 'transfer_window': return soccer.stayAtClub(s);
@@ -962,9 +969,19 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     return !!d && !!d.querySelector('[data-full-time]') && !document.querySelector('[data-rank-shifting]');
   }, md, { timeout: limit });
   const tableNow = page => page.evaluate(() => [...document.querySelectorAll('[data-season-centre] [data-rank-shift] [data-club]')].filter(r => r.getBoundingClientRect().height > 0).map(r => r.dataset.club));
-  /** Press on to matchday `md` (through its poster when it has one). */
+  /* Release AU: a cup night can stand between two league games. He presses through it (the cup, its saved result,
+     then on) and the last of those presses is the one that starts the next league matchday. Each cup night's screen
+     is held to the floors and to the walker rule like every other screen of the Season Centre. */
+  const cups = { nights: 0, labels: new Set() };
+  async function cupNights(page, where) {
+    const through = await throughCupNights(page, async () => { await floorsAt(page, `cup night ${where}`); await walkerAt(page, `cup night ${where}`); });
+    cups.nights += through.nights;
+    for (const l of through.labels) cups.labels.add(l);
+    return through.presses > 0;
+  }
+  /** Press on to matchday `md` (through any cup night before it, and through its poster when it has one). */
   async function playTo(page, md) {
-    await clickText(page, `▶ Matchday ${md}`);
+    if (!(await cupNights(page, `before matchday ${md}`))) await clickText(page, `▶ Matchday ${md}`);
     if (await page.$('[data-poster]')) await clickText(page, `▶ Matchday ${md}`);
   }
   const openLatest = async page => {
@@ -1190,6 +1207,8 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       if (vw === 390) await shot(p, 'resumed-kick-off-390');
       /* on to a poster, then the review */
       await clickText(p, '▶ Matchday 4');
+      /* a cup night that came after league game 3 is still to be seen: the resume shows it first */
+      await cupNights(p, `after the resume ${tag}`);
       if (await p.$('[data-poster]')) { await floorsAt(p, `poster ${tag}`); await clickText(p, '▶ Matchday 4'); }
       await fullTime(p, 4);
       if (await clickText(p, '⏩ To the next big game')) { if (await p.$('[data-poster]')) await floorsAt(p, `poster ${tag}`); }
@@ -1379,6 +1398,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     check(floors.clipped.length === 0 && floors.sideways.length === 0, `C6. the header's club and season are never clipped and nothing scrolls sideways (${floors.clipped.length}, ${floors.sideways.length})`);
     for (const w of walk.onNew.slice(0, 4)) console.log(`   C5: ${w}`);
     check(walk.n >= 8 && walk.onNew.length === 0 && walk.clash.size === 0, `C5. on ${walk.n} screens the career walker never presses one of this round's buttons, and none of their labels starts like an action it presses (${walk.onNew.length} picks, ${[...walk.clash].join(' | ') || 'no clash'})`);
+    check(cups.nights > 0, `C. between league games the walk met the season's cup nights and pressed through each (${cups.nights} nights; the bar said: ${[...cups.labels].slice(0, 6).join(' | ')})`);
     check(errorsSeen.length === 0, `C. no page error on any screen (${errorsSeen.slice(0, 2).join(' | ') || 'none'})`);
   } finally {
     try { server.kill(); } catch { /* gone */ }
