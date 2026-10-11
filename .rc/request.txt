@@ -1,0 +1,1 @@
+simEras-on-main: git worktree add -q /tmp/base aa564f16 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simEras.mjs > /tmp/eras.log 2>&1; s=$?; grep -a "FAIL" /tmp/eras.log | cut -c1-200; tail -1 /tmp/eras.log; echo "simEras on origin/main aa564f16 exit $s"; exit $s
