@@ -49,8 +49,9 @@
  * block at the foot of the file that is NOT about reviews: finding 6 of Round 1302 (a real goal that is the last kick
  * of a half), reproduced on halves nobody asks a review in, as three cases marked `fails`. The fix pass of Round 1303
  * mended the screen, so those are plain cases now, with two more beside them (reduced motion, and Skip during the
- * card). So: 44 cases, 39 plain and 5 that pass by failing (all five are about a penalty a review gives, a kind
- * of review the game does not play).
+ * card). The same fix mended one of Round 1302's five open rows on the way (the kick of a penalty a review gives in
+ * the place before a real last kick is played now). So: 43 cases, 39 plain and 4 that pass by failing (all four are
+ * about a penalty a review gives, a kind of review the game does not play).
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -693,7 +694,11 @@ describe('Club Manager: the review screen', () => {
   type AwardedRow = { what: string; match: number; hint: number; shape: (x: LateShape) => boolean; under: 'quiet' | 'OPEN'; kick: 'played' | 'OPEN' };
   const LATE_AWARDED: AwardedRow[] = [
     { what: 'a real goal is the last kick after it and a real goal has the place before it', match: 1, hint: 10321, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
-    { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
+    /* Round 1303 fix: this row's kick was OPEN (never drawn: the plan plays nothing in the place before a last kick).
+       A real goal in that place has a stoppage of its own now (finding 6 of Round 1302, `goalStop` on the screen),
+       and the goal of a penalty a review gives is such a goal, so the kick is played out after its card. The case
+       marked `fails` for it went red on the runner the day the screen was mended (r1303-fx-e), as it was built to. */
+    { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
     { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
     /* Round 1303: on the lower penalty rate the half this row stood on (match 3, seed 8615) holds no review. A scan of
        200,000 first halves of entries 5 to 24 (runner result r1303-scan2) found one half of this shape: entry 11, seed 2022. */
