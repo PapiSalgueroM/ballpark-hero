@@ -1,0 +1,5 @@
+# Release AV fix2: the lead's hand step proven again with the helper as it is finally saved (three lines of the ceiling note reworded after rAV-fx2-b; the logic is the same). Head ede83172, no new commit.
+#!serve
+#!playwright
+#!serial
+prove: node .rc/x/fx2ProveBudgets.mjs
