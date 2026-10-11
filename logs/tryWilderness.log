@@ -1,0 +1,8 @@
+== playWilderness as committed
+locator.click: Timeout 30000ms exceeded.
+  - waiting for locator('button:has-text("Newcastle")').first()
+  log: [ `  - waiting for locator('button:has-text("Newcastle")').first()` ],
+  name: 'TimeoutError'
+as committed: exit=1 | Node.js v24.21.0
+== playWilderness with the league tile pressed (1 line changed)
+TRY playWilderness: as committed exit=1, tile pressed exit=0 | playWilderness: green. Getting sacked is a chapter now, not the last page.

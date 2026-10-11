@@ -1,0 +1,16 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playEra2005 exit=1 11s | playEra2005: 1 failure
+playEra2010 exit=1 6s | playEra2010: 1 failure
+playEra2015 exit=1 17s | playEra2015: 1 failure
+playEra2020 exit=0 18s | playEra2020: green. The 2020-21 branch plays like a person would find it.
+playNationalities exit=0 21s | playNationalities: green. The filter narrows to real nations and every flag is the right man's.
+walkEraMarket exit=0 205s | walkEraMarket: green. Each market on screen holds only men of its own season.
+playEra2005-drop exit=1 12s | playEra2005 control: RED. Expected exactly 2 red (Michael Owen is at 2005 Newcastle (the window correction, visible in the UI); Alan Shearer is in the squad), got 2 of th
+playEra2010-drop exit=1 7s | playEra2010 control: RED. Expected exactly 1 red (Wayne Rooney is in the 2010 United squad), got 1 of them and 1 other(s): no 2026 player leaked into 2010.
+playEra2015-drop exit=1 17s | playEra2015 control: RED. Expected exactly 5 red (Jamie Vardy is in the 2015 Leicester squad; Kasper Schmeichel is in goal; Dybala arrived from Palermo, the window correc
+playEra2020-drop exit=1 18s | playEra2020 control: green. Taking those men out of the era squad data was reported by exactly the checks that claim them, so the squad is read off the squad. Exiting non
+playNationalities-nofilter exit=0 21s | playNationalities control nofilter: all 1 guarded checks fired (mutations landed: {"natPredicate":1})
+tryNationJob exit=0 76s | TRY playNationJob: as committed exit=1, tile pressed exit=1 | Node.js v24.21.0
+tryReleaseClause exit=0 51s | TRY playReleaseClause: as committed exit=1, tile pressed exit=0 | playReleaseClause: green. The desk is on the wall and the door opens and shuts like the engine promised.
+trySponsors exit=0 51s | TRY playSponsors: as committed exit=1, tile pressed exit=0 | playSponsors: green. The desk offers three real deals and pays for the one you take.
+tryWilderness exit=0 54s | TRY playWilderness: as committed exit=1, tile pressed exit=0 | playWilderness: green. Getting sacked is a chapter now, not the last page.

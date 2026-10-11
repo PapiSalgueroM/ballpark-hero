@@ -1,0 +1,20 @@
+1) Take a job and build a record worth a country
+  PASS  the career is running
+  PASS  the save was given a record worth an international job
+2) The country calls on the Manager tile
+  PASS  the manager tile is on the hub
+  FAIL  the tile says the country is calling (Managers)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-nation-offer]') to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playNationJob.mjs:84:13 {
+  log: [ "  - waiting for locator('[data-nation-offer]') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

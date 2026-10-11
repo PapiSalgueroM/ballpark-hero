@@ -1,0 +1,8 @@
+== playSponsors as committed
+locator.click: Timeout 30000ms exceeded.
+  - waiting for locator('button:has-text("Newcastle")').first()
+  log: [ `  - waiting for locator('button:has-text("Newcastle")').first()` ],
+  name: 'TimeoutError'
+as committed: exit=1 | Node.js v24.21.0
+== playSponsors with the league tile pressed (1 line changed)
+TRY playSponsors: as committed exit=1, tile pressed exit=0 | playSponsors: green. The desk offers three real deals and pays for the one you take.

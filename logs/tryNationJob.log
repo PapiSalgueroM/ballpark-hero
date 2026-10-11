@@ -1,0 +1,13 @@
+== playNationJob as committed
+locator.click: Timeout 30000ms exceeded.
+  - waiting for locator('text=Take the job')
+  log: [ "  - waiting for locator('text=Take the job')" ],
+  name: 'TimeoutError'
+as committed: exit=1 | Node.js v24.21.0
+== playNationJob with the league tile pressed (1 line changed)
+  FAIL  the tile says the country is calling (Managers)
+locator.waitFor: Timeout 30000ms exceeded.
+  - waiting for locator('[data-nation-offer]') to be visible
+  log: [ "  - waiting for locator('[data-nation-offer]') to be visible" ],
+  name: 'TimeoutError'
+TRY playNationJob: as committed exit=1, tile pressed exit=1 | Node.js v24.21.0
