@@ -1,0 +1,26 @@
+# Release AX, final proof, extras 2: the harnesses this train changed, each control its own line (EXPECT1 = the control must exit 1 on its own closing line), and the fleet of careers that never answer the press
+press-units: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/soccerPressRoomReadAsAbsent.test.tsx src/test/belgianOpponentLabelsLeague.test.ts src/test/soccerSavePartsReadAsAbsent.test.ts --testTimeout=300000
+pressNeutral: export TMPDIR=$(mktemp -d); git worktree add -q /tmp/base-c 934c29d9 && node .rc/x/pressNeutral.mjs /tmp/base-c 150
+simSaveKeeper: export TMPDIR=$(mktemp -d); node scripts/simSaveKeeper.mjs
+simSaveKeeper-partrow-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+simSaveKeeper-partrowus-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
+simSaveKeeper-partbrief-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partbrief node scripts/simSaveKeeper.mjs
+simSaveKeeper-partagent-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partagent node scripts/simSaveKeeper.mjs
+simSaveKeeper-partreturn-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partreturn node scripts/simSaveKeeper.mjs
+simSaveKeeper-partfarewell-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+simSaveKeeper-partpress-EXPECT1: export TMPDIR=$(mktemp -d); SIM_SAVE_KEEPER_CONTROL=partpress node scripts/simSaveKeeper.mjs
+simUsCareerSaveRetry: export TMPDIR=$(mktemp -d); node scripts/simUsCareerSaveRetry.mjs
+simUsCareerPractice-reset: export TMPDIR=$(mktemp -d); US_CAREER_PRACTICE_CONTROL=reset node scripts/simUsCareerPractice.mjs
+simUsCareerActionConfirm: export TMPDIR=$(mktemp -d); node scripts/simUsCareerActionConfirm.mjs
+simUsCareerActionConfirm-ownKey: export TMPDIR=$(mktemp -d); US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs
+simCareerKeepPlaying-nomoney-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=nomoney node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-nomoneysave-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=nomoneysave node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-norehabrow-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=norehabrow node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-noconvictionrow-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=noconvictionrow node scripts/simCareerKeepPlaying.mjs
+simCareerKeepPlaying-nomoneytrial-EXPECT1: export TMPDIR=$(mktemp -d); KEEP_PLAYING_CONTROL=nomoneytrial node scripts/simCareerKeepPlaying.mjs
+simExtension: export TMPDIR=$(mktemp -d); node scripts/simExtension.mjs
+simFreeAgency: export TMPDIR=$(mktemp -d); node scripts/simFreeAgency.mjs
+simCareerSeasonTruth: export TMPDIR=$(mktemp -d); CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
+simBuildYourXiFit: export TMPDIR=$(mktemp -d); node scripts/simBuildYourXiFit.mjs
+simValidatorRefusalHold: export TMPDIR=$(mktemp -d); node scripts/simValidatorRefusalHold.mjs
+simLineupValidatorClient: export TMPDIR=$(mktemp -d); node scripts/simLineupValidatorClient.mjs

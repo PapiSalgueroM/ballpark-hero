@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/belgianOpponentLabelsLeague.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/test/soccerSavePartsReadAsAbsent.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 368[2mms[22m[39m
+[90mstdout[2m | src/test/soccerPressRoomReadAsAbsent.test.tsx[2m > [22m[2mthe journey of ruling C3 for the Press room: can natural play make the part unreadable[2m > [22m[2mevery unreadable part on the fleet is the one known road, and the room is open again on the next playing screen
+[22m[39mpress journey: 17 careers, 4239 steps, 461 season rows, 401 answers, 401 promises {"missed":263,"met":80,"excused":29,"pending":15}, 14 loans, 26 years out, 14 severe injuries, 34 times Keep playing; parts broken by the gifted goals 1, rooms answered again after it 1; unexplained 0
+
+ [32m✓[39m src/test/soccerPressRoomReadAsAbsent.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 7189[2mms[22m[39m
+   [33m[2m✓[22m[39m the journey of ruling C3 for the Press room: can natural play make the part unreadable[2m > [22mevery unreadable part on the fleet is the one known road, and the room is open again on the next playing screen [33m 7099[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 21:55:51
+[2m   Duration [22m 10.69s[2m (transform 1.80s, setup 350ms, collect 6.25s, tests 7.59s, environment 1.75s, prepare 667ms)[22m
+
