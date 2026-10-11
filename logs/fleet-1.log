@@ -1,0 +1,9 @@
+seed 10107 UNREADABLE random_events -> random_events, 9 rows, 6 answers: settled promise (goals, missed) of source 7: saved actual 9 in 2028, row 8 holds 13 in 2028 at Al Ahli | events ["🌍 Spain won the European Championship.","🤝 Four gifted goals and a Golden Boot with an invisible asterisk"]
+seed 10233 UNREADABLE random_events -> transfer_window, 17 rows, 14 answers: settled promise (goals, missed) of source 15: saved actual 5 in 2036, row 16 holds 9 in 2036 at Juventus | events ["🍳 Burned the dessert on national TV. Everyone loved it","🤝 Four gifted goals and a Golden Boot with an invisible asterisk"]
+seed 10335 UNREADABLE random_events -> random_events, 20 rows, 17 answers: settled promise (goals, missed) of source 18: saved actual 24 in 2039, row 19 holds 28 in 2039 at Flamengo | events ["👋 Rival Retires","🤝 Four gifted goals and a Golden Boot with an invisible asterisk"]
+ROADS to an unreadable part (digits masked):
+  1 x after random_events -> random_events; lastEventId 333; settled promise (goals, missed) of source #: saved actual # in #, row # holds # in # at Al Ahli
+  1 x after random_events -> transfer_window; lastEventId 333; settled promise (goals, missed) of source #: saved actual # in #, row # holds # in # at Juventus
+  1 x after random_events -> random_events; lastEventId 333; settled promise (goals, missed) of source #: saved actual # in #, row # holds # in # at Flamengo
+TALLY {"careers":400,"steps":79349,"rows":8322,"answers":7499,"promises":7499,"settled":{"missed":5731,"met":1433,"excused":239,"moved":13},"moves":769,"loans":77,"farewells":314,"kept":255,"outYears":25,"severe":236,"throws":0,"unreadable":3,"reopened":3,"shut":0,"unsettled":0,"loadDiffers":0,"retired":400,"phasesEnded":{}}
+pressFleet: 400 careers from seed 10000; 3 unreadable part(s), 3 answered again; 0 hard failure(s) (throws 0, shut 0, unsettled 0, load differs 0). No throw, no shut room, every pending promise settled by its next played row.

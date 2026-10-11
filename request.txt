@@ -1,0 +1,6 @@
+# Release AX review, engine-saves, request b: the reviewer's probes on the pushed head. A vitest of fourteen damages of the pressRoom part at two points of a real career (and two promises on one row at the clamps); three fleets of whole careers that answer the press every year with random choices; a fleet that never answers, byte equal against the base origin/release-aw-int c9a1f86a
+damage: export TMPDIR=$(mktemp -d); cp .rc/x/zzReviewPressDamage.test.tsx src/test/zzReviewPressDamage.test.tsx && node_modules/.bin/vitest run src/test/zzReviewPressDamage.test.tsx --testTimeout=300000 --hookTimeout=120000
+fleet-1: export TMPDIR=$(mktemp -d); node .rc/x/pressFleet.mjs 400 10000
+fleet-2: export TMPDIR=$(mktemp -d); node .rc/x/pressFleet.mjs 400 20000
+fleet-3: export TMPDIR=$(mktemp -d); node .rc/x/pressFleet.mjs 400 30000
+neutral-vs-base: export TMPDIR=$(mktemp -d); git worktree add -q /tmp/base-aw c9a1f86a && node .rc/x/pressNeutral2.mjs /tmp/base-aw 200 3001

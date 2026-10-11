@@ -1,0 +1,4 @@
+ok   the two bundles are two trees (only the head has src/lib/soccerCareerPress.ts)
+reviewer's copy: seeds 3001 to 3200, base /tmp/base-aw
+ok   no career of the fleet holds a pressRoom (0)
+pressNeutral: 200 careers, 34496 steps, 3729 season rows, 200 played to retirement; 0 failure(s). Every save after every step and every draw count is the base engine's: the Press room moved nothing for a player who never answers.

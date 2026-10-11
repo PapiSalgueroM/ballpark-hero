@@ -1,0 +1,5 @@
+damage exit=0 5s |    Duration  4.14s (transform 1.44s, setup 70ms, collect 1.82s, tests 1.30s, environment 402ms, prepare 205ms)
+fleet-1 exit=0 91s | pressFleet: 400 careers from seed 10000; 3 unreadable part(s), 3 answered again; 0 hard failure(s) (throws 0, shut 0, unsettled 0, load differs 0). No throw, no shut room
+fleet-2 exit=0 95s | pressFleet: 400 careers from seed 20000; 5 unreadable part(s), 5 answered again; 0 hard failure(s) (throws 0, shut 0, unsettled 0, load differs 0). No throw, no shut room
+fleet-3 exit=0 104s | pressFleet: 400 careers from seed 30000; 5 unreadable part(s), 5 answered again; 0 hard failure(s) (throws 0, shut 0, unsettled 0, load differs 0). No throw, no shut room
+neutral-vs-base exit=0 42s | pressNeutral: 200 careers, 34496 steps, 3729 season rows, 200 played to retirement; 0 failure(s). Every save after every step and every draw count is the base engine's: t
