@@ -1,0 +1,8 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-units exit=0 15s | PASS farewell units: {"mode":"units","total":85,"files":[{"file":"soccerCareerFarewell.test.ts","passed":50},{"file":"soccerFarewellUi.test.tsx","passed":14},{"file":"soc
+farewell-outcomes exit=0 6s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-page-control exit=0 25s | PASS farewell page-control: {"mode":"page-control","baseline":13,"componentBaseline":14,"componentSourceControls":1,"pageSourceControls":2,"intendedFailures":[{"id":"anno
+farewell-native exit=0 242s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+sweepWeight exit=1 28s | sweepWeight: 3 failures
+gitclean exit=0 0s | clean
