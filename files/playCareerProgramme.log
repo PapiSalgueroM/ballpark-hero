@@ -1,0 +1,22 @@
+FAIL 320-soccer-career: AssertionError [ERR_ASSERTION]: 320-soccer-career: Squad Back restores body and page position
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:26:31)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:132:97
+Career programme native: 1080 checks, 20/21 completed gameplay journeys
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(report.cases.every(v=>v.ok))
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:187:196 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

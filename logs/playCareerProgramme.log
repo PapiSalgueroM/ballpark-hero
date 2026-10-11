@@ -1,0 +1,3 @@
+FAIL 320-soccer-career: AssertionError [ERR_ASSERTION]: 320-soccer-career: Squad Back restores body and page position
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+Node.js v24.21.0
