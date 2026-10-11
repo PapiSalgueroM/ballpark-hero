@@ -156,11 +156,20 @@
      estimate: a run goes red only when its estimate passes about 5.4,
      which is about 2.5 errors over the lift, well under one reroll in a
      hundred (at 8000 the interval ended 2.9 over, and the same sum came to
-     about one reroll in ten). The NFL runs
-     16000 a seed by default now (BAL_DEFAULT below; the bound is untouched).
-     THE COST: that child takes 64 minutes on a runner by itself (measured
-     three times: 3864, 3848 and 3871 s), where 8000 took 29; a remote check
-     job ends at 100 minutes. The other three statistics at 16000: peak OVR
+     about one reroll in ten).
+     BUT 16000 DOES NOT FIT THE GATE. That child takes 64 minutes on a
+     runner by itself (measured three times: 3864, 3848 and 3871 s), where
+     8000 took 29, and one command of a remote check is cut at 70 minutes:
+     the whole harness at 16000 was cut there with the balance children
+     still running (exit 124, which is the clock and not a red; runner
+     result r1301-summer-all). So the NFL runs 12000 a seed by default
+     (BAL_DEFAULT below; the bound is untouched): the largest size the
+     whole harness can carry in one command. By the root of the size its
+     interval ends about 2.4 points over the estimate, about 2.4 inside the
+     bound, and a reroll goes red about one time in forty (one in ten at
+     8000, about one in two hundred at 16000). A gate that can run the NFL
+     balance as a line of its own may set SIM_BALANCE_CAREERS=16000 for it.
+     The other three statistics at 16000: peak OVR
      +0.08 [0.04, 0.13], Hall share +0.15 points [-0.30, 0.61], headline
      awards a season -3.5% [-6.4, -0.7] (and -1.8% [-4.8, 1.8] on seed 7).
      THE NBA NEXT, with Round 1103 (2026-10-09, the tree with the NBA's new
@@ -709,11 +718,13 @@ const TOL = { peak: 1.0, legacyRel: 0.075, hofPts: 3, headlineRel: 0.15 };
    since Round 1103 (2026-10-09): at 2000 its Hall share interval is 1.62
    points either way against a tolerance of 3, and a lift near 1.25 points
    came up red on one run of five and 0.02 inside on another, on two trees
-   (the header has the measurement). The NFL runs 16000 since Round 1301
+   (the header has the measurement). The NFL runs 12000 since Round 1301
    (2026-10-11): at 8000 its legacy interval still ended 0.7 points inside
-   the bound; at 16000 it ends 2.5 inside on two seed sets and two trees.
+   the bound; at 16000 it ends 2.5 inside on two seed sets and two trees,
+   but that child is 64 minutes and one gate command is cut at 70, so the
+   default is the largest size the whole harness can carry.
    SIM_BALANCE_CAREERS still sets one size for every sport. */
-const BAL_DEFAULT = { nfl: 16000, nba: 8000, mlb: 8000 };
+const BAL_DEFAULT = { nfl: 12000, nba: 8000, mlb: 8000 };
 const balCareers = slug => Number(process.env.SIM_BALANCE_CAREERS || BAL_DEFAULT[slug] || 2000);
 const BAL_SIZES = Object.keys(SPORTS).map(slug => `${slug} ${balCareers(slug)}`).join(', ');
 const BAL_SEEDS = 3;
