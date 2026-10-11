@@ -1,0 +1,4 @@
+# Review (run lens) of Round 1212 on 1e1066fb: why the Round 1221 law receipt says NOT COMPARED (its three moved inputs put back as the record holds them)
+#!serial
+law-attrib-all3: git cat-file -p bb182e87db73 > src/data/usLeagueShape.ts && git cat-file -p 62a6293dbffd > src/lib/careerRival.ts && git cat-file -p 3bccd4b40c17 > src/lib/season/us.ts && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- src scripts; git status --short | head -3; exit $s
+law-attrib-round-only: git cat-file -p bb182e87db73 > src/data/usLeagueShape.ts && git cat-file -p 3bccd4b40c17 > src/lib/season/us.ts && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- src scripts; exit $s

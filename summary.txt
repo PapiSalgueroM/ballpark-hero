@@ -1,0 +1,2 @@
+law-attrib-all3 exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+law-attrib-round-only exit=3 19s | simUsSeasonCentre digest compare: NOT COMPARED, 1 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
