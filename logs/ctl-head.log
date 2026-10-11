@@ -1,0 +1,46 @@
+head | simExtensionResponseMotion | unreply | exit 1 1s | } | Error: Failed to resolve import "./MarketChanceWheel" from ".sim-control/extension-motion-kiDzKX/ExtensionCard.tsx". Does the file exist?
+head | simFreeAgencyFeedback | consumed | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | annual | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | years | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | total | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | local | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | receipt | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | status | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | focus | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | focusOwner | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | restored | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | replacement | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | finite | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simFreeAgencyFeedback | reduced | exit 1 1s | } | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+head | simCareerDecisionOutcome | snapshot | exit 1 0s | } | AssertionError [ERR_ASSERTION]: snapshot binds exactly one executable anchor
+head | simCareerDecisionOutcome | choice | exit 1 0s | } | AssertionError [ERR_ASSERTION]: choice binds exactly one executable anchor
+head | simCareerDecisionOutcome | apply | exit 0 3s | simCareerDecisionOutcome apply: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerDecisionOutcome | rapid | exit 0 3s | simCareerDecisionOutcome rapid: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerDecisionOutcome | drawOrder | exit 1 0s | } | AssertionError [ERR_ASSERTION]: drawOrder binds exactly one executable anchor
+head | simCareerDecisionOutcome | tradeDrawOrder | exit 1 0s | } | AssertionError [ERR_ASSERTION]: tradeDrawOrder binds exactly one executable anchor
+head | simCareerDecisionOutcome | tradeTeam | exit 1 0s | } | AssertionError [ERR_ASSERTION]: tradeTeam binds exactly one executable anchor
+head | simCareerDecisionOutcome | persist | exit 0 3s | simCareerDecisionOutcome persist: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerDecisionOutcome | continueDraw | exit 0 3s | simCareerDecisionOutcome continueDraw: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerDecisionOutcome | continueWrite | exit 0 3s | simCareerDecisionOutcome continueWrite: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerDecisionOutcome | continueSeason | exit 0 3s | simCareerDecisionOutcome continueSeason: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerDecisionOutcome | continueFocus | exit 0 3s | simCareerDecisionOutcome continueFocus: intended assertions and independent ordinary/rivalry baseline passed.
+head | simCareerSeasonReview | returnFocus | exit 0 3s | simCareerSeasonReview returnFocus: intended assertions and independent retirement baseline passed.
+head | simCareerSeasonReview | pendingEvent | exit 0 3s | simCareerSeasonReview pendingEvent: intended assertions and independent retirement baseline passed.
+head | simCareerSeasonReview | retiredBack | exit 0 3s | simCareerSeasonReview retiredBack: intended assertions and independent retirement baseline passed.
+head | simUsCareerPractice | gain | exit 0 4s | simUsCareerPractice control gain: all four named outcomes rejected the defect, all four quiet restores passed
+head | simUsCareerPractice | save | exit 0 4s | simUsCareerPractice control save: all four named outcomes rejected the defect, all four quiet restores passed
+head | simUsCareerPractice | abort | exit 0 5s | simUsCareerPractice control abort: all four named outcomes rejected the defect, all four quiet restores passed
+head | simUsCareerPractice | pending | exit 0 3s | simUsCareerPractice control pending: all four named outcomes rejected the defect, all four quiet restores passed
+head | simUsCareerPractice | carry | exit 0 5s | simUsCareerPractice control carry: all four named outcomes rejected the defect, all four quiet restores passed
+head | simUsCareerProspect | save | exit 0 3s | simUsCareerProspect control save: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerProspect | restore | exit 0 3s | simUsCareerProspect control restore: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerProspect | handoff | exit 0 4s | simUsCareerProspect control handoff: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerProspect | duplicate | exit 0 4s | simUsCareerProspect control duplicate: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerProspect | undrafted | exit 0 3s | simUsCareerProspect control undrafted: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerProspect | archive | exit 0 4s | simUsCareerProspect control archive: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerProspect | back | exit 0 3s | simUsCareerProspect control back: 4 named assertion failures and 4 independent legacy passes
+head | simUsCareerActionConfirm | retireWiring | exit 0 5s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay o
+head | simUsCareerActionConfirm | restartWiring | exit 0 4s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay o
+head | simUsCareerActionConfirm | legacy | exit 0 5s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay o
+head | simNoDoubleRecord | coachflip | exit 0 22s | simNoDoubleRecord: NO_DOUBLE_CONTROL=coachflip fired exactly where it should, so the checks it targets can fail
+ctl head: 45 controls run, 19 with a non zero exit

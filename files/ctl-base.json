@@ -1,0 +1,272 @@
+{
+ "simExtensionResponseMotion:unreply": {
+  "exit": 0,
+  "last": "simExtensionResponseMotion unreply control: all three real-engine response checks rejected the removed binding; both opening-state checks stayed green",
+  "err": "",
+  "s": 1
+ },
+ "simFreeAgencyFeedback:consumed": {
+  "exit": 0,
+  "last": "Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove",
+  "err": "",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:annual": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:years": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:total": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:local": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:receipt": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:status": {
+  "exit": 0,
+  "last": "Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove",
+  "err": "",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:focus": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:focusOwner": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\\(element\\)|TestingLibraryElementError: Unable to find an accessible element with the role/. Input",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:restored": {
+  "exit": 0,
+  "last": "Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove",
+  "err": "",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:replacement": {
+  "exit": 0,
+  "last": "Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove",
+  "err": "",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:finite": {
+  "exit": 0,
+  "last": "Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove",
+  "err": "",
+  "s": 2
+ },
+ "simFreeAgencyFeedback:reduced": {
+  "exit": 0,
+  "last": "Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove",
+  "err": "",
+  "s": 2
+ },
+ "simCareerDecisionOutcome:snapshot": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: snapshot binds exactly one executable anchor",
+  "s": 0
+ },
+ "simCareerDecisionOutcome:choice": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: choice binds exactly one executable anchor",
+  "s": 0
+ },
+ "simCareerDecisionOutcome:apply": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome apply: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerDecisionOutcome:rapid": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome rapid: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerDecisionOutcome:drawOrder": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: drawOrder binds exactly one executable anchor",
+  "s": 0
+ },
+ "simCareerDecisionOutcome:tradeDrawOrder": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: tradeDrawOrder binds exactly one executable anchor",
+  "s": 0
+ },
+ "simCareerDecisionOutcome:tradeTeam": {
+  "exit": 1,
+  "last": "}",
+  "err": "AssertionError [ERR_ASSERTION]: tradeTeam binds exactly one executable anchor",
+  "s": 0
+ },
+ "simCareerDecisionOutcome:persist": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome persist: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerDecisionOutcome:continueDraw": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome continueDraw: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerDecisionOutcome:continueWrite": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome continueWrite: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerDecisionOutcome:continueSeason": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome continueSeason: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerDecisionOutcome:continueFocus": {
+  "exit": 0,
+  "last": "simCareerDecisionOutcome continueFocus: intended assertions and independent ordinary/rivalry baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerSeasonReview:returnFocus": {
+  "exit": 0,
+  "last": "simCareerSeasonReview returnFocus: intended assertions and independent retirement baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerSeasonReview:pendingEvent": {
+  "exit": 0,
+  "last": "simCareerSeasonReview pendingEvent: intended assertions and independent retirement baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simCareerSeasonReview:retiredBack": {
+  "exit": 0,
+  "last": "simCareerSeasonReview retiredBack: intended assertions and independent retirement baseline passed.",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerPractice:gain": {
+  "exit": 0,
+  "last": "simUsCareerPractice control gain: all four named outcomes rejected the defect, all four quiet restores passed",
+  "err": "",
+  "s": 4
+ },
+ "simUsCareerPractice:save": {
+  "exit": 0,
+  "last": "simUsCareerPractice control save: all four named outcomes rejected the defect, all four quiet restores passed",
+  "err": "",
+  "s": 4
+ },
+ "simUsCareerPractice:abort": {
+  "exit": 0,
+  "last": "simUsCareerPractice control abort: all four named outcomes rejected the defect, all four quiet restores passed",
+  "err": "",
+  "s": 5
+ },
+ "simUsCareerPractice:pending": {
+  "exit": 0,
+  "last": "simUsCareerPractice control pending: all four named outcomes rejected the defect, all four quiet restores passed",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerPractice:carry": {
+  "exit": 0,
+  "last": "simUsCareerPractice control carry: all four named outcomes rejected the defect, all four quiet restores passed",
+  "err": "",
+  "s": 5
+ },
+ "simUsCareerProspect:save": {
+  "exit": 0,
+  "last": "simUsCareerProspect control save: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerProspect:restore": {
+  "exit": 0,
+  "last": "simUsCareerProspect control restore: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerProspect:handoff": {
+  "exit": 0,
+  "last": "simUsCareerProspect control handoff: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 4
+ },
+ "simUsCareerProspect:duplicate": {
+  "exit": 0,
+  "last": "simUsCareerProspect control duplicate: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerProspect:undrafted": {
+  "exit": 0,
+  "last": "simUsCareerProspect control undrafted: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerProspect:archive": {
+  "exit": 0,
+  "last": "simUsCareerProspect control archive: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 4
+ },
+ "simUsCareerProspect:back": {
+  "exit": 0,
+  "last": "simUsCareerProspect control back: 4 named assertion failures and 4 independent legacy passes",
+  "err": "",
+  "s": 3
+ },
+ "simUsCareerActionConfirm:retireWiring": {
+  "exit": 0,
+  "last": "Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay o",
+  "err": "",
+  "s": 4
+ },
+ "simUsCareerActionConfirm:restartWiring": {
+  "exit": 0,
+  "last": "Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay o",
+  "err": "",
+  "s": 4
+ },
+ "simUsCareerActionConfirm:legacy": {
+  "exit": 0,
+  "last": "Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay o",
+  "err": "",
+  "s": 5
+ },
+ "simNoDoubleRecord:coachflip": {
+  "exit": 0,
+  "last": "simNoDoubleRecord: NO_DOUBLE_CONTROL=coachflip fired exactly where it should, so the checks it targets can fail",
+  "err": "",
+  "s": 22
+ }
+}

@@ -1,0 +1,3 @@
+ctl-head exit=0 128s | ctl head: 45 controls run, 19 with a non zero exit
+ctl-base exit=0 141s | ctl base: 45 controls run, 12 with a non zero exit
+ctl-compare exit=0 0s | ctl compare: 45 controls, 7 behave differently on the head

@@ -1,0 +1,5 @@
+# reviewer us-board-recording, Release AX on 72f54789: every negative control that edits or copies UsCareerBoard.tsx, ExtensionCard.tsx or FreeAgencyPanel.tsx in harnesses whose controls nobody ran after the merge, on the head and on the base c9a1f86a, and which of them behave differently
+#!serial
+ctl-head: node .rc/x/ctl.mjs head
+ctl-base: cp .rc/x/ctl.mjs /tmp/ctl.mjs && git checkout -q --detach c9a1f86a && node /tmp/ctl.mjs base; s=$?; git checkout -q -; exit $s
+ctl-compare: node .rc/x/ctl.mjs compare
