@@ -1,0 +1,14 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flagship-head exit=0 1s | flagshipProbe: 43 chunks, 2662559 bytes raw = 2600.2 KB (the ceiling is 2600), 771.4 KB gzipped
+main-build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flagship-main exit=0 1s | flagshipProbe: 43 chunks, 2661052 bytes raw = 2598.7 KB (the ceiling is 2600), 771.0 KB gzipped
+flagship-diff exit=0 0s | flagshipProbe diff: 43 chunk names, raw bytes moved by +1507 (1.5 KB)
+ledger-plain exit=0 2s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ledger-mlbladder exit=1 2s | simUsSeasonLedger: CONTROL mlbladder FIRED, red at exactly E4
+anchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+realfix-x6-head exit=3 87s | playCmRealFixtures alone on this head: 3 of 6 runs red
+realfix-x6-main exit=1 93s | playCmRealFixtures alone on main's build: 1 of 6 runs red
+detective-x5-head exit=2 52s | playDraftDetectiveReports on this head: 2 of 5 runs red
+detective-x5-main exit=4 53s | playDraftDetectiveReports on main's build: 4 of 5 runs red
+rivalp-cutdraw exit=1 461s | simUsRivalSense: 47 checks, 4 failed (full size), red sections: P1, P2

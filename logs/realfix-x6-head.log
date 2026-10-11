@@ -1,0 +1,51 @@
+simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+run 1 RED
+cases 5, passed 4; controls 2; source held true
+CASE 390-real: passed; console errors 0; asset errors 0; shots 390-real-calendar-overview.png 390-real-calendar-sources.png 390-real-calendar.png 390-real-help.png 390-real-result.png
+CASE 390-legacy: passed; console errors 0; asset errors 0; shots 390-legacy-calendar-overview.png 390-legacy-calendar.png 390-legacy-help.png 390-legacy-result.png
+CASE 390-later: passed; console errors 0; asset errors 0; shots 390-later-calendar-overview.png 390-later-calendar.png 390-later-help.png 390-later-result.png
+CASE 1280-real: FAILED; console errors 0; asset errors 0; shots 1280-real-calendar-overview.png 1280-real-calendar-sources.png 1280-real-calendar.png 1280-real-failure.png
+    AssertionError [ERR_ASSERTION]: The input did not match the regular expression /opponent order|fixture order/i. Input:
+    
+    "How to Play Club Manager\nLoading screen...\nLet's Play!\nClose"
+    
+        at journey (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:218:12)
+        at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:281:34
+CASE 1280-later: passed; console errors 0; asset errors 0; shots 1280-later-calendar-overview.png 1280-later-calendar.png 1280-later-help.png 1280-later-result.png
+report keys: sourceBefore, forwardedExternalRequests, sourceAfter, sourceHeld
+run 2 RED
+cases 5, passed 3; controls 2; source held true
+CASE 390-real: passed; console errors 0; asset errors 0; shots 390-real-calendar-overview.png 390-real-calendar-sources.png 390-real-calendar.png 390-real-help.png 390-real-result.png
+CASE 390-legacy: passed; console errors 0; asset errors 0; shots 390-legacy-calendar-overview.png 390-legacy-calendar.png 390-legacy-help.png 390-legacy-result.png
+CASE 390-later: passed; console errors 0; asset errors 0; shots 390-later-calendar-overview.png 390-later-calendar.png 390-later-help.png 390-later-result.png
+CASE 1280-real: FAILED; console errors 0; asset errors 0; shots 1280-real-calendar-overview.png 1280-real-calendar-sources.png 1280-real-calendar.png 1280-real-failure.png
+    AssertionError [ERR_ASSERTION]: The input did not match the regular expression /opponent order|fixture order/i. Input:
+    
+    "How to Play Club Manager\nLoading screen...\nLet's Play!\nClose"
+    
+        at journey (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:218:12)
+        at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:281:34
+CASE 1280-later: FAILED; console errors 0; asset errors 0; shots 1280-later-calendar-overview.png 1280-later-calendar.png 1280-later-failure.png
+    AssertionError [ERR_ASSERTION]: The input did not match the regular expression /opponent order|fixture order/i. Input:
+    
+    "How to Play Club Manager\nLoading screen...\nLet's Play!\nClose"
+    
+        at journey (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:218:12)
+        at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:283:11
+report keys: sourceBefore, forwardedExternalRequests, sourceAfter, sourceHeld
+run 6 RED
+cases 6, passed 5; controls 2; source held true
+CASE 390-real: passed; console errors 0; asset errors 0; shots 390-real-calendar-overview.png 390-real-calendar-sources.png 390-real-calendar.png 390-real-help.png 390-real-result.png
+CASE 390-legacy: passed; console errors 0; asset errors 0; shots 390-legacy-calendar-overview.png 390-legacy-calendar.png 390-legacy-help.png 390-legacy-result.png
+CASE 390-later: passed; console errors 0; asset errors 0; shots 390-later-calendar-overview.png 390-later-calendar.png 390-later-help.png 390-later-result.png
+CASE 1280-real: passed; console errors 0; asset errors 0; shots 1280-real-calendar-overview.png 1280-real-calendar-sources.png 1280-real-calendar.png 1280-real-help.png 1280-real-result.png
+CASE 1280-legacy: passed; console errors 0; asset errors 0; shots 1280-legacy-calendar-overview.png 1280-legacy-calendar.png 1280-legacy-help.png 1280-legacy-result.png
+CASE 1280-later: FAILED; console errors 0; asset errors 0; shots 1280-later-calendar-overview.png 1280-later-calendar.png 1280-later-failure.png
+    AssertionError [ERR_ASSERTION]: The input did not match the regular expression /opponent order|fixture order/i. Input:
+    
+    "How to Play Club Manager\nLoading screen...\nLet's Play!\nClose"
+    
+        at journey (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:218:12)
+        at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:283:11
+report keys: sourceBefore, forwardedExternalRequests, sourceAfter, sourceHeld
+playCmRealFixtures alone on this head: 3 of 6 runs red

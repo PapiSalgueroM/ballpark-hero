@@ -1,0 +1,6 @@
+  FAIL: /soccer-career now needs 2600 KB of JavaScript before it can render, over the 2600 KB ceiling. Check what got statically imported.
+simFlagshipWeight: 1 failure
+   84 lazy dependencies including the Club Manager chunk (42 are shared chunks the page already has, which is normal)
+   43 chunks, 2600 KB raw (ceiling 2600), 771 KB over the wire
+
+flagshipProbe: 43 chunks, 2662559 bytes raw = 2600.2 KB (the ceiling is 2600), 771.4 KB gzipped

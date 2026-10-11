@@ -1,0 +1,17 @@
+# Release AV, follow up 1 on head 53abaf7a: the flagship's weight on this head and on main's own build (aa564f16), chunk by chunk; the season ledger's control mlbladder after its one line; the Round 1227 control that is judged only in the proof; the anchors fence that reads the harness I edited; and the two walks of the other lane that were red once (rAV-H4), six and five runs each on this head and on main's build, to say how often each is red.
+#!build
+#!playwright
+#!serial
+flagship-head: node scripts/simFlagshipWeight.mjs | tail -3; node .rc/x/flagshipProbe.mjs dist > $RC_OUT/flagship-head.txt; tail -1 $RC_OUT/flagship-head.txt
+main-build: R=$PWD && git worktree add -q --detach /tmp/m2 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$R/node_modules" /tmp/m2/node_modules && cd /tmp/m2 && npm run build > /tmp/m2-build.log 2>&1; s=$?; tail -1 /tmp/m2-build.log | cut -c1-160; exit $s
+flagship-main: R=$PWD && cd /tmp/m2 && node scripts/simFlagshipWeight.mjs | tail -3; node $R/.rc/x/flagshipProbe.mjs dist > $RC_OUT/flagship-main.txt; tail -1 $RC_OUT/flagship-main.txt
+flagship-diff: node .rc/x/flagshipProbe.mjs --diff $RC_OUT/flagship-main.txt $RC_OUT/flagship-head.txt
+ledger-plain: node scripts/simUsSeasonLedger.mjs
+ledger-mlbladder: US_LEDGER_CONTROL=mlbladder node scripts/simUsSeasonLedger.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && cp -r .tmp-fx/font-cache /tmp/m2-font-cache
+realfix-x6-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs | tail -1; r=0; for i in 1 2 3 4 5 6; do FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf-$i.log 2>&1 || { r=$((r+1)); echo "run $i RED"; cp cm-real-fixture-artifacts/native/report.json $RC_OUT/realfix-report-$i.json; node .rc/x/realfixReport.mjs cm-real-fixture-artifacts/native/report.json | head -40; }; done; echo "playCmRealFixtures alone on this head: $r of 6 runs red"; exit $r
+realfix-x6-main: R=$PWD && cd /tmp/m2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs | tail -1; r=0; for i in 1 2 3 4 5 6; do FREE_KICK_FONT_CACHE=/tmp/m2-font-cache NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rfm-$i.log 2>&1 || { r=$((r+1)); echo "run $i RED"; node $R/.rc/x/realfixReport.mjs cm-real-fixture-artifacts/native/report.json | head -40; }; done; echo "playCmRealFixtures alone on main's build: $r of 6 runs red"; exit $r
+detective-x5-head: r=0; for i in 1 2 3 4 5; do NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs > /tmp/dd-$i.log 2>&1 || r=$((r+1)); tail -1 /tmp/dd-$i.log | cut -c1-70; done; echo "playDraftDetectiveReports on this head: $r of 5 runs red"; exit $r
+detective-x5-main: cd /tmp/m2 && r=0; for i in 1 2 3 4 5; do NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs > /tmp/ddm-$i.log 2>&1 || r=$((r+1)); tail -1 /tmp/ddm-$i.log | cut -c1-70; done; echo "playDraftDetectiveReports on main's build: $r of 5 runs red"; exit $r
+rivalp-cutdraw: RIVAL_PROVE=f6dfa9b3 RIVAL_MOVED=nfl RIVAL_CARDS=nfl US_RIVAL_CONTROL=cutdraw node scripts/simUsRivalSense.mjs
