@@ -1,0 +1,10 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmLeagueRules exit=0 26s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+saveSize-0 exit=0 22s | simClubManagerSaveSize: all sections green
+saveSize-1 exit=0 22s | simClubManagerSaveSize: all sections green
+saveSize-2 exit=0 22s | simClubManagerSaveSize: all sections green
+saveSize-3 exit=0 22s | simClubManagerSaveSize: all sections green
+saveSize-4 exit=0 22s | simClubManagerSaveSize: all sections green
+saveSize-5 exit=0 22s | simClubManagerSaveSize: all sections green
+saveSize-uncapped exit=1 23s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+vitest-all exit=0 349s |    Duration  348.31s (transform 22.97s, setup 13.81s, collect 103.55s, tests 731.21s, environment 109.67s, prepare 22.95s)
