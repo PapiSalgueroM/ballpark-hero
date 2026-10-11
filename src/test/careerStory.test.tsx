@@ -302,6 +302,10 @@ describe('Soccer Career: the story keeps the save small', () => {
     expect(p.cup / p.cupRows).toBeLessThan(CUP_BYTES_PER_SEASON);
     expect(p.division / p.divisionRows).toBeLessThan(DIVISION_BYTES_PER_SEASON);
     expect(p.ten).toBeLessThan(TEN_DIVISIONS_BYTES);
+    console.log(`[save parts] seed ${seed}: opening cup ties ${p.opening} bytes over ${p.openingRows} seasons, chance wheel ${p.wheel} bytes`);
+    expect(p.openingRows, 'seasons with an opening cup tie to measure').toBeGreaterThanOrEqual(PART_SEASONS_FLOOR);
+    expect(p.opening / p.openingRows).toBeLessThan(OPENING_BYTES_PER_SEASON);
+    expect(p.wheel).toBeLessThan(WHEEL_BYTES);
   });
 });
 
@@ -336,6 +340,20 @@ describe('Soccer Career: the story keeps the save small', () => {
    row a season's division measures about 2,350 on the harness's careers.
    scripts/simCareerStory.mjs holds the same parts in bands over 96 careers,
    with the controls that put the waste back (worldmoves, cuptwice). */
+/* Release AU fix pass (2026-10-10). Rounds 1197 to 1208 add two parts, and
+   both landed in "the rest", which then read 82,143 B on seed 9750 against
+   its 80,000 (about 2 KB of opening ties and one receipt of about 150 B).
+   They are parts like the train's, so they are measured as parts, and the
+   rest is again what the save held before the train, under the bound it
+   had then, unchanged:
+     opening cup ties: a 2026 on season row's opening tie in a named cup
+       (cupRun.opening), by the season that kept one. Twice the measured
+       mean, the story's rule.
+     chance wheel: the one receipt a save holds (chanceWheel), one object.
+       Half again over the largest measured, the whole save's rule.
+   MEASURED by this test on release-au-int (CI runner): seed 9748: rest 61,936 B, opening ties 1,978 over 18 seasons (110 a season), wheel 149; seed 9749: rest 74,528, opening ties 1,967 over 18 (109), wheel 164; seed 9750: rest 79,485, opening ties 2,276 over 21 (108), wheel 136. Budgets: opening ties 220 a season (mean 109), chance wheel 250 (largest 164). */
+const OPENING_BYTES_PER_SEASON = 220;
+const WHEEL_BYTES = 250;
 const REST_BOUND = 80_000;
 const CUP_BYTES_PER_SEASON = 3_500;
 const DIVISION_BYTES_PER_SEASON = 1_250;
@@ -345,11 +363,15 @@ function saveParts(s: CareerState) {
   const bytesOf = (v: unknown) => (v === undefined ? 0 : JSON.stringify(v).length);
   const cupRows = s.seasons.filter(r => r.clubCupRun);
   const divisionRows = s.seasons.filter(r => r.leagueWorld);
+  const openingRows = s.seasons.filter(r => r.cupRun?.opening);
   return {
     cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
     division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
     ten: bytesOf(s.leagueWorld),
-    rest: bytesOf({ ...s, leagueWorld: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined })) }),
+    /* Release AU fix pass: the two parts Rounds 1197 to 1208 add (THE PARTS below). */
+    opening: openingRows.reduce((n, r) => n + bytesOf(r.cupRun?.opening), 0), openingRows: openingRows.length,
+    wheel: bytesOf(s.chanceWheel),
+    rest: bytesOf({ ...s, leagueWorld: undefined, chanceWheel: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined, cupRun: r.cupRun?.opening ? { ...r.cupRun, opening: undefined } : r.cupRun })) }),
   };
 }
 
