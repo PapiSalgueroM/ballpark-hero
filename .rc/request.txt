@@ -1,0 +1,8 @@
+# Release AW part one, second fix pass, finding 13: a probe (is an Escape pressed right after the farewell dialog opens ignored, and by what), then the other lane's farewell walk on the same runner and the same build, on d4cbc2aa
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+farewell-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-farewell-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerFarewell.mjs 2>&1 | tee soccer-farewell-artifacts/outcomes.log | tail -60; s=$?; node scripts/qa/checkSoccerFarewell.mjs outcomes; c=$?; exit $((s + c))
+probe-esc: PROBE_N=20 node .rc/x/probeEsc.mjs
+farewell-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-farewell-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerFarewell.mjs 2>&1 | tee soccer-farewell-artifacts/native.log | grep -E "^(PASS|FAIL|Soccer farewell|    at async)" | cut -c1-200; s=$?; node scripts/qa/checkSoccerFarewell.mjs native > /dev/null 2>&1; c=$?; cp soccer-farewell-artifacts/native/1280-normal-failure.png "$RC_OUT"/ 2>/dev/null; echo "walk=$s check=$c"; exit $((s + c))
