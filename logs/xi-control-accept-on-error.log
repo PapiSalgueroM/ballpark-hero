@@ -1,0 +1,6 @@
+playLineupValidator: build dist, the wait is 15000 ms, control accept-on-error
+
+S1 at 390: the validator says its day allowance is spent
+  FAIL  the pitch still reads 0 of 11 (1)
+
+playLineupValidator control: green. Accept on error was planted, the slot filled, and the nothing filled assertion caught it.

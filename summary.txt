@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+labels-pure exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+bel exit=0 14s | rsBel: done, 19 lines
+soc exit=0 47s | rsSoc: done, 74 lines
+labels-browser exit=0 10s | rsCopy: 9 pictures in /tmp/labels-browser/shots, 9 copied, 0.7 MB
+xi exit=0 32s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+xi-control-accept-on-error exit=0 2s | playLineupValidator control: green. Accept on error was planted, the slot filled, and the nothing filled assertion caught it.

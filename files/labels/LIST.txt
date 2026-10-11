@@ -1,0 +1,9 @@
+copied     46237 320-fixtures.png
+copied     49819 320-game2-reload.png
+copied     49819 320-game2.png
+copied     51320 390-fixtures.png
+copied     52721 390-game2-reload.png
+copied     52721 390-game2.png
+copied    132211 1280-fixtures.png
+copied    132211 1280-game2-reload.png
+copied    132211 1280-game2.png
