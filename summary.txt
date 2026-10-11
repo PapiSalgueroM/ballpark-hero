@@ -1,0 +1,2 @@
+on-1227 exit=3 1s | Automatic merge failed; fix conflicts and then commit the result.
+on-au exit=3 1s | Automatic merge failed; fix conflicts and then commit the result.

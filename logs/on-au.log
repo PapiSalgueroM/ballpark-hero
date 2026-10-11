@@ -1,0 +1,4 @@
+MERGE au: CONFLICT in: src/pages/WhatsNew.tsx 
+Auto-merging src/pages/WhatsNew.tsx
+CONFLICT (content): Merge conflict in src/pages/WhatsNew.tsx
+Automatic merge failed; fix conflicts and then commit the result.
