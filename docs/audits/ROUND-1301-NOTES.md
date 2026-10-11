@@ -256,16 +256,25 @@ near 2.7 percent; the +3.9 read at 8,000 was a high draw. At 16,000 the interval
 estimate, so a run is red only when its estimate passes about 5.4, about 2.5 errors over the lift: well under one
 reroll in a hundred. `TOL` is untouched; baseball's 8,000 (Round 1226) stands.
 
-**But 16,000 does not fit the gate, so the default is 12,000.** The football child takes 64 minutes on a runner by
-itself at 16,000 where it took 29 at 8,000, and one command of a remote check is cut at 70 minutes
-(`timeout 4200` in the kit's `run.sh`). The whole harness at 16,000 was sent once (`r1301-summer-all`, on
-`7c33de72`) and was cut there with the three balance children still running: exit 124, which is the clock and
-not a red. `BAL_DEFAULT.nfl` is therefore 12,000, the largest size the whole harness can carry in one command.
-By the root of the size its interval ends about 2.4 points over the estimate, about 2.4 inside the bound, and a
-reroll is red about one time in forty (one in ten at 8,000, about one in two hundred at 16,000). The size that
-cures more is measured and one variable away (`SIM_BALANCE_CAREERS=16000`) for a gate that runs the football
-balance as a line of its own. The closing report carries the run at 12,000 (`r1301-summer-12k`), or says that
-it had not come back.
+**But 16,000 is too long for a gate line, so the default is 12,000.** The football child takes 64 minutes on a
+runner by itself at 16,000 where it took 29 at 8,000, and one command of a remote check is cut at 70 minutes
+(`timeout 4200` in the kit's `run.sh`). `BAL_DEFAULT.nfl` is 12,000. Measured there on `SIM_SEED=7`
+(`r1301-s4-nfl12-seed7`, 2,887 s, 48 minutes for the child alone): median legacy +3.0 percent (1.0 to 5.7), 1.8
+points inside the bound; peak OVR +0.08 (0.03 to 0.13), Hall share +0.12 points (-0.41 to 0.64), headline awards
+-1.9 percent (-5.4 to 1.6). A reroll is red there about one time in twenty five (one in ten at 8,000, about one
+in two hundred at 16,000). The stronger size is measured and one variable away (`SIM_BALANCE_CAREERS=16000`)
+for a gate that gives the football balance a longer clock.
+
+**And the whole harness no longer fits one command, at any football size above 8,000.** Sent whole twice in this
+round (`r1301-summer-all` with football at 16,000 on `7c33de72`, `r1301-summer-12k` at 12,000 on `a9d16de6`), it
+was cut at 70 minutes both times with the balance children still running: exit 124, which is the clock and not a
+red (sections 1 to 5 and 7 to 12 had printed with nothing failing). It was already at the edge before this
+round: with all three sports at 8,000 Round 1226 measured the whole harness at 3,917 s and 4,108 s (65 and 68
+minutes, `r1226-y-sum` and `r1226-summer-full`), because the three balance children share about two cores on a
+runner (alone they take 29, 46 and 41 minutes). So the gate has to run it one sport a line, each on a runner of
+its own: `SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs`, and the same for nba, mlb and nhl. Every section
+runs for the sport named (`r1301-s4-nhl` is that line for the NHL: green, 369 s). The football line at the new
+default was sent (`r1301-summer-nfl`); the closing report says whether it came back.
 
 The NHL part of the same harness, whole, on this round's head (`r1301-s4-nhl`, `SIM_SPORTS=nhl`): green, and its
 balance on calibration 3 reads peak +0.13 (0.01 to 0.25), median legacy +1.8 percent (-0.3 to 3.8), Hall share
