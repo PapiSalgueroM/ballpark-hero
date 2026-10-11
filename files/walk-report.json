@@ -1,0 +1,242 @@
+{
+ "fixtures": {
+  "ruledOut": {
+   "seed": 2460,
+   "minute": 9,
+   "side": "me",
+   "who": "Kiernan Dewsbury-Hall",
+   "decision": "disallowed"
+  },
+  "goalBefore": {
+   "seed": 1724,
+   "minute": 8,
+   "side": "opp",
+   "who": "João Gomes",
+   "decision": "disallowed"
+  },
+  "two": {
+   "seed": 4926,
+   "minute": 6,
+   "side": "opp",
+   "who": "Jérémy Jacquet",
+   "decision": "disallowed"
+  },
+  "lateWhistle": {
+   "seed": 1984,
+   "minute": 45,
+   "side": "opp",
+   "who": "Alejandro Garnacho",
+   "decision": "disallowed"
+  },
+  "lateBefore": {
+   "seed": 2591,
+   "minute": 45,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  },
+  "ownGoal": {
+   "seed": 1940,
+   "minute": 10,
+   "side": "me",
+   "who": "Brennan Johnson",
+   "decision": "disallowed"
+  },
+  "injury": {
+   "seed": 3861,
+   "minute": 15,
+   "side": "opp",
+   "who": "Hugo Ekitiké",
+   "decision": "disallowed"
+  },
+  "red": {
+   "seed": 6513,
+   "minute": 34,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  },
+  "crowdedGoal": {
+   "seed": 42322,
+   "minute": 45,
+   "side": "opp",
+   "who": "Alejandro Garnacho",
+   "decision": "disallowed"
+  },
+  "crowdedShot": {
+   "seed": 6203,
+   "minute": 45,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  }
+ },
+ "cases": [
+  {
+   "id": "390-motion-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "390-motion-crowdedGoal-plain-1-checking.jpg",
+    "390-motion-crowdedGoal-plain-2-decided.jpg",
+    "390-motion-crowdedGoal-plain-3-after.jpg",
+    "390-motion-crowdedGoal-plain-8-full-time.jpg",
+    "390-motion-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "1280-motion-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "1280-motion-crowdedGoal-plain-1-checking.jpg",
+    "1280-motion-crowdedGoal-plain-2-decided.jpg",
+    "1280-motion-crowdedGoal-plain-3-after.jpg",
+    "1280-motion-crowdedGoal-plain-8-full-time.jpg",
+    "1280-motion-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "390-reduced-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "390-reduced-crowdedGoal-plain-1-checking.jpg",
+    "390-reduced-crowdedGoal-plain-2-decided.jpg",
+    "390-reduced-crowdedGoal-plain-3-after.jpg",
+    "390-reduced-crowdedGoal-plain-8-full-time.jpg",
+    "390-reduced-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 30
+  }
+ ],
+ "help": []
+}

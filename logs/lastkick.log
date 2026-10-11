@@ -1,0 +1,22 @@
+mkLastKick: wrote scripts/zzLastKickWalk.mjs (48523 characters, three edits)
+playCmVar: the build plays goal.
+FIXTURE crowdedGoal: league match 2, seed 42322, opp 45' Alejandro Garnacho, disallowed
+playCmVar: not walked on this build: penaltyScored (needs the penalty kind), penaltySaved (needs the penalty kind).
+LASTKICK 390-motion-crowdedGoal-plain: the engine's last goal of the half is me 45+4' Brennan Johnson (clock place 49), the whistle is at clock place 49, the score then is {"me":2,"opp":0}
+LASTKICK 390-motion-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","clock":"45+4, stage first","reviewCardUp":0,"shot":"390-motion-crowdedGoal-plain-0-last-kick-card.jpg"}
+LASTKICK 390-motion-crowdedGoal-plain: goal card samples 2, the last of them: 45' "GOAL! Merlin Röhl 45+2'Everton · 1 this seas" me=1 opp=0 first t=24835 ; 45' "GOAL! Free kick, Brennan Johnson 45+4'Everto" me=2 opp=0 first t=26070
+LASTKICK 390-motion-crowdedGoal-plain: sample index of the last goal card 51, of the first review card 54, of the interval 57, of 58 samples
+CASE 390-motion-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 32s
+LASTKICK 1280-motion-crowdedGoal-plain: the engine's last goal of the half is me 45+4' Brennan Johnson (clock place 49), the whistle is at clock place 49, the score then is {"me":2,"opp":0}
+LASTKICK 1280-motion-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","clock":"45+4, stage first","reviewCardUp":0,"shot":"1280-motion-crowdedGoal-plain-0-last-kick-card.jpg"}
+LASTKICK 1280-motion-crowdedGoal-plain: goal card samples 2, the last of them: 45' "GOAL! Merlin Röhl 45+2'Everton · 1 this seas" me=1 opp=0 first t=24672 ; 45' "GOAL! Free kick, Brennan Johnson 45+4'Everto" me=2 opp=0 first t=25907
+LASTKICK 1280-motion-crowdedGoal-plain: sample index of the last goal card 51, of the first review card 54, of the interval 57, of 58 samples
+CASE 1280-motion-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 32s
+LASTKICK 390-reduced-crowdedGoal-plain: the engine's last goal of the half is me 45+4' Brennan Johnson (clock place 49), the whistle is at clock place 49, the score then is {"me":2,"opp":0}
+LASTKICK 390-reduced-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","clock":"45+4, stage first","reviewCardUp":0,"shot":"390-reduced-crowdedGoal-plain-0-last-kick-card.jpg"}
+LASTKICK 390-reduced-crowdedGoal-plain: goal card samples 2, the last of them: 45' "GOAL! Merlin Röhl 45+2'Everton · 1 this seas" me=1 opp=0 first t=24362 ; 45' "GOAL! Free kick, Brennan Johnson 45+4'Everto" me=2 opp=0 first t=26411
+LASTKICK 390-reduced-crowdedGoal-plain: sample index of the last goal card 25, of the first review card 27, of the interval 30, of 31 samples
+CASE 390-reduced-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 30s
+playCmVar: 3 cases and 0 help views at 390 and 1280, 10 of 12 fixtures found, 0 failed assertion(s).
+playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+lastkick exit 0
