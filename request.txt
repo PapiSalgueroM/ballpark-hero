@@ -1,0 +1,35 @@
+# Release AV proof, Rounds 1212 and 1300 (MLB week by week, the shared seam): the Season Center harness, each control its own line
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+season-absix-1: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=absix node scripts/simUsSeasonCentre.mjs
+season-absix-2: SPORTS=mlb US_SEASON_CONTROL=absix node scripts/simUsSeasonCentre.mjs
+season-allstar: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=allstar node scripts/simUsSeasonCentre.mjs
+season-club: SPORTS=mlb US_SEASON_CONTROL=club node scripts/simUsSeasonCentre.mjs
+season-conf: US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+season-hits: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=hits node scripts/simUsSeasonCentre.mjs
+season-length-1: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+season-length-2: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+season-mlbcap: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbcap node scripts/simUsSeasonCentre.mjs
+season-mlbfit: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbfit node scripts/simUsSeasonCentre.mjs
+season-mlbformula: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbformula node scripts/simUsSeasonCentre.mjs
+season-mlbinnings: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbinnings node scripts/simUsSeasonCentre.mjs
+season-mlblevel: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlblevel node scripts/simUsSeasonCentre.mjs
+season-mlbold: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbold node scripts/simUsSeasonCentre.mjs
+season-mlborder: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlborder node scripts/simUsSeasonCentre.mjs
+season-mlbstage: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbstage node scripts/simUsSeasonCentre.mjs
+season-mlbwho: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbwho node scripts/simUsSeasonCentre.mjs
+season-names: US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+season-nflheld: US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+season-outside: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=outside node scripts/simUsSeasonCentre.mjs
+season-pathyear: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pathyear node scripts/simUsSeasonCentre.mjs
+season-pitcher: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pitcher node scripts/simUsSeasonCentre.mjs
+season-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+season-rbi: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=rbi node scripts/simUsSeasonCentre.mjs
+season-record-1: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+season-record-2: US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+season-series: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=series node scripts/simUsSeasonCentre.mjs
+season-stage-1: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+season-stage-2: US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+season-static: US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+season-stream: US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+season-sum: US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+vitest-season: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonCentreScreens.test.tsx src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=300000
