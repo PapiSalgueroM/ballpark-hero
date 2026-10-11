@@ -1,0 +1,2 @@
+inputs whose blob differs between the two records: 3 (src/data/usLeagueShape.ts, src/lib/careerRival.ts, src/lib/season/us.ts); made on 09969f3e886aabdfc4357165791dad92d90401cd and 55afa19c855aa2e3b05bba84289241f953d4c698
+digestEq: 42 values compared, 0 differ
