@@ -9,8 +9,14 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { cmVarLiveState } from './qa/cmVarLit.mjs';
 
 assert(process.env.CI, 'Run this browser proof only in remote CI');
+/* Round 1218: the page's Quick Sim asks the engine for video reviews when the switch CM_VAR_LIVE is on (the
+   hook's own line), so the engine run this proof compares the page with asks for the same. The switch is read
+   from the source the build was made from, the way scripts/playCmVar.mjs reads it. With the switch off this is
+   the call it always was. */
+const HOOK_ASKS = cmVarLiveState() === 'on' ? { varReviews: true } : {};
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'cm-quick-subs-artifacts/native');
 const CACHE = path.resolve(process.env.FREE_KICK_FONT_CACHE || path.join(ROOT, 'cm-quick-subs-artifacts/font-cache'));
@@ -122,7 +128,7 @@ try {
         fs.writeFileSync(path.join(OUT, `${id}-before.json`), JSON.stringify(before, null, 2));
         // Each browser context boots fresh module counters, so its oracle does too.
         const caseCm = await import(`${pathToFileURL(bundle).href}?case=${id}`);
-        const expected = fixedDate(() => withQuickSubsSeed(FINISH_SEED, () => caseCm.playNextEntry(before, { skipHalftime: true })));
+        const expected = fixedDate(() => withQuickSubsSeed(FINISH_SEED, () => caseCm.playNextEntry(before, { skipHalftime: true, ...HOOK_ASKS })));
         assert.equal(expected.kind, 'match'); assert(expected.report.detail.subs.length > 0, 'Actual coaching makes own substitutions');
         const subs = expected.report.detail.subs;
         for (const sub of subs) for (const nameKey of ['off', 'on']) {
