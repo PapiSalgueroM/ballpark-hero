@@ -1,0 +1,6 @@
+# Release AW fix pass 3: the WHOLE unit suite on the pushed head (plain build first, as the gate does)
+#!build
+#!serial
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > /tmp/va.log 2>&1; s=$?; grep -a -E "Test Files|Tests |FAIL " /tmp/va.log | tail -12; exit $s
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+gitclean: test -z "$(git status --porcelain --untracked-files=no)" && echo clean
