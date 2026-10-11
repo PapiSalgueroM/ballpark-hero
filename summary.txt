@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsSeasonCentre exit=0 244s | playUsSeasonCentre: 217 checks, 0 failed
+ctl-walk-count-mlb exit=1 83s | playUsSeasonCentre: 73 checks, 2 failed (control count)
+playCareerHub exit=0 46s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playSeasonReveal exit=0 21s | ALL SEASON REVEAL WALK CHECKS PASSED
+sweepWeight exit=1 27s | sweepWeight: 13 failures
