@@ -78,6 +78,9 @@ export interface UsSeasonView {
   /** Round 1212: how a review tile's number is printed, by the board's own label; absent: as the board's review
    *  prints it. Baseball prints a batting average the way the season card does (.276, never 0.276). */
   tileText?(label: string, value: string): string;
+  /** Round 1212 (fix pass): the board's postseason labels as the review's playoff line prints them after the
+   *  number; a label not here prints in lower case, as it always did. Baseball's 'Team postseason games' reads "games". */
+  postLabels?: Record<string, string>;
   /** The "?" sheet. `named`: opponents are named this season. `opp`: a team of
    *  this season that is not his, for the worked example; absent when nobody is named. */
   help(named: boolean, opp?: string): UsHelp;

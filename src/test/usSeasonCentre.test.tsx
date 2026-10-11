@@ -273,6 +273,21 @@ function openMlb(pos: string, seed: string): UsCareerCore {
 }
 
 describe('the US Season Center with MLB bound', () => {
+  it('prints baseball\'s playoff line the way the other sports read: the games, then his line as the save holds it', () => {
+    const career = openMlb('CF', 'mlb-centre-po');
+    const base = career.seasons[career.seasons.length - 1];
+    /* a Division Series exit of today's rounds: seven games fit a best of three and a best of five */
+    const row = { ...base, teamResult: 'Lost the Division Series', poGames: 7, poLine: '9 for 28 (.321), 2 HR' } as UsRow;
+    const one: UsCareerCore = { ...career, seasons: [...career.seasons.slice(0, -1), row] };
+    const b = buildUsSeason(MLB_SEASON, one, row, MLB_CAREER_SPORT.teamLabelOf);
+    if (b.ok === false) throw new Error(`usSeasonCentre.test: ${b.why}`);
+    const s = deriveSeason(b.sport, row, b.ctx);
+    if (!s) throw new Error('usSeasonCentre.test: the season has no game by game view');
+    const review = buildUsModel(MLB_CAREER_SPORT, MLB_SEASON, one, row, b.ctx, s, b.key).review;
+    expect(review.path!.line).toBe('Your playoffs: 7 games, 9 for 28 (.321), 2 HR');
+    expect(review.path!.steps.map(st => st.label)).toEqual(['Wild Card Series', 'Division Series']);
+    expect(review.notes).toEqual([]);
+  });
   it.each(['CF', 'C', 'DH'])('walks a %s season from the first pitch card to the review: innings on the clock, his line, the record and his totals', async pos => {
     const career = openMlb(pos, `mlb-centre-${pos}`);
     const saved = JSON.stringify(career);
