@@ -1,0 +1,5 @@
+# Round 1212 SECOND closing check on 22a93dde (verifier): finding 3, the weight sweep on a served build of the final head
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
