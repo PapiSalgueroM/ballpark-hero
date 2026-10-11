@@ -1,0 +1,31 @@
+# Round 1212 fix pass on 14d883c0: the type gate, the US tests, the harness on five seed sets, the seam receipt, the controls touched
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts src/test/usSeasonMlb.test.ts src/test/usSeasonSlate.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+ctl-seam: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+ctl-mlborder: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlborder node scripts/simUsSeasonCentre.mjs
+ctl-mlbinnings: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbinnings node scripts/simUsSeasonCentre.mjs
+ctl-mlbcap: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbcap node scripts/simUsSeasonCentre.mjs
+ctl-mlbold: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbold node scripts/simUsSeasonCentre.mjs
+ctl-series: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=series node scripts/simUsSeasonCentre.mjs
+ctl-mlbformula: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbformula node scripts/simUsSeasonCentre.mjs
+ctl-hits: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=hits node scripts/simUsSeasonCentre.mjs
+ctl-rbi: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=rbi node scripts/simUsSeasonCentre.mjs
+ctl-allstar: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=allstar node scripts/simUsSeasonCentre.mjs
+ctl-pitcher: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pitcher node scripts/simUsSeasonCentre.mjs
+ctl-club: SPORTS=mlb US_SEASON_CONTROL=club node scripts/simUsSeasonCentre.mjs
+ctl-outside: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=outside node scripts/simUsSeasonCentre.mjs
+ctl-mlbwho: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbwho node scripts/simUsSeasonCentre.mjs
+ctl-pathyear: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=pathyear node scripts/simUsSeasonCentre.mjs
+ctl-mlbstage: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbstage node scripts/simUsSeasonCentre.mjs
+ctl-mlblevel: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlblevel node scripts/simUsSeasonCentre.mjs
+ctl-length: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
