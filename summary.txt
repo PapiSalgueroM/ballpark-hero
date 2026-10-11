@@ -1,0 +1,6 @@
+halftime-head-2 exit=0 583s | ALL HALFTIME CHECKS PASSED
+halftime-head-3 exit=0 599s | ALL HALFTIME CHECKS PASSED
+halftime-head-1 exit=0 600s | ALL HALFTIME CHECKS PASSED
+halftime-main-1 exit=0 495s | ALL HALFTIME CHECKS PASSED
+halftime-main-2 exit=0 520s | ALL HALFTIME CHECKS PASSED
+halftime-main-3 exit=0 543s | ALL HALFTIME CHECKS PASSED
