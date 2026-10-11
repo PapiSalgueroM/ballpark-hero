@@ -192,13 +192,19 @@ describe('the journey of ruling C3 for the Press room: can natural play make the
     }
     console.log(`press journey: ${FLEET.length} careers, ${total.steps} steps, ${total.seasons} season rows, ${total.answers} answers, ${total.promises} promises ${JSON.stringify(total.outcomes)}, ${total.loans} loans, ${total.outYears} years out, ${total.severe} severe injuries, ${total.keptPlaying} times Keep playing; parts broken by the gifted goals ${total.gifted}, rooms answered again after it ${total.reopened}; unexplained ${unexplained.length}`);
     expect(unexplained).toEqual([]);
-    /* The fleet looked at something: careers were played, the press was answered, promises were made, and the
-       years out and Keep playing were on the road. */
+    /* The fleet looked at something. Measured on its first runs (2026-10-11, a GitHub runner): 17 careers, 4,154
+       steps, 452 season rows, 391 answers, every one a promise (269 missed, 81 met, 27 excused, 14 still
+       pending), 14 loans, 26 years out, 13 severe injuries, 31 times Keep playing, and one part broken by the
+       gifted goals. The floors sit far under those, so they only catch a fleet that stopped playing. */
     expect(total.seasons).toBeGreaterThan(200);
     expect(total.answers).toBeGreaterThan(100);
-    expect(total.promises).toBeGreaterThan(20);
+    expect(total.promises).toBeGreaterThan(100);
+    expect(total.loans).toBeGreaterThan(0);
     expect(total.outYears).toBeGreaterThan(0);
+    expect(total.severe).toBeGreaterThan(0);
     expect(total.keptPlaying).toBeGreaterThan(0);
+    /* A part the road broke is answered again on a later playing screen (the count is printed above); a room
+       that stayed shut there is in `unexplained`, which is what this case fails on before the ruling. */
   }, 240_000);
 });
 

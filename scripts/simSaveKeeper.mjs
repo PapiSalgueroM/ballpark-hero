@@ -86,8 +86,9 @@
  *   partagent     the agentReview row is left out                      (1)
  *   partreturn    the internationalReturn row is left out              (1)
  *   partfarewell  the farewellSeason row is left out                   (1)
+ *   partpress     the pressRoom row is left out                        (1)
  * A control that fired exits 1 and its last line says FIRED. One that did not
- * fire, or could not run, exits 2 and says so. A green run exits 0. The six
+ * fire, or could not run, exits 2 and says so. A green run exits 0. The seven
  * part controls must also fire on their OWN sentence (the failure that names
  * the part they left out as a version number with no row): the line before
  * FIRED prints it, and without it the control exits 2.
@@ -101,6 +102,24 @@
  * of those sentences, one number down and one up). The fixtures hold the four
  * on two more played saves: seed 2 is a veteran's hub, seed 3 a transfer
  * window with a brief filed.
+ *
+ * RELEASE AX (2026-10-11). The Press room of the other lane's Rounds 1230 to
+ * 1234 is a fifth part of the Soccer Career save one level down, pressRoom
+ * with version 1. Its row says `absent` too, and it had to be MADE true: as
+ * it merged, a part the reader could not verify shut the room for the rest
+ * of the career, and natural play gets there (the Golden Boot Arithmetic deal
+ * rewrites a season that settled a promise). The reader now reads such a part
+ * as no press room and the next answer writes a fresh one
+ * (src/test/soccerPressRoomReadAsAbsent.test.tsx holds the road and the
+ * ruling). The veteran's hub of seed 2 answers the press once, so one save
+ * holds four parts. Control partpress leaves the row out.
+ * WHAT THIS TABLE CANNOT SEE: a part with no version number. The same release
+ * saves contractTalk beside the career in the four US careers, with no number
+ * on it, so no row here can hold it: restoreMarketTalk
+ * (src/lib/usCareerMarket.ts) reads a talk it cannot verify as no talk, and
+ * the US board recording holds that on the named save extCut
+ * (scripts/simUsBoardParity.mjs). A part of a game that has a whole save row
+ * (SAVE_VERSIONS) is not looked into either.
  *
  * MEASURED (first green run, 2026-10-10, GitHub runner, node 24): see the
  * summary block this harness prints; the numbers are copied into
@@ -122,7 +141,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -431,6 +450,9 @@ const PART_VERSIONS = {
     { at: ['agentReview', 'version'], current: 1, other: 'absent', reader: 'readAgentReview (src/lib/soccerAgentReview.ts)' },
     { at: ['internationalReturn', 'version'], current: 1, other: 'absent', reader: 'readInternationalReturn (src/lib/soccerInternationalReturn.ts)' },
     { at: ['farewellSeason', 'version'], current: 1, other: 'absent', reader: 'readSoccerFarewell (src/lib/soccerCareerFarewell.ts)' },
+    /* Release AX: the Press room. With another number nothing is read out of it, no played year settles on it,
+       the room is offered as on a save with no part and the next answer writes a fresh part over it. */
+    { at: ['pressRoom', 'version'], current: 1, other: 'absent', reader: 'the Press room reader (stateOf, read through pressRoomView, src/lib/soccerCareerPress.ts)' },
   ],
   '/nfl-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
   '/nba-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
@@ -442,6 +464,7 @@ const PART_CONTROLS = {
   partrow: ['/soccer-career', 'programme.version'], partrowus: ['/nfl-my-career', 'prospect.v'],
   partbrief: ['/soccer-career', 'transferBrief.version'], partagent: ['/soccer-career', 'agentReview.version'],
   partreturn: ['/soccer-career', 'internationalReturn.version'], partfarewell: ['/soccer-career', 'farewellSeason.version'],
+  partpress: ['/soccer-career', 'pressRoom.version'],
 };
 if (PART_CONTROLS[CONTROL]) {
   const [route, where] = PART_CONTROLS[CONTROL];
@@ -822,7 +845,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };

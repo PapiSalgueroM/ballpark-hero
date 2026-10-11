@@ -77,6 +77,7 @@ import * as BRIEF from './src/lib/soccerCareerTransferBrief';
 import * as AGENT from './src/lib/soccerAgentReview';
 import * as INTL from './src/lib/soccerInternationalReturn';
 import * as FARE from './src/lib/soccerCareerFarewell';
+import * as PRESS from './src/lib/soccerCareerPress';
 import { AGENTS } from './src/lib/soccerCareerLife';
 import { careerStep } from './scripts/lib/careerStep.mjs';
 import * as USP from './src/lib/usCareerProgramme';
@@ -179,6 +180,10 @@ const veteranParts = (c, clubs) => {
   if (!INTL.readInternationalReturn(s)) return null;
   s = SOC.announceFarewellSeason(s, clubs);
   if (!FARE.readSoccerFarewell(s) || !AGENT.readAgentReview(s) || !INTL.readInternationalReturn(s)) return null;
+  /* Release AX: the Press room is a fifth part. The veteran answers for his last season once, the way the tile
+     does (answerSoccerPress); a hub where the room is not open is passed over like any other that lacks a part. */
+  s = PRESS.answerSoccerPress(s, 'accountable');
+  if (!s.pressRoom || PRESS.pressRoomView(s).history.length !== 1) return null;
   return s;
 };
 const soccerVeteran = seed => {
@@ -340,6 +345,7 @@ export const partReads = {
     'agentReview.version': raw => parsed(raw, s => AGENT.readAgentReview(s) !== null),
     'internationalReturn.version': raw => parsed(raw, s => INTL.readInternationalReturn(s) !== null),
     'farewellSeason.version': raw => parsed(raw, s => FARE.readSoccerFarewell(s) !== null),
+    'pressRoom.version': raw => parsed(raw, s => PRESS.pressRoomView(s).history.length > 0),
   },
   '/nfl-my-career': { 'prospect.v': prospectRead(NFL_CAREER_SPORT) },
   '/nba-my-career': { 'prospect.v': prospectRead(NBA_CAREER_SPORT) },
@@ -401,6 +407,19 @@ export const partAbsent = {
       if (!open.eligible) return 'with the flag off the card stays closed (' + open.reason + ')';
       const next = FARE.announceSoccerFarewell(off);
       if (next === off || !FARE.readSoccerFarewell(next) || next.isFinalSeason !== true) return 'a new announcement did not overwrite the unreadable plan';
+      return null;
+    },
+    /* Release AX: the Press room. With another number nothing is read out of the part, the room is judged as on
+       the same save with the part taken out (no sentence about verifying holds it shut), and the next answer
+       writes a fresh part with that one answer in it. */
+    'pressRoom.version': raw => {
+      const s = JSON.parse(raw);
+      const now = PRESS.pressRoomView(s);
+      if (now.history.length !== 0 || now.credibility !== 50) return 'the part is still read';
+      if (!sameAnswer(now, PRESS.pressRoomView(without(s, 'pressRoom')))) return 'the room is not judged as on the same save without the part (' + now.reason + ')';
+      if (!now.eligible) return 'the room stays closed (' + now.reason + ')';
+      const next = PRESS.answerSoccerPress(s, 'calm');
+      if (next === s || !next.pressRoom || next.pressRoom.version !== 1 || PRESS.pressRoomView(next).history.length !== 1) return 'a new answer did not overwrite the unreadable part';
       return null;
     },
   },

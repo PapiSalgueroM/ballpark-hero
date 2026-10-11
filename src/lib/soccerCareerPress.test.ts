@@ -301,16 +301,25 @@ describe('Soccer Press once-only settlement', () => {
   });
 });
 
-describe('Soccer Press malformed optional saves fail closed', () => {
+/* Release AX, the lead's ruling C3 (the integration moved these three cases with the reader, and owes them
+   back): a part that cannot be verified is read as ABSENT. It never throws, nothing is read out of it, no played
+   year settles on it and it is left as it lies, and it no longer shuts the room: the room is offered as on a
+   save with no part, and the next answer writes a fresh part. Before the ruling each case below held the room
+   shut (eligible false, the answer refused). src/test/soccerPressRoomReadAsAbsent.test.tsx holds the rest. */
+describe('Soccer Press malformed optional saves are read as absent', () => {
   it.each([null, [], 'bad', {}, { version: 2, credibility: 50, history: [] },
     { version: 1, credibility: -1, history: [] }, { version: 1, credibility: 101, history: [] },
     { version: 1, credibility: 50, history: {} }, { version: 1, credibility: 50, history: [null] },
-  ])('rejects invalid Press state %j without replacing it', raw => {
+  ])('reads invalid Press state %j as absent and never settles on it', raw => {
     const state = career();
     state.pressRoom = raw as CareerState['pressRoom'];
     const before = structuredClone(state);
-    expect(pressRoomView(state).eligible).toBe(false);
-    expect(answerSoccerPress(state, 'calm')).toBe(state);
+    expect(pressRoomView(state)).toMatchObject({ eligible: true, history: [], credibility: 50 });
+    const answered = answerSoccerPress(state, 'calm');
+    expect(answered).not.toBe(state);
+    expect(state).toEqual(before);
+    expect(answered.pressRoom).toMatchObject({ version: 1, credibility: 50 });
+    expect(answered.pressRoom!.history).toHaveLength(1);
     const row = record(state), recorded = structuredClone(state);
     settleSoccerPress(state, row);
     expect(state).toEqual(recorded);
@@ -327,7 +336,10 @@ describe('Soccer Press malformed optional saves fail closed', () => {
     ]) {
       const state = held(); change(state);
       expect(pressRoomView(state).history).toEqual([]);
-      expect(answerSoccerPress(state, 'calm')).toBe(state);
+      const answered = answerSoccerPress(state, 'calm');
+      expect(answered).not.toBe(state);
+      expect(answered.pressRoom!.history).toHaveLength(1);
+      expect(answered.pressRoom!.history[0].promise).toBeUndefined();
     }
   });
 
@@ -337,9 +349,11 @@ describe('Soccer Press malformed optional saves fail closed', () => {
     for (const patch of [{ outcome: 'missed' as const }, { actual: 99 }, { settledIndex: 0 }]) {
       const corrupt = structuredClone(state);
       Object.assign(corrupt.pressRoom!.history[0].promise!, patch);
-      expect(pressRoomView(corrupt).eligible).toBe(false);
+      expect(pressRoomView(corrupt).eligible).toBe(true);
       expect(pressRoomView(corrupt).history).toEqual([]);
-      expect(answerSoccerPress(corrupt, 'calm')).toBe(corrupt);
+      const answered = answerSoccerPress(corrupt, 'calm');
+      expect(answered).not.toBe(corrupt);
+      expect(answered.pressRoom!.history).toHaveLength(1);
     }
   });
 });

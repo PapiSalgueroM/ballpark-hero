@@ -139,12 +139,17 @@ const QUESTIONS: Record<SoccerPressTopic, [string, string, string]> = {
 };
 
 export function pressRoomView(career: CareerState): PressRoomView {
-  const source = sourceOf(career), state = stateOf(career), invalid = career.pressRoom !== undefined && !state;
+  /* Release AX, the lead's ruling C3: a part that cannot be verified is read as ABSENT. It used to shut the room
+     for the rest of the career ("could not be verified"), and natural play can get there: the corruption event
+     "Golden Boot Arithmetic" adds four goals to a season after it settled a promise. Now the room reads as it
+     does on a save with no part (no history, credibility 50), and the next answer writes a fresh part over the
+     unreadable one. A pending promise inside an unreadable part ends with no verdict. */
+  const source = sourceOf(career), state = stateOf(career);
   const history = state ? state.history.slice().reverse().map(copyHistory) : [];
   const topic = source ? topicOf(career, source) : null;
   const lead = source ? [`Looking back at ${source.year} at ${source.club}.`, `Your ${source.year} record at ${source.club} is in.`, `About that ${source.year} season at ${source.club}.`][source.year % 3] : '';
   const question = source && topic ? `${lead} ${source.statLine} ${QUESTIONS[topic][source.year % 3]}` : 'Finish a senior club season with appearances to open the Press Room.';
-  const reason = invalid ? 'The saved Press Room record could not be verified.' : career.retired || career.phase !== 'playing' ? 'Answer on the playing screen between seasons.'
+  const reason = career.retired || career.phase !== 'playing' ? 'Answer on the playing screen between seasons.'
     : !source ? 'A recorded senior club season with appearances is needed.' : !meter(career.popularity) || !meter(career.morale) ? 'The saved popularity or morale could not be verified.'
     : state?.history.some(h => h.source.index === source.index) ? 'You already answered for this saved season.' : null;
   const target = source ? promiseFor(source, career.currentClub) : null, pending = history.some(h => h.promise?.outcome === 'pending');
