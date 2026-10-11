@@ -1,0 +1,32 @@
+nba run exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature 993ef9d61f27
+        at or over from, pooled 9.81 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.96 percent (band 0.79 to 1.14: the reference's 0.97, 0.17 from seed to seed); read against the marks of calibration 2 (the reference was read against 2)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 9.81 percent (band 9.25 to 10.16); at or over to, pooled 0.96 percent (band 0.79 to 1.14)
+nba markdrift exit 1 | simCareerHall nba CONTROL markdrift: wanted marks red, red [v2replay,v3replay,marks,halfrule], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 16.23 percent; at or over to, pooled 1.25 percent
+        at or over from, pooled 16.55 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.96 percent (band 0.79 to 1.14: the reference's 0
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 16.55 percent (band 9.25 to 10.16); at or over to, pooled 0.96 percent (band 0.79 to 1.14)
+nba todrift exit 1 | simCareerHall nba CONTROL todrift: wanted marks red, red [v2replay,v3replay,marks,halfrule,anchors], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 4.48 percent
+        at or over from, pooled 9.81 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 4.25 percent (band 0.79 to 1.14: the reference's 0.
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 9.81 percent (band 9.25 to 10.16); at or over to, pooled 4.25 percent (band 0.79 to 1.14)
+nba statsup exit 1 | simCareerHall nba CONTROL statsup: wanted marks red, red [marks], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+        at or over from, pooled 11.58 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 1.33 percent (band 0.79 to 1.14: the reference's 0
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 11.58 percent (band 9.25 to 10.16); at or over to, pooled 1.33 percent (band 0.79 to 1.14)
+nba statsdown exit 1 | simCareerHall nba CONTROL statsdown: wanted marks red, red [marks], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+        at or over from, pooled 8.25 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.68 percent (band 0.79 to 1.14: the reference's 0.
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 8.25 percent (band 9.25 to 10.16); at or over to, pooled 0.68 percent (band 0.79 to 1.14)
+nba nostandout exit 1 | simCareerHall nba CONTROL nostandout: wanted standoutgain red and marks green, red [v2replay,v3replay,standoutgain,standoutcap,words], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+        at or over from, pooled 9.81 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.96 percent (band 0.79 to 1.14: the reference's 0.
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 9.81 percent (band 9.25 to 10.16); at or over to, pooled 0.96 percent (band 0.79 to 1.14)
+nba oldmarks exit 2 | control oldmarks never reached its file, refusing to report
+nba confirm 78-101 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+  17 (a) marks, the fleet: 24 seeds (78 to 101, NOT THE CHECK FLEET OF THE LEDGER), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature fcf2b26fd7aa
+        at or over from, pooled 9.72 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.94 percent (band 0.79 to 1.14: the reference's 0.97, 0.17 from seed to seed); read against the marks of calibration 2 (the reference was read against 2)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 9.72 percent (band 9.25 to 10.16); at or over to, pooled 0.94 percent (band 0.79 to 1.14)
+run-sport: nba done

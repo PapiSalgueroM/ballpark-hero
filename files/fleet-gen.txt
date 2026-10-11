@@ -1,0 +1,5 @@
+fleet nfl (the marks of calibration 2, 48 reference seeds 30 to 77, 2000 careers a seed, 13 cells): at or over from 10.30 percent, 0.74 from seed to seed, band 9.56 to 11.04 (seeds ran 8.71 to 11.88); at or over to 0.99 percent, 0.23 from seed to seed, band 0.76 to 1.22
+fleet nba (the marks of calibration 2, 48 reference seeds 30 to 77, 2000 careers a seed, 12 cells): at or over from 9.71 percent, 0.45 from seed to seed, band 9.25 to 10.16 (seeds ran 8.69 to 10.56); at or over to 0.97 percent, 0.17 from seed to seed, band 0.79 to 1.14
+fleet mlb (the marks of calibration 2, 48 reference seeds 30 to 77, 2000 careers a seed, 22 cells): at or over from 9.89 percent, 0.73 from seed to seed, band 9.17 to 10.62 (seeds ran 8.43 to 11.72); at or over to 0.95 percent, 0.20 from seed to seed, band 0.75 to 1.16
+fleet nhl (the marks of calibration 3, 48 reference seeds 30 to 77, 2000 careers a seed, 12 cells): at or over from 10.39 percent, 0.55 from seed to seed, band 9.84 to 10.95 (seeds ran 9.29 to 11.40); at or over to 0.99 percent, 0.20 from seed to seed, band 0.78 to 1.19
+genCareerHallMarks: wrote scripts/data/careerHallMarks.json (the fleet of nfl, nba, mlb, nhl)

@@ -1,0 +1,9 @@
+tsc exit=0 60s | 
+ref-dumps exit=0 469s | 192
+fleet-gen exit=0 1s |  1 file changed, 522 insertions(+)
+block3-again exit=0 20s | block3-again: the block of calibration 3 comes out the same with the fleet in the file
+sport-nhl exit=0 118s | run-sport: nhl done
+sport-nfl exit=0 155s | run-sport: nfl done
+sport-nba exit=0 134s | run-sport: nba done
+sport-mlb exit=0 171s | run-sport: mlb done
+base-refusals exit=0 1s | simCareerHall nba CONTROL plantbase: REFUSED, its string is not in the source (not a FIRED)

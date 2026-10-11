@@ -1,0 +1,35 @@
+nhl run exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature 1eab0c54fc63
+        at or over from, pooled 10.37 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.37 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+nhl markdrift exit 1 | simCareerHall nhl CONTROL markdrift: wanted marks red, red [v3replay,marks,halfrule], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 15.73 percent; at or over to, pooled 0.88 percent
+        at or over from, pooled 16.78 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 16.78 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+nhl todrift exit 1 | simCareerHall nhl CONTROL todrift: wanted marks red, red [v2replay,v3replay,marks,halfrule,hallshare], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 6.52 percent
+        at or over from, pooled 10.37 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 7.63 percent (band 0.78 to 1.19: the reference's 
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 10.37 percent (band 9.84 to 10.95); at or over to, pooled 7.63 percent (band 0.78 to 1.19)
+nhl statsup exit 1 | simCareerHall nhl CONTROL statsup: wanted marks red, red [marks], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+        at or over from, pooled 13.19 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 1.53 percent (band 0.78 to 1.19: the reference's 
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 13.19 percent (band 9.84 to 10.95); at or over to, pooled 1.53 percent (band 0.78 to 1.19)
+nhl statsdown exit 1 | simCareerHall nhl CONTROL statsdown: wanted marks red, red [marks], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+        at or over from, pooled 7.94 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.57 percent (band 0.78 to 1.19: the reference's 0
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 7.94 percent (band 9.84 to 10.95); at or over to, pooled 0.57 percent (band 0.78 to 1.19)
+nhl nostandout exit 1 | simCareerHall nhl CONTROL nostandout: wanted standoutgain red and marks green, red [v2replay,v3replay,standoutgain,standoutcap,words,anchors], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+        at or over from, pooled 10.37 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.37 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+nhl oldmarks exit 1 | simCareerHall nhl CONTROL oldmarks: wanted marks red, red [v3replay,marks,halfrule], FIRED
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 12.08 percent; at or over to, pooled 1.21 percent
+        at or over from, pooled 12.74 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 1.39 percent (band 0.78 to 1.19: the reference's 
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 12.74 percent (band 9.84 to 10.95); at or over to, pooled 1.39 percent (band 0.78 to 1.19)
+nhl confirm 78-101 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+  17 (a) marks, the fleet: 24 seeds (78 to 101, NOT THE CHECK FLEET OF THE LEDGER), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature 07298c4b3c3d
+        at or over from, pooled 10.36 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 1.00 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.36 percent (band 9.84 to 10.95); at or over to, pooled 1.00 percent (band 0.78 to 1.19)
+run-sport: nhl done
