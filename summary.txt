@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+labels-pure exit=1 32s | Node.js v24.21.0
+labels-browser exit=1 0s | Node.js v24.21.0
+simCareerProgramme exit=0 74s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+playSoccerSeasonCalendar exit=0 52s | Calendar native: 6 cases, 301 checks, 1 effective copied observation control
