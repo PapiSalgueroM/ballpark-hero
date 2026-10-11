@@ -179,6 +179,11 @@
  * for it (mlbOldTwin, the NFL's oldSaveTwin is the pattern).
  *   mlbold     the number file forgets that word: the season is
  *              laid out with no record band                      -> section 3
+ * And that engine drew a playoff run's games by one law for every round, so
+ * a live save holds counts today's rounds cannot (five games behind a Wild
+ * Card Series exit, nine behind a Division Series exit): mlbOldLawTwin.
+ *   mlbfit     the bind loses `pathNeedsFit`: a path is drawn
+ *              for playoff games its rounds cannot hold          -> section 4
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -329,6 +334,8 @@ const CONTROLS = {
      and the law's cap of nine runs an inning lifted */
   mlbinnings: { section: 7, label: 'a side scores in', patches: [{ file: MLB, from: '    const runs = mlbSpreadRuns(nine, mins, q, rng);', to: '    const runs = mlbSpreadRuns(nine, mins, q / 6, rng);' }] },
   mlbcap: { section: 7, label: 'more than nine runs', patches: [{ file: MLB, from: '  const cap = Math.max(INNING_RUNS_MAX, Math.ceil(total / n));', to: '  const cap = Math.max(INNING_RUNS_MAX, total);' }] },
+  /* the fix pass: a path is drawn whether or not the saved playoff games fit the rounds (the bind loses `pathNeedsFit`) */
+  mlbfit: { section: 4, label: 'playoff games that fit no round', patches: [{ file: MLB, from: '  pathNeedsFit: true,\n', to: '' }] },
   /* the fix pass: the order of the series is the calmest of the shuffles and no more (the keyed swaps off) */
   mlborder: { section: 7, label: 'met again one series later', patches: [{ file: MLB, from: 'const ORDER_SWAPS = 400;', to: 'const ORDER_SWAPS = 0;' }] },
   /* the fix pass: the number file forgets the word an older build wrote for a first exit (the bind loses `olderBand`) */
@@ -347,7 +354,7 @@ const CONTROL_SPORT = {
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
-  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb', mlborder: 'mlb',
+  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb', mlborder: 'mlb', mlbfit: 'mlb',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 if (CONTROL === 'lawdrift' ? DIGEST !== 'compare' : !!(CONTROL && DIGEST) && !DIGEST_CONTROLS.includes(CONTROL)) { console.error("the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run"); process.exit(2); }
@@ -420,6 +427,7 @@ const MLB_WC_GAME = 'Lost the Wild Card Game';
    and the sentence a season before today's rounds shows where a path would be. Typed here, the harness's own. */
 const MLB_OLD_FIRST_EXIT = 'Lost the Wild Card series';
 const MLB_NO_PATH_BEFORE = "The playoff path starts with the 2022 season, when the playoffs took today's shape.";
+const MLB_NO_PATH_MISFIT = "No playoff path for this season: the playoff games on your season card do not fit today's rounds.";
 /** The results a season of that year can end on, first exit to title: no wild card round to 2011, one game
  *  from 2012 to 2019 and in 2021, a series in 2020 and from 2022 (typed here, the harness's own reading). */
 const mlbOwnResults = year => (year < 2012 ? MLB_LADDER.slice(1) : (year <= 2019 || year === 2021) ? [MLB_WC_GAME, ...MLB_LADDER.slice(1)] : MLB_LADDER);
@@ -772,6 +780,31 @@ function mlbOldTwin(bind, SB, career) {
   if (M.usPlayoffPath(bind, row, b.ctx, b.key)) out.problems.push(`a path in ${row.year} for an older save's first exit`);
   const note = bind.view.noPathNote ? bind.view.noPathNote(row) : null;
   if (note !== MLB_NO_PATH_BEFORE) out.problems.push(`the line under the review reads ${JSON.stringify(note)}`);
+  return out;
+}
+
+/** Section 4, MLB, the fix pass of Round 1212: the second older save twin. Before Round 1226 the engine drew a
+ *  playoff run's games by one law for every round, so a live save holds counts today's rounds cannot: five
+ *  games behind a Wild Card Series exit (a best of three and no more), nine behind a Division Series exit (a
+ *  best of three and a best of five hold eight). No career played here holds one (the fleet measures 0), so
+ *  the bind's `pathNeedsFit` was held by vitest alone. Every derived season from 2022 that ended at one of
+ *  those two exits is copied with that count written in (by hand, said here); the playoff games are not in the
+ *  season key, so the season itself must be the same one, and it must show NO path and the sentence that says
+ *  the games do not fit. null: not such a season. */
+const MLB_OLD_LAW_GAMES = { 'Lost the Wild Card series': 5, 'Lost the Division Series': 9 };
+function mlbOldLawTwin(bind, SB, career, s) {
+  const twin = JSON.parse(JSON.stringify(career));
+  const row = twin.seasons[twin.seasons.length - 1];
+  const games = MLB_OLD_LAW_GAMES[row.teamResult];
+  if (row.year < MLB_PATH_FROM || games === undefined) return null;
+  row.poGames = games;
+  const out = { year: row.year, pos: twin.pos, result: row.teamResult, problems: [] };
+  const b = M.buildUsSeason(bind, twin, row, SB.teamLabelOf);
+  const s2 = b.ok ? M.deriveSeasonOrWhy(b.sport, row, b.ctx) : `build: ${b.why}`;
+  if (JSON.stringify(s2) !== JSON.stringify(s)) { out.problems.push('the season is not the one the same line shows with a count that fits'); return out; }
+  if (M.usPlayoffPath(bind, row, b.ctx, b.key)) out.problems.push(`a path for ${games} playoff games, which the rounds of "${row.teamResult}" cannot hold`);
+  const note = bind.view.noPathNote ? bind.view.noPathNote(row) : null;
+  if (note !== MLB_NO_PATH_MISFIT) out.problems.push(`the line under the review reads ${JSON.stringify(note)}`);
   return out;
 }
 
@@ -1184,6 +1217,12 @@ const OLD_SAVE_MIN = 25;
    careers: 36 of 36 laid out with no record band, median 82 wins. The floor is for the five seed sets and is
    under half of five times the one set measured. */
 const MLB_OLD_MIN = 150;
+/* The second older save twin (mlbOldLawTwin): exits from 2022 given playoff games the rounds cannot hold.
+   Measured on seed set 0 (40 careers): 156 such seasons, 111 Wild Card Series exits on five games and 45
+   Division Series exits on nine; every one is the same season as its line with a count that fits, with no path
+   and the line that says the games do not fit. Control `mlbfit` at 16 careers: 81 of 81 draw a path all the
+   same. The floor is for the five seed sets, each exit, under half of five times the smaller arm of one set. */
+const MLB_OLD_LAW_MIN = 100;
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
 const NFL_POINTS = [21.0, 24.5];
@@ -1280,6 +1319,8 @@ function observe(c, line, who) {
   digestSeason(who, row, 'ok', s, pathNow);
   rec.path = !!pathNow;
   rec.p4.push(...pathProblems(who.slug, row, pathNow, s.target, { named: rec.named, eraId: career.eraId, SB, count: poRounds[who.slug] ??= { early: 0, finals: 0 } }));
+  /* the fix pass of Round 1212: the same line with playoff games as the engine before Round 1226 drew them (see mlbOldLawTwin) */
+  if (who.slug === 'mlb') rec.oldLaw = mlbOldLawTwin(bind, SB, career, s);
   rec.hot = s.games.filter(g => g.events.some(e => e.kind === 'hot')).length;
   rec.on = s.games.filter(g => g.played).length;
   /* section 5 */
@@ -1646,6 +1687,12 @@ for (const slug of SPORTS) {
        playoff season shows no path (a year before the rounds the ledger holds, or saved games that do not fit) */
     console.log(`     playoff seasons ${po.playoff ?? 0}: path shown ${po.shown ?? 0}, none before ${MLB_PATH_FROM} ${po.before ?? 0}, none because the saved games do not fit ${po.misfit ?? 0} (${share(po.misfit ?? 0, (po.shown ?? 0) + (po.misfit ?? 0))} of the seasons from ${MLB_PATH_FROM})`);
     check('4', (po.shown ?? 0) > 0 && (po.before ?? 0) > 0, `mlb a path is drawn from ${MLB_PATH_FROM} and none before it, both in the population (${po.shown ?? 0} and ${po.before ?? 0})`);
+    /* the fix pass: the same lines with playoff games as the engine before Round 1226 drew them (see mlbOldLawTwin) */
+    const oldLaw = derived.filter(r => r.oldLaw).map(r => r.oldLaw);
+    const oldLawBy = k => oldLaw.filter(t => t.result === k).length;
+    console.log(`     saves from before Round 1226: ${oldLaw.length} exits from ${MLB_PATH_FROM} given playoff games their rounds cannot hold (${oldLawBy(MLB_LADDER[0])} Wild Card Series exits on 5 games, ${oldLawBy(MLB_LADDER[1])} Division Series exits on 9)`);
+    if (SEEDSETS.length >= 5 && CAREERS >= 40 && (!CONTROL || CONTROL === 'mlbfit')) check('4', oldLawBy(MLB_LADDER[0]) >= MLB_OLD_LAW_MIN && oldLawBy(MLB_LADDER[1]) >= MLB_OLD_LAW_MIN, `mlb both exits are in the population with playoff games an older save holds (${oldLawBy(MLB_LADDER[0])} and ${oldLawBy(MLB_LADDER[1])}, at least ${MLB_OLD_LAW_MIN} each)`);
+    tally('4', "mlb an older save's playoff games that fit no round show no path and the line that says so", oldLaw.filter(t => t.problems.length).map(t => `${t.year} ${t.pos} "${t.result}": ${t.problems[0]}`), oldLaw.length);
     check('4', (po.misfit ?? 0) <= 0.01 * ((po.shown ?? 0) + (po.misfit ?? 0)), `mlb playoff games that do not fit their rounds stay under 1% of the seasons from ${MLB_PATH_FROM} (${po.misfit ?? 0}: the engine holds October to the year's rounds since Round 1226)`);
   } else
   check('4', po.early > 0 && po.finals > 0, `${slug} named playoff rounds were checked for their conference (${po.early} before the last round, ${po.finals} in it)`);
@@ -1909,6 +1956,12 @@ if (CONTROL) {
     if (CONTROL === 'mlbinnings') { const big = labels.some(l => l.startsWith('mlb') && l.includes('the biggest inning of a team game')); ok = ok && big; note += `; the big inning band ${big ? 'is' : 'is NOT'} red beside it`; }
     if (CONTROL === 'mlbcap') { ok = ok && mlbSeen.overNine > 0; note += `; ${mlbSeen.overNine} team games hold an inning of more than nine`; }
     if (CONTROL === 'mlborder') { const park = labels.some(l => l.startsWith('mlb') && l.includes('series past three running in one park')); ok = ok && park; note += `; ${mlbSeen.againSeasons} of ${mlbSeen.seasons} named seasons meet a club again one series later, and the park band ${park ? 'is' : 'is NOT'} red beside it`; }
+    if (CONTROL === 'mlbfit') {
+      const twins = seen.filter(r => r.slug === 'mlb' && r.oldLaw);
+      const wrong = twins.filter(r => r.oldLaw.problems.some(p => p.includes('a path for'))).length;
+      ok = ok && wrong > 0;
+      note += `; ${wrong} of ${twins.length} exits given playoff games their rounds cannot hold draw a path all the same`;
+    }
     if (CONTROL === 'mlbold') {
       const twins = seen.filter(r => r.slug === 'mlb' && r.old);
       const wrong = twins.filter(r => r.old.problems.some(p => p.includes('no record band'))).length;
