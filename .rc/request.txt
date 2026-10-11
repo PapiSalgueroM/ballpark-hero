@@ -1,0 +1,11 @@
+simDraftNight: node scripts/simDraftNight.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmReload: node scripts/simGmReload.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simFoHub: node scripts/simFoHub.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmDesk: node scripts/simGmDesk.mjs
