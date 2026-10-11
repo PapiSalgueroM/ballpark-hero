@@ -1,0 +1,5 @@
+# rAV-cm-c1: reviewer cm, Release AV head 5ed04ae7. The stream probe again with the modern leagues and the real fixture lists loaded, saves made by origin/main played by the head, and 2000 league phase draws
+stream2: git worktree add -q --detach /tmp/sb2 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/sb2/node_modules && node .rc/x/cmStreamProbe.mjs /tmp/sb2
+oldsave: git worktree add -q --detach /tmp/ob aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/ob/node_modules && node --max-old-space-size=6144 .rc/x/cmOldSaveProbe.mjs /tmp/ob
+ucl2000: node .rc/x/cmUclProbe.mjs 2000
+ucl-imports: grep -rln "uclLeaguePhase\|leagueSlate" src scripts --include=*.ts --include=*.tsx --include=*.mjs --include=*.js | sort
