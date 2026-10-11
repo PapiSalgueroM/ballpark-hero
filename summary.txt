@@ -1,0 +1,2 @@
+r2-base-screen exit=1 4s | PROBE3 base screen: vitest exit 1
+r2-head exit=1 4s | PROBE3 head one seed: vitest exit 1
