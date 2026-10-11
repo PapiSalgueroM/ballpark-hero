@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSaveKeeper: node scripts/simSaveKeeper.mjs > $RC_OUT/simSaveKeeper.log 2>&1; s=$?; grep -E "front-office|gameLog" $RC_OUT/simSaveKeeper.log | cut -c1-360; tail -1 $RC_OUT/simSaveKeeper.log; exit $s
+sk-partgamelog: SIM_SAVE_KEEPER_CONTROL=partgamelog node scripts/simSaveKeeper.mjs > $RC_OUT/sk-partgamelog.log 2>&1; s=$?; tail -2 $RC_OUT/sk-partgamelog.log | cut -c1-330; exit $s
+sk-partrowus: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs > $RC_OUT/sk-partrowus.log 2>&1; s=$?; tail -2 $RC_OUT/sk-partrowus.log | cut -c1-330; exit $s
+sk-partbrief: SIM_SAVE_KEEPER_CONTROL=partbrief node scripts/simSaveKeeper.mjs > $RC_OUT/sk-partbrief.log 2>&1; s=$?; tail -2 $RC_OUT/sk-partbrief.log | cut -c1-330; exit $s
+sk-partfarewell: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs > $RC_OUT/sk-partfarewell.log 2>&1; s=$?; tail -2 $RC_OUT/sk-partfarewell.log | cut -c1-330; exit $s
+sk-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs > $RC_OUT/sk-norow.log 2>&1; s=$?; tail -2 $RC_OUT/sk-norow.log | cut -c1-330; exit $s
+sk-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs > $RC_OUT/sk-versiontable.log 2>&1; s=$?; tail -2 $RC_OUT/sk-versiontable.log | cut -c1-330; exit $s
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+vitest-board: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/nba-front-office/NbaDraftNightRivals.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts --testTimeout=600000 --hookTimeout=120000 2>&1 | tail -5; exit ${PIPESTATUS[0]}
+simGmGameDay: node scripts/simGmGameDay.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+simGmReload: node scripts/simGmReload.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simFoHub: node scripts/simFoHub.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
