@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+rm-green: node scripts/playReducedMotion.mjs
+rm-wheelcut: RC_OUT=/tmp/rm-wheelcut REDUCED_MOTION_CONTROL=wheelcut node scripts/playReducedMotion.mjs
+rm-noguard: RC_OUT=/tmp/rm-noguard REDUCED_MOTION_CONTROL=noguard node scripts/playReducedMotion.mjs
+rm-noblanket: RC_OUT=/tmp/rm-noblanket REDUCED_MOTION_CONTROL=noblanket node scripts/playReducedMotion.mjs

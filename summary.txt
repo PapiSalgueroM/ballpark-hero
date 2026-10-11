@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rm-green exit=0 47s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+rm-wheelcut exit=0 46s | playReducedMotion control: green. With the wheel's result line pushed under the fold of its dialog the wheel stage went red (8 findings over 4 screen size(s)) and nothing
+rm-noguard exit=0 50s | playReducedMotion control: green. The stripped guard was reported on the synthetic page (6 findings) and on the routes (10), so both stages work.
+rm-noblanket exit=0 46s | playReducedMotion control: green. With the blanket rule's transition duration rewritten out of 23 served file(s), the duration stage went red on 21 route(s) and nothing e
