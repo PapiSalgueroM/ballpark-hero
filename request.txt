@@ -1,0 +1,4 @@
+erasPre1035: bash .rc/x/at.sh 709e103f simEras
+erasAt1035: bash .rc/x/at.sh b777801d simEras
+erasPre1052: bash .rc/x/at.sh 0bdc970d simEras
+erasAt1052: bash .rc/x/at.sh 5010ae3f simEras

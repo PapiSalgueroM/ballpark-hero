@@ -1,0 +1,5 @@
+AT 709e103f = 709e103f5 2026-10-06 Round 1035: Club Manager's value curve lifted into scripts/lib/cmValueCurve.mjs, the bake imports it
+== simEras at 709e103f5d exit=0
+   368 clubs, 4253 players compared field by field against the bake
+closing line: ALL ERA AND AGEING CHECKS PASSED
+DONE at 709e103f5d worst=0

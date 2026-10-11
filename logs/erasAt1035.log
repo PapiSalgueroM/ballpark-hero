@@ -1,0 +1,10 @@
+AT b777801d = b777801df 2026-10-06 Round 1035: the A-League Men join Club Manager as league 23, twelve real squads generated offline
+== simEras at b777801df1 exit=1
+   368 clubs, 4229 players compared field by field against the bake
+  FAIL: 1 projected players at year zero differ from the real data
+  FAIL: projected 4229 players at year zero, the bake says 4253
+  FAIL: the champion's points moved by 4.1
+  FAIL: 89 players are not in the real data and are not flagged as made up
+4 FAILURES
+closing line: 4 FAILURES
+DONE at b777801df1 worst=1

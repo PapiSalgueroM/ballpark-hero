@@ -1,0 +1,9 @@
+AT 0bdc970d = 0bdc970d9 2026-10-08 Round 1052: step 4, the gathered leagues table, its generator and the Russian Premier League's 16 generated squads (nothing impor
+== simEras at 0bdc970d9c exit=1
+   426 clubs, 4377 players compared field by field against the bake
+  FAIL: 1 projected players at year zero differ from the real data
+  FAIL: projected 4377 players at year zero, the bake says 4401
+  FAIL: 89 players are not in the real data and are not flagged as made up
+3 FAILURES
+closing line: 3 FAILURES
+DONE at 0bdc970d9c worst=1

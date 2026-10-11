@@ -1,0 +1,9 @@
+AT 5010ae3f = 5010ae3f2 2026-10-08 Round 1052: step 5, Russia is in the engine (rules row, league row, nation, the join, the nationality fold, the side tables, the 
+== simEras at 5010ae3f22 exit=1
+   426 clubs, 4377 players compared field by field against the bake
+  FAIL: 1 projected players at year zero differ from the real data
+  FAIL: projected 4377 players at year zero, the bake says 4401
+  FAIL: 180 players are not in the real data and are not flagged as made up
+3 FAILURES
+closing line: 3 FAILURES
+DONE at 5010ae3f22 worst=1
