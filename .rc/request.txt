@@ -1,0 +1,14 @@
+#!serial
+# Round 1302 fix pass, final proof: the slow and the tree walking lines, one at a time. Base: origin/release-au-int at 0757b2a9.
+base: git worktree add -q /tmp/base 0757b2a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && git -C /tmp/base log --oneline -1 | cut -c1-80
+armA: node .rc/x/varProbe.mjs full | tail -14 | cut -c1-300
+armC: node .rc/x/varProbe.mjs off | tail -1 > /tmp/here.txt; (cd /tmp/base && node "$OLDPWD/.rc/x/varProbe.mjs" off | tail -1 > /tmp/base.txt); cat /tmp/here.txt /tmp/base.txt; a=$(grep -o 'off digest [0-9a-f]*' /tmp/here.txt); b=$(grep -o 'off digest [0-9a-f]*' /tmp/base.txt); test -n "$a" && test "$a" = "$b" && echo "ARM C HOLDS: $a on both trees"
+armC-fleet: (cd /tmp/base && PROBE_ENTRIES=50 node "$OLDPWD/.rc/x/r1218probe.mjs" fleet | tee /tmp/base-fleet.txt | tail -2); PROBE_ENTRIES=50 node .rc/x/r1218probe.mjs fleet | tee /tmp/here-fleet.txt | tail -2; a=$(grep '^FLEET digest' /tmp/base-fleet.txt); b=$(grep '^FLEET digest' /tmp/here-fleet.txt); test -n "$a" && test "$a" = "$b" && echo "ARM C HOLDS over the fleet: $a on both trees"
+old-saves: (cd /tmp/base && node "$OLDPWD/.rc/x/r1218probe.mjs" make /tmp/saves.json | tail -1 && node "$OLDPWD/.rc/x/r1218probe.mjs" load /tmp/saves.json | grep '^D ' > /tmp/base-d.txt); node .rc/x/r1218probe.mjs load /tmp/saves.json > /tmp/here-load.txt; echo "load exit $?"; grep -v '^D ' /tmp/here-load.txt | cut -c1-200 | tail -20; grep '^D ' /tmp/here-load.txt > /tmp/here-d.txt; diff /tmp/base-d.txt /tmp/here-d.txt && test -s /tmp/here-d.txt && echo "OLD SAVES HOLD: $(wc -l < /tmp/here-d.txt) digest lines equal on both trees"
+cmvar-all: set -o pipefail; CM_VAR_CONTROL=all node scripts/simCmVar.mjs | grep -a "^PASS\|^FAIL\|CAUGHT\|^simCmVar:" | cut -c1-260
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
