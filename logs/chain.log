@@ -1,0 +1,37 @@
+LINK lay1221 -> main: 42 values, 5 differ; 8 bundled files differ of 72
+   moved, counted over the seed sets: nfl careers x5
+   file src/lib/careerHub.ts: not bundled -> 76f7d71fe72f
+   file src/lib/careerRivalryEvents.ts: d94645cda67b -> 0cc91c17d831
+   file src/lib/nbaCareerPreDraft.ts: b55178928dbe -> 1492c52c1fb3
+   file src/lib/nbaCareerRivalryEvents.ts: b8c98476eeca -> c17863ff3fcf
+   file src/lib/nbaCareerSport.ts: 8d23e34a6773 -> 2bab8fdf5f0c
+   file src/lib/nflCareerRivalryEvents.ts: 5820229e3f6e -> d13f9dc8584c
+   file src/lib/nflCareerSport.ts: 1c7a51ed3b53 -> affb30810991
+   file src/lib/nflMyCareer.ts: 15d214e966e4 -> 63ccc87f6cbc
+LINK main -> after1300: 42 values, 0 differ; 1 bundled files differ of 72
+   file src/lib/season/us.ts: 3bccd4b40c17 -> 5c7ecb526cda
+LINK after1300 -> after1301: 42 values, 0 differ; 4 bundled files differ of 72
+   file src/lib/careerHallOfFame.ts: 447b451e9c6f -> ad80bcfd3c9f
+   file src/lib/careerRival.ts: 62a6293dbffd -> 06dd01b40331
+   file src/lib/nbaMyCareer.ts: 03e8d99c36d1 -> 1d41ed444c7f
+   file src/lib/nflMyCareer.ts: 63ccc87f6cbc -> a7fa11f3069a
+LINK after1301 -> after1227: 42 values, 5 differ; 8 bundled files differ of 72
+   moved, counted over the seed sets: nfl careers x5
+   file src/lib/careerAwards.ts: 149fda7ed0b3 -> b74b3b1f69d0
+   file src/lib/careerRival.ts: 06dd01b40331 -> a49f56f1df12
+   file src/lib/careerRivalryEvents.ts: 0cc91c17d831 -> 690c71793449
+   file src/lib/nbaCareerRivalryEvents.ts: c17863ff3fcf -> de6cc4f412f6
+   file src/lib/nbaMyCareer.ts: 1d41ed444c7f -> 317ea8d44d62
+   file src/lib/nflCareerRivalryEvents.ts: d13f9dc8584c -> fb21970fb7cc
+   file src/lib/nflMyCareer.ts: a7fa11f3069a -> 4dc8feabe22a
+   file src/lib/usCareerStatLine.ts: 608bb45cc481 -> fb73dc184f1b
+LINK after1227 -> head: 42 values, 0 differ; 2 bundled files differ of 72
+   file src/data/usLeagueShape.ts: bb182e87db73 -> b440489f004b
+   file src/lib/season/us.ts: 5c7ecb526cda -> 3820d139db2c
+record lay1221: commit 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79, round 1300, careers 40, stray draws 0, 70 inputs + 1 moved
+record main: commit aa564f16019b9e821981d5c4e3e0262312c73b62, round 1221, careers 40, stray draws 0, 67 inputs + 5 moved
+record after1300: commit ff4bfba650313bb3c15f4037dffaf61ada4428aa, round 1300, careers 40, stray draws 0, 71 inputs + 1 moved
+record after1301: commit f6dfa9b3ae91239a780e6537c658c3d7026d4c24, round 1300, careers 40, stray draws 0, 71 inputs + 1 moved
+record after1227: commit a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e, round 1300, careers 40, stray draws 0, 71 inputs + 1 moved
+record head: commit 5db0724bd380cb8fbfc4f8777641cbb6c1c7b7bf, round 1300, careers 40, stray draws 0, 71 inputs + 1 moved
+digestChain: values that differ, link by link: lay1221->main 5; main->after1300 0; after1300->after1301 0; after1301->after1227 5; after1227->head 0

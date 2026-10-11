@@ -1,0 +1,12 @@
+p1-main exit=0 17s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/p1-main.json
+p2-after1300 exit=0 17s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/p2-after1300.json
+p3-after1301 exit=0 16s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/p3-after1301.json
+p4-after1227 exit=0 16s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/p4-after1227.json
+p5-head exit=0 16s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/usSeasonLayDigest.json
+chain exit=0 0s | digestChain: values that differ, link by link: lay1221->main 5; main->after1300 0; after1300->after1301 0; after1301->after1227 5; after1227->head 0
+chain-seam exit=0 0s | digestChain: values that differ, link by link: seam1212base->after1301 0; after1301->law 0; law->head 5
+lay-old-compare exit=3 16s | simUsSeasonCentre digest compare: NOT COMPARED, 14 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)
+lay-new-compare exit=0 16s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+lay-new-control exit=1 16s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)
+law-compare exit=3 16s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+seam-compare exit=3 16s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the seam)
