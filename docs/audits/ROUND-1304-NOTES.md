@@ -252,3 +252,45 @@ So a 2005-06 save can print a club that was not founded yet. Round 146 already w
 in this file (`buyerPool`, `approachSuitors` and the job suitors all branch on the era: "a 2010 manager
 cannot be poached by a 2026 club"); these two places never got it. Verdict: DEFECT, a club of the wrong
 year on a player's screen. See the closing report for what was done about it.
+
+## The defect, fixed at its cause
+
+**The test first (commit `269ef5ea`).** `scripts/simEra2020.mjs` got a section 9 that plays nothing: for
+every past season it starts 100 seeded saves and reads the transfer log the opening window wrote, and
+it runs 60 seeded negotiations until a rival enters, each against the clubs of that season's leagues.
+On the engine as it stood it is red on eight lines:
+
+| Season | Deals in the news | Bought by a club not of that season | Rivals | Not of that season | One it printed |
+|---|---|---|---|---|---|
+| 2010-11 | 469 | 106 | 37 | 30 | `Al-Hilal sign Lassana Diarra from Real Madrid` |
+| 2015-16 | 428 | 72 | 33 | 26 | `Leeds United sign Pierre-Emerick Aubameyang from Borussia Dortmund` |
+| 2005-06 | 472 | 99 | 34 | 29 | `Bournemouth sign Ruud van Nistelrooy from Manchester United` |
+| 2020-21 | 440 | 27 | 32 | 21 | `Nottingham Forest sign Cristiano Ronaldo from Juventus` |
+
+**The fix (commit `754b0b2b`).** One helper in `src/lib/clubManager.ts`, `actingClubsByLeague(state)`: the
+era's own leagues through `eraPlayableClubs` in a past season, and exactly today's expression otherwise.
+`generateHeadlines` and the rival bidder in `makeOffer` read it. Against the base the engine file is 17
+lines added and 2 removed in three hunks, none naming an appeal, and the Round 1081 manifest pin follows
+it (`d4aa57b9...` to `f98e849f...`). On the fixed engine section 9 reads 0 of 466, 419, 472 and 435 deals
+and 0 of 35, 31, 32 and 33 rivals. Its two controls put the old line back as the engine is bundled:
+`modernnews` fails the news sentence in all four eras (106, 72, 99 and 27, the base's own numbers) with
+no rival wrong, and `modernwar` fails the rival sentence (27, 20, 25 and 25) with no deal wrong.
+
+**What moved, and the proof that nothing else did.** A career that starts today reads the same clubs in the
+same order. `scripts/simCmLeagueRules.mjs` holds that as hashes: on the fix (`r1304-fx2`) its 27 modern
+entries and 48 pure entries match untouched, and all 20 era entries differ, every one in the three hashes
+of a whole state (`start`, `whole`, `wholeNext`), which holds the headlines and the transfer log. Eleven
+differ in nothing else. Four era seasons also play out differently (`era2010|bundesliga2010`,
+`era2010|ligue12010`, `era2015|ligue12015`, `era2005|bundesliga2005`), because the pool of clubs that can
+afford a man has another size, so a deal exists or does not and the stream after it shifts. On the commit
+before the fix the same harness is green on the file as it stood (`r1304-fx2a`), so nothing else in the
+round moved a hash. The 20 era entries were then written with `--part=eras --write` on the tree and the
+harness ran green whole on the same runner (commit `c9269787`, with the paragraph in the harness header).
+
+**Saves.** A past season save from before the fix can hold up to eight headlines and up to 80 Latest
+Transfers rows that name a club of today. Nothing rewrites them: the headlines are replaced at the next
+window and the log rolls off at 80 rows. No signing of the player's own is touched, because the defect
+never moved a man, it only named a buyer. The count of saves it could touch: every past season save ever
+started (each opens with a window), which is why a reader leaves them alone rather than editing history.
+
+**One What's New entry** says it in plain words, at the top of October 2026.
