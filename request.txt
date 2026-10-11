@@ -1,0 +1,26 @@
+# Release AV proof, Round 1227 (the NFL rival on your position): its harness, each control its own line
+simUsRivalSense: node scripts/simUsRivalSense.mjs
+rival-bridge: US_RIVAL_CONTROL=bridge node scripts/simUsRivalSense.mjs
+rival-cutdraw: US_RIVAL_CONTROL=cutdraw node scripts/simUsRivalSense.mjs
+rival-drawsnfl: US_RIVAL_CONTROL=drawsnfl node scripts/simUsRivalSense.mjs
+rival-fullscorenfl: US_RIVAL_CONTROL=fullscorenfl node scripts/simUsRivalSense.mjs
+rival-impure: US_RIVAL_CONTROL=impure node scripts/simUsRivalSense.mjs
+rival-lastyearnfl: US_RIVAL_CONTROL=lastyearnfl node scripts/simUsRivalSense.mjs
+rival-nofloor: US_RIVAL_CONTROL=nofloor node scripts/simUsRivalSense.mjs
+rival-offshapenfl: US_RIVAL_CONTROL=offshapenfl node scripts/simUsRivalSense.mjs
+rival-oldscalenfl: US_RIVAL_CONTROL=oldscalenfl node scripts/simUsRivalSense.mjs
+rival-oneslot: US_RIVAL_CONTROL=oneslot node scripts/simUsRivalSense.mjs
+rival-oneslotsite: US_RIVAL_CONTROL=oneslotsite node scripts/simUsRivalSense.mjs
+rival-owndead: US_RIVAL_CONTROL=owndead node scripts/simUsRivalSense.mjs
+rival-owndealt: US_RIVAL_CONTROL=owndealt node scripts/simUsRivalSense.mjs
+rival-rostergate: US_RIVAL_CONTROL=rostergate node scripts/simUsRivalSense.mjs
+rival-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+rival-workload17: US_RIVAL_CONTROL=workload17 node scripts/simUsRivalSense.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+rivalry-allstar221: RIVALRY_CONTROL=allstar221 node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rivalry-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+rivalry-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+rivalry-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+vitest-rival: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=300000
