@@ -1,0 +1,6 @@
+# Reviewer (screens) of Release AX, the second walk again on the head alone (no base build), in case the request with the base build is slow: where the screen is after Push for more, offer by offer
+#!serve
+#!playwright
+push-nfl: SPORT=nfl node .rc/x/rsUs2.mjs
+push-nba: SPORT=nba node .rc/x/rsUs2.mjs
+push-mlb: SPORT=mlb node .rc/x/rsUs2.mjs
