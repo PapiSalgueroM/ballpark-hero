@@ -1,0 +1,19 @@
+diagnostic copy written: scripts/zzSeasonMotionDiag.mjs
+40
+   DIAG B1i 390 compact Probe 14 2036 Man City from 2: table 2 to 3 same order false; table 3 to 4 same order false; animations at the second table's first frame 7; in the air before it 6
+   DIAG B1i 390 compact Probe 14 2036 Man City from 7: table 7 to 8 same order false; table 8 to 9 same order false; animations at the second table's first frame 5; in the air before it 5
+   DIAG B1i 390 compact Probe 14 2036 Man City from 13: table 13 to 14 same order false; table 14 to 15 same order false; animations at the second table's first frame 6; in the air before it 4
+   DIAG B1i 390 compact Probe 14 2036 Man City from 21: table 21 to 22 same order false; table 22 to 23 same order true; animations at the second table's first frame 0; in the air before it 0
+   DIAG B1i 1280 whole Probe 14 2036 Man City from 2: table 2 to 3 same order false; table 3 to 4 same order false; animations at the second table's first frame 16; in the air before it 20
+   DIAG B1i 1280 whole Probe 14 2036 Man City from 7: table 7 to 8 same order false; table 8 to 9 same order false; animations at the second table's first frame 16; in the air before it 14
+   DIAG B1i 1280 whole Probe 14 2036 Man City from 13: table 13 to 14 same order false; table 14 to 15 same order false; animations at the second table's first frame 11; in the air before it 13
+   DIAG B1i 1280 whole Probe 14 2036 Man City from 21: table 21 to 22 same order false; table 22 to 23 same order true; animations at the second table's first frame 4; in the air before it 4
+   B1i: 1280 whole Probe 14 2036 Man City from 21: Tottenham starts the second flight 58.00 px from its place in table 22
+   B1i: 1280 whole Probe 14 2036 Man City from 21: Nottingham Forest starts the second flight 58.00 px from its place in table 22
+   B1i: 1280 whole Probe 14 2036 Man City from 21: Burnley starts the second flight 29.00 px from its place in table 22
+   B1i: 1280 whole Probe 14 2036 Man City from 21: Ipswich Town starts the second flight 29.00 px from its place in table 22
+ok   B1i. a flight was in the air when the second table landed in 38 of 40 cases (floor half)
+FAIL B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (4 bad starts, 0 bad ends, 0 leftovers; largest start deviation 58.000 px)
+playSeasonCentreMotion: 2 checks, 1 failed (only B1i)
+FAIL B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (4 bad starts, 0 bad ends, 0 leftovers; largest start deviation 58.000 px)
+playSeasonCentreMotion: 2 checks, 1 failed (only B1i)
