@@ -1,0 +1,19 @@
+SKIPPED nba: not asked for (SPORTS)
+SKIPPED nfl: not asked for (SPORTS)
+viewer chunk UsSeasonCentre-D2-1almd.js (6.4K raw); the cover lives in usCareerSeasonReview-BUbsI6sY.js
+CONTROL playfirst: the served entry plays the season without waiting for the viewer (usCareerSeasonReview-BUbsI6sY.js)
+ok   [lazy] mlb 390x844: the viewer chunk is not requested on load or on the hub (48 chunks)
+ok   [lazy] mlb 390x844: no chunk the page loads holds "You go deep"
+ok   [layout] mlb 390x844: the entry is at least 44 px tall and fully visible (44 px)
+FAIL [load first] mlb 390x844: two frames after the press nothing is played while the viewer loads (curtain true, season on the save true, button loading false)
+FAIL [cover] mlb 390x844: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (902 frames in 15005 ms, 902 bare; at the end curtain true, covered false)
+ok   [lazy] mlb 390x844: the viewer chunk is requested after the press
+     the first press downloads 14 chunks, 115.3K gz: UsSeasonCentre 2.9K, core 7.5K, leagueCore 0.4K, keyedShuffle 0.1K, us 3.9K, SeasonCentre 13.6K, LeagueTableCard 1.1K, VictoryMoment 1.3K, useCareerMoment 65.9K, clubRivalries 10.3K, dialogA11y 0.1K, ArcadeShotFeedback 0.9K, useBodyLock 0.3K, mlb 6.9K
+ok   [same press] mlb 390x844: Play and Week by week saved the same bytes
+     mlb 390x844: from the press to the first card 15005 ms over 902 frames (162 games derived)
+FAIL [agreement] mlb 390x844: the first card offers "Play ball"
+FAIL [clock] mlb 390x844: the score bug equals the feed on every sample (0 samples, 0 scores)
+FAIL [errors] the walk threw: Error: page.evaluate: TypeError: Cannot read properties of null (reading 'querySelectorAll')
+supabase requests aborted: 4
+control playfirst: RED AT THE NAMED CHECK (load first); checks red: load first, cover, agreement, clock, errors
+playUsSeasonCentre: 10 checks, 5 failed (control playfirst)
