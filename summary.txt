@@ -1,0 +1,1 @@
+measure exit=0 25s | CMVAR_ENGINE {"seeds":[11,12,13,14,15,16,17,18,19,20],"leagueMatches":6780,"reviewableGoalsPerMatch":2.3891,"goalsPerMatch":2.7122,"foulsPerMatch":20.143,"probeRate":0.00
