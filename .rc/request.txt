@@ -1,0 +1,14 @@
+# Release AX, final proof, extras 1: the three pull requests' own kits on the final head, and this release's new walk with its control (a plain build, one at a time)
+#!build
+#!playwright
+#!serial
+simLineupRecordPositions: LINEUP_RECORD_POSITIONS_OUT=/tmp/xi-proof NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLineupRecordPositions.mjs
+edge-sha: sha256sum supabase/functions/validate-player/index.ts
+labels-pure: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SOCCER_OPPONENT_LABELS_OUT=/tmp/labels-proof node scripts/simSoccerOpponentLabels.mjs 2>&1 | tail -20
+labels-browser: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT=/tmp/labels-proof SOCCER_OPPONENT_LABELS_OUT=/tmp/labels-browser node scripts/simSoccerOpponentLabels.mjs 2>&1 | tail -20
+pm-fonts: mkdir -p career-press-market-artifacts && FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+pm-units: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerPress.test.ts src/test/soccerPressRoomUi.test.tsx src/lib/usCareerMarket.test.ts src/test/usCareerMarketUi.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerSaveRetry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-press-market-artifacts/units.json 2>&1 | tail -25 && node scripts/qa/checkCareerPressMarket.mjs units
+pm-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs outcomes
+pm-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs native
+playUsMarketTalk: node scripts/playUsMarketTalk.mjs
+playUsMarketTalk-droptalk-EXPECT1: US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs
