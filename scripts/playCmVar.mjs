@@ -39,7 +39,13 @@ import pw from './lib/playwrightLoader.mjs';
 assert(process.env.CI, 'Run the review walk in remote CI, never on a desk machine');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 {
-  const { cmVarLiveState } = await import('./qa/cmVarLit.mjs');
+  const { cmVarLiveState, cmVarStagedKinds } = await import('./qa/cmVarLit.mjs');
+  /* Round 1303: a lit build whose list of kinds is empty asks for no review either (the ledger holds both kinds). */
+  if (cmVarLiveState() === 'on' && cmVarStagedKinds().length === 0) {
+    console.error('playCmVar: cannot run: the switch is on and the game is handed no kind of review (CM_VAR_KINDS is empty in src/data/clubManagerVarRates.ts), so the page asks for no review.');
+    console.error('playCmVar: stage a kind in a scratch checkout: node scripts/qa/cmVarLit.mjs on goal (or on all), then npm run build, then this walk, then node scripts/qa/cmVarLit.mjs off.');
+    process.exit(2);
+  }
   if (cmVarLiveState() !== 'on') {
     console.error('playCmVar: cannot run: VAR is switched off (CM_VAR_LIVE is false in src/lib/clubManagerVarLive.ts), so the page asks for no review.');
     console.error('playCmVar: light a scratch checkout first: node scripts/qa/cmVarLit.mjs on, then npm run build, then this walk, then node scripts/qa/cmVarLit.mjs off.');
@@ -49,6 +55,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.RC_OUT || process.env.CM_VAR_NATIVE_ARTIFACTS || process.env.SHOTS || path.join(ROOT, 'cm-var-artifacts/native'));
 fs.mkdirSync(OUT, { recursive: true });
 const KEY = 'dukb-club-manager-save', NOW = 1791547200000, SECOND_SEED = 5312, FINISH_SEED = 5313;
+/* Round 1303: the kinds of review the build was handed. The walk asks the engine with the same list the page's
+   hook asks with, plays the penalty cases only on a build that plays the penalty kind, and on a build with the
+   goal kind alone asserts that no review ever gives a penalty. */
+const KINDS = (await import('./qa/cmVarLit.mjs')).cmVarStagedKinds();
+const PENALTY_KIND = KINDS.includes('penalty');
+console.log(`playCmVar: the build plays ${KINDS.join(' and ')}.`);
 const clone = v => JSON.parse(JSON.stringify(v));
 function fixedDate(fn) {
   const OriginalDate = Date;
@@ -78,10 +90,13 @@ function alone(v, feed) {
 /** What each case is played on: which league match of the career, a seed that holds it today, and the half it wants. */
 const WANTED = {
   ruledOut: { match: 0, hint: 2460, want: feed => reviewsOf(feed).find(v => v.review.decision === 'disallowed' && v.side === 'me' && alone(v, feed)) },
-  penaltyScored: { match: 0, hint: 1735, want: (feed, live) => reviewsOf(feed).find(v => v.review.decision === 'awarded' && alone(v, feed) && !!kickOf(live, v)?.goal) },
-  penaltySaved: { match: 2, hint: 2193, want: (feed, live) => reviewsOf(feed).find(v => { const k = kickOf(live, v); return v.review.decision === 'awarded' && alone(v, feed) && !!k && !k.goal && !!k.on; }) },
+  penaltyScored: { match: 0, hint: 1735, needs: 'penalty', want: (feed, live) => reviewsOf(feed).find(v => v.review.decision === 'awarded' && alone(v, feed) && !!kickOf(live, v)?.goal) },
+  /* Round 1303: on the lower penalty rate the first four matches hold no saved penalty by review; the tenth entry does. */
+  penaltySaved: { match: 9, hint: 1832, needs: 'penalty', want: (feed, live) => reviewsOf(feed).find(v => { const k = kickOf(live, v); return v.review.decision === 'awarded' && alone(v, feed) && !!k && !k.goal && !!k.on; }) },
   goalBefore: { match: 1, hint: 1724, want: feed => { const all = reviewsOf(feed); return all.length === 1 && all[0].review.decision === 'disallowed' && all[0].minute >= 4 && all[0].minute <= 40 && !all[0].plus && feed.some(e => e.kind === 'goal' && place(e) === place(all[0]) - 1) ? all[0] : null; } },
-  two: { match: 0, hint: 2453, want: feed => { const all = reviewsOf(feed); return all.length === 2 && all.every(r => r.minute >= 4 && r.minute <= 40 && !r.plus) && all[1].minute - all[0].minute >= 4 ? all[0] : null; } },
+  /* optional: with the goal kind alone the fixtures may hold no half with two reviews or with a review beside a red card
+     (the two hints below stand on a penalty a review gives); then the jsdom cases hold them and the walk says so. */
+  two: { match: 0, hint: 2453, optional: !PENALTY_KIND, want: feed => { const all = reviewsOf(feed); return all.length === 2 && all.every(r => r.minute >= 4 && r.minute <= 40 && !r.plus) && all[1].minute - all[0].minute >= 4 ? all[0] : null; } },
   /* Round 1302: the cases nobody had walked. A goal ruled out in the last two clock places of the half with the
      end of the half to itself (drawn before its card now), an own goal the minute after a ruled out goal, and a
      review in the same minute as the other side's injury or red card. */
@@ -89,7 +104,7 @@ const WANTED = {
   lateBefore: { match: 1, hint: 2591, want: (feed, live) => lateRuledOut(feed, live, 1) },
   ownGoal: { match: 1, hint: 1940, want: feed => { const all = reviewsOf(feed), r = all[0]; return all.length === 1 && r.review.decision === 'disallowed' && r.minute >= 4 && r.minute <= 38 && !r.plus && feed.some(e => e.kind === 'goal' && e.og && place(e) === place(r) + 1) ? r : null; } },
   injury: { match: 0, hint: 3861, want: feed => besideOther(feed, 'injury') },
-  red: { match: 1, hint: 3827, want: feed => besideOther(feed, 'red') },
+  red: { match: 1, hint: 3827, optional: !PENALTY_KIND, want: feed => besideOther(feed, 'red') },
   /* Round 1302 fix: the end of a half that real chances FILL (the two reviews of the round found the screen wrong
      there: a card that said "goal ruled out" on a real goal in the net, or on a real shot's last picture). The
      clock now stops for the ruled out goal, at the whistle when no instant before it is free. crowdedGoal: a real
@@ -127,13 +142,15 @@ const fixtures = {};
     delete first.realLeagueFixtures;
     first.squad = first.squad.map(p => ({ ...p, fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0 }));
     entries.push(first);
-    for (let n = 0; n < 2; n++) entries.push(withCmVarSeed(5000 + n, () => cm.playNextEntry(entries[n], { skipHalftime: true, noCoach: true })).state);
+    for (let n = 0; n < (PENALTY_KIND ? 9 : 2); n++) entries.push(withCmVarSeed(5000 + n, () => cm.playNextEntry(entries[n], { skipHalftime: true, noCoach: true })).state);
     for (const [kind, spec] of Object.entries(WANTED)) {
+      if (spec.needs && !KINDS.includes(spec.needs)) { console.log(`FIXTURE ${kind}: not played, the build does not play the ${spec.needs} kind`); continue; }
       const pre = entries[spec.match];
       for (const seed of [spec.hint, ...Array.from({ length: 2500 }, (_, i) => 1700 + i)]) {
-        const stop = withCmVarSeed(seed, () => cm.playNextEntry(pre, { varReviews: true }));
+        const stop = withCmVarSeed(seed, () => cm.playNextEntry(pre, { varReviews: KINDS }));
         if (stop.kind !== 'halftime' || stop.state.live.varReviews !== true) continue;
         const feed = cm.liveFeed(stop.state.live), review = spec.want(feed, stop.state.live);
+        if (!PENALTY_KIND && reviewsOf(feed).some(v => v.review.incident === 'penalty')) throw new Error(`a build with the goal kind alone drew a penalty review (${kind}, seed ${seed})`);
         if (!review) continue;
         fixtures[kind] = { kind, pre, seed, review, second: kind === 'two' ? reviewsOf(feed)[1] : null };
         break;
@@ -145,7 +162,11 @@ const fixtures = {};
 const report = { fixtures: Object.fromEntries(Object.entries(fixtures).map(([k, f]) => [k, { seed: f.seed, minute: f.review.minute, side: f.review.side, who: f.review.text, decision: f.review.review.decision }])), cases: [], help: [] };
 const save = () => fs.writeFileSync(path.join(OUT, 'walk-report.json'), JSON.stringify(report, null, 1));
 const failures = [];
-for (const kind of Object.keys(WANTED)) if (!fixtures[kind]) failures.push(`no half of the search holds the ${kind} case`);
+for (const [kind, spec] of Object.entries(WANTED)) if (!fixtures[kind] && !(spec.needs && !KINDS.includes(spec.needs)) && !spec.optional) failures.push(`no half of the search holds the ${kind} case`);
+const absent = Object.entries(WANTED).filter(([kind]) => !fixtures[kind]).map(([kind, spec]) => `${kind} (${spec.needs && !KINDS.includes(spec.needs) ? `needs the ${spec.needs} kind` : 'no half of the search holds it with these kinds'})`);
+if (absent.length) console.log(`playCmVar: not walked on this build: ${absent.join(', ')}.`);
+/** The cases of a list the build can meet. */
+const met = kinds => kinds.filter(kind => fixtures[kind]);
 save();
 
 /* ---- the build, served ---- */
@@ -266,7 +287,7 @@ async function runCase(profile, motion, kind, variant) {
     await toHub(w);
     const before = await w.saved();
     const cm = await engine(`case=${id}`);
-    const half = fixedDate(() => withCmVarSeed(f.seed, () => cm.playNextEntry(before, { varReviews: true })));
+    const half = fixedDate(() => withCmVarSeed(f.seed, () => cm.playNextEntry(before, { varReviews: KINDS })));
     const live = half.state.live, feed = cm.liveFeed(live);
     const v = reviewsOf(feed).find(e => e.review.id === f.review.review.id);
     assert(v, 'the engine does not draw this fixture from the save the page holds');
@@ -278,6 +299,8 @@ async function runCase(profile, motion, kind, variant) {
     await w.activate(w.page.locator('[data-cm-way="live"]'));
     await w.stage('first');
     check((await w.saved()).live?.varReviews === true, 'the saved match does not carry the review opt in on a lit build');
+    check(JSON.stringify((await w.saved()).live?.varKinds) === JSON.stringify(KINDS), `the saved match does not carry the kinds of review the build plays (${JSON.stringify((await w.saved()).live?.varKinds)})`);
+    if (!PENALTY_KIND) check(!feed.some(e => e.kind === 'var' && e.review?.incident === 'penalty'), 'a match of a build with the goal kind alone holds a penalty review');
     await w.activate(w.page.locator('[data-cm-live-controls]').getByRole('button', { name: '4x', exact: true }));
     const whereBefore = await w.where();
     await w.page.waitForFunction(rid => document.querySelector('[data-cm-var]')?.dataset.cmVarId === rid, v.review.id, { timeout: 120000 });
@@ -375,6 +398,9 @@ async function runCase(profile, motion, kind, variant) {
         await helpLines.waitFor();
         const text = await helpLines.innerText();
         check(text.includes('goes in first') && text.includes('VAR example'), 'the match help does not explain the review');
+        /* Round 1303: the match's own help says what the kinds this match was kicked off with do, and nothing else. */
+        check(text.includes(PENALTY_KIND ? 'VAR here reviews goals and penalties only' : 'VAR here reviews goals only'), `the match help does not name the kinds of review this build plays: ${text.slice(0, 400)}`);
+        if (!PENALTY_KIND) check(!/penalty a review|can become a penalty|gives a penalty/.test(text), 'the match help speaks of a penalty by review in a match that reviews goals only');
         row.shots.push(await w.shot(`${id}-4-help`));
         await w.activate(w.page.getByRole('button', { name: 'Close the help' }));
       }
@@ -422,7 +448,10 @@ async function hubHelp(profile) {
     if (!(box.x >= 0 && box.right <= box.vw && box.docWidth <= box.vw + 1)) row.fail.push(`the VAR paragraph does not fit the screen: ${JSON.stringify(box)}`);
     if (!(box.paragraphs.length >= 5 && box.paragraphs.every(h => h > 0 && h < box.vh / 2))) row.fail.push(`the VAR help is not short paragraphs, each under half a screen: ${JSON.stringify(box)}`);
     if (!row.text.includes("VAR in today's game")) row.fail.push('the VAR help lost its heading');
-    for (const must of ['Premier League', 'Champions League', 'a clearly wrong second yellow', 'goals and penalties only', 'goes in first']) if (!row.text.includes(must)) row.fail.push(`the VAR paragraph does not say "${must}"`);
+    for (const must of ['Premier League', 'Champions League', 'a clearly wrong second yellow', PENALTY_KIND ? 'goals and penalties only' : 'This game reviews goals only', 'goes in first']) if (!row.text.includes(must)) row.fail.push(`the VAR paragraph does not say "${must}"`);
+    /* Round 1303: with the goal kind alone the help never speaks of a penalty a review gives, and it never states a real league's rate. */
+    if (!PENALTY_KIND) for (const never of ['can become a penalty', 'a penalty given about once', 'a penalty a review gave']) if (row.text.includes(never)) row.fail.push(`the VAR paragraph says "${never}" on a build that reviews goals only`);
+    for (const never of ['Serie A 2017', 'Ligue 1 2023', 'Premier League 2022']) if (row.text.includes(never)) row.fail.push(`the VAR paragraph names a real season ("${never}"): the help never states a real league's rate`);
     if (row.text.includes('straight red cards')) row.fail.push('the VAR paragraph still states the protocol of before July 2026');
     row.shots.push(await w.shot(`${id}-1-var-paragraph`));
   } catch (error) { row.fail.push(`the walk stopped: ${String(error.stack || error).slice(0, 500)}`); await w.page.screenshot({ path: path.join(OUT, `${id}-FAILURE.jpg`), type: 'jpeg', quality: 55 }).catch(() => {}); }
@@ -433,15 +462,15 @@ async function hubHelp(profile) {
 
 try {
   for (const profile of PROFILES) await hubHelp(profile);
-  for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored', 'penaltySaved', 'goalBefore']) await runCase(profile, 'no-preference', kind, 'plain');
-  for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored']) await runCase(profile, 'reduce', kind, 'plain');
-  await runCase(PROFILES[0], 'no-preference', 'two', 'plain');
-  for (const profile of PROFILES) for (const kind of ['lateWhistle', 'lateBefore', 'ownGoal', 'injury', 'red']) await runCase(profile, 'no-preference', kind, 'plain');
+  for (const profile of PROFILES) for (const kind of met(['ruledOut', 'penaltyScored', 'penaltySaved', 'goalBefore'])) await runCase(profile, 'no-preference', kind, 'plain');
+  for (const profile of PROFILES) for (const kind of met(['ruledOut', 'penaltyScored'])) await runCase(profile, 'reduce', kind, 'plain');
+  for (const kind of met(['two'])) await runCase(PROFILES[0], 'no-preference', kind, 'plain');
+  for (const profile of PROFILES) for (const kind of met(['lateWhistle', 'lateBefore', 'ownGoal', 'injury', 'red'])) await runCase(profile, 'no-preference', kind, 'plain');
   /* Round 1302 fix: the crowded ends of a half, and the two late goals with reduced motion (nobody had walked either). */
   for (const profile of PROFILES) for (const kind of ['crowdedGoal', 'crowdedShot']) await runCase(profile, 'no-preference', kind, 'plain');
   for (const profile of PROFILES) for (const kind of ['lateWhistle', 'lateBefore']) await runCase(profile, 'reduce', kind, 'plain');
   await runCase(PROFILES[0], 'reduce', 'crowdedGoal', 'plain');
-  for (const variant of ['leave', 'skip']) for (const profile of PROFILES) for (const kind of ['ruledOut', 'penaltyScored']) await runCase(profile, 'no-preference', kind, variant);
+  for (const variant of ['leave', 'skip']) for (const profile of PROFILES) for (const kind of met(['ruledOut', 'penaltyScored'])) await runCase(profile, 'no-preference', kind, variant);
 } finally { await browser.close(); if (server) server.kill(); save(); }
 for (const line of failures.slice(0, 60)) console.log(`FAIL ${line.split('\n')[0].slice(0, 420)}`);
 console.log(`playCmVar: ${report.cases.length} cases and ${report.help.length} help views at 390 and 1280, ${Object.keys(fixtures).length} of ${Object.keys(WANTED).length} fixtures found, ${failures.length} failed assertion(s).`);

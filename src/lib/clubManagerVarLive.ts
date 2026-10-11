@@ -35,6 +35,21 @@
  * When both are closed: this line, the What's New entry and the cases of the unit file follow, then the lit
  * walk. docs/audits/ROUND-1302-NOTES.md has the whole list (ROUND-1218-NOTES.md has the first half).
  *
+ * Round 1303 changed what holds this line, and left it false. The lead ruled on the first reason (a rate stands
+ * on two independent publishers within a factor of two, derived from the lowest reading: recent-seasons is
+ * accepted) and asked for goals only. So the KIND of review became data: the rates ledger's kinds block, written
+ * by the generator as CM_VAR_KINDS, handed to kickOff by the hook (cmVarGameAsk in src/lib/clubManagerVar.ts)
+ * and saved with the match. An open owed entry now holds the kinds it names, not this whole switch, and this
+ * switch may be true only while CM_VAR_KINDS is not empty (scripts/simCmVarLedger.mjs, control owedlive). Turning
+ * it on alone asks for nothing: with an empty list the game asks kickOff for no review.
+ *   penalties-total still holds the penalty kind (see above).
+ *   goals-level, new, holds the goal kind: measured on ten fleets, the goal kind ALONE moves goals a match by
+ *     0.066 to 0.088 down (a goal a review rules out is a goal fewer and nothing gives one back), outside the 0.05
+ *     the balance harnesses let a rule move. The entry says the three ways it closes; one is the lead's ruling.
+ * When a kind is played: this line, the What's New entry, the lit rule in the unit file (its mode `switch` goes
+ * red that day, as it must), then the lit walk (node scripts/qa/cmVarLit.mjs on goal stages it in a scratch
+ * checkout today). docs/audits/ROUND-1303-NOTES.md has the list.
+ *
  * Kept in its own file with no import so the help text, which several harnesses render with a plain
  * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it.
  */

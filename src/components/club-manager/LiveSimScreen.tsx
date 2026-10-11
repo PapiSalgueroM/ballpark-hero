@@ -30,7 +30,7 @@ import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/
 /* Round 1146: the mark after a goal, the report's own. */
 import { scorerMark } from '@/lib/clubManagerScorerLine';
 import type { GoalMarks } from '@/lib/clubManagerScorerLine';
-import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel } from '@/lib/clubManagerVar';
+import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';
 import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
 
 /**
@@ -420,7 +420,10 @@ export function stagePitchInput(
 }
 
 /** Round 1101: the "?" on the match. It is in the DOM only while its panel is open. */
-function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: boolean }) {
+/** Round 1303: kinds is the list of kinds of review the match was kicked off with (a goal ruled out, a penalty
+ *  given). The help says what those kinds do and nothing about a kind the match does not play. */
+function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: readonly string[] }) {
+  const goals = kinds.includes('goal'), penalties = kinds.includes('penalty'), reviews = goals || penalties;
   return (
     <div data-cm-live-help="1" className="bg-card border border-border rounded-2xl p-3 text-left">
       <div className="flex items-center justify-between gap-2">
@@ -432,9 +435,9 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
       <ul className="mt-1 space-y-1.5 text-xs text-muted-foreground list-disc pl-4">
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
-        <li>{reviews ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
+        <li>{penalties ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
-        {reviews && <li>VAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.</li>}
+        {reviews && <li>VAR here reviews {goals && penalties ? 'goals and penalties only' : goals ? 'goals only' : 'penalty calls only'}, and you only see a review that changed the call.{goals ? ' A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats.' : ''}{penalties ? ' A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.' : ''}</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
@@ -442,7 +445,7 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
         <span className="font-bold">Worked example: </span>
         {"It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next."}
       </p>
-      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0.</p>}
+      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>{goals ? 'At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal.' : 'At 0-0 a review gives a penalty and the kick misses. It stays 0-0.'}{goals && penalties ? ' If a review gives a penalty and the kick misses, it still stays 0-0.' : ''}</p>}
     </div>
   );
 }
@@ -1810,7 +1813,7 @@ export function LiveSimScreen({
               )}
 
               {/* Round 1101: how watching a match works, only while it is asked for. */}
-              {sidePanel === 'help' && <LiveMatchHelp onClose={() => setPanel(null)} reviews={!!liveNow?.varReviews} />}
+              {sidePanel === 'help' && <LiveMatchHelp onClose={() => setPanel(null)} kinds={liveNow ? cmVarKindsOf(liveNow) : []} />}
 
               {/* the change sheet: a sub or a shape, at this minute */}
               {sheetOpen && picked && (
