@@ -1,0 +1,4 @@
+r1-cards exit=0 6s |    Duration  5.42s (transform 2.46s, setup 91ms, collect 3.12s, tests 493ms, environment 753ms, prepare 374ms)
+r1-theirs exit=0 7s |    Duration  6.03s (transform 4.41s, setup 703ms, collect 8.59s, tests 1.98s, environment 2.14s, prepare 995ms)
+r1-units exit=1 0s | Node.js v24.21.0
+tsc exit=0 63s | 

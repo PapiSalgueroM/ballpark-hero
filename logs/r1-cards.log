@@ -1,0 +1,10 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usProgrammeCardTruth.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 493[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 00:04:29
+[2m   Duration [22m 5.42s[2m (transform 2.46s, setup 91ms, collect 3.12s, tests 493ms, environment 753ms, prepare 374ms)[22m
+
