@@ -161,3 +161,75 @@ holds every later tree to it:
 
 The digest of the four engines and the board fixture did not move (`src/test/usCareerTruthDigest.test.ts` and
 `src/test/usBoardFixture.test.tsx` are green untouched): they do not carry the stamp, and no engine line changed.
+
+## Step 3. The marks check reads a fleet, never one seed
+
+**What was wrong.** Section 17 (a) of `scripts/simCareerHall.mjs` held one run of 2,000 careers at one seed
+against bands cut from the same six runs the marks were cut on (the six run range widened by half). On seeds the
+marks never saw, football's pooled share moved about 0.8 of a point from seed to seed against a band 0.77 either
+way, so the check was red on about half of them with nothing changed, and the per cell half of it was red on one
+seed in six on the live tree. The other three sports were loose by luck where football was tight by luck.
+
+**The statistic that ships** (the lead's ruling on the scout's open question 4: the pooled share over a fleet,
+a band from the measured spread of at least ten seeds, never a bound on one seed):
+
+- A CHECK FLEET of 24 seeds the marks were never cut on (`SIM_SEED` 6 to 29), 2,000 careers a seed. A run of the
+  harness plays them as 24 children of itself (measuring runs, four at a time, each in its own temp folder, the
+  control taken out of their environment) and reads the 48,000 careers against its OWN table: the pooled share
+  at or over a `from` mark, and at or over a `to` mark.
+- A REFERENCE of 48 further seeds (30 to 77), recorded in the ledger's `fleet` block by
+  `MARKS_FLEET=all node scripts/genCareerHallMarks.mjs <dir>`: for each sport the mean of a seed's pooled share
+  and its deviation from seed to seed.
+- THE BAND: the reference mean plus and minus 4 deviations of a seed times the root of (1/24 + 1/48), which is
+  the error of the gap between a mean of 24 and a mean of 48, four times over: one deviation of a seed.
+- One seed's numbers are still printed, labelled as never the check. Each cell's fleet share is printed with
+  its distance from the reference, and a cell further than five fleet errors is named; cells decide nothing.
+- A measuring run (a child, or a row dump for the generator) and a control aimed at another check play no fleet
+  and do not judge `[marks]`.
+
+Recorded on this round's tree (runner result `r1301-s3-gen`), percent:
+
+| Sport | Marks of | Reference, at or over `from` | From seed to seed | Band | Check fleet (6 to 29) | Confirmation fleet (78 to 101) |
+|---|---|---|---|---|---|---|
+| NHL | calibration 3 | 10.39 | 0.55 | 9.84 to 10.95 | 10.37 | 10.36 |
+| NFL | calibration 2 | 10.30 | 0.74 | 9.56 to 11.04 | 10.52 | 10.54 |
+| NBA | calibration 2 | 9.71 | 0.45 | 9.25 to 10.16 | 9.81 | 9.72 |
+| MLB | calibration 2 | 9.89 | 0.73 | 9.17 to 10.62 | 9.99 | 9.91 |
+
+| Sport | Reference, at or over `to` | From seed to seed | Band | Check fleet | Confirmation fleet |
+|---|---|---|---|---|---|
+| NHL | 0.99 | 0.20 | 0.78 to 1.19 | 0.97 | 1.00 |
+| NFL | 0.99 | 0.23 | 0.76 to 1.22 | 0.96 | 0.97 |
+| NBA | 0.97 | 0.17 | 0.79 to 1.14 | 0.96 | 0.94 |
+| MLB | 0.95 | 0.20 | 0.75 to 1.16 | 0.97 | 0.96 |
+
+The confirmation fleet is 24 seeds neither the marks, nor the reference, nor the check ever saw
+(`SIM_FLEET_SEEDS=78-101`); it is green in all four sports, which was a condition of shipping the bands.
+
+**What it can see, measured.** Every career total of the check fleet times 1.02 (the `statsup` control) reads
+13.19 percent in the NHL, 12.65 in football, 11.58 in basketball and 12.73 in baseball: red in every sport, by
+1.4 to 2.2 points over the top of the band. Divided by 1.02 (`statsdown`) it is red under the band (7.94 and 7.97
+in the NHL and football). A lift of one percent reads 11.75, 11.51, 10.64 and 11.23 on the same fleets, also
+over each band, by 2.5 to 5.8 fleet errors. The move this round exists for (two more games in 82) read 12.74
+against the NHL's band of 9.84 to 10.95: the `oldmarks` control puts the calibration 2 marks back and is red.
+
+**How often it is red for nothing.** Redrawing which 24 of the 72 measured seeds are the check fleet and which
+48 the reference, 2,000 times a sport, the check was red 0, 0, 0 and 2 times in 2,000 (NHL, NFL, NBA, MLB). That
+experiment redraws one fixed set of seeds, so it cannot tell a rate of one in a thousand from one in ten
+thousand; it does say the rate is nowhere near the one in two the old band had in football.
+
+**The rule that ships, in the generator's header and in the harness's comment** (the critic's binding
+correction: a harness must not do one thing under a header that says another). What turns `[marks]` red: the
+engine's career totals moved since the reference was recorded, or the table's marks are not the marks the
+reference was read against. The way back when a round moved an engine's stats on purpose: a NEW calibration
+for that sport (this round is the worked example, steps a to e in the generator's header). Who may record the
+reference again with the marks kept: only a round that names the stat move it made, shows its own reference
+still reads 8 to 12 percent at or over `from`, and carries the lead's ruling in its brief. Never a round that
+only wants the check green.
+
+**What stays as it was.** The six run bands of each block stay in the ledger for the record, unread. The `[base]`
+band and the outcome floors (the standout's gain, the Hall share ceiling) are still cut from the six runs; they
+are floors at half the smallest and a ceiling at the largest plus the spread, they were not what this round was
+sent to cure, and they are listed as owed. Two controls of the harness refuse to run because their strings are
+no longer in the source, on Round 1226's head exactly as here (`mlb nobase` and `nba plantbase`, runner result
+`r1301-s3-gen`, line `base-refusals`): owed, not this round's.
