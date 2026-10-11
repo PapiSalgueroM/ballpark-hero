@@ -1,0 +1,14 @@
+MUTATION era APPLIED to src/lib/mlbSeasonHeld.ts
+FAIL 2 mlb the hub's held line is there exactly when the binding holds the season: 401 of 4621; 2017: line yes, build ok || 2018: line yes, build ok || 2019: line yes, build ok
+FAIL 2 mlb the line the binding hands the hub is the ledger's own line for this sport: 439 of 4621; 2015: binding "📺 No week by week this season: the game holds no league schedule for your club.", ledger "📺 No week by week this season: in the real 2015 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162." || 2016: binding "
+FAIL 2 mlb no held season yields a derived season: 401 of 1265; 2017 || 2018 || 2019
+simUsSeasonCentre: 148 checks, 3 failed
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so
+[31m[1mAssertionError[22m: 2004 TBD: expected '📺 No week by week this season: the g…' to be '📺 No week by week this season: in th…' // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m122 passed[39m[22m[90m (123)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > agrees with the ledger row by row%2C and the build is held exactly when the hub says so,line=184,column=98:
+ src/lib/mlbSeasonHeld.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT era harness=1 vitest=1

@@ -1,0 +1,15 @@
+MUTATION round APPLIED to src/lib/season/mlb.ts
+FAIL 3 mlb the season shown is the season saved (independent checker): 2013 of 3755; 2027 C: hits 165 over at bats 623 do not round to 0.264 || 2028 C: hits 172 over at bats 610 do not round to 0.281 || 2030 C: hits 88 over at bats 317 do not round to 0.277
+simUsSeasonCentre: 148 checks, 1 failed
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mthe at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make
+[31m[1mAssertionError[22m: 40 games at .195: expected 196 to be 195 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22ma season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings
+[31m[1mAssertionError[22m: C now 2027: expected 244 to be 243 // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m121 passed[39m[22m[90m (123)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > the at bats and hits a batting average allows > walks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make,line=121,column=78::As
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > a season derived from its saved line > lands every hitter position on the save in both eras%3A the sums%2C the average%2C the innings,line=234,column=66::AssertionError: C now
+ src/lib/season/mlb.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT round harness=1 vitest=1

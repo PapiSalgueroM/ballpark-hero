@@ -1,0 +1,4 @@
+mut-round exit=0 80s | MUT round harness=1 vitest=1
+mut-pathfrom exit=0 81s | MUT pathfrom harness=1 vitest=0
+mut-era exit=0 81s | MUT era harness=1 vitest=1
+mut-watch exit=0 81s | MUT watch harness=0 vitest=0

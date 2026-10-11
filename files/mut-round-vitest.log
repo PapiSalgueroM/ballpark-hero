@@ -1,0 +1,88 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 693[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 493[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonMlb.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1464[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1155[2mms[22m[39m
+   [32m✓[39m mlbScore[2m > [22mgives the stronger side more of the wins, step by step[32m 36[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals the league formula for every one of the 30 clubs, in series that never run into one another[32m 78[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22msays what is wrong with a schedule that is not the formula[32m 1[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals a throwback season as unnamed series of three, half of them at home[32m 7[2mms[22m[39m
+[31m   [31m×[31m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make[39m[32m 11[2mms[22m[39m
+[31m     → 40 games at .195: expected 196 to be 195 // Object.is equality[39m
+   [32m✓[39m the at bats and hits a batting average allows[2m > [22mnever hands him fewer hits than his home runs and doubles[32m 1[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mholds pitchers and no hitter[32m 1[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words[32m 2[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so[32m 51[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mlays out nothing for a line the engine played on another length, whatever the ledger says[32m 6[2mms[22m[39m
+[31m   [31m×[31m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings[39m[32m 69[2mms[22m[39m
+[31m     → C now 2027: expected 244 to be 243 // Object.is equality[39m
+   [32m✓[39m a season derived from its saved line[2m > [22mopens an older line with no doubles and no on base percentage, and holds a line with no average to the plain tile[32m 12[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mreads the result words of every year from the engine, and bands a result by the round it ended in[32m 15[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws a path from 2022 on, round by round, whose scores add up to the saved games, and names nobody[32m 13[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws no path before 2022 and says why, in a throwback season and for a result the year cannot hold[32m 1[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mlabels the clock inning by inning and words every line of the feed[32m 0[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mprints his line, the halfway sentence with and without an All-Star, and a help sheet with no dash in it[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1053[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 6893[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1932[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 352[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 963[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 310[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1200[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 456[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mthe at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make
+[31m[1mAssertionError[22m: 40 games at .195: expected 196 to be 195 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 195[39m
+[31m+ 196[39m
+
+[36m [2m❯[22m src/test/usSeasonMlb.test.ts:[2m121:78[22m[39m
+    [90m119| [39m      const fit = mlbAtBats(games, avg, 0, keyedRng(`mlb-ab|${games}|$…
+    [90m120| [39m      [35mif[39m ([33m![39mfit) { none[33m.[39m[34mpush[39m([32m`[39m[36m${[39mgames[36m}[39m[32m@.[39m[36m${[39ma[36m}[39m[32m`[39m)[33m;[39m [35mcontinue[39m[33m;[39m }
+    [90m121| [39m      expect(Math.round((fit.h / fit.ab) * 1000), `${games} games at .…
+    [90m   | [39m                                                                             [31m^[39m
+    [90m122| [39m      expect(fit.ab >= Math.ceil(games * 2.2) && fit.ab <= Math.floor(…
+    [90m123| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22ma season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings
+[31m[1mAssertionError[22m: C now 2027: expected 244 to be 243 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 243[39m
+[31m+ 244[39m
+
+[36m [2m❯[22m src/test/usSeasonMlb.test.ts:[2m234:66[22m[39m
+    [90m232| [39m        const sum = (k: string) => on.reduce((a, g) => a + (g.line[k] …
+    [90m233| [39m        for (const k of ['hr', 'rbi', 'sb', 'doubles']) expect(sum(k),…
+    [90m234| [39m        expect(Math.round((sum('h') / sum('ab')) * 1000), label).toBe(…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m235| [39m        [35mfor[39m ([35mconst[39m g [35mof[39m s[33m.[39mgames) {
+    [90m236| [39m          [34mexpect[39m(g[33m.[39mus [33m===[39m g[33m.[39mthem[33m,[39m [32m`[39m[36m${[39mlabel[36m}[39m[32m game [39m[36m${[39mg[33m.[39mmd[36m}[39m[32m`[39m)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m121 passed[39m[22m[90m (123)[39m
+[2m   Start at [22m 02:12:14
+[2m   Duration [22m 10.57s[2m (transform 3.12s, setup 267ms, collect 6.04s, tests 10.10s, environment 1.69s, prepare 495ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > the at bats and hits a batting average allows > walks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make,line=121,column=78::AssertionError: 40 games at .195: expected 196 to be 195 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 195%0A+ 196%0A%0A ❯ src/test/usSeasonMlb.test.ts:121:78%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > a season derived from its saved line > lands every hitter position on the save in both eras%3A the sums%2C the average%2C the innings,line=234,column=66::AssertionError: C now 2027: expected 244 to be 243 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 243%0A+ 244%0A%0A ❯ src/test/usSeasonMlb.test.ts:234:66%0A%0A

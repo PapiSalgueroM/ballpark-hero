@@ -1,0 +1,8 @@
+MUTATION pathfrom APPLIED to src/lib/season/us.ts
+FAIL 4 mlb the playoff path follows the saved result, the playoff games and the bracket's conferences: 36 of 3756; 2022 "Lost the World Series": no path for a playoff season whose games fit its rounds || 2022 "Lost the Wild Card series": no path for a playoff season whose games fit its rounds || 2022 "WON THE WORLD SERIES": no path for a playoff season whose games fit its rounds
+simUsSeasonCentre: 148 checks, 1 failed
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m123 passed[39m[22m[90m (123)[39m
+ src/lib/season/us.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT pathfrom harness=1 vitest=0

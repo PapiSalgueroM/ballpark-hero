@@ -1,0 +1,7 @@
+MUTATION watch APPLIED to src/components/us-career/season/UsSeasonCentreEntry.tsx
+simUsSeasonCentre: 148 checks, 0 failed
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m123 passed[39m[22m[90m (123)[39m
+ src/components/us-career/season/UsSeasonCentreEntry.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT watch harness=0 vitest=0

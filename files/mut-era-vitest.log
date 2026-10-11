@@ -1,0 +1,64 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1396[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 379[2mms[22m[39m
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 784[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 501[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonMlb.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4135[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1027[2mms[22m[39m
+   [32m✓[39m mlbScore[2m > [22mgives the stronger side more of the wins, step by step[32m 38[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals the league formula for every one of the 30 clubs, in series that never run into one another[32m 70[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22msays what is wrong with a schedule that is not the formula[32m 3[2mms[22m[39m
+   [32m✓[39m the schedule in series[2m > [22mdeals a throwback season as unnamed series of three, half of them at home[32m 7[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 556[2mms[22m[39m
+   [32m✓[39m the at bats and hits a batting average allows[2m > [22mnever hands him fewer hits than his home runs and doubles[32m 1[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mholds pitchers and no hitter[32m 1[2mms[22m[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mholds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words[32m 2[2mms[22m[39m
+[31m   [31m×[31m held, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so[39m[32m 23[2mms[22m[39m
+[31m     → 2004 TBD: expected '📺 No week by week this season: the g…' to be '📺 No week by week this season: in th…' // Object.is equality[39m
+   [32m✓[39m held, said before he presses (the whole sentence, typed here)[2m > [22mlays out nothing for a line the engine played on another length, whatever the ledger says[32m 10[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 2366[2mms[22m[39m
+   [32m✓[39m a season derived from its saved line[2m > [22mopens an older line with no doubles and no on base percentage, and holds a line with no average to the plain tile[32m 6[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mreads the result words of every year from the engine, and bands a result by the round it ended in[32m 8[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws a path from 2022 on, round by round, whose scores add up to the saved games, and names nobody[32m 11[2mms[22m[39m
+   [32m✓[39m October, by the year[2m > [22mdraws no path before 2022 and says why, in a throwback season and for a result the year cannot hold[32m 1[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mlabels the clock inning by inning and words every line of the feed[32m 0[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mprints his line, the halfway sentence with and without an All-Star, and a help sheet with no dash in it[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 7440[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2248[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 555[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 957[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1187[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 464[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonMlb.test.ts[2m > [22mheld, said before he presses (the whole sentence, typed here)[2m > [22magrees with the ledger row by row, and the build is held exactly when the hub says so
+[31m[1mAssertionError[22m: 2004 TBD: expected '📺 No week by week this season: the g…' to be '📺 No week by week this season: in th…' // Object.is equality[39m
+
+Expected: [32m"📺 No week by week this season:[7m in[27m the [7mreal 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162[27m."[39m
+Received: [31m"📺 No week by week this season: the [7mgame holds no league schedule for your club[27m."[39m
+
+[36m [2m❯[22m src/test/usSeasonMlb.test.ts:[2m184:98[22m[39m
+    [90m182| [39m        [34mexpect[39m(b[33m.[39mok[33m,[39m [32m`[39m[36m${[39mseason[33m.[39myear[36m}[39m[32m [39m[36m${[39mteam[36m}[39m[32m`[39m)[33m.[39m[34mtoBe[39m(line [33m===[39m [35mnull[39m)[33m;[39m
+    [90m183| [39m        if (b.ok === false) { expect(b.line, `${season.year} ${team}`)…
+    [90m184| [39m        expect(mlbSeasonHeld(season.year, eraId, { pos: 'CF', team }),…
+    [90m   | [39m                                                                                                 [31m^[39m
+    [90m185| [39m      }
+    [90m186| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m122 passed[39m[22m[90m (123)[39m
+[2m   Start at [22m 02:14:57
+[2m   Duration [22m 10.84s[2m (transform 3.12s, setup 272ms, collect 5.79s, tests 13.75s, environment 1.75s, prepare 362ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonMlb.test.ts,title=src/test/usSeasonMlb.test.ts > held%2C said before he presses (the whole sentence%2C typed here) > agrees with the ledger row by row%2C and the build is held exactly when the hub says so,line=184,column=98::AssertionError: 2004 TBD: expected '📺 No week by week this season: the g…' to be '📺 No week by week this season: in th…' // Object.is equality%0A%0AExpected: "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162."%0AReceived: "📺 No week by week this season: the game holds no league schedule for your club."%0A%0A ❯ src/test/usSeasonMlb.test.ts:184:98%0A%0A
