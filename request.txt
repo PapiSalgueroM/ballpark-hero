@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+simTactics: node scripts/simTactics.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
