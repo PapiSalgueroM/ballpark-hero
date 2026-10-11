@@ -76,7 +76,33 @@ const clone = value => JSON.parse(JSON.stringify(value));
      results moved             2.6 to 3.6 percent of league matches (about one in 32); 6.4 to 8.2 percent have a
        goal ruled out (about one in 14).
    The KINDS outcome (decision 2) holds that the engine plays a kind only in a match kicked off with it and that
-   the list is saved with the match (controls kindgoal, kindpenalty, kindsaved). */
+   the list is saved with the match (controls kindgoal, kindpenalty, kindsaved).
+   Round 1303, THE FIX PASS (what the block above calls "until the engine changes"). The goals a review rules out
+   are drawn ON TOP now: a match that reviews goals draws them 1 / (1 - goalReview x overturn) times as often
+   (cmVarGoalLift), a goal a review can look at is ruled out at goalReview = 0.030501 a DRAWN goal, and a penalty
+   or a direct free kick, which no review looks at, is taken back at the same rate without a review. The owed
+   entry goals-level is gone, the goal kind is on in the ledger, and the controls goalslevel and playsgoal gave
+   way to nolift (no lift: the old gap comes back), liftkind (the lift in a match that does not review goals)
+   and liftpens (penalty goals lifted and never taken back). MEASURED on that engine (runner result r1303-fx-c,
+   head 0eb6e17a), the goal kind alone, ten fleets of 3,897 to 4,046 league matches on the same ten sets of seeds:
+     goals a match moved by    0.0054 0.0058 0.0058 -0.0118 0.0005 -0.0060 -0.0077 0.0106 0.0033 0.0012
+       mean 0.0007, standard deviation 0.007: the band (0.05) lies 7 of those from the mean and the widest fleet
+       (-0.0118) uses a quarter of it. Control nolift on the default seeds: -0.0753.
+     goals ruled out a match   0.0699 0.0765 0.0771 0.0751 0.0785 0.0808 0.0715 0.0779 0.0731 0.0705
+       mean 0.0751 (the target is 0.0752), standard deviation 0.0037; the low edge (0.0601) lies 4 of those
+       under the mean and the lowest fleet is 16 percent above it.
+     penalties a match moved by 0.0037 0.0121 0.0010 -0.0038 0.0020 -0.0028 -0.0079 0.0058 0.0036 -0.0072
+       mean 0.0007 on 0.355 to 0.386 a match: level (the first version of the lift, which lifted penalty goals and
+       never took them back, put about 0.008 on: r1303-fx-a). Printed on every run, not asserted here; the take
+       back itself is held in the rates outcome (control liftpens).
+     results moved             5.9 to 7.0 percent of league matches: more than before the lift (2.6 to 3.6),
+       because a lifted match draws from the match stream differently from its first goal on, not because more
+       goals are ruled out. The paired gap is unbiased noise around zero for the same reason.
+   An independent fleet that shares no code with this harness (the run review's probe, r1303-fx-d): 4,297 league
+   matches 2.7142 with against 2.7152 without, 4,327 matches 2.7083 against 2.7132, no penalty review in either.
+   With EVERY kind staged the same ten fleets sit at 0.0435 to 0.0656 UP (a review's penalties add goals and
+   nothing takes them back): at and past the band, the penalty kind's own doing, held with that kind by
+   penalties-total (everyKindLevel below). */
 const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.20, goalGap: 0.05, scoredShare: 0.10 };
 const BASE = 'c33d013965aa33b87f5db23e2ca270be6fcd977c';
 /** One seeded stretch on a fixed clock: the fleet's own function (scripts/lib/cmVarFleet.mjs), under the name the walk imports. */
@@ -609,8 +635,9 @@ async function main() {
            entry in the engine: a match that reviews goals draws them a little more often, by exactly what its
            reviews rule out (cmVarGoalLift), so those goals come ON TOP and the level stays. MEASURED, see the
            header. The rule is unchanged and has nothing left to excuse it: the goal kind alone must sit inside the
-           band (an owed entry goals-level, open or accepted, would excuse it and there is none; if one ever comes
-           back while the engine is inside, it is stale). And the list the game is handed (the generated
+           band. An OPEN owed entry goals-level would hold the kind off and there is none (if one ever comes back
+           while the engine is inside, it is stale); an ACCEPTED one excuses nothing (the read review's minor 3: with
+           a ruling in the ledger this check passed at any gap). And the list the game is handed (the generated
            CM_VAR_KINDS) may not hold a kind the measured engine is outside its band for. Never a wider band.
            Control nolift takes the lift away and must go red here. */
         const goalOnly = playFleet(real, { seeds, paired: true, reviews: ['goal'] });
@@ -626,9 +653,9 @@ async function main() {
         const insideGap = Math.abs(gapG) <= BANDS.goalGap, heldGoal = holds.includes('goals-level'), ruledGoal = accepted.includes('goals-level');
         metrics.bands.goalKindAlone.level = { band: BANDS.goalGap, inside: insideGap, held: heldGoal, accepted: ruledGoal };
         metrics.bands.gamePlays = plays;
-        assert.ok(insideGap || heldGoal || ruledGoal, `With the goal kind alone reviews move goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows a rule to move them, and the ledger neither holds the goal kind for it nor carries a ruling (owed goals-level)`);
+        assert.ok(insideGap || heldGoal, `With the goal kind alone reviews move goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows a rule to move them, and the ledger does not hold the goal kind off for it (a ruling does not excuse it: the engine draws the goals a review rules out on top, so the level is the engine's to keep)`);
         assert.ok(!(insideGap && heldGoal), `With the goal kind alone reviews move goals a match by ${r4(gapG)}, inside the ${BANDS.goalGap} the family allows: the ledger's owed entry goals-level is stale, take it out`);
-        assert.ok(!plays.includes('goal') || insideGap || ruledGoal, `The game plays the goal kind while it moves goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows, with no ruling in the ledger`);
+        assert.ok(!plays.includes('goal') || insideGap, `The game plays the goal kind while it moves goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows`);
         assert.ok(!plays.includes('penalty') || insideTotal, `The game plays the penalty kind while penalties a match with reviews on (${r4(total)}) is outside real football's ${r4(band.low)} to ${r4(band.high)}`);
         assert.ok(!plays.includes('penalty') || insidePairGap, `The game plays the penalty kind while reviews with every kind staged move goals a match by ${r4(gap)}, past the ${BANDS.goalGap} the family allows`);
       },
