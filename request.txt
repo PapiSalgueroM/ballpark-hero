@@ -1,0 +1,1 @@
+story-measure: node .rc/x/fxStoryParts.mjs 999999 999999 && node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=600000 --hookTimeout=120000 > /tmp/story.log 2>&1; s=$?; grep -a "save parts\|story size\|Tests \|FAIL\|AssertionError" /tmp/story.log | cut -c1-260; git checkout -- src; exit $s
