@@ -1,0 +1,15 @@
+#!serial
+baseline-nhl: SIM_FLEET_DIR=/tmp/fl-nhl SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000 | tail -3 | cut -c1-300
+mut-A: bash .rc/x/mutrun.sh A nhl /tmp/fl-nhl src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx
+mut-B: bash .rc/x/mutrun.sh B nhl /tmp/fl-nhl src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx
+mut-C: bash .rc/x/mutrun.sh C nba /tmp/fl-nba src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/nbaOldSaveLines.test.ts src/test/usCareerTruthDigest.test.ts
+mut-D82: bash .rc/x/mutrun.sh D82 nhl /tmp/fl-nhl-82
+mut-D83: bash .rc/x/mutrun.sh D83 nhl /tmp/fl-nhl-83
+mut-D85: bash .rc/x/mutrun.sh D85 nhl /tmp/fl-nhl-85
+mut-E: bash .rc/x/mutrun.sh E nhl /tmp/fl-nhl src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx
+mut-F: bash .rc/x/mutrun.sh F nhl /tmp/fl-nhl src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx
+mut-G: bash .rc/x/mutrun.sh G mlb /tmp/fl-mlb src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx
+mut-H: bash .rc/x/mutrun.sh H nhl /tmp/fl-nhl src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx
+block3-again: set -o pipefail; bash .rc/x/dumps.sh . /tmp/rows nhl 2000 base 1 2 3 4 5 | tail -1 && MARKS_OUT=/tmp/ledger-out.json MARKS_CALIBRATION=3 node scripts/genCareerHallMarks.mjs /tmp/rows | tail -1 && cmp /tmp/ledger-out.json scripts/data/careerHallMarks.json && echo "block3-again: the committed ledger is the generator own output from six fresh NHL runs, byte for byte"
+gen-guard: node scripts/genCareerHallMarks.mjs /tmp/rows; c=$?; echo "gen-guard: the generator with no variable exits $c"; git status --short -- scripts/data | head -3; test $c -eq 2
+tree-clean: git status --short -- src scripts | head -5; test -z "$(git status --short -- src scripts)" && echo "tree-clean: nothing left mutated"
