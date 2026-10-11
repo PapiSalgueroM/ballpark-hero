@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1409[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 353[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonMlb.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 6030[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1024[2mms[22m[39m
+   [33m[2m✓[22m[39m the innings of a game[2m > [22mspreads a side's runs the way the score law draws an inning: they add up, the minimums hold, nothing passes nine [33m 2468[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 397[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 1833[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 7509[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1861[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 414[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1167[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1317[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 469[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m101 passed[39m[22m[90m (101)[39m
+[2m   Start at [22m 05:21:21
+[2m   Duration [22m 11.16s[2m (transform 3.28s, setup 224ms, collect 6.07s, tests 14.95s, environment 1.35s, prepare 526ms)[22m
+

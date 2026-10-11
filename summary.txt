@@ -1,0 +1,11 @@
+tsc exit=0 61s | 
+vitest-mlb exit=0 12s |    Duration  11.16s (transform 3.28s, setup 224ms, collect 6.07s, tests 14.95s, environment 1.35s, prepare 526ms)
+simUsSeasonCentre exit=0 80s | simUsSeasonCentre: 158 checks, 0 failed
+ctl-absix exit=1 13s | simUsSeasonCentre: 58 checks, 2 failed (control absix)
+law-compare exit=0 20s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+seam-compare exit=0 20s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+simUsSeasonLedger exit=0 3s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simUsBoardParity exit=0 37s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)

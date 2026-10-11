@@ -1,0 +1,13 @@
+# Round 1212 fix 2, THE FINAL PROOF on the pushed head (after 8f06909a only words moved: the harness header, the notes and one comment in mlb.ts): the type gate, the harness plain and its new control, the receipts, the ledger harness, the board replay, the three fences
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-mlb: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=300000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+ctl-absix: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=absix node scripts/simUsSeasonCentre.mjs
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
