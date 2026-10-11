@@ -1,0 +1,11 @@
+# Release AX review, engine-saves, request c: the reviewer's walk of a saved contract talk (reload, Back, Spin, Skip, a second tab, damaged talks), this train's own walk with its control, PR217's native walk after its sim, the save keeper's walk
+#!serve
+#!playwright
+#!serial
+walkUsTalk: node .rc/x/walkUsTalk.mjs
+playUsMarketTalk: node scripts/playUsMarketTalk.mjs
+playUsMarketTalk-droptalk-EXPECT1: US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs
+pm-fonts: mkdir -p career-press-market-artifacts && FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+pm-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs outcomes
+pm-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs native
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
