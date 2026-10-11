@@ -1,0 +1,30 @@
+# rAV-cm-fam1: reviewer cm, Release AV head 5ed04ae7. The Club Manager harness family, half 1 of 2 (28 harnesses), each plain to its summary line, on a plain build
+#!build
+simAwardRaces: node scripts/simAwardRaces.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simEras: node scripts/simEras.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simManagerOffers: node scripts/simManagerOffers.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simManagers: node scripts/simManagers.mjs
