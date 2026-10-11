@@ -1,0 +1,16 @@
+# Release AW fix pass 3, finding 1 (the farewell flag, way out a) with no build, one at a time. Two lines put one file back as the commit before the fix has it and restore it.
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+f1-new: node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000
+f1-red-at-a5febdbf-EXPECT1: git worktree add -q /tmp/red a5febdbf && ln -s "$PWD/node_modules" /tmp/red/node_modules && cd /tmp/red && node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/f1red.log 2>&1; s=$?; cp /tmp/f1red.log "$RC_OUT/f1-red.log"; grep -a -E "Test Files|Tests " /tmp/f1red.log | tail -2; exit $s
+f1-letter-EXPECT1: git show a5febdbf:src/lib/soccerCareerFarewell.ts > src/lib/soccerCareerFarewell.ts; node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx src/test/soccerCareerFarewell.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/f1let.log 2>&1; s=$?; git checkout -- src/lib; test "$(git status --porcelain --untracked-files=no | wc -l)" = 0 || echo NOT-RESTORED; cp /tmp/f1let.log "$RC_OUT/f1-letter.log"; grep -a -E "Test Files|Tests " /tmp/f1let.log | tail -2; exit $s
+sk-letter-EXPECT1: git show a5febdbf:src/lib/soccerCareerFarewell.ts > src/lib/soccerCareerFarewell.ts; node scripts/simSaveKeeper.mjs > /tmp/sklet.log 2>&1; s=$?; git checkout -- src/lib; test "$(git status --porcelain --untracked-files=no | wc -l)" = 0 || echo NOT-RESTORED; cp /tmp/sklet.log "$RC_OUT/sk-letter.log"; grep -a -i "farewell" /tmp/sklet.log | cut -c1-400 | tail -4; tail -1 /tmp/sklet.log; exit $s
+farewell-units-otherlane: node_modules/.bin/vitest run src/test/soccerCareerFarewell.test.ts src/test/soccerFarewellUi.test.tsx src/test/soccerFarewellPage.test.tsx --testTimeout=300000 --hookTimeout=120000
+damage: mkdir -p /tmp/sb5 && git archive 5ed04ae7cd9618141ea8db4600206fcec2feeb07 src | tar -x -C /tmp/sb5 && ln -s "$PWD/node_modules" /tmp/sb5/node_modules && SC_BASE=/tmp/sb5 SC_MODE=damage SC_N=5 node .rc/x/scProbe.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+sk-partfarewell-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+gitclean: test -z "$(git status --porcelain --untracked-files=no)" && echo clean

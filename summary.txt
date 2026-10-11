@@ -1,0 +1,14 @@
+tsc exit=0 37s | 
+f1-new exit=0 2s |    Duration  2.24s (transform 1.20s, setup 67ms, collect 2.36s, tests 414ms, environment 402ms, prepare 96ms)
+f1-red-at-a5febdbf-EXPECT1 exit=1 3s |       Tests  7 failed | 19 passed (26)
+f1-letter-EXPECT1 exit=1 3s |       Tests  22 failed | 54 passed (76)
+sk-letter-EXPECT1 exit=1 2s | simSaveKeeper: RED in section(s) 1.
+farewell-units-otherlane exit=0 3s |    Duration  3.22s (transform 1.40s, setup 108ms, collect 3.48s, tests 1.71s, environment 748ms, prepare 235ms)
+damage exit=0 84s | sc-engine probe damage: green
+simSaveKeeper exit=0 2s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+sk-partfarewell-EXPECT1 exit=1 2s | simSaveKeeper control partfarewell: FIRED. Section 1 is red.
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 12s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+gitclean exit=0 0s | clean
