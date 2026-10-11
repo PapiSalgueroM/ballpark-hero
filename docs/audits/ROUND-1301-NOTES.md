@@ -233,3 +233,49 @@ are floors at half the smallest and a ceiling at the largest plus the spread, th
 sent to cure, and they are listed as owed. Two controls of the harness refuse to run because their strings are
 no longer in the source, on Round 1226's head exactly as here (`mlb nobase` and `nba plantbase`, runner result
 `r1301-s3-gen`, line `base-refusals`): owed, not this round's.
+
+## Step 4. The summer harness: more football careers, the bound untouched
+
+`scripts/simUsCareerSummer.mjs`, section 6, holds the summer deck to a tolerance decided before anything was
+measured: with the summer on against off, the 95 percent interval of the median legacy must sit inside 7.5 percent
+either way. For football that interval ended 0.7 points inside the bound at 8,000 careers a seed (+3.9 percent,
+0.3 to 6.8), which is a check that goes red about one reroll in ten with nothing changed. The lead's ruling: the
+same cure Round 1226 gave baseball's Hall share, more careers and never a wider bound, both trees measured.
+
+Measured at 16,000 careers a seed, three seeds, on GitHub runners (`SIM_SPORTS=nfl SIM_SECTIONS=6
+SIM_BALANCE_CAREERS=16000 node scripts/simUsCareerSummer.mjs`):
+
+| Tree | Seeds | Median legacy, on against off | Inside by | Runner result | Time |
+|---|---|---|---|---|---|
+| this round | default | +2.8 percent (1.0 to 5.0) | 2.5 points | `r1301-s4-nfl-head` | 3,864 s |
+| this round | `SIM_SEED=7` | +2.6 percent (0.7 to 4.6) | 2.9 points | `r1301-s4-nfl-head7` | 3,848 s |
+| `origin/main` (Release AT) | default | +2.8 percent (1.0 to 5.0) | 2.5 points | `r1301-s4-nfl-base` | 3,871 s |
+
+The two trees play the same football careers to the last digit (this round touched no football line). The lift is
+near 2.7 percent; the +3.9 read at 8,000 was a high draw. At 16,000 the interval ends about 2.1 points over its
+estimate, so a run is red only when its estimate passes about 5.4, about 2.5 errors over the lift: well under one
+reroll in a hundred. `BAL_DEFAULT.nfl` is 16,000; `TOL` is untouched; baseball's 8,000 (Round 1226) stands.
+
+**The cost, said plainly:** the football child now takes 64 minutes on a runner by itself where it took 29, and a
+remote check job ends at 100 minutes. The whole harness at its default sizes was sent once on this round's head
+(`r1301-summer-all`); the closing report says how long it took, or that it had not come back.
+
+The NHL part of the same harness, whole, on this round's head (`r1301-s4-nhl`, `SIM_SPORTS=nhl`): green, and its
+balance on calibration 3 reads peak +0.13 (0.01 to 0.25), median legacy +1.8 percent (-0.3 to 3.8), Hall share
++0.40 points (-1.20 to 2.00) against a tolerance of 3, headline awards +2.7 percent (-2.1 to 7.1).
+
+## What a player sees, and what is owed
+
+- No words on any screen changed, and no screen prints a mark: the ballot card names the player's own total
+  ("your 1,240 assists sat near the top of this game's books") and the help says how big a push can be, which did
+  not move. So there is no What's New entry (the lead's decision 6). What changes is who gets the push: an NHL
+  career that retires from this release on needs about two percent more goals, assists or points to stand out,
+  which is what two more games a season put there.
+- A stamp of 3 read by OLD code (a tab left open on the build before this one) is junk to it: that code drops
+  the stamp and reads the career on calibration 1. It is the Round 1051 design, not new here, and it needs a
+  stale tab to save a career retired in a fresh one; listed for the lead, not fixed.
+- Guide sentences (the other lane's files): none is owed by this round. Round 1226's owed hockey sentence (the
+  guide says 82 games) stands as that round listed it.
+- Owed fences this round did not cure: the `[base]` band and the outcome floors still come from the six runs;
+  two controls of the Hall harness refuse to run because their strings left the source in earlier rounds
+  (`mlb nobase`, `nba plantbase`).
