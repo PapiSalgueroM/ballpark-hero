@@ -1,0 +1,3 @@
+/home/runner/work/ballpark-hero/ballpark-hero/dist/.r1305/Board.trustlog.tsx
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another club, an empty one or junk: t
+red rows 1, green rows 19; vitest exit 1 (1 wanted)

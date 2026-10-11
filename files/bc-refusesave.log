@@ -1,0 +1,409 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score
+FO_GAMEDAY week 6: his game SEA 37, ARI 6; the lowest loser of the sixteen is on 6
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score 188ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record
+FO_GAMEDAY adopted at week 9: the log reads 1-1, the league's record is 3-7
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > the next press appends in week order, and a remount keeps the log 145ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record 73ms
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 1838ms
+ × src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log 28ms
+   → Unable to find an element with the text: This week. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"space-y-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"rounded-xl border border-destructive/40 bg-card p-4 text-sm"[39m
+        [33mrole[39m=[32m"alert"[39m
+      [36m>[39m
+        [36m<p>[39m
+          [0mWe couldn't open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.[0m
+        [36m</p>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary"[39m
+        [36m>[39m
+          [0mDelete unusable save[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"rounded-2xl border border-border bg-card p-4 text-center"[39m
+      [36m>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"font-display text-lg font-bold text-foreground"[39m
+        [36m>[39m
+          [0mTake over a front office[0m
+        [36m</p>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"mt-1 text-xs text-muted-foreground"[39m
+        [36m>[39m
+          [0mReal 2026 roster snapshot, with original simulation ratings using 2023 to 2025 performance, playing time and draft priors. Limited evidence is marked. The whole club too: men on the 53 and the practice squad (kickers, punters and long snappers sit this one out). Manage the cap, sign free agents, swing trades, survive the injury report, draft the future, and chase a dynasty across as many seasons as you can. Saves automatically.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"grid grid-cols-2 gap-1.5 sm:grid-cols-4"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(151, 35, 63);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mArizona[0m
+            [0m [0m
+            [0mCardinals[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mNFC West[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(167, 25, 48);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mAtlanta[0m
+            [0m [0m
+            [0mFalcons[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mNFC South[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(36, 23, 115);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mBaltimore[0m
+            [0m [0m
+            [0mRavens[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mAFC North[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(0, 51, 141);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mBuffalo[0m
+            [0m [0m
+            [0mBills[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mAFC East[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(0, 133, 202);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mCarolina[0m
+            [0m [0m
+            [0mPanthers[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mNFC South[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(11, 22, 42);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mChicago[0m
+            [0m [0m
+            [0mBears[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          ...
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 384ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores
+FO_GAMEDAY one press: his club ARI played 1 playoff games; the log holds w17, NFC Divisional
+FO_GAMEDAY one press: the lowest loser of the thirteen saved playoff finals is on 13
+
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+FO_GAMEDAY desk on: the edge of his staff is 1.0266666666666666; told with it 37-6, without it 37-6; the log holds 37-6
+
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise > abandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club 326ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores 63ms
+ ✓ src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included 39ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 102ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 199ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 233ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 164ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 357ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 331ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 154ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's 258ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's 303ms
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's 130ms
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx > the record > is complete, or is being printed 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log
+TestingLibraryElementError: Unable to find an element with the text: This week. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"space-y-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"rounded-xl border border-destructive/40 bg-card p-4 text-sm"[39m
+        [33mrole[39m=[32m"alert"[39m
+      [36m>[39m
+        [36m<p>[39m
+          [0mWe couldn't open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.[0m
+        [36m</p>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary"[39m
+        [36m>[39m
+          [0mDelete unusable save[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"rounded-2xl border border-border bg-card p-4 text-center"[39m
+      [36m>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"font-display text-lg font-bold text-foreground"[39m
+        [36m>[39m
+          [0mTake over a front office[0m
+        [36m</p>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"mt-1 text-xs text-muted-foreground"[39m
+        [36m>[39m
+          [0mReal 2026 roster snapshot, with original simulation ratings using 2023 to 2025 performance, playing time and draft priors. Limited evidence is marked. The whole club too: men on the 53 and the practice squad (kickers, punters and long snappers sit this one out). Manage the cap, sign free agents, swing trades, survive the injury report, draft the future, and chase a dynasty across as many seasons as you can. Saves automatically.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"grid grid-cols-2 gap-1.5 sm:grid-cols-4"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(151, 35, 63);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mArizona[0m
+            [0m [0m
+            [0mCardinals[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mNFC West[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(167, 25, 48);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mAtlanta[0m
+            [0m [0m
+            [0mFalcons[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mNFC South[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(36, 23, 115);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mBaltimore[0m
+            [0m [0m
+            [0mRavens[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mAFC North[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(0, 51, 141);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mBuffalo[0m
+            [0m [0m
+            [0mBills[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mAFC East[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(0, 133, 202);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mCarolina[0m
+            [0m [0m
+            [0mPanthers[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mNFC South[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-1.5 w-full rounded-full"[39m
+            [33mstyle[39m=[32m"background: rgb(11, 22, 42);"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"mt-1.5 block truncate text-xs font-bold text-foreground"[39m
+          [36m>[39m
+            [0mChicago[0m
+            [0m [0m
+            [0mBears[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block truncate text-[10px] text-muted-foreground"[39m
+          ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ getByText node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:196:21
+    194|       render(<Board />);
+    195|       /* the hub, not the save error screen */
+    196|       expect(screen.getByText('This week'), name).toBeTruthy();
+       |                     ^
+    197|       openWeek();
+    198|       play('Play Week 6');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 19 passed (20)
+   Start at  20:52:19
+   Duration  5.41s (transform 1.54s, setup 102ms, collect 2.00s, tests 5.32s, environment 615ms, prepare 189ms)
+
