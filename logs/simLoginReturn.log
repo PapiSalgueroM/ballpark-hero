@@ -1,0 +1,12 @@
+1) the home template covers its crawler copy with a boot splash inside #root
+   #dukb-boot covers #dukb-home-copy inside #root, showing the mark
+2) without JavaScript the splash is hidden and the whole copy shows
+   the noscript rule hides the splash and lifts the cap
+3) the prerenderer writes the same splash into every saved route
+   prerender.mjs writes the splash and its noscript rule
+4) measured: on a phone with the app blocked, the viewport shows the splash and no copy
+   55 grid points: 55 on the splash, 0 on the copy, 0 elsewhere
+5) the auth modal turns its spinners off on open and on return from the back-forward cache
+   both spinners reset on open, and on a restored page
+
+simLoginReturn: green. A full auth return shows the mark, then the site, and provider buttons reset after a restored page.
