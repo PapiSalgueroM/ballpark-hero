@@ -232,8 +232,21 @@ if (!existsSync(ASSETS)) {
        harness), and Round 1041's domestic cup brings it to 2511 KB. 2600
        leaves 89 KB of room and still sits far under 2511 + 444, so Club
        Manager coming back still fails. The on demand loading above is still
-       owed and is now the cheaper fix. */
-    const CEILING_KB = 2600;
+       owed and is now the cheaper fix.
+       Raised at Release AV (2026-10-11) with a fresh measurement: main (Release
+       AU) already needed 2599 KB (2,661,052 bytes; it was 2511 at Release AI,
+       and the releases between were not split by a measurement), and Round
+       1227 brings it to 2600 KB (2,662,559 bytes on the release head, red
+       from that round's merge on and green just before it: 1,451 bytes
+       more in the rivalry chunk this page shares with the US careers, which
+       now carries the roster beat builder of a rival who plays your own stat
+       line, and 56 in the entry for one more chunk name). 2700 leaves 100 KB
+       of room and still sits far under 2600 + 444, so Club Manager coming
+       back still fails. Owed, and the cheaper fix every time: the fact beat
+       and roster beat builders of src/lib/careerRivalryEvents.ts (only the
+       four US careers call them) in a module of their own, and the on demand
+       loading above. */
+    const CEILING_KB = 2700;
     if (rawK > CEILING_KB) {
       fail(`/soccer-career now needs ${rawK.toFixed(0)} KB of JavaScript before it can render, over the ${CEILING_KB} KB ceiling. Check what got statically imported.`);
     }
