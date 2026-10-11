@@ -1,0 +1,4 @@
+ok   15 actual production pending-card and saved-wheel journeys at320/390/1280
+ok   full raw EUR saves, USD display, reload/spin/skip and seen-only continuation
+ok   exact post-bootstrap action vectors and zero read/reveal/ack vectors
+ok   strict geometry and three effective copied observation detectors
