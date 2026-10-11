@@ -13,7 +13,7 @@ import {
 import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbSeasonHeld, mlbViewGames } from '@/lib/mlbSeasonHeld';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { MLB_MISSED_PLAYOFFS, MLB_PLAYOFF_LADDER, MLB_WILD_CARD_GAME_EXIT, mlbEraTeamIds, mlbPlayoffResults, mlbTeamLabelOf } from '@/lib/mlbMyCareer';
-import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
+import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_GAME_RULES, MLB_INNINGS_SRC, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
 import type { UsCareerCore } from '@/lib/usCareerSport';
 
 const HITTERS = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'];
@@ -406,6 +406,10 @@ describe('October, by the year', () => {
 describe('the words', () => {
   it('labels the clock inning by inning and words every line of the feed', () => {
     const { clock, eventWords } = MLB_SEASON.view;
+    /* the innings of a game are the ledger's number (two sourced: MLB_INNINGS_SRC), and one mark for everything after them */
+    expect(MLB_GAME_RULES.innings).toBe(9);
+    expect(MLB_INNINGS_SRC.length).toBeGreaterThanOrEqual(2);
+    expect(clock.length).toBe(MLB_GAME_RULES.innings + 1);
     expect(clock.length).toBe(10);
     expect(Array.from({ length: 11 }, (_, m) => clock.label(m))).toEqual(['1st', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', 'EXT']);
     expect(eventWords({ min: 3, kind: 'inning', side: 'us', pts: 2 }, 'Detroit Tigers', 'another team', 'CF')).toBe('⚾ Detroit Tigers put 2 on the board in the 3rd');

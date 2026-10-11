@@ -385,12 +385,29 @@ export const MLB_GAME_SHARES: { shutouts: number | null; oneRun: number | null; 
    regular-season games, per report" (14 February 2023), and For The Win in
    Yahoo Sports, "MLB playoffs extra innings rules: Is there a 'ghost
    runner'? Here's the answer" (18 October 2024: "to start the 10th and
-   onwards"). The year it began and the plain rule that a game has nine
-   innings and plays on until one side leads are thin: MLB_THIN. */
-export const MLB_GAME_RULES: { extraInningRunner: boolean; extraInningRunnerInPostseason: boolean; extraInningRunnerFrom: number | null; innings: number | null } = {
-  extraInningRunner: true, extraInningRunnerInPostseason: false, extraInningRunnerFrom: null, innings: null,
+   onwards"). The year it began is thin: MLB_THIN.
+
+   NINE INNINGS (recorded in the fix pass of Round 1212, read 2026-10-10; it
+   was thin in Round 1211, when no reader could open the league's glossary).
+   A regulation game is nine innings; the home side does not bat in the
+   bottom of the ninth when it leads; a game level after nine plays extra
+   innings until one side has won. The league says so twice, and that is ONE
+   source: its Glossary, "Regulation Game" ("regulation games last until the
+   trailing team has had the chance to make 27 outs (nine innings)"), and
+   rule 7.01 of the Official Baseball Rules as printed by Baseball Rules
+   Academy ("A regulation game consists of nine innings, unless extended
+   because of a tie score"). Two publishers stand beside it: Britannica
+   Students, "baseball" ("nine innings make a normal game unless the home
+   team is ahead at the end of 8 1/2 innings, and in that case the game is
+   complete"; additional innings "until one side wins"), and ESPN, "Source:
+   Extra-inning, extra-runner rule to remain" (13 February 2023: the placed
+   runner begins "the 10th inning" and every extra inning after it "until a
+   winner is determined"). */
+export const MLB_GAME_RULES: { extraInningRunner: boolean; extraInningRunnerInPostseason: boolean; extraInningRunnerFrom: number | null; innings: number } = {
+  extraInningRunner: true, extraInningRunnerInPostseason: false, extraInningRunnerFrom: null, innings: 9,
 };
 export const MLB_GAME_RULES_SRC: readonly string[] = ['cbs-2023-runner', 'ftw-2024-runner'];
+export const MLB_INNINGS_SRC: readonly string[] = ['mlb-glossary-regulation', 'obr-7-01', 'britannica-students', 'espn-2023-runner'];
 
 /* A CLUB OUTSIDE THE LEAGUE. The career's engine can send a player to the
    Yomiuri Giants for two years (src/lib/mlbCareerLifeB.ts). No MLB standings
@@ -425,9 +442,9 @@ export const MLB_THIN: readonly { what: string; oneSource: string; tried: string
     tried: 'Ticketmaster and USA TODAY do not give the split; no article read states 81. For 2023 and 2024 the 32 of 64 is filled: ESPN and Baseball Reference agree.',
   },
   {
-    what: 'The first season of the extra inning runner (2020), and the rule that a game has nine innings and plays on until one side leads.',
-    oneSource: 'CBS Sports (2023) gives 2020; For The Win calls the first extra inning "the 10th".',
-    tried: 'The league glossary refused the reader; a dictionary page refused the reader; the explainers a search found were not publishers this ledger would cite.',
+    what: 'The first season of the extra inning runner (2020).',
+    oneSource: 'CBS Sports (2023) gives 2020.',
+    tried: 'No second report that names the year was gathered. The rule that a game has nine innings and plays on until one side leads was thin here until the fix pass of Round 1212 recorded it: MLB_GAME_RULES.innings and MLB_INNINGS_SRC.',
   },
   {
     what: 'How long the Division Series, the League Championship Series and the World Series were before 2022.',

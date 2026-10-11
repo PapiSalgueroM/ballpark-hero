@@ -26,11 +26,13 @@
    home runs, doubles, runs batted in and steals. Nothing else (no walks, no
    pitchers, no dates).
 
+   Nine innings, the home side not batting in a ninth it leads, and extra
+   innings until one side has won: the clock is built on it, and the number
+   is the ledger's (MLB_GAME_RULES.innings, two sourced since this round's fix
+   pass: MLB_INNINGS_SRC), never typed here.
+
    THIN, marked (the ledger's MLB_THIN, one source each), and how each is
    handled here:
-   - Nine innings, and extra innings until one side leads: the clock is built
-     on it, as the NFL's is on four quarters of fifteen minutes (NFL_CLOCK,
-     thin the same way). It is the game's basic rule; a second source is owed.
    - The World Series as the only round against the other league: NOT used.
      The playoff path names no opponent (`pathNamed: false`).
    - The shares of shutouts, one run games and extra inning games: not used
@@ -44,7 +46,7 @@
 import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEvent, type StatTotal } from './core';
 import { splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx, type UsSeasonFormat } from './us';
 import { MLB_MISSED_PLAYOFFS, MLB_PLAYOFF_LADDER, mlbEraTeamIds, mlbPlayoffResults } from '../mlbMyCareer';
-import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING } from '@/data/usSeasonLedgerMlb';
+import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_GAME_RULES, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING } from '@/data/usSeasonLedgerMlb';
 import type { UsShape } from '@/data/usLeagueShape';
 import { postseasonRounds } from '../usSeasonShape';
 import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
@@ -55,8 +57,8 @@ import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbViewGames } from '../mlbSeaso
 const BANDS = [[52, 86], [84, 95], [86, 100], [88, 103], [90, 105], [92, 108]] as const;
 /** The first season whose divisions the ledger holds (MLB_DIVISIONS_2026 is that season's). */
 const SHAPE_FROM = 2026;
-/** The clock's marks: nine innings and one for everything after the ninth. */
-const INNINGS = 9;
+/** The clock's marks: the innings of a regulation game (the ledger's nine) and one for everything after the last. */
+const INNINGS = MLB_GAME_RULES.innings;
 const EXTRA = INNINGS + 1;
 /** After a run scores, the chance the inning brings another (this sim's own):
  *  it is what makes shutouts and ten run games both happen. */
