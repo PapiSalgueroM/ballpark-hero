@@ -1,0 +1,5 @@
+# Reviewer sc-screens, Release AW part one: veteran offers, the agent brief, the contract talk and its wheel, a keyboard probe of the farewell dialog, reduced motion
+#!serve
+#!playwright
+walkC: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-c.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-c.log 2>&1; FIXTURES=.tmp-fx/rv/fx-c.json REPORT=walk-c ONLY_S=offer,brief,oldbrief,talk node .rc/x/walk.mjs
+walkD: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-d.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-d.log 2>&1; FIXTURES=.tmp-fx/rv/fx-d.json REPORT=walk-d ONLY_S=kbd,motion node .rc/x/walk.mjs
