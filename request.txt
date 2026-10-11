@@ -1,0 +1,6 @@
+simDraftNight: node scripts/simDraftNight.mjs
+simDraftNight-norivals: DRAFT_CONTROL=norivals node scripts/simDraftNight.mjs
+simDraftNight-dropai: DRAFT_CONTROL=dropai node scripts/simDraftNight.mjs
+simDraftNight-slowsteps: DRAFT_CONTROL=slowsteps node scripts/simDraftNight.mjs
+base-simGmReload-replay: git worktree add -q /tmp/base cbfa94fd && cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

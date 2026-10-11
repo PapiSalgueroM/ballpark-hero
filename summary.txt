@@ -1,0 +1,6 @@
+simDraftNight-dropai exit=0 0s | NEGATIVE CONTROL dropai was on; 7 finding(s). A control run is expected to be red.
+simDraftNight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+simDraftNight-slowsteps exit=0 0s | NEGATIVE CONTROL slowsteps was on; 1 finding(s). A control run is expected to be red.
+simDraftNight-norivals exit=0 2s | control "norivals": both reds were seen (the source check for the NBA on the copy, and the behaviour test red by name with the copy loaded). The check works.
+base-simGmReload-replay exit=1 5s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
