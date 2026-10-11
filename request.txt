@@ -1,0 +1,16 @@
+# Release AV fix pass: the law and seam receipts of simUsSeasonCentre. The attribution first (prints at the line just before Round 1227's merge, at that merge and at this head, each with that commit's own harness, read link by link against the two committed records), then both records printed from this head, each compared and its control run with the new record in place. Nothing is committed by the runner.
+#!serial
+old-law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+old-seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+p-before1227: git worktree add -q --detach /tmp/w3 f6dfa9b3ae91239a780e6537c658c3d7026d4c24 && ln -s "$PWD/node_modules" /tmp/w3/node_modules && cd /tmp/w3 && US_SEASON_DIGEST=print US_SEASON_DIGEST_COMMIT=f6dfa9b3ae91239a780e6537c658c3d7026d4c24 US_SEASON_DIGEST_OUT=$RC_OUT/p-before1227.json node scripts/simUsSeasonCentre.mjs
+p-after1227: git worktree add -q --detach /tmp/w4 a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e && ln -s "$PWD/node_modules" /tmp/w4/node_modules && cd /tmp/w4 && US_SEASON_DIGEST=print US_SEASON_DIGEST_COMMIT=a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e US_SEASON_DIGEST_OUT=$RC_OUT/p-after1227.json node scripts/simUsSeasonCentre.mjs
+p-head-law: US_SEASON_DIGEST=print US_SEASON_DIGEST_COMMIT=41bc8793c8bb1ace15769a8f529523f34dc9c614 US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLawDigest.json node scripts/simUsSeasonCentre.mjs
+p-head-seam: US_SEASON_DIGEST=print US_SEASON_DIGEST_RECEIPT=seam US_SEASON_DIGEST_COMMIT=41bc8793c8bb1ace15769a8f529523f34dc9c614 US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonSeamDigest.json node scripts/simUsSeasonCentre.mjs
+chain-law: node .rc/x/digestChain.mjs lawrecord=scripts/data/usSeasonLawDigest.json before1227=$RC_OUT/p-before1227.json after1227=$RC_OUT/p-after1227.json head=$RC_OUT/usSeasonLawDigest.json layrecord=scripts/data/usSeasonLayDigest.json
+chain-seam: node .rc/x/digestChain.mjs seamrecord=scripts/data/usSeasonSeamDigest.json before1227=$RC_OUT/p-before1227.json after1227=$RC_OUT/p-after1227.json head=$RC_OUT/usSeasonSeamDigest.json layrecord=scripts/data/usSeasonLayDigest.json
+new-law-compare: cp $RC_OUT/usSeasonLawDigest.json scripts/data/usSeasonLawDigest.json && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -q -- scripts/data; exit $s
+new-law-control: cp $RC_OUT/usSeasonLawDigest.json scripts/data/usSeasonLawDigest.json && US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -q -- scripts/data; exit $s
+new-seam-compare: cp $RC_OUT/usSeasonSeamDigest.json scripts/data/usSeasonSeamDigest.json && US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -q -- scripts/data; exit $s
+new-seam-control: cp $RC_OUT/usSeasonSeamDigest.json scripts/data/usSeasonSeamDigest.json && US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -q -- scripts/data; exit $s
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+headsha: git log --oneline -3 | cat; git rev-parse HEAD^

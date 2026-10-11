@@ -1,0 +1,14 @@
+old-law-compare exit=3 19s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+old-seam-compare exit=3 19s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the seam)
+p-before1227 exit=0 20s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/p-before1227.json
+p-after1227 exit=0 20s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/p-after1227.json
+p-head-law exit=0 20s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/usSeasonLawDigest.json
+p-head-seam exit=0 20s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/usSeasonSeamDigest.json
+chain-law exit=0 1s | digestChain: values that differ, link by link: lawrecord->before1227 0; before1227->after1227 5; after1227->head 0; head->layrecord 0
+chain-seam exit=0 0s | digestChain: values that differ, link by link: seamrecord->before1227 0; before1227->after1227 5; after1227->head 0; head->layrecord 0
+new-law-compare exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+new-law-control exit=1 19s | simUsSeasonCentre digest compare: 11 digests, 5 moved (control lawdrift)
+new-seam-compare exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+new-seam-control exit=1 19s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control seam)
+lay-compare exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+headsha exit=0 0s | 41bc8793c8bb1ace15769a8f529523f34dc9c614

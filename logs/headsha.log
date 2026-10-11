@@ -1,0 +1,4 @@
+2cafe70bf rc request rAV-fx-r for 41bc8793c8bb1ace15769a8f529523f34dc9c614
+41bc8793c Release AV fix 3 (minor, review us-careers finding 4, in part): an NHL life card no longer types an 82 game season
+f2c8e484b Release AV fix 2 (minor, review cm finding 2): the Champions League league phase compares names as plain text
+41bc8793c8bb1ace15769a8f529523f34dc9c614

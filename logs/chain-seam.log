@@ -1,0 +1,24 @@
+LINK seamrecord -> before1227: 42 values, 0 differ; 3 bundled files differ of 72
+   file src/lib/careerHallOfFame.ts: 447b451e9c6f -> ad80bcfd3c9f
+   file src/lib/nbaMyCareer.ts: 03e8d99c36d1 -> 1d41ed444c7f
+   file src/lib/nflMyCareer.ts: 63ccc87f6cbc -> a7fa11f3069a
+LINK before1227 -> after1227: 42 values, 5 differ; 8 bundled files differ of 72
+   moved, counted over the seed sets: nfl careers x5
+   file src/lib/careerAwards.ts: 149fda7ed0b3 -> b74b3b1f69d0
+   file src/lib/careerRival.ts: 06dd01b40331 -> a49f56f1df12
+   file src/lib/careerRivalryEvents.ts: 0cc91c17d831 -> 690c71793449
+   file src/lib/nbaCareerRivalryEvents.ts: c17863ff3fcf -> de6cc4f412f6
+   file src/lib/nbaMyCareer.ts: 1d41ed444c7f -> 317ea8d44d62
+   file src/lib/nflCareerRivalryEvents.ts: d13f9dc8584c -> fb21970fb7cc
+   file src/lib/nflMyCareer.ts: a7fa11f3069a -> 4dc8feabe22a
+   file src/lib/usCareerStatLine.ts: 608bb45cc481 -> fb73dc184f1b
+LINK after1227 -> head: 42 values, 0 differ; 2 bundled files differ of 72
+   file src/data/usLeagueShape.ts: bb182e87db73 -> b440489f004b
+   file src/lib/season/us.ts: 5c7ecb526cda -> 3820d139db2c
+LINK head -> layrecord: 42 values, 0 differ; 0 bundled files differ of 72
+record seamrecord: commit 60188732, round 1212, careers 40, stray draws 0, 69 inputs + 3 moved
+record before1227: commit f6dfa9b3ae91239a780e6537c658c3d7026d4c24, round 1221, careers 40, stray draws 0, 67 inputs + 5 moved
+record after1227: commit a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e, round 1221, careers 40, stray draws 0, 67 inputs + 5 moved
+record head: commit 41bc8793c8bb1ace15769a8f529523f34dc9c614, round 1212, careers 40, stray draws 0, 69 inputs + 3 moved
+record layrecord: commit 5db0724bd380cb8fbfc4f8777641cbb6c1c7b7bf, round 1300, careers 40, stray draws 0, 71 inputs + 1 moved
+digestChain: values that differ, link by link: seamrecord->before1227 0; before1227->after1227 5; after1227->head 0; head->layrecord 0
