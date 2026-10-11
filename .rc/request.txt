@@ -1,0 +1,6 @@
+# Release AW part one, fix pass, proof 3: the screens reviewer's own walk again on the fixed head (the veteran's farewell season, the contract talk and its wheel, the contract review help, the retirement suggestion), at 320, 390 and 1280
+#!serve
+#!playwright
+walkA: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-a.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-a.log 2>&1; FIXTURES=.tmp-fx/rv/fx-a.json REPORT=walk-a ONLY_S=vet node .rc/x/walk.mjs
+walkC: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-c.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-c.log 2>&1; FIXTURES=.tmp-fx/rv/fx-c.json REPORT=walk-c ONLY_S=offer,talk node .rc/x/walk.mjs
+walkE: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-e.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-e.log 2>&1; FIXTURES=.tmp-fx/rv/fx-e.json REPORT=walk-e ONLY_S=extra node .rc/x/walk.mjs
