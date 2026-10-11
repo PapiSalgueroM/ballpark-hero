@@ -1,0 +1,12 @@
+fonts=0
+sim=2
+simCmRealFixtures: cannot run: a control is judged beside the base comparison, so it needs CM_FIXTURE_BASE=<commit>
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:272:25 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/cm-real-fixture-artifacts/outcomes/native-later-season.json'
+}
+
+Node.js v24.21.0
+RESULT realfix=1

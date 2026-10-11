@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-dark exit=2 0s | playCmVar: light a scratch checkout first: node scripts/qa/cmVarLit.mjs on, then npm run build, then this walk, then node scripts/qa/cmVarLit.mjs off.
+realfix exit=1 2s | RESULT realfix=1
+quicksubs exit=0 28s | RESULT quicksubs=0
