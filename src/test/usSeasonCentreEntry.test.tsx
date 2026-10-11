@@ -792,6 +792,22 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(c.seasons[0].team).toBe('BAL');
     expect(c.seasons[0].year).toBe(2026);
     expect(q('[data-watch-last]')).toBeNull();
+    /* the fix pass: he has since moved, as free agency moves him. The link still asks about the Orioles, his
+       club of 2026, so it stays away (a link that asked about his club of TODAY would offer a held season) */
+    const remount = async (team: string) => {
+      const save = JSON.parse(localStorage.getItem(MLB_CAREER_SPORT.saveKey)!);
+      save.c.team = team;
+      cleanup(); resetCareerMomentsForTest();
+      localStorage.setItem(MLB_CAREER_SPORT.saveKey, JSON.stringify(save));
+      render(<MemoryRouter><MlbMyCareerBoard /></MemoryRouter>);
+      await flush();
+      if ((await toHub(MLB_CAREER_SPORT)) === 'retired') throw new Error('retired after one season');
+    };
+    await remount('SEA');
+    expect(savedCareer(MLB_CAREER_SPORT).team).toBe('SEA');
+    expect(savedCareer(MLB_CAREER_SPORT).seasons[0].team).toBe('BAL');
+    expect(q('[data-week-by-week]')).not.toBeNull();
+    expect(q('[data-watch-last]')).toBeNull();
     /* the twin: the same career at a club whose 2026 was 162 games is offered its season again */
     cleanup(); localStorage.clear(); resetCareerMomentsForTest();
     await mlbHub('CF', 'mlb-again|BAL', 'now', c => { c.team = 'SEA'; });
@@ -799,5 +815,11 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     if ((await toHub(MLB_CAREER_SPORT)) === 'retired') throw new Error('retired after one season');
     expect(savedCareer(MLB_CAREER_SPORT).seasons[0].team).toBe('SEA');
     expect(q('[data-watch-last]')!.textContent).toContain('Watch the 2026 season again');
-  }, 60000);
+    /* and the other way round: now an Oriole, he is still offered the Mariners' 2026, which was 162 games */
+    await remount('BAL');
+    expect(savedCareer(MLB_CAREER_SPORT).team).toBe('BAL');
+    expect(savedCareer(MLB_CAREER_SPORT).seasons[0].team).toBe('SEA');
+    expect(q('[data-week-by-week]')).not.toBeNull();
+    expect(q('[data-watch-last]')!.textContent).toContain('Watch the 2026 season again');
+  }, 120000);
 });
