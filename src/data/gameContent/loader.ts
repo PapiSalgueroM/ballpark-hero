@@ -23,10 +23,11 @@ import type { GameContent, GameContentMap } from './types';
 export type ContentBundle =
   | 'soccer1' | 'soccer2' | 'football' | 'college' | 'basketball'
   | 'baseball' | 'hockey' | 'moreSports' | 'world'
-  | 'clubManagement' | 'stadiumManagement' | 'academyManagement' | 'aussieRulesManagement';
+  | 'clubManagement' | 'stadiumManagement' | 'academyManagement' | 'aussieRulesManagement' | 'formulaCareer';
 
 /** Which sport file holds each route's guide. */
 export const PATH_BUNDLE: Record<string, ContentBundle> = {
+  '/f1-career': 'formulaCareer',
   '/aussie-rules-manager': 'aussieRulesManagement',
   /* baseball */
   '/baseball-career': 'baseball',
@@ -173,6 +174,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
 
 /** Sport guides share chunks; the three management games each load only their own guide. */
 const LOADERS: Record<ContentBundle, () => Promise<Record<string, GameContentMap>>> = {
+  formulaCareer: () => import('./formulaCareer'),
   aussieRulesManagement: () => import('./aussieRulesManagement'),
   clubManagement: () => import('./clubManagement'),
   stadiumManagement: () => import('./stadiumManagement'),
