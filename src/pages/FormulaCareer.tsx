@@ -150,7 +150,7 @@ export default function FormulaCareer() {
                           <article key={offer.id} className="rounded-xl border border-border p-3" data-formula-offer={offer.id}>
                             <h3 className="font-bold">{teamName(offer.teamId)}</h3>
                             <p className="text-sm">{money(offer.salary)} game salary · One season{offer.teamId === player!.teamId ? ' · Renew your seat' : ''}</p>
-                            <p className="text-xs text-muted-foreground">{offer.teamId === player!.teamId ? 'Your teammate stays.' : 'Outgoing seat: ' + (career.drivers.find(driver => driver.id === offer.outgoingDriverId)?.name ?? 'Driver not recorded')}</p>
+                            <p className="text-xs text-muted-foreground">{offer.teamId === player!.teamId ? 'No seat swap on renewal.' : 'Outgoing seat: ' + (career.drivers.find(driver => driver.id === offer.outgoingDriverId)?.name ?? 'Driver not recorded')}</p>
                             <p className="my-2 text-sm">Negotiation: {offer.decision === 'original' ? 'Not tried' : offer.decision === 'raise' ? 'Raise agreed' : offer.decision === 'counter' ? 'Smaller raise agreed' : 'Raise refused, original salary held'}</p>
                             <div className="grid grid-cols-2 gap-2">
                               <Button variant="outline" className={actionClass} disabled={offer.negotiated} onClick={() => game.negotiate(offer.id)} aria-label={'Negotiate with ' + teamName(offer.teamId)}>Negotiate</Button>
