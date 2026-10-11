@@ -1,0 +1,138 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 4670, whistle 50, review at 49, card at 49, played shot save shot save goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 1987, whistle 49, review at 48, card at 47, played goal shot
+
+ [31m❯[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 39387[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 1080[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 1537[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 1051[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 1986[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 1162[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 854[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 3439[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time [33m 1026[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 417[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 1142[2mms[22m[39m
+   [32m✓[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion[32m 259[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 1742[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends[39m[33m 1202[2mms[22m[39m
+[31m     → the clock under the card is not at the minute the card prints: expected 47 to be 48 // Object.is equality[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 1697[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net[39m[33m 910[2mms[22m[39m
+[31m     → the clock under the card is not at the minute the card prints: expected 47 to be 48 // Object.is equality[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net [33m 1327[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1600[2mms[22m[39m
+[31m     → a goal counted after the card with nothing played in between: expected '1 - 0' to be '2 - 0' // Object.is equality[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1381[2mms[22m[39m
+[31m     → the review opened before its own minute: expected 48 to be greater than or equal to 49[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way [33m 1605[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1377[2mms[22m[39m
+[31m     → the review opened before its own minute: expected 48 to be greater than or equal to 49[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way [33m 1362[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 1421[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 1361[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1373[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 1289[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1134[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 1376[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 1617[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 1659[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+[31m[1mAssertionError[22m: the clock under the card is not at the minute the card prints: expected 47 to be 48 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 48[39m
+[31m+ 47[39m
+
+[36m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m479:120[22m[39m
+    [90m477| [39m    [34mexpect[39m(frames[first][33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'net'[39m)[33m;[39m
+    [90m478| [39m    [34mexpect[39m(frames[first][33m.[39mnet)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m479| [39m    expect(frames[first].minute + frames[first].plus, 'the clock under…
+    [90m   | [39m                                                                                                                       [31m^[39m
+    [90m480| [39m    /* The goal counts for nothing: the score under the card and at th…
+    [90m481| [39m    expect(new Set(frames.slice(first).map(f => f.score)), 'the score …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net
+[31m[1mAssertionError[22m: the clock under the card is not at the minute the card prints: expected 47 to be 48 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 48[39m
+[31m+ 47[39m
+
+[36m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m493:120[22m[39m
+    [90m491| [39m    [35mconst[39m first [33m=[39m frames[33m.[39m[34mfindIndex[39m(cardUp)[33m,[39m up [33m=[39m frames[33m.[39m[34mfilter[39m(cardUp)[33m;[39m
+    [90m492| [39m    [34mnothingUnder[39m(frames[33m,[39m [34mruledOutIds[39m(h[33m.[39mfeed))[33m;[39m
+    [90m493| [39m    expect(frames[first].minute + frames[first].plus, 'the clock under…
+    [90m   | [39m                                                                                                                       [31m^[39m
+    [90m494| [39m    expect(new Set(up.map(f => f.ball)).size, 'the ball moved under th…
+    [90m495| [39m    expect(new Set(frames.slice(first).map(f => f.score)), 'the score …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: a goal counted after the card with nothing played in between: expected '1 - 0' to be '2 - 0' // Object.is equality[39m
+
+Expected: [32m"[7m2[27m - 0"[39m
+Received: [31m"[7m1[27m - 0"[39m
+
+[36m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m555:133[22m[39m
+    [90m553| [39m    /* The score does not move under the card, and no goal lands on it…
+    [90m554| [39m    expect(new Set(frames.slice(first, last + 1).map(f => f.score)).si…
+    [90m555| [39m    if (!runs.some(r => r.from > last)) expect(frames[first].score, 'a…
+    [90m   | [39m                                                                                                                                    [31m^[39m
+    [90m556| [39m    /* A real goal at the clock place the card opens at is on the scor…
+    [90m557| [39m       kick's line is not kept back for the review the whistle is wait…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the review opened before its own minute: expected 48 to be greater than or equal to 49[39m
+[36m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m552:98[22m[39m
+    [90m550| [39m    /* The card is not early: at its own minute, or one clock place be…
+    [90m551| [39m    const lastKick = h.feed.some(e => isChance(e) && place(e) === h.wh…
+    [90m552| [39m    expect(frames[first].minute + frames[first].plus, 'the review open…
+    [90m   | [39m                                                                                                 [31m^[39m
+    [90m553| [39m    /* The score does not move under the card, and no goal lands on it…
+    [90m554| [39m    expect(new Set(frames.slice(first, last + 1).map(f => f.score)).si…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 04:46:19
+[2m   Duration [22m 41.20s[2m (transform 1.04s, setup 29ms, collect 1.34s, tests 39.39s, environment 168ms, prepare 93ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out 'at the whistle' is drawn before its card%2C at its own minute%2C and its review closes before the half ends,line=479,column=120::AssertionError: the clock under the card is not at the minute the card prints: expected 47 to be 48 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 48%0A+ 47%0A%0A ❯ src/test/clubManagerVarScreen.test.tsx:479:120%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > reduced motion%2C a goal ruled out 'at the whistle'%3A the card opens at its own minute on the ball in the net,line=493,column=120::AssertionError: the clock under the card is not at the minute the card prints: expected 47 to be 48 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 48%0A+ 47%0A%0A ❯ src/test/clubManagerVarScreen.test.tsx:493:120%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=555,column=133::AssertionError: a goal counted after the card with nothing played in between: expected '1 - 0' to be '2 - 0' // Object.is equality%0A%0AExpected: "2 - 0"%0AReceived: "1 - 0"%0A%0A ❯ src/test/clubManagerVarScreen.test.tsx:555:133%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=552,column=98::AssertionError: the review opened before its own minute: expected 48 to be greater than or equal to 49%0A ❯ src/test/clubManagerVarScreen.test.tsx:552:98%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=552,column=98::AssertionError: the review opened before its own minute: expected 48 to be greater than or equal to 49%0A ❯ src/test/clubManagerVarScreen.test.tsx:552:98%0A%0A
