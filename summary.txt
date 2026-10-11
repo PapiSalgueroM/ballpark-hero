@@ -1,0 +1,6 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=1 28s | sweepWeight: 13 failures
+playSeasonCentre exit=1 198s | playSeasonCentre: 40 checks, 3 failed
+playSeasonMoments exit=1 154s | playSeasonMoments: 9 checks, 5 failed
+playSeasonCentreMotion exit=1 98s | Node.js v24.21.0
+playSoccerCareerCompetitions exit=1 8s | playSoccerCareerCompetitions: 50 checks, 2 failed
