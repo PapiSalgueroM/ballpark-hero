@@ -9,14 +9,16 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
-import { cmVarLiveState } from './qa/cmVarLit.mjs';
+import { cmVarLiveState, cmVarStagedKinds } from './qa/cmVarLit.mjs';
 
 assert(process.env.CI, 'Run this browser proof only in remote CI');
 /* Round 1218: the page's Quick Sim asks the engine for video reviews when the switch CM_VAR_LIVE is on (the
    hook's own line), so the engine run this proof compares the page with asks for the same. The switch is read
    from the source the build was made from, the way scripts/playCmVar.mjs reads it. With the switch off this is
    the call it always was. */
-const HOOK_ASKS = cmVarLiveState() === 'on' ? { varReviews: true } : {};
+/* Round 1303: and it asks with the list of kinds the build was handed (CM_VAR_KINDS in the generated rates file,
+   the hook's cmVarGameAsk), never with true, which stages every kind. An empty list asks for nothing. */
+const HOOK_ASKS = cmVarLiveState() === 'on' && cmVarStagedKinds().length ? { varReviews: cmVarStagedKinds() } : {};
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'cm-quick-subs-artifacts/native');
 const CACHE = path.resolve(process.env.FREE_KICK_FONT_CACHE || path.join(ROOT, 'cm-quick-subs-artifacts/font-cache'));

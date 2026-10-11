@@ -15,11 +15,12 @@
     20
   ],
   "leagueMatches": 6780,
-  "reviewableGoalsPerMatch": 2.3895,
-  "foulsPerMatch": 20.14,
+  "reviewableGoalsPerMatch": 2.3891,
+  "goalsPerMatch": 2.7122,
+  "foulsPerMatch": 20.143,
   "probeRate": 0.004,
   "awardsAtProbeRate": 495,
   "awardsPerMatchPerUnitRate": 18.252,
-  "runner": "r1218-b1",
-  "head": "b6d1cf80"
+  "runner": "r1303-fx-measure",
+  "head": "b4d93edc"
 }

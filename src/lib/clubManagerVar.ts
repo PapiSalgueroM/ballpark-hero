@@ -1,5 +1,5 @@
 import { keyedRng } from '@/lib/keyedRng';
-import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE } from '@/data/clubManagerVarRates';
+import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE, CM_VAR_KINDS } from '@/data/clubManagerVarRates';
 
 /** Round 1218: the rates and the coverage are DERIVED from real football by scripts/genCmVarRates.mjs
  * (scripts/data/cmVarRates.json, cmVarCompetitions.json) and read from the generated module. No rate is typed here.
@@ -14,7 +14,45 @@ export interface CmVarDecision {
   /** 'ruled_out' since Round 1218: one publisher splits why goals are ruled out, so the card names no reason. */
   reason: 'offside' | 'attacking_foul' | 'handball' | 'ruled_out' | 'clear' | 'penalty_stands' | 'missed_foul';
 }
-export { CM_VAR_GAME_RATES };
+export { CM_VAR_GAME_RATES, CM_VAR_KINDS };
+
+/** Round 1303 (the lead's decision 2). The KINDS of review the engine can play: a goal ruled out, a penalty given.
+ *  Which of them the GAME plays is data: scripts/data/cmVarRates.json (kinds, and what its owed entries hold),
+ *  through the generator, as CM_VAR_KINDS. Turning a kind on is a line of that ledger, never an edit here. */
+export type CmVarKind = 'goal' | 'penalty';
+export const CM_VAR_ALL_KINDS: readonly CmVarKind[] = ['goal', 'penalty'];
+/** What a caller hands kickOff. A LIST asks for those kinds and is saved with the match (the game asks with
+ *  CM_VAR_KINDS, see cmVarGameAsk). `true` stages every kind the engine can play and saves no list: the tests
+ *  and the harnesses ask that way, the game never does (scripts/simCmVar.mjs holds that at the source). */
+export type CmVarAsk = boolean | readonly CmVarKind[];
+export function cmVarKindsAsked(ask: CmVarAsk | undefined): CmVarKind[] {
+  if (ask === true) return [...CM_VAR_ALL_KINDS];
+  return ask ? CM_VAR_ALL_KINDS.filter(kind => ask.includes(kind)) : [];
+}
+/** The kinds a match in play reviews: the list it was kicked off with. A match with reviews and no list was
+ *  kicked off with every kind staged (no save in the wild holds one: the switch was never on before the list). */
+export function cmVarKindsOf(live: { varReviews?: true; varKinds?: readonly CmVarKind[] }): CmVarKind[] {
+  if (!live.varReviews) return [];
+  const saved = live.varKinds;
+  return saved ? CM_VAR_ALL_KINDS.filter(kind => saved.includes(kind)) : [...CM_VAR_ALL_KINDS];
+}
+/** What the game itself asks kickOff for, at both places it kicks a match off: the kinds the ledger has on, and
+ *  nothing at all while the switch is off or no kind is on. */
+export function cmVarGameAsk(switchOn: boolean, kinds: readonly CmVarKind[] = CM_VAR_KINDS): { varReviews?: readonly CmVarKind[] } {
+  return switchOn && kinds.length > 0 ? { varReviews: kinds } : {};
+}
+
+/** Round 1303 fix (owed goals-level, closed in the engine). The engine's goals are calibrated on goals that COUNTED,
+ *  and real football's counted goals are already net of what reviews took away. So a match that reviews goals draws
+ *  its goals a little more often, by exactly what its reviews rule out: those goals come ON TOP and goals a match
+ *  stays where the engine without reviews has it. p is the chance a drawn goal is taken back (the review rate times
+ *  the overturn rate); drawing 1 / (1 - p) times as often and taking back p of them leaves the same count
+ *  (settleGoalReviews takes them back: with a review when a review can look at the goal, without one when it
+ *  cannot). A match that does not review goals is not touched (the factor is exactly 1). */
+export function cmVarGoalLift(kinds: readonly CmVarKind[]): number {
+  if (!kinds.includes('goal')) return 1;
+  return 1 / (1 - CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);
+}
 
 const CUP_STAGES = ['R16', 'QF', 'SF', 'F'], UCL_STAGES = ['group', 'R16', 'QF', 'SF', 'F'];
 /** Does this competition use reviews at this stage in 2026-27? key is league:<id>, cup:<cup name> or ucl.
@@ -33,7 +71,13 @@ type ReviewLine = { minute: number; plus?: number; side: 'me' | 'opp'; kind: 'va
 export function settleGoalReviews<T extends Goal>(goals: T[], side: 'me' | 'opp', matchKey: string): { goals: T[]; reviews: ReviewLine[] } {
   const accepted: T[] = [], reviews: ReviewLine[] = [];
   for (const goal of goals) {
-    if (goal.penalty || goal.freeKick) { accepted.push(goal); continue; }
+    /* Round 1303 fix: a penalty or a direct free kick is not reviewed. A match that reviews goals draws every
+       goal a little more often (cmVarGoalLift), so one of these is taken back as often as a review rules a goal
+       out, with no review and no trace: only the goals a review can look at end up lifted. */
+    if (goal.penalty || goal.freeKick) {
+      if (keyedRng(`${matchKey}:${side}:${goal.minute}:${goal.plus ?? 0}:${goal.name}:lift`)() >= CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn) accepted.push(goal);
+      continue;
+    }
     const id = `${matchKey}:${side}:${goal.minute}:${goal.plus ?? 0}:${goal.name}:goal`;
     const rng = keyedRng(id);
     if (rng() >= CM_VAR_GAME_RATES.goalReview) { accepted.push(goal); continue; }

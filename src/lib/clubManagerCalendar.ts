@@ -32,6 +32,7 @@ import {
   startCareer, interimManagerName,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
+import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
 
@@ -609,13 +610,13 @@ export interface SimRun {
  * always were, and since Round 1072 the quick sim coach makes the changes. A tap on a day and every fast forward button go through
  * here, so the two can never drift.
  */
-export function simToWeek(career: CareerState, targetWeek: number, opts?: { varReviews?: boolean }): SimRun {
+export function simToWeek(career: CareerState, targetWeek: number, opts?: { varReviews?: CmVarAsk }): SimRun {
   let state = career;
   let lastReport: MatchWeekReport | null = null;
   const target = Math.min(targetWeek, career.calendar.length);
   while (state.week < target) {
     const suitorBefore = state.approach?.club ?? null;
-    const res = playNextEntry(state, { skipHalftime: true, untilWeek: target, ...(opts?.varReviews ? { varReviews: true } : {}) });
+    const res = playNextEntry(state, { skipHalftime: true, untilWeek: target, ...(opts?.varReviews ? { varReviews: opts.varReviews } : {}) });
     state = res.state;
     if (res.kind === 'window') return { state, lastReport, halt: 'window' };
     if (res.kind === 'seasonOver') return { state, lastReport, halt: 'seasonOver' };
