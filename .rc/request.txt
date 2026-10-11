@@ -1,0 +1,30 @@
+# rAV-cm-fam2: reviewer cm, Release AV head 5ed04ae7. The Club Manager harness family, half 2 of 2 (28 harnesses), each plain to its summary line, on a plain build
+#!build
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
+simClubManagerFacilities: node scripts/simClubManagerFacilities.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2020: node scripts/simEra2020.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simManagerXp: node scripts/simManagerXp.mjs
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
