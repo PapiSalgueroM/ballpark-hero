@@ -1,0 +1,4 @@
+w-head exit=0 55s | head sweep exit 0
+w-base exit=0 52s | base r1302 846fe9e6 sweep exit 1 (read the rows)
+w-main exit=0 52s | main aa564f16 sweep exit 0 (read the rows)
+clean exit=0 0s | 0

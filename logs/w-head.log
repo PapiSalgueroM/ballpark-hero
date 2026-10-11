@@ -1,0 +1,6 @@
+head build exit 0
+   /club-manager       586K gz over  39 files (budget 586K, 586.0K to the tenth)
+   /manager-hot-seat   603K gz over  41 files (budget 603K, 603.3K to the tenth)
+   /deadline-day       613K gz over  45 files (budget 613K, 613.4K to the tenth)
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+head sweep exit 0
