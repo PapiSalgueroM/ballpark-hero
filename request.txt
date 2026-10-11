@@ -1,0 +1,7 @@
+# Reviewer (screens) of Release AX, second walk: where the screen is after Push for more, offer by offer, on the head and on a build of the base (origin/release-aw-int c9a1f86a) for comparison
+#!serve
+#!playwright
+push-nfl: git worktree add -q /tmp/base c9a1f86af6fa3611b35eb27fe0fbe44369752dd7 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && npm run build > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log); touch /tmp/base-ready; BASE2DIST=/tmp/base/dist BASE2PORT=4174 SPORT=nfl node .rc/x/rsUs2.mjs
+push-nba: while [ ! -f /tmp/base-ready ]; do sleep 3; done; BASE2DIST=/tmp/base/dist BASE2PORT=4175 SPORT=nba node .rc/x/rsUs2.mjs
+push-mlb: while [ ! -f /tmp/base-ready ]; do sleep 3; done; BASE2DIST=/tmp/base/dist BASE2PORT=4176 SPORT=mlb node .rc/x/rsUs2.mjs
+push-nhl: while [ ! -f /tmp/base-ready ]; do sleep 3; done; BASE2DIST=/tmp/base/dist BASE2PORT=4177 SPORT=nhl node .rc/x/rsUs2.mjs
