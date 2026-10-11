@@ -1,0 +1,2 @@
+# Reviewer sc-engine, Release AW part one, head 64d87aed: mutation H (the plain request hands makeOffer no seasons) against the veteran offers sim
+mH-offers-EXPECT-RED: node .rc/x/scMut.mjs H && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs; s=$?; git checkout -- src scripts; exit $s
