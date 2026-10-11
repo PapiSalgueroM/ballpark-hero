@@ -1,0 +1,6 @@
+# Release AV, follow up 2 on head 7037e28d: the other sports baseline recorded again holds, and its control still fires; the two fences that read the harness files edited since the proof was sent
+sense-others: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-othersport: SENSE_PROVE_OTHERS=1 SIM_NBA_SENSE_CONTROL=othersport node scripts/simNbaAwardsSense.mjs
+sense-plain: node scripts/simNbaAwardsSense.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs

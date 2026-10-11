@@ -1,0 +1,5 @@
+sense-othersport exit=1 147s | simNbaAwardsSense: 172 checks, 1 failed (full size, control othersport), 147s
+sense-plain exit=0 153s | simNbaAwardsSense: 169 checks, 0 failed (full size), 152s
+sense-others exit=0 161s | simNbaAwardsSense: 172 checks, 0 failed (full size), 160s
+rivals exit=0 17s | No rival product names found. 0 findings.
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
