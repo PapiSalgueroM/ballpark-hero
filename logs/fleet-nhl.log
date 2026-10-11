@@ -1,0 +1,10 @@
+dumps: 72 row files of nhl in /tmp/fh, 72 runs in 327 s
+dumps: 72 row files of nhl in /tmp/fb, 72 runs in 230 s
+nhl statsup, the check fleet (24 seeds 6 to 29, 12 cells), every total times k: x1.0000 from 10.37 to 0.97 | x1.0100 from 11.75 to 1.21 | x1.0200 from 13.19 to 1.53 | x1.0244 from 13.88 to 1.68 | x1.0300 from 14.74 to 1.88 | x1.0400 from 16.37 to 2.31 | x1.0500 from 18.07 to 2.83 | x1.0600 from 19.83 to 3.42
+nhl cups a career: base 0.8862 (72 seeds), head 0.8912 (72 seeds), head over base 1.0057, gap 0.0050 = 1.28 errors
+nhl harts a career: base 0.2602 (72 seeds), head 0.2623 (72 seeds), head over base 1.0083, gap 0.0022 = 0.81 errors
+nhl connSmythes a career: base 0.1826 (72 seeds), head 0.1821 (72 seeds), head over base 0.9975, gap -0.0005 = -0.25 errors
+nhl allStars a career: base 2.1160 (72 seeds), head 2.1211 (72 seeds), head over base 1.0025, gap 0.0052 = 0.66 errors
+nhl hall1 a career: base 30.2069 (72 seeds), head 30.3556 (72 seeds), head over base 1.0049, gap 0.1486 = 1.00 errors
+nhl seasons a career: base 19.9235 (72 seeds), head 19.9204 (72 seeds), head over base 0.9998, gap -0.0031 = -1.09 errors
+fleet2: nhl done

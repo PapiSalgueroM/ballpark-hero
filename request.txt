@@ -1,0 +1,4 @@
+fleet-nhl: set -o pipefail; bash .rc/x/dumps.sh . /tmp/fh nhl 2000 $(seq 6 77) | tail -1 && git worktree add -q /tmp/base f78037dcddea12c1a02586c7d5c0e185efb86121 && ln -s "$PWD/node_modules" /tmp/base/node_modules && bash .rc/x/dumps.sh /tmp/base /tmp/fb nhl 2000 $(seq 6 77) | tail -1 && node .rc/x/fleet2.mjs /tmp/fh nhl . /tmp/fb | tee $RC_OUT/fleet2-nhl.txt
+fleet-nfl: set -o pipefail; bash .rc/x/dumps.sh . /tmp/f-nfl nfl 2000 $(seq 6 29) | tail -1 && node .rc/x/fleet2.mjs /tmp/f-nfl nfl . | tee $RC_OUT/fleet2-nfl.txt
+fleet-nba: set -o pipefail; bash .rc/x/dumps.sh . /tmp/f-nba nba 2000 $(seq 6 29) | tail -1 && node .rc/x/fleet2.mjs /tmp/f-nba nba . | tee $RC_OUT/fleet2-nba.txt
+fleet-mlb: set -o pipefail; bash .rc/x/dumps.sh . /tmp/f-mlb mlb 2000 $(seq 6 29) | tail -1 && node .rc/x/fleet2.mjs /tmp/f-mlb mlb . | tee $RC_OUT/fleet2-mlb.txt

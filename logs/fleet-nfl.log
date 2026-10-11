@@ -1,0 +1,8 @@
+dumps: 24 row files of nfl in /tmp/f-nfl, 24 runs in 192 s
+nfl statsup, the check fleet (24 seeds 6 to 29, 13 cells), every total times k: x1.0000 from 10.52 to 0.96 | x1.0100 from 11.51 to 1.20 | x1.0200 from 12.65 to 1.52 | x1.0244 from 13.33 to 1.68 | x1.0300 from 13.96 to 1.90 | x1.0400 from 15.60 to 2.40 | x1.0500 from 17.16 to 2.86 | x1.0600 from 18.41 to 3.47
+nfl rings a career: head 0.6436 (error 0.0055, 24 seeds)
+nfl mvps a career: head 0.0964 (error 0.0017, 24 seeds)
+nfl allPros a career: head 0.5341 (error 0.0033, 24 seeds)
+nfl hall1 a career: head 20.5958 (error 0.1314, 24 seeds)
+nfl seasons a career: head 15.2749 (error 0.0042, 24 seeds)
+fleet2: nfl done
