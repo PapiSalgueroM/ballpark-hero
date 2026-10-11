@@ -1,0 +1,64 @@
+# Round 1302 review (run lens), request A: the round's harnesses, every negative control on its own line, the type gate, the fences.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-stage: CM_VAR_LEDGER_CONTROL=stage node scripts/simCmVarLedger.mjs
+l-unread: CM_VAR_LEDGER_CONTROL=unread node scripts/simCmVarLedger.mjs
+l-bogus: CM_VAR_LEDGER_CONTROL=nosuchcontrol node scripts/simCmVarLedger.mjs
+simCmVar: node scripts/simCmVar.mjs > /tmp/v-normal.log 2>&1; s=$?; grep -a "^simCmVar bands\|^simCmVar coverage" /tmp/v-normal.log | cut -c1-900; tail -1 /tmp/v-normal.log | cut -c1-200; exit $s
+bands-301: CM_VAR_BANDS_SEEDS=301,302,303,304,305,306 node scripts/simCmVar.mjs > /tmp/v-b301.log 2>&1; s=$?; grep -a "^simCmVar bands" /tmp/v-b301.log | cut -c1-900; tail -1 /tmp/v-b301.log | cut -c1-400; exit $s
+bands-501: CM_VAR_BANDS_SEEDS=501,502,503,504,505,506 node scripts/simCmVar.mjs > /tmp/v-b501.log 2>&1; s=$?; grep -a "^simCmVar bands" /tmp/v-b501.log | cut -c1-900; tail -1 /tmp/v-b501.log | cut -c1-400; exit $s
+bands-901: CM_VAR_BANDS_SEEDS=901,902,903,904,905,906 node scripts/simCmVar.mjs > /tmp/v-b901.log 2>&1; s=$?; grep -a "^simCmVar bands" /tmp/v-b901.log | cut -c1-900; tail -1 /tmp/v-b901.log | cut -c1-400; exit $s
+c-counted: CM_VAR_CONTROL=counted node scripts/simCmVar.mjs > /tmp/c.counted.log 2>&1; s=$?; tail -1 /tmp/c.counted.log | cut -c1-160; grep -a CAUGHT /tmp/c.counted.log | cut -c1-330; exit $s
+c-decorative: CM_VAR_CONTROL=decorative node scripts/simCmVar.mjs > /tmp/c.decorative.log 2>&1; s=$?; tail -1 /tmp/c.decorative.log | cut -c1-160; grep -a CAUGHT /tmp/c.decorative.log | cut -c1-330; exit $s
+c-penalty: CM_VAR_CONTROL=penalty node scripts/simCmVar.mjs > /tmp/c.penalty.log 2>&1; s=$?; tail -1 /tmp/c.penalty.log | cut -c1-160; grep -a CAUGHT /tmp/c.penalty.log | cut -c1-330; exit $s
+c-awards: CM_VAR_CONTROL=awards node scripts/simCmVar.mjs > /tmp/c.awards.log 2>&1; s=$?; tail -1 /tmp/c.awards.log | cut -c1-160; grep -a CAUGHT /tmp/c.awards.log | cut -c1-330; exit $s
+c-resolution: CM_VAR_CONTROL=resolution node scripts/simCmVar.mjs > /tmp/c.resolution.log 2>&1; s=$?; tail -1 /tmp/c.resolution.log | cut -c1-160; grep -a CAUGHT /tmp/c.resolution.log | cut -c1-330; exit $s
+c-past: CM_VAR_CONTROL=past node scripts/simCmVar.mjs > /tmp/c.past.log 2>&1; s=$?; tail -1 /tmp/c.past.log | cut -c1-160; grep -a CAUGHT /tmp/c.past.log | cut -c1-330; exit $s
+c-reveal: CM_VAR_CONTROL=reveal node scripts/simCmVar.mjs > /tmp/c.reveal.log 2>&1; s=$?; tail -1 /tmp/c.reveal.log | cut -c1-160; grep -a CAUGHT /tmp/c.reveal.log | cut -c1-330; exit $s
+c-resume: CM_VAR_CONTROL=resume node scripts/simCmVar.mjs > /tmp/c.resume.log 2>&1; s=$?; tail -1 /tmp/c.resume.log | cut -c1-160; grep -a CAUGHT /tmp/c.resume.log | cut -c1-330; exit $s
+c-announce: CM_VAR_CONTROL=announce node scripts/simCmVar.mjs > /tmp/c.announce.log 2>&1; s=$?; tail -1 /tmp/c.announce.log | cut -c1-160; grep -a CAUGHT /tmp/c.announce.log | cut -c1-330; exit $s
+c-disabled: CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs > /tmp/c.disabled.log 2>&1; s=$?; tail -1 /tmp/c.disabled.log | cut -c1-160; grep -a CAUGHT /tmp/c.disabled.log | cut -c1-330; exit $s
+c-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs > /tmp/c.everywhere.log 2>&1; s=$?; tail -1 /tmp/c.everywhere.log | cut -c1-160; grep -a CAUGHT /tmp/c.everywhere.log | cut -c1-330; exit $s
+c-historic: CM_VAR_CONTROL=historic node scripts/simCmVar.mjs > /tmp/c.historic.log 2>&1; s=$?; tail -1 /tmp/c.historic.log | cut -c1-160; grep -a CAUGHT /tmp/c.historic.log | cut -c1-330; exit $s
+c-streamgoal: CM_VAR_CONTROL=streamgoal node scripts/simCmVar.mjs > /tmp/c.streamgoal.log 2>&1; s=$?; tail -1 /tmp/c.streamgoal.log | cut -c1-160; grep -a CAUGHT /tmp/c.streamgoal.log | cut -c1-330; exit $s
+c-streamfoul: CM_VAR_CONTROL=streamfoul node scripts/simCmVar.mjs > /tmp/c.streamfoul.log 2>&1; s=$?; tail -1 /tmp/c.streamfoul.log | cut -c1-160; grep -a CAUGHT /tmp/c.streamfoul.log | cut -c1-330; exit $s
+c-oldgoalreview: CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs > /tmp/c.oldgoalreview.log 2>&1; s=$?; tail -1 /tmp/c.oldgoalreview.log | cut -c1-160; grep -a CAUGHT /tmp/c.oldgoalreview.log | cut -c1-330; exit $s
+c-oldoverturn: CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs > /tmp/c.oldoverturn.log 2>&1; s=$?; tail -1 /tmp/c.oldoverturn.log | cut -c1-160; grep -a CAUGHT /tmp/c.oldoverturn.log | cut -c1-330; exit $s
+c-oldpenaltyreview: CM_VAR_CONTROL=oldpenaltyreview node scripts/simCmVar.mjs > /tmp/c.oldpenaltyreview.log 2>&1; s=$?; tail -1 /tmp/c.oldpenaltyreview.log | cut -c1-160; grep -a CAUGHT /tmp/c.oldpenaltyreview.log | cut -c1-330; exit $s
+c-oldmissedfoul: CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs > /tmp/c.oldmissedfoul.log 2>&1; s=$?; tail -1 /tmp/c.oldmissedfoul.log | cut -c1-160; grep -a CAUGHT /tmp/c.oldmissedfoul.log | cut -c1-330; exit $s
+c-oldpenaltyscores: CM_VAR_CONTROL=oldpenaltyscores node scripts/simCmVar.mjs > /tmp/c.oldpenaltyscores.log 2>&1; s=$?; tail -1 /tmp/c.oldpenaltyscores.log | cut -c1-160; grep -a CAUGHT /tmp/c.oldpenaltyscores.log | cut -c1-330; exit $s
+c-oldpenaltyontarget: CM_VAR_CONTROL=oldpenaltyontarget node scripts/simCmVar.mjs > /tmp/c.oldpenaltyontarget.log 2>&1; s=$?; tail -1 /tmp/c.oldpenaltyontarget.log | cut -c1-160; grep -a CAUGHT /tmp/c.oldpenaltyontarget.log | cut -c1-330; exit $s
+c-penaltyband: CM_VAR_CONTROL=penaltyband node scripts/simCmVar.mjs > /tmp/c.penaltyband.log 2>&1; s=$?; tail -1 /tmp/c.penaltyband.log | cut -c1-160; grep -a CAUGHT /tmp/c.penaltyband.log | cut -c1-330; exit $s
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+save-varon: CM_SAVE_VAR=on node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+livemotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx src/test/liveSimCelebration.test.tsx src/test/managerPenaltyMarkers.test.tsx --testTimeout=300000 --hookTimeout=120000
+simDailyDeals: node scripts/simDailyDeals.mjs
+deals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+deals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
