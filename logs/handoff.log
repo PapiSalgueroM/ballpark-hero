@@ -1,0 +1,46 @@
+mode handoff, N 60, base /tmp/sb2, head /home/runner/work/ballpark-hero/ballpark-hero
+ok   the two bundles are really two trees (only the head has requestTransferDecision)
+category | saves | head with both conditions out equal to base | base errors | head threw | head moved | head moved under 30
+    between | 60 | 60 | 0 | 0 | 0 | 0
+    intl | 60 | 60 | 0 | 0 | 0 | 0
+    mid30:ballon_dor | 60 | 60 | 0 | 0 | 41 | 0
+    mid30:moral_dilemma | 59 | 59 | 0 | 0 | 45 | 0
+    mid30:newspaper | 60 | 60 | 0 | 0 | 41 | 0
+    mid30:random_events | 60 | 60 | 0 | 0 | 46 | 0
+    mid30:rehab_choice | 21 | 21 | 0 | 0 | 18 | 0
+    mid30:retirement_suggestion | 60 | 60 | 0 | 0 | 50 | 0
+    mid30:rivalry_event | 60 | 60 | 0 | 0 | 47 | 0
+    mid30:season_summary | 60 | 60 | 0 | 0 | 41 | 0
+    mid30:social_media_action | 60 | 60 | 0 | 0 | 45 | 0
+    mid30:transfer_window | 60 | 60 | 0 | 0 | 43 | 0
+    mid30:world_cup | 60 | 60 | 0 | 0 | 43 | 0
+    mid:ballon_dor | 60 | 60 | 0 | 0 | 0 | 0
+    mid:international_debut | 7 | 7 | 0 | 0 | 0 | 0
+    mid:moral_dilemma | 60 | 60 | 0 | 0 | 6 | 0
+    mid:newspaper | 60 | 60 | 0 | 0 | 0 | 0
+    mid:random_events | 60 | 60 | 0 | 0 | 0 | 0
+    mid:rehab_choice | 36 | 36 | 0 | 0 | 19 | 0
+    mid:retirement_suggestion | 60 | 60 | 0 | 0 | 50 | 0
+    mid:rivalry_event | 60 | 60 | 0 | 0 | 2 | 0
+    mid:season_summary | 60 | 60 | 0 | 0 | 0 | 0
+    mid:social_media_action | 60 | 60 | 0 | 0 | 0 | 0
+    mid:transfer_window | 60 | 60 | 0 | 0 | 0 | 0
+    mid:world_cup | 60 | 60 | 0 | 0 | 0 | 0
+    play30 | 60 | 60 | 0 | 0 | 42 | 0
+    retired | 60 | 60 | 0 | 0 | 0 | 0
+    tw | 60 | 60 | 0 | 0 | 0 | 0
+    tw30 | 58 | 58 | 0 | 0 | 43 | 0
+    tw34 | 52 | 52 | 0 | 0 | 49 | 0
+    vet31 | 55 | 55 | 0 | 0 | 43 | 0
+ok   enough old saves were made (1728)
+ok   every old save of the base plays 60 presses on the head (both conditions out) byte equal to the base: 1728 of 1728
+ok   the plain head never throws on an old save of the base (0)
+ok   the plain head never leaves the base on an old save before age 30 (0)
+ok   category between was covered (60)
+ok   category vet31 was covered (55)
+FAIL category loan was covered (0)
+ok   category retired was covered (60)
+ok   category mid:newspaper was covered (60)
+ok   category mid:transfer_window was covered (60)
+ok   category mid:random_events was covered (60)
+sc-engine probe handoff: RED, 1 failed

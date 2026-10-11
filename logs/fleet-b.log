@@ -1,0 +1,63 @@
+mode fleet, N 200, base /tmp/sb4, head /home/runner/work/ballpark-hero/ballpark-hero
+ok   the two bundles are really two trees (only the head has requestTransferDecision)
+seeds 201 to 400
+fleet: 200 careers (odd seeds reload the save after every press), 200 played to retirement, 5238 season rows, 0 reference errors
+ok   at least 95 percent of the base careers play to retirement (200 of 200)
+ok   head with the two conditions out is byte equal to the base at every press, save and draw count: 200 of 200
+ok   the head really moves careers: 186 of 200 leave the base somewhere
+ok   no career leaves the base before age 30 (youngest first move at 30)
+first move of the head, by age (age | careers that reached it | first moved here):
+    17 | 200 | 0 | cumulative 0
+    18 | 200 | 0 | cumulative 0
+    19 | 200 | 0 | cumulative 0
+    20 | 200 | 0 | cumulative 0
+    21 | 200 | 0 | cumulative 0
+    22 | 200 | 0 | cumulative 0
+    23 | 200 | 0 | cumulative 0
+    24 | 200 | 0 | cumulative 0
+    25 | 200 | 0 | cumulative 0
+    26 | 200 | 0 | cumulative 0
+    27 | 200 | 0 | cumulative 0
+    28 | 200 | 0 | cumulative 0
+    29 | 200 | 0 | cumulative 0
+    30 | 200 | 97 | cumulative 97
+    31 | 200 | 15 | cumulative 112
+    32 | 200 | 17 | cumulative 129
+    33 | 198 | 12 | cumulative 141
+    34 | 194 | 15 | cumulative 156
+    35 | 186 | 16 | cumulative 172
+    36 | 176 | 6 | cumulative 178
+    37 | 162 | 4 | cumulative 182
+    38 | 151 | 2 | cumulative 184
+    39 | 149 | 2 | cumulative 186
+    40 | 143 | 0 | cumulative 186
+    41 | 139 | 0 | cumulative 186
+    42 | 130 | 0 | cumulative 186
+    43 | 107 | 0 | cumulative 186
+    44 | 69 | 0 | cumulative 186
+    45 | 29 | 0 | cumulative 186
+    46 | 4 | 0 | cumulative 186
+    47 | 1 | 0 | cumulative 186
+where the head first moves (phase the press left: leaves that differ):
+    46  random_events: transferSituation.offers.N.wage | transferSituation.offers.N.wage | transferSituation.offers.N.wage
+    40  random_events: transferSituation.offers.N.wage | transferSituation.offers.N.wage
+    29  random_events: transferSituation.offer.wage
+    25  random_events: transferSituation.offers.N.wage | transferSituation.offers.N.wage | transferSituation.offers.N.wage | transferSituation.offers.N.wage
+    22  random_events: transferSituation.offerA.wage | transferSituation.offerB.wage
+    11  transfer_window: transferSituation.offer.wage
+    10  social_media_action: pendingEvents.N.choices.N.consequence
+    3  moral_dilemma: pendingEvents.N.choices.N.consequence
+with only the offers condition out, what still moves first:
+    22  social_media_action: pendingEvents.N.choices.N.consequence
+    12  moral_dilemma: pendingEvents.N.choices.N.consequence
+with only the talks condition out, what still moves first:
+    49  random_events: transferSituation.offers.N.wage | transferSituation.offers.N.wage | transferSituation.offers.N.wage
+    40  random_events: transferSituation.offers.N.wage | transferSituation.offers.N.wage
+    34  random_events: transferSituation.offer.wage
+    26  random_events: transferSituation.offers.N.wage | transferSituation.offers.N.wage | transferSituation.offers.N.wage | transferSituation.offers.N.wage
+    23  random_events: transferSituation.offerA.wage | transferSituation.offerB.wage
+    12  transfer_window: transferSituation.offer.wage
+ok   each half of the inverse is needed on its own (both half inverses still leave the base)
+ok   senior rows of every base career run year by year and age by age (0 breaks): the receipts of the new cards rely on it
+request results seen on the reference: 373
+sc-engine probe fleet: green

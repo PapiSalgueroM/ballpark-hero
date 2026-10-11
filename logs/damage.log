@@ -1,0 +1,68 @@
+mode damage, N 5, base /tmp/sb5, head /home/runner/work/ballpark-hero/ballpark-hero
+ok   the two bundles are really two trees (only the head has requestTransferDecision)
+ok   enough damaged saves were played (3240, 30 presses each)
+ok   a damaged new field never makes the engine throw (0)
+ok   a damaged new field never changes anything else in the save (0)
+ok   no reader, eligibility or action of the four new parts throws on a damaged field (0)
+what the cards say on a damaged field (count, case):
+    5  transferBrief=nul at between: brief: false
+    5  transferBrief=zero at between: brief: false
+    5  transferBrief=text at between: brief: false
+    5  transferBrief=yes at between: brief: false
+    5  transferBrief=list at between: brief: false
+    5  transferBrief=empty at between: brief: false
+    5  transferBrief=v2 at between: brief: false
+    5  transferBrief=v1bare at between: brief: false
+    5  transferBrief=proto at between: brief: false
+    5  transferBrief=deep at between: brief: false
+    5  farewellSeason=nul at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=zero at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=text at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=yes at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=list at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=empty at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=v2 at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=v1bare at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=proto at between: This saved farewell plan cannot be verified.
+    5  farewellSeason=deep at between: This saved farewell plan cannot be verified.
+    5  agentReview=nul at between: The saved agent review could not be verified.
+    5  agentReview=zero at between: The saved agent review could not be verified.
+    5  agentReview=text at between: The saved agent review could not be verified.
+    5  agentReview=yes at between: The saved agent review could not be verified.
+    5  agentReview=list at between: The saved agent review could not be verified.
+    5  agentReview=empty at between: The saved agent review could not be verified.
+    5  agentReview=v2 at between: The saved agent review could not be verified.
+    5  agentReview=v1bare at between: The saved agent review could not be verified.
+    5  agentReview=proto at between: The saved agent review could not be verified.
+    5  agentReview=deep at between: The saved agent review could not be verified.
+    5  transferBrief=nul at play30: brief: false
+    5  transferBrief=zero at play30: brief: false
+    5  transferBrief=text at play30: brief: false
+    5  transferBrief=yes at play30: brief: false
+    5  transferBrief=list at play30: brief: false
+    5  transferBrief=empty at play30: brief: false
+    5  transferBrief=v2 at play30: brief: false
+    5  transferBrief=v1bare at play30: brief: false
+    5  transferBrief=proto at play30: brief: false
+    5  transferBrief=deep at play30: brief: false
+    5  farewellSeason=nul at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=zero at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=text at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=yes at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=list at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=empty at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=v2 at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=v1bare at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=proto at play30: This saved farewell plan cannot be verified.
+    5  farewellSeason=deep at play30: This saved farewell plan cannot be verified.
+    5  internationalReturn=nul at play30: The saved availability change could not be verified.
+    5  internationalReturn=zero at play30: The saved availability change could not be verified.
+    5  internationalReturn=text at play30: The saved availability change could not be verified.
+    5  internationalReturn=yes at play30: The saved availability change could not be verified.
+    5  internationalReturn=list at play30: The saved availability change could not be verified.
+    5  internationalReturn=empty at play30: The saved availability change could not be verified.
+    5  internationalReturn=v2 at play30: The saved availability change could not be verified.
+    5  internationalReturn=v1bare at play30: The saved availability change could not be verified.
+    5  internationalReturn=proto at play30: The saved availability change could not be verified.
+    5  internationalReturn=deep at play30: The saved availability change could not be verified.
+sc-engine probe damage: green

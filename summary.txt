@@ -1,0 +1,5 @@
+once exit=0 130s | sc-engine probe once: green
+fleet-a exit=0 233s | sc-engine probe fleet: green
+handoff exit=1 298s | sc-engine probe handoff: RED, 1 failed
+damage exit=0 103s | sc-engine probe damage: green
+fleet-b exit=0 223s | sc-engine probe fleet: green
