@@ -1,0 +1,7 @@
+simTrustCopy: node scripts/simTrustCopy.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simTicker: node scripts/simTicker.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
