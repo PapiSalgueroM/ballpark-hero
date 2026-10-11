@@ -24,9 +24,10 @@
      hofPlain  in the Hall with no push.
      nearPush  outside the Hall with a push paid.
      missed    outside the Hall with no push, at 60 percent of the line or more.
-     open      NOT retired: the same career cut after eleven seasons, unstamped,
-               for a career that ended with a push. It is judged when it
-               retires, on the calibration of that day.
+     open      NOT retired: the same career as it stood before its last
+               season, unstamped, for a career that ended with a push. It is
+               judged when it retires, on the calibration of that day; what
+               this tree would have told it then is recorded beside it.
    The first careers of each kind in play order, up to the quota (the NHL's
    are larger: its marks are the ones that moved). For each: the whole save
    (JSON), the sport's legacyOf whole and hallRecordFor whole, read off the
@@ -47,9 +48,9 @@ const ENGINES = {
   nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
 };
 const QUOTA = { nhl: { byPush: 8, hofPlain: 3, nearPush: 3, missed: 2, open: 4 }, '*': { byPush: 1, hofPlain: 1, nearPush: 0, missed: 1, open: 1 } };
-const CAREERS = 600, OPEN_AT = 11;
+const CAREERS = 600;
 const clone = x => JSON.parse(JSON.stringify(x));
-const out = { tag: TAG, commit: COMMIT, careersPlayed: CAREERS, openAt: OPEN_AT, sports: {}, counts: {} };
+const out = { tag: TAG, commit: COMMIT, careersPlayed: CAREERS, sports: {}, counts: {} };
 let n = 0;
 for (const [sport, E] of Object.entries(ENGINES)) {
   n += 1;
@@ -74,6 +75,7 @@ for (const [sport, E] of Object.entries(ENGINES)) {
     const c = eng.start(`Hall ${i}`, pos, archs[i % archs.length], Math.random, null);
     let tq = null, guard = 0, cut = null;
     while (!c.retired && guard++ < 30) {
+      if (c.seasons.length > 0) cut = clone(c);
       if ((c.suspendedSeasons ?? 0) > 0) {
         c.suspendedSeasons -= 1;
         c.seasons.push({ year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0, ...(E.banned ?? {}), awards: [], teamResult: 'SUSPENDED', salary: 0 });
@@ -82,7 +84,6 @@ for (const [sport, E] of Object.entries(ENGINES)) {
       const ev = eng.drawEvent(c, Math.random);
       if (ev) ev.options[Math.floor(Math.random() * ev.options.length)].apply(c, Math.random);
       if (eng.stop(c)) c.retired = true;
-      if (!c.retired && c.seasons.length === OPEN_AT) cut = clone(c);
     }
     c.retired = true;
     eng.stampHallCalibration(c);

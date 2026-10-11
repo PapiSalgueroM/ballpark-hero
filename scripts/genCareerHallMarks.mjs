@@ -8,16 +8,36 @@
    scripts/data/careerHallMarks.json, which section 17 of that harness holds
    the tables in the four *MyCareer.ts files to.
 
-   WHICH TABLE THE MARKS GO INTO. Before the release that first ships
-   calibration 2 they go into the version 2 tables (and the recording is
-   made again: SIM_RECORD_V2=1 node scripts/simCareerHall.mjs <sport>).
-   AFTER THAT RELEASE CALIBRATION 2 IS NEVER EDITED: every career retired on
-   it keeps the ballot it was told, and section 15 (d) of the harness holds
-   the four tables to scripts/data/careerHallV2.json. A later round that
-   moves an engine's stats turns section 17 red on purpose, and its way back
-   to green is a NEW calibration: a version 3 table beside version 2 in the
-   four *MyCareer.ts files, HALL_CALIBRATION 3 in careerHallOfFame.ts, the
-   marks below derived for it, and its own recording.
+   WHICH TABLE THE MARKS GO INTO, the rule as it ships since Round 1301.
+   A CALIBRATION THAT HAS SHIPPED IS NEVER EDITED: every career retired on it
+   keeps the ballot it was told, and section 15 of the harness holds each
+   one's tables to its recording (scripts/data/careerHallV2.json, V3.json).
+   Calibration 2 is live, so this script no longer writes its block: run
+   with no MARKS_CALIBRATION it only derives beside the ledger
+   (MARKS_OUT=<file>, a check).
+
+   A round that moves an engine's career totals turns section 17 (a) of the
+   harness red on purpose (the fleet's pooled share at or over a mark leaves
+   the band of the recorded reference). Its way back to green is a NEW
+   calibration for the sport it moved, and Round 1301 is the worked example
+   (the NHL, calibration 3, after the 84 game season):
+     a. type the calibration in CALIBRATIONS below, with its sports and why;
+     b. a new table beside the last in that sport's *MyCareer.ts file, the
+        next number in HALL_CALIBRATION (careerHallOfFame.ts), and the other
+        sports' maps pointing the new number at the table they already read;
+     c. six measuring runs of that sport (HOW TO DERIVE, step 1) and
+          MARKS_CALIBRATION=<n> node scripts/genCareerHallMarks.mjs <dir>
+        which writes only the block calibrations.<n> (every other byte of
+        the ledger is checked to be what it was) and prints the marks to
+        paste; paste, and do both once more for the outcome;
+     d. the recording of the new calibration (SIM_RECORD_V<n>=1, section 15);
+     e. the fleet's reference recorded again for that sport against the new
+        marks (MARKS_FLEET below), and the confirmation fleet green.
+   The ONE other way back, with the marks kept: record the fleet's reference
+   again (MARKS_FLEET). That is allowed only to a round that names the stat
+   move it made, shows the new reference still reads 8 to 12 percent at or
+   over from (about one in ten, the design), and carries the lead's ruling
+   in its brief. Never to turn a red check green.
 
    HOW TO DERIVE:
      1. Six measuring runs a sport, the board skipped, one row file each:
@@ -95,9 +115,68 @@ const OUT = process.env.MARKS_OUT || LEDGER;
 const CALIBRATIONS = {
   3: { round: 1301, sports: ['nhl'], why: 'Round 1226 made the NHL play the season the league really plays (84 games from 2026-27), so a skater\'s career totals run about 84 over 82 of what the calibration 2 marks were cut on, and about one career in eight cleared a from mark where the design says one in ten.' },
 };
+/* Round 1301: the fleet band of [marks] (section 17 (a) of the harness has the
+   rule in full). MARKS_FLEET=all (or a list: nhl,nfl) reads the REFERENCE
+   seeds' row files of each sport named, counts the pooled share at or over
+   the from marks and the to marks of the sport's latest block, seed by seed,
+   and writes ONLY the sport's entry under `fleet` in the ledger: the mean,
+   the deviation from seed to seed, and (for the reader) the band they give a
+   check fleet of the ledger's own size. The check seeds, the reference seeds,
+   the careers a seed and z are fixed here and written with it.
+   The rows come from measuring runs on the tree being recorded:
+     SIM_SKIP_BOARD=1 SIM_SEED=<30 to 77> SIM_DUMP_ROWS=<dir>/rows-<sport>-<seed>.json node scripts/simCareerHall.mjs <sport> 2000
+   WHO MAY RUN IT: the round that adds a calibration, for the sports of that
+   calibration; or, with the marks kept, a round that names the stat move it
+   made, shows the new reference still reads 8 to 12 percent at or over from,
+   and carries the lead's ruling. Never to turn a red check green. */
+const FLEET_RULE = { careers: 2000, checkSeeds: Array.from({ length: 24 }, (_, i) => 6 + i), refSeeds: Array.from({ length: 48 }, (_, i) => 30 + i), z: 4 };
+const FLEET_SPORTS = !process.env.MARKS_FLEET ? null : process.env.MARKS_FLEET === 'all' ? ['nfl', 'nba', 'mlb', 'nhl'] : process.env.MARKS_FLEET.split(',');
+function writeFleet() {
+  const text = readFileSync(LEDGER, 'utf8').split('\r\n').join('\n');
+  const file = JSON.parse(text);
+  if (`${JSON.stringify(file, null, 1)}\n` !== text) { console.error('the committed ledger is not this generator\'s own output: refusing to write the fleet into it'); process.exit(2); }
+  const mean = xs => xs.reduce((s, x) => s + x, 0) / xs.length;
+  const dev = xs => { const m = mean(xs); return Math.sqrt(xs.reduce((s, x) => s + (x - m) ** 2, 0) / (xs.length - 1)); };
+  const r5 = x => Math.round(x * 1e5) / 1e5;
+  const { careers, checkSeeds, refSeeds, z } = FLEET_RULE;
+  const half = sd => z * sd * Math.sqrt(1 / checkSeeds.length + 1 / refSeeds.length);
+  const stat = xs => { const m = mean(xs), sd = dev(xs); return { mean: r5(m), sd: r5(sd), lo: r5(Math.max(0, m - half(sd))), hi: r5(m + half(sd)), min: r5(Math.min(...xs)), max: r5(Math.max(...xs)) }; };
+  file.fleet ??= { note: '', round: 0, careers, checkSeeds, refSeeds, z, sports: {} };
+  Object.assign(file.fleet, {
+    note: 'Round 1301: the fleet band of the [marks] check (scripts/simCareerHall.mjs, section 17 (a), which has the rule: what turns it red, the way back, who may record this again). Written by MARKS_FLEET=<sports> node scripts/genCareerHallMarks.mjs <dir> from measuring runs of the reference seeds; never edited by hand. Per sport: the calibration whose marks were read, and the mean and the deviation from seed to seed of the pooled share at or over from, at or over to, and of each cell. lo and hi are the band for a check fleet of checkSeeds: the mean plus and minus z deviations times the root of (1 / check seeds + 1 / reference seeds). Shares are fractions.',
+    round: 1301, careers, checkSeeds, refSeeds, z,
+  });
+  for (const sport of FLEET_SPORTS) {
+    if (!POSITIONS[sport]) { console.error(`MARKS_FLEET: ${sport} is not a sport`); process.exit(2); }
+    let cal = 2, block = file.sports[sport];
+    for (const [n, c] of Object.entries(file.calibrations ?? {})) if (c.sports?.[sport] && Number(n) > cal) { cal = Number(n); block = c.sports[sport]; }
+    const cells = POSITIONS[sport].flatMap(pos => (block.standouts[pos] ?? []).filter(f => !decided(sport, pos, 'standout', f, 'dropped')).map(f => ({ pos, stat: f, from: block.positions[pos].families[f].from, to: block.positions[pos].families[f].to })));
+    const from = [], to = [], perCell = cells.map(() => []);
+    for (const seed of refSeeds) {
+      const f = path.join(DIR, `rows-${sport}-${seed}.json`);
+      if (!existsSync(f)) { console.error(`missing ${f}`); process.exit(2); }
+      const rows = JSON.parse(readFileSync(f, 'utf8'));
+      if (rows.length !== careers) { console.error(`${f}: ${rows.length} careers, the fleet is ${careers} a seed`); process.exit(2); }
+      let a = 0, b = 0, n = 0;
+      cells.forEach((c, i) => {
+        const mine = rows.filter(r => r.pos === c.pos);
+        const over = mine.filter(r => (r.t[c.stat] ?? 0) >= c.from).length;
+        perCell[i].push(over / mine.length);
+        a += over; b += mine.filter(r => (r.t[c.stat] ?? 0) >= c.to).length; n += mine.length;
+      });
+      from.push(a / n); to.push(b / n);
+    }
+    file.fleet.sports[sport] = { calibration: cal, fromPooled: stat(from), toPooled: stat(to), cells: cells.map((c, i) => ({ pos: c.pos, stat: c.stat, mean: r5(mean(perCell[i])), sd: r5(dev(perCell[i])) })) };
+    const s = file.fleet.sports[sport];
+    console.log(`fleet ${sport} (the marks of calibration ${cal}, ${refSeeds.length} reference seeds ${refSeeds[0]} to ${refSeeds.at(-1)}, ${careers} careers a seed, ${cells.length} cells): at or over from ${(100 * s.fromPooled.mean).toFixed(2)} percent, ${(100 * s.fromPooled.sd).toFixed(2)} from seed to seed, band ${(100 * s.fromPooled.lo).toFixed(2)} to ${(100 * s.fromPooled.hi).toFixed(2)} (seeds ran ${(100 * s.fromPooled.min).toFixed(2)} to ${(100 * s.fromPooled.max).toFixed(2)}); at or over to ${(100 * s.toPooled.mean).toFixed(2)} percent, ${(100 * s.toPooled.sd).toFixed(2)} from seed to seed, band ${(100 * s.toPooled.lo).toFixed(2)} to ${(100 * s.toPooled.hi).toFixed(2)}`);
+  }
+  writeFileSync(OUT, `${JSON.stringify(file, null, 1)}\n`);
+  console.log(`genCareerHallMarks: wrote ${path.relative(ROOT, OUT)} (the fleet of ${FLEET_SPORTS.join(', ')})`);
+  process.exit(0);
+}
 const CAL = Number(process.env.MARKS_CALIBRATION || 2);
 if (CAL !== 2 && !CALIBRATIONS[CAL]) { console.error(`MARKS_CALIBRATION=${process.env.MARKS_CALIBRATION}: not a calibration of CALIBRATIONS (type it there with its sports and its reason first)`); process.exit(2); }
-if (CAL === 2 && OUT === LEDGER) { console.error('calibration 2 has shipped and its block of the ledger is never written again. MARKS_OUT=<file> derives it beside the ledger (a check); MARKS_CALIBRATION=<n> measures a later calibration.'); process.exit(2); }
+if (CAL === 2 && OUT === LEDGER && !FLEET_SPORTS) { console.error('calibration 2 has shipped and its block of the ledger is never written again. MARKS_OUT=<file> derives it beside the ledger (a check); MARKS_CALIBRATION=<n> measures a later calibration.'); process.exit(2); }
 const SEEDS = ['base', '1', '2', '3', '4', '5'];
 const RAMP_FLOOR = 1.10, HALF = 0.5, BASE_TARGET = 110, MIN_POOL = 1500, DEFAULT_N = 2000, TOP_SHARE = 0.05, COVERED = 0.9;
 /* Rule B bases that are fixed, not measured. */
@@ -151,6 +230,8 @@ const POSITIONS = {
   nfl: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], nba: ['PG', 'SG', 'SF', 'PF', 'C'],
   mlb: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], nhl: ['C', 'LW', 'RW', 'D', 'G'],
 };
+
+if (FLEET_SPORTS) writeFleet();
 
 const sig = (x, d) => (x === 0 ? 0 : Number(x.toPrecision(d)));
 const sigUp = (x, d) => { if (x === 0) return 0; const unit = 10 ** (Math.floor(Math.log10(Math.abs(x))) - d + 1); return Number((Math.ceil(x / unit - 1e-9) * unit).toPrecision(d)); };
