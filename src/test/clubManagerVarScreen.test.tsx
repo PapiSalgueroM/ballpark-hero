@@ -34,8 +34,10 @@
  * clock stopped, right before its card. So every ruled out goal is drawn, and `nothingUnder` now asks for exactly
  * that under its card: the ball in the net THAT goal went into. Five shapes of a half whose end real chances fill
  * are played on the halves the review found them on (league match 2, seeds 42322, 6203, 4670, 2219 and 1987).
- * Not here because the engine does not hold them: two reviews in one minute or in back to back minutes (none in
- * 7,500 first and 7,500 second halves).
+ * The engine does not hold two reviews in one minute or in back to back minutes (none in 7,500 first and 7,500
+ * second halves). Two in one minute is on the lead's list all the same, so ONE case is staged by hand and says so:
+ * a real ruled out goal's review copied onto the other side in the same minute. Every other case is a half the
+ * engine drew, untouched.
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -337,6 +339,38 @@ describe('Club Manager: the review screen', () => {
     expect(order(frames)).toEqual([a.review!.id, b.review!.id]);
     nothingUnder(frames, ruledOutIds(h.feed));
   }, 240000);
+
+  /* Round 1302 fix. THE ONE CASE STAGED BY HAND. The engine holds no two reviews in one minute (none in 15,000
+     halves searched), and the lead's list asks for it, so this takes a real half with one goal of mine ruled out
+     and copies that review onto the other side in the same minute, by one of their men on the pitch. Nothing else
+     is typed. The plan has room for one action at that place, so one of the two goals is played on the clock and
+     the other with the clock stopped: each is drawn before its own card, the cards come one after the other,
+     each on its own goal in its own net, and the score never moves. */
+  it('two goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time', async () => {
+    const h = half(0, 2460, ruledOutAlone);
+    const v = h.review, id = v.review!.id, second = `${id}:staged`;
+    const career = structuredClone(h.career), play = career.live!.h1Play!;
+    const at = play.findIndex(p => p.review?.id === id);
+    const theirs = (career.live!.oppXi ?? []).find(p => p.p !== 'GK');
+    expect(at, 'the ruled out goal has no line in the committed play').toBeGreaterThanOrEqual(0);
+    expect(theirs, 'the opposition has nobody on the pitch to give the staged goal to').toBeTruthy();
+    play.splice(at + 1, 0, { ...play[at], side: 'opp', who: theirs!.n, review: { ...play[at].review!, id: second } });
+    const feed = liveFeed(career.live!), before = scoreBy(feed, place(v));
+    expect(reviewsOf(feed).filter(r => place(r) === place(v)).map(r => r.review!.id)).toEqual([id, second]);
+    const mounted = openAt({ ...h, career }, v.minute - 1);
+    const frames = await run(mounted, 20000, closedFor(second, 700));
+    expect(order(frames), 'the two reviews did not each get their card, one after the other').toEqual([id, second]);
+    nothingUnder(frames, ruledOutIds(feed));
+    /* Each goal is drawn before its own card: a flight before the first, and another between the two cards. */
+    const firstUp = frames.findIndex(f => f.cardId === id), firstDown = frames.map(f => f.cardId).lastIndexOf(id), secondUp = frames.findIndex(f => f.cardId === second);
+    expect(frames.slice(0, firstUp).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the first ruled out goal was not drawn before its review').toBe(true);
+    expect(frames.slice(firstDown + 1, secondUp).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the second ruled out goal was not drawn before its review').toBe(true);
+    expect(new Set(frames.map(f => f.score)), 'the score moved with a ruled out goal').toEqual(new Set([before]));
+    expect(frames.some(f => f.goalCard !== null)).toBe(false);
+    const end = frames[frames.length - 1].text;
+    expect(end).toContain(`VAR: goal ruled out: ${v.text} (${h.career.clubName})`);
+    expect(end).toContain(`VAR: goal ruled out: ${theirs!.n}`);
+  }, 180000);
 
   it('Skip to the whistle during a review takes the card away and leaves the half as the engine has it', async () => {
     const h = half(0, 2460, ruledOutAlone);
