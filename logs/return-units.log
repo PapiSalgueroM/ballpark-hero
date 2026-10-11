@@ -1,0 +1,81 @@
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 5588[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 1720[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 1502[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 1457[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 355[2mms[22m[39m
+ [31m❯[39m src/test/soccerInternationalReturnUi.test.tsx [2m([22m[2m21 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 534[2mms[22m[39m
+[31m   [31m×[31m Soccer international return controls[2m > [22mshows rules and a worked example before review without reading draws or changing the career[39m[32m 113[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  National-team selection for Netherlands[31m
+Received:
+[31m  Make yourself available againNational-team selection for 🇳🇱Netherlands.Returning opens national-team selection again. It does not give you a call-up or play a match.Your existing caps, goals, trophies and tournament history stay on the books. The actual squad selector decides your next appearances.Form, rating and age still matter. Injury, bans and failed qualification can still keep you out.You can return once per recorded season. Retiring again, moving clubs or reloading cannot unlock another return that season.Example: return with 40 caps. You still have 40 until you actually play for your country again.Back?Review comebackClose[31m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mconfirms once for two captured rapid confirmation clicks through the real component guard[32m 44[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mreopens Help from review without confirming and retains the review choice[32m 47[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mreturns Back to the actual opener and restores the complete previous body style[32m 89[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mcloses Escape to the real opener and shows rules again when reopened[32m 108[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mkeeps this-season saved availability read-only after another retirement=false[32m 27[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mkeeps this-season saved availability read-only after another retirement=true[32m 28[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22moffers a later return for a later saved senior row in the explicit fixture[32m 28[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mshows the existing capped senior comeback at age 18[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mshows the existing capped senior comeback at age 44[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for uncapped and leaves the complete input unchanged[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for still available and leaves the complete input unchanged[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for too young and leaves the complete input unchanged[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for past the age boundary and leaves the complete input unchanged[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for retired career and leaves the complete input unchanged[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for queued season summary and leaves the complete input unchanged[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for ceremony phase and leaves the complete input unchanged[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for no saved rows and leaves the complete input unchanged[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for no senior source row and leaves the complete input unchanged[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for source age mismatch and leaves the complete input unchanged[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer international return controls[2m > [22mrenders no comeback for malformed optional receipt and leaves the complete input unchanged[32m 3[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerInternationalReturnUi.test.tsx[2m > [22mSoccer international return controls[2m > [22mshows rules and a worked example before review without reading draws or changing the career
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  National-team selection for Netherlands[31m
+Received:
+[31m  Make yourself available againNational-team selection for 🇳🇱Netherlands.Returning opens national-team selection again. It does not give you a call-up or play a match.Your existing caps, goals, trophies and tournament history stay on the books. The actual squad selector decides your next appearances.Form, rating and age still matter. Injury, bans and failed qualification can still keep you out.You can return once per recorded season. Retiring again, moving clubs or reloading cannot unlock another return that season.Example: return with 40 caps. You still have 40 until you actually play for your country again.Back?Review comebackClose[31m[39m
+[36m [2m❯[22m src/test/soccerInternationalReturnUi.test.tsx:[2m49:20[22m[39m
+    [90m 47| [39m    render(<InternationalReturnCard career={career} onReturn={onReturn…
+    [90m 48| [39m    [35mconst[39m { dialog } [33m=[39m [34mopen[39m()[33m;[39m
+    [90m 49| [39m    expect(dialog).toHaveTextContent('National-team selection for Neth…
+    [90m   | [39m                   [31m^[39m
+    [90m 50| [39m    expect(dialog.querySelector('[data-international-return-help]')).t…
+    [90m 51| [39m    expect(dialog).toHaveTextContent('It does not give you a call-up o…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m121 passed[39m[22m[90m (122)[39m
+[2m   Start at [22m 10:19:47
+[2m   Duration [22m 15.03s[2m (transform 1.97s, setup 174ms, collect 3.62s, tests 8.09s, environment 1.16s, prepare 225ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/soccer-international-return-artifacts/units.json
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+false !== true
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerInternationalReturn.mjs:10:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
