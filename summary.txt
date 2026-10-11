@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-outcomes exit=0 7s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+probe-esc exit=0 189s | probeEsc: 280 trials, 38 Escapes ignored, plan after announce announced
+farewell-native exit=0 238s | walk=0 check=0

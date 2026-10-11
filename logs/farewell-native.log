@@ -1,0 +1,20 @@
+PASS 320-normal 82 checks
+PASS 320-suggestion 70 checks
+PASS 320-ban 67 checks
+PASS 320-prison 67 checks
+PASS 320-rehab 72 checks
+PASS 320-ceremonies 82 checks
+PASS 390-normal 77 checks
+PASS 390-suggestion 70 checks
+PASS 390-ban 67 checks
+PASS 390-prison 67 checks
+PASS 390-rehab 72 checks
+PASS 390-ceremonies 82 checks
+PASS 1280-normal 77 checks
+PASS 1280-suggestion 70 checks
+PASS 1280-ban 67 checks
+PASS 1280-prison 67 checks
+PASS 1280-rehab 72 checks
+PASS 1280-ceremonies 82 checks
+Soccer farewell native 1310 checks,18 journeys,3 copied observation controls,0 failures.
+walk=0 check=0
