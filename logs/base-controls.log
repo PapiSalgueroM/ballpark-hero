@@ -1,0 +1,8 @@
+f78037dcd
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+MAIN control lock exit=1 | Error: control refused: ".style.overflow=\"hidden\"" is not in the served site exactly once (0 files hold it)
+MAIN control held exit=1 | Error: control refused: "/=>\\(([\\w$]+)\\|\\|[\\w$]+\\)&&([\\w$]+)\\?/g" is not in the served site exactly once (0 files hold it)
+MAIN control otherplace exit=1 | Error: control refused: "/(\\.key\\))===([\\w$]+)(&&[\\w$]+\\([\\w$]+\\)\\)\\})/g" is not in the served site exactly once (0 files hold it)
+MAIN control chipword exit=1 | Error: control refused: "/,round:[\\w$]+\\.round\\}/g" is not in the served site exactly once (0 files hold it)
+MAIN control pitchgone exit=1 | Error: control refused: "return{gone:!0}" is not in the served site exactly once (0 files hold it)
+MAIN control floor exit=1 | playSeasonCentreMotion: 61 checks, 1 failed (control floor) (only C)

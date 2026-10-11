@@ -1,0 +1,1 @@
+base-controls exit=0 152s | MAIN control floor exit=1 | playSeasonCentreMotion: 61 checks, 1 failed (control floor) (only C)
