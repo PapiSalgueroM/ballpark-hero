@@ -9,6 +9,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerChanceWheel } from './lib/chanceWheelWalk.mjs';
 assert(process.env.CI, 'Run the actual development browser journeys only in remote CI');
 process.env.CAREER_DEVELOPMENT_IMPORT_ONLY = '1';
 const { developmentBundle, developmentFixture, seeded, NOW } = await import('./simSoccerCareerDevelopment.mjs');
@@ -142,7 +143,18 @@ try {
         }
         const actual = await saved(); compare(want, actual, name); write(`${id}-${name}-rng`, { expected: expected.draws, actual: draws, seed });
         check(JSON.stringify(draws) === JSON.stringify(expected.draws), `${name}: the actual click consumes exactly the unchanged engine random draws`);
-        row.actions.push({ method, seed, phase: actual.phase, draws: draws.length }); return actual;
+        row.actions.push({ method, seed, phase: actual.phase, draws: draws.length });
+        /* Release AU (Rounds 1197 to 1208): an event choice with odds leaves a chance wheel receipt on the save and
+           the wheel opens over the page. A player answers it next (Show result, then Continue), and so does the
+           walk. The save after it must be the save before it with the receipt marked seen, and nothing else. */
+        if (actual.chanceWheel && actual.chanceWheel.seen === false) {
+          const answered = await answerChanceWheel(page, 'skip');
+          check(!!answered, `${name}: the chance wheel this choice left was open and could be answered`);
+          await page.waitForFunction(key => JSON.parse(localStorage.getItem(key) || 'null')?.chanceWheel?.seen === true, KEY, { timeout: 15000 }).catch(() => {});
+          const after = await saved(); compare({ ...actual, chanceWheel: { ...actual.chanceWheel, seen: true } }, after, `${name}-wheel`);
+          return after;
+        }
+        return actual;
       };
       const reload = async name => {
         const before = await bytes(); await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); const after = await bytes();

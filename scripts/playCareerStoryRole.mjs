@@ -35,6 +35,11 @@ const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json
 assert(/^\s+setClubs\(FALLBACK_CLUBS\);$/m.test(fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').replaceAll('\r\n', '\n')), 'Route and oracle use the same actual club pool');
 const B = await bundleCareerStoryRole();
 const captured = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves.find(save => save.id === 'ere').state;
+/* Release AU (Rounds 1197 to 1208): an event choice with odds leaves a chance wheel receipt on the save, and a player
+   answers the wheel where the choice is made. The fixture career answers it there too: the receipt marked seen, the
+   way the wheel's own Continue writes it (acknowledgeChanceWheel in src/lib/careerChanceWheel.ts), and nothing else.
+   It draws nothing, so the recorded draws of the preparation are what they were. */
+const seenWheel = s => (s.chanceWheel && s.chanceWheel.seen === false ? { ...s, chanceWheel: { ...s.chanceWheel, seen: true } } : s);
 function step(E, s) {
   const clubs = E.FALLBACK_CLUBS;
   switch (s.phase) {
@@ -44,7 +49,7 @@ function step(E, s) {
     case 'rehab_choice': return E.applyRehabChoice(s, 1);
     case 'newspaper': return E.dismissNewspaper(s);
     case 'season_summary': return E.dismissSummary(s, clubs);
-    case 'random_events': assert(s.pendingEvents?.length, 'Actual event screen has a choice'); return E.applyEventChoice(s, s.pendingEvents[0].choices.length - 1, clubs);
+    case 'random_events': assert(s.pendingEvents?.length, 'Actual event screen has a choice'); return seenWheel(E.applyEventChoice(s, s.pendingEvents[0].choices.length - 1, clubs));
     case 'moral_dilemma': return s.pendingMoralDilemma ? E.applyMoralDilemmaChoice(s, s.pendingMoralDilemma.choices.length - 1) : E.dismissMoralDilemma(s, clubs);
     case 'social_media_action': return E.dismissSocialMediaPhase(s, clubs);
     case 'red_card_appeal_result': return E.dismissAppealResult(s, clubs);
