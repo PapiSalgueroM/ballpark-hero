@@ -1,0 +1,2 @@
+tsc exit=0 114s | 
+vitest-all exit=1 646s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerInternationalReturnUi.test.tsx,title=src/test/soccerInternationalReturnUi.test.tsx > Soccer inte
