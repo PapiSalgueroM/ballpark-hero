@@ -1,0 +1,18 @@
+# Round 1212 on e8b676d7 (the tile text and the write control's keys): the Season Center walk on a served build, its controls, the weights
+#!serve
+#!playwright
+#!serial
+weigh: node .rc/x/weigh.mjs
+playUsSeasonCentre: SHOTS=$RC_OUT ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-write-mlb: US_SEASON_PLAY_CONTROL=write SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-write-nba: US_SEASON_PLAY_CONTROL=write SPORTS=nba ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-static-mlb: US_SEASON_PLAY_CONTROL=static SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-count-mlb: US_SEASON_PLAY_CONTROL=count SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-cover-mlb: US_SEASON_PLAY_CONTROL=cover SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-playfirst-mlb: US_SEASON_PLAY_CONTROL=playfirst SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+ctl-walk-nohandover-mlb: US_SEASON_PLAY_CONTROL=nohandover SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playGames-mlb: ONLY=/mlb-my-career ENGINES=chromium node scripts/playGames.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
