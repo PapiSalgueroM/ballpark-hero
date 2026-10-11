@@ -1,0 +1,64 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+livemotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx src/test/liveSimCelebration.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmhook1: node_modules/.bin/vitest run src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerSlots.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmhook2: node_modules/.bin/vitest run src/test/clubManagerSaveSize.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/managerMatchPlans.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmrest: node_modules/.bin/vitest run src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/clubManagerRowButtons.test.tsx src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerStartWait.test.tsx --testTimeout=300000 --hookTimeout=120000
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-stage: CM_VAR_LEDGER_CONTROL=stage node scripts/simCmVarLedger.mjs
+l-unread: CM_VAR_LEDGER_CONTROL=unread node scripts/simCmVarLedger.mjs
+simCmVar: node scripts/simCmVar.mjs
+lm-plain: node scripts/simLiveSimMotion.mjs
+lm-pause: LIVE_MOTION_CONTROL=pause node scripts/simLiveSimMotion.mjs
+lm-redraw: LIVE_MOTION_CONTROL=redraw node scripts/simLiveSimMotion.mjs
+lm-trigger: LIVE_MOTION_CONTROL=trigger node scripts/simLiveSimMotion.mjs
+lm-speed: LIVE_MOTION_CONTROL=speed node scripts/simLiveSimMotion.mjs
+lm-terminal: LIVE_MOTION_CONTROL=terminal node scripts/simLiveSimMotion.mjs
+lm-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs
+lm-etclear: LIVE_MOTION_CONTROL=etclear node scripts/simLiveSimMotion.mjs
+lm-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
+lm-lastkick: LIVE_MOTION_CONTROL=lastkick node scripts/simLiveSimMotion.mjs
+lm-skipmoment: LIVE_MOTION_CONTROL=skipmoment node scripts/simLiveSimMotion.mjs
+lm-lag: LIVE_MOTION_CONTROL=lag node scripts/simLiveSimMotion.mjs
+lm-hold: LIVE_MOTION_CONTROL=hold node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+deals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+deals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+varlive-switch: CM_VAR_LIVE_CONTROL=switch node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+l-disagree: CM_VAR_LEDGER_CONTROL=disagree node scripts/simCmVarLedger.mjs
+l-receiptsilent: CM_VAR_LEDGER_CONTROL=receiptsilent node scripts/simCmVarLedger.mjs
+l-kindon: CM_VAR_LEDGER_CONTROL=kindon node scripts/simCmVarLedger.mjs
+l-kindline: CM_VAR_LEDGER_CONTROL=kindline node scripts/simCmVarLedger.mjs
+l-gametrue: CM_VAR_LEDGER_CONTROL=gametrue node scripts/simCmVarLedger.mjs
+litstatus: node scripts/qa/cmVarLit.mjs status
