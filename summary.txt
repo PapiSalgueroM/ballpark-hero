@@ -1,0 +1,6 @@
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+seam-compare exit=0 18s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+vitest-mlb exit=0 32s |    Duration  31.44s (transform 2.58s, setup 206ms, collect 5.10s, tests 34.39s, environment 1.09s, prepare 357ms)
+tsc exit=0 46s | 
+simUsBoardParity exit=0 28s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
