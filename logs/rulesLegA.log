@@ -1,0 +1,4 @@
+AT 269ef5ea = 269ef5ead 2026-10-11 Round 1304: simEra2020 section 9, red first: a past season's news and bidding wars must name clubs of that season, and on this en
+== simCmLeagueRules at 269ef5eadd exit=0
+closing line: simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+DONE at 269ef5eadd worst=0

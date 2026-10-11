@@ -1,0 +1,1 @@
+rulesLegA: bash .rc/x/at.sh 269ef5ea simCmLeagueRules
