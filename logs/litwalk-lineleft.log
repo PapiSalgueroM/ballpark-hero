@@ -1,0 +1,31 @@
+fx2Mut lineleft: applied to src/components/club-manager/LiveSimScreen.tsx
+cmVarLit: CM_VAR_LIVE turned on in this checkout. Never commit it on from here.
+BUILD exit=0
+cases that failed on the line under the pitch: 48
+FAIL 390-motion-ruledOut-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Hayden Hackney"
+FAIL 390-motion-goalBefore-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Everton"
+FAIL 1280-motion-ruledOut-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Hayden Hackney"
+FAIL 1280-motion-goalBefore-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Everton"
+FAIL 390-reduced-ruledOut-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Hayden Hackney"
+FAIL 1280-reduced-ruledOut-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Hayden Hackney"
+FAIL 390-motion-two-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Everton"
+FAIL 390-motion-lateWhistle-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Michael Keane"
+FAIL 390-motion-lateBefore-plain: the line under the pitch says something under the card of a ruled out goal: "Corner, left, Johan Manzambi"
+FAIL 390-motion-ownGoal-plain: the line under the pitch says something under the card of a ruled out goal: "Shot: James Garner"
+FAIL 390-motion-injury-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Liverpool"
+FAIL 1280-motion-lateWhistle-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Michael Keane"
+FAIL 1280-motion-lateBefore-plain: the line under the pitch says something under the card of a ruled out goal: "Corner, left, Johan Manzambi"
+FAIL 1280-motion-ownGoal-plain: the line under the pitch says something under the card of a ruled out goal: "Shot: James Garner"
+FAIL 1280-motion-injury-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Liverpool"
+FAIL 390-motion-crowdedGoal-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Aston Villa"
+FAIL 390-motion-crowdedShot-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Aston Villa"
+FAIL 1280-motion-crowdedGoal-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Aston Villa"
+FAIL 1280-motion-crowdedShot-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Aston Villa"
+FAIL 390-reduced-lateWhistle-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Michael Keane"
+FAIL 390-reduced-lateBefore-plain: the line under the pitch says something under the card of a ruled out goal: "Corner, left, Johan Manzambi"
+FAIL 1280-reduced-lateWhistle-plain: the line under the pitch says something under the card of a ruled out goal: "Foul by Michael Keane"
+FAIL 1280-reduced-lateBefore-plain: the line under the pitch says something under the card of a ruled out goal: "Corner, left, Johan Manzambi"
+FAIL 390-reduced-crowdedGoal-plain: the line under the pitch says something under the card of a ruled out goal: "Throw in, Aston Villa"
+playCmVar: 40 cases and 2 help views at 390 and 1280, 12 of 12 fixtures found, 24 failed assertion(s).
+playCmVar: FAILED.
+RESULT walk=1 (a control: anything but 0 with the line failures above is the check biting)
