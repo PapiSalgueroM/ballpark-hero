@@ -188,7 +188,7 @@ for (const spec of profiles) for (const seed of [1, 3, 15, 23]) for (const choic
   routeInputs.push({ id, spec, seed, choice, mode, queue, input, originalRow, originalPlain, currentPlain, expected });
 }
 assert.equal(routeInputs.length, 720);
-const healthyRows = new Map(), healthyActionRows = new Map(), fixtureCandidates = [];
+const healthyRows = new Map(), healthyActionRows = new Map();
 for (const arm of ['healthy', ...faultDefinitions.map(f => f.id), 'undo']) {
   const B = scopes.get(arm), counts = Object.fromEntries(groupNames.map(group => [group, 0])), whole = [];
   for (const spec of profiles) {
@@ -210,7 +210,7 @@ for (const arm of ['healthy', ...faultDefinitions.map(f => f.id), 'undo']) {
     whole.push({ id: 'action/' + r.id, group, refs: row.refs });
     check(arm, group, r.id, () => { noError(row, r.id); const expected = group === 'policy' ? r.expected : r.originalRow; for (const key of ['value', 'inputAfter', 'argsAfter']) equal(row[key], expected[key], r.id + ' complete ' + key); if (r.queue === 'following') { assert.equal(row.value.pendingEvents[0].id, 2); assert.equal(row.value.phase, 'random_events'); } });
     check(arm, 'draws', r.id, () => { noError(row, r.id); equal(row.draws, r.originalRow.draws, 'entire original/current action vector'); sameRows(r.originalRow, r.originalPlain, 'original transparent observation'); if (arm === 'healthy' || arm === 'undo') sameRows(row, r.currentPlain, 'current transparent observation'); });
-    if (arm === 'healthy') { healthyActionRows.set('action/' + r.id, row); if (r.choice === 1 && r.mode === 'reload' && r.queue === 'following' && r.seed === 1 && ['young29', 'elite30', 'elite34', 'holding38'].includes(r.spec.id)) fixtureCandidates.push(r); }
+    if (arm === 'healthy') healthyActionRows.set('action/' + r.id, row);
   }
   for (const result of [true, false]) {
     const s = subject(profiles[4]); s.chanceWheel = { title: 'Contract negotiation', chance: .5, roll: result ? .1 : .8, hit: '20% wage raise', miss: 'Relationship damaged', result, seen: false };
@@ -225,11 +225,14 @@ for (const arm of ['healthy', ...faultDefinitions.map(f => f.id), 'undo']) {
   write('arms-' + arm + '.json', arms.at(-1));
 }
 const browserFixtures = [];
-for (const r of fixtureCandidates) for (const currency of r.spec.id === 'elite34' ? ['EUR', 'USD'] : ['EUR']) {
-  const B = scopes.get('healthy'), result = healthyActionRows.get('action/' + r.id), ack = B.run('browser-ack/' + r.spec.id, 0, (e, state) => e.wheel.acknowledgeChanceWheel(state), result.value);
+const browserMapping = [['young29', 'EUR', 15], ['elite30', 'EUR', 15], ['elite34', 'EUR', 15], ['elite34', 'USD', 1], ['holding38', 'EUR', 15]];
+for (const [profile, currency, seed] of browserMapping) {
+  const candidates = routeInputs.filter(r => r.spec.id === profile && r.seed === seed && r.choice === 1 && r.mode === 'reload' && r.queue === 'following');
+  assert.equal(candidates.length, 1, 'one exact retained browser case'); const r = candidates[0];
+  const B = scopes.get('healthy'), result = healthyActionRows.get('action/' + r.id), ack = B.run('browser-ack/' + r.spec.id + '/' + currency, 0, (e, state) => e.wheel.acknowledgeChanceWheel(state), result.value);
   const display = B.run('browser-display/' + r.spec.id + '/' + currency, 0, (e, state, code, bridge) => { bridge.setCurrency(code); const expected = expectedDemand(state); return { consequence: e.currency.localizeMoney(expected.consequence), hit: e.currency.localizeMoney(expected.hit) }; }, r.input, [currency]);
-  const loaded = B.run('browser-load/' + r.spec.id, 0, (e, state) => e.engine.repairCareer(state), r.input); equal(loaded.value, r.input, 'browser fixture load already repaired'); equal(loaded.draws, [], 'fixture repair has no extra draws');
-  const following = B.run('browser-following/' + r.spec.id, 37, (e, state, pool) => e.engine.applyEventChoice(state, 0, pool), ack.value, [clubs]);
+  const loaded = B.run('browser-load/' + r.spec.id + '/' + currency, 0, (e, state) => e.engine.repairCareer(state), r.input); equal(loaded.value, r.input, 'browser fixture load already repaired'); equal(loaded.draws, [], 'fixture repair has no extra draws');
+  const following = B.run('browser-following/' + r.spec.id + '/' + currency, 37, (e, state, pool) => e.engine.applyEventChoice(state, 0, pool), ack.value, [clubs]);
   browserFixtures.push({ id: r.spec.id + '-' + currency, currency, key: 'soccerCareerSave', value: r.input, expected: result.value, expectedAcknowledged: ack.value, expectedFollowing: following.value, followingDraws: following.draws, followingSeed: 37, draws: result.draws, seed: r.seed, consequence: display.value.consequence, hit: display.value.hit, resultLabel: result.value.chanceWheel.result ? display.value.hit : 'Relationship damaged' });
 }
 write('browser-fixtures.json', browserFixtures); assert.equal(browserFixtures.length, 5);
@@ -240,7 +243,8 @@ write('report.json', report); write('logical-ledger.json', ledger); write('objec
 for (const arm of arms) { const fault = faultDefinitions.find(f => f.id === arm.id); equal(arm.failedGroups, fault?.failures ?? [], arm.id + ' exact intended failure groups'); }
 assert.ok(failures.every(f => f.name === 'AssertionError'), 'only actual assertion failures');
 for (const fault of faultDefinitions) assert.ok(failures.some(f => f.arm === fault.id), fault.id + ' effective');
-assert.ok(fixtureCandidates.some(r => healthyActionRows.get('action/' + r.id).value.chanceWheel.result), 'declared cohort actual hit');
+assert.ok(browserFixtures.some(fixture => fixture.expected.chanceWheel.result), 'declared cohort actual hit');
+assert.ok(browserFixtures.some(fixture => !fixture.expected.chanceWheel.result), 'declared browser actual miss');
 assert.ok(routeInputs.some(r => r.choice === 1 && !healthyActionRows.get('action/' + r.id).value.chanceWheel.result), 'declared cohort actual miss');
 const total = fs.readdirSync(OUT, { recursive: true }).filter(file => fs.statSync(path.join(OUT, file)).isFile()).reduce((sum, file) => sum + fs.statSync(path.join(OUT, file)).size, 0);
 assert.ok(total < 430000000, 'complete proof retained under430M');
