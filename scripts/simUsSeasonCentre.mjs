@@ -143,6 +143,8 @@
  *   mlbformula he hosts ten of thirteen against a division rival
  *              (the bind's own check off)                        -> section 5
  *   series     the 162 games shuffled one by one, not in series  -> section 5
+ *              (since the fix pass section 7's two checks on the
+ *              order of the series go red with it: no series left)
  *   hits       finish hands him one hit too many                 -> section 3
  *   rbi        his RBI may exceed his team's runs that game      -> section 3
  *   allstar    the halfway sentence printed for every season     -> section 3
@@ -167,6 +169,10 @@
  *              of team games with an inning of five or more must
  *              be red beside it                                  -> section 7
  *   mlbcap     the law's cap of nine runs an inning is lifted    -> section 7
+ *   mlborder   the order of the series is the calmest shuffle
+ *              and no more (the keyed swaps off). Named: a club
+ *              met again one series later; the band on series
+ *              past three in one park must be red beside it      -> section 7
  * The same fix pass, older saves: before Round 1226 the engine wrote
  * today's ladder in every year, so a live save holds "Lost the Wild Card
  * series" for a first exit of 2004 to 2021. Baseball has an older save twin
@@ -323,6 +329,8 @@ const CONTROLS = {
      and the law's cap of nine runs an inning lifted */
   mlbinnings: { section: 7, label: 'a side scores in', patches: [{ file: MLB, from: '    const runs = mlbSpreadRuns(nine, mins, q, rng);', to: '    const runs = mlbSpreadRuns(nine, mins, q / 6, rng);' }] },
   mlbcap: { section: 7, label: 'more than nine runs', patches: [{ file: MLB, from: '  const cap = Math.max(INNING_RUNS_MAX, Math.ceil(total / n));', to: '  const cap = Math.max(INNING_RUNS_MAX, total);' }] },
+  /* the fix pass: the order of the series is the calmest of the shuffles and no more (the keyed swaps off) */
+  mlborder: { section: 7, label: 'met again one series later', patches: [{ file: MLB, from: 'const ORDER_SWAPS = 400;', to: 'const ORDER_SWAPS = 0;' }] },
   /* the fix pass: the number file forgets the word an older build wrote for a first exit (the bind loses `olderBand`) */
   mlbold: { section: 3, label: "an older save's first exit is shown", patches: [{ file: MLB, from: '  formatOf,\n  olderBand,\n', to: '  formatOf,\n' }] },
   /* Round 1221: the digest's own control (run with US_SEASON_DIGEST=compare): a field goal ends one drive in a hundred more */
@@ -339,7 +347,7 @@ const CONTROL_SPORT = {
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
-  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb',
+  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb', mlborder: 'mlb',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 if (CONTROL === 'lawdrift' ? DIGEST !== 'compare' : !!(CONTROL && DIGEST) && !DIGEST_CONTROLS.includes(CONTROL)) { console.error("the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run"); process.exit(2); }
@@ -1132,13 +1140,19 @@ const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7, mlb: 0.7 };
    92 (89.5 to 96.5), the Championship Series 96 (91.75 to 99.25), a lost World Series 97 (93.75 to 101.25), a
    title 100 (96 to 104). The ledger marks the league's shares of shutouts, one run games and extra inning
    games THIN (one source), so none of them is a target here: each band is this career's own, set around what
-   the score law itself measures, and says so. */
-const MLB_RUNS_OVER = [-0.05, 0.3];
-const MLB_SHUTOUT = [0.03, 0.065];
-const MLB_ONE_RUN = [0.22, 0.32];
-const MLB_EXTRA = [0.05, 0.11];
-const MLB_AB_GAME = [3.5, 4.0];
-const MLB_HITLESS = [0.2, 0.36];
+   the score law itself measures, and says so.
+   THE FIX PASS (2026-10-10, review finding 12): the first bands were 30 to 100 times wider than that spread (one
+   run games 22 to 32% around 26.3) and would have passed a visibly different score law. Measured again on the
+   five seed sets on runner r1212-fx1 (608,472 games): 4.556 against 4.48 and 4.885 against 4.81 (0.076 and 0.075
+   over), shut out 4.2%, one run 26.3%, past the ninth 7.9%, at bats 3.754, no hit 26.3%. Each band now sits
+   about fifteen to twenty times the spread between sets on each side of its number: still no coin toss (the
+   controls at 16 careers and one seed set stay inside them), and a law a point or two off is red. */
+const MLB_RUNS_OVER = [0, 0.16];
+const MLB_SHUTOUT = [0.034, 0.05];
+const MLB_ONE_RUN = [0.245, 0.282];
+const MLB_EXTRA = [0.066, 0.092];
+const MLB_AB_GAME = [3.68, 3.83];
+const MLB_HITLESS = [0.24, 0.285];
 /* The fix pass of Round 1212, the innings of a game. The runs of a side are spread by the score law's own
    chances an inning (src/lib/season/mlb.ts mlbSpreadRuns). MEASURED on the five seed sets (40 careers a set, a
    GitHub runner, 2026-10-10, 1,216,944 team games): a side scores in 2.72 innings a team game, 30.3% of nine
@@ -1152,6 +1166,17 @@ const MLB_HITLESS = [0.2, 0.36];
    about 1% bring five or more. */
 const MLB_SCORING_INNINGS = [0.28, 0.325];
 const MLB_BIG_INNING = [0.07, 0.105];
+/* The fix pass, the order of the series (review finding 4). The first cut only kept a club out of back to back
+   series and let four series run in one park: a club was met again one series later in 76.5% of named seasons
+   (1.51 times a season) and a fifth of a season sat in runs of four series at home or away (2.17 a season; the
+   longest homestand 12 games at the median). Now the order also counts a club again one series later and every
+   series past three in one park, and keyed swaps settle it. Measured on seed set 0 (40 careers, 746 seasons):
+   0 named seasons meet a club again one series later and 0 series run past three in one park; a probe over
+   every club of the league (600 seasons) gives the same, with the longest homestand and the longest trip at 10
+   games. Control `mlborder` (the swaps off) at 16 careers: 28.5% of named seasons and 1.611 series a season.
+   Both bands are a ceiling a little above nothing, far under what the control lands. */
+const MLB_AGAIN_MAX = 0.05;
+const MLB_PARK_PAST_MAX = 0.1;
 const OLD_SAVE_MIN = 25;
 /* The fix pass of Round 1212: first exits of a year before 2022 written as a save from before Round 1226 holds
    them (mlbOldTwin). Measured on seed set 0 (40 careers): 78 such seasons, 0 refused, every one shown inside a
@@ -1195,7 +1220,7 @@ const NFL_GAME_CAPS = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackle
 /** A full season: he played 14 or more of the 17, so a game's share of his total means something. */
 const NFL_FULL = 14;
 /* Round 1212, baseball's section 7 numbers */
-const mlbSeen = { games: 0, level: 0, shut: 0, ten: 0, oneRun: 0, extra: 0, played: 0, ab: 0, hitless: 0, four: 0, allHis: 0, seasons: 0, oddOrder: 0, scoring: 0, five: 0, overNine: 0, oneFrame: 0, fourUp: 0 };
+const mlbSeen = { games: 0, level: 0, shut: 0, ten: 0, oneRun: 0, extra: 0, played: 0, ab: 0, hitless: 0, four: 0, allHis: 0, seasons: 0, oddOrder: 0, scoring: 0, five: 0, overNine: 0, oneFrame: 0, fourUp: 0, orderSeasons: 0, parkPast: 0, againSeasons: 0 };
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 /* Round 1221, the digest mode: one running sha1 a sport and a seed set, fed every season in the order the
    fleet plays it with what the viewer is handed (see the header). Nothing is kept when the mode is off. */
@@ -1308,6 +1333,23 @@ function observe(c, line, who) {
       let run = 1; let odd = false;
       s.games.forEach((g, i) => { if (i === 0) return; run = g.opp === s.games[i - 1].opp ? run + 1 : 1; if (run > 4) odd = true; });
       if (odd) mlbSeen.oddOrder += 1;
+    }
+    /* the fix pass: how the order of the series reads, by the harness's own reading of the games. A series is
+       a run of games against one club in one park in a named season, and three games in an unnamed one. A club
+       met again one series later (named seasons), and every series past three running in one park (all). */
+    {
+      const ser = [];
+      if (rec.named) for (const g of s.games) { const last = ser[ser.length - 1]; if (last && last.opp === g.opp && last.home === g.home) last.n += 1; else ser.push({ opp: g.opp, home: g.home, n: 1 }); }
+      else for (let i = 0; i < s.games.length; i += 3) ser.push({ opp: null, home: s.games[i].home, n: 3 });
+      let again = 0; let park = 1; let past = 0;
+      ser.forEach((x, i) => {
+        if (rec.named && i > 1 && x.opp === ser[i - 2].opp) again += 1;
+        park = i > 0 && x.home === ser[i - 1].home ? park + 1 : 1;
+        if (park > 3) past += 1;
+      });
+      mlbSeen.orderSeasons += 1;
+      mlbSeen.parkPast += past;
+      if (again) mlbSeen.againSeasons += 1;
     }
   }
   if (who.slug === 'nfl') {
@@ -1686,10 +1728,10 @@ for (const slug of SPORTS) {
     console.log(`     named seasons in which a club is met in back to back series: ${mlbSeen.oddOrder} of ${mlbSeen.seasons}`);
     check('7', mlbSeen.level === 0, `mlb no game is level (${mlbSeen.level} of ${mlbSeen.games})`);
     check('7', shut >= MLB_SHUTOUT[0] && shut <= MLB_SHUTOUT[1], `mlb a side is shut out in ${(100 * MLB_SHUTOUT[0]).toFixed(1)} to ${(100 * MLB_SHUTOUT[1]).toFixed(1)}% of team games (${share(mlbSeen.shut, g2)})`);
-    check('7', one >= MLB_ONE_RUN[0] && one <= MLB_ONE_RUN[1], `mlb games decided by one run are ${(100 * MLB_ONE_RUN[0]).toFixed(0)} to ${(100 * MLB_ONE_RUN[1]).toFixed(0)}% (${share(mlbSeen.oneRun, g1)})`);
+    check('7', one >= MLB_ONE_RUN[0] && one <= MLB_ONE_RUN[1], `mlb games decided by one run are ${(100 * MLB_ONE_RUN[0]).toFixed(1)} to ${(100 * MLB_ONE_RUN[1]).toFixed(1)}% (${share(mlbSeen.oneRun, g1)})`);
     check('7', ext >= MLB_EXTRA[0] && ext <= MLB_EXTRA[1], `mlb games past the ninth are ${(100 * MLB_EXTRA[0]).toFixed(1)} to ${(100 * MLB_EXTRA[1]).toFixed(1)}% (${share(mlbSeen.extra, g1)})`);
     check('7', abg >= MLB_AB_GAME[0] && abg <= MLB_AB_GAME[1], `mlb his at bats a game sit inside ${MLB_AB_GAME[0]} to ${MLB_AB_GAME[1]} (${abg.toFixed(3)})`);
-    check('7', hitless >= MLB_HITLESS[0] && hitless <= MLB_HITLESS[1], `mlb games he played with no hit are ${(100 * MLB_HITLESS[0]).toFixed(0)} to ${(100 * MLB_HITLESS[1]).toFixed(0)}% (${share(mlbSeen.hitless, pl)})`);
+    check('7', hitless >= MLB_HITLESS[0] && hitless <= MLB_HITLESS[1], `mlb games he played with no hit are ${(100 * MLB_HITLESS[0]).toFixed(1)} to ${(100 * MLB_HITLESS[1]).toFixed(1)}% (${share(mlbSeen.hitless, pl)})`);
     check('7', mlbSeen.seasons > 0 && mlbSeen.oddOrder === 0, `mlb no named season meets a club in back to back series (${mlbSeen.oddOrder} of ${mlbSeen.seasons})`);
     /* the fix pass: the innings of a game */
     const frames = mlbSeen.scoring / (9 * g2); const five = mlbSeen.five / g2;
@@ -1697,6 +1739,11 @@ for (const slug of SPORTS) {
     check('7', frames >= MLB_SCORING_INNINGS[0] && frames <= MLB_SCORING_INNINGS[1], `mlb a side scores in ${(100 * MLB_SCORING_INNINGS[0]).toFixed(1)} to ${(100 * MLB_SCORING_INNINGS[1]).toFixed(1)}% of nine innings a team game (${share(mlbSeen.scoring, 9 * g2)})`);
     check('7', five >= MLB_BIG_INNING[0] && five <= MLB_BIG_INNING[1], `mlb the biggest inning of a team game is five runs or more in ${(100 * MLB_BIG_INNING[0]).toFixed(1)} to ${(100 * MLB_BIG_INNING[1]).toFixed(1)}% of team games (${share(mlbSeen.five, g2)})`);
     check('7', mlbSeen.games > 0 && mlbSeen.overNine === 0, `mlb no inning holds more than nine runs, the score law's own cap (${mlbSeen.overNine} of ${g2} team games)`);
+    /* the fix pass: the order of the series */
+    const againShare = mlbSeen.againSeasons / Math.max(1, mlbSeen.seasons); const parkPast = mlbSeen.parkPast / Math.max(1, mlbSeen.orderSeasons);
+    console.log(`     a club met again one series later: ${share(mlbSeen.againSeasons, Math.max(1, mlbSeen.seasons))} of named seasons; series past three running in one park: ${parkPast.toFixed(3)} a season (${mlbSeen.parkPast} in ${mlbSeen.orderSeasons})`);
+    check('7', mlbSeen.seasons > 0 && againShare <= MLB_AGAIN_MAX, `mlb a club is met again one series later in under ${(100 * MLB_AGAIN_MAX).toFixed(0)}% of named seasons (${share(mlbSeen.againSeasons, Math.max(1, mlbSeen.seasons))})`);
+    check('7', mlbSeen.orderSeasons > 0 && parkPast <= MLB_PARK_PAST_MAX, `mlb series past three running in one park stay under ${MLB_PARK_PAST_MAX} a season (${parkPast.toFixed(3)})`);
   }
   if (slug === 'nfl') {
     const lv = nflSeen.level / Math.max(1, nflSeen.games);
@@ -1861,6 +1908,7 @@ if (CONTROL) {
     /* the fix pass: lumpy innings must turn the big inning band red beside the named one, and a lifted cap must show an inning past nine */
     if (CONTROL === 'mlbinnings') { const big = labels.some(l => l.startsWith('mlb') && l.includes('the biggest inning of a team game')); ok = ok && big; note += `; the big inning band ${big ? 'is' : 'is NOT'} red beside it`; }
     if (CONTROL === 'mlbcap') { ok = ok && mlbSeen.overNine > 0; note += `; ${mlbSeen.overNine} team games hold an inning of more than nine`; }
+    if (CONTROL === 'mlborder') { const park = labels.some(l => l.startsWith('mlb') && l.includes('series past three running in one park')); ok = ok && park; note += `; ${mlbSeen.againSeasons} of ${mlbSeen.seasons} named seasons meet a club again one series later, and the park band ${park ? 'is' : 'is NOT'} red beside it`; }
     if (CONTROL === 'mlbold') {
       const twins = seen.filter(r => r.slug === 'mlb' && r.old);
       const wrong = twins.filter(r => r.old.problems.some(p => p.includes('no record band'))).length;

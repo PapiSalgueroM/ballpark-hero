@@ -81,7 +81,10 @@ const SUMS: { key: string; cap: number }[] = [{ key: 'hr', cap: 3 }, { key: 'dou
 /** Counted in tens a season, so they follow half of the core's game to game form (the NFL's rule for touchdowns). */
 const FORM_POWER = 0.5;
 const ORDER_TRIES = 40;
-const HOME_RUN_OF_SERIES = 4;
+/** Keyed swaps of two series tried after the shuffles, each kept only when the order reads less oddly. */
+const ORDER_SWAPS = 400;
+/** The most series running in one park before the order reads oddly (this sim's own). */
+const HOME_RUN_OF_SERIES = 3;
 
 /** The most runs the score law puts in one inning (this sim's own cap). */
 const INNING_RUNS_MAX = 9;
@@ -174,21 +177,25 @@ export function mlbScore(edge: number, home: boolean, rng: Rng, eraId: string | 
 export interface MlbSeries { slot: number; home: boolean; games: number }
 
 /** How oddly an order of series reads: the same club in back to back series
- *  (counted heavily), and every series past four running at home or away. */
+ *  (counted heavily), the same club again one series later (at Washington, at
+ *  Milwaukee, at Washington), and every series past three running at home or
+ *  away (a trip or a homestand of four series is twelve games or more). */
 export function mlbOrderProblems(list: readonly MlbSeries[]): number {
   let bad = 0;
   let run = 1;
   for (let i = 1; i < list.length; i += 1) {
     if (list[i].slot === list[i - 1].slot) bad += 100;
+    if (i > 1 && list[i].slot === list[i - 2].slot) bad += 3;
     run = list[i].home === list[i - 1].home ? run + 1 : 1;
     if (run > HOME_RUN_OF_SERIES) bad += 1;
   }
   return bad;
 }
 
-/** The calmest of a few keyed shuffles of the series, then a pass that parts
- *  any club still meeting itself in back to back series (so a run of games
- *  against one club in one park is always one series long). */
+/** The calmest of a few keyed shuffles of the series, then keyed swaps of two
+ *  series, each kept only when the order reads less oddly, then a pass that
+ *  parts any club still meeting itself in back to back series (so a run of
+ *  games against one club in one park is always one series long). */
 function orderSeries(list: MlbSeries[], rng: Rng): MlbSeries[] {
   let best = shuffled(list, rng);
   let least = mlbOrderProblems(best);
@@ -198,6 +205,14 @@ function orderSeries(list: MlbSeries[], rng: Rng): MlbSeries[] {
     if (bad < least) { best = next; least = bad; }
   }
   const out = best.slice();
+  for (let t = 0; t < ORDER_SWAPS && least > 0; t += 1) {
+    const i = Math.floor(rng() * out.length);
+    const j = Math.floor(rng() * out.length);
+    if (i === j) continue;
+    [out[i], out[j]] = [out[j], out[i]];
+    const bad = mlbOrderProblems(out);
+    if (bad < least) least = bad; else [out[i], out[j]] = [out[j], out[i]];
+  }
   const clash = (i: number): boolean => (i > 0 && out[i].slot === out[i - 1].slot) || (i < out.length - 1 && out[i].slot === out[i + 1].slot);
   for (let i = 1; i < out.length; i += 1) {
     if (out[i].slot !== out[i - 1].slot) continue;
@@ -268,6 +283,16 @@ export function mlbDealUnnamed(games: number, rng: Rng): [number, number][][] {
     const next = shuffled(flags, rng);
     const bad = runs(next);
     if (bad < least) { best = next; least = bad; }
+  }
+  /* then keyed swaps of a home series with an away one, each kept only when the parks read less oddly */
+  best = best.slice();
+  for (let t = 0; t < ORDER_SWAPS && least > 0; t += 1) {
+    const i = Math.floor(rng() * count);
+    const j = Math.floor(rng() * count);
+    if (best[i] === best[j]) continue;
+    [best[i], best[j]] = [best[j], best[i]];
+    const bad = runs(best);
+    if (bad < least) least = bad; else [best[i], best[j]] = [best[j], best[i]];
   }
   const out: [number, number][][] = [];
   for (let s = 0; s < count; s += 1) {

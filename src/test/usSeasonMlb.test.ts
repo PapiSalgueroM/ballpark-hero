@@ -120,8 +120,9 @@ describe('the schedule in series', () => {
         expect(list.reduce((a, s) => a + s.games, 0), team).toBe(f.games);
         expect(list.filter(s => s.home).reduce((a, s) => a + s.games, 0), team).toBe(81);
         expect(list.every(s => s.games === 3 || s.games === 4), team).toBe(true);
-        /* no club in back to back series */
-        expect(mlbOrderProblems(list), team).toBeLessThan(100);
+        /* no club in back to back series, and (the fix pass) no club again one series later and no more
+           than three series running in one park: the order reads like a schedule */
+        expect(mlbOrderProblems(list), `${team} ${k}`).toBe(0);
         const rounds = mlbDeal(ctx, keyedRng(`mlb-deal|${team}|${k}`));
         const games = rounds.map((r, i): DerivedGame => ({ md: i + 1, opp: r[0][0] === 0 ? r[0][1] : r[0][0], home: r[0][0] === 0, us: 1, them: 0, fixed: false, played: true, started: true, line: {}, events: [] }));
         expect(mlbDealProblems(ctx, games), `${team} ${k}`).toEqual([]);
@@ -131,6 +132,16 @@ describe('the schedule in series', () => {
         expect(games.filter(g => g.opp === rival), team).toHaveLength(f.rival.games);
       }
     }
+  });
+  it('counts what reads oddly in an order of series: back to back, again one series later, four running in one park', () => {
+    const s = (slot: number, home: boolean) => ({ slot, home, games: 3 });
+    expect(mlbOrderProblems([s(1, true), s(2, false), s(3, true), s(4, false)])).toBe(0);
+    /* at Washington, at Milwaukee, at Washington */
+    expect(mlbOrderProblems([s(1, false), s(2, true), s(1, false)])).toBe(3);
+    expect(mlbOrderProblems([s(1, true), s(1, false)])).toBe(100);
+    /* three series in one park is a homestand; the fourth and the fifth each count */
+    expect(mlbOrderProblems([s(1, true), s(2, true), s(3, true), s(4, false)])).toBe(0);
+    expect(mlbOrderProblems([s(1, true), s(2, true), s(3, true), s(4, true), s(5, true)])).toBe(2);
   });
   it('says what is wrong with a schedule that is not the formula', () => {
     const ctx = ctxOf('DET');
@@ -152,6 +163,9 @@ describe('the schedule in series', () => {
       expect(home.filter(Boolean)).toHaveLength(81);
       for (let i = 0; i < 162; i += 3) expect(new Set(home.slice(i, i + 3)).size, `series at ${i}`).toBe(1);
       expect(new Set(rounds.map(r => (r[0][0] === 0 ? r[0][1] : r[0][0]))).size).toBe(162);
+      /* never more than three series running in one park */
+      let run = 1;
+      for (let i = 3; i < 162; i += 3) { run = home[i] === home[i - 3] ? run + 1 : 1; expect(run, `mlb-unnamed|${k} series at ${i}`).toBeLessThanOrEqual(3); }
     }
   });
 });
