@@ -75,7 +75,7 @@ const AB_HIGH = 4.5;
 /** The most runs he can drive in in one game (this sim's own cap). */
 const RBI_MAX = 8;
 /** His caps a game: home runs, doubles, steals. */
-const SUMS: { key: string; cap: number; team?: boolean }[] = [{ key: 'hr', cap: 3, team: true }, { key: 'doubles', cap: 3 }, { key: 'sb', cap: 3 }];
+const SUMS: { key: string; cap: number }[] = [{ key: 'hr', cap: 3 }, { key: 'doubles', cap: 3 }, { key: 'sb', cap: 3 }];
 /** Counted in tens a season, so they follow half of the core's game to game form (the NFL's rule for touchdowns). */
 const FORM_POWER = 0.5;
 const ORDER_TRIES = 40;
@@ -267,16 +267,44 @@ export function mlbDealProblems(ctx: UsSeasonCtx, games: readonly DerivedGame[])
   return out;
 }
 
+/** What the core spreads over the games he played: sums only. A home run is
+ *  NOT handed to the core as a floor on his team's score: the core lifts a
+ *  score to a floor after the score law has spoken, and in a game of four
+ *  runs a side that turns a 0-1 into a 1-1, a level game, which a ball game
+ *  never is. `finish` keeps his home runs inside his team's runs instead. */
 function totals(row: UsRow): StatTotal[] {
   const out: StatTotal[] = [];
   for (const t of SUMS) {
     const v = num(row[t.key]);
     if (v === null) continue;
-    out.push(t.team
-      ? { key: t.key, kind: 'sum', total: v, perGameCap: t.cap, teamFor: true, teamPoints: 1, formPower: FORM_POWER }
-      : { key: t.key, kind: 'sum', total: v, perGameCap: t.cap, formPower: FORM_POWER });
+    out.push({ key: t.key, kind: 'sum', total: v, perGameCap: t.cap, formPower: FORM_POWER });
   }
   return out;
+}
+
+/** Whole numbers moved one at a time onto `total`: up into a keyed game with
+ *  room (by `weight`), down out of a keyed game above its minimum. false: the
+ *  minimums or the caps cannot hold the total. */
+function settle(x: number[], total: number, mins: readonly number[], caps: readonly number[], weight: (i: number) => number, rng: Rng): boolean {
+  let sum = x.reduce((a, b) => a + b, 0);
+  const pick = (w: number[]): number => {
+    const all = w.reduce((a, b) => a + b, 0);
+    if (!(all > 0)) return -1;
+    let at = rng() * all;
+    for (let i = 0; i < w.length; i += 1) { at -= w[i]; if (at < 0) return i; }
+    return w.findIndex(v => v > 0);
+  };
+  while (sum < total) {
+    const i = pick(x.map((v, k) => (v < caps[k] ? Math.max(1e-6, weight(k)) : 0)));
+    if (i < 0) return false;
+    x[i] += 1; sum += 1;
+  }
+  while (sum > total) {
+    const i = pick(x.map((v, k) => (v > mins[k] ? v - mins[k] : 0)));
+    if (i < 0) return false;
+    x[i] -= 1; sum -= 1;
+  }
+  return true;
 }
 
 /** His season's at bats and hits: whole numbers whose quotient rounds to the
@@ -306,8 +334,6 @@ export function mlbAtBats(games: number, avg: number, extra: number, rng: Rng): 
 
 /** A weight that clumps: most innings (or games) get little, a few get a lot. */
 const clumpy = (rng: Rng): number => { const x = -Math.log(Math.max(rng(), 1e-9)); return x * x; };
-/** A weight around one with a modest spread (the sum of two draws). */
-const steady = (rng: Rng): number => (-Math.log(Math.max(rng(), 1e-9)) - Math.log(Math.max(rng(), 1e-9))) / 2;
 
 /** Was the game level after nine? Only a one run game can have been. */
 export function mlbWentExtra(g: DerivedGame): boolean {
@@ -363,17 +389,29 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   /* a line the engine played on another length is not this view's season */
   if (num(row.slate) !== null && row.slate !== mlbViewGames()) return false;
   const on = games.filter(g => g.played);
+  /* his home runs stay inside his team's runs: a line his team's runs cannot hold changes places with a
+     line they can (two games he played exchange their whole lines, which keeps every total and every cap) */
+  for (const g of on) {
+    if (of(g, 'hr') <= g.us) continue;
+    const others = on.filter(x => x !== g && of(x, 'hr') <= g.us && of(g, 'hr') <= x.us);
+    if (others.length === 0) return false;
+    const x = others[Math.floor(rng() * others.length)];
+    [g.line, x.line] = [x.line, g.line];
+  }
   const need = on.map(g => of(g, 'hr') + of(g, 'doubles'));
   const fit = mlbAtBats(on.length, avg, need.reduce((a, b) => a + b, 0), rng);
   if (!fit) return false;
   const ab = splitTotal(fit.ab, on.map(() => 0.8 + 0.4 * rng()), on.map(() => AB_MAX), need.map(x => Math.max(1, x)));
   if (!ab) return false;
-  const hits = splitTotal(fit.h, on.map((_, i) => steady(rng) * ab[i]), ab, need);
-  if (!hits) return false;
-  /* runs batted in: at least his home runs, at most his team's runs that game */
+  /* hits: each at bat a keyed try at his average, then moved one at a time onto the season's hits */
+  const hits = ab.map((n, i) => { let h = 0; for (let k = 0; k < n; k += 1) if (rng() < avg) h += 1; return Math.min(n, Math.max(need[i], h)); });
+  if (!settle(hits, fit.h, need, ab, i => ab[i] - hits[i], rng)) return false;
+  /* runs batted in: at least his home runs, at most his team's runs that game, likelier on a day he hits */
   const room = on.map(g => Math.min(g.us, RBI_MAX));
-  const driven = splitTotal(rbi, on.map((g, i) => (0.3 + rng()) * (g.us + 2 * of(g, 'hr')) * (hits[i] > 0 ? 1 : 0.3)), room, on.map(g => of(g, 'hr')));
-  if (!driven) return false;
+  const floor = on.map(g => of(g, 'hr'));
+  const driven = floor.slice();
+  if (driven.some((v, i) => v > room[i])) return false;
+  if (!settle(driven, rbi, floor, room, i => (room[i] - driven[i]) * (hits[i] > 0 ? 1 : 0.25), rng)) return false;
   on.forEach((g, i) => { g.line.ab = ab[i]; g.line.h = hits[i]; g.line.rbi = driven[i]; });
   for (const g of games) {
     /* drawn for every game, so the rule never moves another game's innings */
