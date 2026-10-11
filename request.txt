@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+mksave: PART=mksave node .rc/x/probeRun.mjs
+walkRun: node .rc/x/walkRun.mjs
+walkOld: node .rc/x/walkOld.mjs

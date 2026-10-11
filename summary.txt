@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mksave exit=0 1s | probe: done
+walkRun exit=0 104s | walkRun: green. A past season names only its own clubs in the news, the feed and the bidding wars.
+walkOld exit=0 37s | walkOld: green. A save from before the round opens, shows what it held and plays on.

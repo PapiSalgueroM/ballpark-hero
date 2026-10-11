@@ -1,0 +1,187 @@
+[
+ {
+  "label": "2005-06 Juventus 390 reduce",
+  "clubs": 98,
+  "news": [
+   "📰 Bayern Munich sign Djibril Cissé from Liverpool for £20m.",
+   "📰 Valencia sign Mateja Kežman from Atlético Madrid for £14m.",
+   "📰 Inter Milan sign Kaká from AC Milan for £27m.",
+   "📰 AC Milan sign Sébastien Frey from Fiorentina for £14m.",
+   "📰 Inter Milan sign Juan Román Riquelme from Villarreal for £14m.",
+   "📰 Chelsea sign Wayne Rooney from Manchester United for £42m."
+  ],
+  "overflowNews": 0,
+  "affordable": 12,
+  "talksTried": 4,
+  "rivalLine": "⚔️ Bidding war: Lyon at £14.7m",
+  "rival": "Lyon",
+  "note": "Lyon just entered the race at £14.7m. Bidding war.",
+  "overflowWar": 0,
+  "end": "HIJACKED",
+  "endNote": "Lyon closed the deal at £14.7m while you hesitated.",
+  "log": [
+   "Djibril Cissé: Liverpool to Bayern Munich 20",
+   "Mateja Kežman: Atlético Madrid to Valencia 14",
+   "Kaká: AC Milan to Inter Milan 27",
+   "Sébastien Frey: Fiorentina to AC Milan 14",
+   "Juan Román Riquelme: Villarreal to Inter Milan 14",
+   "Wayne Rooney: Manchester United to Chelsea 42",
+   "Ryan Giggs: Manchester United to Lyon 14.7"
+  ],
+  "cutRows": [
+   "Wayne Rooney · Manchester United to Chelsea",
+   "Juan Román Riquelme · Villarreal to Inter Milan"
+  ]
+ },
+ {
+  "label": "2010-11 Barcelona 1280 no-preference",
+  "clubs": 98,
+  "news": [
+   "📰 AC Milan sign Nemanja Vidic from Manchester United for £32m.",
+   "📰 Atlético Madrid sign James Milner from Manchester City for £21m.",
+   "📰 Real Madrid sign Sergio Agüero from Atlético Madrid for £41m.",
+   "📰 Tottenham sign Diego Godín from Villarreal for £16m.",
+   "📰 Athletic Club sign Didier Zokora from Sevilla for £15m.",
+   "📰 Bayer Leverkusen sign Claudio Marchisio from Juventus for £17m."
+  ],
+  "overflowNews": 0,
+  "affordable": 43,
+  "talksTried": 1,
+  "rivalLine": "⚔️ Bidding war: Schalke 04 at £45.3m",
+  "rival": "Schalke 04",
+  "note": "Schalke 04 just entered the race at £45.3m. Bidding war.",
+  "overflowWar": 0,
+  "end": "HIJACKED",
+  "endNote": "Schalke 04 closed the deal at £45.3m while you hesitated.",
+  "log": [
+   "Nemanja Vidic: Manchester United to AC Milan 32",
+   "James Milner: Manchester City to Atlético Madrid 21",
+   "Sergio Agüero: Atlético Madrid to Real Madrid 41",
+   "Diego Godín: Villarreal to Tottenham 16",
+   "Didier Zokora: Sevilla to Athletic Club 15",
+   "Claudio Marchisio: Juventus to Bayer Leverkusen 17",
+   "Wesley Sneijder: Inter Milan to Schalke 04 45.3"
+  ],
+  "cutRows": []
+ },
+ {
+  "label": "2015-16 Chelsea 390 no-preference",
+  "clubs": 98,
+  "news": [
+   "📰 Roma sign Mateo Kovacic from Real Madrid for £25m.",
+   "📰 Napoli sign Ivan Rakitic from Barcelona for £33m.",
+   "📰 Tottenham sign Enzo Pérez from Valencia for £22m.",
+   "📰 Bayern Munich sign Isco from Real Madrid for £46m.",
+   "📰 Borussia Dortmund sign Juan Mata from Manchester United for £29m.",
+   "📰 AC Milan sign Franck Ribéry from Bayern Munich for £25m."
+  ],
+  "overflowNews": 0,
+  "affordable": 17,
+  "talksTried": 3,
+  "rivalLine": "⚔️ Bidding war: Manchester United at £29.6m",
+  "rival": "Manchester United",
+  "note": "Manchester United just entered the race at £29.6m. Bidding war.",
+  "overflowWar": 0,
+  "end": "HIJACKED",
+  "endNote": "Manchester United closed the deal at £29.6m while you hesitated.",
+  "log": [
+   "Mateo Kovacic: Real Madrid to Roma 25",
+   "Ivan Rakitic: Barcelona to Napoli 33",
+   "Enzo Pérez: Valencia to Tottenham 22",
+   "Isco: Real Madrid to Bayern Munich 46",
+   "Juan Mata: Manchester United to Borussia Dortmund 29",
+   "Franck Ribéry: Bayern Munich to AC Milan 25",
+   "Douglas Costa: Bayern Munich to Manchester United 29.6"
+  ],
+  "cutRows": [
+   "Douglas Costa · Bayern Munich to Manchester United",
+   "Juan Mata · Manchester United to Borussia Dortmund"
+  ]
+ },
+ {
+  "label": "2020-21 Bayern Munich 1280 reduce",
+  "clubs": 98,
+  "news": [
+   "📰 Barcelona sign João Félix from Atlético Madrid for £115m.",
+   "📰 Borussia Dortmund sign Paulo Dybala from Juventus for £80m.",
+   "📰 Manchester City sign Heung-min Son from Tottenham for £72m.",
+   "📰 RB Leipzig sign Ferran Torres from Manchester City for £53m.",
+   "📰 Arsenal sign Ousmane Dembélé from Barcelona for £70m."
+  ],
+  "overflowNews": 0,
+  "affordable": 4,
+  "talksTried": 1,
+  "rivalLine": "⚔️ Bidding war: Inter Milan at £55.9m",
+  "rival": "Inter Milan",
+  "note": "Inter Milan just entered the race at £55.9m. Bidding war.",
+  "overflowWar": 0,
+  "end": "HIJACKED",
+  "endNote": "Inter Milan closed the deal at £55.9m while you hesitated.",
+  "log": [
+   "João Félix: Atlético Madrid to Barcelona 115",
+   "Paulo Dybala: Juventus to Borussia Dortmund 80",
+   "Heung-min Son: Tottenham to Manchester City 72",
+   "Ferran Torres: Manchester City to RB Leipzig 53",
+   "Ousmane Dembélé: Barcelona to Arsenal 70",
+   "Miralem Pjanić: Barcelona to Inter Milan 55.9"
+  ],
+  "cutRows": []
+ },
+ {
+  "label": "2010-11 Chelsea 390 reduce",
+  "clubs": 98,
+  "news": [
+   "📰 Liverpool sign Dejan Stanković from Inter Milan for £13m.",
+   "📰 Borussia Dortmund sign Frédéric Kanouté from Sevilla for £13m.",
+   "📰 Liverpool sign Sergio Agüero from Atlético Madrid for £38m."
+  ],
+  "overflowNews": 0,
+  "affordable": 7,
+  "talksTried": 2,
+  "rivalLine": "⚔️ Bidding war: Bordeaux at £26.3m",
+  "rival": "Bordeaux",
+  "note": "Bordeaux just entered the race at £26.3m. Bidding war.",
+  "overflowWar": 0,
+  "end": "HIJACKED",
+  "endNote": "Bordeaux closed the deal at £26.3m while you hesitated.",
+  "log": [
+   "Dejan Stanković: Inter Milan to Liverpool 13",
+   "Frédéric Kanouté: Sevilla to Borussia Dortmund 13",
+   "Sergio Agüero: Atlético Madrid to Liverpool 38",
+   "Javier Mascherano: Barcelona to Bordeaux 26.3"
+  ],
+  "cutRows": [
+   "Javier Mascherano · Barcelona to Bordeaux",
+   "Frédéric Kanouté · Sevilla to Borussia Dortmund"
+  ]
+ },
+ {
+  "label": "2005-06 Arsenal 1280 no-preference",
+  "clubs": 98,
+  "news": [
+   "📰 Chelsea sign Michael Ballack from Bayern Munich for £30m.",
+   "📰 Liverpool sign Sergio Ramos from Real Madrid for £26m.",
+   "📰 Roma sign Harry Kewell from Liverpool for £13m.",
+   "📰 Juventus sign Frank Lampard from Chelsea for £32m.",
+   "📰 Liverpool sign Alex Frei from Rennes for £10m."
+  ],
+  "overflowNews": 0,
+  "affordable": 4,
+  "talksTried": 4,
+  "rivalLine": "⚔️ Bidding war: Werder Bremen at £4.8m",
+  "rival": "Werder Bremen",
+  "note": "Werder Bremen just entered the race at £4.8m. Bidding war.",
+  "overflowWar": 0,
+  "end": "HIJACKED",
+  "endNote": "Werder Bremen closed the deal at £4.8m while you hesitated.",
+  "log": [
+   "Michael Ballack: Bayern Munich to Chelsea 30",
+   "Sergio Ramos: Real Madrid to Liverpool 26",
+   "Harry Kewell: Liverpool to Roma 13",
+   "Frank Lampard: Chelsea to Juventus 32",
+   "Alex Frei: Rennes to Liverpool 10",
+   "Lionel Messi: Barcelona to Werder Bremen 4.8"
+  ],
+  "cutRows": []
+ }
+]

@@ -1,0 +1,30 @@
+== old era2010 save at 390 (reduce)
+  PASS  old era2010 save at 390 (reduce): the saved career opens on Arsenal
+  PASS  old era2010 save at 390 (reduce): the slot offers Resume Career
+  PASS  old era2010 save at 390 (reduce): the squad in the save is the squad that was saved (26 men)
+   Around the league on this build, from the old save: 📰 Atalanta sign Frank Lampard from Chelsea for £22m. | 📰 Brighton sign Esteban Cambiasso from Inter Milan for £30m. | 📰 Fulham sign Andrea Pirlo from AC Milan for £11m. | 📰 Mainz sign Diego Perotti from Sevilla for £18m.
+   the open negotiation's rival on screen: ⚔️ Bidding war: Başakşehir at £29.2m (the save holds Başakşehir)
+   the old negotiation ended as: HIJACKED; note: Başakşehir closed the deal at £29.2m while you hesitated.; last row of the feed: {"name":"Arjen Robben","from":"Bayern Munich","to":"Başakşehir","fee":29.2,"season":1,"week":0}
+  PASS  old era2010 save at 390 (reduce): the old negotiation can be brought to an end (HIJACKED)
+  PASS  old era2010 save at 390 (reduce): after a reload the career is still there with its squad (26 men)
+  PASS  old era2010 save at 390 (reduce): no real page errors (clean)
+== old era2010 save at 1280 (no-preference)
+  PASS  old era2010 save at 1280 (no-preference): the saved career opens on Arsenal
+  PASS  old era2010 save at 1280 (no-preference): the slot offers Resume Career
+  PASS  old era2010 save at 1280 (no-preference): the squad in the save is the squad that was saved (26 men)
+   Around the league on this build, from the old save: 📰 Atalanta sign Frank Lampard from Chelsea for £22m. | 📰 Brighton sign Esteban Cambiasso from Inter Milan for £30m. | 📰 Fulham sign Andrea Pirlo from AC Milan for £11m. | 📰 Mainz sign Diego Perotti from Sevilla for £18m.
+   the open negotiation's rival on screen: ⚔️ Bidding war: Başakşehir at £29.2m (the save holds Başakşehir)
+   the old negotiation ended as: HIJACKED; note: Başakşehir closed the deal at £29.2m while you hesitated.; last row of the feed: {"name":"Arjen Robben","from":"Bayern Munich","to":"Başakşehir","fee":29.2,"season":1,"week":0}
+  PASS  old era2010 save at 1280 (no-preference): the old negotiation can be brought to an end (HIJACKED)
+  PASS  old era2010 save at 1280 (no-preference): after a reload the career is still there with its squad (26 men)
+  PASS  old era2010 save at 1280 (no-preference): no real page errors (clean)
+== old era2005 save at 390 (no-preference)
+  PASS  old era2005 save at 390 (no-preference): the saved career opens on Chelsea
+  PASS  old era2005 save at 390 (no-preference): the slot offers Resume Career
+  PASS  old era2005 save at 390 (no-preference): the squad in the save is the squad that was saved (26 men)
+   Around the league on this build, from the old save: nothing
+   the open negotiation's rival on screen: none (the save holds none)
+  PASS  old era2005 save at 390 (no-preference): after a reload the career is still there with its squad (26 men)
+  PASS  old era2005 save at 390 (no-preference): no real page errors (clean)
+
+walkOld: green. A save from before the round opens, shows what it held and plays on.
