@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe-head exit=0 8s | pushAgain: the push stayed spent across a reload in 6 journeys, came back in 0, not applicable in 2
+walk-head exit=0 7s | playUsMarketTalk: 12 checks, 0 failed
+mut-build exit=0 32s |  M src/components/us-career/UsCareerBoard.tsx
+probe-mut exit=0 7s | pushAgain: the push stayed spent across a reload in 0 journeys, came back in 6, not applicable in 2
+walk-mut exit=0 7s | playUsMarketTalk: 12 checks, 0 failed
+pm-fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+pm-outcomes-mut exit=0 5s | Outcomes:6 healthy groups,27 entire original/current state+RNG pairs,6 effective exact copied failures,18 prepared fixture branches.
+pm-native-mut exit=0 376s | Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.

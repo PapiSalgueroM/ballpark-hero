@@ -1,0 +1,9 @@
+nfl extension: first push result held; push control after the wheel disabled; after a reload enabled; second push TAKEN: a second wheel opened and the save changed (result withdrawn)
+nfl freeagency: first push result held; push control after the wheel disabled; after a reload enabled; second push TAKEN: a second wheel opened and the save changed (result raised)
+nba extension: first push result held; push control after the wheel disabled; after a reload enabled; second push TAKEN: a second wheel opened and the save changed (result withdrawn)
+nba freeagency: first push result held; push control after the wheel disabled; after a reload enabled; second push TAKEN: a second wheel opened and the save changed (result raised)
+mlb extension: no push to make on this save (push control absent)
+mlb freeagency: first push result held; push control after the wheel disabled; after a reload enabled; second push TAKEN: a second wheel opened and the save changed (result raised)
+nhl extension: no push to make on this save (push control absent)
+nhl freeagency: first push result held; push control after the wheel disabled; after a reload enabled; second push TAKEN: a second wheel opened and the save changed (result raised)
+pushAgain: the push stayed spent across a reload in 0 journeys, came back in 6, not applicable in 2
