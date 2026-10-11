@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+c3-new: node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000 --hookTimeout=120000 --reporter=verbose

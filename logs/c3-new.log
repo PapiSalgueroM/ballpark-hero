@@ -1,0 +1,188 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the review is offered again and a new write succeeds[32m 21[2mms[22m[39m
+[31m   → expected 'The saved agent review could not be v…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22manother version: the review is offered again and a new write succeeds[32m 4[2mms[22m[39m
+[31m   → expected 'The saved agent review could not be v…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22mnull: the review is offered again and a new write succeeds[32m 4[2mms[22m[39m
+[31m   → expected 'The saved agent review could not be v…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22ma receipt whose source row no longer matches: the review is offered again and a new write succeeds[32m 4[2mms[22m[39m
+[31m   → expected 'The saved agent review could not be v…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the comeback is offered again and a new write succeeds[32m 5[2mms[22m[39m
+[31m   → expected 'The saved availability change could n…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22manother version: the comeback is offered again and a new write succeeds[32m 3[2mms[22m[39m
+[31m   → expected 'The saved availability change could n…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22mnull: the comeback is offered again and a new write succeeds[32m 3[2mms[22m[39m
+[31m   → expected 'The saved availability change could n…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22ma receipt whose source row no longer matches: the comeback is offered again and a new write succeeds[32m 3[2mms[22m[39m
+[31m   → expected 'The saved availability change could n…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, a wrong shape: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 5[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, another version: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 4[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, null: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 3[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, a receipt whose source row no longer matches: the card is offered again like to any eligible player, and a new announcement overwrites the part[32m 13[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, a wrong shape: read as absent, not offered again, and played as the save with no part[32m 11[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, another version: read as absent, not offered again, and played as the save with no part[32m 2[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, null: read as absent, not offered again, and played as the save with no part[32m 2[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, a receipt whose source row no longer matches: read as absent, not offered again, and played as the save with no part[32m 3[2mms[22m[39m
+[31m   → expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+ [32m✓[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mthe flag alone ends nothing: with no readable plan the summary of that year does not retire the player[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mthe journey of ruling C3: announce a farewell, play the year, retire, then carry on[2m > [22mis NOT reachable: after a farewell retirement no step adds a season row, so the plan stays readable for good[32m 75[2mms[22m[39m
+ [31m×[39m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mthe journey of ruling C3: announce a farewell, play the year, retire, then carry on[2m > [22mbuilt by hand (a row past the farewell year on a career that plays on): the plan is read as absent and the flag decides[32m 48[2mms[22m[39m
+[31m   → expected { eligible: false, year: null, …(1) } to deeply equal { eligible: false, year: null, …(1) }[39m
+ [32m✓[39m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell season is announced by one box on the page[2m > [22mon the playing screen an announced plan shows its card and no second banner[32m 195[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell season is announced by one box on the page[2m > [22mon the season summary of the final year the card is still the only one[32m 108[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell season is announced by one box on the page[2m > [22ma player of 34 with no plan is offered the farewell once and told nothing yet[32m 55[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell plan that cannot be verified is read as absent on the page[2m > [22mwith the flag set by the announcement: the old banner shows, once, and the card is not offered again[32m 50[2mms[22m[39m
+ [31m×[39m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell plan that cannot be verified is read as absent on the page[2m > [22mwith the flag off: the card is offered again and there is no banner[32m 60[2mms[22m[39m
+[31m   → expected { announced: +0, available: +0, …(1) } to deeply equal { announced: +0, available: 1, …(1) }[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 18 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell plan that cannot be verified is read as absent on the page[2m > [22mwith the flag off: the card is offered again and there is no banner
+[31m[1mAssertionError[22m: expected { announced: +0, available: +0, …(1) } to deeply equal { announced: +0, available: 1, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "announced": 0,[22m
+[32m-   "available": 1,[39m
+[31m+   "available": 0,[39m
+[2m    "banner": false,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerFarewellOneBanner.test.tsx:[2m165:33[22m[39m
+    [90m163| [39m    const saved = unverifiable(announceSoccerFarewell(senior()), false…
+    [90m164| [39m    expect(readSoccerFarewell(saved), 'the plan is past verifying').to…
+    [90m165| [39m    expect(boxes(mount(saved))).toEqual({ announced: 0, available: 1, …
+    [90m   | [39m                                [31m^[39m
+    [90m166| [39m  })[33m;[39m
+    [90m167| [39m[33m}[39m);
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the review is offered again and a new write succeeds
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22manother version: the review is offered again and a new write succeeds
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22mnull: the review is offered again and a new write succeeds
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22magentReview: a part that cannot be verified is read as absent[2m > [22ma receipt whose source row no longer matches: the review is offered again and a new write succeeds
+[31m[1mAssertionError[22m: expected 'The saved agent review could not be v…' not to match /verified/i[39m
+
+[32m- Expected:[39m 
+/verified/i
+
+[31m+ Received:[39m 
+"The saved agent review could not be verified."
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m99:36[22m[39m
+    [90m 97| [39m    [34mexpect[39m([34mreadAgentReview[39m(c))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 98| [39m    [35mconst[39m eligibility [33m=[39m [34magentReviewEligibility[39m(c)[33m;[39m
+    [90m 99| [39m    [34mexpect[39m(eligibility[33m.[39mreason)[33m.[39mnot[33m.[39m[34mtoMatch[39m([33mSENTENCE[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m100| [39m    [34mexpect[39m(eligibility[33m.[39mavailable)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m101| [39m    [35mconst[39m next [33m=[39m [34mchangeCareerAgent[39m(c[33m,[39m [32m'super'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22ma wrong shape: the comeback is offered again and a new write succeeds
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22manother version: the comeback is offered again and a new write succeeds
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22mnull: the comeback is offered again and a new write succeeds
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22minternationalReturn: a part that cannot be verified is read as absent[2m > [22ma receipt whose source row no longer matches: the comeback is offered again and a new write succeeds
+[31m[1mAssertionError[22m: expected 'The saved availability change could n…' not to match /verified/i[39m
+
+[32m- Expected:[39m 
+/verified/i
+
+[31m+ Received:[39m 
+"The saved availability change could not be verified."
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m121:36[22m[39m
+    [90m119| [39m    [34mexpect[39m([34mreadInternationalReturn[39m(c))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m120| [39m    [35mconst[39m eligibility [33m=[39m [34minternationalReturnEligibility[39m(c)[33m;[39m
+    [90m121| [39m    [34mexpect[39m(eligibility[33m.[39mreason)[33m.[39mnot[33m.[39m[34mtoMatch[39m([33mSENTENCE[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m122| [39m    [34mexpect[39m(eligibility[33m.[39mavailable)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m123| [39m    [35mconst[39m next [33m=[39m [34mmakeInternationallyAvailable[39m(c)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, a wrong shape: the card is offered again like to any eligible player, and a new announcement overwrites the part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, another version: the card is offered again like to any eligible player, and a new announcement overwrites the part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, null: the card is offered again like to any eligible player, and a new announcement overwrites the part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag off, a receipt whose source row no longer matches: the card is offered again like to any eligible player, and a new announcement overwrites the part
+[31m[1mAssertionError[22m: expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+
+[32m- Expected:[39m 
+/verified/i
+
+[31m+ Received:[39m 
+"This saved farewell plan cannot be verified."
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m148:36[22m[39m
+    [90m146| [39m    [34mexpect[39m([34mreadSoccerFarewell[39m(c))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m147| [39m    [35mconst[39m eligibility [33m=[39m [34mfarewellEligibility[39m(c)[33m;[39m
+    [90m148| [39m    [34mexpect[39m(eligibility[33m.[39mreason)[33m.[39mnot[33m.[39m[34mtoMatch[39m([33mSENTENCE[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m149| [39m    expect(eligibility).toMatchObject({ eligible: true, year: latest.y…
+    [90m150| [39m    [35mconst[39m next [33m=[39m [34mannounceSoccerFarewell[39m(c)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, a wrong shape: read as absent, not offered again, and played as the save with no part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, another version: read as absent, not offered again, and played as the save with no part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, null: read as absent, not offered again, and played as the save with no part
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mfarewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag[2m > [22mflag set by the announcement, a receipt whose source row no longer matches: read as absent, not offered again, and played as the save with no part
+[31m[1mAssertionError[22m: expected 'This saved farewell plan cannot be ve…' not to match /verified/i[39m
+
+[32m- Expected:[39m 
+/verified/i
+
+[31m+ Received:[39m 
+"This saved farewell plan cannot be verified."
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m166:36[22m[39m
+    [90m164| [39m    [34mexpect[39m([34mfarewellSeasonComplete[39m(c))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m165| [39m    [35mconst[39m eligibility [33m=[39m [34mfarewellEligibility[39m(c)[33m;[39m
+    [90m166| [39m    [34mexpect[39m(eligibility[33m.[39mreason)[33m.[39mnot[33m.[39m[34mtoMatch[39m([33mSENTENCE[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m167| [39m    expect(eligibility).toEqual({ eligible: false, year: null, reason:…
+    [90m168| [39m    [34mexpect[39m([34mannounceSoccerFarewell[39m(c))[33m.[39m[34mtoBe[39m(c)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePartsReadAsAbsent.test.ts[2m > [22mthe journey of ruling C3: announce a farewell, play the year, retire, then carry on[2m > [22mbuilt by hand (a row past the farewell year on a career that plays on): the plan is read as absent and the flag decides
+[31m[1mAssertionError[22m: expected { eligible: false, year: null, …(1) } to deeply equal { eligible: false, year: null, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "eligible": false,[22m
+[32m-   "reason": "Your final season is already announced.",[39m
+[31m+   "reason": "This saved farewell plan cannot be verified.",[39m
+[2m    "year": null,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerSavePartsReadAsAbsent.test.ts:[2m257:42[22m[39m
+    [90m255| [39m    expect(carried.farewellSeason, 'and left in the save as it was').t…
+    [90m256| [39m    expect(carried.isFinalSeason, 'as the engine leaves it: nothing cl…
+    [90m257| [39m    expect(farewellEligibility(carried)).toEqual({ eligible: false, ye…
+    [90m   | [39m                                         [31m^[39m
+    [90m258| [39m    [35mconst[39m cleared [33m=[39m { [33m...[39mcarried[33m,[39m isFinalSeason[33m:[39m [35mfalse[39m }[33m;[39m
+    [90m259| [39m    expect(farewellEligibility(cleared)).toMatchObject({ eligible: tru…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m18 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 18:41:22
+[2m   Duration [22m 4.87s[2m (transform 2.43s, setup 167ms, collect 4.96s, tests 702ms, environment 1.06s, prepare 459ms)[22m
+
