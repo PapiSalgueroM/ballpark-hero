@@ -1,0 +1,4 @@
+#!serial
+fleet: R="$PWD"; export USC_N=300; git worktree add -q --detach /tmp/base aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$R/node_modules" /tmp/base/node_modules && (cd /tmp/base && node "$R/.rc/x/uscProbe.mjs" dump /tmp/base.json) && node .rc/x/uscProbe.mjs dump /tmp/head.json && node .rc/x/uscCmp.mjs fleet /tmp/base.json /tmp/head.json "$RC_OUT/fleet.txt"
+resume: R="$PWD"; (cd /tmp/base && node "$R/.rc/x/uscProbe.mjs" resume /tmp/base.json /tmp/baseres.json) && node .rc/x/uscProbe.mjs resume /tmp/base.json /tmp/headres.json && node .rc/x/uscCmp.mjs resume /tmp/baseres.json /tmp/headres.json "$RC_OUT/resume.txt"
+selfsame: export USC_N=300; node .rc/x/uscProbe.mjs dump /tmp/head2.json && node .rc/x/uscCmp.mjs fleet /tmp/head.json /tmp/head2.json "$RC_OUT/self.txt" | tail -2
