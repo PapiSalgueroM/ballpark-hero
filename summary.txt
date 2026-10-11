@@ -1,0 +1,15 @@
+base exit=0 2s | aa564f160 Record Release AU live: deployment aa7795c9, entry index-CSV
+fleet exit=0 56s | DEFAULT PATH BYTE EQUAL on three trees (branch, r1302 base, main): FLEET digest 09851c081462974d5553656b9035a2a4b4ba8888b433642fa4bab9a2e1115dbe
+old-saves exit=0 4s | OLD SAVES HOLD: 16 digest lines equal on the r1302 base and the branch
+new-saves-back exit=0 4s | SAVES OF THE BRANCH LOAD ON MAIN THE SAME: 16 digest lines equal
+kinds exit=0 15s | KINDS HOLD: the saved list survives a real save and load and the second half plays it
+gap exit=0 45s | GAP {"seeds":[2,3,4],"clubs":144,"matches":4339,"goalsOn":2.6435,"goalsOff":2.7184,"ruledOut":346,"penaltyReviews":0,"resultMoved":123,"withReview":333,"ruledOutPerMatch"
+gap2 exit=0 46s | GAP {"seeds":[12,13,14],"clubs":144,"matches":4327,"goalsOn":2.6547,"goalsOff":2.7291,"ruledOut":333,"penaltyReviews":0,"resultMoved":134,"withReview":321,"ruledOutPerMat
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLegalPages exit=0 0s | simLegalPages: all green
+simNumberFormatting exit=0 120s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+gitclean exit=0 1s | 0
+litprobe exit=0 10s |       Tests  3 passed (3)
