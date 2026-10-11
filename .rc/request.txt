@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+# Round 1303: the browser walks on the build AS IT SHIPS (dark). The live match fit walk nobody had run on this round, the two Quick Sim walks the branch carries through Round 1218, the review walk (which must refuse a dark build with exit 2), and the page weights.
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs > /tmp/lf.log 2>&1; s=$?; cp /tmp/lf.log "$RC_OUT/playLiveMatchFit.log"; tail -8 /tmp/lf.log | cut -c1-420; echo "playLiveMatchFit exit $s"; exit $s
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -3 /tmp/sf.log | cut -c1-400; echo "simCmRealFixtures exit $s"; exit $s
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf.log 2>&1; s=$?; tail -6 /tmp/rf.log | cut -c1-400; echo "playCmRealFixtures exit $s"; exit $s
+playCmQuickSubs: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs > /tmp/qs.log 2>&1; s=$?; tail -6 /tmp/qs.log | cut -c1-400; echo "playCmQuickSubs exit $s"; exit $s
+playCmVar-dark: node scripts/playCmVar.mjs > /tmp/vd.log 2>&1; s=$?; tail -3 /tmp/vd.log | cut -c1-300; echo "playCmVar on the dark build exit $s (2 is the refusal it must give)"; exit $s
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -a -i "club-manager\|over\|budget" /tmp/w.log | cut -c1-260 | head -30; tail -3 /tmp/w.log | cut -c1-300; echo "sweepWeight exit $s"; exit $s
+playClubManagerNewCountries: node scripts/playClubManagerNewCountries.mjs > /tmp/nc.log 2>&1; s=$?; cp /tmp/nc.log "$RC_OUT/playClubManagerNewCountries.log"; tail -5 /tmp/nc.log | cut -c1-400; echo "playClubManagerNewCountries exit $s"; exit $s
