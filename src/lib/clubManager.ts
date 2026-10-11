@@ -50,8 +50,8 @@ import { keyedRng } from '@/lib/keyedRng';
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
 import {
-  bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
-  liveBook, openBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
+  bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
+  liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -329,8 +329,13 @@ function creditRaceGoals(state: CareerState, club: string, goals: number): void 
  *  - THE FIRST LAW. For every rival club at every moment: the goals on its rows + its own goals + its
  *    unnamed goals = its goals for in the league table. Each applyResult of a league round has one note
  *    call beside it (noteBookResult for two other clubs, noteBookMine for my match).
- *  - A BOOK IS A WHOLE SEASON OR NOTHING. It opens where a season starts and nowhere else. A save in mid
- *    season with no book (an old save, a hot seat run handed over) finishes the season without one.
+ *  - A BOOK IS A WHOLE SEASON, OR IT SAYS WHERE IT STARTED (Round 1306). A book opens where a season
+ *    starts. A save that reaches a match week in mid season with no book of that season (a save from
+ *    before the book, a hot seat run handed over, a book that is damaged or no longer adds up to the
+ *    table) starts a LATE one there (ensureLeagueBook): every goal so far is counted unnamed for its
+ *    club, so the first law holds from that moment, and the book carries the round it started at and
+ *    what my own men held then, so a board can count everybody from the same round. Nothing is ever
+ *    rebuilt from a guess, and no award is read from a late book.
  */
 
 /** A rival's penalties and direct free kicks go to the taker of its eleven (takerOf), the man the engine
@@ -355,6 +360,38 @@ const bookStampOf = (state: CareerState, leagueId: string): string => `${leagueI
 /** Opens the book of the season that is starting. Called by startCareer and startNextSeason only. */
 function openLeagueBook(state: CareerState): void {
   state.leagueBook = openBook(bookStampOf(state, careerLeagueOf(state).id));
+}
+
+/**
+ * Round 1306. A save that reaches a match week without a fit book of this season starts one there. Called
+ * once at the top of playNextEntry, after the other self repairs (two of them can change a player's id,
+ * and the late book keys my men by id), and never by a daily game (the `noBook` option).
+ *
+ * FIT means the careful reader accepts the book (the full walk: a stamp, every entry, every row) AND
+ * the first law holds for every rival club against the table. A fit book is left alone, so a healthy
+ * career never has its book reopened. Anything else (no book, a damaged one, another season's, one that
+ * stopped adding up because an older build played some weeks of it) is replaced:
+ *  - with no league match left this season: by nothing. The summer opens a whole book.
+ *  - before any league match of the season has been played: by an ordinary, whole book (a save parked
+ *    at the first week on a build from before the book loses nothing).
+ *  - otherwise by a late book from the next league round on (openLateBook).
+ * It draws nothing and reads only the save.
+ */
+function ensureLeagueBook(state: CareerState): void {
+  if (!state.leagueClubs?.length) return;
+  const stamp = bookStampOf(state, careerLeagueOf(state).id);
+  const goalsFor = new Map(state.table.map(r => [r.club, r.gf]));
+  const clubs = state.leagueClubs.filter(c => c !== state.clubName).map(club => ({ club, gf: goalsFor.get(club) ?? 0 }));
+  const book = readBook(state.leagueBook, stamp);
+  if (book && bookFits(book, clubs)) return;
+  const next = state.calendar.slice(state.week).find(e => e.type === 'league');
+  if (!next) return;
+  if (state.table.every(r => r.w + r.d + r.l === 0)) {
+    state.leagueBook = openBook(stamp);
+    return;
+  }
+  const mine = state.squad.map((p): [string, number, number] => [p.id, p.comp?.league?.goals ?? 0, p.comp?.league?.assists ?? 0]);
+  state.leagueBook = openLateBook(stamp, next.round, clubs, mine);
 }
 
 /** The book of the season in play, or null: no book, a damaged one, or another season's. The full shape
@@ -2407,11 +2444,12 @@ export interface CareerState {
   resultLog?: ResultLogEntry[];
   /** Round 1229: the league book of the season in play: every rival's league goals, assists and clean
    *  sheets by man, and my men's league clean sheets. Opened where a season starts (startCareer,
-   *  startNextSeason) and replaced every summer, so it never grows season over season. Absent on a save
-   *  whose season began before the round, on a daily, and on a hot seat run handed over: those play the
-   *  season out without one and get theirs at the next season start, never a rebuilt one. Read it
-   *  through leagueBookOf, which reads a damaged or stale book as none. Nothing reads it for a screen
-   *  yet: the old race (scorerRace) is still what the board and the awards show. */
+   *  startNextSeason) and replaced every summer, so it never grows season over season. Absent on a
+   *  daily, and until its next match week on a save whose season began before the round and on a hot
+   *  seat run handed over: Round 1306 starts a LATE book for those there (ensureLeagueBook), counted
+   *  from that round and marked as such, never one rebuilt from a guess. Read it through leagueBookOf,
+   *  which reads a damaged or stale book as none. Nothing reads it for a screen yet: the old race
+   *  (scorerRace) is still what the board and the awards show. */
   leagueBook?: LeagueBook;
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
@@ -17770,7 +17808,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
      Round 1072, with nobody making changes. Manager Hot Seat passes it: its
@@ -17819,6 +17857,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureSetPieces(state);
   // Round 978: and a damaged international block goes, that block alone.
   ensureIntl(state);
+  /* Round 1306: and a save with no fit league book of this season starts one here. `noBook` is the two
+     daily games' (Manager Hot Seat passes it beside noCoach, for the same reason: a daily is a seed
+     replayed through this function and never carries a book). */
+  if (!opts?.noBook) ensureLeagueBook(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this

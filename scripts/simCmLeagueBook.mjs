@@ -49,21 +49,31 @@
  *            between other clubs, the count on rows of forwards, midfielders and defenders against what
  *            the harness's own copy of the goal table and of the assist table says for each eleven,
  *            inside four binomial standard deviations
- *   oldsave  four saves with no book (the two committed fixtures, loaded through loadCareer, and two
- *            written in the run twenty entries into a season) finish their season on the candidate
- *            exactly as on the reference engines, entry by entry, with the same board and summary, and
- *            never gain a book; the season after opens one that obeys the law from its first round; a
- *            book that is a string, an array, a number, or last season's own reads as no book, is never
- *            written into, and the save plays the entries the same save with no book at all plays; a
- *            book with one holed row is refused whole by the reader and plays the same entries too, but
- *            the match week (a stamp and a type check, on purpose) still writes to it; a book in which
- *            one club's entry has no rows map is refused by the reader, never thrown on by the match
- *            week, and that entry is left as it was found
+ *   oldsave  REWRITTEN in Round 1306 for the rule that replaced "a whole season or nothing": a save that
+ *            reaches a match week with no fit book of its season starts one there (ensureLeagueBook).
+ *            (i) five saves with no book (the two committed fixtures, loaded through loadCareer; two
+ *            written in the run twenty entries into a season; one parked at the first week of a season):
+ *            the load itself gives no book; the first entry opens a LATE book whose round is the next
+ *            league entry's, opened on the rivals' goals for and on my men's league lines as they stood,
+ *            or, for the parked one, an ordinary whole book; the law after every entry to the season's
+ *            end; the save but its book byte equal, entry by entry and draw for draw, to the reference
+ *            engines', with the same board and summary; the season after opens an empty whole book; and,
+ *            with BOOK_BASE, the base commit's reader accepts the late book (a rolled back release reads
+ *            it). (ii) the six unreadable books (a string, an array, a number, last season's own, a row
+ *            with a hole, a club entry with no rows map): each is replaced at the next entry by exactly
+ *            the late book the same save with no book is given, the week never throws, the save but its
+ *            book plays the same entries; and with the repair off (the noBook path) the match week's own
+ *            guard holds as it did. (iii) the stale book: ten entries on the candidate and three on an
+ *            engine from before the book leave a book that reads and does not fit, and the next entry
+ *            replaces it. (iv) over the whole fleet no career that started its season with a book ends
+ *            an entry on a late one
  *   doors    the takeover from the picker at its three entries and the job joined today in season one
  *            and in season three: a whole book at the handover and the law after every entry to the end
- *   dailies  Manager Hot Seat (four dates, played to a verdict, handed over to Club Manager and played
- *            on) and Deadline Day (three dates): no state ever carries a book, and every state is byte
- *            equal to the reference engines' for the same date
+ *   dailies  Manager Hot Seat (six dates, two of them across the transfer window, played to a verdict,
+ *            handed over to Club Manager and played on) and Deadline Day (three dates): no state of a
+ *            daily ever carries a book, every state but its book is byte equal to the reference engines'
+ *            for the same date, and the career handed over holds none and then a readable late book
+ *            after each of its first entries in Club Manager (Round 1306)
  *   thin     Round 1306: a club that cannot field a named eleven is dealt over THE MEN ITS ROSTER HAS in
  *            the places a full eleven would give them, with an empty shirt (rated at the club's strength,
  *            never given a row) in every place it cannot fill. (i) at each season's end the clean sheets
@@ -137,9 +147,23 @@
  *   thinsheet     a thin club's clean sheet against ME is not written down -> thin (i)
  *   thinall       every club is routed through the partial eleven: the same men in another order, so
  *                 the same roll names another man (needs BOOK_BASE)  -> thin (iv)
+ *   noreopen      the repair trusts whatever the match week's reader accepts, the law unasked: a stale
+ *                 book is kept                                       -> oldsave (iii), and (ii) with it
+ *   fitlive       the repair asks the match week's reader and then the law: the holed book is kept for
+ *                 the season and the entry with no rows map throws   -> oldsave (ii), both books
+ *   latezero      a late book opens every club on nought unnamed     -> oldsave (i): the law after the
+ *                 first entry of a save with no book, and (ii), (iii) with it
+ *   alwayslate    a book opened before any league match is a late one -> oldsave (i), the parked save
+ *   hotseatbook1  the Hot Seat's walk past a window drops the noBook option -> dailies
+ *   hotseatbook2  the Hot Seat's setup drops it                      -> dailies
+ *   hotseatbook3  the Hot Seat's match drops it                      -> dailies
+ *   (redeal and hurtentry above still hold what they held: the load opens no book; the match week's
+ *   guard, now reached with the repair off, never throws on an entry with no rows map)
  *   readerdraw    the reader draws from Math.random once a board     -> boards (iii) and (iv)
  *   readerwrite   the reader turns the book's list of my clean sheets round in place -> boards (iii)
- * dropmine and byeweek break the first law, so section boards (i) goes red with them as well.
+ * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
+ * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
+ * by a late book, which is exactly a book reopened in a healthy fleet.
  *
  * MEASURED: see the block above PURPOSE_FLOOR.
  *
@@ -189,11 +213,18 @@ const NOTE_RESULT = 'noteBookResult(state, myLeagueId, entry.round, h, a, hg, ag
    it sits two spaces deeper than the week's close, so with its indent it occurs once. */
 const NOTE_BYE = `          ${NOTE_RESULT}`;
 const OPEN_LINE = '  state.leagueBook = openBook(bookStampOf(state, careerLeagueOf(state).id));';
+/* Round 1306: the one call that starts a book for a save that has none (ensureLeagueBook, at the top of the
+   match week). The engine with the book out never makes it, so it is an engine from before the book. */
+const ENSURE_CALL = '  if (!opts?.noBook) ensureLeagueBook(state);';
 const BOOK_OFF = [
   { file: ENGINE, from: OPEN_LINE, to: '  void openBook;' },
   { file: ENGINE, from: NOTE_MINE, to: '' },
   { file: ENGINE, from: NOTE_RESULT, to: '', n: 2 },
+  { file: ENGINE, from: ENSURE_CALL, to: '  void ensureLeagueBook;' },
 ];
+/* The Hot Seat's three calls of the match week, each with the option that keeps a daily without a book. */
+const HOT_CALL = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: true, noBook: true })`;
+const HOT_CALL_BOOKED = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: true })`;
 /* The line of noteBookSide that picks a club's eleven (null for a club that cannot field a named one). */
 const SIDE_XI = '  const xi = pickOppSquad(roster)?.xi ?? null;';
 /* The line of the reader module that hands a board back (leaders). */
@@ -210,7 +241,7 @@ const CONTROLS = {
   weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin'] },
   mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream' },
   dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards'] },
-  byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin', 'boards'] },
+  byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin', 'boards', 'oldsave'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
   wrongman: { patch: [{ file: ENGINE, from: '    let man: OppXiLine | null = bookNamed(there, line.name) ?? bookNamed(theirs, line.name);', to: "    let man: OppXiLine | null = there.find(p => p.p !== 'GK') ?? bookNamed(theirs, line.name);" }], red: 'names' },
@@ -232,6 +263,13 @@ const CONTROLS = {
   nofill: { patch: [{ file: BOOK, from: '    for (let i = 0; i < open[line]; i += 1) outfield.push({ n: `?${++shirts}`, p: SHIRT_POS[line], r: rating, e: true });', to: '    void shirts;' }], red: 'thin' },
   shirtrow: { patch: [{ file: BOOK, from: '  if (man.e) return null;', to: '' }], red: 'thin' },
   thinsheet: { patch: [{ file: ENGINE, from: '    if (thin) creditCleanSheet(book, opp, thin.keeper, thinBacks(thin.outfield));', to: '    void thin;' }], red: 'thin' },
+  noreopen: { patch: [{ file: ENGINE, from: '  if (book && bookFits(book, clubs)) return;', to: '  if (liveBook(state.leagueBook, stamp)) return;' }], red: 'oldsave', mentions: ['the stale book'] },
+  fitlive: { patch: [{ file: ENGINE, from: '  const book = readBook(state.leagueBook, stamp);', to: '  const book = liveBook(state.leagueBook, stamp);' }], red: 'oldsave', mentions: ['a row with a hole', 'a club entry with no rows'] },
+  latezero: { patch: [{ file: BOOK, from: '    book.c[c.club] = { m: {}, og: 0, u: c.gf };', to: '    book.c[c.club] = { m: {}, og: 0, u: 0 };' }], red: 'oldsave' },
+  alwayslate: { patch: [{ file: ENGINE, from: '  if (state.table.every(r => r.w + r.d + r.l === 0)) {', to: '  if (state.table.length < 0) {' }], red: 'oldsave', mentions: ['parked'] },
+  hotseatbook1: { patch: [{ file: HOT, from: HOT_CALL('run.state'), to: HOT_CALL_BOOKED('run.state') }], red: 'dailies' },
+  hotseatbook2: { patch: [{ file: HOT, from: HOT_CALL('s'), to: HOT_CALL_BOOKED('s') }], red: 'dailies' },
+  hotseatbook3: { patch: [{ file: HOT, from: HOT_CALL('ready'), to: HOT_CALL_BOOKED('ready') }], red: 'dailies' },
   readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
   readerwrite: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  input.book.my.reverse();\n${LEADERS_RETURN}` }], red: 'boards' },
   thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
@@ -356,13 +394,43 @@ async function engine(label, root, patches = []) {
  * Every one of the 21 controls FIRED for its own section and no other on seed set 0 (r1229-fx4), and the
  * nine that are new or re-measured since the review on seed sets 1 to 4 as well (r1229-fx5).
  * Wall time: full fleet about 118 seconds, with BOOK_BASE and BOOK_MEASURE about 195; default fleet about 45.
+ *
+ * ROUND 1306, MEASURED on GitHub runners, 2026-10-11, five seed sets each (remote checks r1306-b1, r1306-c1
+ * and r1306-e1; the base commit is 8d3f54c6, which keeps a book itself, so the saves of section oldsave are
+ * written by the engine with the book out).
+ *   thin (iii)   goals of clubs with no eleven against other clubs on a named row, against the harness's own
+ *            partial eleven, z: full fleets 0.37 -0.37 -1.25 0.12 0.16 (9,260 to 11,030 goals, 68.5 to 69.3
+ *            in a hundred named), default fleets -2.03 1.25 1.78 -0.70 -0.11 (2,041 to 2,565 goals), gate 4.
+ *            Control nofill: every such goal lands on a named man, 1 failure, the z itself. THIN_FLOOR 1,200
+ *            is six tenths of the lowest default fleet.
+ *   thin (i)     keeper rows of 141 to 161 club seasons with no eleven a full fleet (29 to 36 a default one),
+ *            49 to 60 of their clean sheets kept against me (8 to 25). Control thinsheet: 17 failures.
+ *   thin (ii)    control shirtrow: 2,282 failures (every row under an empty shirt's mark).
+ *   thin (iv)    671 of 671 entries of clubs with an eleven all season byte equal to the base commit's on the
+ *            full fleet, 114 of 114 on the default one (seed set 0). Control thinall: 7 failures.
+ *   stream       108 of 108 and 20 of 20 faces equal to the base commit's (seed set 0): step (b) moved no match.
+ *   shapes (ii)  measured again, because thin clubs' forwards are on the Goals board now: rise full 4.35 4.41
+ *            4.57 4.52 4.54, default 4.10 4.10 4.40 4.70 4.30. PURPOSE_FLOOR 1.5 stays, further under than before.
+ *   shapes (v)   who is given an assist, the three lines against the harness's own two tables, z (forwards,
+ *            midfielders, defenders): full (0.63 0.59 -1.46) (0.81 0.22 -1.23) (0.35 -0.79 0.54) (0.08 -0.40
+ *            0.39) (-1.46 0.02 1.70), default (-1.99 0.37 1.92) (0.18 -0.92 0.89) (0.47 -1.33 1.04) (0.14 1.09
+ *            -1.48) (-1.46 0.92 0.62): thirty healthy z, none over 2, gate 4. 20,101 to 20,376 assists a full
+ *            fleet, 3,392 to 3,905 a default one. Control assistgoalweight: forwards z 7.98 9.08 9.42 10.64
+ *            9.12 and defenders z -11.04 -11.15 -10.37 -12.20 -10.87 on the five default sets, 23.33 and
+ *            -28.33 on a full one. ASSIST_FLOOR 2,000 is six tenths of the lowest default fleet; at that
+ *            count the control would still stand near z 8 on defenders.
+ *   boards       923 checks over 54 season ends on a full fleet. Controls: readerdraw 6 failures, readerwrite
+ *            5. dropmine and byeweek turn boards red with their own section, as they must.
+ * Every control of the harness FIRED for its own section and no other (or with the sections its line names) on
+ * seed set 0, the 21 of Round 1229 among them, after step (b) (r1306-b1, r1306-c1) and the new ones after the
+ * step that added them. Wall time on a runner: full fleet 100 to 170 seconds, default 42 to 60.
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
 /** Section shapes (iv) is judged on at least this many matches: see MEASURED above. */
 const MULTI_FLOOR = 1000;
 /** Section shapes (v) is judged on at least this many assists between other clubs: see MEASURED, Round 1306. */
-const ASSIST_FLOOR = 1500;
+const ASSIST_FLOOR = 2000;
 /** Section thin (iii) is judged on at least this many goals of clubs with no eleven: see MEASURED, Round 1306. */
 const THIN_FLOOR = 1200;
 
@@ -594,6 +662,8 @@ const newAcc = () => ({
   ends: [],
   /* A copy of the whole save at each season's end, for section boards. */
   endSaves: [],
+  /* Entries of the fleet that ended on a LATE book, and the first of them: must be none (oldsave (iv)). */
+  lateEntries: 0, lateFirst: null,
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -729,6 +799,8 @@ function watcher(mod, label, acc, opts = {}) {
     entry(before, after, r, season) {
       acc.entries += 1;
       const where = `season ${season + 1} week ${after.week}`;
+      /* Round 1306, oldsave (iv): a career that started its season with a book never has it reopened late. */
+      if (after.leagueBook?.r0 !== undefined) { acc.lateEntries += 1; acc.lateFirst ??= `${label} ${where}`; }
       const book = lawNow(mod, after, label, where);
       if (!book || !before.book) return;
       const mineNow = cm.mySquadNames(after);
@@ -1478,35 +1550,77 @@ function onStream(seed, fn) {
   Date.now = () => 1791302400000;
   try { return fn(draw); } finally { Math.random = realRandom; Date.now = realNow; }
 }
-const whole = s => sha(JSON.stringify(s));
 
-/* ---------- section oldsave: a save with no book finishes its season as it always did ---------- */
+/* ---------- section oldsave (Round 1306): a save with no fit book starts one at its next match week ---------- */
 {
-  /** A save played to the end of its season on one engine: a face after every entry, the board, the summary, the next season. */
-  const finishOn = (mod, raw, seed, viaLoad) => onStream(seed, draw => {
+  const { boards } = candidate;
+  const bookless = s => sha(withoutBook(s));
+  /** What ensureLeagueBook must make of a save, read off the save as it stood BEFORE its first entry: no
+   *  league match left means nothing; no league match played yet means an ordinary whole book; otherwise a
+   *  late book from the next league round, opened on the rivals' goals for and my men's league lines. */
+  const expected = s0 => {
+    const gf = new Map(s0.table.map(r => [r.club, r.gf]));
+    const next = s0.calendar.slice(s0.week).find(e => e.type === 'league') ?? null;
+    return {
+      next, whole: s0.table.every(r => played(r) === 0),
+      u0: rivalsOf(s0).reduce((n, c) => n + (gf.get(c) ?? 0), 0),
+      mine: s0.squad.map(p => `${p.comp?.league?.goals ?? 0}|${p.comp?.league?.assists ?? 0}`).filter(x => x !== '0|0').sort().join(' '),
+    };
+  };
+  /** The book of `s` right after the entry that should have opened it, against `want`. */
+  const judgeOpened = (mod, name, s, want) => {
+    const book = mod.cm.leagueBookOf(s);
+    tick('oldsave', 4);
+    if (!want.next) { if ('leagueBook' in s && book) fail('oldsave', `${name}: a book was opened with no league match left to record`); return; }
+    if (!book) { fail('oldsave', `${name}: after its first entry the save holds no readable book`); return; }
+    if (want.whole) {
+      if (!boards.bookIsWhole(book) || book.b !== undefined || book.u0 !== undefined) fail('oldsave', `${name}: no league match had been played, and the book opened is a late one (r0 ${book.r0})`);
+      return;
+    }
+    if (book.r0 !== want.next.round) fail('oldsave', `${name}: the late book says it started at round index ${book.r0}, the next league entry was round index ${want.next.round}`);
+    if (book.u0 !== want.u0) fail('oldsave', `${name}: the late book was opened on ${book.u0} rival goals, the table held ${want.u0}`);
+    const held = (book.b ?? []).map(t => `${t[1]}|${t[2]}`).sort().join(' ');
+    if (held !== want.mine) fail('oldsave', `${name}: the late book's baseline of my men (${held}) is not their league lines as they stood (${want.mine})`);
+    /* (v) a release rolled back for a day reads a save this round wrote: the base commit's careful reader accepts it. */
+    if (base?.book) {
+      tick('oldsave');
+      if (!base.book.readBook(JSON.parse(JSON.stringify(s.leagueBook)), s.leagueBook.s)) fail('oldsave', `${name}: the base commit's reader refuses the late book this engine wrote`);
+    }
+  };
+  /** A save played to the end of its season on one engine: a face (the whole save but the book, and the
+   *  count of draws) after every entry, the board, the summary, the next season. `judge` (the candidate
+   *  only) also holds the book that opens and the law after every entry. */
+  const finishOn = (mod, save, judge) => onStream(save.seed, draw => {
     let s;
-    if (viaLoad) { store.clear(); store.set(mod.cm.SAVE_KEY, raw); s = mod.cm.loadCareer(); } else s = wake(mod, JSON.parse(raw));
+    if (save.viaLoad) { store.clear(); store.set(mod.cm.SAVE_KEY, save.raw); s = mod.cm.loadCareer(); } else s = wake(mod, JSON.parse(save.raw));
     if (!s) return null;
-    const faces = [whole(s)];
-    let sawBook = 'leagueBook' in s;
+    const faces = [bookless(s)];
+    const bookAtLoad = 'leagueBook' in s;
+    const want = judge ? expected(s) : null;
+    let late = 0;
     let guard = 0;
     while (s.week < s.calendar.length && guard++ < 220) {
       const r = mod.cm.playNextEntry(s, { skipHalftime: true });
       s = r.state;
-      faces.push(`${whole(s)}|${draw.calls()}`);
-      if ('leagueBook' in s) sawBook = true;
+      faces.push(`${bookless(s)}|${draw.calls()}`);
+      if (judge) {
+        if (guard === 1) judgeOpened(mod, save.name, s, want);
+        if (want.next) lawNow(mod, s, save.name, `entry ${guard}`, 'oldsave');
+        if (s.leagueBook?.r0 !== undefined) late += 1;
+      }
       if (r.kind === 'seasonOver') break;
     }
     const board = JSON.stringify(mod.cm.goldenBootTable(s, 12));
     const fin = mod.cm.finishSeason(s);
-    return { faces, sawBook, board, boot: JSON.stringify(fin.summary.goldenBoot ?? null), next: mod.cm.startNextSeason(fin.state) };
+    return { faces, bookAtLoad, late, wantLate: Boolean(want?.next && !want.whole), board, boot: JSON.stringify(fin.summary.goldenBoot ?? null), next: mod.cm.startNextSeason(fin.state) };
   });
   const saves = [
     { name: 'the committed save of Round 1052 (Sevilla)', raw: fs.readFileSync(path.join(ROOT, 'scripts/data/cmOldSave1052Fixture.json'), 'utf8'), viaLoad: true, seed: 0x7001 },
     { name: 'the committed second tier save (Valencia)', raw: fs.readFileSync(path.join(ROOT, 'scripts/data/cmSecondTierOldSaveFixture.json'), 'utf8'), viaLoad: true, seed: 0x7002 },
   ];
-  /* And two written in this run by the engine with the book out: twenty entries into a season, then saved.
-     (Never by the base commit: since Round 1306 the base is a commit that keeps a book itself.) */
+  /* And three written in this run by the engine with the book out (never by the base commit, which keeps a
+     book itself): two twenty entries into a season, and one PARKED AT THE FIRST WEEK of its second season,
+     where no league match has been played and the book that opens must be an ordinary whole one. */
   const writer = await refs[0][1].again();
   for (const [club, seed] of [['Everton', 0x7003], ['Southampton', 0x7004]]) {
     const raw = onStream(seed, () => {
@@ -1516,99 +1630,151 @@ const whole = s => sha(JSON.stringify(s));
     });
     saves.push({ name: `${club}, twenty entries in, written by the ${refs[0][0]} engine`, raw, viaLoad: false, seed: seed + 16 });
   }
+  {
+    const raw = onStream(0x7005, () => {
+      let s = writer.cm.startCareer('Bayern Munich');
+      let guard = 0;
+      while (s.week < s.calendar.length && guard++ < 220) { const r = writer.cm.playNextEntry(s, { skipHalftime: true }); s = r.state; if (r.kind === 'seasonOver') break; }
+      return JSON.stringify(writer.cm.startNextSeason(writer.cm.finishSeason(s).state));
+    });
+    saves.push({ name: `Bayern Munich, parked at the first week of season two, written by the ${refs[0][0]} engine`, raw, viaLoad: false, seed: 0x7015, parked: true });
+  }
+  /* (i) each save on the candidate and on every reference engine, two fresh copies a pair. */
   const followUps = [];
+  let lateSaves = 0;
   for (const [refName, ref] of refs) {
     const candCopy = await candidate.again();
     const refCopy = await ref.again();
     for (const save of saves) {
       if (JSON.parse(save.raw).leagueBook !== undefined) cannot(`${save.name} carries a league book: it is not an old save`);
-      const a = finishOn(candCopy, save.raw, save.seed, save.viaLoad);
-      const b = finishOn(refCopy, save.raw, save.seed, save.viaLoad);
+      const first = refName === refs[0][0];
+      const a = finishOn(candCopy, save, first);
+      const b = finishOn(refCopy, save, false);
       tick('oldsave');
       if (!a || !b) { fail('oldsave', `${save.name}: did not load (${a ? 'candidate ok' : 'candidate null'}, ${b ? `${refName} ok` : `${refName} null`})`); continue; }
-      if (a.sawBook) fail('oldsave', `${save.name}: a league book appeared in a season that started without one`);
+      tick('oldsave');
+      if (a.bookAtLoad) fail('oldsave', `${save.name}: the load itself gave the save a league book (a load is a read: the book opens when a match is played)`);
       const firstOff = a.faces.findIndex((face, i) => face !== b.faces[i]);
       tick('oldsave', a.faces.length);
-      if (a.faces.length !== b.faces.length || firstOff >= 0) fail('oldsave', `${save.name}: the save differs from the ${refName} engine's from entry ${firstOff} of ${a.faces.length}`);
+      if (a.faces.length !== b.faces.length || firstOff >= 0) fail('oldsave', `${save.name}: the save but its book differs from the ${refName} engine's from entry ${firstOff} of ${a.faces.length}`);
       tick('oldsave', 2);
-      if (a.board !== b.board) fail('oldsave', `${save.name}: the golden boot board differs from the ${refName} engine's`);
+      if (a.board !== b.board) fail('oldsave', `${save.name}: the golden boot board differs from the ${refName} engine's (a late book feeds no race)`);
       if (a.boot !== b.boot) fail('oldsave', `${save.name}: the summary's golden boot differs from the ${refName} engine's`);
-      if (refName === refs[0][0]) followUps.push({ save, next: a.next });
+      if (first) {
+        tick('oldsave', 2);
+        if (save.parked && a.late) fail('oldsave', `${save.name}: no league match had been played and the season was kept on a late book`);
+        if (a.wantLate && a.late !== a.faces.length - 1) fail('oldsave', `${save.name}: ${a.late} of ${a.faces.length - 1} entries ended on a late book: it was opened late and must stay late to the season's end`);
+        if (a.wantLate) lateSaves += 1;
+        followUps.push({ save, next: a.next });
+      }
     }
   }
-  /* The season after: a book from its first round, and it obeys the law. */
+  tick('oldsave');
+  if (lateSaves < 2) fail('oldsave', `only ${lateSaves} of the saves with no book were in mid season: the late book was hardly tried`);
+  /* The season after: an ordinary whole book from its first round, and it obeys the law. */
   for (const { save, next } of followUps) {
     onStream(save.seed + 99, () => {
       let s = wake(candidate, next);
       const opened = candidate.cm.leagueBookOf(s);
       tick('oldsave');
-      if (!opened || Object.keys(opened.c).length) fail('oldsave', `${save.name}: the next season did not open with an empty book`);
+      if (!opened || Object.keys(opened.c).length || !boards.bookIsWhole(opened) || opened.b !== undefined) fail('oldsave', `${save.name}: the next season did not open with an empty whole book`);
       for (let k = 0; k < 8 && s.week < s.calendar.length; k++) {
         s = candidate.cm.playNextEntry(s, { skipHalftime: true }).state;
-        lawNow(candidate, s, save.name, `next season, entry ${k + 1}`, 'oldsave');
+        const book = lawNow(candidate, s, save.name, `next season, entry ${k + 1}`, 'oldsave');
+        if (book && !boards.bookIsWhole(book)) fail('oldsave', `${save.name}: next season, entry ${k + 1}: the book is a late one`);
       }
     });
   }
-  /* A book that cannot be read is no book: a string, an array, another league order's, last season's own. */
+  /* (ii) THE SIX UNREADABLE BOOKS: a string, an array, a number, last season's own, one row with a hole, one
+     club entry with no rows map. Each is replaced by a late book at the next entry, exactly the book the
+     same save with NO book is given, the week never throws, and the save but its book plays the entries
+     that save plays. (The fit check asks the careful reader first: the match week's reader, a stamp and a
+     type check, accepts the last two, and the first law alone would keep the holed one for the whole
+     season and throw on the other.) And the match week's own guard is still held, on the path that never
+     repairs (noBook, the dailies'): there a book the week cannot read is left as it was found, the holed
+     one is written to like its whole twin, and the entry with no rows map is stepped over, never thrown on. */
   {
-    /* One copy makes the save. Then each damaged book, and the same save with NO book at all, is played four
-       entries on a copy of the candidate evaluated afresh for it (the engine numbers its youth players, its
-       press questions and its messages as it goes, so only two copies with the same past are comparable byte
-       for byte). Both sides are the candidate, so this holds whatever a control does to the match stream. */
     const maker = await candidate.again();
-    const makeOn = mod => onStream(0x7010, () => {
-      let s = mod.cm.startCareer('Everton');
+    const made = onStream(0x7010, () => {
+      let s = maker.cm.startCareer('Everton');
       let guard = 0;
-      while (s.week < s.calendar.length && guard++ < 220) { const r = mod.cm.playNextEntry(s, { skipHalftime: true }); s = r.state; if (r.kind === 'seasonOver') break; }
+      while (s.week < s.calendar.length && guard++ < 220) { const r = maker.cm.playNextEntry(s, { skipHalftime: true }); s = r.state; if (r.kind === 'seasonOver') break; }
       const last = s.leagueBook ? JSON.parse(JSON.stringify(s.leagueBook)) : null;
-      let next = mod.cm.startNextSeason(mod.cm.finishSeason(s).state);
-      for (let k = 0; k < 4; k++) next = mod.cm.playNextEntry(next, { skipHalftime: true }).state;
+      let next = maker.cm.startNextSeason(maker.cm.finishSeason(s).state);
+      for (let k = 0; k < 4; k++) next = maker.cm.playNextEntry(next, { skipHalftime: true }).state;
       return { last, next };
     });
-    const made = makeOn(maker);
     const plain = JSON.parse(JSON.stringify(made.next));
     delete plain.leagueBook;
     if (!made.last || !made.next.leagueBook || made.last.s === made.next.leagueBook.s) cannot('last season and this one carry the same stamp, so a stale book cannot be told apart here');
     const good = JSON.stringify(made.next.leagueBook);
     const holed = JSON.parse(good.replace(/\[(\d+),(\d+),(\d+),(\d+)\]/, '[$1,$2,null,$4]'));
-    /* The third entry: can the match week tell? It asks a stamp and a type and nothing more (the full walk
-       on every result was measured at 60 percent of a season once), so a book with one holed row is still
-       written to in a match week. The READER refuses it whole, which is what a screen will ask, and the
-       engine never makes such a row itself: a row is four numbers from the moment it exists. */
-    /* And one a hand could make and JSON cannot: the stamp is right, one club's entry has no rows map. The
-       match week reads that book (a stamp and a type), so it must step over that entry, never throw on it
-       and never write to it, while the rest of the save plays as it would have. */
     const noRows = JSON.parse(good);
     const hurtClub = Object.keys(noRows.c)[0];
     if (!hurtClub) cannot('four entries into the season the book made for the unreadable books is still empty');
     noRows.c[hurtClub] = { m: null, og: 0, u: 0 };
     const damaged = [['a string', 'the book', true], ['an array', [made.next.leagueBook], true], ["last season's own", made.last, true], ['a row with a hole', holed, false], ['a number', 7, true], ['a club entry with no rows', noRows, false, hurtClub]];
-    const fourOn = (mod, from) => onStream(0x7011, () => { let s = wake(mod, from); for (let k = 0; k < 4; k++) s = mod.cm.playNextEntry(s, { skipHalftime: true }).state; return s; });
-    for (const [what, value, weekSeesIt, untouched] of damaged) {
+    const fourOn = (mod, from, opts) => onStream(0x7011, () => { let s = wake(mod, from); for (let k = 0; k < 4; k++) s = mod.cm.playNextEntry(s, opts).state; return s; });
+    for (const [what, value, weekRefuses, untouched] of damaged) {
       const v = JSON.parse(JSON.stringify(made.next));
       v.leagueBook = value;
       const text = JSON.stringify(value);
-      tick('oldsave', (weekSeesIt ? 3 : 2) + (untouched ? 1 : 0));
       if (text === good) cannot(`the damage "${what}" changed nothing`);
+      tick('oldsave', 4);
       if (maker.cm.leagueBookOf(v) !== null) fail('oldsave', `a save whose book is ${what} reads as having a book`);
-      /* A book the match week cannot read is played as the save with no book at all. The holed one it can
-         read and does write to, so it is played beside the same save with its book whole: the rest of the
-         save must not know the difference (and the two sides then deal alike, whatever a control does). */
-      let on;
-      let off;
+      /* The repair: replaced by the late book a save with no book is given. */
       try {
-        on = fourOn(await candidate.again(), v);
-        off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(weekSeesIt ? plain : made.next)));
+        const on = fourOn(await candidate.again(), v, { skipHalftime: true });
+        const off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(plain)), { skipHalftime: true });
+        const book = candidate.cm.leagueBookOf(wake(candidate, on));
+        if (!book || boards.bookIsWhole(book)) fail('oldsave', `a save whose book is ${what} was not given a late book at its next entry (${book ? 'the book reads as whole' : 'no readable book four entries on'})`);
+        else if (!boards.bookFits(book, rivalsOf(on).map(club => ({ club, gf: on.table.find(r => r.club === club)?.gf ?? 0 })))) fail('oldsave', `a save whose book is ${what}: the late book it was given does not add up to the table`);
+        if (JSON.stringify(on.leagueBook) !== JSON.stringify(off.leagueBook)) fail('oldsave', `a save whose book is ${what} was not given the book the same save with no book is given`);
+        if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the same save with no book plays`);
       } catch (e) {
         fail('oldsave', `a save whose book is ${what} threw in a match week: ${String(e?.message ?? e).slice(0, 120)}`);
-        continue;
       }
-      if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the same save with no book plays`);
-      if (weekSeesIt && JSON.stringify(on.leagueBook) !== text) fail('oldsave', `a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
-      if (untouched && JSON.stringify(on.leagueBook?.c?.[untouched]) !== JSON.stringify(value.c[untouched])) fail('oldsave', `a save whose book is ${what} had that entry (${untouched}) written into: ${String(JSON.stringify(on.leagueBook?.c?.[untouched])).slice(0, 80)}`);
+      /* The match week's own guard, with the repair off. */
+      tick('oldsave', (weekRefuses ? 2 : 1) + (untouched ? 1 : 0));
+      try {
+        const on = fourOn(await candidate.again(), v, { skipHalftime: true, noBook: true });
+        const off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(weekRefuses ? plain : made.next)), { skipHalftime: true, noBook: true });
+        if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `with the repair off, a save whose book is ${what} does not play the four entries the same save with ${weekRefuses ? 'no book' : 'its book whole'} plays`);
+        if (weekRefuses && JSON.stringify(on.leagueBook) !== text) fail('oldsave', `with the repair off, a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
+        if (untouched && JSON.stringify(on.leagueBook?.c?.[untouched]) !== JSON.stringify(value.c[untouched])) fail('oldsave', `with the repair off, a save whose book is ${what} had that entry (${untouched}) written into: ${String(JSON.stringify(on.leagueBook?.c?.[untouched])).slice(0, 80)}`);
+      } catch (e) {
+        fail('oldsave', `with the repair off, a save whose book is ${what} threw in a match week: ${String(e?.message ?? e).slice(0, 120)}`);
+      }
     }
   }
-  console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')}, the season after each, and six unreadable books`);
+  /* (iii) THE STALE BOOK. A tab left open across a deploy, a second device on a cached build: some weeks of a
+     season played by an engine from before the book. The book still reads (its stamp and every row are
+     sound) and no longer adds up. Ten entries on the candidate, three on the engine with the book out,
+     handed back: the reader says it does not fit; the candidate's next entry opens a late book. */
+  {
+    const a = await candidate.again();
+    const b = await refs[0][1].again();
+    const stale = onStream(0x7020, () => {
+      let s = a.cm.startCareer('Arsenal');
+      for (let k = 0; k < 10; k++) s = a.cm.playNextEntry(s, { skipHalftime: true }).state;
+      for (let k = 0; k < 3; k++) s = b.cm.playNextEntry(wake(b, s), { skipHalftime: true }).state;
+      return s;
+    });
+    const clubsOf = s => rivalsOf(s).map(club => ({ club, gf: s.table.find(r => r.club === club)?.gf ?? 0 }));
+    const before = a.cm.leagueBookOf(wake(a, stale));
+    tick('oldsave', 3);
+    if (!before) fail('oldsave', 'the stale book: three entries on an engine from before the book left the book unreadable (it should read and not fit)');
+    else if (boards.bookFits(before, clubsOf(stale))) cannot('the stale book: three entries on the engine with the book out scored no rival goal, so nothing went stale');
+    const want = expected(stale);
+    const after = onStream(0x7021, () => a.cm.playNextEntry(stale, { skipHalftime: true }).state);
+    const book = a.cm.leagueBookOf(after);
+    if (!book || boards.bookIsWhole(book) || book.r0 !== want.next?.round) fail('oldsave', `the stale book was not replaced by a late book at the next entry (${book ? `r0 ${book.r0}, the next league round was ${want.next?.round}` : 'no readable book'})`);
+    else if (!boards.bookFits(book, clubsOf(after))) fail('oldsave', 'the stale book: the late book that replaced it does not add up to the table');
+  }
+  /* (iv) NOBODY'S BOOK IS REOPENED IN A HEALTHY FLEET: over every career that started with a book. */
+  tick('oldsave');
+  if (acc.lateEntries) fail('oldsave', `${acc.lateEntries} entries of the fleet ended on a late book: a career that started its season with a book had it reopened (${acc.lateFirst})`);
+  console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')} (${lateSaves} of them on a late book, one parked at the first week on a whole one), the season after each, six unreadable books replaced and the match week's own guard with the repair off, the stale book, and no book of the fleet reopened`);
 }
 
 /* ---------- section doors: the two ways into a season that is already running ---------- */
@@ -1675,35 +1841,57 @@ const whole = s => sha(JSON.stringify(s));
 
 /* ---------- section dailies: a daily carries no book, and its state is what it was ---------- */
 {
-  const HOT_DATES = ['2026-10-10', '2026-10-12', '2026-10-27', '2027-01-30'];
+  /* Round 1306: two more Hot Seat dates, picked because their runs cross the transfer window (2026-10-11 and
+     2026-10-17). The Hot Seat calls the match week at three places, the day's setup, the walk past a window
+     and the match itself, and the walk past a window is only reached by a run that meets one: the section
+     says so below when no date does, so a data update cannot quietly drop that call from the proof. */
+  const HOT_DATES = ['2026-10-10', '2026-10-11', '2026-10-12', '2026-10-17', '2026-10-27', '2027-01-30'];
   const DEADLINE_DATES = ['2026-10-10', '2026-10-18', '2026-11-09'];
   const hotOn = (mod, date) => onStream(0x7300, () => {
     const { hs, cm } = mod;
     const seen = [];
     const booked = [];
-    const see = (what, st) => { seen.push(`${what} ${whole(st)}`); if (st && 'leagueBook' in st) booked.push(what); };
+    /* Every state as the whole save but the book, and whether it carries a book: together, the whole save. */
+    const see = (what, st, mayBook = false) => { seen.push(`${what} ${sha(withoutBook(st))}`); if (!mayBook && st && 'leagueBook' in st) booked.push(what); };
     const setup = hs.dailyHotSeat(date);
     let run = hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date });
+    const from = run.takeover.calendarWeek;
     see('at the start', run.state);
     let guard = 0;
     while (!run.verdict && guard++ < 40) {
       run = hs.pendingPress(run) ? hs.answerHotSeatPress(run, 0) : hs.playHotSeatMatch(run, 'balanced', null);
       see(`after step ${guard}`, run.state);
     }
-    /* Handed over to Club Manager: a season in flight with no book, played on. */
+    const crossed = run.state.calendar.slice(from, run.state.week).some(e => e.type === 'window');
+    /* Handed over to Club Manager: a season in flight with no book. Since Round 1306 it starts a late one at
+       its first match week there, so from here on a book is allowed, and what it reads as is noted. */
     let s = wake(mod, hs.handoverState(run));
     see('handed over', s);
-    for (let k = 0; k < 3 && s.week < s.calendar.length; k++) { s = cm.playNextEntry(s, { skipHalftime: true }).state; see(`handed over, entry ${k + 1}`, s); }
-    return { club: setup.club, seen, booked };
+    const lateFrom = [];
+    for (let k = 0; k < 3 && s.week < s.calendar.length; k++) {
+      s = cm.playNextEntry(s, { skipHalftime: true }).state;
+      see(`handed over, entry ${k + 1}`, s, true);
+      lateFrom.push(cm.leagueBookOf(s)?.r0 ?? null);
+    }
+    return { club: setup.club, seen, booked, crossed, lateFrom };
   });
   const deadlineOn = (mod, date) => onStream(0x7301, () => {
     const run = mod.dd.startDeadlineDay(mod.dd.dailyDeadlineDay(date));
-    return { seen: [`at the start ${whole(run.state)}`], booked: 'leagueBook' in run.state ? ['at the start'] : [] };
+    return { seen: [`at the start ${sha(withoutBook(run.state))}`], booked: 'leagueBook' in run.state ? ['at the start'] : [] };
   });
   for (const [kind, dates, deal] of [['Hot Seat', HOT_DATES, hotOn], ['Deadline Day', DEADLINE_DATES, deadlineOn]]) {
     const mine = await candidate.again();
     const got = dates.map(date => deal(mine, date));
     got.forEach((g, i) => { tick('dailies'); if (g.booked.length) fail('dailies', `${kind} ${dates[i]}: the state carries a league book ${g.booked[0]}${g.booked.length > 1 ? ` and at ${g.booked.length - 1} later points` : ''}`); });
+    if (kind === 'Hot Seat') {
+      /* The career handed over starts a late book at its first match week in Club Manager, and keeps it. */
+      got.forEach((g, i) => {
+        tick('dailies');
+        if (!g.lateFrom.length || g.lateFrom.some(r0 => typeof r0 !== 'number')) fail('dailies', `${kind} ${dates[i]}: handed over to Club Manager, the career does not hold a readable late book after each of its first entries there (${JSON.stringify(g.lateFrom)})`);
+      });
+      tick('dailies');
+      if (!got.some(g => g.crossed)) fail('dailies', 'no Hot Seat date of the section plays a run across the transfer window: the walk past a window, one of the three places the Hot Seat calls the match week, was never run');
+    }
     for (const [refName, ref] of refs) {
       const theirs = await ref.again();
       dates.forEach((date, i) => {
@@ -1770,10 +1958,12 @@ if (CONTROL) {
   const allowed = CONTROLS[CONTROL].also ?? [];
   const others = SECTIONS.filter(s => s !== want && !allowed.includes(s) && red.get(s).length);
   const withIt = allowed.filter(s => red.get(s).length);
-  const fired = red.get(want).length > 0 && others.length === 0;
+  /* A control may name what its failures must speak of: red for another reason is not this control firing. */
+  const unsaid = (CONTROLS[CONTROL].mentions ?? []).filter(word => !red.get(want).some(m => m.includes(word)));
+  const fired = red.get(want).length > 0 && others.length === 0 && unsaid.length === 0;
   console.log(fired
     ? `simCmLeagueBook: CONTROL ${CONTROL} FIRED: section ${want} went red (${red.get(want).length} failures)${withIt.length ? `, with ${withIt.join(', ')} as it must` : ''} and no other section did (${secs}s)`
-    : `simCmLeagueBook: CONTROL ${CONTROL} DID NOT FIRE as it must: ${want} has ${red.get(want).length} failures, other red sections [${others.join(', ')}] (${secs}s)`);
+    : `simCmLeagueBook: CONTROL ${CONTROL} DID NOT FIRE as it must: ${want} has ${red.get(want).length} failures${unsaid.length ? `, none of them about ${unsaid.join(' or about ')}` : ''}, other red sections [${others.join(', ')}] (${secs}s)`);
   process.exit(fired ? 1 : 3);
 }
 console.log(total === 0
