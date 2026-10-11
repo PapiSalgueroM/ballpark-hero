@@ -1,0 +1,10 @@
+      {
+        const lk = await lastKick;
+        const cards = seen.filter(s => s.goalCard).map(s => `${s.minute}' "${String(s.goalText ?? '').split('\n').join(' ').slice(0, 44)}" ${s.score} ${s.stage} t=${s.t}`);
+        const lastCard = seen.map(s => s.goalCard).lastIndexOf(true), firstVar = seen.findIndex(s => s.card !== 'none'), firstInterval = seen.findIndex(s => s.stage === 'interval');
+        console.log(`LASTKICK ${id}: ${JSON.stringify(lk)}`);
+        console.log(`LASTKICK ${id}: goal card samples ${cards.length}, the last of them: ${cards.slice(-4).join(' ; ')}`);
+        console.log(`LASTKICK ${id}: sample index of the last goal card ${lastCard}, of the first review card ${firstVar}, of the interval ${firstInterval}, of ${seen.length} samples`);
+        check(!lk.error, `the last kick of the half never got its scorer card: ${lk.error}`);
+        check(lk.error || lk.reviewCardUp === 0, 'a review card was up with the scorer card of the last kick');
+      }
