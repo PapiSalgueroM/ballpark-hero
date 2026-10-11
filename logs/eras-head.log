@@ -1,0 +1,53 @@
+head nfl default seed base: 17 (a) marks, 13 standout cells; at or over from, pooled 10.09 percent; at or over to, pooled 0.77 percent
+head nfl default seed 1: 17 (a) marks, 13 standout cells; at or over from, pooled 10.68 percent; at or over to, pooled 0.71 percent
+head nfl default seed 2: 17 (a) marks, 13 standout cells; at or over from, pooled 10.62 percent; at or over to, pooled 0.86 percent
+head nfl default seed 3: 17 (a) marks, 13 standout cells; at or over from, pooled 11.78 percent; at or over to, pooled 1.02 percent
+head nfl default seed 4: 17 (a) marks, 13 standout cells; at or over from, pooled 10.49 percent; at or over to, pooled 1.08 percent
+head nfl default seed 5: 17 (a) marks, 13 standout cells; at or over from, pooled 10.58 percent; at or over to, pooled 1.42 percent
+mut-era nfl: careers with no era named now start in the throwback era
+head nfl throwback seed base: 17 (a) marks, 13 standout cells; at or over from, pooled 4.55 percent; at or over to, pooled 0.15 percent
+head nfl throwback seed 1: 17 (a) marks, 13 standout cells; at or over from, pooled 5.29 percent; at or over to, pooled 0.43 percent
+head nfl throwback seed 2: 17 (a) marks, 13 standout cells; at or over from, pooled 5.78 percent; at or over to, pooled 0.15 percent
+head nfl throwback seed 3: 17 (a) marks, 13 standout cells; at or over from, pooled 5.11 percent; at or over to, pooled 0.09 percent
+head nfl throwback seed 4: 17 (a) marks, 13 standout cells; at or over from, pooled 5.08 percent; at or over to, pooled 0.22 percent
+head nfl throwback seed 5: 17 (a) marks, 13 standout cells; at or over from, pooled 5.05 percent; at or over to, pooled 0.25 percent
+head nba default seed base: 17 (a) marks, 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+head nba default seed 1: 17 (a) marks, 12 standout cells; at or over from, pooled 9.85 percent; at or over to, pooled 0.90 percent
+head nba default seed 2: 17 (a) marks, 12 standout cells; at or over from, pooled 9.50 percent; at or over to, pooled 1.02 percent
+head nba default seed 3: 17 (a) marks, 12 standout cells; at or over from, pooled 9.52 percent; at or over to, pooled 0.94 percent
+head nba default seed 4: 17 (a) marks, 12 standout cells; at or over from, pooled 9.92 percent; at or over to, pooled 1.04 percent
+head nba default seed 5: 17 (a) marks, 12 standout cells; at or over from, pooled 9.81 percent; at or over to, pooled 0.69 percent
+mut-era nba: careers with no era named now start in the throwback era
+head nba throwback seed base: 17 (a) marks, 12 standout cells; at or over from, pooled 3.90 percent; at or over to, pooled 0.23 percent
+head nba throwback seed 1: 17 (a) marks, 12 standout cells; at or over from, pooled 3.79 percent; at or over to, pooled 0.08 percent
+head nba throwback seed 2: 17 (a) marks, 12 standout cells; at or over from, pooled 4.15 percent; at or over to, pooled 0.27 percent
+head nba throwback seed 3: 17 (a) marks, 12 standout cells; at or over from, pooled 4.25 percent; at or over to, pooled 0.19 percent
+head nba throwback seed 4: 17 (a) marks, 12 standout cells; at or over from, pooled 4.27 percent; at or over to, pooled 0.19 percent
+head nba throwback seed 5: 17 (a) marks, 12 standout cells; at or over from, pooled 3.85 percent; at or over to, pooled 0.13 percent
+head mlb default seed base: 17 (a) marks, 22 standout cells; at or over from, pooled 9.60 percent; at or over to, pooled 0.83 percent
+head mlb default seed 1: 17 (a) marks, 22 standout cells; at or over from, pooled 10.22 percent; at or over to, pooled 0.90 percent
+head mlb default seed 2: 17 (a) marks, 22 standout cells; at or over from, pooled 11.63 percent; at or over to, pooled 1.10 percent
+head mlb default seed 3: 17 (a) marks, 22 standout cells; at or over from, pooled 10.82 percent; at or over to, pooled 1.35 percent
+head mlb default seed 4: 17 (a) marks, 22 standout cells; at or over from, pooled 9.70 percent; at or over to, pooled 0.78 percent
+head mlb default seed 5: 17 (a) marks, 22 standout cells; at or over from, pooled 10.05 percent; at or over to, pooled 1.07 percent
+mut-era mlb: careers with no era named now start in the throwback era
+head mlb throwback seed base: 17 (a) marks, 22 standout cells; at or over from, pooled 6.53 percent; at or over to, pooled 0.43 percent
+head mlb throwback seed 1: 17 (a) marks, 22 standout cells; at or over from, pooled 6.75 percent; at or over to, pooled 0.57 percent
+head mlb throwback seed 2: 17 (a) marks, 22 standout cells; at or over from, pooled 7.00 percent; at or over to, pooled 0.35 percent
+head mlb throwback seed 3: 17 (a) marks, 22 standout cells; at or over from, pooled 6.63 percent; at or over to, pooled 0.30 percent
+head mlb throwback seed 4: 17 (a) marks, 22 standout cells; at or over from, pooled 6.35 percent; at or over to, pooled 0.38 percent
+head mlb throwback seed 5: 17 (a) marks, 22 standout cells; at or over from, pooled 6.75 percent; at or over to, pooled 0.40 percent
+head nhl default seed base: 17 (a) marks, 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+head nhl default seed 1: 17 (a) marks, 12 standout cells; at or over from, pooled 11.06 percent; at or over to, pooled 0.92 percent
+head nhl default seed 2: 17 (a) marks, 12 standout cells; at or over from, pooled 10.38 percent; at or over to, pooled 0.92 percent
+head nhl default seed 3: 17 (a) marks, 12 standout cells; at or over from, pooled 9.48 percent; at or over to, pooled 0.67 percent
+head nhl default seed 4: 17 (a) marks, 12 standout cells; at or over from, pooled 9.77 percent; at or over to, pooled 0.94 percent
+head nhl default seed 5: 17 (a) marks, 12 standout cells; at or over from, pooled 9.85 percent; at or over to, pooled 0.94 percent
+mut-era nhl: careers with no era named now start in the throwback era
+head nhl throwback seed base: 17 (a) marks, 12 standout cells; at or over from, pooled 4.48 percent; at or over to, pooled 0.13 percent
+head nhl throwback seed 1: 17 (a) marks, 12 standout cells; at or over from, pooled 4.17 percent; at or over to, pooled 0.23 percent
+head nhl throwback seed 2: 17 (a) marks, 12 standout cells; at or over from, pooled 3.69 percent; at or over to, pooled 0.08 percent
+head nhl throwback seed 3: 17 (a) marks, 12 standout cells; at or over from, pooled 4.27 percent; at or over to, pooled 0.29 percent
+head nhl throwback seed 4: 17 (a) marks, 12 standout cells; at or over from, pooled 3.44 percent; at or over to, pooled 0.04 percent
+head nhl throwback seed 5: 17 (a) marks, 12 standout cells; at or over from, pooled 3.65 percent; at or over to, pooled 0.13 percent
+tb-old2 head: done

@@ -1,0 +1,53 @@
+main nfl default seed base: 17 (a) marks: 13 standout cells; at or over from, pooled 10.09 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: []; at or over to, pooled 0.77 percent (band 0.12 t
+main nfl default seed 1: 17 (a) marks: 13 standout cells; at or over from, pooled 10.68 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [QB passTd 3.6]; at or over to, pooled 0.71 percent
+main nfl default seed 2: 17 (a) marks: 13 standout cells; at or over from, pooled 10.62 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: []; at or over to, pooled 0.86 percent (band 0.12 t
+main nfl default seed 3: 17 (a) marks: 13 standout cells; at or over from, pooled 11.78 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: []; at or over to, pooled 1.02 percent (band 0.12 t
+main nfl default seed 4: 17 (a) marks: 13 standout cells; at or over from, pooled 10.49 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: []; at or over to, pooled 1.08 percent (band 0.12 t
+main nfl default seed 5: 17 (a) marks: 13 standout cells; at or over from, pooled 10.58 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: []; at or over to, pooled 1.42 percent (band 0.12 t
+mut-era nfl: careers with no era named now start in the throwback era
+main nfl throwback seed base: 17 (a) marks: 13 standout cells; at or over from, pooled 4.55 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [QB passYds 1.2, QB passTd 1.6, WR recYds 3.6, TE re
+main nfl throwback seed 1: 17 (a) marks: 13 standout cells; at or over from, pooled 5.29 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [TE rec 4.0]; at or over to, pooled 0.43 percent (ba
+main nfl throwback seed 2: 17 (a) marks: 13 standout cells; at or over from, pooled 5.78 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [QB passYds 1.2, LB tackles 3.2]; at or over to, poo
+main nfl throwback seed 3: 17 (a) marks: 13 standout cells; at or over from, pooled 5.11 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [QB passYds 2.4, RB rushYds 4.0, TE rec 4.0]; at or 
+main nfl throwback seed 4: 17 (a) marks: 13 standout cells; at or over from, pooled 5.08 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [QB passYds 3.6, RB rushYds 2.0, RB rushTd 4.0, TE r
+main nfl throwback seed 5: 17 (a) marks: 13 standout cells; at or over from, pooled 5.05 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: [QB passYds 3.2, QB passTd 3.2, WR recYds 3.6, TE re
+main nba default seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 9.71 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 1.25 percent (band 0.00 to
+main nba default seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 9.85 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 0.90 percent (band 0.00 to
+main nba default seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 9.50 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 1.02 percent (band 0.00 to
+main nba default seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 9.52 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 0.94 percent (band 0.00 to
+main nba default seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 9.92 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 1.04 percent (band 0.00 to
+main nba default seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 9.81 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 0.69 percent (band 0.00 to
+mut-era nba: careers with no era named now start in the throwback era
+main nba throwback seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 3.90 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: [PG pts 3.0, PG ast 2.3, SG pts 2.3, SG ast 2.0, SF 
+main nba throwback seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 3.79 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: [PG pts 3.0, PG ast 3.3, SG pts 2.3, SG ast 1.3, SF 
+main nba throwback seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 4.15 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: [PG pts 3.3, PG ast 2.8, SG pts 2.0, SG ast 1.5, SF 
+main nba throwback seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 4.25 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: [PG pts 3.0, PG ast 2.0, SG pts 2.8, SG ast 2.3, SF 
+main nba throwback seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 4.27 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: [PG pts 2.8, PG ast 3.0, SG pts 4.3, SG ast 4.0, SF 
+main nba throwback seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 3.85 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: [PG pts 3.3, PG ast 2.0, SG pts 2.3, SG ast 1.0, SF 
+main mlb default seed base: 17 (a) marks: 22 standout cells; at or over from, pooled 9.60 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 0.83 percent (band 0.49 to
+main mlb default seed 1: 17 (a) marks: 22 standout cells; at or over from, pooled 10.22 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 0.90 percent (band 0.49 t
+main mlb default seed 2: 17 (a) marks: 22 standout cells; at or over from, pooled 11.63 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 1.10 percent (band 0.49 t
+main mlb default seed 3: 17 (a) marks: 22 standout cells; at or over from, pooled 10.82 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 1.35 percent (band 0.49 t
+main mlb default seed 4: 17 (a) marks: 22 standout cells; at or over from, pooled 9.70 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 0.78 percent (band 0.49 to
+main mlb default seed 5: 17 (a) marks: 22 standout cells; at or over from, pooled 10.05 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 1.07 percent (band 0.49 t
+mut-era mlb: careers with no era named now start in the throwback era
+main mlb throwback seed base: 17 (a) marks: 22 standout cells; at or over from, pooled 10.72 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 0.88 percent (band 0.49 t
+main mlb throwback seed 1: 17 (a) marks: 22 standout cells; at or over from, pooled 11.13 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 1.10 percent (band 0.49 t
+main mlb throwback seed 2: 17 (a) marks: 22 standout cells; at or over from, pooled 9.80 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 1.00 percent (band 0.49 to
+main mlb throwback seed 3: 17 (a) marks: 22 standout cells; at or over from, pooled 11.13 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 0.90 percent (band 0.49 t
+main mlb throwback seed 4: 17 (a) marks: 22 standout cells; at or over from, pooled 11.13 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 1.32 percent (band 0.49 t
+main mlb throwback seed 5: 17 (a) marks: 22 standout cells; at or over from, pooled 10.93 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 0.95 percent (band 0.49 t
+main nhl default seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 10.35 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.88 percent (band 0.27 t
+main nhl default seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 10.17 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.96 percent (band 0.27 t
+main nhl default seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 9.33 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.69 percent (band 0.27 to
+main nhl default seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 9.58 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.79 percent (band 0.27 to
+main nhl default seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 10.85 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [RW points 14.5]; at or over to, pooled 0.90 percen
+main nhl default seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 9.73 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.94 percent (band 0.27 to
+mut-era nhl: careers with no era named now start in the throwback era
+main nhl throwback seed base: 17 (a) marks: 12 standout cells; at or over from, pooled 11.00 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: [C goals 14.8]; at or over to, pooled 1.04 percent 
+main nhl throwback seed 1: 17 (a) marks: 12 standout cells; at or over from, pooled 9.90 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 1.02 percent (band 0.27 to
+main nhl throwback seed 2: 17 (a) marks: 12 standout cells; at or over from, pooled 9.35 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.71 percent (band 0.27 to
+main nhl throwback seed 3: 17 (a) marks: 12 standout cells; at or over from, pooled 10.06 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.90 percent (band 0.27 t
+main nhl throwback seed 4: 17 (a) marks: 12 standout cells; at or over from, pooled 9.29 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.77 percent (band 0.27 to
+main nhl throwback seed 5: 17 (a) marks: 12 standout cells; at or over from, pooled 9.23 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.96 percent (band 0.27 to
+tb-old2 main: done
