@@ -214,7 +214,15 @@ async function pure() {
 }
 
 async function browserProof() {
-  const inputRoot=path.resolve(ROOT,process.env.SOCCER_OPPONENT_LABELS_INPUT||'career-opponent-labels-artifacts/proof');const fixture=JSON.parse(fs.readFileSync(path.join(inputRoot,'fixtures.json'),'utf8')),save=read(fixture.save,inputRoot),actual=read(fixture.actual,inputRoot);const saved=JSON.stringify(save);const inputReport=JSON.parse(fs.readFileSync(path.join(inputRoot,'report.json'),'utf8'));assert.equal(inputReport.status,'pass');
+  const inputRoot=path.resolve(ROOT,process.env.SOCCER_OPPONENT_LABELS_INPUT||'career-opponent-labels-artifacts/proof');const fixture=JSON.parse(fs.readFileSync(path.join(inputRoot,'fixtures.json'),'utf8')),save=read(fixture.save,inputRoot),actual=read(fixture.actual,inputRoot);
+  /* Release AX: since Release AU a career event can leave a chance wheel receipt on the save, and until it is seen the
+     wheel stands over the summary and takes every press (this proof was cut from a base without it and timed out on
+     the Watch button under the wheel, in all three widths). The witness is a genuine save, so it can hold one. It is
+     acknowledged here exactly as the page's own close writes it (seen true, nothing else), before the save is loaded:
+     the journey then starts where a player stands once he has looked at his wheel, and every byte comparison below is
+     against that save. The wheel has walks of its own. */
+  const wheelAcknowledged=!!(save.chanceWheel&&typeof save.chanceWheel==='object'&&save.chanceWheel.seen===false);if(wheelAcknowledged)save.chanceWheel={...save.chanceWheel,seen:true};
+  const saved=JSON.stringify(save);const inputReport=JSON.parse(fs.readFileSync(path.join(inputRoot,'report.json'),'utf8'));assert.equal(inputReport.status,'pass');
   const {default:pw}=await import('./lib/playwrightLoader.mjs');const port=4597,base=`http://127.0.0.1:${port}`;const server=spawn(process.execPath,[path.join(ROOT,'scripts/lib/hostLikeServer.mjs'),path.join(ROOT,'dist'),String(port)],{stdio:'pipe'});let serverText='';server.stdout.on('data',b=>serverText+=String(b));
   const report={status:'running',head:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim(),input:{root:inputRoot,file:'fixtures.json',sha256:sha(fs.readFileSync(path.join(inputRoot,'fixtures.json'))),reportSha256:sha(fs.readFileSync(path.join(inputRoot,'report.json')))},journeys:[],detectors:[]};assert.equal(report.head,inputReport.head,'actual browser and fresh method source head');let browser;
   try{
