@@ -1,0 +1,10 @@
+# Release AU proof, playGames part 1: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playGames-soccer-career: ONLY=/soccer-career node scripts/playGames.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-stadium-tycoon: ONLY=/stadium-tycoon node scripts/playGames.mjs
+playGames-nba-my-career: ONLY=/nba-my-career node scripts/playGames.mjs
+playGames-nfl-my-career: ONLY=/nfl-my-career node scripts/playGames.mjs
