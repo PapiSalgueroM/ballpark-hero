@@ -1,0 +1,7 @@
+# verify 3 of Release AW part one on 046e38ae: the WHOLE unit suite, then the two readers of a plain build that rulings C5 and C7 name
+#!build
+#!serial
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simPrerender: node scripts/simPrerender.mjs > /tmp/pr.log 2>&1; s=$?; cp /tmp/pr.log "$RC_OUT/simPrerender.log"; grep -a -E "FAIL|drops the entry" /tmp/pr.log | cut -c1-220 | head -20; tail -1 /tmp/pr.log | cut -c1-200; exit $s
+gitclean: git status --porcelain --untracked-files=no | wc -l
