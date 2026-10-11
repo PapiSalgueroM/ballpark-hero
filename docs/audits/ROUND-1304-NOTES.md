@@ -171,3 +171,84 @@ count of saves a fix could touch is zero: this round changes no file under `src/
    the files (the bake, less every man the join moved, each found at his new club, plus what each generated
    league says it ships). Sections 4 and 6 read the same joined world.
 4. Every rewritten sentence gets a negative control that is read to its last line.
+
+## What was done (added after the table was pushed)
+
+No file under `src/` changed. Six harnesses and five walks did.
+
+**The harnesses, green on a runner (`r1304-s2`, head `f17dec1b`).**
+
+| Harness | Exit | Seconds | What it printed |
+|---|---|---|---|
+| `simEra2005` | 0 | 20 | 1712 era-exclusive names, 0 leaks; 15 names shared with 2026, 13 listed pairs, 0 unexplained |
+| `simEra2010` | 0 | 18 | 1715 era-exclusive names, 0 leaks; 36 shared, 11 listed pairs, 0 unexplained |
+| `simEra2015` | 0 | 17 | 1430 era-exclusive names, 0 leaks; 229 shared, 19 listed pairs, 0 unexplained |
+| `simEra2020` | 0 | 13 | 939 era-exclusive names, 0 leaks; 835 shared, 10 listed pairs, 0 unexplained; 29 era-only clubs, 6 in two or more eras, the reversal moves 0, 6 of 6 pinned clubs read the league they always have |
+| `simEras` | 0 | 786 | 454 clubs, 5113 players compared; "the bake's 4401, less 1 moved by a newer squad list (Ryan Fraser from Southampton), plus 713 in 2 generated leagues (A-League Men 310, Russian Premier League 403) = 5113" |
+| `simStatsCentre` | 0 | 3 | all checks passed (no assertion changed) |
+
+`simEras` section 5 read 0.00 goals a game, 2.9 champion points and 0.2 of my points, the same three numbers
+as the base, as it must with no engine file touched.
+
+**"It has always read", proven.** A probe printed an unscoped `leagueOf` for the six pinned clubs on four
+trees (`r1304-s2`, labels `pins971`, `pinsPre1035`, `pinsPre1040seg`, `pinsHead`): Round 971's closing
+commit `1a8e68b7` where the fixed order shipped, `709e103f`, `fa77f447` and this branch. On all four: Wigan
+Athletic `premier2010`, Zaragoza `laliga2010`, Chievo Verona `seriea2010`, Bordeaux `ligue12010`, Caen
+`ligue12010`, Leicester City `premier2015`. Cádiz read `laliga2005` on the first three and `segunda` on
+this branch. Era-only clubs and those in two or more eras: 45 and 17 at `1a8e68b7`, 53 and 21 at
+`709e103f`, 37 and 11 at `fa77f447`, 29 and 6 today.
+
+**The negative controls, each read to its last line (`r1304-s2c` on `f17dec1b`, `r1304-s2d` on `712196e7`).**
+Every one exits 1 and prints the sentence it is aimed at.
+
+| Harness | Control | What it breaks, in memory | The line that fired |
+|---|---|---|---|
+| all four `simEra20xx` | `leak` (new) | the modern save is handed the era's market at year zero | `2005-only Lucas Pereira is on the 2026 market` (1712 leaks); 2010: Zlatan Ibrahimović (1715); 2015: Carlos Bacca (1430); 2020: Ismaël Bennacer (939) |
+| `simEra2005` | `unlisted` (new) | the Ronaldo pair leaves the list | `2005 vs 2026: 1 shared names age impossibly: Ronaldo (28 -> 25)` |
+| `simEra2010` | `unlisted` (new) | the Wendel pair leaves the list | `Wendel: aged 2 years between 2010 (27) and 2026 (29), same name, different person?` |
+| `simEra2015`, `simEra2020` | `joinage` (new) | one man of a generated league reads ten years older | `1 shared 2015/2026 names age impossibly: Hiroki Sakai (24 -> 46)`; 2020: `Hiroki Sakai (2020 29, now 46)` |
+| `simEra2020` | `shiporder` (new) | the engine's era order retyped oldest first as it is bundled | the order pin, and the pins of Wigan Athletic, Zaragoza, Chievo Verona and Bordeaux (5 failures) |
+| `simEra2020` | `eraorder` (old) | the fixed order taken out as the engine is bundled | `leagueOf's era fallback hangs on the order of ERA_LEAGUES: Wigan Athletic premier2010 -> premier2005; ...` |
+| `simEras` | `dropman` (new) | one real man missing from the year zero world | `1 projected players at year zero differ from the real data` and `projected 5094 players at year zero, the real data says 5113` |
+| `simEras` | `unflag` (new) | one made up man of the 2031 world loses his flag | `1 players are not in the real data and are not flagged as made up` |
+| `simStatsCentre` | `nosubs` (new) | the men who came on are not counted | `664 total apps across 51 matches with 0 men coming on, expected 561` and six more |
+
+The first cut of `leak` only flipped the save's era, so the save read the era's world two decades on, where
+the real men have retired: it was inert in `simEra2005` (exit 0, read on `r1304-s2c`) and fired on only 9, 90
+and 258 men in the others. It now sets the era's start year too and exits 2 when the market it handed over
+holds no era-only man. The 24 controls the four era harnesses already had all still exit 1 (`r1304-s2c`).
+
+## The walks, and what the pictures found
+
+Five walks that open a past season were red on the base, none of them for the game's sake
+(`r1304-walks`, the build of this branch, whose `src` is the base's):
+
+| Walk | First failing line | Cause | Verdict |
+|---|---|---|---|
+| `playEra2005`, `playEra2010`, `playEra2015`, `playEra2020`, `playNationalities` | the first check after "England, Premier League" (for example `2005 Wigan are a pickable club`), then a timeout on the next press | Since Round 1052 the line under the page title names "the Russian Premier League", so the press on `text=Premier League` landed on that sentence and the league step never moved on. | STALE press. It targets the league tile now. |
+| `playEra2005`, `playEra2010` | `Germany correctly absent from 2005` (and 2010) | Rounds 902 and 901 made both seasons a full big five. | STALE. They ask what `playEra2015` asks since Round 899: Italy, Germany and France offered, the Netherlands not. |
+| `playEra2005`, `playEra2010`, `playEra2015` | `no 2026 player leaked into 2005` (2010, 2015) | The line read the whole page body for Haaland or Bruno Fernandes. Since Round 971 the guide under the game names both as 2020-21 men. | STALE. The line reads the game without its guide (`namedInGame` in `scripts/lib/eraDressingRoom.mjs`), with a control, `ERA_CONTROL=ghost`. |
+
+The same press was in four walks of today's game. `playReleaseClause`, `playSponsors` and `playWilderness`
+are red as committed and green with the one press changed (`r1304-walks2`, labels `try*`), so they got it
+too, in a commit of their own. `playNationJob` is red as committed on the same press and still red with it
+changed, further on (`the tile says the country is calling (Managers)`, then a wait for
+`[data-nation-offer]`): another cause, left alone and reported.
+
+A walk written for this round and not committed (`walkEraMarket`, kept beside the closing report) read the
+transfer market off the screen in all five worlds, 120 views a past season and 560 today, and compared
+every name with that season's squads (`r1304-walks2`): 1,611 men in 2005-06, 1,636 in 2010-11, 1,545 in
+2015-16, 1,665 in 2020-21 and 4,858 in 2026-27 across 27 leagues. No stranger, no man listed at a club
+that season does not have, and 16 men of the other worlds searched by name in each: none listed.
+
+**And one real defect, which no harness guards.** The pictures of the 2010-11 market show this under
+"Around the league": `Burnley sign Antonio Cassano from Sampdoria for £16m`, `Brentford sign Andrés
+Iniesta from Barcelona for £56m`, `The window's biggest deal so far: Andrés Iniesta to Brentford for £56m`.
+Neither club is in the 2010-11 world. The men are right and the buyers are not: in `src/lib/clubManager.ts`,
+`generateHeadlines` draws the buying club from `REAL_LEAGUES`, today's 454 clubs with today's budgets, in
+every past season, and the same deals go into Latest Transfers. The rival who "just entered the race" in a
+negotiation is drawn the same way, from the top five of each of today's leagues, and can close the deal.
+So a 2005-06 save can print a club that was not founded yet. Round 146 already wrote the rule three times
+in this file (`buyerPool`, `approachSuitors` and the job suitors all branch on the era: "a 2010 manager
+cannot be poached by a 2026 club"); these two places never got it. Verdict: DEFECT, a club of the wrong
+year on a player's screen. See the closing report for what was done about it.
