@@ -1,0 +1,14 @@
+lm-pause exit=1 7s | simLiveSimMotion: control pause turned "pause freezes" red on an assertion (1 failed), as it must.
+lm-redraw exit=1 10s | simLiveSimMotion: control redraw turned "a tactics redraw cancels" red on an assertion (1 failed), as it must.
+simOwnGoalMotion exit=0 26s | simOwnGoalMotion: green. 16 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand (OG6 to OG8 and OG10), the two recorded digests,
+anchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerALeague exit=0 8s | simClubManagerALeague: all checks passed
+lm-plain exit=0 74s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simClubManagerMeters exit=0 29s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerScore exit=0 89s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerBudget exit=0 139s | simClubManagerBudget: PASS
+simCmLeagueFixtures exit=0 16s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simAcademy exit=0 304s | ALL ACADEMY CHECKS PASSED
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simRoles exit=0 1093s | ALL ROLE CHECKS PASSED
+simPress exit=0 1692s | ALL PRESS AND TEAM TALK CHECKS PASSED

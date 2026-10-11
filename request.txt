@@ -1,0 +1,14 @@
+lm-redraw: LIVE_MOTION_CONTROL=redraw node scripts/simLiveSimMotion.mjs
+lm-pause: LIVE_MOTION_CONTROL=pause node scripts/simLiveSimMotion.mjs
+lm-plain: node scripts/simLiveSimMotion.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
