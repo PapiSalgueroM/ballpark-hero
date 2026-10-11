@@ -67,7 +67,24 @@
  *   City 6,7,2,3,1,2 (3.50), Crotone 20 every seed (20.00). Every mean sits
  *   inside the family spread above, so the bands stand.
  *
- * Eight negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder,
+ * Round 1304: the modern world this harness compares with is the JOINED one
+ *   the game reads (src/data/clubManagerWorldRosters.ts: the value table's
+ *   bake, the A-League Men of Round 1035 and the Russian Premier League of
+ *   Round 1052), no longer the bake alone. Reading the bake alone called
+ *   eight real 2026 men of those two files, each six or seven years older
+ *   (Leckie, Sakai, Tisserand, Olaza, Cordoba, Djiku, Becao, Salcedo), 2020
+ *   men on the 2026 market (red from Round 1035's commit b777801d). The
+ *   namesake pass of section 2 is the check that judges them now. Section 8
+ *   was red from Round 1040's commit d557a8ae: Serie B, Ligue 2 and the
+ *   Segunda gave 24 clubs only the past knew a modern league, Cadiz among
+ *   them, so its floor and its one club pin were typed against a world that
+ *   had moved. MEASURED on runners 2026-10-11 (docs/audits/ROUND-1304-NOTES.md
+ *   has the table): era-only clubs 53 before Round 1040, 46 after Serie B,
+ *   37 after Ligue 2, 29 after the Segunda; of them in two or more eras 21,
+ *   18, 11 and 6. Section 8 now pins the shipped order of the eras itself
+ *   and the six clubs the fallback still serves in two or more eras.
+ *
+ * Eleven negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -90,8 +107,9 @@ const e20 = await import('${R}/src/data/clubManagerEra2020.ts');
 const e15 = await import('${R}/src/data/clubManagerEra2015.ts');
 const e10 = await import('${R}/src/data/clubManagerEra2010.ts');
 const e05 = await import('${R}/src/data/clubManagerEra2005.ts');
-const modern = await import('${R}/src/data/clubManagerRosters.ts');
-export { engine, eras, e20, e15, e10, e05, modern };
+const modern = await import('${R}/src/data/clubManagerWorldRosters.ts');
+const baked = await import('${R}/src/data/clubManagerRosters.ts');
+export { engine, eras, e20, e15, e10, e05, modern, baked };
 `);
 /* esbuild through its JS API, resolved by walk-up, so the harness runs from
    the repo and from a worktree whose node_modules is the repo's. */
@@ -101,18 +119,31 @@ const { build } = await import('esbuild');
    ERA_LEAGUES in insertion order again, as it did before the closing check.
    The anchor must be in the source or the control refuses (exit 2). */
 const ERA_ORDER_ANCHOR = 'for (const eraId of ERA_FALLBACK_ORDER) {';
-const plugins = process.env.SIM_ERA2020_CONTROL === 'eraorder' ? [{
-  name: 'eraorder',
+/* Control shiporder (Round 1304, section 8) is the other one that edits the
+   engine as it is bundled: the fixed order is retyped oldest season first,
+   the tidy order somebody would reach for, instead of the order the eras
+   shipped in. The anchor is the whole line, so the control refuses the day
+   the constant changes for any reason. */
+const SHIP_ORDER_ANCHOR = "export const ERA_FALLBACK_ORDER: readonly string[] = ['era2010', 'era2015', 'era2005', 'era2020'];";
+const SHIP_ORDER_BROKEN = "export const ERA_FALLBACK_ORDER: readonly string[] = ['era2005', 'era2010', 'era2015', 'era2020'];";
+const engineEdit = (name, anchor, to, why) => ({
+  name,
   setup(b) {
     b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManager\.ts$/ }, a => {
       const src = fs.readFileSync(a.path, 'utf8');
-      if (!src.includes(ERA_ORDER_ANCHOR)) { console.error('CONTROL eraorder did not apply: leagueOf has no fixed era order to remove'); process.exit(2); }
-      return { contents: src.replace(ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {'), loader: 'ts' };
+      if (src.split(anchor).length !== 2) { console.error(`CONTROL ${name} did not apply: ${why}`); process.exit(2); }
+      console.log(`   CONTROL ${name} applied: the engine is edited as it is bundled, one line`);
+      return { contents: src.replace(anchor, to), loader: 'ts' };
     });
   },
-}] : [];
+});
+const plugins = process.env.SIM_ERA2020_CONTROL === 'eraorder'
+  ? [engineEdit('eraorder', ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {', 'leagueOf has no fixed era order to remove')]
+  : process.env.SIM_ERA2020_CONTROL === 'shiporder'
+    ? [engineEdit('shiporder', SHIP_ORDER_ANCHOR, SHIP_ORDER_BROKEN, 'the line that types the shipped order is not in the engine as this control knows it')]
+    : [];
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', plugins });
-const { engine: cm, eras: ER, e20: E20, e15: E15, e10: E10, e05: E05, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, eras: ER, e20: E20, e15: E15, e10: E10, e05: E05, modern: MOD, baked: BAKED } = await import(pathToFileURL(BUNDLE).href);
 fs.rmSync(ENTRY, { force: true });
 fs.rmSync(BUNDLE, { force: true });
 await ER.ensureAllEraRosters();
@@ -123,7 +154,12 @@ const {
   eraUclHasR16, uclFirstKoRound, careerLeagueOf, leagueOf, eraLeagueOf,
 } = cm;
 const { ERA2020_ROSTERS, ERA2020_META, ERA2020_PARTIAL } = E20;
-const { CM_ROSTERS } = MOD;
+/* Round 1304: the modern world is the joined one, the same object both
+   engine files read, so a league that joins the game joins this harness.
+   The bake alone is kept only to tell which clubs a generated league added
+   (control joinage). */
+const { CM_WORLD_ROSTERS: CM_ROSTERS } = MOD;
+const BAKED_CLUBS = new Set(Object.keys(BAKED.CM_ROSTERS));
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -158,9 +194,21 @@ const BAND_THIN = 14;
                   files about 150 men under the wrong league.
      eraorder     leagueOf's fixed era order is taken out as the engine is
                   bundled (see the plugin above the build), so section 8's
-                  reversal of ERA_LEAGUES moves the multi-era clubs. */
+                  reversal of ERA_LEAGUES moves the multi-era clubs.
+     leak         (Round 1304) the modern save is handed the 2020 market, as
+                  a market cache that forgot the era would hand it: section
+                  2's "2020-only ... is on the 2026 market" must fail.
+     joinage      (Round 1304) one man the 2020 world shares with a
+                  generated league (a club the bake does not hold) reads ten
+                  years older in memory: section 2's namesake pass must fail
+                  on him, which proves the pass reads the generated leagues.
+     shiporder    (Round 1304) the engine's fixed order of the eras is
+                  retyped oldest season first as it is bundled: section 8's
+                  pin on the shipped order and its club pins must fail,
+                  while the reversal test, which only asks that the order
+                  not hang on the object, still passes. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -242,8 +290,18 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
   else if (kane.age !== 26) fail(`market Kane is ${kane.age}, the 2020 bake says 26`);
 
   Math.random = seeded(37);
-  const nowNames = new Set(buildMarket(startCareer('Arsenal')).map(p => p.name));
+  let now = startCareer('Arsenal');
+  /* Round 1304: the modern names are the joined world's, the one the game
+     reads. The market comes out of the engine and this list out of the data
+     files, so the two can still disagree, which is the whole check. */
   const modernNames = new Set(Object.values(CM_ROSTERS).flat().map(p => p.n));
+  if (CONTROL === 'leak') {
+    const eraOnly = Object.values(ERA2020_ROSTERS).flat().filter(p => !modernNames.has(p.n)).length;
+    if (!eraOnly) controlRefuse('no 2020 man is missing from the modern world, so nobody could leak');
+    now = { ...now, eraId: 'era2020' };
+    console.log(`   CONTROL leak applied: the modern save reads the 2020 market (${eraOnly} era-only men could be on it)`);
+  }
+  const nowNames = new Set(buildMarket(now).map(p => p.name));
   let checked = 0, leaked = 0;
   for (const roster of Object.values(ERA2020_ROSTERS)) for (const p of roster) {
     if (modernNames.has(p.n)) continue;
@@ -323,8 +381,20 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
   };
   const byName = rosters => { const m = new Map(); for (const roster of Object.values(rosters)) for (const p of roster) m.set(p.n, p); return m; };
   const here = byName(ERA2020_ROSTERS);
+  const nowByName = byName(CM_ROSTERS);
+  if (CONTROL === 'joinage') {
+    let hit = null;
+    for (const [club, roster] of Object.entries(CM_ROSTERS)) {
+      if (BAKED_CLUBS.has(club)) continue;
+      hit = roster.find(p => here.has(p.n) && !PAIRS.now[p.n]) ?? null;
+      if (hit) break;
+    }
+    if (!hit) controlRefuse('the 2020 world shares no man with a generated league');
+    nowByName.set(hit.n, { ...hit, a: hit.a + 10 });
+    console.log(`   CONTROL joinage applied: ${hit.n}, a man of a generated league, reads ten years older`);
+  }
   const worlds = [
-    ['now', byName(CM_ROSTERS), 6, 400],
+    ['now', nowByName, 6, 400],
     ['era2015', byName(E15.ERA2015_ROSTERS), -5, 280],
     ['era2010', byName(E10.ERA2010_ROSTERS), -10, 40],
     ['era2005', byName(E05.ERA2005_ROSTERS), -15, 5],
@@ -631,10 +701,28 @@ console.log('8) Every past season\'s market files a man under the league his clu
      must move no club. MEASURED 2026-10-05: 17 era-only clubs sit in two or
      three eras; with the old insertion order fallback (control eraorder)
      the reversal moves all 17, Cadiz from laliga2005 to laliga2020. */
+  /* Round 1304: the world this was measured on moved. Round 1040 gave the
+     modern game Serie B, Ligue 2 and the Segunda, and a club a modern league
+     holds never reaches the fallback (REAL_LEAGUES wins, Round 146's rule),
+     so the clubs it serves fell from 53 to 29 and the ones in two or more
+     eras from 21 to 6 (measured on runners at each of Round 1040's three
+     commits, 2026-10-11). Cadiz is one that left: the 2026-27 data has them
+     in the Segunda, so an unscoped lookup reads segunda, by design. The
+     rule did not move, so it is held three ways that do not hang on which
+     clubs happen to be left: the shipped order itself is pinned, every
+     era-only club must read the first era of that order that holds it, and
+     the six clubs still served in two or more eras are pinned by name to
+     the league they have always read (control shiporder retypes the order
+     oldest first and must fail the first and the third). The floor is half
+     of today's six, as it was about half of the count it was first set on. */
   const order = cm.ERA_FALLBACK_ORDER ?? [];
   const keys = Object.keys(ERA_LEAGUES);
   const missing = keys.filter(k => !order.includes(k));
   if (missing.length) fail(`leagueOf's fixed era order leaves out ${missing.join(', ')}; a new era goes at the end of ERA_FALLBACK_ORDER`);
+  const SHIPPED = ['era2010', 'era2015', 'era2005', 'era2020'];
+  if (order.slice(0, SHIPPED.length).join(',') !== SHIPPED.join(',')) fail(`leagueOf reads the eras as ${order.join(', ')}; they shipped as ${SHIPPED.join(', ')} and a new era goes at the END`);
+  const MULTI_FLOOR = 3;
+  const PINS = { 'Wigan Athletic': 'premier2010', 'Zaragoza': 'laliga2010', 'Chievo Verona': 'seriea2010', 'Bordeaux': 'ligue12010', 'Caen': 'ligue12010', 'Leicester City': 'premier2015' };
   const real = new Set(cm.REAL_LEAGUES.flatMap(l => l.clubs));
   const eraOnly = [...new Set(keys.flatMap(k => ERA_LEAGUES[k].flatMap(l => l.clubs)))].filter(c => !real.has(c));
   const multi = eraOnly.filter(c => keys.filter(k => ERA_LEAGUES[k].some(l => l.clubs.includes(c))).length > 1);
@@ -646,9 +734,24 @@ console.log('8) Every past season\'s market files a man under the league his clu
   for (const k of keys) delete ERA_LEAGUES[k];
   for (const [k, v] of saved) ERA_LEAGUES[k] = v;
   console.log(`   ${eraOnly.length} era-only clubs, ${multi.length} of them in more than one era; reversing ERA_LEAGUES moves ${moved.length}`);
-  if (multi.length < 10) fail(`only ${multi.length} era-only clubs sit in two eras; the order check has nothing to bite on`);
+  if (multi.length < MULTI_FLOOR) fail(`only ${multi.length} era-only clubs sit in two eras; the order check has nothing to bite on`);
   if (moved.length) fail(`leagueOf's era fallback hangs on the order of ERA_LEAGUES: ${moved.slice(0, 4).join('; ')}${moved.length > 4 ? ` and ${moved.length - 4} more` : ''}`);
-  if (leagueOf('Cádiz').id !== 'laliga2005') fail(`an unscoped leagueOf('Cádiz') reads ${leagueOf('Cádiz').id}; it has always read laliga2005`);
+  /* Every club the fallback serves reads the first era of the fixed order
+     that holds it: the rule itself, club by club, whichever clubs are left. */
+  const firstEraLeague = c => order.map(k => (ERA_LEAGUES[k] ?? []).find(l => l.clubs.includes(c))).find(Boolean);
+  const offOrder = eraOnly.filter(c => leagueOf(c).id !== firstEraLeague(c)?.id).map(c => `${c} reads ${leagueOf(c).id}, the order says ${firstEraLeague(c)?.id}`);
+  if (offOrder.length) fail(`${offOrder.length} era-only clubs do not read the first era of the fixed order that holds them: ${offOrder.slice(0, 4).join('; ')}`);
+  /* And the six by name. A pinned club that a modern league has since taken
+     comes off this list in the round that took it, like a namesake pair that
+     is no longer shared. */
+  let pinned = 0;
+  for (const [club, id] of Object.entries(PINS)) {
+    if (real.has(club)) { fail(`${club} plays in a modern league now (${leagueOf(club).id}); take it off section 8's pins in the round that put it there`); continue; }
+    if (!multi.includes(club)) { fail(`${club} is pinned as a club of two or more eras and sits in ${keys.filter(k => ERA_LEAGUES[k].some(l => l.clubs.includes(club))).length}`); continue; }
+    if (leagueOf(club).id !== id) fail(`an unscoped leagueOf('${club}') reads ${leagueOf(club).id}; it has always read ${id}`);
+    else pinned += 1;
+  }
+  console.log(`   the eras are read as ${order.join(', ')}; ${pinned} of ${Object.keys(PINS).length} pinned clubs read the league they always have`);
 }
 
 console.log('');
