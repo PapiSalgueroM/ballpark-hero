@@ -1,0 +1,4 @@
+#!serial
+pin-red: node scripts/simManagerAppealIsolation.mjs > /tmp/p0.log 2>&1; s=$?; grep -a "Error\|hold\|passed\|FAIL" /tmp/p0.log | cut -c1-300 | tail -5; exit $s
+pin-proof: git show 53e40fee:src/lib/clubManager.ts > src/lib/clubManager.ts; sha256sum src/lib/clubManager.ts | cut -c1-64; node scripts/simManagerAppealIsolation.mjs > /tmp/p1.log 2>&1; s=$?; tail -2 /tmp/p1.log | cut -c1-300; git checkout -- src; exit $s
+clean: git status --porcelain --untracked-files=no | wc -l
