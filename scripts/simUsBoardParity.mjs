@@ -123,6 +123,66 @@
  * saves, all but "rookie"). The player's own stream did not move: scripts/
  * simNbaAwardsSense.mjs section P proves that on a fleet that answers no
  * card. 1,872,641 bytes.
+ * Round 1227 (the NFL rival plays the player's position on the player's
+ * own stat line) re-recorded it on purpose on 2026-10-10, on a GitHub
+ * runner, once a step, each from the branch commit its header names.
+ * Step c, the bind (recorded from 96c3f64d). Proof first: the commit
+ * before it, dd3896ac, which only cuts nflStatLineFor out of simSeason,
+ * replays the fixture before green in all four sports and passes the truth
+ * digest with nothing allowed to move, so this recording moves for the bind
+ * alone. The NBA, the MLB and the NHL are byte for byte the same. In the
+ * NFL every one of the 459 clicks is the same button (43 seasons played,
+ * 10 rival beats and 5 rival choices before and after, 685 screen steps).
+ * Step 10, the first season played, is the first save that differs, and it
+ * differs first in c.rival: his line is a wide receiver's own now, his
+ * score is on the printed parts, and he carries the year and whether he
+ * made the first team. The save hash differs at 438 of the 459 steps (the
+ * rival is on every save from there), the markup at 39, and 14 of the 15
+ * fixed saves moved, all but "rookie", which is cut before the first
+ * season. The player's own stream did not move: scripts/simUsRivalSense.mjs
+ * section P1 proves that on a fleet that answers no card, and P2 with
+ * every card answered. 1,869,467 bytes.
+ * The All-Pro card and beat 221 (recorded from 5bdd0a9c). Proof first: the
+ * head with step c's recording in, 83d42fec, replays green in all four
+ * sports and passes the truth digest plain, and between the two heads the
+ * player's lines and the rival's trail are byte equal over the fleet (the
+ * floor at zero in between moved no season of 107,618). The NBA, the MLB
+ * and the NHL are byte for byte the same again, and so is the whole NFL
+ * click path, all 459 steps, with every one of the fifteen fixed saves as
+ * it starts. One screen walk moved: fixed save "negNet", step 52 (the 2034
+ * season). The fixture before dealt the All-Pro card that said he was off
+ * the first team a year after he was on it, a card of Round 1149 that is
+ * no longer dealt once the rival is judged on the season; the same roll
+ * now picks "Head to Head Win" from the pool, and steps 53 and 54 follow
+ * it (4 of that save's 56 steps differ, in pendingRivalryEvent, then
+ * morale and lastRivalryEventId). 1,869,465 bytes.
+ * The single input of that recording, closed after the review (runners
+ * r1227-x1 and r1227-x2, 2026-10-10). Two source commits lie between step
+ * c's recording and this one: 55339449 (seven counts of nflStatLineFor
+ * floored at zero) and 5bdd0a9c (the cards). On 55339449 ALONE step c's
+ * recording replays green in all four sports (three runs of three in a
+ * worktree of that commit, and two more with that commit's src and scripts
+ * laid over the head) and the truth digest passes plain (two runs of two).
+ * On 5bdd0a9c the same recording is red at fixed save "negNet" steps 52 to
+ * 54, first in c.pendingRivalryEvent, and the digest is red. So the floor
+ * moved no recorded career, and this recording and the 8 nfl leaves of the
+ * truth digest (commit 2be3775c, whose message carries no attribution)
+ * moved for the cards alone.
+ * Seen once while proving it, and NOT a number: the very first replay on
+ * 55339449 was red at fixed save "noCoachKey" step 38 (after "Announce this
+ * is the last season"), where the screen read caught the farewell banner
+ * and the recording's read had come before it. The banner is a React.lazy
+ * component (UsCareerBoard.tsx), so that screen read races its chunk; the
+ * save was equal, and the five replays after it on the same commit were
+ * green. If this harness is ever red at that one step alone, rerun it once
+ * before reading it as a change.
+ * Taken once more from 4c010129, the head after the review's fix pass
+ * (words, comments, harness checks and the merge of Release AT's main; no
+ * engine line), on runner r1227-x6: all four sports byte for byte the
+ * recording of 5bdd0a9c, 1,869,465 bytes again. Only recordedFrom moved,
+ * and that is the whole of the commit. The truth digest taken again from
+ * the same head with the nfl keys allowed came back byte equal, so it has
+ * no commit.
  * Round 1149 (the other three careers get what the NBA rival got)
  * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
  * each from the branch commit its header names.

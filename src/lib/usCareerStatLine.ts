@@ -25,6 +25,7 @@ import type { CareerPos, SeasonLine } from './nflMyCareer';
 import type { NbaSeasonLine } from './nbaMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from './mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from './nhlMyCareer';
+import type { AwardSeasonLine } from './careerAwards';
 import { formatNumber } from './formatNumber';
 
 export const SUSPENDED_STAT_LINE = 'Suspended, no season played';
@@ -70,6 +71,59 @@ export function nflStatLine(s: SeasonLine, p: CareerPos): string {
     ]);
     default: return seasonLine(s.teamResult, []);
   }
+}
+
+/* ─── Round 1227: what a line PRINTS, as numbers ─────────────────────────────
+
+   The head to head with the rival is read off the two season lines the screen
+   prints, so it can never say what they do not. A sport's season score
+   (careerAwards.ts) reads a few stats its printed line does not carry (a
+   back's receiving yards, a linebacker's and a corner's forced fumbles, a
+   hitter's steals), so the verdict scores exactly the parts below and nothing
+   else. Each picker is the printer beside it, part for part:
+   src/test/usRivalLine.test.ts reads the printed text back and holds the two
+   together, so a part added to a printer without its picker fails there.
+
+   Types only from the engines, and careerAwards.ts imports nothing, so no
+   cycle. The player's awards still read his whole line: this is the verdict. */
+
+/** A running back's line prints his catches, not his receiving yards, and the season score reads yards: his
+ *  printed catches are read at the mean of the engine's own yards a catch (6.5 plus up to 3, simSeason). */
+export const NFL_RB_PRINTED_YARDS_A_CATCH = 8;
+
+/** What a printer and its picker read of a season: its stats, with or without the season around them. */
+export type NflPrintedStats = Pick<SeasonLine, 'games' | 'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' | 'recTd' | 'tackles' | 'sacks' | 'picks' | 'passDef' | 'forcedFum' | 'fgMade' | 'fgAtt' | 'longFg'>;
+export type MlbPrintedStats = Pick<MlbSeasonLine, 'games' | 'avg' | 'hr' | 'rbi' | 'wins' | 'lossesP' | 'era' | 'so' | 'saves' | 'holds'>;
+export type NhlPrintedStats = Pick<NhlSeasonLine, 'games' | 'goals' | 'assists' | 'points' | 'wins' | 'svpct'>;
+
+/** The numbers nflStatLine prints for that position, and nothing else (`games` rides along for the type: no
+ *  season score reads it; a kicker's attempts are printed and no score has a field for them). */
+export function nflLineAsPrinted(s: NflPrintedStats, p: CareerPos): AwardSeasonLine {
+  const games = s.games;
+  switch (p) {
+    case 'QB': return { games, passYds: s.passYds, passTd: s.passTd, ints: s.ints };
+    case 'RB': return { games, rushYds: s.rushYds, rushTd: s.rushTd, rec: s.rec, recYds: (s.rec ?? 0) * NFL_RB_PRINTED_YARDS_A_CATCH };
+    case 'WR':
+    case 'TE': return { games, rec: s.rec, recYds: s.recYds, recTd: s.recTd };
+    case 'LB': return { games, tackles: s.tackles, sacks: s.sacks, picks: s.picks };
+    case 'CB': return { games, picks: s.picks, passDef: s.passDef, tackles: s.tackles };
+    case 'EDGE': return { games, sacks: s.sacks, tackles: s.tackles, forcedFum: s.forcedFum };
+    case 'K': return { games, fgMade: s.fgMade, longFg: s.longFg };
+    default: return { games };
+  }
+}
+
+/** The numbers mlbStatLine prints for that position (a starter's losses are printed and no score reads them). */
+export function mlbLineAsPrinted(s: MlbPrintedStats, p: MlbCareerPos): AwardSeasonLine {
+  if (p === 'SP') return { games: s.games, wins: s.wins, era: s.era, so: s.so };
+  if (p === 'RP') return { games: s.games, saves: s.saves, holds: s.holds, era: s.era, so: s.so };
+  return { games: s.games, avg: s.avg, hr: s.hr, rbi: s.rbi };
+}
+
+/** The numbers nhlStatLine prints for that position. */
+export function nhlLineAsPrinted(s: NhlPrintedStats, p: NhlCareerPos): AwardSeasonLine {
+  if (p === 'G') return { games: s.games, wins: s.wins, svpct: s.svpct };
+  return { games: s.games, goals: s.goals, assists: s.assists, points: s.points };
 }
 
 /** Career sums the NFL save never kept: every counting stat any position records. */

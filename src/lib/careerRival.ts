@@ -23,6 +23,7 @@
 */
 
 import { seasonSwing } from './careerVariance';
+import { keyedRng } from './keyedRng';
 
 export type RivalSport = 'mlb' | 'nba' | 'nfl' | 'nhl';
 
@@ -42,8 +43,10 @@ export interface CareerRival {
   lastLine: string;
   /** His score last season, so the comparison is on the record. */
   lastScore: number;
-  /** Round 1112: the season his last line belongs to, and whether that season made the All-Star roster. Only a
-   *  sport that plays its rival through a RivalSeasonPlay writes them (the NBA); a save from before has neither. */
+  /** Round 1112: the season his last line belongs to, and whether that season made the sport's roster honour
+   *  (Round 1227 widened the meaning, not the name, because NBA saves hold the field: the All-Star roster in the
+   *  NBA, MLB and the NHL, the first team All-Pro in the NFL). Only a sport that plays its rival through a
+   *  RivalSeasonPlay writes them; a save from before has neither. */
   lastYear?: number;
   lastAllStar?: boolean;
 }
@@ -57,9 +60,47 @@ export interface RivalSeasonResult { line: string; score: number; year?: number;
  * the season (rating plus the season's swing, drawn here exactly as it always was) and the season's stream.
  * THE RULE FOR A SPORT THAT MOVES OVER: take from `rng` exactly the draws that sport's built in line took (the
  * NBA's took one), and key everything else off the rival (keyedRng), so the player's own stream does not move
- * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts.
+ * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts, the NFL's nflRivalSeason in nflMyCareer.ts.
  */
 export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) => RivalSeasonResult;
+
+/* ─── Round 1227: what every sport's rival season shares ──────────────────────
+
+   Round 1112 wrote the NBA's binding by hand. These three are that binding's
+   own lines, lifted so the other sports bind to the same law instead of a
+   copy of it, and the NBA calls them (proven byte equal: scripts/
+   simUsRivalSense.mjs section P1, scripts/simNbaAwardsSense.mjs section R). */
+
+/**
+ * THE DRAW COUNT LAW. How many draws of the season's stream a sport's rival season takes after the swing: what
+ * that sport's built in line took (read off simRivalSeason below: the NHL's goals and assists, MLB's home runs
+ * and average; the NFL's line, gone since Round 1227, took three parts or a kicker's one, and the NBA's took
+ * one before Round 1112). A binding takes exactly this many and pays for everything else from a stream keyed
+ * on the rival, so the player's own stream is where it always was. It outlives the built in lines: the count
+ * is the law, not the lines.
+ */
+export function rivalSeasonDraws(sport: RivalSport, pos: string): number {
+  if (sport === 'nba') return 1;
+  if (sport === 'nfl') return pos === 'K' ? 1 : 3;
+  return 2;
+}
+
+/** The stream a rival's season draws on: `draws` draws of the season's stream, then a generator keyed on the
+ *  tag, his name, the year and each of those draws in order. With one draw the key is the NBA's own of Round
+ *  1112, character for character. */
+export function rivalSeasonStream(
+  tag: string, r: Pick<CareerRival, 'name'>, year: number, rng: () => number, draws: number,
+): () => number {
+  let key = `${tag}|${r.name}|${year}`;
+  for (let i = 0; i < draws; i += 1) key += `|${rng()}`;
+  return keyedRng(key);
+}
+
+/** The rival's kind of player among his position's kinds: fixed for him, by a hash of his name and position
+ *  (never his rating or his age, which move). ONE rule for every sport that deals a rival a kind. */
+export function rivalKindOf<K>(tag: string, r: Pick<CareerRival, 'name' | 'pos'>, kinds: readonly K[]): K {
+  return kinds[Math.floor(keyedRng(`${tag}|${r.name}|${r.pos}`)() * kinds.length)];
+}
 
 /** Round 1112: who had the better year, from the scores of the two printed lines. THE one comparison: the
  *  season note and the head to head tally are both written from it, and every card that says who is ahead
@@ -101,8 +142,10 @@ export function draftRival(
 }
 
 /** The sports whose rival line is still built in below. The NBA's is not: Round 1112 moved it onto the
- *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. */
-export type BuiltInRivalSport = Exclude<RivalSport, 'nba'>;
+ *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. Round 1227
+ *  did the same for the NFL (nflRivalSeason in nflMyCareer.ts) and took the NFL's built in lines out, since
+ *  no career could reach them any more. MLB's and the NHL's go in the round that moves those two over. */
+export type BuiltInRivalSport = Exclude<RivalSport, 'nba' | 'nfl'>;
 
 /** Round 1226: carries a COUNT of a built in NHL or MLB line (goals, assists, home runs) to a season that was
  *  not the engine's own length, such as the 48 games of 2012-13 or the 60 of 2020. It reaches the PRINTED line
@@ -121,42 +164,6 @@ export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => num
     const pg = cut ? cut(g) : g, pa = cut ? cut(a) : a;
     line = `${pg}G ${pa}A ${pg + pa}P`;
     score = g + a;
-  } else if (sport === 'nfl') {
-    // Football positions are not on one scale: a quarterback throws for
-    // 4000 yards while a corner never touches the ball, so the rival plays
-    // MY position and is scored the same way I am. Without this the head to
-    // head against a quarterback finished 13-0 every single career, which is
-    // not a rivalry, it is a formality.
-    const p = r.pos;
-    if (p === 'QB') {
-      const yds = Math.max(400, Math.round(1900 + (form - 62) * 92 + rng() * 500));
-      const td = Math.max(1, Math.round(6 + (form - 62) * 0.95 + rng() * 6));
-      const ip = Math.max(1, Math.round(18.5 - (form - 62) * 0.36 + rng() * 4));
-      line = `${yds} yds, ${td} TD, ${ip} INT`;
-      score = yds / 60 + td * 2;
-    } else if (p === 'RB') {
-      const yds = Math.max(80, Math.round(260 + (form - 62) * 46 + rng() * 260));
-      const rec = Math.max(0, Math.round(14 + (form - 62) * 1.1 + rng() * 12));
-      const td = Math.max(0, Math.round(1 + (form - 62) * 0.42 + rng() * 3));
-      line = `${yds} rush yds, ${rec} rec, ${td} TD`;
-      score = (yds + rec * 8) / 60 + td * 2;
-    } else if (p === 'WR' || p === 'TE') {
-      const rec = Math.max(4, Math.round(28 + (form - 62) * 2.5 + rng() * 14));
-      const yds = Math.round(rec * (10.5 + rng() * 4));
-      const td = Math.max(0, Math.round(1 + (form - 62) * 0.35 + rng() * 3));
-      line = `${rec} rec, ${yds} yds, ${td} TD`;
-      score = yds / 60 + td * 2;
-    } else if (p === 'K') {
-      const fg = Math.max(6, Math.round(22 + (form - 62) * 0.5 + rng() * 5));
-      line = `${fg} field goals`;
-      score = (fg * 30) / 60;
-    } else {
-      const tk = Math.max(15, Math.round(95 + (form - 62) * 2.4 + rng() * 20));
-      const sk = Math.max(0, Math.round((3 + (form - 62) * 0.35 + rng() * 3) * 10) / 10);
-      const pk = Math.max(0, Math.round(1 + (form - 62) * 0.08 + rng() * 2));
-      line = `${tk} tackles, ${sk} sacks, ${pk} INT`;
-      score = (tk * 9) / 60 + (sk + pk) * 2;
-    }
   } else {
     const hr = Math.max(0, Math.round((4 + (form - 62) * 0.85) + rng() * 5));
     const avg = Math.min(0.36, Math.max(0.2, Math.round((0.226 + (form - 62) * 0.0026 + rng() * 0.02) * 1000) / 1000));

@@ -500,7 +500,10 @@ console.log('5) MEASURED, asserted on nothing');
     const row = POSITIONS.map(pos => { const c = NEW.E.startCareer('Pay', pos, NEW.E.ARCHETYPES[pos][0], mulberry(5), null, era); return `${pos} ${[75, 85, 95].map(o => NEW.E.marketSalary({ ...c, ovr: o })).join('/')}`; });
     console.log(`   for Round 1123, open market pay at 75/85/95 in ${era} (M a year): ${row.join(', ')}`);
   }
-  console.log(`   for Round 1112, the head to head share of decided years in the throwback, 17 game arm -> now (the rival keeps a 17 game line against a 16 game player): ${POSITIONS.map(pos => `${pos} ${measured1b[pos].h2h.base.toFixed(1)} -> ${measured1b[pos].h2h.now.toFixed(1)}`).join(', ')}`);
+  /* Round 1227: the rival plays the season's real length now (nflRivalSeason), so the two arms read alike. Until
+     then he kept a 17 game line against a 16 game player and every position's share fell in the throwback
+     (measured on the tree before: QB 41.2 to 33.7, K 12.9 to 6.8). */
+  console.log(`   the head to head share of decided years in the throwback, 17 game arm -> now (printed, not judged; scripts/simUsRivalSense.mjs holds the rival to the season's real length):${POSITIONS.map(pos => `${pos} ${measured1b[pos].h2h.base.toFixed(1)} -> ${measured1b[pos].h2h.now.toFixed(1)}`).join(', ')}`);
   console.log(`   for Round 1051's owner, the Hall percent by position in the throwback, 17 game arm -> now: ${POSITIONS.map(pos => `${pos} ${measured1b[pos].hall.base.toFixed(1)} -> ${measured1b[pos].hall.now.toFixed(1)}`).join(', ')}`);
 
   /* The 2026 top of the market by position, millions a year, beside what the engine's open market pays a 95.

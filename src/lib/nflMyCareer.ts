@@ -16,11 +16,11 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 // they are real career paths and not reskins of a receiver.
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
-import { nflSeasonScore, wonAward } from './careerAwards';
+import { awardSlots, nflSeasonScore, wonAward } from './careerAwards';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { rookieDeal } from './usCareerRookieDeal';
-import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalSeasonDraws, rivalSeasonStream } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
 import { getNflLifeEventsC } from './nflCareerLifeC';
@@ -46,9 +46,9 @@ import { nflMoneySeasonTick } from './nflCareerMoney';
 import type { InboxMessage } from './careerInbox';
 import { receiveNflInboxTexts } from './nflCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
-import { nflRivalryTick, nflRivalryChoiceTick } from './nflCareerRivalryEvents';
+import { nflRivalryTick, nflRivalryChoiceTick, NFL_ROSTER_AWARD } from './nflCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
-import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from './usCareerStatLine';
+import { countOf, nflCareerStatBullet, nflLineAsPrinted, nflMajorAward, nflStatLine, type NflCareerSums, type NflPrintedStats } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
@@ -543,88 +543,11 @@ export function simSeason(
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
-  const g = games / NFL_RATE_GAMES;
   const line: SeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
-  if (c.pos === 'QB') {
-    // Round 98: capped just under Peyton Manning's 5477 in 2013, which is
-    // the real record. A career year should scrape it, never beat it.
-    line.passYds = Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g));
-    line.passTd = Math.max(4, Math.round((6 + (form - 62) * 0.95 + rng() * 6) * g));
-    // Round 56 realism fix: the old slope (0.25) meant a 95 rated quarterback
-    // still threw 12 interceptions a year, which no elite passer does. Real
-    // reference points: elite seasons land around 6 to 9, average starters 12
-    // to 14, and bad starters 18 to 20. The steeper slope hits all three.
-    line.ints = Math.max(1, Math.round((18.5 - (form - 62) * 0.36 + rng() * 4) * g));
-  } else if (c.pos === 'RB') {
-    /* Round 127: the same cap the quarterback line has had since Round 98,
-       which the running back line never got. Eric Dickerson ran for 2105 in
-       1984 and nobody has beaten it since, so a career year here scrapes it
-       and never passes it. Without the cap a peak back cleared the record by
-       one to twenty six yards in roughly three runs out of five, and
-       simCareerRealism has been failing on it for a while. */
-    line.rushYds = Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g));
-    line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
-    line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
-    line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
-  } else if (c.pos === 'WR') {
-    line.rec = Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g));
-    line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
-    line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
-  } else if (c.pos === 'TE') {
-    // Tight ends catch fewer, shorter, but score near the goal line.
-    line.rec = Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g);
-    line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
-    line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
-  } else if (c.pos === 'LB') {
-    /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
-       long note below): the tail of this curve brushed past the harness's
-       200 tackle ceiling about once in a few thousand seasons, and a sim
-       should never out-stat the record book. Tackles are an unofficial stat
-       counted differently across eras, so 200 is the conservative bound the
-       realism harness has always used, and the engine now agrees with it. */
-    line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
-    /* Round 1104: a sack is credited whole or split in two, so the line is
-       rounded to halves (it was tenths: 11.3 sacks is not a number football
-       has). The same at the two other sack lines below. */
-    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 2) / 2);
-    line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
-    line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
-  } else if (c.pos === 'CB') {
-    line.tackles = Math.round((38 + (form - 62) * 1.2 + rng() * 18) * g);
-    line.picks = Math.max(0, Math.round(((form - 68) * 0.11 + rng() * 3) * g));
-    line.passDef = Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g);
-    line.forcedFum = Math.max(0, Math.round((rng() * 2) * g));
-  } else if (c.pos === 'EDGE') {
-    /* Round 123: capped at the real single season record, which nothing in
-       this game should ever cross. Myles Garrett has it at 23.0 in 2025, per
-       Pro Football Reference's single season leaders; Michael Strahan in 2001
-       and T.J. Watt in 2021 share the previous mark at 22.5, and Al Baker's
-       23.0 in 1978 sits above both but predates 1982, when sacks became an
-       official statistic.
-
-       This came out of Round 123 by accident. simCareerRealism.mjs was going
-       red about one run in four on "EDGE sacks: 22.6 beats the real single
-       season record of 22.5", and the first assumption was that this round
-       had broken something. It had not: measured over 56,000 EDGE seasons,
-       the unmodified engine at Round 122 crossed 22.5 three times and topped
-       out at 23.1, and this round's engine crossed it once. The bug was two
-       separate things wearing each other's coat. The harness bound was STALE,
-       written in Round 97 when 22.5 really was the record, and the engine had
-       no cap at all, so on the day somebody broke the record in real life the
-       harness became both wrong and still, occasionally, right. */
-    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
-    line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
-    line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
-    line.passDef = Math.max(0, Math.round((rng() * 4) * g));
-  } else if (c.pos === 'K') {
-    line.fgAtt = Math.round((24 + rng() * 12) * g);
-    const acc = Math.min(0.98, 0.66 + (form - 62) * 0.011 + rng() * 0.06);
-    line.fgMade = Math.round((line.fgAtt ?? 0) * acc);
-    line.longFg = Math.round(48 + (form - 64) * 0.5 + rng() * 12);
-  }
+  Object.assign(line, nflStatLineFor({ form, pos: c.pos, games }, rng));
 
   // team result
   const strength = teamQuality + (c.ovr - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
@@ -725,8 +648,12 @@ export function simSeason(
   if (sn) notes.push(sn);
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
+  /* Round 1227: on my own position's stat line, and both seasons are scored
+     the one way, off the parts the season line prints (nflRivalSeason below
+     says how). The All-Pro above is decided first, because at a position the
+     first team names one man he cannot be on it in a season I am. */
   if (c.rival && !c.rival.retired) {
-    for (const n of judgeRivalSeason(c.rival, (((line.passYds ?? 0) + (line.rushYds ?? 0) + (line.recYds ?? 0) + (line.tackles ?? 0) * 9 + (line.fgMade ?? 0) * 30) / 60 + ((line.passTd ?? 0) + (line.rushTd ?? 0) + (line.recTd ?? 0) + (line.sacks ?? 0) + (line.picks ?? 0)) * 2), c.name, 'nfl', rng)) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, nflHeadToHeadScore(c.pos, line), c.name, 'nfl', rng, nflRivalSeason(c.year, { pos: c.pos, firstTeam: line.awards.includes(NFL_ROSTER_AWARD) }))) notes.push(n);
   }
   /* Round 521: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship rolls its own. A fired beat
@@ -743,6 +670,204 @@ export function simSeason(
   else nflRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
+}
+
+/* ─── Round 1227: one regular season's stat line, as a function ───────────────
+
+   This is the stat block of simSeason, cut out with no draw moved and no
+   number changed (Round 1103 cut nbaStatLineFor the same way), so the
+   player's season and his rival's are ONE function: the rival plays the
+   player's position on the player's own line, with its caps, its halves and
+   the season's real length (nflRivalSeason below).
+
+   THE RULES OF THE CUT. It reads its input and `rng` and nothing else. It
+   returns only the keys that position records, in the order the block wrote
+   them (the saved key order is part of a save, and a key holding undefined
+   is not an absent key). The draws are the block's, in the block's order:
+   QB 3 (yards, touchdowns, interceptions), RB 4 (rush yards, touchdowns,
+   catches, yards a catch), WR 3 and TE 3 (catches, yards a catch,
+   touchdowns), LB 4 (tackles, sacks, interceptions, forced fumbles), CB 4
+   (tackles, interceptions, passes defended, forced fumbles), EDGE 4 (sacks,
+   tackles, forced fumbles, passes defended), K 3 (attempts, accuracy, long).
+   src/test/usRivalLine.test.ts holds the counts and the key order.
+
+   ONE NUMBER DID CHANGE, in a commit of its own after the cut was proven:
+   seven counts are floored at zero. The block had no floor on passing yards,
+   a back's rushing yards and catches, a receiver's and a tight end's catches,
+   a linebacker's tackles or a corner's passes defended, so at a low enough
+   form a season could print a negative number (a back's rushing yards go
+   under zero below a form of 56 on a low draw, and form reaches 42 for a
+   player rated 60 with rock bottom morale on a 62 club in his worst year).
+   The built in rival line had floors of its own, which this function now
+   replaces, so without these a rival could have printed one too. The floor
+   moves no draw, and moves a line only where it printed a number below zero. */
+
+/** What a stat line is made from: the form of the season, the position, and the games of real action. */
+export interface NflLineInput { form: number; pos: CareerPos; games: number }
+/** The stats of one season line, without the season around them. */
+export type NflStatLine = Pick<SeasonLine, 'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' | 'recTd' | 'tackles' | 'sacks' | 'picks' | 'passDef' | 'forcedFum' | 'fgMade' | 'fgAtt' | 'longFg'>;
+
+export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine {
+  const { form, pos } = x;
+  const g = x.games / NFL_RATE_GAMES;
+  const line: NflStatLine = {};
+  if (pos === 'QB') {
+    // Round 98: capped just under Peyton Manning's 5477 in 2013, which is
+    // the real record. A career year should scrape it, never beat it.
+    line.passYds = Math.max(0, Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g)));
+    line.passTd = Math.max(4, Math.round((6 + (form - 62) * 0.95 + rng() * 6) * g));
+    // Round 56 realism fix: the old slope (0.25) meant a 95 rated quarterback
+    // still threw 12 interceptions a year, which no elite passer does. Real
+    // reference points: elite seasons land around 6 to 9, average starters 12
+    // to 14, and bad starters 18 to 20. The steeper slope hits all three.
+    line.ints = Math.max(1, Math.round((18.5 - (form - 62) * 0.36 + rng() * 4) * g));
+  } else if (pos === 'RB') {
+    /* Round 127: the same cap the quarterback line has had since Round 98,
+       which the running back line never got. Eric Dickerson ran for 2105 in
+       1984 and nobody has beaten it since, so a career year here scrapes it
+       and never passes it. Without the cap a peak back cleared the record by
+       one to twenty six yards in roughly three runs out of five, and
+       simCareerRealism has been failing on it for a while. */
+    line.rushYds = Math.max(0, Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g)));
+    line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
+    line.rec = Math.max(0, Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g));
+    line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
+  } else if (pos === 'WR') {
+    line.rec = Math.max(0, Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g)));
+    line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
+    line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
+  } else if (pos === 'TE') {
+    // Tight ends catch fewer, shorter, but score near the goal line.
+    line.rec = Math.max(0, Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g));
+    line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
+    line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
+  } else if (pos === 'LB') {
+    /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
+       long note below): the tail of this curve brushed past the harness's
+       200 tackle ceiling about once in a few thousand seasons, and a sim
+       should never out-stat the record book. Tackles are an unofficial stat
+       counted differently across eras, so 200 is the conservative bound the
+       realism harness has always used, and the engine now agrees with it. */
+    line.tackles = Math.max(0, Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g)));
+    /* Round 1104: a sack is credited whole or split in two, so the line is
+       rounded to halves (it was tenths: 11.3 sacks is not a number football
+       has). The same at the two other sack lines below. */
+    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 2) / 2);
+    line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
+    line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
+  } else if (pos === 'CB') {
+    line.tackles = Math.round((38 + (form - 62) * 1.2 + rng() * 18) * g);
+    line.picks = Math.max(0, Math.round(((form - 68) * 0.11 + rng() * 3) * g));
+    line.passDef = Math.max(0, Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g));
+    line.forcedFum = Math.max(0, Math.round((rng() * 2) * g));
+  } else if (pos === 'EDGE') {
+    /* Round 123: capped at the real single season record, which nothing in
+       this game should ever cross. Myles Garrett has it at 23.0 in 2025, per
+       Pro Football Reference's single season leaders; Michael Strahan in 2001
+       and T.J. Watt in 2021 share the previous mark at 22.5, and Al Baker's
+       23.0 in 1978 sits above both but predates 1982, when sacks became an
+       official statistic.
+
+       This came out of Round 123 by accident. simCareerRealism.mjs was going
+       red about one run in four on "EDGE sacks: 22.6 beats the real single
+       season record of 22.5", and the first assumption was that this round
+       had broken something. It had not: measured over 56,000 EDGE seasons,
+       the unmodified engine at Round 122 crossed 22.5 three times and topped
+       out at 23.1, and this round's engine crossed it once. The bug was two
+       separate things wearing each other's coat. The harness bound was STALE,
+       written in Round 97 when 22.5 really was the record, and the engine had
+       no cap at all, so on the day somebody broke the record in real life the
+       harness became both wrong and still, occasionally, right. */
+    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
+    line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
+    line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
+    line.passDef = Math.max(0, Math.round((rng() * 4) * g));
+  } else if (pos === 'K') {
+    line.fgAtt = Math.round((24 + rng() * 12) * g);
+    const acc = Math.min(0.98, 0.66 + (form - 62) * 0.011 + rng() * 0.06);
+    line.fgMade = Math.round((line.fgAtt ?? 0) * acc);
+    line.longFg = Math.round(48 + (form - 64) * 0.5 + rng() * 12);
+  }
+  return line;
+}
+
+/* ─── Round 1227: the rival plays your position on your own stat line ──────────
+
+   Until this round the NFL rival's season was a private curve in
+   careerRival.ts: one line for a linebacker, a corner and an edge rusher (a
+   corner's rival printed sacks), a kicker with no attempts and no long, a
+   tight end on the wide receiver's curve with no cap, and every line a 17
+   game one whatever the season's length. And the player's side of "who had
+   the better year" was one formula for all eight positions. Measured on the
+   tree before (five seeds of 1,500 careers, scripts/simUsRivalSense.mjs): a
+   corner took 0.0 percent of the head to head years, a linebacker 0.2, an
+   edge rusher 0.4, a kicker 10.1, and no rival line of a corner, an edge
+   rusher or a kicker could be read as a line of his position at all.
+
+   Now his season is nflStatLineFor, the player's own function, and:
+
+     position   his own (draftRival gives him the player's and nothing ever
+                changes it; the player's is only the fallback for a save
+                edited by hand).
+     job        a starter who plays every game of the season's REAL length
+                (nflSeasonLength: 16 from 2005 to 2020), every year, as the
+                NBA's rival has since Round 1112.
+     form       his rating plus the season's swing, as careerRival.ts has
+                always handed it. No morale and no club term: a rival has
+                neither on the save.
+     honour     the first team All-Pro, by the same expression that decides
+                the player's (wonAward on the season score of his whole line at
+                a full schedule pace). At a position the GAME'S first team
+                names ONE man (awardSlots: quarterback, running back, tight
+                end, kicker) he is not on it in a season the player is: two
+                men cannot hold one place. That is the team as it is picked
+                today, which the award table uses in every era; the real
+                team named two running backs through the 2015 season (the
+                sources are beside NFL_ALL_PRO in careerAwards.ts), so in a
+                2005 to 2015 season this rule follows the game's table and
+                is not a statement about the real ballot of that year.
+
+   THE VERDICT is nflHeadToHeadScore for BOTH seasons: the season score of
+   exactly the parts the season line prints (nflLineAsPrinted in
+   usCareerStatLine.ts). So the head to head can never say what the two
+   printed lines do not. What that leaves out, on purpose: a back's catches
+   count at eight yards each and not at his real receiving yards; a
+   linebacker's and a corner's forced fumbles are not printed, so they do
+   not count; a receiver's or a tight end's catches and a kicker's attempts
+   ARE printed and no season score reads them (a receiver is read on yards
+   and touchdowns, a kicker on his makes and his long), so they do not count
+   either. The player's AWARDS still read his whole line (statScore).
+
+   THE STREAM. The built in line took three draws of the season's stream
+   after the swing, or one for a kicker (rivalSeasonDraws). This takes
+   exactly those and seeds a keyed stream with them, which pays for the
+   line's draws and the All-Pro pass. So the player's own stream is where it
+   was, draw for draw (scripts/simUsRivalSense.mjs section P1). */
+
+/** One NFL season's side of the head to head: the season score of the parts its line prints. */
+export function nflHeadToHeadScore(pos: CareerPos, line: NflPrintedStats): number {
+  return nflSeasonScore(pos, nflLineAsPrinted(line, pos));
+}
+
+/** The rival's season of `year`, as the hook judgeRivalSeason takes (careerRival.ts, RivalSeasonPlay). `mine` is
+ *  the player's own position (the fallback) and whether his season just made the first team All-Pro. */
+export function nflRivalSeason(year: number, mine: { pos: CareerPos; firstTeam: boolean }): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = rivalSeasonStream('nfl-rival', r, year, rng, rivalSeasonDraws('nfl', r.pos));
+    const pos = (r.pos in ARCHETYPES ? r.pos : mine.pos) as CareerPos;
+    const len = nflSeasonLength(year);
+    const season: SeasonLine = {
+      year, team: r.team, age: r.age, ovr: r.ovr, games: len, awards: [], teamResult: '', salary: 0,
+      ...nflStatLineFor({ form, pos, games: len }, keyed),
+    };
+    const won = wonAward(keyed, 'nfl', 'allPro', pos, nflSeasonScore(pos, nflAwardPaceLine(season, len)));
+    const onePlace = awardSlots('nfl', 'allPro', pos) === 1;
+    return {
+      line: nflStatLine(season, pos),
+      score: nflHeadToHeadScore(pos, season),
+      year, allStar: won && !(onePlace && mine.firstTeam),
+    };
+  };
 }
 
 /** End-of-season progression: growth to potential, decline with age and wear. */

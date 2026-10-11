@@ -187,32 +187,35 @@ function seasonBeforeHolds(p: { seasons: { awards?: string[] }[] }, award: strin
 /** What a sport hands ownRosterBeat for one card: its words and the line the tap logs. */
 export interface OwnRosterWords<R> { description: (r: R) => string; line: string }
 
-export function ownRosterBeat<P extends { seasons: { awards?: string[] }[]; morale: number }, R>(spec: {
-  id: number; emoji: string; title: string;
-  /** The award word the sport's engine writes on a season that made the roster. */
-  award: string;
-  made: OwnRosterWords<R>;
-  dropped: OwnRosterWords<R>;
-}): RivalryEventDef<P, R> {
-  return factBeat<P, R>({
-    id: spec.id, emoji: spec.emoji, title: spec.title,
-    cards: [
-      {
-        when: s => lastSeasonHolds(s, spec.award) === true,
-        description: (_s, r) => spec.made.description(r),
-        consequence: "Morale +5",
-        move: s => { s.morale = meter(s.morale + 5); },
-        line: () => spec.made.line,
-      },
-      {
-        when: s => lastSeasonHolds(s, spec.award) === false && seasonBeforeHolds(s, spec.award),
-        description: (_s, r) => spec.dropped.description(r),
-        consequence: "Morale -5",
-        move: s => { s.morale = meter(s.morale - 5); },
-        line: () => spec.dropped.line,
-      },
-    ],
-  });
+/** What ownRosterBeat reads of a sport: the award word its engine writes on a season that made the roster, and
+ *  the words of the two cards. */
+export interface OwnRosterSpec<R> { award: string; made: OwnRosterWords<R>; dropped: OwnRosterWords<R> }
+
+/** The two cards above (Round 1227 cut them out of ownRosterBeat unchanged, so rosterBeat below can keep them
+ *  for a card dealt before a sport's rival moved onto the player's line). */
+function ownRosterCards<P extends { seasons: { awards?: string[] }[]; morale: number }, R>(spec: OwnRosterSpec<R>): FactCard<P, R>[] {
+  return [
+    {
+      when: s => lastSeasonHolds(s, spec.award) === true,
+      description: (_s, r) => spec.made.description(r),
+      consequence: "Morale +5",
+      move: s => { s.morale = meter(s.morale + 5); },
+      line: () => spec.made.line,
+    },
+    {
+      when: s => lastSeasonHolds(s, spec.award) === false && seasonBeforeHolds(s, spec.award),
+      description: (_s, r) => spec.dropped.description(r),
+      consequence: "Morale -5",
+      move: s => { s.morale = meter(s.morale - 5); },
+      line: () => spec.dropped.line,
+    },
+  ];
+}
+
+export function ownRosterBeat<P extends { seasons: { awards?: string[] }[]; morale: number }, R>(
+  spec: { id: number; emoji: string; title: string } & OwnRosterSpec<R>,
+): RivalryEventDef<P, R> {
+  return factBeat<P, R>({ id: spec.id, emoji: spec.emoji, title: spec.title, cards: ownRosterCards<P, R>(spec) });
 }
 
 /** The All-Star words MLB and the NHL share: both leagues call it the All-Star roster. */
@@ -225,6 +228,100 @@ export const ALL_STAR_OWN_ROSTER = {
   dropped: {
     description: (r: { name: string }) => `The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and ${r.name}.`,
     line: "🗳️ You were left off the All-Star roster.",
+  },
+};
+
+/* ─── Round 1227: the roster beat of a sport whose rival plays your own line ────
+
+   Round 1112 wrote the NBA's three cards by hand: both of you made the roster,
+   only you, only him, dealt only when at least one of you did, each saying and
+   doing only what the two seasons support. This is that beat as one builder,
+   and the NBA's 306 is bound to it with not a word or a number changed. A
+   sport binds to it in the round that moves its rival onto the player's own
+   stat line, because only then is there a roster pick behind HIS season.
+
+   `own` keeps the two cards of ownRosterBeat for ONE purpose: a save sitting
+   on a card that the release before dealt ("Morale +5" for making the roster,
+   "Morale -5" for dropping off it) still pays what that card printed. Each is
+   supported only while rosterFacts is null, which is never once the sport's
+   rival has been judged on the season at hand, so an own card is never DEALT
+   again, and the tap (which finds its card by the promise printed on it and
+   by `when`) never has two cards to choose from: the fact cards and the own
+   cards are never supported together. */
+
+/** Who made the roster in the season the rival was last judged on. `mine` reads the player's own last season
+ *  (the engine picked his roster); his is what his season's own pick wrote on him. Null when the save holds no
+ *  season or the rival's last season is not that year, so a card is never dealt on two different seasons. */
+export function rosterFacts<L extends { year: number }>(
+  s: { seasons: L[] }, r: { lastYear?: number; lastAllStar?: boolean }, mine: (last: L) => boolean,
+): { mine: boolean; his: boolean } | null {
+  const last = s.seasons[s.seasons.length - 1];
+  if (!last || r.lastYear !== last.year) return null;
+  return { mine: mine(last), his: r.lastAllStar === true };
+}
+
+/** What a sport hands rosterBeat for one of its three cards: its words and the line the tap logs. */
+export interface RosterWords<R> { description: (r: R) => string; line: (r: R) => string }
+
+export function rosterBeat<
+  L extends { year: number; awards?: string[] },
+  P extends { seasons: L[]; morale: number; fanbase: number },
+  R extends { lastYear?: number; lastAllStar?: boolean },
+>(spec: {
+  id: number; emoji: string; title: string;
+  /** Did the player's own season make the roster? Read off the season line, in the engine's own word. */
+  mine: (last: L) => boolean;
+  both: RosterWords<R>; onlyYou: RosterWords<R>; onlyHim: RosterWords<R>;
+  own?: OwnRosterSpec<R>;
+}): RivalryEventDef<P, R> {
+  const facts = (s: P, r: R) => rosterFacts(s, r, spec.mine);
+  const own: FactCard<P, R>[] = spec.own
+    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))
+    : [];
+  return factBeat<P, R>({
+    id: spec.id, emoji: spec.emoji, title: spec.title,
+    cards: [
+      {
+        when: (s, r) => { const f = facts(s, r); return !!f && f.mine && f.his; },
+        description: (_s, r) => spec.both.description(r),
+        consequence: "Fanbase +3",
+        move: s => { s.fanbase = meter(s.fanbase + 3); },
+        line: (_s, r) => spec.both.line(r),
+      },
+      {
+        when: (s, r) => { const f = facts(s, r); return !!f && f.mine && !f.his; },
+        description: (_s, r) => spec.onlyYou.description(r),
+        consequence: "Morale +5",
+        move: s => { s.morale = meter(s.morale + 5); },
+        line: (_s, r) => spec.onlyYou.line(r),
+      },
+      {
+        when: (s, r) => { const f = facts(s, r); return !!f && !f.mine && f.his; },
+        description: (_s, r) => spec.onlyHim.description(r),
+        consequence: "Morale -5",
+        move: s => { s.morale = meter(s.morale - 5); },
+        line: (_s, r) => spec.onlyHim.line(r),
+      },
+      ...own,
+    ],
+  });
+}
+
+/** The three cards in the words of a league that calls it the All-Star roster (the NBA's own since Round 1112,
+ *  word for word). */
+export const ALL_STAR_ROSTER = {
+  emoji: "🗳️", title: "All-Star Rosters",
+  both: {
+    description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} are both on them.`,
+    line: (r: { name: string }) => `🗳️ You and ${r.name} both made the All-Star roster.`,
+  },
+  onlyYou: {
+    description: (r: { name: string }) => `The All-Star rosters are out. You are on one and ${r.name} is not.`,
+    line: (r: { name: string }) => `🗳️ You made the All-Star roster and ${r.name} did not.`,
+  },
+  onlyHim: {
+    description: (r: { name: string }) => `The All-Star rosters are out. ${r.name} is on one and you are not.`,
+    line: (r: { name: string }) => `🗳️ ${r.name} made the All-Star roster and you did not.`,
   },
 };
 
