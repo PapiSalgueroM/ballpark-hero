@@ -42,8 +42,14 @@
  *     in place with nothing left. So that this rule is exercised on every run
  *     and not only when the probe happens to deal such a pair, each case is
  *     run a second time with table k + 1 handed in again as a new array.
- *     Measured 2026-10-11 on a runner: the numbers are printed by the two
- *     check lines (cases, flights in the air, pairs of the season itself).
+ *     Measured 2026-10-11 on a runner (request rAW-f3-m). Release AW's five
+ *     seasons: 38 pairs change the order (a flight in the air in 37, every
+ *     row in place) and 2 hold it (the Man City pair, at both widths); with
+ *     the second arm that is 42 same order cases, a flight in the air in 39.
+ *     Release AV's five seasons under this same file: 40 pairs change the
+ *     order and none holds it (38 flights), which is the old check word for
+ *     word, and the second arm's 40 cases hold (38 flights). Both floors
+ *     stay "30 cases, half of them with a flight in the air".
  *  B2 Moves are real: the share of one matchday steps in which at least one
  *     row carried a transform clears a floor (below), so a run that slides
  *     nothing cannot pass.
