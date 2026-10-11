@@ -1,0 +1,5 @@
+  FAIL [fold] nba-844-late-watch: a second after it landed the closing row sits at 563 to 617 in a 390 high viewport (it landed at 563 to 617)
+  FAIL [fold] nba-844-late-watch: the closing row sits at 563 to 617 in a 390 high viewport, covered
+  measured nba-844-late-watch: the night is 547 high on a 390 high screen (at its first frame the page was at 529 with the play area's top at 69); the page was at rest 0 ms in with the night's top at 141, and moved 0 px for the ending (the closing row started to land at 563 to 617, and ends at 563 to 617)
+  walked nba-844-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 366 frames
+playDraftNight [control ending]: 2 FAILURE(S) of its own check (fold), as it must

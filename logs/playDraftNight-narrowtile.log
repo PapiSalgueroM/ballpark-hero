@@ -1,0 +1,4 @@
+  FAIL [cut] nba-320-late-watch: "Timberwolves" would be cut on a lottery tile: 83 px of words in 73 px
+  measured nba-320-late-watch: a tile has 73 px for a club (widest "Timberwolves", 83 px) and 73 px for a seed line (widest "Seed 12 · Up 10", 72 px)
+  walked nba-320-late-watch: pick 35, 5 rows and 4 lottery tiles, card 861 high, 366 frames
+playDraftNight [control narrowtile]: 1 FAILURE(S) of its own check (cut), as it must
