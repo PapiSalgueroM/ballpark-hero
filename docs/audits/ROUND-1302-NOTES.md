@@ -97,6 +97,10 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
   prints). When real chances run back to back to the whistle, or the goal is at the whistle's own place, it
   stops AT the whistle: the last real action is over and counted, the ruled out goal is played and reviewed,
   and the period ends when the card closes.
+- **It waits for a real goal's pill.** Where the clock stops at the whistle after a real last kick, that goal
+  has just been told by its pill ("GOAL! ..."), and the stoppage does not start until the pill has had its 2.6
+  seconds: a pill that says GOAL for one side is never up with a card that rules out a goal of the other. And
+  the last kick's line is told on time, not kept back for the review the whistle is waiting for.
 - **What that corner did before, and the reviews found:** with no free instant the card opened 0.05 before the
   whistle on whatever was there. League match 2 of the fresh Everton career, seed 42322: a card that said "goal
   ruled out" for an Aston Villa goal sat on Everton's own real goal in Villa's net at 1 - 0, and the half then
