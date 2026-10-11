@@ -1,0 +1,11 @@
+# Release AX d5 on c4a91cdc: the replay of the new recording and its eight controls, one at a time
+#!serial
+simUsBoardParity: export TMPDIR=$(mktemp -d); node scripts/simUsBoardParity.mjs
+parity-label: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+parity-draw: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=draw node scripts/simUsBoardParity.mjs
+parity-binding: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=binding node scripts/simUsBoardParity.mjs
+parity-restore: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=restore node scripts/simUsBoardParity.mjs
+parity-era: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=era node scripts/simUsBoardParity.mjs
+parity-fixture: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+parity-wheel: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=wheel node scripts/simUsBoardParity.mjs
+parity-talk: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=talk node scripts/simUsBoardParity.mjs
