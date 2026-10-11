@@ -1,0 +1,77 @@
+
+  /* ==== REVIEWPROBE: the run reviewer's cases. Never part of the repo: spliced into a copy on the runner. ==== */
+  type Probe = { k: number; cls: string; h: Half };
+  function lateRuledOut(limit: number, from: number, to: number): Probe[] {
+    const out: Probe[] = [], count: Record<string, number> = {};
+    for (let k = 0; k < 3; k++) {
+      const pre = entry(k);
+      for (let seed = from; seed < to; seed++) {
+        const res = seeded(seed, () => playNextEntry(pre, { varReviews: true }));
+        if (res.kind !== 'halftime' || !res.state.live || res.state.live.varReviews !== true) continue;
+        const live = res.state.live, feed = liveFeed(live), all = reviewsOf(feed), whistle = 45 + (live.added?.h1 ?? 0);
+        if (all.length !== 1) continue;
+        const r = all[0];
+        if (r.review!.decision !== 'disallowed' || place(r) < whistle - 1) continue;
+        const room = !feed.some(e => isChance(e) && place(e) >= place(r) - 1);
+        const quiet = !feed.some(e => isChance(e) && place(e) >= whistle - 3);
+        const cls = room ? (quiet ? 'quiet' : 'roomNotQuiet') : 'crowded';
+        count[cls] = (count[cls] ?? 0) + 1;
+        if ((count[cls] ?? 0) > limit) continue;
+        out.push({ k, cls, h: { career: structuredClone(res.state), review: r, feed, live, whistle, seed } });
+      }
+    }
+    console.info(`REVIEWPROBE found ${JSON.stringify(count)} late ruled out goals (one review in the half) in seeds ${from} to ${to} of three league matches`);
+    return out;
+  }
+  async function playLate(p: Probe) {
+    const h = p.h, r = h.review, id = r.review!.id;
+    const mounted = openAt(h, 44.2);
+    const frames = await run(mounted, 30000, fs => fs[fs.length - 1].stage === 'interval');
+    const first = frames.findIndex(cardUp), last = frames.map(cardUp).lastIndexOf(true), whistle = frames.findIndex(f => f.stage === 'interval');
+    const runs: string[] = [];
+    for (const f of frames) { const m = `${f.motion}${f.motion === 'goal' && cardUp(f) ? '(card)' : ''}`; if (runs[runs.length - 1] !== m) runs.push(m); }
+    const win = h.feed.filter(e => isChance(e) && place(e) >= 45);
+    const realGoals = win.filter(e => e.kind === 'goal');
+    const up = frames.filter(cardUp);
+    const under = up.filter(f => f.goalCard !== null || !(f.motion === 'pass' || (f.motion === 'goal' && f.phase === 'net'))).length;
+    const cardOnNet = first >= 0 && frames[first].motion === 'goal' && frames[first].phase === 'net' && frames[first].net;
+    let flightBefore = false;
+    for (let i = first - 1; i >= 0 && i >= first - 120; i--) { if (frames[i].goalCard !== null) break; if (frames[i].motion === 'goal' && frames[i].phase === 'flight') { flightBefore = true; break; } }
+    const valid = new Set<string>(); for (let pos = 43; pos <= h.whistle; pos++) valid.add(scoreBy(h.feed, pos));
+    const scores = [...new Set(frames.map(f => f.score))];
+    const tail = last >= 0 ? frames.slice(last + 1) : [];
+    const cardAfter = tail.findIndex(f => f.goalCard !== null), flightAfter = tail.findIndex(f => f.motion === 'goal' && f.phase === 'flight');
+    const goalCards = realGoals.map(g => ({ who: g.text, side: g.side, at: place(g), card: frames.findIndex(f => f.goalCard !== null && f.goalCard.includes(g.text)) }));
+    const row = {
+      cls: p.cls, match: p.k + 1, seed: h.seed, whistle: h.whistle, review: { side: r.side, at: place(r), who: r.text },
+      window: win.map(e => `${e.kind}:${e.side}@${place(e)}`), runs, first, last, whistleFrame: whistle, frames: frames.length,
+      shownOnce: JSON.stringify(order(frames)) === JSON.stringify([id]), under, cardOnNet, flightBefore,
+      atFirst: first >= 0 ? { minute: frames[first].minute, motion: frames[first].motion, phase: frames[first].phase, score: frames[first].score, text: frames[first].cardText.slice(0, 90) } : null,
+      scoresUnderCard: [...new Set(up.map(f => f.score))], scores, invalidScores: scores.filter(s => !valid.has(s)),
+      endScore: whistle >= 0 ? frames[whistle].score : null, engineScore: scoreBy(h.feed, h.whistle), goalCards, cardAfter, flightAfter,
+      marks: JSON.stringify(mounted.callbacks.onMark.mock.calls),
+    };
+    const bad: string[] = [];
+    if (whistle < 0) bad.push('the half never ended');
+    if (whistle >= 0 && whistle <= last) bad.push('the half ended under the review card');
+    if (!row.shownOnce) bad.push(`the review was shown ${JSON.stringify(order(frames))}`);
+    if (under > 0) bad.push(`${under} frames with an action in flight or a goal card under the review card`);
+    if (row.endScore !== row.engineScore) bad.push(`the half ended ${row.endScore}, the engine says ${row.engineScore}`);
+    if (row.invalidScores.length) bad.push(`a score the engine never had: ${row.invalidScores.join(' / ')}`);
+    if (row.scoresUnderCard.length > 1) bad.push(`the score moved under the card: ${row.scoresUnderCard.join(' / ')}`);
+    for (const g of goalCards) if (g.card < 0) bad.push(`the real goal of ${g.who} at ${g.at} never got its card`);
+    if (cardAfter >= 0 && (flightAfter < 0 || flightAfter > cardAfter)) bad.push('a goal card rose after the review with no flight of its own after it (the card sat on a real goal)');
+    if (p.cls !== 'crowded' && !(cardOnNet && flightBefore)) bad.push('a late ruled out goal with the end of the half to itself (the screen rule) was not drawn before its card');
+    if (p.cls === 'crowded' && first >= 0 && frames[first].motion === 'goal') bad.push('crowded half: the card opened on a goal in the net although the ruled out goal is not staged');
+    console.info(`REVIEWPROBE ${bad.length ? 'BAD' : 'ok'} ${JSON.stringify({ ...row, bad })}`);
+    cleanup();
+    return bad.map(b => `${p.cls} match ${p.k + 1} seed ${h.seed}: ${b}`);
+  }
+
+  it('REVIEWPROBE late ruled out goals of every class, played to the whistle', async () => {
+    const found = lateRuledOut(Number(process.env.RR_LIMIT ?? 6), Number(process.env.RR_FROM ?? 1700), Number(process.env.RR_TO ?? 6700));
+    const bad: string[] = [];
+    for (const p of found.filter(q => q.cls !== 'quiet' || process.env.RR_QUIET === '1')) bad.push(...await playLate(p));
+    console.info(`REVIEWPROBE SUMMARY played ${found.length} halves, ${bad.length} problem(s)`);
+    expect(bad).toEqual([]);
+  }, 1500000);
