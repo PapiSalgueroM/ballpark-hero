@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 319[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 697[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2084[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mslams DEAL DONE only after the flip, with the fee the save holds [33m 531[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays nothing when the screen opens onto a deal that was already done [33m 519[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mshakes once for a hijack and for a collapse, and never slams [33m 584[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 542[2mms[22m[39m
+   [33m[2m✓[22m[39m the shootout order tile[2m > [22mopens on request, adds on tap, removes on a second tap, and backs out [33m 305[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 651[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRowButtons.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerManagerFace.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2247[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mlets a Skip career name its manager, background point and all [33m 966[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mrefuses a real footballer on rename before it reaches the save [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mleaves the homeland alone when only the name changes [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mopens a Skip career at an MLS club on its own country [33m 417[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 01:23:03
+[2m   Duration [22m 9.43s[2m (transform 3.33s, setup 384ms, collect 10.12s, tests 6.64s, environment 3.10s, prepare 655ms)[22m
+

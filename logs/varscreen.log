@@ -1,0 +1,37 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 48293[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 2171[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 2881[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 2250[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 4056[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 2325[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 1597[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 6243[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 819[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 1525[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 2188[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, and its review closes before the half ends [33m 1339[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, and its review closes before the half ends [33m 2338[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 2995[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 1954[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1949[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 1528[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1478[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 2330[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 2690[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 3273[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 01:21:40
+[2m   Duration [22m 52.30s[2m (transform 2.30s, setup 80ms, collect 3.06s, tests 48.29s, environment 378ms, prepare 141ms)[22m
+
