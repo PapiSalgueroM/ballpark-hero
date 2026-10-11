@@ -1,0 +1,5 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-all exit=0 368s |       Tests  6980 passed | 58 skipped (7038)
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simPrerender-EXPECT1 exit=1 0s | simPrerender: 7 failures
+gitclean exit=0 0s | clean

@@ -1,0 +1,8 @@
+  FAIL: /whats-new drops the entry "Club Manager: VAR for goals, and the last kick of a half gets its moment.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: tell your agent what you want before you ask to leave.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: announce your last season.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: come back to your national team.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: review your agent once a season.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: from 30, your pay follows your age and your form.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops 7 entries in total
+simPrerender: 7 failures
