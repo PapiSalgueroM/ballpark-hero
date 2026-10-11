@@ -1,0 +1,25 @@
+MUTATION seasononly applied to src/lib/clubManager.ts
+2) digest, every league of every historic era
+  FAIL: eras: era2010|premier2010 differs in wholeNext
+  FAIL: eras: era2010|laliga2010 differs in wholeNext
+  FAIL: eras: era2010|seriea2010 differs in wholeNext
+  FAIL: eras: era2010|bundesliga2010 differs in wholeNext
+  FAIL: eras: era2010|ligue12010 differs in wholeNext
+  FAIL: eras: era2015|premier2015 differs in wholeNext
+  FAIL: eras: era2015|laliga2015 differs in wholeNext
+  FAIL: eras: era2015|seriea2015 differs in wholeNext
+  FAIL: eras: era2015|bundesliga2015 differs in wholeNext
+  FAIL: eras: era2015|ligue12015 differs in wholeNext
+  FAIL: eras: era2005|premier2005 differs in wholeNext
+  FAIL: eras: era2005|laliga2005 differs in wholeNext
+  FAIL: eras: era2005|seriea2005 differs in wholeNext
+  FAIL: eras: era2005|bundesliga2005 differs in wholeNext
+  FAIL: eras: era2005|ligue12005 differs in wholeNext
+  FAIL: eras: era2020|premier2020 differs in wholeNext
+  FAIL: eras: era2020|laliga2020 differs in wholeNext
+  FAIL: eras: era2020|seriea2020 differs in wholeNext
+  FAIL: eras: era2020|bundesliga2020 differs in wholeNext
+  FAIL: eras: era2020|ligue12020 differs in wholeNext
+   20 entries compared, 20 differ
+
+simCmLeagueRules: 20 failure(s)

@@ -1,0 +1,17 @@
+#!serial
+m1-eraconst-2020: node .rc/x/mut.mjs eraconst && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-wrongfn-2020: node .rc/x/mut.mjs wrongfn && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-seasononly-2020: node .rc/x/mut.mjs seasononly && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-seasononly-rules: node .rc/x/mut.mjs seasononly && node scripts/simCmLeagueRules.mjs --part=eras; s=$?; git checkout -- src scripts; exit $s
+m3-seasononly-eraucl: node .rc/x/mut.mjs seasononly && node scripts/simClubManagerEraUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-seasononly-scan: node .rc/x/mut.mjs seasononly && PART=scan SCAN_PER=1 PROBE_ERAS=era2010 node .rc/x/probeRun.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-marketera-2005: node .rc/x/mut.mjs marketera && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-marketera-2010: node .rc/x/mut.mjs marketera && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-marketera-2015: node .rc/x/mut.mjs marketera && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-marketera-2020: node .rc/x/mut.mjs marketera && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-nosupersede-2020: node .rc/x/mut.mjs nosupersede && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-nosupersede-aleague: node .rc/x/mut.mjs nosupersede && node scripts/simClubManagerALeague.mjs; s=$?; git checkout -- src scripts; exit $s
+m6-topsix-2020: node .rc/x/mut.mjs topsix && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+m6-topsix-rules: node .rc/x/mut.mjs topsix && node scripts/simCmLeagueRules.mjs --part=eras; s=$?; git checkout -- src scripts; exit $s
+m5-nosupersede-eras: node .rc/x/mut.mjs nosupersede && node scripts/simEras.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short -- src scripts | head -5; git diff --quiet -- src scripts

@@ -1,0 +1,16 @@
+m1-eraconst-2020 exit=1 12s | simEra2020: 6 failure(s).
+m2-wrongfn-2020 exit=1 11s | simEra2020: 4 failure(s).
+m3-seasononly-2020 exit=0 11s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+m3-seasononly-rules exit=1 7s | simCmLeagueRules: 20 failure(s)
+m3-seasononly-eraucl exit=0 25s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+m3-seasononly-scan exit=0 6s | probe: done
+m4-marketera-2005 exit=1 13s | simEra2005: 5 failures
+m4-marketera-2010 exit=1 14s | simEra2010: 5 failures
+m4-marketera-2015 exit=1 12s | simEra2015: 5 failures
+m4-marketera-2020 exit=1 13s | simEra2020: 5 failure(s).
+m5-nosupersede-2020 exit=0 12s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+m5-nosupersede-aleague exit=1 6s | simClubManagerALeague: 2 failure(s)
+m6-topsix-2020 exit=0 12s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+m6-topsix-rules exit=0 8s | simCmLeagueRules: all checks passed (eras)
+m5-nosupersede-eras exit=0 749s | ALL ERA AND AGEING CHECKS PASSED
+clean exit=0 0s | 

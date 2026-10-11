@@ -1,0 +1,33 @@
+MUTATION seasononly applied to src/lib/clubManager.ts
+probe: head tree has actingClubsByLeague=true; base cbfa94fd has it=false
+SCAN) every string of a past season save, searched for a club of today that the season does not have
+   head era2010: 5 careers (0 stuck, 0 sacked), 353 clubs of today not in the season; roots with a hit: inbox=28 transferLog=18 squad=12 scorerRace=10 intl=10 aiHeadlines=7
+      inbox: era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai
+      inbox: era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra
+      inbox: era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra
+      transferLog: era2010/Arsenal@s2e30 transferLog[].to: Bournemouth <= Bournemouth
+      transferLog: era2010/Arsenal@s2e30 transferLog[].to: Hull City <= Hull City
+      transferLog: era2010/Barcelona@s2start transferLog[].to: Nottingham Forest <= Nottingham Forest
+      squad: era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos
+      scorerRace: era2010/Barcelona@start scorerRace[].name: León <= Pedro León
+      intl: era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos
+      aiHeadlines: era2010/Arsenal@s2e30 aiHeadlines[]: Bournemouth <= Bournemouth sign Leonardo Bonucci from Juventus for £26m.
+      aiHeadlines: era2010/Arsenal@s2e30 aiHeadlines[]: Hull City <= Hull City sign Álvaro Negredo from Sevilla for £12m.
+      aiHeadlines: era2010/Barcelona@s2start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Philippe Mexès from Roma for £19m.
+   base era2010: 5 careers (0 stuck, 0 sacked), 353 clubs of today not in the season; roots with a hit: transferLog=60 negotiation=36 inbox=28 squad=12 aiHeadlines=10 scorerRace=10 intl=10
+      transferLog: era2010/Arsenal@talkEnd transferLog[].to: Trabzonspor <= Trabzonspor
+      transferLog: era2010/Arsenal@talkEnd transferLog[].to: Vancouver Whitecaps <= Vancouver Whitecaps
+      transferLog: era2010/Arsenal@s2e30 transferLog[].to: Bournemouth <= Bournemouth
+      negotiation: era2010/Arsenal@talk negotiation.rivalBidder: Trabzonspor <= Trabzonspor
+      negotiation: era2010/Arsenal@talk negotiation.note: Trabzonspor <= Trabzonspor just entered the race at £30.4m. Bidding war.
+      negotiation: era2010/Arsenal@talkEnd negotiation.note: Trabzonspor <= Trabzonspor closed the deal at £30.4m while you hesitated.
+      inbox: era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai
+      inbox: era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra
+      inbox: era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra
+      squad: era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos
+      aiHeadlines: era2010/Arsenal@s2e30 aiHeadlines[]: Bournemouth <= Bournemouth sign Leonardo Bonucci from Juventus for £26m.
+      aiHeadlines: era2010/Arsenal@s2e30 aiHeadlines[]: Hull City <= Hull City sign Álvaro Negredo from Sevilla for £12m.
+      aiHeadlines: era2010/Barcelona@s2start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Philippe Mexès from Roma for £19m.
+      scorerRace: era2010/Barcelona@start scorerRace[].name: León <= Pedro León
+      intl: era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos
+probe: done

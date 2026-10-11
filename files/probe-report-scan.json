@@ -1,0 +1,188 @@
+{
+ "scan": {
+  "head": {
+   "era2010": {
+    "careers": 5,
+    "stuck": 0,
+    "sacked": 0,
+    "hits": {
+     "aiHeadlines": {
+      "n": 7,
+      "exact": 0,
+      "samples": [
+       "era2010/Arsenal@s2e30 aiHeadlines[]: Bournemouth <= Bournemouth sign Leonardo Bonucci from Juventus for £26m.",
+       "era2010/Arsenal@s2e30 aiHeadlines[]: Hull City <= Hull City sign Álvaro Negredo from Sevilla for £12m.",
+       "era2010/Barcelona@s2start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Philippe Mexès from Roma for £19m.",
+       "era2010/Juventus@s2start aiHeadlines[]: Ipswich Town <= Ipswich Town sign Xabi Alonso from Real Madrid for £20m.",
+       "era2010/Juventus@s2start aiHeadlines[]: Real Betis <= Real Betis sign Mirko Vučinić from Roma for £20m.",
+       "era2010/Juventus@s2start aiHeadlines[]: Al-Hilal <= Al-Hilal sign Carlos Tévez from Manchester City for £28m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 7
+      }
+     },
+     "transferLog": {
+      "n": 18,
+      "exact": 18,
+      "samples": [
+       "era2010/Arsenal@s2e30 transferLog[].to: Bournemouth <= Bournemouth",
+       "era2010/Arsenal@s2e30 transferLog[].to: Hull City <= Hull City",
+       "era2010/Barcelona@s2start transferLog[].to: Nottingham Forest <= Nottingham Forest",
+       "era2010/Juventus@s2start transferLog[].to: Ipswich Town <= Ipswich Town",
+       "era2010/Juventus@s2start transferLog[].to: Real Betis <= Real Betis",
+       "era2010/Juventus@s2start transferLog[].to: Al-Hilal <= Al-Hilal"
+      ],
+      "paths": {
+       "transferLog[].to": 18
+      }
+     },
+     "squad": {
+      "n": 12,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "squad[].name": 12
+      }
+     },
+     "scorerRace": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start scorerRace[].name: León <= Pedro León"
+      ],
+      "paths": {
+       "scorerRace[].name": 10
+      }
+     },
+     "inbox": {
+      "n": 28,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai",
+       "era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e42 inbox[].text: Santos <= International break: the window runs 21 Mar to 29 Mar, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they went strai"
+      ],
+      "paths": {
+       "inbox[].text": 28
+      }
+     },
+     "intl": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "intl.last.called[].name": 10
+      }
+     }
+    }
+   }
+  },
+  "base": {
+   "era2010": {
+    "careers": 5,
+    "stuck": 0,
+    "sacked": 0,
+    "hits": {
+     "negotiation": {
+      "n": 36,
+      "exact": 18,
+      "samples": [
+       "era2010/Arsenal@talk negotiation.rivalBidder: Trabzonspor <= Trabzonspor",
+       "era2010/Arsenal@talk negotiation.note: Trabzonspor <= Trabzonspor just entered the race at £30.4m. Bidding war.",
+       "era2010/Arsenal@talkEnd negotiation.note: Trabzonspor <= Trabzonspor closed the deal at £30.4m while you hesitated.",
+       "era2010/Arsenal@talk negotiation.rivalBidder: Vancouver Whitecaps <= Vancouver Whitecaps",
+       "era2010/Arsenal@talk negotiation.note: Vancouver Whitecaps <= Vancouver Whitecaps just entered the race at £27.1m. Bidding war.",
+       "era2010/Arsenal@talkEnd negotiation.note: Vancouver Whitecaps <= Vancouver Whitecaps closed the deal at £27.1m while you hesitated."
+      ],
+      "paths": {
+       "negotiation.rivalBidder": 18,
+       "negotiation.note": 18
+      }
+     },
+     "transferLog": {
+      "n": 60,
+      "exact": 60,
+      "samples": [
+       "era2010/Arsenal@talkEnd transferLog[].to: Trabzonspor <= Trabzonspor",
+       "era2010/Arsenal@talkEnd transferLog[].to: Vancouver Whitecaps <= Vancouver Whitecaps",
+       "era2010/Arsenal@s2e30 transferLog[].to: Bournemouth <= Bournemouth",
+       "era2010/Arsenal@s2e30 transferLog[].to: Hull City <= Hull City",
+       "era2010/Barcelona@talkEnd transferLog[].to: Southampton <= Southampton",
+       "era2010/Barcelona@talkEnd transferLog[].to: Altach <= Altach"
+      ],
+      "paths": {
+       "transferLog[].to": 60
+      }
+     },
+     "aiHeadlines": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Arsenal@s2e30 aiHeadlines[]: Bournemouth <= Bournemouth sign Leonardo Bonucci from Juventus for £26m.",
+       "era2010/Arsenal@s2e30 aiHeadlines[]: Hull City <= Hull City sign Álvaro Negredo from Sevilla for £12m.",
+       "era2010/Barcelona@s2start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Philippe Mexès from Roma for £19m.",
+       "era2010/Juventus@start aiHeadlines[]: Crystal Palace <= Crystal Palace sign Sergio Agüero from Atlético Madrid for £36m.",
+       "era2010/Juventus@s2start aiHeadlines[]: Ipswich Town <= Ipswich Town sign Xabi Alonso from Real Madrid for £20m.",
+       "era2010/Juventus@s2start aiHeadlines[]: Real Betis <= Real Betis sign Mirko Vučinić from Roma for £20m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 10
+      }
+     },
+     "squad": {
+      "n": 12,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "squad[].name": 12
+      }
+     },
+     "scorerRace": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start scorerRace[].name: León <= Pedro León"
+      ],
+      "paths": {
+       "scorerRace[].name": 10
+      }
+     },
+     "inbox": {
+      "n": 28,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai",
+       "era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e42 inbox[].text: Santos <= International break: the window runs 21 Mar to 29 Mar, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they went strai"
+      ],
+      "paths": {
+       "inbox[].text": 28
+      }
+     },
+     "intl": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "intl.last.called[].name": 10
+      }
+     }
+    }
+   }
+  }
+ }
+}
