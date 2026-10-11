@@ -109,12 +109,17 @@
  * FIRED only if the named section went red and no other did (four controls name the sections that go red,
  * or may, with theirs for the same reason, and say so on their last line when one did):
  *   weight        a striker weighs 8, not 5 (needs BOOK_BASE)         -> stream, and shapes with it
- *   mathrandom    the scorer pick reads Math.random                  -> stream
- *   dropmine      my own league match is not noted                   -> law, and with it the three other
- *                 sections that check the law (names, oldsave, doors)
+ *   mathrandom    the scorer pick reads Math.random                  -> stream (and since the repair of
+ *                 Round 1306 oldsave and dailies with it: a save with no book and a hot seat career handed
+ *                 over now keep a late book, so the same draw moves them off the book out engine too)
+ *   dropmine      my own league match is not noted                   -> law, and with it the sections that
+ *                 check the law or read the rows (names, oldsave, doors, thin, boards), and shapes since
+ *                 the repair: the book is opened again after every match of mine, so most of a club's
+ *                 goals are unnamed counts and the shares by line fall short of the weight
  *   byeweek       the results of a week I do not play (a league with an odd number of clubs) are not
- *                 noted                                              -> law (shapes may go with it: those
- *                 goals are then missing from the rows the shares are counted on)
+ *                 noted                                              -> law (shapes, thin, boards and
+ *                 oldsave may go with it: those goals are missing from the rows the shares and the clean
+ *                 sheets are counted on, and the week after the bye the repair opens the book again)
  *   cleanside     the clean sheet goes to the side that did not score -> law
  *   bought        the book's eleven keeps a man now in my squad      -> names
  *   wrongman      a goal against me goes to the first outfield man on their pitch, whoever the report
@@ -163,7 +168,11 @@
  *   readerwrite   the reader turns the book's list of my clean sheets round in place -> boards (iii)
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
- * by a late book, which is exactly a book reopened in a healthy fleet.
+ * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
+ * watcher still holds the law and counts the late book, and compares nothing else: the new book is not the
+ * old one plus what the week added, so a gain read across the two is no gain (measured on the first run
+ * after step (d): byeweek's eight "names" failures were all of that kind, a row that "gained" nought and an
+ * own goal count that "added" minus one). A healthy fleet has no such entry, which is oldsave (iv).
  *
  * MEASURED: see the block above PURPOSE_FLOOR.
  *
@@ -239,8 +248,8 @@ const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', '
  *  weight table is what the deal is judged against) } */
 const CONTROLS = {
   weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin'] },
-  mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream' },
-  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards'] },
+  mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream', also: ['oldsave', 'dailies'] },
+  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards', 'shapes'] },
   byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin', 'boards', 'oldsave'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
@@ -424,6 +433,23 @@ async function engine(label, root, patches = []) {
  * Every control of the harness FIRED for its own section and no other (or with the sections its line names) on
  * seed set 0, the 21 of Round 1229 among them, after step (b) (r1306-b1, r1306-c1) and the new ones after the
  * step that added them. Wall time on a runner: full fleet 100 to 170 seconds, default 42 to 60.
+ *
+ * STEP (d), THE REPAIR (remote check r1306-d1, head 449361a1, ten fleets green):
+ *   oldsave      3,231 checks on a full fleet with BOOK_BASE (3,023 to 3,099 without it): 5 saves with no book
+ *            (4 finish on a late book, the one parked at the first week on a whole one), the season after
+ *            each, the six unreadable books, the stale book. Over ten healthy fleets no career that started
+ *            its season with a book ended an entry on a late one (0 of 2,366 entries on a full fleet).
+ *   dailies      154 checks with BOOK_BASE (85 without): 6 Hot Seat dates and 3 Deadline Day dates.
+ *   the controls of the step, failures on seed set 0: noreopen 5, fitlive 3, latezero 1,202, alwayslate 2,
+ *            hotseatbook1 2, hotseatbook2 12, hotseatbook3 6; and the ones it could have moved: hurtentry 1,
+ *            redeal 2, strip 12, stripdeadline 3.
+ *   what the fit check costs (the careful reader and the law, once an ENTRY): the "book's own cost" line read
+ *            0 to 32 in a hundred more on six fleets before the step (r1306-e1, mean 15.3) and -1 to 30 after
+ *            it (r1306-d1, mean 15.0). On a sample of four to five seconds that is nothing measured.
+ * AFTER THE REPAIR all 35 controls were fired again on seed set 0 (the critic's correction 7). 32 fired as
+ * they were written. Three had their own section red and one more: mathrandom (oldsave and dailies), dropmine
+ * (shapes) and byeweek (names). Their lists were derived again, the reasons are on their lines above, and the
+ * result names of the run that fired them again are in docs/audits/ROUND-1306-NOTES.md.
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
@@ -803,6 +829,11 @@ function watcher(mod, label, acc, opts = {}) {
       if (after.leagueBook?.r0 !== undefined) { acc.lateEntries += 1; acc.lateFirst ??= `${label} ${where}`; }
       const book = lawNow(mod, after, label, where);
       if (!book || !before.book) return;
+      /* Round 1306: a book REPLACED in this entry (the repair found it unfit and opened a late one) is
+         another book, and what it gained since the entry began cannot be read off the old one. That it
+         happened at all is section oldsave (iv)'s and boards (i)'s to say; the comparisons below would only
+         say it again, in the words of sections that hold something else. No healthy career gets here. */
+      if ((after.leagueBook?.r0 ?? null) !== (before.book.r0 ?? null)) return;
       const mineNow = cm.mySquadNames(after);
       const rep = r.kind === 'match' && r.report.competition === 'league' ? r.report : null;
       const myOpp = rep ? (rep.home === after.clubName ? rep.away : rep.home) : null;
