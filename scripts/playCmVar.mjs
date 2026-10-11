@@ -14,6 +14,9 @@
  * the ruled out goal there, at the whistle when nothing before it is free), the two late goals with reduced
  * motion, and a stricter look under every card: a ruled out goal's card sits on THAT goal, in the net it went
  * into, and on nothing else. Where the page stood is read inside the page at every change of the screen.
+ * The second fix of Round 1303 made the last kick of a half a standing part of the crowdedGoal case: that half
+ * ends on a real goal at the whistle's own clock place, and the walk now waits for that goal's scorer card, reads
+ * it in the frame it is up with the goal on the score, and photographs it (a line LASTKICK per case in the log).
  * The matches are REAL halves of the engine on the shipped rates: the first three league matches of a fresh
  * 2026-27 Everton career (the career scripts/simCmVar.mjs uses), found by searching seeds. A review's id holds
  * the fixture, the minute and the man, so one fixture reviews only a handful of incidents: a saved penalty and a
@@ -308,7 +311,21 @@ async function runCase(profile, motion, kind, variant) {
     if (!PENALTY_KIND) check(!feed.some(e => e.kind === 'var' && e.review?.incident === 'penalty'), 'a match of a build with the goal kind alone holds a penalty review');
     await w.activate(w.page.locator('[data-cm-live-controls]').getByRole('button', { name: '4x', exact: true }));
     const whereBefore = await w.where();
-    await w.page.waitForFunction(rid => document.querySelector('[data-cm-var]')?.dataset.cmVarId === rid, v.review.id, { timeout: 120000 });
+    /* Round 1303 fix 2: the last kick of a half in a real browser. Five jsdom cases and a control of
+       simLiveSimMotion held the scorer card of a goal that is the last kick of a period, and no walk did (the
+       closing check's open item 6). The crowdedGoal half ends on a real goal at the whistle's own clock place, so
+       this case waits for THAT goal's scorer card: the card up with the half's final score on the board. What is
+       on it, the clock under it and whether a review card is up with it are read in that very frame, inside the
+       page, and then it is photographed. The wait starts here because the card comes before the review. */
+    const whistlePlace = 45 + (live.added?.h1 ?? 0);
+    const lastGoal = kind === 'crowdedGoal' ? feed.filter(e => e.kind === 'goal').sort((a, b) => place(b) - place(a))[0] : null;
+    const lastKick = !lastGoal ? null : w.page.waitForFunction(({ me, opp }) => {
+      const goalCard = document.querySelector('[data-cm-goal-card]'), stageEl = document.querySelector('[data-cm-live-stage]');
+      const n = side => Number(document.querySelector(`[data-cm-live-stagebox] [data-cm-score-of="${side}"]`)?.textContent);
+      if (!goalCard || n('me') !== me || n('opp') !== opp) return null;
+      return { text: goalCard.innerText.replace(/\n/g, ' | '), minute: Number(stageEl?.dataset.cmLiveMinute), plus: Number(stageEl?.dataset.cmLivePlus ?? 0), stage: stageEl?.dataset.cmLiveStage ?? null, reviewCardUp: document.querySelectorAll('[data-cm-var]').length };
+    }, goalsBy(whistlePlace), { timeout: 150000 }).then(async handle => ({ ...(await handle.jsonValue()), shot: await w.shot(`${id}-0-last-kick-card`) })).catch(error => ({ error: String(error).slice(0, 200) }));
+    await w.page.waitForFunction(rid =>document.querySelector('[data-cm-var]')?.dataset.cmVarId === rid, v.review.id, { timeout: 120000 });
     const card = w.page.locator('[data-cm-var]');
     const box = await card.evaluate(el => { const b = el.getBoundingClientRect(); return { text: el.innerText.replace(/\n/g, ' | '), x: Math.round(b.x), right: Math.round(b.right), top: Math.round(b.top), bottom: Math.round(b.bottom), vw: innerWidth, vh: innerHeight, animations: el.getAnimations({ subtree: true }).length, cut: [...el.querySelectorAll('p')].some(p => p.scrollWidth > p.clientWidth + 1) }; });
     const whereChecking = await w.where(), scoreChecking = await w.score();
@@ -349,7 +366,25 @@ async function runCase(profile, motion, kind, variant) {
       row.scoreAfter = await w.score();
       row.shots.push(await w.shot(`${id}-3-after`));
       const seen = await w.page.evaluate(() => window.__seen);
-      const mine = `:${v.review.id}`, opened = seen.findIndex(s => s.card.endsWith(mine)), closed = seen.map(s => s.card.endsWith(mine)).lastIndexOf(true);
+      if (lastKick) {
+        /* Round 1303 fix 2: the scorer card of the last kick (set up before the review, above). It names the scorer
+           and his minute, the clock under it stands at the whistle's own place with the half still on, no review
+           card is up with it, and in what the screen showed it comes down before the interval. */
+        const lk = await lastKick, cardAt = seen.map(s => s.goalCard).lastIndexOf(true), intervalAt = seen.findIndex(s => s.stage === 'interval');
+        row.lastKick = { ...lk, goal: `${lastGoal.side} ${cm.minuteLabel(lastGoal)} ${lastGoal.text}`, goalPlace: place(lastGoal), whistlePlace, cardAt, intervalAt, samples: seen.length };
+        if (lk.shot) row.shots.push(lk.shot);
+        console.log(`LASTKICK ${id}: ${JSON.stringify(row.lastKick)}`);
+        check(place(lastGoal) === whistlePlace, `the fixture's last goal is at clock place ${place(lastGoal)} and the whistle at ${whistlePlace}: this half does not end on a goal`);
+        check(!lk.error, `the last kick of the half never got its scorer card with the goal on the score: ${lk.error}`);
+        if (!lk.error) {
+          check(lk.text.includes('GOAL!') && lk.text.includes(lastGoal.text) && lk.text.includes(cm.minuteLabel(lastGoal)), `the scorer card of the last kick does not name the scorer and his minute (${lastGoal.text}, ${cm.minuteLabel(lastGoal)}): ${lk.text}`);
+          check(lk.minute + lk.plus === whistlePlace && lk.stage === 'first', `the scorer card of the last kick was up with the clock at ${lk.minute}+${lk.plus} in the stage ${lk.stage}, and the whistle is at clock place ${whistlePlace} of the first half`);
+          check(lk.reviewCardUp === 0, 'a review card was up with the scorer card of the last kick');
+        }
+        check(cardAt >= 0 && String(seen[cardAt].goalText ?? '').includes(lastGoal.text) && seen[cardAt].stage === 'first', `the last scorer card the screen showed is not the last kick's, in the half it belongs to: ${JSON.stringify(seen[cardAt] ?? null)}`);
+        check(intervalAt < 0 || cardAt < intervalAt, `the scorer card of the last kick was still up when the interval came (sample ${cardAt}, the interval at ${intervalAt})`);
+      }
+      const mine = `:${v.review.id}`, opened =seen.findIndex(s => s.card.endsWith(mine)), closed = seen.map(s => s.card.endsWith(mine)).lastIndexOf(true);
       const under = seen.filter(s => s.card !== 'none');
       check(!under.some(s => s.goalCard), 'a goal card was up under a review card');
       /* Round 1302 fix: under the card of a ruled out goal the pitch shows THAT goal, its ball stopped in the net it
