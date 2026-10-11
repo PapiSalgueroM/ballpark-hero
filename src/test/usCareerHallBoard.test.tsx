@@ -257,7 +257,7 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     const after = read(sport).c as UsCareerCore & Record<string, unknown>;
     const before = copy(c) as UsCareerCore & Record<string, unknown>;
     // Round 1051: the save that retires a career also stamps its legacy calibration.
-    expect(after.hallCal).toBe(2);
+    expect(after.hallCal).toBe(HALL_CALIBRATION);
     for (const k of ['retired', 'retirement', 'summer', 'hallCal']) { delete after[k]; delete before[k]; }
     expect(after, 'nothing but the end and the dropped summer changed').toEqual(before);
   });

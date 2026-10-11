@@ -3324,5 +3324,419 @@
     "baseCredit": {}
    }
   }
+ },
+ "calibrations": {
+  "3": {
+   "note": "Round 1301: calibration 3, the marks of nhl measured again. Written by MARKS_CALIBRATION=3 node scripts/genCareerHallMarks.mjs <dir> from the pooled careers of six measuring runs of scripts/simCareerHall.mjs on the engine of that round, by the rules above; never edited by hand. A sport this block does not list keeps the block of the calibration before it. In this block a key ending in 2 (hallShare2, medianScore2) reads calibration 3, the calibration of the day it was measured, and a key ending in 1 reads calibration 1.",
+   "round": 1301,
+   "why": "Round 1226 made the NHL play the season the league really plays (84 games from 2026-27), so a skater's career totals run about 84 over 82 of what the calibration 2 marks were cut on, and about one career in eight cleared a from mark where the design says one in ten.",
+   "seeds": [
+    "base",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+   ],
+   "sports": {
+    "nhl": {
+     "careers": 12000,
+     "runs": [
+      2000,
+      2000,
+      2000,
+      2000,
+      2000,
+      2000
+     ],
+     "positions": {
+      "C": {
+       "n": 2400,
+       "medianSeasons": 20,
+       "hallShare1": 28.2,
+       "medianScore1": 343,
+       "families": {
+        "goals": {
+         "median": 601,
+         "p90": 954,
+         "p99": 1125,
+         "from": 954,
+         "to": 1130,
+         "floored": false
+        },
+        "assists": {
+         "median": 833,
+         "p90": 1005,
+         "p99": 1156,
+         "from": 1010,
+         "to": 1160,
+         "floored": false
+        },
+        "points": {
+         "median": 1472,
+         "p90": 1862,
+         "p99": 2130,
+         "from": 1860,
+         "to": 2130,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1577,
+         "p90": 1786,
+         "p99": 1821,
+         "from": 1790,
+         "to": 1970,
+         "floored": true
+        }
+       }
+      },
+      "LW": {
+       "n": 2400,
+       "medianSeasons": 19,
+       "hallShare1": 29.2,
+       "medianScore1": 362,
+       "families": {
+        "goals": {
+         "median": 635,
+         "p90": 891,
+         "p99": 1075,
+         "from": 891,
+         "to": 1080,
+         "floored": false
+        },
+        "assists": {
+         "median": 781,
+         "p90": 959,
+         "p99": 1115,
+         "from": 959,
+         "to": 1120,
+         "floored": false
+        },
+        "points": {
+         "median": 1441,
+         "p90": 1766,
+         "p99": 2035,
+         "from": 1770,
+         "to": 2040,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1534,
+         "p90": 1747,
+         "p99": 1815,
+         "from": 1750,
+         "to": 1930,
+         "floored": true
+        }
+       }
+      },
+      "RW": {
+       "n": 2400,
+       "medianSeasons": 20,
+       "hallShare1": 27.5,
+       "medianScore1": 350,
+       "families": {
+        "goals": {
+         "median": 689,
+         "p90": 858,
+         "p99": 991,
+         "from": 858,
+         "to": 991,
+         "floored": false
+        },
+        "assists": {
+         "median": 794,
+         "p90": 956,
+         "p99": 1068,
+         "from": 956,
+         "to": 1070,
+         "floored": false
+        },
+        "points": {
+         "median": 1483,
+         "p90": 1795,
+         "p99": 2038,
+         "from": 1800,
+         "to": 2040,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1565,
+         "p90": 1767,
+         "p99": 1818,
+         "from": 1770,
+         "to": 1950,
+         "floored": true
+        }
+       }
+      },
+      "D": {
+       "n": 2400,
+       "medianSeasons": 20,
+       "hallShare1": 27.3,
+       "medianScore1": 348,
+       "families": {
+        "goals": {
+         "median": 270,
+         "p90": 349,
+         "p99": 402,
+         "from": 349,
+         "to": 402,
+         "floored": false
+        },
+        "assists": {
+         "median": 941,
+         "p90": 1121,
+         "p99": 1255,
+         "from": 1120,
+         "to": 1260,
+         "floored": false
+        },
+        "points": {
+         "median": 1203,
+         "p90": 1457,
+         "p99": 1644,
+         "from": 1460,
+         "to": 1640,
+         "floored": false
+        },
+        "wins": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "games": {
+         "median": 1611,
+         "p90": 1780,
+         "p99": 1819,
+         "from": 1780,
+         "to": 1960,
+         "floored": true
+        }
+       }
+      },
+      "G": {
+       "n": 2400,
+       "medianSeasons": 21,
+       "hallShare1": 36.8,
+       "medianScore1": 410,
+       "families": {
+        "goals": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "assists": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "points": {
+         "median": 0,
+         "p90": 0,
+         "p99": 0,
+         "from": 0,
+         "to": 0,
+         "floored": false
+        },
+        "wins": {
+         "median": 656,
+         "p90": 720,
+         "p99": 765,
+         "from": 720,
+         "to": 792,
+         "floored": true
+        },
+        "games": {
+         "median": 1303,
+         "p90": 1374,
+         "p99": 1396,
+         "from": 1370,
+         "to": 1510,
+         "floored": true
+        }
+       }
+      }
+     },
+     "standouts": {
+      "C": [
+       "goals",
+       "assists",
+       "points"
+      ],
+      "LW": [
+       "goals",
+       "assists",
+       "points"
+      ],
+      "RW": [
+       "goals",
+       "assists",
+       "points"
+      ],
+      "D": [
+       "assists",
+       "points"
+      ],
+      "G": [
+       "wins"
+      ]
+     },
+     "base": {},
+     "nearHalf": [],
+     "bands": {
+      "defaultCareers": 2000,
+      "fromCell": {
+       "lo": 0.0431,
+       "hi": 0.1594,
+       "measuredLo": 0.0625,
+       "measuredHi": 0.14,
+       "cells": 72
+      },
+      "fromPooled": {
+       "lo": 0.0819,
+       "hi": 0.1202,
+       "measured": [
+        0.0915,
+        0.1106,
+        0.1038,
+        0.0948,
+        0.0977,
+        0.0985
+       ]
+      },
+      "toPooled": {
+       "lo": 0.0053,
+       "hi": 0.0107,
+       "measured": [
+        0.0088,
+        0.0092,
+        0.0092,
+        0.0067,
+        0.0094,
+        0.0094
+       ]
+      }
+     },
+     "outcome": {
+      "topShare": 0.05,
+      "covered": 0.9,
+      "pooledGain": {
+       "measured": [
+        0.15,
+        0.1667,
+        0.225,
+        0.23,
+        0.2,
+        0.1667
+       ],
+       "floor": 0.075
+      },
+      "standoutGain": {
+       "measured": [
+        0.075,
+        0.0875,
+        0.0625,
+        0.1167,
+        0.0708,
+        0.075
+       ],
+       "floor": 0.0313
+      },
+      "hallShare1": [
+       0.2855,
+       0.2915,
+       0.304,
+       0.302,
+       0.3115,
+       0.293
+      ],
+      "hallShare2": [
+       0.2985,
+       0.307,
+       0.3155,
+       0.3155,
+       0.3215,
+       0.305
+      ],
+      "hallCeiling": 0.3445,
+      "newlyIn": [
+       26,
+       31,
+       23,
+       27,
+       20,
+       24
+      ],
+      "medianScore1": [
+       364,
+       364,
+       363,
+       357,
+       370,
+       352
+      ],
+      "medianScore2": [
+       366,
+       367,
+       369,
+       363,
+       372,
+       354
+      ],
+      "meanScore1": [
+       441.8,
+       445.2,
+       445.1,
+       443.3,
+       452.2,
+       440.6
+      ],
+      "meanScore2": [
+       458.4,
+       466.3,
+       465,
+       461.5,
+       471,
+       459.9
+      ],
+      "baseCredit": {}
+     }
+    }
+   }
+  }
  }
 }

@@ -1475,7 +1475,8 @@ for (const { pos, s } of tableCells) {
   const m = ML.positions[pos]?.families[s.stat];
   if (!m || s.stat in MARKS.excluded[SPORT]) { halfMiss.push(`${pos} ${s.stat} is not a family of the ledger`); continue; }
   if (s.from !== m.from || s.to !== m.to || s.label !== MARKS.labels[SPORT][s.stat]) halfMiss.push(`${pos} ${s.stat} off the ledger's marks`);
-  if (!(s.to >= s.from * MARKS.rules.rampFloor)) halfMiss.push(`${pos} ${s.stat} ramp under the floor`);
+  // Round 1301: the generator's own allowance (its sigUp rounds a floor up less 1e-9). 720 times 1.10 is 792.0000000000001 in a double, and 792 is the floor.
+  if (!(s.to >= s.from * MARKS.rules.rampFloor - 1e-9)) halfMiss.push(`${pos} ${s.stat} ramp under the floor`);
   // A family's own top exists only where the anchors halved it, and is exactly half.
   if ((s.top !== undefined) !== decided(pos, 'standout', s.stat, 'halved') || (s.top !== undefined && s.top !== TOP / 2)) halfMiss.push(`${pos} ${s.stat} top ${s.top} against the anchors' decisions`);
   const perSeason = s.from / Math.max(1, ML.positions[pos].medianSeasons);
