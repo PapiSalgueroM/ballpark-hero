@@ -1,0 +1,5 @@
+vitest-onepress-alone exit=0 7s |    Duration  6.25s (transform 2.05s, setup 99ms, collect 295ms, tests 4.28s, environment 589ms, prepare 317ms)
+vitest-onepress exit=0 11s |    Duration  10.04s (transform 3.05s, setup 173ms, collect 3.88s, tests 12.90s, environment 1.10s, prepare 642ms)
+onepress-control-titles exit=0 9s | vitest exit 1 (1 wanted: a title that counts double must turn the title cases red)
+onepress-control-noedges exit=0 8s | vitest exit 0 (printed, not required: the desk's edges only matter where they flip a game)
+tsc exit=0 67s | 

@@ -1,0 +1,4 @@
+/home/runner/work/ballpark-hero/ballpark-hero/dist/.r1305/Board.noedges.tsx
+red rows: 0, green rows: 13
+      Tests  13 passed (13)
+vitest exit 0 (printed, not required: the desk's edges only matter where they flip a game)
