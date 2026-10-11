@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=0 28s | sweepWeight exit 0
+playCmVar-dark exit=0 1s | playCmVar on the dark build exit 2 (2 is the refusal it must give)
+m-fftrue exit=0 1s | MUT fftrue: ledger exit 1 | FAIL src/lib/clubManagerCalendar.ts hands the engine varReviews: true, which stages every kind of review: the game asks with cmVarGameAsk
+clean exit=0 1s | 0

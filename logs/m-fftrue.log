@@ -1,0 +1,2 @@
+MUT fftrue APPLIED to src/lib/clubManagerCalendar.ts
+MUT fftrue: ledger exit 1 | FAIL src/lib/clubManagerCalendar.ts hands the engine varReviews: true, which stages every kind of review: the game asks with cmVarGameAsk
