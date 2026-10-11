@@ -1,0 +1,25 @@
+nhl y2006 2019 C: 60 lines
+   season read as "engine 82": 4 lines, clubs ATL PHX, games min 79 median 80 max 82
+   season read as "ledger 68": 6 lines, clubs CAR NYI, games min 36 median 67 max 68
+   season read as "ledger 69": 23 lines, clubs BUF DAL FLA NJD NSH PHI PIT WSH, games min 66 median 68 max 69
+   season read as "ledger 70": 15 lines, clubs BOS CBJ CGY CHI COL LAK NYR TBL TOR, games min 39 median 68 max 70
+   season read as "ledger 71": 12 lines, clubs ANA DET EDM MTL STL, games min 68 median 71 max 71
+   lines with more games than the season read for their club: 0
+   lines on a club the 2019-20 table does not hold: 4: career 11 ATL 82 games (slate none); career 17 PHX 80 games (slate none); career 27 PHX 79 games (slate none); career 59 PHX 80 games (slate none)
+   lines over 71 games: 4: career 11 ATL 82; career 17 PHX 80; career 27 PHX 79; career 59 PHX 80
+nhl y2006 2019 G: 60 lines
+   season read as "engine 82": 5 lines, clubs ATL PHX, games min 20 median 49 max 66
+   season read as "ledger 68": 5 lines, clubs CAR NYI, games min 17 median 19 max 54
+   season read as "ledger 69": 10 lines, clubs BUF DAL FLA MIN NSH PHI PIT VAN, games min 19 median 52 max 55
+   season read as "ledger 70": 23 lines, clubs BOS CHI COL LAK NYR TBL TOR, games min 17 median 50 max 57
+   season read as "ledger 71": 17 lines, clubs ANA DET EDM MTL OTT STL, games min 11 median 19 max 58
+   lines with more games than the season read for their club: 0
+   lines on a club the 2019-20 table does not hold: 5: career 26 PHX 21 games (slate none); career 27 ATL 66 games (slate none); career 29 PHX 20 games (slate none); career 42 ATL 49 games (slate none); career 47 ATL 64 games (slate none)
+   lines over 71 games: 0: none
+nhl y2006 2012 C: 60 lines
+   season read as "ledger 48": 60 lines, clubs ANA ATL BOS BUF CAR CBJ CGY COL DAL DET EDM FLA LAK MIN MTL NSH NYI NYR OTT PHI PHX PIT SJS TBL TOR VAN, games min 27 median 47 max 48
+   lines with more games than the season read for their club: 0
+nhl y2006 2020 C: 60 lines
+   season read as "ledger 56": 60 lines, clubs ANA ATL BUF CBJ CGY COL DAL DET EDM FLA LAK MIN MTL NJD NYI OTT PHI PHX PIT SJS STL TBL TOR VAN, games min 35 median 55 max 56
+   lines with more games than the season read for their club: 0
+fx2Games: done on /home/runner/work/ballpark-hero/ballpark-hero

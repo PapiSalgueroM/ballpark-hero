@@ -1,0 +1,12 @@
+# Release AV fix2 (second fix pass, head ede83172, no new commit): the gates on the pushed head again, the probe that names the career of the closing check's finding 4, and the lead's hand step for the two weight fences proven on this throwaway checkout (red as it stands, green after the helper, the scripts put back).
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+headsrc: git diff --stat ede8317293ed11f27c6d3b663fb9422a566fe9b8 HEAD -- src scripts public; git rev-parse HEAD
+probe: node .rc/x/fx2Games.mjs
+prove: node .rc/x/fx2ProveBudgets.mjs

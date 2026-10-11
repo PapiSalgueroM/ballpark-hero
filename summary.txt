@@ -1,0 +1,9 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 39s | 
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+headsrc exit=0 0s | 818dd5ae24372f3f99738c534bdf849aa5755654
+probe exit=0 0s | fx2Games: done on /home/runner/work/ballpark-hero/ballpark-hero
+prove exit=0 54s | fx2ProveBudgets: all as wanted (red as it stands, green after the lead's hand step, nothing kept on the branch)

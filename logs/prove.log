@@ -1,0 +1,34 @@
+sweepWeight as it stands: exit 1, "sweepWeight: 3 failures"
+   over: /club-manager 587K against 586K
+   over: /manager-hot-seat 604K against 603K
+   over: /deadline-day 615K against 613K
+   row: /                   242K gz over   3 files (budget 243K, 242.1K to the tenth)
+   row: /club-manager       587K gz over  39 files (budget 586K, 587.1K to the tenth)
+   row: /soccer-career      808K gz over  45 files (budget 808K, 808.1K to the tenth)
+   row: /nfl-my-career      479K gz over  47 files (budget 479K, 479.2K to the tenth)
+   row: /front-office       361K gz over  34 files (budget 362K, 361.2K to the tenth)
+   row: /manager-hot-seat   604K gz over  41 files (budget 603K, 604.5K to the tenth)
+   row: /deadline-day       615K gz over  45 files (budget 613K, 614.6K to the tenth)
+ok   sweepWeight is red on the pushed head as the closing check found (3 rows over)
+simFlagshipWeight as it stands: exit 1, "simFlagshipWeight: 1 failure", 43 chunks, 2600 KB raw, ceiling 2600
+ok   simFlagshipWeight is red on the pushed head as the closing check found
+the flagship's static closure: 43 chunks, 2662559 bytes raw (2600.2 KB)
+   "are both on them" (the roster beat words of Round 1227, only the US careers deal them) is in: careerRivalryChoices-MJgJuT1K.js (9017 bytes, LOADED BY /soccer-career before it can render)
+   "one more line in the argument between you and" (the own roster words MLB and the NHL share, older than this release) is in: careerRivalryChoices-MJgJuT1K.js (9017 bytes, LOADED BY /soccer-career before it can render); usCareerSeasonReview-CiH-_bcB.js (457878 bytes, not in the flagship closure)
+ok   the helper refuses a lower budget and writes nothing (exit 2: "setBudgetsAV: /club-manager is at 586 and 1 is lower; a saving gets its own note; nothing written")
+ok   the helper refuses a lower ceiling and writes nothing (exit 2: "setBudgetsAV: the ceiling is at 2600 and 100 is lower; a saving gets its own note; nothing written")
+the helper: node .rc/x/fix2-AV-setBudgetsAV.mjs /club-manager=587 /manager-hot-seat=604 /deadline-day=615 --flagship=2700 --flagship-measured=2600
+   /club-manager: 586 -> 587
+   /manager-hot-seat: 603 -> 604
+   /deadline-day: 613 -> 615
+   flagship ceiling: 2600 -> 2700 (measured 2600)
+ok   the helper wrote its numbers (exit 0)
+sweepWeight after the helper: exit 0, "sweepWeight: green. Every page is inside its budget, and the budgets came down this round."
+ok   sweepWeight is green with the measured numbers in its rows
+simFlagshipWeight after the helper: exit 0, "simFlagshipWeight: green. The flagship carries its own game and nobody else's."
+ok   simFlagshipWeight is green with the new ceiling
+the diff: 17 lines added, 5 removed, kept as files/budgets-av.patch
+ok   no added line holds a dash character
+ok   both scripts still parse
+ok   the two scripts are put back as the branch has them
+fx2ProveBudgets: all as wanted (red as it stands, green after the lead's hand step, nothing kept on the branch)
