@@ -1,0 +1,8 @@
+# Release AW: diagnosis of the agent review native walk (3 of 12 journeys red on the merged head 9d73ce5f)
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+agent-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-agent-review-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs 2>&1 | tee soccer-agent-review-artifacts/outcomes.log | tail -60; s=$?; node scripts/qa/checkSoccerAgentReview.mjs outcomes; c=$?; exit $((s + c))
+agent-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-agent-review-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs 2>&1 | tee soccer-agent-review-artifacts/native.log | tail -60; s=$?; node scripts/qa/checkSoccerAgentReview.mjs native; c=$?; exit $((s + c))
+extract: node .rc/x/extractWalk.mjs soccer-agent-review-artifacts/native
