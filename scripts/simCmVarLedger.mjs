@@ -36,6 +36,9 @@
  * kindline (the generated file hands kickOff a kind the ledger does not play) | gametrue (the hook asks the engine
  * with varReviews: true, which stages every kind, and not with the ledger's list). owedlive, since Round 1303, is
  * the switch on while no kind of review is played.
+ * Round 1303 fix (sections 6b and 7): helprate (the How to Play block states a count of a real league in a real
+ * season; the help may hold no number but the game's own). kindon needs an open entry that holds a kind which is
+ * off: since the goal kind is on, that is penalties-total and the penalty kind.
  * Round 1302 also holds that every competition is a row: nothing in notRead, and an unknown row says what was
  * looked for.
  * A control that fires ends "FIRED" and exits 1. One that changes nothing or is not caught exits 3.
@@ -60,6 +63,7 @@ const EXPECT = {
   receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
   highest: /goalReview is not the stricter count/, names: /the help would name/, owedlive: /CM_VAR_LIVE is true while the rates ledger still owes/,
   kindon: /kind is on in the ledger while an open owed entry holds it/, kindline: /CM_VAR_KINDS on disk plays/, gametrue: /hands the engine varReviews: true/,
+  helprate: /the help states a number that is not the game's own in its VAR block \(23, 306, 2023\/24\)/,
   /* stage asks for the Australia Cup named bare (a comma or the end of the list straight after it) INSIDE the list
      of names: no name holds a colon and every key after "kickOff covers" does, so the match cannot run on into
      the keys, where cup:Australia Cup always stands bare. It used to ask for the cup as the LAST name, which
@@ -114,6 +118,12 @@ if (CONTROL === 'kindline') { const before = generatedTwist; generatedTwist = s 
 /* gametrue (Round 1303): the hook's first kickoff asks the engine the way a harness stages every kind. */
 let hookTwist = s => s;
 if (CONTROL === 'gametrue') { hookTwist = s => s.replace('...cmVarGameAsk(CM_VAR_LIVE)', '...(CM_VAR_LIVE ? { varReviews: true } : {})'); changed = hookTwist(text('src/hooks/useClubManager.ts')) !== text('src/hooks/useClubManager.ts'); }
+/* helprate (Round 1303 fix): the How to Play block states a count of a real league in a real season. */
+let helpTwist = s => s;
+if (CONTROL === 'helprate') {
+  helpTwist = s => s.replace('You only see a review that changed the call, and it is rare.', 'You only see a review that changed the call, and it is rare: 23 in 306 matches of the French top division in 2023/24.');
+  changed = helpTwist(text('src/components/club-manager/ClubManagerHelp.tsx')) !== text('src/components/club-manager/ClubManagerHelp.tsx');
+}
 /* owedlive: the switch read as on, with something still owed. */
 let switchTwist = s => s;
 if (CONTROL === 'owedlive') {
@@ -314,6 +324,36 @@ for (const file of gameFiles) {
 const hookCode = codeOf(hookTwist(text('src/hooks/useClubManager.ts')));
 ok(hookCode.split('cmVarGameAsk(CM_VAR_LIVE)').length - 1 === 2 && hookCode.split('varReviews').length - 1 === 0, 'the hook does not ask for reviews through cmVarGameAsk(CM_VAR_LIVE) at exactly its two kickoffs');
 ok(/varReviews: true as const, \.\.\.\(varReviews === true \? \{\} : \{ varKinds \}\)/.test(codeOf(text('src/lib/clubManager.ts'))), 'kickOff does not save the list of kinds it was asked for with the match');
+
+/* 6b. Round 1303 fix: ONE list of kinds. It is written in four files (the generator, the engine's own module, the
+   staging tool and this harness); each is read off its file here and must be this harness's list, in its order. */
+const listIn = (file, pattern) => { const m = pattern.exec(codeOf(text(file))); return m ? [...m[1].matchAll(/'([a-z]+)'/g)].map(x => x[1]) : null; };
+for (const [file, pattern] of [
+  ['scripts/genCmVarRates.mjs', /export const KIND_NAMES = \[([^\]]*)\];/],
+  ['src/lib/clubManagerVar.ts', /export const CM_VAR_ALL_KINDS: readonly CmVarKind\[\] = \[([^\]]*)\];/],
+  ['scripts/qa/cmVarLit.mjs', /const ALL_KINDS = \[([^\]]*)\];/],
+]) ok(JSON.stringify(listIn(file, pattern)) === JSON.stringify(KINDS), `${file} does not list the kinds of review as this harness does (${KINDS.join(', ')}): ${JSON.stringify(listIn(file, pattern))}`);
+
+/* 7. Round 1303 fix (the lead's decision 1): THE HELP NEVER STATES A REAL LEAGUE'S RATE. A rate of a real league
+   needs a number, so every number in the WORDS of the two helps that talk about reviews must be one the game's own
+   text needs: the season reviews start in (2026/27, July 2026), the four era starts, the round of 16 and a 0-0
+   scoreline in the How to Play block; a 0-0 scoreline in the match's own help. Anything else with a digit fails by
+   default: a season such as 2017-18 or 2023/24, a count such as 23 in 306, a per match figure such as 0.075. A
+   list of known offenders finds only the last offender. Read off the CODE (comments out), with the two shapes
+   that are code and not words taken out first: a class list, and the game's own figure worked out from data. */
+const helpWords = source => codeOf(source).replace(/className=(?:"[^"]*"|\{[^}]*\})/g, '').replace(/Math\.round\(1 \/ CM_VAR_REAL\.[A-Za-z.]+\)/g, '');
+const numbersIn = words => words.match(/[0-9]+(?:[.,/+-][0-9]+)*/g) ?? [];
+const helpSource = helpTwist(text('src/components/club-manager/ClubManagerHelp.tsx'));
+const varBlock = /data-cm-help="var"[\s\S]*?<\/div>\}/.exec(helpSource);
+ok(!!varBlock && varBlock[0].includes('How often.') && varBlock[0].includes('CM_VAR_COVERED_NAMES'), 'the VAR block of src/components/club-manager/ClubManagerHelp.tsx was not found whole');
+const HELP_NUMBERS = ['2026/27', '2026', '2005', '2010', '2015', '2020', '16', '0-0'];
+const strayHelp = numbersIn(helpWords(varBlock?.[0] ?? '')).filter(n => !HELP_NUMBERS.includes(n));
+ok(strayHelp.length === 0, `the help states a number that is not the game's own in its VAR block (${strayHelp.join(', ')}): the Help never states a real league's rate, a count or a season of one`);
+const matchHelp = /function LiveMatchHelp\([\s\S]*?\n\}\n/.exec(text('src/components/club-manager/LiveSimScreen.tsx'));
+const matchVarLines = (matchHelp?.[0] ?? '').split('\n').filter(line => line.includes('VAR') || line.includes('review'));
+ok(!!matchHelp && matchVarLines.length >= 3, 'the lines about reviews of the match help (LiveMatchHelp in LiveSimScreen.tsx) were not found');
+const strayMatch = numbersIn(helpWords(matchVarLines.join('\n'))).filter(n => n !== '0-0');
+ok(strayMatch.length === 0, `the help states a number that is not the game's own in the match help (${strayMatch.join(', ')})`);
 
 /* 5. No dash of the two banned kinds, in the ledgers, the receipts or this harness's own messages. */
 const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
