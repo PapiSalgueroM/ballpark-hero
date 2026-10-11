@@ -1,0 +1,27 @@
+# reviewer us-board-recording, Release AX on 72f54789: the four anchor rows in three gate harnesses (plain, and each fault), the harnesses that hold the season digests and deck C, and the harnesses that read the US board files but stand in no gate list
+#!serial
+saveRetry: export TMPDIR=$(mktemp -d); node scripts/simUsCareerSaveRetry.mjs && node .rc/x/retryRows.mjs
+practice: export TMPDIR=$(mktemp -d); node scripts/simUsCareerPractice.mjs
+practice-reset: export TMPDIR=$(mktemp -d); US_CAREER_PRACTICE_CONTROL=reset node scripts/simUsCareerPractice.mjs
+action: export TMPDIR=$(mktemp -d); node scripts/simUsCareerActionConfirm.mjs
+action-ownKey: export TMPDIR=$(mktemp -d); US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs
+deckC: export TMPDIR=$(mktemp -d); node scripts/simUsCareerDeckC.mjs
+seasonCentre: export TMPDIR=$(mktemp -d); node scripts/simUsSeasonCentre.mjs
+postseason: export TMPDIR=$(mktemp -d); node scripts/simUsPostseason.mjs
+seasonTruth: export TMPDIR=$(mktemp -d); CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
+gameLawNfl: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/gameLawNfl.test.ts --testTimeout=300000
+digest-sha: sha256sum scripts/data/careerSeasonTruth.json scripts/data/usSeasonLayDigest.json scripts/data/usSeasonLawDigest.json scripts/data/usSeasonSeamDigest.json scripts/data/usCareerDeckCDigest.json scripts/data/careerPreDraftDigest.json; git diff --stat c9a1f86a HEAD -- scripts/data | cat
+u-sessionMarks: export TMPDIR=$(mktemp -d); node scripts/simSessionMarks.mjs
+u-careerHub: export TMPDIR=$(mktemp -d); node scripts/simCareerHub.mjs
+u-homeFront: export TMPDIR=$(mktemp -d); node scripts/simHomeFront.mjs
+u-extMotion: export TMPDIR=$(mktemp -d); node scripts/simExtensionResponseMotion.mjs
+u-extMotion-unreply: export TMPDIR=$(mktemp -d); EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs
+u-faFeedback: export TMPDIR=$(mktemp -d); node scripts/simFreeAgencyFeedback.mjs
+u-faFeedback-restored: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs
+u-faFeedback-status: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=status node scripts/simFreeAgencyFeedback.mjs
+u-moneyApp: export TMPDIR=$(mktemp -d); node scripts/simMoneyAppFeedback.mjs
+u-badgeMotion: export TMPDIR=$(mktemp -d); node scripts/simCareerBadgeMotion.mjs
+u-seasonReview: export TMPDIR=$(mktemp -d); node scripts/simCareerSeasonReview.mjs
+u-entryGuide: export TMPDIR=$(mktemp -d); node scripts/simCareerEntryGuide.mjs
+u-decisionOutcome: export TMPDIR=$(mktemp -d); node scripts/simCareerDecisionOutcome.mjs
+u-usCoachCareer: export TMPDIR=$(mktemp -d); timeout 1500 node scripts/simUsCoachCareer.mjs
