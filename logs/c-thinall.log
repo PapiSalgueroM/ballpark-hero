@@ -1,0 +1,21 @@
+simCmLeagueBook: 5 careers x 2 seasons (default fleet, seed set 0), CONTROL thinall
+stream  20 of 20 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 4.8s with the book and this harness watching every entry, 3.6s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 3731ms with the book and 3023ms with it out (23.4% more)
+stream  20 of 20 faces equal to the source of the base commit
+shapes  credited rival goals 7780: forwards 58.6%, midfielders 32.8%, defenders 8.5%, keepers 0 goals
+        between other clubs (5792 goals), dealt against the weight: ATT 3223 vs 3235.4 (z -0.33), MID 1871 vs 1848.2 (z 0.64), DEF 529 vs 549.1 (z -0.90)
+        clubs with an eleven: assists 3625 on 5875 credited goals = 0.617 a goal (the rule 0.614, z 0.53); own goals 175 of 6050 = 2.89% (the rule 2.75%, z 0.68); every club: 4433 assists on 7780 credited goals = 0.570 a goal
+        every goal its own roll: one man took every goal in 219 of 1651 matches a club with an eleven scored two or more in = 13.3% (the weight says 12.9%, z 0.44)
+        unnamed goals 965 (club weeks with no named eleven: 2478); my league matches 368, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 828 of 2116 club weeks, 9 of 26 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        no named eleven in mlsEast: 486 of 758 club weeks, 9 of 14 rival clubs seen (Atlanta United 11 men, 0 keepers; CF Montréal 7 men, 1 keepers; Charlotte FC 10 men, 1 keepers; D.C. United 6 men, 0 keepers; FC Cincinnati 6 men, 1 keepers; Nashville SC 7 men, 0 keepers; ...)
+        top ten of the Goals board held by forwards and wingers: 10.00 on the book, 5.90 on the old race, rise 4.10 (floor 1.5) over 10 seasons
+thin    clubs with no eleven, against other clubs: 1784 of 2565 goals on a named row = 69.6% (the harness's own partial eleven says 71.1%, z -2.03, floor 800 goals)
+        keeper rows of 36 club seasons with no eleven held against the table (315 clean sheets on them, 17 kept against me)
+        clubs with an eleven all season: 107 of 114 entries byte equal to the base commit's at the season's end
+names   21140 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 366 league matches of mine: 403 goal lines, 371 naming a man of that club's roster (each on his row), 21 naming nobody its roster holds, 51 from the spot or a free kick, 153 assists (each by a man on their pitch); 2 matches not judged, the opponent played twice in the entry
+simCmLeagueBook: cannot run: Everton, twenty entries in, written by the base engine carries a league book: it is not an old save
