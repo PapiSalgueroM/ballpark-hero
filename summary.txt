@@ -1,0 +1,3 @@
+scanA0 exit=0 8s |   seed 2483: whistle 50, review at 50 (opp), kick scored, real chances from 47 on: opp shot at 47; other reviews in the half 0
+scanA1 exit=0 14s |   seed 13657: whistle 50, review at 49 (opp), kick scored, real chances from 47 on: none; other reviews in the half 0
+scanA2 exit=0 14s |   seed 13452: whistle 47, review at 46 (me), kick scored, real chances from 44 on: none; other reviews in the half 0

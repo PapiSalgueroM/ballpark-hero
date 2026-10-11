@@ -1,0 +1,3 @@
+scanA0: node .rc/x/scanAwarded.mjs 0 12000
+scanA1: node .rc/x/scanAwarded.mjs 1 12000
+scanA2: node .rc/x/scanAwarded.mjs 2 12000
