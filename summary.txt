@@ -1,0 +1,3 @@
+simUsPlanSeason-typed exit=1 2s | simUsPlanSeason control typed: FIRED (must turn exactly card and rates red; red: card, rates)
+simUsPlanSeason exit=0 2s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+simCmLeaguePhase exit=0 22s | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.

@@ -1,0 +1,4 @@
+# Release AV, two harnesses the release adds that the gate lists did not name yet (no build needed)
+simUsPlanSeason: node scripts/simUsPlanSeason.mjs
+simUsPlanSeason-typed: US_PLAN_CONTROL=typed node scripts/simUsPlanSeason.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
