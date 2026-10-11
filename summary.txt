@@ -1,0 +1,3 @@
+simUsCareerDeckC exit=0 81s | simUsCareerDeckC: all checks passed
+tsc exit=0 93s | 
+simUsCareerSaveRetry exit=0 133s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes

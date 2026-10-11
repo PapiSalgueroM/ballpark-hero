@@ -1,0 +1,4 @@
+# Release AX on 5d5926f6: simUsCareerSaveRetry with its copies inside the repo (the first try put them outside and the copy could not resolve react), the deck C digest after the base merge
+simUsCareerSaveRetry: export TMPDIR=$(mktemp -d); node scripts/simUsCareerSaveRetry.mjs
+simUsCareerDeckC: export TMPDIR=$(mktemp -d); node scripts/simUsCareerDeckC.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
