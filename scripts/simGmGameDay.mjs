@@ -46,9 +46,43 @@
  *    nobody, without the story law being asked (with no ceiling a saved
  *    250000 threw out of the NFL's law and a saved 1e21 never came back),
  *    and the NFL tells no final above its own top score.
- *  6 NOBODY MOUNTS IT YET. No file under src imports the new modules but the
- *    modules themselves and their tests. The round that binds a board turns
- *    this into "the cards are lazy".
+ *  6 THE MOUNT LIST (rewritten in Round 1305, when the first board came to
+ *    import a module). Every file under src that imports one of the modules
+ *    is on a list in this file, with the modules it may reach: the modules
+ *    and their tests, and the NFL board for the bind and the log and nothing
+ *    else. And no board imports the told path, a story law, a game day law
+ *    or the words of a "?" STATICALLY (read from the syntax tree): what only
+ *    a drawn card reads must not sit in a board's own chunk.
+ *
+ * ROUND 1305, THE PRESS (src/lib/frontOfficeGameDay.ts, the NFL board's bind
+ * to the quick path, and src/lib/gmGameLog.ts, the save field of the
+ * season's results). Each season of the fleet is played a third time the way
+ * the BOARD tells it: `nflTell` on every game right after the engine has
+ * played it, and on the thirteen playoff games after the one press
+ * postseason has come back, inside the seeded Math.random.
+ *  7 THE PRESS PATH DOES NOT MOVE. With the bind telling, the generator's
+ *    state and draw count after Week 17, the 272 winners, the 32 records and
+ *    the postseason's row (thirteen games, champion, next 64 draws, records
+ *    after) are the untold season's, which section 4 holds to the recorded
+ *    fixture. AND THE SCORES DO DIFFER: the share of games whose told score
+ *    is not the engine's own sits above a floor (see MEASURED), so a run
+ *    with the law switched off cannot read green.
+ *  8 THE BIND'S SCORES ARE THE LAW'S. Every game: the bind never refuses,
+ *    and it tells exactly the quick path's final for the chance the engine
+ *    played the game at (read by the fleet BEFORE the game), under the key
+ *    the board's recipe gives. The four statistics of section 3 for the
+ *    bind's scores sit inside section 3's bands against the same baseline.
+ *  9 THE LOG IS THE SEASON. For four GM clubs a season (the best and the
+ *    worst record and two keyed picks): after every week the log's record
+ *    is the club's by this harness's own count of the engine's winners, and
+ *    after Week 17 the league's; one entry a week in week order; the one
+ *    press finish adds exactly his playoff games; through JSON and the
+ *    reader it is the same log; it reads as absent for another season,
+ *    another club and a club that is no club; with any one field of the
+ *    first, a middle or the last entry damaged or missing it reads as
+ *    absent and nothing throws; and a log begun at week k (a save from
+ *    before the round) holds one entry a week from k on, and its record is
+ *    NOT the league's, which the run prints.
  *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
@@ -76,6 +110,14 @@
  *   ceiling     the library's ceiling typed as 100000                section 5 (both save guards, and the story)
  *   lawmax      the NFL's game day law claims a top score of 999     section 5 (no final above the sport's own)
  *   mounted     an import planted in memory in a route file          section 6
+ *   static      a static import of the told path planted in the NFL board   section 6 (no board imports a story statically)
+ *   bindstream  a Math.random() planted in nflTell                   section 7 (the draw count, the winners, the records)
+ *   bindold     nflTell hands back the engine's own score            section 8 (losers on 15 or fewer: none; the quick
+ *               path's final), and section 7's "the scores do differ"
+ *   bindchance  nflTell reads the chance with the two clubs swapped  section 8 (the quick path's final for the chance)
+ *   bindrefuse  nflTell refuses a game in five by its key            section 8 (the bind never refuses)
+ *   logdrop     addToGmGameLog drops every road win                  section 9 (the record a week, one entry a week)
+ *   logholes    readGmGameLog skips an entry it cannot read          section 9 (a damaged entry: the log is absent)
  * NOT HELD HERE: the save guard and the repair with every field damaged
  * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
  * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
@@ -111,6 +153,19 @@
  *   title games a set, 221 of 400 (a level one is 0.582 by the arithmetic).
  *   NOT printed beside them: the league's real figures. None was read on two
  *   sources in this round, so none is typed here.
+ * MEASURED FOR ROUND 1305 (2026-10-11, seed sets 0 to 4, 22,800 games a set
+ * told by the bind; runner result r1305-b1):
+ *   Section 7, the share of games whose told score is not the engine's own:
+ *   0.9975 to 0.9982 a set (41 to 57 games in 22,800 where the law's final
+ *   happened to be the engine's). One set's standard error is about 0.0003.
+ *   The floor is 0.99: 0.0075 under the lowest set, about 25 of those errors,
+ *   and under control bindold (the engine's score handed back) it reads 0.
+ *   Section 8: the bind refused 0 games in every set, and the check is that
+ *   count being zero (no band: section 1 already holds that the law never
+ *   refuses). Its four statistics are section 3's told ones to the digit,
+ *   because the bind's key and chance are the quick path's.
+ *   Section 9 has no band: every check is an equality over 320 club seasons
+ *   a set (four clubs in each of 80 seasons).
  *
  * Nothing here reads the network. The clock is read only to time the run
  * for its own log lines: no check and nothing that is played depends on it.
@@ -316,8 +371,8 @@ function storyProblems(story, quick, view) {
 /* ─── The bands of sections 1 and 3 (see MEASURED in the header) ─── */
 const SWAPPED_MOST = 0.002;
 const BANDS = { points: 0.25, losers15: 0.02, shutouts: 0.005, forty: 0.006 };
-/* Section 7: the share of games whose told score is not the engine's own (see MEASURED, Round 1305) */
-const DIFFER_LEAST = Number(process.env.GM_GAMEDAY_DIFFER_LEAST ?? 0);
+/* Section 7: the least share of games whose told score is not the engine's own (see MEASURED, Round 1305) */
+const DIFFER_LEAST = 0.99;
 /* The fields of a log entry, each with a value that is not one (section 9 damages every one in turn) */
 const ENTRY_DAMAGE = { v: 2, key: '', where: '', home: 'NO SUCH CLUB', away: 'NO SUCH CLUB', homeScore: 1000, awayScore: -1 };
 
@@ -663,6 +718,8 @@ for (const set of SEEDSETS) {
   check(8, `set ${set}: every game of the fleet was told by the bind (${bound.games} of ${games})`, bound.games === games);
   const Bn = stat(bound);
   for (const k of Object.keys(BANDS)) check(8, `set ${set}: ${k} by the bind ${Bn[k].toFixed(4)} against the free law's ${F[k].toFixed(4)}, inside ${BANDS[k]}`, Math.abs(Bn[k] - F[k]) < BANDS[k]);
+  /* the same key and the same chance tell the same final, so the bind's four numbers are section 3's told ones exactly */
+  check(8, `set ${set}: the bind's four statistics are the quick path's own to the digit (points ${Bn.points.toFixed(4)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, forty ${Bn.forty.toFixed(4)})`, same(Bn, T));
   settle(9, `set ${set}: after every week the log's record is the club's, and after Week 17 the league's`, s9.weekly);
   settle(9, `set ${set}: the log holds one entry a week, in week order`, s9.order);
   settle(9, `set ${set}: the one press finish adds exactly his playoff games, in order, and the regular season's record does not move`, s9.playoff);
@@ -670,7 +727,7 @@ for (const set of SEEDSETS) {
   settle(9, `set ${set}: the log reads as absent for another season, for another club and for a club that is no club`, s9.other);
   settle(9, `set ${set}: with any one field of an entry damaged the log reads as absent, and nothing throws`, s9.damage);
   settle(9, `set ${set}: a log begun at week k holds one entry a week from k on and none before, and its record is not the league's`, s9.late);
-  console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; ${lateSeen}`);
+  console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; points a team game ${Bn.points.toFixed(2)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, sides on 40 or more ${Bn.forty.toFixed(4)}; ${lateSeen}`);
   const afcShare = afcTitles / lines.length;
   measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games, differShare, refused: s8.refused.bad });
   console.log(`set ${set}: ${lines.length} seasons, ${told.games} games told in ${Date.now() - t1} ms; points a team game ${T.points.toFixed(2)} (free ${F.points.toFixed(2)}); losers on 15 or fewer ${T.losers15.toFixed(4)} (free ${F.losers15.toFixed(4)}); shutouts ${T.shutouts.toFixed(4)} (free ${F.shutouts.toFixed(4)}); sides on 40 or more ${T.forty.toFixed(4)} (free ${F.forty.toFixed(4)}); swapped ${swappedShare.toFixed(5)}; the AFC champion won ${afcTitles} of ${lines.length} title games`);
@@ -792,6 +849,7 @@ if (measured.length > 0) {
   console.log(`MEASURED over seed sets ${measured.map(m => m.set).join(', ')} (${measured.reduce((a, m) => a + m.games, 0)} games):`);
   for (const k of Object.keys(BANDS)) console.log(`  ${k}: told ${span(m => m.T[k])}, free ${span(m => m.F[k])}, told less free ${span(m => m.T[k] - m.F[k])} (band ${BANDS[k]} either side)`);
   console.log(`  swapped share ${span(m => m.swappedShare)} (band: under ${SWAPPED_MOST})`);
+  console.log(`  the board's way (Round 1305): told scores that are not the engine's own ${span(m => m.differShare)} (floor: above ${DIFFER_LEAST}); games the bind refused ${measured.map(m => m.refused).join(', ')} a set (held at zero)`);
   const all = Array.from({ length: 10 }, (_, d) => measured.reduce((a, m) => ({ n: a.n + m.tries[d].n, tries: a.tries + m.tries[d].tries, swapped: a.swapped + m.tries[d].swapped }), { n: 0, tries: 0, swapped: 0 }));
   console.log(`  tries a game by decile of the home chance (games, mean tries, swapped): ${all.map((c, d) => `${d / 10}: ${c.n}, ${c.n ? (c.tries / c.n).toFixed(2) : 'none'}, ${c.swapped}`).join(' | ')}`);
   const shapeAll = {};

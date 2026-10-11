@@ -50,7 +50,7 @@ describe('nflWhere, nflIsRegular and nflGameKey', () => {
 describe('nflTell', () => {
   it('tells the law\'s final for the engine\'s winner, at the engine\'s own chance, and nothing else of the game moves', () => {
     const { lg, games } = played();
-    const isClub = (id: string) => Object.hasOwn(lg.teams, id);
+    const isClub = (id: string) => Object.prototype.hasOwnProperty.call(lg.teams, id);
     const before = JSON.stringify(lg);
     let differ = 0;
     for (const { g, week } of games) {

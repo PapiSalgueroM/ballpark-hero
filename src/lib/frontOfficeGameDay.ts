@@ -49,7 +49,7 @@ export function nflTell(
 ): { game: GmGame; last: GmLastGame | null; byLaw: boolean } {
   const key = nflGameKey(season, where, g);
   let told: ToldGame | null = null;
-  if (Object.hasOwn(teams, g.home) && Object.hasOwn(teams, g.away) && (g.winner === g.home || g.winner === g.away)) {
+  if (Object.prototype.hasOwnProperty.call(teams, g.home) && Object.prototype.hasOwnProperty.call(teams, g.away) && (g.winner === g.home || g.winner === g.away)) {
     const home = teams[g.home], away = teams[g.away];
     const pHome = edges ? winProb(home, away, edges[g.home] ?? 0, edges[g.away] ?? 0) : winProb(home, away);
     told = quickGame(NFL_SCORE_LAW, { key, home: g.home, away: g.away, decided: { homeWon: g.winner === g.home, pHome } });
