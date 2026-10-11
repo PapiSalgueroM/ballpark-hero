@@ -98,8 +98,10 @@ const ENGINE_CONTROLS = {
   mlbtyped: { expect: ['E6', 'E8a', 'E8b', 'E8c'], from: 'const slate = seasonLength("mlb", c.year, c.team);', to: 'const slate = 162;' },
   /* The engine's old law for the games of an October, for every year. */
   mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
-  /* One ladder for every year again: a Wild Card series in 2004 and in 2012. */
-  mlbladder: { expect: ['E4'], from: 'result = stages[postseasonRung("mlb", c.year, stage)];', to: 'result = ladder[stage];' },
+  /* One ladder for every year again: a Wild Card series in 2004 and in 2012. Release AV: Round 1212 lifted the
+     five results out of simMlbSeason into MLB_PLAYOFF_LADDER, so the old replacement (`ladder[stage]`) named a
+     local that is gone and the control threw before it judged anything. It names the lifted list now. */
+  mlbladder: { expect: ['E4'], from: 'result = stages[postseasonRung("mlb", c.year, stage)];', to: 'result = MLB_PLAYOFF_LADDER[stage];' },
   /* The fix pass, E4 before 2022: the review's mutations fold and partial, and the lost final back on the law for one round fewer. */
   mlbfold: { expect: ['E4'], from: 'if (known.length === 0) return playoffGames(Math.max(0, stage - skip), draw, sport);', to: 'if (known.length === 0) return playoffGames(stage, draw, sport);' },
   mlbpartial: { expect: ['E4'], from: 'const rest = playoffGames(Math.max(0, stage - skip - known.length), draw, sport);', to: 'const rest = playoffGames(Math.max(0, stage - skip), draw, sport);' },
