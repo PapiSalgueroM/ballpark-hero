@@ -2,6 +2,7 @@
 
 import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
+import type { SoccerAgentReview } from './soccerAgentReview';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';
 import { personalGoalMilestoneNews } from './soccerCareerMilestone';
@@ -1087,6 +1088,7 @@ export interface CareerState {
   /** Round 49 life layer. Optional so pre-R49 saves keep loading. */
   personality?: string | null; // showman | iceman | hothead | professor | enigma
   agentId?: string | null;     // cousin | shark | super | self
+  agentReview?: SoccerAgentReview;
   lifeFlags?: Record<string, number>; // chained life-event arcs
   /** Round 54 realism layer. All optional so pre-R54 saves keep loading. */
   appearance?: PlayerAppearance | null; // create-your-look, rendered by PlayerAvatar

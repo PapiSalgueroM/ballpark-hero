@@ -22,6 +22,8 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";
+import { AgentReviewCard } from "@/components/soccer-career/AgentReviewCard";
+import { agentReviewEligibility, changeCareerAgent } from "@/lib/soccerAgentReview";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
@@ -922,6 +924,7 @@ export default function SoccerCareer() {
     } catch { return { career: null, invalid: true }; }
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
+  const agentReviewAttempt = useRef<CareerState | null>(null);
   const [saveError, setSaveError] = useState(restoredSave.invalid);
   const [saveFailed, setSaveFailed] = useState(false);
   const [clubs, setClubs] = useState<ClubData[]>([]);
@@ -1191,6 +1194,13 @@ export default function SoccerCareer() {
   const handleDismissWorldCup = () => {
     if (!career) return;
     setCareer(dismissWorldCup(career, clubs));
+  };
+
+  const handleChangeAgent = (agentId: string) => {
+    if (!career || agentReviewAttempt.current === career || !agentReviewEligibility(career).available
+      || !getAgentDef(agentId) || agentId === career.agentId) return;
+    agentReviewAttempt.current = career;
+    setCareer(prev => prev === career ? changeCareerAgent(prev, agentId) : prev);
   };
 
   const handleRetireInternational = () => {
@@ -1484,6 +1494,7 @@ export default function SoccerCareer() {
               onAcademyFocus={handleAcademyFocus}
               onCareerPatch={handleCareerPatch}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
+              onAgentChange={handleChangeAgent}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
@@ -2906,7 +2917,7 @@ function ordinalPlace(n: number): string {
   return `${n}${suf}`;
 }
 
-function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onCurrencyChange?: () => void }) {
+function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: CareerState; onCurrencyChange?: () => void; onAgentChange?: (agentId: string) => void }) {
   const lifestyleEmoji: Record<string, string> = {
     "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Untouchable": "👑",
   };
@@ -3018,6 +3029,8 @@ function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onC
           })()}
         </div>
       )}
+
+      {onAgentChange && <AgentReviewCard career={career} onChange={onAgentChange} />}
 
       {/* Popularity & Morale bars */}
       <div className="space-y-1.5">
@@ -3722,7 +3735,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
@@ -3772,6 +3785,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   /* Round 258: bumping this re-renders every money figure on the page
      after the currency picker changes. */
   onCurrencyChange?: () => void;
+  onAgentChange: (agentId: string) => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const visibleCareer = careerBeforeBallonDorReveal(career);
@@ -4390,7 +4404,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
-            <FinancialPanel career={career} onCurrencyChange={onCurrencyChange} />
+            <FinancialPanel career={career} onCurrencyChange={onCurrencyChange} onAgentChange={onAgentChange} />
           )}
 
           {/* Round 134: My Life used to be a wall of eight tabs and a hundred
