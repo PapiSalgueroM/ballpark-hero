@@ -52,6 +52,11 @@
  * card). The same fix mended one of Round 1302's five open rows on the way (the kick of a penalty a review gives in
  * the place before a real last kick is played now). So: 43 cases, 39 plain and 4 that pass by failing (all four are
  * about a penalty a review gives, a kind of review the game does not play).
+ * The second fix pass of Round 1303 took the mark `fails` off those four. A case marked `fails` is green on any
+ * throw and on a timeout, so a crash or a hang read as "the defect is still there". Each is a plain case now that
+ * asserts the open defect ITSELF (a real action under that card, that kick not played out): green only while
+ * exactly that is on the screen, red on a timeout or any other throw, and red the day the defect is mended. They
+ * are still titled KNOWN OPEN and their rows still say OPEN. No case of this file passes by failing any more.
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -681,9 +686,9 @@ describe('Club Manager: the review screen', () => {
          says "Penalty to ..." and no kick is ever drawn: the score moves at the whistle. On 6428 the card comes
          late (after the real shots), the kick starts, and the whistle goes before it is played out.
      Both are OPEN, unreachable today (VAR is dark, and penalties by review are held off by the ledger's owed entry
-     penalties-total) and written up in docs/audits/ROUND-1302-NOTES.md. They are kept below as cases marked
-     `fails`: each is green while the defect is there and goes RED the day it is mended, and then it becomes a
-     plain row. A ruled out goal got the stoppage for this corner; a penalty needs its twin (the card on a quiet
+     penalties-total) and written up in docs/audits/ROUND-1302-NOTES.md. They are kept below as cases titled KNOWN
+     OPEN (marked `fails` until the second fix of Round 1303, plain cases that assert the defect itself since): each
+     is green while the defect is there and goes RED the day it is mended, and then it becomes a plain row. A ruled out goal got the stoppage for this corner; a penalty needs its twin (the card on a quiet
      pitch, then the kick with the clock stopped). */
   const lateAwarded = (shape: (x: LateShape) => boolean) => (feed: LiveFeedEvent[], live: LiveMatch) => {
     const whistle = 45 + (live.added?.h1 ?? 0), shown = reviewsOf(feed).filter(v => place(v) >= 44), r = shown[0];
@@ -733,17 +738,25 @@ describe('Club Manager: the review screen', () => {
     if (row.under === 'quiet') nothingUnder(frames, new Map());
     if (row.kick === 'played') expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
   }, 240000);
-  /* A case marked `fails` is green on ANY throw, so each of these two does its own work outside the one assertion
-     that is the defect: if the half or its run is gone, it returns, and a `fails` case that returns is RED. */
-  it.fails.each(LATE_AWARDED.filter(r => r.under === 'OPEN'))('KNOWN OPEN, dark: a real action is under the card of a penalty a review gives ($what)', async row => {
-    let got: AwardedRun;
-    try { got = await awardedRun(row); } catch { return; }
-    nothingUnder(got.frames, new Map());
+  /* Round 1303 fix 2 (the closing check's open item 5, the rest of the review's minor 14). These two were marked
+     `fails`. A case marked `fails` is green on ANY throw and on a timeout, so a hang in the run or a crash in a
+     helper read as "the defect is still there". They are plain cases now and assert the open defect ITSELF, by its
+     own shape: the card came up, and a real action is under it (or the kick it gave was not played out). Green only
+     while exactly that is on the screen; red on a timeout, on any other throw, and on the day the defect is mended,
+     and then the row says quiet or played and joins the plain checks above. */
+  it.each(LATE_AWARDED.filter(r => r.under === 'OPEN'))('KNOWN OPEN, dark: a real action is under the card of a penalty a review gives ($what)', async row => {
+    const got = await awardedRun(row);
+    const up = got.frames.filter(cardUp);
+    expect(up.length, 'the card of the penalty a review gives never came up').toBeGreaterThan(0);
+    expect(got.frames[got.last].cardText).toContain('VAR: penalty awarded');
+    const actions = [...new Set(up.map(f => `${f.motion}/${f.phase}`))].filter(a => a !== 'pass/pass');
+    expect(actions.length, "the pitch under this card is quiet now: the open defect is mended, so set this row's under to 'quiet'").toBeGreaterThan(0);
   }, 240000);
-  it.fails.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is not played out ($what)', async row => {
-    let got: AwardedRun;
-    try { got = await awardedRun(row); } catch { return; }
-    expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
+  it.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is not played out ($what)', async row => {
+    const got = await awardedRun(row);
+    expect(got.frames.some(cardUp), 'the card of the penalty a review gives never came up').toBe(true);
+    expect(got.frames[got.last].cardText).toContain('VAR: penalty awarded');
+    expect(kickPlayed(got), "the kick this card gave is played out now: the open defect is mended, so set this row's kick to 'played'").toBe(false);
   }, 240000);
 
   /* ---- Round 1302: the cases nobody had played (fix-AT section 7 item 8) ----

@@ -15,7 +15,7 @@
     "Matches a season is arithmetic on the league's size, not a figure read on the page, except where the literal prints it."
   ],
   "checkedBy": "scripts/simCmVarLedger.mjs",
-  "sha256": "fae30ee0dc14a10f08a820eb58b3058f9e30ef1e9e32deef05f8537494b59bf6",
+  "sha256": "6bc79bfb83cb09b859fd58129c35fed89b2f692ef2a2623ce910dbb6bd3681dc",
   "standard": {
     "rule": "A simulation rate stands on at least two independent publishers, each counting at least one full season of a top division under video review, whose per match figures agree within a factor of 2. It is derived from the lowest of them. No screen prints a rate as a statistic of a real league.",
     "goalsRuledOut": "goals ruled out after a review, per match: 6 readings by 4 publishers, who count DIFFERENT leagues and seasons (Ligue 1 2023-24; Serie A 2017-18; Premier League 2024-25; Premier League 2023-24; Premier League 2022-23): 23 in 306 (lfp-ligue1-2023-24), 29 in 380 (pieri-seriea-2017-18), 31 in 380 (agi-seriea-2017-18), 47 in 380 (espn-pl-2024-25), 50 in 380 (espn-pl-2023-24), 55 in 380 (espn-pl-2022-23). The highest is 1.926 times the lowest, inside the factor of 2 the standard allows. Derived from the LOWEST, 23 in 306 (lfp-ligue1-2023-24).",
