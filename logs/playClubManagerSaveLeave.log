@@ -1,0 +1,7 @@
+  ok    the hidden-tab write alone restored the save at week 2
+6) The banner: on when the store throws at a pagehide, gone after a reload with the store working
+  ok    the banner appeared: "Your career is not being saved right now. This browser has no storage left for douknowball..."
+  ok    after a reload with the store working, no banner
+
+playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManagerSaveLeave exit 0

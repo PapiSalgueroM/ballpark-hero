@@ -1,0 +1,9 @@
+  ok    the card reads "GOAL! Simon Adingra 21' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.3 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 56.0 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playLiveMatchFit exit 0
