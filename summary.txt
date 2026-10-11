@@ -1,0 +1,7 @@
+base exit=0 0s | src/lib, src/hooks, src/pages diff against the base: 0 file(s)
+armA exit=0 5s | varProbe: A HOLDS (showing a review or skipping it is the same match)
+armC exit=0 4s | ARM C HOLDS: off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488 on both trees
+armC-fleet44 exit=0 21s | ARM C HOLDS over the fleet (44 entries a club): FLEET digest 26b02931e8b57910d1d62660017cce627dd2337f3e53186687612403c7bfab8c on both trees
+old-saves exit=0 2s | OLD SAVES HOLD: 12 digest lines equal on both trees
+lit-saves exit=0 1s | LIT SAVES HOLD: 8 half time saves made on the base finish as the same match on both trees
+asked exit=0 15s | ASKED total: 1246 kickoffs in 60 league and competition pairs, 1030 lit, 827 problem(s)

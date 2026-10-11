@@ -1,0 +1,21 @@
+MAKE premier Arsenal (Premier League · Round 1): lit at kickoff true, 1 review line(s) in the first half, seed 7314
+MAKE austria RB Salzburg (Austrian Bundesliga · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7397
+MAKE serieb Cremonese (Serie B · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7494
+MAKE mlsEast Atlanta United (MLS Eastern Conference · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7591
+MAKE denmark FC Copenhagen (Danish Superliga · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7688
+MAKE brasileirao Flamengo (Brasileirão Série A · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7785
+MAKE championship Birmingham City (EFL Championship · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7882
+MAKE ligamx América (Liga MX · Round 1): lit at kickoff false, 0 review line(s) in the first half, seed 7979
+MAKE wrote 8 half time saves
+base load exit 0
+branch load exit 0
+D premier Arsenal lit=true kind=match score=1-1 reviewLines=2 secondHalfReviewLines=1 match=f76083cdf6cbf5c72124820f after=c2f3c29b7b1fb02b5c251376
+D austria RB Salzburg lit=false kind=match score=2-3 reviewLines=0 secondHalfReviewLines=0 match=b556214a762c972f0a2fd37b after=da07dce01ffaaf259336522b
+D serieb Cremonese lit=false kind=match score=1-0 reviewLines=0 secondHalfReviewLines=0 match=22d967b3c8b0dfc0400648d8 after=949d252765991accc4eebea8
+D mlsEast Atlanta United lit=false kind=match score=3-2 reviewLines=0 secondHalfReviewLines=0 match=7ab901db8dea0c073ffe1c18 after=404c8adaeaea088f6a939a75
+D denmark FC Copenhagen lit=false kind=match score=1-1 reviewLines=0 secondHalfReviewLines=0 match=a8467cae5d2ec183d23dd2ad after=e5477aa3343e6b4b2a2907c8
+D brasileirao Flamengo lit=false kind=match score=1-3 reviewLines=0 secondHalfReviewLines=0 match=f2e06685086f7d4b2a5a5073 after=3164b3bec1c8fa3d60f3dee7
+D championship Birmingham City lit=false kind=match score=1-1 reviewLines=0 secondHalfReviewLines=0 match=beeed56214c4131b25504a2c after=b1554d7cda2de53f03785229
+D ligamx América lit=false kind=match score=1-1 reviewLines=0 secondHalfReviewLines=0 match=d0ccccc5a2dc33c5f64de2be after=3cd5df4e3c3c89c577166bab
+LOAD 8 saves: 0 failure(s)
+LIT SAVES HOLD: 8 half time saves made on the base finish as the same match on both trees

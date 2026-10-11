@@ -1,0 +1,91 @@
+ASKED premier | Premier League: 37 kickoffs, 37 lit, 30 the same match as without, 7 review lines
+ASKED premier | Champions League: 6 kickoffs, 6 lit, 4 the same match as without, 2 review lines
+ASKED premier | FA Cup: 4 kickoffs, 0 lit, 4 the same match as without, 0 review lines
+ASKED championship | EFL Championship: 45 kickoffs, 0 lit, 45 the same match as without, 0 review lines
+ASKED championship | FA Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED laliga | La Liga: 43 kickoffs, 43 lit, 38 the same match as without, 6 review lines
+ASKED laliga | Copa del Rey: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED seriea | Serie A: 39 kickoffs, 39 lit, 31 the same match as without, 8 review lines
+ASKED seriea | Coppa Italia: 2 kickoffs, 0 lit, 2 the same match as without, 0 review lines
+ASKED seriea | Champions League: 6 kickoffs, 6 lit, 4 the same match as without, 2 review lines
+ASKED bundesliga | Bundesliga: 42 kickoffs, 42 lit, 35 the same match as without, 8 review lines
+ASKED bundesliga | DFB-Pokal: 4 kickoffs, 0 lit, 4 the same match as without, 0 review lines
+ASKED ligue1 | Ligue 1: 43 kickoffs, 43 lit, 34 the same match as without, 9 review lines
+ASKED ligue1 | Coupe de France: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED eredivisie | Eredivisie: 42 kickoffs, 42 lit, 39 the same match as without, 3 review lines
+ASKED eredivisie | KNVB Cup: 4 kickoffs, 4 lit, 2 the same match as without, 2 review lines
+ASKED saudi | Saudi Pro League: 43 kickoffs, 43 lit, 39 the same match as without, 4 review lines
+ASKED saudi | King's Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED mlsEast | MLS Eastern Conference: 42 kickoffs, 42 lit, 36 the same match as without, 7 review lines
+ASKED mlsEast | U.S. Open Cup: 4 kickoffs, 0 lit, 4 the same match as without, 0 review lines
+ASKED mlsWest | MLS Western Conference: 40 kickoffs, 40 lit, 36 the same match as without, 4 review lines
+ASKED mlsWest | U.S. Open Cup: 6 kickoffs, 0 lit, 6 the same match as without, 0 review lines
+ASKED primeira | Primeira Liga: 38 kickoffs, 38 lit, 37 the same match as without, 1 review lines
+ASKED primeira | Champions League: 6 kickoffs, 6 lit, 6 the same match as without, 0 review lines
+ASKED primeira | Taça de Portugal: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED scottish | Scottish Premiership: 37 kickoffs, 37 lit, 34 the same match as without, 4 review lines
+ASKED scottish | Champions League: 6 kickoffs, 6 lit, 6 the same match as without, 0 review lines
+ASKED scottish | Scottish Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED superlig | Süper Lig: 38 kickoffs, 38 lit, 35 the same match as without, 3 review lines
+ASKED superlig | Champions League: 6 kickoffs, 6 lit, 5 the same match as without, 1 review lines
+ASKED superlig | Turkish Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED bundesliga2 | 2. Bundesliga: 43 kickoffs, 43 lit, 40 the same match as without, 3 review lines
+ASKED bundesliga2 | DFB-Pokal: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED proleague | Belgian Pro League: 37 kickoffs, 37 lit, 34 the same match as without, 3 review lines
+ASKED proleague | Champions League: 6 kickoffs, 6 lit, 4 the same match as without, 4 review lines
+ASKED proleague | Belgian Cup: 4 kickoffs, 0 lit, 4 the same match as without, 0 review lines
+ASKED austria | Austrian Bundesliga: 43 kickoffs, 43 lit, 43 the same match as without, 0 review lines
+ASKED austria | ÖFB Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED greece | Super League Greece: 41 kickoffs, 41 lit, 35 the same match as without, 6 review lines
+ASKED greece | Greek Cup: 5 kickoffs, 0 lit, 5 the same match as without, 0 review lines
+ASKED denmark | Danish Superliga: 43 kickoffs, 43 lit, 34 the same match as without, 9 review lines
+ASKED denmark | Danish Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED switzerland | Swiss Super League: 42 kickoffs, 42 lit, 35 the same match as without, 7 review lines
+ASKED switzerland | Swiss Cup: 4 kickoffs, 0 lit, 4 the same match as without, 0 review lines
+ASKED croatia | SuperSport HNL: 34 kickoffs, 34 lit, 33 the same match as without, 1 review lines
+ASKED croatia | Champions League: 6 kickoffs, 6 lit, 5 the same match as without, 1 review lines
+ASKED croatia | Croatian Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED brasileirao | Brasileirão Série A: 42 kickoffs, 42 lit, 30 the same match as without, 12 review lines
+ASKED brasileirao | Copa do Brasil: 4 kickoffs, 4 lit, 4 the same match as without, 0 review lines
+ASKED ligamx | Liga MX: 46 kickoffs, 0 lit, 46 the same match as without, 0 review lines
+ASKED aleague | A-League Men: 43 kickoffs, 43 lit, 36 the same match as without, 7 review lines
+ASKED aleague | Australia Cup: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED serieb | Serie B: 43 kickoffs, 43 lit, 33 the same match as without, 11 review lines
+ASKED serieb | Coppa Italia: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED ligue2 | Ligue 2: 43 kickoffs, 0 lit, 43 the same match as without, 0 review lines
+ASKED ligue2 | Coupe de France: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED segunda | Segunda División: 43 kickoffs, 43 lit, 35 the same match as without, 8 review lines
+ASKED segunda | Copa del Rey: 3 kickoffs, 0 lit, 3 the same match as without, 0 review lines
+ASKED russia | Russian Premier League: 42 kickoffs, 42 lit, 38 the same match as without, 4 review lines
+ASKED russia | Russian Cup: 4 kickoffs, 0 lit, 4 the same match as without, 0 review lines
+PROBLEM ligue1 | Ligue 1: Angers entry 0 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 1 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 2 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 3 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 4 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 5 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 7 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 8 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 9 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 10 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 11 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 12 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 13 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 14 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 15 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 16 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 17 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 19 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 20 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 21 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 22 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Angers entry 23 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 0 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 1 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 2 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 3 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 4 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 5 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 7 is lit and Ligue 1 is not a covered competition
+PROBLEM ligue1 | Ligue 1: Lorient entry 8 is lit and Ligue 1 is not a covered competition
+ASKED total: 1246 kickoffs in 60 league and competition pairs, 1030 lit, 827 problem(s)
