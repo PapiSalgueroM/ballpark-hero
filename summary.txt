@@ -1,0 +1,16 @@
+simSaveKeeper exit=0 8s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+c-partrow exit=1 8s | simSaveKeeper control partrow: FIRED. Section 1 is red.
+units exit=0 19s |    Duration  17.99s (transform 7.60s, setup 1.13s, collect 18.14s, tests 20.01s, environment 6.44s, prepare 1.81s)
+c-partrowus exit=1 7s | simSaveKeeper control partrowus: FIRED. Section 1 is red.
+brands exit=0 38s | ALL SOCIAL AND BRAND CHECKS PASSED
+finish exit=0 23s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+tsc exit=0 96s | 
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+rival exit=0 19s | No rival product names found. 0 findings.
+awards exit=0 103s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+quotes exit=0 31s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+programme exit=0 95s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+digest-compare exit=0 29s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+us-season exit=0 23s | simUsSeasonCentre: 98 checks, 0 failed
+inbox exit=0 54s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
