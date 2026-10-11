@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerTransferBriefPromise.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 50[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mthe fixture is a real broken promise: 17 league games against 18 promised, fit all year[32m 8[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwithout a brief a refusing coin still brings the request an answer[32m 5[2mms[22m[39m
+[31m   [31m×[31m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the minutes brief filed a refusing coin still brings the request an answer[39m[32m 9[2mms[22m[39m
+[31m     → expected 'no_interest' not to be 'no_interest' // Object.is equality[39m
+[31m   [31m×[31m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the level brief filed a refusing coin still brings the request an answer[39m[32m 3[2mms[22m[39m
+[31m     → expected 'no_interest' not to be 'no_interest' // Object.is equality[39m
+[31m   [31m×[31m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the home brief filed a refusing coin still brings the request an answer[39m[32m 9[2mms[22m[39m
+[31m     → expected 'no_interest' not to be 'no_interest' // Object.is equality[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the promise met the coin still decides the brief: a refusing coin is a refusal[32m 8[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith no plan at all the coin still decides, on both paths[32m 6[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerTransferBriefPromise.test.ts[2m > [22mA broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the minutes brief filed a refusing coin still brings the request an answer
+[41m[1m FAIL [22m[49m src/test/soccerTransferBriefPromise.test.ts[2m > [22mA broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the level brief filed a refusing coin still brings the request an answer
+[41m[1m FAIL [22m[49m src/test/soccerTransferBriefPromise.test.ts[2m > [22mA broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the home brief filed a refusing coin still brings the request an answer
+[31m[1mAssertionError[22m: expected 'no_interest' not to be 'no_interest' // Object.is equality[39m
+[36m [2m❯[22m src/test/soccerTransferBriefPromise.test.ts:[2m85:34[22m[39m
+    [90m 83| [39m      [35mconst[39m result [33m=[39m [34mtransferBriefResult[39m(value[33m,[39m projectLeagueApps)[33m;[39m
+    [90m 84| [39m      expect(result, 'the request stored its one answer').not.toBeNull…
+    [90m 85| [39m      [34mexpect[39m(result[33m?.[39mstatus)[33m.[39mnot[33m.[39m[34mtoBe[39m([32m'no_interest'[39m)[33m;[39m
+    [90m   | [39m                                 [31m^[39m
+    [90m 86| [39m      [34mexpect[39m([[32m'offered'[39m[33m,[39m [32m'no_match'[39m])[33m.[39m[34mtoContain[39m(result[33m?.[39mstatus)[33m;[39m
+    [90m 87| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 09:05:33
+[2m   Duration [22m 2.86s[2m (transform 1.44s, setup 64ms, collect 1.74s, tests 50ms, environment 457ms, prepare 180ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.ts,title=src/test/soccerTransferBriefPromise.test.ts > A broken appearance promise grants the transfer request%2C with or without an agent brief > with the minutes brief filed a refusing coin still brings the request an answer,line=85,column=34::AssertionError: expected 'no_interest' not to be 'no_interest' // Object.is equality%0A ❯ src/test/soccerTransferBriefPromise.test.ts:85:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.ts,title=src/test/soccerTransferBriefPromise.test.ts > A broken appearance promise grants the transfer request%2C with or without an agent brief > with the level brief filed a refusing coin still brings the request an answer,line=85,column=34::AssertionError: expected 'no_interest' not to be 'no_interest' // Object.is equality%0A ❯ src/test/soccerTransferBriefPromise.test.ts:85:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.ts,title=src/test/soccerTransferBriefPromise.test.ts > A broken appearance promise grants the transfer request%2C with or without an agent brief > with the home brief filed a refusing coin still brings the request an answer,line=85,column=34::AssertionError: expected 'no_interest' not to be 'no_interest' // Object.is equality%0A ❯ src/test/soccerTransferBriefPromise.test.ts:85:34%0A%0A

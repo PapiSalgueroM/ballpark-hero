@@ -1,0 +1,2 @@
+vitest-promise-before exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.ts,title=src/test/soccerTransferBriefPromise.test.ts > A broken appear
+tsc exit=0 61s | 
