@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playSoccerResultsLayout-EXPECT1 exit=1 49s |     at error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:313:42)
+gitclean exit=0 0s | clean

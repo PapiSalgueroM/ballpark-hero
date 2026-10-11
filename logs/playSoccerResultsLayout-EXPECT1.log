@@ -1,0 +1,4 @@
+[31msrc/pages/SoccerCareer.tsx (75:33): "localizeMoneyGrouped" is not exported by "src/lib/soccerCurrency.ts", imported by "src/pages/SoccerCareer.tsx".[39m
+file: [36m/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SoccerCareer.tsx:75:33[39m
+    at getRollupError (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+    at error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:313:42)

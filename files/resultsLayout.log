@@ -1,0 +1,159 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+[dukb] no dist/index.html, snapshots stay on the boot script
+[31mx[39m Build failed in 16.34s
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[31msrc/pages/SoccerCareer.tsx (75:33): "localizeMoneyGrouped" is not exported by "src/lib/soccerCurrency.ts", imported by "src/pages/SoccerCareer.tsx".[39m
+file: [36m/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SoccerCareer.tsx:75:33[39m
+[33m
+73:    transfer fee all follow the same chosen currency. Display only: every
+74:    number in the save stays in euros. */
+75: import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } ...
+                                     ^
+76: /* Round 262: the squad you are actually in. Display only, and it renders
+77:    nothing at all when we have no honest answer for that club and season. */
+[39m
+    at getRollupError (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+    at error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:313:42)
+    at Module.error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:17285:16)
+    at Module.traceVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:17718:29)
+    at ModuleScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:15309:39)
+    at FunctionScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at ReturnValueScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at Identifier.bind (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5220:40) {
+  binding: 'localizeMoneyGrouped',
+  code: 'MISSING_EXPORT',
+  exporter: '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/lib/soccerCurrency.ts',
+  id: '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SoccerCareer.tsx',
+  url: 'https://rollupjs.org/troubleshooting/#error-name-is-not-exported-by-module',
+  pos: 3773,
+  loc: {
+    column: 33,
+    file: '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SoccerCareer.tsx',
+    line: 75
+  },
+  frame: '73:    transfer fee all follow the same chosen currency. Display only: every\n' +
+    '74:    number in the save stays in euros. */\n' +
+    '75: import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } ...\n' +
+    '                                     ^\n' +
+    '76: /* Round 262: the squad you are actually in. Display only, and it renders\n' +
+    '77:    nothing at all when we have no honest answer for that club and season. */',
+  watchFiles: [
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/index.html',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/tailwind.config.ts',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/main.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/package.json',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-runtime.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/client.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/lib/safeStorage.ts',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/App.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/index.css',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/lib/freshBuild.ts',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/lib/theme.ts',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/lib/translateGuard.ts',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/lib/saveKeeper.ts',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/index.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/invariant/browser.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-fast-compare/index.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/shallowequal/index.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react-jsx-runtime.production.min.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/index.js',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router-dom/dist/index.mjs',
+    '/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@tanstack/react-query/build/modern/index.js',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NotFound.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Index.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Footle.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/BuzzerBeater.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FreeKick.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/CareerGame.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/HigherLower.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Connections.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/LineupBuilder.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/UfcGame.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NbaLineup.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NbaConnect4.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NbaChain.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FootballConnect4.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FootballGrid.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/CollegeGrid.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FootballTimeline.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/BaseballCareer.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/BaseballConnections.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/HockeyCareer.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NFLCareer.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/HockeyHigherLower.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SportHub.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Teammates.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/PerfectLineupNba.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/PerfectLineupF1.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/PerfectLineupNhl.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Olympics.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessTheCollege.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/TermsOfService.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/PrivacyPolicy.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Search.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Accessibility.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/AdminReports.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/AdminLogin.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/UfcChain.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FightCareer.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ResetPassword.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FightGym.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FightPromoter.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/CageClash.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Profile.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Leaderboard.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessTheYear.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessNflTeam.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/F1Driver.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessTheNation.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/F1Constructor.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessCbbTeam.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessTennisPlayer.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/TennisChain.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GuessNascarDriver.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SoccerGrid.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NascarChain.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/FantasyDraft.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/Conquest.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/WorldCupPredictor.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SoccerCareer.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ShirtNumber.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ScorePredictor.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/HofOrBust.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/TransferPath.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SquadDeal.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/SearchAndDiscard.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/GauntletDraft.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NflGauntletDraft.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NhlGauntletDraft.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/NbaGauntletDraft.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ManagerHotSeat.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ClubManager.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/StadiumTycoon.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/DeadlineDay.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ListQuiz.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/ContractChaos.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/WonderkidFactory.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/PerfectSeasonMlb.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/MlbGauntletDraft.tsx',
+    '/home/runner/work/_temp/t-playSoccerResultsLayout-EXPECT1/results-layout-original-history-785hWk/tree/src/pages/HigherLowerTransfers.tsx',
+    ... 3988 more items
+  ],
+  Symbol(augmented): true
+}
+
+Node.js v24.21.0

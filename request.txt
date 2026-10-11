@@ -1,0 +1,7 @@
+# verify 4 of Release AW part one on c9a1f86a: finding 6, the other lane's results layout walk (the closing pass's P-K3 line; expected to stop on a rollup error building its original tree)
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playSoccerResultsLayout-EXPECT1: export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerResultsLayout.mjs > /tmp/rl.log 2>&1; s=$?; cp /tmp/rl.log "$RC_OUT/resultsLayout.log"; grep -a -i -m4 -E "error|SoccerCareer.tsx" /tmp/rl.log | cut -c1-240; exit $s
+gitclean: test -z "$(git status --porcelain --untracked-files=no)" && echo clean
