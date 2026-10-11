@@ -1,0 +1,3 @@
+# Release AX d5: THE recording, taken once from 5d5926f6 (detached, so the recorder's own stamp names the commit the source is)
+#!serial
+record: git checkout -q --detach 5d5926f6 && node scripts/recordUsBoardFixture.mjs "$RC_OUT/usBoardFixture.json"; s=$?; git checkout -q -; sha256sum "$RC_OUT/usBoardFixture.json"; exit $s
