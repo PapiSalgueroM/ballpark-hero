@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vs.log 2>&1; s=$?; cp /tmp/vs.log "$RC_OUT/varscreen-full.log"; grep -a "KNOWN OPEN\|Test Files \|Tests \|AssertionError\|expected fail" /tmp/vs.log | cut -c1-260 | tail -14; echo "varscreen exit $s"; exit $s
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+ledger: node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+litstatus: node scripts/qa/cmVarLit.mjs status
+simCmVar: node scripts/simCmVar.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+headsha: git log -1 --format=%H HEAD~1 2>/dev/null; git log -3 --format='%h %s' | cut -c1-90
+gitclean: git status --porcelain --untracked-files=no | wc -l
