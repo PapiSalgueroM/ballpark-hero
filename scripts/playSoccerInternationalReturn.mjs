@@ -104,8 +104,9 @@ try{for(const width of [320,390,1280])for(const fixture of fixtures){const id=wi
   const final=JSON.parse(held);check(final.phase==='season_summary','Actual year presents its saved summary before any later gameplay');const summary=page.getByRole('heading',{name:'Season Summary',exact:true}).locator('..');await centerControl('summary',summary);await seedPage(24);await shot('actual-summary',summary,['@target'],0);await pair('readonly-summary',final,final,await bytes());await stopSeed('readonly-summary',[]);
   if(fixture.id==='tournament'){
    await seedPage(25);const history=page.getByRole('button',{name:/Tournaments/});await centerControl('legacy-history',history);await measure('legacy-history',history,['@target'],0);await activate(history);const list=page.getByText('Every tournament',{exact:true}).locator('..');await centerControl('history-list',list);
-   const actual=await list.locator('div.space-y-1 > div').evaluateAll(nodes=>nodes.map(n=>{
+   const actual=await list.locator(':scope > div.space-y-1 > div').evaluateAll(nodes=>nodes.map(n=>{
     // Release AW: since the results layout round a row is two lines, the year and the competition, then the champion and the result.
+    // A row carries the list's own spacing class now, so the rows are taken as the list's direct children and not by that class alone.
     // The same four texts are read in the same order. A row of any other shape gives its raw texts, which cannot equal the saved four.
     const lines=Array.from(n.children);if(lines.length!==2||lines.some(l=>l.children.length!==2))return lines.map(c=>c.textContent);
     return[lines[0].children[0].textContent,lines[0].children[1].textContent,lines[1].children[0].lastElementChild.textContent,lines[1].children[1].textContent];}));
