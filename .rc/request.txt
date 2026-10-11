@@ -1,0 +1,8 @@
+# Release AV, follow up on head 5ed04ae7: the Season Center walk after the one line of its control playfirst, on a served build, one at a time: the control, the plain walk for baseball, and the two fences that read walk scripts
+#!serve
+#!playwright
+#!serial
+playfirst: US_SEASON_PLAY_CONTROL=playfirst SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playUsSeasonCentre: SHOTS=$RC_OUT ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+discovery: node scripts/simBrowserHarnessDiscovery.mjs
