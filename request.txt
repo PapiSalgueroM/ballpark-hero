@@ -1,0 +1,3 @@
+#!serial
+on-1227: bash .rc/x/merge-probe.sh 251f065016e08c39394ef607eb45d28e8d785493 r1227 nfl nba
+on-au: bash .rc/x/merge-probe.sh 0757b2a9277e630e336e16c640e4f76a7d5c47f8 au nhl nfl nba mlb

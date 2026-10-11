@@ -1,0 +1,2 @@
+on-1227 exit=0 125s | merge-probe r1227: every sport named stays green with that round on top
+on-au exit=0 243s | merge-probe au: every sport named stays green with that round on top

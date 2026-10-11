@@ -1,0 +1,12 @@
+MERGE r1227: CONFLICT in: scripts/data/usBoardFixture.json src/pages/WhatsNew.tsx 
+MERGE r1227: closed for the probe with this head's side of [scripts/data/usBoardFixture.json src/pages/WhatsNew.tsx ] (the lead resolves them for real at integration)
+MERGE r1227: clean. Engine files it brings: src/lib/careerRival.ts src/lib/careerRivalryEvents.ts src/lib/nbaMyCareer.ts src/lib/nflMyCareer.ts src/lib/usCareerStatLine.ts 
+r1227 nfl exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature ede17099d63b
+        at or over from, pooled 10.52 percent (band 9.56 to 11.04: the reference's 10.30 over 48 seeds, 0.74 from seed to seed); at or over to, pooled 0.96 percent (band 0.76 to 1.22: the reference's 0.99, 0.23 from seed to seed); read against the marks of calibration 2 (the reference was read again
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.52 percent (band 9.56 to 11.04); at or over to, pooled 0.96 percent (band 0.76 to 1.22)
+r1227 nba exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature 993ef9d61f27
+        at or over from, pooled 9.81 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.96 percent (band 0.79 to 1.14: the reference's 0.97, 0.17 from seed to seed); read against the marks of calibration 2 (the reference was read against
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 9.81 percent (band 9.25 to 10.16); at or over to, pooled 0.96 percent (band 0.79 to 1.14)
+merge-probe r1227: every sport named stays green with that round on top
