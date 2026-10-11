@@ -1,0 +1,1 @@
+summer-nfl: SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs > $RC_OUT/summer-nfl.log 2>&1; s=$?; grep "6) balance\|peak OVR\|median legacy\|Hall share\|headline\|6b\|ran in\|FAIL" $RC_OUT/summer-nfl.log | cut -c1-170; tail -1 $RC_OUT/summer-nfl.log; exit $s
