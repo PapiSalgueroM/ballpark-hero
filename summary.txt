@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+motion-floor exit=1 77s | playSeasonCentreMotion: 62 checks, 1 failed (control floor) (only C)
+motion-lock exit=1 10s | Node.js v24.21.0
+motion-tableview exit=1 77s | playSeasonCentreMotion: 62 checks, 1 failed (control tableview) (only C)
+motion-pitchlayer exit=1 77s | playSeasonCentreMotion: 62 checks, 1 failed (control pitchlayer) (only C)
+motion-held exit=1 9s | Node.js v24.21.0
+motion-otherplace exit=1 9s | Node.js v24.21.0
+motion-chipword exit=1 9s | Node.js v24.21.0
+motion-pitchgone exit=1 9s | Node.js v24.21.0

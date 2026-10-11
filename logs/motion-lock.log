@@ -1,0 +1,11 @@
+CONTROL lock: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 414 table seasons in the probe, five used: Probe 0 2000 Juventus (34); Probe 9 1997 Atletico Madrid (38); Probe 14 2035 Inter Milan (38); Probe 28 2018 Inter Milan (38); Probe 34 2011 Bayern Munich (34)
+C) chunks: Season Centre SeasonCentre-BdQua8c6.js, little pitch MiniPitch-C0nVuzHl.js, pitch part PitchSurface-wfT-G0hM.js
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonCentreMotion.mjs:713
+      if (holders.length !== 1 || countOf(jsText[holders[0]], from) !== 1) throw new Error(`control refused: ${JSON.stringify(String(from).slice(0, 60))} is not in the served site exactly once (${holders.length} files hold it)`);
+                                                                                 ^
+
+Error: control refused: ".style.overflow=\"hidden\"" is not in the served site exactly once (0 files hold it)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonCentreMotion.mjs:713:82
+
+Node.js v24.21.0
