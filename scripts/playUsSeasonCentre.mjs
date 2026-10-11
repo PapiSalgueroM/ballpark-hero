@@ -349,6 +349,8 @@ async function open(slug, save, { width, height, reduced = false, seed = 1048 },
         localStorage.setItem(k, v);
         localStorage.setItem('seasonCentre:help:nba', '1');
         localStorage.setItem('seasonCentre:help:nfl', '1');
+        /* Round 1212: baseball's help sheet is read once too (the "?" is checked in vitest) */
+        localStorage.setItem('seasonCentre:help:mlb', '1');
       }
     } catch { /* private mode */ }
     if (extra) document.addEventListener('DOMContentLoaded', () => { import(extra).catch(() => {}); });
