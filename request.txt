@@ -1,0 +1,36 @@
+# Release AU proof, Round 1219 (and its seam with Round 1210): the keeper harness and the storage fence
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveKeeper-assign: SIM_SAVE_KEEPER_CONTROL=assign node scripts/simSaveKeeper.mjs
+simSaveKeeper-bootwrite: SIM_SAVE_KEEPER_CONTROL=bootwrite node scripts/simSaveKeeper.mjs
+simSaveKeeper-dropkey: SIM_SAVE_KEEPER_CONTROL=dropkey node scripts/simSaveKeeper.mjs
+simSaveKeeper-hidebehind: SIM_SAVE_KEEPER_CONTROL=hidebehind node scripts/simSaveKeeper.mjs
+simSaveKeeper-journalfirst: SIM_SAVE_KEEPER_CONTROL=journalfirst node scripts/simSaveKeeper.mjs
+simSaveKeeper-noaside: SIM_SAVE_KEEPER_CONTROL=noaside node scripts/simSaveKeeper.mjs
+simSaveKeeper-nocopycheck: SIM_SAVE_KEEPER_CONTROL=nocopycheck node scripts/simSaveKeeper.mjs
+simSaveKeeper-nomaincall: SIM_SAVE_KEEPER_CONTROL=nomaincall node scripts/simSaveKeeper.mjs
+simSaveKeeper-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs
+simSaveKeeper-numberonly: SIM_SAVE_KEEPER_CONTROL=numberonly node scripts/simSaveKeeper.mjs
+simSaveKeeper-onebyte: SIM_SAVE_KEEPER_CONTROL=onebyte node scripts/simSaveKeeper.mjs
+simSaveKeeper-pileup: SIM_SAVE_KEEPER_CONTROL=pileup node scripts/simSaveKeeper.mjs
+simSaveKeeper-twins: SIM_SAVE_KEEPER_CONTROL=twins node scripts/simSaveKeeper.mjs
+simSaveKeeper-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simStorageWrites-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+simStorageWrites-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+simStorageWrites-deadhold: SIM_STORAGE_WRITES_CONTROL=deadhold node scripts/simStorageWrites.mjs
+simStorageWrites-floor: SIM_STORAGE_WRITES_CONTROL=floor node scripts/simStorageWrites.mjs
+simStorageWrites-gone: SIM_STORAGE_WRITES_CONTROL=gone node scripts/simStorageWrites.mjs
+simStorageWrites-held: SIM_STORAGE_WRITES_CONTROL=held node scripts/simStorageWrites.mjs
+simStorageWrites-newsite: SIM_STORAGE_WRITES_CONTROL=newsite node scripts/simStorageWrites.mjs
+simStorageWrites-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+simStorageWrites-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+simStorageWrites-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+simStorageWrites-partial: SIM_STORAGE_WRITES_CONTROL=partial node scripts/simStorageWrites.mjs
+simStorageWrites-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+simStorageWrites-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+simStorageWrites-second: SIM_STORAGE_WRITES_CONTROL=second node scripts/simStorageWrites.mjs
+simStorageWrites-stale: SIM_STORAGE_WRITES_CONTROL=stale node scripts/simStorageWrites.mjs
+simStorageWrites-twolists: SIM_STORAGE_WRITES_CONTROL=twolists node scripts/simStorageWrites.mjs
+simStorageWrites-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+simStorageWrites-unlearn: SIM_STORAGE_WRITES_CONTROL=unlearn node scripts/simStorageWrites.mjs
+simStorageWrites-unnamed: SIM_STORAGE_WRITES_CONTROL=unnamed node scripts/simStorageWrites.mjs
