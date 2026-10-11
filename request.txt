@@ -1,0 +1,67 @@
+# Release AV proof, Round 1229 (the league book) and the pin: the book's harness, each control its own line
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+book-assistbench-1: BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+book-assistbench-2: SEEDSET=1 BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+book-assistbench-3: SEEDSET=2 BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+book-assistbench-4: SEEDSET=3 BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+book-assistbench-5: SEEDSET=4 BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+book-bought-1: BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+book-bought-2: SEEDSET=1 BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+book-byeweek-1: BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+book-byeweek-2: SEEDSET=1 BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+book-byeweek-3: SEEDSET=2 BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+book-byeweek-4: SEEDSET=3 BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+book-byeweek-5: SEEDSET=4 BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+book-cleanside: BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+book-dropmine: BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+book-flat: BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+book-hurtentry-1: BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+book-hurtentry-2: SEEDSET=1 BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+book-hurtentry-3: SEEDSET=2 BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+book-hurtentry-4: SEEDSET=3 BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+book-hurtentry-5: SEEDSET=4 BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+book-keyindex-1: BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+book-keyindex-2: SEEDSET=1 BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+book-keyindex-3: SEEDSET=2 BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+book-keyindex-4: SEEDSET=3 BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+book-keyindex-5: SEEDSET=4 BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+book-mathrandom: BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+book-noog: BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+book-offbyone-1: BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+book-offbyone-2: SEEDSET=1 BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+book-offbyone-3: SEEDSET=2 BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+book-offbyone-4: SEEDSET=3 BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+book-offbyone-5: SEEDSET=4 BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+book-penassist: BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+book-penassistmine-1: BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+book-penassistmine-2: SEEDSET=1 BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+book-penassistmine-3: SEEDSET=2 BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+book-penassistmine-4: SEEDSET=3 BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+book-penassistmine-5: SEEDSET=4 BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+book-redeal: BOOK_CONTROL=redeal node scripts/simCmLeagueBook.mjs
+book-seasonstamp: BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+book-strip: BOOK_CONTROL=strip node scripts/simCmLeagueBook.mjs
+book-stripdeadline: BOOK_CONTROL=stripdeadline node scripts/simCmLeagueBook.mjs
+book-twoman-1: BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-twoman-2: SEEDSET=0 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-twoman-3: SEEDSET=1 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-twoman-4: SEEDSET=2 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-twoman-5: SEEDSET=3 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-twoman-6: SEEDSET=4 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-unnamed-1: BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+book-unnamed-2: SEEDSET=1 BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+book-unnamed-3: SEEDSET=2 BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+book-unnamed-4: SEEDSET=3 BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+book-unnamed-5: SEEDSET=4 BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+book-weight: BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+book-wrongman-1: BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+book-wrongman-2: SEEDSET=1 BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+book-wrongman-3: SEEDSET=2 BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+book-wrongman-4: SEEDSET=3 BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+book-wrongman-5: SEEDSET=4 BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+savesize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=300000
