@@ -405,7 +405,8 @@ export function stagePitchInput(
      shares those places with a real chance it is left out as before: a goal that counts for nothing must never
      take the pitch from one that is real. */
   const period = liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi);
-  const lateRoom = (e: LiveFeedEvent): boolean => !period.some(o => o !== e && (isChance(o) || isRuledOut(o)) && placeOf(o) >= placeOf(e) - 1);
+  /* (Told apart by the review's id: every call of liveFeed makes its lines anew, so they are never the same object.) */
+  const lateRoom = (e: LiveFeedEvent): boolean => !period.some(o => (isChance(o) || (isRuledOut(o) && o.review!.id !== e.review!.id)) && placeOf(o) >= placeOf(e) - 1);
   return {
     mine, theirs,
     feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi
@@ -863,7 +864,11 @@ export function LiveSimScreen({
      (the rest of the half is drawn again then, and an action under it is rightly dropped). */
   // A tactics change can replace a future terminal chance during its wind-up.
   // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
-  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
+  /* Round 1302: a goal a review rules out at the whistle's own place is wound up before its place like any last
+     kick. Its line is the screen's own (the engine keeps no shot for it), so it is not in the feed: it stays
+     committed for as long as the feed holds the review it belongs to. */
+  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event)
+    || feed.some(e => isRuledOut(e) && ruledOutKey(e) === motionEvent.key);
   const liveAction = running && !finished && motionStillCommitted ? motionEvent : null;
   /* Never from before the viewer opened: a last kick's wind up starts 1.05 before the whistle whenever the
      screen opens, and a match opened again inside it shows the men of the minute it opened at. */

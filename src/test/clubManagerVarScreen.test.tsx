@@ -21,10 +21,20 @@
  *   Skip to the whistle during a review, and leaving the site mid review and coming back;
  *   reduced motion: a short wait, nothing moving, and the decision up as long as with motion;
  *   a review in the last minutes of a half opens before the whistle and its penalty is still played whole.
+ *
+ * Round 1302 added, each on a real half a scan on a runner found (result r1302-scan and r1302-scan4):
+ *   the case the reviewer saw on seed 2042 (my goal at 44, theirs ruled out at 45), kept as its own case: it fails
+ *     on the screen Release AT shipped with "the review opened before its own minute: expected 44";
+ *   a goal ruled out at the whistle or one clock place before it is DRAWN before its card when it has the end of
+ *     the half to itself (it was a card on its own until this round);
+ *   an own goal the minute after a ruled out goal; a review in the same minute as the other side's injury, red
+ *     card and (in a second half) substitution; a review in extra time (a Champions League knockout night).
+ * Not here because the engine does not hold them: two reviews in one minute or in back to back minutes (none in
+ * 7,500 first and 7,500 second halves).
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { startCareer, playNextEntry, liveFeed, startSecondHalf } from '@/lib/clubManager';
+import { startCareer, playNextEntry, liveFeed, startSecondHalf, startExtraTime } from '@/lib/clubManager';
 import type { CareerState, LiveFeedEvent, LiveMatch } from '@/lib/clubManager';
 import { LiveSimScreen } from '@/components/club-manager/LiveSimScreen';
 
@@ -441,12 +451,19 @@ describe('Club Manager: the review screen', () => {
   }, 180000);
 
   it.each([
-    { what: 'injury', match: 0, hint: 3861, says: 'Injury: ' },
-    { what: 'red', match: 1, hint: 3827, says: 'RED CARD! ' },
-  ] as const)("a review in the same minute as the other side's $what: both are told, and the card sits over nothing", async ({ what, match, hint, says }) => {
+    { what: 'injury', match: 2, hint: 3046, says: 'Injury: ', shared: false },
+    { what: 'injury', match: 0, hint: 3861, says: 'Injury: ', shared: true },
+    { what: 'red', match: 1, hint: 3827, says: 'RED CARD! ', shared: false },
+  ] as const)("a review in the same minute as the other side's $what (a chance at the same place: $shared): both are told, and the card sits over nothing", async ({ what, match, hint, says, shared }) => {
+    /* A ruled out goal is drawn when it has its clock place to itself. Where a real chance shares the place the
+       pitch plays the real one (one action a place) and the review is shown by its card alone: the opener holds
+       such a half on seed 3861 (a shot of mine, their goal ruled out and my injury, all at 15). That row is
+       played too, and is not asked to draw the ruled out goal. */
+    const sharesPlace = (feed: LiveFeedEvent[], r: LiveFeedEvent) => r.review!.decision === 'disallowed' && feed.some(e => isChance(e) && place(e) === place(r));
     const h = half(match, hint, feed => {
       const all = reviewsOf(feed), r = all[0];
-      return all.length === 1 && r.minute >= 2 && r.minute <= 40 && !r.plus && feed.some(e => e.kind === what && e.side !== r.side && place(e) === place(r)) ? r : null;
+      if (all.length !== 1 || r.minute < 2 || r.minute > 40 || r.plus || !feed.some(e => e.kind === what && e.side !== r.side && place(e) === place(r))) return null;
+      return sharesPlace(feed, r) === shared ? r : null;
     });
     const v = h.review, id = v.review!.id;
     const other = h.feed.find(e => e.kind === what && e.side !== v.side && place(e) === place(v))!;
@@ -456,7 +473,7 @@ describe('Club Manager: the review screen', () => {
     nothingUnder(frames, ruledOutIds(h.feed));
     expect(frames.some(f => f.text.includes(`${says}${other.text}`)), `the ${what} of the same minute was never told`).toBe(true);
     const last = frames.map(cardUp).lastIndexOf(true), kick = kickOf(h.live, v);
-    if (v.review!.decision === 'disallowed') expect(frames.slice(0, frames.findIndex(cardUp)).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the ruled out goal was not drawn before its review').toBe(true);
+    if (v.review!.decision === 'disallowed' && !shared) expect(frames.slice(0, frames.findIndex(cardUp)).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the ruled out goal was not drawn before its review').toBe(true);
     /* Release AR's rule, beside a review: a penalty the review gives and that goes in keeps its net, its scorer card and its (P). */
     if (v.review!.decision === 'awarded' && kick?.goal) {
       const after = frames.slice(last + 1), card = after.find(f => f.goalCard !== null);
@@ -505,4 +522,58 @@ describe('Club Manager: the review screen', () => {
       expect(card?.goalCard).toContain('(P)');
     }
   }, 180000);
+
+  /** Extra time with a review in it. Only a Champions League knockout tie plays extra time, so this walks a fresh
+   *  Arsenal career on to the second leg of its first knockout tie (34 entries on the day it was found) and searches
+   *  that night: level on aggregate at 90, then a review after it. Found by a scan on a runner (r1302-scan4): 397
+   *  of 2,500 seeds go to extra time and 29 of those hold a review. */
+  function extraTime(hint: number, want: (feed: LiveFeedEvent[], live: LiveMatch) => LiveFeedEvent | null | undefined): Half {
+    let pre = seeded(4107, () => startCareer('Arsenal'));
+    for (let step = 1; step < 90; step++) {
+      const next = pre.calendar[pre.week];
+      if (!next) break;
+      if (next.type === 'uclKo' && (next.uclLeg === 2 || !next.uclLeg)) break;
+      pre = seeded(4107 * 31 + step, () => playNextEntry(pre, { skipHalftime: true, noCoach: true })).state;
+    }
+    expect(pre.calendar[pre.week]?.type, 'the career never reached a knockout night that can go to extra time').toBe('uclKo');
+    for (const seed of [hint, ...Array.from({ length: 2500 }, (_, i) => 1700 + i)]) {
+      const stop = seeded(seed, () => playNextEntry(pre, { varReviews: true }));
+      if (stop.kind !== 'halftime' || !stop.state.live || stop.state.live.varReviews !== true) continue;
+      const on = seeded(seed + 500000, () => startSecondHalf(stop.state));
+      const extra = on ? seeded(seed + 900000, () => startExtraTime(on)) : null;
+      if (!extra?.live) continue;
+      const feed = liveFeed(extra.live), review = want(feed.filter(e => e.minute > 90), extra.live);
+      if (review) return { career: structuredClone(extra), review, feed, live: extra.live, whistle: extra.live.et?.to ?? 120, seed };
+    }
+    throw new Error('no extra time of that knockout night holds the review this case is about');
+  }
+
+  it.each([
+    { call: 'disallowed', hint: 1760 },
+    { call: 'awarded', hint: 1927 },
+  ] as const)('a review in extra time ($call): its own card, over nothing, on the score the engine has', async ({ call, hint }) => {
+    const h = extraTime(hint, feed => {
+      const all = reviewsOf(feed), r = all[0];
+      if (all.length !== 1 || r.review!.decision !== call || r.minute < 93 || r.minute > 116 || r.plus) return null;
+      /* An awarded penalty that goes in: the feed has its goal, by the same man in the same minute. */
+      return call === 'awarded' && !feed.some(e => e.kind === 'goal' && e.side === r.side && e.minute === r.minute && e.text === r.text) ? null : r;
+    });
+    const v = h.review, id = v.review!.id, before = scoreBy(h.feed, place(v) - 1);
+    const mounted = openAt(h, v.minute - 1);
+    expect(snap(mounted.container, 0).stage).toBe('extra');
+    const frames = await run(mounted, 16000, closedFor(id, 3600));
+    const first = frames.findIndex(cardUp), last = frames.map(cardUp).lastIndexOf(true);
+    expect(order(frames), 'the review was not shown exactly once').toEqual([id]);
+    nothingUnder(frames, ruledOutIds(h.feed));
+    expect(frames[first].minute, 'the review opened before its own minute').toBeGreaterThanOrEqual(v.minute);
+    expect(frames[first].cardText).toContain(`${v.text}, ${clubOf(h, v)}, ${v.minute}'`);
+    for (const f of frames.slice(first, last + 1)) expect(f.score, `the score under the review card at ${f.ms} ms`).toBe(before);
+    if (call === 'disallowed') expect(frames.slice(0, first).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the ruled out goal was not drawn before its review').toBe(true);
+    else {
+      const after = frames.slice(last + 1), card = after.find(f => f.goalCard !== null);
+      expect(after.some(f => f.motion === 'goal' && f.phase === 'net' && f.net), 'the kick of the penalty a review gave was not played after the card').toBe(true);
+      expect(card?.goalCard, 'the penalty a review gave got no scorer card').toContain(v.text);
+      expect(card?.goalCard).toContain('(P)');
+    }
+  }, 240000);
 });
