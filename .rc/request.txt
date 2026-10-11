@@ -1,0 +1,13 @@
+# Release AW part one, reviewer facts-fences, request C: the fences that need a served build, one at a time, on the pushed head 64d87aed
+#!serve
+#!playwright
+#!serial
+simMobileChrome: node scripts/simMobileChrome.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
