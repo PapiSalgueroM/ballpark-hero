@@ -1,0 +1,30 @@
+# Release AU proof, lane A, part 2 of 3: a plain build, three at a time
+#!build
+#!playwright
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerPracticeLifecycle: node scripts/simCareerPracticeLifecycle.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simDrillMotion: node scripts/simDrillMotion.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
+simArcadeShotFeedback: node scripts/simArcadeShotFeedback.mjs
+simTrainingFeedbackMotion: node scripts/simTrainingFeedbackMotion.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simCollegeGridShipped: node scripts/simCollegeGridShipped.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simGridEngine: node scripts/simGridEngine.mjs
+simGridRarity: node scripts/simGridRarity.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simPlayerAutocompleteInteraction: node scripts/simPlayerAutocompleteInteraction.mjs
+simHandleNames: node scripts/simHandleNames.mjs
