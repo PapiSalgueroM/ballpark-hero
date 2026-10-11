@@ -1,7 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
-import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
+import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
@@ -14785,8 +14785,14 @@ function drawSegment(
   /* Round 781: the goal counts first, because the board is sized off them,
      then the board the stretch is placed under (see BOARD), then the draws
      over (from, hi] with hi past `to` by the board. */
-  const nMine = poisson(segM);
-  const nOpp = poisson(segO);
+  /* Round 1303: each kind of review is played only when the match was kicked off with it.
+     Round 1303 fix: and a match that reviews goals draws them a little more often, by exactly what its reviews
+     rule out (cmVarGoalLift), so those goals come on top and goals a match stays level. The factor is exactly 1
+     in a match that does not review goals. */
+  const reviewKinds = cmVarKindsOf(live);
+  const goalLift = cmVarGoalLift(reviewKinds);
+  const nMine = poisson(segM * goalLift);
+  const nOpp = poisson(segO * goalLift);
   const period = periodEnding(live, to);
   const roll = period ? ri(0, BOARD[period].roll) : 0;
   const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;
@@ -14794,8 +14800,6 @@ function drawSegment(
   const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
   const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
   const reviewKey = `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}:${from}:${to}`;
-  /* Round 1303: each kind of review is played only when the match was kicked off with it. */
-  const reviewKinds = cmVarKindsOf(live);
   const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
   if (myReview) me.goals = myReview.goals;
   const oppStart = oppAt(live, from);

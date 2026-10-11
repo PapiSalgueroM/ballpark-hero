@@ -3,20 +3,24 @@
  *
  * In: scripts/data/cmVarRates.json (real football), cmVarCompetitions.json (who uses reviews in 2026-27),
  *     cmVarEngine.json (the engine, measured on a runner).
- * Engine figures: 6780 league matches, runner result r1218-b1, head b6d1cf80.
+ * Engine figures: 6780 league matches, runner result r1303-fx-measure, head b4d93edc.
  *
  * THE STANDARD FOR A RATE (Round 1303): a rate is a parameter of the match engine, never printed as a statistic
  * of a real league. It stands on at least two independent publishers, each counting at least one full season of
  * a top division under video review, whose per match figures agree within a factor of 2, and it is derived
  * from the LOWEST of them. A quantity one publisher counted, or whose readings do not agree, is refused.
- * OWED (goals-level holds goal, penalties-total holds penalty): see owed in scripts/data/cmVarRates.json. A kind an open entry holds is not played.
- * KINDS (Round 1303): goal not played (off in the ledger; held by goals-level), penalty not played (off in the ledger; held by penalties-total). No kind is played, so CM_VAR_LIVE stays false.
+ * OWED (penalties-total holds penalty): see owed in scripts/data/cmVarRates.json. A kind an open entry holds is not played.
+ * KINDS (Round 1303): goal PLAYED, penalty not played (off in the ledger; held by penalties-total).
  *
  * Goals ruled out after a review: 6 readings by 4 publishers, who count DIFFERENT leagues and seasons: 23 in 306 (lfp-ligue1-2023-24), 29 in 380 (pieri-seriea-2017-18), 31 in 380 (agi-seriea-2017-18), 47 in 380 (espn-pl-2024-25), 50 in 380 (espn-pl-2023-24), 55 in 380 (espn-pl-2022-23).
  *   The highest is 1.926 times the lowest. The lowest, 23 in 306 (lfp-ligue1-2023-24) = 0.075163 a match, is derived from; the range runs to 0.144737.
- *   The engine draws 2.3895 goals a match a review can look at (no penalty, no direct free kick).
- *   goalReview = 0.075163 / 2.3895 = 0.031456 a goal. overturn = 1 and penaltyReview = 0: no publisher
- *   counts reviews that end with the call standing by kind of call, so the game shows none.
+ *   The engine draws 2.7122 goals a match, 2.3891 of them goals a review can look at (no penalty, no direct
+ *   free kick): a share of 0.880872. Its goals are calibrated on goals that COUNTED, which in real football are
+ *   already net of reviews, so the goals a review rules out are drawn ON TOP: a match that reviews goals draws
+ *   them 1 / (1 - share x goalReview x overturn) times as often (cmVarGoalLift) and goals a match stays level.
+ *   For each goal that counts and could have been looked at, 0.075163 / 2.3891 = 0.031461 are ruled out; for each goal
+ *   the engine DRAWS that is goalReview = 0.031461 / (1 + 0.880872 x 0.031461) = 0.030613. overturn = 1 and
+ *   penaltyReview = 0: no publisher counts reviews that end with the call standing by kind of call, so the game shows none.
  * Penalties awarded after a review: 7 readings by 5 publishers, who count DIFFERENT leagues and seasons: 25 in 380 (espn-pl-2024-25), 26 in 380 (espn-pl-2022-23), 28 in 380 (espn-pl-2023-24), 23 in 306 (lfp-ligue1-2023-24), 34 in 380 (agi-seriea-2017-18), 35 in 380 (pieri-seriea-2017-18), 40 in 306 (ligainsider-bundesliga-2025-26).
  *   The highest is 1.987 times the lowest. The lowest, 25 in 380 (espn-pl-2024-25) = 0.065789 a match, is derived from; the range runs to 0.130719.
  *   The engine awards 18.252 penalties a match per unit of rate (measured at 0.004 a foul).
@@ -25,7 +29,11 @@
  * All penalties of a season (Round 1302, the band a match with reviews on is held against): Serie A 2017-18, counted by 2 publishers: 120 in 380 (agi-seriea-2017-18) and 126 in 380 (pieri-seriea-2017-18).
  *   0.315789 to 0.331579 a match. scripts/simCmVar.mjs holds the engine's total against it.
  */
-export const CM_VAR_RATES = { goalReview: 0.031456, overturn: 1, penaltyReview: 0, missedFoulReview: 0.003605, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
+export const CM_VAR_RATES = { goalReview: 0.030613, overturn: 1, penaltyReview: 0, missedFoulReview: 0.003605, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
+
+/** Round 1303 fix. The engine itself, measured (scripts/data/cmVarEngine.json): the share of the goals it draws
+ *  that a review can look at. cmVarGoalLift reads it, so the goals a review rules out come on top. */
+export const CM_VAR_ENGINE = { reviewableShare: 0.880872 } as const;
 
 /** Real football, a match: what the harness bands and the help text read. */
 export const CM_VAR_REAL = { goalsRuledOut: { low: 0.075163, high: 0.144737 }, penaltiesAwarded: { low: 0.065789, high: 0.130719 }, penaltiesTotal: { low: 0.315789, high: 0.331579 } } as const;
@@ -34,11 +42,11 @@ export const CM_VAR_REAL = { goalsRuledOut: { low: 0.075163, high: 0.144737 }, p
  *  has on (kinds in scripts/data/cmVarRates.json), each on a rate that meets the standard and held by no open
  *  owed entry. Turning a kind on is a line of that ledger and a run of the generator, never an edit here.
  *  While this list is empty the switch CM_VAR_LIVE stays false. */
-export const CM_VAR_KINDS: readonly ('goal' | 'penalty')[] = [];
+export const CM_VAR_KINDS: readonly ('goal' | 'penalty')[] = ['goal'];
 
 /** Round 1302. What the rates ledger still owes (its open owed entries). An open entry holds the kinds of
  *  review it names: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */
-export const CM_VAR_HOLDS: readonly string[] = ['goals-level', 'penalties-total'];
+export const CM_VAR_HOLDS: readonly string[] = ['penalties-total'];
 
 /** Round 1303. The owed entries a ruling closed: each carries who ruled, when and in what words in the ledger. */
 export const CM_VAR_ACCEPTED: readonly string[] = ['recent-seasons'];

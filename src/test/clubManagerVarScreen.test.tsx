@@ -97,7 +97,11 @@ function half(k: number, hint: number, want: (feed: LiveFeedEvent[], live: LiveM
     if (res.kind !== 'halftime' || !res.state.live || res.state.live.varReviews !== true) continue;
     const feed = liveFeed(res.state.live);
     const review = want(feed, res.state.live);
-    if (review) return { career: structuredClone(res.state), review, feed, live: res.state.live, whistle: 45 + (res.state.live.added?.h1 ?? 0), seed };
+    if (review) {
+      /* A hint that no longer holds its case costs up to 2,500 halves a run: say so, so it gets a new one. */
+      if (seed !== hint) console.info(`clubManagerVarScreen: STALE HINT, league match ${k + 1} hint ${hint}: the case was found on seed ${seed}`);
+      return { career: structuredClone(res.state), review, feed, live: res.state.live, whistle: 45 + (res.state.live.added?.h1 ?? 0), seed };
+    }
   }
   throw new Error(`no first half of league match ${k + 1} holds the review this case is about`);
 }

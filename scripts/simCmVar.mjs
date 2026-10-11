@@ -148,10 +148,12 @@ const controls = {
   /* Round 1302: the generated rates no longer say the ledger holds the switch for the season total of penalties,
      while the engine is outside that band. */
   penaltyband: { file: rates, from: "'penalties-total'", to: "'penalties-total-let-go'", test: 'bands' },
-  /* Round 1303: the generated rates no longer say the ledger holds the goal kind for what it does to goals a match. */
-  goalslevel: { file: rates, from: "'goals-level'", to: "'goals-level-let-go'", test: 'bands' },
-  /* Round 1303: the game handed the goal kind while the ledger holds it. */
-  playsgoal: { file: rates, from: /CM_VAR_KINDS: readonly \('goal' \| 'penalty'\)\[\] = \[[^\]]*\]/, to: "CM_VAR_KINDS: readonly ('goal' | 'penalty')[] = ['goal']", test: 'bands' },
+  /* Round 1303 fix: the goals a review rules out are no longer drawn on top (the lift taken out of a match that
+     reviews goals), so the goal kind alone takes its goals out of the match again. This replaces the controls
+     goalslevel and playsgoal, which twisted the owed entry goals-level: that entry is closed and gone. */
+  nolift: { file: helper, from: '  return 1 / (1 - CM_VAR_ENGINE.reviewableShare * CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);', to: '  return 1;', test: 'bands' },
+  /* Round 1303 fix: the lift given to a match that does not review goals (kicked off with the penalty kind alone). */
+  liftkind: { file: helper, from: "  if (!kinds.includes('goal')) return 1;", to: '  if (kinds.length === 0) return 1;', test: 'kinds' },
   /* Round 1303, the kinds: the engine reviewing goals in a match kicked off without the goal kind, giving penalties in
      one kicked off without the penalty kind, and kicking off without saving the list. */
   kindgoal: { file: engine, from: "  const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;", to: "  const myReview = live.varReviews ? settleGoalReviews(me.goals, 'me', reviewKey) : null;", test: 'kinds' },
@@ -501,6 +503,12 @@ async function main() {
           assert.deepEqual(idsOf(G, 'goal'), idsOf(A, 'goal'), 'The goal kind alone reviews exactly the goals every kind reviews');
           assert.deepEqual(idsOf(P, 'goal'), [], 'The penalty kind alone shows no goal review');
           assert.equal(G.some(e => e.kind === 'shot' && e.review?.decision === 'awarded'), false, 'The goal kind alone plays no kick a review gave');
+          /* Round 1303 fix: the lift belongs to the goal kind (cmVarGoalLift). A match kicked off with the penalty
+             kind alone draws the goals of the match nobody asks a review in, and adds only the penalties a review
+             gave that went in. Control liftkind. */
+          const givenAndScored = g => !!g.penalty && P.some(e => e.kind === 'shot' && e.goal && e.review?.decision === 'awarded' && e.minute === g.minute && e.who === g.name);
+          const drawnGoals = live => [live.h1My, live.h1Opp].map(list => (list ?? []).filter(g => !givenAndScored(g)).map(g => `${g.minute}:${g.name}`));
+          assert.deepEqual(drawnGoals(pen.state.live), drawnGoals(plain.state.live), 'A match kicked off with the penalty kind alone draws the goals of the match nobody asks a review in');
           /* A save closed at half time and opened again: the second half plays the saved list. */
           const finish = stop => withCmVarSeed(seed + 7000, () => cm.resumeMatch(clone(stop.state)));
           const second = play => play.filter(e => e.minute > 45);
@@ -546,7 +554,6 @@ async function main() {
         assert.ok(inside(ruled, d.goals), `Goals ruled out a match ${r4(ruled)} is outside real football's ${r4(d.goals.low)} to ${r4(d.goals.high)} (headroom ${BANDS.headroom})`);
         assert.ok(inside(awarded, d.pens), `Penalties awarded a match ${r4(awarded)} is outside real football's ${r4(d.pens.low)} to ${r4(d.pens.high)} (headroom ${BANDS.headroom})`);
         assert.equal(L.goalConfirmed + L.penaltyConfirmed, 0, `The game showed ${L.goalConfirmed} goal and ${L.penaltyConfirmed} penalty reviews that ended with the call standing, and no publisher counts those by kind of call`);
-        assert.ok(Math.abs(gap) <= BANDS.goalGap, `Reviews moved goals a match by ${r4(gap)}, past the ${BANDS.goalGap} the family allows a rule to move them`);
         const share = L.penaltyAwarded ? L.awardedScored / L.penaltyAwarded : 0;
         metrics.bands.awardedScoredShare = r4(share);
         assert.ok(Math.abs(share - d.law.scores) <= BANDS.scoredShare, `Review penalties went in ${r4(share)} of the time, more than ${BANDS.scoredShare} from the engine penalty law's ${d.law.scores}`);
@@ -563,17 +570,30 @@ async function main() {
         metrics.bands.penaltiesTotalBand = { low: r4(band.low * (1 - BANDS.headroom)), high: r4(band.high * (1 + BANDS.headroom)), inside: insideTotal, held };
         assert.ok(insideTotal || held, `Penalties a match with reviews on ${r4(total)} (without: ${r4(totalOff)}) is outside real football's ${r4(band.low)} to ${r4(band.high)} (headroom ${BANDS.headroom}) and the ledger does not hold the switch for it (owed penalties-total)`);
         assert.ok(!(insideTotal && held), `Penalties a match with reviews on ${r4(total)} is inside real football's ${r4(band.low)} to ${r4(band.high)} (headroom ${BANDS.headroom}): the ledger's owed entry penalties-total is stale, take it out`);
+        /* Round 1303 fix. GOALS A MATCH WITH EVERY KIND STAGED. Until this fix the staged pair sat inside the 0.05
+           by two errors that cancelled: the goals a review ruled out were taken from the match (about 0.075 down)
+           and the penalties a review gave put about 0.05 back. The goals a review rules out are now drawn on top,
+           so the goal kind alone is level (asserted below with nothing to excuse it), and what is left with every
+           kind staged is the penalty kind's own doing: about 0.05 a match UP, at the band's edge. The game does not
+           play that kind; the same owed entry that holds it for penalties a match holds it for this. So: outside
+           the band and the penalty kind not held is red. Never a wider band. */
+        const insidePairGap = Math.abs(gap) <= BANDS.goalGap;
+        metrics.bands.everyKindLevel = { band: BANDS.goalGap, inside: insidePairGap, penaltyKindHeld: held };
+        assert.ok(insidePairGap || held, `With every kind staged reviews moved goals a match by ${r4(gap)}, past the ${BANDS.goalGap} the family allows a rule to move them, and the ledger does not hold the penalty kind for it (owed penalties-total): with the goal kind level, a review's penalties are what moves them`);
         /* Round 1303, the lead's decisions 2 and 6. THE GOAL KIND ALONE, which is what the game would play with
            penalties by review off: the same fleet again, asked for the goal kind only, each match beside the same
            match without reviews. Its goals ruled out a match must sit inside real football's range like the staged
-           fleet's, and it must give no penalty. And GOALS A MATCH: a review that rules a goal out takes a goal away
-           and, with the penalty kind off, nothing gives one back, so the goal kind alone moves goals a match by
-           about the goals it rules out (0.075 at the ledger's lowest reading), which is past the 0.05 the family
-           allows a rule to move them (BANDS.goalGap). MEASURED, see the header. So the same rule as for penalties:
-           outside the band the ledger must say so in an owed entry (goals-level), open (the goal kind is held off)
-           or accepted with the lead's ruling written into it; inside the band an open entry is stale. And the list
-           the game is handed (the generated CM_VAR_KINDS) may not hold a kind the measured engine is outside its
-           band for. Never a wider band. */
+           fleet's, and it must give no penalty. And GOALS A MATCH. As Round 1303 first built it, a review that
+           ruled a goal out took a goal away and nothing gave one back, so the goal kind alone moved goals a match
+           by about the goals it ruled out (-0.066 to -0.088 on ten fleets), past the 0.05 the family allows a rule
+           to move them (BANDS.goalGap), and an owed entry (goals-level) held the kind off. The fix pass closed that
+           entry in the engine: a match that reviews goals draws them a little more often, by exactly what its
+           reviews rule out (cmVarGoalLift), so those goals come ON TOP and the level stays. MEASURED, see the
+           header. The rule is unchanged and has nothing left to excuse it: the goal kind alone must sit inside the
+           band (an owed entry goals-level, open or accepted, would excuse it and there is none; if one ever comes
+           back while the engine is inside, it is stale). And the list the game is handed (the generated
+           CM_VAR_KINDS) may not hold a kind the measured engine is outside its band for. Never a wider band.
+           Control nolift takes the lift away and must go red here. */
         const goalOnly = playFleet(real, { seeds, paired: true, reviews: ['goal'] });
         const G = goalOnly.byKind.league, perG = n => n / G.matches;
         const ruledG = perG(G.ruledOut), gapG = (G.goals - G.goalsOff) / G.matches;
@@ -591,6 +611,7 @@ async function main() {
         assert.ok(!(insideGap && heldGoal), `With the goal kind alone reviews move goals a match by ${r4(gapG)}, inside the ${BANDS.goalGap} the family allows: the ledger's owed entry goals-level is stale, take it out`);
         assert.ok(!plays.includes('goal') || insideGap || ruledGoal, `The game plays the goal kind while it moves goals a match by ${r4(gapG)}, past the ${BANDS.goalGap} the family allows, with no ruling in the ledger`);
         assert.ok(!plays.includes('penalty') || insideTotal, `The game plays the penalty kind while penalties a match with reviews on (${r4(total)}) is outside real football's ${r4(band.low)} to ${r4(band.high)}`);
+        assert.ok(!plays.includes('penalty') || insidePairGap, `The game plays the penalty kind while reviews with every kind staged move goals a match by ${r4(gap)}, past the ${BANDS.goalGap} the family allows`);
       },
       /* Round 1218 fix (review finding 6, fix-AT section 7 item 3). A review is dealt from its own keyed generator,
          never from the match's random stream. Each helper is called inside a seeded stretch: the stream's next two

@@ -30,9 +30,10 @@ vi.mock('@/lib/completions', () => ({
 }));
 
 const CONTROL = process.env.CM_VAR_LIVE_CONTROL === 'on';
-/* Round 1303: `switch` turns the switch on and leaves the kinds as the ledger has them. While the ledger plays no
-   kind of review the game then still asks for nothing, so every case below stays GREEN under it: the switch alone
-   lights nothing. The day the ledger plays a kind this mode goes red like `on`, and the cases become the lit rule. */
+/* Round 1303: `switch` turns the switch on and leaves the kinds as the ledger has them. While the ledger played no
+   kind of review the game then still asked for nothing and every case below stayed green under it. Since the fix
+   pass of Round 1303 the ledger plays the goal kind, so this mode goes RED like `on`: the switch is the one thing
+   between this build and goals being reviewed. */
 const SWITCH_ONLY = process.env.CM_VAR_LIVE_CONTROL === 'switch';
 if (CONTROL || SWITCH_ONLY) vi.doMock('@/lib/clubManagerVarLive', () => ({ CM_VAR_LIVE: true }));
 /* Round 1303: the kind of review is data (CM_VAR_KINDS, generated from the rates ledger) and the list is empty
@@ -96,7 +97,9 @@ describe('Club Manager: VAR ships dark', () => {
     expect(cmVarGameAsk(true, [])).toEqual({});
     expect(cmVarGameAsk(true, ['goal'])).toEqual({ varReviews: ['goal'] });
     expect(cmVarGameAsk(true)).toEqual(CM_VAR_KINDS.length ? { varReviews: CM_VAR_KINDS } : {});
-    if (!CONTROL) expect(CM_VAR_KINDS, 'the ledger holds both kinds of review (owed goals-level and penalties-total), so the generated list is empty').toEqual([]);
+    /* Round 1303 fix: the goal kind is on in the ledger (its owed entry goals-level closed in the engine) and
+       penalties-total still holds the penalty kind, so the generated list is the goal kind alone. */
+    expect(CM_VAR_KINDS, 'the ledger plays the goal kind and holds the penalty kind (owed penalties-total)').toEqual(['goal']);
   });
 
   it('a live kick off through the hook asks for no review', async () => {

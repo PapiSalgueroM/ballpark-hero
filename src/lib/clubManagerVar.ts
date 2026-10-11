@@ -1,5 +1,5 @@
 import { keyedRng } from '@/lib/keyedRng';
-import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE, CM_VAR_KINDS } from '@/data/clubManagerVarRates';
+import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE, CM_VAR_KINDS, CM_VAR_ENGINE } from '@/data/clubManagerVarRates';
 
 /** Round 1218: the rates and the coverage are DERIVED from real football by scripts/genCmVarRates.mjs
  * (scripts/data/cmVarRates.json, cmVarCompetitions.json) and read from the generated module. No rate is typed here.
@@ -40,6 +40,17 @@ export function cmVarKindsOf(live: { varReviews?: true; varKinds?: readonly CmVa
  *  nothing at all while the switch is off or no kind is on. */
 export function cmVarGameAsk(switchOn: boolean, kinds: readonly CmVarKind[] = CM_VAR_KINDS): { varReviews?: readonly CmVarKind[] } {
   return switchOn && kinds.length > 0 ? { varReviews: kinds } : {};
+}
+
+/** Round 1303 fix (owed goals-level, closed in the engine). The engine's goals are calibrated on goals that COUNTED,
+ *  and real football's counted goals are already net of what reviews took away. So a match that reviews goals draws
+ *  its goals a little more often, by exactly what its reviews rule out: those goals come ON TOP and goals a match
+ *  stays where the engine without reviews has it. p is the chance a drawn goal is ruled out (the share a review can
+ *  look at, times the review rate, times the overturn rate); drawing 1 / (1 - p) times as often and ruling out p of
+ *  them leaves the same count. A match that does not review goals is not touched (the factor is exactly 1). */
+export function cmVarGoalLift(kinds: readonly CmVarKind[]): number {
+  if (!kinds.includes('goal')) return 1;
+  return 1 / (1 - CM_VAR_ENGINE.reviewableShare * CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);
 }
 
 const CUP_STAGES = ['R16', 'QF', 'SF', 'F'], UCL_STAGES = ['group', 'R16', 'QF', 'SF', 'F'];

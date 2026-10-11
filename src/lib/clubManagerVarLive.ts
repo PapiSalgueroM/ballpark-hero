@@ -43,12 +43,15 @@
  * switch may be true only while CM_VAR_KINDS is not empty (scripts/simCmVarLedger.mjs, control owedlive). Turning
  * it on alone asks for nothing: with an empty list the game asks kickOff for no review.
  *   penalties-total still holds the penalty kind (see above).
- *   goals-level, new, holds the goal kind: measured on ten fleets, the goal kind ALONE moves goals a match by
- *     0.066 to 0.088 down (a goal a review rules out is a goal fewer and nothing gives one back), outside the 0.05
- *     the balance harnesses let a rule move. The entry says the three ways it closes; one is the lead's ruling.
- * When a kind is played: this line, the What's New entry, the lit rule in the unit file (its mode `switch` goes
- * red that day, as it must), then the lit walk (node scripts/qa/cmVarLit.mjs on goal stages it in a scratch
- * checkout today). docs/audits/ROUND-1303-NOTES.md has the list.
+ *   goals-level held the goal kind: measured on ten fleets, the goal kind ALONE moved goals a match by 0.066 to
+ *     0.088 down (a goal a review ruled out was a goal fewer and nothing gave one back), outside the 0.05 the
+ *     balance harnesses let a rule move. The fix pass of Round 1303 closed it the third way the entry named, in
+ *     the engine: a match that reviews goals draws them a little more often, by exactly what its reviews rule out
+ *     (cmVarGoalLift in src/lib/clubManagerVar.ts), so those goals come on top and goals a match stays level
+ *     (scripts/simCmVar.mjs, bands, and its control nolift). The entry is gone and the goal kind is on in the
+ *     ledger: CM_VAR_KINDS is ['goal'].
+ * The switch itself is the last commit of that pass: this line, the What's New entry, the lit rule in the unit
+ * file, then the walk on the plain build. docs/audits/ROUND-1303-NOTES.md has the list.
  *
  * Kept in its own file with no import so the help text, which several harnesses render with a plain
  * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it.

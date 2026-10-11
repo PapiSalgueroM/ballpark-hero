@@ -20,9 +20,15 @@
  *   one quantity in one competition in one season, that two publishers each counted, the lower count first.
  *   goals:      the engine draws goals, then a review may take one away. A goal can be reviewed when it is
  *               not a penalty and not a direct free kick. So
- *                 ruledOutPerGoal = target goals ruled out a match / reviewable drawn goals a match (engine)
+ *                 perCounted = target goals ruled out a match / reviewable goals a match (engine, no reviews)
+ *               Round 1303 fix: the engine's goals are calibrated on goals that COUNTED, which in real football
+ *               are already net of reviews. So the goals a review rules out are drawn ON TOP: a match that reviews
+ *               goals draws them 1 / (1 - share x goalReview x overturn) times as often, share being the part of
+ *               the engine's goals a review can look at (measured), and the rate is the chance for each DRAWN goal:
+ *                 goalReview = perCounted / (1 + share x perCounted)
+ *               which rules out the target's goals a match and leaves goals a match where they are.
  *               No publisher counts reviews that end with the goal standing by kind of call, so the game
- *               shows none: goalReview = ruledOutPerGoal, overturn = 1, penaltyReview = 0.
+ *               shows none: overturn = 1, penaltyReview = 0.
  *   penalties:  a review can turn a foul the referee let go into a penalty. Not every foul can become one
  *               (the other side needs a chance in that stretch to hang the kick on, one a side a stretch), so
  *                 missedFoulReview = target penalties awarded a match / awards a match per unit of rate (engine)
@@ -177,10 +183,21 @@ export function derive() {
   /* ONE list: the competitions kickOff covers and the names the help prints are the same rows, in the same order. */
   const covered = comps.rows.filter(r => r.verdict === 'yes');
   const coverage = Object.fromEntries(covered.map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
+  /* Round 1303 fix (owed goals-level, closed its third way: the engine). The engine's goals are calibrated on goals
+     that COUNTED, and real football's counted goals are already net of what reviews took away. So a match that
+     reviews goals draws them a little more often, by exactly what its reviews rule out, and the goals that count
+     stay level (cmVarGoalLift in src/lib/clubManagerVar.ts). The share of drawn goals a review can look at is
+     measured; perCounted is the lowest reading over the goals that count and could have been looked at; and the
+     rate handed to the engine is the chance for each goal it DRAWS, perCounted / (1 + share * perCounted), which
+     gives the lowest reading's goals ruled out a match and leaves goals a match where they are. */
+  if (!(engine.goalsPerMatch > 0 && engine.reviewableGoalsPerMatch > 0 && engine.reviewableGoalsPerMatch <= engine.goalsPerMatch)) throw new Error('genCmVarRates: scripts/data/cmVarEngine.json does not carry goalsPerMatch and reviewableGoalsPerMatch (run scripts/measureCmVarEngine.mjs on a runner and adopt it)');
+  const share = n6(engine.reviewableGoalsPerMatch / engine.goalsPerMatch);
+  const perCounted = goals.low / engine.reviewableGoalsPerMatch;
   return {
     engine, goals, pens, total, holds, accepted, kinds, played: kinds.filter(k => k.played).map(k => k.name), law, coverage, names: covered.map(helpName),
+    share, perCounted: n6(perCounted),
     rates: {
-      goalReview: n6(goals.low / engine.reviewableGoalsPerMatch), overturn: 1, penaltyReview: 0,
+      goalReview: n6(perCounted / (1 + share * perCounted)), overturn: 1, penaltyReview: 0,
       missedFoulReview: n6(pens.low / engine.awardsPerMatchPerUnitRate), penaltyScores: law.scores, penaltyOnTarget: law.onTarget,
     },
   };
@@ -210,9 +227,13 @@ export function generatedSource() {
     ' *',
     ` * Goals ruled out after a review: ${every(g)}.`,
     ` *   The highest is ${g.spread.toFixed(3)} times the lowest. The lowest, ${frac(g.target)} = ${n6(g.low)} a match, is derived from; the range runs to ${n6(g.high)}.`,
-    ` *   The engine draws ${e.reviewableGoalsPerMatch} goals a match a review can look at (no penalty, no direct free kick).`,
-    ` *   goalReview = ${n6(g.low)} / ${e.reviewableGoalsPerMatch} = ${d.rates.goalReview} a goal. overturn = 1 and penaltyReview = 0: no publisher`,
-    ' *   counts reviews that end with the call standing by kind of call, so the game shows none.',
+    ` *   The engine draws ${e.goalsPerMatch} goals a match, ${e.reviewableGoalsPerMatch} of them goals a review can look at (no penalty, no direct`,
+    ` *   free kick): a share of ${d.share}. Its goals are calibrated on goals that COUNTED, which in real football are`,
+    ' *   already net of reviews, so the goals a review rules out are drawn ON TOP: a match that reviews goals draws',
+    ' *   them 1 / (1 - share x goalReview x overturn) times as often (cmVarGoalLift) and goals a match stays level.',
+    ` *   For each goal that counts and could have been looked at, ${n6(g.low)} / ${e.reviewableGoalsPerMatch} = ${d.perCounted} are ruled out; for each goal`,
+    ` *   the engine DRAWS that is goalReview = ${d.perCounted} / (1 + ${d.share} x ${d.perCounted}) = ${d.rates.goalReview}. overturn = 1 and`,
+    ' *   penaltyReview = 0: no publisher counts reviews that end with the call standing by kind of call, so the game shows none.',
     ` * Penalties awarded after a review: ${every(p)}.`,
     ` *   The highest is ${p.spread.toFixed(3)} times the lowest. The lowest, ${frac(p.target)} = ${n6(p.low)} a match, is derived from; the range runs to ${n6(p.high)}.`,
     ` *   The engine awards ${e.awardsPerMatchPerUnitRate} penalties a match per unit of rate (measured at ${e.probeRate} a foul).`,
@@ -222,6 +243,10 @@ export function generatedSource() {
     ` *   ${n6(d.total.low)} to ${n6(d.total.high)} a match. scripts/simCmVar.mjs holds the engine's total against it.`,
     ' */',
     `export const CM_VAR_RATES = { goalReview: ${d.rates.goalReview}, overturn: ${d.rates.overturn}, penaltyReview: ${d.rates.penaltyReview}, missedFoulReview: ${d.rates.missedFoulReview}, penaltyScores: ${d.rates.penaltyScores}, penaltyOnTarget: ${d.rates.penaltyOnTarget} } as const;`,
+    '',
+    '/** Round 1303 fix. The engine itself, measured (scripts/data/cmVarEngine.json): the share of the goals it draws',
+    ' *  that a review can look at. cmVarGoalLift reads it, so the goals a review rules out come on top. */',
+    `export const CM_VAR_ENGINE = { reviewableShare: ${d.share} } as const;`,
     '',
     '/** Real football, a match: what the harness bands and the help text read. */',
     `export const CM_VAR_REAL = { goalsRuledOut: { low: ${n6(g.low)}, high: ${n6(g.high)} }, penaltiesAwarded: { low: ${n6(p.low)}, high: ${n6(p.high)} }, penaltiesTotal: { low: ${n6(d.total.low)}, high: ${n6(d.total.high)} } } as const;`,
