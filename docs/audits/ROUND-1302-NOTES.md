@@ -116,8 +116,11 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
   extra time (only a Champions League knockout tie plays extra time: a fresh Arsenal career walked to the
   second leg of its first knockout tie); and the two late goals with reduced motion.
 - **What the engine does not hold**, so nobody can play it on a real half: two reviews in one minute, or in
-  back to back minutes (none in 7,500 first and 7,500 second halves searched). By reading: one review at a
-  time, each ruled out goal drawn before its own card, the second after the first has closed.
+  back to back minutes (none in 7,500 first and 7,500 second halves searched). Two goals ruled out in one
+  minute are played all the same, as ONE case of the screen test staged by hand, and it says so (a real half
+  with one goal ruled out, that review copied onto the other side in the same minute): one card at a time,
+  each ruled out goal drawn before its own card in its own net, the score never moving. Two reviews in back
+  to back minutes are still played nowhere.
 - **Not this round's, and live today with VAR off** (the run review measured it on halves with no review): a
   real goal in the last clock place of a first half is drawn and counted and never gets its scorer card, and of
   two goals in the last two places only one is drawn. For the Club Manager lane's list.
@@ -129,11 +132,14 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
   ledger owes is its open `owed` entries; the switch false while any is open; all 48 competitions as rows, an
   unknown row with a note; the help's names the rows that say yes, a late cup with its stage. Controls (each
   exits 1 and ends FIRED): thin, wiki, figure, missing, extra, onesource, receipt, handedit, highest, names,
-  owedlive, and from this round stage and unread.
+  owedlive, and from this round stage and unread. (`stage` asks for the Australia Cup named without its stage
+  anywhere in the help's list. Its first form asked for the cup as the last name of the list, and ended "DID
+  NOT FIRE", exit 3, the day the DFB-Pokal row was added after it: read a control's last line, not its code.)
 - `scripts/simCmVar.mjs`: Round 1218's outcomes, and in the bands the season total of penalties (control
   `penaltyband`; a caught control exits 0 and prints CAUGHT in this harness). Its coverage outcome reads the
   ledger, so the twelve new yes rows needed no hand there.
-- `src/test/clubManagerVarScreen.test.tsx`: 28 cases on real halves of the engine on the shipped rates. Under
+- `src/test/clubManagerVarScreen.test.tsx`: 29 cases, 28 on real halves of the engine on the shipped rates and
+  one staged by hand (two goals ruled out in one minute). Under
   the card of a ruled out goal it asks for the ball in the net THAT goal went into (the rule it had, "a goal
   stopped in a net", passed a card on somebody's real goal), and under any other card for no action at all.
 - `scripts/playCmVar.mjs`: 40 cases and 2 help views at 390 and 1280 on a LIT build (it exits 2 on a dark one),
@@ -155,7 +161,8 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
    from the generated file, so nobody types it), and the lit walk on the plain build.
 4. Still open on the screen, none of it reachable while the switch is off:
    - A review in a second half and one in extra time are held by the jsdom test only. The lit walk plays first
-     halves. Two reviews in one minute are played nowhere (the engine gave none in 15,000 halves).
+     halves. Two reviews in one minute are played by one hand staged case of the jsdom test and in no
+     browser (the engine gave none in 15,000 halves).
    - A penalty a review GIVES at the very end of a half whose last places real chances fill has not been looked
      at the way the ruled out goals were: its one case ("a review at the very end of a crowded half is still
      shown once") asks that the card comes once and the half ends on the engine's score, not what is under it.
