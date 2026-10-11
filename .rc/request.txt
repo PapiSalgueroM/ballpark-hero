@@ -1,0 +1,2 @@
+w0: node .rc/x/scanWalk.mjs 0 60000
+w1: node .rc/x/scanWalk.mjs 1 60000
