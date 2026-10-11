@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+head-run4: ENGINES=chromium node scripts/playClubManager.mjs
+head-run5: ENGINES=chromium node scripts/playClubManager.mjs
+head-run6: ENGINES=chromium node scripts/playClubManager.mjs
