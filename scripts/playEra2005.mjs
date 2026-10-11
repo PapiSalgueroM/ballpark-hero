@@ -63,7 +63,11 @@ const browser = await chromium.launch();
 
   console.log('2) Spain in 2005');
   say(await page.locator('text=England').count() >= 1 && await page.locator('text=Spain').count() >= 1, 'England and Spain offered in 2005');
-  say(await page.locator('text=Germany').count() === 0, 'Germany correctly absent from 2005');
+  /* Round 1304: Round 902 made 2005-06 a full big five, so Germany is offered now (this line still said absent and
+     had been red since); a nation that had no league in this world (the Netherlands) still is not. The same shape
+     Round 899 gave playEra2015. */
+  say(await page.locator('text=Italy').count() >= 1 && await page.locator('text=Germany').count() >= 1 && await page.locator('text=France').count() >= 1, 'Italy, Germany and France offered in 2005 (Round 902)');
+  say(await page.locator('text=Netherlands').count() === 0, 'the Netherlands correctly absent from 2005');
   await page.locator('text=Spain').first().click();
   await page.waitForTimeout(700);
   await page.locator('text=La Liga').first().click();
@@ -92,7 +96,10 @@ const browser = await chromium.launch();
   await page.waitForTimeout(700);
   await page.locator('text=England').first().click();
   await page.waitForTimeout(700);
-  await page.locator('text=Premier League').first().click();
+  /* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+     Premier League, so 'text=Premier League' pressed that sentence, the league step never moved on and every check
+     after it failed or passed on an empty grid. */
+  await page.locator('button:has-text("Premier League")').first().click();
   await page.waitForTimeout(900);
 
   console.log('3) The 2005 Premier League speaks 2005');

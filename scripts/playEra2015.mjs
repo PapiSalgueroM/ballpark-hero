@@ -107,8 +107,11 @@ const browser = await chromium.launch();
   await page.waitForTimeout(700);
 
   console.log('3) The 2015 Premier League');
-  say(await page.locator('text=Premier League').count() >= 1, 'the 2015 Premier League is offered');
-  await page.locator('text=Premier League').first().click();
+  /* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+     Premier League, so 'text=Premier League' counted and pressed that sentence: the "offered" check passed on it and
+     the league step never moved on. */
+  say(await page.locator('button:has-text("Premier League")').count() >= 1, 'the 2015 Premier League is offered');
+  await page.locator('button:has-text("Premier League")').first().click();
   await page.waitForTimeout(700);
   say(await page.locator('button:has-text("Leicester City")').count() === 1, '2015 Leicester are a pickable club');
   say(await page.locator('button:has-text("Norwich City")').count() === 1, '2015 Norwich are a pickable club');

@@ -67,7 +67,9 @@ async function pick(page, nation, league) {
   await page.waitForTimeout(700);
   await page.locator(`text=${nation}`).first().click();
   await page.waitForTimeout(700);
-  await page.locator(`text=${league}`).first().click();
+  /* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+     Premier League, so 'text=Premier League' pressed that sentence and the league step never moved on. */
+  await page.locator(`button:has-text("${league}")`).first().click();
   await page.waitForTimeout(700);
 }
 async function room(page, club, label) {

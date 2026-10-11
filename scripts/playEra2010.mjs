@@ -59,13 +59,20 @@ await page.waitForTimeout(700);
 
 console.log('2) Nations shrink to the era');
 say(await page.locator('text=England').count() >= 1 && await page.locator('text=Spain').count() >= 1, 'England and Spain offered in 2010');
-say(await page.locator('text=Germany').count() === 0, 'Germany correctly absent from 2010');
+/* Round 1304: Round 901 made 2010-11 a full big five, so Germany is offered now (this line still said absent and
+   had been red since); a nation that had no league in this world (the Netherlands) still is not. The same shape
+   Round 899 gave playEra2015. */
+say(await page.locator('text=Italy').count() >= 1 && await page.locator('text=Germany').count() >= 1 && await page.locator('text=France').count() >= 1, 'Italy, Germany and France offered in 2010 (Round 901)');
+say(await page.locator('text=Netherlands').count() === 0, 'the Netherlands correctly absent from 2010');
 await page.locator('text=England').first().click();
 await page.waitForTimeout(700);
 
 console.log('3) The 2010 league and clubs');
-say(await page.locator('text=Premier League').count() >= 1, 'the 2010 Premier League is offered');
-await page.locator('text=Premier League').first().click();
+/* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+   Premier League, so 'text=Premier League' counted and pressed that sentence: the "offered" check passed on it and
+   the league step never moved on. */
+say(await page.locator('button:has-text("Premier League")').count() >= 1, 'the 2010 Premier League is offered');
+await page.locator('button:has-text("Premier League")').first().click();
 await page.waitForTimeout(700);
 say(await page.locator('button:has-text("Blackpool")').count() === 1, '2010 Blackpool is a pickable club');
 say(await page.locator('button:has-text("Barcelona")').count() === 0, 'Barcelona is not in the English league');
