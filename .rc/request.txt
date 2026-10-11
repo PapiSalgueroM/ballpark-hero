@@ -1,0 +1,39 @@
+# Round 1306 step (b), head 083d112f: the type gate, the unit file, the harness on both fleets with the base arm, the measure, every control on seed set 0
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+measure: BOOK_MEASURE=leagues node scripts/simCmLeagueBook.mjs
+book-full-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-full && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+c-nofill: BOOK_CONTROL=nofill node scripts/simCmLeagueBook.mjs
+c-shirtrow: BOOK_CONTROL=shirtrow node scripts/simCmLeagueBook.mjs
+c-thinsheet: BOOK_CONTROL=thinsheet node scripts/simCmLeagueBook.mjs
+c-thinall: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-thinall && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_CONTROL=thinall node scripts/simCmLeagueBook.mjs
+c-weight: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-weight && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+c-mathrandom: BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+c-dropmine: BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-byeweek: BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+c-cleanside: BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+c-bought: BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+c-wrongman: BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+c-unnamed: BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+c-offbyone: BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+c-penassistmine: BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+c-assistbench: BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+c-twoman: BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-flat: BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+c-penassist: BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+c-noog: BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+c-keyindex: BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+c-hurtentry: BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+c-redeal: BOOK_CONTROL=redeal node scripts/simCmLeagueBook.mjs
+c-seasonstamp: BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-strip: BOOK_CONTROL=strip node scripts/simCmLeagueBook.mjs
+c-stripdeadline: BOOK_CONTROL=stripdeadline node scripts/simCmLeagueBook.mjs
+book-d1: SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-d2: SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-d3: SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-d4: SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f1: SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f2: SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f3: SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f4: SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
