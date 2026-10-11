@@ -1,0 +1,12 @@
+inj0 exit=0 16s | scanInj: match 1 red, a chance at the same place true: 0: 
+inj2 exit=0 17s | scanInj: match 3 red, a chance at the same place true: 0: 
+inj1 exit=0 22s | scanInj: match 2 red, a chance at the same place true: 0: 
+inj3 exit=0 19s | scanInj: match 4 red, a chance at the same place true: 0: 
+inj4 exit=0 21s | scanInj: match 5 red, a chance at the same place true: 0: 
+inj5 exit=0 20s | scanInj: match 6 red, a chance at the same place true: 0: 
+inj6 exit=0 24s | scanInj: match 7 red, a chance at the same place true: 0: 
+inj7 exit=0 23s | scanInj: match 8 red, a chance at the same place true: 0: 
+inj8 exit=0 19s | scanInj: match 9 red, a chance at the same place true: 0: 
+inj10 exit=0 20s | scanInj: match 11 red, a chance at the same place true: 0: 
+inj9 exit=0 24s | scanInj: match 10 red, a chance at the same place true: 0: 
+inj11 exit=0 24s | scanInj: match 12 red, a chance at the same place true: 0: 

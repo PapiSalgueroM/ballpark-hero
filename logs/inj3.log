@@ -1,0 +1,5 @@
+scanInj: match 4, seeds 1700 to 10699: 9000 first halves lit, 19 s
+scanInj: match 4 injury, a chance at the same place false: 0: 
+scanInj: match 4 injury, a chance at the same place true: 1: 3287 (opp disallowed at 25)
+scanInj: match 4 red, a chance at the same place false: 1: 6197 (opp disallowed at 36)
+scanInj: match 4 red, a chance at the same place true: 0: 
