@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+base-x3b: bash .rc/x/baseRun.sh 94647e74 3 playClubManager.mjs
