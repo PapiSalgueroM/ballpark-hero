@@ -1,0 +1,23 @@
+== 2005-06: Real Madrid
+  PASS  2005-06: the summer window is open and the market renders
+   120 views, 1611 different men read off the screen (5 leagues), 0 tagged MADE UP
+  PASS  2005-06: the walk read a real share of the market (1611 men)
+  PASS  2005-06: every man without the MADE UP tag is in that season's squads (0 strangers)
+  PASS  2005-06: every real man is listed at a club of that season (0 off)
+  PASS  2005-06: 16 men who exist only in other seasons were searched by name and none is listed (none found; e.g. Wesley Sneijder, Gonzalo Higuaín, Alexandre Pato)
+  PASS  2005-06: no real page errors (clean)
+== 2010-11: Manchester United
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('text=Take the job')
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walkEraMarket.mjs:69:43 {
+  log: [ "  - waiting for locator('text=Take the job')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

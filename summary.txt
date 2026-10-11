@@ -1,0 +1,9 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playEra2005 exit=1 40s | Node.js v24.21.0
+playEra2010 exit=1 36s | Node.js v24.21.0
+playEra2015 exit=1 39s | Node.js v24.21.0
+playEra2020 exit=1 41s | Node.js v24.21.0
+playNationalities exit=1 35s | Node.js v24.21.0
+walkEraMarket exit=1 62s | Node.js v24.21.0
+playClubManagerSlots exit=0 9s | playClubManagerSlots: green
+playCmDataOnDemand exit=0 26s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.

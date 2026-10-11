@@ -1,0 +1,47 @@
+1) The era step holds four real past seasons, the newest first
+  PASS  the 2020-21 era tile is on the menu
+  PASS  the 2015-16 tile survived the addition
+  PASS  the 2010-11 tile survived the addition
+  PASS  the 2005-06 tile survived the addition
+  PASS  all four past eras carry the REAL DATA badge
+  PASS  the 2020-21 tile sells its squads and the big five
+2) Germany in 2020
+  PASS  England offered in 2020
+  PASS  Spain offered in 2020
+  PASS  Italy offered in 2020
+  PASS  Germany offered in 2020
+  PASS  France offered in 2020
+  PASS  2020 Arminia Bielefeld are a pickable club
+  PASS  2020 Union Berlin are a pickable club
+  PASS  2026 Elversberg correctly absent from the 2020 Bundesliga
+  PASS  the thin squad marker shows for Arminia Bielefeld
+  PASS  the Bayern tile demands the title
+3) Into the 2020 Dortmund dressing room
+  PASS  the Dortmund career header says 2020-21
+  PASS  the Squad tab listed the Dortmund squad
+  PASS  Haaland is in the 2020 Dortmund squad
+  PASS  Bellingham arrived from Birmingham, the window correction landed
+  PASS  Hakimi is gone to Inter, as he was that summer
+  PASS  no real page errors on the Germany walk (clean)
+4) The 2020-21 Premier League
+  FAIL  2020 Leeds United are a pickable club
+  FAIL  2020 Sheffield United are a pickable club
+  PASS  Brentford correctly absent from the 2020-21 Premier League
+  FAIL  the Manchester City tile demands the title
+5) Into the 2020 Chelsea dressing room
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('text=Take the job')
+
+    at enterSquad (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/eraDressingRoom.mjs:87:43)
+    at room (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playEra2020.mjs:78:19)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playEra2020.mjs:142:13 {
+  log: [ "  - waiting for locator('text=Take the job')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

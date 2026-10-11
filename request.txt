@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs
+playNationalities: ENGINES=chromium node scripts/playNationalities.mjs
+walkEraMarket: node .rc/x/walkEraMarket.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmDataOnDemand: ENGINES=chromium node scripts/playCmDataOnDemand.mjs
