@@ -1,0 +1,2 @@
+#!playwright
+weight-base: git worktree add -q /tmp/base 611c3f4e && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && npm run build > /tmp/b.log 2>&1; echo "base build exit=$?"; (node scripts/lib/hostLikeServer.mjs dist 4199 > /tmp/srv.log 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 SWEEP_BASE=http://localhost:4199 BASE=http://localhost:4199 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; echo "sweep exit=$?"; grep -a "gz over\|failures" /tmp/w.log | cut -c1-120 | head -40
