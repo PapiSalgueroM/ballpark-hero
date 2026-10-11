@@ -1,0 +1,21 @@
+# Round 1306 step (e), head a87cd26d: the reader and its section, both unit files, ten fleets, the two reader controls and the two law breakers
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+book-full-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-full && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-readerdraw: BOOK_CONTROL=readerdraw node scripts/simCmLeagueBook.mjs
+c-readerwrite: BOOK_CONTROL=readerwrite node scripts/simCmLeagueBook.mjs
+c-dropmine: BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-byeweek: BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+c-bought: BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+book-d1: SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-d2: SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-d3: SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-d4: SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f1: SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f2: SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f3: SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f4: SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
