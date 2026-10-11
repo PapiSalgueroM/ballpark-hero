@@ -6,9 +6,15 @@
  * career: the eligibility function answered "could not be verified" and nothing ever wrote the part again.
  * The ruling: the reader never throws, the unverifiable part is read as if it were not there, and the next
  * honest write overwrites it. For the two once a season receipts that hands back one use in that season.
- * For the farewell the commitment is not in the part, it is the save's own isFinalSeason flag, which the
- * announcement sets with the plan: while that flag is true the card is not offered again, and the engine
- * plays the save exactly as it plays the same save with the part taken out.
+ * For the farewell the closing pass first kept the card closed while the save's isFinalSeason flag was true,
+ * on the ruling's word that the engine ends a final season by that flag. It does not: only a readable plan
+ * ends a career and nothing ever clears the flag, so a player with an unreadable plan and the flag set kept a
+ * FINAL SEASON banner, was never offered the card again and played on for good, which is the "closed for the
+ * rest of a career" the ruling forbids, and it treated an unreadable part differently from a missing one (a
+ * save with the flag and no part was always offered the card). The fix pass after the closing check takes
+ * the ruling's ONE RULE at its word: an unreadable plan is judged exactly as the same save with the part
+ * taken out, whatever the flag says, a new announcement overwrites it, and the engine then ends that year.
+ * The engine plays the save exactly as it plays the same save with the part taken out, as before.
  *
  * WHAT FAILS FIRST (on the head before the ruling's commit): every "is offered again" case of the three
  * parts, and the sentence check of the farewell cases with the flag set. The cases that only hold what the
@@ -130,14 +136,13 @@ describe('internationalReturn: a part that cannot be verified is read as absent'
   });
 });
 
-const FLAG_SENTENCE = 'Your final season is already announced.';
-/** The same save with the part taken out: what "read as absent" means for the engine. */
+/** The same save with the part taken out: what "read as absent" means for the engine and for the card. */
 function bare(career: CareerState): CareerState {
   const copy = clone(career); delete bag(copy).farewellSeason; return copy;
 }
 const fieldAside = (career: CareerState) => ({ ...career, farewellSeason: undefined });
 
-describe('farewellSeason: a plan that cannot be verified is read as absent, and the commitment is the flag', () => {
+describe('farewellSeason: a plan that cannot be verified is read as absent, whatever the flag says', () => {
   it.each(DAMAGE)('flag off, %s: the card is offered again like to any eligible player, and a new announcement overwrites the part', (_label, damage) => {
     const c = clone(announceSoccerFarewell(veteran()));
     c.isFinalSeason = false;
@@ -155,18 +160,24 @@ describe('farewellSeason: a plan that cannot be verified is read as absent, and 
     expect(announceSoccerFarewell(next), 'one announcement, as before').toBe(next);
   });
 
-  it.each(DAMAGE)('flag set by the announcement, %s: read as absent, not offered again, and played as the save with no part', (_label, damage) => {
+  it.each(DAMAGE)('flag set by the announcement, %s: judged exactly as the save with no part, offered again, overwritten, and played as the save with no part', (_label, damage) => {
     const c = clone(announceSoccerFarewell(veteran()));
     expect(c.isFinalSeason, 'the announcement set the flag with the plan').toBe(true);
     bag(c).farewellSeason = damage(bag(c.farewellSeason), c);
-    const before = clone(c);
+    const before = clone(c), latest = c.seasons[c.seasons.length - 1];
     expect(readSoccerFarewell(c)).toBeNull();
     expect(farewellSeasonComplete(c)).toBe(false);
     const eligibility = farewellEligibility(c);
     expect(eligibility.reason).not.toMatch(SENTENCE);
-    expect(eligibility).toEqual({ eligible: false, year: null, reason: FLAG_SENTENCE });
-    expect(announceSoccerFarewell(c)).toBe(c);
-    expect(announceFarewellSeason(c, FALLBACK_CLUBS)).toBe(c);
+    expect(eligibility, 'the one rule: the answer of the same save with the part taken out').toEqual(farewellEligibility(bare(c)));
+    expect(eligibility).toMatchObject({ eligible: true, year: latest.year + 1 });
+    const next = announceSoccerFarewell(c);
+    expect(next).not.toBe(c);
+    expect(readSoccerFarewell(next), 'the next honest write overwrites the unreadable part').toEqual({ version: 1, year: latest.year + 1,
+      sourceCount: c.seasons.length, sourceYear: latest.year, sourceAge: latest.age, announcedAge: c.age, club: c.currentClub, sourcePhase: 'playing' });
+    expect(next.isFinalSeason).toBe(true);
+    expect(announceSoccerFarewell(next), 'one announcement, as before').toBe(next);
+    expect(readSoccerFarewell(announceFarewellSeason(c, FALLBACK_CLUBS)), 'and through the engine, as the page announces it').toEqual(readSoccerFarewell(next));
     const held = run(41, () => advanceProSeason(clone(c), FALLBACK_CLUBS));
     const plain = run(41, () => advanceProSeason(bare(c), FALLBACK_CLUBS));
     expect(held.draws).toEqual(plain.draws);
@@ -186,6 +197,20 @@ describe('farewellSeason: a plan that cannot be verified is read as absent, and 
     expect(fieldAside(held.value)).toEqual(fieldAside(plain.value));
     expect(held.value.retired).toBe(false);
     expect(held.value.isFinalSeason).toBe(true);
+  });
+
+  it('the way out the flag never gave: announced again over the unreadable plan, that year ends the career as any farewell year does', () => {
+    const c = clone(announceSoccerFarewell(veteran()));
+    bag(c).farewellSeason = { ...bag(c.farewellSeason), version: 2 };
+    expect(farewellSeasonComplete(run(41, () => advanceProSeason(clone(c), FALLBACK_CLUBS)).value), 'left as it is, the year ends nothing').toBe(false);
+    const again = announceSoccerFarewell(c);
+    const plan = readSoccerFarewell(again)!;
+    expect(plan, 'a readable plan was written over the unreadable one').not.toBeNull();
+    const played = run(41, () => advanceProSeason(clone(again), FALLBACK_CLUBS)).value;
+    expect(farewellSeasonComplete(played), 'the announced year was played').toBe(true);
+    const ended = run(17, () => finish(played)).value;
+    expect(ended.retired).toBe(true); expect(ended.phase).toBe('retirement_ceremony');
+    expect(ended.seasons).toHaveLength(plan.sourceCount + 1);
   });
 });
 
@@ -241,7 +266,7 @@ describe('the journey of ruling C3: announce a farewell, play the year, retire, 
     }
   });
 
-  it('built by hand (a row past the farewell year on a career that plays on): the plan is read as absent and the flag decides', () => {
+  it('built by hand (a row past the farewell year on a career that plays on): the plan is read as absent and the card is offered again', () => {
     const state = announceSoccerFarewell(veteran());
     const plan = readSoccerFarewell(state)!;
     const played = run(41, () => advanceProSeason(clone(state), FALLBACK_CLUBS)).value;
@@ -254,11 +279,12 @@ describe('the journey of ruling C3: announce a farewell, play the year, retire, 
     expect(readSoccerFarewell(carried), 'never thrown on, read as absent').toBeNull();
     expect(carried.farewellSeason, 'and left in the save as it was').toEqual(plan);
     expect(carried.isFinalSeason, 'as the engine leaves it: nothing clears the flag').toBe(true);
-    expect(farewellEligibility(carried)).toEqual({ eligible: false, year: null, reason: FLAG_SENTENCE });
-    const cleared = { ...carried, isFinalSeason: false };
-    expect(farewellEligibility(cleared)).toMatchObject({ eligible: true, year: last.year + 2 });
-    const again = announceSoccerFarewell(cleared);
+    expect(farewellEligibility(carried), 'the ruling for this journey: offered again when the player is eligible, with the flag as the engine leaves it')
+      .toMatchObject({ eligible: true, year: last.year + 2 });
+    expect(farewellEligibility(carried)).toEqual(farewellEligibility(bare(carried)));
+    const again = announceSoccerFarewell(carried);
     expect(readSoccerFarewell(again)).toMatchObject({ version: 1, year: last.year + 2, sourceCount: plan.sourceCount + 2 });
     expect(again.isFinalSeason).toBe(true);
+    expect(farewellEligibility({ ...carried, isFinalSeason: false }), 'the flag changes nothing in the answer').toEqual(farewellEligibility(carried));
   });
 });
