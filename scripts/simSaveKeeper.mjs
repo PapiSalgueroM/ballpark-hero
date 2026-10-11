@@ -16,11 +16,18 @@
  *      fact, the setItem that names the game's key; every game with a pure
  *      loader accepts its own fixtures.
  *   1  the version table (SAVE_VERSIONS). Every row's real save holds exactly
- *      `current` where the row says; every other game's real save holds no
- *      whole number named v, version or saveVersion at its top level or one
- *      level down; and where the game exports a loader, a real save one
- *      version down and one version up is handed to it and the row's
- *      `other` and `oldest` must agree with what the loader answered.
+ *      `current` where the row says; and where the game exports a loader, a
+ *      real save one version down and one version up is handed to it and the
+ *      row's `other` and `oldest` must agree with what the loader answered.
+ *      Every other game's real saves are searched for a whole number named
+ *      v, version or saveVersion at the top level or one level down. Five
+ *      games hold one on a PART of the save (PART_VERSIONS: Soccer Career's
+ *      season plan, the four US careers' road to the draft): each must be
+ *      found on a real save, hold the number the row says, and its own reader
+ *      must do with another number what the row says. A number named in
+ *      neither table is red. (Release AU fix pass: the fixtures are played
+ *      saves now. As start states they held no parts, and this section said
+ *      "none" over five games that had one.)
  *   2  an ordinary boot writes nothing. A fixture of every game planted,
  *      runSaveKeeper through the real seam: zero writes, zero removes, the
  *      exact set of keys read, and every stored save byte equal before and
@@ -72,6 +79,8 @@
  *   numberonly    no copy for a save with no version number            (4)
  *   nomaincall    runSaveKeeper(); is taken out of src/main.tsx        (6)
  *   assign        reopenGame uses window.location.assign               (6)
+ *   partrow       Soccer Career's row is left out of PART_VERSIONS     (1)
+ *   partrowus     the NFL career's row is left out of PART_VERSIONS    (1)
  * A control that fired exits 1 and its last line says FIRED. One that did not
  * fire, or could not run, exits 2 and says so. A green run exits 0.
  *
@@ -94,7 +103,7 @@ import { buildRealSaves, WRITERS, PURE_LOADERS } from './lib/realSaves.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
-  'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign'];
+  'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -369,6 +378,29 @@ function stringifiedLiterals(rel) {
 section = '1';
 console.log('\n1. the version table: what each save really holds, and what its game does with another number');
 const V = K.SAVE_VERSIONS;
+/* Release AU fix pass (ruling R5). SAVE_VERSIONS holds the version of the WHOLE
+   save: the number the keeper acts on. A version number can also sit on a PART
+   of a save, written only once a career has that part and read by that part's
+   own reader. These are the ones a played save of this head holds. The keeper
+   makes NO copy before a step of one (a missing part is fine, which a missing
+   whole save version never is, so SAVE_VERSIONS cannot carry them as rows): a
+   round that moves one of these numbers migrates that part itself or gives the
+   keeper a rule for it. A number found on a real save and named in neither
+   table turns this section red, which is what the first version of this check
+   could not do: its fixtures were start states, and a start state has no parts. */
+const PART_VERSIONS = {
+  '/soccer-career': { at: ['programme', 'version'], current: 1, other: 'refuses', reader: 'the season plan reader (stateOf, src/lib/soccerCareerProgramme.ts)' },
+  '/nfl-my-career': { at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' },
+  '/nba-my-career': { at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' },
+  '/mlb-my-career': { at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' },
+  '/nhl-my-career': { at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' },
+};
+/* Controls partrow and partrowus: a game whose played save holds a version number is left out of the table. */
+if (CONTROL === 'partrow' || CONTROL === 'partrowus') {
+  const route = CONTROL === 'partrow' ? '/soccer-career' : '/nfl-my-career';
+  if (!PART_VERSIONS[route]) { console.error(`simSaveKeeper control ${CONTROL}: CANNOT RUN. PART_VERSIONS has no row for ${route}, so the control would change nothing.`); process.exit(2); }
+  delete PART_VERSIONS[route];
+}
 /** The same save with the number at a path changed (declared as altered: it is parsed and written again). */
 const withVersion = (raw, at, n) => {
   const o = JSON.parse(raw);
@@ -388,19 +420,45 @@ const withVersion = (raw, at, n) => {
   }
   const NAMES = ['v', 'version', 'saveVersion'];
   const clean = [];
+  const parts = [];
+  const strayParts = Object.keys(PART_VERSIONS).filter(r => !byPath[r] || V[r]);
+  check(strayParts.length === 0, `all ${Object.keys(PART_VERSIONS).length} rows of PART_VERSIONS are long games with no row in SAVE_VERSIONS`, `a row of PART_VERSIONS is not a long game, or its game already has a row in SAVE_VERSIONS: ${strayParts.join(', ')}`);
   for (const e of ENTRIES) {
     if (V[e.path]) continue;
-    const hits = new Set();
+    /* where -> the numbers found there, over every real save of the game */
+    const hits = new Map();
     for (const raw of fleet[e.path] ?? []) {
       const o = JSON.parse(raw);
-      const look = (obj, where) => { for (const n of NAMES) if (Object.prototype.hasOwnProperty.call(obj, n) && Number.isInteger(obj[n])) hits.add(`${where}${n}=${obj[n]}`); };
+      const look = (obj, where) => { for (const n of NAMES) if (Object.prototype.hasOwnProperty.call(obj, n) && Number.isInteger(obj[n])) { if (!hits.has(where + n)) hits.set(where + n, []); hits.get(where + n).push(obj[n]); } };
       look(o, '');
       for (const [k, v] of Object.entries(o)) if (v && typeof v === 'object' && !Array.isArray(v)) look(v, `${k}.`);
     }
-    if (hits.size) fail(`${e.path}: its real save holds a version number (${[...hits].join(', ')}) and SAVE_VERSIONS has no row for it`);
-    else clean.push(e.path);
+    const part = PART_VERSIONS[e.path];
+    const known = part ? part.at.join('.') : null;
+    const unknown = [...hits.entries()].filter(([where]) => where !== known);
+    if (unknown.length) { fail(`${e.path}: its real save holds a version number (${unknown.map(([where, ns]) => `${where}=${[...new Set(ns)].join('/')}`).join(', ')}) and neither SAVE_VERSIONS nor PART_VERSIONS has a row for it`); continue; }
+    if (!part) { clean.push(e.path); continue; }
+    const found = hits.get(known) ?? [];
+    if (found.length === 0 || found.some(n => n !== part.current)) {
+      fail(`${e.path}: PART_VERSIONS says its real saves hold ${part.current} at ${known}, and ${found.length ? `they hold ${[...new Set(found)].join(', ')}` : 'no fixture holds a number there, so nothing here has read that row'}`);
+      continue;
+    }
+    /* What the game does with another number there, asked of the game's own reader of that part. */
+    const read = real.partReads?.[e.path];
+    const holder = (fleet[e.path] ?? []).find(raw => K.versionIn(raw, part.at) === part.current);
+    if (!read || !holder) { fail(`${e.path}: PART_VERSIONS names ${known} and scripts/lib/realSaves.mjs has no reader for that part (partReads)`); continue; }
+    const same = noWindow(() => read(withVersion(holder, part.at, part.current)));
+    const down = noWindow(() => read(withVersion(holder, part.at, part.current - 1)));
+    const up = noWindow(() => read(withVersion(holder, part.at, part.current + 1)));
+    const want = part.other === 'ignores';
+    if (same === true && down === want && up === want) {
+      ok(`${e.path}: ${found.length} of ${fleet[e.path].length} real saves hold ${part.current} at ${known}, a PART of the save; ${part.reader} ${part.other} another number there (asked: one down ${down ? 'read' : 'refused'}, one up ${up ? 'read' : 'refused'}), and the keeper makes no copy before a step of it`);
+      parts.push(e.path);
+    } else fail(`${e.path}: PART_VERSIONS says ${part.reader} ${part.other} another number at ${known}, but the reader answered: written again at current ${same}, one down ${down}, one up ${up}`);
   }
-  check(clean.length === ENTRIES.length - rows.length, `the other ${clean.length} games hold no whole number named v, version or saveVersion at the top level or one level down`);
+  check(clean.length + parts.length === ENTRIES.length - rows.length && parts.length === Object.keys(PART_VERSIONS).length,
+    `of the other ${ENTRIES.length - rows.length} games, ${clean.length} hold no whole number named v, version or saveVersion at the top level or one level down, and ${parts.length} hold one on a part of the save that PART_VERSIONS names`,
+    `${ENTRIES.length - rows.length} games have no row in SAVE_VERSIONS; only ${clean.length} are clean and ${parts.length} of the ${Object.keys(PART_VERSIONS).length} rows of PART_VERSIONS held`);
   for (const r of rows) {
     const row = V[r];
     const load = accepts[r];
@@ -697,7 +755,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };

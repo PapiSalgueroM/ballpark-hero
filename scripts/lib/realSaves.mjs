@@ -24,6 +24,13 @@
  * `indirect` marks a writer whose setItem does not name the key itself (the
  * key arrives through a binding): the harness holds the anchors named there.
  *
+ * PLAYED, NOT JUST STARTED (Release AU fix pass, 2026-10-10). Soccer Career
+ * and the four US careers are played before they are saved (see soccerPlayed
+ * and usCareer in the bundle below), because a save's optional parts, and the
+ * version numbers two of those parts carry, only exist on a save that has been
+ * played. Seeds 0 and 1, the pair the browser walk plants, are played hub
+ * saves in every game; a US career's seeds 2 and 3 are the road to the draft.
+ *
  * Imported by a harness as a function; nothing is built at import time.
  */
 import fs from 'node:fs';
@@ -61,6 +68,15 @@ export const PURE_LOADERS = ['/soccer-career', '/stadium-tycoon', '/wonderkid-fa
 const ENTRY = `
 import * as SOC from './src/lib/soccerCareerEngine';
 import { isSoccerCareerSave } from './src/lib/soccerCareerSave';
+import * as PROG from './src/lib/soccerCareerProgramme';
+import { careerStep } from './scripts/lib/careerStep.mjs';
+import * as USP from './src/lib/usCareerProgramme';
+import { createUsCareerProspect, loadUsCareerProspect } from './src/lib/usCareerProspect';
+import { defaultAppearance } from './src/lib/soccerCareerAppearance';
+import { NFL_CAREER_SPORT } from './src/lib/nflCareerSport';
+import { NBA_CAREER_SPORT } from './src/lib/nbaCareerSport';
+import { MLB_CAREER_SPORT } from './src/lib/mlbCareerSport';
+import { NHL_CAREER_SPORT } from './src/lib/nhlCareerSport';
 import * as CM from './src/lib/clubManager';
 import * as ST from './src/lib/stadiumTycoon';
 import * as WF from './src/lib/wonderkidFactory';
@@ -71,10 +87,6 @@ import * as NBAFO from './src/lib/nbaFrontOffice';
 import * as MLBFO from './src/lib/mlbFrontOffice';
 import * as NHLFO from './src/lib/nhlFrontOffice';
 import { isFrontOfficeSave } from './src/lib/frontOfficeSave';
-import * as NFL from './src/lib/nflMyCareer';
-import * as NBA from './src/lib/nbaMyCareer';
-import * as MLB from './src/lib/mlbMyCareer';
-import * as NHL from './src/lib/nhlMyCareer';
 import * as CFB from './src/lib/cfbDynasty';
 import * as CBB from './src/lib/cbbDynasty';
 import * as ARL from './src/lib/aussieRulesLeague';
@@ -92,11 +104,83 @@ const CM_CLUBS = ['Real Madrid', 'Everton', 'Lincoln City', 'Brentford'];
 const NOW = 1760000000000;
 const store = globalThis.__realSavesStore;
 const written = key => { const v = store.get(key); if (typeof v !== 'string') throw new Error('the engine writer left nothing at ' + key); return v; };
-const usCareer = (start, arch, seed) => {
-  const positions = Object.keys(arch);
-  const pos = positions[seed % positions.length];
-  const list = arch[pos];
-  return JSON.stringify({ c: start('Real Save ' + seed, pos, list[seed % list.length], mulberry32(seed + 1)), phase: 'season', teamQuality: null, coach: null });
+/* Release AU fix pass (ruling R5): a start state is a save no player holds
+   after his first hour, and a check that only reads start states cannot see
+   what a played save gains. So the careers are PLAYED, by the calls their own
+   pages make, with the plans and the roads this head can write:
+     Soccer Career   played until two pro seasons are on the save and the hub
+                     offers a tactical role, then one season plan chosen
+                     through chooseProgramme (state.programme, with its
+                     version; cup runs and chance wheels as the seasons left
+                     them).
+     the US careers  seeds 0 and 1: two seasons in the board's own order (plan,
+                     camp, prepare, season, restore, progress, settle), then a
+                     plan held for the third (c.programme, c.programmeResults,
+                     c.programmePartnership). Seeds 2 and 3: the FIRST save a
+                     new career writes, the road to the draft
+                     (phase 'prospect', with prospect.v). */
+const SOCCER_SEASONS = 2;
+const soccerPlayed = seed => {
+  const clubs = SOC.FALLBACK_CLUBS;
+  const played = s => (s.seasons || []).filter(r => r.type === 'playing').length;
+  let c = SOC.initCareer(
+    'Real Save ' + seed, NATIONS[seed % NATIONS.length], SOCCER_POS[seed % SOCCER_POS.length],
+    'modern', flat(58), 58, 2020, clubs, null, 76 + (seed % 14),
+  );
+  let pick = null;
+  for (let g = 0; g < 900 && !c.retired; g += 1) {
+    if (c.phase === 'playing' && played(c) >= SOCCER_SEASONS) {
+      const view = PROG.programmeOptions(c).find(o => o.id === 'tactics');
+      pick = view ? (view.choices.find(x => x.eligible) || null) : null;
+      if (pick) break;
+    }
+    c = careerStep(SOC, c, clubs);
+  }
+  if (!pick) throw new Error('Soccer Career seed ' + seed + ' never reached a hub that offers a tactical role (phase ' + c.phase + ', ' + played(c) + ' seasons played)');
+  c = PROG.chooseProgramme(c, 'tactics', pick.id);
+  if (!c.programme || !c.programme.plan) throw new Error('Soccer Career seed ' + seed + ': chooseProgramme did not keep the plan on the save');
+  return JSON.stringify(c);
+};
+const US_SEASONS = 2;
+const usPick = (sport, seed) => {
+  const pos = sport.create.positions[seed % sport.create.positions.length];
+  const list = sport.create.archetypes[pos];
+  return { pos, arch: list[seed % list.length] };
+};
+const usPlayed = (sport, seed) => {
+  const { pos, arch } = usPick(sport, seed);
+  const rng = mulberry32(seed + 1);
+  let c = sport.startCareer('Real Save ' + seed, pos, arch, rng, null, sport.create.eras[0].id);
+  let tq = sport.rollTeamQuality(null, rng);
+  sport.assignRole(c, tq, rng);
+  const plan = more => USP.saveUsCareerProgramme(c, sport.slug, { ...USP.usProgrammeDefaults(), ...more });
+  for (let n = 0; n < US_SEASONS; n += 1) {
+    /* A career that leaves the plain road (retired, suspended, out of contract) stops here with what it has played. */
+    if (c.retired || (c.suspendedSeasons ?? 0) > 0 || c.contractYears <= 0) break;
+    c = plan({ workload: 'push', expectation: 'steady', partnership: 'build' });
+    sport.campBattle(c, tq, rng);
+    const prepared = USP.prepareUsCareerProgramme(c, sport.slug);
+    const { line } = sport.simSeason(c, tq, rng);
+    USP.restoreUsCareerProgramme(c, prepared);
+    sport.progress(c, rng);
+    /* The board settles after progress too; a player moved on in between keeps no result for that year. */
+    USP.settleUsCareerProgramme(c, line, sport.slug, prepared);
+    tq = sport.rollTeamQuality(tq, rng);
+  }
+  USP.expireUsCareerProgramme(c);
+  c = plan({ workload: 'recover', bonus: 'steady' });
+  if (!c.programme || !Array.isArray(c.programmeResults) || c.programmeResults.length < 1 || c.seasons.length < 1) throw new Error(sport.slug + ' seed ' + seed + ': the played save holds no plan, no settled plan or no season (' + c.seasons.length + ' seasons played)');
+  return JSON.stringify({ c, phase: 'season', teamQuality: tq, coach: null });
+};
+const usProspect = (sport, seed) => {
+  const { pos, arch } = usPick(sport, seed);
+  const prospect = createUsCareerProspect(sport, { name: 'Real Save ' + seed, pos, archetypeId: arch.id, eraId: sport.create.eras[0].id, appearance: defaultAppearance(), seed: sport.slug + ':real' + seed });
+  return JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect });
+};
+const usCareer = (sport, seed) => {
+  const keep = Math.random;
+  Math.random = mulberry32(seed + 31);
+  try { return seed % 4 < 2 ? usPlayed(sport, seed) : usProspect(sport, seed); } finally { Math.random = keep; }
 };
 const office = (league, myTeam) => JSON.stringify({
   league, myTeam, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0,
@@ -109,10 +193,9 @@ export function makeSaves(seed, rebuildClubs) {
   const realRandom = Math.random;
   Math.random = mulberry32(seed + 11);
   try {
-    out['/soccer-career'] = JSON.stringify(SOC.initCareer(
-      'Real Save ' + seed, NATIONS[seed % NATIONS.length], SOCCER_POS[seed % SOCCER_POS.length],
-      'modern', flat(58), 58, 2020, SOC.FALLBACK_CLUBS, null, 76 + (seed % 14),
-    ));
+    out['/soccer-career'] = soccerPlayed(seed);
+    /* Club Manager draws from its own stream, so the length of the career above cannot move it. */
+    Math.random = mulberry32(seed + 12);
     store.clear();
     if (CM.saveCareer(CM.startCareer(CM_CLUBS[seed % CM_CLUBS.length])) !== true) throw new Error('saveCareer answered false');
     out['/club-manager'] = written('dukb-club-manager-save');
@@ -137,10 +220,10 @@ export function makeSaves(seed, rebuildClubs) {
   out['/mlb-front-office'] = office(mlb, Object.keys(mlb.teams)[seed % Object.keys(mlb.teams).length]);
   const nhl = NHLFO.initNhlLeague(rng);
   out['/nhl-front-office'] = office(nhl, Object.keys(nhl.teams)[seed % Object.keys(nhl.teams).length]);
-  out['/nfl-my-career'] = usCareer((n, p, a, r) => NFL.startCareer(n, p, a, r, null), NFL.ARCHETYPES, seed);
-  out['/nba-my-career'] = usCareer((n, p, a, r) => NBA.startNbaCareer(n, p, a, r, null, 'now'), NBA.NBA_ARCHETYPES, seed);
-  out['/mlb-my-career'] = usCareer((n, p, a, r) => MLB.startMlbCareer(n, p, a, r, null, 'now'), MLB.MLB_ARCHETYPES, seed);
-  out['/nhl-my-career'] = usCareer((n, p, a, r) => NHL.startNhlCareer(n, p, a, r, null, 'now'), NHL.NHL_ARCHETYPES, seed);
+  out['/nfl-my-career'] = usCareer(NFL_CAREER_SPORT, seed);
+  out['/nba-my-career'] = usCareer(NBA_CAREER_SPORT, seed);
+  out['/mlb-my-career'] = usCareer(MLB_CAREER_SPORT, seed);
+  out['/nhl-my-career'] = usCareer(NHL_CAREER_SPORT, seed);
   out['/cfb-dynasty'] = JSON.stringify({ st: CFB.initCfb(CFB.CFB_SCHOOLS[seed % CFB.CFB_SCHOOLS.length].id, rng), phase: 'season', recruits: null, portal: null });
   out['/cbb-dynasty'] = JSON.stringify({ st: CBB.initCbb(CBB.CBB_SCHOOLS[seed % CBB.CBB_SCHOOLS.length].id, rng), phase: 'season', recruits: null, portal: null });
   const league = ARL.createLeague(seed + 7, 'club-00');
@@ -168,12 +251,27 @@ export const accepts = {
   /* Club Manager's loader reads storage itself, so it is handed the save through the stub. */
   '/club-manager': raw => { store.clear(); store.set('dukb-club-manager-save', raw); try { return CM.loadCareer() !== null; } finally { store.clear(); } },
 };
+
+/**
+ * A version number on a PART of a save (scripts/simSaveKeeper.mjs, PART_VERSIONS): true when the game's own reader
+ * of that part still reads it. Soccer Career's reader is not exported, so its answer is read off the hub: the plan
+ * the save holds is still the plan the hub shows.
+ */
+const prospectRead = sport => raw => { try { return loadUsCareerProspect(sport, JSON.parse(raw).prospect) !== null; } catch { return false; } };
+export const partReads = {
+  '/soccer-career': raw => { try { return PROG.programmeOptions(JSON.parse(raw)).some(view => view.choice !== null); } catch { return false; } },
+  '/nfl-my-career': prospectRead(NFL_CAREER_SPORT),
+  '/nba-my-career': prospectRead(NBA_CAREER_SPORT),
+  '/mlb-my-career': prospectRead(MLB_CAREER_SPORT),
+  '/nhl-my-career': prospectRead(NHL_CAREER_SPORT),
+};
 `;
 
 /**
  * Bundles the engines once (esbuild, into `tmpDir`) and returns:
  *   fleet    { '/route': [raw save, one per seed] } for all 21 games
  *   accepts  { '/route': raw => boolean } for the games with a pure loader
+ *   partReads { '/route': raw => boolean } for the games that keep a version number on a part of the save
  * Throws when an engine refuses to start; a caller prints and exits.
  */
 export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
@@ -197,5 +295,5 @@ export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
     const one = mod.makeSaves(seed, rebuildClubs);
     for (const [route, raw] of Object.entries(one)) (fleet[route] ??= []).push(raw);
   }
-  return { fleet, accepts: mod.accepts };
+  return { fleet, accepts: mod.accepts, partReads: mod.partReads };
 }

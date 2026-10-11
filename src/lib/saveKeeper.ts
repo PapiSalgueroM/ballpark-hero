@@ -64,9 +64,13 @@ import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
  * games then write a fresh game over a save they refused, with no press, so
  * without the copy the old bytes were gone five seconds after the page
  * opened. What this does NOT cover, said plainly: the eleven games with no
- * version in the save (Soccer Career among them) change their saves by
- * repair on load and get no copy here, and a game's parked or second keys are
- * not looked at.
+ * version for the whole save (Soccer Career among them) change their saves
+ * by repair on load and get no copy here, and a game's parked or second keys
+ * are not looked at. Five of those eleven do hold a version number on a PART
+ * of the save (Soccer Career's season plan at programme.version, the four US
+ * careers' road to the draft at prospect.v); that part's own reader refuses
+ * another number, and no copy is made before a step of it. They are listed,
+ * with what each reader does, in scripts/simSaveKeeper.mjs (PART_VERSIONS).
  *
  * AN ORDINARY BOOT WRITES NOTHING. With no journal and every held save at its
  * current version the keeper reads the journal key and the keys of the games
@@ -113,12 +117,15 @@ export interface SaveVersionRow {
 }
 
 /**
- * The ten long games whose save holds its own version, keyed by route. Read
- * in each engine and held to it by scripts/simSaveKeeper.mjs: a real save of
- * every row holds exactly `current` at `at`, a real save of every other long
- * game holds no version number at its top level or one level down, and where
- * the game exports a pure loader the row's `other` and `oldest` must agree
- * with what that loader answers for a save one version down. Club Manager's
+ * The ten long games whose WHOLE save holds its own version, keyed by route.
+ * Read in each engine and held to it by scripts/simSaveKeeper.mjs on saves
+ * that have been played: a real save of every row holds exactly `current` at
+ * `at`, and where the game exports a pure loader the row's `other` and
+ * `oldest` must agree with what that loader answers for a save one version
+ * down. A real save of any other long game holds no version number at its
+ * top level or one level down EXCEPT the part versions that harness names
+ * one by one (PART_VERSIONS: five games, see the header above); a number it
+ * finds that neither table names turns it red. Club Manager's
  * number also lives in src/lib/clubManager.ts (SAVE_VERSION) and in
  * src/lib/clubManagerSlots.ts; this table is the third place, and the
  * harness is what holds it to the first.
