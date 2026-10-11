@@ -1,0 +1,16 @@
+mutFlag: applied to src/components/soccer-career/InternationalReturnCard.tsx
+mutFlag: applied to src/components/soccer-career/InternationalReturnCard.tsx
+mutFlag: the Release AW entry is out of scripts/simNationalityFlags.mjs (865 characters)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerInternationalReturn.test.ts [2m([22m[2m83 tests[22m[2m)[22m[33m 510[2mms[22m[39m
+ [32m✓[39m src/test/soccerInternationalReturnUi.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 746[2mms[22m[39m
+ [32m✓[39m src/test/soccerInternationalReturnPage.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1676[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer international return real page actions[2m > [22muses the actual rules and confirmation once for two captured button clicks [33m 312[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m114 passed[39m[22m[90m (114)[39m
+[2m   Start at [22m 11:56:09
+[2m   Duration [22m 5.12s[2m (transform 1.97s, setup 220ms, collect 5.12s, tests 2.93s, environment 1.32s, prepare 555ms)[22m
+

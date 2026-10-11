@@ -1,0 +1,5 @@
+# Release AW part one, reviewer facts-fences, request G: the cure the builder named and did not try for the comeback card's bare nationality (the name kept as text, its flag after it on the same line, the owed entry out of the fence), applied to the runner's copy only and put back after each line
+#!serial
+flag-cure-fence: node .rc/x/mutFlag.mjs && node scripts/simNationalityFlags.mjs; s=$?; git checkout -- src scripts; exit $s
+flag-cure-units: node .rc/x/mutFlag.mjs && node_modules/.bin/vitest run src/test/soccerInternationalReturnUi.test.tsx src/test/soccerInternationalReturnPage.test.tsx src/test/soccerInternationalReturn.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+flag-cure-tsc: node .rc/x/mutFlag.mjs && node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; git checkout -- src scripts; exit $s
