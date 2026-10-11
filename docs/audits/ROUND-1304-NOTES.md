@@ -154,8 +154,13 @@ Nothing left to do there but gate it.
 
 ## Saves
 
+(Written with the table, before the walks' pictures found the defect below. It is still true of the six
+harnesses' reds, and it is no longer the whole answer: the engine did change, and the two sections named
+"Saves" further down, under "The defect, fixed at its cause" and under "The fix pass", say what a past
+season save from before the round can hold.)
+
 No defect put a wrong man into any market, so no save holds one and nothing needs a reader's rule. The
-count of saves a fix could touch is zero: this round changes no file under `src/`.
+count of saves a fix of the six reds could touch is zero: the table's own work changes no file under `src/`.
 
 ## What the rewrite does (the same rule, under today's design)
 
@@ -174,7 +179,9 @@ count of saves a fix could touch is zero: this round changes no file under `src/
 
 ## What was done (added after the table was pushed)
 
-No file under `src/` changed. Six harnesses and five walks did.
+For the six reds, no file under `src/` changed: six harnesses and five walks did. (The defect the pictures
+found afterwards did change the engine, `src/lib/clubManager.ts`; that is the section "The defect, fixed at
+its cause", and the fix pass after it changed that file again and `src/lib/managerJobMarket.ts`.)
 
 **The harnesses, green on a runner (`r1304-s2`, head `f17dec1b`).**
 
@@ -251,7 +258,8 @@ negotiation is drawn the same way, from the top five of each of today's leagues,
 So a 2005-06 save can print a club that was not founded yet. Round 146 already wrote the rule three times
 in this file (`buyerPool`, `approachSuitors` and the job suitors all branch on the era: "a 2010 manager
 cannot be poached by a 2026 club"); these two places never got it. Verdict: DEFECT, a club of the wrong
-year on a player's screen. See the closing report for what was done about it.
+year on a player's screen. See the closing report for what was done about it. (There was a third place,
+the out of work screen of Round 201, found by the reviewer who read the code: see "The fix pass" below.)
 
 ## The defect, fixed at its cause
 
@@ -294,3 +302,76 @@ never moved a man, it only named a buyer. The count of saves it could touch: eve
 started (each opens with a window), which is why a reader leaves them alone rather than editing history.
 
 **One What's New entry** says it in plain words, at the top of October 2026.
+
+## The fix pass (after two adversarial reviews, 2026-10-11)
+
+**A third place of the same defect: the out of work screen.** The reviewer who read the code found that
+`wildernessWeek` (Round 201) drew a sacked manager's job offers, and the floor that opens after eight
+silent weeks, from `allOfferClubs()`, today's 454 clubs, in every past season. And taking such a job did
+not work: the rollover's move guard (Round 146) refuses a club the era does not hold, so the manager was
+back at the club that sacked him with the sack wiped. Verdict: DEFECT, the same one.
+
+The test first (commit `ee8ac52d`): `scripts/simEra2020.mjs` section 10. For every past season, 60 seeded
+careers are marked sacked and waited through twelve weeks; every offer is read against that season's
+leagues and the era's own club def; the newest offer is taken; the floor is forced on its own with a
+generator that returns one constant; and a save that still holds an offer from a club of today is waited
+and taken. On the engine as it stood it is red on 24 lines, six a season:
+
+| Season | Calls | From a club not of that season | Card of today on the rest | Jobs taken | Did not move him | Floors | Not of that season |
+|---|---|---|---|---|---|---|---|
+| 2010-11 | 119 | 99 | 20 | 60 | 50 | 30 | 24 |
+| 2015-16 | 98 | 75 | 23 | 60 | 45 | 30 | 24 |
+| 2005-06 | 109 | 83 | 26 | 60 | 43 | 30 | 24 |
+| 2020-21 | 103 | 85 | 18 | 60 | 50 | 30 | 30 |
+
+Lines it printed: `Hearts of today's Scottish Premiership rang the sacked manager of Arsenal`, `Blackburn
+Rovers as EFL Championship, tier 4, 8m (that season: Premier League, tier 3, 10m)`, `Barcelona to
+Millwall: the save reads Barcelona`.
+
+The fix (commit `ef6710a7`): `eraOfferClubs(career)` in `src/lib/clubManager.ts` builds a past season's
+pool (that season's leagues, the era's tier and budget, the league's nation), `wildernessWeek` passes it
+to the same churn rule through a new last argument of `realJobOffers` and `vacancies` in
+`src/lib/managerJobMarket.ts`, and the floor reads the same pool. A career that starts today passes
+`allOfferClubs()`, the array it always read: 108 modern careers (four clubs in each of the 27 leagues,
+twelve weeks, three floors, one job taken) hash the same at 1,836 states on the engine before and after
+the fix. On the fixed engine section 10 reads 133, 94, 107 and 110 calls and 60 jobs taken a season, with
+nothing wrong. Controls `modernjobs` (the pool is today's again: 20 failures, five sentences a season)
+and `takestale` (the refusal below is taken out: 4 failures, its own sentence) put the old engine back as
+it is bundled, one line each. The league rules digest did not move: no digest season reaches this screen
+(the harness is green on the committed file, and writing the era part again on the fixed tree gives the
+same bytes). The Round 1081 pin of the engine file was taken again (`f98e849f...` to `a1e28830...`).
+
+**Saves, the fix pass.** Two things a past season save from before the round can still hold, and what a
+reader does with each. Neither touches a signing, a squad or a result, and nothing is rewritten on load.
+
+1. A save that was sitting on the out of work screen holds up to four job offers drawn from today's
+   clubs. An offer from a club that season has is honest and stays. One from a club it does not have
+   cannot be honoured, so `acceptWildernessJob` returns null for it (the button does nothing, where
+   before it put the manager back at his old club), and `wildernessWeek` drops it the next time he waits,
+   when that season's clubs start ringing. It can only touch a past season save whose manager was out of
+   work, with an offer on the table, at the moment of the update.
+2. A save with a bidding war OPEN against a club of today keeps that rival for that one negotiation, and
+   the rival can still close the deal, which writes one new Latest row naming it (the running reviewer
+   found a rival of today in 4 of 8 old saves with a war in flight, Basaksehir and Flamengo in 2010-11,
+   AEK Athens in 2005-06 and Anderlecht in 2020-21, and 3 of the 4 closed the deal). Left alone on purpose: dropping the rival would change a negotiation the player is in the
+   middle of, the row is one of the 80 that roll off, and it ends with that negotiation. The paragraph
+   "Saves" above did not name this seam.
+
+**Three fences the reviews found too weak, tightened.**
+
+- `simEra2020` section 9 read freshly started saves only, so an engine that kept the rule for the first
+  window and dropped it from the second summer on passed it. Every save of its news loop is now rolled
+  into season two and every buyer the Latest feed names there is read (561, 554, 545 and 549 a season,
+  none of today). Control `firstsummer` is the reviewer's mutation: 4 failures, that sentence alone.
+- `simEras` section 1 passed with one real man at two clubs (the join failing to move him). It now fails
+  on any name at a club of the bake and at a club outside it at once (0 today); control `twoclubs`
+  fails that sentence alone. `scripts/simClubManagerALeague.mjs` has always held this for the A-League's
+  men and is in no gate list: it belongs beside the era fences.
+- `simEra2020` section 8's floor for era-only clubs in two or more eras is the measured 6, not 3.
+
+**Read and left alone, with the reason.** `wildernessProfile` reads the sacked manager's last tier from
+today's club def in every era (`clubDefFor`), a number no screen prints; an era club that is not in
+today's game reads tier 4 there. It is also what `employedStanding` reads for the job hunt, so changing
+it moves more than this screen and is its own round. The Latest feed at 390 pixels cuts a long buying
+club short (`Sergio Aguero · Atletico Madrid to Manches...`): the row has used `truncate` since the feed
+was built, in a file this round does not own.
