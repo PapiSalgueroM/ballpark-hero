@@ -1,0 +1,23 @@
+# Release AV proof, Round 1301 (the NHL Hall marks as calibration 3): simCareerHall's controls, part 3 of 3
+hall-statsup-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=statsup node scripts/simCareerHall.mjs mlb 2000
+hall-statsup-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=statsup node scripts/simCareerHall.mjs nba 2000
+hall-statsup-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=statsup node scripts/simCareerHall.mjs nfl 2000
+hall-statsup-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=statsup node scripts/simCareerHall.mjs nhl 2000
+hall-todrift-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs mlb 2000
+hall-todrift-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nba 2000
+hall-todrift-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nfl 2000
+hall-todrift-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nhl 2000
+hall-twofamilies: SIM_SKIP_BOARD=1 SIM_CONTROL=twofamilies node scripts/simCareerHall.mjs nhl 2000
+hall-v1drift-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs mlb 2000
+hall-v1drift-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs nba 2000
+hall-v1drift-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs nfl 2000
+hall-v1drift-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs nhl 2000
+hall-v2drift-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=v2drift node scripts/simCareerHall.mjs mlb 2000
+hall-v2drift-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=v2drift node scripts/simCareerHall.mjs nba 2000
+hall-v2drift-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=v2drift node scripts/simCareerHall.mjs nfl 2000
+hall-v2drift-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=v2drift node scripts/simCareerHall.mjs nhl 2000
+hall-v3drift-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=v3drift node scripts/simCareerHall.mjs mlb 2000
+hall-v3drift-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=v3drift node scripts/simCareerHall.mjs nba 2000
+hall-v3drift-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=v3drift node scripts/simCareerHall.mjs nfl 2000
+hall-v3drift-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=v3drift node scripts/simCareerHall.mjs nhl 2000
+hall-wholesheet: SIM_SKIP_BOARD=1 SIM_CONTROL=wholesheet node scripts/simCareerHall.mjs nhl 2000
