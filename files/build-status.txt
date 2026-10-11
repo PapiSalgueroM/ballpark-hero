@@ -1,0 +1,10 @@
+ M public/buzzer-beater/index.html
+ M public/conquest/index.html
+ M public/f1-constructor/index.html
+ M public/free-kick/index.html
+ M public/gauntlet-draft/index.html
+ M public/nfl-gauntlet-draft/index.html
+ M public/perfect-lineup-f1/index.html
+ M public/perfect-season-nba/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json
