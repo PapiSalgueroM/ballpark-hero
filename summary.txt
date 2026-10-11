@@ -1,0 +1,5 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playfirst exit=1 64s | playUsSeasonCentre: 10 checks, 5 failed (control playfirst)
+playUsSeasonCentre exit=0 239s | playUsSeasonCentre: 217 checks, 0 failed
+anchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+discovery exit=0 9s | Retained actual child receipts: .sim-control/browser-discovery-ACwzOY/report.json
