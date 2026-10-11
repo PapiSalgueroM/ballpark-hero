@@ -1,0 +1,5 @@
+# Round 1212 fix pass: the law digest record of Round 1221 printed on the pushed head 55afa19c855aa2e3b05bba84289241f953d4c698 (the record's commit field names it)
+#!serial
+law-print: US_SEASON_DIGEST=print US_SEASON_DIGEST_COMMIT=55afa19c855aa2e3b05bba84289241f953d4c698 US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLawDigest.json node scripts/simUsSeasonCentre.mjs
+law-values: node .rc/x/digestEq.mjs scripts/data/usSeasonLawDigest.json $RC_OUT/usSeasonLawDigest.json
+law-new-compare: cp $RC_OUT/usSeasonLawDigest.json scripts/data/usSeasonLawDigest.json && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
