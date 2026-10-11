@@ -1,0 +1,7 @@
+# Release AW part one, reviewer facts-fences, request B: the fences that walk the whole src tree, one at a time, on the pushed head 64d87aed
+#!serial
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
