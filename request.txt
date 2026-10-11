@@ -1,0 +1,4 @@
+# Release AX: the whole unit suite again after two unit files of this lane learned the wheel and the Compare button, and the fences that read src
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+two-files: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/usCareerHallBoard.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000

@@ -1,0 +1,3 @@
+two-files exit=0 23s |    Duration  22.44s (transform 4.12s, setup 142ms, collect 8.91s, tests 33.06s, environment 837ms, prepare 511ms)
+tsc exit=0 79s | 
+vitest-all exit=0 397s |    Duration  395.23s (transform 27.10s, setup 14.86s, collect 115.86s, tests 842.62s, environment 118.19s, prepare 25.57s)
