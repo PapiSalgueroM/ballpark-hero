@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/uclLeaguePhase.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 786[2mms[22m[39m
+   [33m[2m✓[22m[39m the pots and the slate[2m > [22msays so on the saved slate when the search gave up and the recorded pattern was seated [33m 421[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1813[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mshows the actual rules and worked example before the choice tiles [33m 386[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerProgramme.test.ts [2m([22m[2m55 tests[22m[2m)[22m[33m 324[2mms[22m[39m
+ [32m✓[39m src/test/usProgrammeCardTruth.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 710[2mms[22m[39m
+ [32m✓[39m src/lib/leagueSlate.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 708[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 41127[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 41126[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m127 passed[39m[22m[90m (127)[39m
+[2m   Start at [22m 12:22:47
+[2m   Duration [22m 46.89s[2m (transform 2.38s, setup 512ms, collect 5.08s, tests 45.52s, environment 3.76s, prepare 991ms)[22m
+
