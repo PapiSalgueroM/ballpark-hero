@@ -1,0 +1,50 @@
+[
+  {
+    "seeds": "31-36",
+    "mode": "rates",
+    "matches": 4037,
+    "ruledOut": 288,
+    "ruledOutPerMatch": 0.0713,
+    "awarded": 0,
+    "goalsOn": 2.595,
+    "goalsOff": 2.6621,
+    "gap": -0.0671,
+    "resultMoved": 117,
+    "resultMovedShare": 0.029,
+    "matchesWithReview": 284,
+    "penaltiesOn": 0.3641,
+    "penaltiesOff": 0.3671
+  },
+  {
+    "seeds": "41-46",
+    "mode": "rates",
+    "matches": 4051,
+    "ruledOut": 312,
+    "ruledOutPerMatch": 0.077,
+    "awarded": 0,
+    "goalsOn": 2.6161,
+    "goalsOff": 2.6912,
+    "gap": -0.075,
+    "resultMoved": 110,
+    "resultMovedShare": 0.0272,
+    "matchesWithReview": 299,
+    "penaltiesOn": 0.3584,
+    "penaltiesOff": 0.3557
+  },
+  {
+    "seeds": "51-56",
+    "mode": "rates",
+    "matches": 4004,
+    "ruledOut": 318,
+    "ruledOutPerMatch": 0.0794,
+    "awarded": 0,
+    "goalsOn": 2.6518,
+    "goalsOff": 2.7308,
+    "gap": -0.0789,
+    "resultMoved": 140,
+    "resultMovedShare": 0.035,
+    "matchesWithReview": 303,
+    "penaltiesOn": 0.3664,
+    "penaltiesOff": 0.3679
+  }
+]

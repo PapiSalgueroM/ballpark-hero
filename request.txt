@@ -1,0 +1,3 @@
+gapA: node .rc/x/gapProbe.mjs 31-36 41-46 51-56
+gapB: node .rc/x/gapProbe.mjs 61-66 71-76 101-106
+gapC: node .rc/x/gapProbe.mjs 201-206 301-306 501-506 901-906
