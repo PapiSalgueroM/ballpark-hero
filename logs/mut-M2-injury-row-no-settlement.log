@@ -1,0 +1,18 @@
+mut M2: applied to src/lib/soccerCareerEngine.ts
+ 1 file changed, 1 deletion(-)
+--- M2 pressUnits exit=0
+[2m   Duration [22m 5.25s[2m (transform 870ms, setup 116ms, collect 2.15s, tests 4.11s, environment 814ms, prepare 270ms)[22m
+
+--- M2 pmOutcomes exit=0
+CONTROL FIRED market-ack-rewrites: market-ack-and-comparison
+Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+--- M2 engineUnits exit=0
+[2m   Duration [22m 1.55s[2m (transform 766ms, setup 60ms, collect 1.84s, tests 207ms, environment 369ms, prepare 97ms)[22m
+
+--- M2 programme exit=0
+CONTROL FIRED wheel-ui
+Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance outcomes,7 native career fixtures.
+--- M2 keepPlaying exit=1
+  FAIL: anchor "revert rehab" is in the engine 0 times, it must be exactly once
+  FAIL: anchor "revert rehab" is in the engine 0 times, it must be exactly once
+MUT M2: pressUnits=0 pmOutcomes=0 engineUnits=0 programme=0 keepPlaying=1

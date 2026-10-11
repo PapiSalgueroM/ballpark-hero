@@ -1,0 +1,24 @@
+mut M5: applied to src/lib/usCareerMarket.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- M5 marketUnits exit=1
+ [31m❯[39m src/lib/usCareerMarket.test.ts [2m([22m[2m53 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 20[2mms[22m[39m
+[31m   [31m×[31m saved US contract market[2m > [22mrestore rejects stale year binding without repairing the career[39m[32m 5[2mms[22m[39m
+[31m   [31m×[31m saved US contract market[2m > [22mrestore preserves a no-offer extension and a same-year declined marker[39m[32m 1[2mms[22m[39m
+ [31m❯[39m src/test/usCareerMarketBoard.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 509[2mms[22m[39m
+[31m   [31m×[31m US market on the saved board[2m > [22ma stale talk is dropped alone and the whole underlying career remains on the hub[39m[32m 12[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/usCareerMarket.test.ts[2m > [22msaved US contract market[2m > [22mrestore rejects stale year binding without repairing the career
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketBoard.test.tsx,title=src/test/usCareerMarketBoard.test.tsx > US market on the saved board > a stale talk is dropped alone and the whole underlying career remains on the hub,line=
+--- M5 pmOutcomes exit=1
+AssertionError [ERR_ASSERTION]: [{"name":"market-context","ok":false,"error":"AssertionError [ERR_ASSERTION]: Another contract year cannot restore this talk\n+ actual - expected\n\n+ {\n+   context: {\n+     contractYears: 1,\n+     salary: 4.2,\n+     sport: 
+
+Node.js v24.21.0
+--- M5 parity exit=0
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+--- M5 saveRetry exit=0
+Copied controls: 23/23 mapped AssertionErrors with unchanged independent baseline.
+Source and fixture holds: 3405; complete reports, transforms, source copies and hashes retained.
+US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+MUT M5: marketUnits=1 pmOutcomes=1 parity=0 saveRetry=0

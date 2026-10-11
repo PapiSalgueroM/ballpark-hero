@@ -1,0 +1,18 @@
+# Release AX review, engine-saves, request d (one at a time): six mutations of a settlement or a talk rule, each followed by every test and harness that could notice (the closing line of each says which did), then the US board recording replayed with its eight controls
+#!serial
+mut-M1-press-after-money-and-plan: bash .rc/x/mutrun.sh M1
+mut-M2-injury-row-no-settlement: bash .rc/x/mutrun.sh M2
+mut-M2b-out-years-no-settlement: bash .rc/x/mutrun.sh M2b
+mut-M3-target-exactly-met-is-missed: bash .rc/x/mutrun.sh M3
+mut-M4-push-not-saved: bash .rc/x/mutrun.sh M4
+mut-M5-stale-year-accepted: bash .rc/x/mutrun.sh M5
+clean: git status --short -- src scripts | head -5; git diff --stat | tail -1; echo "tree clean check done"
+simUsBoardParity: export TMPDIR=$(mktemp -d); node scripts/simUsBoardParity.mjs
+parity-label: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+parity-draw: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=draw node scripts/simUsBoardParity.mjs
+parity-binding: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=binding node scripts/simUsBoardParity.mjs
+parity-restore: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=restore node scripts/simUsBoardParity.mjs
+parity-era: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=era node scripts/simUsBoardParity.mjs
+parity-fixture: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+parity-wheel: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=wheel node scripts/simUsBoardParity.mjs
+parity-talk: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=talk node scripts/simUsBoardParity.mjs

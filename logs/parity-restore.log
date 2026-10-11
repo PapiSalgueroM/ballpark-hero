@@ -1,0 +1,11 @@
+control restore: Vitest exit 1, passed [], failed [nfl, nba, mlb, nhl]
+   nfl save "noRole" step 23 (after "press: Sign up"): the save differs first in c.role
+   nfl save "noRole" step 24 (after "press: 🥤Team nutritionist🏕️ Training camp, 2027You've dropped wei"): the save differs
+   nba save "noRole" step 25 (after "press: Fund it and rename it"): the save differs first in c.role
+   nba save "noRole" step 26 (after "press: 🥵Strength coach🏀 Training camp, 2030Conditioning test tomo"): the save differs
+   mlb save "noRole" step 23 (after "press: Settle, keep it friendly"): the save differs first in c.role
+   mlb save "noRole" step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous"): the save differs
+   nhl save "noRole" step 23 (after "press: Sign up"): the save differs first in c.role
+   nhl save "noRole" step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold "): the save differs
+  CONTROL FIRED: [nfl, nba, mlb, nhl] red on "save "noRole"", the rest green
+simUsBoardParity control restore: green. The control turned its own sports red for its own reason.

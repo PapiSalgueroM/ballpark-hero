@@ -1,0 +1,16 @@
+mut-M1-press-after-money-and-plan exit=0 91s | MUT M1: pressUnits=0 pmOutcomes=0 engineUnits=0 programme=0 keepPlaying=0
+mut-M2-injury-row-no-settlement exit=0 52s | MUT M2: pressUnits=0 pmOutcomes=0 engineUnits=0 programme=0 keepPlaying=1
+mut-M2b-out-years-no-settlement exit=0 93s | MUT M2b: pressUnits=1 pmOutcomes=1 engineUnits=0 programme=0 keepPlaying=0
+mut-M3-target-exactly-met-is-missed exit=0 94s | MUT M3: pressUnits=1 pmOutcomes=1 engineUnits=0 programme=0 keepPlaying=0
+mut-M4-push-not-saved exit=0 108s | MUT M4: marketUnits=0 pmOutcomes=0 parity=1 saveRetry=0
+mut-M5-stale-year-accepted exit=0 97s | MUT M5: marketUnits=1 pmOutcomes=1 parity=0 saveRetry=0
+clean exit=0 0s | tree clean check done
+simUsBoardParity exit=0 30s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+parity-label exit=0 29s | simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+parity-draw exit=0 30s | simUsBoardParity control draw: green. The control turned its own sports red for its own reason.
+parity-binding exit=0 29s | simUsBoardParity control binding: green. The control turned its own sports red for its own reason.
+parity-restore exit=0 28s | simUsBoardParity control restore: green. The control turned its own sports red for its own reason.
+parity-era exit=0 29s | simUsBoardParity control era: green. The control turned its own sports red for its own reason.
+parity-fixture exit=0 29s | simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
+parity-wheel exit=0 0s | simUsBoardParity control wheel: green. The control turned its own sport red for its own reason.
+parity-talk exit=0 30s | simUsBoardParity control talk: green. The control turned its own sports red for its own reason.

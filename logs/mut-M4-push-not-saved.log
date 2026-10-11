@@ -1,0 +1,20 @@
+mut M4: applied to src/components/us-career/UsCareerBoard.tsx
+ 1 file changed, 1 deletion(-)
+--- M4 marketUnits exit=0
+[2m   Duration [22m 2.77s[2m (transform 1.22s, setup 110ms, collect 2.17s, tests 939ms, environment 760ms, prepare 295ms)[22m
+
+--- M4 pmOutcomes exit=0
+CONTROL FIRED market-ack-rewrites: market-ack-and-comparison
+Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+--- M4 parity exit=1
+   Vitest exit 1, passed [], failed [nfl, nba, mlb, nhl]
+  FAIL: the replay exited 1
+  FAIL: the replay passed [], not all four sports
+  FAIL: 39 steps differ from the fixture
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures
+--- M4 saveRetry exit=0
+Copied controls: 23/23 mapped AssertionErrors with unchanged independent baseline.
+Source and fixture holds: 3405; complete reports, transforms, source copies and hashes retained.
+US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+MUT M4: marketUnits=0 pmOutcomes=0 parity=1 saveRetry=0

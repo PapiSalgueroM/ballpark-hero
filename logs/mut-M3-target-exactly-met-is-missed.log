@@ -1,0 +1,25 @@
+mut M3: applied to src/lib/soccerCareerPress.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- M3 pressUnits exit=1
+ [31m❯[39m src/lib/soccerCareerPress.test.ts [2m([22m[2m78 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[32m 191[2mms[22m[39m
+[31m   [31m×[31m Soccer Press answers and recorded context[2m > [22mbinds a new promise to the current club after a move while retaining the source club[39m[32m 8[2mms[22m[39m
+[31m   [31m×[31m Soccer Press once-only settlement[2m > [22msettles ST from the exact next recorded line {"goals":17}[39m[32m 4[2mms[22m[39m
+[31m   [31m×[31m Soccer Press once-only settlement[2m > [22msettles GK from the exact next recorded line {"cleanSheets":12}[39m[32m 1[2mms[22m[39m
+[31m   [31m×[31m Soccer Press once-only settlement[2m > [22msettles CM from the exact next recorded line {"assists":10}[39m[32m 1[2mms[22m[39m
+[31m   [31m×[31m Soccer Press once-only settlement[2m > [22msettles CB from the exact next recorded line {"apps":30,"rating":7}[39m[32m 1[2mms[22m[39m
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerPress.test.ts,title=src/lib/soccerCareerPress.test.ts > Soccer Press malformed optional saves are read as absent > rejects a forged completed verdict or actual figure against its he
+--- M3 pmOutcomes exit=1
+AssertionError [ERR_ASSERTION]: [{"name":"press-settlement-once","ok":false,"error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'missed' !== 'met'\n\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerPre
+
+Node.js v24.21.0
+--- M3 engineUnits exit=0
+[2m   Duration [22m 1.53s[2m (transform 739ms, setup 59ms, collect 1.77s, tests 218ms, environment 396ms, prepare 159ms)[22m
+
+--- M3 programme exit=0
+CONTROL FIRED wheel-ui
+Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance outcomes,7 native career fixtures.
+--- M3 keepPlaying exit=0
+     now      retire age 41.27, rows 26.27, playing rows 22.52, goals 88.1, net worth 116.2M, legacy 65.5; 40+ seasons 80, goals mean 1.95 p90 5, 20+ goal seasons 0
+simCareerKeepPlaying: 1463 checks, 0 failures
+MUT M3: pressUnits=1 pmOutcomes=1 engineUnits=0 programme=0 keepPlaying=0

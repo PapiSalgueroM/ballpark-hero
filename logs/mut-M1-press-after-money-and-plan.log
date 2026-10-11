@@ -1,0 +1,18 @@
+mut M1: applied to src/lib/soccerCareerEngine.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- M1 pressUnits exit=0
+[2m   Duration [22m 4.97s[2m (transform 838ms, setup 109ms, collect 2.05s, tests 3.79s, environment 800ms, prepare 354ms)[22m
+
+--- M1 pmOutcomes exit=0
+CONTROL FIRED market-ack-rewrites: market-ack-and-comparison
+Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+--- M1 engineUnits exit=0
+[2m   Duration [22m 1.46s[2m (transform 703ms, setup 61ms, collect 1.66s, tests 204ms, environment 368ms, prepare 171ms)[22m
+
+--- M1 programme exit=0
+CONTROL FIRED wheel-ui
+Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance outcomes,7 native career fixtures.
+--- M1 keepPlaying exit=0
+     now      retire age 41.27, rows 26.27, playing rows 22.52, goals 88.1, net worth 116.2M, legacy 65.5; 40+ seasons 80, goals mean 1.95 p90 5, 20+ goal seasons 0
+simCareerKeepPlaying: 1463 checks, 0 failures
+MUT M1: pressUnits=0 pmOutcomes=0 engineUnits=0 programme=0 keepPlaying=0
