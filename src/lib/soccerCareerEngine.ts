@@ -4588,7 +4588,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
       /* Same shape as the ordinary loan window: the contract and the wage
          stay where they are, only the football moves. */
       for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
-        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
+        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);
         if (!candidates.length) continue;
         const club = pickAcrossLeagues(candidates);
         exclude.add(club.name);
