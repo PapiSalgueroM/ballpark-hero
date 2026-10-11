@@ -190,6 +190,8 @@ async function open(profile, motion, pre, seed) {
         net: document.querySelector('.cm-live-net--top[data-cm-net="goal"]') ? 'top' : document.querySelector('.cm-live-net--bottom[data-cm-net="goal"]') ? 'bottom' : null, stage: root?.dataset.cmLiveStage ?? null,
         /* The pill of a goal that has just been told ('me' or 'opp'; any other pill is 'none'). */
         goalPill: !!document.querySelector('[data-cm-live-pill="me"], [data-cm-live-pill="opp"]'),
+        /* Round 1302 fix 2: the small line under the pitch. */
+        line: (document.querySelector('[data-cm-live-event]')?.textContent ?? '').trim(),
         goalCard: !!document.querySelector('[data-cm-goal-card]'), goalText: document.querySelector('[data-cm-goal-card]')?.textContent ?? '', minute: root?.dataset.cmLiveMinute ?? null, y: Math.round(window.scrollY),
         score: [...document.querySelectorAll('[data-cm-live-stagebox] [data-cm-score-of]')].map(el => `${el.dataset.cmScoreOf}=${el.textContent}`).join(' ') };
     };
@@ -333,6 +335,13 @@ async function runCase(profile, motion, kind, variant) {
       /* A pill that says GOAL for a real goal is never up with a card that rules a goal out (where the clock stops
          at the whistle after a real last kick, the stoppage waits for that goal's pill to come down first). */
       if (ruledOut) check(!under.some(s => s.goalPill), 'the pill of a real goal was up under the card of a ruled out goal');
+      /* Round 1302 fix 2: the small line under the pitch says nothing under the card of a ruled out goal. It kept
+         the last thing told (this walk's own pictures read "Throw in, Aston Villa" under a goal and the card that
+         rules it out). Asked of every sample under such a card but the one it opens on: a line told in that very
+         frame is taken off in the frame after. */
+      const idOf = s => s.card.slice(s.card.indexOf(':') + 1);
+      const lineUnder = seen.filter((s, i) => nets[idOf(s)] && i > 0 && idOf(seen[i - 1]) === idOf(s) && s.line !== '');
+      check(!lineUnder.length, `the line under the pitch says something under the card of a ruled out goal: ${JSON.stringify(lineUnder[0]?.line)}`);
       /* Round 1302: the flight has to be the action right before the card (a sample is kept only when the screen
          changes, so those are the last few), with no goal card of its own. An earlier real goal of the same half
          does not count: the first lit walk of this round passed a late case on one. Asked of every ruled out goal. */
