@@ -566,6 +566,11 @@ function compareContent(candidate, baseline) {
     if (!inactive) fail(`seed ${out.seed}: historical comparison contains an active live match`);
     const state = { ...out.state };
     if (state.live === null) delete state.live;
+    /* Round 1229: the league book is a save field the pre-1072 engine does not know. It carries the book it
+       is handed untouched while today's engine writes the week's rows into it, so the comparison leaves the
+       field out on both sides. scripts/simCmLeagueBook.mjs holds the book itself, and that the whole save
+       but the book and the count of draws are what they were with the book taken out of the engine. */
+    delete state.leagueBook;
     const content = sortedJSON({ report: out.report, state });
     return { present, inactive, content, hash: createHash('sha256').update(content).digest('hex') };
   });

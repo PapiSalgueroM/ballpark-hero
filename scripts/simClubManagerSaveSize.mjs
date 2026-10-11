@@ -154,6 +154,25 @@
  * Lincoln City 219,554, slope 3,098 to 4,435 (the control fired, 33
  * failures in section 1 and nothing else). 196,000 now sits 9,240 over the
  * healthy top and 10,936 under the defect's bottom, so it stays.
+ * Round 1229 moved SIZE_BUDGET to 203,000, measured the same way on GitHub
+ * runners (2026-10-10, remote checks r1229-size-base and r1229-size-cand).
+ * The round keeps a league book in the save (leagueBook: every rival's
+ * league goals, assists and clean sheets by man), one season's worth,
+ * replaced every summer, so it adds a level and no slope. The round's base
+ * (980654fa), default stream and SIM_SEED 1 to 5: healthy 179,671 to
+ * 186,562 (Real Madrid 179,671 to 183,000, Everton 184,683 to 185,940,
+ * Lincoln City 184,799 to 186,562). With the book (4ab6e246), the same six
+ * streams: healthy 180,907 to 193,046 (Real Madrid 180,907 to 189,130,
+ * Everton 190,906 to 192,180, Lincoln City 191,243 to 193,046), slope -42
+ * to 1,153. The book is about 50 bytes on day one, 6,023 to 7,284 at the
+ * end of season one and 1,236 to 6,534 at season 15 (a 20 club league near
+ * 6,200, a 24 club league near 6,500). All six streams still passed the old
+ * 196,000, with 2,954 left over the healthy top, which is no margin.
+ * Uncapped, default stream, with the book: Real Madrid 215,793, Everton
+ * 223,925, Lincoln City 226,422, slope 3,103 to 4,398 (the control fired,
+ * 33 failures in section 1 and nothing else). 203,000 sits 9,954 over the
+ * healthy top and 12,793 under the defect's bottom. The slope fence did not
+ * move.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *
@@ -178,7 +197,7 @@ const ENTRY = `${TMP}/cmSaveSize.entry.mjs`;
 const BUNDLE = `${TMP}/cmSaveSize.bundle.mjs`;
 
 /* Measured ranges beside each, see the header. */
-const SIZE_BUDGET = 196_000;   // Round 1052, 27 leagues: healthy 179,120 to 187,581; head to head uncapped 207,690 to 219,987 (was 192,000: Round 1040, 26 leagues, healthy 177,355 to 184,064, uncapped 205,532 to 217,721)
+const SIZE_BUDGET = 203_000;   // Round 1229, the league book: healthy 180,907 to 193,046; head to head uncapped 215,793 to 226,422 (was 196,000: Round 1052, 27 leagues, healthy 179,120 to 187,581, uncapped 207,690 to 219,987)
 const SLOPE_CAP = 2_000;       // healthy 249 to 1,178 bytes a season; uncapped 3,052 to 4,408
 const CLUBS = ['Real Madrid', 'Everton', 'Lincoln City'];
 const SEASONS = 15;

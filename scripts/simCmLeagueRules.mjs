@@ -309,6 +309,33 @@
       which holds the windows themselves. Pure held 48/0. Written with
       --part=modern,eras,pure --write on the tree itself, then run green
       whole.
+      Round 1229 (2026-10-10) re-took modern and eras for one new save
+      field and nothing else. The round keeps a league book in the save
+      (leagueBook: every rival's league goals, assists and clean sheets by
+      man), opened by startCareer and startNextSeason and written to after
+      every league result, on a keyed stream of its own. Attribution on a
+      GitHub runner at 68209f4c (remote check r1229-rules), two legs. Leg A,
+      a copy of the tree with the one line that opens a book made a no-op
+      (so no book is ever opened or written to): the file as it stood, byte
+      for byte (modern 27/0, eras 20/0, pure 48/0), so the book is the whole
+      cause and no result, table or draw of any save moved. Leg B, the tree
+      itself: all 27 modern and all 20 era saves moved in start, whole and
+      wholeNext, and the ten pyramid saves in s2_whole as well, 151 hashes,
+      each one a hash of a whole state, which now carries the book; table,
+      results, world, cup, europe, trophies, objectives, summary,
+      promotions and every other next season and second season view held
+      in all 47, and pure held 48/0. Written with --part=modern,eras,pure
+      --write on the tree itself, then run green whole on the same runner.
+      Taken a second time the same day at 852b05fc (remote check
+      r1229-rules2) after the book's list of my own men's clean sheets
+      changed from a map by player id to a list of pairs, a change of
+      shape inside the book and of nothing else. Both legs again, each
+      against the file as it stood before the round (980654fa): leg A the
+      file byte for byte, leg B the same 151 hashes in the same 47 saves
+      and no other. The file this tree carries is that second writing.
+      scripts/simCmLeagueBook.mjs holds the same thing from the other side:
+      the whole save but the book, and the count of draws, equal with the
+      book in and out and equal to the commit before the round.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
