@@ -4063,8 +4063,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
 
-      {/* FINAL SEASON BANNER */}
-      {career.isFinalSeason && !career.retired && (
+      {/* FINAL SEASON BANNER. Release AW fix pass: an announced farewell season has its own card right
+          below (it names the year and holds the rules), and announcing is the only thing that sets this
+          flag, so the two stacked boxes said one thing twice on every screen of that season and filled a
+          320 by 568 phone's first screen. While a plan is held the card speaks alone. */}
+      {career.isFinalSeason && !career.retired && !readSoccerFarewell(career) && (
         <div className="bg-amber-500/15 border-2 border-amber-500/40 rounded-xl p-3 text-center animate-pulse">
           <span className="text-sm font-black text-amber-400 uppercase tracking-widest">⚠️ FINAL SEASON</span>
           <p className="text-[10px] text-muted-foreground mt-0.5">This will be your last season as a professional footballer</p>
