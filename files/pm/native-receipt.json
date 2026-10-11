@@ -1,0 +1,16 @@
+{
+  "head": "7242aef89763eccdf52ddc6885bf94abb9ef7780",
+  "tree": "4bd6860f4f1a006ede392b92b5c009c4be1a41af",
+  "journeys": 54,
+  "checks": 1899,
+  "pairs": 225,
+  "reloads": 252,
+  "rng": 147,
+  "shots": 93,
+  "layouts": 186,
+  "restorations": 30,
+  "detectors": 3,
+  "forwarded": 0,
+  "sourceHeld": true,
+  "scope": "Complete retained native receipts. Manual pixel review is separate."
+}
