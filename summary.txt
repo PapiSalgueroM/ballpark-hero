@@ -1,0 +1,13 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerCareerAwardReveal exit=0 12s | playSoccerCareerAwardReveal: 26 checks, 0 failed
+playSoccerCareerCompetitions exit=0 9s | playSoccerCareerCompetitions: 52 checks, 0 failed
+playSoccerCareerContracts exit=0 25s | playSoccerCareerContracts: 201 checks, 0 failed
+playSoccerCareerDiscipline exit=0 9s | playSoccerCareerDiscipline: 178 checks, 0 failed
+playSoccerCareerFamily exit=0 19s | playSoccerCareerFamily: 72 checks, 0 failed
+playSoccerCareerLeagueWorld exit=0 13s | playSoccerCareerLeagueWorld: 249 checks, 0 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+playSoccerCareerOpponents exit=0 11s | playSoccerCareerOpponents: 164 checks, 0 failed
+playNbaNumbers exit=0 62s | playNbaNumbers: 85 checks, 0 failed
+playCareerHub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playSaveKeeper exit=1 844s | playSaveKeeper: RED, 5 problem(s).
+playDraftNight exit=0 213s | playDraftNight: ALL GREEN, 49 nights walked
+playCmQuickSubs exit=0 13s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.

@@ -1,0 +1,180 @@
+fixture simulated: matchday 35, red at 19, next game suspended, 4 yellows/1 reds, 3 served club bans
+ok   390x844 matchday1: actual card feed matches that game's recorded allocation
+ok   390x844 matchday1: cards leave the exact derived score 0-2
+ok   390x844 matchday1: served-ban gaps are visible
+ok   390x844 matchday2: actual card feed matches that game's recorded allocation
+ok   390x844 matchday2: cards leave the exact derived score 0-3
+ok   390x844 matchday2: served-ban gaps are visible
+ok   390x844 matchday3: actual card feed matches that game's recorded allocation
+ok   390x844 matchday3: cards leave the exact derived score 1-0
+ok   390x844 matchday3: served-ban gaps are visible
+ok   390x844 matchday4: actual card feed matches that game's recorded allocation
+ok   390x844 matchday4: cards leave the exact derived score 3-0
+ok   390x844 matchday5: actual card feed matches that game's recorded allocation
+ok   390x844 matchday5: cards leave the exact derived score 1-3
+ok   390x844 matchday6: actual card feed matches that game's recorded allocation
+ok   390x844 matchday6: cards leave the exact derived score 1-1
+ok   390x844 matchday7: actual card feed matches that game's recorded allocation
+ok   390x844 matchday7: cards leave the exact derived score 1-2
+ok   390x844 matchday8: actual card feed matches that game's recorded allocation
+ok   390x844 matchday8: cards leave the exact derived score 0-0
+ok   390x844 matchday9: actual card feed matches that game's recorded allocation
+ok   390x844 matchday9: cards leave the exact derived score 3-0
+ok   390x844 matchday10: actual card feed matches that game's recorded allocation
+ok   390x844 matchday10: cards leave the exact derived score 1-2
+ok   390x844 matchday11: actual card feed matches that game's recorded allocation
+ok   390x844 matchday11: cards leave the exact derived score 1-2
+ok   390x844 matchday12: actual card feed matches that game's recorded allocation
+ok   390x844 matchday12: cards leave the exact derived score 2-1
+ok   390x844 matchday13: actual card feed matches that game's recorded allocation
+ok   390x844 matchday13: cards leave the exact derived score 0-2
+ok   390x844 matchday14: actual card feed matches that game's recorded allocation
+ok   390x844 matchday14: cards leave the exact derived score 0-1
+ok   390x844 matchday15: actual card feed matches that game's recorded allocation
+ok   390x844 matchday15: cards leave the exact derived score 2-2
+ok   390x844 matchday16: actual card feed matches that game's recorded allocation
+ok   390x844 matchday16: cards leave the exact derived score 0-1
+ok   390x844 matchday17: actual card feed matches that game's recorded allocation
+ok   390x844 matchday17: cards leave the exact derived score 4-1
+ok   390x844 matchday18: actual card feed matches that game's recorded allocation
+ok   390x844 matchday18: cards leave the exact derived score 1-2
+ok   390x844 matchday19: actual card feed matches that game's recorded allocation
+ok   390x844 matchday19: cards leave the exact derived score 3-0
+ok   390x844 matchday20: actual card feed matches that game's recorded allocation
+ok   390x844 matchday20: cards leave the exact derived score 1-2
+ok   390x844 matchday21: actual card feed matches that game's recorded allocation
+ok   390x844 matchday21: cards leave the exact derived score 3-0
+ok   390x844 matchday22: actual card feed matches that game's recorded allocation
+ok   390x844 matchday22: cards leave the exact derived score 1-1
+ok   390x844 matchday23: actual card feed matches that game's recorded allocation
+ok   390x844 matchday23: cards leave the exact derived score 2-1
+ok   390x844 matchday24: actual card feed matches that game's recorded allocation
+ok   390x844 matchday24: cards leave the exact derived score 3-2
+ok   390x844 matchday25: actual card feed matches that game's recorded allocation
+ok   390x844 matchday25: cards leave the exact derived score 4-0
+ok   390x844 matchday26: actual card feed matches that game's recorded allocation
+ok   390x844 matchday26: cards leave the exact derived score 1-2
+ok   390x844 matchday27: actual card feed matches that game's recorded allocation
+ok   390x844 matchday27: cards leave the exact derived score 0-0
+ok   390x844 matchday28: actual card feed matches that game's recorded allocation
+ok   390x844 matchday28: cards leave the exact derived score 0-2
+ok   390x844 matchday29: actual card feed matches that game's recorded allocation
+ok   390x844 matchday29: cards leave the exact derived score 2-0
+ok   390x844 matchday30: actual card feed matches that game's recorded allocation
+ok   390x844 matchday30: cards leave the exact derived score 0-2
+ok   390x844 matchday31: actual card feed matches that game's recorded allocation
+ok   390x844 matchday31: cards leave the exact derived score 2-0
+ok   390x844 matchday32: actual card feed matches that game's recorded allocation
+ok   390x844 matchday32: cards leave the exact derived score 0-0
+ok   390x844 matchday33: actual card feed matches that game's recorded allocation
+ok   390x844 matchday33: cards leave the exact derived score 4-0
+ok   390x844 matchday34: actual card feed matches that game's recorded allocation
+ok   390x844 matchday34: cards leave the exact derived score 0-2
+ok   390x844 matchday35: actual card feed matches that game's recorded allocation
+ok   390x844 matchday35: cards leave the exact derived score 1-3
+ok   390x844: send-off text and minute match his offAt and his match line
+ok   390x844: a goal after his red shows him off the pitch
+ok   390x844 matchday36: actual card feed matches that game's recorded allocation
+ok   390x844 matchday36: cards leave the exact derived score 2-0
+ok   390x844: next match says Suspended with no player events
+ok   390x844 matchday36: served-ban gaps are visible
+ok   390x844 matchday37: actual card feed matches that game's recorded allocation
+ok   390x844 matchday37: cards leave the exact derived score 1-0
+ok   390x844 matchday38: actual card feed matches that game's recorded allocation
+ok   390x844 matchday38: cards leave the exact derived score 1-1
+ok   390x844: actual complete match feeds conserve 1 red and 4 yellow cards
+ok   390x844: review uses exact saved cards and actually served ban count
+ok   390x844: watching all cards preserves exact career save bytes
+ok   390x844: closing restores page position and recorded stats
+ok   390x844: reload preserves exact save and totals
+ok   390x844: no page errors or horizontal overflow
+ok   1280x900 matchday1: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday1: cards leave the exact derived score 0-2
+ok   1280x900 matchday1: served-ban gaps are visible
+ok   1280x900 matchday2: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday2: cards leave the exact derived score 0-3
+ok   1280x900 matchday2: served-ban gaps are visible
+ok   1280x900 matchday3: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday3: cards leave the exact derived score 1-0
+ok   1280x900 matchday3: served-ban gaps are visible
+ok   1280x900 matchday4: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday4: cards leave the exact derived score 3-0
+ok   1280x900 matchday5: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday5: cards leave the exact derived score 1-3
+ok   1280x900 matchday6: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday6: cards leave the exact derived score 1-1
+ok   1280x900 matchday7: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday7: cards leave the exact derived score 1-2
+ok   1280x900 matchday8: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday8: cards leave the exact derived score 0-0
+ok   1280x900 matchday9: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday9: cards leave the exact derived score 3-0
+ok   1280x900 matchday10: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday10: cards leave the exact derived score 1-2
+ok   1280x900 matchday11: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday11: cards leave the exact derived score 1-2
+ok   1280x900 matchday12: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday12: cards leave the exact derived score 2-1
+ok   1280x900 matchday13: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday13: cards leave the exact derived score 0-2
+ok   1280x900 matchday14: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday14: cards leave the exact derived score 0-1
+ok   1280x900 matchday15: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday15: cards leave the exact derived score 2-2
+ok   1280x900 matchday16: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday16: cards leave the exact derived score 0-1
+ok   1280x900 matchday17: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday17: cards leave the exact derived score 4-1
+ok   1280x900 matchday18: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday18: cards leave the exact derived score 1-2
+ok   1280x900 matchday19: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday19: cards leave the exact derived score 3-0
+ok   1280x900 matchday20: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday20: cards leave the exact derived score 1-2
+ok   1280x900 matchday21: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday21: cards leave the exact derived score 3-0
+ok   1280x900 matchday22: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday22: cards leave the exact derived score 1-1
+ok   1280x900 matchday23: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday23: cards leave the exact derived score 2-1
+ok   1280x900 matchday24: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday24: cards leave the exact derived score 3-2
+ok   1280x900 matchday25: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday25: cards leave the exact derived score 4-0
+ok   1280x900 matchday26: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday26: cards leave the exact derived score 1-2
+ok   1280x900 matchday27: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday27: cards leave the exact derived score 0-0
+ok   1280x900 matchday28: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday28: cards leave the exact derived score 0-2
+ok   1280x900 matchday29: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday29: cards leave the exact derived score 2-0
+ok   1280x900 matchday30: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday30: cards leave the exact derived score 0-2
+ok   1280x900 matchday31: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday31: cards leave the exact derived score 2-0
+ok   1280x900 matchday32: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday32: cards leave the exact derived score 0-0
+ok   1280x900 matchday33: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday33: cards leave the exact derived score 4-0
+ok   1280x900 matchday34: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday34: cards leave the exact derived score 0-2
+ok   1280x900 matchday35: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday35: cards leave the exact derived score 1-3
+ok   1280x900: send-off text and minute match his offAt and his match line
+ok   1280x900: a goal after his red shows him off the pitch
+ok   1280x900 matchday36: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday36: cards leave the exact derived score 2-0
+ok   1280x900: next match says Suspended with no player events
+ok   1280x900 matchday36: served-ban gaps are visible
+ok   1280x900 matchday37: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday37: cards leave the exact derived score 1-0
+ok   1280x900 matchday38: actual card feed matches that game's recorded allocation
+ok   1280x900 matchday38: cards leave the exact derived score 1-1
+ok   1280x900: actual complete match feeds conserve 1 red and 4 yellow cards
+ok   1280x900: review uses exact saved cards and actually served ban count
+ok   1280x900: watching all cards preserves exact career save bytes
+ok   1280x900: closing restores page position and recorded stats
+ok   1280x900: reload preserves exact save and totals
+ok   1280x900: no page errors or horizontal overflow
+playSoccerCareerDiscipline: 178 checks, 0 failed
