@@ -1,0 +1,6 @@
+vitest-mlb exit=0 15s |    Duration  13.66s (transform 4.48s, setup 475ms, collect 8.33s, tests 17.11s, environment 2.84s, prepare 1.02s)
+ctl-mlbinnings exit=1 20s | simUsSeasonCentre: 53 checks, 2 failed (control mlbinnings)
+ctl-mlbcap exit=1 19s | simUsSeasonCentre: 53 checks, 1 failed (control mlbcap)
+tsc exit=0 97s | 
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsSeasonCentre exit=0 112s | simUsSeasonCentre: 151 checks, 0 failed

@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-mlb: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentreScreens.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+ctl-mlbinnings: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbinnings node scripts/simUsSeasonCentre.mjs
+ctl-mlbcap: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlbcap node scripts/simUsSeasonCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
