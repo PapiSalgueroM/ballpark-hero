@@ -1,0 +1,1155 @@
+{
+  "status": "fail",
+  "head": "e02488a4df7aec190251a9e8f5d52abf851877b0",
+  "input": {
+    "root": "/tmp/labels-proof",
+    "file": "fixtures.json",
+    "sha256": "32877bcfe27cb560c8f6f3a2a518a5910864c84099ac007ff93dbddbd2271ddb",
+    "reportSha256": "ffac6cbb269d42e8c390ff5fe63f8026cc334de8c6a3c6f43347edc76d15871e"
+  },
+  "journeys": [
+    {
+      "width": 320,
+      "height": 844,
+      "status": "fail",
+      "save": "e8fb76eb43a9b52f38c75f470c2270dd3a57836d747e91e1bfefd5cc7334e1df",
+      "reads": [],
+      "shots": [
+        {
+          "file": "shots/320-failure.png",
+          "bytes": 55293,
+          "sha256": "eff95960838109ad40cd6c0e168413d5a0731cb44ee1b7deb6e300a0f4e2eacf"
+        }
+      ],
+      "layouts": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CareerChanceWheel-_9hvvk9X.js",
+          "status": 200,
+          "body": "b6076c828b3a64ba816402a0712ec5df46baf7136332aabc2c16f5bb1c301267",
+          "bytes": 2896,
+          "sha256": "e1fb52fab9e5ca0f4fee013f973e30c5245dcc0764896e3b9dba772361db3651"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "externalRequests": [
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T08%3A57%3A45.529Z&start_at=lte.2026-10-12T16%3A57%3A45.529Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/am.png",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/am.png"
+      ],
+      "fontScope": "network-free installed fallback fonts, actual document.fonts.ready; saved help preference already seen",
+      "document": "24cfc751dba814c5bc7f4137b9a2bf8aff4a88dccd3a71b85364e91482c4f36b",
+      "startup": "8fd7248e3fd37dd4a404c45e9a7b06559fca7e80cc06904de78f9e0dfebd2bc2",
+      "loadedSave": "9769968ddde9e7cd8af7a6c79a46f498fce31cc329c0383e20b36bcaf1f03f55",
+      "bodyBefore": {
+        "attribute": "pointer-events: none;",
+        "declarations": [
+          [
+            "pointer-events",
+            "none",
+            ""
+          ]
+        ],
+        "overflow": "hidden",
+        "pointerEvents": "none",
+        "marginRight": "0px",
+        "position": "relative"
+      },
+      "error": {
+        "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-watch-week-by-week]')\n    - locator resolved to <button data-watch-week-by-week=\"true\" class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full h-10 text-sm font-semibold\">📺 Watch it week by week</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <p class=\"text-xs text-muted-foreground\">Amber: Hamstring tweaked. Slate: Backflip lands s…</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  14 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <p class=\"text-xs text-muted-foreground\">Amber: Hamstring tweaked. Slate: Backflip lands s…</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n",
+        "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-watch-week-by-week]')\n    - locator resolved to <button data-watch-week-by-week=\"true\" class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full h-10 text-sm font-semibold\">📺 Watch it week by week</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <p class=\"text-xs text-muted-foreground\">Amber: Hamstring tweaked. Slate: Backflip lands s…</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  14 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <p class=\"text-xs text-muted-foreground\">Amber: Hamstring tweaked. Slate: Backflip lands s…</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n\n    at openGame2 (/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:228:135)\n    at async browserProof (/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:234:19)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:256:53"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "status": "fail",
+      "save": "e8fb76eb43a9b52f38c75f470c2270dd3a57836d747e91e1bfefd5cc7334e1df",
+      "reads": [],
+      "shots": [
+        {
+          "file": "shots/390-failure.png",
+          "bytes": 56094,
+          "sha256": "b56e2863a1ad49ba7e9aba2d37836e9890b9fe85ceb5739b16018b14baa3c5c3"
+        }
+      ],
+      "layouts": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CareerChanceWheel-_9hvvk9X.js",
+          "status": 200,
+          "body": "b6076c828b3a64ba816402a0712ec5df46baf7136332aabc2c16f5bb1c301267",
+          "bytes": 2896,
+          "sha256": "e1fb52fab9e5ca0f4fee013f973e30c5245dcc0764896e3b9dba772361db3651"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "externalRequests": [
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T08%3A58%3A16.506Z&start_at=lte.2026-10-12T16%3A58%3A16.506Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w40/am.png",
+        "https://flagcdn.com/w80/be.png"
+      ],
+      "fontScope": "network-free installed fallback fonts, actual document.fonts.ready; saved help preference already seen",
+      "document": "24cfc751dba814c5bc7f4137b9a2bf8aff4a88dccd3a71b85364e91482c4f36b",
+      "startup": "a1ca503cdf4c948b8abc33a03ce6e771f006452dacfe3d4a4be44bd45cc286ef",
+      "loadedSave": "9769968ddde9e7cd8af7a6c79a46f498fce31cc329c0383e20b36bcaf1f03f55",
+      "bodyBefore": {
+        "attribute": "pointer-events: none;",
+        "declarations": [
+          [
+            "pointer-events",
+            "none",
+            ""
+          ]
+        ],
+        "overflow": "hidden",
+        "pointerEvents": "none",
+        "marginRight": "0px",
+        "position": "relative"
+      },
+      "error": {
+        "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-watch-week-by-week]')\n    - locator resolved to <button data-watch-week-by-week=\"true\" class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full h-10 text-sm font-semibold\">📺 Watch it week by week</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  14 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n",
+        "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-watch-week-by-week]')\n    - locator resolved to <button data-watch-week-by-week=\"true\" class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full h-10 text-sm font-semibold\">📺 Watch it week by week</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  14 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n\n    at openGame2 (/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:228:135)\n    at async browserProof (/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:234:19)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:256:53"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "status": "fail",
+      "save": "e8fb76eb43a9b52f38c75f470c2270dd3a57836d747e91e1bfefd5cc7334e1df",
+      "reads": [],
+      "shots": [
+        {
+          "file": "shots/1280-failure.png",
+          "bytes": 134019,
+          "sha256": "8aa3a37d27038e29be01852bfe7a21a16b1a3e9b0f424156aba7e6a668b5465c"
+        }
+      ],
+      "layouts": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CareerChanceWheel-_9hvvk9X.js",
+          "status": 200,
+          "body": "b6076c828b3a64ba816402a0712ec5df46baf7136332aabc2c16f5bb1c301267",
+          "bytes": 2896,
+          "sha256": "e1fb52fab9e5ca0f4fee013f973e30c5245dcc0764896e3b9dba772361db3651"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "externalRequests": [
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T08%3A58%3A47.451Z&start_at=lte.2026-10-12T16%3A58%3A47.451Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w40/am.png",
+        "https://flagcdn.com/w80/be.png"
+      ],
+      "fontScope": "network-free installed fallback fonts, actual document.fonts.ready; saved help preference already seen",
+      "document": "24cfc751dba814c5bc7f4137b9a2bf8aff4a88dccd3a71b85364e91482c4f36b",
+      "startup": "f07224c81cd79bd6c7232cf488bcf9ed87b669908001ce7d7a79a3102eb760a2",
+      "loadedSave": "9769968ddde9e7cd8af7a6c79a46f498fce31cc329c0383e20b36bcaf1f03f55",
+      "bodyBefore": {
+        "attribute": "pointer-events: none;",
+        "declarations": [
+          [
+            "pointer-events",
+            "none",
+            ""
+          ]
+        ],
+        "overflow": "hidden",
+        "pointerEvents": "none",
+        "marginRight": "0px",
+        "position": "relative"
+      },
+      "error": {
+        "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-watch-week-by-week]')\n    - locator resolved to <button data-watch-week-by-week=\"true\" class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full h-10 text-sm font-semibold\">📺 Watch it week by week</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <p aria-live=\"polite\" data-wheel-result=\"true\" class=\"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold\">Ready to reveal your saved result.</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  14 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <p aria-live=\"polite\" data-wheel-result=\"true\" class=\"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold\">Ready to reveal your saved result.</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <p aria-live=\"polite\" data-wheel-result=\"true\" class=\"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold\">Ready to reveal your saved result.</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n",
+        "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-watch-week-by-week]')\n    - locator resolved to <button data-watch-week-by-week=\"true\" class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full h-10 text-sm font-semibold\">📺 Watch it week by week</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <p aria-live=\"polite\" data-wheel-result=\"true\" class=\"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold\">Ready to reveal your saved result.</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  2 × retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  14 × retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <p aria-live=\"polite\" data-wheel-result=\"true\" class=\"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold\">Ready to reveal your saved result.</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-wheel-scroll=\"true\" class=\"min-h-0 space-y-3 overflow-y-auto text-sm\">…</div> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n       - waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <p aria-live=\"polite\" data-wheel-result=\"true\" class=\"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold\">Ready to reveal your saved result.</p> from <div role=\"dialog\" tabindex=\"-1\" id=\"radix-:rf:\" data-state=\"open\" aria-labelledby=\"radix-:rg:\" aria-describedby=\"radix-:rh:\" data-career-chance-wheel=\"true\" class=\"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n\n    at openGame2 (/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:228:135)\n    at async browserProof (/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:234:19)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:256:53"
+      }
+    }
+  ],
+  "detectors": [],
+  "error": {
+    "message": "AssertionError [ERR_ASSERTION]: all3 native saved-row journeys",
+    "stack": "AssertionError [ERR_ASSERTION]: all3 native saved-row journeys\n    at browserProof (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:243:5)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:256:53"
+  }
+}
