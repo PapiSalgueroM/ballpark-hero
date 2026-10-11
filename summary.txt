@@ -1,0 +1,5 @@
+summer-nfl-rest exit=0 66s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+rivals exit=0 18s | No rival product names found. 0 findings.
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 87s | 
+summer-nfl-6 exit=0 2941s | simUsCareerSummer: green. Sections 6 held.
