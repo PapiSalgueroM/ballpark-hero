@@ -1,0 +1,53 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simEras: node scripts/simEras.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simWilderness: node scripts/simWilderness.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simManagerOffers: node scripts/simManagerOffers.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+probeModern: node .rc/x/probeModern.mjs 4
+probeModern-era: PROBE_ERA=era2010 node .rc/x/probeModern.mjs 4
+vitest-jobs: node_modules/.bin/vitest run src/test/clubManagerJobHunt.test.ts src/test/managerMatchPlans.test.tsx src/test/cmValueCurve.test.ts src/test/managerWorldBrowser.test.tsx --testTimeout=300000 --hookTimeout=120000
+c20-dupe: SIM_ERA2020_CONTROL=dupe node scripts/simEra2020.mjs
+c20-stale: SIM_ERA2020_CONTROL=stale node scripts/simEra2020.mjs
+c20-fourleagues: SIM_ERA2020_CONTROL=fourleagues node scripts/simEra2020.mjs
+c20-nofield: SIM_ERA2020_CONTROL=nofield node scripts/simEra2020.mjs
+c20-swapfinish: SIM_ERA2020_CONTROL=swapfinish node scripts/simEra2020.mjs
+c20-nolift: SIM_ERA2020_CONTROL=nolift node scripts/simEra2020.mjs
+c20-modernmarket: SIM_ERA2020_CONTROL=modernmarket node scripts/simEra2020.mjs
+c20-eraorder: SIM_ERA2020_CONTROL=eraorder node scripts/simEra2020.mjs
+c20-leak: SIM_ERA2020_CONTROL=leak node scripts/simEra2020.mjs
+c20-joinage: SIM_ERA2020_CONTROL=joinage node scripts/simEra2020.mjs
+c20-shiporder: SIM_ERA2020_CONTROL=shiporder node scripts/simEra2020.mjs
+c20-modernnews: SIM_ERA2020_CONTROL=modernnews node scripts/simEra2020.mjs
+c20-modernwar: SIM_ERA2020_CONTROL=modernwar node scripts/simEra2020.mjs
+c20-modernjobs: SIM_ERA2020_CONTROL=modernjobs node scripts/simEra2020.mjs
+c20-takestale: SIM_ERA2020_CONTROL=takestale node scripts/simEra2020.mjs
+c20-firstsummer: SIM_ERA2020_CONTROL=firstsummer node scripts/simEra2020.mjs
+cEras-dropman: SIM_ERAS_CONTROL=dropman node scripts/simEras.mjs
+cEras-unflag: SIM_ERAS_CONTROL=unflag node scripts/simEras.mjs
+cEras-twoclubs: SIM_ERAS_CONTROL=twoclubs node scripts/simEras.mjs
