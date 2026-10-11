@@ -1,0 +1,112 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE3 searched 124443 first halves (seeds 1700 up, three league matches), found 8 with a late ruled out goal and a real goal in its last places
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 BAD {"cls":"realGoal(opp@50 Matty Cash)","match":2,"seed":2379,"whistle":50,"review":{"side":"opp","at":49,"who":"Nicolas Jackson"},"window":["shot:me@45","save:opp@50","goal:opp@50"],"runs":["pass/pass","shot/plant","shot/flight","shot/wide","pass/pass","pass/pass(var)","pass/pass","goal/plant","goal/flight","goal/net","INT:null/null"],"first":296,"last":452,"whistleFrame":524,"frames":725,"under":0,"underList":[],"staged":false,"atFirst":"pass/pass score 0 - 1","endScore":"0 - 2","engineScore":"0 - 2","goals":[{"who":"Matty Cash","side":"opp","at":50,"card":-1,"cardStage":null,"cardBeforeWhistle":false}],"realGoalFlights":1,"bad":["the real goal of Matty Cash at 50 never got its scorer card (3.2 s into the interval included)"]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 ok {"cls":"realGoal(me@48 Kiernan Dewsbury-Hall)","match":2,"seed":30278,"whistle":50,"review":{"side":"opp","at":49,"who":"Nicolas Jackson"},"window":["save:me@47","shot:me@48","goal:me@48"],"runs":["pass/pass","save/plant","save/flight","save/caught","pass/pass","goal/plant","goal/flight","goal/net(goalcard)","pass/pass","pass/pass(var)","pass/pass","INT:null/null"],"first":416,"last":572,"whistleFrame":615,"frames":816,"under":0,"underList":[],"staged":false,"atFirst":"pass/pass score 1 - 1","endScore":"1 - 1","engineScore":"1 - 1","goals":[{"who":"Kiernan Dewsbury-Hall","side":"me","at":48,"card":307,"cardStage":"first","cardBeforeWhistle":true}],"realGoalFlights":1,"bad":[]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 BAD {"cls":"realGoal(me@48 Thierno Barry)","match":2,"seed":31922,"whistle":50,"review":{"side":"opp","at":49,"who":"Nicolas Jackson"},"window":["save:me@46","goal:me@48","shot:me@49","save:opp@49","shot:opp@49"],"runs":["pass/pass","save/plant","save/flight","save/caught","pass/pass","goal/plant","goal/flight","goal/net(goalcard)","shot/plant","shot/flight","shot/wide","shot/wide(var)","shot/wide","INT:null/null"],"first":434,"last":590,"whistleFrame":597,"frames":798,"under":157,"underList":["shot/wide"],"staged":false,"atFirst":"shot/wide score 2 - 0","endScore":"2 - 0","engineScore":"2 - 0","goals":[{"who":"Thierno Barry","side":"me","at":48,"card":288,"cardStage":"first","cardBeforeWhistle":true}],"realGoalFlights":1,"bad":["157 frames under the review card with shot/wide"]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 ok {"cls":"realGoal(opp@48 João Gomes)","match":2,"seed":35388,"whistle":50,"review":{"side":"opp","at":49,"who":"Nicolas Jackson"},"window":["save:me@45","goal:opp@48"],"runs":["pass/pass","save/plant","save/flight","save/caught","pass/pass","goal/plant","goal/flight","goal/net(goalcard)","pass/pass","pass/pass(var)","pass/pass","INT:null/null"],"first":397,"last":553,"whistleFrame":615,"frames":816,"under":0,"underList":[],"staged":false,"atFirst":"pass/pass score 1 - 3","endScore":"1 - 3","engineScore":"1 - 3","goals":[{"who":"João Gomes","side":"opp","at":48,"card":288,"cardStage":"first","cardBeforeWhistle":true}],"realGoalFlights":1,"bad":[]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 ok {"cls":"realGoal(me@48 Kiernan Dewsbury-Hall)","match":2,"seed":36791,"whistle":49,"review":{"side":"opp","at":49,"who":"Nicolas Jackson"},"window":["save:me@45","goal:me@48"],"runs":["pass/pass","save/plant","save/flight","save/caught","pass/pass","pass/pass(var)","pass/pass","goal/plant","goal/flight","goal/net(goalcard)","INT:null/null"],"first":234,"last":390,"whistleFrame":533,"frames":734,"under":0,"underList":[],"staged":false,"atFirst":"pass/pass score 0 - 0","endScore":"1 - 0","engineScore":"1 - 0","goals":[{"who":"Kiernan Dewsbury-Hall","side":"me","at":48,"card":448,"cardStage":"first","cardBeforeWhistle":true}],"realGoalFlights":1,"bad":[]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 ok {"cls":"realGoal(me@47 Hayden Hackney)","match":2,"seed":39093,"whistle":49,"review":{"side":"opp","at":48,"who":"Alejandro Garnacho"},"window":["shot:opp@47","goal:me@47"],"runs":["pass/pass","goal/plant","goal/flight","goal/net(goalcard)","pass/pass","pass/pass(var)","pass/pass","INT:null/null"],"first":335,"last":491,"whistleFrame":552,"frames":753,"under":0,"underList":[],"staged":false,"atFirst":"pass/pass score 1 - 0","endScore":"1 - 0","engineScore":"1 - 0","goals":[{"who":"Hayden Hackney","side":"me","at":47,"card":226,"cardStage":"first","cardBeforeWhistle":true}],"realGoalFlights":1,"bad":[]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 BAD {"cls":"realGoal(me@47 Merlin Röhl)","match":2,"seed":42322,"whistle":49,"review":{"side":"opp","at":48,"who":"Alejandro Garnacho"},"window":["shot:opp@46","goal:me@47","shot:opp@48","goal:me@49"],"runs":["pass/pass","shot/plant","shot/flight","shot/wide","goal/plant","goal/flight","goal/net(goalcard)","goal/plant","goal/flight","goal/net","goal/net(var)","goal/net","INT:null/null"],"first":353,"last":509,"whistleFrame":516,"frames":717,"under":0,"underList":[],"staged":true,"atFirst":"goal/net score 1 - 0","endScore":"2 - 0","engineScore":"2 - 0","goals":[{"who":"Merlin Röhl","side":"me","at":47,"card":226,"cardStage":"first","cardBeforeWhistle":true},{"who":"Brennan Johnson","side":"me","at":49,"card":-1,"cardStage":null,"cardBeforeWhistle":false}],"realGoalFlights":2,"bad":["the real goal of Brennan Johnson at 49 never got its scorer card (3.2 s into the interval included)","realGoal(me@47 Merlin Röhl) half: the ruled out goal took the pitch (the card opened on a goal in the net) although a real chance is in its last places"]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE2 BAD {"cls":"realGoal(me@50 Thierno Barry)","match":2,"seed":43180,"whistle":50,"review":{"side":"opp","at":49,"who":"Matty Cash"},"window":["save:opp@46","save:opp@47","goal:me@50"],"runs":["pass/pass","save/plant","save/flight","save/caught","pass/pass","save/plant","save/flight","save/caught","pass/pass","pass/pass(var)","pass/pass","goal/plant","goal/flight","goal/net","INT:null/null"],"first":296,"last":452,"whistleFrame":524,"frames":725,"under":0,"underList":[],"staged":false,"atFirst":"pass/pass score 0 - 2","endScore":"1 - 2","engineScore":"1 - 2","goals":[{"who":"Thierno Barry","side":"me","at":50,"card":-1,"cardStage":null,"cardBeforeWhistle":false}],"realGoalFlights":1,"bad":["the real goal of Thierno Barry at 50 never got its scorer card (3.2 s into the interval included)"]}
+
+[90mstdout[2m | src/test/reviewRunProbe3.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mREVIEWPROBE3 a late ruled out goal beside a real goal
+[22m[39mREVIEWPROBE3 SUMMARY played 8 halves, 5 problem(s)
+
+ [31m❯[39m src/test/reviewRunProbe3.test.tsx [2m([22m[2m23 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m22 skipped[39m[2m)[22m[33m 201201[2mms[22m[39m
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed')
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded')
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, and its review closes before the half ends
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, and its review closes before the half ends
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has
+   [2m[90m↓[39m[22m Club Manager: the review screen[2m > [22mREVIEWPROBE2 late ruled out goals beside a real chance, and the baseline
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mREVIEWPROBE3 a late ruled out goal beside a real goal[39m[33m 201199[2mms[22m[39m
+[31m     → expected [ …(5) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/reviewRunProbe3.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mREVIEWPROBE3 a late ruled out goal beside a real goal
+[31m[1mAssertionError[22m: expected [ …(5) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "realGoal(opp@50 Matty Cash) match 2 seed 2379: the real goal of Matty Cash at 50 never got its scorer card (3.2 s into the interval included)",[39m
+[31m+   "realGoal(me@48 Thierno Barry) match 2 seed 31922: 157 frames under the review card with shot/wide",[39m
+[31m+   "realGoal(me@47 Merlin Röhl) match 2 seed 42322: the real goal of Brennan Johnson at 49 never got its scorer card (3.2 s into the interval included)",[39m
+[31m+   "realGoal(me@47 Merlin Röhl) match 2 seed 42322: realGoal(me@47 Merlin Röhl) half: the ruled out goal took the pitch (the card opened on a goal in the net) although a real chance is in its last places",[39m
+[31m+   "realGoal(me@50 Thierno Barry) match 2 seed 43180: the real goal of Thierno Barry at 50 never got its scorer card (3.2 s into the interval included)",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/reviewRunProbe3.test.tsx:[2m683:17[22m[39m
+    [90m681| [39m    [35mfor[39m ([35mconst[39m p [35mof[39m found) bad[33m.[39m[34mpush[39m([33m...[39m[35mawait[39m [34mplayLate2[39m(p))[33m;[39m
+    [90m682| [39m    console.info(`REVIEWPROBE3 SUMMARY played ${found.length} halves, …
+    [90m683| [39m    [34mexpect[39m(bad)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m684| [39m  }[33m,[39m [34m3000000[39m)[33m;[39m
+    [90m685| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Error [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: [vitest-worker]: Timeout calling "onTaskUpdate"[39m
+[90m [2m❯[22m Object.onTimeoutError node_modules/vitest/dist/chunks/rpc.-pEldfrD.js:[2m53:10[22m[39m
+[90m [2m❯[22m Timeout._onTimeout node_modules/vitest/dist/chunks/index.B521nVV-.js:[2m59:62[22m[39m
+[90m [2m❯[22m listOnTimeout node:internal/timers:[2m685:17[22m[39m
+[90m [2m❯[22m processTimers node:internal/timers:[2m618:7[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m22 skipped[39m[90m (23)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 02:37:34
+[2m   Duration [22m 203.89s[2m (transform 1.45s, setup 54ms, collect 1.92s, tests 201.20s, environment 317ms, prepare 113ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/reviewRunProbe3.test.tsx,title=src/test/reviewRunProbe3.test.tsx > Club Manager%3A the review screen > REVIEWPROBE3 a late ruled out goal beside a real goal,line=683,column=17::AssertionError: expected [ …(5) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "realGoal(opp@50 Matty Cash) match 2 seed 2379: the real goal of Matty Cash at 50 never got its scorer card (3.2 s into the interval included)",%0A+   "realGoal(me@48 Thierno Barry) match 2 seed 31922: 157 frames under the review card with shot/wide",%0A+   "realGoal(me@47 Merlin Röhl) match 2 seed 42322: the real goal of Brennan Johnson at 49 never got its scorer card (3.2 s into the interval included)",%0A+   "realGoal(me@47 Merlin Röhl) match 2 seed 42322: realGoal(me@47 Merlin Röhl) half: the ruled out goal took the pitch (the card opened on a goal in the net) although a real chance is in its last places",%0A+   "realGoal(me@50 Thierno Barry) match 2 seed 43180: the real goal of Thierno Barry at 50 never got its scorer card (3.2 s into the interval included)",%0A+ ]%0A%0A ❯ src/test/reviewRunProbe3.test.tsx:683:17%0A%0A
