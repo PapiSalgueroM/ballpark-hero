@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+livemotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000
+save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+lm-plain: node scripts/simLiveSimMotion.mjs
+lm-pause: LIVE_MOTION_CONTROL=pause node scripts/simLiveSimMotion.mjs
+lm-redraw: LIVE_MOTION_CONTROL=redraw node scripts/simLiveSimMotion.mjs
+lm-trigger: LIVE_MOTION_CONTROL=trigger node scripts/simLiveSimMotion.mjs
+lm-terminal: LIVE_MOTION_CONTROL=terminal node scripts/simLiveSimMotion.mjs
+lm-etclear: LIVE_MOTION_CONTROL=etclear node scripts/simLiveSimMotion.mjs
+lm-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
+lm-lastkick: LIVE_MOTION_CONTROL=lastkick node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+anchors: node scripts/simHarnessAnchors.mjs
