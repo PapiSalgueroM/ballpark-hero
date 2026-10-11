@@ -1,0 +1,10 @@
+# Release AW closing pass, final proof P-H1b: gate lane H1: the rest of the play list
+#!serve
+#!playwright
+#!serial
+playGames-stat-detective: ONLY=/stat-detective node scripts/playGames.mjs
+playGames-dart-draft: ONLY=/dart-draft node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playGames-mlb-my-career: ONLY=/mlb-my-career node scripts/playGames.mjs
+playGames-nhl-my-career: ONLY=/nhl-my-career node scripts/playGames.mjs
