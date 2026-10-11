@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+hall-nhl: node scripts/simCareerHall.mjs nhl 2000 > $RC_OUT/hall-nhl.log 2>&1; s=$?; grep "FAIL\|17 (a)\|15 (e)\|19 (b)" $RC_OUT/hall-nhl.log | cut -c1-300; tail -1 $RC_OUT/hall-nhl.log; exit $s
+hall-nfl: node scripts/simCareerHall.mjs nfl 2000 > $RC_OUT/hall-nfl.log 2>&1; s=$?; grep "FAIL\|17 (a)\|15 (e)\|19 (b)" $RC_OUT/hall-nfl.log | cut -c1-300; tail -1 $RC_OUT/hall-nfl.log; exit $s
+hall-nba: node scripts/simCareerHall.mjs nba 2000 > $RC_OUT/hall-nba.log 2>&1; s=$?; grep "FAIL\|17 (a)\|15 (e)\|19 (b)" $RC_OUT/hall-nba.log | cut -c1-300; tail -1 $RC_OUT/hall-nba.log; exit $s
+hall-mlb: node scripts/simCareerHall.mjs mlb 2000 > $RC_OUT/hall-mlb.log 2>&1; s=$?; grep "FAIL\|17 (a)\|15 (e)\|19 (b)" $RC_OUT/hall-mlb.log | cut -c1-300; tail -1 $RC_OUT/hall-mlb.log; exit $s
+gencheck: set -o pipefail; bash .rc/x/dumps.sh . /tmp/rows nhl 2000 base 1 2 3 4 5 | tail -1 && MARKS_OUT=/tmp/ledger-out.json MARKS_CALIBRATION=3 node scripts/genCareerHallMarks.mjs /tmp/rows | tail -1 && cmp /tmp/ledger-out.json scripts/data/careerHallMarks.json && echo "gencheck: the committed ledger is the generator own output, byte for byte"
+vitest: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/nbaOldSaveLines.test.ts src/test/careerHallV1Replay.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs

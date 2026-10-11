@@ -1,0 +1,15 @@
+tsc exit=0 75s | 
+hall-nfl exit=0 226s | simCareerHall nfl: all 34 checks green
+hall-nba exit=0 315s | simCareerHall nba: all 34 checks green
+gencheck exit=0 26s | gencheck: the committed ledger is the generator own output, byte for byte
+vitest exit=0 59s |    Duration  58.72s (transform 4.21s, setup 610ms, collect 12.39s, tests 70.98s, environment 4.25s, prepare 1.13s)
+hall-mlb exit=0 260s | simCareerHall mlb: all 34 checks green
+hall-nhl exit=0 496s | simCareerHall nhl: all 35 checks green
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simUsCareerActionConfirm exit=0 8s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsSeasonLedger exit=0 4s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsBoardParity exit=0 46s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNbaAwardsSense exit=0 104s | simNbaAwardsSense: 171 checks, 0 failed (full size), 104s
