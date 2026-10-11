@@ -1,0 +1,2 @@
+w0 exit=0 63s | scanWalk: injury: hint 3861 HOLDS; first seeds that hold it: 3861 (opp 15'), 25417 (opp 36'), 30399 (opp 36'), 31835 (opp 6'), 51382 (opp 12')
+w1 exit=0 92s | scanWalk: crowdedShot: hint 6203 HOLDS; first seeds that hold it: 6203 (opp 45+4'), 11311 (opp 45+3'), 21326 (opp 45+3'), 21927 (opp 45+3'), 25202 (opp 45+4'), 27308 (opp

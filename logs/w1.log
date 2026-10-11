@@ -1,0 +1,8 @@
+scanWalk: match 2, the goal kind alone, seeds 1700 to 61699: 60000 first halves lit, 0 with a penalty review (must be 0), 92 s
+scanWalk: goalBefore: hint 1724 HOLDS; first seeds that hold it: 1724 (opp 8'), 2592 (opp 8'), 3187 (me 10'), 3684 (opp 38'), 3898 (opp 40'), 5646 (me 16')
+scanWalk: lateWhistle: hint 1984 HOLDS; first seeds that hold it: 1984 (opp 45+3'), 2079 (opp 45+4'), 3024 (opp 45+3'), 4314 (opp 45+4'), 4799 (opp 45+3'), 5767 (opp 45+4')
+scanWalk: lateBefore: hint 2591 HOLDS; first seeds that hold it: 2338 (opp 45+3'), 2591 (opp 45+4'), 3022 (opp 45+4'), 4065 (opp 45+3'), 6940 (opp 45+4'), 6962 (opp 45+4')
+scanWalk: ownGoal: hint 1940 HOLDS; first seeds that hold it: 1940 (me 10'), 6513 (opp 34'), 11893 (me 18'), 12298 (me 10'), 24232 (me 31')
+scanWalk: red: hint 3827 is STALE; first seeds that hold it: 6513 (opp 34')
+scanWalk: crowdedGoal: hint 42322 HOLDS; first seeds that hold it: 42322 (opp 45+3'), 54057 (opp 45+4')
+scanWalk: crowdedShot: hint 6203 HOLDS; first seeds that hold it: 6203 (opp 45+4'), 11311 (opp 45+3'), 21326 (opp 45+3'), 21927 (opp 45+3'), 25202 (opp 45+4'), 27308 (opp 45+3')

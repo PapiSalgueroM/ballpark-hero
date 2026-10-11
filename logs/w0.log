@@ -1,0 +1,4 @@
+scanWalk: match 1, the goal kind alone, seeds 1700 to 61699: 60000 first halves lit, 0 with a penalty review (must be 0), 63 s
+scanWalk: ruledOut: hint 2460 HOLDS; first seeds that hold it: 2460 (me 9'), 2576 (me 23'), 3345 (me 23'), 3347 (me 23'), 3407 (me 9'), 3667 (me 30')
+scanWalk: two: hint 2453 is STALE; first seeds that hold it: 4926 (opp 6'), 5524 (me 8'), 7588 (opp 15'), 11823 (me 23'), 14154 (me 10'), 20346 (opp 8')
+scanWalk: injury: hint 3861 HOLDS; first seeds that hold it: 3861 (opp 15'), 25417 (opp 36'), 30399 (opp 36'), 31835 (opp 6'), 51382 (opp 12')
