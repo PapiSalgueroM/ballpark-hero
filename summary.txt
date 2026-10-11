@@ -1,0 +1,6 @@
+print-head-2 exit=0 6s |    Duration  4.98s (transform 1.82s, setup 83ms, collect 222ms, tests 3.22s, environment 560ms, prepare 210ms)
+print-head-1 exit=0 9s |    Duration  8.43s (transform 2.03s, setup 120ms, collect 255ms, tests 6.51s, environment 508ms, prepare 279ms)
+print-base exit=0 10s |    Duration  7.78s (transform 1.54s, setup 102ms, collect 208ms, tests 6.07s, environment 530ms, prepare 256ms)
+print-base-again exit=0 10s |    Duration  8.51s (transform 1.90s, setup 90ms, collect 274ms, tests 6.95s, environment 457ms, prepare 293ms)
+noprint-fails exit=0 6s | vitest exit 1 (1 is the wanted answer: nothing is recorded yet)
+tsc exit=0 72s | 

@@ -1,0 +1,162 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+FO_ONE_PRESS|fifteen|desk off|ordinary|press seed|11
+FO_ONE_PRESS|fifteen|desk off|ordinary|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk off|ordinary|recap|ff8e20c90f42f580d957626ba4c3c417b27f5be9
+FO_ONE_PRESS|fifteen|desk off|ordinary|draft|4490732b0adf62aa2c6cbea73825e92ddf97b870
+FO_ONE_PRESS|fifteen|desk off|ordinary|hub|e4615a4f723b1600b48b5007b94e7825770fdb64
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+FO_ONE_PRESS|fifteen|desk off|title|press seed|12
+FO_ONE_PRESS|fifteen|desk off|title|winners|NE,DEN,BUF,SF,LA,TB,BAL,NE,ARI,LA,BAL,ARI,ARI
+FO_ONE_PRESS|fifteen|desk off|title|recap|d4df88f7b41aa21058edc729bf5de651bbc1b23b
+FO_ONE_PRESS|fifteen|desk off|title|draft|39cb405e1b22d8437085f5850320f00284b076bc
+FO_ONE_PRESS|fifteen|desk off|title|hub|78ca6a2c99dda340296bd1bf067ee9e5bedca834
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+FO_ONE_PRESS|fifteen|desk off|fired|press seed|11
+FO_ONE_PRESS|fifteen|desk off|fired|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk off|fired|recap|cb1cd42e06c096ebe86fcb0aba44b84e680d3b12
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+FO_ONE_PRESS|fifteen|desk on|ordinary|press seed|11
+FO_ONE_PRESS|fifteen|desk on|ordinary|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk on|ordinary|recap|adc56f8f21309bc0b42ab03351f2240d9470e375
+FO_ONE_PRESS|fifteen|desk on|ordinary|draft|1a76425648377b13555fde77bdd203b55243aa7e
+FO_ONE_PRESS|fifteen|desk on|ordinary|hub|d6d73c5ce95ccaa7b8d517f31b030b0447cd13ff
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+FO_ONE_PRESS|fifteen|desk on|title|press seed|11
+FO_ONE_PRESS|fifteen|desk on|title|winners|KC,LAC,IND,DET,PHI,GB,BAL,LAC,ARI,DET,BAL,ARI,ARI
+FO_ONE_PRESS|fifteen|desk on|title|recap|1aed044af9bbacff211e119701f9bdbad62d7a4e
+FO_ONE_PRESS|fifteen|desk on|title|draft|ecbc67329370df3cc5f34d7132171620d7d1fab2
+FO_ONE_PRESS|fifteen|desk on|title|hub|b9090fb8bb55a95fa643c2e55f2439013d291bed
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+FO_ONE_PRESS|fifteen|desk on|fired|press seed|11
+FO_ONE_PRESS|fifteen|desk on|fired|winners|LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC
+FO_ONE_PRESS|fifteen|desk on|fired|recap|5d14fd946fa9e6adb2e34d622dec6a396453d5b3
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+FO_ONE_PRESS|deep|desk off|ordinary|press seed|11
+FO_ONE_PRESS|deep|desk off|ordinary|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk off|ordinary|recap|780b9786e272e5c31a0787860e2dce284e8e0385
+FO_ONE_PRESS|deep|desk off|ordinary|draft|798791c8895d02da3f8f6d20e3ba4836661c483b
+FO_ONE_PRESS|deep|desk off|ordinary|hub|e118d28afa937477916367cfda9637eebac8d9f6
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+FO_ONE_PRESS|deep|desk off|title|press seed|11
+FO_ONE_PRESS|deep|desk off|title|winners|IND,JAX,BAL,DAL,DET,ATL,NE,BAL,ARI,DET,BAL,ARI,ARI
+FO_ONE_PRESS|deep|desk off|title|recap|4e2fbdd208d2c78733988af5f0fbeb223bd715eb
+FO_ONE_PRESS|deep|desk off|title|draft|e784c00eb869e52efb38f8cd67554c8a281a5021
+FO_ONE_PRESS|deep|desk off|title|hub|7bb892d36dcb6609c4a5b56ef0adf5bf910f81b7
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+FO_ONE_PRESS|deep|desk off|fired|press seed|11
+FO_ONE_PRESS|deep|desk off|fired|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk off|fired|recap|b56f3204559a899c9cdc5b9d4deb319645fcd1e4
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+FO_ONE_PRESS|deep|desk on|ordinary|press seed|11
+FO_ONE_PRESS|deep|desk on|ordinary|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk on|ordinary|recap|843979bfcea96ac1fbad31f8f28d676b50bbd15e
+FO_ONE_PRESS|deep|desk on|ordinary|draft|a6f7c8c5077e0e7c0960a460c9ab0d023af44617
+FO_ONE_PRESS|deep|desk on|ordinary|hub|ba264af1fa13f37dd8381ac16424a468524027c7
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+FO_ONE_PRESS|deep|desk on|title|press seed|11
+FO_ONE_PRESS|deep|desk on|title|winners|IND,JAX,BAL,DAL,DET,ATL,NE,BAL,ARI,DET,BAL,ARI,ARI
+FO_ONE_PRESS|deep|desk on|title|recap|c3f77605c067bf38825a44b180a0eec83df3af81
+FO_ONE_PRESS|deep|desk on|title|draft|434f5613410f60a8da7629f5084a57fc89e56f3c
+FO_ONE_PRESS|deep|desk on|title|hub|ffe1b1620747d749a527131df8b2dcd1acea86bf
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+FO_ONE_PRESS|deep|desk on|fired|press seed|11
+FO_ONE_PRESS|deep|desk on|fired|winners|IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF
+FO_ONE_PRESS|deep|desk on|fired|recap|6a62b5c27eaa8659d95839d409b09773ab26b6c6
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > the record > is complete, or is being printed
+FO_ONE_PRESS_RECORD 52 values
+  'fifteen|desk off|ordinary|press seed': '11',
+  'fifteen|desk off|ordinary|winners': 'LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC',
+  'fifteen|desk off|ordinary|recap': 'ff8e20c90f42f580d957626ba4c3c417b27f5be9',
+  'fifteen|desk off|ordinary|draft': '4490732b0adf62aa2c6cbea73825e92ddf97b870',
+  'fifteen|desk off|ordinary|hub': 'e4615a4f723b1600b48b5007b94e7825770fdb64',
+  'fifteen|desk off|title|press seed': '12',
+  'fifteen|desk off|title|winners': 'NE,DEN,BUF,SF,LA,TB,BAL,NE,ARI,LA,BAL,ARI,ARI',
+  'fifteen|desk off|title|recap': 'd4df88f7b41aa21058edc729bf5de651bbc1b23b',
+  'fifteen|desk off|title|draft': '39cb405e1b22d8437085f5850320f00284b076bc',
+  'fifteen|desk off|title|hub': '78ca6a2c99dda340296bd1bf067ee9e5bedca834',
+  'fifteen|desk off|fired|press seed': '11',
+  'fifteen|desk off|fired|winners': 'LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC',
+  'fifteen|desk off|fired|recap': 'cb1cd42e06c096ebe86fcb0aba44b84e680d3b12',
+  'fifteen|desk on|ordinary|press seed': '11',
+  'fifteen|desk on|ordinary|winners': 'LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC',
+  'fifteen|desk on|ordinary|recap': 'adc56f8f21309bc0b42ab03351f2240d9470e375',
+  'fifteen|desk on|ordinary|draft': '1a76425648377b13555fde77bdd203b55243aa7e',
+  'fifteen|desk on|ordinary|hub': 'd6d73c5ce95ccaa7b8d517f31b030b0447cd13ff',
+  'fifteen|desk on|title|press seed': '11',
+  'fifteen|desk on|title|winners': 'KC,LAC,IND,DET,PHI,GB,BAL,LAC,ARI,DET,BAL,ARI,ARI',
+  'fifteen|desk on|title|recap': '1aed044af9bbacff211e119701f9bdbad62d7a4e',
+  'fifteen|desk on|title|draft': 'ecbc67329370df3cc5f34d7132171620d7d1fab2',
+  'fifteen|desk on|title|hub': 'b9090fb8bb55a95fa643c2e55f2439013d291bed',
+  'fifteen|desk on|fired|press seed': '11',
+  'fifteen|desk on|fired|winners': 'LAC,KC,IND,GB,PHI,DET,BAL,KC,DET,GB,KC,DET,KC',
+  'fifteen|desk on|fired|recap': '5d14fd946fa9e6adb2e34d622dec6a396453d5b3',
+  'deep|desk off|ordinary|press seed': '11',
+  'deep|desk off|ordinary|winners': 'IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF',
+  'deep|desk off|ordinary|recap': '780b9786e272e5c31a0787860e2dce284e8e0385',
+  'deep|desk off|ordinary|draft': '798791c8895d02da3f8f6d20e3ba4836661c483b',
+  'deep|desk off|ordinary|hub': 'e118d28afa937477916367cfda9637eebac8d9f6',
+  'deep|desk off|title|press seed': '11',
+  'deep|desk off|title|winners': 'IND,JAX,BAL,DAL,DET,ATL,NE,BAL,ARI,DET,BAL,ARI,ARI',
+  'deep|desk off|title|recap': '4e2fbdd208d2c78733988af5f0fbeb223bd715eb',
+  'deep|desk off|title|draft': 'e784c00eb869e52efb38f8cd67554c8a281a5021',
+  'deep|desk off|title|hub': '7bb892d36dcb6609c4a5b56ef0adf5bf910f81b7',
+  'deep|desk off|fired|press seed': '11',
+  'deep|desk off|fired|winners': 'IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF',
+  'deep|desk off|fired|recap': 'b56f3204559a899c9cdc5b9d4deb319645fcd1e4',
+  'deep|desk on|ordinary|press seed': '11',
+  'deep|desk on|ordinary|winners': 'IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF',
+  'deep|desk on|ordinary|recap': '843979bfcea96ac1fbad31f8f28d676b50bbd15e',
+  'deep|desk on|ordinary|draft': 'a6f7c8c5077e0e7c0960a460c9ab0d023af44617',
+  'deep|desk on|ordinary|hub': 'ba264af1fa13f37dd8381ac16424a468524027c7',
+  'deep|desk on|title|press seed': '11',
+  'deep|desk on|title|winners': 'IND,JAX,BAL,DAL,DET,ATL,NE,BAL,ARI,DET,BAL,ARI,ARI',
+  'deep|desk on|title|recap': 'c3f77605c067bf38825a44b180a0eec83df3af81',
+  'deep|desk on|title|draft': '434f5613410f60a8da7629f5084a57fc89e56f3c',
+  'deep|desk on|title|hub': 'ffe1b1620747d749a527131df8b2dcd1acea86bf',
+  'deep|desk on|fired|press seed': '11',
+  'deep|desk on|fired|winners': 'IND,JAX,PIT,GB,DET,ATL,NE,PIT,SF,DET,PIT,SF,SF',
+  'deep|desk on|fired|recap': '6a62b5c27eaa8659d95839d409b09773ab26b6c6',
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx (13 tests) 6511ms
+   ✓ NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  2823ms
+   ✓ NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's  460ms
+   ✓ NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  346ms
+   ✓ NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's  493ms
+   ✓ NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  653ms
+   ✓ NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's  422ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  20:20:49
+   Duration  8.43s (transform 2.03s, setup 120ms, collect 255ms, tests 6.51s, environment 508ms, prepare 279ms)
+

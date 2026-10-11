@@ -1,0 +1,279 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ [31m❯[39m src/components/front-office/FrontOfficeOnePress.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m13 failed[39m[2m)[22m[33m 4107[2mms[22m[39m
+[31m   [31m×[31m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's[39m[33m 2520[2mms[22m[39m
+[31m     → nothing is recorded for "fifteen|desk off|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's[39m[32m 245[2mms[22m[39m
+[31m     → nothing is recorded for "fifteen|desk off|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's[39m[32m 100[2mms[22m[39m
+[31m     → nothing is recorded for "fifteen|desk off|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's[39m[32m 143[2mms[22m[39m
+[31m     → nothing is recorded for "fifteen|desk on|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's[39m[32m 118[2mms[22m[39m
+[31m     → nothing is recorded for "fifteen|desk on|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's[39m[32m 100[2mms[22m[39m
+[31m     → nothing is recorded for "fifteen|desk on|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, deep league, GM desk off: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's[39m[32m 132[2mms[22m[39m
+[31m     → nothing is recorded for "deep|desk off|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, deep league, GM desk off: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's[39m[32m 134[2mms[22m[39m
+[31m     → nothing is recorded for "deep|desk off|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, deep league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's[39m[32m 141[2mms[22m[39m
+[31m     → nothing is recorded for "deep|desk off|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, deep league, GM desk on: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's[39m[32m 170[2mms[22m[39m
+[31m     → nothing is recorded for "deep|desk on|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, deep league, GM desk on: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's[39m[32m 151[2mms[22m[39m
+[31m     → nothing is recorded for "deep|desk on|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m NFL front office, deep league, GM desk on: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's[39m[32m 145[2mms[22m[39m
+[31m     → nothing is recorded for "deep|desk on|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[31m   [31m×[31m the record[2m > [22mis complete, or is being printed[39m[32m 5[2mms[22m[39m
+[31m     → expected [] to have a length of 52 but got +0[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 13 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "fifteen|desk off|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "fifteen|desk off|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "fifteen|desk off|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "fifteen|desk on|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "fifteen|desk on|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "fifteen|desk on|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, deep league, GM desk off: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "deep|desk off|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, deep league, GM desk off: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "deep|desk off|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, deep league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "deep|desk off|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, deep league, GM desk on: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "deep|desk on|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, deep league, GM desk on: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "deep|desk on|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mNFL front office, deep league, GM desk on: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's
+[31m[1mAssertionError[22m: nothing is recorded for "deep|desk on|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined[39m
+[36m [2m❯[22m hold src/components/front-office/FrontOfficeOnePress.test.tsx:[2m141:129[22m[39m
+    [90m139| [39m[35mfunction[39m [34mhold[39m(key[33m:[39m string[33m,[39m value[33m:[39m string) {
+    [90m140| [39m  if (PRINT) { printed.push(`  '${key}': '${value}',`); console.log(`F…
+    [90m141| [39m  expect(RECORDED[key], `nothing is recorded for "${key}". Record on t…
+    [90m   | [39m                                                                                                                                [31m^[39m
+    [90m142| [39m  expect(value, `"${key}" is not what the base wrote`).toBe(RECORDED[k…
+    [90m143| [39m}
+[90m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m191:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22mthe record[2m > [22mis complete, or is being printed
+[31m[1mAssertionError[22m: expected [] to have a length of 52 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 52[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/components/front-office/FrontOfficeOnePress.test.tsx:[2m231:35[22m[39m
+    [90m229| [39m    /* four league and desk pairs, each: two endings at three points a…
+    [90m230| [39m       thirteen winners of each of the three */[39m
+    [90m231| [39m    expect(Object.keys(RECORDED)).toHaveLength(4 * (3 + 3 + 1 + 3 + 3)…
+    [90m   | [39m                                  [31m^[39m
+    [90m232| [39m  })[33m;[39m
+    [90m233| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/13]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m13 failed[39m[22m[90m (13)[39m
+[2m   Start at [22m 20:21:06
+[2m   Duration [22m 5.66s[2m (transform 1.96s, setup 75ms, collect 267ms, tests 4.11s, environment 535ms, prepare 178ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk off%3A one press of the final week > ordinary%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "fifteen|desk off|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk off%3A one press of the final week > title%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "fifteen|desk off|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk off%3A one press of the final week > fired%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "fifteen|desk off|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk on%3A one press of the final week > ordinary%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "fifteen|desk on|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk on%3A one press of the final week > title%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "fifteen|desk on|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C fifteen league%2C GM desk on%3A one press of the final week > fired%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "fifteen|desk on|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C deep league%2C GM desk off%3A one press of the final week > ordinary%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "deep|desk off|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C deep league%2C GM desk off%3A one press of the final week > title%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "deep|desk off|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C deep league%2C GM desk off%3A one press of the final week > fired%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "deep|desk off|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C deep league%2C GM desk on%3A one press of the final week > ordinary%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "deep|desk on|ordinary|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C deep league%2C GM desk on%3A one press of the final week > title%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "deep|desk on|title|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office%2C deep league%2C GM desk on%3A one press of the final week > fired%3A the save at the recap%2C the draft and the next season's hub is the base's,line=141,column=129::AssertionError: nothing is recorded for "deep|desk on|fired|press seed". Record on the base with FO_ONE_PRESS=print and commit the literals: expected undefined to be defined%0A ❯ hold src/components/front-office/FrontOfficeOnePress.test.tsx:141:129%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:191:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.test.tsx > the record > is complete%2C or is being printed,line=231,column=35::AssertionError: expected [] to have a length of 52 but got +0%0A%0A- Expected%0A+ Received%0A%0A- 52%0A+ 0%0A%0A ❯ src/components/front-office/FrontOfficeOnePress.test.tsx:231:35%0A%0A

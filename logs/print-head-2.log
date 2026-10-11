@@ -1,0 +1,7 @@
+16
+
+ Test Files  1 passed (1)
+      Tests  4 passed | 9 skipped (13)
+   Start at  20:20:49
+   Duration  4.98s (transform 1.82s, setup 83ms, collect 222ms, tests 3.22s, environment 560ms, prepare 210ms)
+
