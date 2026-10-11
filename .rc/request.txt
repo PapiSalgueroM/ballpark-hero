@@ -1,0 +1,4 @@
+# Release AV, after merge f: both recordings taken again from the merged head a1e4f86b (nothing is committed by the runner).
+#!serial
+record-board: git show 251f0650:scripts/data/usBoardFixture.json > /tmp/board-1227.json && node scripts/recordUsBoardFixture.mjs $RC_OUT/usBoardFixture.json && node .rc/x/cmprec3.mjs scripts/data/usBoardFixture.json $RC_OUT/usBoardFixture.json /tmp/board-1227.json nfl
+record-digest: cp src/test/fixtures/usCareerTruthDigest.json /tmp/digest-committed.json && DIGEST_RECORD=1 DIGEST_ALLOW='nfl|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000 && cp src/test/fixtures/usCareerTruthDigest.json $RC_OUT/usCareerTruthDigest.json && cmp /tmp/digest-committed.json src/test/fixtures/usCareerTruthDigest.json && echo "digest retake: byte equal to the committed file"; s=$?; git checkout -q -- src/test/fixtures/usCareerTruthDigest.json; exit $s
