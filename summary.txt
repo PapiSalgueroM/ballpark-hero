@@ -1,0 +1,13 @@
+base exit=0 0s | aa564f160 Record Release AU live: deployment aa7795c9, entry index-CSV31ZtP.js; 
+armA exit=0 4s | varProbe: A HOLDS (showing a review or skipping it is the same match)
+armC exit=0 3s | ARM C HOLDS: off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488 on both trees
+armC-fleet exit=0 16s | ARM C HOLDS over the fleet: FLEET digest 647837df4d9733a113c9c719f6b8af4f8af8af437cd4755adde092070c96af9b on both trees
+old-saves exit=0 1s | OLD SAVES HOLD: 12 digest lines equal on both trees
+lit-roundtrip exit=0 0s | staged check exit 1 (1 is right: a staged list is not what the ledger gives)
+cmvar-all exit=0 350s | simCmVar: 13 actual outcomes and 26 effective controls passed.
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 22s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 1s | simStorageWrites: all green (owed: 12)
+simLegalPages exit=0 0s | simLegalPages: all green
+simNoInventedQuotes exit=0 10s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 81s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes

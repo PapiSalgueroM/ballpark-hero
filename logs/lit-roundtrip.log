@@ -1,0 +1,10 @@
+cmVarLit: CM_VAR_LIVE turned on in this checkout. Never commit it on from here.
+cmVarLit: the game is handed goal in this checkout. Never commit that list from here: the ledger writes it.
+cmVarLit: CM_VAR_LIVE is on, the game is handed goal
+genCmVarRates: src/data/clubManagerVarRates.ts is not what the ledgers give. Run node scripts/genCmVarRates.mjs
+genCmVarRates --check: 1 file(s) out of step with the ledgers.
+cmVarLit: CM_VAR_LIVE turned off in this checkout. Never commit it on from here.
+cmVarLit: the kinds list is the ledger's again (no kind).
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+0
+staged check exit 1 (1 is right: a staged list is not what the ledger gives)
