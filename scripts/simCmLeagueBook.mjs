@@ -111,6 +111,10 @@
  *   BOOK_FLEET=full node scripts/simCmLeagueBook.mjs      the whole fleet (the round's remote check)
  *   BOOK_BASE=<a worktree of the base commit> ...         adds the base commit as a reference
  *   BOOK_MEASURE=1 ...                                    also prints the boards with CM_BOOK_TAKER false
+ *   BOOK_MEASURE=leagues ...                              Round 1306: plays MEASURE_SEEDS (2) careers of one
+ *                                                         season in every league of every era and prints, a
+ *                                                         league, the share of rival goals on record and the
+ *                                                         best rival total under each rule; gates nothing
  *   SEEDSET=n                                             another set of seeds
  * Offline: bundles the engine from src, reads no network and no database.
  */
@@ -777,6 +781,82 @@ function seasonBoards(mod, s, book, acc, myKept) {
   });
 }
 
+/* ---------- Round 1306, the measuring mode: every league of every era, printed and never gated ---------- */
+/* The literal reading of "a club with no eleven is dealt over the men it has": every goal of such a club to
+   the men its roster holds, by the weight, with no empty shirt. Measured beside the rule the engine follows,
+   never shipped. */
+const SIDE_XI = '  const xi = leagueBookEleven(state, club, mine);';
+const LITERAL = [{ file: ENGINE, from: SIDE_XI, to: "  const xi = leagueBookEleven(state, club, mine) ?? (men => (men.length ? men : null))(oppRosterFor(state, club, mine).map(p => ({ n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) })));" }];
+
+/** One league season of one save, read the moment before finishSeason: what the lead rules on. */
+function readLeagueSeason(mod, s) {
+  const { cm } = mod;
+  const book = cm.leagueBookOf(s);
+  if (!book) return null;
+  const mine = cm.mySquadNames(s);
+  let rows = 0, og = 0, u = 0;
+  for (const club of rivalsOf(s)) { const g = mod.book.bookClubGoals(book, club); rows += g.rows; og += g.og; u += g.u; }
+  const rivalTop = Math.max(0, ...mod.book.bookRows(book).filter(r => !mine.has(r.name)).map(r => r.goals));
+  const raceTop = Math.max(0, ...(s.scorerRace ?? []).filter(e => !mine.has(e.name)).map(e => e.goals));
+  const myTop = Math.max(0, ...s.squad.map(p => p.comp?.league?.goals ?? 0));
+  const thin = [];
+  const gaps = [];
+  for (const club of rivalsOf(s)) {
+    const xi = cm.leagueBookEleven(s, club, mine);
+    if (!xi) { const men = cm.oppRosterFor(s, club, mine); thin.push({ club, men: men.length, keepers: men.filter(p => p.p === 'GK').length }); continue; }
+    /* Critic's advice 15: is the club's strength on the scale of its eleven's ratings? */
+    gaps.push(cm.strengthOf(s, club) - mean(xi.filter(p => p.p !== 'GK').map(p => p.r)));
+  }
+  return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, rivalTop, raceTop, myTop, thin, gaps };
+}
+
+async function measureLeagues(arms) {
+  const seeds = Number(process.env.MEASURE_SEEDS ?? 2);
+  const { cm } = arms[0][1];
+  /* MEASURE_ONLY=<league id>,<league id> narrows the run (a smoke test of the mode itself). */
+  const only = (process.env.MEASURE_ONLY ?? '').split(',').filter(Boolean);
+  const leagues = [...cm.REAL_LEAGUES.map(l => ['now', l]), ...Object.entries(cm.ERA_LEAGUES).flatMap(([era, ls]) => ls.map(l => [era, l]))]
+    .filter(([, l]) => !only.length || only.includes(l.id));
+  console.log(`simCmLeagueBook: MEASURE leagues: ${leagues.length} leagues of every era, ${seeds} careers each, one season, arms: ${arms.map(a => a[0]).join(', ')}`);
+  console.log('measure a league: rival clubs with no eleven (their roster sizes), then for each arm the share of rival goals on record (rows + own goals in a hundred), the best rival total on the book, and how often one of my men leads the Goals board; then the old race\'s best rival total and my best man');
+  const share = x => (x.rows + x.og + x.u ? Math.floor(100 * (x.rows + x.og) / (x.rows + x.og + x.u)) : 100);
+  const table = [];
+  const allGaps = [];
+  leagues.forEach(([era, league], li) => {
+    const club = league.clubs[0];
+    const perArm = arms.map(() => []);
+    for (let k = 0; k < seeds; k++) {
+      const seed = (0x1306 + li * 257 + k * 31) >>> 0;
+      arms.forEach(([, mod], ai) => {
+        let got = null;
+        try { playCareer(mod, club, era, seed, { seasonEnd(s) { got = readLeagueSeason(mod, s); }, stopAfterSeason: () => true }, 1); } catch (e) { got = { error: String(e?.message ?? e).slice(0, 100) }; }
+        perArm[ai].push(got);
+      });
+    }
+    const first = perArm[0].find(x => x && !x.error);
+    if (!first) { console.log(`measure ${era} ${league.id}: NOT MEASURED (${perArm[0][0]?.error ?? 'no book at the season\'s end'})`); return; }
+    allGaps.push(...first.gaps);
+    const sizes = first.thin.map(t => t.men).sort((a, b) => a - b);
+    const cols = arms.map(([name], ai) => {
+      const xs = perArm[ai].filter(x => x && !x.error);
+      const sum = xs.reduce((a, x) => ({ rows: a.rows + x.rows, og: a.og + x.og, u: a.u + x.u }), { rows: 0, og: 0, u: 0 });
+      return { name, share: share(sum), top: mean(xs.map(x => x.rivalTop)), mineLead: xs.filter(x => x.myTop > x.rivalTop).length, n: xs.length };
+    });
+    const xs0 = perArm[0].filter(x => x && !x.error);
+    table.push({ era, id: first.league, cols });
+    console.log(`measure ${era.padEnd(7)} ${first.league.padEnd(14)} ${String(first.clubs).padStart(2)} clubs, no eleven ${String(first.thin.length).padStart(2)} of ${first.clubs - 1}${sizes.length ? ` (men ${sizes[0]} to ${sizes[sizes.length - 1]}, ${first.thin.filter(t => !t.keepers).length} with no keeper)` : ''}: ${cols.map(c => `${c.name} ${c.share} in 100, best rival ${fmt(c.top)}, mine leads ${c.mineLead} of ${c.n}`).join('; ')}; old race best rival ${fmt(mean(xs0.map(x => x.raceTop)))} (mine leads ${xs0.filter(x => x.myTop > x.raceTop).length} of ${xs0.length}), my best ${fmt(mean(xs0.map(x => x.myTop)))}`);
+  });
+  for (const [ai, [name]] of arms.entries()) {
+    const shares = table.map(t => t.cols[ai].share).sort((a, b) => a - b);
+    const near = shares.filter(x => x >= 93 && x <= 97).length;
+    console.log(`measure ${name}: of ${shares.length} leagues ${shares.filter(x => x >= 95).length} hold 95 in 100 or more on record, ${shares.filter(x => x < 95 && x >= 75).length} hold 75 to 94, ${shares.filter(x => x < 75).length} under 75; ${near} within two points of 95; the shares in order: ${shares.join(' ')}`);
+  }
+  const gm = mean(allGaps);
+  const gsd = Math.sqrt(mean(allGaps.map(g => (g - gm) ** 2)));
+  console.log(`measure a club's strength minus the mean rating of its eleven's outfield, over ${allGaps.length} clubs with an eleven: mean ${fmt(gm, 2)}, standard deviation ${fmt(gsd, 2)}, lowest ${fmt(Math.min(...allGaps), 1)}, highest ${fmt(Math.max(...allGaps), 1)} (an empty shirt stands at the club's strength)`);
+  console.log(`simCmLeagueBook: MEASURE leagues done, nothing gated (${Math.round((Date.now() - T0) / 1000)}s)`);
+}
+
 /* ---------- the fleet ---------- */
 const fleet = [];
 CLUBS.forEach(([club, era], ci) => { for (let k = 0; k < SEEDS; k++) fleet.push({ club, era, seed: seedOf(ci, k) }); });
@@ -792,6 +872,13 @@ try {
 if (!candidate.book) cannot('the league book module is not in this tree');
 for (const pos of ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST']) {
   if (candidate.cm.groupOf(pos) !== lineOf(pos)) cannot(`the harness reads ${pos} as ${lineOf(pos)}, the engine as ${candidate.cm.groupOf(pos)}`);
+}
+if (process.env.BOOK_MEASURE === 'leagues') {
+  if (CONTROL) cannot('the measuring mode runs with no control');
+  let literal;
+  try { literal = await engine('literal', ROOT, LITERAL); } catch (e) { cannot(String(e?.message ?? e)); }
+  await measureLeagues([['the rule', candidate], ['literal', literal]]);
+  process.exit(0);
 }
 
 console.log(`simCmLeagueBook: ${fleet.length} careers x ${SEASONS} seasons (${FULL ? 'full' : 'default'} fleet, seed set ${SEEDSET})${CONTROL ? `, CONTROL ${CONTROL}` : ''}`);
