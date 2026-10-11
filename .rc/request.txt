@@ -1,0 +1,16 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+late-fails-first: git checkout 358f09888a8e5fd053160a03ebf40844a582aa58 -- src/components/club-manager/LiveSimScreen.tsx && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx -t "is drawn before its card" --testTimeout=300000; s=$?; git checkout HEAD -- src; git status --short | head -3; echo "RESULT late-on-old-screen=$s"; exit $s
+case2042-on-at-screen: git checkout d39d0d5ac786555576ebb2dc7b1fe3cb341097c5 -- src/components/club-manager/LiveSimScreen.tsx src/components/club-manager/ClubManagerVarReview.tsx && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx -t "a goal of mine at 44" --testTimeout=300000; s=$?; git checkout HEAD -- src; git status --short | head -3; echo "RESULT 2042-on-at-screen=$s"; exit $s
+livemotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx src/test/liveSimCelebration.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000 --hookTimeout=120000
+save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
