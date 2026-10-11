@@ -77,7 +77,9 @@ const AB_HIGH = 4.5;
 /** A sixth at bat only in a game his side scores this many in (this sim's own
  *  rule): seven, or ten when it wins at home, where it does not bat in the
  *  ninth. A side that scores few sends few men to the plate, so a 4 for 6
- *  never turns up in a 3-0 game. */
+ *  never turns up in a 3-0 game. A home win that goes past the ninth is held
+ *  to ten as well: the at bats are dealt before the innings are, so the rule
+ *  errs toward five. */
 const AB_SIX_RUNS = 7;
 const AB_SIX_RUNS_HOME_WIN = 10;
 /** The most runs he can drive in in one game (this sim's own cap). */
