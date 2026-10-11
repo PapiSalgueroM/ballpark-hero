@@ -1,0 +1,2 @@
+#!build
+chunks: for f in dist/assets/usSeasonShape*.js dist/assets/usSeasonLengths*.js dist/assets/usCareerProgramme*.js dist/assets/UsCareerBoard*.js dist/assets/mlb-*.js dist/assets/mlb.js; do [ -f "$f" ] && echo "$f raw $(wc -c < "$f") gz $(gzip -9c "$f" | wc -c)"; done; echo "who names usSeasonShape:"; grep -l "usSeasonShape" dist/assets/*.js | head -20; echo "chunks $(ls dist/assets | grep -c js)"
