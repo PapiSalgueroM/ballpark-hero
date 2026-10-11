@@ -1,0 +1,7 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playCmVar exit=0 593s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+playCmQuickSubs exit=0 10s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+playSaveKeeper exit=0 823s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+playClubManagerNewCountries exit=0 54s | playClubManagerNewCountries: green. Russia can be picked, started, played live and found in an old save's world (3 runs: 390x844, 1280x800, 390x844 reduced motion).
+playInboxCard exit=0 11s | playInboxCard: owned temporary files, headless browser and localhost server cleaned.

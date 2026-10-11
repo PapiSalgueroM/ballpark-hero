@@ -1,0 +1,10 @@
+# Release AW closing pass, final proof P-CMW: rulings C2 and C4: the walks the gate runs by their own invocation, and the Club Manager walks that are no gate line
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts/font-cache && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+playClubManagerNewCountries: node scripts/playClubManagerNewCountries.mjs
+playInboxCard: node scripts/playInboxCard.mjs
