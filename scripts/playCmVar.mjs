@@ -94,9 +94,14 @@ const WANTED = {
   /* Round 1303: on the lower penalty rate the first four matches hold no saved penalty by review; the tenth entry does. */
   penaltySaved: { match: 9, hint: 1832, needs: 'penalty', want: (feed, live) => reviewsOf(feed).find(v => { const k = kickOf(live, v); return v.review.decision === 'awarded' && alone(v, feed) && !!k && !k.goal && !!k.on; }) },
   goalBefore: { match: 1, hint: 1724, want: feed => { const all = reviewsOf(feed); return all.length === 1 && all[0].review.decision === 'disallowed' && all[0].minute >= 4 && all[0].minute <= 40 && !all[0].plus && feed.some(e => e.kind === 'goal' && place(e) === place(all[0]) - 1) ? all[0] : null; } },
-  /* optional: with the goal kind alone the fixtures may hold no half with two reviews or with a review beside a red card
-     (the two hints below stand on a penalty a review gives); then the jsdom cases hold them and the walk says so. */
-  two: { match: 0, hint: 2453, optional: !PENALTY_KIND, want: feed => { const all = reviewsOf(feed); return all.length === 2 && all.every(r => r.minute >= 4 && r.minute <= 40 && !r.plus) && all[1].minute - all[0].minute >= 4 ? all[0] : null; } },
+  /* Round 1303 fix: two reviews in one half and a review beside a red card each stood on a hint with a penalty a
+     review gives in it, so a build with the goal kind alone (the plain build now) had no picture of either, and
+     the two were optional there. A scan of 60,000 first halves asked for the goal kind alone (runner result
+     r1303-fx-walkscan) found six halves with two goals ruled out four minutes apart or more (the first on seed
+     4926 of the opener) and one with a goal ruled out in the minute of the other side's red card (league match 2,
+     seed 6513). Each kind of build has its own hint, and neither case is optional any more: a hint that stops
+     holding its case fails the walk, loudly. */
+  two: { match: 0, hint: PENALTY_KIND ? 2453 : 4926, want: feed => { const all = reviewsOf(feed); return all.length === 2 && all.every(r => r.minute >= 4 && r.minute <= 40 && !r.plus) && all[1].minute - all[0].minute >= 4 ? all[0] : null; } },
   /* Round 1302: the cases nobody had walked. A goal ruled out in the last two clock places of the half with the
      end of the half to itself (drawn before its card now), an own goal the minute after a ruled out goal, and a
      review in the same minute as the other side's injury or red card. */
@@ -104,7 +109,7 @@ const WANTED = {
   lateBefore: { match: 1, hint: 2591, want: (feed, live) => lateRuledOut(feed, live, 1) },
   ownGoal: { match: 1, hint: 1940, want: feed => { const all = reviewsOf(feed), r = all[0]; return all.length === 1 && r.review.decision === 'disallowed' && r.minute >= 4 && r.minute <= 38 && !r.plus && feed.some(e => e.kind === 'goal' && e.og && place(e) === place(r) + 1) ? r : null; } },
   injury: { match: 0, hint: 3861, want: feed => besideOther(feed, 'injury') },
-  red: { match: 1, hint: 3827, optional: !PENALTY_KIND, want: feed => besideOther(feed, 'red') },
+  red: { match: 1, hint: PENALTY_KIND ? 3827 : 6513, want: feed => besideOther(feed, 'red') },
   /* Round 1302 fix: the end of a half that real chances FILL (the two reviews of the round found the screen wrong
      there: a card that said "goal ruled out" on a real goal in the net, or on a real shot's last picture). The
      clock now stops for the ruled out goal, at the whistle when no instant before it is free. crowdedGoal: a real
