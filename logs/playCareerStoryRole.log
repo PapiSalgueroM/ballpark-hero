@@ -1,0 +1,64 @@
+FAIL 320-playing: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 320-summary: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 320-retired: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 390-playing: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 390-summary: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 390-retired: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 1280-playing: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 1280-summary: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+FAIL 1280-retired: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'How to play', exact: true }) to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:189:155
+Career Story native: 0 checks, 9 failed, 0/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 4
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:278:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 4,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
