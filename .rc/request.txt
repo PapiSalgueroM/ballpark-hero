@@ -1,0 +1,7 @@
+# Release AV closing check (verify), served: the us-careers reviewer's own walk again for the plan card of a short year on the pushed head's build (saves made on main), then the two weight fences measured on this head.
+#!serve
+#!playwright
+#!serial
+walk: R="$PWD"; git worktree add -q --detach /tmp/base aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$R/node_modules" /tmp/base/node_modules && (cd /tmp/base && node "$R/.rc/x/uscWalk.mjs" makesaves /tmp/old.json) && node .rc/x/uscWalk.mjs walk /tmp/old.json
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
