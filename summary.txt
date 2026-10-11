@@ -1,0 +1,10 @@
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simLegalPages exit=0 1s | simLegalPages: all green
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 121s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+vitest-all exit=0 553s |    Duration  552.77s (transform 33.99s, setup 25.34s, collect 158.95s, tests 1167.96s, environment 182.76s, prepare 38.36s)
+simCareerHall exit=1 862s | simCareerHall: RED

@@ -1,0 +1,12 @@
+# Round 1212 fix 2 on 8f06909a: the fences that walk the whole tree (one at a time), then the whole vitest suite, then simCareerHall once as a reading (Round 1226's NHL marks band, Round 1301 settles it)
+#!serial
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simCareerHall: node scripts/simCareerHall.mjs
