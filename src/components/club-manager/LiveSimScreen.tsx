@@ -548,7 +548,21 @@ export function LiveSimScreen({
      little clock of its own (`t`, how far into the action it is), and its card opens with the ball in the net.
      Nothing real is shortened, moved or left out for it, and the card never sits on another action's picture. */
   const [stoppage, setStoppage] = useState<{ id: string; t: number } | null>(null);
-  const stopped = stoppage !== null;
+  /* Round 1303 fix (finding 6 of Round 1302, live with VAR off): A REAL GOAL'S OWN STOPPAGE. Two goals had no way
+     onto the pitch. The last kick of a period is wound up to END at the whistle, so its goal was told by a pill and
+     never got its scorer card: the stage changed in the tick the ball was counted. And a goal in the clock place
+     before a last kick was counted and never drawn, because that kick's wind up has the pitch from 1.05 before the
+     whistle. Both now get what every other goal gets, with the match clock standing still: `t` is how far into the
+     goal's action the pitch is. The last kick's goal (`last`) is already in the net at the whistle, so its stoppage
+     starts there (t at NET_AT) and only holds its card, the whistle waiting for it. A goal under a last kick's wind
+     up is played whole at its own place on the clock, and the kick is wound up when it is over. */
+  const [goalStop, setGoalStop] = useState<{ key: string; t: number; last: boolean } | null>(null);
+  /* The same thing as a ref, set in the tick a stoppage is asked for (the state lands a render later): a review's
+     own stoppage does not start under it, and the frame that moves it on reads it. */
+  const goalStopNow = useRef<{ key: string; t: number; last: boolean } | null>(null);
+  /* The last kick whose card has had its time, or that Skip passed over: it is not held for twice. */
+  const lastKickDone = useRef<string | null>(null);
+  const stopped = stoppage !== null || goalStop !== null;
   /* True while the whistle of the period waits for such a goal and its review (the render sets it, like the cap). */
   const whistleHeld = useRef(false);
   const reviewCap = useRef(Infinity);
@@ -575,7 +589,7 @@ export function LiveSimScreen({
   const orientation = sideways ? 'landscape' : 'portrait';
   /* Every stage change ends whatever was playing: a goal's card never rises in the wrong half, and an
      action that fired late (Skip) is not replayed when the next period opens. */
-  const clearAction = () => { setMotionEvent(null); setGoalMoment(null); setReviewEvent(null); setStoppage(null); };
+  const clearAction = () => { setMotionEvent(null); setGoalMoment(null); setReviewEvent(null); setStoppage(null); goalStopNow.current = null; setGoalStop(null); };
   const [picking, setPicking] = useState<string | null>(null);
   /* Round 670 review: the clock reached 90 and the engine has been asked
      about extra time; the next render reads its answer off the live match. */
@@ -635,13 +649,22 @@ export function LiveSimScreen({
     && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')
     && !cmVarEventWaiting(e, feed, settledReviews)), [feed, stageEnd, board, settledReviews]);
   const terminalWindup = !!terminalAction && clock >= terminalMinute - 1.05 && clock < terminalMinute;
+  /* Round 1303 fix: a goal in the clock place before the last kick (the kick's wind up has the pitch from 1.05
+     before the whistle, so the plan stages nothing there). It is played in a stoppage of its own at its own place
+     (see goalStop), and the kick is not wound up over it: its wind up waits for that place and then for the
+     stoppage to be over. Of this period only, and never from before this screen opened. */
+  const underKick = useMemo(() => (terminalAction ? feed.find(e => e.kind === 'goal' && e.side !== 'none' && e !== terminalAction
+    && e.minute >= (stageEnd === 45 ? 0 : stageEnd === 90 ? 46 : 91) && e.minute <= stageEnd
+    && placeOf(e) > terminalMinute - 1.05 && placeOf(e) < terminalMinute && placeOf(e) >= openedAt.current
+    && !cmVarEventWaiting(e, feed, settledReviews)) : undefined), [feed, terminalAction, terminalMinute, stageEnd, settledReviews]);
+  const underKickWaits = !!underKick && clock < placeOf(underKick);
   useEffect(() => {
-    if (!running || finished || !terminalWindup || !terminalAction) return;
+    if (!running || finished || !terminalWindup || !terminalAction || underKickWaits || stopped) return;
     const at = terminalMinute - 1.05;
     const key = `${terminalAction.kind}:${terminalAction.side}:${terminalAction.minute}:${terminalAction.text}`;
     setMotionEvent(current => current?.event === terminalAction && current.at === at
       ? current : { event: terminalAction, key, at });
-  }, [running, finished, terminalWindup, terminalAction, terminalMinute]);
+  }, [running, finished, terminalWindup, terminalAction, terminalMinute, underKickWaits, stopped]);
 
   /* Round 505: the feed carries a name and a minute per event, so the flank
      of a corner, a saved penalty, and a goal from the spot or a direct free
@@ -739,8 +762,9 @@ export function LiveSimScreen({
      where the ball is in the net (the card opens there) and never passes it, so a slow frame cannot carry the
      action past its own end. Pause holds it like everything else. */
   const stoppageOpen = reducedMotion ? 0.01 : NET_AT + 0.004;
+  const reviewStopped = stoppage !== null;
   useEffect(() => {
-    if (!stopped || paused || !running || finished || reviewEvent) return;
+    if (!reviewStopped || paused || !running || finished || reviewEvent) return;
     let frame = 0;
     let last: number | null = null;
     const step = (ts: number) => {
@@ -752,7 +776,42 @@ export function LiveSimScreen({
     };
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [stopped, paused, running, finished, reviewEvent, speed, stoppageOpen]);
+  }, [reviewStopped, paused, running, finished, reviewEvent, speed, stoppageOpen]);
+  /* Round 1303 fix: a real goal's stoppage has a clock of its own too (see goalStop). It runs at the match's pace
+     until the ball is in the net and then at the pace every goal's card is held at (GOAL_HOLD_SECONDS for the last
+     GOAL_HOLD_SPAN of the action), and when the action is over the match clock goes on. Under reduced motion the
+     last picture shows at once, so the hold is the first stretch, as it is for every goal. Pause holds it. */
+  const goalStopped = goalStop !== null;
+  const endGoalStop = () => {
+    const s = goalStopNow.current;
+    goalStopNow.current = null;
+    setGoalStop(null);
+    /* The goal played under a last kick's wind up is over: the pitch goes back to the kick (the effect that winds
+       it up runs when the stoppage is gone) and shows nothing of this goal a second time. */
+    if (s && !s.last) setMotionEvent(current => (current && current.key === s.key ? null : current));
+  };
+  useEffect(() => {
+    if (!goalStopped || paused || !running || finished) return;
+    let frame = 0;
+    let last: number | null = null;
+    const step = (ts: number) => {
+      const s = goalStopNow.current;
+      if (!s) return;
+      if (last === null) last = ts;
+      const dt = Math.min(0.25, (ts - last) / 1000);
+      last = ts;
+      const holdFrom = reducedMotion && !s.last ? 0 : NET_AT;
+      const t = s.t + dt * (s.t < holdFrom ? BASE_RATE * speed : GOAL_HOLD_SPAN / (GOAL_HOLD_SECONDS[speed] ?? 2.5));
+      if (t >= holdFrom + GOAL_HOLD_SPAN) { endGoalStop(); return; }
+      goalStopNow.current = { ...s, t };
+      setGoalStop(goalStopNow.current);
+      frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+    // endGoalStop reads refs and setters only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [goalStopped, paused, running, finished, speed, reducedMotion]);
 
   /* Stage transitions off the clock. The whistle is called exactly once.
      Round 781: at the end of each period's board, not on its last minute.
@@ -1024,12 +1083,13 @@ export function LiveSimScreen({
      the clock, before the foul was told. The walk met that on a phone. */
   const reviewDue = !!nextReview && clock >= reviewCap.current;
   useEffect(() => {
-    if (!running || finished || reviewEvent || !nextReview || !reviewDue) return;
+    /* Round 1303 fix: nor while a real goal has a stoppage of its own (its card is up): the review waits for it. */
+    if (!running || finished || reviewEvent || !nextReview || !reviewDue || goalStop) return;
     if (!nextStopped) { setReviewEvent(nextReview); return; }
     /* The stoppage: first the goal (it starts further down, below the banner effect), and then, with its ball
        in the net, the card. */
     if (stoppage && stoppage.id === nextReview.review!.id && stoppage.t >= stoppageOpen - 1e-9) setReviewEvent(nextReview);
-  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, stoppageOpen]);
+  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, stoppageOpen, goalStop]);
   /* A stoppage never outlives its review: if the review is gone (settled by Skip, or the rest of the period was
      drawn again without it), the match clock is let go at once. */
   const stoppageStale = !!stoppage && nextReview?.review?.id !== stoppage.id;
@@ -1055,6 +1115,8 @@ export function LiveSimScreen({
     let small: Seg[] | null = null;
     let moved: LiveFeedEvent | null = null;
     let scored: { e: LiveFeedEvent; key: string; banner: Banner } | null = null;
+    let stop: { e: LiveFeedEvent; key: string; t: number; last: boolean } | null = null;
+    let stopScored: { e: LiveFeedEvent; key: string; banner: Banner } | null = null;
     const lines: LogLine[] = [];
     for (const e of feed) {
       /* Round 781: a line in the board fires when the clock reaches its plus.
@@ -1068,7 +1130,13 @@ export function LiveSimScreen({
       const key = `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
-      if (playsOut(e)) { setMotionEvent({ event: e, key, at: clock }); moved = e; }
+      /* Round 1303 fix (finding 6): a goal in the place before the last kick stops the clock and is played now
+         (see goalStop), when its line fires on time and nothing else has the pitch. */
+      const under = e === underKick && terminalWindup && clock - firesAt(e) <= 0.5 && !reviewEvent && !stopped && !goalStopNow.current;
+      if (playsOut(e) || under) { setMotionEvent({ event: e, key, at: clock }); moved = e; }
+      if (under) stop = { e, key, t: 0, last: false };
+      /* And the last kick's own goal, in the net as the whistle is due: its card is held with the whistle waiting. */
+      if (lastKickOwed && liveAction && e === terminalAction) { moved = e; stop = { e, key: liveAction.key, t: NET_AT, last: true }; }
       const club = e.side === 'me' ? career.clubName : opponent;
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
@@ -1093,6 +1161,7 @@ export function LiveSimScreen({
             tone: e.side === 'me' ? 'me' : 'opp',
           };
           scored = { e, key, banner: big };
+          if (stop && (stop as { e: LiveFeedEvent }).e === e) stopScored = scored;
           break;
         }
         case 'var':
@@ -1139,14 +1208,27 @@ export function LiveSimScreen({
     /* Round 1101: a goal that fired on time and has the pitch (it is the last chance at its place, so its
        action is the one playing) gets the goal sequence in place of the pill: its card rises when the ball
        is in the net. A goal fired late (Skip, a catch up) keeps the pill, and so does the last kick of a period. */
-    const sequence = scored as { e: LiveFeedEvent; key: string; banner: Banner } | null;
-    if (sequence && moved === sequence.e && clock - firesAt(sequence.e) <= 0.5) {
+    /* Round 1303 fix: a goal with a stoppage of its own is the one whose sequence this is, whatever else was told
+       in the same tick (a second goal at its place keeps the pill, as the earlier of two at one place always has). */
+    const stopped1 = stopScored as { e: LiveFeedEvent; key: string; banner: Banner } | null;
+    const sequence = stopped1 ?? (scored as { e: LiveFeedEvent; key: string; banner: Banner } | null);
+    if (sequence && (stopped1 !== null || moved === sequence.e) && clock - firesAt(sequence.e) <= 0.5) {
       const count = goalCardCount(career, feed, sequence.e);
       /* Nothing says GOAL before the ball is in: its line on the list beside the pitch waits with the score
          (the effect below tells it), and the line under the pitch says nothing else while the goal plays. */
       const at = lines.findIndex(l => l.key === sequence.key);
       const line: LogLine = at >= 0 ? lines.splice(at, 1)[0] : { key: sequence.key, at: minuteLabel(sequence.e), segs: sequence.banner.segs };
-      setGoalMoment({ key: sequence.key, at: clock, side: sequence.e.side === 'me' ? 'me' : 'opp', segs: sequence.banner.segs, club: sequence.banner.club, nth: count.nth, season: count.season, line });
+      /* Round 1303 fix: a goal with a stoppage of its own. The last kick's card belongs to the wind up the pitch
+         has already played (that action's key and its start), every other goal's to the action starting now. */
+      const asked = stop as { e: LiveFeedEvent; key: string; t: number; last: boolean } | null;
+      const stopNow = asked && asked.e === sequence.e ? { key: asked.key, t: asked.t, last: asked.last } : null;
+      const held = stopNow?.last && liveAction ? liveAction : null;
+      setGoalMoment({ key: held ? held.key : sequence.key, at: held ? held.at : clock, side: sequence.e.side === 'me' ? 'me' : 'opp', segs: sequence.banner.segs, club: sequence.banner.club, nth: count.nth, season: count.season, line });
+      if (stopNow) {
+        goalStopNow.current = stopNow;
+        setGoalStop(stopNow);
+        if (stopNow.last) lastKickDone.current = stopNow.key;
+      }
       if (big === sequence.banner) big = null;
       small = null;
       setEventLine(null);
@@ -1178,12 +1260,15 @@ export function LiveSimScreen({
   useEffect(() => {
     if (!running || finished || reviewEvent || !nextReview || !reviewDue || !nextStopped) return;
     const id = nextReview.review!.id;
-    if ((stoppage && stoppage.id === id) || goalPill.current) return;
+    /* Round 1303 fix: nor under a real goal's own stoppage (the last kick's goal, its card held at the whistle).
+       The ref is set in the very commit that stoppage is asked for, by the banner effect above; `goalStop` is an
+       input so this comes round again when it is over. */
+    if ((stoppage && stoppage.id === id) || goalPill.current || goalStopNow.current) return;
     setStoppage({ id, t: 0 });
     setMotionEvent({ event: { minute: nextReview.minute, ...(nextReview.plus ? { plus: nextReview.plus } : {}), side: nextReview.side, kind: 'goal', text: nextReview.text }, key: ruledOutKey(nextReview), at: clock });
     // The clock stands still while this runs; the review, the stoppage and the pill are the inputs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, banner]);
+  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, banner, goalStop]);
 
   /* ---- the dots and the ball, off the shared pitch (Round 1101): the plan is built further up ---- */
   const sceneKey = pitchSceneKey(plan, clock);
@@ -1192,11 +1277,25 @@ export function LiveSimScreen({
   const scene = useMemo(() => pitchScene(plan, clock), [plan, sceneKey]);
   /* The part places roles; who each one is (his name, number, id, armband) is this screen's own. */
   const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);
-  /* Round 1302: in a stoppage the match clock stands still and the action on the pitch runs on the stoppage's own. */
-  const motion = useLiveSimMotion(scene, motionEvent, clock + (stoppage?.t ?? 0), running && !finished && motionStillCommitted);
+  /* Round 1302: in a stoppage the match clock stands still and the action on the pitch runs on the stoppage's own.
+     Round 1303 fix: a real goal's stoppage likewise. The last kick's is read off its own wind up, which started
+     ACTION_SPAN before the whistle and has the ball in the net: a hair inside its end, so that last picture stays
+     for as long as the whistle waits (at the whistle itself the clock stands a float's breadth past the action). */
+  const lastKickOn = !!terminalAction && terminalAction.kind === 'goal' && !!liveAction && liveAction.event === terminalAction;
+  const goalClock = goalStop ? (goalStop.last && liveAction ? liveAction.at + Math.min(goalStop.t, ACTION_SPAN - 0.001) : clock + goalStop.t) : clock;
+  const motion = useLiveSimMotion(scene, motionEvent,
+    goalStop ? goalClock : lastKickOn && liveAction && clock >= stageStop ? liveAction.at + ACTION_SPAN - 0.001 : clock + (stoppage?.t ?? 0),
+    running && !finished && motionStillCommitted);
+  /* Round 1303 fix: the last kick of the period is a goal, its wind up is what the pitch has just played, and its
+     card has not had its time: the whistle waits (the banner effect starts the stoppage in this same commit, when
+     that goal's line fires). Not after Skip, and not for a kick the pitch dropped (the line up changed under it):
+     those keep the pill, as every goal told late does. */
+  const lastKickOwed = running && !finished && lastKickOn && !!liveAction && !reviewEvent && clock >= stageStop - 1e-9
+    && motion.action === 'goal' && lastKickDone.current !== liveAction.key && !firedRef.current.has(lineKey(terminalAction!));
+  if (lastKickOwed) whistleHeld.current = true;
 
   /* ---- the goal sequence (Round 1101), derived in render and never from effect state ---- */
-  const goalPhase = goalWindow(liveAction, clock, reducedMotion);
+  const goalPhase = goalWindow(liveAction, goalClock, reducedMotion);
   /* An action the pitch has shown and then stopped showing before its time is one the part dropped (the line
      up changed under it: a substitution in a goal's wind up). The goal it was has nothing left to wait for. */
   const shownAction = useRef<string | null>(null);
@@ -1207,7 +1306,7 @@ export function LiveSimScreen({
     else if (shownAction.current === liveAction.key && clock - liveAction.at < ACTION_SPAN && droppedKey !== liveAction.key) setDroppedKey(liveAction.key);
   });
   /* The card and the hold exist only inside the goal's own action, and only while the pitch is drawing it. */
-  const gm = goalMoment && liveAction && liveAction.key === goalMoment.key && clock - goalMoment.at >= 0 && clock - goalMoment.at <= ACTION_SPAN
+  const gm = goalMoment && liveAction && liveAction.key === goalMoment.key && goalClock - goalMoment.at >= 0 && goalClock - goalMoment.at <= ACTION_SPAN
     && motion.action === 'goal' ? goalMoment : null;
   const cardUp = !!gm && goalPhase === 'net';
   /* Under reduced motion the last frame shows at once, so the hold is the first stretch after the line fires. */
@@ -1224,6 +1323,14 @@ export function LiveSimScreen({
   if (running && !finished) {
     const lo = stage === 'first' ? 0 : stage === 'extra' ? 91 : 46;
     for (const e of feed) {
+      /* Round 1303 fix: a goal played in a stoppage of its own (the place before a last kick) waits for its ball
+         like any other: from the frame the clock reaches its place (its line fires after that frame) until its
+         ball is in the net. One that is told without a stoppage (Skip, a catch up) does not wait. */
+      if (e === underKick && placeOf(e) <= clock) {
+        const told = firedRef.current.has(lineKey(e));
+        if (told ? goalStop?.key === lineKey(e) && goalStop.t < (reducedMotion ? 0 : NET_AT) : terminalWindup) waiting[e.side as Side] += 1;
+        continue;
+      }
       if (e.kind !== 'goal' || e.side === 'none' || e.minute < lo || e.minute > stageEnd || placeOf(e) > clock || !playsOut(e)) continue;
       /* The pitch counts the action from the tick its line fired on, a hair after the instant the plan gave
          it. Once that action is the one playing, the wait is read off its own start, so the new score and the
@@ -1239,7 +1346,7 @@ export function LiveSimScreen({
      in the net, or the moment that goal stops waiting for any other reason (its action was dropped, Skip).
      Never before. */
   const goalStillWaiting = !!goalMoment && running && !finished && droppedKey !== goalMoment.key
-    && clock < goalMoment.at + (reducedMotion ? 0 : NET_AT);
+    && goalClock < goalMoment.at + (reducedMotion ? 0 : NET_AT);
   const toldGoal = useRef<string | null>(null);
   const periodOn = running && !finished && clock < stageStop;
   useEffect(() => {
@@ -1248,7 +1355,12 @@ export function LiveSimScreen({
     setLog(prev => [goalMoment.line, ...prev].slice(0, 5));
     if (periodOn) setEventLine(goalMoment.line.segs);
   }, [goalMoment, goalStillWaiting, periodOn]);
-  const skipGoal = () => { if (gm) setClock(c => Math.min(stageStop, Math.max(c, gm.at + ACTION_SPAN + 0.001))); };
+  /* Round 1303 fix: a tap on the card of a goal in a stoppage of its own ends that stoppage and nothing else (the
+     match clock stands where it stood, so the last kick after it is still wound up whole). */
+  const skipGoal = () => {
+    if (goalStopNow.current) { endGoalStop(); return; }
+    if (gm) setClock(c => Math.min(stageStop, Math.max(c, gm.at + ACTION_SPAN + 0.001)));
+  };
 
   /* ---- the change sheet: tap one of your dots ---- */
   const sheetRef = useRevealScroll<HTMLDivElement>(`pick:${picking ?? ''}`, { skipFirst: true });
@@ -1758,6 +1870,11 @@ export function LiveSimScreen({
                       setReviewEvent(null);
                       /* Round 1302: a ruled out goal that was being played when Skip was pressed stops with its review. */
                       setStoppage(null);
+                      /* Round 1303 fix: Skip ends a real goal's stoppage too, and a last kick it passes over keeps
+                         the pill and the whistle at once, as every goal told late does. */
+                      goalStopNow.current = null;
+                      setGoalStop(null);
+                      if (liveAction && terminalAction && liveAction.event === terminalAction) lastKickDone.current = liveAction.key;
                       setMotionEvent(current => (current && current.key.startsWith('ruledout:') ? null : current));
                       setClock(stageStop);
                     }}

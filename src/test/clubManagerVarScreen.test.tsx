@@ -47,8 +47,10 @@
  * marked `fails`, and every other case a half the engine drew, untouched, that must pass.
  * Round 1303 moved two penalty cases to halves that hold their review on the lower penalty rate, and added a second
  * block at the foot of the file that is NOT about reviews: finding 6 of Round 1302 (a real goal that is the last kick
- * of a half), reproduced on halves nobody asks a review in, as three more cases marked `fails`. So: 42 cases, 34
- * plain and 8 that pass by failing.
+ * of a half), reproduced on halves nobody asks a review in, as three cases marked `fails`. The fix pass of Round 1303
+ * mended the screen, so those are plain cases now, with two more beside them (reduced motion, and Skip during the
+ * card). So: 44 cases, 39 plain and 5 that pass by failing (all five are about a penalty a review gives, a kind
+ * of review the game does not play).
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -587,12 +589,17 @@ describe('Club Manager: the review screen', () => {
   };
   const at = (x: LateShape, back: number) => x.real.some(e => place(e) === x.whistle - back);
   /** The real chances of the end of a half that the pitch plays, in order, by its own two rules (scene.ts): one
-   *  action a clock place (of two lines the later), and nothing the place before a last kick (its wind up is there). */
+   *  action a clock place (of two lines the later), and the place before a last kick is that kick's wind up.
+   *  Round 1303 fix: a GOAL in that place is played all the same, with the clock stopped (the first when there are
+   *  two); a shot or a save there still is not. */
   function playedReal(h: Half, from: number): LiveFeedEvent[] {
     const chances = h.feed.filter(e => isChance(e) && place(e) >= from && place(e) <= h.whistle);
     const lastKick = chances.some(e => place(e) === h.whistle);
     const byPlace = new Map<number, LiveFeedEvent>();
-    for (const e of chances) if (!(lastKick && place(e) === h.whistle - 1)) byPlace.set(place(e), e);
+    for (const e of chances) {
+      if (!(lastKick && place(e) === h.whistle - 1)) byPlace.set(place(e), e);
+      else if (e.kind === 'goal' && !byPlace.has(place(e))) byPlace.set(place(e), e);
+    }
     return [...byPlace.values()].sort((a, b) => place(a) - place(b));
   }
   it.each([
@@ -896,61 +903,128 @@ describe('Club Manager: the review screen', () => {
   }, 240000);
 });
 
-/* ---- Round 1303. NOT a review case: finding 6 of Round 1302's fix report, LIVE TODAY with VAR off ----
+/* ---- Round 1303. NOT a review case: finding 6 of Round 1302's fix report, which was live with VAR off ----
    The lead's decision 4 of Round 1303 asked for it reproduced by a test that fails first, and then fixed. The
-   first half of that is here; the fix is NOT (see docs/audits/ROUND-1303-NOTES.md section 5: it is the live match
-   screen's own rule since Round 1101, "a goal fired late keeps the pill, and so does the last kick of a period",
-   and the plan playing nothing in the place before a last kick; the cure is the twin of the stoppage and wants a
-   round of its own). Nobody asks for a review in these halves: they are the game as it ships, on the halves the
-   run review of Round 1302 named (league match 1, seeds 1742 and 1860: a real goal at the whistle's own place;
-   seed 1773: goals at 45+2 and 45+3 with the whistle at 45+3).
-   Each case is marked `fails`: green while the defect is there, RED the day it is mended, and then it becomes a
-   plain case. A case marked `fails` is green on ANY throw, so each does its own work outside the one assertion
-   that is the defect: if the half is gone, the goal is not the last kick any more, or the half never ends, it
-   returns, and a `fails` case that returns is RED. */
-describe('Club Manager: the last kick of a half (finding 6 of Round 1302, live with VAR off)', () => {
-  type Late = { career: CareerState; feed: LiveFeedEvent[]; whistle: number; late: LiveFeedEvent[] };
+   builder's pass left the first half of that here as three cases marked `fails` (green while the defect was
+   there); the fix pass mended the screen (a real goal's own stoppage, `goalStop` in LiveSimScreen.tsx) and the
+   mark came off, so they are plain cases now and must pass. Nobody asks for a review in these halves: they are the
+   game as it ships, on the halves the run review of Round 1302 named (league match 1, seeds 1742 and 1860: a real
+   goal at the whistle's own place; seed 1773: goals at 45+2 and 45+3 with the whistle at 45+3).
+   What they hold: the last kick's goal gets its scorer card, with its ball in the net and the goal on the score,
+   for as long as any goal's card stays up, and the whistle waits for it; and a goal in the clock place before a
+   last kick is drawn whole, with its own card, before that kick is wound up. */
+describe('Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)', () => {
+  type Late = { career: CareerState; feed: LiveFeedEvent[]; whistle: number; late: LiveFeedEvent[]; seed: number };
   /** The first half of league match 1 on this seed, nobody asking for reviews, when it holds what the case is about. */
-  function lateGoals(hint: number, want: (late: LiveFeedEvent[], whistle: number) => boolean): (Late & { seed: number }) | null {
+  function lateGoals(hint: number, want: (late: LiveFeedEvent[], whistle: number) => boolean): Late {
     for (const seed of [hint, ...Array.from({ length: 1500 }, (_, i) => 1700 + i)]) {
       const res = seeded(seed, () => playNextEntry(entry(0), {}));
       if (res.kind !== 'halftime' || !res.state.live || 'varReviews' in res.state.live) continue;
       const feed = liveFeed(res.state.live), whistle = 45 + (res.state.live.added?.h1 ?? 0);
       const late = feed.filter(e => e.kind === 'goal' && place(e) >= whistle - 1);
-      if (want(late, whistle)) return { career: structuredClone(res.state), feed, whistle, late, seed };
+      if (want(late, whistle)) {
+        if (seed !== hint) console.info(`clubManagerVarScreen: STALE HINT, the last kick of a half, hint ${hint}: the case was found on seed ${seed}`);
+        return { career: structuredClone(res.state), feed, whistle, late, seed };
+      }
     }
-    return null;
+    throw new Error('no first half of the opener ends the way this case is about');
   }
-  /** The half played from 44.2 to the interval and 3.2 seconds on, or null when it never gets there. */
-  async function played(h: Late): Promise<{ frames: Frame[]; whistle: number } | null> {
+  /** The half played from 44.2 to the interval and 3.2 seconds on. */
+  async function played(h: Late, reduced = false): Promise<{ frames: Frame[]; whistle: number }> {
+    if (reduced) {
+      const original = window.matchMedia;
+      vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ ...original(query), matches: true }));
+    }
     const career = structuredClone(h.career);
     career.live!.minute = 44.2;
     const mounted = mount(career);
     let frames = await run(mounted, 40000, fs => fs[fs.length - 1].stage === 'interval');
     const whistle = frames.findIndex(f => f.stage === 'interval');
-    if (whistle < 0) return null;
+    expect(whistle, 'the half never reached the interval').toBeGreaterThan(0);
     frames = await run(mounted, 3200, undefined, 1, frames);
+    expect(mounted.callbacks.onMark.mock.calls, 'the interval was not marked exactly once').toEqual([[45]]);
     return { frames, whistle };
   }
+  /** The frames a goal's scorer card was up in. */
+  const cardsOf = (frames: Frame[], goal: LiveFeedEvent) => frames.map((f, i) => (f.goalCard !== null && f.goalCard.includes(goal.text) ? i : -1)).filter(i => i >= 0);
 
-  it.fails.each([1742, 1860])('KNOWN OPEN, live today: a real goal that is the last kick of a first half gets no scorer card (seed %i)', async seed => {
-    let h: ReturnType<typeof lateGoals> = null, got: Awaited<ReturnType<typeof played>> = null;
-    try { h = lateGoals(seed, (late, whistle) => late.some(g => place(g) === whistle)); got = h ? await played(h) : null; } catch { return; }
-    if (!h || !got) return;
-    const goal = h.late.find(g => place(g) === h!.whistle)!;
-    /* The goal IS drawn and counted: what is missing is its card, not the goal. */
-    if (!got.frames.slice(0, got.whistle + 1).some(f => f.motion === 'goal') || got.frames[got.frames.length - 1].score !== scoreBy(h.feed, h.whistle)) return;
-    console.info(`clubManagerVarScreen: the last kick of the half, hint ${seed}, found on seed ${h.seed}: whistle ${h.whistle}, ${goal.side} goal by ${goal.text}, score at the end ${got.frames[got.frames.length - 1].score}, scorer cards seen ${got.frames.filter(f => f.goalCard !== null).length} frames`);
-    expect(got.frames.some(f => f.goalCard !== null && f.goalCard.includes(goal.text)), 'the goal that is the last kick of the half got no scorer card').toBe(true);
+  it.each([
+    { seed: 1742, reduced: false },
+    { seed: 1860, reduced: false },
+    { seed: 1742, reduced: true },
+  ])('a real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed $seed, reduced motion $reduced)', async ({ seed, reduced }) => {
+    const h = lateGoals(seed, (late, whistle) => late.filter(g => place(g) === whistle).length === 1 && late.length === 1);
+    const { frames, whistle } = await played(h, reduced);
+    const goal = h.late[0], after = scoreBy(h.feed, h.whistle), before = scoreBy(h.feed, h.whistle - 1);
+    const cards = cardsOf(frames, goal);
+    console.info(`clubManagerVarScreen: the last kick of the half, hint ${seed}, found on seed ${h.seed}: whistle ${h.whistle}, ${goal.side} goal by ${goal.text}, score at the end ${frames[frames.length - 1].score}, scorer cards seen ${cards.length} frames`);
+    expect(frames[frames.length - 1].score).toBe(after);
+    expect(cards.length, 'the goal that is the last kick of the half got no scorer card').toBeGreaterThan(0);
+    /* The card is up before the whistle and down at it; under it the ball is in the net and the goal is counted. */
+    expect(cards[cards.length - 1], 'the card of the last kick was still up at the interval').toBeLessThan(whistle);
+    for (const i of cards) {
+      expect(`${frames[i].motion}/${frames[i].phase}`, `what the pitch shows under the card at ${frames[i].ms} ms`).toBe('goal/net');
+      expect(frames[i].score, `the score under the card at ${frames[i].ms} ms`).toBe(after);
+      expect(frames[i].minute + frames[i].plus, 'the clock under the card').toBe(h.whistle);
+    }
+    /* Nothing says the new score before the ball is in the net: the first frame that shows it has the net. */
+    const counted = frames.findIndex(f => f.score === after);
+    expect(frames[counted - 1].score, 'the score right before the last kick counted').toBe(before);
+    expect(`${frames[counted].motion}/${frames[counted].phase}`, 'what the pitch shows when the last kick is counted').toBe('goal/net');
+    /* The card has a goal's own time (1.8 seconds at the 2x a match opens at), and the whistle goes right after. */
+    const up = frames[cards[cards.length - 1]].ms - frames[cards[0]].ms;
+    expect(up, 'how long the card of the last kick was up, in ms').toBeGreaterThanOrEqual(1600);
+    expect(up).toBeLessThanOrEqual(2100);
+    expect(frames[whistle].ms - frames[cards[cards.length - 1]].ms, 'the whistle did not follow the card').toBeLessThanOrEqual(100);
   }, 240000);
 
-  it.fails('KNOWN OPEN, live today: of two goals in the last two clock places of a first half only one is drawn (seed 1773)', async () => {
-    let h: ReturnType<typeof lateGoals> = null, got: Awaited<ReturnType<typeof played>> = null;
-    try { h = lateGoals(1773, (late, whistle) => late.some(g => place(g) === whistle) && late.some(g => place(g) === whistle - 1)); got = h ? await played(h) : null; } catch { return; }
-    if (!h || !got) return;
-    if (got.frames[got.frames.length - 1].score !== scoreBy(h.feed, h.whistle)) return;
-    const drawn = actionRuns(got.frames.slice(0, got.whistle + 1)).filter(r => r.kind === 'goal').length;
-    console.info(`clubManagerVarScreen: two goals in the last two places, hint 1773, found on seed ${h.seed}: whistle ${h.whistle}, goals at ${h.late.map(place).join(' and ')}, goals drawn ${drawn}, score at the end ${got.frames[got.frames.length - 1].score}`);
-    expect(drawn, 'a goal in the place before a last kick was counted and never drawn').toBe(h.late.length);
+  it('two goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)', async () => {
+    const h = lateGoals(1773, (late, whistle) => late.length === 2 && late.some(g => place(g) === whistle) && late.some(g => place(g) === whistle - 1));
+    const { frames, whistle } = await played(h);
+    const [first, last] = [...h.late].sort((a, b) => place(a) - place(b));
+    const upTo = frames.slice(0, whistle + 1);
+    const drawn = actionRuns(upTo).filter(r => r.kind === 'goal');
+    console.info(`clubManagerVarScreen: two goals in the last two places, hint 1773, found on seed ${h.seed}: whistle ${h.whistle}, goals at ${h.late.map(place).join(' and ')}, goals drawn ${drawn.length}, score at the end ${frames[frames.length - 1].score}`);
+    expect(frames[frames.length - 1].score).toBe(scoreBy(h.feed, h.whistle));
+    expect(drawn.length, 'a goal in the place before a last kick was counted and never drawn').toBe(2);
+    const a = cardsOf(frames, first), b = cardsOf(frames, last);
+    /* When one man scores both, the two cards are told apart by their minute. */
+    const mine = (goal: LiveFeedEvent, idx: number[]) => idx.filter(i => frames[i].goalCard!.includes(`${goal.minute}${goal.plus ? `+${goal.plus}` : ''}'`));
+    const ca = mine(first, a), cb = mine(last, b);
+    expect(ca.length, 'the goal in the place before the last kick got no scorer card').toBeGreaterThan(0);
+    expect(cb.length, 'the last kick got no scorer card').toBeGreaterThan(0);
+    expect(ca[ca.length - 1], 'the two cards were not one after the other').toBeLessThan(cb[0]);
+    expect(cb[cb.length - 1]).toBeLessThan(whistle);
+    /* The first goal is played with the match clock standing at its own place, wound up, struck and in. */
+    for (const i of ca) {
+      expect(frames[i].minute + frames[i].plus, 'the clock under the card of the goal before the last kick').toBe(place(first));
+      expect(`${frames[i].motion}/${frames[i].phase}`).toBe('goal/net');
+      expect(frames[i].score, 'the score under the first card').toBe(scoreBy(h.feed, place(first)));
+    }
+    expect(frames.slice(drawn[0].from, ca[0]).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the goal before the last kick was not played out before its card').toBe(true);
+    /* Its goal is not on the score before its ball is in the net. */
+    const counted = frames.findIndex(f => f.score === scoreBy(h.feed, place(first)));
+    expect(frames[counted - 1].score, 'the score right before the goal before the last kick counted').toBe(scoreBy(h.feed, place(first) - 1));
+    expect(`${frames[counted].motion}/${frames[counted].phase}`, 'what the pitch shows when that goal is counted').toBe('goal/net');
+    /* And the last kick is wound up whole after it: planted, struck, in, then its card. */
+    expect(drawn[1].from, 'the last kick was wound up under the card of the goal before it').toBeGreaterThan(ca[ca.length - 1]);
+    expect(frames.slice(drawn[1].from, cb[0]).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the last kick was not played out').toBe(true);
+    for (const i of cb) expect(frames[i].score).toBe(scoreBy(h.feed, h.whistle));
+  }, 240000);
+
+  it('Skip during the card of the last kick ends the half at once, on the engine score (seed 1742)', async () => {
+    const h = lateGoals(1742, (late, whistle) => late.filter(g => place(g) === whistle).length === 1 && late.length === 1);
+    const career = structuredClone(h.career);
+    career.live!.minute = 44.2;
+    const mounted = mount(career);
+    const frames = await run(mounted, 40000, fs => fs[fs.length - 1].goalCard !== null);
+    expect(frames[frames.length - 1].goalCard, 'the card of the last kick never came up').toContain(h.late[0].text);
+    expect(frames[frames.length - 1].stage).toBe('first');
+    fireEvent.click(mounted.getByRole('button', { name: /Skip/ }));
+    const after = await run(mounted, 400, undefined, 1, frames);
+    expect(after[after.length - 1].stage).toBe('interval');
+    expect(after[after.length - 1].goalCard).toBeNull();
+    expect(after[after.length - 1].score).toBe(scoreBy(h.feed, h.whistle));
+    expect(mounted.callbacks.onMark.mock.calls).toEqual([[45]]);
   }, 240000);
 });
