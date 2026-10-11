@@ -1,0 +1,3 @@
+mut P3: applied to src/lib/season/usPlayoffs.ts
+simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+KILLED P3 sim=0 vitest=1

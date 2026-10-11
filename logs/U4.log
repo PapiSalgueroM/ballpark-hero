@@ -1,0 +1,3 @@
+mut U4: applied to src/lib/uclLeaguePhase.ts
+simCmLeaguePhase: RED, 7021 checks, 8002 failed, sections all.
+KILLED U4 sim=1 vitest=1

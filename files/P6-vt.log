@@ -1,0 +1,55 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [31m❯[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 685[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 570[2mms[22m[39m
+   [32m✓[39m usSeriesOrder[2m > [22mis a real shuffle: over the seeds a seven game series is not always the same order[32m 1[2mms[22m[39m
+   [32m✓[39m usSeriesOrder[2m > [22mrefuses a length no series of that need can have[32m 1[2mms[22m[39m
+   [32m✓[39m usPostRow[2m > [22mputs the saved playoff numbers under the regular keys of an NBA line[32m 0[2mms[22m[39m
+   [32m✓[39m usPostRow[2m > [22manswers null for a line with no playoff number, and never reads the NFL sentence[32m 0[2mms[22m[39m
+   [32m✓[39m usPostRow[2m > [22mdrops a stat field the save holds no playoff number for[32m 0[2mms[22m[39m
+   [32m✓[39m usPostTotals[2m > [22mkeeps a sum and turns a mean of whole numbers into the nearest whole total, worked in tenths[32m 1[2mms[22m[39m
+   [32m✓[39m usPostTotals[2m > [22manswers null for a total the core cannot hold game by game[32m 0[2mms[22m[39m
+   [32m✓[39m usPostTotals[2m > [22mfrom ten games up the whole total always averages back to the saved decimal (plain arithmetic)[32m 53[2mms[22m[39m
+   [32m✓[39m usCountWords[2m > [22msays every count of a best of seven, a best of five and a best of three[32m 2[2mms[22m[39m
+   [32m✓[39m usCountWords[2m > [22msays a one game round without a series score[32m 0[2mms[22m[39m
+   [32m✓[39m usPlayoffLay[2m > [22mholds the path as numbers: the same rounds, the same opponents, the same scores[32m 6[2mms[22m[39m
+   [32m✓[39m usPlayoffLay[2m > [22mlays nothing out for a count that is absent or does not fit, and the path keeps its rounds[32m 1[2mms[22m[39m
+   [32m✓[39m usPlayoffLay[2m > [22mreads a one game round as one game, and refuses a count that is not the rounds played[32m 1[2mms[22m[39m
+[31m   [31m×[31m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit[39m[32m 10[2mms[22m[39m
+[31m     → expected 4 to be 2 // Object.is equality[39m
+   [32m✓[39m usPostseason, the NBA[2m > [22mis the same twice and from a JSON round trip of the row, and leaves the path alone[32m 27[2mms[22m[39m
+   [32m✓[39m usPostseason, the NBA[2m > [22mfails closed, each case for its own reason, and never with a made up game[32m 4[2mms[22m[39m
+   [32m✓[39m usPostseason, the NBA[2m > [22mhas an agreement list that fires: a point too many, a game dropped, a clincher turned, a level game[32m 1[2mms[22m[39m
+   [32m✓[39m usPostseason, sport neutral[2m > [22mlays out an NFL line that holds playoff numbers under the same naming rule, through the NFL bind[32m 6[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit
+[31m[1mAssertionError[22m: expected 4 to be 2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 4[39m
+
+[36m [2m❯[22m src/test/usPlayoffs.test.ts:[2m258:48[22m[39m
+    [90m256| [39m      [34mexpect[39m(p[33m.[39mchampion)[33m.[39m[34mtoBe[39m(i [33m===[39m [34m4[39m)[33m;[39m
+    [90m257| [39m      /* no venue is claimed, and the run is not scored as all home ga…
+    [90m258| [39m      [34mexpect[39m(games[33m.[39m[34mfilter[39m(g [33m=>[39m g[33m.[39mhome)[33m.[39mlength)[33m.[39m[34mtoBe[39m([33mMath[39m[33m.[39m[34mceil[39m(po [33m/[39m [34m2[39m))[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m259| [39m      [34mexpect[39m(p[33m.[39mseason[33m.[39mlabels[[34m0[39m][33m.[39mname)[33m.[39m[34mtoBe[39m(b[33m.[39mctx[33m.[39mteamLabel)[33m;[39m
+    [90m260| [39m      [34mexpect[39m(p[33m.[39mkey)[33m.[39m[34mtoBe[39m([32m`[39m[36m${[39mb[33m.[39mkey[36m}[39m[32m|pog|[39m[36m${[39mp[33m.[39m[35mtry[39m[36m}[39m[32m`[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 10:32:27
+[2m   Duration [22m 1.89s[2m (transform 551ms, setup 71ms, collect 1.28s, tests 694ms, environment 488ms, prepare 178ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C the NBA > lays every run out game by game%2C on the saved playoff line to the unit,line=258,column=48::AssertionError: expected 4 to be 2 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2%0A+ 4%0A%0A ❯ src/test/usPlayoffs.test.ts:258:48%0A%0A

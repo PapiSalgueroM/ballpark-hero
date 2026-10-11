@@ -1,0 +1,26 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe exit=1 0s | probe: 1 markers are in the build
+U2 exit=0 18s | KILLED U2 sim=1 vitest=1
+U3 exit=0 18s | KILLED U3 sim=1 vitest=0
+U4 exit=0 18s | KILLED U4 sim=1 vitest=1
+U5 exit=0 18s | KILLED U5 sim=0 vitest=1
+U6 exit=0 18s | KILLED U6 sim=0 vitest=1
+U8 exit=0 18s | KILLED U8 sim=1 vitest=1
+U9 exit=1 18s | SURVIVED U9 sim=0 vitest=0
+S1 exit=0 21s | KILLED S1 sim=1 vitest=1
+B2 exit=0 19s | KILLED B2 sim=0 vitest=1
+B3 exit=0 20s | KILLED B3 sim=1 vitest=1
+B4 exit=0 19s | KILLED B4 sim=1 vitest=1
+B5 exit=0 19s | KILLED B5 sim=0 vitest=1
+B6 exit=0 19s | KILLED B6 sim=1 vitest=1
+G2 exit=0 19s | KILLED G2 sim=0 vitest=1
+G3 exit=0 19s | KILLED G3 sim=1 vitest=1
+Q1 exit=0 19s | KILLED Q1 sim=1 vitest=1
+Q2 exit=0 20s | KILLED Q2 sim=0 vitest=1
+P3 exit=0 14s | KILLED P3 sim=0 vitest=1
+P4 exit=0 16s | KILLED P4 sim=1 vitest=1
+P5 exit=0 13s | KILLED P5 sim=0 vitest=1
+P6 exit=0 14s | KILLED P6 sim=1 vitest=1
+P7 exit=0 20s | KILLED P7 sim=1 vitest=0
+P8 exit=0 13s | KILLED P8 sim=0 vitest=1
+clean exit=0 0s | tree restored

@@ -1,0 +1,24 @@
+probe: 507 js chunks in dist/assets, 14441885 characters
+absent  ucl:opponentsGoalDifference  "opponentsGoalDifference"  
+absent  ucl:footnote  "Level on points goes to goal difference"  
+absent  ucl:awayGoalsFor  "awayGoalsFor"  
+absent  slate:pattern-tail  "10268,10327,10360"  
+absent  slate:pattern-head  "3,161,196,251,260"  
+absent  gm:nfl-14  "nfl-14"  
+absent  gm:AFC-CC  "AFC-CC"  
+absent  gm:rebuilt-line  "The playoff bracket on this save could not be read"  
+absent  gm:throw  "gmBracket: the game played for"  
+absent  gm:rout-words  "won going away"  
+absent  gm:story-key  "|story|"  
+absent  gm:help  "the title game here is not level ground"  
+absent  gm:gameday-help  "Scores are told about the clubs"  
+IN THE BUILD  po:play-in  "Play-In Tournament"  NbaPlayoffFormatHistory-CbAaE6iW.js
+absent  po:pog  "|pog|"  
+absent  po:win-series  "You win the series"  
+absent  po:level  "Series level"  
+absent  po:source-cbs  "cbsPlayIn"  
+absent  po:source-espn  "espnNfl14"  
+absent  po:thin  "which clubs the 2019-20 version of the play-in was open to"  
+sanity (chunks holding a string the build must hold): CM_VAR=0 careerRival=29 Season Center=6
+dist html files at the root: index.html
+probe: 1 markers are in the build

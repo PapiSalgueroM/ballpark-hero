@@ -1,0 +1,68 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/leagueSlate.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+ [31m❯[39m src/lib/uclLeaguePhase.test.ts [2m([22m[2m25 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 418[2mms[22m[39m
+   [32m✓[39m the league phase numbers[2m > [22mare the real ones, and the Europa League shares them[32m 2[2mms[22m[39m
+[31m   [31m×[31m the league phase numbers[2m > [22msort a position into its zone[39m[32m 9[2mms[22m[39m
+[31m     → expected [ Array(6) ] to deeply equal [ 'r16', 'r16', 'playoff', …(3) ][39m
+   [32m✓[39m the pots and the slate[2m > [22mputs the holders top of pot one, then goes by strength, then by name[32m 8[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mdraws the same slate from the same seed and survives a round trip through JSON[32m 42[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mgives every club eight different opponents, four at home, none of its own association[32m 13[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mtells one story about who is at home: the fixture list, a club's own fixture and the saved code agree[32m 41[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22msays so on the saved slate when the search gave up and the recorded pattern was seated[32m 212[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mhands the builder the cap of two: no club meets three of one other association[32m 55[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mrefuses a field with a club that has no association[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mputs points first[32m 1[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 1, goal difference[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 2, goals scored[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 3, away goals scored[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 4, wins[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 5, away wins[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 6, the points of the clubs each has played[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 7, their goal difference[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 8, their goals[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mfalls to the name only when all eight are level[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mhas no head to head step[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22msays its order in words, with no dash[32m 0[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mseeds the top eight, pairs the play-offs inside the real pairings and leaves 25th down out[32m 30[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mworks the example: 10th is seeded against 23rd or 24th, and a win brings 7th or 8th[32m 0[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mis the same draw from the same order and seed, and only moves when one of its own positions does[32m 1[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mpairs the winners of slots 2i and 2i + 1, the even slot at home in the second leg[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/uclLeaguePhase.test.ts[2m > [22mthe league phase numbers[2m > [22msort a position into its zone
+[31m[1mAssertionError[22m: expected [ Array(6) ] to deeply equal [ 'r16', 'r16', 'playoff', …(3) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "r16",[22m
+[2m    "r16",[22m
+[2m    "playoff",[22m
+[32m-   "playoff",[39m
+[31m+   "out",[39m
+[2m    "out",[22m
+[2m    "out",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/uclLeaguePhase.test.ts:[2m24:56[22m[39m
+    [90m 22| [39m  })[33m;[39m
+    [90m 23| [39m  [34mit[39m([32m'sort a position into its zone'[39m[33m,[39m () [33m=>[39m {
+    [90m 24| [39m    expect([1, 8, 9, 24, 25, 36].map(leaguePhaseZone)).toEqual(['r16',…
+    [90m   | [39m                                                       [31m^[39m
+    [90m 25| [39m  })[33m;[39m
+    [90m 26| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m35 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 10:27:30
+[2m   Duration [22m 1.08s[2m (transform 98ms, setup 74ms, collect 138ms, tests 722ms, environment 500ms, prepare 207ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/uclLeaguePhase.test.ts,title=src/lib/uclLeaguePhase.test.ts > the league phase numbers > sort a position into its zone,line=24,column=56::AssertionError: expected [ Array(6) ] to deeply equal [ 'r16', 'r16', 'playoff', …(3) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "r16",%0A    "r16",%0A    "playoff",%0A-   "playoff",%0A+   "out",%0A    "out",%0A    "out",%0A  ]%0A%0A ❯ src/lib/uclLeaguePhase.test.ts:24:56%0A%0A

@@ -1,0 +1,54 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 20[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mholds the NBA and the NFL and nothing else (the MLB and the NHL read their ledgers)[32m 1[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mputs two publishers, none of them a wiki, behind every fact a row states[32m 3[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mcites every source it lists (no source nobody stands on)[32m 0[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mhas windows of one sport in order, never overlapping, at most one still open[32m 1[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mreads the rounds from the one typed copy, a one game round as [1, 1][32m 1[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mholds clubs and byes as a pair: a knockout of R rounds seats 2^R, and a bye is a seat nobody fills[32m 0[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22magrees with the prose histories on the size of the field (two files of this repo, not a source)[32m 2[2mms[22m[39m
+[31m   [31m×[31m usPostseasonFormat[2m > [22manswers a season inside a window with its row and its rounds[39m[32m 10[2mms[22m[39m
+[31m     → expected { name: 'Play-In Tournament', …(1) } to deeply equal { name: 'Play-In Tournament', …(1) }[39m
+   [32m✓[39m usPostseasonFormat[2m > [22mrefuses a season no row holds, a season played to another format, and a sport it does not hold[32m 0[2mms[22m[39m
+   [32m✓[39m usPostseasonFormat[2m > [22mmarks what it could not two source instead of filling it[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 998[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 568[2mms[22m[39m
+   [33m[2m✓[22m[39m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit [33m 335[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usPostseasonFormat.test.ts[2m > [22musPostseasonFormat[2m > [22manswers a season inside a window with its row and its rounds
+[31m[1mAssertionError[22m: expected { name: 'Play-In Tournament', …(1) } to deeply equal { name: 'Play-In Tournament', …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "name": "Play-In Tournament",[22m
+[2m    "places": [[22m
+[2m      7,[22m
+[32m-     10,[39m
+[31m+     8,[39m
+[2m    ],[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/usPostseasonFormat.test.ts:[2m109:53[22m[39m
+    [90m107| [39m    [34mexpect[39m(nba[33m?.[39mbefore)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m108| [39m    expect(nba?.rounds.map(r => [...r.series])).toEqual([[4, 7], [4, 7…
+    [90m109| [39m    expect(usPostseasonFormat('nba', 2020)?.before).toEqual({ name: 'P…
+    [90m   | [39m                                                    [31m^[39m
+    [90m110| [39m    [34mexpect[39m([34musPostseasonFormat[39m([32m'nba'[39m[33m,[39m [34m2041[39m)[33m?.[39m[35mfrom[39m)[33m.[39m[34mtoBe[39m([34m2020[39m)[33m;[39m
+    [90m111| [39m    [35mconst[39m nfl [33m=[39m [34musPostseasonFormat[39m([32m'nfl'[39m[33m,[39m [34m2021[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 10:33:01
+[2m   Duration [22m 2.22s[2m (transform 550ms, setup 75ms, collect 1.27s, tests 1.02s, environment 508ms, prepare 196ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPostseasonFormat.test.ts,title=src/test/usPostseasonFormat.test.ts > usPostseasonFormat > answers a season inside a window with its row and its rounds,line=109,column=53::AssertionError: expected { name: 'Play-In Tournament', …(1) } to deeply equal { name: 'Play-In Tournament', …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "name": "Play-In Tournament",%0A    "places": [%0A      7,%0A-     10,%0A+     8,%0A    ],%0A  }%0A%0A ❯ src/test/usPostseasonFormat.test.ts:109:53%0A%0A

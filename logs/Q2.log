@@ -1,0 +1,3 @@
+mut Q2: applied to src/lib/gameLaws/nflGameDay.ts
+simGmGameDay: 188 checks, 0 failed
+KILLED Q2 sim=0 vitest=1

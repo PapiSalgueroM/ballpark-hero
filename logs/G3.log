@@ -1,0 +1,3 @@
+mut G3: applied to src/lib/gmGameDay.ts
+simGmGameDay: 188 checks, 5 failed
+KILLED G3 sim=1 vitest=1

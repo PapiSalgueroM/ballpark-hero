@@ -1,0 +1,3 @@
+mut B3: applied to src/data/gmBrackets/nfl.ts
+simGmGameDay: 188 checks, 25 failed
+KILLED B3 sim=1 vitest=1

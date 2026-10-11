@@ -1,0 +1,1118 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 17[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mholds the NBA and the NFL and nothing else (the MLB and the NHL read their ledgers)[32m 2[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mputs two publishers, none of them a wiki, behind every fact a row states[32m 3[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mcites every source it lists (no source nobody stands on)[32m 0[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mhas windows of one sport in order, never overlapping, at most one still open[32m 0[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mreads the rounds from the one typed copy, a one game round as [1, 1][32m 1[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22mholds clubs and byes as a pair: a knockout of R rounds seats 2^R, and a bye is a seat nobody fills[32m 0[2mms[22m[39m
+   [32m✓[39m the postseason format rows[2m > [22magrees with the prose histories on the size of the field (two files of this repo, not a source)[32m 1[2mms[22m[39m
+   [32m✓[39m usPostseasonFormat[2m > [22manswers a season inside a window with its row and its rounds[32m 0[2mms[22m[39m
+[31m   [31m×[31m usPostseasonFormat[2m > [22mrefuses a season no row holds, a season played to another format, and a sport it does not hold[39m[32m 7[2mms[22m[39m
+[31m     → expected { sport: 'nba', from: 2003, …(8) } to be null[39m
+   [32m✓[39m usPostseasonFormat[2m > [22mmarks what it could not two source instead of filling it[32m 0[2mms[22m[39m
+ [31m❯[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1015[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 569[2mms[22m[39m
+   [32m✓[39m usSeriesOrder[2m > [22mis a real shuffle: over the seeds a seven game series is not always the same order[32m 1[2mms[22m[39m
+   [32m✓[39m usSeriesOrder[2m > [22mrefuses a length no series of that need can have[32m 1[2mms[22m[39m
+   [32m✓[39m usPostRow[2m > [22mputs the saved playoff numbers under the regular keys of an NBA line[32m 0[2mms[22m[39m
+   [32m✓[39m usPostRow[2m > [22manswers null for a line with no playoff number, and never reads the NFL sentence[32m 0[2mms[22m[39m
+   [32m✓[39m usPostRow[2m > [22mdrops a stat field the save holds no playoff number for[32m 0[2mms[22m[39m
+   [32m✓[39m usPostTotals[2m > [22mkeeps a sum and turns a mean of whole numbers into the nearest whole total, worked in tenths[32m 1[2mms[22m[39m
+   [32m✓[39m usPostTotals[2m > [22manswers null for a total the core cannot hold game by game[32m 0[2mms[22m[39m
+   [32m✓[39m usPostTotals[2m > [22mfrom ten games up the whole total always averages back to the saved decimal (plain arithmetic)[32m 53[2mms[22m[39m
+   [32m✓[39m usCountWords[2m > [22msays every count of a best of seven, a best of five and a best of three[32m 2[2mms[22m[39m
+   [32m✓[39m usCountWords[2m > [22msays a one game round without a series score[32m 0[2mms[22m[39m
+   [32m✓[39m usPlayoffLay[2m > [22mholds the path as numbers: the same rounds, the same opponents, the same scores[32m 6[2mms[22m[39m
+   [32m✓[39m usPlayoffLay[2m > [22mlays nothing out for a count that is absent or does not fit, and the path keeps its rounds[32m 1[2mms[22m[39m
+   [32m✓[39m usPlayoffLay[2m > [22mreads a one game round as one game, and refuses a count that is not the rounds played[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit [33m 334[2mms[22m[39m
+   [32m✓[39m usPostseason, the NBA[2m > [22mis the same twice and from a JSON round trip of the row, and leaves the path alone[32m 22[2mms[22m[39m
+[31m   [31m×[31m usPostseason, the NBA[2m > [22mfails closed, each case for its own reason, and never with a made up game[39m[32m 14[2mms[22m[39m
+[31m     → expected { …(7) } to be 'format' // Object.is equality[39m
+   [32m✓[39m usPostseason, the NBA[2m > [22mhas an agreement list that fires: a point too many, a game dropped, a clincher turned, a level game[32m 2[2mms[22m[39m
+   [32m✓[39m usPostseason, sport neutral[2m > [22mlays out an NFL line that holds playoff numbers under the same naming rule, through the NFL bind[32m 8[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostseason, the NBA[2m > [22mfails closed, each case for its own reason, and never with a made up game
+[31m[1mAssertionError[22m: expected { …(7) } to be 'format' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"format"
+
+[31m+ Received:[39m 
+{
+  "at": [
+    {
+      "mine": 1,
+      "no": 1,
+      "over": null,
+      "series": 0,
+      "theirs": 0,
+    },
+    {
+      "mine": 1,
+      "no": 2,
+      "over": null,
+      "series": 0,
+      "theirs": 1,
+    },
+    {
+      "mine": 2,
+      "no": 3,
+      "over": null,
+      "series": 0,
+      "theirs": 1,
+    },
+    {
+      "mine": 3,
+      "no": 4,
+      "over": null,
+      "series": 0,
+      "theirs": 1,
+    },
+    {
+      "mine": 4,
+      "no": 5,
+      "over": "won",
+      "series": 0,
+      "theirs": 1,
+    },
+    {
+      "mine": 1,
+      "no": 1,
+      "over": null,
+      "series": 1,
+      "theirs": 0,
+    },
+    {
+      "mine": 1,
+      "no": 2,
+      "over": null,
+      "series": 1,
+      "theirs": 1,
+    },
+    {
+      "mine": 1,
+      "no": 3,
+      "over": null,
+      "series": 1,
+      "theirs": 2,
+    },
+    {
+      "mine": 2,
+      "no": 4,
+      "over": null,
+      "series": 1,
+      "theirs": 2,
+    },
+    {
+      "mine": 2,
+      "no": 5,
+      "over": null,
+      "series": 1,
+      "theirs": 3,
+    },
+    {
+      "mine": 2,
+      "no": 6,
+      "over": "lost",
+      "series": 1,
+      "theirs": 4,
+    },
+  ],
+  "champion": false,
+  "held": [
+    [
+      "pts",
+      289,
+    ],
+    [
+      "reb",
+      64,
+    ],
+    [
+      "ast",
+      87,
+    ],
+  ],
+  "key": "Post Closed|nba|now|PG|BOS|2030|80|25|6.1|7.4|Lost in the conference semis|centre|pog|2",
+  "season": {
+    "attempt": 0,
+    "bucket": {
+      "apps": 0,
+      "line": {
+        "ast": 0,
+        "pts": 0,
+        "reb": 0,
+      },
+    },
+    "clinch": null,
+    "games": [
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 36,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 30,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 29,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 32,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 29,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 32,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 31,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 30,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": true,
+        "line": {
+          "ast": 4,
+          "pts": 20,
+          "reb": 2,
+        },
+        "md": 1,
+        "opp": 1,
+        "played": true,
+        "started": true,
+        "them": 124,
+        "us": 125,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 28,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 30,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 27,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 33,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 26,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 33,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 30,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 33,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": true,
+        "line": {
+          "ast": 8,
+          "pts": 32,
+          "reb": 9,
+        },
+        "md": 2,
+        "opp": 1,
+        "played": true,
+        "started": true,
+        "them": 129,
+        "us": 111,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 28,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 26,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 35,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 28,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 30,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 29,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 32,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 29,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": true,
+        "line": {
+          "ast": 11,
+          "pts": 20,
+          "reb": 5,
+        },
+        "md": 3,
+        "opp": 1,
+        "played": true,
+        "started": true,
+        "them": 112,
+        "us": 125,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 33,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 25,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 27,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 29,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 33,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 30,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 28,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 30,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": false,
+        "line": {
+          "ast": 7,
+          "pts": 26,
+          "reb": 4,
+        },
+        "md": 4,
+        "opp": 1,
+        "played": true,
+        "started": true,
+        "them": 114,
+        "us": 121,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 32,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 28,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 31,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 32,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 29,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 29,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 36,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 27,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": false,
+        "line": {
+          "ast": 10,
+          "pts": 18,
+          "reb": 7,
+        },
+        "md": 5,
+        "opp": 1,
+        "played": true,
+        "started": true,
+        "them": 116,
+        "us": 128,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 31,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 27,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 30,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 33,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 36,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 34,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 31,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 31,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": false,
+        "line": {
+          "ast": 6,
+          "pts": 26,
+          "reb": 7,
+        },
+        "md": 6,
+        "opp": 2,
+        "played": true,
+        "started": true,
+        "them": 125,
+        "us": 128,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 27,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 33,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 35,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 36,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 29,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 36,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 33,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 29,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": false,
+        "line": {
+          "ast": 6,
+          "pts": 27,
+          "reb": 8,
+        },
+        "md": 7,
+        "opp": 2,
+        "played": true,
+        "started": true,
+        "them": 134,
+        "us": 124,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 30,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 31,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 27,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 30,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 30,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 27,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 25,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 33,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": false,
+        "line": {
+          "ast": 10,
+          "pts": 33,
+          "reb": 9,
+        },
+        "md": 8,
+        "opp": 2,
+        "played": true,
+        "started": true,
+        "them": 121,
+        "us": 112,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 29,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 26,
+            "side": "them",
+          },
+          {
+            "kind": "hot",
+            "min": 23,
+            "mine": true,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 36,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 24,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 31,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 23,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 29,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 27,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": true,
+        "line": {
+          "ast": 7,
+          "pts": 42,
+          "reb": 7,
+        },
+        "md": 9,
+        "opp": 2,
+        "played": true,
+        "started": true,
+        "them": 100,
+        "us": 125,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 21,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 31,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 23,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 29,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 25,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 26,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 22,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 25,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": true,
+        "line": {
+          "ast": 6,
+          "pts": 21,
+          "reb": 3,
+        },
+        "md": 10,
+        "opp": 2,
+        "played": true,
+        "started": true,
+        "them": 111,
+        "us": 91,
+      },
+      {
+        "events": [
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 32,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 12,
+            "pts": 30,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 26,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 24,
+            "pts": 30,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 31,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 36,
+            "pts": 31,
+            "side": "them",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 28,
+            "side": "us",
+          },
+          {
+            "kind": "quarter",
+            "min": 48,
+            "pts": 35,
+            "side": "them",
+          },
+        ],
+        "fixed": false,
+        "home": true,
+        "line": {
+          "ast": 12,
+          "pts": 24,
+          "reb": 3,
+        },
+        "md": 11,
+        "opp": 2,
+        "played": true,
+        "started": true,
+        "them": 126,
+        "us": 117,
+      },
+    ],
+    "key": "Post Closed|nba|now|PG|BOS|2030|80|25|6.1|7.4|Lost in the conference semis|centre|pog|2",
+    "labels": [
+      {
+        "key": "BOS",
+        "name": "Boston Celtics",
+        "named": true,
+      },
+      {
+        "key": "DET",
+        "name": "Detroit Pistons",
+        "named": true,
+      },
+      {
+        "key": "WAS",
+        "name": "Washington Wizards",
+        "named": true,
+      },
+    ],
+    "mode": "record",
+    "repairs": 0,
+    "rounds": [
+      [
+        [
+          0,
+          1,
+          125,
+          124,
+        ],
+      ],
+      [
+        [
+          0,
+          1,
+          111,
+          129,
+        ],
+      ],
+      [
+        [
+          0,
+          1,
+          125,
+          112,
+        ],
+      ],
+      [
+        [
+          1,
+          0,
+          114,
+          121,
+        ],
+      ],
+      [
+        [
+          1,
+          0,
+          116,
+          128,
+        ],
+      ],
+      [
+        [
+          2,
+          0,
+          125,
+          128,
+        ],
+      ],
+      [
+        [
+          2,
+          0,
+          134,
+          124,
+        ],
+      ],
+      [
+        [
+          2,
+          0,
+          121,
+          112,
+        ],
+      ],
+      [
+        [
+          0,
+          2,
+          125,
+          100,
+        ],
+      ],
+      [
+        [
+          0,
+          2,
+          91,
+          111,
+        ],
+      ],
+      [
+        [
+          0,
+          2,
+          117,
+          126,
+        ],
+      ],
+    ],
+    "rule": null,
+    "target": {
+      "kind": "record",
+      "winsMax": 6,
+      "winsMin": 6,
+    },
+    "teams": 3,
+  },
+  "series": [
+    {
+      "from": 1,
+      "most": 7,
+      "named": true,
+      "need": 4,
+      "opp": "Detroit Pistons",
+      "round": "First round",
+      "to": 5,
+      "won": true,
+    },
+    {
+      "from": 6,
+      "most": 7,
+      "named": true,
+      "need": 4,
+      "opp": "Washington Wizards",
+      "round": "Conference semifinals",
+      "to": 11,
+      "won": false,
+    },
+  ],
+  "try": 2,
+}
+
+[36m [2m❯[22m src/test/usPlayoffs.test.ts:[2m296:41[22m[39m
+    [90m294| [39m    /* a season the format file does not hold, and one played to anoth…
+    [90m295| [39m    [34mexpect[39m([34mwhy[39m({ [33m...[39mrun[33m,[39m year[33m:[39m [34m2002[39m }))[33m.[39m[34mtoBe[39m([32m'format'[39m)[33m;[39m
+    [90m296| [39m    [34mexpect[39m([34mwhy[39m({ [33m...[39mrun[33m,[39m year[33m:[39m [34m2019[39m }))[33m.[39m[34mtoBe[39m([32m'format'[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m297| [39m    expect(why({ ...run, poPpg: undefined, poRpg: undefined, poApg: un…
+    [90m298| [39m    [34mexpect[39m([34mwhy[39m({ [33m...[39mrun[33m,[39m poPpg[33m:[39m [33m-[39m[34m3[39m }))[33m.[39m[34mtoBe[39m([32m'totals'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usPostseasonFormat.test.ts[2m > [22musPostseasonFormat[2m > [22mrefuses a season no row holds, a season played to another format, and a sport it does not hold
+[31m[1mAssertionError[22m: expected { sport: 'nba', from: 2003, …(8) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "before": null,
+  "byes": 0,
+  "clubs": 16,
+  "from": 2003,
+  "lastRoundOnlyCross": true,
+  "modified": [],
+  "rounds": [
+    {
+      "name": "First round",
+      "series": [
+        4,
+        7,
+      ],
+    },
+    {
+      "name": "Conference semifinals",
+      "series": [
+        4,
+        7,
+      ],
+    },
+    {
+      "name": "Conference finals",
+      "series": [
+        4,
+        7,
+      ],
+    },
+    {
+      "name": "NBA Finals",
+      "series": [
+        4,
+        7,
+      ],
+    },
+  ],
+  "sport": "nba",
+  "src": {
+    "clubs": [
+      "cbsPlayIn",
+      "nbaNotable",
+      "siNbaTeams",
+    ],
+    "lastRoundOnlyCross": [
+      "espnConfFinals",
+      "siNbaFormat",
+    ],
+    "modified": [
+      "cbsPlayIn",
+      "siNbaTeams",
+    ],
+    "years": [
+      "nbcFirstRound",
+      "nbaNotable",
+      "cbsPlayIn",
+      "siNbaTeams",
+    ],
+  },
+  "to": 2019,
+}
+
+[36m [2m❯[22m src/test/usPostseasonFormat.test.ts:[2m119:45[22m[39m
+    [90m117| [39m  it('refuses a season no row holds, a season played to another format…
+    [90m118| [39m    [34mexpect[39m([34musPostseasonFormat[39m([32m'nba'[39m[33m,[39m [34m2002[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m119| [39m    [34mexpect[39m([34musPostseasonFormat[39m([32m'nba'[39m[33m,[39m [34m2019[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                            [31m^[39m
+    [90m120| [39m    [34mexpect[39m([34musPostseasonFormat[39m([32m'nfl'[39m[33m,[39m [34m2019[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m121| [39m    [34mexpect[39m([34musPostseasonFormat[39m([32m'mlb'[39m[33m,[39m [34m2023[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 10:31:57
+[2m   Duration [22m 2.26s[2m (transform 546ms, setup 76ms, collect 1.28s, tests 1.03s, environment 486ms, prepare 116ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C the NBA > fails closed%2C each case for its own reason%2C and never with a made up game,line=296,column=41::AssertionError: expected { …(7) } to be 'format' // Object.is equality%0A%0A- Expected: %0A"format"%0A%0A+ Received: %0A{%0A  "at": [%0A    {%0A      "mine": 1,%0A      "no": 1,%0A      "over": null,%0A      "series": 0,%0A      "theirs": 0,%0A    },%0A    {%0A      "mine": 1,%0A      "no": 2,%0A      "over": null,%0A      "series": 0,%0A      "theirs": 1,%0A    },%0A    {%0A      "mine": 2,%0A      "no": 3,%0A      "over": null,%0A      "series": 0,%0A      "theirs": 1,%0A    },%0A    {%0A      "mine": 3,%0A      "no": 4,%0A      "over": null,%0A      "series": 0,%0A      "theirs": 1,%0A    },%0A    {%0A      "mine": 4,%0A      "no": 5,%0A      "over": "won",%0A      "series": 0,%0A      "theirs": 1,%0A    },%0A    {%0A      "mine": 1,%0A      "no": 1,%0A      "over": null,%0A      "series": 1,%0A      "theirs": 0,%0A    },%0A    {%0A      "mine": 1,%0A      "no": 2,%0A      "over": null,%0A      "series": 1,%0A      "theirs": 1,%0A    },%0A    {%0A      "mine": 1,%0A      "no": 3,%0A      "over": null,%0A      "series": 1,%0A      "theirs": 2,%0A    },%0A    {%0A      "mine": 2,%0A      "no": 4,%0A      "over": null,%0A      "series": 1,%0A      "theirs": 2,%0A    },%0A    {%0A      "mine": 2,%0A      "no": 5,%0A      "over": null,%0A      "series": 1,%0A      "theirs": 3,%0A    },%0A    {%0A      "mine": 2,%0A      "no": 6,%0A      "over": "lost",%0A      "series": 1,%0A      "theirs": 4,%0A    },%0A  ],%0A  "champion": false,%0A  "held": [%0A    [%0A      "pts",%0A      289,%0A    ],%0A    [%0A      "reb",%0A      64,%0A    ],%0A    [%0A      "ast",%0A      87,%0A    ],%0A  ],%0A  "key": "Post Closed|nba|now|PG|BOS|2030|80|25|6.1|7.4|Lost in the conference semis|centre|pog|2",%0A  "season": {%0A    "attempt": 0,%0A    "bucket": {%0A      "apps": 0,%0A      "line": {%0A        "ast": 0,%0A        "pts": 0,%0A        "reb": 0,%0A      },%0A    },%0A    "clinch": null,%0A    "games": [%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 36,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 29,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 32,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 29,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 32,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 31,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": true,%0A        "line": {%0A          "ast": 4,%0A          "pts": 20,%0A          "reb": 2,%0A        },%0A        "md": 1,%0A        "opp": 1,%0A        "played": true,%0A        "started": true,%0A        "them": 124,%0A        "us": 125,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 28,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 27,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 33,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 26,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 33,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 30,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 33,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": true,%0A        "line": {%0A          "ast": 8,%0A          "pts": 32,%0A          "reb": 9,%0A        },%0A        "md": 2,%0A        "opp": 1,%0A        "played": true,%0A        "started": true,%0A        "them": 129,%0A        "us": 111,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 28,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 26,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 35,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 28,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 30,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 29,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 32,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 29,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": true,%0A        "line": {%0A          "ast": 11,%0A          "pts": 20,%0A          "reb": 5,%0A        },%0A        "md": 3,%0A        "opp": 1,%0A        "played": true,%0A        "started": true,%0A        "them": 112,%0A        "us": 125,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 33,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 25,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 27,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 29,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 33,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 28,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": false,%0A        "line": {%0A          "ast": 7,%0A          "pts": 26,%0A          "reb": 4,%0A        },%0A        "md": 4,%0A        "opp": 1,%0A        "played": true,%0A        "started": true,%0A        "them": 114,%0A        "us": 121,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 32,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 28,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 31,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 32,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 29,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 29,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 36,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 27,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": false,%0A        "line": {%0A          "ast": 10,%0A          "pts": 18,%0A          "reb": 7,%0A        },%0A        "md": 5,%0A        "opp": 1,%0A        "played": true,%0A        "started": true,%0A        "them": 116,%0A        "us": 128,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 31,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 27,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 30,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 33,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 36,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 34,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 31,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 31,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": false,%0A        "line": {%0A          "ast": 6,%0A          "pts": 26,%0A          "reb": 7,%0A        },%0A        "md": 6,%0A        "opp": 2,%0A        "played": true,%0A        "started": true,%0A        "them": 125,%0A        "us": 128,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 27,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 33,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 35,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 36,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 29,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 36,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 33,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 29,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": false,%0A        "line": {%0A          "ast": 6,%0A          "pts": 27,%0A          "reb": 8,%0A        },%0A        "md": 7,%0A        "opp": 2,%0A        "played": true,%0A        "started": true,%0A        "them": 134,%0A        "us": 124,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 30,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 31,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 27,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 30,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 27,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 25,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 33,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": false,%0A        "line": {%0A          "ast": 10,%0A          "pts": 33,%0A          "reb": 9,%0A        },%0A        "md": 8,%0A        "opp": 2,%0A        "played": true,%0A        "started": true,%0A        "them": 121,%0A        "us": 112,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 29,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 26,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "hot",%0A            "min": 23,%0A            "mine": true,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 36,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 24,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 31,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 23,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 29,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 27,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": true,%0A        "line": {%0A          "ast": 7,%0A          "pts": 42,%0A          "reb": 7,%0A        },%0A        "md": 9,%0A        "opp": 2,%0A        "played": true,%0A        "started": true,%0A        "them": 100,%0A        "us": 125,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 21,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 31,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 23,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 29,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 25,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 26,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 22,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 25,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": true,%0A        "line": {%0A          "ast": 6,%0A          "pts": 21,%0A          "reb": 3,%0A        },%0A        "md": 10,%0A        "opp": 2,%0A        "played": true,%0A        "started": true,%0A        "them": 111,%0A        "us": 91,%0A      },%0A      {%0A        "events": [%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 32,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 12,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 26,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 24,%0A            "pts": 30,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 31,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 36,%0A            "pts": 31,%0A            "side": "them",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 28,%0A            "side": "us",%0A          },%0A          {%0A            "kind": "quarter",%0A            "min": 48,%0A            "pts": 35,%0A            "side": "them",%0A          },%0A        ],%0A        "fixed": false,%0A        "home": true,%0A        "line": {%0A          "ast": 12,%0A          "pts": 24,%0A          "reb": 3,%0A        },%0A        "md": 11,%0A        "opp": 2,%0A        "played": true,%0A        "started": true,%0A        "them": 126,%0A        "us": 117,%0A      },%0A    ],%0A    "key": "Post Closed|nba|now|PG|BOS|2030|80|25|6.1|7.4|Lost in the conference semis|centre|pog|2",%0A    "labels": [%0A      {%0A        "key": "BOS",%0A        "name": "Boston Celtics",%0A        "named": true,%0A      },%0A      {%0A        "key": "DET",%0A        "name": "Detroit Pistons",%0A        "named": true,%0A      },%0A      {%0A        "key": "WAS",%0A        "name": "Washington Wizards",%0A        "named": true,%0A      },%0A    ],%0A    "mode": "record",%0A    "repairs": 0,%0A    "rounds": [%0A      [%0A        [%0A          0,%0A          1,%0A          125,%0A          124,%0A        ],%0A      ],%0A      [%0A        [%0A          0,%0A          1,%0A          111,%0A          129,%0A        ],%0A      ],%0A      [%0A        [%0A          0,%0A          1,%0A          125,%0A          112,%0A        ],%0A      ],%0A      [%0A        [%0A          1,%0A          0,%0A          114,%0A          121,%0A        ],%0A      ],%0A      [%0A        [%0A          1,%0A          0,%0A          116,%0A          128,%0A        ],%0A      ],%0A      [%0A        [%0A          2,%0A          0,%0A          125,%0A          128,%0A        ],%0A      ],%0A      [%0A        [%0A          2,%0A          0,%0A          134,%0A          124,%0A        ],%0A      ],%0A      [%0A        [%0A          2,%0A          0,%0A          121,%0A          112,%0A        ],%0A      ],%0A      [%0A        [%0A          0,%0A          2,%0A          125,%0A          100,%0A        ],%0A      ],%0A      [%0A        [%0A          0,%0A          2,%0A          91,%0A          111,%0A        ],%0A      ],%0A      [%0A        [%0A          0,%0A          2,%0A          117,%0A          126,%0A        ],%0A      ],%0A    ],%0A    "rule": null,%0A    "target": {%0A      "kind": "record",%0A      "winsMax": 6,%0A      "winsMin": 6,%0A    },%0A    "teams": 3,%0A  },%0A  "series": [%0A    {%0A      "from": 1,%0A      "most": 7,%0A      "named": true,%0A      "need": 4,%0A      "opp": "Detroit Pistons",%0A      "round": "First round",%0A      "to": 5,%0A      "won": true,%0A    },%0A    {%0A      "from": 6,%0A      "most": 7,%0A      "named": true,%0A      "need": 4,%0A      "opp": "Washington Wizards",%0A      "round": "Conference semifinals",%0A      "to": 11,%0A      "won": false,%0A    },%0A  ],%0A  "try": 2,%0A}%0A%0A ❯ src/test/usPlayoffs.test.ts:296:41%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPostseasonFormat.test.ts,title=src/test/usPostseasonFormat.test.ts > usPostseasonFormat > refuses a season no row holds%2C a season played to another format%2C and a sport it does not hold,line=119,column=45::AssertionError: expected { sport: 'nba', from: 2003, …(8) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "before": null,%0A  "byes": 0,%0A  "clubs": 16,%0A  "from": 2003,%0A  "lastRoundOnlyCross": true,%0A  "modified": [],%0A  "rounds": [%0A    {%0A      "name": "First round",%0A      "series": [%0A        4,%0A        7,%0A      ],%0A    },%0A    {%0A      "name": "Conference semifinals",%0A      "series": [%0A        4,%0A        7,%0A      ],%0A    },%0A    {%0A      "name": "Conference finals",%0A      "series": [%0A        4,%0A        7,%0A      ],%0A    },%0A    {%0A      "name": "NBA Finals",%0A      "series": [%0A        4,%0A        7,%0A      ],%0A    },%0A  ],%0A  "sport": "nba",%0A  "src": {%0A    "clubs": [%0A      "cbsPlayIn",%0A      "nbaNotable",%0A      "siNbaTeams",%0A    ],%0A    "lastRoundOnlyCross": [%0A      "espnConfFinals",%0A      "siNbaFormat",%0A    ],%0A    "modified": [%0A      "cbsPlayIn",%0A      "siNbaTeams",%0A    ],%0A    "years": [%0A      "nbcFirstRound",%0A      "nbaNotable",%0A      "cbsPlayIn",%0A      "siNbaTeams",%0A    ],%0A  },%0A  "to": 2019,%0A}%0A%0A ❯ src/test/usPostseasonFormat.test.ts:119:45%0A%0A

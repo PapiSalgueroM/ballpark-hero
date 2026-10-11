@@ -1,0 +1,3 @@
+mut U6: applied to src/lib/uclLeaguePhase.ts
+simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+KILLED U6 sim=0 vitest=1
