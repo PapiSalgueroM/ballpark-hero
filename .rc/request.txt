@@ -1,0 +1,27 @@
+#!serve
+#!playwright
+#!serial
+mksave: PART=mksave node .rc/x/probeRun.mjs
+walkRun: node .rc/x/walkRun.mjs
+walkOld: node .rc/x/walkOld.mjs
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs
+ghost05: ERA_CONTROL=ghost ENGINES=chromium node scripts/playEra2005.mjs
+ghost10: ERA_CONTROL=ghost ENGINES=chromium node scripts/playEra2010.mjs
+ghost15: ERA_CONTROL=ghost ENGINES=chromium node scripts/playEra2015.mjs
+ghost20: ERA_CONTROL=ghost ENGINES=chromium node scripts/playEra2020.mjs
+drop05: ERA_CONTROL=drop ENGINES=chromium node scripts/playEra2005.mjs
+drop10: ERA_CONTROL=drop ENGINES=chromium node scripts/playEra2010.mjs
+drop15: ERA_CONTROL=drop ENGINES=chromium node scripts/playEra2015.mjs
+drop20: ERA_CONTROL=drop ENGINES=chromium node scripts/playEra2020.mjs
+playNationalities: ENGINES=chromium node scripts/playNationalities.mjs
+nat-nofilter: NATIONALITIES_CONTROL=nofilter ENGINES=chromium node scripts/playNationalities.mjs
+playReleaseClause: ENGINES=chromium node scripts/playReleaseClause.mjs
+playSponsors: ENGINES=chromium node scripts/playSponsors.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+playDealDesk: ENGINES=chromium node scripts/playDealDesk.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
