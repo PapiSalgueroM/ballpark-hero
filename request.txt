@@ -1,0 +1,1 @@
+nfl12-seed7: SIM_SEED=7 SIM_SPORTS=nfl SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs > $RC_OUT/nfl12-seed7.log 2>&1; s=$?; grep "6) balance\|peak OVR\|median legacy\|Hall share\|headline\|ran in\|FAIL" $RC_OUT/nfl12-seed7.log | cut -c1-170; tail -1 $RC_OUT/nfl12-seed7.log; exit $s
