@@ -1,0 +1,10 @@
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+c-partrow: SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+c-partrowus: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
+c-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs
+c-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs
+c-dropkey: SIM_SAVE_KEEPER_CONTROL=dropkey node scripts/simSaveKeeper.mjs
+c-numberonly: SIM_SAVE_KEEPER_CONTROL=numberonly node scripts/simSaveKeeper.mjs
+c-onebyte: SIM_SAVE_KEEPER_CONTROL=onebyte node scripts/simSaveKeeper.mjs
+c-pileup: SIM_SAVE_KEEPER_CONTROL=pileup node scripts/simSaveKeeper.mjs
+keeper-units: node_modules/.bin/vitest run src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
