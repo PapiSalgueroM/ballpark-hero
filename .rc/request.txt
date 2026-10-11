@@ -1,0 +1,5 @@
+# rAV-cm-b: reviewer cm, Release AV head 5ed04ae7. The reviewer's own probes: the match stream against origin/main after every call in every league of every era, and the two dailies for 120 dates against Release AS (54e3820a)
+stream: git worktree add -q --detach /tmp/sb aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/sb/node_modules && node .rc/x/cmStreamProbe.mjs /tmp/sb
+dailies60: git worktree add -q --detach /tmp/as1 54e3820a2deb6ecb5ad7ba11a27455742e19ed93 && ln -s "$PWD/node_modules" /tmp/as1/node_modules && node .rc/x/cmDailiesProbe.mjs /tmp/as1 2026-10-11 60
+dailies60-later: git worktree add -q --detach /tmp/as2 54e3820a2deb6ecb5ad7ba11a27455742e19ed93 && ln -s "$PWD/node_modules" /tmp/as2/node_modules && node .rc/x/cmDailiesProbe.mjs /tmp/as2 2026-12-10 60
+baseline-is-AS: git worktree add -q --detach /tmp/as3 54e3820a2deb6ecb5ad7ba11a27455742e19ed93 && ln -s "$PWD/node_modules" /tmp/as3/node_modules && node scripts/simDailyDeals.mjs --root /tmp/as3 --print --verify
