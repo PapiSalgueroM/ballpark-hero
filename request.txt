@@ -1,0 +1,4 @@
+#!serial
+rec-main: git worktree add -q /tmp/main f78037dcddea12c1a02586c7d5c0e185efb86121 && ln -s "$PWD/node_modules" /tmp/main/node_modules && R="$PWD" && cd /tmp/main && node "$R/scripts/recordCareerHallSaves1301.mjs" main f78037dcddea12c1a02586c7d5c0e185efb86121 "$RC_OUT/saves-main.json"
+rec-r1226: git worktree add -q /tmp/r1226 2c86ecc7e0317e61739f9af0a9008700a8ddd555 && ln -s "$PWD/node_modules" /tmp/r1226/node_modules && R="$PWD" && cd /tmp/r1226 && node "$R/scripts/recordCareerHallSaves1301.mjs" r1226 2c86ecc7e0317e61739f9af0a9008700a8ddd555 "$RC_OUT/saves-r1226.json"
+sizes: ls -la "$RC_OUT" | tail -4

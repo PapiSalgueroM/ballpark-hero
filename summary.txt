@@ -1,0 +1,3 @@
+rec-main exit=0 3s | recordCareerHallSaves1301: wrote /home/runner/work/_temp/rc-out/files/saves-main.json (main, f78037dcddea12c1a02586c7d5c0e185efb86121)
+rec-r1226 exit=0 3s | recordCareerHallSaves1301: wrote /home/runner/work/_temp/rc-out/files/saves-r1226.json (r1226, 2c86ecc7e0317e61739f9af0a9008700a8ddd555)
+sizes exit=0 0s | -rw-r--r-- 1 runner runner 256868 Oct 11 00:10 saves-r1226.json

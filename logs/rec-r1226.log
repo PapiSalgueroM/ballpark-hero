@@ -1,0 +1,5 @@
+r1226 nfl: calibration 2, kept {"byPush":1,"hofPlain":1,"nearPush":0,"missed":1,"open":1} of seen {"byPush":23,"hofPlain":115,"nearPush":17,"missed":199,"open":101} in 600 careers
+r1226 nba: calibration 2, kept {"byPush":1,"hofPlain":1,"nearPush":0,"missed":1,"open":1} of seen {"byPush":13,"hofPlain":115,"nearPush":17,"missed":140,"open":140} in 600 careers
+r1226 mlb: calibration 2, kept {"byPush":1,"hofPlain":1,"nearPush":0,"missed":1,"open":1} of seen {"byPush":5,"hofPlain":131,"nearPush":12,"missed":235,"open":123} in 600 careers
+r1226 nhl: calibration 2, kept {"byPush":8,"hofPlain":3,"nearPush":3,"missed":2,"open":4} of seen {"byPush":23,"hofPlain":67,"nearPush":26,"missed":180,"open":176} in 600 careers
+recordCareerHallSaves1301: wrote /home/runner/work/_temp/rc-out/files/saves-r1226.json (r1226, 2c86ecc7e0317e61739f9af0a9008700a8ddd555)
