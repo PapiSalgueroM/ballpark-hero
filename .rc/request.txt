@@ -1,0 +1,17 @@
+# Release AW part one, final proof, the gate list part H2b (the same lines as Release AV's proof request rAV-H2b, so each line compares with the base)
+#!serve
+#!playwright
+#!serial
+playCollegeGridFirstTap: node scripts/playCollegeGridFirstTap.mjs
+playGridCls: node scripts/playGridCls.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playTycoonGearFit: node scripts/playTycoonGearFit.mjs
+playTycoonSetPieceFit: node scripts/playTycoonSetPieceFit.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+playCareerLeagueWorld: node scripts/playCareerLeagueWorld.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playCareerMoments: node scripts/playCareerMoments.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playAutocompleteRace: node scripts/playAutocompleteRace.mjs
+playLineupValidator: node scripts/playLineupValidator.mjs
+playNflTruth: node scripts/playNflTruth.mjs
