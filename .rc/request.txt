@@ -1,0 +1,6 @@
+# Release AW part one, final proof, extras 3: the veteran offers harness on the final head, and the keeper walk with a base from BEFORE the save keeper (Release AT live, f78037dc), as Release AV's follow up rAV-G3 ran it
+#!serve
+#!playwright
+#!serial
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+playSaveKeeper-base-AT: git worktree add -q --detach /tmp/base f78037dcddea12c1a02586c7d5c0e185efb86121 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
