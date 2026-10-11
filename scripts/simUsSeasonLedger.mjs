@@ -54,7 +54,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { readFileSync, unlinkSync } from 'node:fs';
+import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
@@ -72,12 +72,63 @@ await build({
       "export { MLB_TEAMS } from './src/data/conquestDataMlb.ts';",
       "export { NHL_TEAMS } from './src/data/conquestDataNhl.ts';",
       "export { playoffGames } from './src/lib/careerVariance.ts';",
+      "export * as shape from './src/lib/usSeasonShape.ts';",
+      "export * as nhlEngine from './src/lib/nhlMyCareer.ts';",
+      "export * as mlbEngine from './src/lib/mlbMyCareer.ts';",
+      "export { nhlFullSlateOf, nhlHeadlinesFor } from './src/lib/nhlCareerLoop.ts';",
+      "export { mlbSlateMark, mlbEarnedBadges } from './src/lib/mlbCareerLoop.ts';",
+      "export { nhlEarnedBadges } from './src/lib/nhlCareerLoop.ts';",
+      "export { MLB_CAREER_SPORT } from './src/lib/mlbCareerSport.ts';",
+      "export { NHL_CAREER_SPORT } from './src/lib/nhlCareerSport.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
   },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT,
   logLevel: 'error', alias: { '@': './src' },
 });
+/* Round 1226, the ENGINE controls: each puts one typed constant back into
+   the bundled engine, where the reader of the ledger is asked today. They
+   change the bundle's text and nothing on disk, and refuse to run when the
+   line they change is not there. */
+const ENGINE_CONTROLS = {
+  /* A typed length also empties E8: no season is of another length any more, so its cells compare nothing. */
+  nhltyped: { expect: ['E2', 'E8a', 'E8b', 'E8c'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
+  /* The average of an October printed from the draw again, not from his hits over his at bats. */
+  mlbavg: { expect: ['E7'], from: 'const shown = hits / ab;', to: 'const shown = drawn;' },
+  mlbtyped: { expect: ['E6', 'E8a', 'E8b', 'E8c'], from: 'const slate = seasonLength("mlb", c.year, c.team);', to: 'const slate = 162;' },
+  /* The engine's old law for the games of an October, for every year. */
+  mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
+  /* One ladder for every year again: a Wild Card series in 2004 and in 2012. */
+  mlbladder: { expect: ['E4'], from: 'result = stages[postseasonRung("mlb", c.year, stage)];', to: 'result = ladder[stage];' },
+  /* The fix pass, E4 before 2022: the review's mutations fold and partial, and the lost final back on the law for one round fewer. */
+  mlbfold: { expect: ['E4'], from: 'if (known.length === 0) return playoffGames(Math.max(0, stage - skip), draw, sport);', to: 'if (known.length === 0) return playoffGames(stage, draw, sport);' },
+  mlbpartial: { expect: ['E4'], from: 'const rest = playoffGames(Math.max(0, stage - skip - known.length), draw, sport);', to: 'const rest = playoffGames(Math.max(0, stage - skip), draw, sport);' },
+  mlblostfinal: { expect: ['E4'], from: 'if (known.length < played.length && stage === ENGINE_ROUNDS - 1) return playoffGames(stage, draw, sport);', to: '' },
+  /* The fix pass, E9. A badge that asks for a full year reads raw games again; a suspended season forgets its length. */
+  mlbbadge: { expect: ['E9a'], from: 'games: fullSeasonOf("mlb", s.games, mlbWorkSlate(c.pos, slateOf("mlb", s))),', to: 'games: s.games,' },
+  nhlbadge: { expect: ['E9a'], from: 'games: fullSeasonOf("nhl", s.games, nhlWorkSlate(c.pos, slateOf("nhl", s))),', to: 'games: s.games,' },
+  suspslate: { expect: ['E9b'], from: '...slateField("nhl", c.year, c.team)', to: '' },
+  /* The fix pass, E8. The award score read off the saved (short) line again, not off the full draw. */
+  nhlawards: { expect: ['E8a'], from: 'const statScore = nhlSeasonScore(c.pos, full);', to: 'const statScore = nhlSeasonScore(c.pos, line);' },
+  mlbawards: { expect: ['E8a'], from: 'const statScore = mlbSeasonScore(c.pos, full);', to: 'const statScore = mlbSeasonScore(c.pos, line);' },
+  /* One award gate of games read off the saved line: nobody plays 78 games of 48, or 130 of 60. */
+  nhlgates: { expect: ['E8a'], from: 'fullGames >= 78 && c.health >= 80', to: 'line.games >= 78 && c.health >= 80' },
+  mlbgates: { expect: ['E8a'], from: 'c.pos !== "DH" && fullGames >= 130', to: 'c.pos !== "DH" && line.games >= 130' },
+  /* The head to head scored off the saved line against the rival's full season: the review's major. */
+  nhlhead: { expect: ['E8a'], from: '((full.svpct ?? 0.9) - 0.9) * 900)) : full.points ?? 0;', to: '((full.svpct ?? 0.9) - 0.9) * 900)) : line.points ?? 0;' },
+  mlbhead: { expect: ['E8a'], from: 'Math.round((full.hr ?? 0) * 1.6 + ((full.avg ?? 0.24) - 0.24) * 300);', to: 'Math.round((line.hr ?? 0) * 1.6 + ((line.avg ?? 0.24) - 0.24) * 300);' },
+  /* One count left on the full season in the saved line. */
+  nhlcarry: { expect: ['E8b'], from: 'line.goals = cut(full.goals);', to: 'line.goals = full.goals;' },
+  mlbcarry: { expect: ['E8b'], from: 'if (v !== void 0) line[k] = cut(v);', to: 'if (v !== void 0) line[k] = k === "hr" ? v : cut(v);' },
+  /* The comeback gate reads the season before as raw games: 48 of 48 or 60 of 60 is a lost year again. */
+  nhlcomeback: { expect: ['E8c'], from: 'const prevEq = prevSeason ? fullSeasonOf("nhl", prevSeason.games, nhlWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.nhl)) : 0;', to: 'const prevEq = prevSeason ? prevSeason.games : 0;' },
+  mlbcomeback: { expect: ['E8c'], from: 'const prevEq = prevSeason ? fullSeasonOf("mlb", prevSeason.games, mlbWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.mlb)) : 0;', to: 'const prevEq = prevSeason ? prevSeason.games : 0;' },
+};
+if (ENGINE_CONTROLS[CONTROL]) {
+  const k = ENGINE_CONTROLS[CONTROL]; const text = readFileSync(OUT, 'utf8');
+  if (text.split(k.from).length !== 2) { console.log(`CONTROL ${CONTROL} ABORTED: the engine line "${k.from}" is not there once to change`); process.exit(2); }
+  writeFileSync(OUT, text.replace(k.from, () => k.to));
+}
 const game = await import(pathToFileURL(OUT).href);
 try { unlinkSync(OUT); } catch { /* a temp file left behind is harmless */ }
 
@@ -147,9 +198,10 @@ const OWN = {
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
   thin: { mlb: 10, nhl: 9 },
-  /* The one first round whose length is thin (played, and only one source gave its length): the
-     third window, the series of 2020. By its place in the list, so a moved year cannot hide it. */
-  mlbThinFirstRound: [2],
+  /* The first rounds whose length is thin (played, and only one source gave its length), by their
+     place in the list, so a moved year cannot hide one. None since Round 1226's fix pass filled the
+     best of three of 2020 on two sources (ESPN and CBS Sports). */
+  mlbThinFirstRound: [],
   /* Club seasons whose schedule page was read for the home and away numbers. */
   mlbPlayed: 'DET 2023|TEX 2024|DET 2025|DET 2026|TOR 2026|TEX 2026|HOU 2026',
   /* The NHL playoff block: its first season, the two modified tournaments, its round names. */
@@ -236,6 +288,7 @@ const CONTROLS = {
   nhlplayoff: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.series[0][1] === 7, 'the best of seven'); nhl.NHL_PLAYOFF_FORMAT.series[0] = [3, 5]; } },
   nhlscore: { expect: ['N7'], run() { must(nhl.NHL_OVERTIME.now.shootouts === 119, 'the 119 shootouts'); nhl.NHL_OVERTIME.now.shootouts = 0; } },
 };
+for (const [name, k] of Object.entries(ENGINE_CONTROLS)) CONTROLS[name] = { expect: k.expect, run() {} };
 if (CONTROL === 'list') { console.log(Object.keys(CONTROLS).join(' ')); process.exit(0); }
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_LEDGER_CONTROL "${CONTROL}", expected one of: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL) CONTROLS[CONTROL].run();
@@ -595,6 +648,403 @@ const OWN_MLB_DIVISIONS = {
   }
 }
 
+/* ===== Round 1226, THE REVERSE CHECK: the engines play what the ledger says. =====
+   E1  the reader (src/lib/usSeasonShape.ts) hands back the ledger's length
+       for every NHL season in range, held to THIS FILE'S OWN TABLE, and the
+       engine's own season where the ledger holds nothing.
+   E2  the NHL engine plays it: a skater's season never holds more games than
+       his club's did, about a quarter of healthy seasons are the whole
+       schedule (the engine's own draw is four equal counts, so 25 percent;
+       measured 23.5 to 26.1 percent over 12 year and club cells of 1,500
+       seasons each, about 1,140 of them healthy skaters; the band is 19 to 31), the saved line carries the length
+       exactly when it is not the engine's own, and the engine's code types
+       no season length of its own. Control: nhltyped. */
+const mulberry = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const ENGINE_OWN = 82;
+{
+  const S = game.shape;
+  const own2019 = Object.fromEntries(OWN.nhl2019.split(' ').reduce((a, x, i, l) => (i % 2 ? a : [...a, [x, Number(l[i + 1])]]), []));
+  /* Ids typed here: two the ledger holds in 2019-20 under the game's id, and the two of the 2006 list it does not. */
+  const IDS = ['BOS', 'CAR', 'ATL', 'PHX'];
+  for (const y of rangeOf(OWN.nhlYears[0], OWN.nhlYears[1])) for (const id of IDS) {
+    const want = y === 2019 ? (own2019[id] ?? ENGINE_OWN) : (y in OWN.nhlGames ? OWN.nhlGames[y] : ENGINE_OWN);
+    const from = y === 2019 && !(id in own2019) ? 'engine' : 'ledger';
+    const got = S.seasonLengthRow('nhl', y, id);
+    check('E1', got.games === want && got.from === from && S.seasonLength('nhl', y, id) === want, `the reader says ${got.games} (${got.from}) for the NHL ${y} season of ${id}; this file's own table says ${want} (${from})`);
+  }
+  for (const y of [2027, 2035, 2046]) { const got = S.seasonLengthRow('nhl', y, 'BOS'); check('E1', got.games === OWN.nhlGames[2026] && got.from === 'carried', `the reader says ${got.games} (${got.from}) for the NHL ${y} season; the last row carried forward is ${OWN.nhlGames[2026]}`); }
+  for (const y of [1990, 2005]) { const got = S.seasonLengthRow('nhl', y, 'BOS'); check('E1', got.games === ENGINE_OWN && got.from === 'engine', `the reader says ${got.games} (${got.from}) for the NHL ${y} season, a year before the ledger; the engine's own season is ${ENGINE_OWN}`); }
+  check('E1', S.US_ENGINE_SEASON.nhl === ENGINE_OWN && S.slateOf('nhl', {}) === ENGINE_OWN && S.slateOf('nhl', { slate: 84 }) === 84, 'a saved line with no slate is not read as the engine own season, or one with a slate is not read as its own');
+
+  /* E2: the engine, played. */
+  const N = game.nhlEngine;
+  const CELLS = [[2006, 'BOS', 82], [2012, 'BOS', 48], [2012, 'ATL', 48], [2019, 'BOS', 70], [2019, 'CAR', 68], [2019, 'ATL', 82], [2020, 'BOS', 56], [2025, 'BOS', 82], [2026, 'BOS', 84], [2026, 'UTA', 84], [2031, 'BOS', 84], [2040, 'BOS', 84]];
+  for (const [year, team, want] of CELLS) {
+    let over = 0; let whole = 0; let healthy = 0; let slateBad = 0; let goalieOver = 0; const SEASONS = 1500;
+    for (let i = 0; i < SEASONS; i++) {
+      const rng = mulberry(year * 1000 + i);
+      const pos = i % 5 === 4 ? 'G' : ['C', 'LW', 'RW', 'D'][i % 4];
+      const c = N.startNhlCareer('Ledger Check', pos, N.NHL_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2006' : undefined);
+      c.year = year; c.team = team; c.health = 100;
+      const { line, notes: said } = N.simNhlSeason(c, 80, rng);
+      if ((line.slate ?? ENGINE_OWN) !== want || ('slate' in line) !== (want !== ENGINE_OWN)) slateBad++;
+      if (pos === 'G') { if (line.games > want) goalieOver++; continue; }
+      if (line.games > want) over++;
+      if (!said.some(n => n.includes('Injuries'))) { healthy++; if (line.games === want) whole++; }
+    }
+    const share = healthy ? 100 * whole / healthy : 0;
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE nhl ${year} ${team} want ${want}: whole ${share.toFixed(1)} percent of ${healthy} healthy skater seasons`);
+    check('E2', over === 0 && goalieOver === 0, `${over} skater seasons and ${goalieOver} goalie seasons of ${SEASONS} hold more games than the ${want} of the ${year} season of ${team}`);
+    check('E2', share >= 19 && share <= 31, `${share.toFixed(1)} percent of healthy skater seasons are the whole ${want} game schedule of ${year} (${team}); the engine's draw makes it 25 (band 19 to 31)`);
+    check('E2', slateBad === 0, `${slateBad} of ${SEASONS} saved lines of ${year} (${team}) carry the wrong season length, or carry one where the engine's own was played`);
+  }
+  /* The engine's code, comments stripped, types no season length. */
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const nhlCode = stripC(readFileSync(path.join(ROOT, 'src/lib/nhlMyCareer.ts'), 'utf8')).split('export const NHL_SPEND_ITEMS')[0];
+  const loopCode = stripC(readFileSync(path.join(ROOT, 'src/lib/nhlCareerLoop.ts'), 'utf8'));
+  for (const [what, code, re] of [['nhlMyCareer.ts', nhlCode, /\/ 8[24]\b|\b79 \+ Math\.floor|= 8[24];/], ['nhlCareerLoop.ts', loopCode, /\b8[24]\b|\b78\b/]]) {
+    const hit = code.match(re);
+    check('E2', !hit, `src/lib/${what} types a season length of its own again ("${hit?.[0]}"); it must ask src/lib/usSeasonShape.ts`);
+  }
+  /* A saved line keeps the season it was played on: the mark for a full season and the paper's count both read it. */
+  check('E2', game.nhlFullSlateOf('C', {}) === 78 && game.nhlFullSlateOf('C', { slate: 84 }) === 80 && game.nhlFullSlateOf('C', { slate: 48 }) === 46 && game.nhlFullSlateOf('G', { slate: 84 }) === 55 && game.nhlFullSlateOf('G', { slate: 48 }) === 32,
+    `the full season mark does not follow the saved length: ${[{}, { slate: 84 }, { slate: 48 }].map(l => game.nhlFullSlateOf('C', l)).join(', ')} for a skater (78, 80, 46 expected), ${game.nhlFullSlateOf('G', { slate: 84 })} and ${game.nhlFullSlateOf('G', { slate: 48 })} for a goalie (55 and 32)`);
+}
+
+/* ===== Round 1226, the reverse check for October (MLB). =====
+   E3  the reader hands back the ledger's rounds for every MLB season, held to
+       THIS FILE'S OWN TABLE: no wild card round to 2011 (three rounds), one
+       game in 2012 to 2019 and 2021, a best of three in 2020, and the best
+       of three, five, seven and seven from 2022.
+   E4  the MLB engine plays it: no Wild Card result in a year with no wild
+       card round, a Wild Card Game that is one game, and from 2022 every run
+       inside the rounds it went through, with a swept Wild Card Series among
+       them (measured: 43.3 to 44.2 percent of Wild Card exits are two games,
+       over three years of 6,000 seasons each and about 1,900 exits a year;
+       the law makes it 42.4; the band is 34 to 51). Before 2022 the later
+       rounds are not in the ledger, so every run is held to the engine's own
+       law for the rounds that year had (OWN_LAW), on top of the one game or
+       the best of three of 2020 the ledger does hold, and a lost World Series
+       keeps the 13 to 19 the engine always gave it (measured over 6,000
+       seasons a year: 272 to 293 lost World Series a year, every one 13 to
+       19; 525 to 583 lost Championship Series). Controls: mlbrounds,
+       mlbladder, mlbfold, mlbpartial, mlblostfinal. */
+const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championship Series', 'World Series'], series: [[2, 3], [3, 5], [4, 7], [4, 7]], from: 2022, game: [1, 1], series2020: [2, 3] };
+/* What the engine's own law, round(rounds * 4 * (0.82 to 1.18)), can print for one to five rounds' worth. */
+const OWN_LAW = { 1: [3, 5], 2: [7, 9], 3: [10, 14], 4: [13, 19], 5: [16, 22] };
+{
+  const S = game.shape; const M = game.mlbEngine;
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const open = n => Array.from({ length: n }, () => ({ name: null, series: null }));
+  const wantRounds = y => {
+    if (y >= OWN_OCTOBER.from) return OWN_OCTOBER.names.map((name, i) => ({ name, series: OWN_OCTOBER.series[i] }));
+    const w = OWN.mlbFirstRound.find(x => y >= x[0] && (x[1] === null || y <= x[1]));
+    if (!w) return open(4);
+    if (w[2] === null) return open(3);
+    return [{ name: w[2], series: w[2] === 'Wild Card Game' ? OWN_OCTOBER.game : OWN_OCTOBER.series2020 }, ...open(3)];
+  };
+  for (const y of rangeOf(2000, 2040)) check('E3', same(S.postseasonRounds('mlb', y), wantRounds(y)), `the reader's rounds for the MLB ${y} postseason are ${JSON.stringify(S.postseasonRounds('mlb', y))}; this file's own table says ${JSON.stringify(wantRounds(y))}`);
+  for (const y of rangeOf(2000, 2040)) {
+    const p = OWN.nhlPlayoff; const bound = y >= p.from && !p.modified.includes(y);
+    const want = bound ? p.rounds.map(name => ({ name, series: [4, 7] })) : open(4);
+    check('E3', same(S.postseasonRounds('nhl', y), want), `the reader's rounds for the NHL playoffs of the season that started in ${y} are not this file's own (${bound ? 'four best of sevens' : 'four open rounds'})`);
+  }
+
+  const RESULTS = { wcs: 'Lost the Wild Card series', wcg: 'Lost the Wild Card Game', ds: 'Lost the Division Series', cs: 'Lost the Championship Series', ws: 'Lost the World Series', won: 'WON THE WORLD SERIES' };
+  const play = (year, n) => {
+    const by = new Map();
+    for (let i = 0; i < n; i++) {
+      const rng = mulberry(year * 7919 + i);
+      const pos = ['CF', 'SS', '1B', 'SP', 'RP', 'DH'][i % 6];
+      const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2004' : undefined);
+      c.year = year; c.health = 100;
+      const { line } = M.simMlbSeason(c, 90, rng);
+      if (line.poGames === undefined) continue;
+      if (!by.has(line.teamResult)) by.set(line.teamResult, []);
+      by.get(line.teamResult).push(line.poGames);
+    }
+    return by;
+  };
+  const outside = (list, lo, hi) => (list ?? []).filter(g => g < lo || g > hi).length;
+  for (const year of [2004, 2011, 2012, 2019, 2020, 2021, 2022, 2026, 2033]) {
+    const by = play(year, 6000); const w = OWN.mlbFirstRound.find(x => year >= x[0] && (x[1] === null || year <= x[1]));
+    const seen = [...by.keys()]; const n = k => (by.get(RESULTS[k]) ?? []).length;
+    check('E4', seen.every(r => Object.values(RESULTS).includes(r)) && n('ds') > 100 && n('won') > 10, `the ${year} postseason wrote a result outside the ladder, or too few runs to judge (${seen.join(' | ')})`);
+    if (w[2] === null) check('E4', n('wcs') === 0 && n('wcg') === 0, `${n('wcs') + n('wcg')} seasons of ${year} ended in a wild card round; the ledger says that year had none`);
+    else if (w[2] === 'Wild Card Game') check('E4', n('wcs') === 0 && n('wcg') > 100 && outside(by.get(RESULTS.wcg), 1, 1) === 0, `in ${year} the wild card was one game: ${n('wcs')} seasons read as a series, ${n('wcg')} as the game, ${outside(by.get(RESULTS.wcg), 1, 1)} of those not one game long`);
+    else check('E4', n('wcg') === 0 && n('wcs') > 100, `in ${year} the wild card was a series: ${n('wcg')} seasons read as a single game, ${n('wcs')} as the series`);
+    if (year >= OWN_OCTOBER.from) {
+      const sum = (k, upTo) => OWN_OCTOBER.series.slice(0, upTo).reduce((t, x) => t + x[k], 0);
+      const bad = outside(by.get(RESULTS.wcs), sum(0, 1), sum(1, 1)) + outside(by.get(RESULTS.ds), sum(0, 2), sum(1, 2)) + outside(by.get(RESULTS.cs), sum(0, 3), sum(1, 3)) + outside(by.get(RESULTS.ws), sum(0, 4), sum(1, 4)) + outside(by.get(RESULTS.won), sum(0, 4), sum(1, 4));
+      check('E4', bad === 0, `${bad} runs of ${year} hold a count of games their rounds cannot (a best of three, five, seven and seven)`);
+      const swept = 100 * (by.get(RESULTS.wcs) ?? []).filter(g => g === 2).length / Math.max(1, n('wcs'));
+      if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year}: ${swept.toFixed(1)} percent of ${n('wcs')} Wild Card exits are two games; Division Series exits by games 5 to 8: ${[5, 6, 7, 8].map(g => (by.get(RESULTS.ds) ?? []).filter(x => x === g).length).join(' ')}`);
+      check('E4', swept >= 34 && swept <= 51, `${swept.toFixed(1)} percent of the Wild Card exits of ${year} are two games; the law makes it 42.4 (band 34 to 51)`);
+    } else {
+      /* Before 2022 (the fix pass). The rounds after the first are not in the ledger, so a run is held
+         to the engine's own law for the rounds that year really had, on top of the wild card round the
+         ledger does hold (one game, or the best of three of 2020). A lost final keeps the count the
+         engine always gave that result, 13 to 19: the law for three rounds starts at 10, and a count
+         of 10 or 11 under "Lost the World Series" was the review's major 1. */
+      const first = w[2] === null ? null : w[2] === 'Wild Card Game' ? OWN_OCTOBER.game : OWN_OCTOBER.series2020;
+      const add = r => (first ? [r[0] + first[0], r[1] + first[1]] : r);
+      const want = { ds: add(OWN_LAW[1]), cs: add(OWN_LAW[2]), ws: OWN_LAW[4], won: add(OWN_LAW[4]) };
+      if (first) want[w[2] === 'Wild Card Game' ? 'wcg' : 'wcs'] = first;
+      const bad = Object.entries(want).reduce((sum, [k, r]) => sum + outside(by.get(RESULTS[k]), r[0], r[1]), 0);
+      if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year}: ${Object.keys(want).map(k => `${k} ${n(k)} runs, ${Math.min(...(by.get(RESULTS[k]) ?? [0]))} to ${Math.max(...(by.get(RESULTS[k]) ?? [0]))} games`).join('; ')}`);
+      check('E4', n('cs') > 100 && n('ws') > 50 && bad === 0, `${bad} runs of ${year} hold a count of games outside the engine's law for the rounds that year had (${Object.entries(want).map(([k, r]) => `${k} ${r[0]} to ${r[1]}`).join(', ')}; ${n('cs')} lost Championship Series and ${n('ws')} lost World Series read)`);
+    }
+  }
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const mlbCode = stripC(readFileSync(path.join(ROOT, 'src/lib/mlbMyCareer.ts'), 'utf8'));
+  check('E4', !mlbCode.includes('playoffGames(') && mlbCode.includes("playoffRunGames('mlb', c.year, depth, rng)") && mlbCode.includes("stages[postseasonRung('mlb', c.year, stage)]"), 'src/lib/mlbMyCareer.ts no longer asks src/lib/usSeasonShape.ts for the rounds and the games of its October');
+}
+
+/* ===== Round 1226, the reverse check for the MLB season's length. =====
+   E5  the reader hands back the ledger's length for every MLB season and
+       every id of the game's lists, held to THIS FILE'S OWN TABLE (the clubs
+       off their schedule BY NAME, found in the game's lists the way M3 does).
+   E6  the MLB engine plays it: nobody plays more games than his club did, a
+       healthy hitter misses seven at most, about an eighth of them play the
+       whole schedule in a full season and a quarter in the short one
+       (measured 10.1 to 14.2 percent and 25.0 percent over ten year and club
+       cells of 2,400 seasons, about 1,520 healthy hitters each; the bands
+       are 8 to 17 and 19 to 31), a starter and a
+       reliever fit a short season, and the saved line carries the length
+       exactly when it is not the engine's own. Control: mlbtyped. */
+const MLB_OWN = 162;
+{
+  const S = game.shape; const M = game.mlbEngine;
+  const wantMlb = (y, id) => {
+    if (y < OWN.mlbYears[0]) return [MLB_OWN, 'engine'];
+    if (y > OWN.mlbYears[1]) return [OWN.mlbSchedule[OWN.mlbYears[1]] ?? MLB_OWN, 'carried'];
+    for (const l of MLB_LISTS) {
+      if (y < l.from) continue;
+      const t = l.teams.find(x => x.id === id); if (!t) continue;
+      for (const [games, names] of Object.entries(OWN.mlbOffClubs[y] ?? {})) if (names.split('|').includes(label(t))) return [Number(games), 'ledger'];
+    }
+    return [OWN.mlbSchedule[y] ?? MLB_OWN, 'ledger'];
+  };
+  const allIds = [...new Set(MLB_LISTS.flatMap(l => l.teams.map(t => t.id)))];
+  let off = 0;
+  for (const y of rangeOf(2000, 2035)) for (const id of allIds) {
+    const [want, from] = wantMlb(y, id); const got = S.seasonLengthRow('mlb', y, id);
+    if (want !== (OWN.mlbSchedule[y] ?? MLB_OWN)) off++;
+    check('E5', got.games === want && got.from === from, `the reader says ${got.games} (${got.from}) for the MLB ${y} season of ${id}; this file's own table says ${want} (${from})`);
+  }
+  /* 42 of the 50 club lines: six are clubs under a name no list of the game holds that year, and two played the whole schedule with a tie inside it. */
+  check('E5', off === 42, `${off} year and id pairs are off their schedule's length by this file's own table; 42 expected`);
+  check('E5', S.seasonLength('mlb', 2026) === MLB_OWN && S.seasonLength('mlb', 2020) === OWN.mlbSchedule[2020] && S.seasonLength('mlb', 2026, 'Yomiuri Giants') === MLB_OWN && S.seasonLengthRow('mlb', 2020, 'Yomiuri Giants').from === 'engine' && S.seasonLengthRow('mlb', 2020, 'Yomiuri Giants').games === MLB_OWN, 'a season asked for with no club is not the schedule of that year, or a club outside the league is read as a row of the ledger');
+
+  const CELLS = [[2004, 'BOS', 162], [2004, 'PIT', 161], [2005, 'CIN', 163], [2008, 'MON', 162], [2016, 'CHC', 162], [2020, 'BOS', 60], [2020, 'DET', 58], [2026, 'NYY', 161], [2026, 'BOS', 162], [2027, 'NYY', 162]];
+  for (const [year, team, want] of CELLS) {
+    let over = 0; let whole = 0; let healthy = 0; let far = 0; let slateBad = 0; let arms = 0; const SEASONS = 2400;
+    for (let i = 0; i < SEASONS; i++) {
+      const rng = mulberry(year * 3301 + i);
+      const pos = ['CF', 'SS', '1B', 'C', 'SP', 'RP'][i % 6];
+      const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2004' : undefined);
+      c.year = year; c.team = team; c.health = 100;
+      const { line, notes: said } = M.simMlbSeason(c, 80, rng);
+      if ((line.slate ?? MLB_OWN) !== want || ('slate' in line) !== (want !== MLB_OWN)) slateBad++;
+      if (line.games > want) over++;
+      if (pos === 'SP' || pos === 'RP') { if (line.games > want * (pos === 'SP' ? 0.25 : 0.5)) arms++; continue; }
+      if (said.some(n => n.includes('Injured list'))) continue;
+      healthy++; if (line.games === want) whole++; if (line.games < want - 7) far++;
+    }
+    const share = healthy ? 100 * whole / healthy : 0;
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year} ${team} want ${want}: whole ${share.toFixed(1)} percent of ${healthy} healthy hitter seasons`);
+    check('E6', over === 0 && far === 0, `${over} seasons of ${SEASONS} hold more games than the ${want} of the ${year} season of ${team}, and ${far} healthy hitters missed more than seven`);
+    check('E6', arms === 0, `${arms} pitcher seasons of ${year} (${team}) hold more starts or appearances than a ${want} game season can`);
+    /* Two expectations, two bands (the review's minor 9): the engine's draw is eight equal counts, so an
+       eighth of healthy hitters play a whole full season (measured 10.1 to 14.2 percent over eight cells
+       of about 1,520; band 8 to 17), and a 58 or 60 game season folds two of the eight onto its last
+       game, so a quarter do (measured 25.0 twice; band 19 to 31). */
+    const band = want < 100 ? [19, 31] : [8, 17];
+    check('E6', share >= band[0] && share <= band[1], `${share.toFixed(1)} percent of healthy hitter seasons are the whole ${want} game schedule of ${year} (${team}); band ${band[0]} to ${band[1]}`);
+    check('E6', slateBad === 0, `${slateBad} of ${SEASONS} saved lines of ${year} (${team}) carry the wrong season length, or carry one where the engine's own was played`);
+  }
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const code = stripC(readFileSync(path.join(ROOT, 'src/lib/mlbMyCareer.ts'), 'utf8')).split('export const MLB_SPEND_ITEMS')[0];
+  const loop = stripC(readFileSync(path.join(ROOT, 'src/lib/mlbCareerLoop.ts'), 'utf8'));
+  for (const [what, text, re] of [['mlbMyCareer.ts', code, /\b155 \+ Math\.floor|= 16[0-3];|\/ 16[1-3]\b/], ['mlbCareerLoop.ts', loop, /\b155\b|\b16[1-3]\b/]]) {
+    const hit = text.match(re);
+    check('E6', !hit, `src/lib/${what} types a season length of its own again ("${hit?.[0]}"); it must ask src/lib/usSeasonShape.ts`);
+  }
+  check('E6', game.mlbSlateMark('CF', 150, {}) === 150 && game.mlbSlateMark('CF', 150, { slate: 60 }) === 56 && game.mlbSlateMark('SP', 30, { slate: 60 }) === 11 && game.mlbSlateMark('SP', 30, { slate: 163 }) === 30,
+    `the full season mark does not follow the saved length: ${game.mlbSlateMark('CF', 150, {})}, ${game.mlbSlateMark('CF', 150, { slate: 60 })}, ${game.mlbSlateMark('SP', 30, { slate: 60 })}, ${game.mlbSlateMark('SP', 30, { slate: 163 })} (150, 56, 11 and 30 expected)`);
+}
+
+/* ===== Round 1226, E7: a hitter's October line is his own arithmetic. =====
+   "4 for 16 (.250), 1 HR": the average is his hits over his at bats in the
+   season line's shape (three places, no leading zero), his at bats are four
+   a game, and a home run is a hit. 3,000 seasons in each of four years;
+   every hitter who reached October is read. Control: mlbavg. */
+{
+  const M = game.mlbEngine; let read = 0; let bad = 0; let first = '';
+  for (const year of [2008, 2014, 2026, 2030]) for (let i = 0; i < 3000; i++) {
+    const rng = mulberry(year * 911 + i);
+    const pos = ['CF', 'SS', '1B', 'C', 'DH', '3B'][i % 6];
+    const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2004' : undefined);
+    c.year = year;
+    const { line } = M.simMlbSeason(c, 90, rng);
+    if (line.poLine === undefined) continue;
+    read++;
+    const m = line.poLine.match(/^(\d+) for (\d+) \((\.\d{3})\), (\d+) HR$/);
+    const ok = m && Number(m[2]) === 4 * line.poGames && Number(m[4]) <= Number(m[1]) && Number(m[1]) <= Number(m[2]) && m[3] === `.${String(Math.round(1000 * Number(m[1]) / Number(m[2]))).padStart(3, '0')}`;
+    if (!ok) { bad++; if (!first) first = `${line.poLine} in ${line.poGames} games`; }
+  }
+  check('E7', read > 2000 && bad === 0, `${bad} of ${read} October lines of a hitter are not his hits over his at bats in the season line's shape (the first: "${first}")`);
+}
+
+/* ===== Round 1226 (the fix pass), E8: a short season is the full season, carried. =====
+   Both engines draw every season on their own length and judge the awards
+   and the rival on that draw; the saved line is that draw carried to the
+   season the club really played. So, for ONE saved state and ONE stream:
+   E8a  the awards of a season of another length are the awards of the same
+        season played on the engine's own length, award for award, and so is
+        the head to head with the rival (the same score for him, the same
+        tally); his printed counts are his full counts carried. Exact:
+        nothing here is a rate, so there is no band.
+   E8b  every count on the saved line is the full season's count carried to
+        the length his position worked through, the points are the goals plus
+        the assists, the rates did not move, and a first choice starter never
+        has more wins than starts.
+   E8c  the comeback gate reads the season before as the full season it
+        stands for: nobody whose short season was no lost year by this file's
+        own arithmetic (more than 35 games of 82, more than 70 of 162) wins
+        it, and a hitter whose 2020 really was a lost one still can.
+   The pair is the season's own year and 1990, a year before both ledgers
+   (the engine's own length and its own ladder). The floors under the counts
+   only prove the fleet reaches what is being compared. MEASURED on the tree
+   this was written on (2026-10-10), 6,000 paired seasons a sport over four
+   year and club cells: 5,418 NHL and 6,269 MLB awards in the full seasons
+   (floor 400); the year went to the player 4,119 times and to the rival
+   1,881 in the NHL, 1,900 and 4,100 in MLB (floors 800); every comparison
+   equal. After the short year, 6,000 seasons a sport: no comeback award off
+   a season that was no lost year; 104 hitters whose 2020 was a lost one, 79
+   of them the comeback player of 2021 (floors 50 and 30). What each control
+   turned red: nhlawards 1,745 seasons with other awards, mlbawards 1,340,
+   nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915,
+   nhlcarry 4,401 counts, mlbcarry 2,000, nhlcomeback 381 comebacks off a
+   whole 48 game season, mlbcomeback 2,979 off a whole 60 game one.
+   Controls: nhlawards, mlbawards, nhlgates, mlbgates, nhlhead, mlbhead
+   (E8a), nhlcarry, mlbcarry (E8b), nhlcomeback, mlbcomeback (E8c). */
+{
+  const S = game.shape; const FULL_YEAR = 1990;
+  const SPORTS = [
+    { key: 'nhl', E: game.nhlEngine, own: ENGINE_OWN, start: 'startNhlCareer', sim: 'simNhlSeason', progress: 'nhlProgress', assign: 'nhlAssignRole', arch: game.nhlEngine.NHL_ARCHETYPES,
+      positions: ['C', 'LW', 'RW', 'D', 'G'], canWin: pos => pos !== 'G', era: y => (y < 2026 ? 'y2006' : undefined), work: (pos, slate) => (pos === 'G' ? Math.min(slate, ENGINE_OWN) : slate),
+      counts: ['games', 'wins', 'goals', 'assists'], rates: ['svpct'], cells: [[2012, 'BOS'], [2019, 'CAR'], [2020, 'BOS'], [2026, 'BOS']],
+      rivalCounts: text => (text.match(/^(\d+)G (\d+)A \d+P$/) ?? []).slice(1, 3).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2012, lost: 35, lostYears: 0, lostWon: 0 } },
+    { key: 'mlb', E: game.mlbEngine, own: MLB_OWN, start: 'startMlbCareer', sim: 'simMlbSeason', progress: 'mlbProgress', assign: 'mlbAssignRole', arch: game.mlbEngine.MLB_ARCHETYPES,
+      positions: ['CF', 'SS', '1B', 'C', 'SP', 'RP'], canWin: pos => pos !== 'SP' && pos !== 'RP', era: y => (y < 2026 ? 'y2004' : undefined), work: (pos, slate) => (pos === 'SP' || pos === 'RP' ? Math.min(slate, MLB_OWN) : slate),
+      counts: ['games', 'wins', 'lossesP', 'so', 'saves', 'holds', 'hr', 'rbi', 'sb', 'doubles'], rates: ['avg', 'obp', 'era'], cells: [[2005, 'CIN'], [2020, 'BOS'], [2020, 'DET'], [2026, 'NYY']],
+      rivalCounts: text => (text.match(/, (\d+) HR$/) ?? []).slice(1, 2).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2020, lost: 70, lostYears: 50, lostWon: 30 } },
+  ];
+  for (const sp of SPORTS) {
+    const carry = (n, to) => (to === sp.own ? n : Math.round(n * to / sp.own));
+    let seasons = 0; let awardsFull = 0; let awardBad = 0; let headBad = 0; let carryBad = 0; let rateBad = 0; let rivalBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = '';
+    for (const [year, team] of sp.cells) {
+      const slate = S.seasonLength(sp.key, year, team);
+      check('E8a', slate !== sp.own, `the ${sp.key.toUpperCase()} ${year} season of ${team} is the engine's own ${sp.own} games, so it compares nothing`);
+      for (let i = 0; i < 1500; i++) {
+        const rng = mulberry(year * 4409 + i * 13 + 5);
+        const pos = sp.positions[i % sp.positions.length];
+        const c = sp.E[sp.start]('Ledger Check', pos, sp.arch[pos][i % sp.arch[pos].length], rng, null, sp.era(year));
+        c.team = team; c.health = 100; c.ovr = 74 + (i * 7) % 23; c.pot = Math.max(c.pot, c.ovr);
+        /* The rival within three of him either way, so both verdicts are common. */
+        if (c.rival) { c.rival.ovr = Math.max(55, Math.min(95, c.ovr + (i % 7) - 3)); c.rival.pot = Math.max(c.rival.pot, c.rival.ovr); }
+        /* Two in three have a season behind them, so the rookie award and the comeback gate are both in play. */
+        if (i % 3) { c.year = year - 1; sp.E[sp.sim](c, 80, rng); sp.E[sp.progress](c, rng); }
+        c.year = year; sp.E[sp.assign](c, 80, rng);
+        const snap = JSON.stringify(c); const seed = year * 7001 + i; const before = JSON.parse(snap).rival;
+        const a = JSON.parse(snap); const A = sp.E[sp.sim](a, 82, mulberry(seed)).line;
+        const b = JSON.parse(snap); b.year = FULL_YEAR; const B = sp.E[sp.sim](b, 82, mulberry(seed)).line;
+        seasons++; awardsFull += B.awards.length;
+        if (JSON.stringify(A.awards) !== JSON.stringify(B.awards)) { awardBad++; if (!first) first = `${year} ${team} ${pos}: [${A.awards.join(', ')}] against [${B.awards.join(', ')}] in full`; }
+        if (before && !before.retired) {
+          if (b.rival.myYears > before.myYears) mine++; else his++;
+          if (a.rival.myYears !== b.rival.myYears || a.rival.hisYears !== b.rival.hisYears || a.rival.lastScore !== b.rival.lastScore) headBad++;
+          const shown = sp.rivalCounts(a.rival.lastLine); const full = sp.rivalCounts(b.rival.lastLine);
+          if (!full.length || shown.length !== full.length || shown.some((n, k) => n !== carry(full[k], slate))) rivalBad++;
+        }
+        const w = sp.work(pos, slate);
+        for (const k of sp.counts) if (B[k] !== undefined && A[k] !== carry(B[k], w)) carryBad++;
+        if (A.goals !== undefined && A.points !== A.goals + A.assists) carryBad++;
+        if (A.slate !== slate || 'slate' in B) carryBad++;
+        for (const k of sp.rates) if (A[k] !== B[k]) rateBad++;
+        if (pos === 'SP' && a.role !== 'backup' && A.wins > A.games) recordBad++;
+      }
+    }
+    const U = sp.key.toUpperCase();
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8 ${sp.key}: ${seasons} paired seasons, ${awardsFull} awards in the full ones, the year mine ${mine} and his ${his}`);
+    check('E8a', awardsFull >= sp.floors.awards && mine >= sp.floors.mine && his >= sp.floors.his, `the ${U} fleet is too thin to compare: ${awardsFull} awards, ${mine} years won and ${his} lost against the rival over ${seasons} seasons (floors ${sp.floors.awards}, ${sp.floors.mine}, ${sp.floors.his})`);
+    check('E8a', awardBad === 0, `${awardBad} of ${seasons} ${U} seasons of another length hold other awards than the same season played in full (the first: ${first})`);
+    check('E8a', headBad === 0, `${headBad} of ${seasons} ${U} seasons of another length score the head to head with the rival differently from the same season played in full`);
+    check('E8b', carryBad === 0 && rateBad === 0, `${carryBad} counts on a saved ${U} line are not the full season's count carried to the season's length, and ${rateBad} rates moved`);
+    check('E8a', rivalBad === 0, `${rivalBad} printed ${U} rival lines are not his full season's counts carried to the season's length`);
+    check('E8b', recordBad === 0, `${recordBad} first choice ${U} starters have more wins than starts`);
+
+    /* E8c: the season after a short one. */
+    const cb = sp.comeback; let after = 0; let wrong = 0; let lostYears = 0; let lostWon = 0;
+    for (let i = 0; i < 6000; i++) {
+      const rng = mulberry(cb.year * 6151 + i);
+      const pos = sp.positions[i % sp.positions.length];
+      const c = sp.E[sp.start]('Ledger Check', pos, sp.arch[pos][i % sp.arch[pos].length], rng, null, sp.era(cb.year));
+      c.team = 'BOS'; c.year = cb.year; c.ovr = 80 + (i * 5) % 17; c.pot = Math.max(c.pot, c.ovr); c.health = 55 + (i % 4) * 15;
+      sp.E[sp.sim](c, 80, rng); sp.E[sp.progress](c, rng);
+      const prev = c.seasons[c.seasons.length - 1];
+      const prevFull = prev.games * sp.own / sp.work(pos, prev.slate ?? sp.own);
+      c.health = 100;
+      const won = sp.E[sp.sim](c, 80, rng).line.awards.includes('Comeback Player of the Year');
+      if (prev.slate !== undefined && prev.slate !== sp.own) after++;
+      if (prevFull > cb.lost) { if (won) wrong++; } else if (sp.canWin(pos)) { lostYears++; if (won) lostWon++; }
+    }
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8c ${sp.key}: ${after} seasons after the short ${cb.year}, ${wrong} wrong comebacks, ${lostYears} lost years before, ${lostWon} comebacks off them`);
+    check('E8c', after === 6000 && wrong === 0, `${wrong} of ${after} ${U} seasons after the short ${cb.year} one won the comeback award although the season before was no lost year (more than ${cb.lost} games of ${sp.own} as a full season)`);
+    check('E8c', lostYears >= cb.lostYears && lostWon >= cb.lostWon, `only ${lostWon} comebacks off ${lostYears} lost ${U} seasons of ${cb.year}: the gate no longer opens for a lost short season (floors ${cb.lostWon} and ${cb.lostYears})`);
+  }
+}
+
+/* ===== Round 1226 (the fix pass), E9: a saved short season is read as the full season it stands for. =====
+   E9a  the three badges that ask for a full year (a .330 season: 120 games;
+        a sub 2.00 season: 20 starts; a .930 season: 40 games in the crease)
+        can be earned in a short season, are not handed to a part of one, and
+        a line with no slate is judged as it always was. Twelve typed cases,
+        each a single saved line.
+   E9b  a season sat out on the suspended list is saved with the season's
+        length when it is not the engine's own, and with none when it is.
+   Controls: mlbbadge, nhlbadge (E9a), suspslate (E9b). */
+{
+  const M = game.mlbEngine; const N = game.nhlEngine; const S = game.shape;
+  const mlbWith = (pos, line) => { const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], mulberry(77), null, 'y2004'); c.seasons = [{ year: 2020, team: 'BOS', age: 24, ovr: 80, awards: [], teamResult: 'Missed October', salary: 1, ...line }]; return game.mlbEarnedBadges(c).map(b => b.id); };
+  const nhlWith = (pos, line) => { const c = N.startNhlCareer('Ledger Check', pos, N.NHL_ARCHETYPES[pos][0], mulberry(78), null, 'y2006'); c.seasons = [{ year: 2012, team: 'BOS', age: 24, ovr: 80, awards: [], teamResult: 'Missed the playoffs', salary: 1, ...line }]; return game.nhlEarnedBadges(c).map(b => b.id); };
+  const CASES = [
+    ['a .340 hitter over all 60 games of 2020', mlbWith('CF', { games: 60, slate: 60, avg: 0.34 }), 'avg_330', true],
+    ['a .340 hitter over 40 of the 60 games of 2020', mlbWith('CF', { games: 40, slate: 60, avg: 0.34 }), 'avg_330', false],
+    ['a .340 hitter over 120 games of a line with no slate', mlbWith('CF', { games: 120, avg: 0.34 }), 'avg_330', true],
+    ['a .340 hitter over 119 games of a line with no slate', mlbWith('CF', { games: 119, avg: 0.34 }), 'avg_330', false],
+    ['a starter on 1.90 over 12 starts of 2020', mlbWith('SP', { games: 12, slate: 60, era: 1.9 }), 'era_200', true],
+    ['a starter on 1.90 over 7 starts of 2020', mlbWith('SP', { games: 7, slate: 60, era: 1.9 }), 'era_200', false],
+    ['a starter on 1.90 over 19 starts of a line with no slate', mlbWith('SP', { games: 19, era: 1.9 }), 'era_200', false],
+    ['a starter on 1.90 over 20 starts of a 163 game season', mlbWith('SP', { games: 20, slate: 163, era: 1.9 }), 'era_200', true],
+    ['a .931 goalie over 30 games of the 48 of 2012-13', nhlWith('G', { games: 30, slate: 48, svpct: 0.931 }), 'svpct_930', true],
+    ['a .931 goalie over 23 games of the 48 of 2012-13', nhlWith('G', { games: 23, slate: 48, svpct: 0.931 }), 'svpct_930', false],
+    ['a .931 goalie over 39 games of an 84 game season', nhlWith('G', { games: 39, slate: 84, svpct: 0.931 }), 'svpct_930', false],
+    ['a .931 goalie over 40 games of a line with no slate', nhlWith('G', { games: 40, svpct: 0.931 }), 'svpct_930', true],
+  ];
+  for (const [what, ids, id, want] of CASES) check('E9a', ids.includes(id) === want, `${what} ${want ? 'does not earn' : 'earns'} the badge ${id}`);
+
+  const SUSPENDED = [['mlb', 2020, 'BOS', 60], ['mlb', 2020, 'DET', 58], ['mlb', 2026, 'NYY', 161], ['mlb', 2026, 'BOS', undefined], ['mlb', 2019, 'BOS', undefined], ['nhl', 2026, 'BOS', 84], ['nhl', 2031, 'BOS', 84], ['nhl', 2012, 'BOS', 48], ['nhl', 2011, 'BOS', undefined], ['nhl', 2019, 'ATL', undefined]];
+  for (const [sport, year, team, want] of SUSPENDED) {
+    const c = sport === 'mlb' ? M.startMlbCareer('Ledger Check', 'CF', M.MLB_ARCHETYPES.CF[0], mulberry(79), null, year < 2026 ? 'y2004' : undefined) : N.startNhlCareer('Ledger Check', 'C', N.NHL_ARCHETYPES.C[0], mulberry(79), null, year < 2026 ? 'y2006' : undefined);
+    c.year = year; c.team = team;
+    const line = (sport === 'mlb' ? game.MLB_CAREER_SPORT : game.NHL_CAREER_SPORT).suspendedLine(c);
+    check('E9b', line.games === 0 && line.teamResult === 'SUSPENDED' && line.slate === want && ('slate' in line) === (want !== undefined) && S.slateOf(sport, line) === (want ?? S.US_ENGINE_SEASON[sport]),
+      `the suspended ${sport.toUpperCase()} ${year} season of ${team} is saved with the length ${line.slate}; ${want ?? 'none (the engine own season)'} expected`);
+  }
+}
+
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
 {
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -604,11 +1054,13 @@ const OWN_MLB_DIVISIONS = {
 
   /* The season lengths. */
   const mlbOdd = mlb.MLB_SEASONS.filter(r => r.games !== 162).map(r => `${r.year} (${r.games})`);
-  if (readsLedger(mlbSrc)) notes.push('MLB engine: it reads a length ledger now. Read gamesFor again before trusting the notes below.');
+  const noId = mlb.MLB_SEASONS.flatMap(r => r.clubs.map(g => [r.year, g.clubs.length - g.ids.length])).filter(x => x[1] > 0);
+  if (mlbSrc.includes("seasonLength('mlb', c.year, c.team)")) notes.push(`MLB engine: it reads its season length from the ledger by year and club (Round 1226, src/lib/usSeasonShape.ts). What it still plays on the schedule's own length: ${noId.reduce((t, x) => t + x[1], 0)} club seasons the ledger names that no list of the game holds under that name that year (${noId.map(x => x[0]).join(', ')}: no club is mapped across a move or a rename), and a pitcher keeps the engine's 32 starts or 62 to 71 appearances and gives way only to a season too short to hold them.`);
   else if (mlbSrc.includes('155 + Math.floor(rng() * 8)')) notes.push(`MLB engine: a healthy hitter plays 155 to 162 games in every year (gamesFor), and it reads no length ledger. The ledger: the schedule was not 162 in ${mlbOdd.join(', ')}, and ${mlb.MLB_SEASONS.filter(r => r.clubs.some(g => g.games !== r.games)).length} seasons hold a club that did not play its schedule's length.`);
   else notes.push('MLB engine: the line that draws a hitter games count has moved; this note could not be made.');
   const nhlOdd = nhl.NHL_SEASONS.filter(r => r.games !== 82).map(r => `${r.year} (${r.games === null ? 'no single length' : r.games})`);
-  if (readsLedger(nhlSrc)) notes.push('NHL engine: it reads a length ledger now. Read gamesFor again before trusting the notes below.');
+  const nhlUnheld = NHL_LISTS[0].teams.map(t => t.id).filter(id => !(id in nhl.NHL_2019_CLUB_GAMES));
+  if (nhlSrc.includes("seasonLength('nhl', c.year, c.team)")) notes.push(`NHL engine: it reads its season length from the ledger by year and club (Round 1226, src/lib/usSeasonShape.ts). What it still plays on its own ${ENGINE_OWN} games: the 2019-20 season of a club the ledger does not hold under the game's id (${nhlUnheld.join(', ')} of the 2006 list: that season has no single length, and no club is mapped across a move or a rename). A goalie keeps the engine's 58 to 67 starts and gives way only to a season too short to hold them.`);
   else if (nhlSrc.includes('79 + Math.floor(rng() * 4)')) notes.push(`NHL engine: a healthy skater plays 79 to 82 games in every year (gamesFor), and it reads no length ledger. The ledger: the season was not 82 in ${nhlOdd.join(', ')}. So the engine plays more than the real season in 2012, 2019 and 2020, and at most 82 of the 84 from 2026.`);
   else notes.push('NHL engine: the line that draws a skater games count has moved; this note could not be made.');
   if (nhlSrc.includes('games / 82')) notes.push('NHL engine: a skater production is scaled by games / 82 (simNhlSeason), and the season paper counts missed games from 82 (src/lib/nhlCareerLoop.ts). Both are the 82 game season.');
@@ -626,15 +1078,17 @@ const OWN_MLB_DIVISIONS = {
     }
     return out;
   };
+  /* The years are read from the windows, never typed: a note may not contradict the data it describes. */
+  const yearsOf = round => mlb.MLB_FIRST_ROUND.filter(w => w.round === round).map(w => (w.to === null ? `from ${w.from}` : w.from === w.to ? `${w.from}` : `${w.from} to ${w.to}`)).join(' and ');
   const mlbWords = (mlbSrc.match(/const stages = \[([^\]]*)\]/) ?? [])[1] ?? '';
   const nhlWords = (nhlSrc.match(/const stages = \[([^\]]*)\]/) ?? [])[1] ?? '';
   const say = (sport, words, rows) => rows.map(r => `stage ${r.stage} saves ${r.counts[0]} to ${r.counts[r.counts.length - 1]} games, the real rounds hold ${r.lo} to ${r.hi}: ${r.bad} percent cannot fit`).join('; ');
-  notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
+  const mlbAsks = mlbSrc.includes("playoffRunGames('mlb', c.year, depth, rng)");
+  if (mlbAsks) notes.push(`MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from ${mlb.MLB_PLAYOFF_FORMAT.from} every run fits its rounds, the wild card of ${yearsOf('Wild Card Game')} is one game, and no Wild Card result is written in ${yearsOf(null)}. What it still plays by its own law, because the ledger does not hold the length: every round after the first before ${mlb.MLB_PLAYOFF_FORMAT.from}${mlb.MLB_FIRST_ROUND.some(w => w.wildCard && w.series === null) ? `, and the Wild Card Series of ${mlb.MLB_FIRST_ROUND.filter(w => w.wildCard && w.series === null).map(w => w.from).join(', ')}` : ''} (MLB_THIN); a lost World Series there keeps the 13 to 19 games the engine always gave it. It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.`);
+  else notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
   const npf = nhl.NHL_PLAYOFF_FORMAT;
   notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; what the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} must source it first or draw none.`);
-  /* The years are read from the windows, never typed: a note may not contradict the data it describes. */
-  const yearsOf = round => mlb.MLB_FIRST_ROUND.filter(w => w.round === round).map(w => (w.to === null ? `from ${w.from}` : w.from === w.to ? `${w.from}` : `${w.from} to ${w.to}`)).join(' and ');
   if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in ${yearsOf(null)}, one game in ${yearsOf('Wild Card Game')}, a series only in ${yearsOf('Wild Card Series')}; and the engine models no first round bye.`);
 
   /* The club outside the league. */

@@ -163,6 +163,25 @@
      8000 reads +3.6% [2.1, 5.5] here and +2.3% [0.8, 3.7] on Release AP's.
      NOT CHANGED, and the next to speak: the MLB's Hall share at 2000 a seed
      is +1.28 [-0.38, 2.95], 0.05 inside, on a tree no round has moved.
+     AND IT SPOKE, with Round 1226 (2026-10-10, MLB and NHL My Career on
+     the real season's length). The MLB's Hall share, on minus off, in
+     points, all on GitHub runners, the base being Release AT's gate tree:
+       the base, 2000 a seed, default seed    +1.28 [-0.38, 2.95]   inside by 0.05
+       the base, 2000 a seed, SIM_SEED=7      +1.87 [0.21, 3.53]    red
+       the base, 8000 a seed                  +1.89 [1.06, 2.72]    inside
+       this tree, 2000 a seed, default seed   +1.37 [-0.29, 3.03]   red by 0.03
+       this tree, 2000 a seed, SIM_SEED=7     +1.90 [0.24, 3.56]    red
+       this tree, 2000 a seed, SIM_SEED=11    +1.27 [-0.41, 2.94]   inside
+       this tree, 2000 a seed, SIM_SEED=13    +2.05 [0.39, 3.71]    red
+       this tree, 8000 a seed                 +1.88 [1.05, 2.72]    inside
+     So the lift is about 1.9 points on both trees and Round 1226 did not
+     move it (1.89 against 1.88 at 8000). At 2000 a seed the interval is
+     1.66 points either way against a bound of 3, so a run goes red
+     whenever its estimate passes 1.34, which is under the lift itself: the
+     base is red on one seed of two and this tree on three of four. MLB
+     runs 8000 a seed by default now (BAL_DEFAULT below, the same cure as
+     the NFL and the NBA, the bound untouched): 0.28 points inside, about
+     41 minutes for that child on a runner.
      6b on the summer loop: median career majors 0 in all four, a major
      ever won by 4.5, 16.9, 7.6 and 15.5 percent, Hall 15.1, 30.1, 32.0 and
      27.9 percent (floors: median 0, at most 25 percent, Hall at least 5).
@@ -671,7 +690,7 @@ const TOL = { peak: 1.0, legacyRel: 0.075, hofPts: 3, headlineRel: 0.15 };
    came up red on one run of five and 0.02 inside on another, on two trees
    (the header has the measurement). SIM_BALANCE_CAREERS still sets one size
    for every sport. */
-const BAL_DEFAULT = { nfl: 8000, nba: 8000 };
+const BAL_DEFAULT = { nfl: 8000, nba: 8000, mlb: 8000 };
 const balCareers = slug => Number(process.env.SIM_BALANCE_CAREERS || BAL_DEFAULT[slug] || 2000);
 const BAL_SIZES = Object.keys(SPORTS).map(slug => `${slug} ${balCareers(slug)}`).join(', ');
 const BAL_SEEDS = 3;

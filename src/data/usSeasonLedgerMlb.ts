@@ -333,21 +333,27 @@ export const MLB_PLAYOFF_FORMAT = {
    Almanac, "MLB Postseason Playoffs 1969 - 2026" (its eras: one wild card
    club to 2011, a wild card game 2012 to 2021, a wild card series from 2022,
    and a wild card series in 2020).
+   The series of 2020 was a best of three (filled in Round 1226's fix pass):
+   ESPN, the same report ("The 2020 postseason marked the debut of the
+   best-of-three wild-card series."), and CBS Sports, "MLB expands playoffs
+   to 16 teams for shortened 2020 season, adds best-of-three Wild Card
+   Series" (23 July 2020: "All first-round games will be part of
+   best-of-three series.").
    A null means one of two things here, and `wildCard` says which:
    - `wildCard: false`: the season had NO wild card round, so there is no
      `round` and no `series` to hold (2004 to 2011: for 2004 and for 2011
      Baseball Almanac lists the Division Series, the League Championship
      Series and the World Series and no wild card round).
    - `wildCard: true` with `series: null`: the round was played and its
-     length is a number only one source gave (2020: MLB_THIN). */
+     length is a number only one source gave (no window today). */
 export const MLB_FIRST_ROUND: readonly { from: number; to: number | null; round: string | null; clubs: number; series: readonly [number, number] | null; wildCard: boolean }[] = [
   { from: 2004, to: 2011, round: null, clubs: 8, series: null, wildCard: false },
   { from: 2012, to: 2019, round: 'Wild Card Game', clubs: 10, series: [1, 1], wildCard: true },
-  { from: 2020, to: 2020, round: 'Wild Card Series', clubs: 16, series: null, wildCard: true },
+  { from: 2020, to: 2020, round: 'Wild Card Series', clubs: 16, series: [2, 3], wildCard: true },
   { from: 2021, to: 2021, round: 'Wild Card Game', clubs: 10, series: [1, 1], wildCard: true },
   { from: 2022, to: null, round: 'Wild Card Series', clubs: 12, series: [2, 3], wildCard: true },
 ];
-export const MLB_FIRST_ROUND_SRC: readonly string[] = ['espn-wildcard', 'almanac-postseason', 'cbs-2022-playoffs'];
+export const MLB_FIRST_ROUND_SRC: readonly string[] = ['espn-wildcard', 'almanac-postseason', 'cbs-2022-playoffs', 'cbs-2020-playoffs'];
 
 /** The first season with no tiebreaker game: a 163rd game was how two clubs
  *  level for a place were split until then. CBS Sports, "2022 MLB playoffs:
@@ -424,9 +430,9 @@ export const MLB_THIN: readonly { what: string; oneSource: string; tried: string
     tried: 'The league glossary refused the reader; a dictionary page refused the reader; the explainers a search found were not publishers this ledger would cite.',
   },
   {
-    what: 'The 2020 Wild Card Series as a best of three, and the Division Series as a best of five before 2022.',
-    oneSource: 'ESPN gives the best of five for 1995 to 2011. The best of three of 2020 is in src/lib/mlbPostseasonFormatHistory.ts from a CBS Sports report that was not read again today.',
-    tried: 'Baseball Almanac names the rounds of every season and gives no lengths.',
+    what: 'How long the Division Series, the League Championship Series and the World Series were before 2022.',
+    oneSource: 'The Division Series as a best of five: ESPN for 1995 to 2011, and Baseball Almanac, "MLB Division Series History (1981-2026)" ("The Divisional Series is a best-of-five series", no years given). The League Championship Series as a best of seven: the same Baseball Almanac page ("In 1985, the format was changed to a best-of-seven contest, where it has remained to this day."). The World Series: nothing read.',
+    tried: 'A year by year second source for 2012 to 2021 and any source for the World Series were not gathered; the league site did not answer the reader. So a career before 2022 plays those rounds by the law the engine always had (src/lib/usSeasonShape.ts).',
   },
   {
     what: 'The league and the season length of the Yomiuri Giants.',

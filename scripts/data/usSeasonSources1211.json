@@ -239,6 +239,12 @@
       "url": "https://www.cbssports.com/mlb/news/2022-mlb-playoffs-schedule-format-and-rules-for-the-expanded-postseason", "read": "2026-10-10",
       "says": ["The field expands from 10 teams to 12.", "The two division winners with the best records in each league are rewarded with a first-round bye.", "The best-of-three Wild Card Series will be played on three consecutive days.", "straight to the best-of-five Division Series", "With the addition of the Wild Card Series this year, MLB has done away with Game 163 tiebreakers.", "In past years, teams with identical records that tied for a division crown or playoff spot squared off in an extra game to break the tie."]
     },
+    "cbs-2020-playoffs": {
+      "sport": "mlb", "seasons": [2020], "group": "cbs", "publisher": "CBS Sports (Dayn Perry and R.J. Anderson)", "title": "MLB expands playoffs to 16 teams for shortened 2020 season, adds best-of-three Wild Card Series", "published": "2020-07-23",
+      "url": "https://www.cbssports.com/mlb/news/mlb-expands-playoffs-to-16-teams-for-shortened-2020-season-adds-best-of-three-wild-card-series/", "read": "2026-10-10",
+      "says": ["All first-round games will be part of best-of-three series.", "The 'Wild Card Series' will all take place between Sept. 29 and Oct. 2."],
+      "note": "Read in Round 1226's fix pass for the length of the 2020 Wild Card Series. It gives no length for the rounds after it."
+    },
     "nbcboston-2022-playoffs": {
       "sport": "mlb", "group": "nbc", "publisher": "NBC Sports Boston (Kristen Conti)", "title": "How to watch MLB postseason, bracket, new format explained", "published": "2022-09-08",
       "url": "https://www.nbcsportsboston.com/mlb/boston-red-sox/how-to-watch-mlb-postseason-bracket-new-format-explained/204905", "read": "2026-10-10",
@@ -247,7 +253,7 @@
     "espn-wildcard": {
       "sport": "mlb", "group": "espn", "publisher": "ESPN (Keith Jenkins)", "title": "How does MLB wild card work? Format, history, stats", "published": "2025-09-25",
       "url": "https://www.espn.com/mlb/story/_/id/46358337/mlb-wild-card-format-history-records-facts-stats", "read": "2026-10-10",
-      "says": ["Since 2022, three teams in each league earn a wild-card spot, bringing the total number of playoff teams to 12", "MLB introduced the wild card in 1995 along with the realignment of three divisions per league.", "a single wild-card team in each league earned a postseason berth ... played the team with the league's best record in a best-of-five series (1995 to 2011)", "A second wild-card team was added to each league in 2012, and the two clubs began the postseason with a one-game playoff.", "During the COVID-19 pandemic in 2020, the postseason field was expanded to 16 total teams (eight per league)", "The postseason format reverted to two wild-card teams in each league facing off in a single-game playoff in 2021"]
+      "says": ["Since 2022, three teams in each league earn a wild-card spot, bringing the total number of playoff teams to 12", "MLB introduced the wild card in 1995 along with the realignment of three divisions per league.", "a single wild-card team in each league earned a postseason berth ... played the team with the league's best record in a best-of-five series (1995 to 2011)", "A second wild-card team was added to each league in 2012, and the two clubs began the postseason with a one-game playoff.", "During the COVID-19 pandemic in 2020, the postseason field was expanded to 16 total teams (eight per league)", "The 2020 postseason marked the debut of the best-of-three wild-card series.", "The postseason format reverted to two wild-card teams in each league facing off in a single-game playoff in 2021"]
     },
     "almanac-postseason": {
       "sport": "mlb", "group": "almanac", "publisher": "Baseball Almanac", "title": "MLB Postseason Playoffs 1969 - 2026",
