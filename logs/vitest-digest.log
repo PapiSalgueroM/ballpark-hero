@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreScreens.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3421[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mdraws every screen exactly as the base did [33m 1075[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a group label changed moves a recorded screen [33m 635[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the halfway line changed moves a recorded screen [33m 390[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the first tile's label changed moves a recorded screen [33m 420[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a review note changed moves a recorded screen [33m 446[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the help's footnote changed moves a recorded screen [33m 451[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 53120[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 53119[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 00:02:35
+[2m   Duration [22m 57.92s[2m (transform 4.18s, setup 393ms, collect 8.11s, tests 56.59s, environment 2.14s, prepare 1.46s)[22m
+

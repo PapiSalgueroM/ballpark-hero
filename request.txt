@@ -1,0 +1,8 @@
+# Round 1212 steps 1 to 3 (first cut): the number file compiles, the engine's draws did not move
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts src/test/usSeasonCentreScreens.test.tsx --testTimeout=300000 --hookTimeout=300000
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

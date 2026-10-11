@@ -1,0 +1,7 @@
+vitest-digest exit=0 58s |    Duration  57.92s (transform 4.18s, setup 393ms, collect 8.11s, tests 56.59s, environment 2.14s, prepare 1.46s)
+simUsBoardParity exit=0 62s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simMlbCareer exit=0 20s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+seam-compare exit=0 28s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+simUsSeasonLedger exit=0 5s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+tsc exit=0 95s | 
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
