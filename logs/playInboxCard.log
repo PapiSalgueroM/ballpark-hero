@@ -1,0 +1,11 @@
+inbox 320px normal: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 320px reduced: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 390px normal: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 390px reduced: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 430px normal: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 430px reduced: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 1440px normal: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+inbox 1440px reduced: all8 retained IDs, pending/resolved/search/reset, exact real-engine reply effects and both focus paths passed; max overflow 0px; zero interaction writes/errors.
+playInboxCard: all eight viewport/motion cases pass with complete saved copy and 44px controls; original input order and reply identity retained.
+playInboxCard: production card/CSS unchanged, no account or remote writes, zero interaction save writes; all temporary source copies are owned.
+playInboxCard: owned temporary files, headless browser and localhost server cleaned.
