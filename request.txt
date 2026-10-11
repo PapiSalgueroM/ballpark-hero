@@ -1,0 +1,11 @@
+# Release AW fix pass 3, finding 4: playSeasonCentreMotion B1i (the same order arriving mid flight)
+#!serve
+#!playwright
+#!serial
+b1i: ONLY=B1i node scripts/playSeasonCentreMotion.mjs
+b1i-samecut: SEASON_MOTION_CONTROL=samecut ONLY=B1i node scripts/playSeasonCentreMotion.mjs
+b1i-count: SEASON_MOTION_CONTROL=count ONLY=B1i node scripts/playSeasonCentreMotion.mjs
+partB-samecut: SEASON_MOTION_CONTROL=samecut ONLY=B1,B2,B3,B4 node scripts/playSeasonCentreMotion.mjs
+b1i-on-main: git worktree add -q /tmp/mainb feb919f1 && cp scripts/playSeasonCentreMotion.mjs /tmp/mainb/scripts/playSeasonCentreMotion.mjs && ln -s "$PWD/node_modules" /tmp/mainb/node_modules && cp -r dist /tmp/mainb/dist && cd /tmp/mainb && ONLY=B1i node scripts/playSeasonCentreMotion.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+gitclean: test -z "$(git status --porcelain --untracked-files=no)" && echo clean

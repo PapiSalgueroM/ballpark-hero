@@ -1,0 +1,6 @@
+tables from node: 414 table seasons in the probe, five used: Probe 0 2000 Juventus (34); Probe 9 1997 Atletico Madrid (38); Probe 14 2035 Inter Milan (38); Probe 28 2018 Inter Milan (38); Probe 34 2011 Bayern Munich (34)
+ok   B1i. a flight was in the air when the second table landed in 38 of 40 cases (floor half)
+ok   B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (0 bad starts, 0 bad ends, 0 leftovers; largest start deviation 0.000 px)
+ok   B1i. the same order came again with a flight in the air in 38 of 40 cases (floor half; 0 of them are two tables of the season itself, the rest table k + 1 handed in twice)
+ok   B1i. the same order arriving mid flight starts nothing: the first flight is left alone, still begins where table k had its rows and ends in place, nothing left (0 cut or restarted, 0 bad starts, 0 bad ends, 0 leftovers; largest start deviation 0.000 px)
+playSeasonCentreMotion: 4 checks, 0 failed (only B1i)
