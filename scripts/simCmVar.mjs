@@ -46,7 +46,17 @@ const clone = value => JSON.parse(JSON.stringify(value));
    by review stay OFF: the ledger's open entry penalties-total holds the switch, and this harness is red when the
    engine is outside the band and that entry is gone (control penaltyband), or inside it with the entry still there.
    About 630 league matches in 4,000 have a review and about 240 end with another result than the same match
-   without reviews. */
+   without reviews.
+   Round 1302, what the run review measured and this header did not know (no band was moved for it: the default
+   seeds are fixed, so nothing here is a coin toss today, and it becomes one only if those seeds or a rate move).
+   Three more fleets (seeds 301 to 306, 501 to 506, 901 to 906; runner result r1302-run-a) gave goals ruled out
+   0.0788 0.0735 0.0644. Over the ten fleets on record the mean is 0.0760 and the standard deviation 0.0058, so the
+   LOW edge of the goals band (0.0611) lies 2.6 standard deviations under the mean, not the 3.5 said above (that was
+   seven fleets). Whoever next moves a rate or the default seeds measures the band again on more fleets first.
+   And the penalty band's headroom (0.20) is the other bands', not one measured for that quantity: without reviews
+   the engine sits at 0.3597 to 0.3821 a match against the band's top of 0.3979, a margin of 4 percent that is
+   printed on every run and not asserted. It decides nothing while penalties-total is open; the day somebody
+   closes that entry, that margin has to be measured on several fleets before it is trusted. */
 const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.20, goalGap: 0.05, scoredShare: 0.10 };
 const BASE = 'c33d013965aa33b87f5db23e2ca270be6fcd977c';
 /** One seeded stretch on a fixed clock: the fleet's own function (scripts/lib/cmVarFleet.mjs), under the name the walk imports. */

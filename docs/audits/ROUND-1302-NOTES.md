@@ -61,25 +61,55 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
 - Rows the lead may want to look at: both MLS rows and the Australia Cup stand on the organiser's or the
   referees' body's own page plus one outside report; the MLS outside report speaks of the season by its date
   and match, not in print (the same judgment as the Saudi row of Round 1218).
+- The Copa do Brasil's stage (from the round of 16) stood on one filed source that names a phase. The read
+  review found the federation's own page of a video review in a round of 16 tie of the 2026 cup (cbf.com.br,
+  published 2026-08-05, Remo against Santos, the second leg); it is on the row since the fix, read again that
+  day. The third source on the row names no round and the stage does not stand on it.
+- What the read review said of the sources and is NOT mended (each says what the ledger says; the weakness is
+  how independent the two are): the MLS outside report is an aggregator's rewrite; the Brasileirão's two are
+  rewrites of one federation release, and Greece's are two write ups of one seminar (the ledger's fourth rule
+  counts such a pair once, so a strict reader would call both rows one source short); Ligue 2's two newspapers
+  were read on sites that carry them; the Saudi row's second source names the opening round, not the season.
+  And the unknown rows had one search each: the DFB-Pokal note says nobody names the video assistant, and the
+  reviewer's one search found two regional papers that do (from the second round on), nearly word for word the
+  same, so probably one agency text, which still leaves that row one source short.
 
 ## 4. The review screen
 
 - **The case the reviewer saw** (seed 2042 of the opener: my goal at 44, theirs ruled out at 45) is kept as its
   own test in `src/test/clubManagerVarScreen.test.tsx`, played from before my goal to the whistle.
-- **A goal ruled out in the last two clock places of a period is drawn before its card** when it has the end of
-  the period to itself (no chance and no other ruled out goal from the place before it to the whistle):
-  `stagePitchInput` in `LiveSimScreen.tsx`, the `lateRoom` rule. At the whistle's own place the plan winds it up
-  to end at the whistle like any last kick; one place before, it is played on time. Where it shares those
-  places with a real chance it is still shown by its card alone: a goal that counts for nothing must not take
-  the pitch from one that is real.
+- **Every goal a review rules out is drawn before its card** (the fix that followed the round's two reviews;
+  until then 10 of the 23 late ones a scan found, and every one that shared its clock place with a real chance,
+  were a card on its own). Where the plan has room it plays on the clock, as Round 1218 built it. Where it has
+  none (a real chance has its clock place, or it falls in the last two places of a period) the match clock
+  STOPS for it: the goal is played out from the frame on the screen, its card opens with the ball in the net,
+  and the clock goes on when the card closes. `LiveSimScreen.tsx`, "the stoppage". The plan never stages it
+  there, so nothing real is moved, shortened or left out for a goal that counts for nothing.
+- **When the clock stops for it:** at the first instant from its own place on at which nothing else is playing
+  (ahead of a real last kick that is just before the wind up, one clock place before the minute the card
+  prints). When real chances run back to back to the whistle, or the goal is at the whistle's own place, it
+  stops AT the whistle: the last real action is over and counted, the ruled out goal is played and reviewed,
+  and the period ends when the card closes.
+- **What that corner did before, and the reviews found:** with no free instant the card opened 0.05 before the
+  whistle on whatever was there. League match 2 of the fresh Everton career, seed 42322: a card that said "goal
+  ruled out" for an Aston Villa goal sat on Everton's own real goal in Villa's net at 1 - 0, and the half then
+  ended 2 - 0. Seeds 2219, 4670 and 6203: the card sat on the last picture of a real shot or save. All four are
+  cases of the screen test now, with a fifth for the stop just before a real last kick (seed 1987).
+- **The rule of the first build of this round (`lateRoom`: a late goal staged in the plan when it had the end of
+  the period to itself) is gone.** The stoppage does the same job with the card at the minute it prints (the
+  staged one opened one or two clock places early), and the mutations of it the run review tried cannot be
+  written any more. What they did (my real shot at 45+3 dropped so the ruled out goal could be the last kick,
+  seed 6203) is held by the test: with a late goal staged in the plan again it fails.
 - **Played for the first time**, each on a real half: an own goal the minute after a ruled out goal; a review
   in the same minute as the other side's injury, red card and (in a second half) substitution; a review in
-  extra time (only a Champions League knockout tie plays extra time: Arsenal's quarter final second leg).
-- **What the engine does not hold**, so nobody can play it: two reviews in one minute, or in back to back
-  minutes (none in 7,500 first and 7,500 second halves searched).
-- **Still shown by its card alone:** a ruled out goal that shares its clock place with a real chance, at any
-  minute (the pitch plays one action a place, and the real one has it), and one in the last two places of a
-  period that shares them with a real chance or the last kick (10 of the 23 late ones a scan found).
+  extra time (only a Champions League knockout tie plays extra time: a fresh Arsenal career walked to the
+  second leg of its first knockout tie); and the two late goals with reduced motion.
+- **What the engine does not hold**, so nobody can play it on a real half: two reviews in one minute, or in
+  back to back minutes (none in 7,500 first and 7,500 second halves searched). By reading: one review at a
+  time, each ruled out goal drawn before its own card, the second after the first has closed.
+- **Not this round's, and live today with VAR off** (the run review measured it on halves with no review): a
+  real goal in the last clock place of a first half is drawn and counted and never gets its scorer card, and of
+  two goals in the last two places only one is drawn. For the Club Manager lane's list.
 
 ## 5. What holds it
 
@@ -92,8 +122,14 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
 - `scripts/simCmVar.mjs`: Round 1218's outcomes, and in the bands the season total of penalties (control
   `penaltyband`; a caught control exits 0 and prints CAUGHT in this harness). Its coverage outcome reads the
   ledger, so the twelve new yes rows needed no hand there.
-- `src/test/clubManagerVarScreen.test.tsx`: 21 cases on real halves of the engine on the shipped rates.
-- `scripts/playCmVar.mjs`: 31 cases and 2 help views at 390 and 1280 on a LIT build (it exits 2 on a dark one).
+- `src/test/clubManagerVarScreen.test.tsx`: 28 cases on real halves of the engine on the shipped rates. Under
+  the card of a ruled out goal it asks for the ball in the net THAT goal went into (the rule it had, "a goal
+  stopped in a net", passed a card on somebody's real goal), and under any other card for no action at all.
+- `scripts/playCmVar.mjs`: 40 cases and 2 help views at 390 and 1280 on a LIT build (it exits 2 on a dark one),
+  with the same look under every card and the page's position read inside the page at every change.
+- `scripts/simLiveSimMotion.mjs`: its `redraw` control anchors on a statement this round put over two lines, and
+  its `pause` control on the clock's guard, which gained `reviewEvent` when the review screen was merged (dead
+  on main since then) and `stopped` in the fix. Both anchors follow the code again and both controls fire.
 
 ## 6. For whoever turns VAR on
 
@@ -105,3 +141,17 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
    kind to be zero, which the generator does not write today (both kinds are derived or neither).
 3. Then the switch commit of Round 1218's closing fix (`origin/r1218-cm-var-switch`, three files), the What's
    New entry reworded for 28 competitions, and the lit walk on the plain build.
+4. Still open on the screen, none of it reachable while the switch is off:
+   - A review in a second half and one in extra time are held by the jsdom test only. The lit walk plays first
+     halves. Two reviews in one minute are played nowhere (the engine gave none in 15,000 halves).
+   - A penalty a review GIVES at the very end of a half whose last places real chances fill has not been looked
+     at the way the ruled out goals were: its one case ("a review at the very end of a crowded half is still
+     shown once") asks that the card comes once and the half ends on the engine's score, not what is under it.
+   - A ruled out goal one place before a real last kick is played just before the wind up, so its card (say
+     45+3') opens with the clock one place earlier (LIVE 45+2'). In order, and one label early.
+5. The bands of `scripts/simCmVar.mjs`, for whoever next moves a rate or the default seeds. Goals ruled out:
+   the band is 0.0611 to 0.0979 a match, and over the ten fleets on record the mean is 0.0760 and the standard
+   deviation 0.0058, so the low edge is 2.6 of those under the mean (a fleet on seeds 901 to 906 gave 0.0644),
+   not the 3.5 the harness header says. The penalty band's headroom (0.20) is the other bands', not measured
+   for penalties: without reviews the engine is at 0.3597 to 0.3821 against a top of 0.3979, a margin of 4
+   percent that is printed and not asserted. Neither decides anything while the default seeds stand.
