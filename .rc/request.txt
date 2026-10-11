@@ -1,0 +1,27 @@
+# Release AW closing pass, final proof P-CM1: ruling C2: Club Manager readers that are no gate line, part 1 (plain build, three at a time)
+#!build
+#!playwright
+simAcademy: node scripts/simAcademy.mjs
+simApproaches: node scripts/simApproaches.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simBoard: node scripts/simBoard.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simBooks: node scripts/simBooks.mjs
+simCalendar: node scripts/simCalendar.mjs
+simCalendarCurrentDate: node scripts/simCalendarCurrentDate.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
+simClubManagerFacilities: node scripts/simClubManagerFacilities.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+simContractPreview: node scripts/simContractPreview.mjs
