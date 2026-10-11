@@ -365,12 +365,34 @@ export interface WorldCupResult {
 /* ─── Ballon d'Or System ───
    Round 834: the night's shape is the shared one in careerAwardsNight.ts. A
    nominee is a shared candidate plus what the soccer card shows. */
+interface GeneratedBallonCandidate {
+  id: number;
+  role: "primary" | "filler";
+  slot: number;
+  seed: number;
+  firstYear: number;
+  entryAge: number;
+  retiredYear: number | null;
+  name: string;
+  nationality: string;
+  position: string;
+  club: string;
+  baseGoals: [number, number];
+}
+interface GeneratedBallonPool {
+  version: 1;
+  year: number;
+  nextId: number;
+  entries: GeneratedBallonCandidate[];
+}
 export interface BallonDorNominee extends AwardsCandidate {
   nationality: string;
   club: string;
   position: string;
   goals: number;
   trophies: string[];
+  generatedId?: number;
+  generatedAge?: number;
 }
 
 /** playerRank: 1-10 if nominated, 11-30 in the wider world ranking, else null. */
@@ -1005,6 +1027,7 @@ export interface CareerState {
   // Ballon d'Or & Awards
   awards: Award[];
   pendingBallonDor: BallonDorResult | null;
+  generatedBallonPool?: GeneratedBallonPool;
   lastUCLResult: UCLResult | null;
   // Retirement & Legacy
   legacy: LegacyResult | null;
@@ -7033,7 +7056,7 @@ const GEN_POSITIONS: Array<{ pos: string; goals: [number, number] }> = [
   { pos: "CAM", goals: [8, 22] }, { pos: "CM", goals: [4, 14] }, { pos: "CDM", goals: [2, 8] }, { pos: "CB", goals: [1, 5] },
 ];
 
-function generateContender(usedNames: Set<string>, seed: number): RealContender {
+function generateContender(usedNames: Set<string>, seed: number, startAge = rand(19, 28)): RealContender {
   const nat = GEN_NATIONALITIES[(seed * 7 + 3) % GEN_NATIONALITIES.length];
   /* Round 197: names come from the guarded pools now. The loop still walks
      until it finds one this career has not used, so two contenders never
@@ -7047,7 +7070,7 @@ function generateContender(usedNames: Set<string>, seed: number): RealContender 
   if (!name) name = `${intlName(nat, seed)} Jr.`;
   const p = GEN_POSITIONS[(seed * 11) % GEN_POSITIONS.length];
   const club = GEN_CLUBS[(seed * 13 + 2) % GEN_CLUBS.length];
-  return { name, nationality: nat, position: p.pos, club, baseGoals: p.goals, startAge: rand(19, 28) };
+  return { name, nationality: nat, position: p.pos, club, baseGoals: p.goals, startAge };
 }
 const TOP_6_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool"];
 const LEAGUE_CLUBS: Record<string, string[]> = {
@@ -7170,6 +7193,38 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const usedNames = new Set<string>([state.playerName]);
   if (state.rival) usedNames.add(state.rival.name);
 
+  const previousPool = state.generatedBallonPool;
+  let generatedPool: GeneratedBallonPool | undefined;
+  if (previousPool) {
+    generatedPool = {
+      ...previousPool, year,
+      entries: previousPool.entries.map(entry => ({
+        ...entry, baseGoals: [...entry.baseGoals] as [number, number],
+        retiredYear: entry.retiredYear === null && entry.entryAge + year - entry.firstYear >= 37 ? entry.firstYear + 37 - entry.entryAge : entry.retiredYear,
+      })),
+    };
+    state.generatedBallonPool = generatedPool;
+  }
+  const generatedContender = (role: GeneratedBallonCandidate["role"], slot: number, initialSeed: number) => {
+    // Consume the existing generated-call age draw; save only the entry age.
+    const entryAge = rand(19, 28);
+    generatedPool ??= { version: 1, year, nextId: 0, entries: [] };
+    const pool = generatedPool;
+    let entry = pool.entries.find(row => row.role === role && row.slot === slot && row.retiredYear === null);
+    if (!entry) {
+      const seed = pool.entries.some(row => row.role === role && row.slot === slot) ? 9900 + pool.nextId : initialSeed;
+      const reserved = new Set([...usedNames, ...pool.entries.map(row => row.name)]);
+      const { startAge, ...profile } = generateContender(reserved, seed, entryAge);
+      const baseName = profile.name;
+      let suffix = 1;
+      while (reserved.has(profile.name)) profile.name = baseName + " " + suffix++;
+      entry = { ...profile, baseGoals: [...profile.baseGoals] as [number, number], id: pool.nextId++, role, slot, seed, firstYear: year, entryAge: startAge, retiredYear: null };
+      pool.entries.push(entry);
+    }
+    state.generatedBallonPool = pool;
+    return { ...entry, generatedId: entry.id, generatedAge: entry.entryAge + year - entry.firstYear };
+  };
+
   const allNomineeData: BallonDorNominee[] = [];
   if (eraCount > 0) {
     for (const star of eraStars.slice(0, eraCount)) {
@@ -7197,7 +7252,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   if (generatedCount > 0) {
     // A stable guarded pool recurs across years as its simulated seasons change.
     for (let i = 0; i < generatedCount; i++) {
-      const gen = generateContender(usedNames, 9900 + i);
+      const gen = generatedContender("primary", i, 9900 + i);
       if (usedNames.has(gen.name)) continue;
       usedNames.add(gen.name);
       const goals = rand(gen.baseGoals[0], gen.baseGoals[1]);
@@ -7210,6 +7265,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       allNomineeData.push({
         name: gen.name, nationality: gen.nationality, position: gen.position,
         club: gen.club, points: pts, goals, trophies, isPlayer: false,
+        generatedId: gen.generatedId, generatedAge: gen.generatedAge,
       });
     }
   }
@@ -7333,12 +7389,14 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     fill: (shortlist, need) => {
       let fillerSeed = 0;
       while (shortlist.length < need && fillerSeed < 20) {
-        const gen = generateContender(usedNames, year * 31 + fillerSeed++);
+        const slot = fillerSeed++;
+        const gen = generatedContender("filler", slot, year * 31 + slot);
         if (usedNames.has(gen.name)) continue;
         usedNames.add(gen.name);
         shortlist.push({
           name: gen.name, nationality: gen.nationality, position: gen.position,
           club: gen.club, points: rand(30, 50), goals: rand(5, 15), trophies: [], isPlayer: false,
+          generatedId: gen.generatedId, generatedAge: gen.generatedAge,
         });
       }
     },
