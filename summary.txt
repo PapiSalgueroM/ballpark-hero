@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+b1i exit=0 14s | playSeasonCentreMotion: 4 checks, 0 failed (only B1i)
+b1i-samecut exit=1 14s | playSeasonCentreMotion: 4 checks, 1 failed (control samecut) (only B1i)
+b1i-count exit=1 14s | playSeasonCentreMotion: 4 checks, 2 failed (control count) (only B1i)
+partB-samecut exit=0 43s | playSeasonCentreMotion: 12 checks, 0 failed (control samecut) (only B1,B2,B3,B4)
+b1i-on-main exit=0 14s | playSeasonCentreMotion: 4 checks, 0 failed (only B1i)
+playSeasonCentreMotion exit=0 135s | playSeasonCentreMotion: 80 checks, 0 failed
+gitclean exit=0 0s | clean
