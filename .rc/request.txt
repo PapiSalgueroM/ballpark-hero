@@ -1,0 +1,6 @@
+# Release AW part one: the Season Centre motion walk again, alone (one timing check, B1i, was red once in rAW-P-H2b; the train touches nothing of that screen)
+#!serve
+#!playwright
+#!serial
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playSeasonCentreMotion-second: node scripts/playSeasonCentreMotion.mjs
