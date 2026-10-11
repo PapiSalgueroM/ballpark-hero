@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Round 1303 review (run lens), request F on the final head: the page weights again on a build of this runner (the builder left 0.2K of room on /club-manager), the review walk refusing a dark build, and the fence against the literal true in the fast forward.
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/sweepWeight.log"; grep -a -i "club-manager" /tmp/w.log | cut -c1-260 | head -12; tail -2 /tmp/w.log | cut -c1-300; echo "sweepWeight exit $s"; exit $s
+playCmVar-dark: node scripts/playCmVar.mjs > /tmp/vd.log 2>&1; s=$?; tail -2 /tmp/vd.log | cut -c1-260; echo "playCmVar on the dark build exit $s (2 is the refusal it must give)"
+m-fftrue: node .rc/x/mut.mjs fftrue && { node scripts/simCmVarLedger.mjs > /tmp/m9.log 2>&1; a=$?; git checkout -- src scripts; echo "MUT fftrue: ledger exit $a | $(grep -a "^FAIL" /tmp/m9.log | head -1 | cut -c1-220)"; }
+clean: git status --short | grep -v "^??" | wc -l
