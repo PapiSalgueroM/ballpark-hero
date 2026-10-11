@@ -1,0 +1,17 @@
+# Round 1306 head 5f1313aa (engine and pages as on ecb69867), served: the walks that drive Club Manager's own screens and read no engine source; a red one is run again on the base c9a1f86a in the same line
+#!serve
+#!playwright
+#!serial
+playEra2005: bash .rc/x/walkBoth.sh playEra2005
+playEra2010: bash .rc/x/walkBoth.sh playEra2010
+playEra2015: bash .rc/x/walkBoth.sh playEra2015
+playEra2020: bash .rc/x/walkBoth.sh playEra2020
+playNationJob: bash .rc/x/walkBoth.sh playNationJob
+playReleaseClause: bash .rc/x/walkBoth.sh playReleaseClause
+playSponsors: bash .rc/x/walkBoth.sh playSponsors
+playWilderness: bash .rc/x/walkBoth.sh playWilderness
+playNationalities: bash .rc/x/walkBoth.sh playNationalities
+playDealDesk: bash .rc/x/walkBoth.sh playDealDesk
+playCmLeagueFixtures: bash .rc/x/walkBoth.sh playCmLeagueFixtures
+sweepSaves: bash .rc/x/walkBoth.sh sweepSaves
+playReducedMotion: bash .rc/x/walkBoth.sh playReducedMotion

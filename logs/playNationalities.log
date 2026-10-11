@@ -1,0 +1,32 @@
+1) Take the Newcastle job and reach the market
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Newcastle")').first()
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playNationalities.mjs:64:62 {
+  log: [ `  - waiting for locator('button:has-text("Newcastle")').first()` ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
+=== walkBoth: playNationalities is RED on the head (exit 1). The same walk on the base c9a1f86a:
+1) Take the Newcastle job and reach the market
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Newcastle")').first()
+
+    at /tmp/b-c9a1f86a/scripts/playNationalities.mjs:64:62 {
+  log: [ `  - waiting for locator('button:has-text("Newcastle")').first()` ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
+=== walkBoth: playNationalities head exit 1, base exit 1

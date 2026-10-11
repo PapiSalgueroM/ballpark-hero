@@ -1,0 +1,14 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playEra2005 exit=1 116s | === walkBoth: playEra2005 head exit 1, base exit 1
+playEra2010 exit=1 77s | === walkBoth: playEra2010 head exit 1, base exit 1
+playEra2015 exit=1 84s | === walkBoth: playEra2015 head exit 1, base exit 1
+playEra2020 exit=1 89s | === walkBoth: playEra2020 head exit 1, base exit 1
+playNationJob exit=1 77s | === walkBoth: playNationJob head exit 1, base exit 1
+playReleaseClause exit=1 76s | === walkBoth: playReleaseClause head exit 1, base exit 1
+playSponsors exit=1 75s | === walkBoth: playSponsors head exit 1, base exit 1
+playWilderness exit=1 75s | === walkBoth: playWilderness head exit 1, base exit 1
+playNationalities exit=1 75s | === walkBoth: playNationalities head exit 1, base exit 1
+playDealDesk exit=0 14s | playDealDesk: green. The desk opens, the meter reads the typed number, the fee table hands off to the terms table without signing anybody, and meeting his terms closes it
+playCmLeagueFixtures exit=0 93s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), one with its list three seconds late and 7 of the review's (two takeovers
+sweepSaves exit=0 409s | sweepSaves: green. Every save on the site survives being garbage.
+playReducedMotion exit=0 45s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
