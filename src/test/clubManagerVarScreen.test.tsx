@@ -25,10 +25,15 @@
  * Round 1302 added, each on a real half a scan on a runner found (result r1302-scan and r1302-scan4):
  *   the case the reviewer saw on seed 2042 (my goal at 44, theirs ruled out at 45), kept as its own case: it fails
  *     on the screen Release AT shipped with "the review opened before its own minute: expected 44";
- *   a goal ruled out at the whistle or one clock place before it is DRAWN before its card when it has the end of
- *     the half to itself (it was a card on its own until this round);
+ *   a goal ruled out at the whistle or one clock place before it is DRAWN before its card (it was a card on its
+ *     own until this round), with motion and with reduced motion, and the card opens at the minute it prints;
  *   an own goal the minute after a ruled out goal; a review in the same minute as the other side's injury, red
  *     card and (in a second half) substitution; a review in extra time (a Champions League knockout night).
+ * The fix of Round 1302 (after its two reviews) added THE STOPPAGE and its cases: a ruled out goal the plan has no
+ * room for (a real chance has its clock place, or it falls in the last two places of a period) is played with the
+ * clock stopped, right before its card. So every ruled out goal is drawn, and `nothingUnder` now asks for exactly
+ * that under its card: the ball in the net THAT goal went into. Five shapes of a half whose end real chances fill
+ * are played on the halves the review found them on (league match 2, seeds 42322, 6203, 4670, 2219 and 1987).
  * Not here because the engine does not hold them: two reviews in one minute or in back to back minutes (none in
  * 7,500 first and 7,500 second halves).
  */
@@ -100,7 +105,9 @@ const awardedAlone = (how: 'scored' | 'saved') => (feed: LiveFeedEvent[], live: 
 
 /* ---- the screen, frame by frame ---- */
 type Frame = {
-  ms: number; stage: string; minute: number; score: string; motion: string | null; phase: string | null; net: boolean; ball: string | null;
+  ms: number; stage: string; minute: number; plus: number; score: string; motion: string | null; phase: string | null; net: boolean; ball: string | null;
+  /** Which goal the ball is in: 'top' is the opposition's net (the one I attack), 'bottom' is mine. */
+  netAt: 'top' | 'bottom' | null;
   card: string | null; cardId: string | null; cardText: string; goalCard: string | null; celebrating: boolean; text: string;
 };
 function snap(c: HTMLElement, ms: number): Frame {
@@ -108,10 +115,11 @@ function snap(c: HTMLElement, ms: number): Frame {
   const pitch = c.querySelector('[data-cm-live-pitch]');
   const card = c.querySelector('[data-cm-var]');
   return {
-    ms, stage: root.getAttribute('data-cm-live-stage')!, minute: Number(root.getAttribute('data-cm-live-minute')),
+    ms, stage: root.getAttribute('data-cm-live-stage')!, minute: Number(root.getAttribute('data-cm-live-minute')), plus: Number(root.getAttribute('data-cm-live-plus') ?? 0),
     score: c.querySelector('[data-cm-live-score]')!.textContent!.trim(),
     motion: pitch?.getAttribute('data-cm-motion') ?? null, phase: pitch?.getAttribute('data-cm-motion-phase') ?? null,
     net: !!c.querySelector('[data-cm-net="goal"]'), ball: c.querySelector('[data-cm-ball]')?.getAttribute('style') ?? null,
+    netAt: c.querySelector('.cm-live-net--top[data-cm-net="goal"]') ? 'top' : c.querySelector('.cm-live-net--bottom[data-cm-net="goal"]') ? 'bottom' : null,
     card: card?.getAttribute('data-cm-var') ?? null, cardId: card?.getAttribute('data-cm-var-id') ?? null, cardText: card?.textContent ?? '',
     goalCard: c.querySelector('[data-cm-goal-card]')?.textContent ?? null,
     celebrating: !!c.querySelector('[data-cm-actor-pose="celebrate"]'), text: c.textContent ?? '',
@@ -147,6 +155,35 @@ const closedFor = (id: string, ms: number) => (frames: Frame[]) => {
 };
 const scoreBy = (feed: LiveFeedEvent[], pos: number) => ['me', 'opp'].map(side => feed.filter(e => e.kind === 'goal' && e.side === side && place(e) <= pos).length).join(' - ');
 const clubOf = (h: Half, v: LiveFeedEvent) => (v.side === 'me' ? h.career.clubName : h.live.opponent);
+/** The net each ruled out goal went into, by its review: a goal of mine goes in the top net, one of theirs in the bottom one. */
+const ruledOutIds = (feed: LiveFeedEvent[]) => new Map(reviewsOf(feed).filter(r => r.review!.decision === 'disallowed').map(r => [r.review!.id, r.side === 'me' ? 'top' : 'bottom'] as const));
+/**
+ * While a review card is up nothing else is. No goal card. Under the card of a ruled out goal the pitch shows that
+ * goal and nothing else: its ball stopped in the net it went into. Every ruled out goal is drawn before its card
+ * (Round 1302: on the clock where the plan has room, with the clock stopped where it has none), so a quiet pitch
+ * under such a card is a goal that was not drawn, and a ball in the OTHER net is somebody's real goal with a card
+ * that says "goal ruled out" on top of it (the review of Round 1302 saw exactly that on league match 2, seed 42322,
+ * and the rule as it was, "a goal stopped in a net", could not tell the two apart). Under any other card (a
+ * penalty a review gives) there is no action at all.
+ */
+function nothingUnder(frames: Frame[], nets: Map<string, 'top' | 'bottom'>) {
+  for (const f of frames.filter(cardUp)) {
+    expect(f.goalCard, `a goal card under the review card at ${f.ms} ms`).toBeNull();
+    const own = nets.get(f.cardId!);
+    if (own) expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `what the pitch shows under the card of a ruled out goal at ${f.ms} ms`).toBe(`goal/net in the ${own} net`);
+    else expect(`${f.motion}/${f.phase}`, `an action under the review card at ${f.ms} ms`).toBe('pass/pass');
+  }
+}
+/** Each review's id in the order its card came up. */
+const order = (frames: Frame[]) => frames.map(f => f.cardId).filter((id, i, all): id is string => id !== null && id !== all[i - 1]);
+/** The actions the pitch played, in order: each starts with its man planting his foot. */
+function actionRuns(frames: Frame[]): { kind: string; from: number }[] {
+  const runs: { kind: string; from: number }[] = [];
+  frames.forEach((f, i) => {
+    if (f.phase === 'plant' && f.motion && (i === 0 || frames[i - 1].phase !== 'plant' || frames[i - 1].motion !== f.motion)) runs.push({ kind: f.motion, from: i });
+  });
+  return runs;
+}
 
 describe('Club Manager: the review screen', () => {
   it('a goal a review rules out is drawn first, and its review opens with the ball in the net', async () => {
@@ -202,13 +239,10 @@ describe('Club Manager: the review screen', () => {
     const goalCards = frames.map((f, i) => (f.goalCard !== null ? i : -1)).filter(i => i >= 0);
     expect(goalCards.length, 'the goal of the minute before never got its card').toBeGreaterThan(0);
     expect(Math.max(...goalCards)).toBeLessThan(first);
-    for (const f of frames.filter(cardUp)) {
-      /* While a review card is up: the earlier goal is on the score, no goal card is under it, and the only
-         action on the pitch is the reviewed goal itself, stopped in the net. */
-      expect(f.score, `the score under the review card at ${f.ms} ms`).toBe(withGoal);
-      expect(f.goalCard, `a goal card under the review card at ${f.ms} ms`).toBeNull();
-      expect(f.motion === 'pass' || (v.review!.decision === 'disallowed' && f.motion === 'goal' && f.phase === 'net'), `an action in flight under the review card at ${f.ms} ms: ${f.motion} ${f.phase}`).toBe(true);
-    }
+    /* While a review card is up: the earlier goal is on the score, no goal card is under it, and the only
+       action on the pitch is the reviewed goal itself, stopped in its own net. */
+    for (const f of frames.filter(cardUp)) expect(f.score, `the score under the review card at ${f.ms} ms`).toBe(withGoal);
+    nothingUnder(frames, ruledOutIds(h.feed));
   }, 120000);
 
   /* Round 1302. THE ONE THE REVIEWER SAW (review-run of Round 1218, seed 2042 of the opener): my goal at 44', a
@@ -235,10 +269,10 @@ describe('Club Manager: the review screen', () => {
     expect(frames[first].minute, 'the review opened before its own minute').toBeGreaterThanOrEqual(45);
     for (const f of frames.filter(cardUp)) {
       expect(f.score, `the score under the review card at ${f.ms} ms`).toBe(withMine);
-      expect(f.goalCard, `a goal card under the review card at ${f.ms} ms`).toBeNull();
-      expect(f.motion === 'pass' || (f.motion === 'goal' && f.phase === 'net'), `an action in flight under the review card at ${f.ms} ms: ${f.motion} ${f.phase}`).toBe(true);
       expect(f.cardText).toContain(`${v.text}, ${h.live.opponent}, 45'`);
     }
+    /* Under the card: their ruled out goal in MY net, never my real goal of the minute before in theirs. */
+    nothingUnder(frames, ruledOutIds(h.feed));
     /* Their goal was drawn before its card (the ball went in), and the half ends on the engine score. */
     expect(frames.slice(0, first).some(f => f.motion === 'goal' && f.phase === 'flight' && f.goalCard === null && f.score === withMine), 'the ruled out goal was not drawn before its review').toBe(true);
     expect(whistle, 'the half never ended, or ended under the review card').toBeGreaterThan(frames.map(cardUp).lastIndexOf(true));
@@ -292,16 +326,6 @@ describe('Club Manager: the review screen', () => {
     expect(frames.some(f => f.goalCard !== null)).toBe(false);
   }, 120000);
 
-  /** While a review card is up nothing else is: no goal card, and no action but a ruled out goal stopped in its net. */
-  function nothingUnder(frames: Frame[], ruledOut: Set<string>) {
-    for (const f of frames.filter(cardUp)) {
-      expect(f.goalCard, `a goal card under the review card at ${f.ms} ms`).toBeNull();
-      expect(f.motion === 'pass' || (ruledOut.has(f.cardId!) && f.motion === 'goal' && f.phase === 'net'), `an action in flight under the review card at ${f.ms} ms: ${f.motion} ${f.phase}`).toBe(true);
-    }
-  }
-  const order = (frames: Frame[]) => frames.map(f => f.cardId).filter((id, i, all): id is string => id !== null && id !== all[i - 1]);
-  const ruledOutIds = (feed: LiveFeedEvent[]) => new Set(reviewsOf(feed).filter(r => r.review!.decision === 'disallowed').map(r => r.review!.id));
-
   it('two reviews in one half each get their own card, in turn', async () => {
     const h = half(0, 2453, feed => {
       const all = reviewsOf(feed);
@@ -343,7 +367,7 @@ describe('Club Manager: the review screen', () => {
     expect(order(again)).toEqual([id]);
     expect(again[0].score).toBe(scoreBy(h.feed, place(v) - 1));
     expect(again[again.length - 1].score).toBe(scoreBy(h.feed, place(v)));
-    nothingUnder(again, new Set());
+    nothingUnder(again, new Map());
   }, 120000);
 
   it('reduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion', async () => {
@@ -375,9 +399,9 @@ describe('Club Manager: the review screen', () => {
     const quiet = !feed.some(e => isChance(e) && place(e) >= whistle - 3 && !(e.side === r.side && place(e) === place(r) && e.text === r.text));
     return quiet === quietEnd ? r : null;
   };
-  async function toTheWhistle(h: Half) {
+  async function toTheWhistle(h: Half, maxMs = 22000) {
     const mounted = openAt(h, 44.2);
-    const frames = await run(mounted, 22000, fs => fs[fs.length - 1].stage === 'interval');
+    const frames = await run(mounted, maxMs, fs => fs[fs.length - 1].stage === 'interval');
     const last = frames.map(cardUp).lastIndexOf(true), whistle = frames.findIndex(f => f.stage === 'interval');
     expect(order(frames), 'the review was not shown exactly once').toEqual([h.review.review!.id]);
     expect(whistle, 'the half never ended, or ended under the review card').toBeGreaterThan(last);
@@ -388,24 +412,28 @@ describe('Club Manager: the review screen', () => {
 
   it('a penalty a review gives in the last minute of a half is still played before the whistle', async () => {
     const { frames, last, whistle } = await toTheWhistle(half(1, 2340, lastMinutes('awarded', true)));
-    nothingUnder(frames, new Set());
+    nothingUnder(frames, new Map());
     expect(frames[last].cardText).toContain('VAR: penalty awarded');
     expect(frames.slice(last + 1, whistle).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the kick was not played out before the whistle').toBe(true);
     expect(frames.slice(last + 1, whistle).some(f => f.motion === 'goal' && f.phase === 'net'), 'the ball was not in before the whistle').toBe(true);
   }, 120000);
 
-  /* Round 1302: a goal ruled out in the last two clock places of a half is DRAWN before its card when it has the
-     end of the half to itself (lastMinutes(.., true) asks for that). At the whistle's own place it is wound up to
-     end at the whistle, like any last kick; one place before, it is played on time. Round 1218 left both to a
-     card on its own: this case failed there on "the ruled out goal was not drawn before its review". */
-  it.each([
+  /* Round 1302: a goal ruled out in the last two clock places of a half is DRAWN before its card. The plan has no
+     room that is certain for it there, so the match clock stops for it (the stoppage, see LiveSimScreen.tsx): one
+     place before the whistle at its own place, and at the whistle's own place at the whistle, which then waits
+     for the goal and its review. Either way the card opens at the minute it prints. These two have the end of the
+     half to themselves (lastMinutes(.., true) asks for that). Round 1218 left both to a card on its own: this case
+     failed there on "the ruled out goal was not drawn before its review". */
+  const quietLate = (back: number) => (feed: LiveFeedEvent[], live: LiveMatch) => {
+    const r = lastMinutes('disallowed', true)(feed, live);
+    return r && place(r) === 45 + (live.added?.h1 ?? 0) - back ? r : null;
+  };
+  const LATE = [
     { where: 'at the whistle', hint: 1984, back: 0 },
     { where: 'one clock place before the whistle', hint: 2591, back: 1 },
-  ])('a goal ruled out $where is drawn before its card, and its review closes before the half ends', async ({ hint, back }) => {
-    const h = half(1, hint, (feed, live) => {
-      const r = lastMinutes('disallowed', true)(feed, live);
-      return r && place(r) === 45 + (live.added?.h1 ?? 0) - back ? r : null;
-    });
+  ];
+  it.each(LATE)('a goal ruled out $where is drawn before its card, at its own minute, and its review closes before the half ends', async ({ hint, back }) => {
+    const h = half(1, hint, quietLate(back));
     const { frames, last } = await toTheWhistle(h);
     const first = frames.findIndex(cardUp);
     nothingUnder(frames, ruledOutIds(h.feed));
@@ -414,9 +442,85 @@ describe('Club Manager: the review screen', () => {
     expect(frames[first].motion).toBe('goal');
     expect(frames[first].phase).toBe('net');
     expect(frames[first].net).toBe(true);
+    expect(frames[first].minute + frames[first].plus, 'the clock under the card is not at the minute the card prints').toBe(place(h.review));
     /* The goal counts for nothing: the score under the card and at the whistle is the score before it. */
     expect(new Set(frames.slice(first).map(f => f.score)), 'the score moved with the ruled out goal').toEqual(new Set([scoreBy(h.feed, h.whistle)]));
   }, 180000);
+
+  /* The same two with reduced motion, which nobody had played (the review of Round 1302). Nothing moves: the goal
+     shows as its last picture, the card opens on it at its own minute, and the half ends after the card. */
+  it.each(LATE)('reduced motion, a goal ruled out $where: the card opens at its own minute on the ball in the net', async ({ hint, back }) => {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ ...original(query), matches: true }));
+    const h = half(1, hint, quietLate(back));
+    const { frames } = await toTheWhistle(h);
+    const first = frames.findIndex(cardUp), up = frames.filter(cardUp);
+    nothingUnder(frames, ruledOutIds(h.feed));
+    expect(frames[first].minute + frames[first].plus, 'the clock under the card is not at the minute the card prints').toBe(place(h.review));
+    expect(new Set(up.map(f => f.ball)).size, 'the ball moved under the card').toBe(1);
+    expect(new Set(frames.slice(first).map(f => f.score)), 'the score moved with the ruled out goal').toEqual(new Set([scoreBy(h.feed, h.whistle)]));
+  }, 180000);
+
+  /* Round 1302 fix (the two reviews of the round). The end of a half that real chances FILL. The pitch plays one
+     action a clock place and winds the last kick up under the place before it, so a goal ruled out there has no
+     room on the clock. It used to be a card alone, and where the chances ran back to back to the whistle that
+     card opened 0.05 before it on whatever was there: on my own real goal in THEIR net with the score not moved
+     yet (league match 2, seed 42322: "goal ruled out" on a goal that then counted), or on the last picture of a
+     real shot or save (seeds 2219, 4670, 6203). Now the clock stops for the ruled out goal and nothing real gives
+     way to it. Each row is one shape of that corner, on the half the review found it on:
+       every real chance of the end of the half is played, whole, in its order (so no shot is dropped to make
+         room: with the ruled out goal staged in the plan at the whistle, seed 6203 loses my shot at 45+3);
+       the ruled out goal is the action right before its card, and under the card the ball is in ITS OWN net;
+       no goal lands on the score after the card unless an action was played after it. */
+  type LateShape = { r: LiveFeedEvent; whistle: number; real: LiveFeedEvent[] };
+  const lateRuledOut = (shape: (x: LateShape) => boolean) => (feed: LiveFeedEvent[], live: LiveMatch) => {
+    const whistle = 45 + (live.added?.h1 ?? 0), shown = reviewsOf(feed).filter(v => place(v) >= 44), r = shown[0];
+    if (shown.length !== 1 || r.review!.decision !== 'disallowed' || place(r) < whistle - 1) return null;
+    return shape({ r, whistle, real: feed.filter(e => isChance(e) && place(e) >= 44) }) ? r : null;
+  };
+  const at = (x: LateShape, back: number) => x.real.some(e => place(e) === x.whistle - back);
+  /** The real chances of the end of a half that the pitch plays, in order, by its own two rules (scene.ts): one
+   *  action a clock place (of two lines the later), and nothing the place before a last kick (its wind up is there). */
+  function playedReal(h: Half, from: number): LiveFeedEvent[] {
+    const chances = h.feed.filter(e => isChance(e) && place(e) >= from && place(e) <= h.whistle);
+    const lastKick = chances.some(e => place(e) === h.whistle);
+    const byPlace = new Map<number, LiveFeedEvent>();
+    for (const e of chances) if (!(lastKick && place(e) === h.whistle - 1)) byPlace.set(place(e), e);
+    return [...byPlace.values()].sort((a, b) => place(a) - place(b));
+  }
+  it.each([
+    { what: 'a real goal is the last kick after it and no instant is free before the wind up', hint: 42322, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
+    { what: 'it is at the whistle and a real chance is one place before it', hint: 6203, shape: (x: LateShape) => place(x.r) === x.whistle && !at(x, 0) && at(x, 1) },
+    { what: 'a real chance has its own place, one before the whistle', hint: 4670, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) },
+    { what: 'it is at the whistle and so is a real last kick', hint: 2219, shape: (x: LateShape) => place(x.r) === x.whistle && at(x, 0) },
+    { what: 'a real last kick follows it and the pitch is free before the wind up', hint: 1987, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
+  ])('a goal ruled out at the end of a half that real chances fill ($what): it is drawn, in its own net, and nothing real gives way', async ({ hint, shape }) => {
+    const h = half(1, hint, lateRuledOut(shape));
+    const v = h.review;
+    const { frames, last, whistle } = await toTheWhistle(h, 40000);
+    const first = frames.findIndex(cardUp);
+    nothingUnder(frames, ruledOutIds(h.feed));
+    expect(frames[last].cardText).toContain('VAR: goal ruled out');
+    /* The ruled out goal is the action right before the card: wound up, struck, in. */
+    const runs = actionRuns(frames.slice(0, whistle));
+    const before = runs.filter(r => r.from < first), own = before[before.length - 1];
+    expect(own?.kind, 'the action right before the card').toBe('goal');
+    expect(frames.slice(own.from, first).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the ruled out goal was not drawn before its review').toBe(true);
+    /* Every real chance of the end of the half was played, in order, and each to its last picture. */
+    const real = runs.filter(r => r !== own);
+    expect(real.map(r => r.kind), 'the real chances the pitch played from 45 on').toEqual(playedReal(h, 45).map(e => e.kind));
+    for (const r of real) {
+      const next = runs[runs.indexOf(r) + 1]?.from ?? whistle;
+      expect(frames.slice(r.from, next).some(f => f.phase === 'wide' || f.phase === 'caught' || f.phase === 'net'), `the real ${r.kind} that started at ${frames[r.from].ms} ms was cut before its end`).toBe(true);
+    }
+    /* The card is not early: at its own minute, or one clock place before it when a real last kick has the rest. */
+    const lastKick = h.feed.some(e => isChance(e) && place(e) === h.whistle);
+    expect(frames[first].minute + frames[first].plus, 'the review opened before its own minute').toBeGreaterThanOrEqual(place(v) - (lastKick && place(v) < h.whistle ? 1 : 0));
+    /* The score does not move under the card, and no goal lands on it afterwards unless an action was played after. */
+    expect(new Set(frames.slice(first, last + 1).map(f => f.score)).size, 'the score moved under the review card').toBe(1);
+    if (!runs.some(r => r.from > last)) expect(frames[first].score, 'a goal counted after the card with nothing played in between').toBe(scoreBy(h.feed, h.whistle));
+    console.info(`clubManagerVarScreen: the crowded end was found on seed ${h.seed}, whistle ${h.whistle}, review at ${place(v)}, card at ${frames[first].minute + frames[first].plus}, played ${runs.map(r => r.kind).join(' ')}`);
+  }, 240000);
 
   it('a review at the very end of a crowded half is still shown once, and the half ends on the engine score', async () => {
     await toTheWhistle(half(0, 2483, lastMinutes('awarded', false)));
@@ -455,10 +559,10 @@ describe('Club Manager: the review screen', () => {
     { what: 'injury', match: 0, hint: 3861, says: 'Injury: ', shared: true },
     { what: 'red', match: 1, hint: 3827, says: 'RED CARD! ', shared: false },
   ] as const)("a review in the same minute as the other side's $what (a chance at the same place: $shared): both are told, and the card sits over nothing", async ({ what, match, hint, says, shared }) => {
-    /* A ruled out goal is drawn when it has its clock place to itself. Where a real chance shares the place the
-       pitch plays the real one (one action a place) and the review is shown by its card alone: the opener holds
-       such a half on seed 3861 (a shot of mine, their goal ruled out and my injury, all at 15). That row is
-       played too, and is not asked to draw the ruled out goal. */
+    /* A ruled out goal with its clock place to itself is played on the clock. Where a real chance shares the place
+       the plan plays the real one (one action a place), and the ruled out goal is played with the clock stopped,
+       right before its card (the stoppage): the opener holds such a half on seed 3861 (a shot of mine, their goal
+       ruled out and my injury, all at 15). Until the fix of Round 1302 that row was a card on its own. */
     const sharesPlace = (feed: LiveFeedEvent[], r: LiveFeedEvent) => r.review!.decision === 'disallowed' && feed.some(e => isChance(e) && place(e) === place(r));
     const h = half(match, hint, feed => {
       const all = reviewsOf(feed), r = all[0];
@@ -473,7 +577,13 @@ describe('Club Manager: the review screen', () => {
     nothingUnder(frames, ruledOutIds(h.feed));
     expect(frames.some(f => f.text.includes(`${says}${other.text}`)), `the ${what} of the same minute was never told`).toBe(true);
     const last = frames.map(cardUp).lastIndexOf(true), kick = kickOf(h.live, v);
-    if (v.review!.decision === 'disallowed' && !shared) expect(frames.slice(0, frames.findIndex(cardUp)).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the ruled out goal was not drawn before its review').toBe(true);
+    if (v.review!.decision === 'disallowed') expect(frames.slice(0, frames.findIndex(cardUp)).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the ruled out goal was not drawn before its review').toBe(true);
+    /* The real chance that shares its place is not lost to it: it is played too. */
+    if (shared) {
+      const chance = h.feed.filter(e => isChance(e) && place(e) === place(v)).pop()!;
+      const played = actionRuns(frames).filter(r => r.kind === chance.kind).length;
+      expect(played, `the real ${chance.kind} of the same minute was not played beside the ruled out goal`).toBeGreaterThanOrEqual(chance.kind === 'goal' ? 2 : 1);
+    }
     /* Release AR's rule, beside a review: a penalty the review gives and that goes in keeps its net, its scorer card and its (P). */
     if (v.review!.decision === 'awarded' && kick?.goal) {
       const after = frames.slice(last + 1), card = after.find(f => f.goalCard !== null);

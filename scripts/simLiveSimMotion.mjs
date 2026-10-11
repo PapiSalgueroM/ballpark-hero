@@ -118,8 +118,9 @@ try {
     if (control === 'trigger') viewer = replace(viewer, 'setMotionEvent({ event: e, key, at: clock })', 'setMotionEvent(null)');
     if (control === 'save') motion = replace(motion, 'const event = action.event;', "const event = action.event.kind === 'save' ? { ...action.event, kind: 'goal' as const } : action.event;");
     /* Round 1302 fix: the clock's guard gained `reviewEvent` when the review screen was merged (Rounds 1179 to 1183),
-       and this control's anchor could never match again: it aborted, with the same exit code as a control that fires. */
-    if (control === 'pause') viewer = replace(viewer, 'if (paused || !running || finished || reviewEvent) { lastTs.current = null; return; }', 'if (!running || finished || reviewEvent) { lastTs.current = null; return; }');
+       and this control's anchor could never match again: it aborted, with the same exit code as a control that fires.
+       It gained `stopped` in the same fix (the stoppage a ruled out goal is played in), and the anchor follows. */
+    if (control === 'pause') viewer = replace(viewer, 'if (paused || !running || finished || reviewEvent || stopped) { lastTs.current = null; return; }', 'if (!running || finished || reviewEvent || stopped) { lastTs.current = null; return; }');
     if (control === 'mutation') viewer = replace(viewer, 'firedRef.current.add(key);', "firedRef.current.add(key); if (e.kind === 'goal' && liveNow) liveNow.myGoals += 1;");
     if (control === 'lineup') motion = replace(motion, '&& samePlayers(action.scene.mine, scene.mine) && samePlayers(action.scene.theirs, scene.theirs)', '&& true');
     if (control === 'speed') viewer = replace(viewer, 'c + dt * BASE_RATE * speed', 'c + dt * BASE_RATE');
