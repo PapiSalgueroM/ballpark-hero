@@ -1,0 +1,36 @@
+# Release AV proof, Round 1302 (VAR stays off): the ledger, the dark rule and its control, the daily deals with both controls
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+ledger-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+ledger-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+ledger-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+ledger-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+ledger-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+ledger-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+ledger-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+ledger-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+ledger-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+ledger-stage: CM_VAR_LEDGER_CONTROL=stage node scripts/simCmVarLedger.mjs
+ledger-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+ledger-unread: CM_VAR_LEDGER_CONTROL=unread node scripts/simCmVarLedger.mjs
+ledger-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+var-switch: grep -n "export const CM_VAR_LIVE" src/lib/clubManagerVarLive.ts && grep -c "export const CM_VAR_LIVE: boolean = false;" src/lib/clubManagerVarLive.ts
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=300000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=300000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+lm-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
+lm-etclear: LIVE_MOTION_CONTROL=etclear node scripts/simLiveSimMotion.mjs
+lm-hold: LIVE_MOTION_CONTROL=hold node scripts/simLiveSimMotion.mjs
+lm-lag: LIVE_MOTION_CONTROL=lag node scripts/simLiveSimMotion.mjs
+lm-lastkick: LIVE_MOTION_CONTROL=lastkick node scripts/simLiveSimMotion.mjs
+lm-pause: LIVE_MOTION_CONTROL=pause node scripts/simLiveSimMotion.mjs
+lm-redraw: LIVE_MOTION_CONTROL=redraw node scripts/simLiveSimMotion.mjs
+lm-skipmoment: LIVE_MOTION_CONTROL=skipmoment node scripts/simLiveSimMotion.mjs
+lm-speed: LIVE_MOTION_CONTROL=speed node scripts/simLiveSimMotion.mjs
+lm-terminal: LIVE_MOTION_CONTROL=terminal node scripts/simLiveSimMotion.mjs
+lm-trigger: LIVE_MOTION_CONTROL=trigger node scripts/simLiveSimMotion.mjs
+lm-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs
