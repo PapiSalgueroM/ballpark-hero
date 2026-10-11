@@ -1,0 +1,73 @@
+[
+  {
+    "label": "2010-11 Blackpool at 390 (reduced motion)",
+    "waits": 20,
+    "offers": [
+      {
+        "club": "Wolves",
+        "league": "Premier League",
+        "text": "WolvesPremier LeagueThey wanted someone who knows the country and the league.The brief: Stay up. That is the whole brief.Take the Wolves job"
+      }
+    ],
+    "took": "Wolves",
+    "now": "Wolves",
+    "oldSave": {
+      "stale": "Bournemouth",
+      "kept": "Almería",
+      "afterAWeek": [
+        "Almería"
+      ]
+    }
+  },
+  {
+    "label": "2005-06 Juventus at 1280",
+    "waits": 9,
+    "offers": [
+      {
+        "club": "Köln",
+        "league": "Bundesliga",
+        "text": "KölnBundesligaNobody else was interested at the money they are offering.The brief: Stay up. That is the whole brief.Take the Köln job"
+      },
+      {
+        "club": "West Ham",
+        "league": "Premier League",
+        "text": "West HamPremier LeagueThey wanted someone who knows the country and the league.The brief: Stay up. That is the whole brief.Take the West Ham job"
+      },
+      {
+        "club": "Ascoli",
+        "league": "Serie A",
+        "text": "AscoliSerie ANobody else was interested at the money they are offering.The brief: Stay up. That is the whole brief.Take the Ascoli job"
+      }
+    ],
+    "took": "Ascoli",
+    "now": "Ascoli",
+    "oldSave": {
+      "stale": "Bournemouth",
+      "kept": "Alavés",
+      "afterAWeek": [
+        "Alavés"
+      ]
+    }
+  },
+  {
+    "label": "2020-21 Sevilla at 390",
+    "waits": 20,
+    "offers": [
+      {
+        "club": "Köln",
+        "league": "Bundesliga",
+        "text": "KölnBundesligaNobody else was interested at the money they are offering.The brief: Stay up. That is the whole brief.Take the Köln job"
+      }
+    ],
+    "took": "Köln",
+    "now": "Köln",
+    "oldSave": {
+      "stale": "Bournemouth",
+      "kept": "Atlético Madrid",
+      "afterAWeek": [
+        "Atlético Madrid",
+        "Augsburg"
+      ]
+    }
+  }
+]

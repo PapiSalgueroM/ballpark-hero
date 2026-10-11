@@ -1,0 +1,72 @@
+BASE BUILD at 94647e741 Round 1304: the notes carry the defect's test, fix, what moved and the proof that nothing else did
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 26.72s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+== 2010-11 Blackpool at 390 (reduced motion)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the career is running (Blackpool, era2010)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the save was doctored to a sacked manager
+  PASS  2010-11 Blackpool at 390 (reduced motion): the out of work panel is on the screen
+  PASS  2010-11 Blackpool at 390 (reduced motion): it says he is out of work
+   after 20 weeks: Charlton Athletic (EFL Championship)
+  PASS  2010-11 Blackpool at 390 (reduced motion): a club rang (1 on the table)
+  FAIL  2010-11 Blackpool at 390 (reduced motion): every club that rang is a club of 2010-11 (Charlton Athletic of EFL Championship)
+  PASS  2010-11 Blackpool at 390 (reduced motion): every card prints that season's league (all of them)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the club that sacked him did not ring
+  PASS  2010-11 Blackpool at 390 (reduced motion): the out of work screen does not scroll sideways
+  PASS  2010-11 Blackpool at 390 (reduced motion): no "Take the job" button is cut short (none)
+  FAIL  2010-11 Blackpool at 390 (reduced motion): "Take the Charlton Athletic job" put him at Charlton Athletic (the save reads Blackpool, sacked false, season 2)
+  PASS  2010-11 Blackpool at 390 (reduced motion): his new club is a club of 2010-11
+  PASS  2010-11 Blackpool at 390 (reduced motion): the hub shows Charlton Athletic and the sacked screen is gone
+  PASS  2010-11 Blackpool at 390 (reduced motion): an old save's out of work screen was written, holding Bournemouth (today) and Almería (that season)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the old save opens showing both offers (Bournemouth, Almería)
+  FAIL  2010-11 Blackpool at 390 (reduced motion): taking the Bournemouth job did nothing (still out of work, the save reads Blackpool, sacked false)
+  FAIL  2010-11 Blackpool at 390 (reduced motion): the walk threw: TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-wait-week]')
+
+== 2005-06 Juventus at 1280
+  PASS  2005-06 Juventus at 1280: the career is running (Juventus, era2005)
+  PASS  2005-06 Juventus at 1280: the save was doctored to a sacked manager
+  PASS  2005-06 Juventus at 1280: the out of work panel is on the screen
+  PASS  2005-06 Juventus at 1280: it says he is out of work
+   after 20 weeks: Millwall (EFL Championship), Sheffield United (EFL Championship)
+  PASS  2005-06 Juventus at 1280: a club rang (2 on the table)
+  FAIL  2005-06 Juventus at 1280: every club that rang is a club of 2005-06 (Millwall of EFL Championship, Sheffield United of EFL Championship)
+  PASS  2005-06 Juventus at 1280: every card prints that season's league (all of them)
+  PASS  2005-06 Juventus at 1280: the club that sacked him did not ring
+  PASS  2005-06 Juventus at 1280: the out of work screen does not scroll sideways
+  PASS  2005-06 Juventus at 1280: no "Take the job" button is cut short (none)
+  FAIL  2005-06 Juventus at 1280: "Take the Sheffield United job" put him at Sheffield United (the save reads Juventus, sacked false, season 2)
+  PASS  2005-06 Juventus at 1280: his new club is a club of 2005-06
+  PASS  2005-06 Juventus at 1280: the hub shows Sheffield United and the sacked screen is gone
+  PASS  2005-06 Juventus at 1280: an old save's out of work screen was written, holding Bournemouth (today) and Alavés (that season)
+  PASS  2005-06 Juventus at 1280: the old save opens showing both offers (Bournemouth, Alavés)
+  FAIL  2005-06 Juventus at 1280: taking the Bournemouth job did nothing (still out of work, the save reads Juventus, sacked false)
+  FAIL  2005-06 Juventus at 1280: the walk threw: TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-wait-week]')
+
+== 2020-21 Sevilla at 390
+  PASS  2020-21 Sevilla at 390: the career is running (Sevilla, era2020)
+  PASS  2020-21 Sevilla at 390: the save was doctored to a sacked manager
+  PASS  2020-21 Sevilla at 390: the out of work panel is on the screen
+  PASS  2020-21 Sevilla at 390: it says he is out of work
+   after 20 weeks: Preston North End (EFL Championship)
+  PASS  2020-21 Sevilla at 390: a club rang (1 on the table)
+  FAIL  2020-21 Sevilla at 390: every club that rang is a club of 2020-21 (Preston North End of EFL Championship)
+  PASS  2020-21 Sevilla at 390: every card prints that season's league (all of them)
+  PASS  2020-21 Sevilla at 390: the club that sacked him did not ring
+  PASS  2020-21 Sevilla at 390: the out of work screen does not scroll sideways
+  PASS  2020-21 Sevilla at 390: no "Take the job" button is cut short (none)
+  FAIL  2020-21 Sevilla at 390: "Take the Preston North End job" put him at Preston North End (the save reads Sevilla, sacked false, season 2)
+  PASS  2020-21 Sevilla at 390: his new club is a club of 2020-21
+  PASS  2020-21 Sevilla at 390: the hub shows Preston North End and the sacked screen is gone
+  PASS  2020-21 Sevilla at 390: an old save's out of work screen was written, holding Bournemouth (today) and Atlético Madrid (that season)
+  PASS  2020-21 Sevilla at 390: the old save opens showing both offers (Bournemouth, Atlético Madrid)
+  FAIL  2020-21 Sevilla at 390: taking the Bournemouth job did nothing (still out of work, the save reads Sevilla, sacked false)
+  FAIL  2020-21 Sevilla at 390: the walk threw: TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-wait-week]')
+
+walkEraWild: 12 failure(s).
+walkEraWild on the base build 94647e7418: exit=1

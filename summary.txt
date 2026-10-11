@@ -1,0 +1,12 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkEraWild exit=0 82s | walkEraWild: green. A manager sacked in a past season is rung by that season, and the job he takes is the job he gets.
+playWilderness exit=0 18s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+playWilderness-nooffers exit=0 22s | playWilderness control nooffers: all 1 guarded checks fired (mutations landed: {"offerList":1})
+playEra2005 exit=0 11s | playEra2005: green. The 2005-06 branch plays like a person would find it.
+playEra2010 exit=0 6s | playEra2010: green. A person can walk into 2010 and find it real.
+playEra2015 exit=0 17s | playEra2015: green. The 2015-16 branch plays like a person would find it.
+playEra2020 exit=0 18s | playEra2020: green. The 2020-21 branch plays like a person would find it.
+sweepWeight exit=1 26s | sweepWeight: 1 failure
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playClubManager exit=1 73s | Played Club Manager through its own screens. 1 findings.
+walkEraWild-base exit=1 203s | walkEraWild on the base build 94647e7418: exit=1

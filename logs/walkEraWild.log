@@ -1,0 +1,67 @@
+== 2010-11 Blackpool at 390 (reduced motion)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the career is running (Blackpool, era2010)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the save was doctored to a sacked manager
+  PASS  2010-11 Blackpool at 390 (reduced motion): the out of work panel is on the screen
+  PASS  2010-11 Blackpool at 390 (reduced motion): it says he is out of work
+   after 20 weeks: Wolves (Premier League)
+  PASS  2010-11 Blackpool at 390 (reduced motion): a club rang (1 on the table)
+  PASS  2010-11 Blackpool at 390 (reduced motion): every club that rang is a club of 2010-11 (none of today)
+  PASS  2010-11 Blackpool at 390 (reduced motion): every card prints that season's league (all of them)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the club that sacked him did not ring
+  PASS  2010-11 Blackpool at 390 (reduced motion): the out of work screen does not scroll sideways
+  PASS  2010-11 Blackpool at 390 (reduced motion): no "Take the job" button is cut short (none)
+  PASS  2010-11 Blackpool at 390 (reduced motion): "Take the Wolves job" put him at Wolves (the save reads Wolves, sacked false, season 2)
+  PASS  2010-11 Blackpool at 390 (reduced motion): his new club is a club of 2010-11
+  PASS  2010-11 Blackpool at 390 (reduced motion): the hub shows Wolves and the sacked screen is gone
+  PASS  2010-11 Blackpool at 390 (reduced motion): an old save's out of work screen was written, holding Bournemouth (today) and Almería (that season)
+  PASS  2010-11 Blackpool at 390 (reduced motion): the old save opens showing both offers (Bournemouth, Almería)
+  PASS  2010-11 Blackpool at 390 (reduced motion): taking the Bournemouth job did nothing (still out of work, the save reads Wolves, sacked true)
+  PASS  2010-11 Blackpool at 390 (reduced motion): a week later the Bournemouth offer is gone (Almería)
+  PASS  2010-11 Blackpool at 390 (reduced motion): and the Almería offer is still there
+  PASS  2010-11 Blackpool at 390 (reduced motion): everything on the table is a club of 2010-11
+  PASS  2010-11 Blackpool at 390 (reduced motion): no page error (clean)
+== 2005-06 Juventus at 1280
+  PASS  2005-06 Juventus at 1280: the career is running (Juventus, era2005)
+  PASS  2005-06 Juventus at 1280: the save was doctored to a sacked manager
+  PASS  2005-06 Juventus at 1280: the out of work panel is on the screen
+  PASS  2005-06 Juventus at 1280: it says he is out of work
+   after 9 weeks: Köln (Bundesliga), West Ham (Premier League), Ascoli (Serie A)
+  PASS  2005-06 Juventus at 1280: a club rang (3 on the table)
+  PASS  2005-06 Juventus at 1280: every club that rang is a club of 2005-06 (none of today)
+  PASS  2005-06 Juventus at 1280: every card prints that season's league (all of them)
+  PASS  2005-06 Juventus at 1280: the club that sacked him did not ring
+  PASS  2005-06 Juventus at 1280: the out of work screen does not scroll sideways
+  PASS  2005-06 Juventus at 1280: no "Take the job" button is cut short (none)
+  PASS  2005-06 Juventus at 1280: "Take the Ascoli job" put him at Ascoli (the save reads Ascoli, sacked false, season 2)
+  PASS  2005-06 Juventus at 1280: his new club is a club of 2005-06
+  PASS  2005-06 Juventus at 1280: the hub shows Ascoli and the sacked screen is gone
+  PASS  2005-06 Juventus at 1280: an old save's out of work screen was written, holding Bournemouth (today) and Alavés (that season)
+  PASS  2005-06 Juventus at 1280: the old save opens showing both offers (Bournemouth, Alavés)
+  PASS  2005-06 Juventus at 1280: taking the Bournemouth job did nothing (still out of work, the save reads Ascoli, sacked true)
+  PASS  2005-06 Juventus at 1280: a week later the Bournemouth offer is gone (Alavés)
+  PASS  2005-06 Juventus at 1280: and the Alavés offer is still there
+  PASS  2005-06 Juventus at 1280: everything on the table is a club of 2005-06
+  PASS  2005-06 Juventus at 1280: no page error (clean)
+== 2020-21 Sevilla at 390
+  PASS  2020-21 Sevilla at 390: the career is running (Sevilla, era2020)
+  PASS  2020-21 Sevilla at 390: the save was doctored to a sacked manager
+  PASS  2020-21 Sevilla at 390: the out of work panel is on the screen
+  PASS  2020-21 Sevilla at 390: it says he is out of work
+   after 20 weeks: Köln (Bundesliga)
+  PASS  2020-21 Sevilla at 390: a club rang (1 on the table)
+  PASS  2020-21 Sevilla at 390: every club that rang is a club of 2020-21 (none of today)
+  PASS  2020-21 Sevilla at 390: every card prints that season's league (all of them)
+  PASS  2020-21 Sevilla at 390: the club that sacked him did not ring
+  PASS  2020-21 Sevilla at 390: the out of work screen does not scroll sideways
+  PASS  2020-21 Sevilla at 390: no "Take the job" button is cut short (none)
+  PASS  2020-21 Sevilla at 390: "Take the Köln job" put him at Köln (the save reads Köln, sacked false, season 2)
+  PASS  2020-21 Sevilla at 390: his new club is a club of 2020-21
+  PASS  2020-21 Sevilla at 390: the hub shows Köln and the sacked screen is gone
+  PASS  2020-21 Sevilla at 390: an old save's out of work screen was written, holding Bournemouth (today) and Atlético Madrid (that season)
+  PASS  2020-21 Sevilla at 390: the old save opens showing both offers (Bournemouth, Atlético Madrid)
+  PASS  2020-21 Sevilla at 390: taking the Bournemouth job did nothing (still out of work, the save reads Köln, sacked true)
+  PASS  2020-21 Sevilla at 390: a week later the Bournemouth offer is gone (Atlético Madrid, Augsburg)
+  PASS  2020-21 Sevilla at 390: and the Atlético Madrid offer is still there
+  PASS  2020-21 Sevilla at 390: everything on the table is a club of 2020-21
+  PASS  2020-21 Sevilla at 390: no page error (clean)
+walkEraWild: green. A manager sacked in a past season is rung by that season, and the job he takes is the job he gets.
