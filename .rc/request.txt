@@ -1,0 +1,15 @@
+# Release AU proof, the browser walk list part 3: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playLineupValidator: node scripts/playLineupValidator.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+playSoccerCareerAwardReveal: node scripts/playSoccerCareerAwardReveal.mjs
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
+playSoccerCareerContracts: node scripts/playSoccerCareerContracts.mjs
+playSoccerCareerDiscipline: node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerFamily: node scripts/playSoccerCareerFamily.mjs
+playSoccerCareerLeagueWorld: node scripts/playSoccerCareerLeagueWorld.mjs
+playSoccerCareerOpponents: node scripts/playSoccerCareerOpponents.mjs
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playCareerHub: node scripts/playCareerHub.mjs
