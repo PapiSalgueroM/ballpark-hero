@@ -149,6 +149,10 @@ import { careerDevelopmentBaseReceipt, careerDevelopmentOriginalPlugin, inverseC
    five edits back on the copied engine, beside the two already composed here. Proof that they are all that moved
    the recording: remote check rAT-sc-engine-g. See scripts/lib/careerStoryRoleAttribution1190.mjs. */
 import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs';
+/* Release AU: Rounds 1197 to 1208 add a chance wheel receipt and an opening cup tie to a save. The fourth inverse
+   takes them out of the copied files the historical bundle loads, so the recording made before them still
+   replays: scripts/lib/careerNextTenAttribution1197.mjs. */
+import { inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -170,7 +174,7 @@ for (const relative of heldPaths) {
   const bytes = fs.readFileSync(path.join(ROOT, relative));
   sourceBefore[relative] = sha(bytes);
 }
-const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [] };
+const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [] };
 function retain(name, value) {
   if (!ARTIFACTS) return;
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -359,12 +363,14 @@ if (SECTIONS.includes('1')) {
     const historical = await loadSoccerBrand(ROOT, (relative, source) => {
       /* Release AT: under SOCIAL_BRANDS_ATTRIBUTION=train1178 this bundle keeps the train out too, so the
          fixture from before the train is asked of a tree with both taken out. */
-      const controlled = trainOut ? trainOut.rewrite(relative, source) : rewrite(relative, source);
+      /* The wheel alone moves this recording (remote check rAU-G2), so the wheel alone is taken out. */
+      const controlled = inverseCareerNextTen(relative, trainOut ? trainOut.rewrite(relative, source) : rewrite(relative, source), report.nextTenInverses, ['wheel']);
       return relative === 'src/lib/soccerCareerEngine.ts' ? inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses) : controlled;
     });
     assert.equal(controlFired - beforeControlCount, CONTROL ? 1 : 0, 'The additional historical bundle retains exactly the same effective copied fault');
     assert.equal(report.inverses.length, 1, 'One copied engine receives the bounded historical inverse');
     assert.equal(report.storyRoleInverses.length, 1, 'The same copied engine receives the story and role inverse once');
+    assert.equal(report.nextTenInverses.length, 1, 'The copied wheel library receives the Rounds 1197 to 1208 inverse once');
     compared = probeSoccerBrand(historical);
     const inverseText = JSON.stringify(compared);
     retain('inverse.json', compared);
