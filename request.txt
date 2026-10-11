@@ -1,0 +1,2 @@
+# Round 1212 step 4 (the bind) on 0ed60fba: the whole vitest suite (two Soccer Career files are red on the base 60188732 and on release-au-int 20f2f475)
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
