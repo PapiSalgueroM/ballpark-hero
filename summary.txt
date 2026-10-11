@@ -1,0 +1,4 @@
+rival-prove exit=0 831s | simUsRivalSense: 47 checks, 0 failed (full size)
+rivalp-liftcard exit=1 880s | simUsRivalSense: 47 checks, 1 failed (full size), red sections: L
+rivalp-liftkey exit=1 903s | simUsRivalSense: 47 checks, 5 failed (full size), red sections: N.U2, P1, L, P2
+rivalp-tickdraws exit=1 639s | simUsRivalSense: 47 checks, 7 failed (full size), red sections: P1, P2
