@@ -1,0 +1,10 @@
+chunks: centre SeasonCentre-BdQua8c6.js, drill board DrillBoard-BaA6bN4K.js, through ball ThroughBallBoard-BQCjit_-.js, training ground TrainingPanel-vIU3XSOX.js
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:122
+const swapOnce = (from, to) => { const n = CHUNK_TEXT.split(from).length - 1; if (n !== 1) throw new Error(`control refused: ${JSON.stringify(from)} appears ${n} times in the chunk`); CHUNK_TEXT = CHUNK_TEXT.replace(from, to); };
+                                                                                                 ^
+
+Error: control refused: ",-1,[])" appears 0 times in the chunk
+    at swapOnce (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:122:98)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:123:27
+
+Node.js v24.21.0

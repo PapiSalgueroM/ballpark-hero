@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+centre-static exit=1 120s | playSeasonCentre: 41 checks, 1 failed (control static)
+centre-write exit=1 119s | playSeasonCentre: 41 checks, 1 failed (control write)
+centre-label exit=1 427s | playSeasonCentre: 41 checks, 5 failed (control label)
+centre-count exit=1 119s | playSeasonCentre: 41 checks, 2 failed (control count)
+moments-used exit=1 1s | Node.js v24.21.0
+moments-label exit=1 59s | playSeasonMoments: 117 checks, 1 failed (control label)
+moments-fixtures exit=1 1s | Node.js v24.21.0
+playSeasonMoments exit=0 58s | playSeasonMoments: 117 checks, 0 failed

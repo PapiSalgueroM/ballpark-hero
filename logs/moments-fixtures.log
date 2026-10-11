@@ -1,0 +1,9 @@
+chunks: centre SeasonCentre-BdQua8c6.js, drill board DrillBoard-BaA6bN4K.js, through ball ThroughBallBoard-BQCjit_-.js, training ground TrainingPanel-vIU3XSOX.js
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:129
+  if (n !== 1) throw new Error(`control refused: the Fixtures guard appears ${n} times in the chunk`);
+                     ^
+
+Error: control refused: the Fixtures guard appears 0 times in the chunk
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:129:22
+
+Node.js v24.21.0

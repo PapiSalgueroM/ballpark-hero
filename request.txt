@@ -1,0 +1,12 @@
+# Release AU fix 2: the controls of playSeasonCentre and playSeasonMoments after their repair (a plain build, one at a time; each must exit 1 and name its own check)
+#!build
+#!playwright
+#!serial
+centre-static: SEASON_CENTRE_PLAY_CONTROL=static node scripts/playSeasonCentre.mjs
+centre-write: SEASON_CENTRE_PLAY_CONTROL=write node scripts/playSeasonCentre.mjs
+centre-label: SEASON_CENTRE_PLAY_CONTROL=label node scripts/playSeasonCentre.mjs
+centre-count: SEASON_CENTRE_PLAY_CONTROL=count node scripts/playSeasonCentre.mjs
+moments-used: SEASON_MOMENTS_PLAY_CONTROL=used node scripts/playSeasonMoments.mjs
+moments-label: SEASON_MOMENTS_PLAY_CONTROL=label node scripts/playSeasonMoments.mjs
+moments-fixtures: SEASON_MOMENTS_PLAY_CONTROL=fixtures node scripts/playSeasonMoments.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
