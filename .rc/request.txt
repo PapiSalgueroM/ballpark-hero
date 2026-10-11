@@ -1,0 +1,7 @@
+#!serial
+attr-oldengine-olddigest: git show cbfa94fd:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 269ef5ea:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+attr-newengine-olddigest: git show 269ef5ea:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+attr-oldengine-newdigest: git show cbfa94fd:src/lib/clubManager.ts > src/lib/clubManager.ts && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+attr-prefixpass-engine: git show 94647e74:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 94647e74:src/lib/managerJobMarket.ts > src/lib/managerJobMarket.ts && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+rulesRetake: node scripts/simCmLeagueRules.mjs --part=eras --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.retaken.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json; git diff --quiet -- scripts/data/cmLeagueRulesDigest.json; s=$?; echo "retake against the committed digest: $s (0 means byte identical)"; git checkout -- src scripts; exit $s
+clean: git status --short | grep -v '^??' | head -5; test -z "$(git status --short | grep -v '^??')" && echo "tree restored"
