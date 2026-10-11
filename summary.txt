@@ -1,0 +1,6 @@
+attr-oldengine-olddigest exit=0 20s | simCmLeagueRules: all checks passed (modern, eras, pure)
+attr-newengine-olddigest exit=1 19s | simCmLeagueRules: 20 failure(s)
+attr-oldengine-newdigest exit=1 19s | simCmLeagueRules: 20 failure(s)
+attr-prefixpass-engine exit=0 20s | simCmLeagueRules: all checks passed (modern, eras, pure)
+rulesRetake exit=0 6s | retake against the committed digest: 0 (0 means byte identical)
+clean exit=0 0s | tree restored
