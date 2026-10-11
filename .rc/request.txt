@@ -1,0 +1,2 @@
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
