@@ -1,0 +1,12 @@
+# Release AX review, engine-saves, request e: the rest of the gate lists' save family on the pushed head, and the reviewer's fleet that asks whether every talk the game builds passes its own reader
+#!serve
+#!playwright
+#!serial
+usTalkFleet: export TMPDIR=$(mktemp -d); node .rc/x/usTalkFleet.mjs 400 91000
+simUsCareerRecovery: export TMPDIR=$(mktemp -d); node scripts/simUsCareerRecovery.mjs
+simSoccerCareerSaveRetry: export TMPDIR=$(mktemp -d); node scripts/simSoccerCareerSaveRetry.mjs
+simCareerParity: export TMPDIR=$(mktemp -d); node scripts/simCareerParity.mjs
+simStorageWrites: export TMPDIR=$(mktemp -d); node scripts/simStorageWrites.mjs
+simDailySaveHardening: export TMPDIR=$(mktemp -d); node scripts/simDailySaveHardening.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
