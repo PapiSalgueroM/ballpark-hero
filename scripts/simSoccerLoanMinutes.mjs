@@ -27,7 +27,7 @@ const git = (...args) => execFileSync('git', args, { cwd: ROOT, maxBuffer: 150_0
 const objects = {}, failures = [], armRows = {}, bundles = {}, currentReplayInputs = new Map();
 const report = { status: 'fail', base: BASE, head: git('rev-parse', 'HEAD').toString().trim(), tree: git('rev-parse', 'HEAD^{tree}').toString().trim(),
   scope: '160 explicitly altered saved boundaries; one actual loan-season/return path per moved input; no natural career or guaranteed appearance claim',
-  clock: '2026-10-11T12:00:00.000Z', callerComparison: 'Complete raw stacks retained; cross-source comparison holds values and every caller frame after replacing line/column coordinates only.', arms: {}, controls: [], failures };
+  clock: '2026-10-11T12:00:00.000Z', callerComparison: 'Complete raw stacks retained; ordinary old/current comparisons replace only caller line/column coordinates. Only recorded-current progression versus its same-input replay additionally checks the byte-identical raw prefix through forwardSeason and exact source-bound outer harness routes with the measured10-frame truncation.', arms: {}, controls: [], failures };
 fs.mkdirSync(path.join(OUT, 'objects'), { recursive: true });
 function save(rel, bytes) { const target = path.join(OUT, rel); fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, bytes); return { path: rel, bytes: Buffer.byteLength(bytes), sha256: sha(bytes) }; }
 function put(value) {
@@ -45,6 +45,11 @@ function comparableRow(row) { return { ...row, frames: row.frames.map(comparable
 function clone(value) {
   if (Array.isArray(value)) return value.map(clone);
   if (value && typeof value === 'object') { const out = {}; for (const [key, item] of Object.entries(value)) Object.defineProperty(out, key, { value: clone(item), enumerable: true, writable: true, configurable: true }); return out; }
+  return value;
+}
+function comparisonCopy(value) {
+  if (Array.isArray(value)) { const out = new Array(value.length); for (const key of Object.keys(value)) Object.defineProperty(out, key, { value: comparisonCopy(value[key]), enumerable: true, writable: true, configurable: true }); return out; }
+  if (value && typeof value === 'object') { const out = {}; for (const [key, item] of Object.entries(value)) Object.defineProperty(out, key, { value: comparisonCopy(item), enumerable: true, writable: true, configurable: true }); return out; }
   return value;
 }
 function snapshot(value) {
@@ -275,6 +280,97 @@ function runCase(B, subjectRow) {
   } catch (error) { row.error = { name: error.name, message: error.message, stack: error.stack }; }
   return row;
 }
+let progressionSource = null;
+const progressionComparisons = [];
+let progressionWitness = null;
+function progressionContext() {
+  if (progressionSource) return progressionSource;
+  const raw = fs.readFileSync(fileURLToPath(import.meta.url)), text = lf(raw.toString()), lines = text.split('\n');
+  const site = (wholeLine, token) => { const matching = lines.flatMap((line, index) => line === wholeLine ? [index] : []); assert.equal(matching.length, 1, 'unique actual whole caller source line'); const index = lines[matching[0]].indexOf(token); assert.ok(index >= 0); return `${import.meta.url}:${matching[0] + 1}:${index + 1}`; };
+  const replay = site('      const currentSeason = forwardSeason(B.current, clone(input), first.seed, currentFrames);', 'forwardSeason(');
+  const recorded = site('    if (working.loan) { const season = forwardSeason(B, working, d.seed + 1000, frames); row.lifecycle = season.fact; working = season.state; }', 'forwardSeason(');
+  const armLine = '    armRows[id] = subjectRows.map(row => runCase(B[id], row));';
+  const runCaseSite = site(armLine, 'runCase('), mapSite = site(armLine, 'map(');
+  assert.equal(Error.stackTraceLimit, 10, 'measured caller frame limit');
+  const processFrame = '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)';
+  progressionSource = { raw: save('comparison/method.raw.mjs', raw), lf: save('comparison/method.lf.mjs', Buffer.from(text)), frameLimit: 10,
+    sites: { replay, recorded, runCaseSite, mapSite }, replayRoute: [`    at ${replay}`, processFrame],
+    recordedRoute: [`    at runCase (${recorded})`, `    at ${runCaseSite}`, '    at Array.map (<anonymous>)', `    at ${mapSite}`, processFrame] };
+  return progressionSource;
+}
+function progressionCaller(replay, recorded) {
+  const base = { replay: put(replay), recorded: put(recorded) }, coordinate = value => value.replace(/:\d+:\d+/g, ':<line>:<column>');
+  if (coordinate(replay) === coordinate(recorded)) return { ...base, mode: 'coordinates-only', findings: [] };
+  const context = progressionContext(), left = replay.split('\n'), right = recorded.split('\n');
+  const boundary = rows => rows.flatMap((line, index) => line.startsWith(`    at forwardSeason (${import.meta.url}:`) ? [index] : []);
+  const lb = boundary(left), rb = boundary(right);
+  if (lb.length !== 1 || rb.length !== 1) return { ...base, mode: 'declared-progression-routes', findings: ['progression-boundary'] };
+  const lp = left.slice(0, lb[0] + 1), rp = right.slice(0, rb[0] + 1), ls = left.slice(lb[0] + 1), rs = right.slice(rb[0] + 1);
+  const findings = [];
+  if (lp.join('\n') !== rp.join('\n')) findings.push('progression-engine-prefix');
+  const leftExpected = context.replayRoute.slice(0, Math.max(0, context.frameLimit - (lp.length - 1)));
+  const rightExpected = context.recordedRoute.slice(0, Math.max(0, context.frameLimit - (rp.length - 1)));
+  if (ls.join('\n') !== leftExpected.join('\n') || rs.join('\n') !== rightExpected.join('\n')) findings.push('progression-harness-route');
+  return { ...base, mode: 'declared-progression-routes', prefixReplay: put(lp), prefixRecorded: put(rp), suffixReplay: put(ls), suffixRecorded: put(rs), expectedReplay: put(leftExpected), expectedRecorded: put(rightExpected), findings };
+}
+function compareProgressionFrames(replayFrames, recordedFrames, id) {
+  const pair = { id, replayFrames: put(replayFrames), recordedFrames: put(recordedFrames), replayCount: replayFrames.length, recordedCount: recordedFrames.length, status: 'fail', frames: [] }; progressionComparisons.push(pair);
+  assert.equal(replayFrames.length, recordedFrames.length, 'complete progression frame count');
+  for (let frameIndex = 0; frameIndex < replayFrames.length; frameIndex++) {
+    const a = comparisonCopy(replayFrames[frameIndex]), b = comparisonCopy(recordedFrames[frameIndex]), receipt = { frameIndex, replay: put(a), recorded: put(b), status: 'fail', tapes: [] }; pair.frames.push(receipt);
+    for (const kind of ['draws', 'fullTape']) {
+      const tapeReceipt = { kind, replay: a[kind], recorded: b[kind], status: 'fail', callers: null }, callers = []; receipt.tapes.push(tapeReceipt);
+      try {
+        const left = get(a[kind]), right = get(b[kind]); tapeReceipt.replayCount = left.length; tapeReceipt.recordedCount = right.length;
+        assert.equal(left.length, right.length, 'every complete progression draw');
+        for (let index = 0; index < left.length; index++) {
+          const observed = { index, replayItem: put(left[index]), recordedItem: put(right[index]), status: 'fail' }; callers.push(observed);
+          const av = comparisonCopy(left[index]), bv = comparisonCopy(right[index]); delete av.caller; delete bv.caller;
+          Object.assign(observed, progressionCaller(left[index].caller, right[index].caller));
+          if (observed.mode === 'declared-progression-routes' && !progressionWitness) progressionWitness = { replay: left[index].caller, recorded: right[index].caller };
+          assert.deepEqual(av, bv, 'complete draw values and non-caller fields'); assert.deepEqual(observed.findings, [], 'exact engine prefix and declared full outer caller route'); observed.status = 'pass';
+        }
+        tapeReceipt.status = 'pass';
+      } finally { tapeReceipt.callers = put(callers); }
+      delete a[kind]; delete b[kind];
+    }
+    assert.deepEqual(get(a.continuation), get(b.continuation), 'complete immediate continuation values'); delete a.continuation; delete b.continuation;
+    assert.deepEqual(a, b, 'complete non-tape frame including callbacks and undefined ledgers'); receipt.status = 'pass';
+  }
+  pair.status = 'pass';
+}
+function comparisonControls() {
+  const records = report.comparisonControls;
+  const collect = (id, run) => { const record = { id, status: 'fail' }; records.push(record); try { run(record); record.status = 'pass'; } catch (error) { record.error = { name: error.name, message: error.message, stack: error.stack }; failures.push({ id: `${id}/control`, error: record.error }); } };
+  collect('comparison-host-primitive', record => {
+    const actual = armRows.current.find(row => row.offerFacts.length)?.offerFacts; assert.ok(actual?.length, 'actual retained VM offer-array witness');
+    const healthy = comparisonCopy(actual); record.healthy = put(healthy); record.originalVM = put(actual);
+    record.prototypeFacts = { originalArray: Array.isArray(actual), originalHostPrototype: Object.getPrototypeOf(actual) === Array.prototype, copiedArray: Array.isArray(healthy), copiedHostPrototype: Object.getPrototypeOf(healthy) === Array.prototype };
+    assert.deepEqual(record.prototypeFacts, { originalArray: true, originalHostPrototype: false, copiedArray: true, copiedHostPrototype: true }, 'actual VM-to-host comparison transport');
+    assert.equal(record.originalVM, record.healthy, 'every complete serialized offer field held by transport'); assert.deepEqual(snapshot(actual), snapshot(healthy), 'all callbacks and undefined paths held by transport');
+    const primitive = comparisonCopy(healthy), oldMin = primitive[0].projection.min; primitive[0].projection.min += 1;
+    record.fault = put(primitive); assert.notEqual(record.fault, record.healthy, 'copied primitive fault changed whole body');
+    let detected = null; try { assert.deepEqual(primitive, healthy); } catch (error) { detected = { name: error.name, message: error.message, stack: error.stack }; }
+    record.detectorError = put(detected); assert.equal(detected?.name, 'AssertionError', 'primitive difference remains strict');
+    primitive[0].projection.min = oldMin; record.undo = put(primitive); assert.deepEqual(primitive, healthy); assert.equal(record.undo, record.healthy, 'complete primitive undo');
+    record.effective = true; record.findings = ['primitive-value'];
+  });
+  for (const kind of ['engine-prefix', 'missing-boundary', 'harness-route']) collect(`comparison-${kind}`, record => {
+    assert.ok(progressionWitness, 'actual changed-route witness');
+    const source = progressionContext(), baseline = comparisonCopy(progressionWitness); record.healthy = put(baseline); assert.deepEqual(progressionCaller(baseline.replay, baseline.recorded).findings, []);
+    const engineFrame = baseline.replay.split('\n').find(line => line.includes('(loan-actual-engine.cjs:'));
+    const boundaryFrame = baseline.replay.split('\n').find(line => line.startsWith(`    at forwardSeason (${import.meta.url}:`));
+    const edit = kind === 'engine-prefix' ? { from: engineFrame, to: engineFrame?.replace('    at ', '    at copied_'), expected: ['progression-engine-prefix'] }
+      : kind === 'missing-boundary' ? { from: boundaryFrame, to: boundaryFrame?.replace('forwardSeason', 'copied_forwardSeason'), expected: ['progression-boundary'] }
+      : { from: source.replayRoute[0], to: source.replayRoute[0].replace('    at ', '    at copied_boundary '), expected: ['progression-harness-route'] };
+    assert.ok(edit.from && edit.to, 'actual full caller mutation anchor');
+    const copied = comparisonCopy(baseline); assert.equal(copied.replay.split(edit.from).length - 1, 1, 'unique actual copied caller anchor'); copied.replay = copied.replay.replace(edit.from, edit.to);
+    record.fault = put(copied); assert.notEqual(record.fault, record.healthy, 'copied caller fault changed whole body'); const result = progressionCaller(copied.replay, copied.recorded); record.observed = put(result); record.findings = result.findings; assert.deepEqual(result.findings, edit.expected, 'precise independent comparison fault');
+    assert.equal(copied.replay.split(edit.to).length - 1, 1, 'unique caller reverse anchor'); copied.replay = copied.replay.replace(edit.to, edit.from); record.undo = put(copied);
+    assert.deepEqual(copied, baseline); assert.equal(record.undo, record.healthy, 'whole actual caller undo'); assert.deepEqual(progressionCaller(copied.replay, copied.recorded).findings, []); record.effective = true;
+  });
+  return records;
+}
 function desiredLaw(row) {
   if (!row.windowFact?.forced || row.error) return [];
   const findings = [];
@@ -320,7 +416,7 @@ try {
     if (row.lifecycle) check(`${row.id}/return`, row.lifecycle.returned && row.lifecycle.parentRestored && row.lifecycle.actualLoanRows > 0, row.lifecycle);
     if (row.descriptor.kind === 'saved-unsuitable') check(`${row.id}/legacy-offer`, !!row.windowFact.loan && row.windowFact.projection.min < 20, row.windowFact);
     const common = ['voluntary', 'sale', 'release', 'repeat-release', 'already-loan', 'expiry', 'saved-unsuitable'].includes(row.descriptor.kind) || row.descriptor.overall === 90;
-    if (common) captureCheck(`${row.id}/whole-unrelated-output`, () => assert.deepEqual(comparableRow(row), comparableRow(armRows.original.find(item => item.id === row.id))));
+    if (common) captureCheck(`${row.id}/whole-unrelated-output`, () => assert.deepEqual(comparisonCopy(comparableRow(row)), comparisonCopy(comparableRow(armRows.original.find(item => item.id === row.id)))));
     const ackInput = row.ack.before;
     // Complete old/current actual acknowledgement replay, including an empty listing.
     const acknowledgedState = clone(currentReplayInputs.get(row.id).acknowledgement);
@@ -342,8 +438,8 @@ try {
       const oldSeason = forwardSeason(B.original, clone(input), first.seed, originalFrames);
       const currentSeason = forwardSeason(B.current, clone(input), first.seed, currentFrames);
       report.sameInputSeasons.push({ id: row.id, input: first.before, original: { frames: originalFrames, outcome: oldSeason.fact }, current: { frames: currentFrames, outcome: currentSeason.fact } });
-      captureCheck(`${row.id}/same-input-season`, () => assert.deepEqual({ frames: currentFrames.map(comparableFrame), outcome: currentSeason.fact }, { frames: originalFrames.map(comparableFrame), outcome: oldSeason.fact }));
-      captureCheck(`${row.id}/whole-current-progression-replay`, () => assert.deepEqual(currentFrames.map(comparableFrame), row.frames.slice(row.frames.indexOf(first)).map(comparableFrame)));
+      captureCheck(`${row.id}/same-input-season`, () => assert.deepEqual(comparisonCopy({ frames: currentFrames.map(comparableFrame), outcome: currentSeason.fact }), comparisonCopy({ frames: originalFrames.map(comparableFrame), outcome: oldSeason.fact })));
+      captureCheck(`${row.id}/whole-current-progression-replay`, () => compareProgressionFrames(currentFrames, row.frames.slice(row.frames.indexOf(first)), row.id));
     } catch (error) {
       const failure = { id: row.id, input: first.before, originalFrames, currentFrames, error: { name: error.name, message: error.message, stack: error.stack } };
       report.sameInputSeasons.push(failure); failures.push({ id: `${row.id}/complete-season-replay`, detail: failure });
@@ -355,8 +451,10 @@ try {
     fullOriginal: report.arms.original.rows, fullFault: report.arms['remove-filter'].rows, fullHealthy: report.arms.current.rows, fullUndo: report.arms.undo.rows });
   captureCheck('remove-filter/exact-map', () => assert.deepEqual(actual, expected));
   check('remove-filter/effectiveness', report.controls[0].effective, report.controls[0]);
-  captureCheck('remove-filter/whole-AA-outcomes', () => assert.deepEqual(armRows['remove-filter'], armRows.original));
-  captureCheck('undo/whole-current-outcomes', () => assert.deepEqual(armRows.undo, armRows.current));
+  captureCheck('remove-filter/whole-AA-outcomes', () => assert.equal(report.arms['remove-filter'].rows, report.arms.original.rows, 'complete raw original/fault identity'));
+  captureCheck('undo/whole-current-outcomes', () => assert.equal(report.arms.undo.rows, report.arms.current.rows, 'complete raw current/undo identity'));
+  report.comparisonControls = []; captureCheck('comparison-controls/complete', () => { report.comparisonControls = comparisonControls(); });
+  report.comparisonTransport = { source: progressionSource, comparisons: put(progressionComparisons), scope: 'Only current recorded-versus-replayed progression callers may use the exact raw forwardSeason prefix and independently source-bound outer routes; all ordinary comparisons remain coordinates-only.' };
   report.sameInputAcknowledgements = put(report.sameInputAcknowledgements); report.sameInputSeasons = put(report.sameInputSeasons);
   report.summary = { actualArms: Object.keys(B).length, completeCases: Object.values(armRows).reduce((sum, rows) => sum + rows.length, 0),
     healthyForcedOffers: armRows.current.filter(row => row.windowFact?.forced).reduce((sum, row) => sum + row.offerFacts.length, 0),
@@ -367,6 +465,7 @@ try {
   report.status = 'pass';
 } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; process.exitCode = 1; }
 finally {
+  report.comparisonTransport = { source: progressionSource, comparisons: put(progressionComparisons), scope: 'Only current recorded-versus-replayed progression callers may use the exact raw forwardSeason prefix and independently source-bound outer routes; all ordinary comparisons remain coordinates-only.' };
   report.bundles = bundles; save('objects.json', JSON.stringify(objects)); save('report.json', JSON.stringify(report));
   function inventoryOf(dir = OUT) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => { const item = path.join(dir, entry.name); if (entry.isDirectory()) return inventoryOf(item); const bytes = fs.readFileSync(item); return [{ path: path.relative(OUT, item).replaceAll('\\', '/'), bytes: bytes.length, sha256: sha(bytes) }]; }); }
   save('inventory.json', JSON.stringify({ scope: 'All final payload bodies except this inventory and the measured size receipt', files: inventoryOf().filter(row => !['inventory.json', 'size.json'].includes(row.path)) }));
