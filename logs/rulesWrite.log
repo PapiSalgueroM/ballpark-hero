@@ -1,0 +1,6 @@
+2) digest, every league of every historic era
+baseline written for eras from /home/runner/work/ballpark-hero/ballpark-hero
+
+simCmLeagueRules: all checks passed (eras)
+ scripts/data/cmLeagueRulesDigest.json | 224 +++++++++++++++++-----------------
+ 1 file changed, 112 insertions(+), 112 deletions(-)

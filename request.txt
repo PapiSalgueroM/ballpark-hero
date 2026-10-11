@@ -1,0 +1,4 @@
+#!serial
+rulesCompare: node scripts/simCmLeagueRules.mjs
+rulesWrite: node scripts/simCmLeagueRules.mjs --part=eras --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json
+rulesAfter: node scripts/simCmLeagueRules.mjs
