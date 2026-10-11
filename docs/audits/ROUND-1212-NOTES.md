@@ -72,6 +72,25 @@ who he played in October (the path shows rounds and scores and names nobody).
   seam receipt still 0 moved) and r1212-5b (the whole vitest suite: 431 files passed, 2 skipped, 6,356 tests
   passed, exit 0).
 
+- The first walk of the bind (r1212-4c) found two defects, both fixed in e8b676d7: the review's AVG tile
+  printed 0.276 where the season card prints .276 (one optional member on the shared view, `tileText`, set by
+  baseball only), and the walk's `write` control wrote to the NBA's and the NFL's save keys only, so it did
+  not fire on baseball (it writes to the walked sports' own keys now).
+- The code's last commit (e8b676d7): r1212-6a (type gate, the US tests with the NBA and NFL screens, the
+  harness "148 checks, 0 failed", the seam receipt 0 moved, the board replay, the fences: all exit 0), r1212-6b
+  (the whole vitest suite: 431 files passed, exit 0) and r1212-6c on a served build: playUsSeasonCentre "217
+  checks, 0 failed" (the NBA, the NFL and MLB at 390 by 844 and 1280 by 800), its controls write, static,
+  count, cover, playfirst and nohandover each red at the named check on baseball (and write on the NBA),
+  playCareerHub, playSeasonReveal, playReducedMotion and playGames on /mlb-my-career green. On the merged head
+  before that fix (r1212-5c): playExtension, playFreeAgency, playDepthChart, playUsCareerSaveSeam,
+  playDraftNight, simMobileChrome and sweepGames green.
+- sweepWeight is red with the same 13 routes as on the base (budgets are the lead's). Measured on the last
+  commit: /mlb-my-career 551.6K gz, /nhl-my-career 554.1K, /nba-my-career 564.0K, /nfl-my-career 478.3K (its
+  budget is 469K and it was 476.9K on the base; the rise since the bind is the release line's merge, the bind
+  itself moved the four routes by +1.0K, +0.5K, -0.1K and 0). Baseball's number file is a 6.9K chunk loaded
+  on the first press. From the press to the first card: about 565 ms for 162 games, of which 500 ms is the
+  walk's own delay on the viewer chunk (the NBA's 82 games: 542 ms).
+
 The controls, each run once on r1212-4a, each exit 1, each closing with its own red line:
 
     control mlbstage: RED AT THE NAMED CHECK (section 1); sections red: 1, 4; 330 seasons carry the unknown result, 330 of them shown with no band and no path
