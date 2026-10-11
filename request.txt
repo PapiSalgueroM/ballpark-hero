@@ -1,0 +1,25 @@
+# Release AW closing pass, final proof P-B2: gate lane B, part 2 (plain build, three at a time)
+#!build
+#!playwright
+simUsCareerPractice: node scripts/simUsCareerPractice.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerRecovery: node scripts/simUsCareerRecovery.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simBuzzerContestRecap: node scripts/simBuzzerContestRecap.mjs
+simThreePointContest: node scripts/simThreePointContest.mjs
+simCagePracticeFeedback: node scripts/simCagePracticeFeedback.mjs
+simCageFightStats: node scripts/simCageFightStats.mjs
+simCageReadiness: node scripts/simCageReadiness.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+simTycoonLoads: node scripts/simTycoonLoads.mjs
+simTycoonPitch: node scripts/simTycoonPitch.mjs
+simTycoonLeague: node scripts/simTycoonLeague.mjs
+simTycoonClock: node scripts/simTycoonClock.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
