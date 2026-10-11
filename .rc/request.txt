@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+#!serial
+walkEraMarket: node .rc/x/walkEraMarket.mjs
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs
+playNationalities: ENGINES=chromium node scripts/playNationalities.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmDataOnDemand: ENGINES=chromium node scripts/playCmDataOnDemand.mjs
+playReleaseClause: ENGINES=chromium node scripts/playReleaseClause.mjs
+playSponsors: ENGINES=chromium node scripts/playSponsors.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playDealDesk: ENGINES=chromium node scripts/playDealDesk.mjs
