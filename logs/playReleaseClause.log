@@ -1,0 +1,19 @@
+1) Take a real job in the modern era
+  PASS  the Newcastle job is on
+2) The contracts desk is finally on the wall (the Round 105 mount fix)
+  PASS  the contracts desk renders on the Squad tab
+  PASS  the wage bill reads against the cap
+  PASS  the final-year list is present (staggered deals guarantee expirers)
+  PASS  the clause deal is offered next to the plain renewal
+  PASS  the clause button quotes the exit number
+3) Sign the cheaper deal with the exit door in it
+  PASS  the granted-clauses ledger appears with one door
+  PASS  the ledger quotes the clause number
+  PASS  the full-price removal renewal is offered
+4) The desk survives a reload, and the clause with it
+  PASS  the granted clause survived the reload
+5) The full-price renewal deletes the door
+  PASS  the ledger is empty again: the plain renewal deleted the clause
+  PASS  no real page errors on the walk (clean)
+
+playReleaseClause: green. The desk is on the wall and the door opens and shuts like the engine promised.

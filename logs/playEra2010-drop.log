@@ -1,0 +1,25 @@
+  control  {n:"Wayne Rooney", confirmed in the served /assets/clubManagerEra2005-DZSwQTfX.js
+1) The era step
+  PASS  the 2010-11 era tile is on the menu
+  PASS  both eras carry the REAL DATA badge
+2) Nations shrink to the era
+  PASS  England and Spain offered in 2010
+  PASS  Italy, Germany and France offered in 2010 (Round 901)
+  PASS  the Netherlands correctly absent from 2010
+3) The 2010 league and clubs
+  PASS  the 2010 Premier League is offered
+  PASS  2010 Blackpool is a pickable club
+  PASS  Barcelona is not in the English league
+  PASS  the thin-squad marker shows
+  PASS  the United tile demands the title
+  PASS  no Top N phrasing on any part of the tile
+4) Into the 2010 dressing room
+  PASS  the career header says 2010-11
+  PASS  the Squad tab listed the squad
+  FAIL  Wayne Rooney is in the 2010 United squad
+  PASS  no 2026 player leaked into 2010
+  PASS  no real page errors (clean)
+
+   control: 1 served asset(s) rewritten, 1 of 1 target checks red, 0 other check(s) red
+   control: the page body still named Wayne Rooney while the squad data had lost them
+playEra2010 control: green. Taking those men out of the era squad data was reported by exactly the checks that claim them, so the squad is read off the squad. Exiting non zero, because a run with findings fails.
