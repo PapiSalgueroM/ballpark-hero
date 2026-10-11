@@ -1,0 +1,12 @@
+FAIL goalsRuledOut is modelled but THIN (1 publisher(s) on 2 host(s) counted it, a rate needs two)
+FAIL goalReview is not the stricter count, the lowest reading on file over the engine figure (0.030501 against 0.049222)
+FAIL the goal rate does not give the lowest reading's goals ruled out a match on top of a level goal count (0.075162 against 0.123684)
+FAIL penaltiesTotal, the band of all penalties a match, is not counted by two publishers for one season
+FAIL the goal kind is on in the ledger and its rate does not meet the standard
+FAIL the kinds the generator plays (goal) are not the kinds the ledger has on and nothing holds (none)
+FAIL CM_VAR_KINDS on disk plays goal and the ledger plays no kind
+FAIL CM_VAR_LIVE is true while the rates ledger still owes: no kind of review is played (goal: on; penalty: held by penalties-total)
+simCmVarLedger: 4 rate rows from 5 publishers. Rates that meet the standard (two publishers within a factor of 2): penaltiesAwarded. Figures two publishers counted: none.
+simCmVarLedger: OWED and open: penalties-total holds penalty. Kinds of review the game plays: none, so the switch must stay off.
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:switzerland, league:austria, league:croatia, league:saudi, league:bundesliga2, league:denmark, league:greece, league:segunda, league:serieb, league:mlsEast, league:mlsWest, league:brasileirao, league:aleague, league:russia, ucl, cup:KNVB Cup, cup:Copa do Brasil, cup:Australia Cup, cup:DFB-Pokal.
+simCmVarLedger control thin: FIRED (goalsRuledOut is modelled but THIN (1 publisher(s) on 2 host(s) counted it, a rate needs two))
