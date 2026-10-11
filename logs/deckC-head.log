@@ -1,0 +1,5 @@
+nhl: 1200 saves, 36 deck C cards dealt, 109 of 1200 draws were deck C, draw hash 19803f37f1737563
+   words against effects: 11882 plays, 2222 at a gamble's edge, 1572 era money pairs, 556 trades or claims
+   and 7744 plays again with the rating at its potential
+FAIL nhl: the seeded draw changed on 4 of 1200 saves (first: save 16)
+simUsCareerDeckC: 1 failure(s)

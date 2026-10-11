@@ -1,0 +1,5 @@
+deckC-fix3parent exit=0 13s | simUsCareerDeckC: all checks passed
+deckC-head exit=1 15s | simUsCareerDeckC: 1 failure(s)
+deckC-fix3 exit=1 15s | simUsCareerDeckC: 1 failure(s)
+deckC-fix1parent exit=0 10s | simUsCareerDeckC: all checks passed
+deckC-main exit=0 9s | simUsCareerDeckC: all checks passed
