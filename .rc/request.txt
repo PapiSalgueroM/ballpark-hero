@@ -1,0 +1,16 @@
+# Release AU proof, the browser walk list part 2: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playCareerSquad: node scripts/playCareerSquad.mjs
+playCollegeGridFirstTap: node scripts/playCollegeGridFirstTap.mjs
+playGridCls: node scripts/playGridCls.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playTycoonGearFit: node scripts/playTycoonGearFit.mjs
+playTycoonSetPieceFit: node scripts/playTycoonSetPieceFit.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+playCareerLeagueWorld: node scripts/playCareerLeagueWorld.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playCareerMoments: node scripts/playCareerMoments.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playAutocompleteRace: node scripts/playAutocompleteRace.mjs
