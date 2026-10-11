@@ -1,0 +1,2 @@
+# Reviewer sc-engine, Release AW part one, head 64d87aed: mutation G (the transfer quote reads no seasons) against the veteran offers sim
+mG-offers-EXPECT-RED: node .rc/x/scMut.mjs G && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs; s=$?; git checkout -- src scripts; exit $s
