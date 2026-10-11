@@ -167,6 +167,12 @@
  *              of team games with an inning of five or more must
  *              be red beside it                                  -> section 7
  *   mlbcap     the law's cap of nine runs an inning is lifted    -> section 7
+ * The same fix pass, older saves: before Round 1226 the engine wrote
+ * today's ladder in every year, so a live save holds "Lost the Wild Card
+ * series" for a first exit of 2004 to 2021. Baseball has an older save twin
+ * for it (mlbOldTwin, the NFL's oldSaveTwin is the pattern).
+ *   mlbold     the number file forgets that word: the season is
+ *              laid out with no record band                      -> section 3
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -317,6 +323,8 @@ const CONTROLS = {
      and the law's cap of nine runs an inning lifted */
   mlbinnings: { section: 7, label: 'a side scores in', patches: [{ file: MLB, from: '    const runs = mlbSpreadRuns(nine, mins, q, rng);', to: '    const runs = mlbSpreadRuns(nine, mins, q / 6, rng);' }] },
   mlbcap: { section: 7, label: 'more than nine runs', patches: [{ file: MLB, from: '  const cap = Math.max(INNING_RUNS_MAX, Math.ceil(total / n));', to: '  const cap = Math.max(INNING_RUNS_MAX, total);' }] },
+  /* the fix pass: the number file forgets the word an older build wrote for a first exit (the bind loses `olderBand`) */
+  mlbold: { section: 3, label: "an older save's first exit is shown", patches: [{ file: MLB, from: '  formatOf,\n  olderBand,\n', to: '  formatOf,\n' }] },
   /* Round 1221: the digest's own control (run with US_SEASON_DIGEST=compare): a field goal ends one drive in a hundred more */
   lawdrift: { section: 'digest', patches: [{ file: NFL_SCORE, from: 'const FG_A_DRIVE = 0.1445;', to: 'const FG_A_DRIVE = 0.1545;' }] },
   /* Round 1300: the lay receipt's own control (run with US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay):
@@ -331,7 +339,7 @@ const CONTROL_SPORT = {
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
-  mlbinnings: 'mlb', mlbcap: 'mlb',
+  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 if (CONTROL === 'lawdrift' ? DIGEST !== 'compare' : !!(CONTROL && DIGEST) && !DIGEST_CONTROLS.includes(CONTROL)) { console.error("the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run"); process.exit(2); }
@@ -400,6 +408,10 @@ const MLB_SERIES = [[2, 3], [3, 5], [4, 7], [4, 7]];
 const MLB_ROUNDS = ['Wild Card Series', 'Division Series', 'Championship Series', 'World Series'];
 const MLB_LADDER = ['Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'];
 const MLB_WC_GAME = 'Lost the Wild Card Game';
+/* The fix pass: what the engine wrote for a first exit in EVERY year before Round 1226 (the live site's saves),
+   and the sentence a season before today's rounds shows where a path would be. Typed here, the harness's own. */
+const MLB_OLD_FIRST_EXIT = 'Lost the Wild Card series';
+const MLB_NO_PATH_BEFORE = "The playoff path starts with the 2022 season, when the playoffs took today's shape.";
 /** The results a season of that year can end on, first exit to title: no wild card round to 2011, one game
  *  from 2012 to 2019 and in 2021, a series in 2020 and from 2022 (typed here, the harness's own reading). */
 const mlbOwnResults = year => (year < 2012 ? MLB_LADDER.slice(1) : (year <= 2019 || year === 2021) ? [MLB_WC_GAME, ...MLB_LADDER.slice(1)] : MLB_LADDER);
@@ -552,8 +564,10 @@ const OWN = {
 const ownBand = (slug, teamResult, year) => {
   const o = OWN[slug];
   if (teamResult === o.missed) return o.bands[0];
-  /* baseball: a result the year's own ladder does not hold has no band */
-  if (slug === 'mlb' && !mlbOwnResults(year).includes(teamResult)) return null;
+  /* baseball: a result the year's own ladder does not hold has no band, but for ONE word (the fix pass): a save
+     from before Round 1226 holds the Wild Card series word for a first exit of any year (MLB_OLD_FIRST_EXIT), and
+     a first exit holds a first exit's band whatever the year */
+  if (slug === 'mlb' && !mlbOwnResults(year).includes(teamResult) && teamResult !== MLB_OLD_FIRST_EXIT) return null;
   const i = o.results.indexOf(teamResult);
   return i < 0 ? null : o.bands[i + 1];
 };
@@ -720,6 +734,39 @@ function oldSaveTwin(bind, SB, career, n) {
   return out;
 }
 
+/** Section 3, MLB, the fix pass of Round 1212: the same season as a save made BEFORE Round 1226 holds it.
+ *  That engine (the live site's) wrote today's ladder in every year, so its first exit of 2004 to 2021 reads
+ *  "Lost the Wild Card series", a word this engine never writes in those years: no career played here holds
+ *  one, and the first cut laid such a season out with no record band at all (a 79-83 beside a playoff exit).
+ *  Every derived season that ended at its year's FIRST exit, in a year whose own ladder lacks the old word, is
+ *  copied; its result is rewritten to the old word and its `slate` dropped (by hand, said here because no
+ *  engine call made this line; the live engine writes no `slate`); it is derived again and held to the same
+ *  independent checker and to what the first cut got wrong: a record inside a first exit's band (OWN.mlb, the
+ *  harness's own), no path, and the sentence under the review that says why. Nothing is drawn.
+ *  null: not such a season. */
+function mlbOldTwin(bind, SB, career) {
+  const twin = JSON.parse(JSON.stringify(career));
+  const row = twin.seasons[twin.seasons.length - 1];
+  const own = mlbOwnResults(row.year);
+  if (own.includes(MLB_OLD_FIRST_EXIT) || row.teamResult !== own[0]) return null;
+  row.teamResult = MLB_OLD_FIRST_EXIT;
+  delete row.slate;
+  const out = { year: row.year, pos: twin.pos, why: null, problems: [], wins: null };
+  const b = M.buildUsSeason(bind, twin, row, SB.teamLabelOf);
+  if (!b.ok) { out.why = `build: ${b.why}`; return out; }
+  const s = M.deriveSeasonOrWhy(b.sport, row, b.ctx);
+  if (typeof s === 'string') { out.why = s; return out; }
+  out.problems = shownIsSavedMlb(row, bind, twin.pos, s);
+  const band = ownBand('mlb', row.teamResult, row.year);
+  out.wins = s.games.filter(g => g.us > g.them).length;
+  if (!band || s.target.kind !== 'record') out.problems.push(`no record band for "${row.teamResult}" in ${row.year}`);
+  if (band && (out.wins < band[0] || out.wins > band[1])) out.problems.push(`wins ${out.wins} outside ${band[0]} to ${band[1]} for an older save's first exit`);
+  if (M.usPlayoffPath(bind, row, b.ctx, b.key)) out.problems.push(`a path in ${row.year} for an older save's first exit`);
+  const note = bind.view.noPathNote ? bind.view.noPathNote(row) : null;
+  if (note !== MLB_NO_PATH_BEFORE) out.problems.push(`the line under the review reads ${JSON.stringify(note)}`);
+  return out;
+}
+
 /** Section 3, any sport: the events' points make each side's score at full
  *  time and never pass it or fall at any minute the bug can show. */
 function boardIsTrue(slug, s) {
@@ -755,7 +802,10 @@ function mlbPathProblems(row, path, target, who) {
   const i = results.indexOf(row.teamResult);
   if (i < 0) {
     if (path) out.push('a path for a season with no playoff result of its year');
-    if (row.teamResult !== OWN.mlb.missed && target.kind !== 'none') out.push('a band for a result the year does not hold');
+    /* the fix pass: an older save's first exit word is the one result outside its year's ladder that holds a band */
+    const old = row.teamResult === MLB_OLD_FIRST_EXIT;
+    if (!old && row.teamResult !== OWN.mlb.missed && target.kind !== 'none') out.push('a band for a result the year does not hold');
+    if (old && target.kind !== 'record') out.push("no band for an older save's first exit");
     return out;
   }
   c.playoff = (c.playoff ?? 0) + 1;
@@ -1089,18 +1139,26 @@ const MLB_ONE_RUN = [0.22, 0.32];
 const MLB_EXTRA = [0.05, 0.11];
 const MLB_AB_GAME = [3.5, 4.0];
 const MLB_HITLESS = [0.2, 0.36];
-/* The fix pass of Round 1212, the innings of a game (FIVE_SET_NUMBERS). The runs of a side are spread by the
-   score law's own chances an inning (src/lib/season/mlb.ts mlbSpreadRuns). Measured on seed set 0 (40 careers,
-   241,704 team games): a side scores in 2.72 innings a team game, 30.3% of nine, against 20.6% under the first
-   cut; the biggest inning of a team game is five runs or more in 8.8% of team games, against 23.5%; a side with
-   four runs or more has all of them in one inning in 1.9%, against 21.2%; no inning over nine, against 1.5% of
-   team games. The bands have about two points of room on each side of the first and a point and a half of the
-   second; control `mlbinnings` lands 18.2% and 29.9%, and control `mlbcap` shows 184 team games with an inning
-   past nine at 16 careers. The real game, for the reader and never as a target (one source each, so not in the
-   ledger): about 27 to 29% of half innings bring a run and about 1% bring five or more. */
+/* The fix pass of Round 1212, the innings of a game. The runs of a side are spread by the score law's own
+   chances an inning (src/lib/season/mlb.ts mlbSpreadRuns). MEASURED on the five seed sets (40 careers a set, a
+   GitHub runner, 2026-10-10, 1,216,944 team games): a side scores in 2.72 innings a team game, 30.3% of nine
+   (seed set 0 alone: 30.3%), against 20.6% under the first cut; the biggest inning of a team game is five runs
+   or more in 8.9% of team games (set 0: 8.8%), against 23.5%; a side with four runs or more has all of them in
+   one inning in 1.9%, against 21.2%; no inning over nine, against 1.5% of team games. The spread between a set
+   and the five is a tenth of a point, and each band has about two points of room on each side of the first
+   number and a point and a half of the second. Control `mlbinnings` lands 18.3% and 29.7% on seed set 0;
+   control `mlbcap` shows 357 of 241,704 team games with an inning past nine. The real game, for the reader and
+   never as a target (one source each, so not in the ledger): about 27 to 29% of half innings bring a run and
+   about 1% bring five or more. */
 const MLB_SCORING_INNINGS = [0.28, 0.325];
 const MLB_BIG_INNING = [0.07, 0.105];
 const OLD_SAVE_MIN = 25;
+/* The fix pass of Round 1212: first exits of a year before 2022 written as a save from before Round 1226 holds
+   them (mlbOldTwin). Measured on seed set 0 (40 careers): 78 such seasons, 0 refused, every one shown inside a
+   first exit's 84 to 95 wins (median 90), with no path and the line that says why. Control `mlbold` at 16
+   careers: 36 of 36 laid out with no record band, median 82 wins. The floor is for the five seed sets and is
+   under half of five times the one set measured. */
+const MLB_OLD_MIN = 150;
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
 const NFL_POINTS = [21.0, 24.5];
@@ -1187,6 +1245,8 @@ function observe(c, line, who) {
   rec.p3.push(...boardIsTrue(who.slug, s));
   /* the same line as an older save holds it (see oldSaveTwin) */
   if (who.slug === 'nfl' && isNum(row.sacks)) rec.old = oldSaveTwin(bind, SB, career, seen.length);
+  /* the fix pass of Round 1212: baseball's older save twin (see mlbOldTwin); null when the season is not one */
+  if (who.slug === 'mlb') rec.old = mlbOldTwin(bind, SB, career);
   const band = ownBand(who.slug, row.teamResult, row.year);
   if (band && (rec.wins < band[0] || rec.wins > band[1])) rec.p3.push(`wins ${rec.wins} outside ${band[0]} to ${band[1]} for "${row.teamResult}"`);
   if (!band && s.target.kind !== 'none') rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
@@ -1517,6 +1577,19 @@ for (const slug of SPORTS) {
     check('3', oldRefused.length <= old.length * (REFUSED_MAX[slug] ?? 0), `${slug} a season saved with sacks in tenths still opens: refused stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(oldRefused.length, old.length)})`);
     tally('3', `${slug} a season saved with sacks in tenths shows the sacks the save holds`, oldShown.filter(t => t.problems.length).map(t => `${t.year} ${t.pos} ${t.sacks}: ${t.problems[0]}`), oldShown.length);
   }
+  if (slug === 'mlb') {
+    /* saves from before Round 1226: a first exit of a year before 2022 in the word that engine wrote (see mlbOldTwin) */
+    const old = derived.filter(r => r.old).map(r => r.old);
+    const oldRefused = old.filter(t => t.why !== null);
+    const oldShown = old.filter(t => t.why === null);
+    const oldWins = oldShown.map(t => t.wins).sort((a, b) => a - b);
+    console.log(`     saves from before Round 1226: ${old.length} first exits of a year before 2022 written as that engine wrote them, refused ${oldRefused.length}, shown ${oldShown.length}; median wins ${oldWins.length ? oldWins[Math.floor(oldWins.length / 2)] : 'none'}`);
+    if (oldRefused.length) console.log(`     first refusals: ${oldRefused.slice(0, 3).map(t => `${t.year} ${t.pos}: ${t.why}`).join(' || ')}`);
+    /* the floor is the gate's (five seed sets); a control run is one set and proves its own population in its verdict */
+    if (SEEDSETS.length >= 5 && CAREERS >= 40 && (!CONTROL || CONTROL === 'mlbold')) check('3', old.length >= MLB_OLD_MIN, `mlb first exits of a year before 2022 are in the population as an older save holds them (${old.length}, at least ${MLB_OLD_MIN})`);
+    check('3', oldRefused.length <= old.length * (REFUSED_MAX[slug] ?? 0), `mlb an older save's first exit still opens: refused stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(oldRefused.length, old.length)})`);
+    tally('3', "mlb an older save's first exit is shown as saved, with a first exit's record, no path and the line that says why", oldShown.filter(t => t.problems.length).map(t => `${t.year} ${t.pos}: ${t.problems[0]}`), oldShown.length);
+  }
   if (slug === 'nba') {
     const hot = derived.reduce((a, r) => a + r.hot, 0); const on = derived.reduce((a, r) => a + r.on, 0);
     console.log(`     takeover lines: ${hot} in ${on} games he played (${share(hot, on)}), in ${derived.filter(r => r.hot > 0).length} of ${derived.length} seasons`);
@@ -1788,6 +1861,12 @@ if (CONTROL) {
     /* the fix pass: lumpy innings must turn the big inning band red beside the named one, and a lifted cap must show an inning past nine */
     if (CONTROL === 'mlbinnings') { const big = labels.some(l => l.startsWith('mlb') && l.includes('the biggest inning of a team game')); ok = ok && big; note += `; the big inning band ${big ? 'is' : 'is NOT'} red beside it`; }
     if (CONTROL === 'mlbcap') { ok = ok && mlbSeen.overNine > 0; note += `; ${mlbSeen.overNine} team games hold an inning of more than nine`; }
+    if (CONTROL === 'mlbold') {
+      const twins = seen.filter(r => r.slug === 'mlb' && r.old);
+      const wrong = twins.filter(r => r.old.problems.some(p => p.includes('no record band'))).length;
+      ok = ok && wrong > 0;
+      note += `; ${wrong} of ${twins.length} first exits written as an older save holds them are laid out with no record band`;
+    }
     if (CONTROL === 'poscore') {
       const wrong = seen.filter(r => r.p4.some(p => p.includes('prints a score'))).length;
       ok = ok && wrong > 0;

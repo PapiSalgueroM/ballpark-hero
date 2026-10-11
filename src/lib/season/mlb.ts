@@ -562,10 +562,21 @@ function shapeOf(eraId: string | undefined, year: number): UsShape | null {
   return (eraId ?? 'now') === 'now' && year >= SHAPE_FROM ? { formula: { kind: 'mlb162' }, divisions: MLB_DIVISIONS_2026 } : null;
 }
 
+/** A result an OLDER BUILD of the engine wrote in a year whose own list does not
+ *  hold it. Before Round 1226 the engine wrote today's ladder in every year, so
+ *  a save from before it holds "Lost the Wild Card series" for a first exit of
+ *  2004 to 2021, years with no such round or with a one game wild card. It was
+ *  a first exit and holds a first exit's band, whatever the year (so the record
+ *  laid out still fits how the season ended); any other unknown word has none. */
+function olderBand(teamResult: string): readonly [number, number] | null {
+  return teamResult === MLB_PLAYOFF_LADDER[0] ? BANDS[1] : null;
+}
+
 /** Why a season with a postseason shows no path, or null. */
 function noPathNote(row: UsRow): string | null {
-  if (!formatOf(row.year).results.includes(row.teamResult)) return null;
+  if (!formatOf(row.year).results.includes(row.teamResult) && olderBand(row.teamResult) === null) return null;
   if (row.year < MLB_PLAYOFF_FORMAT.from) return `The playoff path starts with the ${MLB_PLAYOFF_FORMAT.from} season, when the playoffs took today's shape.`;
+  if (typeof row.poGames !== 'number') return 'No playoff path for this season: your season card holds no playoff games.';
   return "No playoff path for this season: the playoff games on your season card do not fit today's rounds.";
 }
 
@@ -578,6 +589,7 @@ export const MLB_SEASON: UsSeasonBind = {
   heldFor: pos => mlbHeldPos(pos),
   shapeOf,
   formatOf,
+  olderBand,
   /* the ledger holds every round's length from its format year on, and the saved games must fit them */
   pathFrom: MLB_PLAYOFF_FORMAT.from,
   pathNeedsFit: true,

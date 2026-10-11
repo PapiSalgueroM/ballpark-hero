@@ -117,6 +117,10 @@ export interface UsSeasonBind {
   /** Round 1212: a sport whose postseason changed shape over the years a career plays hands the year's own
    *  results, bands, series and rounds; absent: the four members below stand for every year. */
   formatOf?(year: number): UsSeasonFormat;
+  /** Round 1212 (fix pass): the band of a result the year's own list does not hold and an OLDER BUILD of the
+   *  engine wrote in that year, by exact equality (baseball wrote one ladder for every year before Round
+   *  1226, so an older save holds a first exit word some years never had); null or absent: no band. */
+  olderBand?(teamResult: string): readonly [number, number] | null;
   /** Round 1212: no playoff path is drawn for a season before this year; absent: every year. */
   pathFrom?: number;
   /** Round 1212: no path at all when the saved playoff games do not fit the rounds played; absent: the
@@ -221,11 +225,14 @@ export function dealUnnamed(games: number, rng: Rng): [number, number][][] {
   return flags.map((home, i): [number, number][] => [home ? [0, i + 1] : [i + 1, 0]]);
 }
 
-/** The band a team result holds, by exact equality with the engine's own words; null: an unknown result. */
+/** The band a team result holds, by exact equality with the engine's own words; null: an unknown result.
+ *  Round 1212 (fix pass): a word the year's own list does not hold may still be one an older build of the
+ *  engine wrote in that year, and the bind says which band it holds (`olderBand`); absent: none. */
 export function usBandOf(bind: UsSeasonBind, teamResult: string): readonly [number, number] | null {
   if (teamResult === bind.missed) return bind.bands[0] ?? null;
   const i = bind.results.indexOf(teamResult);
-  return i < 0 ? null : bind.bands[i + 1] ?? null;
+  if (i < 0) return bind.olderBand?.(teamResult) ?? null;
+  return bind.bands[i + 1] ?? null;
 }
 
 /** The game's own teams of that season by slot, or null when the ledger's

@@ -326,7 +326,36 @@ describe('October, by the year', () => {
     }
     expect(usBandOf(usBindOf(MLB_SEASON, 2015), MLB_WILD_CARD_GAME_EXIT)).toEqual([84, 95]);
     expect(usBandOf(usBindOf(MLB_SEASON, 2027), MLB_WILD_CARD_GAME_EXIT)).toBeNull();
-    expect(usBandOf(usBindOf(MLB_SEASON, 2008), 'Lost the Wild Card series')).toBeNull();
+    /* the word a build before Round 1226 wrote for a first exit in EVERY year (the live site's saves hold it):
+       a first exit's band in a year with no wild card round and in a year whose wild card was one game */
+    for (const year of [2004, 2008, 2011, 2012, 2015, 2019, 2021, 2022, 2030]) expect(usBandOf(usBindOf(MLB_SEASON, year), 'Lost the Wild Card series'), String(year)).toEqual([84, 95]);
+    expect(usBandOf(usBindOf(MLB_SEASON, 2008), 'Lost the Wild Card series ')).toBeNull();
+    expect(usBandOf(usBindOf(MLB_SEASON, 2008), MLB_WILD_CARD_GAME_EXIT)).toBeNull();
+  });
+  it('lays out a first exit of 2009 and of 2015 as a save from before Round 1226 holds it: a first exit\'s record, no path, and the line that says why', () => {
+    const view = MLB_SEASON.view;
+    let seen = 0;
+    for (const year of [2009, 2015]) {
+      const team = mlbEraTeamIds('y2004').find(t => mlbHeldLine(year, t, 'y2004') === null)!;
+      /* the year's own ladder does not hold the word: no wild card round in 2009, a one game wild card in 2015 */
+      expect(mlbPlayoffResults(year)).not.toContain('Lost the Wild Card series');
+      for (let games = 150; games <= 157; games += 1) {
+        /* as the live engine wrote it: the old word, playoff games by the old law, no `slate` */
+        const row = ROW({ year, team, games, teamResult: 'Lost the Wild Card series', poGames: 4 });
+        const b = okBuild(row, 'CF', 'y2004');
+        const s = deriveSeason(b.sport, row, b.ctx)!;
+        expect(s, `${year} ${games}`).not.toBeNull();
+        expect(s.target, `${year} ${games}`).toEqual({ kind: 'record', winsMin: 84, winsMax: 95 });
+        const wins = s.games.filter(g => g.us > g.them).length;
+        expect(wins, `${year} ${games}`).toBeGreaterThanOrEqual(84);
+        expect(wins, `${year} ${games}`).toBeLessThanOrEqual(95);
+        expect(disagreements(b.sport, row, b.ctx, s), `${year} ${games}`).toEqual([]);
+        expect(usPlayoffPath(MLB_SEASON, row, b.ctx, b.key), `${year} ${games}`).toBeNull();
+        expect(view.noPathNote!(row), `${year} ${games}`).toBe("The playoff path starts with the 2022 season, when the playoffs took today's shape.");
+        seen += 1;
+      }
+    }
+    expect(seen).toBe(16);
   });
   it('draws a path from 2022 on, round by round, whose scores add up to the saved games, and names nobody', () => {
     const { ctx, key } = okBuild(ROW());
@@ -368,6 +397,9 @@ describe('October, by the year', () => {
     }
     expect(view.noPathNote!(ROW({ teamResult: MLB_MISSED_PLAYOFFS }))).toBeNull();
     expect(view.noPathNote!(ROW({ teamResult: 'Lost the Wild Card series', poGames: 5 }))).toBe("No playoff path for this season: the playoff games on your season card do not fit today's rounds.");
+    /* a line that holds no playoff games at all is not told its games "do not fit" */
+    expect(view.noPathNote!(ROW({ teamResult: 'Lost the Division Series' }))).toBe('No playoff path for this season: your season card holds no playoff games.');
+    expect(view.noPathNote!(ROW({ teamResult: 'Lost the Division Series ', poGames: 5 }))).toBeNull();
   });
 });
 
