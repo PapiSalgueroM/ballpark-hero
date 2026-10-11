@@ -1,0 +1,19 @@
+# Round 1306 FINAL head ecb69867, served: the weight rows of the head, of the base c9a1f86a and after steps (b) and (e), each by its own build; the walks that were red or not run on r1306-walk1; the three routes played again
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: bash .rc/x/weightAt.sh c9a1f86a 4181
+weight-stepb: bash .rc/x/weightAt.sh ca421497 4182
+weight-stepe: bash .rc/x/weightAt.sh a87cd26d 4183
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playCmQuickSubs: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playClubManager: node scripts/playClubManager.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
