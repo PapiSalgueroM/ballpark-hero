@@ -1,0 +1,4 @@
+# Reviewer sc-screens, Release AW part one, run 3: the tournament history rows, the retirement suggestion with its farewell card, the brief after a broken promise, the FINAL SEASON banner under reduced motion
+#!serve
+#!playwright
+walkE: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-e.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-e.log 2>&1; FIXTURES=.tmp-fx/rv/fx-e.json REPORT=walk-e ONLY_S=extra node .rc/x/walk.mjs
