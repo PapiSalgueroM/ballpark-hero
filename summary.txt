@@ -1,0 +1,16 @@
+plan exit=0 4s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+plan-s3 exit=0 4s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 3).
+plan-s7 exit=0 3s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 7).
+plan-typed exit=1 3s | simUsPlanSeason control typed: FIRED (must turn exactly card and rates red; red: card, rates)
+plan-yeardrift exit=1 3s | simUsPlanSeason control yeardrift: FIRED (must turn exactly judge and rates red; red: judge, rates)
+plan-statfull exit=1 3s | simUsPlanSeason control statfull: FIRED (must turn exactly card and rates red; red: card, rates)
+vitest-plan exit=0 63s |    Duration  61.91s (transform 2.25s, setup 497ms, collect 6.95s, tests 59.30s, environment 3.68s, prepare 1.05s)
+tsc exit=0 100s | 
+simCareerProgramme exit=0 92s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+simUsBoardParity exit=0 62s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+lay-compare exit=0 30s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+simMlbCareer exit=0 22s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simUsSeasonLedger exit=0 4s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+probe-main-then-head exit=0 8s | uscPlan: done on /home/runner/work/ballpark-hero/ballpark-hero
+simNhlCareer exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
