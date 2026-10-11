@@ -111,6 +111,8 @@ type Frame = {
   /** Which goal the ball is in: 'top' is the opposition's net (the one I attack), 'bottom' is mine. */
   netAt: 'top' | 'bottom' | null;
   card: string | null; cardId: string | null; cardText: string; goalCard: string | null; celebrating: boolean; text: string;
+  /** The small line under the pitch (chances, saves, corners, throw ins, fouls). */
+  line: string;
 };
 function snap(c: HTMLElement, ms: number): Frame {
   const root = c.querySelector('[data-cm-live-stage]')!;
@@ -125,6 +127,7 @@ function snap(c: HTMLElement, ms: number): Frame {
     card: card?.getAttribute('data-cm-var') ?? null, cardId: card?.getAttribute('data-cm-var-id') ?? null, cardText: card?.textContent ?? '',
     goalCard: c.querySelector('[data-cm-goal-card]')?.textContent ?? null,
     celebrating: !!c.querySelector('[data-cm-actor-pose="celebrate"]'), text: c.textContent ?? '',
+    line: c.querySelector('[data-cm-live-event]')?.textContent ?? '',
   };
 }
 function mount(career: CareerState) {
@@ -167,13 +170,18 @@ const ruledOutIds = (feed: LiveFeedEvent[]) => new Map(reviewsOf(feed).filter(r 
  * that says "goal ruled out" on top of it (the review of Round 1302 saw exactly that on league match 2, seed 42322,
  * and the rule as it was, "a goal stopped in a net", could not tell the two apart). Under any other card (a
  * penalty a review gives) there is no action at all.
+ * Round 1302 fix 2: and the small line under the pitch says nothing under the card of a ruled out goal. It used to
+ * keep the last thing told ("Throw in, Aston Villa" under a goal and a card that rules it out, in the lit walk's
+ * pictures). A real goal has cleared that line while it plays since Round 1101.
  */
 function nothingUnder(frames: Frame[], nets: Map<string, 'top' | 'bottom'>) {
   for (const f of frames.filter(cardUp)) {
     expect(f.goalCard, `a goal card under the review card at ${f.ms} ms`).toBeNull();
     const own = nets.get(f.cardId!);
-    if (own) expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `what the pitch shows under the card of a ruled out goal at ${f.ms} ms`).toBe(`goal/net in the ${own} net`);
-    else expect(`${f.motion}/${f.phase}`, `an action under the review card at ${f.ms} ms`).toBe('pass/pass');
+    if (own) {
+      expect(`${f.motion}/${f.phase} in the ${f.netAt} net`, `what the pitch shows under the card of a ruled out goal at ${f.ms} ms`).toBe(`goal/net in the ${own} net`);
+      expect(f.line, `the line under the pitch under the card of a ruled out goal at ${f.ms} ms`).toBe('');
+    } else expect(`${f.motion}/${f.phase}`, `an action under the review card at ${f.ms} ms`).toBe('pass/pass');
   }
 }
 /** Each review's id in the order its card came up. */
@@ -220,6 +228,12 @@ describe('Club Manager: the review screen', () => {
     expect(after.every(f => f.motion === 'pass'), 'the ruled out goal went on playing after its review').toBe(true);
     expect(after.some(f => f.celebrating) || lead.some(f => f.celebrating)).toBe(false);
     expect(after[after.length - 1].text).toContain(`VAR: goal ruled out: ${v.text} (${clubOf(h, v)})`);
+    /* Round 1302 fix 2: the line under the pitch says nothing from the goal's first frame until its card is gone
+       (it kept the last small line told before the goal), and then it says the ruling. */
+    const struck = frames.findIndex(f => f.motion === 'goal');
+    expect(struck, 'the ruled out goal never started').toBeGreaterThan(0);
+    expect([...new Set(frames.slice(struck, last + 1).map(f => f.line))], 'the line under the pitch while the ruled out goal was played and reviewed').toEqual(['']);
+    expect(after.some(f => f.line === `VAR: goal ruled out: ${v.text} (${clubOf(h, v)})`), 'the line under the pitch never said the ruling').toBe(true);
   }, 120000);
 
   it.each([
@@ -365,6 +379,47 @@ describe('Club Manager: the review screen', () => {
     const firstUp = frames.findIndex(f => f.cardId === id), firstDown = frames.map(f => f.cardId).lastIndexOf(id), secondUp = frames.findIndex(f => f.cardId === second);
     expect(frames.slice(0, firstUp).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the first ruled out goal was not drawn before its review').toBe(true);
     expect(frames.slice(firstDown + 1, secondUp).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the second ruled out goal was not drawn before its review').toBe(true);
+    expect(new Set(frames.map(f => f.score)), 'the score moved with a ruled out goal').toEqual(new Set([before]));
+    expect(frames.some(f => f.goalCard !== null)).toBe(false);
+    const end = frames[frames.length - 1].text;
+    expect(end).toContain(`VAR: goal ruled out: ${v.text} (${h.career.clubName})`);
+    expect(end).toContain(`VAR: goal ruled out: ${theirs!.n}`);
+  }, 180000);
+
+  /* Round 1302 fix 2. THE SECOND CASE STAGED BY HAND, the last of the lead's list nobody had played: two reviews in
+     back to back minutes (the engine holds none in 15,000 halves either). The same real half and the same copy of
+     its real review onto one of their men, ONE MINUTE LATER. Nothing else is typed. Each goal has a clock place to
+     itself, so both are played on the clock: each before its own card, each card on its own goal in its own net
+     and not before the minute it prints, the second goal not started while the first card is up, and the score
+     never moving. */
+  it('two goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute', async () => {
+    const h = half(0, 2460, ruledOutAlone);
+    const v = h.review, id = v.review!.id, second = `${id}:staged`;
+    const career = structuredClone(h.career), play = career.live!.h1Play!;
+    const at = play.findIndex(p => p.review?.id === id);
+    const theirs = (career.live!.oppXi ?? []).find(p => p.p !== 'GK');
+    expect(at, 'the ruled out goal has no line in the committed play').toBeGreaterThanOrEqual(0);
+    expect(theirs, 'the opposition has nobody on the pitch to give the staged goal to').toBeTruthy();
+    play.splice(at + 1, 0, { ...play[at], minute: play[at].minute + 1, side: 'opp', who: theirs!.n, review: { ...play[at].review!, id: second } });
+    const feed = liveFeed(career.live!), before = scoreBy(feed, place(v) + 1);
+    expect(reviewsOf(feed).filter(r => place(r) >= place(v) && place(r) <= place(v) + 1).map(r => `${place(r)} ${r.review!.id}`)).toEqual([`${place(v)} ${id}`, `${place(v) + 1} ${second}`]);
+    const mounted = openAt({ ...h, career }, v.minute - 1);
+    const frames = await run(mounted, 24000, closedFor(second, 700));
+    const ids = frames.map(f => f.cardId), firstUp = ids.indexOf(id), firstDown = ids.lastIndexOf(id), secondUp = ids.indexOf(second);
+    const goals = actionRuns(frames).filter(r => r.kind === 'goal');
+    console.info(`clubManagerVarScreen: back to back (staged by hand) on seed ${h.seed}: reviews at ${place(v)} and ${place(v) + 1}, cards at ${firstUp >= 0 ? frames[firstUp].minute : 'never'} and ${secondUp >= 0 ? frames[secondUp].minute : 'never'}, ${goals.length} goal(s) played, starting at ${goals.map(g => `${frames[g.from].ms} ms (minute ${frames[g.from].minute})`).join(' and ')}, first card up from ${firstUp >= 0 ? frames[firstUp].ms : '-'} to ${firstDown >= 0 ? frames[firstDown].ms : '-'} ms`);
+    expect(order(frames), 'the two reviews did not each get their card, one after the other').toEqual([id, second]);
+    nothingUnder(frames, ruledOutIds(feed));
+    /* Each card not before the minute it prints (the first at its minute to the place, as on the half untouched). */
+    expect(frames[firstUp].minute, 'the first card is not at the minute it prints').toBe(v.minute);
+    expect(frames[secondUp].minute, 'the second review opened before its own minute').toBeGreaterThanOrEqual(v.minute + 1);
+    /* Two goals played, one before each card, and nothing of the second while the first card is up. */
+    const flight = (f: Frame) => f.motion === 'goal' && f.phase === 'flight';
+    expect(goals.length, 'the two ruled out goals were not each played once').toBe(2);
+    expect(goals[0].from).toBeLessThan(firstUp);
+    expect(goals[1].from, 'the second ruled out goal started under the first card').toBeGreaterThan(firstDown);
+    expect(frames.slice(0, firstUp).some(flight), 'the first ruled out goal was not drawn before its review').toBe(true);
+    expect(frames.slice(firstDown + 1, secondUp).some(flight), 'the second ruled out goal was not drawn before its review').toBe(true);
     expect(new Set(frames.map(f => f.score)), 'the score moved with a ruled out goal').toEqual(new Set([before]));
     expect(frames.some(f => f.goalCard !== null)).toBe(false);
     const end = frames[frames.length - 1].text;
@@ -572,8 +627,20 @@ describe('Club Manager: the review screen', () => {
     console.info(`clubManagerVarScreen: the crowded end was found on seed ${h.seed}, whistle ${h.whistle}, review at ${place(v)}, card at ${frames[first].minute + frames[first].plus}, played ${runs.map(r => r.kind).join(' ')}`);
   }, 240000);
 
+  /* Round 1302 fix 2: this case asked only that the card comes once and the half ends on the engine's score. Nobody
+     had looked at what is UNDER the card of a penalty a review gives where real chances fill the end of a half (the
+     awarded twin of the ruled out goals above). It says what it finds, and asks the rule every other awarded card
+     is held to: no action under the card, and the score does not move under it. */
   it('a review at the very end of a crowded half is still shown once, and the half ends on the engine score', async () => {
-    await toTheWhistle(half(0, 2483, lastMinutes('awarded', false)));
+    const h = half(0, 2483, lastMinutes('awarded', false));
+    const v = h.review;
+    const { frames, last, whistle } = await toTheWhistle(h);
+    const first = frames.findIndex(cardUp), up = frames.filter(cardUp);
+    const runs = actionRuns(frames.slice(0, whistle));
+    const under = [...new Set(up.map(f => `${f.motion}/${f.phase}${f.netAt ? ` in the ${f.netAt} net` : ''}`))];
+    console.info(`clubManagerVarScreen: the crowded end with a penalty given was found on seed ${h.seed}, whistle ${h.whistle}, review at ${place(v)}, card at ${frames[first].minute + frames[first].plus}, under the card ${under.join(' and ')}, score under it ${[...new Set(up.map(f => f.score))].join(' then ')}, at the whistle ${frames[whistle].score}, played ${runs.map(r => `${r.kind}${r.from > last ? ' (after the card)' : ''}`).join(', ') || 'nothing'}, chances from 44 on ${h.feed.filter(e => isChance(e) && place(e) >= 44).map(e => `${e.side} ${e.kind} at ${place(e)}${e.penalty ? ' (P)' : ''}`).join(', ')}`);
+    nothingUnder(frames, new Map());
+    expect(new Set(up.map(f => f.score)).size, 'the score moved under the review card').toBe(1);
   }, 120000);
 
   /* ---- Round 1302: the cases nobody had played (fix-AT section 7 item 8) ----
