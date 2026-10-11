@@ -1,0 +1,14 @@
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simEras: node scripts/simEras.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+pins971: bash .rc/x/pinsat.sh 1a8e68b7
+pinsPre1035: bash .rc/x/pinsat.sh 709e103f
+pinsPre1040seg: bash .rc/x/pinsat.sh fa77f447
+pinsHead: bash .rc/x/pinsat.sh HEAD
