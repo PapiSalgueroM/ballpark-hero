@@ -1,0 +1,13 @@
+# Release AW: merge d (PR221, the agent review) with its pin, head 9d73ce5f. Its own kit as its workflow runs it, one stage a line.
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+agent-units: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-agent-review-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerAgentReview.test.ts src/test/soccerAgentReviewUi.test.tsx src/test/soccerAgentReviewPage.test.tsx src/test/soccerCareerSaveRetry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-agent-review-artifacts/units.json 2>&1 | tee soccer-agent-review-artifacts/units.log | tail -40; s=$?; node scripts/qa/checkSoccerAgentReview.mjs units; c=$?; exit $((s + c))
+agent-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-agent-review-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs 2>&1 | tee soccer-agent-review-artifacts/outcomes.log | tail -40; s=$?; node scripts/qa/checkSoccerAgentReview.mjs outcomes; c=$?; exit $((s + c))
+agent-page-control: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-agent-review-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs 2>&1 | tee soccer-agent-review-artifacts/page-control.log | tail -40; s=$?; node scripts/qa/checkSoccerAgentReview.mjs page-control; c=$?; exit $((s + c))
+agent-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-agent-review-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs 2>&1 | tee soccer-agent-review-artifacts/native.log | tail -40; s=$?; node scripts/qa/checkSoccerAgentReview.mjs native; c=$?; exit $((s + c))
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

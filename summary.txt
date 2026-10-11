@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 62s | 
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+agent-units exit=0 16s | PASS agent review units: {"mode":"units","total":129,"files":[{"file":"soccerAgentReview.test.ts","passed":83},{"file":"soccerAgentReviewUi.test.tsx","passed":28},{"file"
+agent-outcomes exit=0 10s | PASS agent review outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":120,"readVectors":120,"sourceControls":7,"branches":4,"sourceHeld":true}
+agent-page-control exit=0 19s | PASS agent review page-control: {"mode":"page-control","pageBaseline":10,"componentBaseline":28,"sourceControls":2,"intendedFailures":[{"id":"page-double-callback","faile
+agent-native exit=2 337s | Node.js v24.21.0
+simSoccerContractMoves exit=0 2s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simSoccerOfferReview exit=0 13s | Soccer offer review: passed.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
