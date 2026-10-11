@@ -1,0 +1,10 @@
+derby exit=0 4s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+dev exit=0 6s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+trophy exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+season exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+story exit=0 56s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+derby-all exit=0 24s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,10 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derb
+trophy-all exit=0 20s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 7 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/tr
+season-all exit=0 20s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,8 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+dev-all exit=0 157s | simSoccerCareerDevelopment: healthy outcomes passed, 27 effective controls caught
+story-all exit=0 877s | simCareerStoryRole: 16 healthy groups, 17 effective copied controls caught;12 complete AR careers and48 neutral pairs held
