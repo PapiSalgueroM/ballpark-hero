@@ -1,0 +1,2234 @@
+{
+ "problems": [
+  "again-star-390: the halfway poster does not say All-Star for a season whose awards are [\"All-Star\"]: \"\"",
+  "again-older-390: the halfway poster does not say All-Star for a season whose awards are [\"All-Star\"]: \"\""
+ ],
+ "scenarios": {
+  "first-390": {
+   "seed": 41,
+   "team": "PHI",
+   "year": 2026,
+   "pos": "CF",
+   "hub": {
+    "button": "📺 Week by week",
+    "held": null,
+    "h": 44
+   },
+   "pressMs": 113,
+   "help": "How the Season Center worksYour season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not.The teams, the divisions and how often you meet each one follow the league's standard schedule formula. How the games are grouped into series, which series falls where and which park a league series is played in, every score and every stat line are this career's own, not a real schedule.Your team's record is this career's own too. It always fits how your season ended: here a champion wins 92 to 108 of 162 and a team that missed the playoffs 52 to 86.If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again.▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final.Worked examplesA gameGame 41, at home to the Atlanta Braves. You win 6-4 and go 2 for 4 with a home run and 3 RBI. Your record goes to 24-17.Your numbersYour season card says .287 with 24 home runs and 81 RBI. Every home run, RBI, double and steal here adds up to exactly that, and your hits over your at bats round to .287. Walks are not dealt game by game, so your on base percentage is the one on your card.SeriesBaseball is played in series: a few games in a row against one club in one park. You meet each division rival 13 times, and how often you meet everybody else follows the league formula too. A game you sat out reads Did not play.The inningsThe clock runs inning by inning. Each line is the runs a side put up in that inning, and a home run of yours is called out in the inning it came in. A game still level after nine is settled in extra innings, shown as one last mark.All-StarIf your season card has an All-Star on it, the halfway point tells you so.The playoffs show as a path, round by round, with the numbers your season card already has. From 2026 on, the league is this career's own world on today's format. Every October here starts at the first round: this career has no first round bye. The path shows each round and its score, not who you played. A season before 2022 shows no playoff path, because the playoffs had a different shape then, and a season whose playoff games do not fit today's rounds shows none either.Got it",
+   "kickoff": "Philadelphia Phillies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1AwayTexas Rangers2AwayTexas Rangers3AwayTexas Rangers4HomeCincinnati Reds5HomeCincinnati Reds▶ Play ball⏭ Straight to the season review",
+   "line": {
+    "year": 2026,
+    "team": "PHI",
+    "age": 21,
+    "ovr": 72,
+    "games": 158,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.236,
+    "hr": 12,
+    "rbi": 65,
+    "sb": 1,
+    "doubles": 25,
+    "obp": 0.31
+   },
+   "gameMs": 15356,
+   "game": {
+    "clock": "TEX5-8PHIFINALFinal5th⚾ Philadelphia Phillies put 8 on the board in the 5th5th⚾ Texas Rangers put 5 on the board in the 5th",
+    "full": true,
+    "his": "2-53 RBI"
+   },
+   "log7": {
+    "record": "2-5",
+    "rows": [
+     [
+      "G7",
+      "H",
+      "CIN",
+      "L 3-6",
+      "2-3 1 RBI"
+     ],
+     [
+      "G6",
+      "H",
+      "CIN",
+      "L 7-9",
+      "0-3"
+     ],
+     [
+      "G5",
+      "H",
+      "CIN",
+      "L 6-7",
+      "0-3"
+     ],
+     [
+      "G4",
+      "H",
+      "CIN",
+      "W 6-5",
+      "1-3 2B"
+     ],
+     [
+      "G3",
+      "A",
+      "TEX",
+      "L 2-8",
+      "0-4"
+     ],
+     [
+      "G2",
+      "A",
+      "TEX",
+      "L 5-6",
+      "0-4"
+     ],
+     [
+      "G1",
+      "A",
+      "TEX",
+      "W 8-5",
+      "2-5 3 RBI"
+     ]
+    ]
+   },
+   "poster": "HalfwayFirst half: 80 games, .225 with 4 home runs.Best so far: Game 27, L 4-6, 2 for 4 with a home run, a double and 2 RBI",
+   "review": {
+    "tiles": [
+     "158Games",
+     ".236AVG",
+     "12HR",
+     "65RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review71-91 · Missed October158Games.236AVG12HR65RBIRegular season, the same numbers as your season card.⭐ Best game: Game 94, W 7-2 vs Miami Marlins, 3 for 6 with 2 home runs and 2 RBILast five:WLLWL"
+   },
+   "record": "71-91",
+   "panel": "← BackG162HSDPL 1-31-5G161HSDPW 6-41-3G160HSDPL 1-91-5G159ASFGL 3-61-4G158ASFGW 8-32-3 2BG157ASFGL 0-81-5G156APITW 5-21-5 1 RBIG155APITL 4-50-5G154APITL 1-51-5 2BG153HNYYL 0-110-3G152HNYYL 3-63-5 1 RBI 2BG151HNYYW 3-20-3G150HWSNL 1-93-5 2BG149HWSNL 5-110-5G148HWSNL 3-6Did not playG147HSEAW 9-50-4G146HSEAL 4-70-4G145HSEAL 1-71-4G144HCOLL 4-112-5G143HCOLL 9-130-3 2 RBIG142HCOLW 8-31-3 1 RBIG141HATLL",
+   "sums": {
+    "games": 162,
+    "played": 158,
+    "ab": 598,
+    "h": 141,
+    "hr": 12,
+    "rbi": 65,
+    "d": 25,
+    "sb": 1,
+    "w": 71,
+    "l": 91,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "SDP",
+     "L 1-3",
+     "1-5"
+    ],
+    [
+     "G161",
+     "H",
+     "SDP",
+     "W 6-4",
+     "1-3"
+    ],
+    [
+     "G160",
+     "H",
+     "SDP",
+     "L 1-9",
+     "1-5"
+    ],
+    [
+     "G159",
+     "A",
+     "SFG",
+     "L 3-6",
+     "1-4"
+    ],
+    [
+     "G3",
+     "A",
+     "TEX",
+     "L 2-8",
+     "0-4"
+    ],
+    [
+     "G2",
+     "A",
+     "TEX",
+     "L 5-6",
+     "0-4"
+    ],
+    [
+     "G1",
+     "A",
+     "TEX",
+     "W 8-5",
+     "2-5 3 RBI"
+    ]
+   ],
+   "after": {
+    "overlay": false,
+    "curtain": "\n      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }\n      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }\n      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }\n      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }\n      @keyframes cmWinPulse { 0% { box-shadow: 0 0"
+   },
+   "hubAfter": {
+    "watch": null,
+    "button": null,
+    "held": null,
+    "head": "MLB My Career"
+   },
+   "errors": []
+  },
+  "first-390-rm": {
+   "seed": 41,
+   "team": "PHI",
+   "year": 2026,
+   "pos": "CF",
+   "hub": {
+    "button": "📺 Week by week",
+    "held": null,
+    "h": 44
+   },
+   "pressMs": 109,
+   "kickoff": "Philadelphia Phillies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1AwayTexas Rangers2AwayTexas Rangers3AwayTexas Rangers4HomeCincinnati Reds5HomeCincinnati Reds▶ Play ball⏭ Straight to the season review",
+   "line": {
+    "year": 2026,
+    "team": "PHI",
+    "age": 21,
+    "ovr": 72,
+    "games": 158,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.236,
+    "hr": 12,
+    "rbi": 65,
+    "sb": 1,
+    "doubles": 25,
+    "obp": 0.31
+   },
+   "gameMs": 9,
+   "game": {
+    "clock": "TEX5-8PHIFINALFinal5th⚾ Philadelphia Phillies put 8 on the board in the 5th5th⚾ Texas Rangers put 5 on the board in the 5th",
+    "full": true,
+    "his": "2-53 RBI"
+   },
+   "log7": {
+    "record": "2-5",
+    "rows": [
+     [
+      "G7",
+      "H",
+      "CIN",
+      "L 3-6",
+      "2-3 1 RBI"
+     ],
+     [
+      "G6",
+      "H",
+      "CIN",
+      "L 7-9",
+      "0-3"
+     ],
+     [
+      "G5",
+      "H",
+      "CIN",
+      "L 6-7",
+      "0-3"
+     ],
+     [
+      "G4",
+      "H",
+      "CIN",
+      "W 6-5",
+      "1-3 2B"
+     ],
+     [
+      "G3",
+      "A",
+      "TEX",
+      "L 2-8",
+      "0-4"
+     ],
+     [
+      "G2",
+      "A",
+      "TEX",
+      "L 5-6",
+      "0-4"
+     ],
+     [
+      "G1",
+      "A",
+      "TEX",
+      "W 8-5",
+      "2-5 3 RBI"
+     ]
+    ]
+   },
+   "poster": "HalfwayFirst half: 80 games, .225 with 4 home runs.Best so far: Game 27, L 4-6, 2 for 4 with a home run, a double and 2 RBI",
+   "review": {
+    "tiles": [
+     "158Games",
+     ".236AVG",
+     "12HR",
+     "65RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review71-91 · Missed October158Games.236AVG12HR65RBIRegular season, the same numbers as your season card.⭐ Best game: Game 94, W 7-2 vs Miami Marlins, 3 for 6 with 2 home runs and 2 RBILast five:WLLWL"
+   },
+   "record": "71-91",
+   "panel": "← BackG162HSDPL 1-31-5G161HSDPW 6-41-3G160HSDPL 1-91-5G159ASFGL 3-61-4G158ASFGW 8-32-3 2BG157ASFGL 0-81-5G156APITW 5-21-5 1 RBIG155APITL 4-50-5G154APITL 1-51-5 2BG153HNYYL 0-110-3G152HNYYL 3-63-5 1 RBI 2BG151HNYYW 3-20-3G150HWSNL 1-93-5 2BG149HWSNL 5-110-5G148HWSNL 3-6Did not playG147HSEAW 9-50-4G146HSEAL 4-70-4G145HSEAL 1-71-4G144HCOLL 4-112-5G143HCOLL 9-130-3 2 RBIG142HCOLW 8-31-3 1 RBIG141HATLL",
+   "sums": {
+    "games": 162,
+    "played": 158,
+    "ab": 598,
+    "h": 141,
+    "hr": 12,
+    "rbi": 65,
+    "d": 25,
+    "sb": 1,
+    "w": 71,
+    "l": 91,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "SDP",
+     "L 1-3",
+     "1-5"
+    ],
+    [
+     "G161",
+     "H",
+     "SDP",
+     "W 6-4",
+     "1-3"
+    ],
+    [
+     "G160",
+     "H",
+     "SDP",
+     "L 1-9",
+     "1-5"
+    ],
+    [
+     "G159",
+     "A",
+     "SFG",
+     "L 3-6",
+     "1-4"
+    ],
+    [
+     "G3",
+     "A",
+     "TEX",
+     "L 2-8",
+     "0-4"
+    ],
+    [
+     "G2",
+     "A",
+     "TEX",
+     "L 5-6",
+     "0-4"
+    ],
+    [
+     "G1",
+     "A",
+     "TEX",
+     "W 8-5",
+     "2-5 3 RBI"
+    ]
+   ],
+   "after": {
+    "overlay": false,
+    "curtain": "\n      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }\n      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }\n      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }\n      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }\n      @keyframes cmWinPulse { 0% { box-shadow: 0 0"
+   },
+   "hubAfter": {
+    "watch": null,
+    "button": null,
+    "held": null,
+    "head": "MLB My Career"
+   },
+   "errors": []
+  },
+  "first-1280": {
+   "seed": 41,
+   "team": "PHI",
+   "year": 2026,
+   "pos": "CF",
+   "hub": {
+    "button": "📺 Week by week",
+    "held": null,
+    "h": 44
+   },
+   "pressMs": 110,
+   "kickoff": "Philadelphia Phillies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1AwayTexas Rangers2AwayTexas Rangers3AwayTexas Rangers4HomeCincinnati Reds5HomeCincinnati Reds▶ Play ball⏭ Straight to the season review",
+   "line": {
+    "year": 2026,
+    "team": "PHI",
+    "age": 21,
+    "ovr": 72,
+    "games": 158,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.236,
+    "hr": 12,
+    "rbi": 65,
+    "sb": 1,
+    "doubles": 25,
+    "obp": 0.31
+   },
+   "gameMs": 15350,
+   "game": {
+    "clock": "TEX5-8PHIFINALFinal5th⚾ Philadelphia Phillies put 8 on the board in the 5th5th⚾ Texas Rangers put 5 on the board in the 5th",
+    "full": true,
+    "his": "2-53 RBI"
+   },
+   "log7": {
+    "record": "2-5",
+    "rows": [
+     [
+      "G7",
+      "H",
+      "CIN",
+      "L 3-6",
+      "2-3 1 RBI"
+     ],
+     [
+      "G6",
+      "H",
+      "CIN",
+      "L 7-9",
+      "0-3"
+     ],
+     [
+      "G5",
+      "H",
+      "CIN",
+      "L 6-7",
+      "0-3"
+     ],
+     [
+      "G4",
+      "H",
+      "CIN",
+      "W 6-5",
+      "1-3 2B"
+     ],
+     [
+      "G3",
+      "A",
+      "TEX",
+      "L 2-8",
+      "0-4"
+     ],
+     [
+      "G2",
+      "A",
+      "TEX",
+      "L 5-6",
+      "0-4"
+     ],
+     [
+      "G1",
+      "A",
+      "TEX",
+      "W 8-5",
+      "2-5 3 RBI"
+     ]
+    ]
+   },
+   "poster": "HalfwayFirst half: 80 games, .225 with 4 home runs.Best so far: Game 27, L 4-6, 2 for 4 with a home run, a double and 2 RBI",
+   "review": {
+    "tiles": [
+     "158Games",
+     ".236AVG",
+     "12HR",
+     "65RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review71-91 · Missed October158Games.236AVG12HR65RBIRegular season, the same numbers as your season card.⭐ Best game: Game 94, W 7-2 vs Miami Marlins, 3 for 6 with 2 home runs and 2 RBILast five:WLLWL"
+   },
+   "record": "71-91",
+   "panel": "After game 16271-91Home 38-43Away 33-48Streak L1Division 26-26League 52-62Last 10:LLLWLWLLWLGame logG162HSDPL 1-31-5G161HSDPW 6-41-3G160HSDPL 1-91-5G159ASFGL 3-61-4G158ASFGW 8-32-3 2BG157ASFGL 0-81-5G156APITW 5-21-5 1 RBIG155APITL 4-50-5G154APITL 1-51-5 2BG153HNYYL 0-110-3G152HNYYL 3-63-5 1 RBI 2BG151HNYYW 3-20-3G150HWSNL 1-93-5 2BG149HWSNL 5-110-5G148HWSNL 3-6Did not playG147HSEAW 9-50-4G146HSEAL",
+   "sums": {
+    "games": 162,
+    "played": 158,
+    "ab": 598,
+    "h": 141,
+    "hr": 12,
+    "rbi": 65,
+    "d": 25,
+    "sb": 1,
+    "w": 71,
+    "l": 91,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "SDP",
+     "L 1-3",
+     "1-5"
+    ],
+    [
+     "G161",
+     "H",
+     "SDP",
+     "W 6-4",
+     "1-3"
+    ],
+    [
+     "G160",
+     "H",
+     "SDP",
+     "L 1-9",
+     "1-5"
+    ],
+    [
+     "G159",
+     "A",
+     "SFG",
+     "L 3-6",
+     "1-4"
+    ],
+    [
+     "G3",
+     "A",
+     "TEX",
+     "L 2-8",
+     "0-4"
+    ],
+    [
+     "G2",
+     "A",
+     "TEX",
+     "L 5-6",
+     "0-4"
+    ],
+    [
+     "G1",
+     "A",
+     "TEX",
+     "W 8-5",
+     "2-5 3 RBI"
+    ]
+   ],
+   "after": {
+    "overlay": false,
+    "curtain": "\n      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }\n      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }\n      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }\n      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }\n      @keyframes cmWinPulse { 0% { box-shadow: 0 0"
+   },
+   "hubAfter": {
+    "watch": null,
+    "button": null,
+    "held": null,
+    "head": "MLB My Career"
+   },
+   "errors": []
+  },
+  "first-1280-rm": {
+   "seed": 41,
+   "team": "PHI",
+   "year": 2026,
+   "pos": "CF",
+   "hub": {
+    "button": "📺 Week by week",
+    "held": null,
+    "h": 44
+   },
+   "pressMs": 115,
+   "help": "How the Season Center worksYour season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not.The teams, the divisions and how often you meet each one follow the league's standard schedule formula. How the games are grouped into series, which series falls where and which park a league series is played in, every score and every stat line are this career's own, not a real schedule.Your team's record is this career's own too. It always fits how your season ended: here a champion wins 92 to 108 of 162 and a team that missed the playoffs 52 to 86.If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again.▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final.Worked examplesA gameGame 41, at home to the Atlanta Braves. You win 6-4 and go 2 for 4 with a home run and 3 RBI. Your record goes to 24-17.Your numbersYour season card says .287 with 24 home runs and 81 RBI. Every home run, RBI, double and steal here adds up to exactly that, and your hits over your at bats round to .287. Walks are not dealt game by game, so your on base percentage is the one on your card.SeriesBaseball is played in series: a few games in a row against one club in one park. You meet each division rival 13 times, and how often you meet everybody else follows the league formula too. A game you sat out reads Did not play.The inningsThe clock runs inning by inning. Each line is the runs a side put up in that inning, and a home run of yours is called out in the inning it came in. A game still level after nine is settled in extra innings, shown as one last mark.All-StarIf your season card has an All-Star on it, the halfway point tells you so.The playoffs show as a path, round by round, with the numbers your season card already has. From 2026 on, the league is this career's own world on today's format. Every October here starts at the first round: this career has no first round bye. The path shows each round and its score, not who you played. A season before 2022 shows no playoff path, because the playoffs had a different shape then, and a season whose playoff games do not fit today's rounds shows none either.Got it",
+   "kickoff": "Philadelphia Phillies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1AwayTexas Rangers2AwayTexas Rangers3AwayTexas Rangers4HomeCincinnati Reds5HomeCincinnati Reds▶ Play ball⏭ Straight to the season review",
+   "line": {
+    "year": 2026,
+    "team": "PHI",
+    "age": 21,
+    "ovr": 72,
+    "games": 158,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.236,
+    "hr": 12,
+    "rbi": 65,
+    "sb": 1,
+    "doubles": 25,
+    "obp": 0.31
+   },
+   "gameMs": 11,
+   "game": {
+    "clock": "TEX5-8PHIFINALFinal5th⚾ Philadelphia Phillies put 8 on the board in the 5th5th⚾ Texas Rangers put 5 on the board in the 5th",
+    "full": true,
+    "his": "2-53 RBI"
+   },
+   "log7": {
+    "record": "2-5",
+    "rows": [
+     [
+      "G7",
+      "H",
+      "CIN",
+      "L 3-6",
+      "2-3 1 RBI"
+     ],
+     [
+      "G6",
+      "H",
+      "CIN",
+      "L 7-9",
+      "0-3"
+     ],
+     [
+      "G5",
+      "H",
+      "CIN",
+      "L 6-7",
+      "0-3"
+     ],
+     [
+      "G4",
+      "H",
+      "CIN",
+      "W 6-5",
+      "1-3 2B"
+     ],
+     [
+      "G3",
+      "A",
+      "TEX",
+      "L 2-8",
+      "0-4"
+     ],
+     [
+      "G2",
+      "A",
+      "TEX",
+      "L 5-6",
+      "0-4"
+     ],
+     [
+      "G1",
+      "A",
+      "TEX",
+      "W 8-5",
+      "2-5 3 RBI"
+     ]
+    ]
+   },
+   "poster": "HalfwayFirst half: 80 games, .225 with 4 home runs.Best so far: Game 27, L 4-6, 2 for 4 with a home run, a double and 2 RBI",
+   "review": {
+    "tiles": [
+     "158Games",
+     ".236AVG",
+     "12HR",
+     "65RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review71-91 · Missed October158Games.236AVG12HR65RBIRegular season, the same numbers as your season card.⭐ Best game: Game 94, W 7-2 vs Miami Marlins, 3 for 6 with 2 home runs and 2 RBILast five:WLLWL"
+   },
+   "record": "71-91",
+   "panel": "After game 16271-91Home 38-43Away 33-48Streak L1Division 26-26League 52-62Last 10:LLLWLWLLWLGame logG162HSDPL 1-31-5G161HSDPW 6-41-3G160HSDPL 1-91-5G159ASFGL 3-61-4G158ASFGW 8-32-3 2BG157ASFGL 0-81-5G156APITW 5-21-5 1 RBIG155APITL 4-50-5G154APITL 1-51-5 2BG153HNYYL 0-110-3G152HNYYL 3-63-5 1 RBI 2BG151HNYYW 3-20-3G150HWSNL 1-93-5 2BG149HWSNL 5-110-5G148HWSNL 3-6Did not playG147HSEAW 9-50-4G146HSEAL",
+   "sums": {
+    "games": 162,
+    "played": 158,
+    "ab": 598,
+    "h": 141,
+    "hr": 12,
+    "rbi": 65,
+    "d": 25,
+    "sb": 1,
+    "w": 71,
+    "l": 91,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "SDP",
+     "L 1-3",
+     "1-5"
+    ],
+    [
+     "G161",
+     "H",
+     "SDP",
+     "W 6-4",
+     "1-3"
+    ],
+    [
+     "G160",
+     "H",
+     "SDP",
+     "L 1-9",
+     "1-5"
+    ],
+    [
+     "G159",
+     "A",
+     "SFG",
+     "L 3-6",
+     "1-4"
+    ],
+    [
+     "G3",
+     "A",
+     "TEX",
+     "L 2-8",
+     "0-4"
+    ],
+    [
+     "G2",
+     "A",
+     "TEX",
+     "L 5-6",
+     "0-4"
+    ],
+    [
+     "G1",
+     "A",
+     "TEX",
+     "W 8-5",
+     "2-5 3 RBI"
+    ]
+   ],
+   "after": {
+    "overlay": false,
+    "curtain": "\n      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }\n      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }\n      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }\n      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }\n      @keyframes cmWinPulse { 0% { box-shadow: 0 0"
+   },
+   "hubAfter": {
+    "watch": null,
+    "button": null,
+    "held": null,
+    "head": "MLB My Career"
+   },
+   "errors": []
+  },
+  "timing-390-x4": {
+   "ms": 330
+  },
+  "timing-390-x1": {
+   "ms": 113
+  },
+  "held-pitcher-390": {
+   "seed": 1,
+   "team": "COL",
+   "year": 2026,
+   "pos": "SP",
+   "era": "now",
+   "line": "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.",
+   "button": false,
+   "watch": false,
+   "right": 355,
+   "height": 37,
+   "play": [
+    "Play the 2026 season",
+    "📊My PlayerOVR 69The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-club161-390": {
+   "seed": 17,
+   "team": "BAL",
+   "year": 2026,
+   "pos": "CF",
+   "era": "now",
+   "line": "📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162.",
+   "button": false,
+   "watch": false,
+   "right": 354,
+   "height": 85,
+   "play": [
+    "Play the 2026 season",
+    "📊My PlayerOVR 71The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-y2020-390": {
+   "seed": 1,
+   "team": "ARI",
+   "year": 2020,
+   "pos": "SS",
+   "era": "y2004",
+   "line": "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.",
+   "button": false,
+   "watch": false,
+   "right": 356,
+   "height": 37,
+   "play": [
+    "Play the 2020 season",
+    "📊My PlayerOVR 72The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-y2004club-390": {
+   "seed": 9,
+   "team": "MIL",
+   "year": 2004,
+   "pos": "CF",
+   "era": "y2004",
+   "line": "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162.",
+   "button": false,
+   "watch": false,
+   "right": 354,
+   "height": 61,
+   "play": [
+    "Play the 2004 season",
+    "📊My PlayerOVR 68The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-japan-390": {
+   "seed": 50,
+   "team": "Yomiuri Giants",
+   "year": 2026,
+   "pos": "RF",
+   "era": "now",
+   "line": "📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season.",
+   "button": false,
+   "watch": false,
+   "right": 353,
+   "height": 61,
+   "play": [
+    "Play the 2026 season",
+    "📊My PlayerOVR 69The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-pitcher-1280": {
+   "seed": 1,
+   "team": "COL",
+   "year": 2026,
+   "pos": "SP",
+   "era": "now",
+   "line": "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.",
+   "button": false,
+   "watch": false,
+   "right": 903,
+   "height": 13,
+   "play": [
+    "Play the 2026 season",
+    "📊My PlayerOVR 69The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-club161-1280": {
+   "seed": 17,
+   "team": "BAL",
+   "year": 2026,
+   "pos": "CF",
+   "era": "now",
+   "line": "📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162.",
+   "button": false,
+   "watch": false,
+   "right": 926,
+   "height": 37,
+   "play": [
+    "Play the 2026 season",
+    "📊My PlayerOVR 71The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-y2020-1280": {
+   "seed": 1,
+   "team": "ARI",
+   "year": 2020,
+   "pos": "SS",
+   "era": "y2004",
+   "line": "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.",
+   "button": false,
+   "watch": false,
+   "right": 935,
+   "height": 37,
+   "play": [
+    "Play the 2020 season",
+    "📊My PlayerOVR 72The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-y2004club-1280": {
+   "seed": 9,
+   "team": "MIL",
+   "year": 2004,
+   "pos": "CF",
+   "era": "y2004",
+   "line": "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162.",
+   "button": false,
+   "watch": false,
+   "right": 942,
+   "height": 37,
+   "play": [
+    "Play the 2004 season",
+    "📊My PlayerOVR 68The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "held-japan-1280": {
+   "seed": 50,
+   "team": "Yomiuri Giants",
+   "year": 2026,
+   "pos": "RF",
+   "era": "now",
+   "line": "📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season.",
+   "button": false,
+   "watch": false,
+   "right": 934,
+   "height": 37,
+   "play": [
+    "Play the 2026 season",
+    "📊My PlayerOVR 69The fans down at 30",
+    "📜Career LogNo seasons yetPlay one and it goes on the books"
+   ],
+   "afterPlay": {
+    "seasons": 1,
+    "overlay": false
+   }
+  },
+  "again-star-390": {
+   "seed": 68,
+   "team": "COL",
+   "year": 2030,
+   "pos": "SS",
+   "era": "now",
+   "line": {
+    "year": 2030,
+    "team": "COL",
+    "age": 25,
+    "ovr": 75,
+    "games": 160,
+    "awards": [
+     "All-Star"
+    ],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.286,
+    "hr": 27,
+    "rbi": 87,
+    "sb": 49,
+    "doubles": 37,
+    "obp": 0.382
+   },
+   "hub": {
+    "watch": "↺ Watch the 2030 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Colorado Rockies2030 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawLast season: Missed OctoberFirst five1HomeBaltimore Orioles2HomeBaltimore Orioles3HomeBaltimore Orioles4AwayHouston Astros5AwayHouston Astros▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "160Games",
+     ".286AVG",
+     "27HR",
+     "87RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review59-103 · Missed October160Games.286AVG27HR87RBIRegular season, the same numbers as your season card.⭐ Best game: Game 25, W 8-3 vs Arizona Diamondbacks, 3 for 6 with 3 home runs and 4 RBILast five:LLWLLAll-Star"
+   },
+   "record": "59-103",
+   "sums": {
+    "games": 162,
+    "played": 160,
+    "ab": 637,
+    "h": 182,
+    "hr": 27,
+    "rbi": 87,
+    "d": 37,
+    "sb": 49,
+    "w": 59,
+    "l": 103,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "STL",
+     "L 2-3",
+     "1-3"
+    ],
+    [
+     "G161",
+     "H",
+     "STL",
+     "L 1-5",
+     "3-6 HR 1 RBI 2 2B"
+    ],
+    [
+     "G160",
+     "H",
+     "STL",
+     "W 7-1",
+     "1-5 HR 2 RBI SB"
+    ],
+    [
+     "G159",
+     "H",
+     "MIN",
+     "L 2-4",
+     "1-5"
+    ],
+    [
+     "G158",
+     "H",
+     "MIN",
+     "L 2-7",
+     "2-5"
+    ],
+    [
+     "G3",
+     "H",
+     "BAL",
+     "L 4-6",
+     "3-3 1 RBI"
+    ],
+    [
+     "G2",
+     "H",
+     "BAL",
+     "L 3-5",
+     "3-5 2 HR 2 RBI 2B"
+    ],
+    [
+     "G1",
+     "H",
+     "BAL",
+     "L 7-9",
+     "1-3 HR 2 RBI"
+    ]
+   ]
+  },
+  "again-star-1280-rm": {
+   "seed": 68,
+   "team": "COL",
+   "year": 2030,
+   "pos": "SS",
+   "era": "now",
+   "line": {
+    "year": 2030,
+    "team": "COL",
+    "age": 25,
+    "ovr": 75,
+    "games": 160,
+    "awards": [
+     "All-Star"
+    ],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.286,
+    "hr": 27,
+    "rbi": 87,
+    "sb": 49,
+    "doubles": 37,
+    "obp": 0.382
+   },
+   "hub": {
+    "watch": "↺ Watch the 2030 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Colorado Rockies2030 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawLast season: Missed OctoberFirst five1HomeBaltimore Orioles2HomeBaltimore Orioles3HomeBaltimore Orioles4AwayHouston Astros5AwayHouston Astros▶ Play ball⏭ Straight to the season review",
+   "poster": "HalfwayFirst half: 80 games, .270 with 17 home runs. You are an All-Star this year.Best so far: Game 25, W 8-3, 3 for 6 with 3 home runs and 4 RBI",
+   "review": {
+    "tiles": [
+     "160Games",
+     ".286AVG",
+     "27HR",
+     "87RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review59-103 · Missed October160Games.286AVG27HR87RBIRegular season, the same numbers as your season card.⭐ Best game: Game 25, W 8-3 vs Arizona Diamondbacks, 3 for 6 with 3 home runs and 4 RBILast five:LLWLLAll-Star"
+   },
+   "record": "59-103",
+   "sums": {
+    "games": 162,
+    "played": 160,
+    "ab": 637,
+    "h": 182,
+    "hr": 27,
+    "rbi": 87,
+    "d": 37,
+    "sb": 49,
+    "w": 59,
+    "l": 103,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "STL",
+     "L 2-3",
+     "1-3"
+    ],
+    [
+     "G161",
+     "H",
+     "STL",
+     "L 1-5",
+     "3-6 HR 1 RBI 2 2B"
+    ],
+    [
+     "G160",
+     "H",
+     "STL",
+     "W 7-1",
+     "1-5 HR 2 RBI SB"
+    ],
+    [
+     "G159",
+     "H",
+     "MIN",
+     "L 2-4",
+     "1-5"
+    ],
+    [
+     "G158",
+     "H",
+     "MIN",
+     "L 2-7",
+     "2-5"
+    ],
+    [
+     "G3",
+     "H",
+     "BAL",
+     "L 4-6",
+     "3-3 1 RBI"
+    ],
+    [
+     "G2",
+     "H",
+     "BAL",
+     "L 3-5",
+     "3-5 2 HR 2 RBI 2B"
+    ],
+    [
+     "G1",
+     "H",
+     "BAL",
+     "L 7-9",
+     "1-3 HR 2 RBI"
+    ]
+   ]
+  },
+  "again-deep-390": {
+   "seed": 30,
+   "team": "CLE",
+   "year": 2027,
+   "pos": "SS",
+   "era": "now",
+   "line": {
+    "year": 2027,
+    "team": "CLE",
+    "age": 22,
+    "ovr": 73,
+    "games": 162,
+    "awards": [],
+    "teamResult": "Lost the Championship Series",
+    "salary": 0.8,
+    "avg": 0.269,
+    "hr": 19,
+    "rbi": 67,
+    "sb": 9,
+    "doubles": 30,
+    "obp": 0.361,
+    "poGames": 12,
+    "poLine": "13 for 48 (.271), 1 HR"
+   },
+   "hub": {
+    "watch": "↺ Watch the 2027 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Cleveland Guardians2027 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawLast season: Lost the Division SeriesFirst five1HomeHouston Astros2HomeHouston Astros3HomeHouston Astros4AwayChicago White Sox5AwayChicago White Sox▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "162Games",
+     ".269AVG",
+     "19HR",
+     "67RBI"
+    ],
+    "path": [
+     "Playoffs",
+     "W",
+     "Wild Card Series",
+     "beat another team 2-1",
+     "W",
+     "Division Series",
+     "beat another team 3-0",
+     "L",
+     "Championship Series",
+     "lost to another team 2-4",
+     "Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR"
+    ],
+    "pathText": "PlayoffsWWild Card Seriesbeat another team 2-1WDivision Seriesbeat another team 3-0LChampionship Serieslost to another team 2-4Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR",
+    "text": "Season review102-60 · Lost the Championship Series162Games.269AVG19HR67RBIRegular season, the same numbers as your season card.⭐ Best game: Game 150, W 7-3 vs Sacramento Athletics, 3 for 4 with 2 home runs and 2 RBILast five:LLWWWPlayoffsWWild Card Seriesbeat another team 2-1WDivision Seriesbeat another team 3-0LChampionship Serieslost to another team 2-4Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR"
+   },
+   "record": "102-60",
+   "sums": {
+    "games": 162,
+    "played": 162,
+    "ab": 640,
+    "h": 172,
+    "hr": 19,
+    "rbi": 67,
+    "d": 30,
+    "sb": 9,
+    "w": 102,
+    "l": 60,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "MIN",
+     "W 8-4",
+     "2-5 1 RBI"
+    ],
+    [
+     "G161",
+     "H",
+     "MIN",
+     "W 6-1",
+     "2-3 2B"
+    ],
+    [
+     "G160",
+     "H",
+     "MIN",
+     "W 9-3",
+     "2-5"
+    ],
+    [
+     "G159",
+     "H",
+     "CIN",
+     "L 10-11",
+     "0-3"
+    ],
+    [
+     "G158",
+     "H",
+     "CIN",
+     "L 1-2",
+     "1-3 2B"
+    ],
+    [
+     "G3",
+     "H",
+     "HOU",
+     "L 1-2",
+     "0-4"
+    ],
+    [
+     "G2",
+     "H",
+     "HOU",
+     "W 7-1",
+     "1-3"
+    ],
+    [
+     "G1",
+     "H",
+     "HOU",
+     "W 4-2",
+     "0-3"
+    ]
+   ]
+  },
+  "again-deep-1280": {
+   "seed": 30,
+   "team": "CLE",
+   "year": 2027,
+   "pos": "SS",
+   "era": "now",
+   "line": {
+    "year": 2027,
+    "team": "CLE",
+    "age": 22,
+    "ovr": 73,
+    "games": 162,
+    "awards": [],
+    "teamResult": "Lost the Championship Series",
+    "salary": 0.8,
+    "avg": 0.269,
+    "hr": 19,
+    "rbi": 67,
+    "sb": 9,
+    "doubles": 30,
+    "obp": 0.361,
+    "poGames": 12,
+    "poLine": "13 for 48 (.271), 1 HR"
+   },
+   "hub": {
+    "watch": "↺ Watch the 2027 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Cleveland Guardians2027 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawLast season: Lost the Division SeriesFirst five1HomeHouston Astros2HomeHouston Astros3HomeHouston Astros4AwayChicago White Sox5AwayChicago White Sox▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "162Games",
+     ".269AVG",
+     "19HR",
+     "67RBI"
+    ],
+    "path": [
+     "Playoffs",
+     "W",
+     "Wild Card Series",
+     "beat another team 2-1",
+     "W",
+     "Division Series",
+     "beat another team 3-0",
+     "L",
+     "Championship Series",
+     "lost to another team 2-4",
+     "Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR"
+    ],
+    "pathText": "PlayoffsWWild Card Seriesbeat another team 2-1WDivision Seriesbeat another team 3-0LChampionship Serieslost to another team 2-4Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR",
+    "text": "Season review102-60 · Lost the Championship Series162Games.269AVG19HR67RBIRegular season, the same numbers as your season card.⭐ Best game: Game 150, W 7-3 vs Sacramento Athletics, 3 for 4 with 2 home runs and 2 RBILast five:LLWWWPlayoffsWWild Card Seriesbeat another team 2-1WDivision Seriesbeat another team 3-0LChampionship Serieslost to another team 2-4Your playoffs: 12 team postseason games, 13 for 48 (.271), 1 HR"
+   },
+   "record": "102-60",
+   "sums": {
+    "games": 162,
+    "played": 162,
+    "ab": 640,
+    "h": 172,
+    "hr": 19,
+    "rbi": 67,
+    "d": 30,
+    "sb": 9,
+    "w": 102,
+    "l": 60,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "MIN",
+     "W 8-4",
+     "2-5 1 RBI"
+    ],
+    [
+     "G161",
+     "H",
+     "MIN",
+     "W 6-1",
+     "2-3 2B"
+    ],
+    [
+     "G160",
+     "H",
+     "MIN",
+     "W 9-3",
+     "2-5"
+    ],
+    [
+     "G159",
+     "H",
+     "CIN",
+     "L 10-11",
+     "0-3"
+    ],
+    [
+     "G158",
+     "H",
+     "CIN",
+     "L 1-2",
+     "1-3 2B"
+    ],
+    [
+     "G3",
+     "H",
+     "HOU",
+     "L 1-2",
+     "0-4"
+    ],
+    [
+     "G2",
+     "H",
+     "HOU",
+     "W 7-1",
+     "1-3"
+    ],
+    [
+     "G1",
+     "H",
+     "HOU",
+     "W 4-2",
+     "0-3"
+    ]
+   ]
+  },
+  "again-plain-390-rm": {
+   "seed": 3,
+   "team": "TOR",
+   "year": 2026,
+   "pos": "1B",
+   "era": "now",
+   "line": {
+    "year": 2026,
+    "team": "TOR",
+    "age": 21,
+    "ovr": 72,
+    "games": 155,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.259,
+    "hr": 23,
+    "rbi": 75,
+    "sb": 3,
+    "doubles": 30,
+    "obp": 0.356
+   },
+   "hub": {
+    "watch": "↺ Watch the 2026 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Toronto Blue Jays2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1AwayChicago White Sox2AwayChicago White Sox3AwayChicago White Sox4HomeNew York Yankees5HomeNew York Yankees▶ Play ball⏭ Straight to the season review",
+   "poster": "HalfwayFirst half: 78 games, .298 with 14 home runs.Best so far: Game 56, W 5-2, 3 for 4 with 2 home runs and 2 RBI",
+   "review": {
+    "tiles": [
+     "155Games",
+     ".259AVG",
+     "23HR",
+     "75RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review70-92 · Missed October155Games.259AVG23HR75RBIRegular season, the same numbers as your season card.⭐ Best game: Game 113, L 2-3 vs Sacramento Athletics, 3 for 5 with 2 home runs, a double and 2 RBILast five:WWLWL"
+   },
+   "record": "70-92",
+   "sums": {
+    "games": 162,
+    "played": 155,
+    "ab": 576,
+    "h": 149,
+    "hr": 23,
+    "rbi": 75,
+    "d": 30,
+    "sb": 3,
+    "w": 70,
+    "l": 92,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "STL",
+     "L 3-5",
+     "2-4"
+    ],
+    [
+     "G161",
+     "H",
+     "STL",
+     "W 6-3",
+     "3-5 3 2B"
+    ],
+    [
+     "G160",
+     "H",
+     "STL",
+     "L 1-8",
+     "1-5 HR 1 RBI"
+    ],
+    [
+     "G159",
+     "H",
+     "CLE",
+     "W 15-9",
+     "1-3 HR 1 RBI"
+    ],
+    [
+     "G158",
+     "H",
+     "CLE",
+     "W 4-3",
+     "1-3 2B"
+    ],
+    [
+     "G3",
+     "A",
+     "CHW",
+     "W 7-2",
+     "2-5 HR 3 RBI"
+    ],
+    [
+     "G2",
+     "A",
+     "CHW",
+     "W 8-0",
+     "1-4 HR 1 RBI"
+    ],
+    [
+     "G1",
+     "A",
+     "CHW",
+     "L 4-8",
+     "0-3"
+    ]
+   ]
+  },
+  "again-throwback-390": {
+   "seed": 2,
+   "team": "FLA",
+   "year": 2004,
+   "pos": "LF",
+   "era": "y2004",
+   "line": {
+    "year": 2004,
+    "team": "FLA",
+    "age": 21,
+    "ovr": 71,
+    "games": 80,
+    "awards": [],
+    "teamResult": "Lost the Division Series",
+    "salary": 0.3,
+    "avg": 0.256,
+    "hr": 6,
+    "rbi": 29,
+    "sb": 0,
+    "doubles": 12,
+    "obp": 0.321,
+    "poGames": 4,
+    "poLine": "4 for 16 (.250), 1 HR"
+   },
+   "hub": {
+    "watch": "↺ Watch the 2004 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Florida Marlins2004 · MLB162 games · 81 home, 81 away · this career's own drawOpponents are not named this season: the game does not hold that season's divisions and schedule.First five1Awayanother team2Awayanother team3Awayanother team4Homeanother team5Homeanother team▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "80Games",
+     ".256AVG",
+     "6HR",
+     "29RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review86-76 · Lost the Division Series80Games.256AVG6HR29RBIRegular season, the same numbers as your season card.⭐ Best game: Game 2, W 5-1 vs another team, 3 for 4 with a home run and 1 RBILast five:LLWLLThe playoff path starts with the 2022 season, when the playoffs took today's shape."
+   },
+   "record": "86-76",
+   "sums": {
+    "games": 162,
+    "played": 80,
+    "ab": 312,
+    "h": 80,
+    "hr": 6,
+    "rbi": 29,
+    "d": 12,
+    "sb": 0,
+    "w": 86,
+    "l": 76,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "another team",
+     "L 5-6",
+     "Did not play"
+    ],
+    [
+     "G161",
+     "H",
+     "another team",
+     "L 1-2",
+     "Did not play"
+    ],
+    [
+     "G160",
+     "H",
+     "another team",
+     "W 9-7",
+     "Did not play"
+    ],
+    [
+     "G159",
+     "A",
+     "another team",
+     "L 6-8",
+     "0-3"
+    ],
+    [
+     "G158",
+     "A",
+     "another team",
+     "L 3-9",
+     "Did not play"
+    ],
+    [
+     "G3",
+     "A",
+     "another team",
+     "W 7-6",
+     "Did not play"
+    ],
+    [
+     "G2",
+     "A",
+     "another team",
+     "W 5-1",
+     "3-4 HR 1 RBI"
+    ],
+    [
+     "G1",
+     "A",
+     "another team",
+     "L 3-4",
+     "Did not play"
+    ]
+   ]
+  },
+  "again-throwback-1280": {
+   "seed": 2,
+   "team": "FLA",
+   "year": 2004,
+   "pos": "LF",
+   "era": "y2004",
+   "line": {
+    "year": 2004,
+    "team": "FLA",
+    "age": 21,
+    "ovr": 71,
+    "games": 80,
+    "awards": [],
+    "teamResult": "Lost the Division Series",
+    "salary": 0.3,
+    "avg": 0.256,
+    "hr": 6,
+    "rbi": 29,
+    "sb": 0,
+    "doubles": 12,
+    "obp": 0.321,
+    "poGames": 4,
+    "poLine": "4 for 16 (.250), 1 HR"
+   },
+   "hub": {
+    "watch": "↺ Watch the 2004 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Florida Marlins2004 · MLB162 games · 81 home, 81 away · this career's own drawOpponents are not named this season: the game does not hold that season's divisions and schedule.First five1Awayanother team2Awayanother team3Awayanother team4Homeanother team5Homeanother team▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "80Games",
+     ".256AVG",
+     "6HR",
+     "29RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review86-76 · Lost the Division Series80Games.256AVG6HR29RBIRegular season, the same numbers as your season card.⭐ Best game: Game 2, W 5-1 vs another team, 3 for 4 with a home run and 1 RBILast five:LLWLLThe playoff path starts with the 2022 season, when the playoffs took today's shape."
+   },
+   "record": "86-76",
+   "sums": {
+    "games": 162,
+    "played": 80,
+    "ab": 312,
+    "h": 80,
+    "hr": 6,
+    "rbi": 29,
+    "d": 12,
+    "sb": 0,
+    "w": 86,
+    "l": 76,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "H",
+     "another team",
+     "L 5-6",
+     "Did not play"
+    ],
+    [
+     "G161",
+     "H",
+     "another team",
+     "L 1-2",
+     "Did not play"
+    ],
+    [
+     "G160",
+     "H",
+     "another team",
+     "W 9-7",
+     "Did not play"
+    ],
+    [
+     "G159",
+     "A",
+     "another team",
+     "L 6-8",
+     "0-3"
+    ],
+    [
+     "G158",
+     "A",
+     "another team",
+     "L 3-9",
+     "Did not play"
+    ],
+    [
+     "G3",
+     "A",
+     "another team",
+     "W 7-6",
+     "Did not play"
+    ],
+    [
+     "G2",
+     "A",
+     "another team",
+     "W 5-1",
+     "3-4 HR 1 RBI"
+    ],
+    [
+     "G1",
+     "A",
+     "another team",
+     "L 3-4",
+     "Did not play"
+    ]
+   ]
+  },
+  "again-hurt-390": {
+   "seed": 1,
+   "team": "COL",
+   "year": 2026,
+   "pos": "C",
+   "era": "now",
+   "line": {
+    "year": 2026,
+    "team": "COL",
+    "age": 21,
+    "ovr": 72,
+    "games": 74,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.222,
+    "hr": 2,
+    "rbi": 15,
+    "sb": 1,
+    "doubles": 12,
+    "obp": 0.317
+   },
+   "hub": {
+    "watch": "↺ Watch the 2026 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Colorado Rockies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1HomeSacramento Athletics2HomeSacramento Athletics3HomeSacramento Athletics4AwayAtlanta Braves5AwayAtlanta Braves▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "74Games",
+     ".222AVG",
+     "2HR",
+     "15RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review77-85 · Missed October74Games.222AVG2HR15RBIRegular season, the same numbers as your season card.⭐ Best game: Game 155, W 4-3 vs Washington Nationals, 2 for 4 with 2 doubles and 1 RBILast five:WLLWL"
+   },
+   "record": "77-85",
+   "sums": {
+    "games": 162,
+    "played": 74,
+    "ab": 293,
+    "h": 65,
+    "hr": 2,
+    "rbi": 15,
+    "d": 12,
+    "sb": 1,
+    "w": 77,
+    "l": 85,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "A",
+     "LAD",
+     "L 1-4",
+     "1-5"
+    ],
+    [
+     "G161",
+     "A",
+     "LAD",
+     "W 11-2",
+     "Did not play"
+    ],
+    [
+     "G160",
+     "A",
+     "LAD",
+     "L 4-7",
+     "2-3"
+    ],
+    [
+     "G159",
+     "A",
+     "LAD",
+     "L 5-7",
+     "1-3 2B"
+    ],
+    [
+     "G158",
+     "A",
+     "CIN",
+     "W 7-6",
+     "1-3 2B"
+    ],
+    [
+     "G3",
+     "H",
+     "ATH",
+     "W 6-4",
+     "Did not play"
+    ],
+    [
+     "G2",
+     "H",
+     "ATH",
+     "L 1-6",
+     "1-3"
+    ],
+    [
+     "G1",
+     "H",
+     "ATH",
+     "L 2-6",
+     "0-3"
+    ]
+   ]
+  },
+  "again-hurt-1280": {
+   "seed": 1,
+   "team": "COL",
+   "year": 2026,
+   "pos": "C",
+   "era": "now",
+   "line": {
+    "year": 2026,
+    "team": "COL",
+    "age": 21,
+    "ovr": 72,
+    "games": 74,
+    "awards": [],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.222,
+    "hr": 2,
+    "rbi": 15,
+    "sb": 1,
+    "doubles": 12,
+    "obp": 0.317
+   },
+   "hub": {
+    "watch": "↺ Watch the 2026 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Colorado Rockies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1HomeSacramento Athletics2HomeSacramento Athletics3HomeSacramento Athletics4AwayAtlanta Braves5AwayAtlanta Braves▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "74Games",
+     ".222AVG",
+     "2HR",
+     "15RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review77-85 · Missed October74Games.222AVG2HR15RBIRegular season, the same numbers as your season card.⭐ Best game: Game 155, W 4-3 vs Washington Nationals, 2 for 4 with 2 doubles and 1 RBILast five:WLLWL"
+   },
+   "record": "77-85",
+   "sums": {
+    "games": 162,
+    "played": 74,
+    "ab": 293,
+    "h": 65,
+    "hr": 2,
+    "rbi": 15,
+    "d": 12,
+    "sb": 1,
+    "w": 77,
+    "l": 85,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "A",
+     "LAD",
+     "L 1-4",
+     "1-5"
+    ],
+    [
+     "G161",
+     "A",
+     "LAD",
+     "W 11-2",
+     "Did not play"
+    ],
+    [
+     "G160",
+     "A",
+     "LAD",
+     "L 4-7",
+     "2-3"
+    ],
+    [
+     "G159",
+     "A",
+     "LAD",
+     "L 5-7",
+     "1-3 2B"
+    ],
+    [
+     "G158",
+     "A",
+     "CIN",
+     "W 7-6",
+     "1-3 2B"
+    ],
+    [
+     "G3",
+     "H",
+     "ATH",
+     "W 6-4",
+     "Did not play"
+    ],
+    [
+     "G2",
+     "H",
+     "ATH",
+     "L 1-6",
+     "1-3"
+    ],
+    [
+     "G1",
+     "H",
+     "ATH",
+     "L 2-6",
+     "0-3"
+    ]
+   ]
+  },
+  "again-older-390": {
+   "seed": 68,
+   "team": "COL",
+   "year": 2030,
+   "pos": "SS",
+   "era": "now",
+   "line": {
+    "year": 2030,
+    "team": "COL",
+    "age": 25,
+    "ovr": 75,
+    "games": 160,
+    "awards": [
+     "All-Star"
+    ],
+    "teamResult": "Missed October",
+    "salary": 0.8,
+    "avg": 0.286,
+    "hr": 27,
+    "rbi": 87,
+    "sb": 49
+   },
+   "hub": {
+    "watch": "↺ Watch the 2030 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Colorado Rockies2030 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawLast season: Missed OctoberFirst five1HomeMilwaukee Brewers2HomeMilwaukee Brewers3HomeMilwaukee Brewers4AwayTexas Rangers5AwayTexas Rangers▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "160Games",
+     ".286AVG",
+     "27HR",
+     "87RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review66-96 · Missed October160Games.286AVG27HR87RBIRegular season, the same numbers as your season card.⭐ Best game: Game 87, W 9-7 vs Baltimore Orioles, 3 for 5 with 3 home runs and 4 RBILast five:LLWLWAll-Star"
+   },
+   "record": "66-96",
+   "sums": {
+    "games": 162,
+    "played": 160,
+    "ab": 605,
+    "h": 173,
+    "hr": 27,
+    "rbi": 87,
+    "d": 0,
+    "sb": 49,
+    "w": 66,
+    "l": 96,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "A",
+     "PIT",
+     "W 8-2",
+     "0-3 2 SB"
+    ],
+    [
+     "G161",
+     "A",
+     "PIT",
+     "L 2-8",
+     "0-3"
+    ],
+    [
+     "G160",
+     "A",
+     "PIT",
+     "W 4-3",
+     "1-5 1 RBI"
+    ],
+    [
+     "G159",
+     "A",
+     "CHC",
+     "L 2-4",
+     "1-3"
+    ],
+    [
+     "G158",
+     "A",
+     "CHC",
+     "L 1-4",
+     "2-5 HR 1 RBI SB"
+    ],
+    [
+     "G3",
+     "H",
+     "MIL",
+     "L 1-9",
+     "0-3"
+    ],
+    [
+     "G2",
+     "H",
+     "MIL",
+     "L 0-5",
+     "1-3 SB"
+    ],
+    [
+     "G1",
+     "H",
+     "MIL",
+     "W 1-0",
+     "0-3 SB"
+    ]
+   ]
+  },
+  "again-misfit-390": {
+   "seed": 2,
+   "team": "PHI",
+   "year": 2026,
+   "pos": "3B",
+   "era": "now",
+   "line": {
+    "year": 2026,
+    "team": "PHI",
+    "age": 21,
+    "ovr": 70,
+    "games": 80,
+    "awards": [],
+    "teamResult": "Lost the Wild Card series",
+    "salary": 0.8,
+    "avg": 0.253,
+    "hr": 5,
+    "rbi": 28,
+    "sb": 0,
+    "doubles": 11,
+    "obp": 0.318,
+    "poGames": 5,
+    "poLine": "3 for 12 (.250), 1 HR"
+   },
+   "hub": {
+    "watch": "↺ Watch the 2026 season again",
+    "held": null,
+    "button": true
+   },
+   "kickoff": "Philadelphia Phillies2026 · MLB162 games · 81 home, 81 away · the league's schedule formula, this career's own drawFirst five1AwayNew York Mets2AwayNew York Mets3AwayNew York Mets4AwayNew York Mets5AwayLos Angeles Angels▶ Play ball⏭ Straight to the season review",
+   "poster": "",
+   "review": {
+    "tiles": [
+     "80Games",
+     ".253AVG",
+     "5HR",
+     "28RBI"
+    ],
+    "path": [],
+    "pathText": null,
+    "text": "Season review85-77 · Lost the Wild Card series80Games.253AVG5HR28RBIRegular season, the same numbers as your season card.⭐ Best game: Game 67, W 5-4 vs Miami Marlins, 2 for 4 with a home run and 2 RBILast five:WLWLWNo playoff path for this season: the playoff games on your season card do not fit today's rounds."
+   },
+   "record": "85-77",
+   "sums": {
+    "games": 162,
+    "played": 80,
+    "ab": 296,
+    "h": 75,
+    "hr": 5,
+    "rbi": 28,
+    "d": 11,
+    "sb": 0,
+    "w": 85,
+    "l": 77,
+    "other": 0,
+    "odd": []
+   },
+   "sampleRows": [
+    [
+     "G162",
+     "A",
+     "MIL",
+     "W 5-1",
+     "Did not play"
+    ],
+    [
+     "G161",
+     "A",
+     "MIL",
+     "L 1-9",
+     "Did not play"
+    ],
+    [
+     "G160",
+     "A",
+     "MIL",
+     "W 5-0",
+     "1-3 2B"
+    ],
+    [
+     "G159",
+     "A",
+     "KCR",
+     "L 1-6",
+     "Did not play"
+    ],
+    [
+     "G158",
+     "A",
+     "KCR",
+     "W 10-6",
+     "Did not play"
+    ],
+    [
+     "G3",
+     "A",
+     "NYM",
+     "L 4-9",
+     "1-3 2B"
+    ],
+    [
+     "G2",
+     "A",
+     "NYM",
+     "L 2-4",
+     "0-4"
+    ],
+    [
+     "G1",
+     "A",
+     "NYM",
+     "W 8-3",
+     "0-4"
+    ]
+   ]
+  }
+ }
+}
