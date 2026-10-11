@@ -79,6 +79,7 @@ import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
    the gate's own expectation to the pound. clubManagerXp imports only a type
    from the engine, so there is no cycle. */
 import { gateEdge } from '@/lib/clubManagerXp';
+import { isUclLeagueStage, sortedUclLeague } from '@/lib/clubManagerUclLeague';
 
 export type ConcessionTier = 0 | 1 | 2;
 
@@ -394,7 +395,8 @@ export function certainFixturesLeft(state: CareerState): { home: number; away: n
   let home = 0, away = 0, euroAway = 0;
   /* fixtureFor answers null for a cup or knockout round that has not been
      drawn yet and for a competition the club is out of, so walking the
-     calendar with it counts exactly the fixtures the club is certain of. */
+     calendar with it counts drawn fixtures. An earned modern round of 16
+     tie awaiting its draw is counted below. */
   for (let i = state.week; i < state.calendar.length; i++) {
     const entry = state.calendar[i];
     if (entry.type === 'window') continue;
@@ -402,6 +404,20 @@ export function certainFixturesLeft(state: CareerState): { home: number; away: n
     if (!fx) continue;
     if (fx.home === true) home += 1;
     else if (fx.home === false) { away += 1; if (entry.type === 'uclGroup' || entry.type === 'uclKo') euroAway += 1; }
+  }
+  const group = state.uclGroup;
+  if (state.uclFormat === 'league36' && state.uclKoRound === 'R16' && state.uclExit == null
+    && Number.isSafeInteger(state.week) && state.week >= 0
+    && state.uclDraw && typeof state.uclDraw === 'object' && !Array.isArray(state.uclDraw) && !('R16' in state.uclDraw)
+    && isUclLeagueStage(group) && group.matchday === 8
+    && sortedUclLeague(group).slice(0, 8).some(row => row.club === state.clubName)) {
+    const legs = state.calendar.map((entry, index) => ({ entry, index }))
+      .filter(({ entry }) => entry.type === 'uclKo' && entry.uclRound === 'R16');
+    if (legs.length === 2 && legs[0].index >= state.week
+      && legs[0].entry.uclLeg === 1 && legs[1].entry.uclLeg === 2
+      && fixtureFor(state, legs[0].entry) === null && fixtureFor(state, legs[1].entry) === null) {
+      home += 1; away += 1; euroAway += 1;
+    }
   }
   return { home, away, euroAway };
 }
@@ -519,7 +535,7 @@ export function projectFinances(state: CareerState): FinanceProjection {
     resultActual: round2(incomeActual - spendActual),
     resultProjected: round2(incomeProjected - spendProjected),
     possibleBonus: state.sponsor?.bonus ?? 0,
-    caveat: 'Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.',
+    caveat: 'Counts league fixtures, ties already drawn and a round of 16 tie earned by finishing in the league phase top eight. Later rounds depend on results and are left out, and so are deals you have not done.',
   };
 }
 

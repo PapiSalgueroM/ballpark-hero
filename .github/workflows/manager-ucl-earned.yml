@@ -1,0 +1,195 @@
+name: Manager earned European fixture forecast
+on:
+  push:
+    branches: [codex/manager-ucl-finance]
+    paths:
+      - src/lib/clubManagerFinances.ts
+      - scripts/qa/managerUclEarnedForecastProof.mjs
+      - .github/workflows/manager-ucl-earned.yml
+  pull_request:
+    paths:
+      - src/lib/clubManagerFinances.ts
+      - scripts/qa/managerUclEarnedForecastProof.mjs
+      - .github/workflows/manager-ucl-earned.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: manager-ucl-earned-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and locked dependency preparation
+        run: |
+          mkdir -p manager-ucl-earned-artifacts
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse '4477e8038cdd08511cb246ab7d61d31a42b1922b^{tree}')" = 189744383b543613db2415276b8651a6e92c7c3d
+          git diff --exit-code 4477e8038cdd08511cb246ab7d61d31a42b1922b HEAD -- src ':!src/lib/clubManagerFinances.ts' package.json package-lock.json scripts/lib scripts/simClubManagerFinances.mjs
+          git rev-parse HEAD > manager-ucl-earned-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > manager-ucl-earned-artifacts/source-tree.txt
+          git archive --format=zip --output=manager-ucl-earned-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > manager-ucl-earned-artifacts/source-inventory.txt
+          sha256sum package.json package-lock.json > manager-ucl-earned-artifacts/packages-before.txt
+          npm ci
+          DEPENDENCY_OUT=manager-ucl-earned-artifacts/dependencies-before.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > manager-ucl-earned-artifacts/packages-after-setup.txt
+          cmp manager-ucl-earned-artifacts/packages-before.txt manager-ucl-earned-artifacts/packages-after-setup.txt
+      - name: Actual app type gate
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-ucl-earned-artifacts/types.log
+      - name: Immutable full-cohort evidence input
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .tmp-ucl-earned-input
+          curl -fsSL --connect-timeout 20 --max-time 300 --retry 2 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/11684728449/zip -o .tmp-ucl-earned-input/artifact.zip 2> .tmp-ucl-earned-input/download-errors.log
+          python - <<'PY'
+          import hashlib,json,pathlib,shutil,stat,zipfile
+          root=pathlib.Path('.tmp-ucl-earned-input')
+          archive=root/'artifact.zip'
+          assert archive.stat().st_size==516545839
+          with archive.open('rb') as source: digest=hashlib.file_digest(source,'sha256').hexdigest()
+          assert digest=='67cb08f992e1e4847ebc23155a39d532f36cd6b763dba33291f70e9934f627ae'
+          target=(root/'evidence').resolve()
+          target.mkdir()
+          seen=set()
+          rows=[]
+          with zipfile.ZipFile(archive) as packed:
+           for member in packed.infolist():
+            name=member.filename
+            assert not name.startswith('/') and '\\' not in name and ':' not in name
+            relative=pathlib.PurePosixPath(name)
+            assert '..' not in relative.parts and name.casefold() not in seen
+            seen.add(name.casefold())
+            assert not stat.S_ISLNK(member.external_attr>>16)
+            path=(target/relative).resolve()
+            assert path.is_relative_to(target)
+            if member.is_dir():
+             path.mkdir(parents=True,exist_ok=True)
+             continue
+            path.parent.mkdir(parents=True,exist_ok=True)
+            with packed.open(member) as source,path.open('xb') as sink: shutil.copyfileobj(source,sink)
+            assert path.stat().st_size==member.file_size
+            with path.open('rb') as source: file_sha=hashlib.file_digest(source,'sha256').hexdigest()
+            rows.append({'file':name,'bytes':member.file_size,'sha256':file_sha})
+          assert len(rows)==3888 and sum(row['bytes'] for row in rows)==528998331
+          out=pathlib.Path('manager-ucl-earned-artifacts')
+          (out/'input-artifact-inventory.json').write_text(json.dumps({'artifactId':11684728449,'runId':38092563931,'head':'80ad811e54bb1a96a17c9ac95a4404a79afc313e','zipBytes':archive.stat().st_size,'zipSha256':digest,'files':rows},indent=2))
+          reference=out/'input-reference'
+          reference.mkdir()
+          for name in ['original-git-tree.txt','current-git-tree.txt','source.zip','source-head.txt','source-tree.txt','source-inventory.txt','inventory.json','observer.cjs','preload.cjs','report.json','diagnostic.log','types.log','source-held.log','packages-before.txt','packages-after.txt','dependencies-before.json','dependencies-after.json']:
+           shutil.copy2(target/name,reference/name)
+          assert (target/'source-head.txt').read_text().strip()=='80ad811e54bb1a96a17c9ac95a4404a79afc313e'
+          print('PASS immutable80ad whole ZIP:3888 files, full hashes, exact declared current36-career input available')
+          PY
+      - name: Full production SEO build
+        id: build
+        run: |
+          npm run build:seo 2>&1 | tee manager-ucl-earned-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > manager-ucl-earned-artifacts/generated-public.patch
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > manager-ucl-earned-artifacts/generated-public-sha256.txt
+          tar -czf manager-ucl-earned-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          sha256sum manager-ucl-earned-artifacts/generated-public-and-lastmod.tar.gz > manager-ucl-earned-artifacts/generated-public-archive-sha256.txt
+          sha256sum scripts/data/lastmod.json > manager-ucl-earned-artifacts/generated-lastmod-sha256.txt
+      - name: Full saved-cohort earned fixture proof and actual source faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          MANAGER_UCL_EARNED_INPUT="$PWD/.tmp-ucl-earned-input/evidence" MANAGER_UCL_EARNED_OUT=manager-ucl-earned-artifacts/proof UCL_EARNED_ARTIFACT_MANIFEST="$PWD/manager-ucl-earned-artifacts/input-artifact-inventory.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerUclEarnedForecastProof.mjs 2>&1 | tee manager-ucl-earned-artifacts/earned-proof.log
+      - name: Unchanged historical finance gate, actual failures remain visible
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          mkdir -p manager-ucl-earned-artifacts/historical-finances
+          UCL_FINANCE_PROCESS_OUT="$PWD/manager-ucl-earned-artifacts/historical-finances" UCL_FINANCE_CLOCK=1791590400000 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/.tmp-ucl-earned-input/evidence/preload.cjs" node scripts/simClubManagerFinances.mjs 2>&1 | tee manager-ucl-earned-artifacts/historical-finances.log
+      - name: Related actual finance and competition outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simClubManagerSave simClubManagerCalendar simManagerCareer simManagerUclLeague simUclFormatHistory simFinance simClubManagerBudget simClubManagerFacilities simManagerXp simNoInventedQuotes simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-ucl-earned-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "manager-ucl-earned-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-earned-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen rebuilt output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-ucl-earned-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "manager-ucl-earned-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-earned-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Sources packages and installed dependencies held
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f manager-ucl-earned-artifacts/generated-lastmod-sha256.txt ]; then sha256sum --check manager-ucl-earned-artifacts/generated-lastmod-sha256.txt; fi
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json ':!scripts/data/lastmod.json' > manager-ucl-earned-artifacts/source-held.log
+          sha256sum package.json package-lock.json > manager-ucl-earned-artifacts/packages-final.txt
+          cmp manager-ucl-earned-artifacts/packages-before.txt manager-ucl-earned-artifacts/packages-final.txt
+          DEPENDENCY_OUT=manager-ucl-earned-artifacts/dependencies-final.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          cmp manager-ucl-earned-artifacts/dependencies-before.json manager-ucl-earned-artifacts/dependencies-final.json
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS actual pinned Playwright1.64.0');
+          JS
+          du -sb manager-ucl-earned-artifacts > manager-ucl-earned-artifacts/artifact-size.log
+          test "$(du -sb manager-ucl-earned-artifacts | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-ucl-earned-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-ucl-earned-artifacts/
+          retention-days: 5
+          if-no-files-found: error

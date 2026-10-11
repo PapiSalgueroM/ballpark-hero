@@ -1,0 +1,96 @@
+name: Manager UCL finance paired diagnosis
+on:
+  push:
+    branches: [codex/manager-ucl-finance]
+    paths:
+      - scripts/qa/managerUclFinanceDiagnostic.mjs
+      - .github/workflows/manager-ucl-finance-diagnostic.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: manager-ucl-finance-diagnostic-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  diagnosis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    defaults:
+      run:
+        shell: bash
+    env:
+      MANAGER_UCL_FINANCE_OUT: manager-ucl-finance-diagnostic
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact head and install locked dependencies
+        run: |
+          mkdir -p manager-ucl-finance-diagnostic
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git rev-parse '4477e8038cdd08511cb246ab7d61d31a42b1922b^{tree}')" = 189744383b543613db2415276b8651a6e92c7c3d
+          test "$(git rev-parse '09df145abfb241679022b41903d2f19bc254ebf9^{tree}')" = 3d527d2a120e909132bbbde53148d140b6a014e1
+          git diff --exit-code 4477e8038cdd08511cb246ab7d61d31a42b1922b HEAD -- src package.json package-lock.json scripts/simClubManagerFinances.mjs scripts/lib
+          git rev-parse HEAD > manager-ucl-finance-diagnostic/source-head.txt
+          git rev-parse 'HEAD^{tree}' > manager-ucl-finance-diagnostic/source-tree.txt
+          git archive --format=zip --output=manager-ucl-finance-diagnostic/source.zip HEAD
+          git ls-tree -r HEAD > manager-ucl-finance-diagnostic/source-inventory.txt
+          sha256sum package.json package-lock.json > manager-ucl-finance-diagnostic/packages-before.txt
+          npm ci
+          DEPENDENCY_OUT=manager-ucl-finance-diagnostic/dependencies-before.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+      - name: Actual app types before paired diagnostic
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-ucl-finance-diagnostic/types.log
+      - name: Actual original and modern full finance cohort
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerUclFinanceDiagnostic.mjs 2>&1 | tee manager-ucl-finance-diagnostic/diagnostic.log
+      - name: Complete source and dependency holds
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json > manager-ucl-finance-diagnostic/source-held.log
+          sha256sum package.json package-lock.json > manager-ucl-finance-diagnostic/packages-after.txt
+          cmp manager-ucl-finance-diagnostic/packages-before.txt manager-ucl-finance-diagnostic/packages-after.txt
+          DEPENDENCY_OUT=manager-ucl-finance-diagnostic/dependencies-after.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          cmp manager-ucl-finance-diagnostic/dependencies-before.json manager-ucl-finance-diagnostic/dependencies-after.json
+          du -sb manager-ucl-finance-diagnostic > manager-ucl-finance-diagnostic/artifact-size.log
+          test "$(du -sb manager-ucl-finance-diagnostic | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-ucl-finance-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-ucl-finance-diagnostic/
+          retention-days: 5
+          if-no-files-found: error
+
