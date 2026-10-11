@@ -443,7 +443,7 @@ export function getNhlCorruptionEvents(c: NhlCareerState, rng: () => number): Nh
       body: 'A team doctor writes you whatever gets you on the ice for the second night in two cities, in amounts that appear on no chart anywhere.',
       options: [
         { label: 'Keep the routine', effect: 'Play every night, health falls',
-          apply: (cc) => { setFlag(cc, 'scripts', 1); cc.health = clamp(cc.health - 12, 0, 100); cc.ovr = Math.min(99, cc.ovr + 1); heatUp(cc, 8); return 'You played 82 games on a body built for 55. Rating +1, health -12.'; } },
+          apply: (cc) => { setFlag(cc, 'scripts', 1); cc.health = clamp(cc.health - 12, 0, 100); cc.ovr = Math.min(99, cc.ovr + 1); heatUp(cc, 8); return 'You played every game on a body built for two thirds of them. Rating +1, health -12.'; } },
         { label: 'Get a real second opinion', effect: 'Miss games, protect your life',
           apply: (cc) => { setFlag(cc, 'scripts', -1); cc.health = clamp(cc.health + 10, 0, 100); cc.morale = clamp(cc.morale + 8, 0, 100); return 'You got a real doctor, tapered off and missed fourteen games. Health +10 and a retirement you will be able to enjoy.'; } },
       ],
