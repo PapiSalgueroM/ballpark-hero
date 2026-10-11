@@ -1,0 +1,11 @@
+#!serial
+# Round 1302 fix pass, the closing head (a notes commit on top of the head r1302-g1 and r1302-g2 check): the type gate, the ledger harness, its stage control, the generator's check, and the three tree fences.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simCmVarLedger.mjs
+l-stage: CM_VAR_LEDGER_CONTROL=stage node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
