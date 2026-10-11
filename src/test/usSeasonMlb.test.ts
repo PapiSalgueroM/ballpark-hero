@@ -148,8 +148,10 @@ describe('held, said before he presses (the whole sentence, typed here)', () => 
   });
   it('holds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words', () => {
     expect(mlbViewGames()).toBe(162);
-    /* 2020: 60 games for every club */
-    expect(mlbHeldLine(2020, 'DET', 'y2004')).toBe('📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.');
+    /* 2020: a 60 game schedule, and the Tigers and the Cardinals finished two short of it (the ledger's own row) */
+    expect(mlbHeldLine(2020, 'BOS', 'y2004')).toBe('📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.');
+    expect(mlbRealGames(2020, 'DET', 'y2004')).toBe(58);
+    expect(mlbHeldLine(2020, 'DET', 'y2004')).toBe('📺 No week by week this season: in the real 2020 season your club finished on 58 games, two short of the 60 on the schedule that year, and the week by week view is built for 162.');
     /* 2026: the Orioles and the Yankees finished on 161, and nobody else did */
     expect(mlbRealGames(2026, 'BAL', 'now')).toBe(161);
     expect(mlbHeldLine(2026, 'BAL', 'now')).toContain('📺 No week by week this season: in the real 2026 season your club ');
