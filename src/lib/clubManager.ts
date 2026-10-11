@@ -16,7 +16,7 @@ import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
-import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
+import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier, OfferClub } from '@/lib/managerOffers';
 /* Round 783: the job hunt's pure half. It imports nothing from here but
    types, so there is no cycle; see its header. */
 import {
@@ -1908,6 +1908,19 @@ function agreedJobOffer(career: CareerState, club: string): MarketJobOffer {
   };
 }
 
+/** Round 1304: the clubs that can ring a manager who is out of work in a
+ *  past season, on that season's own card (its league, its country, the
+ *  era's tier and budget). Null for a career that starts today, which reads
+ *  today's pyramid exactly as it always did. */
+function eraOfferClubs(career: CareerState): OfferClub[] | null {
+  const eraId = career.eraId;
+  if (!eraId || !isHistoricEra(eraId)) return null;
+  return (ERA_LEAGUES[eraId] ?? []).flatMap(l => {
+    const country = NATIONS.find(n => n.id === leagueRulesOf(l.id).nationId)?.name ?? '';
+    return eraPlayableClubs(eraId, l.id).map(c => ({ name: c.name, country, tier: c.tier as ClubTier, league: l.name, budget: c.budget }));
+  });
+}
+
 /**
  * Another week without a job. Offers may arrive, and standing quietly
  * slides, so waiting is a real cost rather than a free reroll. The market
@@ -1919,15 +1932,23 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
   const weeksOut = w.weeksOut + 1;
   const profile = wildernessProfile({ ...career, wilderness: { ...w, weeksOut } });
   const exclude = [w.formerClub, ...w.seen];
-  let offers: MarketJobOffer[] = [...w.offers];
-  const fresh: MarketJobOffer[] = realJobOffers(profile, rng, exclude);
+  /* Round 1304: in a past season the phone rings from that season's clubs.
+     This screen drew from today's pyramid in every era, so a manager sacked
+     in 2010-11 was offered jobs by clubs of today, and taking one at a club
+     that season does not hold moved him nowhere. A save from before the fix
+     can still hold such an offer: it is dropped here, the next time he
+     waits, and acceptWildernessJob will not take it. */
+  const eraPool = eraOfferClubs(career);
+  const pool = eraPool ?? allOfferClubs();
+  let offers: MarketJobOffer[] = eraPool ? w.offers.filter(o => eraPool.some(c => c.name === o.club)) : [...w.offers];
+  const fresh: MarketJobOffer[] = realJobOffers(profile, rng, exclude, pool);
   /* One call a week at most: a flood of offers would make waiting free. */
   if (fresh.length && rng() < 0.55) {
     offers = [...offers, fresh[0]].slice(-4);
   }
   if (!offers.length && weeksOut >= 8) {
     /* The floor. Somebody always needs a manager in the end. */
-    const bottom = allOfferClubs()
+    const bottom = pool
       .filter(c => c.tier >= 3 && !exclude.includes(c.name))
       .sort((a, b) => b.tier - a.tier);
     const pick = bottom[Math.floor(rng() * Math.max(1, Math.min(20, bottom.length)))] ?? bottom[0];
@@ -1959,6 +1980,10 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
 export function acceptWildernessJob(career: CareerState, club: string): CareerState | null {
   const w = career.wilderness;
   if (!w || !w.offers.some(o => o.club === club)) return null;
+  /* Round 1304: an offer a save from before the fix still holds, from a club
+     this past season does not have, is not a job. The rollover would refuse
+     the move and put him back at the club that sacked him. */
+  if (career.eraId && isHistoricEra(career.eraId) && !eraLeagueOf(club, career.eraId)) return null;
   /* Round 783 review: and nothing booked before the sack can outrank it at
      the rollover, even on a path that skipped enterWilderness. */
   const hunt = career.jobHunt ? { jobHunt: dropOnSack(jobHuntOf(career)) } : {};
@@ -10304,11 +10329,13 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
 /**
  * Round 1304: the clubs that can ACT in this save's world, league by league,
  * strongest first. A past season's world is that season's leagues and
- * nothing else, which Round 146 already held for bids, approaches and job
- * offers. The news feed's buyers and the rival of a negotiation read
- * today's leagues in every era instead, so a 2010-11 save printed "Brentford
- * sign Andres Iniesta from Barcelona" and a 2005-06 one could name a club
- * that was not founded yet. Today's game reads exactly what it always read.
+ * nothing else, which Round 146 already held for bids, approaches and the
+ * job offers of a manager in work. The news feed's buyers and the rival of
+ * a negotiation read today's leagues in every era instead, so a 2010-11
+ * save printed "Brentford sign Andres Iniesta from Barcelona" and a 2005-06
+ * one could name a club that was not founded yet. (The out of work screen
+ * was the third such place: see eraOfferClubs.) Today's game reads exactly
+ * what it always read.
  */
 function actingClubsByLeague(state: CareerState): ClubDef[][] {
   const eraId = state.eraId;

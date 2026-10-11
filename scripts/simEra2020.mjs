@@ -98,7 +98,7 @@
  *      came from a club of today and 188 of 240 jobs taken moved him
  *      nowhere (the numbers are at the section).
  *
- * Thirteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar,
+ * Fifteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar|modernjobs|takestale,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -158,11 +158,21 @@ const NEWS_ANCHOR = '  const allClubs = actingClubsByLeague(state).flat().filter
 const NEWS_BROKEN = '  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id)).filter(c => c.name !== droppedClub);';
 const WAR_ANCHOR = '    const spenders = actingClubsByLeague(career).flatMap(cs => cs.slice(0, 5).map(c => c.name))';
 const WAR_BROKEN = '    const spenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 5).map(c => c.name))';
+/* Controls modernjobs and takestale (Round 1304 fix pass, section 10), one
+   line each: the out of work screen reads today's pyramid in every era
+   again (its offers, its floor and the offers it holds, the engine as it was
+   before the fix), and a job at a club the season does not hold can be
+   taken again. */
+const JOBS_ANCHOR = '  const eraPool = eraOfferClubs(career);';
+const JOBS_BROKEN = '  const eraPool = null as OfferClub[] | null;';
+const TAKE_ANCHOR = '  if (career.eraId && isHistoricEra(career.eraId) && !eraLeagueOf(club, career.eraId)) return null;';
 const ENGINE_CONTROLS = {
   eraorder: [ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {', 'leagueOf has no fixed era order to remove'],
   shiporder: [SHIP_ORDER_ANCHOR, SHIP_ORDER_BROKEN, 'the line that types the shipped order is not in the engine as this control knows it'],
   modernnews: [NEWS_ANCHOR, NEWS_BROKEN, 'the news does not pick its buyer from this save\'s own world on the line this control knows'],
   modernwar: [WAR_ANCHOR, WAR_BROKEN, 'the bidding war does not pick its rival from this save\'s own world on the line this control knows'],
+  modernjobs: [JOBS_ANCHOR, JOBS_BROKEN, 'the out of work screen does not read this save\'s own world on the line this control knows'],
+  takestale: [TAKE_ANCHOR, '', 'the out of work screen does not refuse a club the season does not hold on the line this control knows'],
 };
 const engineControl = ENGINE_CONTROLS[process.env.SIM_ERA2020_CONTROL ?? ''];
 const plugins = engineControl ? [engineEdit(process.env.SIM_ERA2020_CONTROL, ...engineControl)] : [];
@@ -240,9 +250,19 @@ const BAND_THIN = 14;
                   must fail in every era.
      modernwar    (Round 1304) the rival of a negotiation is picked from
                   today's leagues again, as the engine is bundled: section
-                  9's "rivals ... not in that season's leagues" must fail. */
+                  9's "rivals ... not in that season's leagues" must fail.
+     modernjobs   (Round 1304 fix pass) the out of work screen reads today's
+                  pyramid in every era again, as the engine is bundled:
+                  section 10's "job offers to a sacked manager come from a
+                  club that is not in that season's leagues" must fail in
+                  every era, with the card, the move and the floor after it,
+                  and the stale offer of an old save stays on the screen.
+     takestale    (Round 1304 fix pass) the line that refuses a job at a
+                  club the season does not hold is taken out as the engine
+                  is bundled: section 10's "was taken and the save reads"
+                  must fail in every era, and nothing else. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder', 'modernnews', 'modernwar'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder', 'modernnews', 'modernwar', 'modernjobs', 'takestale'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -889,9 +909,12 @@ console.log('10) Every past season\'s out of work market offers jobs at clubs of
      one of the rest printed a card of today (20, 23, 26, 18); of 60 jobs
      taken an era, 10, 15, 17 and 10 moved the manager ("Barcelona to
      Millwall: the save reads Barcelona"); of 30 floors an era, 24, 24, 24
-     and 30 were not a club of that season. The floors are about half of the
-     fewest calls and the fewest jobs taken these seeds gave an era on either
-     engine. */
+     and 30 were not a club of that season. The fixed engine reads 133, 94,
+     107 and 110 calls and 60 jobs taken an era, and its own counts are on
+     the line each era prints. The floors are about half of the fewest calls
+     (94) and the fewest jobs taken (60) these seeds gave an era on either
+     engine. Controls modernjobs and takestale put the old engine back as it
+     is bundled, one line each. */
   const WILD_SEEDS = 60, WILD_WEEKS = 12, CALL_FLOOR = 45, TAKE_FLOOR = 30, FLOOR_CLUBS = 6;
   const SILENT = [0.36, 0.5, 0.65, 0.8, 0.99];
   const today = cm.REAL_LEAGUES.flatMap(l => l.clubs);
