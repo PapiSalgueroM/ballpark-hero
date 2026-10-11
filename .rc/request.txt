@@ -1,0 +1,12 @@
+# Release AW closing pass, final proof P-H1a: gate lane H1: the weight sweep with every row to the tenth, the flagship raw size, half the play list
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight.log"; grep -a "to the tenth" /tmp/w.log | cut -c1-200; tail -2 /tmp/w.log | cut -c1-300; exit $s
+playGames-soccer-career: ONLY=/soccer-career node scripts/playGames.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-stadium-tycoon: ONLY=/stadium-tycoon node scripts/playGames.mjs
+playGames-nba-my-career: ONLY=/nba-my-career node scripts/playGames.mjs
+playGames-nfl-my-career: ONLY=/nfl-my-career node scripts/playGames.mjs
+playGames-buzzer-beater: ONLY=/buzzer-beater node scripts/playGames.mjs
+playGames-cage-clash: ONLY=/cage-clash node scripts/playGames.mjs
