@@ -1,0 +1,4 @@
+ucl2000 exit=0 8s | cmUclProbe: GREEN. 2000 draws: 1923 inside both rules with no fallback, 7 with a same association match, 76 over the cap, 0 fallback.
+ucl-imports exit=0 0s | src/lib/uclLeaguePhase.ts
+oldsave exit=0 36s | cmOldSaveProbe: GREEN. 12 saves made by main, 891 of 891 faces equal, 0 problem(s).
+stream2 exit=0 66s | cmStreamProbe: GREEN. 4974 of 4974 faces equal to the base over 74 careers, 0 careers differ, 0 threw, 0 law failures.

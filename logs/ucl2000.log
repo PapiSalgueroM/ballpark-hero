@@ -1,0 +1,6 @@
+template 0 [6 5 4 4 3 2 2 2 1 1 1 1 1 1 1 1]: 500 draws, 424 inside both rules, 6 with a same association match, 76 over the cap, 0 fallback
+template 1 [5 5 4 4 4 2 2 2 2 1 1 1 1 1 1]: 500 draws, 499 inside both rules, 1 with a same association match, 0 over the cap, 0 fallback
+template 2 [4 4 4 4 3 2 2 2 2 2 1 1 1 1 1 1 1]: 500 draws, 500 inside both rules, 0 with a same association match, 0 over the cap, 0 fallback
+template 3 [4 4 4 4 4 2 2 2 1 1 1 1 1 1 1 1 1 1]: 500 draws, 500 inside both rules, 0 with a same association match, 0 over the cap, 0 fallback
+fields whose counting floor is above zero: 77; draws above their counting floor: 0; null 0; shape failures 0; cost mismatches 0; not the same slate twice 0
+cmUclProbe: GREEN. 2000 draws: 1923 inside both rules with no fallback, 7 with a same association match, 76 over the cap, 0 fallback.
