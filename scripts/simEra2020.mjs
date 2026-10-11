@@ -787,15 +787,18 @@ console.log('8) Every past season\'s market files a man under the league his clu
      era-only club must read the first era of that order that holds it, and
      the six clubs still served in two or more eras are pinned by name to
      the league they have always read (control shiporder retypes the order
-     oldest first and must fail the first and the third). The floor is half
-     of today's six, as it was about half of the count it was first set on. */
+     oldest first and must fail the first and the third). The floor is
+     today's six, the number measured (fix pass: it was typed 3, half of the
+     six, and the reading reviewer asked for the measured one). The round
+     that takes a pinned club into a modern league retypes the floor with
+     the pin. */
   const order = cm.ERA_FALLBACK_ORDER ?? [];
   const keys = Object.keys(ERA_LEAGUES);
   const missing = keys.filter(k => !order.includes(k));
   if (missing.length) fail(`leagueOf's fixed era order leaves out ${missing.join(', ')}; a new era goes at the end of ERA_FALLBACK_ORDER`);
   const SHIPPED = ['era2010', 'era2015', 'era2005', 'era2020'];
   if (order.slice(0, SHIPPED.length).join(',') !== SHIPPED.join(',')) fail(`leagueOf reads the eras as ${order.join(', ')}; they shipped as ${SHIPPED.join(', ')} and a new era goes at the END`);
-  const MULTI_FLOOR = 3;
+  const MULTI_FLOOR = 6;
   const PINS = { 'Wigan Athletic': 'premier2010', 'Zaragoza': 'laliga2010', 'Chievo Verona': 'seriea2010', 'Bordeaux': 'ligue12010', 'Caen': 'ligue12010', 'Leicester City': 'premier2015' };
   const real = new Set(cm.REAL_LEAGUES.flatMap(l => l.clubs));
   const eraOnly = [...new Set(keys.flatMap(k => ERA_LEAGUES[k].flatMap(l => l.clubs)))].filter(c => !real.has(c));
