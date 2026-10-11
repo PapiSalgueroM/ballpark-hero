@@ -1,0 +1,25 @@
+# Release AV proof, Round 1301 (the NHL Hall marks as calibration 3): simCareerHall's controls, part 2 of 3
+hall-noramp-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs mlb 2000
+hall-noramp-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs nba 2000
+hall-noramp-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs nfl 2000
+hall-noramp-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs nhl 2000
+hall-nostamp-nhl: SIM_CONTROL=nostamp node scripts/simCareerHall.mjs nhl 2000
+hall-nostamp-nhl-2: SIM_SKIP_BOARD=1 SIM_CONTROL=nostamp node scripts/simCareerHall.mjs nhl 2000
+hall-nostandout-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs mlb 2000
+hall-nostandout-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs nba 2000
+hall-nostandout-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs nfl 2000
+hall-nostandout-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs nhl 2000
+hall-oldmarks-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=oldmarks node scripts/simCareerHall.mjs nfl 2000
+hall-oldmarks-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=oldmarks node scripts/simCareerHall.mjs nhl 2000
+hall-plantbase-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=plantbase node scripts/simCareerHall.mjs mlb 2000
+hall-plantbase-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=plantbase node scripts/simCareerHall.mjs nba 2000
+hall-plantbase-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=plantbase node scripts/simCareerHall.mjs nfl 2000
+hall-plantbase-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=plantbase node scripts/simCareerHall.mjs nhl 2000
+hall-seasonbig-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=seasonbig node scripts/simCareerHall.mjs mlb 2000
+hall-seasonbig-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=seasonbig node scripts/simCareerHall.mjs nba 2000
+hall-seasonbig-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=seasonbig node scripts/simCareerHall.mjs nfl 2000
+hall-seasonbig-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=seasonbig node scripts/simCareerHall.mjs nhl 2000
+hall-statsdown-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=statsdown node scripts/simCareerHall.mjs mlb 2000
+hall-statsdown-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=statsdown node scripts/simCareerHall.mjs nba 2000
+hall-statsdown-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=statsdown node scripts/simCareerHall.mjs nfl 2000
+hall-statsdown-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=statsdown node scripts/simCareerHall.mjs nhl 2000
