@@ -1,5 +1,6 @@
 /* Round 1212: why an MLB My Career season has no game by game view, in the
-   words the hub shows BEFORE a press. Small and eager: the MLB binding reads
+   words the hub shows BEFORE a press. Small and eager (so it lives beside the
+   engine and not in src/lib/season, which only loads on a press): the MLB binding reads
    it for the hub's muted line and the lazy number file (src/lib/season/mlb.ts)
    reads the same functions for the build, so the words exist once and the hub
    and the viewer cannot disagree.
@@ -26,8 +27,8 @@
    No React, no Math.random, nothing evaluated at module scope from an
    import. */
 import { MLB_FORMULAS, MLB_OUTSIDE_CLUBS, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
-import { seasonLengthRow } from '../usSeasonShape';
-import { MLB_PITCHERS, mlbEraTeamIds } from '../mlbMyCareer';
+import { seasonLengthRow } from './usSeasonShape';
+import { MLB_PITCHERS, mlbEraTeamIds } from './mlbMyCareer';
 
 /** The season the game by game view is built for: the schedule formula's own length. */
 export function mlbViewGames(): number {

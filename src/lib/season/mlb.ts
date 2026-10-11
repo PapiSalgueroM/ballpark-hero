@@ -1,6 +1,6 @@
 /* Round 1212: baseball's number file for the US Season Center
    (src/lib/season/us.ts binds it to the season core). Hitters only: a
-   pitcher is held with an honest line (src/lib/season/mlbHeld.ts says why).
+   pitcher is held with an honest line (src/lib/mlbSeasonHeld.ts says why).
 
    What is the engine's, read from the saved line: games played, the batting
    average (three places), home runs, runs batted in, doubles, steals, the
@@ -47,7 +47,7 @@ import { MLB_MISSED_PLAYOFFS, MLB_PLAYOFF_LADDER, mlbEraTeamIds, mlbPlayoffResul
 import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING } from '@/data/usSeasonLedgerMlb';
 import type { UsShape } from '@/data/usLeagueShape';
 import { postseasonRounds } from '../usSeasonShape';
-import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbViewGames } from './mlbHeld';
+import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
 
 /** Wins this career's rule gives each result, of 162: missed, a first round
  *  exit, then the Division Series, the Championship Series, a lost World
