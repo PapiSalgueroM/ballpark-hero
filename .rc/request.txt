@@ -1,0 +1,12 @@
+inj0: node .rc/x/scanInj.mjs 0 9000
+inj1: node .rc/x/scanInj.mjs 1 9000
+inj2: node .rc/x/scanInj.mjs 2 9000
+inj3: node .rc/x/scanInj.mjs 3 9000
+inj4: node .rc/x/scanInj.mjs 4 9000
+inj5: node .rc/x/scanInj.mjs 5 9000
+inj6: node .rc/x/scanInj.mjs 6 9000
+inj7: node .rc/x/scanInj.mjs 7 9000
+inj8: node .rc/x/scanInj.mjs 8 9000
+inj9: node .rc/x/scanInj.mjs 9 9000
+inj10: node .rc/x/scanInj.mjs 10 9000
+inj11: node .rc/x/scanInj.mjs 11 9000
