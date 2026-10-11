@@ -1,0 +1,226 @@
+name: Formula Career
+on:
+  push:
+    branches: [codex/f1-driver-career]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: formula-career-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source archives and evidence helpers
+        run: |
+          mkdir -p formula-career-artifacts/helpers
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git rev-parse 'aa564f16019b9e821981d5c4e3e0262312c73b62^{tree}')" = e3e5332ddf95b79802c82487a03df3c0aca32e75
+          git diff --name-status aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > formula-career-artifacts/changed-source.txt
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import fs from 'node:fs';
+          const allowed=new Set(['src/lib/formulaCareer.ts','src/data/formulaCareer2025.ts','src/hooks/useFormulaCareer.ts','src/pages/FormulaCareer.tsx','src/data/gameContent/formulaCareer.ts','src/App.tsx','src/data/gameRegistry.ts','src/data/gameContent/index.ts','src/data/gameContent/loader.ts','src/data/seoMeta.ts','src/pages/WhatsNew.tsx','index.html','src/data/searchKeywords.json','src/data/seoMetaParts/seoMetaPart08.ts','scripts/simFormulaCareer.mjs','scripts/playFormulaCareer.mjs','.github/workflows/formula-career.yml','docs/ROUND1277-1279.md','docs/WORKBOARD.md','docs/PROJECT-STATE.md']);
+          const changed=execFileSync('git',['diff','--name-only','-z','aa564f16019b9e821981d5c4e3e0262312c73b62','HEAD']).toString().split('\0').filter(Boolean);
+          fs.writeFileSync('formula-career-artifacts/source-scope.json',JSON.stringify({base:'aa564f16019b9e821981d5c4e3e0262312c73b62',allowed:[...allowed],changed},null,2));for(const file of changed)assert(allowed.has(file),'undeclared source change: '+file);
+          for(const file of ['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs'])assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString(),execFileSync('git',['rev-parse','aa564f16019b9e821981d5c4e3e0262312c73b62:'+file]).toString(),file+' baseline hold');
+          JS
+          git rev-parse HEAD > formula-career-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > formula-career-artifacts/source-tree.txt
+          git -c core.autocrlf=false archive --format=zip --output=formula-career-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > formula-career-artifacts/source-inventory.txt
+          git -c core.autocrlf=false archive --format=zip --output=formula-career-artifacts/base-source.zip aa564f16019b9e821981d5c4e3e0262312c73b62
+          git ls-tree -r aa564f16019b9e821981d5c4e3e0262312c73b62 > formula-career-artifacts/base-source-inventory.txt
+          sha256sum formula-career-artifacts/source.zip formula-career-artifacts/base-source.zip > formula-career-artifacts/source-archive-sha256.txt
+          sha256sum package.json package-lock.json > formula-career-artifacts/packages-before.txt
+          cat > formula-career-artifacts/helpers/dependencies.mjs <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const name=expected.name??directory.split('node_modules/').at(-1),file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' omission needs an actual OS or CPU reason');omitted.push({directory,name,version:expected.version,optional:true,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(actual.name,name,directory+' name');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify({platform:process.platform,arch:process.arch,installed,omitted},null,2));assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          console.log('PASS locked dependency census: 521 installed and 78 platform-qualified optional omissions');
+          JS
+          cat > formula-career-artifacts/helpers/observe-runner.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import {syncBuiltinESMExports} from 'node:module';import {pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';
+          const out=path.resolve(process.env.FORMULA_RUNNER_DIR),names=fs.readdirSync('scripts').filter(x=>/^(sim|play|sweep)[A-Za-z0-9]*\.mjs$/.test(x)&&x!=='runAllSims.mjs').sort(),selected=(process.env.ONLY||'').split(',').filter(Boolean),expected=selected.length?names.filter(x=>selected.includes(x.replace(/\.mjs$/,''))):names;
+          const hash=b=>createHash('sha256').update(b).digest('hex'),nativeSpawn=cp.spawn,children=[];fs.mkdirSync(path.join(out,'children'),{recursive:true});
+          const discovery=names.map(file=>({file,bytes:fs.statSync('scripts/'+file).size,sha256:hash(fs.readFileSync('scripts/'+file))}));fs.writeFileSync(path.join(out,'discovery.json'),JSON.stringify({network:process.env.SIM_NETWORK,browser:process.argv.includes('--browser'),selected,expected,discovery,runnerSha256:hash(fs.readFileSync('scripts/runAllSims.mjs'))},null,2));
+          cp.spawn=function(command,args,options){
+           const child=nativeSpawn.call(this,command,args,options),file=path.basename(args?.[0]??'');
+           if(command===process.execPath&&path.dirname(path.resolve(args?.[0]??''))===path.resolve('scripts')&&names.includes(file)){
+            const index=children.length,base=path.join(out,'children',String(index).padStart(4,'0')+'-'+file),environment=Object.fromEntries(['SIM_NETWORK','ENGINES','TZ','NODE_OPTIONS','BASE','SWEEP_BASE','PORT','FORMULA_EVIDENCE_DIR','FORMULA_CAREER_OUT','FORMULA_CAREER_BROWSER_OUT','FORMULA_CAREER_INPUT'].map(key=>[key,options?.env?.[key]??null])),row={file,args,cwd:options?.cwd??null,environment,stdout:base+'.stdout.log',stderr:base+'.stderr.log',stdoutBytes:0,stderrBytes:0,chunks:[],exitCode:null,signal:null};children.push(row);fs.writeFileSync(row.stdout,'');fs.writeFileSync(row.stderr,'');
+            child.stdout.on('data',data=>{row.chunks.push({stream:'stdout',start:row.stdoutBytes,bytes:data.length});fs.appendFileSync(row.stdout,data);row.stdoutBytes+=data.length;});child.stderr.on('data',data=>{row.chunks.push({stream:'stderr',start:row.stderrBytes,bytes:data.length});fs.appendFileSync(row.stderr,data);row.stderrBytes+=data.length;});child.on('close',(code,signal)=>{row.exitCode=code;row.signal=signal;});
+           }return child;
+          };syncBuiltinESMExports();process.on('exit',code=>fs.writeFileSync(path.join(out,'process.json'),JSON.stringify({runnerExit:code,children},null,2)));await import(pathToFileURL(path.resolve('scripts/runAllSims.mjs')).href);
+          JS
+          cat > formula-career-artifacts/helpers/check-runner.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=path.resolve(process.env.FORMULA_RUNNER_DIR),discovery=JSON.parse(fs.readFileSync(path.join(out,'discovery.json'),'utf8')),processes=JSON.parse(fs.readFileSync(path.join(out,'process.json'),'utf8')),text=fs.readFileSync(path.join(out,'runner.log'),'utf8'),classifications=[...text.matchAll(/^\s+(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$/gm)].map(m=>({verdict:m[1],file:m[2]})),omissions=[];
+          const hash=b=>createHash('sha256').update(b).digest('hex');for(const row of processes.children){const offsets={stdout:0,stderr:0};for(const key of ['stdout','stderr'])assert.equal(fs.statSync(row[key]).size,row[key+'Bytes']);for(const chunk of row.chunks){assert(['stdout','stderr'].includes(chunk.stream));assert.equal(chunk.start,offsets[chunk.stream]);assert(Number.isInteger(chunk.bytes)&&chunk.bytes>0);offsets[chunk.stream]+=chunk.bytes;}assert.equal(offsets.stdout,row.stdoutBytes);assert.equal(offsets.stderr,row.stderrBytes);const output=fs.readFileSync(row.stdout,'utf8')+'\n'+fs.readFileSync(row.stderr,'utf8');omissions.push({file:row.file,lines:output.split('\n').filter(line=>/\bskip(?:ped|ping)?\b|\bnot (?:run|checked)\b|\blive.only\b/i.test(line)),stdoutSha256:hash(fs.readFileSync(row.stdout)),stderrSha256:hash(fs.readFileSync(row.stderr))});}
+          const failures=classifications.filter(x=>x.verdict!=='PASS');fs.writeFileSync(path.join(out,'scope.json'),JSON.stringify({expected:discovery.expected,actual:processes.children.map(x=>x.file),classifications,failures,internalOmissions:omissions,qualification:'Internal omissions are retained and receive no live or database coverage credit.'},null,2));
+          assert.equal(discovery.network,'offline');assert.equal(discovery.browser,true);assert.equal(hash(fs.readFileSync('scripts/runAllSims.mjs')),discovery.runnerSha256);assert.deepEqual(processes.children.map(x=>x.file).sort(),[...discovery.expected].sort());assert.deepEqual(classifications.map(x=>x.file).sort(),[...discovery.expected].sort());assert.equal(failures.length,0,'FAIL, EMPTY or SKIP results are unwaived');assert.equal(processes.runnerExit,0);for(const row of processes.children){assert.equal(row.exitCode,0,row.file);assert.equal(row.signal,null,row.file);}
+          console.log('PASS exact unchanged runner coverage: '+classifications.length+' named results, with no FAIL, EMPTY or SKIP');
+          JS
+          cat > formula-career-artifacts/helpers/generated.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex');function rows(root){if(!fs.existsSync(root))return[];const stat=fs.lstatSync(root);assert(!stat.isSymbolicLink(),'symlink '+root);if(stat.isFile())return[{file:root,bytes:stat.size,sha256:hash(fs.readFileSync(root))}];assert(stat.isDirectory(),root);return fs.readdirSync(root).sort().flatMap(name=>rows(path.join(root,name)));}
+          const current={public:rows('public'),lastmod:rows('scripts/data/lastmod.json'),dist:rows('dist')},file='formula-career-artifacts/generated-body-inventory.json';if(process.argv.includes('--check'))assert.deepEqual(current,JSON.parse(fs.readFileSync(file,'utf8')));else fs.writeFileSync(file,JSON.stringify(current,null,2));console.log('PASS complete generated inventory: '+current.public.length+' public files, '+current.dist.length+' dist files');
+          JS
+          cat > formula-career-artifacts/helpers/prepare-derived.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {build} from 'esbuild';
+          const root=process.cwd(),out=path.resolve('formula-career-artifacts/derived-preparation'),hash=b=>createHash('sha256').update(b).digest('hex');fs.mkdirSync(out,{recursive:true});
+          const files=()=>['index.html','src/data/searchKeywords.json',...fs.readdirSync('src/data/seoMetaParts').sort().map(x=>'src/data/seoMetaParts/'+x)];
+          function keep(stage){const rows=[];for(const file of files()){const body=fs.readFileSync(file),destination=path.join(out,stage,file);fs.mkdirSync(path.dirname(destination),{recursive:true});fs.writeFileSync(destination,body);rows.push({file,bytes:body.length,sha256:hash(body)});}return rows;}
+          async function snapshots(stage){const graphs=[];for(const [name,entry]of [['homeCopy','src/data/homeCopy.ts'],['guides','src/data/gameContent/index.ts'],['seoMeta','src/data/seoMeta.ts']]){const result=await build({entryPoints:[entry],bundle:true,platform:'node',format:'cjs',write:false,metafile:true,outfile:path.join(out,stage,name+'.cjs'),alias:{'@':path.join(root,'src')},logLevel:'error'});const inputs=[];for(const file of Object.keys(result.metafile.inputs)){assert(!file.startsWith('<'),'unexpected virtual snapshot input '+file);const absolute=path.resolve(file);assert(absolute.startsWith(root+path.sep),'snapshot outside checkout '+file);const body=fs.readFileSync(absolute),destination=path.join(out,stage,'inputs',file);fs.mkdirSync(path.dirname(destination),{recursive:true});fs.writeFileSync(destination,body);inputs.push({file,bytes:body.length,sha256:hash(body)});}for(const output of result.outputFiles)fs.writeFileSync(output.path,output.contents);fs.writeFileSync(path.join(out,stage,name+'.metafile.json'),JSON.stringify(result.metafile,null,2));graphs.push({name,entry,inputs,bundleSha256:hash(result.outputFiles[0].contents)});}return graphs;}
+          const before=keep('before'),beforeSnapshots=await snapshots('before'),runs=[];for(const file of ['scripts/genHomeCopy.mjs','scripts/genSearchKeywords.mjs','scripts/genSeoMetaParts.mjs']){const body=fs.readFileSync(file),destination=path.join(out,'helpers',file);fs.mkdirSync(path.dirname(destination),{recursive:true});fs.writeFileSync(destination,body);const result=cp.spawnSync(process.execPath,[file],{cwd:root,env:process.env,maxBuffer:256*1024*1024});fs.writeFileSync(path.join(out,path.basename(file)+'.stdout.log'),result.stdout??Buffer.alloc(0));fs.writeFileSync(path.join(out,path.basename(file)+'.stderr.log'),result.stderr??Buffer.alloc(0));runs.push({file,sourceSha256:hash(body),exitCode:result.status,signal:result.signal,error:result.error?String(result.error):null});}
+          const after=keep('after'),afterSnapshots=await snapshots('after'),patch=cp.spawnSync('git',['diff','--binary','HEAD','--','index.html','src/data/searchKeywords.json','src/data/seoMetaParts'],{maxBuffer:256*1024*1024});fs.writeFileSync(path.join(out,'derived-source.patch'),patch.stdout);const report={qualification:'Independent input provenance snapshots, not the generators private temporary compiled bundles.',before,after,beforeSnapshots,afterSnapshots,runs,patchExit:patch.status};fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));for(const run of runs){assert.equal(run.exitCode,0,run.file);assert.equal(run.signal,null);assert.equal(run.error,null);}assert.equal(patch.status,0);assert.deepEqual(after,before,'Generated source changed. Retain and adopt only reviewed exact bytes, then rerun on a new source head.');assert.equal(patch.stdout.length,0);console.log('PASS actual derived-source generators are no-ops on frozen source');
+          JS
+          sha256sum formula-career-artifacts/helpers/*.mjs > formula-career-artifacts/helper-source-sha256.txt
+      - name: Locked packages and remote verification tools
+        run: |
+          npm ci
+          DEPENDENCY_OUT=formula-career-artifacts/dependencies-before.json node formula-career-artifacts/helpers/dependencies.mjs
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > formula-career-artifacts/packages-after-setup.txt
+          cmp formula-career-artifacts/packages-before.txt formula-career-artifacts/packages-after-setup.txt
+          DEPENDENCY_OUT=formula-career-artifacts/dependencies-after-setup.json node formula-career-artifacts/helpers/dependencies.mjs
+          cmp formula-career-artifacts/dependencies-before.json formula-career-artifacts/dependencies-after-setup.json
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS actual pinned Playwright 1.64.0');
+          JS
+      - name: Actual app type gate
+        id: types
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee formula-career-artifacts/types.log
+      - name: Actual frozen derived-source preparation
+        id: derived
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/prepare-derived.mjs 2>&1 | tee formula-career-artifacts/derived-preparation.log
+      - name: Actual committed method source gate
+        run: |
+          for method in scripts/simFormulaCareer.mjs scripts/playFormulaCareer.mjs; do
+            git cat-file -e "HEAD:$method"
+            test "$(git cat-file -s "HEAD:$method")" -gt 0
+            test -s "$method"
+            git diff --exit-code HEAD -- "$method"
+          done
+      - name: One full production SEO build
+        id: build
+        run: |
+          npm run build:seo 2>&1 | tee formula-career-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > formula-career-artifacts/generated-public.patch
+          node formula-career-artifacts/helpers/generated.mjs
+          tar -czf formula-career-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          tar -czf formula-career-artifacts/dist.tar.gz dist
+          sha256sum formula-career-artifacts/generated-public-and-lastmod.tar.gz formula-career-artifacts/dist.tar.gz > formula-career-artifacts/generated-archive-sha256.txt
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > formula-career-artifacts/post-build-source-held.log
+      - name: Actual Formula Career compiled method and copied-source controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          mkdir -p formula-career-artifacts/focused-runner
+          failed=0
+          FORMULA_EVIDENCE_DIR=formula-career-artifacts/proof FORMULA_RUNNER_DIR=formula-career-artifacts/focused-runner ONLY=simFormulaCareer NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/focused-runner/runner.log || failed=1
+          FORMULA_RUNNER_DIR=formula-career-artifacts/focused-runner node formula-career-artifacts/helpers/check-runner.mjs || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';const report=JSON.parse(fs.readFileSync('formula-career-artifacts/proof/report.json','utf8'));assert.equal(report.status,'pass');
+          JS
+          exit "$failed"
+      - name: Actual saved Formula Career browser journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          mkdir -p formula-career-artifacts/browser-runner
+          failed=0
+          FORMULA_EVIDENCE_DIR=formula-career-artifacts/browser FORMULA_CAREER_INPUT=formula-career-artifacts/proof FORMULA_RUNNER_DIR=formula-career-artifacts/browser-runner ONLY=playFormulaCareer NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/browser-runner/runner.log || failed=1
+          FORMULA_RUNNER_DIR=formula-career-artifacts/browser-runner node formula-career-artifacts/helpers/check-runner.mjs || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';const report=JSON.parse(fs.readFileSync('formula-career-artifacts/browser/report.json','utf8'));assert.equal(report.status,'pass');
+          JS
+          exit "$failed"
+      - name: Early complete evidence size guard
+        if: ${{ !cancelled() }}
+        run: |
+          du -sb formula-career-artifacts > formula-career-artifacts/early-artifact-size.log
+          test "$(du -sb formula-career-artifacts | cut -f1)" -lt 500000000
+      - name: Retain focused post-build evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: formula-career-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: formula-career-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error
+      - name: Entire unchanged offline auto-discovered suite including browsers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          mkdir -p formula-career-artifacts/full-suite-runner
+          failed=0
+          env -u ONLY -u FORMULA_EVIDENCE_DIR FORMULA_CAREER_OUT=formula-career-artifacts/full-suite/proof FORMULA_CAREER_BROWSER_OUT=formula-career-artifacts/full-suite/browser FORMULA_CAREER_INPUT=formula-career-artifacts/full-suite/proof FORMULA_RUNNER_DIR=formula-career-artifacts/full-suite-runner NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee formula-career-artifacts/full-suite-runner/runner.log || failed=1
+          FORMULA_RUNNER_DIR=formula-career-artifacts/full-suite-runner node formula-career-artifacts/helpers/check-runner.mjs || failed=1
+          exit "$failed"
+      - name: All fifteen rebuilt output readers with complete child output
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            mkdir -p "formula-career-artifacts/readers/$harness"
+            FORMULA_RUNNER_DIR="formula-career-artifacts/readers/$harness" ONLY="$harness" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node formula-career-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee "formula-career-artifacts/readers/$harness/runner.log" || failed=1
+            FORMULA_RUNNER_DIR="formula-career-artifacts/readers/$harness" node formula-career-artifacts/helpers/check-runner.mjs || failed=1
+          done
+          exit "$failed"
+      - name: Final whole source package dependency and generated-body holds
+        if: ${{ !cancelled() }}
+        run: |
+          failed=0
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > formula-career-artifacts/source-held.log || failed=1
+          git ls-files --others --exclude-standard -- src scripts .github/workflows > formula-career-artifacts/unexpected-source-files.txt
+          test ! -s formula-career-artifacts/unexpected-source-files.txt || failed=1
+          sha256sum package.json package-lock.json > formula-career-artifacts/packages-final.txt
+          cmp formula-career-artifacts/packages-before.txt formula-career-artifacts/packages-final.txt || failed=1
+          DEPENDENCY_OUT=formula-career-artifacts/dependencies-final.json node formula-career-artifacts/helpers/dependencies.mjs || failed=1
+          cmp formula-career-artifacts/dependencies-before.json formula-career-artifacts/dependencies-final.json || failed=1
+          sha256sum --check formula-career-artifacts/helper-source-sha256.txt || failed=1
+          if [ -f formula-career-artifacts/generated-body-inventory.json ]; then node formula-career-artifacts/helpers/generated.mjs --check || failed=1; fi
+          if [ -f formula-career-artifacts/generated-archive-sha256.txt ]; then sha256sum --check formula-career-artifacts/generated-archive-sha256.txt || failed=1; fi
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS actual final Playwright 1.64.0');
+          JS
+          du -sb formula-career-artifacts > formula-career-artifacts/artifact-size.log
+          find formula-career-artifacts -type f ! -name artifact-member-sha256.txt -print0 | sort -z | xargs -0 sha256sum > formula-career-artifacts/artifact-member-sha256.txt
+          test "$(du -sb formula-career-artifacts | cut -f1)" -lt 500000000 || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: formula-career-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: formula-career-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error

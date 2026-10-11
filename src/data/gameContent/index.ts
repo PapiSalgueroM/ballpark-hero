@@ -12,6 +12,7 @@ import { BASEBALL_CONTENT } from './baseball';
 import { HOCKEY_CONTENT } from './hockey';
 import { MORE_SPORTS_CONTENT } from './moreSports';
 import { WORLD_CONTENT } from './world';
+import { FORMULA_CAREER_CONTENT } from './formulaCareer';
 
 export type { GameContent, GameFaq, GameContentMap } from './types';
 
@@ -30,6 +31,7 @@ export const GAME_CONTENT: GameContentMap = {
   ...HOCKEY_CONTENT,
   ...MORE_SPORTS_CONTENT,
   ...WORLD_CONTENT,
+  ...FORMULA_CAREER_CONTENT,
 };
 
 export const getGameContent = (path: string) => GAME_CONTENT[path];
