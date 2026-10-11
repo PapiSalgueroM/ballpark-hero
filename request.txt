@@ -1,0 +1,4 @@
+# Release AV, the flagship weight fence on the head that raises its ceiling (a plain build)
+#!build
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+gitclean: git status --short | grep -v '^??' | wc -l
