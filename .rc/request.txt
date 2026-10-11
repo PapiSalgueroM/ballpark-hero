@@ -1,0 +1,28 @@
+# Release AX, H1 on c1a2b0fe, served and serial: the tree walkers, PR232's kit (pure, then browser), the Season Centre walks
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+labels-pure: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SOCCER_OPPONENT_LABELS_OUT="$RC_OUT/labels-proof" node scripts/simSoccerOpponentLabels.mjs 2>&1 | tail -40
+labels-browser: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT="$RC_OUT/labels-proof" SOCCER_OPPONENT_LABELS_OUT="$RC_OUT/labels-browser" node scripts/simSoccerOpponentLabels.mjs 2>&1 | tail -40
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playSoccerCareerDiscipline: node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerLeagueWorld: node scripts/playSoccerCareerLeagueWorld.mjs
+playSoccerCareerOpponents: node scripts/playSoccerCareerOpponents.mjs
+playCareerLeagueWorld: node scripts/playCareerLeagueWorld.mjs
+playSoccerSeasonCalendar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playAutocompleteRace: node scripts/playAutocompleteRace.mjs
+playLineupValidator: node scripts/playLineupValidator.mjs
