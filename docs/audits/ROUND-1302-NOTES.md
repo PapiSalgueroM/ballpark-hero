@@ -73,13 +73,22 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
   review found the federation's own page of a video review in a round of 16 tie of the 2026 cup (cbf.com.br,
   published 2026-08-05, Remo against Santos, the second leg); it is on the row since the fix, read again that
   day. The third source on the row names no round and the stage does not stand on it.
-- What the read review said of the sources and is NOT mended (each says what the ledger says; the weakness is
-  how independent the two are): the MLS outside report is an aggregator's rewrite; the Brasileirão's two are
-  rewrites of one federation release, and Greece's are two write ups of one seminar (the ledger's fourth rule
-  counts such a pair once, so a strict reader would call both rows one source short); Ligue 2's two newspapers
-  were read on sites that carry them; the Saudi row's second source names the opening round, not the season.
-  And the unknown rows had one search each. One more search settled the DFB-Pokal (above), so the other 16 cups
-  and Liga MX may well be settled by a second search too: nobody has made it.
+- What the read review said of the sources (each said what the ledger says; the weakness was how independent
+  the two are), and what the second fix pass did about it on 2026-10-11. No verdict moved; each row gained a
+  source of ANOTHER KIND, read that day and filed with its literal:
+  - The Brasileirão's two were rewrites of one federation release (the ledger's fourth rule counts such a pair
+    once). Added: the federation's own page of a video review in a league match of 2026 (cbf.com.br, Santos
+    against Flamengo, the 29th round, published 2026-10-09) and CNN Brasil's report of that match.
+  - Greece's two were write ups of one seminar. Added: in.gr, 2026-08-20, the officials named for the first round
+    of 2026/27, a VAR and an AVAR for every match.
+  - The MLS outside report was an aggregator's rewrite. Added to both rows: a wire agency's own match report
+    (Field Level Media, 2026-10-11: a penalty given after a video review). Like the aggregator's, it speaks of the
+    season by its date and its match, not in print, so the row's note still says how a strict reader counts it.
+  - The Saudi row's second source named the opening round, not the season. Added: a page that prints the
+    2026-2027 season with a video assistant named for each match of the first round (YSscores, 2026-08-14).
+  - NOT mended: Ligue 2's two newspapers were read on sites that carry them (the row says no, which plays like
+    unknown). And the unknown rows had one search each. One more search settled the DFB-Pokal (above), so the
+    other 16 cups and Liga MX may well be settled by a second search too: nobody has made it.
 
 ## 4. The review screen
 
@@ -119,8 +128,32 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
   back to back minutes (none in 7,500 first and 7,500 second halves searched). Two goals ruled out in one
   minute are played all the same, as ONE case of the screen test staged by hand, and it says so (a real half
   with one goal ruled out, that review copied onto the other side in the same minute): one card at a time,
-  each ruled out goal drawn before its own card in its own net, the score never moving. Two reviews in back
-  to back minutes are still played nowhere.
+  each ruled out goal drawn before its own card in its own net, the score never moving. Two goals ruled out in
+  back to back minutes are a SECOND case staged by hand since the second fix pass (the same copy, one minute
+  later). Measured there: both goals are played whole, one after the other, so the second card opens with the
+  clock one place PAST the minute it prints (reviews at 9 and 10, cards at 9 and 11). Late, never early.
+- **The line under the pitch says nothing while a goal a review rules out is played and reviewed** (the second
+  fix pass). It kept the last small line told, so the lit walk's pictures read "Throw in, Aston Villa" under a
+  goal and under the card that rules it out. A real goal has cleared that line while it plays since Round 1101;
+  a ruled out one does now too, and the line says the ruling when the card is gone. The screen test asks it
+  under every ruled out card (20 of its cases fail without it) and the walk asks it in a browser.
+- **OPEN, found by the second fix pass and not mended: a penalty a review GIVES at a crowded end of a half.**
+  A scan of 36,000 first halves of the test's own career (runner result r1302-h3) found 57 with such a penalty
+  in the last three clock places. On the quiet ones and on most others the screen is right (the card on a quiet
+  pitch, the kick played after it). On three tight shapes it is not, and each is a case of the screen test
+  marked `fails` (green while the defect is there, red the day it is mended):
+  - League match 2, seed 10321 (whistle 50, the penalty at 49, my real goals at 47, 48 and with the last kick at
+    50): the card "VAR: checking for a penalty" opens on MY last kick's goal in THEIR net with the score not
+    moved yet (3 - 0), and the penalty's kick is never drawn: the half ends 4 - 1.
+  - League match 2, seed 2287 (the penalty at 49, my real shot is the last kick at 50): the card is on a quiet
+    pitch, and the kick is never drawn. The plan plays nothing in the place before a last kick, which is the
+    live screen's own limit with or without reviews (the item below).
+  - League match 2, seed 6428 (the penalty at 49, real shots at 48 and 49): the card sits on the last picture of
+    a real shot, opens late, and the whistle goes before the kick is played out.
+  The cure is the twin of the stoppage: the card on a quiet pitch (at the whistle when there is no other
+  instant), then the kick with the clock stopped, its goal counted when the ball is in. It was not built: it
+  reaches the way the score waits for the ball, it is not small, and nothing can meet it today (VAR is dark,
+  and penalties by review are held off by `penalties-total` on their own).
 - **Not this round's, and live today with VAR off** (the run review measured it on halves with no review): a
   real goal in the last clock place of a first half is drawn and counted and never gets its scorer card, and of
   two goals in the last two places only one is drawn. For the Club Manager lane's list.
@@ -138,12 +171,15 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
 - `scripts/simCmVar.mjs`: Round 1218's outcomes, and in the bands the season total of penalties (control
   `penaltyband`; a caught control exits 0 and prints CAUGHT in this harness). Its coverage outcome reads the
   ledger, so the twelve new yes rows needed no hand there.
-- `src/test/clubManagerVarScreen.test.tsx`: 29 cases, 28 on real halves of the engine on the shipped rates and
-  one staged by hand (two goals ruled out in one minute). Under
+- `src/test/clubManagerVarScreen.test.tsx`: 39 cases since the second fix pass. 32 are plain cases on real halves
+  of the engine on the shipped rates, two are staged by hand (two goals ruled out in one minute, and in back to
+  back minutes), and five are marked `fails`: the open defects of a penalty given at a crowded end, above. Under
   the card of a ruled out goal it asks for the ball in the net THAT goal went into (the rule it had, "a goal
-  stopped in a net", passed a card on somebody's real goal), and under any other card for no action at all.
+  stopped in a net", passed a card on somebody's real goal) and for nothing on the line under the pitch, and
+  under any other card for no action at all.
 - `scripts/playCmVar.mjs`: 40 cases and 2 help views at 390 and 1280 on a LIT build (it exits 2 on a dark one),
-  with the same look under every card and the page's position read inside the page at every change.
+  with the same look under every card, the line under the pitch read under every ruled out card, and the page's
+  position read inside the page at every change.
 - `scripts/simLiveSimMotion.mjs`: its `redraw` control anchors on a statement this round put over two lines, and
   its `pause` control on the clock's guard, which gained `reviewEvent` when the review screen was merged (dead
   on main since then) and `stopped` in the fix. Both anchors follow the code again and both controls fire.
@@ -161,11 +197,11 @@ left on a not read list (the ledger harness fails if anything is, control `unrea
    from the generated file, so nobody types it), and the lit walk on the plain build.
 4. Still open on the screen, none of it reachable while the switch is off:
    - A review in a second half and one in extra time are held by the jsdom test only. The lit walk plays first
-     halves. Two reviews in one minute are played by one hand staged case of the jsdom test and in no
-     browser (the engine gave none in 15,000 halves).
-   - A penalty a review GIVES at the very end of a half whose last places real chances fill has not been looked
-     at the way the ruled out goals were: its one case ("a review at the very end of a crowded half is still
-     shown once") asks that the card comes once and the half ends on the engine's score, not what is under it.
+     halves. Two reviews in one minute and in back to back minutes are played by two hand staged cases of the
+     jsdom test and in no browser (the engine gave none in 15,000 halves).
+   - A penalty a review GIVES at the very end of a half whose last places real chances fill HAS been looked at
+     now, and it is open on three shapes: section 4 has the seeds, and the screen test keeps each as a case
+     marked `fails`. Turning penalties by review on needs that mended first.
    - A ruled out goal one place before a real last kick is played just before the wind up, so its card (say
      45+3') opens with the clock one place earlier (LIVE 45+2'). In order, and one label early.
 5. The bands of `scripts/simCmVar.mjs`, for whoever next moves a rate or the default seeds. Goals ruled out:
