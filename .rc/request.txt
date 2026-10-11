@@ -1,0 +1,4 @@
+c05-leak: SIM_ERA2005_CONTROL=leak node scripts/simEra2005.mjs
+c10-leak: SIM_ERA2010_CONTROL=leak node scripts/simEra2010.mjs
+c15-leak: SIM_ERA2015_CONTROL=leak node scripts/simEra2015.mjs
+c20-leak: SIM_ERA2020_CONTROL=leak node scripts/simEra2020.mjs
