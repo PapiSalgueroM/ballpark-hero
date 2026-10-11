@@ -643,6 +643,76 @@ describe('Club Manager: the review screen', () => {
     expect(new Set(up.map(f => f.score)).size, 'the score moved under the review card').toBe(1);
   }, 120000);
 
+  /* Round 1302 fix 2: THE AWARDED TWIN of the crowded ends above, which nobody had played. A scan of 36,000 first
+     halves of this career (runner result r1302-h3) found 57 with a penalty a review gives in the last three clock
+     places. These are the tight shapes among them, each on the half the scan found it on. What holds on all four
+     is asked of all four: one card, the score standing still under it, the half ending on the engine's score. Two
+     things do NOT hold on every half, and each row says which (runner result r1302-h4):
+       `under`: the pitch under the card. 'quiet' is right. On 10321 the card sits on my own last kick's goal in
+         THEIR net with the score not moved yet, on 6428 on the last picture of a real shot.
+       `kick`: the kick the card gives. 'played' is right. On 10321 and 2287 a real last kick follows, the plan plays
+         nothing in the place before a last kick (the live screen's own limit, with or without reviews), so the card
+         says "Penalty to ..." and no kick is ever drawn: the score moves at the whistle.
+     Both are OPEN, unreachable today (VAR is dark, and penalties by review are held off by the ledger's owed entry
+     penalties-total) and written up in docs/audits/ROUND-1302-NOTES.md. They are kept below as cases marked
+     `fails`: each is green while the defect is there and goes RED the day it is mended, and then it becomes a
+     plain row. A ruled out goal got the stoppage for this corner; a penalty needs its twin (the card on a quiet
+     pitch, then the kick with the clock stopped). */
+  const lateAwarded = (shape: (x: LateShape) => boolean) => (feed: LiveFeedEvent[], live: LiveMatch) => {
+    const whistle = 45 + (live.added?.h1 ?? 0), shown = reviewsOf(feed).filter(v => place(v) >= 44), r = shown[0];
+    if (shown.length !== 1 || r.review!.decision !== 'awarded' || place(r) < whistle - 2 || !kickOf(live, r)?.goal) return null;
+    const own = (e: LiveFeedEvent) => e.side === r.side && place(e) === place(r) && e.text === r.text;
+    return shape({ r, whistle, real: feed.filter(e => isChance(e) && place(e) >= 44 && !own(e)) }) ? r : null;
+  };
+  type AwardedRow = { what: string; match: number; hint: number; shape: (x: LateShape) => boolean; under: 'quiet' | 'OPEN'; kick: 'played' | 'OPEN' };
+  const LATE_AWARDED: AwardedRow[] = [
+    { what: 'a real goal is the last kick after it and a real goal has the place before it', match: 1, hint: 10321, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
+    { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
+    { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'played', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
+    { what: 'two places before the whistle, a real chance at its place and one after', match: 2, hint: 8615, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
+  ];
+  type AwardedRun = { h: Half; frames: Frame[]; last: number; whistle: number };
+  const awardedRuns = new Map<number, AwardedRun>();
+  /** The half of a row played to the whistle, once a file run (the two `fails` cases read the same frames). */
+  async function awardedRun(row: AwardedRow): Promise<AwardedRun> {
+    const had = awardedRuns.get(row.hint);
+    if (had) return had;
+    const h = half(row.match, row.hint, lateAwarded(row.shape));
+    const got = { h, ...(await toTheWhistle(h, 40000)) };
+    awardedRuns.set(row.hint, got);
+    return got;
+  }
+  /** The kick the card gave, played out between the card and the whistle: struck, and in. */
+  const kickPlayed = ({ frames, last, whistle }: AwardedRun) => {
+    const after = frames.slice(last + 1, whistle);
+    return after.some(f => f.motion === 'goal' && f.phase === 'flight') && after.some(f => f.motion === 'goal' && f.phase === 'net');
+  };
+  it.each(LATE_AWARDED)('a penalty a review gives at the end of a half that real chances fill ($what): one card, the score still under it', async row => {
+    const got = await awardedRun(row);
+    const { h, frames, last, whistle } = got, v = h.review;
+    const first = frames.findIndex(cardUp), up = frames.filter(cardUp);
+    const runs = actionRuns(frames.slice(0, whistle));
+    const under = [...new Set(up.map(f => `${f.motion}/${f.phase}${f.netAt ? ` in the ${f.netAt} net` : ''}`))];
+    console.info(`clubManagerVarScreen: a penalty given at a crowded end, seed ${h.seed} of match ${row.match + 1}: whistle ${h.whistle}, review at ${place(v)} (${v.side}), card at ${frames[first].minute + frames[first].plus}, under the card ${under.join(' and ')}, score under it ${[...new Set(up.map(f => f.score))].join(' then ')}, at the whistle ${frames[whistle].score}, played ${runs.map(r => `${r.kind}${r.from > last ? ' (after the card)' : ''}`).join(', ') || 'nothing'}, the kick ${kickPlayed(got) ? 'played after the card' : 'NOT played'}, chances from 44 on ${h.feed.filter(e => isChance(e) && place(e) >= 44).map(e => `${e.side} ${e.kind} at ${place(e)}${e.penalty ? ' (P)' : ''}`).join(', ')}`);
+    expect(frames[last].cardText).toContain('VAR: penalty awarded');
+    expect(new Set(up.map(f => f.score)).size, 'the score moved under the review card').toBe(1);
+    expect(frames[first].score, 'the kick was on the score before its review opened').toBe(scoreBy(h.feed.filter(e => !(e.kind === 'goal' && e.penalty && e.side === v.side && place(e) === place(v))), frames[first].minute + frames[first].plus));
+    if (row.under === 'quiet') nothingUnder(frames, new Map());
+    if (row.kick === 'played') expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
+  }, 240000);
+  /* A case marked `fails` is green on ANY throw, so each of these two does its own work outside the one assertion
+     that is the defect: if the half or its run is gone, it returns, and a `fails` case that returns is RED. */
+  it.fails.each(LATE_AWARDED.filter(r => r.under === 'OPEN'))('KNOWN OPEN, dark: a real action is under the card of a penalty a review gives ($what)', async row => {
+    let got: AwardedRun;
+    try { got = await awardedRun(row); } catch { return; }
+    nothingUnder(got.frames, new Map());
+  }, 240000);
+  it.fails.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is never played ($what)', async row => {
+    let got: AwardedRun;
+    try { got = await awardedRun(row); } catch { return; }
+    expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
+  }, 240000);
+
   /* ---- Round 1302: the cases nobody had played (fix-AT section 7 item 8) ----
      Each on a real half the engine holds on the shipped rates, found by a scan of 7,500 first and 7,500 second
      halves on a runner (result r1302-scan; the numbers are in docs/audits/ROUND-1302-NOTES.md). */
