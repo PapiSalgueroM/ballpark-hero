@@ -1,0 +1,7 @@
+# Release AV: is simHalftime's gain band a coin toss? three runs on the gate head and three on main, each in its own worktree and temp folder
+halftime-head-1: D=/tmp/hh-1; git worktree add -q --detach $D HEAD && ln -s "$PWD/node_modules" $D/node_modules && mkdir -p $D.tmp && cd $D && TMPDIR=$D.tmp TEMP=$D.tmp TMP=$D.tmp node scripts/simHalftime.mjs
+halftime-head-2: D=/tmp/hh-2; git worktree add -q --detach $D HEAD && ln -s "$PWD/node_modules" $D/node_modules && mkdir -p $D.tmp && cd $D && TMPDIR=$D.tmp TEMP=$D.tmp TMP=$D.tmp node scripts/simHalftime.mjs
+halftime-head-3: D=/tmp/hh-3; git worktree add -q --detach $D HEAD && ln -s "$PWD/node_modules" $D/node_modules && mkdir -p $D.tmp && cd $D && TMPDIR=$D.tmp TEMP=$D.tmp TMP=$D.tmp node scripts/simHalftime.mjs
+halftime-main-1: D=/tmp/hm-1; git fetch -q origin main; git worktree add -q --detach $D origin/main && ln -s "$PWD/node_modules" $D/node_modules && mkdir -p $D.tmp && cd $D && TMPDIR=$D.tmp TEMP=$D.tmp TMP=$D.tmp node scripts/simHalftime.mjs
+halftime-main-2: D=/tmp/hm-2; git fetch -q origin main; git worktree add -q --detach $D origin/main && ln -s "$PWD/node_modules" $D/node_modules && mkdir -p $D.tmp && cd $D && TMPDIR=$D.tmp TEMP=$D.tmp TMP=$D.tmp node scripts/simHalftime.mjs
+halftime-main-3: D=/tmp/hm-3; git fetch -q origin main; git worktree add -q --detach $D origin/main && ln -s "$PWD/node_modules" $D/node_modules && mkdir -p $D.tmp && cd $D && TMPDIR=$D.tmp TEMP=$D.tmp TMP=$D.tmp node scripts/simHalftime.mjs
