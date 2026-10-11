@@ -1,0 +1,6 @@
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simLegalPages exit=0 0s | simLegalPages: all green
+simNoInventedQuotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 118s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+vitest-all exit=0 555s |    Duration  553.92s (transform 33.08s, setup 25.51s, collect 157.28s, tests 1170.64s, environment 184.23s, prepare 37.79s)
