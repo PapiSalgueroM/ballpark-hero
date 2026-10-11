@@ -1,0 +1,14 @@
+# reviewer us-board-recording, Release AX on 72f54789: the recording redone independently (commit c inert, the merge alone moves it, the head records the committed file), the replay and the two new controls on the final head, and two floors that have no control
+#!serial
+prep: mkdir -p /tmp/rv && cp .rc/x/cmpSports.mjs .rc/x/fxMut.mjs /tmp/rv/ && git show 934c29d9:scripts/data/usBoardFixture.json > /tmp/rv/old.json && cp scripts/data/usBoardFixture.json /tmp/rv/new.json && sha256sum /tmp/rv/old.json /tmp/rv/new.json src/test/usBoardFixture.test.tsx && git log --oneline -2 | cat
+c-replay: export TMPDIR=$(mktemp -d); git checkout -q --detach 934c29d9 && sha256sum scripts/data/usBoardFixture.json src/test/usBoardFixture.test.tsx && node scripts/simUsBoardParity.mjs; s=$?; git checkout -q -; exit $s
+c-record: export TMPDIR=$(mktemp -d); git checkout -q --detach 934c29d9 && node scripts/recordUsBoardFixture.mjs /tmp/rv/c-rec.json; s=$?; git checkout -q -; [ $s -eq 0 ] || exit $s; node /tmp/rv/cmpSports.mjs /tmp/rv/old.json /tmp/rv/c-rec.json
+d-record: export TMPDIR=$(mktemp -d); git checkout -q --detach ad4c38f0 && node scripts/recordUsBoardFixture.mjs /tmp/rv/d-rec.json; s=$?; git checkout -q -; [ $s -eq 0 ] || exit $s; node /tmp/rv/cmpSports.mjs /tmp/rv/new.json /tmp/rv/d-rec.json
+d-replay-old-EXPECT1: export TMPDIR=$(mktemp -d); git checkout -q --detach ad4c38f0 && node scripts/simUsBoardParity.mjs > /tmp/rv/d-replay.log 2>&1; s=$?; git checkout -q -; grep -E "FAIL|step|differ|passed|failed" /tmp/rv/d-replay.log | head -30; tail -2 /tmp/rv/d-replay.log; exit $s
+head-record: export TMPDIR=$(mktemp -d); node scripts/recordUsBoardFixture.mjs /tmp/rv/head-rec.json && node /tmp/rv/cmpSports.mjs /tmp/rv/new.json /tmp/rv/head-rec.json
+head-replay: export TMPDIR=$(mktemp -d); node scripts/simUsBoardParity.mjs
+head-wheel: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=wheel node scripts/simUsBoardParity.mjs
+head-talk: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=talk node scripts/simUsBoardParity.mjs
+floor-nosave-EXPECT1: export TMPDIR=$(mktemp -d); node /tmp/rv/fxMut.mjs nosave && node scripts/simUsBoardParity.mjs > /tmp/rv/f1.log 2>&1; s=$?; git checkout -- scripts/data/usBoardFixture.json; grep -E "FAIL" /tmp/rv/f1.log | head -8; tail -1 /tmp/rv/f1.log; exit $s
+floor-nophase-EXPECT1: export TMPDIR=$(mktemp -d); node /tmp/rv/fxMut.mjs nophase && node scripts/simUsBoardParity.mjs > /tmp/rv/f2.log 2>&1; s=$?; git checkout -- scripts/data/usBoardFixture.json; grep -E "FAIL" /tmp/rv/f2.log | head -8; tail -1 /tmp/rv/f2.log; exit $s
+after: git status --short | head -5; sha256sum scripts/data/usBoardFixture.json
