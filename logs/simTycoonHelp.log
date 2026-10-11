@@ -1,0 +1,242 @@
+Round 583: Stadium Tycoon says what the engine does
+   suite: src/test/tycoonHelp.test.tsx
+
+A) the shipped code
+   pass  1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+   pass  2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+   pass  3 the rules open before first play and close with Let's go
+   pass  4 the rules stay closed for a player who already has a save
+   pass  5 the keyboard tap button pays exactly one tap
+   what it measured:
+     1196 taps across 13 clubs printed exactly fmtMoney of what they added, covering plain, K, M, B, T
+     553 paying events (milestone, goal, win) each had a floater printing fmtMoney of its amount
+     a fresh visitor saw the rules first, and Let's go closed them
+     a returning player went straight to the game, and How it works reopens the rules with a named close button
+     the keyboard tap button ("Tap the stadium for $3") paid one tap
+
+A.rawtap) negative control: a tap floater prints the raw number of dollars again
+   ok   failed 1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+         measured: AssertionError: a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap th
+   ok   passed 2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+   ok   passed 3 the rules open before first play and close with Let's go
+   ok   passed 4 the rules stay closed for a player who already has a save
+   ok   passed 5 the keyboard tap button pays exactly one tap
+
+A.rawgoal) negative control: a goal floater prints the raw bonus again
+   ok   passed 1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+   ok   failed 2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+         measured: AssertionError: goal paid 32472 and no floater read "GOAL 81' +$32.5K"; goal paid 32472 and no floater read "GOAL 82' +$32.5K"; goal paid 32472 and no floater read "GOAL 83' +$32.5K"; goal paid 32472 and no floater read "GOAL 84' +$32.5K"; 
+   ok   passed 3 the rules open before first play and close with Let's go
+   ok   passed 4 the rules stay closed for a player who already has a save
+   ok   passed 5 the keyboard tap button pays exactly one tap
+
+A.nohelp) negative control: the rules no longer open before first play
+   ok   passed 1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+   ok   passed 2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+   ok   failed 3 the rules open before first play and close with Let's go
+         measured: AssertionError: a player with no save was not shown the rules: expected null not to be null
+   ok   passed 4 the rules stay closed for a player who already has a save
+   ok   passed 5 the keyboard tap button pays exactly one tap
+
+A.deadkey) negative control: the keyboard tap button is still there but pays nothing
+   ok   passed 1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+   ok   passed 2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+   ok   passed 3 the rules open before first play and close with Let's go
+   ok   passed 4 the rules stay closed for a player who already has a save
+   ok   failed 5 the keyboard tap button pays exactly one tap
+         measured: AssertionError: the keyboard tap did not pay exactly one tap: expected +0 to be 1 // Object.is equality
+
+B) the claims
+   measured: a match lasts 126.0 seconds; the greedy player can first sell up at minutes 12.7, 12.7, 13.3
+   ok   G1
+   ok   G2
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+   82 claims hold (56 in the stadium guide, 11 in the modal's own words, 2 academy corrections, 2 elsewhere on the screen, 11 engine blurbs); 10 idioms excused
+
+B.kickcopy) negative control: the new kick instructions promise twenty seconds instead of twelve
+   RED  G1: the stadium text no longer says "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload."
+   ok   G2
+   RED  G3: "twenty" in "...free-kick offer during a watched match. You have twenty seconds to open it, then choose y..."
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.kickwindow) negative control: a real offered kick reports a shorter window
+   ok   G1
+   RED  G2: "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.": kick window/attempt mismatch: {"window":false,"attempt":true,"remainingSec":11}; kick window/attempt mismatch: {"window":false,"attempt":true,"remainingSec":11}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.kickreopen) negative control: an opened kick becomes available again
+   ok   G1
+   RED  G2: "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.": kick window/attempt mismatch: {"window":true,"attempt":false,"remainingSec":12}; kick window/attempt mismatch: {"window":true,"attempt":false,"remainingSec":12}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.kickgoal) negative control: one scored kick adds two goals
+   ok   G1
+   RED  G2: "A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.": kick award mismatch: {"paid":false,"once":true,"deadline":true,"miss":true}; kick award mismatch: {"paid":false,"once":true,"deadline":true,"miss":true}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.kickrepeat) negative control: a scored kick pays again after it was already awarded
+   ok   G1
+   RED  G2: "A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.": kick award mismatch: {"paid":true,"once":false,"deadline":true,"miss":true}; kick award mismatch: {"paid":true,"once":false,"deadline":true,"miss":true}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.kickdeadline) negative control: a kick left open at full time can still pay
+   ok   G1
+   RED  G2: "A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.": kick award mismatch: {"paid":true,"once":true,"deadline":false,"miss":true}; kick award mismatch: {"paid":true,"once":true,"deadline":false,"miss":true}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.typed) negative control: the guide gains a sentence with a typed number in it
+   ok   G1
+   ok   G2
+   RED  G3: "3" in "...Tap the stadium for instant cash, about 3 dollars a tap at the start. The Megaph..."
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.stale) negative control: the guide says the whistle gives you twenty seconds
+   RED  G1: the stadium text no longer says "about twelve seconds"
+   ok   G2
+   RED  G3: "twenty" in "...stle when it drifts onto the pitch. You get about twenty seconds, and it carries  | , from..."
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.engine) negative control: the engine's Matchday Hype lasts 45 seconds
+   ok   G1
+   RED  G2: "doubles your income for sixty seconds and lifts your taps with it, though goal and win bonuses are not doubled": hype: {"lasts":45,"income":2,"tap":2,"megaTap":1.2592592592592593,"goal":1,"win":1}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.typedmodal) negative control: the rules modal types "60 seconds"
+   ok   G1
+   ok   G2
+   ok   G3
+   RED  M1: the modal types a digit: "... then ). Press it and your income pays double for 60 seconds, and your taps rise..."
+   RED  M2: the screen types an unclaimed number: "6" in "...). Press it and your income  |  60 seconds, and your taps rise with it;..."
+   ok   L1
+
+B.typedfact) negative control: helpFacts hands the modal a typed 60 for the hype length
+   ok   G1
+   ok   G2
+   ok   G3
+   RED  M1: helpFacts hands over a typed fact: hypeSec: 60,
+   ok   M2
+   ok   L1
+
+B.typedscreen) negative control: the away card says half speed again, which is wrong with the Away Day Deal
+   ok   G1
+   ok   G2
+   ok   G3
+   ok   M1
+   RED  M2: the screen types an unclaimed number: "half" in "...The turnstiles kept spinning at half speed...."
+   ok   L1
+
+B.typedblurb) negative control: Boardroom Sway's blurb promises 12% a level while the engine pays 10%
+   ok   G1
+   ok   G2
+   ok   G3
+   ok   M1
+   ok   M2
+   RED  L1: the engine's blurbs no longer say "Matchday income pays 10% more per level"
+
+B.ticketcopy) negative control: the guide says Community takes 16 percent off the gate while the engine takes 15
+   RED  G1: the stadium text no longer says "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster"
+   ok   G2
+   RED  G3: "1" in "...nd switching is free at any time. Community takes 16 percent off the gate money each fan p..."
+   ok   M1
+   ok   M2
+   ok   L1
+
+B.ticketturnout) negative control: the engine's Premium draws half the supporters instead of three quarters
+   ok   G1
+   RED  G2: "On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it": the engine measures 50 where the words print 75
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it": the engine measures 50 where the words print 75
+         measured: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures 25, 50, 25 where the words print 25, 75, 25
+         measured: "A new 120 seat ground with 90 supporters draws 67 on Premium and earns less than Standard, and Premium earns more once 75 percent of your supporters still fill the ground": the engine measures 120, 90, 45, 50 where the words print 120, 90, 67, 75
+
+B.ticketwhole) negative control: the engine's Community stops drawing the whole fanbase
+   ok   G1
+   RED  G2: "On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it": Standard draws 100 percent of the fanbase and Community 90, and a packed ground stops at its seats
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it": Standard draws 100 percent of the fanbase and Community 90, and a packed ground stops at its seats
+
+B.ticketgate) negative control: the engine's Premium takes money off the gate instead of adding it
+   ok   G1
+   RED  G2: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures -5, 75, 25 where the words print 25, 75, 25
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures -5, 75, 25 where the words print 25, 75, 25
+         measured: "A new 120 seat ground with 90 supporters draws 67 on Premium and earns less than Standard, and Premium earns more once 75 percent of your supporters still fill the ground": on the new ground Premium earns less than Standard; Premium first fills it at 160 supporters, which is where its share reaches the seats; from there up Premium does not always earn more
+         measured: "so Premium pays less there, and it pays more once": on the new ground Premium earns less than Standard; Premium first fills it at 160 supporters, which is where its share reaches the seats; from there up Premium does not always earn more
+
+B.ticketcut) negative control: the engine's Community takes 20 percent off the gate
+   ok   G1
+   RED  G2: "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster": the engine measures 20, 50 where the words print 15, 50
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster": the engine measures 20, 50 where the words print 15, 50
+
+B.ticketgrowth) negative control: the engine's Community grows the supporters 40 percent faster
+   ok   G1
+   RED  G2: "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster": the engine measures 15, 40 where the words print 15, 50
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster": the engine measures 15, 40 where the words print 15, 50
+
+B.ticketslow) negative control: the engine's Premium grows the supporters 40 percent slower
+   ok   G1
+   RED  G2: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures 25, 75, 40 where the words print 25, 75, 25
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures 25, 75, 40 where the words print 25, 75, 25
+
+B.ticketstalls) negative control: the engine's offer rate reaches the snacks and the shop as well as the gate
+   ok   G1
+   RED  G2: "Snacks, the shop, parking and the payroll keep their own rates": per fan the snacks and the shop pay {"standard":0.04012,"community":0.03410199999999999,"premium":0.05015000000000003}, and parking with the payroll pays {"standard":3.539999999999999,"community":3.539999999999999,"premium":3.539999999999999}
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+         measured: "Snacks, the shop, parking and the payroll keep their own rates": per fan the snacks and the shop pay {"standard":0.04012,"community":0.03410199999999999,"premium":0.05015000000000003}, and parking with the payroll pays {"standard":3.539999999999999,"community":3.539999999999999,"premium":3.539999999999999}
+
+simTycoonHelp: green.
+   Every money floater prints what the engine paid, the way the balance prints it, up to trillions.
+   The rules open before first play and not after; a keyboard can tap.
+   Every number in the stadium guide and the rules modal is tied to the engine, and nothing typed is left over.
+   All 25 controls fired exactly where they should.
