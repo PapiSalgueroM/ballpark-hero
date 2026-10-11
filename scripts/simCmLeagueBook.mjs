@@ -1084,7 +1084,15 @@ function readLeagueSeason(mod, s) {
   if (!book) return null;
   const mine = cm.mySquadNames(s);
   let rows = 0, og = 0, u = 0;
-  for (const club of rivalsOf(s)) { const g = mod.book.bookClubGoals(book, club); rows += g.rows; og += g.og; u += g.u; }
+  /* Step (d): does this league's own calendar (a split, a play-off round, two conferences) keep the first law
+     to the season's end? A club whose book and table disagree here, or a book that says it started late in
+     a career that opened one at the first week, is a league format the note calls do not cover. */
+  let misfit = 0;
+  for (const club of rivalsOf(s)) {
+    const g = mod.book.bookClubGoals(book, club); rows += g.rows; og += g.og; u += g.u;
+    if (g.rows + g.og + g.u !== (s.table.find(r => r.club === club)?.gf ?? 0)) misfit += 1;
+  }
+  const late = book.r0 !== undefined ? book.r0 : null;
   const rivalTop = Math.max(0, ...mod.book.bookRows(book).filter(r => !mine.has(r.name)).map(r => r.goals));
   const raceTop = Math.max(0, ...(s.scorerRace ?? []).filter(e => !mine.has(e.name)).map(e => e.goals));
   const myTop = Math.max(0, ...s.squad.map(p => p.comp?.league?.goals ?? 0));
@@ -1102,7 +1110,7 @@ function readLeagueSeason(mod, s) {
     /* Critic's advice 15: is the club's strength on the scale of its eleven's ratings? */
     gaps.push(cm.strengthOf(s, club) - mean(xi.filter(p => p.p !== 'GK').map(p => p.r)));
   }
-  return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, rivalTop, raceTop, myTop, thin, gaps, bytes: JSON.stringify(s.leagueBook).length, saveBytes: JSON.stringify(s).length };
+  return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, late, misfit, rivalTop, raceTop, myTop, thin, gaps, bytes: JSON.stringify(s.leagueBook).length, saveBytes: JSON.stringify(s).length };
 }
 
 async function measureLeagues(arms) {
@@ -1117,6 +1125,7 @@ async function measureLeagues(arms) {
   const share = x => (x.rows + x.og + x.u ? Math.floor(100 * (x.rows + x.og) / (x.rows + x.og + x.u)) : 100);
   const table = [];
   const allGaps = [];
+  const repair = { careers: 0, late: [], misfit: [], none: [] };
   leagues.forEach(([era, league], li) => {
     const club = league.clubs[0];
     const perArm = arms.map(() => []);
@@ -1138,6 +1147,15 @@ async function measureLeagues(arms) {
       return { name, share: share(sum), top: mean(xs.map(x => x.rivalTop)), mineLead: xs.filter(x => x.myTop > x.rivalTop).length, n: xs.length, bytes: Math.round(mean(xs.map(x => x.bytes))), saveBytes: Math.round(mean(xs.map(x => x.saveBytes))) };
     });
     const xs0 = perArm[0].filter(x => x && !x.error);
+    /* The candidate's arm ("the rule", the engine as committed): careers that ended the season on a late book
+       or on a book that does not add up to the table, and careers with no readable book at all. */
+    const cand = perArm[1] ?? [];
+    repair.careers += cand.length;
+    for (const x of cand) {
+      if (!x || x.error) repair.none.push(`${era} ${league.id}`);
+      else if (x.late !== null) repair.late.push(`${era} ${x.league} (from round index ${x.late})`);
+      else if (x.misfit) repair.misfit.push(`${era} ${x.league} (${x.misfit} clubs)`);
+    }
     table.push({ era, id: first.league, cols });
     console.log(`measure ${era.padEnd(7)} ${first.league.padEnd(14)} ${String(first.clubs).padStart(2)} clubs, no eleven ${String(first.thin.length).padStart(2)} of ${first.clubs - 1}${sizes.length ? ` (men ${sizes[0]} to ${sizes[sizes.length - 1]}, ${first.thin.filter(t => !t.keepers).length} with no keeper, ${first.thin.filter(t => t.shirtHeaviest).length} whose heaviest man is an empty shirt, ${first.thin.reduce((n, t) => n + t.shirts, 0)} shirts in all)` : ''}: ${cols.map(c => `${c.name} ${c.share} in 100, best rival ${fmt(c.top)}, mine leads ${c.mineLead} of ${c.n}, book ${c.bytes} bytes of a save of ${c.saveBytes}`).join('; ')}; old race best rival ${fmt(mean(xs0.map(x => x.raceTop)))} (mine leads ${xs0.filter(x => x.myTop > x.raceTop).length} of ${xs0.length}), my best ${fmt(mean(xs0.map(x => x.myTop)))}`);
   });
@@ -1149,6 +1167,8 @@ async function measureLeagues(arms) {
   const gm = mean(allGaps);
   const gsd = Math.sqrt(mean(allGaps.map(g => (g - gm) ** 2)));
   console.log(`measure a club's strength minus the mean rating of its eleven's outfield, over ${allGaps.length} clubs with an eleven: mean ${fmt(gm, 2)}, standard deviation ${fmt(gsd, 2)}, lowest ${fmt(Math.min(...allGaps), 1)}, highest ${fmt(Math.max(...allGaps), 1)} (an empty shirt stands at the club's strength)`);
+  const whole = repair.careers - repair.late.length - repair.misfit.length - repair.none.length;
+  console.log(`measure the repair: of ${repair.careers} careers on the engine as committed, ${whole} ended their season on a whole book that adds up to the table; on a late book ${repair.late.length}${repair.late.length ? ` [${repair.late.join('; ')}]` : ''}; whole and not adding up ${repair.misfit.length}${repair.misfit.length ? ` [${repair.misfit.join('; ')}]` : ''}; no readable book or no season end ${repair.none.length}${repair.none.length ? ` [${repair.none.join('; ')}]` : ''}`);
   console.log(`simCmLeagueBook: MEASURE leagues done, nothing gated (${Math.round((Date.now() - T0) / 1000)}s)`);
 }
 
