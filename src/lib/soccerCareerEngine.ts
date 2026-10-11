@@ -9,6 +9,7 @@ import { personalGoalMilestoneNews } from './soccerCareerMilestone';
 import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';
 import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
+import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
@@ -1016,6 +1017,7 @@ export interface CareerState {
   punditState: PunditState | null;
   ownerState: OwnerState | null;
   isFinalSeason: boolean;
+  farewellSeason?: SoccerFarewellPlan;
   isPundit: boolean;
   punditEvents: string[];
   primeType: PrimeType;
@@ -1790,6 +1792,7 @@ function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
  * something the save remembers rather than a line that scrolls away.
  */
 export function applyRehabChoice(prev: CareerState, choiceIndex: number): CareerState {
+  if (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = { ...prev };
   const r = s.pendingRehab;
   s.pendingRehab = null;
@@ -1851,6 +1854,10 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   s.seriousInjuries = history;
   if (history.length >= 2) {
     s.events.push(`⭐ That is ${history.length} serious injuries you have come back from.`);
+  }
+  if (farewellSeasonComplete(s)) {
+    s.pendingSummary = s.seasons[s.seasons.length - 1];
+    s.phase = "season_summary";
   }
   return s;
 }
@@ -5117,6 +5124,7 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
 }
 
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
+  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
   receivePhoneTexts(s, "pro");
@@ -5239,6 +5247,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
     settleCareerPreparation(s, s.seasons[s.seasons.length - 1]);
     Object.assign(s, recordMentorSeason(s, s.seasons[s.seasons.length - 1]));
+    if (farewellSeasonComplete(s)) s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -5324,7 +5333,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
 
   // Retirement suggestion, when overall drops 10+ from peak OR drops to 75 or below (age 30+)
-  if (!s.retirementSuggested && s.age >= 30) {
+  if (!readSoccerFarewell(s) && !s.retirementSuggested && s.age >= 30) {
     const dropFromPeak = s.peakOverall - s.overall;
     if (dropFromPeak >= 10 || s.overall <= 75) {
       s.retirementSuggested = true;
@@ -5333,7 +5342,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
   // Also show suggestion again each season if OVR <=65 and age >=34 (body wearing out)
-  if (s.age >= 34 && s.overall <= 65 && Math.random() < 0.4) {
+  if (!readSoccerFarewell(s) && s.age >= 34 && s.overall <= 65 && Math.random() < 0.4) {
     s.phase = "retirement_suggestion";
     return s;
   }
@@ -6178,6 +6187,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
 
 /* ─── Dismiss newspaper ─── */
 export function dismissNewspaper(prev: CareerState): CareerState {
+  if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev };
   s.pendingNews = [];
   /* Round 850: a conviction saved by an older version sits here with the
@@ -6215,6 +6225,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
      Guarded by shape rather than by naming the one offender: never leave the
      player on a screen that cannot draw. If there is nothing to summarise,
      hand the career back in the phase that has the buttons. */
+  if (farewellSeasonComplete(s)) s.pendingSummary = s.seasons[s.seasons.length - 1];
   s.phase = s.pendingSummary ? "season_summary" : "playing";
   return s;
 }
@@ -7424,6 +7435,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "rivalry_event";
     return s;
   }
+  if (farewellSeasonComplete(s)) return manualRetire(s);
   // Social media action, once per season, only during playing phase for pro players
   if (!s.socialMediaActionUsedThisSeason && s.age >= 18 && !s.retired) {
     s.phase = "social_media_action";
@@ -7452,6 +7464,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
 
 /* ─── Dismiss summary ─── */
 export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
+  if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev }; s.pendingSummary = null;
   if (s.retired) { s.phase = "retired"; return s; }
   return advanceToNextPhase(s, clubs);
@@ -8351,11 +8364,20 @@ export function calculateLegacy(state: CareerState): LegacyResult {
 
 /* ─── Manual Retirement ─── */
 export function manualRetire(prev: CareerState): CareerState {
+  if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev };
   delete s.seasonAmbition;
   delete s.seasonPreparation;
   Object.assign(s, endCareerMentorForRetirement(s));
   cancelReducedRole(s);
+  if (readSoccerFarewell(s) && s.loan) {
+    const back = s.loan;
+    s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
+    s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
+    s.currentClubColor = back.parentColor;
+    s.loan = null;
+    s.events = [...s.events, `🔙 The loan ends. You return to ${back.parentClub} before retiring.`];
+  }
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   endClubCaptaincy(s, "retirement");
@@ -8464,6 +8486,7 @@ function applyRetirementMoneySeason(s: CareerState, seasonsSinceRetiring: number
 
 /* ─── Retirement Suggestion, player can choose to continue or retire ─── */
 export function acceptRetirementSuggestion(prev: CareerState): CareerState {
+  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = { ...prev };
   delete s.seasonAmbition;
   delete s.seasonPreparation;
@@ -8485,7 +8508,14 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   return s;
 }
 
+export function announceFarewellSeason(prev: CareerState, clubs: ClubData[]): CareerState {
+  const announced = announceSoccerFarewell(prev);
+  if (announced === prev) return prev;
+  return prev.phase === "retirement_suggestion" ? declineRetirementSuggestion(announced, clubs) : announced;
+}
+
 export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]): CareerState {
+  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   /* Round 850: Keep Playing plays the season he just aged into. The year was
      already started when the suggestion came up (advanceProSeason ran up to
      it), so this resumes that same advance at the season and nothing above it
