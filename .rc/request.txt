@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+simCmVar: node scripts/simCmVar.mjs
+cmvar-penaltyband: CM_VAR_CONTROL=penaltyband node scripts/simCmVar.mjs
+bands-41: CM_VAR_BANDS_SEEDS=41,42,43,44,45,46 node scripts/simCmVar.mjs
+bands-51: CM_VAR_BANDS_SEEDS=51,52,53,54,55,56 node scripts/simCmVar.mjs
+bands-61: CM_VAR_BANDS_SEEDS=61,62,63,64,65,66 node scripts/simCmVar.mjs
+bands-71: CM_VAR_BANDS_SEEDS=71,72,73,74,75,76 node scripts/simCmVar.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
