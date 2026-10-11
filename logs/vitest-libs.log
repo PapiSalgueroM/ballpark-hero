@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 298[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 889[2mms[22m[39m
+   [33m[2m✓[22m[39m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random [33m 466[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 306[2mms[22m[39m
+ [32m✓[39m src/lib/uclLeaguePhase.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 803[2mms[22m[39m
+   [33m[2m✓[22m[39m the pots and the slate[2m > [22msays so on the saved slate when the search gave up and the recorded pattern was seated [33m 403[2mms[22m[39m
+ [32m✓[39m src/lib/leagueSlate.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 651[2mms[22m[39m
+ [32m✓[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 2483[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 1189[2mms[22m[39m
+   [33m[2m✓[22m[39m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit [33m 1052[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m128 passed[39m[22m[90m (128)[39m
+[2m   Start at [22m 10:26:03
+[2m   Duration [22m 5.14s[2m (transform 1.80s, setup 447ms, collect 2.80s, tests 5.46s, environment 3.31s, prepare 985ms)[22m
+

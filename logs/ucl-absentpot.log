@@ -1,0 +1,20 @@
+  1 set 11: 1000 fields, at the floor 1000, fell back 0, plain fields strict 445 of 445
+  1 set 23: 1000 fields, at the floor 1000, fell back 0, plain fields strict 449 of 449
+  1 set 37: 1000 fields, at the floor 1000, fell back 0, plain fields strict 453 of 453
+  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)
+    4 clubs, 3 in a pot         20 |    20 |   0 | 1.00 | 0 ; 0
+    4 clubs, 4 in a pot         30 |    30 |   0 | 1.20 | 0 ; 0
+    5 clubs, 2 in a pot         54 |    54 |   0 | 1.06 | 0 ; 0
+    5 clubs, 3 in a pot        992 |   992 |   0 | 1.06 | 0 ; 0
+    5 clubs, 4 in a pot        608 |   608 |   0 | 1.16 | 0 ; 0
+    5 clubs, 5 in a pot        183 |   183 |   0 | 1.10 | 1,2 ; 0
+    6 clubs, 2 in a pot         29 |    29 |   0 | 1.17 | 0 ; 0
+    6 clubs, 3 in a pot        604 |   604 |   0 | 1.37 | 0 ; 0
+    6 clubs, 4 in a pot        313 |   313 |   0 | 1.58 | 0 ; 2
+    6 clubs, 5 in a pot        165 |   165 |   0 | 1.09 | 1,2 ; 2
+    6 clubs, 6 in a pot          2 |     2 |   0 | 1.00 | 3 ; 0
+  1 one association swollen past anything the game ships: 8 clubs: 8 of 8 at the floor, 0 on the pattern | 10 clubs: 8 of 8 at the floor, 0 on the pattern | 12 clubs: 7 of 8 at the floor, 0 on the pattern | 18 clubs: 0 of 8 at the floor, 5 on the pattern | 36 clubs: 8 of 8 at the floor, 0 on the pattern
+  1 one association with no club in one pot: 10 clubs: 8 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 11 clubs: 0 of 8 at the floor, 0 on the pattern, 8 fewer on a longer climb | 12 clubs: 0 of 8 at the floor, 0 on the pattern, 8 fewer on a longer climb | 13 clubs: 0 of 8 at the floor, 8 on the pattern, 0 fewer on a longer climb | 14 clubs: 0 of 8 at the floor, 8 on the pattern, 0 fewer on a longer climb
+  1 two or three swollen associations, 200 fields: the cap gave way and the ban held in 66, the ban gave way after the cap's budgets in 35, on the pattern 4
+  control absentpot turned red: [FLOOR] 56, [CLIMB] 16
+simCmLeaguePhase control absentpot: FIRED (16 of its own failures, e.g. [CLIMB] a longer climb drew 1 same association matches (36 over the cap) where the shipped search drew 2 (34): the floor 1/32 is too low (one association of 11 clubs with none in pot 1, field 0))
