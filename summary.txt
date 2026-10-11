@@ -1,0 +1,14 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simMobileChrome exit=0 201s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simNumberFormatting exit=0 75s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simBrowserHarnessDiscovery exit=0 6s | Retained actual child receipts: .sim-control/browser-discovery-B8QYDu/report.json
+simGoogleOnlyReturn exit=0 73s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simSoccerCareerRecords exit=0 5s | simSoccerCareerRecords: 12 outcome checks green, three effective controls caught
+playCareerLeagueWorld exit=0 14s | playCareerLeagueWorld: 39 checks, 0 failed
+playSeasonCentreMotion exit=1 123s | playSeasonCentreMotion: 78 checks, 1 failed
+playCareerMoments exit=0 60s | playCareerMoments: 34 checks, 0 failed
+playLiveMatchFit exit=0 136s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playAutocompleteRace exit=0 139s | playAutocompleteRace: 204 taps on 3 pages at 390 and 1280, 0 stale names offered, 0 stale picks, 6 of 6 current picks landed, target leg 0 of 20.
+playLineupValidator exit=0 30s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+playNflTruth exit=0 99s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+playSoccerCareerAwardReveal exit=0 12s | playSoccerCareerAwardReveal: 26 checks, 0 failed
