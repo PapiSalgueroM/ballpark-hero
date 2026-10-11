@@ -1,0 +1,1 @@
+varscreen-before: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
