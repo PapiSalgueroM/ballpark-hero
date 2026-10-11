@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {build as bundle} from 'esbuild';
-export const ROOT=process.cwd(),BASE='09df145abfb241679022b41903d2f19bc254ebf9',OUT=path.resolve('soccer-results-layout-artifacts'),NOW=1791720000000,KEY='soccerCareerSave';
+export const ROOT=process.cwd(),BASE='afd8f6863681507693a3af34b6038e049dfcd419',OUT=path.resolve('soccer-results-layout-artifacts'),NOW=1791720000000,KEY='soccerCareerSave';
 export const copy=v=>JSON.parse(JSON.stringify(v)),sha=v=>createHash('sha256').update(v).digest('hex');
 export const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:30*1024*1024}).trim();
 export function held(files){return files.map(file=>({file,sha256:sha(fs.readFileSync(file))}));}
