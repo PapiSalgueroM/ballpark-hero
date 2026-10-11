@@ -1,0 +1,15 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/lib/gmGameScore.test.ts (14 tests) 189ms
+ ✓ src/lib/gmBracket.test.ts (18 tests) 250ms
+ ✓ src/lib/gmGameDay.test.ts (31 tests) 660ms
+   ✓ gameStory, with the NFL law > adds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random  322ms
+ ✓ src/lib/gmGameLog.test.ts (13 tests) 11ms
+ ✓ src/lib/frontOfficeGameDay.test.ts (7 tests) 79ms
+
+ Test Files  5 passed (5)
+      Tests  83 passed (83)
+   Start at  20:34:44
+   Duration  2.85s (transform 550ms, setup 313ms, collect 783ms, tests 1.19s, environment 2.41s, prepare 785ms)
+
