@@ -1,0 +1,52 @@
+     save rookie: seed 41, CF PHI 2026 (now), 0 seasons; hub line: null
+     save pitcher: seed 1, SP COL 2026 (now), 0 seasons; hub line: 📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.
+     save oriole: seed 17, CF BAL 2026 (now), 0 seasons; hub line: 📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162.
+     save y2020: seed 1, SS ARI 2020 (y2004), 0 seasons; hub line: 📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162.
+     save y2004short: seed 9, CF MIL 2004 (y2004), 0 seasons; hub line: 📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162.
+     save japan: seed 50, RF Yomiuri Giants 2026 (now), 0 seasons; hub line: 📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season.
+     save star: seed 44, SS PIT 2033 (now), 7 seasons, last 2032 PIT 158 games "Lost the Wild Card series" po 3 awards ["All-Star"]; hub line: null
+     save plain: seed 3, 1B TOR 2027 (now), 1 seasons, last 2026 TOR 155 games "Missed October" po undefined awards []; hub line: null
+     save throwback: seed 2, LF FLA 2005 (y2004), 1 seasons, last 2004 FLA 80 games "Lost the Division Series" po 4 awards []; hub line: null
+     save hurt: seed 1, C COL 2027 (now), 1 seasons, last 2026 COL 74 games "Missed October" po undefined awards []; hub line: null
+     save older: seed 44, SS PIT 2033 (now), 7 seasons, last 2032 PIT 158 games "Lost the Wild Card series" po 3 awards ["All-Star"]; hub line: null
+     save misfit: seed 2, 3B PHI 2027 (now), 1 seasons, last 2026 PHI 80 games "Lost the Wild Card series" po 5 awards []; hub line: null
+PROBLEM first-390 hub: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     first-390: log 162 rows, 158 played, 141 for 598 (0.236), 12 HR, 65 RBI, 25 2B, 1 SB, 71-91; card {"games":158,"avg":0.236,"hr":12,"rbi":65,"doubles":25,"sb":1,"result":"Missed October","awards":[]}
+     first-390: press to first screen 112 ms; first game 15374 ms; record 71-91; tiles 158Games, .236AVG, 12HR, 65RBI; path null
+PROBLEM first-390-rm hub: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     first-390-rm: log 162 rows, 158 played, 141 for 598 (0.236), 12 HR, 65 RBI, 25 2B, 1 SB, 71-91; card {"games":158,"avg":0.236,"hr":12,"rbi":65,"doubles":25,"sb":1,"result":"Missed October","awards":[]}
+     first-390-rm: press to first screen 113 ms; first game 12 ms; record 71-91; tiles 158Games, .236AVG, 12HR, 65RBI; path null
+     first-1280: log 162 rows, 158 played, 141 for 598 (0.236), 12 HR, 65 RBI, 25 2B, 1 SB, 71-91; card {"games":158,"avg":0.236,"hr":12,"rbi":65,"doubles":25,"sb":1,"result":"Missed October","awards":[]}
+     first-1280: press to first screen 109 ms; first game 15363 ms; record 71-91; tiles 158Games, .236AVG, 12HR, 65RBI; path null
+     first-1280-rm: log 162 rows, 158 played, 141 for 598 (0.236), 12 HR, 65 RBI, 25 2B, 1 SB, 71-91; card {"games":158,"avg":0.236,"hr":12,"rbi":65,"doubles":25,"sb":1,"result":"Missed October","awards":[]}
+     first-1280-rm: press to first screen 119 ms; first game 11 ms; record 71-91; tiles 158Games, .236AVG, 12HR, 65RBI; path null
+     press to first card at 390 wide under a 4x CPU throttle: 354 ms
+     press to first card at 390 wide under a 1x CPU throttle: 114 ms
+PROBLEM held-pitcher-390: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     held-pitcher-390: "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins." (button false, 37px tall); play buttons: Play the 2026 season / 📊My PlayerOVR 69The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+PROBLEM held-club161-390: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     held-club161-390: "📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162." (button false, 85px tall); play buttons: Play the 2026 season / 📊My PlayerOVR 71The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+PROBLEM held-y2020-390: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     held-y2020-390: "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162." (button false, 37px tall); play buttons: Play the 2020 season / 📊My PlayerOVR 72The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+PROBLEM held-y2004club-390: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     held-y2004club-390: "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162." (button false, 61px tall); play buttons: Play the 2004 season / 📊My PlayerOVR 68The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+PROBLEM held-japan-390: cut off text: Play one and it goes on the books | Nothing in it. Go and win something
+     held-japan-390: "📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season." (button false, 61px tall); play buttons: Play the 2026 season / 📊My PlayerOVR 69The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+     held-pitcher-1280: "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins." (button false, 13px tall); play buttons: Play the 2026 season / 📊My PlayerOVR 69The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+     held-club161-1280: "📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162." (button false, 37px tall); play buttons: Play the 2026 season / 📊My PlayerOVR 71The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+     held-y2020-1280: "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162." (button false, 37px tall); play buttons: Play the 2020 season / 📊My PlayerOVR 72The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+     held-y2004club-1280: "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162." (button false, 37px tall); play buttons: Play the 2004 season / 📊My PlayerOVR 68The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+     held-japan-1280: "📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season." (button false, 37px tall); play buttons: Play the 2026 season / 📊My PlayerOVR 69The fans down at 30 / 📜Career LogNo seasons yetPlay one and it goes on the books
+PROBLEM again-star-390: no Watch again button for the 2032 season of PIT (held line: null)
+PROBLEM again-star-1280-rm: no Watch again button for the 2032 season of PIT (held line: null)
+PROBLEM again-plain-390-rm: no Watch again button for the 2026 season of TOR (held line: null)
+PROBLEM again-throwback-390: no Watch again button for the 2004 season of FLA (held line: null)
+PROBLEM again-throwback-1280: no Watch again button for the 2004 season of FLA (held line: null)
+     again-hurt-390: log 162 rows, 74 played, 65 for 293 (0.222), 2 HR, 15 RBI, 12 2B, 1 SB, 77-85; card {"games":74,"avg":0.222,"hr":2,"rbi":15,"doubles":12,"sb":1,"result":"Missed October","awards":[]}
+     again-hurt-390: poster ""; tiles 74Games, .222AVG, 2HR, 15RBI; path null; record 77-85
+     again-hurt-1280: log 162 rows, 74 played, 65 for 293 (0.222), 2 HR, 15 RBI, 12 2B, 1 SB, 77-85; card {"games":74,"avg":0.222,"hr":2,"rbi":15,"doubles":12,"sb":1,"result":"Missed October","awards":[]}
+     again-hurt-1280: poster ""; tiles 74Games, .222AVG, 2HR, 15RBI; path null; record 77-85
+PROBLEM again-older-390: no Watch again button for the 2032 season of PIT (held line: null)
+     again-misfit-390: log 162 rows, 80 played, 75 for 296 (0.253), 5 HR, 28 RBI, 11 2B, 0 SB, 85-77; card {"games":80,"avg":0.253,"hr":5,"rbi":28,"doubles":11,"sb":0,"result":"Lost the Wild Card series","awards":[],"po":5}
+     again-misfit-390: poster ""; tiles 80Games, .253AVG, 5HR, 28RBI; path null; record 85-77
+review-run-walk: 25 scenarios, 13 problems
