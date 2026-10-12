@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1312.mjs
+parity: node scripts/simUsBoardParity.mjs
