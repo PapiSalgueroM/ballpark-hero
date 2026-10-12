@@ -12,8 +12,8 @@ import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { seasonSwing, swingNote, playoffDepthOf, clutchSwing, clutchNote } from './careerVariance';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf, postseasonRounds, postseasonRung, playoffRunGames } from './usSeasonShape';
 import { mlbSeasonScore, wonAward } from './careerAwards';
-import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalSeasonStream, rivalSeasonDraws, rivalKindOf } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
@@ -43,7 +43,7 @@ import { receiveMlbInboxTexts } from './mlbCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { mlbRivalryTick, mlbRivalryChoiceTick } from './mlbCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
-import { countOf, mlbCareerStatBullet, mlbMajorAward, type MlbCareerSums } from './usCareerStatLine';
+import { countOf, mlbCareerStatBullet, mlbMajorAward, mlbStatLine, mlbLineAsPrinted, type MlbCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
@@ -797,6 +797,39 @@ export function mlbLineOnSlate(full: MlbSeasonLine, work: number): MlbSeasonLine
     }
   }
   return line;
+}
+
+/** Round 1313: who had the better year is the season score of exactly the parts a printed MLB line shows, the
+ *  same function for both men (a starter's losses and a hitter's steals are not printed, so they are not read). */
+export function mlbHeadToHeadScore(pos: MlbCareerPos, line: MlbSeasonLine): number {
+  return mlbSeasonScore(pos, mlbLineAsPrinted(line, pos));
+}
+
+/**
+ * Round 1313: the MLB rival's season on the player's own line (the NFL's binding of Round 1227, in baseball's
+ * terms). Two draws of the season's stream (the law, rivalSeasonDraws), everything else from his keyed stream.
+ * His position is his own; his kind is hashed off his name among his position's kinds where the line reads one,
+ * EXCEPT a reliever's bullpen job, which is the player's (closer against closer); a healthy workload on the
+ * engine's own season, drawn by the player's own function; his line made by the player's own function and
+ * carried to THE PLAYER'S SLATE of that year (one season, one length: the season sim hands it in); his All-Star
+ * pass by the expression that decides the player's, on the full line; printed by the player's printer and
+ * scored by the one head to head function. Total: a position no table holds falls back to the player's, then
+ * to LF, the stat block's own fallback, so a hand edited save still plays its season.
+ */
+export function mlbRivalSeason(year: number, mine: { pos: MlbCareerPos; kind: string; slate: number }): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = rivalSeasonStream('mlb-rival', r, year, rng, rivalSeasonDraws('mlb', r.pos));
+    const pos = (r.pos in MLB_ARCHETYPES ? r.pos : mine.pos in MLB_ARCHETYPES ? mine.pos : 'LF') as MlbCareerPos;
+    const kind = pos === 'RP' ? mine.kind : pos === 'SP' ? '' : rivalKindOf('mlb-rival-kind', r, MLB_ARCHETYPES[pos]).id;
+    const games = mlbFullWorkload(pos, keyed);
+    const full: MlbSeasonLine = {
+      year, team: r.team, age: r.age, ovr: r.ovr, games, awards: [], teamResult: '', salary: 0,
+      ...mlbStatLineFor({ form, pos, kind, games }, keyed),
+    };
+    const season = mlbLineOnSlate(full, mlbWorkSlate(pos, mine.slate));
+    const allStar = wonAward(keyed, 'mlb', 'mlbAllStar', pos, mlbSeasonScore(pos, full));
+    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };
+  };
 }
 
 export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {

@@ -13,8 +13,8 @@ import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
-import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalSeasonStream, rivalSeasonDraws, rivalKindOf } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNhlLifeEventsA } from './nhlCareerLifeA';
@@ -44,7 +44,7 @@ import { receiveNhlInboxTexts } from './nhlCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { nhlRivalryTick, nhlRivalryChoiceTick } from './nhlCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
-import { countOf, nhlMajorAward } from './usCareerStatLine';
+import { countOf, nhlMajorAward, nhlStatLine, nhlLineAsPrinted } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
@@ -691,6 +691,38 @@ export function nhlLineOnSlate(full: NhlSeasonLine, work: number): NhlSeasonLine
     }
   }
   return line;
+}
+
+/** Round 1313: who had the better year is the season score of exactly the parts a printed NHL line shows, the
+ *  same function for both men (a goalie is read on wins and save percentage, a skater on his points). */
+export function nhlHeadToHeadScore(pos: NhlCareerPos, line: NhlSeasonLine): number {
+  return nhlSeasonScore(pos, nhlLineAsPrinted(line, pos));
+}
+
+/**
+ * Round 1313: the NHL rival's season on the player's own line (the NFL's binding of Round 1227, in hockey's
+ * terms). Two draws of the season's stream (the law, rivalSeasonDraws), everything else from his keyed stream.
+ * His position is his own; a skater's kind (his scoring) is hashed off his name among his position's kinds, a
+ * goalie's line reads none; a healthy workload on the engine's own season, drawn by the player's own function,
+ * at full ice time; his line made by the player's own function and carried to THE PLAYER'S SLATE of that year
+ * (the season sim hands it in); his All-Star pass by the expression that decides the player's, on the full
+ * line; printed by the player's printer and scored by the one head to head function. Total: a position no
+ * table holds falls back to the player's, then to C, the stat block's own fallback.
+ */
+export function nhlRivalSeason(year: number, mine: { pos: NhlCareerPos; slate: number }): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = rivalSeasonStream('nhl-rival', r, year, rng, rivalSeasonDraws('nhl', r.pos));
+    const pos = (r.pos in NHL_ARCHETYPES ? r.pos : mine.pos in NHL_ARCHETYPES ? mine.pos : 'C') as NhlCareerPos;
+    const scoringMult = pos === 'G' ? 0 : rivalKindOf('nhl-rival-kind', r, NHL_ARCHETYPES[pos]).scoringMult;
+    const games = nhlFullWorkload(pos, keyed);
+    const full: NhlSeasonLine = {
+      year, team: r.team, age: r.age, ovr: r.ovr, games, awards: [], teamResult: '', salary: 0,
+      ...nhlStatLineFor({ form, pos, scoringMult, games, iceShare: 1 }, keyed),
+    };
+    const season = nhlLineOnSlate(full, nhlWorkSlate(pos, mine.slate));
+    const allStar = wonAward(keyed, 'nhl', 'nhlAllStar', pos, nhlSeasonScore(pos, full));
+    return { line: nhlStatLine(season, pos), score: nhlHeadToHeadScore(pos, season), year, allStar };
+  };
 }
 
 export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
