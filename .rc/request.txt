@@ -1,0 +1,3 @@
+#!serial
+rules-plain: git status --short | head -5; grep -c "state.worldSeed = Math.floor" src/lib/clubManager.ts; node scripts/simCmLeagueRules.mjs --part=modern
+rules-write-check: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && git diff --stat -- scripts/data && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/digest2.json" && node scripts/simCmLeagueRules.mjs
