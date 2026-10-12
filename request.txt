@@ -1,0 +1,3 @@
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmGameDay-offbyone: GM_GAMEDAY_CONTROL=offbyone node scripts/simGmGameDay.mjs
+simGmGameDay-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
