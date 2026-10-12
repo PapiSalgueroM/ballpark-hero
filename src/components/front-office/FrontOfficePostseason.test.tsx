@@ -551,17 +551,23 @@ describe('NFL front office: one box, two faces in the playoffs', () => {
   });
 });
 
-/** The bracket three rounds on, with his club (made strong) in the title game; the log holds his games of it. */
+/** The bracket three rounds on, with his club in the title game; the log holds his games of it. His club is made
+ *  strong for those three rounds only and saved with its own ratings, so the title game the board plays is an
+ *  ordinary one (a blowout above the law's top score has no clock, and its watch ends at once: the tile's rule). */
 function titleGameSave() {
   for (let k = 1; k <= 12; k += 1) {
     const o = seasonOver();
     const team = o.seeds[0];
-    for (const p of o.league.teams[team].players) p.ovr = 99;
-    o.league.teams[team].defense = 99;
+    const club = o.league.teams[team];
+    const own = { ovr: club.players.map((p: any) => p.ovr), defense: club.defense };
+    for (const p of club.players) p.ovr = 99;
+    club.defense = 99;
     const told: GmGameLog['games'] = [];
     const play = nflPlayTie(o.league.teams, lehmer(k), o.league.season, undefined, told);
     let block = openBracket(o.format, o.league.season, o.seeds);
     for (let w = 0; w < 3; w += 1) block = playBracketWeek(o.format, block, play);
+    club.players.forEach((p: any, i: number) => { p.ovr = own.ovr[i]; });
+    club.defense = own.defense;
     const week = bracketWeek(o.format, block);
     const final = week === null ? null : bracketPairings(o.format, block, week);
     if (!final || !final.some(p => p.homeId === team || p.awayId === team)) continue;
@@ -643,16 +649,24 @@ describe('NFL front office: Watch in the playoffs', () => {
   it('the title game watched: the recap waits for full time, and then it comes', async () => {
     motion();
     titleGameSave();
-    counted(51);
-    render(<Board />);
-    await openBox();
-    fireEvent.click(btn('[data-watch-round]'));
-    await waitFor(() => expect(q('[data-match-clock]')).not.toBeNull());
+    const start = localStorage.getItem(SAVE_KEY)!;
+    /* the first stream whose title game the law tells on the clock (a final it will not tell has no clock: the tile's rule) */
+    let clocked = false;
+    for (let k = 51; k < 58 && !clocked; k += 1) {
+      cleanup();
+      localStorage.setItem(SAVE_KEY, start);
+      counted(k);
+      render(<Board />);
+      await openBox();
+      fireEvent.click(btn('[data-watch-round]'));
+      clocked = await waitFor(() => expect(q('[data-match-clock]')).not.toBeNull()).then(() => true, () => false);
+    }
+    expect(clocked, 'a title game with a clock, in seven streams').toBe(true);
     const s = read();
     expect([s.phase, 'playoffs' in s, s.league.week], 'the press closed the season in the save').toEqual(['recap', false, REGULAR_WEEKS]);
-    expect(screen.queryByText('Go to the draft'), 'no recap while he watches').toBeNull();
+    expect(q('[data-verdict-reveal]'), 'no recap while he watches').toBeNull();
     expect(textOf('[data-week-chip]')).toContain('Playoffs');
     fireEvent.click(q('[data-gameday-speed="Results"]')!);
-    await waitFor(() => expect(screen.queryByText('Go to the draft')).not.toBeNull());
+    await waitFor(() => expect(q('[data-verdict-reveal]')).not.toBeNull());
   });
 });
