@@ -1,0 +1,11 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+secondTab exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract t
+units exit=0 24s |    Duration  23.14s (transform 5.26s, setup 904ms, collect 12.68s, tests 38.34s, environment 5.10s, prepare 1.28s)
+parity exit=0 75s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 104s | 
+practice-reset exit=0 8s | simUsCareerPractice control reset: all four named outcomes rejected the defect, all four quiet restores passed
+practice exit=0 31s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+action exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+walk exit=0 52s | playUsMarketTalk: 34 checks, 0 failed
+saveRetry exit=0 152s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+pm exit=0 390s | Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.

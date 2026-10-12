@@ -1,0 +1,8 @@
+ok   view-wheel: nba 320x568: offer 4 of 4 pushed with its button in the middle of the window (scrollY 1113, the offers window 1105 px tall); the wheel is 405 px tall, its top at 12 and its bottom at 417 of 568, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: nba 320x568: after Continue the pushed offer's card is at 441 to 568 of 568 (100% in the window) and its receipt line at 523 to 555 (100% in the window) (scrollY now 850)
+ok   view-wheel: nhl 390x844: offer 3 of 3 pushed with its button in the middle of the window (scrollY 722, the offers window 852 px tall); the wheel is 375 px tall, its top at 12 and its bottom at 387 of 844, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: nhl 390x844: after Continue the pushed offer's card is at 665 to 844 of 844 (100% in the window) and its receipt line at 747 to 779 (100% in the window) (scrollY now 390)
+ok   view-wheel: nhl 320x568: offer 3 of 3 pushed with its button in the middle of the window (scrollY 959, the offers window 917 px tall); the wheel is 429 px tall, its top at 12 and its bottom at 441 of 568, 100% of it in the window, its heading at 29 to 77 (scrollY now 349)
+ok   view-offer: nhl 320x568: after Continue the pushed offer's card is at 373 to 568 of 568 (100% in the window) and its receipt line at 455 to 503 (100% in the window) (scrollY now 781)
+     50 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 34 checks, 0 failed
