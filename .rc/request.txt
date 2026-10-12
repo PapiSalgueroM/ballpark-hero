@@ -1,0 +1,15 @@
+#!serial
+head: git log --oneline -3 302b4969 && git rev-parse 302b4969
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simCmLeagueBookFacts.mjs
+c-keeperowed: CM_FACTS_CONTROL=keeperowed node scripts/simCmLeagueBookFacts.mjs
+c-staleowed: CM_FACTS_CONTROL=staleowed node scripts/simCmLeagueBookFacts.mjs
+c-onesource: CM_FACTS_CONTROL=onesource node scripts/simCmLeagueBookFacts.mjs
+c-disagree: CM_FACTS_CONTROL=disagree node scripts/simCmLeagueBookFacts.mjs
+c-receipt: CM_FACTS_CONTROL=receipt node scripts/simCmLeagueBookFacts.mjs
+mutrev: node .rc/x/mut1310v.mjs; s=$?; git checkout -- scripts; rm -f scripts/.mut-fence.mjs; git status --short scripts | head -5; exit $s
+runall: ONLY=simCmLeagueBookFacts node scripts/runAllSims.mjs
+sha: tr -d '\r' < scripts/data/cmLeagueBookFacts.json | sha256sum; grep sha256 scripts/data/cmLeagueBookFacts.receipt.json; git show 302b4969:scripts/data/cmLeagueBookFacts.json | tr -d '\r' | sha256sum
+difffiles: git diff --name-only origin/main...302b4969 && test "$(git diff --name-only origin/main...302b4969 | wc -l)" = "4" && echo "four files"
+slug: n=$(git diff origin/main...302b4969 | grep -c -i -E 'ea[^a-z0-9]{0,2}sports|easports'); echo "slug lines in the round diff: $n"; test "$n" = "0"
+simNoRivalNames: node scripts/simNoRivalNames.mjs
