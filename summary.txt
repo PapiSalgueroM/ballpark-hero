@@ -1,0 +1,12 @@
+vitest-fo exit=1 32s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficePostseason.test.tsx,title=src/components/front-office/FrontOfficePostsea
+simGmGameDay exit=0 77s | simGmGameDay: 436 checks, 0 failed
+simGmReload exit=0 8s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+reload-replay exit=0 8s | control "replay": 5 failure(s) fired as expected on all four boards, the check works
+gd-week18 exit=1 63s | simGmGameDay: 436 checks, 5 failed (control week18)
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+tsc exit=0 105s | 
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simFrontOfficeSaveRecovery exit=1 8s | Node.js v24.21.0
+simNflGmDesk exit=0 37s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
