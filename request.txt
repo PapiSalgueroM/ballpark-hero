@@ -1,0 +1,5 @@
+# Round 1306 closing check, head 8318bafb: the weight rows of the pushed head against the budgets it carries (finding 4)
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
