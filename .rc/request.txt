@@ -1,0 +1,23 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
+playCareerSquad: node scripts/playCareerSquad.mjs
+playTycoonGearFit: node scripts/playTycoonGearFit.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playLineupValidator: node scripts/playLineupValidator.mjs
+playDraftNight: node scripts/playDraftNight.mjs
+simSoccerCareerDevelopment-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerDerbyHistory-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+playSoccerCareerDepth: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
+playSoccerCareerDevelopment: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+playCareerStoryRole: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs
+playCareerTrophyRuns: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+playDerbyHistory1195: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
