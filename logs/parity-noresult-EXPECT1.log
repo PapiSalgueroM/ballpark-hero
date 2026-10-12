@@ -1,0 +1,3 @@
+control noresult: 1 named save "wheel" that came up withdrawn rewritten as held in a copy; section A says [all: no named save "wheel" holds a push that came up withdrawn]
+  CONTROL FIRED: [all] red on "holds a push that came up withdrawn", the rest green
+simUsBoardParity control noresult: green. The control turned its own sport red for its own reason.

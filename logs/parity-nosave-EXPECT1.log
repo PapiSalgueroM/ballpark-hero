@@ -1,0 +1,3 @@
+control nosave: the named save "wheel" of the nba and its screens taken out in a copy; section A says [nba: no fixed save or no screens for the saved talks wheel]
+  CONTROL FIRED: [nba] red on "no fixed save or no screens for the saved talks wheel", the rest green
+simUsBoardParity control nosave: green. The control turned its own sport red for its own reason.

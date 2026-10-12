@@ -1,0 +1,3 @@
+control nophase: 20 free agency steps of the nba path given the phase season in a copy; section A says [nba: no step of the recorded path is saved in the freeagency phase]
+  CONTROL FIRED: [nba] red on "no step of the recorded path is saved in the freeagency phase", the rest green
+simUsBoardParity control nophase: green. The control turned its own sport red for its own reason.
