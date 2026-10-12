@@ -1,0 +1,4 @@
+#!serial
+vitest-noguard: node .rc/x/noguard.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts -t "never writes a ledger" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+simCmLeagueRules-inverse: node scripts/lib/cmWorldSeed1250.mjs --apply && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src; exit $s
+simCmShootoutOrder-inverse: node scripts/lib/cmWorldSeed1250.mjs --apply && node scripts/simCmShootoutOrder.mjs; s=$?; git checkout -- src; exit $s
