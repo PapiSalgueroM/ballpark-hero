@@ -1,0 +1,30 @@
+#!serve
+#!playwright
+head-soccer-career: VERBOSE=1 ONLY=/soccer-career node scripts/playGames.mjs
+head-club-manager: VERBOSE=1 ONLY=/club-manager node scripts/playGames.mjs
+head-stadium-tycoon: VERBOSE=1 ONLY=/stadium-tycoon node scripts/playGames.mjs
+head-nba-my-career: VERBOSE=1 ONLY=/nba-my-career node scripts/playGames.mjs
+head-nfl-my-career: VERBOSE=1 ONLY=/nfl-my-career node scripts/playGames.mjs
+head-buzzer-beater: VERBOSE=1 ONLY=/buzzer-beater node scripts/playGames.mjs
+head-cage-clash: VERBOSE=1 ONLY=/cage-clash node scripts/playGames.mjs
+head-stat-detective: VERBOSE=1 ONLY=/stat-detective node scripts/playGames.mjs
+head-dart-draft: VERBOSE=1 ONLY=/dart-draft node scripts/playGames.mjs
+head-manager-hot-seat: VERBOSE=1 ONLY=/manager-hot-seat node scripts/playGames.mjs
+head-deadline-day: VERBOSE=1 ONLY=/deadline-day node scripts/playGames.mjs
+head-mlb-my-career: VERBOSE=1 ONLY=/mlb-my-career node scripts/playGames.mjs
+head-nhl-my-career: VERBOSE=1 ONLY=/nhl-my-career node scripts/playGames.mjs
+head-front-office: VERBOSE=1 ONLY=/front-office node scripts/playGames.mjs
+base-soccer-career: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_soccer-career.mjs && ! grep -q 'report a problem' scripts/pgBase_soccer-career.mjs && VERBOSE=1 ONLY=/soccer-career node scripts/pgBase_soccer-career.mjs
+base-club-manager: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_club-manager.mjs && ! grep -q 'report a problem' scripts/pgBase_club-manager.mjs && VERBOSE=1 ONLY=/club-manager node scripts/pgBase_club-manager.mjs
+base-stadium-tycoon: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_stadium-tycoon.mjs && ! grep -q 'report a problem' scripts/pgBase_stadium-tycoon.mjs && VERBOSE=1 ONLY=/stadium-tycoon node scripts/pgBase_stadium-tycoon.mjs
+base-nba-my-career: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_nba-my-career.mjs && ! grep -q 'report a problem' scripts/pgBase_nba-my-career.mjs && VERBOSE=1 ONLY=/nba-my-career node scripts/pgBase_nba-my-career.mjs
+base-nfl-my-career: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_nfl-my-career.mjs && ! grep -q 'report a problem' scripts/pgBase_nfl-my-career.mjs && VERBOSE=1 ONLY=/nfl-my-career node scripts/pgBase_nfl-my-career.mjs
+base-buzzer-beater: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_buzzer-beater.mjs && ! grep -q 'report a problem' scripts/pgBase_buzzer-beater.mjs && VERBOSE=1 ONLY=/buzzer-beater node scripts/pgBase_buzzer-beater.mjs
+base-cage-clash: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_cage-clash.mjs && ! grep -q 'report a problem' scripts/pgBase_cage-clash.mjs && VERBOSE=1 ONLY=/cage-clash node scripts/pgBase_cage-clash.mjs
+base-stat-detective: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_stat-detective.mjs && ! grep -q 'report a problem' scripts/pgBase_stat-detective.mjs && VERBOSE=1 ONLY=/stat-detective node scripts/pgBase_stat-detective.mjs
+base-dart-draft: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_dart-draft.mjs && ! grep -q 'report a problem' scripts/pgBase_dart-draft.mjs && VERBOSE=1 ONLY=/dart-draft node scripts/pgBase_dart-draft.mjs
+base-manager-hot-seat: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_manager-hot-seat.mjs && ! grep -q 'report a problem' scripts/pgBase_manager-hot-seat.mjs && VERBOSE=1 ONLY=/manager-hot-seat node scripts/pgBase_manager-hot-seat.mjs
+base-deadline-day: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_deadline-day.mjs && ! grep -q 'report a problem' scripts/pgBase_deadline-day.mjs && VERBOSE=1 ONLY=/deadline-day node scripts/pgBase_deadline-day.mjs
+base-mlb-my-career: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_mlb-my-career.mjs && ! grep -q 'report a problem' scripts/pgBase_mlb-my-career.mjs && VERBOSE=1 ONLY=/mlb-my-career node scripts/pgBase_mlb-my-career.mjs
+base-nhl-my-career: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_nhl-my-career.mjs && ! grep -q 'report a problem' scripts/pgBase_nhl-my-career.mjs && VERBOSE=1 ONLY=/nhl-my-career node scripts/pgBase_nhl-my-career.mjs
+base-front-office: grep -q '|report a bug|report a problem|' scripts/playGames.mjs && sed 's/|report a bug|report a problem|/|report a bug|/' scripts/playGames.mjs > scripts/pgBase_front-office.mjs && ! grep -q 'report a problem' scripts/pgBase_front-office.mjs && VERBOSE=1 ONLY=/front-office node scripts/pgBase_front-office.mjs
