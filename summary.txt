@@ -1,0 +1,9 @@
+noShip exit=0 0s | nothing shipped moved
+simSafari exit=0 0s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+simGmXp exit=0 0s | simGmXp: all checks passed
+simActivityNotCompletion exit=0 7s | simActivityNotCompletion: all green
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoInventedQuotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 63s | 

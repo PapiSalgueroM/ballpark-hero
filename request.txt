@@ -1,0 +1,10 @@
+# Round 1314 closing check (fix2) request A on 747cd60a: the type gate, nothing shipped moved, the round's node harnesses, the fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+noShip: d=$(git diff --stat 48cb9d4b -- src public index.html package.json package-lock.json vite.config.ts tsconfig.app.json); if [ -z "$d" ]; then echo "nothing shipped moved"; else echo "$d"; exit 1; fi
+simSafari: node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
