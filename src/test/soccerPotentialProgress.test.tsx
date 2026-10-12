@@ -94,7 +94,7 @@ describe('Soccer Career potential progress display', () => {
     render(view(career));
     expect(screen.getByRole('region', { name: 'Potential progress' }).textContent).toContain('Elite run: 0 seasons.');
     expect(JSON.stringify(career)).toBe(before);
-    expect(Object.hasOwn(career, 'eliteStreak')).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(career, 'eliteStreak')).toBe(false);
   });
 
   it.each(['newspaper', 'season_summary', 'ballon_dor', 'world_cup', 'international_debut', 'rivalry_event'] as const)(
