@@ -204,7 +204,9 @@
  *   hotseatbook3  the Hot Seat's match drops it                      -> dailies
  *   (redeal and hurtentry above still hold what they held: the load opens no book; the match week's
  *   guard, now reached with the repair off, never throws on an entry with no rows map)
- *   readerdraw    the reader draws from Math.random once a board     -> boards (iii) and (iv)
+ *   readerdraw    the reader draws from Math.random once a board     -> boards (iii) and (iv) (stream with
+ *                                                                        it since Round 1311: the engine reads
+ *                                                                        leaders at a season's end)
  *   readerwrite   the reader turns the book's list of my clean sheets round in place -> boards (iii)
  *   The six of the fix pass of Round 1306, each for a check that pass added (a control may name the words
  *   its failures must hold, so red for another reason is not that control firing):
@@ -372,7 +374,9 @@ const CONTROLS = {
   awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', mentions: ['under the floor'] },
   teamsheets: { patch: [{ file: BOARDS, from: TEAM_DEF_ORDER, to: TEAM_DEF_SHEETS }], red: 'awards', mentions: ['back four'] },
   nocap: { patch: [{ file: ENGINE, from: '  state.history = keepTeams(state.history);', to: '' }], red: 'awards', mentions: ['team on'] },
-  readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
+  /* Since Round 1311 the engine itself reads leaders at a season's end (goldenBootTable and finishSeason, on a
+     season the book decides), so a draw in it moves the match stream as well: derived on r1311-s2b and r1311-s4. */
+  readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards', also: ['stream'] },
   readerwrite: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  input.book.my.reverse();\n${LEADERS_RETURN}` }], red: 'boards' },
   thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
   thinbacks: { patch: [{ file: ENGINE, from: THIN_BACKS, to: 'const thinBacks = (outfield: readonly BookMan[]): BookMan[] => [...outfield];' }], red: 'thin', mentions: ['neither a keeper nor of the back line'] },

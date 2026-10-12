@@ -324,7 +324,7 @@ export function dealGoals(key: string, count: number, eleven: readonly BookMan[]
  */
 export function dealShares(eleven: readonly BookMan[], rules: BookRules): { men: { man: BookMan; share: number; setPieces: number }[]; ownGoals: number } {
   const outfield = eleven.filter(m => m.p !== 'GK');
-  const taker = rules.taker ? takerOf(outfield) : null;
+  const theTaker = rules.taker ? takerOf(outfield) : null;
   const weights = outfield.map(m => goalWeight(m.p, m.r));
   const total = weights.reduce((s, w) => s + w, 0);
   const byWeight = (i: number): number => (total > 0 ? weights[i] / total : 1 / outfield.length);
@@ -332,7 +332,7 @@ export function dealShares(eleven: readonly BookMan[], rules: BookRules): { men:
   const open = 1 - pieces;
   const own = open / rules.ownGoalOneIn;
   const men = outfield.map((man, i) => {
-    const setPieces = pieces * (taker ? (man === taker ? 1 : 0) : byWeight(i));
+    const setPieces = pieces * (theTaker ? (man === theTaker ? 1 : 0) : byWeight(i));
     return { man, share: setPieces + (open - own) * byWeight(i), setPieces };
   });
   return { men, ownGoals: own };
