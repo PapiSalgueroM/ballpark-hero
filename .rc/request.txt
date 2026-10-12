@@ -1,0 +1,11 @@
+# Release AX fix pass: why was the plain parity run red at the end of request rAX-fix-h (green alone in rAX-fix-i)? The same mutation lines, with a parity run after each.
+#!serial
+p0: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
+m1: git show fbb472f1:src/components/us-career/UsCareerBoard.tsx > src/components/us-career/UsCareerBoard.tsx && node_modules/.bin/vitest run src/test/usCareerMarketSecondTab.test.tsx --testTimeout=120000 2>&1 | grep "Tests " ; git checkout -- src; echo "changed files: $(git status --short | wc -l)"
+p1: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
+m2: node .rc/x/mutM4.mjs && node_modules/.bin/vitest run src/test/usCareerMarketSecondTab.test.tsx --testTimeout=120000 2>&1 | grep "Tests " ; git checkout -- src; echo "changed files: $(git status --short | wc -l)"
+p2: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
+m3: node .rc/x/mutM4.mjs && node_modules/.bin/vite build > /tmp/b1.log 2>&1; tail -1 /tmp/b1.log; git checkout -- src && node_modules/.bin/vite build > /tmp/b2.log 2>&1; tail -1 /tmp/b2.log; echo "changed files: $(git status --short | wc -l)"
+p3: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
+c1: US_BOARD_PARITY_CONTROL=wheel node scripts/simUsBoardParity.mjs 2>&1 | tail -1; US_BOARD_PARITY_CONTROL=nosave node scripts/simUsBoardParity.mjs 2>&1 | tail -1; US_BOARD_PARITY_CONTROL=nophase node scripts/simUsBoardParity.mjs 2>&1 | tail -1; US_BOARD_PARITY_CONTROL=noresult node scripts/simUsBoardParity.mjs 2>&1 | tail -1
+p4: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
