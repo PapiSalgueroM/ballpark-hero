@@ -1,0 +1,4 @@
+# REVIEW-run Round 1306, head b7943c61: a player walk of Club Manager at two sizes, reduced motion on and off, and one seeded session on head and base builds
+#!serve
+#!playwright
+walk: git worktree add -q /tmp/base c9a1f86a && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4179 > /tmp/base-serve.log 2>&1 &) && sleep 4 && BASE2=http://127.0.0.1:4179 node .rc/x/walk2.mjs
