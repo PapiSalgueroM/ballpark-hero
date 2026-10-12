@@ -45,14 +45,17 @@ function one(source, from, to) {
 }
 const controls = [
   ['new-profile-tuple-alias', ENGINE, 'baseGoals: [...profile.baseGoals] as [number, number], id:', 'baseGoals: profile.baseGoals, id:', ['template-clone']],
-  ['wrong-goal-tuple-accepted', SAVE, '|| entry.baseGoals[0] !== goals[0] || entry.baseGoals[1] !== goals[1]', '|| false', ['invalid-save']],
+  /* Round 1318 (ruling C3): the pool's checks moved out of the save module into the engine's reader, isGeneratedBallonPool,
+     so the two controls that used to loosen the save module now loosen the reader. 'invalid-save' means a case the reader
+     answers wrongly; validatorRun below reads every case through it and every save still opens. */
+  ['wrong-goal-tuple-accepted', ENGINE, '|| entry.baseGoals[0] !== goals[0] || entry.baseGoals[1] !== goals[1]', '|| false', ['invalid-save']],
   ['frozen-age', ENGINE, 'generatedAge: entry.entryAge + year - entry.firstYear', 'generatedAge: entry.entryAge', ['age']],
   ['missing-retirement', ENGINE, 'entry.retiredYear === null && entry.entryAge + year - entry.firstYear >= 37 ? entry.firstYear + 37 - entry.entryAge : entry.retiredYear', 'entry.retiredYear === null && entry.entryAge + year - entry.firstYear >= 370 ? entry.firstYear + 37 - entry.entryAge : entry.retiredYear', ['retirement', 'valid-save']],
   ['retired-slot-reuse', ENGINE, 'let entry = pool.entries.find(row => row.role === role && row.slot === slot && row.retiredYear === null);', 'let entry = pool.entries.find(row => row.role === role && row.slot === slot);', ['replacement']],
   ['filler-reroll', ENGINE, '    if (!entry) {\n      const seed = pool.entries.some', '    if (!entry || role === "filler") {\n      const seed = pool.entries.some', ['identity', 'valid-save']],
   ['previous-pool-mutation', ENGINE, '  if (previousPool) {\n    generatedPool = {', '  if (previousPool) {\n    previousPool.year = year;\n    generatedPool = {', ['prior-pool']],
   ['extra-generated-draw', ENGINE, '    const entryAge = rand(19, 28);', '    const entryAge = rand(19, 28); Math.random();', ['request-draws', 'paired-outcome']],
-  ['malformed-pool-accepted', SAVE, '  if (value.generatedBallonPool !== undefined\n    && !generatedBallonPool(value.generatedBallonPool, (value.seasons[value.seasons.length - 1] as { year: number }).year)) return false;', '  if (value.generatedBallonPool !== undefined\n    && false) return false;', ['invalid-save']],
+  ['malformed-pool-accepted', ENGINE, '  if (!record(v) || v.version !== 1 || !integer(v.year) || v.year < 0 || v.year > lastYear', '  return true;\n  if (!record(v) || v.version !== 1 || !integer(v.year) || v.year < 0 || v.year > lastYear', ['invalid-save']],
 ];
 const heldPaths = [ENGINE, SAVE, 'src/lib/soccerAwardReveal.ts', 'src/pages/SoccerCareer.tsx', 'src/test/soccerCareerSaveRecovery.test.tsx', 'package.json', 'package-lock.json'];
 const rawBefore = new Map(heldPaths.map(p => [p, fs.readFileSync(path.join(ROOT, p))]));
@@ -230,7 +233,8 @@ function runBoundary(b, input, year, filler, seed, id) {
   if (put(prior ?? null) !== priorBefore) findings.push({ group: 'prior-pool', detail: 'complete prior pool held' });
   if (template && (template.aliased || json(template.templatesBefore) !== json(template.templatesAfter) || json(template.factoryBefore) !== json(template.factoryAfter))) findings.push({ group: 'template-clone', detail: 'new tuple isolated from actual template/factory' });
   if (put(s.pendingBallonDor ?? null) !== priorPending) findings.push({ group: 'pending', detail: 'old pending whole held' });
-  if (!m.S.isSoccerCareerSave(s)) findings.push({ group: 'valid-save', detail: 'complete calculated state valid' });
+  /* Round 1318: a valid save no longer implies a readable pool (ruling C3), so this asks both questions the save module used to ask. */
+  if (!m.S.isSoccerCareerSave(s) || (s.generatedBallonPool !== undefined && !m.E.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year))) findings.push({ group: 'valid-save', detail: 'complete calculated state valid and its pool readable' });
   if (error) findings.push({ group: 'error', detail: error });
   const row = { id, year, filler, declaredBoundary: true, modifications, before, inputAfter: put(s), priorBefore, priorAfter: put(prior ?? null), priorPending, result: put(result), fillerResult: put(fillerResult), fillSource: put(String(m.sandbox.__awardFill)), template: put(template), observations: put(m.observations), start, end: m.cursor(), tape: m.saveTape(), error, findings };
   return { row, s, result, fillerResult, tape: m.tape };
@@ -369,8 +373,9 @@ async function main() {
     report.reads.push({ id, original: old, current });
   }
   const bad = malformedCases(sourceFixture), validationInputs = [{ id: 'valid-generated', value: sourceFixture }, { id: 'valid-legacy', value: legacyFixture }, ...bad];
-  const validatorRun = b => { const m = machine(b, 9001); return validationInputs.map(r => { const start = m.cursor(), accepted = m.S.isSoccerCareerSave(r.value); return { id: r.id, input: put(r.value), inputAfter: put(r.value), accepted, start, end: m.cursor(), expected: !bad.some(v => v.id === r.id) }; }); };
-  const validRows = validatorRun(healthy); assert(validRows.every(r => r.accepted === r.expected && r.start === r.end)); report.validation = put(validRows);
+  /* Round 1318 (ruling C3): every case opens as a save; what a case expects is the reader's answer on its pool (absent reads as fine). */
+  const validatorRun = b => { const m = machine(b, 9001); return validationInputs.map(r => { const start = m.cursor(), saved = m.S.isSoccerCareerSave(r.value), accepted = r.value.generatedBallonPool === undefined || m.E.isGeneratedBallonPool(r.value.generatedBallonPool, r.value.seasons.at(-1).year); return { id: r.id, input: put(r.value), inputAfter: put(r.value), saved, accepted, start, end: m.cursor(), expected: !bad.some(v => v.id === r.id) }; }); };
+  const validRows = validatorRun(healthy); assert(validRows.every(r => r.saved && r.accepted === r.expected && r.start === r.end)); report.validation = put(validRows);
   for (const [id, source, from, to, groups] of controls) {
     const changed = one(healthyText[source], from, to), restored = one(changed, to, from); assert.equal(restored, healthyText[source]);
     const fault = await bundle(id, ROOT, { ...healthyText, [source]: changed }, true, true);
@@ -404,6 +409,7 @@ async function main() {
     actual.push(...vf);
     verify(`control ${id} precise map`, () => {
       assert(vf.every(f => groups.includes(f.group)), `${id} validator unrelated hold`);
+      assert(vr.every(r => r.saved), `${id} every case still opens as a save (ruling C3)`);
       if (id === 'wrong-goal-tuple-accepted') assert.deepEqual(vf.map(f => f.caseId), bad.filter(r => r.tuple).map(r => r.id));
       else if (id === 'malformed-pool-accepted') assert.deepEqual(vf.map(f => f.caseId), bad.map(r => r.id));
       else assert.deepEqual(vf, [], `${id} all validator outcomes held`);
@@ -483,8 +489,10 @@ async function main() {
     if (selected.callbacks.some(c => { try { assert.deepEqual(c.actual, c.expected.output); assert.deepEqual(c.draws.map(d => d.value), c.expected.draws.map(d => d.value)); return false; } catch { return true; } })) keys.push('callback-outcome');
     return keys;
   }, ['pending-ballot-immutability', 'read-draws', 'callback-outcome']);
-  const invalidObservation = pageObservations.find(r => r.invalid && r.rawBefore === r.rawAfterReload); assert(invalidObservation);
-  observationControl('raw-invalid-save-overwritten', invalidObservation, v => { v.rawAfterReload = v.rawAfterReload.slice(1); }, (v, h) => { v.rawAfterReload = h.rawAfterReload; }, v => v.rawBefore === v.rawAfterReload ? [] : ['raw-storage-held'], ['raw-storage-held']);
+  /* Round 1318 (ruling C3): a declared malformed pool now opens as the career, so the raw it keeps is the page's own
+     write, and what must hold is that a reload writes nothing new over it. */
+  const invalidObservation = pageObservations.find(r => r.invalid && r.rawAfter === r.rawAfterReload); assert(invalidObservation);
+  observationControl('unreadable-pool-reload-rewritten', invalidObservation, v => { v.rawAfterReload = v.rawAfterReload.slice(1); }, (v, h) => { v.rawAfterReload = h.rawAfterReload; }, v => v.rawAfter === v.rawAfterReload ? [] : ['raw-storage-held'], ['raw-storage-held']);
   report.component = { observations: put(pageObservations), vitest: put(JSON.parse(fs.readFileSync(path.join(componentDir, 'vitest.json'), 'utf8'))), frameworkSetup: put(frameworkSetup), frameworkControl };
   for (const [p, raw] of rawBefore) assert.deepEqual(fs.readFileSync(path.join(ROOT, p)), raw, `held disk ${p}`);
   report.heldSources = [...rawBefore].map(([p, raw]) => ({ path: p, bytes: raw.length, sha256: sha(raw) }));

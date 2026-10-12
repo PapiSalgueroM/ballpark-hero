@@ -49,6 +49,7 @@ import { revealBallonDorResult } from '@/lib/soccerAwardReveal';
 import { revealAfter } from '@/components/club-manager/Celebration';
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { recordCompletion } from '@/lib/completions';
+import { careerStep } from '../../scripts/lib/careerStep.mjs';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 type Saved = Record<string, any>;
@@ -106,22 +107,21 @@ function deriveFixtures() {
   let seed = 1; Math.random = () => { let t = seed += 0x6D2B79F5; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
   const st = { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 };
   const legacy = copy(E.initCareer('Generation Save Tester', 'England', 'ST', '2025', st, 70, 2025, E.FALLBACK_CLUBS, null, 88));
-  const early = (startYear: number) => {
+  /* Round 1318: on today's engine a 2025 start can reach a night before 2028,
+     the first year that draws a generated rival, so the first night is no
+     longer always the pooled one. The walk now plays on (the passive player of
+     scripts/lib/careerStep.mjs) to the first night whose pool presence is the
+     one wanted. */
+  const early = (startYear: number, wantPool: boolean) => {
   let s = E.initCareer('Generation Save Tester', 'England', 'ST', startYear === 2010 ? '2010-14' : '2025', st, 70, startYear, E.FALLBACK_CLUBS, null, 88);
-  for (let i = 0; i < 100 && s.phase !== 'ballon_dor'; i++) {
-    switch (s.phase) {
-      case 'youth': s = E.advanceYouthYear(s, E.FALLBACK_CLUBS); break;
-      case 'contract_offer': if (!s.pendingOffers.length) throw new Error('No actual initial offer'); s = E.acceptOffer(s, s.pendingOffers[0]); break;
-      case 'playing': s = E.advanceProSeason(s, E.FALLBACK_CLUBS); break;
-      case 'season_summary': s = E.dismissSummary(s, E.FALLBACK_CLUBS); break;
-      case 'newspaper': s = E.dismissNewspaper(s); break;
-      default: throw new Error(`Unexpected early fixture phase ${s.phase}`);
-    }
+  for (let i = 0; i < 400 && !(s.phase === 'ballon_dor' && s.pendingBallonDor && !!s.generatedBallonPool === wantPool); i++) {
+    if (s.retired) break;
+    s = careerStep(E, s, E.FALLBACK_CLUBS);
   }
-  if (!s.pendingBallonDor) throw new Error('Genuine pending fixture missing');
+  if (!s.pendingBallonDor || s.phase !== 'ballon_dor') throw new Error('Genuine pending fixture missing');
   return copy(s);
   };
-  const pending = early(2025), legacyPending = early(2010);
+  const pending = early(2025, true), legacyPending = early(2010, false);
   if (!pending.generatedBallonPool || legacyPending.generatedBallonPool) throw new Error('Genuine generated and legacy boundary fixtures missing');
   return { legacy, generated: copy(pending), pending, legacyPending };
 }
@@ -248,20 +248,30 @@ describe('Soccer Career generated-candidate save boundaries', () => {
       expect(rawMigrationReload).toBe(rawMigrated); expect(draws).toHaveLength(migrationReloadStart);
     }
   });
-  it.each(malformed)('rejects present %s pool and preserves whole raw storage over actual reload', async id => {
+  /* Round 1318, ruling C3 of Release AW: a present pool that cannot be verified
+     is read as ABSENT. The save opens as the career it is (no broken save card),
+     the reader refuses the pool, nothing draws on the way in or on a reload, and
+     a reload writes nothing new. That the next night then writes a fresh pool
+     with the draws of a save that never had one is
+     src/test/soccerBallonPoolReadAsAbsent.test.tsx. `invalid` still marks the
+     declared malformed rows for simSoccerAwardGenerations. */
+  it.each(malformed)('reads a present %s pool as absent and opens the career over actual reload', async id => {
     const value = corrupt(fixtures.generated, id), raw = JSON.stringify(value), beforeValidation = draws.length;
     const row: Saved = activeObservation = { id, invalid: true, input: value, rawBefore: raw, frameworkSetup: copy(frameworkSetup) };
-    expect(isSoccerCareerSave(value)).toBe(false); expect(draws).toHaveLength(beforeValidation);
+    expect(isSoccerCareerSave(value)).toBe(true); expect(E.isGeneratedBallonPool(value.generatedBallonPool, value.seasons.at(-1).year)).toBe(false);
+    expect(draws).toHaveLength(beforeValidation);
+    const expectedLoad = modelCall('repairCareer-load', value, E.repairCareer);
+    row.expectedLoad = expectedLoad; expect(expectedLoad.draws).toEqual([]);
     const first = await open(raw);
     row.actualLoadDraws = copy(draws.slice(beforeValidation)); expect(draws).toHaveLength(beforeValidation);
-    expect(first.view.queryByText('TEST: route crashed')).toBeNull(); expect(first.view.getByRole('alert').textContent).toContain("We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.");
-    expect(localStorage.getItem(KEY)).toBe(raw); expect(first.writes.mock.calls.filter(c => c[0] === KEY)).toEqual([]); expect(first.removes.mock.calls.filter(c => c[0] === KEY)).toEqual([]);
-    const rawAfter = localStorage.getItem(KEY), firstWrites = copy(first.writes.mock.calls), firstRemoves = copy(first.removes.mock.calls), firstDOM = first.view.container.innerHTML;
+    expect(first.view.queryByText('TEST: route crashed')).toBeNull(); expect(first.view.queryByRole('alert')).toBeNull();
+    const rawAfter = localStorage.getItem(KEY)!; expect(JSON.parse(rawAfter)).toEqual(expectedLoad.output);
+    const firstWrites = copy(first.writes.mock.calls), firstRemoves = copy(first.removes.mock.calls), firstDOM = first.view.container.innerHTML;
     cleanup(); first.writes.mockRestore(); first.removes.mockRestore();
-    const second = await open(raw), rawAfterReload = localStorage.getItem(KEY);
+    const second = await open(rawAfter), rawAfterReload = localStorage.getItem(KEY);
     expect(draws).toHaveLength(beforeValidation);
-    expect(second.view.queryByText('TEST: route crashed')).toBeNull(); expect(second.view.getByRole('alert').textContent).toContain("We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.");
-    expect(rawAfterReload).toBe(raw); expect(second.writes.mock.calls.filter(c => c[0] === KEY)).toEqual([]); expect(second.removes.mock.calls.filter(c => c[0] === KEY)).toEqual([]);
+    expect(second.view.queryByText('TEST: route crashed')).toBeNull(); expect(second.view.queryByRole('alert')).toBeNull();
+    expect(rawAfterReload).toBe(rawAfter);
     expect(localStorage.getItem(OTHER)).toBe('whole unrelated bytes'); expect(recordCompletion).not.toHaveBeenCalled();
     Object.assign(row, { rawAfter, rawAfterReload, firstWrites, firstRemoves, secondWrites: copy(second.writes.mock.calls), secondRemoves: copy(second.removes.mock.calls), allDraws: copy(draws), firstDOM, secondDOM: second.view.container.innerHTML });
   });
