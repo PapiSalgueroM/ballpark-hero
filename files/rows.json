@@ -1,0 +1,2540 @@
+[
+ {
+  "id": "soccer-grid-320",
+  "route": "/soccer-grid",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 919,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 6396,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Soccer Grid: Daily Football Player Grid Puzzle",
+   "rect": {
+    "x": 32,
+    "y": 983,
+    "w": 256,
+    "h": 84
+   }
+  },
+  "seoTop": 919,
+  "prevBottom": 871,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "soccer-grid-320-place.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report an issue\" class=\"inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground trans"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "soccer-grid-390",
+  "route": "/soccer-grid",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 891,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 5480,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Soccer Grid: Daily Football Player Grid Puzzle",
+   "rect": {
+    "x": 32,
+    "y": 955,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 891,
+  "prevBottom": 843,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "soccer-grid-390-place.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report an issue\" class=\"inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground trans"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "soccer-grid-1280",
+  "route": "/soccer-grid",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 1090,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 4264,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Soccer Grid: Daily Football Player Grid Puzzle",
+   "rect": {
+    "x": 336,
+    "y": 1154,
+    "w": 608,
+    "h": 28
+   }
+  },
+  "seoTop": 1090,
+  "prevBottom": 1042,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "soccer-grid-1280-place.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report an issue\" class=\"inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground trans"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "soccer-career-320",
+  "route": "/soccer-career",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 1411,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 14994,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Soccer Career: Free Football Career Simulator",
+   "rect": {
+    "x": 16,
+    "y": 1475,
+    "w": 288,
+    "h": 56
+   }
+  },
+  "seoTop": 1411,
+  "prevBottom": 1363,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "soccer-career-320-place.png",
+   "soccer-career-320-dialog.png",
+   "soccer-career-320-failed.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 87,
+    "bottom": 482,
+    "left": 0,
+    "right": 320
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "soccer-career",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/soccer-career",
+    "len": 399
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "soccer-career-390",
+  "route": "/soccer-career",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 1277,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 12405,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Soccer Career: Free Football Career Simulator",
+   "rect": {
+    "x": 16,
+    "y": 1341,
+    "w": 358,
+    "h": 56
+   }
+  },
+  "seoTop": 1277,
+  "prevBottom": 1229,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "soccer-career-390-place.png",
+   "soccer-career-390-dialog.png",
+   "soccer-career-390-failed.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 235,
+    "bottom": 610,
+    "left": 3,
+    "right": 387
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "soccer-career",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/soccer-career",
+    "len": 399
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "soccer-career-1280",
+  "route": "/soccer-career",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 1196,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 8519,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Soccer Career: Free Football Career Simulator",
+   "rect": {
+    "x": 320,
+    "y": 1260,
+    "w": 640,
+    "h": 28
+   }
+  },
+  "seoTop": 1196,
+  "prevBottom": 1148,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "soccer-career-1280-place.png",
+   "soccer-career-1280-dialog.png",
+   "soccer-career-1280-failed.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 263,
+    "bottom": 638,
+    "left": 448,
+    "right": 832
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nLIVE\nNo games on th",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "soccer-career",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/soccer-career",
+    "len": 400
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "nba-my-career-320",
+  "route": "/nba-my-career",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 1852,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 16155,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "NBA My Career: Basketball Career Simulator",
+   "rect": {
+    "x": 32,
+    "y": 1916,
+    "w": 256,
+    "h": 84
+   }
+  },
+  "seoTop": 1852,
+  "prevBottom": 1804,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "nba-my-career-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "nba-my-career-390",
+  "route": "/nba-my-career",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 1606,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 13214,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "NBA My Career: Basketball Career Simulator",
+   "rect": {
+    "x": 32,
+    "y": 1670,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 1606,
+  "prevBottom": 1558,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "nba-my-career-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "nba-my-career-1280",
+  "route": "/nba-my-career",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 1470,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 8764,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "NBA My Career: Basketball Career Simulator",
+   "rect": {
+    "x": 336,
+    "y": 1534,
+    "w": 608,
+    "h": 28
+   }
+  },
+  "seoTop": 1470,
+  "prevBottom": 1422,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "nba-my-career-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "front-office-320",
+  "route": "/front-office",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 1569,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 12736,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "NFL Front Office: Football GM Simulator",
+   "rect": {
+    "x": 32,
+    "y": 1633,
+    "w": 256,
+    "h": 56
+   }
+  },
+  "seoTop": 1569,
+  "prevBottom": 1521,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "front-office-320-place.png",
+   "front-office-320-dialog.png",
+   "front-office-320-failed.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 87,
+    "bottom": 482,
+    "left": 0,
+    "right": 320
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "front-office",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/front-office",
+    "len": 398
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "front-office-390",
+  "route": "/front-office",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 1537,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 10705,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "NFL Front Office: Football GM Simulator",
+   "rect": {
+    "x": 32,
+    "y": 1601,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 1537,
+  "prevBottom": 1489,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "front-office-390-place.png",
+   "front-office-390-dialog.png",
+   "front-office-390-failed.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 235,
+    "bottom": 610,
+    "left": 3,
+    "right": 387
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "front-office",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/front-office",
+    "len": 398
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "front-office-1280",
+  "route": "/front-office",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 917,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 6780,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "NFL Front Office: Football GM Simulator",
+   "rect": {
+    "x": 336,
+    "y": 981,
+    "w": 608,
+    "h": 28
+   }
+  },
+  "seoTop": 917,
+  "prevBottom": 869,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "front-office-1280-place.png",
+   "front-office-1280-dialog.png",
+   "front-office-1280-failed.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 263,
+    "bottom": 638,
+    "left": 448,
+    "right": 832
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nLIVE\nNo games on th",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "front-office",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/front-office",
+    "len": 399
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "club-manager-320",
+  "route": "/club-manager",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 1420,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 29653,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Club Manager: Free Football Management Game",
+   "rect": {
+    "x": 32,
+    "y": 1484,
+    "w": 256,
+    "h": 84
+   }
+  },
+  "seoTop": 1420,
+  "prevBottom": 1372,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "club-manager-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "club-manager-390",
+  "route": "/club-manager",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 1213,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 23603,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Club Manager: Free Football Management Game",
+   "rect": {
+    "x": 32,
+    "y": 1277,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 1213,
+  "prevBottom": 1165,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "club-manager-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "club-manager-1280",
+  "route": "/club-manager",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 948,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 13577,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Club Manager: Free Football Management Game",
+   "rect": {
+    "x": 320,
+    "y": 1012,
+    "w": 640,
+    "h": 28
+   }
+  },
+  "seoTop": 948,
+  "prevBottom": 900,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "club-manager-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "transfer-path-320",
+  "route": "/transfer-path",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 364,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 16,
+     "y": 779,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 5798,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Transfer Path: Connect Soccer Players Puzzle",
+   "rect": {
+    "x": 16,
+    "y": 883,
+    "w": 288,
+    "h": 56
+   }
+  },
+  "seoTop": 883,
+  "prevBottom": 835,
+  "overflowX": 0,
+  "scrollY": 364,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": false,
+  "shots": [
+   "transfer-path-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "transfer-path-390",
+  "route": "/transfer-path",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 16,
+     "y": 691,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 5079,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Transfer Path: Connect Soccer Players Puzzle",
+   "rect": {
+    "x": 16,
+    "y": 892,
+    "w": 358,
+    "h": 56
+   }
+  },
+  "seoTop": 892,
+  "prevBottom": 844,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": false,
+  "shots": [
+   "transfer-path-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "transfer-path-1280",
+  "route": "/transfer-path",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 320,
+     "y": 807,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 3924,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Transfer Path: Connect Soccer Players Puzzle",
+   "rect": {
+    "x": 320,
+    "y": 980,
+    "w": 640,
+    "h": 28
+   }
+  },
+  "seoTop": 980,
+  "prevBottom": 932,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": false,
+  "shots": [
+   "transfer-path-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "stat-detective-320",
+  "route": "/stat-detective",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 509,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 5830,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Stat Detective: Guess the NBA Player Quiz",
+   "rect": {
+    "x": 32,
+    "y": 573,
+    "w": 256,
+    "h": 56
+   }
+  },
+  "seoTop": 509,
+  "prevBottom": 461,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "stat-detective-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "stat-detective-390",
+  "route": "/stat-detective",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 485,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 5006,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Stat Detective: Guess the NBA Player Quiz",
+   "rect": {
+    "x": 32,
+    "y": 549,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 485,
+  "prevBottom": 437,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "stat-detective-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "stat-detective-1280",
+  "route": "/stat-detective",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 449,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 3589,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Stat Detective: Guess the NBA Player Quiz",
+   "rect": {
+    "x": 336,
+    "y": 513,
+    "w": 608,
+    "h": 28
+   }
+  },
+  "seoTop": 449,
+  "prevBottom": 401,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "stat-detective-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "player-bingo-320",
+  "route": "/player-bingo",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 489,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 5970,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Player Bingo: Soccer Player Trivia Bingo",
+   "rect": {
+    "x": 32,
+    "y": 553,
+    "w": 256,
+    "h": 56
+   }
+  },
+  "seoTop": 489,
+  "prevBottom": 0,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "player-bingo-320-place.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report an issue\" class=\"inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground trans"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "player-bingo-390",
+  "route": "/player-bingo",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 469,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 5105,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Player Bingo: Soccer Player Trivia Bingo",
+   "rect": {
+    "x": 32,
+    "y": 533,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 469,
+  "prevBottom": 0,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "player-bingo-390-place.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report an issue\" class=\"inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground trans"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "player-bingo-1280",
+  "route": "/player-bingo",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 497,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 3609,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Player Bingo: Soccer Player Trivia Bingo",
+   "rect": {
+    "x": 320,
+    "y": 561,
+    "w": 640,
+    "h": 28
+   }
+  },
+  "seoTop": 497,
+  "prevBottom": 0,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "player-bingo-1280-place.png"
+  ],
+  "banner": true,
+  "dialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report an issue\" class=\"inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground trans"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('footer button').filter({ hasText: 'Report a problem' }).first()\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-"
+  }
+ },
+ {
+  "id": "nba-grid_archive-320",
+  "route": "/nba-grid/archive",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 16,
+     "y": 58268,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 58747,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "shots": [
+   "nba-grid_archive-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "nba-grid_archive-390",
+  "route": "/nba-grid/archive",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 16,
+     "y": 44860,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 45251,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "shots": [
+   "nba-grid_archive-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "nba-grid_archive-1280",
+  "route": "/nba-grid/archive",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 320,
+     "y": 27466,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 27787,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "shots": [
+   "nba-grid_archive-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "deadline-day-320",
+  "route": "/deadline-day",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 597,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 10943,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Deadline Day: Transfer Window Football Game",
+   "rect": {
+    "x": 32,
+    "y": 661,
+    "w": 256,
+    "h": 56
+   }
+  },
+  "seoTop": 597,
+  "prevBottom": 549,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "deadline-day-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "deadline-day-390",
+  "route": "/deadline-day",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 581,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 9193,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Deadline Day: Transfer Window Football Game",
+   "rect": {
+    "x": 32,
+    "y": 645,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 581,
+  "prevBottom": 533,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "deadline-day-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "deadline-day-1280",
+  "route": "/deadline-day",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 395,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 6188,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "Deadline Day: Transfer Window Football Game",
+   "rect": {
+    "x": 336,
+    "y": 459,
+    "w": 608,
+    "h": 28
+   }
+  },
+  "seoTop": 395,
+  "prevBottom": 347,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "deadline-day-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "shirt-number-320",
+  "route": "/shirt-number",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 37,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 16,
+     "y": 629,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 1108,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 37,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "shots": [
+   "shirt-number-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "shirt-number-390",
+  "route": "/shirt-number",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 16,
+     "y": 593,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 1180,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "shots": [
+   "shirt-number-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "shirt-number-1280",
+  "route": "/shirt-number",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED",
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "other",
+    "rect": {
+     "x": 320,
+     "y": 641,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 1181,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "shots": [
+   "shirt-number-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "about-320",
+  "route": "/about",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 3379,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [
+   " If something looks wrong, every page has a Report a problem button in the footer so you can send us the page and the detail that needs checking",
+   " I'm constantly working on it, fact checking everything and adding new games, so if something looks off, tell me with the Report a problem button at the bottom of any page and I'll get on it"
+  ],
+  "jump": false,
+  "nonFooterCount": 0,
+  "footerCount": 1,
+  "shots": [
+   "about-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "about-390",
+  "route": "/about",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 2883,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [
+   " If something looks wrong, every page has a Report a problem button in the footer so you can send us the page and the detail that needs checking",
+   " I'm constantly working on it, fact checking everything and adding new games, so if something looks off, tell me with the Report a problem button at the bottom of any page and I'll get on it"
+  ],
+  "jump": false,
+  "nonFooterCount": 0,
+  "footerCount": 1,
+  "shots": [
+   "about-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "about-1280",
+  "route": "/about",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 1926,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [
+   " If something looks wrong, every page has a Report a problem button in the footer so you can send us the page and the detail that needs checking",
+   " I'm constantly working on it, fact checking everything and adding new games, so if something looks off, tell me with the Report a problem button at the bottom of any page and I'll get on it"
+  ],
+  "jump": false,
+  "nonFooterCount": 0,
+  "footerCount": 1,
+  "shots": [
+   "about-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "whats-new-320",
+  "route": "/whats-new",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 203304,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 1,
+  "problemSentences": [
+   " If something looks off after an update, hit the Report a problem button in the footer and we will get on it",
+   "Report a problem, right under the game",
+   " On most game pages the report button now sits just under the game, above its guide, and it and the one in the footer are both called Report a problem",
+   " So if something like your age still gets stuck after this, hit Report a problem in the footer and tell us"
+  ],
+  "jump": false,
+  "nonFooterCount": 0,
+  "footerCount": 1,
+  "shots": [
+   "whats-new-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "whats-new-390",
+  "route": "/whats-new",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 160837,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 1,
+  "problemSentences": [
+   " If something looks off after an update, hit the Report a problem button in the footer and we will get on it",
+   "Report a problem, right under the game",
+   " On most game pages the report button now sits just under the game, above its guide, and it and the one in the footer are both called Report a problem",
+   " So if something like your age still gets stuck after this, hit Report a problem in the footer and tell us"
+  ],
+  "jump": false,
+  "nonFooterCount": 0,
+  "footerCount": 1,
+  "shots": [
+   "whats-new-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "whats-new-1280",
+  "route": "/whats-new",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "seoNotReady": true,
+  "controls": [
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 78774,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": null,
+  "heading": null,
+  "seoTop": null,
+  "prevBottom": null,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 1,
+  "problemSentences": [
+   " If something looks off after an update, hit the Report a problem button in the footer and we will get on it",
+   "Report a problem, right under the game",
+   " On most game pages the report button now sits just under the game, above its guide, and it and the one in the footer are both called Report a problem",
+   " So if something like your age still gets stuck after this, hit Report a problem in the footer and tell us"
+  ],
+  "jump": false,
+  "nonFooterCount": 0,
+  "footerCount": 1,
+  "shots": [
+   "whats-new-1280-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "perfect-season-nba-320",
+  "route": "/perfect-season-nba",
+  "width": 320,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 87,
+     "y": 946,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 152,
+     "y": 6383,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "82-0 NBA Perfect Season: Basketball Draft Sim",
+   "rect": {
+    "x": 32,
+    "y": 1010,
+    "w": 256,
+    "h": 84
+   }
+  },
+  "seoTop": 946,
+  "prevBottom": 898,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "perfect-season-nba-320-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "perfect-season-nba-390",
+  "route": "/perfect-season-nba",
+  "width": 390,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 122,
+     "y": 894,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 227,
+     "y": 5573,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "82-0 NBA Perfect Season: Basketball Draft Sim",
+   "rect": {
+    "x": 32,
+    "y": 958,
+    "w": 326,
+    "h": 56
+   }
+  },
+  "seoTop": 894,
+  "prevBottom": 846,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "perfect-season-nba-390-place.png"
+  ],
+  "banner": true
+ },
+ {
+  "id": "perfect-season-nba-1280",
+  "route": "/perfect-season-nba",
+  "width": 1280,
+  "errors": [],
+  "console": [
+   "Failed to load resource: net::ERR_FAILED"
+  ],
+  "scrollAtLoad": 0,
+  "controls": [
+   {
+    "where": "seo",
+    "rect": {
+     "x": 567,
+     "y": 640,
+     "w": 146,
+     "h": 32
+    },
+    "title": "Report an issue"
+   },
+   {
+    "where": "footer",
+    "rect": {
+     "x": 572,
+     "y": 3772,
+     "w": 136,
+     "h": 32
+    },
+    "title": "Report a problem or wrong info"
+   }
+  ],
+  "seoState": "ready",
+  "heading": {
+   "text": "82-0 NBA Perfect Season: Basketball Draft Sim",
+   "rect": {
+    "x": 320,
+    "y": 704,
+    "w": 640,
+    "h": 28
+   }
+  },
+  "seoTop": 640,
+  "prevBottom": 592,
+  "overflowX": 0,
+  "scrollY": 0,
+  "oldWords": 0,
+  "problemSentences": [],
+  "jump": false,
+  "nonFooterCount": 1,
+  "footerCount": 1,
+  "aboveGuide": true,
+  "belowGame": true,
+  "shots": [
+   "perfect-season-nba-1280-place.png"
+  ],
+  "banner": true
+ }
+]
