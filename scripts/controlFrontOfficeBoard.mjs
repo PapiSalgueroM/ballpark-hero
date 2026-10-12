@@ -40,7 +40,9 @@
  * hub save past the last week with a champion opened (champopen); then the
  * bracket played without the desk's edges (bracketnoedges: red on a told
  * score, as Round 1305's blind spot asks) and "Sim the rest" playing one
- * round (restround).
+ * round (restround); then the chip reading Week 18/17 in the playoffs
+ * (weekeighteen) and trades left open there with the desk off
+ * (playofftrades).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -88,9 +90,17 @@ const T = {
   psChamp: [PS, 'its season already has a champion'],
   psOutside: [PS, 'a bracket on a save outside the playoffs'],
   psAbandon: [PS, 'abandon in the playoffs and start again'],
-  psDeskOn: [PS, 'GM desk on: the bracket a round at a time is the one press'],
+  /* the title seasons only: the desk's edges are his club's alone (nflDeskEdges, src/lib/nflGmDesk.ts), so a told
+     score moves only where he plays in the bracket, and only the title season is sure to hold games of his there
+     (measured on r1309-b2-ctl: the four desk on cases of the ordinary and the fired season stayed green under the
+     control, the two title cases went red) */
+  psDeskOnTitle: [PS, 'GM desk on: the bracket a round at a time is the one press title'],
   psDeskOff: [PS, 'GM desk off: the bracket a round at a time is the one press'],
   psRestAny: [PS, 'Sim the rest from any round'],
+  psChip: [PS, 'the chip, the week box line and its buttons'],
+  psChipPress: [PS, '"Play Week 17" turns the chip to Playoffs'],
+  psTradeOff: [PS, 'a trade is refused in the bracket (GM desk on: false)'],
+  psTradeOn: [PS, 'a trade is refused in the bracket (GM desk on: true)'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -136,8 +146,10 @@ const CONTROLS = {
     [["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */", '/* a new franchise */'], ["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: abandoned in the playoffs */", '/* abandoned */']], [T.psAbandon], [T.psKeep]],
   rebuiltkeeps: ['a bracket started again keeps the log of the one that is gone', [['setGameLog(regular.length > 0 && gameLogLive.current ? { ...gameLogLive.current, games: regular } : null); /* the playoff games of a bracket started again */', '/* kept */']], [T.psRebuilt], [T.psKeep]],
   champopen: ['a hub save past the last week with nothing to play opens', [["if (s.phase === 'hub' && s.league.week > REGULAR_WEEKS && !(bracketLoad && bracketLoad.kind === 'bracket')) { setSaveError(true); return; }", '']], [T.psChamp], [T.psKeep]],
-  bracketnoedges: ["the bracket is played without the desk's edges (the winners may stand; the told scores may not)", [['const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);', 'const play = nflPlayTie(lg.teams, Math.random, lg.season, undefined, told);']], [T.psDeskOn], [T.psDeskOff]],
+  bracketnoedges: ["the bracket is played without the desk's edges (the winners may stand; the told scores may not)", [['const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);', 'const play = nflPlayTie(lg.teams, Math.random, lg.season, undefined, told);']], [T.psDeskOnTitle], [T.psDeskOff]],
   restround: ['"Sim the rest" plays one round', [["playPlayoffs(asked === 'rest');", 'playPlayoffs(false);']], [T.psRestAny], [T.psKeep]],
+  weekeighteen: ['the chip reads Week 18/17 in the playoffs', [["{seen.season} · {seen.week > REGULAR_WEEKS ? 'Playoffs' : `Week ${seen.week}/${REGULAR_WEEKS}`}", '{seen.season} · Week {seen.week}/{REGULAR_WEEKS}']], [T.psChip, T.psChipPress], [T.psKeep]],
+  playofftrades: ['trades stay open in the playoffs with the desk off', [['const why = deadline ?? (playoffsLive.current && league && league.week > REGULAR_WEEKS ? PLAYOFF_TRADE_LINE : null);', 'const why = deadline;']], [T.psTradeOff], [T.psTradeOn]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 

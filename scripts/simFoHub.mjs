@@ -27,6 +27,13 @@
  *  6. The four boards actually use it, and the tab pills are gone from
  *     all four rather than three.
  *
+ *  8. (Round 1309) Past the last period (the NFL's playoffs, Week 18) the
+ *     play box keeps its title and reads Postseason with his last result,
+ *     or that the regular season is over, and never "0 weeks to play";
+ *     the standings box says the regular season is over and does not
+ *     pulse. Control FO_HUB_CONTROL=nopost bundles a copy of foHub.ts
+ *     with that branch taken out: section 8 must go red and nothing else.
+ *
  * Run: node scripts/simFoHub.mjs
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -41,9 +48,20 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'foHubEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'foHub.bundle.mjs');
 
+/* Round 1309: the control bundles a copy of foHub.ts with the past the last period branch taken out */
+const CONTROL = process.env.FO_HUB_CONTROL || '';
+if (CONTROL && CONTROL !== 'nopost') { console.error(`simFoHub: unknown control ${CONTROL} (nopost)`); process.exit(2); }
+let HUB_FILE = `${ROOT.replaceAll('\\', '/')}/src/lib/foHub.ts`;
+if (CONTROL === 'nopost') {
+  let src = fs.readFileSync(path.join(ROOT, 'src/lib/foHub.ts'), 'utf8').split('\r\n').join('\n');
+  const cuts = [["        : postseason ? REGULAR_SEASON_OVER /* Round 1309: never \"0 weeks to play\" */\n", ''], ['    const over = f.period > f.periods;', '    const over = false;'], ["from './frontOfficeCuts'", `from '${ROOT.replaceAll('\\', '/')}/src/lib/frontOfficeCuts.ts'`]];
+  for (const [from, to] of cuts) { if (src.split(from).length !== 2) { console.error(`simFoHub: control nopost cannot run, its string is not in foHub.ts once: ${from.trim().slice(0, 60)}`); process.exit(2); } src = src.replace(from, () => to); }
+  HUB_FILE = path.join(os.tmpdir(), 'foHub.nopost.ts').replaceAll('\\', '/');
+  fs.writeFileSync(HUB_FILE, src);
+}
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const hub = await import('${ROOT.replaceAll('\\', '/')}/src/lib/foHub.ts');
+const hub = await import('${HUB_FILE}');
 const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
 export { hub, nfl };
 `);
@@ -333,7 +351,34 @@ console.log('7) A real NFL league produces sane boxes on every week of a season'
   console.log(`   ${checked} weeks of a live league, every box readable`);
 }
 
+/* ------------------------------- 8. past the last period (Round 1309) */
+console.log('8) Past the last period the boxes say the regular season is over');
+let red8 = 0;
+{
+  const before = failures;
+  const post = foHubTiles(baseFacts({ period: 18, nextOpponent: null }));
+  const play = byKey(post, 'play'), table = byKey(post, 'standings');
+  ok(play.title === 'This week' && play.value === 'Postseason', `the play box past the last week reads "${play.title}: ${play.value}"`);
+  ok(play.sub === 'Last out: won 27-20 against New York', `the play box gives his last result past the last week: "${play.sub}"`);
+  const none = byKey(foHubTiles(baseFacts({ period: 18, nextOpponent: null, lastResult: null })), 'play');
+  ok(none.sub === 'The regular season is over.', `with no result the play box says the regular season is over, not "${none.sub}"`);
+  for (const [place, label] of [[3, 'inside the cut'], [9, 'outside it'], [1, 'the top seed']]) {
+    const t = byKey(foHubTiles(baseFacts({ period: 18, nextOpponent: null, place })), 'standings');
+    ok(t.sub === 'The regular season is over.' && t.accent === false, `the standings box past the last week, ${label}: "${t.sub}", ${t.accent ? 'pulsing' : 'still'}`);
+    ok(!/0 to play|0 weeks to play/.test(t.sub), `the standings box counts weeks that do not exist (${label})`);
+  }
+  ok(table.value === '#4 in the AFC', `the table's place is still shown: "${table.value}"`);
+  /* the last regular week is untouched */
+  ok(byKey(foHubTiles(baseFacts({ period: 17, lastResult: null })), 'play').sub === '5-3 with 1 weeks to play', 'Week 17 lost its count');
+  red8 = failures - before;
+}
+
 console.log('');
+if (CONTROL) {
+  const fired = red8 > 0 && failures === red8;
+  console.log(fired ? `control ${CONTROL}: RED AT THE NAMED CHECK (section 8: ${red8} failures, none elsewhere)` : `control ${CONTROL}: DID NOT FIRE (section 8 red ${red8}, all failures ${failures})`);
+  process.exit(fired ? 1 : 2);
+}
 if (failures > 0) {
   console.error(`simFoHub: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

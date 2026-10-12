@@ -22,8 +22,10 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import type { ComponentType } from 'react';
-import { initLeague, simGame, REGULAR_WEEKS, DEEP_ROSTER_MAX } from '@/lib/frontOffice';
+import { initLeague, simGame, REGULAR_WEEKS, DEEP_ROSTER_MAX, DEPTH_GROUPS } from '@/lib/frontOffice';
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
+import { FO_DEPTH } from '@/data/frontOfficeDepth';
+import { openNflDesk } from '@/lib/nflGmDesk';
 import { addToGmGameLog, readGmGameLog, type GmGameLog } from '@/lib/gmGameLog';
 import { nflIsRegular, nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
 import { NFL_POSTSEASON, nflPlayTie } from '@/lib/frontOfficePostseason';
@@ -342,5 +344,126 @@ describe('NFL front office: a club over the roster limit cannot press a round', 
       fireEvent.click(b);
     }
     expect(localStorage.getItem(SAVE_KEY), 'nothing was played').toBe(before);
+  });
+});
+
+/* ───────────── Round 1309 (b3): every reader of Week 18 ─────────────
+   In the bracket the league sits at week 18, the engine's own "18 =
+   playoffs". Nothing on the page may read that as an eighteenth week of a
+   seventeen week season: not the chip, the week box's line, the old button,
+   a hurt man's weeks, the roster limit's deadline, nor the hub's two boxes.
+   And trades are shut for every GM while the bracket is open (control
+   playofftrades in scripts/controlFrontOfficeBoard.mjs). */
+const text = () => document.body.textContent ?? '';
+/** The bracket save after one round (his game of it in the log), with `edit` applied to the league first. */
+function inBracket(edit: (league: any, team: string) => void = () => undefined) {
+  const o = seasonOver();
+  const { block, log } = afterRound(o, regularLog(o));
+  edit(o.league, o.team);
+  save(shape(o.league, o.team, { playoffs: block, gameLog: log }));
+  return { o, log };
+}
+
+describe('NFL front office: Week 18 reads as the playoffs', () => {
+  it('the chip, the week box line and its buttons: no Week 18 of 17, no bye line, no old button', () => {
+    const { o, log } = inBracket();
+    /* the AFC's second seed played the Wild Card round: through, his next game is a Divisional one; out, he has none */
+    const through = log.games[log.games.length - 1].winner === o.team;
+    render(<Board />);
+    expect(errorScreen()).toBeNull();
+    const chip = document.querySelector('[data-week-chip]')!.textContent ?? '';
+    expect(chip, 'the chip').toContain('Playoffs');
+    expect(chip).not.toMatch(/Week \d+\/\d+/);
+    fireEvent.click(screen.getByText('This week'));
+    expect(document.querySelector('[data-week-matchup]')!.textContent, 'his round, by its name')
+      .toBe(through ? 'Your game: the AFC Divisional.' : 'No game for you this round. The playoffs play on.');
+    expect(text()).not.toContain('Bye week for you. The league plays on.');
+    expect(screen.queryByText('Play the final week + playoffs'), 'the old button is for Week 17 only').toBeNull();
+    expect(screen.queryByText(/^Play Week/), 'no week to play').toBeNull();
+    expect(screen.getByText(through ? 'Play the AFC Divisional' : 'Play the next round')).toBeTruthy();
+  });
+
+  it('"Play Week 17" turns the chip to Playoffs and takes the old button away', () => {
+    const rng = lehmer(7);
+    const league: any = initLeague(rng);
+    for (let w = 1; w < REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => simGame(g, league.teams, rng)); league.week += 1; }
+    save(shape(league, Object.keys(league.teams)[0]));
+    render(<Board />);
+    fireEvent.click(screen.getByText('This week'));
+    expect(document.querySelector('[data-week-chip]')!.textContent).toContain(`Week ${REGULAR_WEEKS}/${REGULAR_WEEKS}`);
+    fireEvent.click(screen.getByText(`Play Week ${REGULAR_WEEKS}`));
+    expect(read().league.week).toBe(REGULAR_WEEKS + 1);
+    expect(document.querySelector('[data-week-chip]')!.textContent).toContain('Playoffs');
+    expect(text()).not.toMatch(/Week 18|Bye week for you/);
+    expect(screen.queryByText('Play the final week + playoffs')).toBeNull();
+  });
+
+  it('a club with no game this round says so, never that it has a bye week', () => {
+    const o = seasonOver();
+    save(shape(o.league, o.seeds[0], { playoffs: openBracket(o.format, o.league.season, o.seeds) }));
+    render(<Board />);
+    fireEvent.click(screen.getByText('This week'));
+    expect(document.querySelector('[data-week-matchup]')!.textContent, 'the top seed sits out the first round').toBe('No game for you this round. The playoffs play on.');
+    expect(text()).not.toContain('Bye week for you');
+    expect(screen.getByText('Play the next round')).toBeTruthy();
+  });
+
+  it('a hurt man is out for the playoffs, on the roster and on the depth chart, never out a count of weeks', () => {
+    let hurt: any = null;
+    inBracket((league, team) => { hurt = league.teams[team].players.find((p: any) => DEPTH_GROUPS.includes(p.pos)); hurt.out = 2; });
+    render(<Board />);
+    fireEvent.click(screen.getByText('Roster'));
+    expect(text(), 'the roster row').toContain(`${hurt.name} (out for the playoffs)`);
+    expect(text()).not.toMatch(/\(out \d+w\)/);
+    fireEvent.click(document.querySelector('[data-depth-open]') as HTMLElement);
+    fireEvent.click(document.querySelector(`[data-depth-group="${hurt.pos}"]`) as HTMLElement);
+    expect(text(), 'the depth chart row').toContain(`${hurt.name} (out for the playoffs)`);
+    expect(text()).not.toMatch(/\(out \d+w\)/);
+  });
+
+  it('over the roster limit, the men must go before the next round, not before Week 18', () => {
+    const o = seasonOver();
+    const rng = lehmer(7);
+    const league: any = initLeague(rng, { depth: FO_DEPTH });
+    for (let w = 1; w <= REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => simGame(g, league.teams, rng)); league.week += 1; }
+    const seeds = NFL_POSTSEASON.seeds(league);
+    const club = league.teams[seeds[1]];
+    while (club.players.length <= DEEP_ROSTER_MAX) club.players.push(league.freeAgents.shift());
+    save(shape(league, seeds[1], { playoffs: openBracket(o.format, league.season, seeds) }));
+    render(<Board />);
+    fireEvent.click(screen.getByText('Roster'));
+    expect(document.querySelector('[data-over-limit]')!.textContent).toContain('before the next round.');
+    expect(text()).not.toContain('before Week 18');
+  });
+
+  it('the hub: the play box reads Postseason with his last playoff result, the table says the regular season is over, and no box counts weeks left', () => {
+    const { o, log } = inBracket();
+    render(<Board />);
+    const g = log.games[log.games.length - 1];
+    expect(nflIsRegular(g), 'the last game of the log is his playoff game').toBe(false);
+    const won = g.winner === o.team;
+    const us = g.home === o.team ? g.homeScore : g.awayScore;
+    const them = g.home === o.team ? g.awayScore : g.homeScore;
+    expect(text()).toContain('Postseason');
+    expect(text(), 'his last result, read from the log on a fresh mount').toContain(`Last out: ${won ? 'won' : 'lost'} ${us}-${them}`);
+    expect(text()).toContain('The regular season is over.');
+    expect(text()).not.toMatch(/\b0 weeks to play|\b0 to play/);
+  });
+
+  it.each([[false], [true]])('a trade is refused in the bracket (GM desk on: %s), and nothing is traded', (desk) => {
+    let piece: any = null;
+    inBracket((league, team) => { piece = [...league.teams[team].players].sort((a: any, b: any) => b.ovr - a.ovr)[0]; });
+    if (desk) { const s = read(); s.gm = openNflDesk(s.league, s.myTeam); save(s); }
+    render(<Board />);
+    expect(errorScreen()).toBeNull();
+    fireEvent.click(screen.getByText('Trades'));
+    fireEvent.click(screen.getAllByText(`${piece.name} (${piece.pos})`)[0]);
+    const before = localStorage.getItem(SAVE_KEY);
+    fireEvent.click(screen.getByText('Shop him around the league'));
+    /* with the desk on, the deadline's own line refuses it first (Week 18 is past it); with it off, the playoffs' line */
+    expect(text(), 'the refusal').toContain(desk ? '🔒 ' : '🔒 Trades are shut for the playoffs.');
+    expect(text(), 'no offers were asked for').not.toContain('Nobody bit');
+    expect(text()).not.toMatch(/[A-Z]{2,3} offer: /);
+    expect(localStorage.getItem(SAVE_KEY), 'nothing was saved').toBe(before);
   });
 });

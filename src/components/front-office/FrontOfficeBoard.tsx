@@ -74,7 +74,7 @@ import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/componen
    the save. Both are needed in the press's own tick, so they are static;
    the story of a game and its card are not imported here. */
 import { nflIsRegular, nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
-import { addToGmGameLog, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, type GmGameLog } from '@/lib/gmGameLog';
+import { addToGmGameLog, lastGmGame, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, type GmGameLog } from '@/lib/gmGameLog';
 /* Round 1309: the playoffs a round at a time. A press and the load need the
    bracket machine, the NFL's bracket data and its bind in the same tick, so
    they are static; the bracket card and every word only it prints are not
@@ -102,6 +102,10 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'week' | 'standings';
 
 const SAVE_KEY = 'front-office-save-v1';
+
+/* Round 1309: trades are shut while the bracket is open, for every GM (with the desk on they already are: Week 18 is
+   past the deadline). Worded like the deadline's own line. */
+const PLAYOFF_TRADE_LINE = 'Trades are shut for the playoffs. Deals open again once the season is over.';
 
 const NFL_WORDS: FoSportWords = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
 
@@ -949,7 +953,9 @@ export default function FrontOfficeBoard() {
   };
   /* Round 1019: with the desk on, every trade path asks the deadline first. */
   const deadlineBlock = (): boolean => {
-    const why = gm && league ? nflDeadlineRefusal(league) : null;
+    const deadline = gm && league ? nflDeadlineRefusal(league) : null;
+    /* Round 1309: and the playoffs, desk or no desk */
+    const why = deadline ?? (playoffsLive.current && league && league.week > REGULAR_WEEKS ? PLAYOFF_TRADE_LINE : null);
     if (why) setNewsFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
     return !!why;
   };
@@ -1157,7 +1163,9 @@ export default function FrontOfficeBoard() {
      because the recap mounts the re-sign desk too. */
   const conf = conferenceOf(myTeam);
   const confTable = standings(league.teams).filter(x => conferenceOf(x.abbr) === conf);
-  const myLast = weekResults.find(g => g.home === myTeam || g.away === myTeam);
+  /* Round 1309: his last result is the log's last game, on every week and in the playoffs (a reload used to empty
+     the play box until the next press, and the week's grid holds no playoff game) */
+  const myLast = lastGmGame(gameLogLive.current);
   /* Round 828: on a full roster the men on the chart's starting lines, hurt or
      not, are the ones the boxes talk about; the bench is counted, not quoted. */
   const deep = my.rosterDepth === 2;
@@ -1534,7 +1542,7 @@ export default function FrontOfficeBoard() {
       <div className="flex items-center justify-between">
       <span className="min-w-0">
         <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
-          {p.name} {p.out > 0 ? `(out ${p.out}w)` : ''}
+          {p.name} {p.out > 0 ? (league.week > REGULAR_WEEKS ? '(out for the playoffs)' : `(out ${p.out}w)`) : ''}
         </span>
         <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}{noTape(p)}</span>
       </span>
@@ -1605,7 +1613,7 @@ export default function FrontOfficeBoard() {
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold" style={{ background: t.color, color: '#fff' }}>{label(myTeam)}</span>
-        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-week-chip>{seen.season} · Week {seen.week}/{REGULAR_WEEKS}</span>
+        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-week-chip>{seen.season} · {seen.week > REGULAR_WEEKS ? 'Playoffs' : `Week ${seen.week}/${REGULAR_WEEKS}`}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-record-chip>Record <b className="text-foreground">{seenMy.wins}-{seenMy.losses}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 5 ? 'text-destructive' : 'text-muted-foreground')}>
@@ -1738,7 +1746,7 @@ export default function FrontOfficeBoard() {
                     >
                       <span className="min-w-0">
                         <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
-                          {i + 1}. {p.name}{p.out > 0 ? ` (out ${p.out}w)` : ''}
+                          {i + 1}. {p.name}{p.out > 0 ? (league.week > REGULAR_WEEKS ? ' (out for the playoffs)' : ` (out ${p.out}w)`) : ''}
                         </span>
                         <span className="block text-[10px] text-muted-foreground">{p.age}y · ${p.salary}M</span>
                       </span>
@@ -1756,7 +1764,7 @@ export default function FrontOfficeBoard() {
           {cutBlock && depthView === null && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           {overLimit > 0 && depthView === null && (
             <p data-over-limit className="mb-2 text-center text-[10px] text-destructive">
-              {overLimit} over the limit of {DEEP_ROSTER_MAX}. Cut {overLimit === 1 ? 'one man' : `${overLimit} men`} before Week {league.week}.
+              {overLimit} over the limit of {DEEP_ROSTER_MAX}. Cut {overLimit === 1 ? 'one man' : `${overLimit} men`} before {league.week > REGULAR_WEEKS ? 'the next round' : `Week ${league.week}`}.
             </p>
           )}
           {depthView === null && !deep && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
@@ -1999,7 +2007,12 @@ export default function FrontOfficeBoard() {
 
       {tab === 'week' && (
         <div className="relative rounded-2xl border border-gold/40 bg-card p-4 text-center space-y-3" data-week-box>
-          {seenGame ? (
+          {/* Round 1309: in the playoffs the line names his round, or says he has none */}
+          {bracketOpen ? (
+            <p className="text-sm text-foreground" data-week-matchup>
+              {roundNow.round ? `Your game: the ${roundNow.round}.` : 'No game for you this round. The playoffs play on.'}
+            </p>
+          ) : seenGame ? (
             <p className="text-sm text-foreground" data-week-matchup>
               Week {seen.week}: <b>{label(seenGame.away)}</b> at <b>{label(seenGame.home)}</b>
             </p>
