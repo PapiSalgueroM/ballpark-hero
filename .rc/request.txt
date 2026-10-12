@@ -1,0 +1,13 @@
+# AXG merge 1 proof, part a (head 7f532e3e): the type gate, the unit suite, the era fences, the rules digest, the appeal pin with a temporary repin
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+appeal-pin-stale-EXPECT-RED: node scripts/simManagerAppealIsolation.mjs
+appeal-repinned: git worktree add -q --detach /tmp/pin HEAD && ln -s "$PWD/node_modules" /tmp/pin/node_modules && cd /tmp/pin && node .rc/x/repin1081-1229.mjs && node scripts/simManagerAppealIsolation.mjs
