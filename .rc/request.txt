@@ -1,0 +1,4 @@
+#!serial
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-attrib: git checkout 8676802b -- scripts/simClubManagerSlots.mjs && sha256sum scripts/simClubManagerSlots.mjs && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- scripts/simClubManagerSlots.mjs; exit $s
+slots-hash: sha256sum scripts/simClubManagerSlots.mjs src/lib/clubManager.ts src/lib/clubManagerSlots.ts scripts/simClubManagerDecisions.mjs
