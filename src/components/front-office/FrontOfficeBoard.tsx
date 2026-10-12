@@ -73,8 +73,15 @@ import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/componen
    winner the engine decided, and his club's games of the season are kept in
    the save. Both are needed in the press's own tick, so they are static;
    the story of a game and its card are not imported here. */
-import { nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
+import { nflIsRegular, nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
 import { addToGmGameLog, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, type GmGameLog } from '@/lib/gmGameLog';
+/* Round 1309: the playoffs a round at a time. A press and the load need the
+   bracket machine, the NFL's bracket data and its bind in the same tick, so
+   they are static; the bracket card and every word only it prints are not
+   imported here (they ride with the card's lazy chunk). */
+import { inGmPostseason, loadGmPostseason } from '@/lib/gmPostseason';
+import { NFL_POSTSEASON } from '@/lib/frontOfficePostseason';
+import type { GmBracketSave } from '@/lib/gmBracket';
 /* Round 1307: the Game Day tile of the week box. The card, the story of a
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
@@ -133,6 +140,10 @@ interface SaveShape {
      Absent on every older save, at the start of a franchise and of a season,
      and whenever it does not read whole: never null, never an empty log. */
   gameLog?: GmGameLog;
+  /* Round 1309: the playoff bracket (src/lib/gmBracket.ts), while the season
+     is in it: a hub save at Week 18 with no champion for its season. Absent
+     everywhere else, never null. Read through src/lib/gmPostseason.ts. */
+  playoffs?: GmBracketSave;
 }
 
 export default function FrontOfficeBoard() {
@@ -235,6 +246,14 @@ export default function FrontOfficeBoard() {
      round, so it is a ref and not state. */
   const gameLogLive = useRef<GmGameLog | null>(null);
   const setGameLog = (l: GmGameLog | null) => { gameLogLive.current = l; };
+  /* Round 1309: the bracket, while the season is in its playoffs. Every save
+     reads it from the ref (the log's pattern), so a roster move in the
+     middle of the playoffs saves the bracket with it; null keeps the key off
+     the save. `ask` is what the last button asked of playWeek. */
+  const [playoffs, setPlayoffsState] = useState<GmBracketSave | null>(null);
+  const playoffsLive = useRef<GmBracketSave | null>(null);
+  const setPlayoffs = (b: GmBracketSave | null) => { playoffsLive.current = b; setPlayoffsState(b); };
+  const ask = useRef<'week' | 'bracket' | 'round' | 'rest'>('week');
 
   useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
 
@@ -261,6 +280,18 @@ export default function FrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureFoLeagueIds(s.league, s.draftClass);
+      /* Round 1309: a save in the playoffs (a hub save at Week 18 with no
+         champion for its season) plays on the bracket it holds, or on one
+         started again unplayed when it does not read (the feed says so).
+         Asked first, so a bracket is never opened on a save outside them,
+         and refused before any state is set: a hub save past the last week
+         with no bracket to play (its season already has a champion, or no
+         bracket can be made for it) opens on the save error screen, as every
+         unreadable save does. No repair. */
+      const bracketLoad = loadGmPostseason(NFL_POSTSEASON, s.league, s.league.season, inGmPostseason({
+        period: s.league.week, phase: s.phase, seasonHasChampion: s.league.champions.some(c => c.season === s.league.season),
+      }, NFL_POSTSEASON.bracketPeriod), s.playoffs);
+      if (s.phase === 'hub' && s.league.week > REGULAR_WEEKS && !(bracketLoad && bracketLoad.kind === 'bracket')) { setSaveError(true); return; }
       setLeague(s.league);
       setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0);
@@ -282,6 +313,19 @@ export default function FrontOfficeBoard() {
          club's, a damaged entry) is treated as absent. The save loads as it
          would without one and the next press starts a fresh log. */
       setGameLog(readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam));
+      /* Round 1309: the bracket the load handed over (null outside the
+         playoffs, whatever the save held: the key then goes at the next save).
+         A bracket started again keeps the log's regular season and drops its
+         playoff games in the same load, or the tile would show games of a
+         bracket that no longer exists and the round played again would log a
+         second game of his for it. That save is written at once. */
+      const bracketNow = bracketLoad && bracketLoad.kind === 'bracket' ? bracketLoad.repair : null;
+      setPlayoffs(bracketNow ? bracketNow.save : null);
+      if (bracketNow && bracketNow.rebuilt) {
+        const regular = (gameLogLive.current?.games ?? []).filter(nflIsRegular);
+        setGameLog(regular.length > 0 && gameLogLive.current ? { ...gameLogLive.current, games: regular } : null); /* the playoff games of a bracket started again */
+        setNewsFeed([`🔁 ${bracketNow.line}`]);
+      }
       /* Round 431: a reload on the recap screen used to replay the season.
          The save carried phase 'recap' with the league still at the final
          week and no postseason, this effect mapped it back to 'hub', the
@@ -297,6 +341,9 @@ export default function FrontOfficeBoard() {
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
       else openDraft(s.league, s.myTeam, s);
+      /* Round 1309: the bracket started again, and its log, go to storage now
+         (the save's own fields as the patch, as the draft's restore does) */
+      if (bracketNow && bracketNow.rebuilt) persist({ ...s }, s.league, s.myTeam);
     } catch { setSaveError(true); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -312,12 +359,15 @@ export default function FrontOfficeBoard() {
         ...(gmLive.current ? { gm: gmLive.current } : {}),
         ...patch,
         ...(gameLogLive.current ? { gameLog: gameLogLive.current } : {}),
+        ...(playoffsLive.current ? { playoffs: playoffsLive.current } : {}),
       };
       /* Round 1305: the log in a save is the one the reader read or a press
          built, and nothing else. A load that opens the draft hands the whole
          stored save in as its patch, so a log in it that did not read is
          dropped here and never goes back to storage unread. */
       if (!gameLogLive.current) delete base.gameLog;
+      /* Round 1309: the same for the bracket: the key is the ref's, or absent */
+      if (!playoffsLive.current) delete base.playoffs;
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
@@ -379,6 +429,7 @@ export default function FrontOfficeBoard() {
     setGm(openNflDesk(lg, abbr)); setGmOpen(null);
     /* Round 1305: the games of the club he ran before are not this club's season. */
     setGameLog(null); /* a new franchise */
+    setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
   };
 
@@ -499,6 +550,8 @@ export default function FrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an 18th week. */
     if (league.champions.some(c => c.season === league.season)) return;
+    /* Round 1309: past the last week only the bracket is played */
+    if (league.week > REGULAR_WEEKS) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     /* Round 1019: with the desk on, the staff's edge and the trainer ride on
        the week; with it off the week is called exactly as before. */
@@ -957,6 +1010,7 @@ export default function FrontOfficeBoard() {
     setSeasonTradeLine(null);
     setGm(null); setGmOpen(null);
     setGameLog(null); /* abandoned */
+    setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: abandoned in the playoffs */
   };
 
   /* Round 1019: the desk boxes. The first tap on one, on a save from before

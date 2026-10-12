@@ -33,6 +33,12 @@
  * found nothing held: the owner card's pace read after the press during a
  * watch (pacespoils) and the seed handed over as an index (seedoff).
  *
+ * Round 1309 added the fourth, FrontOfficePostseason.test.tsx (the playoffs
+ * a round at a time), and its controls: the bracket dropped from the save
+ * (noplayoffs), carried into a new franchise (abandonbracket), the log's
+ * playoff games kept when a bracket is started again (rebuiltkeeps), and a
+ * hub save past the last week with a champion opened (champopen).
+ *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
@@ -53,6 +59,8 @@ const GD = 'src/components/front-office/FrontOfficeGameDay.test.tsx';
 const OP = 'src/components/front-office/FrontOfficeOnePress.test.tsx';
 /* Round 1307: the tile and Watch */
 const TL = 'src/components/front-office/FrontOfficeTile.test.tsx';
+/* Round 1309: the playoffs a round at a time */
+const PS = 'src/components/front-office/FrontOfficePostseason.test.tsx';
 
 /* The tests by the words of their titles. */
 const T = {
@@ -72,6 +80,11 @@ const T = {
   adopt: [TL, 'a save from before the log shows the next game'],
   pace: [TL, 'NO SPOILER ON THE OWNER CARD'],
   seed: [TL, 'HIS SEED IS COUNTED FROM 1'],
+  psKeep: [PS, 'every save after it holds the bracket'],
+  psRebuilt: [PS, 'is started again unplayed'],
+  psChamp: [PS, 'its season already has a champion'],
+  psOutside: [PS, 'a bracket on a save outside the playoffs'],
+  psAbandon: [PS, 'abandon in the playoffs and start again'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -111,6 +124,12 @@ const CONTROLS = {
     [T.pace], [T.watch, T.tile, T.seed]],
   seedoff: ['the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)',
     [['seedsNow.indexOf(myTeam) + 1 : null', 'seedsNow.indexOf(myTeam) : null']], [T.seed], [T.watch, T.pace, T.week]],
+  /* Round 1309, the playoffs a round at a time (FrontOfficePostseason.test.tsx) */
+  noplayoffs: ['the bracket is not saved', [['...(playoffsLive.current ? { playoffs: playoffsLive.current } : {}),', '']], [T.psKeep], [T.psOutside, T.week]],
+  abandonbracket: ['the bracket is cleared neither by Abandon nor by a new franchise (two keys, one lock)',
+    [["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */", '/* a new franchise */'], ["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: abandoned in the playoffs */", '/* abandoned */']], [T.psAbandon], [T.psKeep]],
+  rebuiltkeeps: ['a bracket started again keeps the log of the one that is gone', [['setGameLog(regular.length > 0 && gameLogLive.current ? { ...gameLogLive.current, games: regular } : null); /* the playoff games of a bracket started again */', '/* kept */']], [T.psRebuilt], [T.psKeep]],
+  champopen: ['a hub save past the last week with nothing to play opens', [["if (s.phase === 'hub' && s.league.week > REGULAR_WEEKS && !(bracketLoad && bracketLoad.kind === 'bracket')) { setSaveError(true); return; }", '']], [T.psChamp], [T.psKeep]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
@@ -150,7 +169,7 @@ function run(name) {
   fs.writeFileSync(copy, src);
   let r, json = null;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
       { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NFL: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
     if (fs.existsSync(report)) json = JSON.parse(fs.readFileSync(report, 'utf8'));
   } finally {
@@ -164,7 +183,7 @@ function run(name) {
   console.log(`control ${name} (${why}): vitest exit ${r.status}; ${reds.length} red, ${rows.filter(x => x.status === 'passed').length} green of ${rows.length}`);
   for (const x of reds) console.log(`   red: ${path.basename(x.file)} > ${x.title.slice(0, 150)}`);
   /* a copy that did not load is not a firing */
-  const unloaded = [GD, OP, TL].filter(f => !rows.some(x => x.file.endsWith(f)));
+  const unloaded = [GD, OP, TL, PS].filter(f => !rows.some(x => x.file.endsWith(f)));
   if (unloaded.length || json.testResults.some(f => LOAD_ERROR.test(f.message || '')) || reds.some(x => LOAD_ERROR.test(x.why))) {
     return { name, fired: false, said: `the copy did not load or a test file did not run (${unloaded.join(', ') || 'a load error in the report'}), so a red here is not the check: ${tail}` };
   }
