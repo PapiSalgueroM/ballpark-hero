@@ -1,0 +1,16 @@
+
+=== Hot Seat, 390x844, reduced motion ON, start by /Take today.s job/i ===
+  note  390-rm: 5 matches kicked off, 2 press answers, stored: manager-hot-seat-daily-2026-10-11 (376 bytes), rules-gate-seen:/manager-hot-seat (1 bytes); on screen: Skip to main content DOUKNOWBALL Back Track stats Manager Hot Seat Five games. One target. The board are watching. YOUNG BOYS SOCCER · NAILED IT 10/10 points You keep the job Target hit. The board sto
+  ok    390-rm: 5 matches played, no stored value ever carried a league book
+  ok    390-rm: handed over to Club Manager at Young Boys, week 22, with no book
+  FAIL: 390-rm: the career handed over could not play a week: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own.
+  ok    390-rm: no page error
+
+=== Hot Seat, 1280x900, reduced motion off, start by /^\s*Random\s*$/i ===
+  note  1280-motion: 5 matches kicked off, 3 press answers, stored: rules-gate-seen:/manager-hot-seat (1 bytes), manager-hot-seat-free (352 bytes); on screen: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Manager Hot Seat Five games. One target. The board are watching. STOKE CITY SOCCER · NAILED I
+  ok    1280-motion: 5 matches played, no stored value ever carried a league book
+  ok    1280-motion: handed over to Club Manager at Stoke City, week 16, with no book
+  FAIL: 1280-motion: the career handed over could not play a week: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER Your managers on thi
+  ok    1280-motion: no page error
+
+hot seat walk: 2 FAILURE(S)
