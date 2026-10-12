@@ -1,0 +1,2 @@
+#!serial
+storyNoPool: node .rc/x/mutStory.mjs && node scripts/simCareerStory.mjs; s=$?; git checkout -- scripts; exit $s
