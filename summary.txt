@@ -1,0 +1,2 @@
+attrib-inverse exit=0 41s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+write-digest exit=0 141s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
