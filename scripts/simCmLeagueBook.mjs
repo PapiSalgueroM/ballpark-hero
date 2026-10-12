@@ -355,6 +355,14 @@ const seedOf = (clubIndex, k) => (0x1229 + SEEDSET * 7919 + clubIndex * 131 + k 
 const VAR_ARM = [0, 1].map(ci => [...ALL_CLUBS[ci], ci]);
 const VAR_ARM_SEEDS = 3;
 const VAR_REVIEW_FLOOR = 11;
+/* THE SAVE MOST PLAYERS HOLD ON THE DAY A RELEASE SHIPS, oldsave (vi): a season in play with the book the
+   commit before the round wrote. [club, entries played, the seed of the stream it was written on, the
+   committed recording]. Hertha BSC's league has seventeen rival clubs with no named eleven, Everton's none.
+   BOOK_WRITE_SAVES=<folder> with BOOK_BASE writes the two recordings afresh and judges nothing. */
+const BOOK_SAVES = [
+  ['Hertha BSC', 12, 0x7030, 'scripts/data/cmBookSaveHerthaFixture.json'],
+  ['Everton', 12, 0x7032, 'scripts/data/cmBookSaveEvertonFixture.json'],
+];
 
 /* Each run its own temp folder: two bundling harnesses at once must never share one. */
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-book-'));
@@ -2050,18 +2058,20 @@ function onStream(seed, fn) {
      here: two copies of the engine number their youth players, press questions and messages apart. */
   let carried = 0;
   let carriedThin = 0;
-  if (base) {
-    const clubsOf = s => rivalsOf(s).map(club => ({ club, gf: s.table.find(r => r.club === club)?.gf ?? 0 }));
-    for (const [club, entries, seed] of [['Hertha BSC', 12, 0x7030], ['Southampton', 21, 0x7031], ['Everton', 12, 0x7032]]) {
-      const name = `${club}, ${entries} entries in with its book, written by the base commit`;
-      const from = await base.again();
+  /** A season in play as `mod` writes it: a fresh copy of the engine starts `club` and plays `entries`
+   *  entries on a seeded stream with the clock fixed. */
+  const bookSaveBy = async (mod, club, entries, seed) => {
+    const from = await mod.again();
+    return onStream(seed, () => {
+      let s = from.cm.startCareer(club);
+      for (let k = 0; k < entries; k++) s = from.cm.playNextEntry(s, { skipHalftime: true }).state;
+      return JSON.stringify(s);
+    });
+  };
+  /** Carry such a save on to its season's end on a fresh copy of the candidate, the book judged all the way. */
+  const carryOn = async (name, raw, seed) => {
+      const clubsOf = s => rivalsOf(s).map(club => ({ club, gf: s.table.find(r => r.club === club)?.gf ?? 0 }));
       const on = await candidate.again();
-      const raw = onStream(seed, () => {
-        let s = from.cm.startCareer(club);
-        for (let k = 0; k < entries; k++) s = from.cm.playNextEntry(s, { skipHalftime: true }).state;
-        return JSON.stringify(s);
-      });
-      if (JSON.parse(raw).leagueBook === undefined) cannot(`${name}: the tree BOOK_BASE names keeps no league book, so there is no such save to carry on`);
       onStream(seed + 16, () => {
         let s = wake(on, JSON.parse(raw));
         const taken = on.cm.leagueBookOf(s);
@@ -2090,6 +2100,20 @@ function onStream(seed, fn) {
           if (!(onRows(end) > rowsBefore)) fail('oldsave', `${name}: its ${bare.length} clubs with no eleven held ${rowsBefore} goals on named rows at the handover and ${onRows(end)} at the season's end: the candidate named nobody there`);
         }
       });
+  };
+  if (base) {
+    /* BOOK_WRITE_SAVES=<folder>: the saves of BOOK_SAVES are written there as this run carries them on. */
+    const writeTo = process.env.BOOK_WRITE_SAVES ? path.resolve(process.env.BOOK_WRITE_SAVES) : null;
+    if (writeTo) fs.mkdirSync(writeTo, { recursive: true });
+    for (const [club, entries, seed, file] of [BOOK_SAVES[0], ['Southampton', 21, 0x7031, null], BOOK_SAVES[1]]) {
+      const name = `${club}, ${entries} entries in with its book, written by the base commit`;
+      const raw = await bookSaveBy(base, club, entries, seed);
+      if (JSON.parse(raw).leagueBook === undefined) cannot(`${name}: the tree BOOK_BASE names keeps no league book, so there is no such save to carry on`);
+      if (writeTo && file) {
+        fs.writeFileSync(path.join(writeTo, path.basename(file)), raw);
+        console.log(`        wrote ${path.basename(file)}: ${club}, ${entries} entries in, ${Buffer.byteLength(raw)} bytes, sha256 ${createHash('sha256').update(raw).digest('hex')}`);
+      }
+      await carryOn(name, raw, seed);
     }
     tick('oldsave');
     if (!carriedThin) fail('oldsave', `of ${carried} saves written by the base commit and carried on, none held a club with no eleven: the transition a live save makes was not tried`);
