@@ -29,8 +29,8 @@ Detector controls must change the action or observation they claim to test.
 Every app runtime, build, test and browser runs remotely. All database
 responses are offline fixtures; external transport is blocked. No new real
 sports facts, app/data edits, production probes or live acceptance are in scope.
-The existing PR242 proof remains qualified independently. New runtime counts,
-control results, artifacts and branch qualification are pending.
+The existing PR242 proof remains qualified independently. The successful new
+remote evidence is recorded below; G retains integration and publication.
 
 First remote run 38289111499, job 114944578771, on proof head d4973ac9
 completed with a browser-method failure. The exact candidate source, 521
@@ -51,4 +51,65 @@ The selector repair must use the exact name span and a fresh remote run.
 
 Failed artifact 11764658245 is retained: 714,418 bytes, 22 entries, ZIP SHA256
 762328bce93d19c439595f7fc3968ca0c4802d2bc5c1f92b68b5fff3ebc8eb0b.
-Only the new proof method is being repaired; the candidate remains frozen.
+The repair changed only the new proof method; the candidate stayed frozen.
+
+The repaired proof source 270c5aafc55fa45044389661c6743fd8299149df passed
+remote run 38290398386, job 114948824202. The workflow, fleet method,
+candidate source and dependencies stayed held. All 521 installed locked
+versions matched before and after. The exact app type gate and complete app
+build passed, with one newly sampled Transfer Path snapshot and zero route
+failures. Generated site output stays in the remote checkout and is not adopted.
+
+The fleet again passed all 2,715 rule slots, including unreachable-rule checks:
+885 retained endpoint pairs and 20 actual fallback puzzles across three rules.
+Five retained rule entries shortened. The helper faults were effective and
+produced 40 and 16 independent findings. Both selected pairs exercised a
+shortened route with two middle players: tpa-213 Everyday moved from five to
+three links, and tpa-550 Europe moved from four to three. The reported tpa-770
+minimum remained three in both tested rules. Statistics stayed at 253 original
+identities and 3,640 original rows, with their source and values unchanged.
+
+All eight natural browser journeys passed 228 checks. The reported pair ran
+Everyday and Europe at 320x568, 390x844 and 1280x800. Natural Mbappe selection
+painted and saved Real Madrid, moved hints matched independent remaining-path
+searches, accepted saves survived cold reload byte for byte, surrender revealed
+a legal shortest path, and surrender plus its unchanged played chain survived
+another reload. The two measured shortened pairs ran at 390x844: real
+autocomplete picks plus the automatic target completed the independent shortest
+chain, showed 1,000 points, saved the exact actions and one win, then restored
+the result. Europe returned to Everyday after reload as the existing save
+contract requires; its action bytes stayed unchanged.
+
+The three detector controls passed 40 checks. Actually omitting the move
+failed the moved-head hint detector; actually omitting surrender failed reveal
+presence; deleting the nonempty saved action key failed saved bytes, chain and
+connector restoration. Setup errors receive no detector credit. Combined:
+268 checks, 180 fixture reads, 164 aborted external requests, zero failures,
+zero app exceptions and zero failed owned assets. Candidate source hashes and
+HEAD remained unchanged. Original PNGs and staged JSON observations are retained.
+
+Successful artifact 11766095155 is retained locally and on GitHub: 2,968,677
+bytes, 50 entries including 41 original PNGs, ZIP SHA256
+c2079950843a2a430815a601a2726ce6db322d28ff5b89c1658e0b4944772b70.
+Root inspected the six accepted-reload, six surrendered-reload and two winning
+captures. Independent review inspected all 27 remaining originals and found
+no blocker in the proved states. All 14 natural reload observations preserve
+the exact raw save bytes, player order and club connectors. The focus-only
+skip link appears in some 320px and desktop surrender captures, clear of the
+proved regions; this is outcome evidence, not general visual acceptance.
+
+This closes the declared proof extension against frozen 2dfee304. It adds no
+app code, sports facts or production database operation. Retained metadata is
+independently derived baseline metadata, not a proof of current stored/live
+hints. The original PR242 run supplies its separately qualified 23 scoped
+harnesses; this follow-up does not claim a fresh full suite, all route snapshots,
+newer-main integration or live publication. Later documentation-only commits
+do not change the qualified methods.
+
+Independent native receipt review found no blocker. Counts refer to this
+offline candidate proof, including control rows where stated. They grant no
+authenticated or backend completion credit. The complete decoded job logs
+are retained locally with LF normalization: failed log SHA256
+317734e6fc06fa7b49e64bd4430af57c325015cd64e659a5465e545e8712ace3,
+successful log SHA256
+6629fd14688463759cfe8fde92cc62a0c2f47f0040c3df50908593057e68c7d9.
