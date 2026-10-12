@@ -1,0 +1,4 @@
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 39s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+vitest-all exit=0 604s |  Test Files  479 passed | 2 skipped (481)

@@ -1,0 +1,4 @@
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > $RUNNER_TEMP/va.log 2>&1; e=$?; grep -E "Test Files|Tests  |FAIL " $RUNNER_TEMP/va.log | head -20 | cut -c1-220; exit $e
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
