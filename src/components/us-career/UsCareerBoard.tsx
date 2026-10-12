@@ -715,7 +715,30 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      onto the career (the year being played plus the new years); pushing
      spends the one negotiation; turning it down plays the season out, which
      is what sends you to free agency next summer. */
+  /* Release AX fix pass (the engine review, finding 1): ONE push, in every tab. The board reads the save once, on
+     load, so a second tab opened before a push still held the talk unpushed: it pushed again on fresh draws and
+     wrote over the save, and a withdrawn offer could come back (measured in a real browser: withdrawn in tab A,
+     then held with the offer back on the table from tab B). Before a push, a sign or a decline this asks the
+     save. When it holds a talk for this same unplayed year that is not the one in memory, another tab has moved
+     it: this tab takes the saved talk (its wheel, its spent push, its withdrawn offer) and the press does
+     nothing else. It never reads a talk the reader refuses, and it stands aside while a write of this tab is
+     still refused (pendingSave), because then the save is BEHIND this tab and must not win. One tab, the save
+     in step: the two are byte equal and nothing changes. */
+  const talkMovedElsewhere = (): boolean => {
+    const held = marketRef.current;
+    if (!career || !held || pendingSave.current) return false;
+    try {
+      const raw = localStorage.getItem(sport.saveKey);
+      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug) : null;
+      if (!stored || JSON.stringify(stored) === JSON.stringify(held)) return false;
+      setMarketTalk(stored);
+      setPhase(stored.kind === 'freeagency' ? 'freeagency' : stored.declined ? 'season' : 'extension');
+      return true;
+    } catch { return false; }
+  };
+
   const signExt = () => {
+    if (talkMovedElsewhere()) return;
     const held = marketRef.current;
     if (!career || held?.kind !== 'extension' || held.declined || !held.talk.offer || (held.wheel && !held.wheel.seen)) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
@@ -731,6 +754,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
 
   const pushExt = () => {
+    if (talkMovedElsewhere()) return;
     const held = marketRef.current;
     if (!career || held?.kind !== 'extension' || held.declined || held.talk.pushed || !held.talk.offer) return;
     const next = pushMarketExtension(held, sport.extPushArgs(career, Math.random));
@@ -740,6 +764,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
 
   const declineExt = () => {
+    if (talkMovedElsewhere()) return;
     const held = marketRef.current;
     if (!career || held?.kind !== 'extension' || held.declined || (held.wheel && !held.wheel.seen)) return;
     extDeclinedRef.current = true;
@@ -750,6 +775,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
 
   const signFa = (idx: number) => {
+    if (talkMovedElsewhere()) return;
     const held = marketRef.current;
     if (!career || held?.kind !== 'freeagency' || (held.wheel && !held.wheel.seen)) return;
     const offer = held.window.offers[idx];
@@ -770,6 +796,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(c, 'season', offer.quality);
   };
   const pushFa = (idx: number) => {
+    if (talkMovedElsewhere()) return;
     const held = marketRef.current;
     if (!career || held?.kind !== 'freeagency' || !held.window.offers[idx] || held.window.offers[idx].pushed || held.window.offers[idx].gone || (held.wheel && !held.wheel.seen)) return;
     const args = sport.faPushArgs(career, Math.random);
