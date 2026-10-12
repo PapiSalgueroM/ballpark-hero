@@ -1,0 +1,5 @@
+  FAIL: /front-office: 369K of gzipped JavaScript against a budget of 366K
+   /nfl-my-career      483K gz over  47 files (budget 485K, 483.5K to the tenth)
+   /front-office       369K gz over  37 files (budget 366K, 369.1K to the tenth)
+sweepWeight: 1 failure
+NflBracket chunk NflBracket-CB1MMXcY.js: 9836 bytes raw, 4240 gzipped

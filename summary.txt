@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-bracketjump exit=3 223s | control bracketjump: DID NOT FIRE as named (point 14 wanted; red points: 14, 12)
+walk exit=1 223s | playFrontOfficeGameDay: 367 checks, 2 failed
+walk-playoffspoil exit=3 227s | control playoffspoil: DID NOT FIRE as named (point 14 wanted; red points: 14, 12)
+mandate exit=0 24s | ALL OWNER MANDATE WALK CHECKS PASSED
+sessionmarks exit=0 17s | playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.
+gmpress exit=1 83s | playGmPress: 2 failures
+fohub exit=1 47s | playFoHub: 26 failures
+playgames exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+seasoncentre exit=0 118s | playSeasonCentre: 41 checks, 0 failed
+walk-lostblock exit=3 224s | control lostblock: DID NOT FIRE as named (point 15 wanted; red points: 15, 12)
+seasonmotion exit=0 134s | playSeasonCentreMotion: 80 checks, 0 failed
+seasonmoments exit=0 58s | playSeasonMoments: 117 checks, 0 failed
+weight exit=1 26s | NflBracket chunk NflBracket-CB1MMXcY.js: 9836 bytes raw, 4240 gzipped
+revealscroll exit=0 214s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
+keeper exit=0 609s | playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the k
