@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 1737[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 943[2mms[22m[39m
+[90mstderr[2m | src/test/cmLeagueLeadersCard.test.tsx[2m > [22m[2mthe Stats screen with a board open[2m > [22m[2mdraws the board alone and Back brings the tiles and the table back
+[22m[39mError: Not implemented: window.scrollTo
+    at module.exports (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at scrollTo (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/Window.js:870:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/StatsScreen.tsx:149:12
+    at commitHookEffectListMount (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitLayoutEffectOnFiber (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23312:15)
+    at commitLayoutMountEffects_complete (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+    at commitLayoutEffects_begin (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+    at commitLayoutEffects (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+    at commitRootImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+    at commitRoot (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26721:5) [90mundefined[39m
+
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 342[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m42 passed[39m[22m[90m (42)[39m
+[2m   Start at [22m 17:49:06
+[2m   Duration [22m 4.49s[2m (transform 2.13s, setup 229ms, collect 3.04s, tests 2.10s, environment 1.95s, prepare 750ms)[22m
+

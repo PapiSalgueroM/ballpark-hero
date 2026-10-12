@@ -1,0 +1,16 @@
+1) The carried balance is an input to the summer, and it is bounded
+   17 summers cloned three ways, 17 with a real balance banked; banking raised the opening kitty in 17/17
+   a balance of four times the close plus 500m opens on 2.00x what an empty balance opens on (highest 2.00x)
+2) The rules screen states the bound the engine enforces
+   How to Play states the carry, its one-allocation cap, that it stays with the club, and what moves the ceiling
+3) A hoarder and a spender across consecutive summers
+   33 summers where the saver ended at least 5m up (median gap 76.5m): he opens on 1.40x the spender's kitty
+4) The wage ceiling is no longer a mirror of your own bill
+   37 summers rolled: the new ceiling equalled 115 percent of that morning's bill in 0 of them (0 percent)
+5) The wage ceiling actually binds, and only on the manager loading it up
+   engaged manager breached in 37/41 seasons (90 percent, median peak bill 1.18x cap)
+   manager keeping the squad he was handed breached in 0/56 seasons (0 percent); 20 sacked keeper(s) handed the club to the next, 2.00 seasons a keeper
+6) A corrupt or pre-Round 436 balance carries nothing rather than NaN
+   7 corrupt balances all opened on 75m, the same as a balance of zero
+
+simClubManagerBudget: PASS
