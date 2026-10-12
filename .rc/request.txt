@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 last walk proof on HEAD: the two screenshot changes
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+wild-nosack: WILDERNESS_CONTROL=nosack ENGINES=chromium node scripts/playWilderness.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
