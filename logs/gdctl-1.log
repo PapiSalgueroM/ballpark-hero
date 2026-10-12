@@ -1,0 +1,21 @@
+simGmGameDay: 462 checks, 0 failed
+winner exit=1 | control winner: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("never names another winner"); sections red: 1, 7, 8
+level exit=1 | control level: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("a told final is never level"); sections red: 1, 2, 3, 5, 7, 8
+refuse exit=1 | control refuse: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("never refuses a game of the fleet"); its named checks of other sections red: 1 of 1 ("every game of the fleet was told and measured"); sections red: 1, 3, 7, 8
+twopaths exit=1 | control twopaths: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("tells the quick path's final"); sections red: 1, 2, 5
+tries exit=1 | control tries: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("the swapped share"); sections red: 1
+offbyone exit=1 | control offbyone: RED AT THE NAMED CHECK (section 2); its named checks red: 1 of 1 ("adds up by the independent checker"); its named checks of other sections red: 1 of 1 ("every game of the log tells a story that the same checker adds up"); sections red: 10, 2
+olddraw exit=1 | control olddraw: RED AT THE NAMED CHECK (section 3); its named checks red: 1 of 1 ("losers15 told 0.0000"); sections red: 3, 8
+pairing exit=1 | control pairing: RED AT THE NAMED CHECK (section 4); its named checks red: 2 of 2 ("playBracketAll gives", "four presses of playBracketWeek"); sections red: 11, 13, 4, 5, 8
+validator exit=1 | control validator: RED AT THE NAMED CHECK (section 4); its named checks red: 3 of 3 ("names a doctored winner", "names a doctored pairing", "names a tie played out of turn"); sections red: 12, 4
+strict exit=1 | control strict: RED AT THE NAMED CHECK (section 4); its named checks red: 2 of 2 ("bracketProblems finds nothing in a bracket the machine played", "finds nothing after any game"); checks that had to stay green and did not: none; sections red: 12, 4
+outofturn exit=1 | control outofturn: RED AT THE NAMED CHECK (section 4); its named checks red: 1 of 1 ("finds nothing after any game"); checks that had to stay green and did not: none; sections red: 4
+enginedrift exit=1 | control enginedrift: RED AT THE NAMED CHECK (section 4); its named checks red: 1 of 1 ("is the recorded one"); checks that had to stay green and did not: none; sections red: 4
+random exit=1 | control random: RED AT THE NAMED CHECK (section 5); its named checks red: 2 of 2 ("holds no Math.random", "takes no draw from Math.random"); sections red: 5, 8
+stream exit=1 | control stream: RED AT THE NAMED CHECK (section 5); its named checks red: 3 of 3 ("holds no Math.random", "takes no draw from Math.random", "moves none of its 272 winners"); sections red: 11, 13, 5, 7, 8
+unkeyed exit=1 | control unkeyed: RED AT THE NAMED CHECK (section 5); its named checks red: 2 of 2 ("the same story twice", "through JSON, tells the same story"); sections red: 5
+ceiling exit=1 | control ceiling: RED AT THE NAMED CHECK (section 5); its named checks red: 2 of 2 ("the save guards refuse a score above the ceiling", "a final above the ceiling is told nothing"); sections red: 5, 9
+lawmax exit=1 | control lawmax: RED AT THE NAMED CHECK (section 5); its named checks red: 1 of 1 ("tells no final above the sport's own top score"); sections red: 5
+lowmax exit=1 | control lowmax: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("has a side above the sport's own top score"); its named checks of other sections red: 1 of 1 ("every told final has a story"); sections red: 1, 10, 2
+mounted exit=1 | control mounted: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("no file under src imports"); sections red: 6
+gdctl: 19 of 19 controls fired.

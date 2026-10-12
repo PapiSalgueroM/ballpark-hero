@@ -1,0 +1,18 @@
+simGmReload exit=0 | control "replay": 5 failure(s) fired as expected on all four boards, the check works
+each: 1 run, all as wanted (exit 0)
+simNflGmDesk exit=0 | simNflGmDesk: control boardedges fired (1 failures, as it should)
+each: 1 run, all as wanted (exit 0)
+simFoHub exit=1 | control nopost: RED AT THE NAMED CHECK (section 8: 6 failures, none elsewhere)
+each: 1 run, all as wanted (exit 1)
+simFrontOfficeSaveRecovery exit=0 | Front Office save recovery cleanup: disposable reader copies and result directory removed; the production reader was read only.
+each: 1 run, all as wanted (exit 0)
+partrow exit=1 | simSaveKeeper control partrow: FIRED. Section 1 is red.
+partrowus exit=1 | simSaveKeeper control partrowus: FIRED. Section 1 is red.
+partbrief exit=1 | simSaveKeeper control partbrief: FIRED. Section 1 is red.
+partagent exit=1 | simSaveKeeper control partagent: FIRED. Section 1 is red.
+partreturn exit=1 | simSaveKeeper control partreturn: FIRED. Section 1 is red.
+partfarewell exit=1 | simSaveKeeper control partfarewell: FIRED. Section 1 is red.
+partpress exit=1 | simSaveKeeper control partpress: FIRED. Section 1 is red.
+partgamelog exit=1 | simSaveKeeper control partgamelog: FIRED. Section 1 is red.
+partplayoffs exit=1 | simSaveKeeper control partplayoffs: FIRED. Section 1 is red.
+keeperparts: 9 of 9 part controls fired.

@@ -1,0 +1,7 @@
+tsc exit=0 143s | 
+vitest-all exit=0 1020s |    Duration  1018.60s (transform 56.88s, setup 43.68s, collect 286.12s, tests 2184.76s, environment 311.83s, prepare 66.91s)
+harness exit=0 200s | each: 12 run, all as wanted (exit 0)
+controls exit=0 121s | keeperparts: 9 of 9 part controls fired.
+fences exit=1 343s | each: 24 run, NOT AS WANTED: simWritesAreSent simSchemaNames simLeaderboardCaps simResultMoment simWritesAreSent simSchemaNames simLeaderboardCaps simResultMoment
+gdctl-2 exit=0 1865s | gdctl: 18 of 18 controls fired.
+gdctl-1 exit=0 2071s | gdctl: 19 of 19 controls fired.

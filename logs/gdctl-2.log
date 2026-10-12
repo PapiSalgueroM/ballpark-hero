@@ -1,0 +1,19 @@
+static exit=1 | control static: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("import no story law"); sections red: 6
+bindstream exit=1 | control bindstream: RED AT THE NAMED CHECK (section 7); its named checks red: 3 of 3 ("with the bind takes no draw from Math.random", "with the bind moves none of its 272 winners", "with the bind moves none of its 32 records"); sections red: 11, 13, 5, 7, 8
+bindold exit=1 | control bindold: RED AT THE NAMED CHECK (section 8); its named checks red: 2 of 2 ("losers15 by the bind 0.0000", "tells the quick path's final for the chance"); its named checks of other sections red: 1 of 1 ("do differ from the engine's"); sections red: 7, 8
+bindrefuse exit=1 | control bindrefuse: RED AT THE NAMED CHECK (section 8); its named checks red: 1 of 1 ("the bind never refuses a game of the fleet"); sections red: 7, 8
+bindchance exit=1 | control bindchance: RED AT THE NAMED CHECK (section 8); its named checks red: 1 of 1 ("tells the quick path's final for the chance"); sections red: 8
+logdrop exit=1 | control logdrop: RED AT THE NAMED CHECK (section 9); its named checks red: 2 of 2 ("after every week the log's record is the club's", "one entry a week, in week order"); sections red: 13, 9
+undo exit=1 | control undo: RED AT THE NAMED CHECK (section 11); its named checks red: 1 of 1 ("the bracket path leaves the 32 records"); checks that had to stay green and did not: none; sections red: 11, 13
+keydrift exit=1 | control keydrift: RED AT THE NAMED CHECK (section 11); its named checks red: 2 of 2 ("each told score is nflTell's on the fixture's own engine game", "nflRoundsOf is runPlayoffs' rounds told"); checks that had to stay green and did not: none; sections red: 11, 13
+trust exit=1 | control trust: RED AT THE NAMED CHECK (section 12); its named checks red: 1 of 1 ("rebuilt unplayed with the feed line"); checks that had to stay green and did not: none; sections red: 12
+keyrebuilt exit=1 | control keyrebuilt: RED AT THE NAMED CHECK (section 13); its named checks red: 2 of 2 ("deep equal the one press path's", "the sink holds every game"); checks that had to stay green and did not: none; sections red: 13
+week18 exit=1 | control week18: RED AT THE NAMED CHECK (section 12); its named checks red: 1 of 1 ("a hub save at week 18 passes the validator with its playoffs block"); checks that had to stay green and did not: none; sections red: 12
+logplayoff exit=1 | control logplayoff: RED AT THE NAMED CHECK (section 13); its named checks red: 2 of 2 ("deep equal the one press path's", "his playoff record in the log is his record in nflRoundsOf"); sections red: 13
+storyleak exit=1 | control storyleak: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("import no story law"); sections red: 6
+inseason exit=1 | control inseason: RED AT THE NAMED CHECK (section 12); its named checks red: 1 of 1 ("outside the postseason the load is null"); checks that had to stay green and did not: none; sections red: 12
+byeplays exit=1 | control byeplays: RED AT THE NAMED CHECK (section 13); its named checks red: 1 of 1 ("no log entry in a week he has the bye"); sections red: 11, 12, 13, 3, 4, 5, 8
+deskless exit=1 | control deskless: RED AT THE NAMED CHECK (section 11); its named checks red: 1 of 1 ("so the desk on checks hold something"); sections red: 11, 13
+noedges exit=1 | control noedges: RED AT THE NAMED CHECK (section 11); its named checks red: 2 of 2 ("with the desk on (his club", "with the desk on, nflRoundsOf"); its named checks of other sections red: 1 of 1 ("with the desk on, the sink holds every game"); checks that had to stay green and did not: none; sections red: 11, 13
+logholes exit=1 | control logholes: RED AT THE NAMED CHECK (section 9); its named checks red: 1 of 1 ("with any one field of an entry damaged the log reads as absent"); sections red: 9
+gdctl: 18 of 18 controls fired.

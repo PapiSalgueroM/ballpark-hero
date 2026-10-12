@@ -1,0 +1,13 @@
+simGmReload exit=0 | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simNflGmDesk exit=0 | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simSessionMarks exit=0 | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simFoHub exit=0 | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+simGmDesk exit=0 | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and an empty panel list leaves nothing on the hub.
+simGmDeskHost exit=0 | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simDraftNight exit=0 | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+simSaveKeeper exit=0 | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+simFrontOfficeSaveRecovery exit=0 | Front Office save recovery cleanup: disposable reader copies and result directory removed; the production reader was read only.
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsPostseason exit=0 | simUsPostseason: 33 checks, 0 failed, 0 findings for the lead
+each: 12 run, all as wanted (exit 0)
