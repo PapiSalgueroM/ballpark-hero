@@ -1,0 +1,12 @@
+# Review (run lens) of Round 1311 at 9c262ba4: the reviewer's own walk (390 and 1280, reduced motion on and off), the round's walk and its six controls, the weight rows
+#!serve
+#!playwright
+mywalk: mkdir -p "$RC_OUT/mywalk" && RC_OUT="$RC_OUT/mywalk" node .rc/x/r1311run-walk.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+leaders: RC_OUT=$(mktemp -d) node scripts/playCmLeagueLeaders.mjs
+c-swap: RC_OUT=$(mktemp -d) LEADERS_CONTROL=swap node scripts/playCmLeagueLeaders.mjs
+c-wide: RC_OUT=$(mktemp -d) LEADERS_CONTROL=wide node scripts/playCmLeagueLeaders.mjs
+c-stack: RC_OUT=$(mktemp -d) LEADERS_CONTROL=stack node scripts/playCmLeagueLeaders.mjs
+c-thin: RC_OUT=$(mktemp -d) LEADERS_CONTROL=thin node scripts/playCmLeagueLeaders.mjs
+c-younglate: RC_OUT=$(mktemp -d) LEADERS_CONTROL=younglate node scripts/playCmLeagueLeaders.mjs
+c-write: RC_OUT=$(mktemp -d) LEADERS_CONTROL=write node scripts/playCmLeagueLeaders.mjs
