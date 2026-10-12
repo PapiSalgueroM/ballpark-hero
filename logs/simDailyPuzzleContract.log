@@ -1,0 +1,45 @@
+1) no caller passes anything component scoped as `puzzles` without a supabasePuzzle
+   46 hooks call useDailyPuzzle
+   src/hooks/useAflHL.ts                    puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useBaseballCareer.ts           puzzles: baseballCareerPuzzles module-level ref
+   src/hooks/useBaseballConnections.ts      puzzles: fallbackBBPuzzles module-level ref
+   src/hooks/useCareerGame.ts               puzzles: fallbackPlayers  module-level ref
+   src/hooks/useCfbHL.ts                    puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useCollegeGrid.ts              puzzles: collegeGridPuzzles module-level ref
+   src/hooks/useConnections.ts              puzzles: fallbackPuzzles  module-level ref
+   src/hooks/useF1HL.ts                     puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useFootballConnect4.ts         puzzles: FOOTBALL_CONNECT4_BOARDS module-level ref
+   src/hooks/useFootballDraft.ts            puzzles: draftGuesserPuzzles module-level ref
+   src/hooks/useFootballGrid.ts             puzzles: NO_POOL          module-level ref
+   src/hooks/useGame.ts                     puzzles: players          module-level ref
+   src/hooks/useGolfHL.ts                   puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useGuessTheCollege.ts          puzzles: DAILY_COLLEGES   module-level ref
+   src/hooks/useGuessTransferValue.ts       puzzles: EMPTY_POOL       module-level ref
+   src/hooks/useHockeyCareer.ts             puzzles: hockeyCareerPuzzles module-level ref
+   src/hooks/useHockeyHL.ts                 puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useMlbHL.ts                    puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useNbaCareer.ts                puzzles: nbaCareerPuzzles module-level ref
+   src/hooks/useNbaConnections.ts           puzzles: fallbackNbaPuzzles module-level ref
+   src/hooks/useNbaHL.ts                    puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useNflConnections.ts           puzzles: fallbackNflPuzzles module-level ref
+   src/hooks/useNflHL.ts                    puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useNhlConnections.ts           puzzles: fallbackNhlPuzzles module-level ref
+   src/hooks/useOlympics.ts                 puzzles: olympicAthletes  module-level ref
+   src/hooks/useShirtNumber.ts              puzzles: shirtNumberPuzzles module-level ref
+   src/hooks/useSoccerGrid.ts               puzzles: soccerGridPuzzles module-level ref
+   src/hooks/useTennisHL.ts                 puzzles: SENTINEL_PUZZLES module-level ref
+   src/hooks/useTransferPath.ts             puzzles: fallbackPuzzles  module-level ref
+   src/hooks/useUfcGame.ts                  puzzles: uniqueUfcFighters module-level ref
+   src/hooks/useWorldCup.ts                 puzzles: worldCupPuzzles  module-level ref
+   src/pages/GuessTheGolfer.tsx             puzzles: guessableGolfers module-level ref
+   src/pages/MissingEleven.tsx              puzzles: SENTINEL         module-level ref
+   src/pages/MissingFive.tsx                puzzles: SENTINEL         module-level ref
+   src/pages/MissingNine.tsx                puzzles: SENTINEL         module-level ref
+   src/pages/MissingXi.tsx                  puzzles: SENTINEL         module-level ref
+   src/pages/PuckDetective.tsx              puzzles: SENTINEL_PUZZLES module-level ref
+   src/pages/RankEm.tsx                     puzzles: SENTINEL         module-level ref
+   src/test/dailySaveHardening.test.tsx     puzzles: PROBE_POOL       module-level ref
+2) every caller that passes supabasePuzzle also passes getPuzzleId
+   13 callers pass supabasePuzzle, all with getPuzzleId
+
+simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
