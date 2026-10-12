@@ -1,0 +1,39 @@
+sale A: Jarrad Branthwaite (CB, 23, 86) to Liverpool; ledger record owned Liverpool
+academy player: Nils Ashworth (RWB, 18, 58) generated=false academyGrad=true isYouth=false
+sale B: Nils Ashworth to Liverpool; ledger record owned Liverpool generated=false
+sacked after season 3
+sacked after season 4
+now season 5, club Everton, yearsOn 4, ledger 29 records
+seeded: Liverpool lists Jarrad Branthwaite: NOT LISTED
+seeded: Liverpool lists Nils Ashworth: age 21, rating 62, made up tag false
+seeded: Liverpool Best XI 90, squad 27; the screen's two reads 2.7 ms
+old: Liverpool lists Jarrad Branthwaite: NOT LISTED
+old: Liverpool lists Nils Ashworth: NOT LISTED
+old: Liverpool Best XI 90.2, squad 26; the screen's two reads 0.0 ms
+buildMarket on the seeded save: 409 ms; save 104649 code units, 109475 bytes
+mkSaveCD: done (rival Liverpool, sale A Jarrad Branthwaite, sale B Nils Ashworth)
+320 seeded: season 5 seed true ledger true; hub 841 ms; open 103 ms; West Ham Best XI 81 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   seeded 320 sold man Jarrad Branthwaite: not listed
+   seeded 320 sold man Nils Ashworth: not listed
+320 old: season 5 seed false ledger false; hub 561 ms; open 106 ms; West Ham Best XI 81 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   old 320 sold man Jarrad Branthwaite: not listed
+   old 320 sold man Nils Ashworth: not listed
+390 seeded: season 5 seed true ledger true; hub 788 ms; open 98 ms; West Ham Best XI 81 (18px); overlap 0; wide false; jumped true; clipped []; errors 0
+   seeded 390 sold man Jarrad Branthwaite: not listed
+   seeded 390 sold man Nils Ashworth: not listed
+   caption: 2030-31 squad. Real players from August 2026 aged forward, with anyone who retired replaced by players this game made up, marked above.
+390 old: season 5 seed false ledger false; hub 556 ms; open 107 ms; West Ham Best XI 81 (18px); overlap 0; wide false; jumped true; clipped []; errors 0
+   old 390 sold man Jarrad Branthwaite: not listed
+   old 390 sold man Nils Ashworth: not listed
+   caption: 2030-31 squad. Real players from August 2026 aged forward, with anyone who retired replaced by players this game made up, marked above.
+1280 seeded: season 5 seed true ledger true; hub 762 ms; open 96 ms; West Ham Best XI 81 (18px); overlap 0; wide false; jumped true; clipped []; errors 0
+   seeded 1280 sold man Jarrad Branthwaite: not listed
+   seeded 1280 sold man Nils Ashworth: not listed
+1280 old: season 5 seed false ledger false; hub 530 ms; open 84 ms; West Ham Best XI 81 (18px); overlap 0; wide false; jumped true; clipped []; errors 0
+   old 1280 sold man Jarrad Branthwaite: not listed
+   old 1280 sold man Nils Ashworth: not listed
+whats-new 390: "Club Manager: the world remembers your deals. In a career you start from today, the players you buy, sell or release, and the ones who retire, stay where they went when you change jobs, and from your second season the rest of the world develops with some variety. A career already in progress plays on exactly as it was."
+help 390: 340 by 300; font 14px; wide false; errors 0
+whats-new 1280: "Club Manager: the world remembers your deals. In a career you start from today, the players you buy, sell or release, and the ones who retire, stay where they went when you change jobs, and from your second season the rest of the world develops with some variety. A career already in progress plays on exactly as it was."
+help 1280: 398 by 260; font 14px; wide false; errors 0
+walkCD: done
