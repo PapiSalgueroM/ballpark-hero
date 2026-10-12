@@ -287,7 +287,10 @@ export default function FrontOfficeBoard() {
      bottom edge (one pixel laid over it, no layout of its own) aligned to the
      END: when the box's bottom is off the screen the page brings it to the
      screen's bottom, and the buttons and the box, 420 px together, are then
-     on it. Which of the two is decided by the width the page loaded at, so a
+     on it. In the bracket the edge is the bottom of the row under the box
+     (the fix pass: the back chip there sat under the fold at 1280), so the
+     buttons, the box and the chip, 476 px, are on the screen together.
+     Which of the two is decided by the width the page loaded at, so a
      window resized across sm changes no key and no option and scrolls
      nothing (useRevealScroll.ts is not edited). */
   const [wideAtLoad] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 640px)').matches);
@@ -2196,7 +2199,7 @@ export default function FrontOfficeBoard() {
                 press logged one or he opened one ("Your game"); the row under it holds the back chip. */}
             <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
               {/* from sm up, the reveal's element: the box's bottom edge, inside its border (laid ON the border it made the box scroll a pixel inside itself), with a one pixel scroll margin for the border (see the reveal) */}
-              {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px scroll-mb-px" data-reveal-edge />}
+              {wideAtLoad && !bracketRow && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px scroll-mb-px" data-reveal-edge />}
               {bracketFace && seenPlayoffs && bracketFormat ? (
                 <NflBracket
                   format={bracketFormat}
@@ -2222,7 +2225,10 @@ export default function FrontOfficeBoard() {
               )}
             </div>
             {bracketRow && (
-              <div className="flex h-11 items-center justify-start" data-bracket-row>
+              <div className="relative flex h-11 items-center justify-start" data-bracket-row>
+                {/* Round 1309, the fix pass: in the bracket the reveal's edge (from sm up) is this row's bottom, so the back
+                    chip is on the screen with the box after a press (on the box's own edge it sat under the fold at 1280) */}
+                {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" data-reveal-edge />}
                 {bracketFace ? null : (
                   <button
                     type="button"

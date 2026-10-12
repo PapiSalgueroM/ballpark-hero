@@ -70,7 +70,8 @@
  *     (the ruling of Round 1307's review, met through the box's bottom edge
  *     aligned to the end: see the board): from sm up, after the first press
  *     of a visit (a week, then a playoff round), the first button's top is
- *     on the screen and so is the whole box, at 1280 by 800 and 1280 by 900;
+ *     on the screen and so is the whole box, at 1280 by 800 and 1280 by 900,
+ *     and (the fix pass) the back chip under the box when his game is on it;
  *     under sm the numbers are printed. At 1280 a window resized across sm
  *     and back scrolls nothing;
  *  13 a desk off save refuses a trade in the bracket with the playoffs' line;
@@ -728,6 +729,10 @@ function revealSay(size, p, what) {
   const line = `${size.w}x${size.h}, ${what}: the first button's top at ${first?.top}, the box from ${p.box?.top} to ${p.box?.bottom} of ${size.h}`;
   if (size.w >= 640) say(12, !!first && first.top >= 0 && p.box.top >= 0 && p.box.bottom <= size.h, `${line}: the buttons and the whole box are on the screen`);
   else note(line);
+  /* the fix pass (the review's minor 4): with his game on the box, the back chip under it is on the screen too */
+  const chip = `${size.w}x${size.h}, ${what}: the back chip from ${p.back?.top} to ${p.back?.bottom} of ${size.h}`;
+  if (size.w >= 640 && p.back) say(12, p.back.top >= 0 && p.back.bottom <= size.h, `${chip}: on the screen with the box`);
+  else if (p.back) note(chip);
 }
 /* correction 27: after a playoff press, his result and the next press button inside the screen with no scroll by him;
    asserted at 390 by 844, printed at 320 by 640 (under sm the reveal's element is the box, as shipped) */
