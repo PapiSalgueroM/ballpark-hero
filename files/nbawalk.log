@@ -1,0 +1,36 @@
+
+===== run nba390: 390x844, reduced motion off =====
+ok    nba390: a new NBA franchise is saved
+note  nba390: his club is DEN, desk on, roster 10
+ok    nba390: the season closed after 20 presses (phase recap)
+ok    nba390: the draft is open with 24 prospects and 2 pick(s) left
+ok    nba390: the draft night card is on screen after his pick
+note  nba390: rows: 1. DEN select Tyrese Isley [91] | 2. BKN take Vontae Bellamy [84] | 3. MIL take Isaiah Halverson [82] | 4. DAL take Jaylen Jarreau [90] | 5. LAC take Cole Holiday [82] | 6. LAL take Damon Reeves [81]
+ok    nba390: exactly one row is his and it is the man he pressed (1. DEN select Tyrese Isley)
+ok    nba390: the card shows 5 rival pick(s)
+ok    nba390: the rival rows are the men the engine took from the class (engine took 5: Vontae Bellamy, Isaiah Halverson, Jaylen Jarreau, Cole Holiday, Damon Reeves; card shows Vontae Bellamy, Isaiah Halverson, Jaylen Jarreau, Cole Holiday, Damon Reeves)
+ok    nba390: every rival row's man is on the roster of the club the row names in the save (5 of 5)
+ok    nba390: none of them was on any roster before the press (5 of 5)
+ok    nba390: every rival row's grade is a number the draft screen printed for that prospect before the press (5 of 5)
+ok    nba390: no row of the card runs off the right edge
+ok    nba390: every row is fully drawn once the card has settled
+ok    nba390: no page error (clean)
+
+===== run nba1280r: 1280x900, reduced motion ON =====
+ok    nba1280r: a new NBA franchise is saved
+note  nba1280r: his club is DEN, desk on, roster 10
+ok    nba1280r: the season closed after 20 presses (phase recap)
+ok    nba1280r: the draft is open with 24 prospects and 2 pick(s) left
+ok    nba1280r: the draft night card is on screen after his pick
+note  nba1280r: rows: 1. DEN select Quentin Halverson [89] | 2. BKN take Bryce Whitmore [87] | 3. DAL take Marcus Beaudry [87] | 4. SAC take Jaylen Marchand [81] | 5. GSW take Vontae Halverson [82] | 6. WAS take Damon Eastwick [79]
+ok    nba1280r: exactly one row is his and it is the man he pressed (1. DEN select Quentin Halverson)
+ok    nba1280r: the card shows 5 rival pick(s)
+ok    nba1280r: the rival rows are the men the engine took from the class (engine took 5: Bryce Whitmore, Marcus Beaudry, Jaylen Marchand, Vontae Halverson, Damon Eastwick; card shows Bryce Whitmore, Marcus Beaudry, Jaylen Marchand, Vontae Halverson, Damon Eastwick)
+ok    nba1280r: every rival row's man is on the roster of the club the row names in the save (5 of 5)
+ok    nba1280r: none of them was on any roster before the press (5 of 5)
+ok    nba1280r: every rival row's grade is a number the draft screen printed for that prospect before the press (5 of 5)
+ok    nba1280r: no row of the card runs off the right edge
+ok    nba1280r: every row is fully drawn once the card has settled
+ok    nba1280r: no page error (clean)
+
+r1305nbawalk: 0 failure(s)
