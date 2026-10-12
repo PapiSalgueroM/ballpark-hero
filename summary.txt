@@ -1,0 +1,6 @@
+vitest-libs exit=0 4s |    Duration  3.51s (transform 632ms, setup 341ms, collect 978ms, tests 2.56s, environment 3.01s, prepare 946ms)
+simGmGameDay exit=0 53s | simGmGameDay: 307 checks, 0 failed
+simGmGameDay-static exit=1 53s | simGmGameDay: 307 checks, 2 failed (control static)
+tsc exit=0 93s | 
+simGmGameDay-mounted exit=1 52s | simGmGameDay: 307 checks, 1 failed (control mounted)
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

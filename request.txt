@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-libs: NO_COLOR=1 node_modules/.bin/vitest run src/lib/gmGameDayView.test.ts src/lib/gmGameLog.test.ts src/lib/gmGameDay.test.ts src/lib/frontOfficeGameDay.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmGameDay-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+simGmGameDay-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

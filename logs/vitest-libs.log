@@ -1,0 +1,20 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/lib/gmGameLog.test.ts (13 tests) 21ms
+stdout | src/lib/gmGameDayView.test.ts > gameDayView > every sentence is the law's own for the story the told path tells
+gmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+ ✓ src/lib/gmGameDayView.test.ts (8 tests) 1155ms
+   ✓ gameDayView > prints the saved final from his side, and the periods add up to it, from both sides  545ms
+   ✓ gameDayView > every sentence is the law's own for the story the told path tells  333ms
+ ✓ src/lib/gmGameDay.test.ts (31 tests) 1293ms
+   ✓ decidingPlays > leaves the game level or the loser ahead after play (2), on every final the NFL law can tell  431ms
+   ✓ gameStory, with the NFL law > adds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random  684ms
+ ✓ src/lib/frontOfficeGameDay.test.ts (7 tests) 89ms
+
+ Test Files  4 passed (4)
+      Tests  59 passed (59)
+   Start at  05:24:44
+   Duration  3.51s (transform 632ms, setup 341ms, collect 978ms, tests 2.56s, environment 3.01s, prepare 946ms)
+
