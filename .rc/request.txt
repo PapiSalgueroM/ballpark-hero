@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 reviewer (run lens) request W3 on 2d0c3cbe: where a new career hub opens after Skip (pre-existing, not the round)
+scrollProbe: node .rc/x/scrollProbe.mjs
