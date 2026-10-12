@@ -1,0 +1,4 @@
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check && node scripts/controlFrontOfficeBoard.mjs all
+gdctl-1: bash .rc/x/gdctl.sh winner level refuse twopaths tries offbyone olddraw pairing validator strict outofturn enginedrift random stream unkeyed ceiling lawmax lowmax mounted
+gdctl-2: bash .rc/x/gdctl.sh static bindstream bindold bindrefuse bindchance logdrop undo keydrift trust keyrebuilt week18 logplayoff storyleak inseason byeplays deskless noedges logholes
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
