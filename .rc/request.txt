@@ -1,0 +1,11 @@
+# Round 1311 step 2 (head 977c3eca, local): the league rules digest by its attribution legs, and a first look at the awards
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+rules-legA: rm -rf /tmp/attrA && git worktree add -q /tmp/attrA HEAD && ln -s "$PWD/node_modules" /tmp/attrA/node_modules && node .rc/x/attrA.mjs /tmp/attrA && TMPDIR=$(mktemp -d) CM_RULES_ROOT=/tmp/attrA node scripts/simCmLeagueRules.mjs
+rules-legB: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+rules-write: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && mkdir -p "$RC_OUT" && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+book-d0-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d0 && git worktree add -q $B b6eb78e7 && TMPDIR=$(mktemp -d) BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+simAwardRaces: TMPDIR=$(mktemp -d) node scripts/simAwardRaces.mjs
+simAwardRaces-measure30: TMPDIR=$(mktemp -d) AWARD_MEASURE=30 node scripts/simAwardRaces.mjs
