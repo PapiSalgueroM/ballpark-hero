@@ -1,0 +1,9 @@
+#!serial
+C1: bash .rc/x/rvmrun.sh C1 fast
+C2: bash .rc/x/rvmrun.sh C2 fast
+C3: bash .rc/x/rvmrun.sh C3 fast
+M1: bash .rc/x/rvmrun.sh M1 fast
+M2: bash .rc/x/rvmrun.sh M2 fast
+M3: bash .rc/x/rvmrun.sh M3 fast
+M4: bash .rc/x/rvmrun.sh M4 fast
+M5: bash .rc/x/rvmrun.sh M5 fast

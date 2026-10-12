@@ -1,0 +1,8 @@
+MUTATION M5 APPLIED: stale constant, consistent: rivals retire at 38 (copy and reader agree) (src/lib/soccerCareerEngine.ts; anchor rows rewritten 3, harness anchors rewritten 1)
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m62 passed[39m[22m[90m (62)[39m
+   ok    reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left
+
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+restored: 0 files left changed under src and scripts
+MUTATION M5 SURVIVED vitest(exit 0) simSaveKeeper(exit 0)

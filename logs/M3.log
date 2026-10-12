@@ -1,0 +1,17 @@
+MUTATION M3 APPLIED: dropped update: the carried pool keeps its old year (src/lib/soccerCareerEngine.ts; anchor rows rewritten 1, harness anchors rewritten 0)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolNameClash.test.tsx[2m > [22ma saved rival whose name is taken this year is replaced at once[2m > [22ma saved rival renamed to the career rival's name
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolNameClash.test.tsx[2m > [22ma saved rival whose name is taken this year is replaced at once[2m > [22mthe career rival renamed, a year after the saved rival was made,
+[31m[1mAssertionError[22m: expected undefined to be defined[39m
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22maccepts the pool a natural career wrote, and the night aft
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m59 passed[39m[22m[90m (62)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolNameClash.test.tsx,title=src/test/soccerBallonPoolNameClash.test.tsx > a saved rival whose name is taken this year is replaced at once >
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolNameClash.test.tsx,title=src/test/soccerBallonPoolNameClash.test.tsx > a saved rival whose name is taken this year is replaced at once >
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as
+   ok    reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left
+
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+restored: 0 files left changed under src and scripts
+MUTATION M3 CAUGHT by vitest(exit 1)

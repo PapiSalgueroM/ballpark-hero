@@ -1,0 +1,8 @@
+C1 exit=0 10s | MUTATION C1 CAUGHT by vitest(exit 1) simSaveKeeper(exit 1)
+C2 exit=0 10s | MUTATION C2 CAUGHT by vitest(exit 1) simSaveKeeper(exit 1)
+C3 exit=0 10s | MUTATION C3 CAUGHT by vitest(exit 1)
+M1 exit=0 10s | MUTATION M1 CAUGHT by vitest(exit 1)
+M2 exit=0 10s | MUTATION M2 CAUGHT by vitest(exit 1) simSaveKeeper(exit 1)
+M3 exit=0 10s | MUTATION M3 CAUGHT by vitest(exit 1)
+M4 exit=3 10s | MUTATION M4 SURVIVED vitest(exit 0) simSaveKeeper(exit 0)
+M5 exit=3 10s | MUTATION M5 SURVIVED vitest(exit 0) simSaveKeeper(exit 0)

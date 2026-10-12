@@ -1,0 +1,21 @@
+MUTATION M2 APPLIED: stale constant: the reader refuses an entry age of 28 (the draw is 19 to 28) (src/lib/soccerCareerEngine.ts; anchor rows rewritten 1, harness anchors rewritten 0)
+grep: write error: Broken pipe
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 29 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolNameClash.test.tsx[2m > [22ma saved rival whose name is taken this year is replaced at once[2m > [22ma saved rival renamed to the career rival's name
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolNameClash.test.tsx[2m > [22ma saved rival whose name is taken this year is replaced at once[2m > [22mthe career rival renamed, a year after the saved rival was made,
+[31m[1mAssertionError[22m: expected undefined to be defined[39m
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a null pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a unknown-version pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a missing-entries pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-entries pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a fraction-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a future-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a string-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-next-id pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a noncontiguous-id pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a invalid-role pool as absent
+   ok    reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left
+
+simSaveKeeper: RED in section(s) 1.
+restored: 0 files left changed under src and scripts
+MUTATION M2 CAUGHT by vitest(exit 1) simSaveKeeper(exit 1)

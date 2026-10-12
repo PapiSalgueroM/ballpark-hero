@@ -1,0 +1,20 @@
+MUTATION C1 APPLIED: control: the save module refuses a junk pool again (PR234 shape) (src/lib/soccerCareerSave.ts; anchor rows rewritten 0, harness anchors rewritten 0)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a null pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a unknown-version pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a missing-entries pool as absent
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerAwardGenerations.test.tsx[2m > [22mSoccer Career generated-candidate save boundaries[2m > [22mreads a present null pool as absent and opens the career over actual reload
+[41m[1m FAIL [22m[49m src/test/soccerCareerAwardGenerations.test.tsx[2m > [22mSoccer Career generated-candidate save boundaries[2m > [22mreads a present unknown-version pool as absent and opens the career over ac
+[41m[1m FAIL [22m[49m src/test/soccerCareerAwardGenerations.test.tsx[2m > [22mSoccer Career generated-candidate save boundaries[2m > [22mreads a present missing-entries pool as absent and opens the career over ac
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m56 passed[39m[22m[90m (62)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as
+   ok    reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left
+
+simSaveKeeper: RED in section(s) 1.
+restored: 0 files left changed under src and scripts
+MUTATION C1 CAUGHT by vitest(exit 1) simSaveKeeper(exit 1)

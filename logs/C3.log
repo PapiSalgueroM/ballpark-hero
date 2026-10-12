@@ -1,0 +1,14 @@
+MUTATION C3 APPLIED: control: correction 12 removed (a clashing saved rival stays and is skipped) (src/lib/soccerCareerEngine.ts; anchor rows rewritten 0, harness anchors rewritten 0)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolNameClash.test.tsx[2m > [22ma saved rival whose name is taken this year is replaced at once[2m > [22ma saved rival renamed to the career rival's name
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolNameClash.test.tsx[2m > [22ma saved rival whose name is taken this year is replaced at once[2m > [22mthe career rival renamed, a year after the saved rival was made,
+[31m[1mAssertionError[22m: expected null to be 2031 // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m60 passed[39m[22m[90m (62)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolNameClash.test.tsx,title=src/test/soccerBallonPoolNameClash.test.tsx > a saved rival whose name is taken this year is replaced at once >
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolNameClash.test.tsx,title=src/test/soccerBallonPoolNameClash.test.tsx > a saved rival whose name is taken this year is replaced at once >
+   ok    reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left
+
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+restored: 0 files left changed under src and scripts
+MUTATION C3 CAUGHT by vitest(exit 1)
