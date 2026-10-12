@@ -1,0 +1,30 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/nhlContributors.test.ts[2m > [22m[2mNHL simulation contributor outcomes[2m > [22m[2mholds the frozen automatic season outcomes and RNG counts with no override fields
+[22m[39mAUTOMATIC 117: digest=b5e307f401421b128b122b890e98b14d14390123165a5964b0bca35b2f0869af, rngCalls=12088
+AUTOMATIC 431: digest=fc273a8285ad7eab1cff2bdeba9084c3401d989e16551ad072fc03589af8044b, rngCalls=12080
+AUTOMATIC 907: digest=1da7787fbd0f1e5f2f5c410beae4a26cc6e4244e3561b9963228c9a528583ec9, rngCalls=12055
+
+[90mstdout[2m | src/test/nhlContributors.test.ts[2m > [22m[2mNHL simulation contributor outcomes[2m > [22m[2mmeasures a paired complete-season win effect for deliberate synthetic contributor choices
+[22m[39mPAIRED SYNTHETIC contributors:96 complete20-round seasons per arm, mean win gap=38.145833333333336,32-seed blocks=37.78125,36.65625,40
+
+ [32m✓[39m src/test/nhlContributors.test.ts [2m([22m[2m12 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 862[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL simulation contributor outcomes[2m > [22mmeasures a paired complete-season win effect for deliberate synthetic contributor choices [33m 636[2mms[22m[39m
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1257[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 860[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m src/test/usRivalLine.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 998[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1227: a picker returns exactly what its printer prints[2m > [22mNFL: every position, printed parts only, a back's catches at the bridge [33m 408[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSaves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonMlb.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 9703[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 2175[2mms[22m[39m
+   [33m[2m✓[22m[39m the innings of a game[2m > [22mspreads a side's runs the way the score law draws an inning: they add up, the minimums hold, nothing passes nine [33m 3923[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 663[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 2561[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m87 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (88)[39m
+[2m   Start at [22m 19:26:10
+[2m   Duration [22m 13.48s[2m (transform 3.72s, setup 621ms, collect 6.58s, tests 12.93s, environment 4.12s, prepare 1.12s)[22m
+

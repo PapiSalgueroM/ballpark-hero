@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usSeasonSlate.test.ts src/test/usSeasonMlb.test.ts src/test/usSeason.test.ts src/test/usRivalOldSaves.test.ts src/test/nhlContributors.test.ts --testTimeout=300000 --hookTimeout=120000
+senseC: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+rc-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+rc-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rc-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+rc-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+ledger: US_LEDGER_MEASURE=1 node scripts/simUsSeasonLedger.mjs
+ledger-fullslatenhl: US_LEDGER_CONTROL=fullslatenhl node scripts/simUsSeasonLedger.mjs
+ledger-fullslatemlb: US_LEDGER_CONTROL=fullslatemlb node scripts/simUsSeasonLedger.mjs
+ledger-nhlgates: US_LEDGER_CONTROL=nhlgates node scripts/simUsSeasonLedger.mjs
+ledger-mlbgates: US_LEDGER_CONTROL=mlbgates node scripts/simUsSeasonLedger.mjs
+ledger-nhlcarry: US_LEDGER_CONTROL=nhlcarry node scripts/simUsSeasonLedger.mjs
+ledger-nhlawards: US_LEDGER_CONTROL=nhlawards node scripts/simUsSeasonLedger.mjs
+board: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
+mlbCareer: node scripts/simMlbCareer.mjs
+nhlCareer: node scripts/simNhlCareer.mjs
+nflCareer: node scripts/simNflCareer.mjs
+nbaCareer: node scripts/simNbaCareer.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalNames: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+invented: node scripts/simInventedNames.mjs
+liveScores: node scripts/simLiveScores.mjs
+lawCmp: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seamCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+layCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
