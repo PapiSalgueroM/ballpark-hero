@@ -1,0 +1,12 @@
+# Round 1311 fixer: is playClubManager's SHALLOW (sacked before any signing) a coin toss of the walk? Three runs on the head's build, then src put back to origin/main 48cb9d4b, rebuilt in place, three runs on that
+#!serve
+#!playwright
+#!serial
+head-1: node scripts/playClubManager.mjs
+head-2: node scripts/playClubManager.mjs
+head-3: node scripts/playClubManager.mjs
+main-build: git checkout 48cb9d4b -- src && node_modules/.bin/vite build > /dev/null 2>&1 && git rev-parse HEAD && echo "built src of 48cb9d4b into dist"
+main-1: node scripts/playClubManager.mjs
+main-2: node scripts/playClubManager.mjs
+main-3: node scripts/playClubManager.mjs
+main-4: node scripts/playClubManager.mjs
