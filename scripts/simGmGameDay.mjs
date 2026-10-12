@@ -113,6 +113,16 @@
  *    count; the 32 records after are the regular season's; every told score
  *    is nflTell's on the fixture's own engine game under the same key; and
  *    nflRoundsOf is runPlayoffs' rounds told the one press way, as JSON text.
+ *    WITH THE GM DESK ON (added after the review of 2026-10-12, which found
+ *    that a playoff game played without the desk's edges left every check
+ *    green): every new franchise opens with the desk, so for each of section
+ *    9's four GM clubs a season his club is given the desk's strongest edge
+ *    (DESK_EDGE, +3) and the same postseason is played the one press way
+ *    (runPlayoffs and nflTell with the edges, as the board does) and the
+ *    bracket way (nflPlayTie with the edges): the same games, champion, next
+ *    draws, draw count, records and told rounds. A count printed beside it,
+ *    and held above zero, says in how many club seasons the edge moved the
+ *    postseason at all, so the desk on checks cannot hold nothing.
  * 12 THE LOAD (the library half; the validator's is Round 1309's). The first
  *    season of each league kind a set, at five stops (opened, then after
  *    each week): a sound block through JSON comes back as it is; outside the
@@ -127,7 +137,8 @@
  *    equals the one press path's log, with no entry in a week he has the bye
  *    and none after he is out, his playoff record is his record in
  *    nflRoundsOf, and after the last game the 32 records are the regular
- *    season's.
+ *    season's. With the desk on (as in section 11): the sink, and his log
+ *    built a press at a time, deep equal the one press path's with the edges.
  *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
@@ -168,6 +179,8 @@
  *   trust       loadGmPostseason hands any block back unrepaired      section 12 (the damages; a sound block stays green)
  *   keyrebuilt  the sink's key built from the told score              section 13 (the deep equal and the sink; the record stays green)
  *   logplayoff  the sink takes no entry                               section 13 (the deep equal and the record)
+ *   noedges     nflPlayTie plays its game without the desk's edges    section 11 with the desk on (and its sink in
+ *               (still told with them)                                section 13); the desk off checks stay green
  * NOT HELD HERE: the save guard and the repair with every field damaged
  * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
  * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
@@ -262,6 +275,11 @@ const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
 /* what only a drawn card reads: the told path, the NFL's story law, its game day law and the words of the two "?" */
 const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW, CARD, NFL_CARD, BRACKET_VIEW, BRACKET_CARD, NFL_BRACKET_CARD];
+/* Round 1308's review (2026-10-12): the strength points a GM desk's staff hands his club in a playoff game
+   (nflDeskEdges). 3 is the most the NFL staff pack gives: the head coach's 0.75 and a coordinator's 2.25 at each end
+   (src/data/gmStaff/packs.ts), weighted 0.72 and 0.28 (src/lib/nflGmDesk.ts, nflStaffEdge). The strongest edge a desk
+   plays, so the strongest signal for sections 11 and 13 with the desk on. */
+const DESK_EDGE = 3;
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
    as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
@@ -304,6 +322,8 @@ const CONTROLS = {
   trust: { section: 12, labels: ['rebuilt unplayed with the feed line'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'const repair = repairGmBracket(format, known, season, () => sport.seeds(league), isClub, seeds => sport.seedsOk(seeds, league));', to: 'const repair = { save: known ?? block, rebuilt: null, line: null, problems: [] };' }] },
   keyrebuilt: { section: 13, labels: ["deep equal the one press path's", 'the sink holds every game'], clean: ['his playoff record in the log'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: 'if (t.last) told.push({ ...t.last, key: `${season}|${tie.round}|${t.game.home}|${t.game.away}|${t.game.homeScore}-${t.game.awayScore}` });' }] },
   logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
+  /* Round 1308's review: the desk's edges dropped from the playoff game (still told with them) */
+  noedges: { section: 11, labels: ['with the desk on (his club', 'with the desk on, nflRoundsOf'], elsewhere: ['with the desk on, the sink holds every game'], clean: ["give the fixture's thirteen games", 'playBracketAll with nflPlayTie gives the same', 'so the desk on checks hold something'], patches: [{ file: NFL_POST, from: "const g = simGame({ week: 0, home, away, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges);", to: "const g = simGame({ week: 0, home, away, homeScore: 0, awayScore: 0, winner: '' }, teams, rng);" }] },
   logholes: { section: 9, labels: ['with any one field of an entry damaged the log reads as absent'], patches: [{ file: LOG, from: 'if (!g || (g.home !== club && g.away !== club) || keys.has(g.key)) return null;', to: 'if (!g) continue; if ((g.home !== club && g.away !== club) || keys.has(g.key)) return null;' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown GM_GAMEDAY_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -519,6 +539,10 @@ for (const set of SEEDSETS) {
   const s12kinds = new Set();
   const s13 = { sink: tally(), when: tally(), entries: tally(), record: tally(), records: tally() };
   const s13seen = { bye: 0, out: 0 };
+  /* the same two sections with the GM desk on (his club DESK_EDGE), against the one press path played with the edges */
+  const s11d = { games: tally(), rounds: tally() };
+  const s13d = { sink: tally(), entries: tally() };
+  const deskSeen = { runs: 0, qualified: 0, moved: 0 };
   const bound = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0, differ: 0 };
   let lateSeen = '';
   const addScore = (o, home, away) => {
@@ -868,6 +892,55 @@ for (const set of SEEDSETS) {
           count(s13.record, all.won - reg.won === wonR && all.lost - reg.lost === inRounds.length - wonR, () => `${id} ${club}: the log's playoff record ${all.won - reg.won}-${all.lost - reg.lost}, nflRoundsOf's ${wonR}-${inRounds.length - wonR}`);
         }
         count(s13.records, recordsOf(w.teams) === regular.records, () => `${id}: the records after the last playoff game are not the regular season's`);
+
+        /* sections 11 and 13 WITH THE GM DESK ON (the review of 2026-10-12, its finding F1). Every new franchise opens with
+           the desk, and its staff hands his club strength points in the playoffs too: the board's one press path hands
+           nflDeskEdges to runPlayoffs and to nflTell, and the bracket path hands the same to nflPlayTie. Desk off, the
+           recorded fixture is the reference; desk on, the one press path played right here is. For each of section 9's
+           four GM clubs, his club given DESK_EDGE: the postseason from the end of Week 17, the same generator, played the
+           one press way and the bracket way (four presses with the save through JSON, and playBracketAll), gives the same
+           games, champion, next draws, draw count and records, the same told rounds, the same sink and the same log. */
+        for (const [club, { log }] of logsOf) {
+          const edges = { [club]: DESK_EDGE };
+          A.gen.state = regular.state;
+          const teamsD = JSON.parse(regular.teams);
+          const { value: one, calls: oneCalls } = withMathRandom(A.gen, () => {
+            const r = E.runPlayoffs(teamsD, Math.random, edges);
+            return { ...r, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+          });
+          const toldD = one.rounds.map(r => ({ name: r.name, told: r.games.map(g => N.nflTell(g, teamsD, A.lg.season, r.name, edges)) }));
+          const roundsD = toldD.map(r => ({ name: r.name, games: r.told.map(t => t.game) }));
+          const lastsD = toldD.flatMap(r => r.told.map(t => t.last));
+          const bareD = one.rounds.flatMap(r => r.games.map(g => `${r.name}|${g.home}|${g.away}|${g.winner}`));
+          deskSeen.runs += 1;
+          if (seeds.includes(club)) deskSeen.qualified += 1;
+          if (bareD.join() !== bare.join()) deskSeen.moved += 1;
+          for (const mode of ['weeks', 'all']) {
+            A.gen.state = regular.state;
+            const teams = JSON.parse(regular.teams);
+            const sink = [];
+            const presses = [];
+            const { value: run, calls } = withMathRandom(A.gen, () => {
+              const play = NP.nflPlayTie(teams, Math.random, A.lg.season, edges, sink);
+              let save = B.openBracket(FORMAT, A.lg.season, NP.NFL_POSTSEASON.seeds({ ...A.lg, teams }));
+              if (mode === 'all') save = B.playBracketAll(FORMAT, save, play);
+              else for (let press = 0; press < 4; press += 1) { const from = sink.length; save = JSON.parse(JSON.stringify(B.playBracketWeek(FORMAT, save, play))); presses.push(sink.slice(from)); }
+              return { save, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+            });
+            const games = B.bracketRounds(FORMAT, run.save).flatMap(r => r.games.map(g => `${r.name}|${g.home}|${g.away}|${g.winner}`));
+            const champ = B.bracketChampion(FORMAT, run.save);
+            count(s11d.games, same(games, bareD) && champ === one.champion && run.next === one.next && calls === oneCalls && recordsOf(teams) === regular.records && recordsOf(teamsD) === regular.records,
+              () => `${id} ${club} +${DESK_EDGE} (${mode}): ${games.find((g, k) => g !== bareD[k]) ?? `champion ${champ} against ${one.champion}, or the next draws, the draw count (${calls} against ${oneCalls}) or the records after`}`);
+            count(s11d.rounds, same(NP.nflRoundsOf(FORMAT, run.save), roundsD), () => `${id} ${club} +${DESK_EDGE} (${mode})`);
+            count(s13d.sink, sink.length === 13 && same(sink, lastsD), () => `${id} ${club} +${DESK_EDGE} (${mode}): ${sink.length} entries; the first that differs: ${JSON.stringify(sink.find((x, k) => !same(x, lastsD[k])) ?? null)}`);
+            if (mode === 'weeks') {
+              const mine = g => g.home === club || g.away === club;
+              const blog = presses.reduce((l, games) => L.addToGmGameLog(l, season, games.filter(mine)), log);
+              const fullD = L.addToGmGameLog(log, season, lastsD.filter(mine));
+              count(s13d.entries, blog !== null && fullD !== null && same(blog, fullD), () => `${id} ${club} +${DESK_EDGE}: the bracket path's log holds ${blog ? blog.games.length : 0} games, the one press path's ${fullD ? fullD.games.length : 0}`);
+            }
+          }
+        }
       }
     }
   }
@@ -949,7 +1022,13 @@ for (const set of SEEDSETS) {
   settle(13, `set ${set}: his playoff record in the log is his record in nflRoundsOf`, s13.record);
   settle(13, `set ${set}: after the last playoff game the 32 records are the regular season's`, s13.records);
   check(13, `set ${set}: the four clubs a season took a bye (${s13seen.bye}) and went out (${s13seen.out}) somewhere in the set`, s13seen.bye > 0 && s13seen.out > 0);
-  console.log(`set ${set}, the bracket a round a press: ${s11.weeks.n} seasons; club seasons of section 13 with a bye ${s13seen.bye}, that went out ${s13seen.out}; stops loaded ${s12.sound.n}, damaged blocks rebuilt ${s12.rebuilt.n}`);
+  /* with the GM desk on (the review of 2026-10-12): the one press path played with the edges is the reference */
+  settle(11, `set ${set}: with the desk on (his club +${DESK_EDGE}), four presses and playBracketAll with nflPlayTie give the one press path's thirteen games, champion, next ${NEXT_DRAWS} draws, draw count and records`, s11d.games);
+  settle(11, `set ${set}: with the desk on, nflRoundsOf is runPlayoffs' rounds told with the edges, name for name and game for game`, s11d.rounds);
+  check(11, `set ${set}: the desk's edge moved the one press postseason in ${deskSeen.moved} of ${deskSeen.runs} club seasons (${deskSeen.qualified} of them in the bracket), so the desk on checks hold something`, deskSeen.moved > 0);
+  settle(13, `set ${set}: with the desk on, the sink holds every game in play order as the one press path's log entry, keys included`, s13d.sink);
+  settle(13, `set ${set}: with the desk on, his playoff entries on the bracket path deep equal the one press path's, keys included`, s13d.entries);
+  console.log(`set ${set}, the bracket a round a press: ${s11.weeks.n} seasons; club seasons of section 13 with a bye ${s13seen.bye}, that went out ${s13seen.out}; stops loaded ${s12.sound.n}, damaged blocks rebuilt ${s12.rebuilt.n}; desk on: ${deskSeen.runs} club seasons, ${deskSeen.qualified} in the bracket, the edge moved the postseason in ${deskSeen.moved}`);
   console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; points a team game ${Bn.points.toFixed(2)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, sides on 40 or more ${Bn.forty.toFixed(4)}; ${lateSeen}`);
   const afcShare = afcTitles / lines.length;
   measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games, differShare, refused: s8.refused.bad });
