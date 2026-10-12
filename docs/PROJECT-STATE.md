@@ -1,3 +1,9 @@
+## Soccer Career guide verification setup repair, 2026-10-12
+
+Draft PR238 at aaabb4c5 triggered exact push run38194820481. Its setup failed because an extra in-place npm install changed locked @adobe/css-tools from4.4.4 to4.5.0. The complete install log also reports17 additions,56 removals and172 changes; the installed-version guard stopped at the first changed row, so there is no complete named after-inventory. Types, outcomes, SEO build, readers and final cap were all skipped and remain unverified. The original failed9-body evidence is retained.
+
+The workflow now installs pinned Playwright1.64.0 in a separate runner temporary package and links only its two browser modules into the fresh app node_modules. The app's installed locked-version and package-byte checks stay in place. The tool package and its lock are retained. A new exact-head remote run is required; the copy proposal and main publication remain pending with session G.
+
 ## Soccer Career guide and No Agent wording follow-up, 2026-10-12
 
 Branch codex/career-guide-clarity starts from exact main4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5. The existing shared guide now explains veteran contract pay and money talks, representation review, transfer priorities, international comeback and an announced farewell season. Its pay example explicitly uses No Agent. The brief, review, offer and result labels describe the actual option without assuming a named agent, and the existing What's New button reference follows the new label. Three existing test selectors follow the renamed button, and one existing expected-text literal follows the explicit No Agent pay example. Their assertion methods, numerical cases and fixtures are held.

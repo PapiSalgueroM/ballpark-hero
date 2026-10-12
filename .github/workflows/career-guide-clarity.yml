@@ -49,10 +49,19 @@ jobs:
           npm ci 2>&1 | tee career-guide-artifacts/install.log
           node scripts/qa/soccerAgentReviewDependencies.mjs before 2>&1 | tee career-guide-artifacts/dependencies-before.log
           cp soccer-agent-review-artifacts/dependencies-before.json career-guide-artifacts/dependencies-before.json
-          npm install --no-save --package-lock=false playwright 2>&1 | tee career-guide-artifacts/browser-install.log
+          browser_tools="$RUNNER_TEMP/career-guide-browser-${{ github.run_id }}-${{ github.run_attempt }}"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee career-guide-artifacts/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" career-guide-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" career-guide-artifacts/browser-package-lock.json
           node scripts/qa/soccerAgentReviewDependencies.mjs after 2>&1 | tee career-guide-artifacts/dependencies-after.log
           cp soccer-agent-review-artifacts/dependencies-*.json career-guide-artifacts/
-          npx playwright install --with-deps chromium 2>&1 | tee career-guide-artifacts/chromium-install.log
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee career-guide-artifacts/chromium-install.log
           python -m pip install fonttools pillow 2>&1 | tee career-guide-artifacts/fonts-install.log
       - name: Actual app type gate
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
