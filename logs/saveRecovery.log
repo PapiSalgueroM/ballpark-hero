@@ -1,0 +1,6 @@
+Soccer Career save recovery control seasons: 37/39 unaffected checks passed.
+Soccer Career save recovery control retired: 2 intended component assertions failed.
+Soccer Career save recovery control retired: rejected Soccer Career actual save recovery restores a retired career on the first render and never records it again after reload: AssertionError: expected [ +0 ] to deeply equal []
+Soccer Career save recovery control retired: rejected Soccer Career actual save recovery records a newly finished ceremony once and does not replay it on the next mount: AssertionError: expected [ +0, +0 ] to deeply equal [ +0 ]
+Soccer Career save recovery control retired: 37/39 unaffected checks passed.
+Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.

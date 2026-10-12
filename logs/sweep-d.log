@@ -1,0 +1,6 @@
+GONE  scripts/simFreeKickPractice.mjs -> src/components/game/ReportQuestion.tsx: "import { getTodayET } from '@/lib/dateUtils';"
+GONE  scripts/simMlbGridPool.mjs -> scripts/simReportContext.mjs: ");\n}\n\nsection = 2;\nconsole.log("
+GONE  scripts/simPlayerBingoHonours.mjs -> src/lib/playerBingo.ts: "  { keys: ['paris saint-germain'], years: [2025] },"
+GONE  src/test/champOrNotReveal.test.tsx -> src/pages/PerfectSeasonNba.tsx: "@/components/game/ReportQuestion"
+TWICE src/test/soccerTransferBriefPromise.test.tsx -> src/pages/WhatsNew.tsx: "Set transfer priority"
+sweep: 115 changed files (105 existed on db4cb09a), 1656 files read, 101753 distinct literals of 20 or more characters, 5 stood once before and do not stand once now

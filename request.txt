@@ -1,0 +1,7 @@
+anchors: node .rc/x/probeAnchors.mjs
+sweep-d: node .rc/x/sweepAnchors2.mjs db4cb09a
+sweep-main: node .rc/x/sweepAnchors2.mjs 48cb9d4b
+simSiteSearch: node scripts/simSiteSearch.mjs > "$RC_OUT/sitesearch.txt" 2>&1; s=$?; grep -A2 '^7)' "$RC_OUT/sitesearch.txt"; tail -2 "$RC_OUT/sitesearch.txt"; exit $s
+errb: node scripts/simErrorBoundary.mjs > "$RC_OUT/errb.txt" 2>&1; s=$?; grep -i 'point' "$RC_OUT/errb.txt" | head -3; tail -1 "$RC_OUT/errb.txt"; exit $s
+loan: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/rv-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs 2>&1 | tail -5 | cut -c1-300; s=${PIPESTATUS[0]}; node .rc/x/loanReport.mjs "$RUNNER_TEMP/rv-loan"; exit $s
+saveRecovery: SOCCER_CAREER_SAVE_CONTROL=all node scripts/simSoccerCareerSaveRecovery.mjs 2>&1 | tail -6 | cut -c1-300; exit ${PIPESTATUS[0]}

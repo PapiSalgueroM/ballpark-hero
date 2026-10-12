@@ -1,0 +1,7 @@
+anchors exit=0 0s | anchors: 56 listed, 0 bad
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+errb exit=0 1s | simErrorBoundary: all green
+loan exit=0 49s | current: 120 inputs; appearance bundled true; compiled holds "imaginary baby cradle" false, "newest member of the family" false
+sweep-d exit=0 66s | sweep: 115 changed files (105 existed on db4cb09a), 1656 files read, 101753 distinct literals of 20 or more characters, 5 stood once before and do not stand once now
+saveRecovery exit=0 22s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+sweep-main exit=0 97s | sweep: 129 changed files (118 existed on 48cb9d4b), 1656 files read, 101753 distinct literals of 20 or more characters, 9 stood once before and do not stand once now

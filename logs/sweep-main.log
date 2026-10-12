@@ -1,0 +1,10 @@
+GONE  scripts/playCareerStoryRole.mjs -> scripts/data/guideHeadingsFrozen.json: "the dumbbell button, bottom right"
+GONE  scripts/simFreeKickPractice.mjs -> src/components/game/ReportQuestion.tsx: "import { getTodayET } from '@/lib/dateUtils';"
+GONE  scripts/simGuideHeadings.mjs -> scripts/data/guideHeadingsFrozen.json: "Open the training ground (the dumbbell button, bottom right)"
+GONE  scripts/simMlbGridPool.mjs -> scripts/simReportContext.mjs: ");\n}\n\nsection = 2;\nconsole.log("
+GONE  scripts/simPlayerBingoHonours.mjs -> src/lib/playerBingo.ts: "  { keys: ['paris saint-germain'], years: [2025] },"
+GONE  scripts/simSoccerLoanMinutes.mjs -> src/lib/soccerCareerEngine.ts: "      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clu"
+GONE  scripts/simSoccerLoanMinutes.mjs -> src/lib/soccerCareerAppearance.ts: "  { id: \"cradle\", label: \"Baby Cradle\", emoji: \"👶\", line: \"rock the baby cradle for the newest member of the family\" },"
+GONE  scripts/simSoccerVeteranOffers.mjs -> src/lib/soccerCareerEngine.ts: "        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));"
+GONE  src/test/champOrNotReveal.test.tsx -> src/pages/PerfectSeasonNba.tsx: "@/components/game/ReportQuestion"
+sweep: 129 changed files (118 existed on 48cb9d4b), 1656 files read, 101753 distinct literals of 20 or more characters, 9 stood once before and do not stand once now

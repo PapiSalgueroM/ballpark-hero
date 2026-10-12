@@ -1,0 +1,12 @@
+Loan minutes: 160 labelled saved boundaries; 640 complete arm cases
+Loan minutes: 144 filtered forced offers; 16 actual empty listings
+Loan minutes: 112 actual returns; 4512 complete action frames
+Loan minutes: 160 exact missing-filter findings; 98467226 retained bytes
+PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+status pass; error none
+failures 0: {}
+law groups on the current arm: {}; first ids 
+remove-filter control: findings 160, effective true
+summary {"actualArms":4,"completeCases":640,"healthyForcedOffers":144,"healthyEmptyListings":16,"actualLoanReturns":112,"retainedFrames":4512,"sourceControlFindings":160}
+original: 120 inputs; appearance bundled true; compiled holds "imaginary baby cradle" false, "newest member of the family" false
+current: 120 inputs; appearance bundled true; compiled holds "imaginary baby cradle" false, "newest member of the family" false
