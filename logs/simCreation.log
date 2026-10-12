@@ -1,0 +1,42 @@
+1) The ceiling still means something (300 careers per band)
+   low ceiling  (74): mean peak 72.3, mean career goals 106, reached 99 0/300
+   mid ceiling  (84): mean peak 81.2, mean career goals 182, reached 99 0/300
+   high ceiling (93): mean peak 85.8, mean career goals 219, reached 99 0/300
+2) Across the real roll distribution, 99 is rare (900 careers)
+   mean peak 76.5 · reached 80 28.8% · 85 10.0% · 90 1.2% · 99 0.00%
+3) Soft cap: earned by achievement, never by drifting (250 careers each way)
+   chasing it: 45/250 careers earned ceiling back, mean +0.22, best +3, 7/250 finished above the number they were given
+   drifting:   0/250 careers earned ceiling back, mean +0.00, 4/250 finished above their number on the old late bloomer allowance alone
+4) 99 is a hard wall even for a career built to break it (200 careers)
+   peaked at exactly 99 in 0/200, above 99 in 0, ceiling above 99 in 0
+5) Both ends of the new overall range (250 careers each)
+   55 start: 21.7 pro seasons, 144 goals, 4.4 trophies, 0.04 Ballon d'Ors, legacy 46.6 (p10 33, p90 65), grew +21.4
+             seasons that won something 19%, won the Ballon d'Or 0%, lost time to injury 21% (20% before 24), rated under 7.0 72%, verdicts {"JOURNEYMAN":205,"GREAT":15,"SOLID PRO":28,"LEGEND":1,"GOAT":1}
+   99 start: 25.6 pro seasons, 916 goals, 32.6 trophies, 15.65 Ballon d'Ors, legacy 83.9 (p10 84, p90 84), grew +0.0
+             seasons that won something 85%, won the Ballon d'Or 61%, lost time to injury 23% (36% before 24), rated under 7.0 25%, verdicts {"LEGEND":250}
+   the cost of starting at 99: 21.4 fewer points of growth, 16 points more of his seasons before 24 lost to injury, and a verdict that docks him for it
+6) The climb line in the legacy verdict
+   started 54, peaked 91 -> climb line +8; started 99, peaked 91 -> -16
+7) Same overall, different build, different career (300 careers each)
+   poacher    (172cm 66kg, finishing): 250 goals, 458 apps over 12.0 seasons, mean rating 7.68, goal mult 1.137, apps mult 0.984
+   target man (196cm 94kg, heading):   218 goals, 465 apps over 12.0 seasons, mean rating 7.52, goal mult 1.009, apps mult 1.028
+   goals per game 0.546 vs 0.469 (16.5% apart), career goal gap 14.9%, appearance gap 6.1 games, rating gap 0.17
+   an untouched build is exactly neutral at all 10 positions across overalls 44 to 99
+   198cm 95kg vs 168cm 62kg: heading 87 vs 72, strength 85 vs 65, acceleration 65 vs 82
+8) Allocator fuzz: 250k moves, typing and stepping mixed
+   250000 moves: 0 illegal values, 0 negative pools, 0 unspendable states, 0 overall drifts
+9) Shaping fuzz: 120k moves across every family
+   120000 moves: 0 unbalanced families, 0 out of range offsets, 0 unknown keys, 0 overall drifts
+10) Garbage physique and shape values
+   every garbage physique clamped, every unbalanced or unknown shape dropped, legal shapes kept
+11) A pre Round 131 save
+   old save played 24 pro seasons, peaked 83, retired=true, verdict SOLID PRO, frame repaired to 180cm
+   a full career save is 82.4 KB, of which this round added 468 bytes
+  FAIL: a full career save is 82.4 KB, over the budget
+12) Create your look
+   skin tones 6 to 12, hair colours 8 to 16, hairstyles 12 to 23, beards 7 to 14, extras 8 to 16, boots 10 to 18, celebrations 10 to 19
+   4000 surprise me rolls, all legal, zero unasked for dye jobs
+13) Copy rules on everything this round wrote
+   9 files clean: no em or en dashes, no other products named in copy
+
+1 FAILURES

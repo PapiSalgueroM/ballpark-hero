@@ -1,0 +1,12 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFlagshipWeight exit=0 2s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simSoccerLoanMinutes exit=0 105s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+tsc exit=0 139s | 
+simHarnessAnchors exit=1 78s | simHarnessAnchors: 1 failure(s)
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simSoccerContractMoves exit=0 4s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simSoccerCareerSaveRetry exit=0 22s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+vitest-all exit=0 783s |    Duration  781.30s (transform 48.27s, setup 32.40s, collect 222.32s, tests 1675.75s, environment 243.62s, prepare 49.19s)
+simCreation exit=1 687s | 1 FAILURES
