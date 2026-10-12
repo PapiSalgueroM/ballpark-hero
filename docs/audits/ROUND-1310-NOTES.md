@@ -17,7 +17,8 @@ reads what this round adds. It puts the real numbers Round 1311's harness sectio
    with CRLF turned to LF.
 3. `scripts/simCmLeagueBookFacts.mjs`: the fence, modelled on `scripts/simCmVarLedger.mjs`, named sim* so
    `scripts/runAllSims.mjs` finds it. It loads no engine and builds no bundle (about a second). Its eight
-   checks and nine controls are in its header.
+   checks and seventeen controls are in its header: the nine the brief named, and eight the reviews asked for
+   (see "After review" below).
 4. This file.
 
 ## The table (what the fence prints, by league and season: goals/length, or the state)
@@ -33,7 +34,9 @@ reads what this round adds. It puts the real numbers Round 1311's harness sectio
 Every cell but one is USED (two publishers on two hosts, every reading on file agreeing exactly).
 Lengths stand on format rows: RSSSF's final table of each season plus ESPN's (La Liga, Serie A, Ligue 1),
 or plus the league's own words (Premier League: 20 clubs since 1995/96; Bundesliga: 18 teams since 1965/66
-but for 1991/92). 2019-20 stands on two season tables in every league, since all five paused that spring.
+but for 1991/92). 2019-20 stands on season rows only, never on a span row, since the pandemic broke that
+season everywhere: two final tables each in the four that played it out (RSSSF and ESPN), and in Ligue 1,
+which stopped it, RSSSF's final table plus NBC Sports' report of the day.
 
 ## The means the fence prints (binding nothing)
 
@@ -57,7 +60,30 @@ mixed). On opened pages the 38 match real range is 26.9 (Premier League) to 31.1
 - Ligue 1 2019-20 is quoted from its second table line and the note only: the first and last lines put a
   club name ending in FC beside its games played, which `scripts/simNoRivalNames.mjs` reads as a product
   title (runner result r1310-e caught it). The same fence caught a sponsor's product name in the title of a
-  laliga.com article quoted under owed (r1310-g); it is now described, not quoted.
+  laliga.com article quoted under owed (r1310-g); it is now described, not quoted, and since the fix it is
+  cited by host and date, because its address carries the same name with a hyphen the fence does not read.
+
+## After review (the fix of 2026-10-12)
+
+Two adversarial reviews (results-g review-run-1310.md and review-read-1310.md) found three majors and the fix
+closed them on the branch:
+- Ligue 1 2019-20 had the champions alone on 27 played. RSSSF's own page and ESPN's table both print Paris
+  Saint-Germain and Strasbourg on 27 (their round 28 meeting was never played) and the other eighteen on 28.
+  The row and the receipt now say so, and the row quotes Strasbourg's line and the n/p line.
+- Two of the fence's rules were held by one line each that no control reached: USED needing two different
+  hosts, and span rows never speaking for 2019-20. Controls samehost and pausedrow now hold them; staleowed,
+  keeperowed, seasontoken, boundary, wikimirror and badurl hold four more guards and two fixes (any host with
+  wiki in it is a wiki host, and a row whose url will not parse no longer throws before the summary). A
+  mutation run on the runner killed every mutant the review found surviving, each by its own control.
+- Smaller words: seven full Ligue 1 seasons before the cut, not eight; Sky Sport Italia's cards quoted as the
+  page prints them; the rules say 2019-20 was paused in four leagues and stopped in Ligue 1, and that a few
+  literals are a publisher's own sentence (never a person's words); RSSSF's English top scorers agrees on
+  all ten Premier League seasons and is under notUsed.
+
+Residual, by design: a cell's two rows given the same wrong number that both their lines print (a games
+column read as goals on both pages) stays USED. One page's column error is caught (DISPUTED); both at once
+needs two readers to make the same mistake on two pages that print the columns in a different order. Do not
+read "two publishers agree" as "the column is right".
 
 ## For Round 1311 (the band)
 
