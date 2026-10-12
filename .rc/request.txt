@@ -1,0 +1,21 @@
+# Round 1311 fixer: the type gate, the unit files, the pin, the merged facts fence, simCmLeagueBook default and five full fleets, the controls whose red list holds facts, the fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBoards.test.ts src/lib/clubManagerLeagueBook.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+appeal1081: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+factsFence: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBookFacts.mjs
+book-plain: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBook.mjs
+book-d4: TMPDIR=$(mktemp -d) SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f0 && git worktree add -q $B 48cb9d4b && BOOK_BASE=$B SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f1: TMPDIR=$(mktemp -d) SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f2: TMPDIR=$(mktemp -d) SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f3: TMPDIR=$(mktemp -d) SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f4: TMPDIR=$(mktemp -d) SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-bookleak-full: TMPDIR=$(mktemp -d) BOOK_FLEET=full BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+c-bookleak-default: TMPDIR=$(mktemp -d) BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+c-dropmine: TMPDIR=$(mktemp -d) BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-dropmine-full: TMPDIR=$(mktemp -d) BOOK_FLEET=full BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+awardRaces: TMPDIR=$(mktemp -d) node scripts/simAwardRaces.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalNames: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+storageWrites: TMPDIR=$(mktemp -d) node scripts/simStorageWrites.mjs
