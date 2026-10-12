@@ -1,0 +1,14 @@
+seamPrint exit=0 27s | old commit 1b4f0a73663f1f5e43ee570202defcae0189ba41, new commit 31648047d3192a48f2e11f4aff936cab8aeda9f2; round 1212 / 1212; moved list equal: true
+layPrint exit=0 32s | old commit 1b4f0a73663f1f5e43ee570202defcae0189ba41, new commit 31648047d3192a48f2e11f4aff936cab8aeda9f2; round 1300 / 1300; moved list equal: true
+lawPrint exit=0 33s | old commit 1b4f0a73663f1f5e43ee570202defcae0189ba41, new commit 31648047d3192a48f2e11f4aff936cab8aeda9f2; round 1221 / 1221; moved list equal: true
+rivalryEvents exit=0 10s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+rc-homeback exit=1 10s | simCareerRivalryEvents: 1 failure
+lawCmp exit=3 34s | simUsSeasonCentre digest compare: NOT COMPARED, 3 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+rc-homeimport exit=1 10s | simCareerRivalryEvents: 1 failure
+rc-owndealt206 exit=1 10s | simCareerRivalryEvents: 3 failures
+digest exit=0 58s |    Duration  57.09s (transform 1.70s, setup 70ms, collect 2.24s, tests 53.66s, environment 458ms, prepare 293ms)
+tsc exit=0 98s | 
+ledger exit=0 6s | simUsSeasonLedger: green. 3041 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+board exit=0 88s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+senseC exit=0 122s | simNbaAwardsSense: 167 checks, 0 failed (full size), 121s
