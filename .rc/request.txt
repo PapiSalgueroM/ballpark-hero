@@ -1,0 +1,3 @@
+eraucl-oldname-base: git worktree add .tmp-base1 b6eb78e799b12c851e4e8e583e9e926aed117f1c && ln -s "$PWD/node_modules" .tmp-base1/node_modules && cd .tmp-base1 && CM_UCL_CONTROL=oldname node scripts/simClubManagerEraUcl.mjs
+eraucl-poolnames-base: git worktree add .tmp-base2 b6eb78e799b12c851e4e8e583e9e926aed117f1c && ln -s "$PWD/node_modules" .tmp-base2/node_modules && cd .tmp-base2 && CM_UCL_CONTROL=poolnames node scripts/simClubManagerEraUcl.mjs
+shoot-unsetpath-base: git worktree add .tmp-base3 b6eb78e799b12c851e4e8e583e9e926aed117f1c && ln -s "$PWD/node_modules" .tmp-base3/node_modules && cd .tmp-base3 && CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
