@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simGmGameDay: node scripts/simGmGameDay.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+vitest-new: node_modules/.bin/vitest run src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/lib/gmBracketView.test.ts src/components/front-office-shared/GmBracketCard.test.tsx src/test/gmBracketLedger.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-undo: GM_GAMEDAY_CONTROL=undo node scripts/simGmGameDay.mjs
+ctl-keydrift: GM_GAMEDAY_CONTROL=keydrift node scripts/simGmGameDay.mjs
+ctl-trust: GM_GAMEDAY_CONTROL=trust node scripts/simGmGameDay.mjs
+ctl-keyrebuilt: GM_GAMEDAY_CONTROL=keyrebuilt node scripts/simGmGameDay.mjs
+ctl-logplayoff: GM_GAMEDAY_CONTROL=logplayoff node scripts/simGmGameDay.mjs
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+ctl-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+usp-gmclubs: US_POST_CONTROL=gmclubs node scripts/simUsPostseason.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/lib/gmBracket.test.ts src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts src/test/usPostseasonFormat.test.ts src/test/usPlayoffs.test.ts --testTimeout=300000 --hookTimeout=120000
