@@ -2184,7 +2184,7 @@ export default function FrontOfficeBoard() {
                 press logged one or he opened one ("Your game"); the row under it holds the back chip. */}
             <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
               {/* from sm up, the reveal's element: the box's bottom edge, laid over it (see the reveal) */}
-              {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" data-reveal-edge />}
+              {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 -bottom-px h-px" data-reveal-edge />}
               {bracketFace && seenPlayoffs && bracketFormat ? (
                 <NflBracket
                   format={bracketFormat}
