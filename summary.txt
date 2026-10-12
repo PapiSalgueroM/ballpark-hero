@@ -1,0 +1,12 @@
+mutA exit=1 2s | simUsSeasonLedger: RED at N10 (1 failed, 4380 passed)
+mutB exit=1 2s | simUsSeasonLedger: RED at N10 N9 (6 failed, 4348 passed)
+mutC exit=1 2s | simUsSeasonLedger: RED at N12 (1 failed, 4380 passed)
+mutD exit=0 2s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+mutD-controls exit=0 146s | allcontrols: 72 of 72 controls fired at their named checks, 0 did not
+mutDA exit=0 2s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+mutE exit=0 2s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+mutE-semisone exit=3 2s | simUsSeasonLedger: CONTROL semisone MISFIRED, red at nothing where N9 was expected
+mutE-onegroup exit=3 2s | simUsSeasonLedger: CONTROL onegroup MISFIRED, red at N10 R2 where N10 and N9 and R2 was expected
+mutF exit=0 2s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+mutF-controls exit=0 146s | allcontrols: 72 of 72 controls fired at their named checks, 0 did not
+clean exit=0 2s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.

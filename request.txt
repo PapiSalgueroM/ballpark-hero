@@ -1,0 +1,13 @@
+#!serial
+mutA: node .rc/x/mutA.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutB: node .rc/x/mutB.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutC: node .rc/x/mutC.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutD: node .rc/x/mutD.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutD-controls: node .rc/x/mutD.mjs && bash .rc/x/allcontrols.sh; s=$?; git checkout -- src scripts; exit $s
+mutDA: node .rc/x/mutD.mjs && node .rc/x/mutA.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutE: node .rc/x/mutE.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutE-semisone: node .rc/x/mutE.mjs && US_LEDGER_CONTROL=semisone node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutE-onegroup: node .rc/x/mutE.mjs && US_LEDGER_CONTROL=onegroup node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutF: node .rc/x/mutF.mjs && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutF-controls: node .rc/x/mutF.mjs && bash .rc/x/allcontrols.sh; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | wc -l; node scripts/simUsSeasonLedger.mjs
