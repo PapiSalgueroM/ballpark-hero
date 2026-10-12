@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/aw-fin node scripts/simSoccerAwardGenerations.mjs; s=$?; node -e "const r=JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/aw-fin/report.json','utf8'));console.log('ORIGINAL '+JSON.stringify(r.original)+' controls '+r.controls.length+' observationControls '+r.observationControls.length+' status '+r.status)"; exit $s
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveKeeper-partballon: SIM_SAVE_KEEPER_CONTROL=partballon node scripts/simSaveKeeper.mjs > $RUNNER_TEMP/pb.log 2>&1; s=$?; tail -4 $RUNNER_TEMP/pb.log; grep -q "generatedBallonPool.version=1" $RUNNER_TEMP/pb.log && grep -q "control partballon: FIRED" $RUNNER_TEMP/pb.log && [ $s -eq 1 ] && echo "partballon FIRED on its own sentence (exit $s), as it must"
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
