@@ -120,6 +120,20 @@
  *            (src/components/club-manager/LeagueLeadersCard.tsx), comments stripped, hold no Math.random,
  *            Date.now, new Date or localeCompare; and printed for the lead: the share and the keepers on record a
  *            league, each board's leader, and the three boards of three leagues after a full season
+ *   awards   Round 1311, the season's honours, by the harness's own reading of the rule (a whole book with
+ *            at least AWARD_FLOOR_RULED in 100 rival goals on record decides): (i) on every season's end of
+ *            the fleet, and of a late arm (two careers whose book is taken off ten entries in), a season the
+ *            book decides has the Goals board's first as its golden boot and the first of each board in its
+ *            awards with the share on record, the same awards on the season's record; any other season has
+ *            no awards and the old race's golden boot; (iii) with BOOK_BASE, on a season the book does not
+ *            decide the WHOLE summary and record are the base commit's, on one it decides all of them but
+ *            the four moved fields (goldenBoot, playerOfSeason, ballonDor, awards); and printed, a league:
+ *            the shares at the season's end, how many the book decided, how often one of mine won the boot.
+ *            The stream face leaves those four fields and each record's awards out, and nothing else.
+ *   facts    Round 1311, the fleet's top scorers beside the real leagues' (scripts/data/cmLeagueBookFacts.json,
+ *            USED figures only, read by the harness's own reading of that file's rule): printed by season
+ *            length, and one band bound on 38 match seasons (see the section; it cannot tell the taker rule
+ *            on from off)
  * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
  * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
  * same order, because the engine numbers its youth players, press questions and messages as it goes.
@@ -212,6 +226,13 @@
  * The second fix pass of Round 1306 added one:
  *   novar         the match is never told which reviews to play, so the arm with the video referee on
  *                 sees none                                          -> law, the floor of that arm
+ * Round 1311 added three:
+ *   awardlate     the awards are read from a late book                -> awards (oldsave with it: every late
+ *                                                                        book save of oldsave then takes its
+ *                                                                        golden boot from the book)
+ *   awardthin     the awards are read from a book under the floor     -> awards
+ *   bookleak      every goal of a side to its taker                    -> facts (shapes and thin with it: the
+ *                                                                        deal no longer follows the weight)
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
  * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
@@ -233,6 +254,10 @@
  *                                                         season in every league of every era and prints, a
  *                                                         league, the share of rival goals on record and the
  *                                                         best rival total under each rule; gates nothing
+ *   BOOK_MEASURE=floor ...                                Round 1311: MEASURE_SEEDS careers of one season in
+ *                                                         every league and prints, a league, the share on
+ *                                                         record at the season's end, who settled the golden
+ *                                                         boot and how often one of mine won it; gates nothing
  *   SEEDSET=n                                             another set of seeds
  * Offline: bundles the engine from src, reads no network and no database.
  */
@@ -336,6 +361,8 @@ const CONTROLS = {
   hotseatbook3: { patch: [{ file: HOT, from: HOT_CALL('ready'), to: HOT_CALL_BOOKED('ready') }], red: 'dailies' },
   /* Round 1311: the awards are read from a late book, or from a book under the floor. awardlate moves the
      golden boot of every late book save of section oldsave too, which judges it against the old race. */
+  /* Round 1311 step 4: every goal of a side to its taker, a leak the band of section facts must catch. */
+  bookleak: { patch: [{ file: BOOK, from: "      : kind !== 'open' && taker ? taker", to: '      : taker ? taker' }], red: 'facts', also: ['shapes', 'thin'] },
   awardlate: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookShare(input.book, input.clubs).share >= AWARD_FLOOR;' }], red: 'awards', also: ['oldsave'], mentions: ['a late book'] },
   awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', mentions: ['under the floor'] },
   readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
@@ -833,7 +860,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
 }
 
 /* ---------- the sections ---------- */
-const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin', 'boards', 'awards'];
+const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin', 'boards', 'awards', 'facts'];
 const red = new Map(SECTIONS.map(s => [s, []]));
 const checked = new Map(SECTIONS.map(s => [s, 0]));
 const fail = (section, message) => { red.get(section).push(message); };
@@ -1947,7 +1974,11 @@ function judgeAwards(mod, label, before, fin, season) {
     if (JSON.stringify(summary.goldenBoot ?? null) !== JSON.stringify(boot)) fail('awards', `${where}: the summary's golden boot ${JSON.stringify(summary.goldenBoot)} is not the old race's ${JSON.stringify(boot)} (${why})`);
   }
   awardEnds.set(`${label}|${season}`, { decided, summary: JSON.stringify(summary), record: JSON.stringify(record) });
-  awardStats.push({ league: cm.careerLeagueOf(before).id, share, decided, late: Boolean(book && book.r0 !== undefined), mineBoot: summary.goldenBoot?.club === before.clubName });
+  const myRow = before.table.find(r => r.club === before.clubName);
+  awardStats.push({
+    league: cm.careerLeagueOf(before).id, share, decided, late: Boolean(book && book.r0 !== undefined), mineBoot: summary.goldenBoot?.club === before.clubName,
+    whole: Boolean(book && book.r0 === undefined), top: lb ? (boards.leaders(lb.input, 'goals', 1)[0]?.n ?? 0) : null, len: myRow ? myRow.w + myRow.d + myRow.l : 0,
+  });
 }
 {
   /* (i) on a LATE book: two careers of the fleet whose book is taken off the save ten entries in, so the next
@@ -1991,6 +2022,90 @@ function judgeAwards(mod, label, before, fin, season) {
   const byLeague = new Map();
   for (const x of awardStats) { const l = byLeague.get(x.league) ?? []; l.push(x); byLeague.set(x.league, l); }
   for (const [league, xs] of byLeague) console.log(`        ${league.padEnd(12)} ${xs.length} season ends: on record ${xs.map(x => x.share).join(' ')}, decided by the book ${xs.filter(x => x.decided).length}, one of mine won the boot ${xs.filter(x => x.mineBoot).length}`);
+}
+
+/* ---------- section facts (Round 1311 step 4): the fleet's top scorers beside the real leagues' ---------- */
+/**
+ * The real figures come from scripts/data/cmLeagueBookFacts.json (Round 1310), USED figures only, read here by
+ * the harness's OWN reading of that file's rule (typed again on purpose, the way this harness types its weight
+ * table): a figure is USED when two publishers on two different hosts print it and agree exactly, and a
+ * season's length (the matches a club played) is USED the same way from the format rows (a span row says
+ * nothing of 2019-20). Nothing under src reads the file (its own fence, scripts/simCmLeagueBookFacts.mjs,
+ * holds that, and the receipt, and the two sources).
+ * PRINTED: by season length, the fleet's mean top scorer beside each real league's mean of the same length,
+ * and the gap in the fleet's own standard errors. BOUND, the one band with measured room: the fleet's mean
+ * top scorer over its 38 match seasons lies between the lowest and the highest real 38 match league mean, each
+ * edge widened by three of the fleet's own standard errors (its winners' deviation over the root of its
+ * seasons). THIS BAND CANNOT TELL THE TAKER RULE ON FROM OFF: Round 1229 measured the taker off at 23.5 to
+ * 24.8, astride the lower edge. It catches a leak (control bookleak: every goal of a side to its taker) and
+ * nothing finer; do not cite it for the taker.
+ */
+function realTopScorers() {
+  const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/cmLeagueBookFacts.json'), 'utf8'));
+  const host = url => new URL(url).host.toLowerCase().replace(/^www\./, '');
+  const seasonsOf = s => {
+    let m = /^(\d{4})-(\d{2})$/.exec(s ?? '');
+    if (m) return [s];
+    m = /^(\d{4})-(\d{2}) to (\d{4})-(\d{2})$/.exec(s ?? '');
+    if (!m) return [];
+    const out = [];
+    for (let y = Number(m[1]); y <= Number(m[3]); y += 1) out.push(`${y}-${String((y + 1) % 100).padStart(2, '0')}`);
+    return out;
+  };
+  const used = rs => {
+    if (!rs?.length) return null;
+    const values = new Set(rs.map(r => r.value));
+    return values.size === 1 && new Set(rs.map(r => r.row.publisher)).size >= 2 && new Set(rs.map(r => host(r.row.url))).size >= 2 ? rs[0].value : null;
+  };
+  const goals = new Map();
+  const lengths = new Map();
+  const add = (map, k, v) => map.set(k, [...(map.get(k) ?? []), v]);
+  for (const row of facts.rows) {
+    const fig = row.figures ?? {};
+    const seasons = seasonsOf(row.season);
+    if (typeof fig.topScorerGoals === 'number' && seasons.length === 1) add(goals, `${row.competition}|${row.season}`, { row, value: fig.topScorerGoals });
+    if (fig.curtailed === true || Number.isInteger(fig.matchesPerClub) || Number.isInteger(fig.clubs)) {
+      const value = fig.curtailed === true ? 'curtailed' : Number.isInteger(fig.matchesPerClub) ? fig.matchesPerClub : 2 * (fig.clubs - 1);
+      for (const s of seasons) if (!(seasons.length > 1 && s === '2019-20')) add(lengths, `${row.competition}|${s}`, { row, value });
+    }
+  }
+  const out = [];
+  for (const [k, rs] of goals) {
+    const g = used(rs);
+    const len = used(lengths.get(k));
+    if (g !== null && Number.isInteger(len)) out.push({ league: k.split('|')[0], season: k.split('|')[1], goals: g, len });
+  }
+  return out;
+}
+{
+  const real = realTopScorers();
+  const byLen = new Map();
+  for (const r of real) { const m = byLen.get(r.len) ?? new Map(); m.set(r.league, [...(m.get(r.league) ?? []), r.goals]); byLen.set(r.len, m); }
+  const fleetSeasons = awardStats.filter(x => x.whole && x.top !== null);
+  const sdOf = xs => { const m = mean(xs); return Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / Math.max(1, xs.length - 1)); };
+  tick('facts');
+  if (!real.length) fail('facts', 'no USED top scorer figure in scripts/data/cmLeagueBookFacts.json');
+  for (const [len, leagues] of [...byLen.entries()].sort((a, b) => b[0] - a[0])) {
+    const fleet = fleetSeasons.filter(x => x.len === len).map(x => x.top);
+    const se = fleet.length > 1 ? sdOf(fleet) / Math.sqrt(fleet.length) : null;
+    const line = [...leagues.entries()].map(([league, xs]) => `${league} ${fmt(mean(xs))} (${xs.length})${se ? `, gap ${fmt((mean(fleet) - mean(xs)) / se, 1)} standard errors` : ''}`).join('; ');
+    console.log(`facts   ${len} match seasons: the fleet's top scorer ${fleet.length ? `${fmt(mean(fleet))} over ${fleet.length} seasons (standard error ${fmt(se ?? 0, 2)})` : 'not played'}; the real leagues: ${line}`);
+  }
+  /* THE BAND, on 38 match seasons. */
+  const real38 = byLen.get(38);
+  const fleet38 = fleetSeasons.filter(x => x.len === 38).map(x => x.top);
+  tick('facts');
+  if (!real38 || real38.size < 2) fail('facts', 'fewer than two real leagues with USED 38 match seasons: the band has no edges');
+  else if (fleet38.length < 2) fail('facts', `the fleet played ${fleet38.length} season of 38 matches: the band cannot be judged`);
+  else {
+    const means = [...real38.values()].map(xs => mean(xs));
+    const se = sdOf(fleet38) / Math.sqrt(fleet38.length);
+    const lo = Math.min(...means) - 3 * se;
+    const hi = Math.max(...means) + 3 * se;
+    const m = mean(fleet38);
+    console.log(`facts   the band on 38 match seasons: ${fmt(lo, 2)} to ${fmt(hi, 2)} (real league means ${fmt(Math.min(...means))} to ${fmt(Math.max(...means))}, widened by three standard errors of ${fmt(se, 2)}); the fleet ${fmt(m, 2)} over ${fleet38.length} seasons, ${fmt((m - lo) / se, 1)} standard errors over the low edge and ${fmt((hi - m) / se, 1)} under the high one`);
+    if (m < lo || m > hi) fail('facts', `the fleet's mean top scorer over its 38 match seasons is ${fmt(m, 2)}, outside the band ${fmt(lo, 2)} to ${fmt(hi, 2)} the real leagues give`);
+  }
 }
 
 /* ---------- section names: the man I bought gains nothing more for the club he left ---------- */
