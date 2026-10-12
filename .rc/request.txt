@@ -1,0 +1,13 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+walk: PORT=4611 node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-700 | tail -60; exit ${PIPESTATUS[0]}
+walk-noreveal-EXPECT1: PORT=4612 US_MARKET_TALK_CONTROL=noreveal node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-600 | tail -24; exit ${PIPESTATUS[0]}
+walk-unspend-EXPECT1: PORT=4613 US_MARKET_TALK_CONTROL=unspend node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
+walk-droptalk-EXPECT1: PORT=4614 US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-500 | tail -10; exit ${PIPESTATUS[0]}
+parity: node scripts/simUsBoardParity.mjs 2>&1 | tail -14; exit ${PIPESTATUS[0]}
+units: node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketUi.test.tsx src/lib/usCareerMarket.test.ts src/test/freeAgencyFeedback.test.tsx src/test/extensionResponseMotion.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback: node scripts/simFreeAgencyFeedback.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+faFeedback-restored: FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-300 | tail -4; exit ${PIPESTATUS[0]}
+extMotion-unreply: EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+anchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
