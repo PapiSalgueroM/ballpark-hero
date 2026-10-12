@@ -1,0 +1,39 @@
+#!build
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAdsense: node scripts/simAdsense.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simReportedGamePools: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportedGamePools.mjs
+simFootlePractice995: node scripts/simFootlePractice995.mjs
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerAgentReviewPageControl: node scripts/simSoccerAgentReviewPageControl.mjs
+simTransferBriefPageControl: node scripts/simTransferBriefPageControl.mjs
+simPlayerBingoLoad: node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
