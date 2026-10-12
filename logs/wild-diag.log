@@ -1,0 +1,21 @@
+mkWildDiag: wrote scripts/wildDiag.mjs
+1) Take a job, then lose it
+  PASS  the career is running
+  PASS  the save was doctored to a board about to pull the trigger
+DIAG i 0 url http://localhost:4173/club-manager ["Back","Track stats","","Managers","Board One bad week from the ","Fans Hopeful","Home","Squad","Tactics","Table","Market","☀️ Transfer window open. Tap","Play Live","⚡ Quick Sim","📊 Match Centre: form, head ","📋 BOARD 1 behind Contenders","📩 INBOX All quiet No messag","📅 CALENDAR Season start Nex","🏆 LEAGUE #17 Premier League","🏅 CUPS Still alive FA Cup","📊 STATS 0 goals Goals, assi","💰 FINANCES -£12m projected ","🏗️ FACILITIES Level 7 · 6 ·","🧑‍🏫 STAFF Level 6 · 5 · 6 ","🎖️ SKILLS Level 1 Tactics, ","⚙️ OPTIONS £ · Normal Curren","🧢 MANAGER 0W 0L New in the ","🏥 TREATMENT All fit No inju","🕵️ RIVAL WATCH Sunderland T","🎙️ PRESS ROOM Nobody has an"]
+  PASS  the board ran out of patience and the wilderness opened
+2) The wilderness has a way onward
+  PASS  the screen says he is out of work
+  PASS  there is a way to wait for the phone
+  PASS  starting over is still offered, it is just no longer the only door
+3) Waiting brings jobs in
+  PASS  a club called after waiting (1 on the table)
+  PASS  the offer states what the board will expect
+  PASS  the club that sacked him did not call back (Norwich City)
+4) Taking the job puts him back to work
+  PASS  the sacked screen is gone
+  PASS  the hub is showing the new club (Norwich City)
+  PASS  the wilderness closed behind him
+  PASS  no real page errors on the walk (clean)
+
+playWilderness: green. Getting sacked is a chapter now, not the last page.

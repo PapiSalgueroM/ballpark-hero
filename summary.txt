@@ -1,0 +1,11 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wild-head-again exit=0 20s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+wild-diag exit=0 19s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+r1304-build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wild-1304-own exit=0 18s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+main-build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wild-headwalk-on-main exit=0 20s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+m1-build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wild-on-m1 exit=0 20s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+m2-build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wild-on-m2 exit=0 20s | playWilderness: green. Getting sacked is a chapter now, not the last page.
