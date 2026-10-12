@@ -1,0 +1,22 @@
+  PASS  390x844 A Play Week 17, owner card ON: box top before 644; after: scrollY 0, his result 713..741, next press "Play the next round" 538..582: both on the screen
+  PASS  390x844 A Play Week 17, owner card off: box top before 644; after: scrollY 0, his result 713..741, next press "Play the next round" 538..582: both on the screen
+  FAIL  390x844 A Watch Week 17, owner card ON: box top before 644; after: scrollY 634, his result 79..107, next press "Play the next round" -96..-52: both on the screen
+  FAIL  390x844 A Watch Week 17, owner card off: box top before 644; after: scrollY 634, his result 79..107, next press "Play the next round" -96..-52: both on the screen
+  PASS  390x844 C Play the Wild Card, owner card ON: box top before 624; after: scrollY 0, his result 691..719, next press "Play the AFC Divisional" 464..508: both on the screen
+  PASS  390x844 C Play the Wild Card, owner card off: box top before 639; after: scrollY 0, his result 706..734, next press "Play the AFC Divisional" 479..523: both on the screen
+  PASS  390x844 C Watch your game (WC), owner card ON: box top before 624; after: scrollY 0, his result 691..719, next press "Play the AFC Divisional" 464..508: both on the screen
+  PASS  390x844 C Watch your game (WC), owner card off: box top before 639; after: scrollY 0, his result 706..734, next press "Play the AFC Divisional" 479..523: both on the screen
+  PASS  390x844 B Play the Divisional, owner card ON: box top before 624; after: scrollY 0, his result 639..667, next press "Play the next round" 464..508: both on the screen
+  PASS  390x844 B Play the Divisional, owner card off: box top before 639; after: scrollY 0, his result 654..682, next press "Play the next round" 479..523: both on the screen
+  ....  320x640 A Play Week 17, owner card ON: box top before 713; after: scrollY 703, his result 79..107, next press "Play the next round" -96..-52
+  ....  320x640 A Play Week 17, owner card off: box top before 713; after: scrollY 703, his result 79..107, next press "Play the next round" -96..-52
+  ....  320x640 A Watch Week 17, owner card ON: box top before 713; after: scrollY 703, his result 79..107, next press "Play the next round" -96..-52
+  ....  320x640 A Watch Week 17, owner card off: box top before 713; after: scrollY 703, his result 79..107, next press "Play the next round" -96..-52
+  ....  320x640 C Play the Wild Card, owner card ON: box top before 673; after: scrollY 661, his result 79..107, next press "Play the AFC Divisional" -148..-104
+  ....  320x640 C Play the Wild Card, owner card off: box top before 673; after: scrollY 661, his result 79..107, next press "Play the AFC Divisional" -148..-104
+  ....  320x640 C Watch your game (WC), owner card ON: box top before 673; after: scrollY 661, his result 79..107, next press "Play the AFC Divisional" -148..-104
+  ....  320x640 C Watch your game (WC), owner card off: box top before 673; after: scrollY 661, his result 79..107, next press "Play the AFC Divisional" -148..-104
+  ....  320x640 B Play the Divisional, owner card ON: box top before 673; after: scrollY 629, his result 79..107, next press "Play the next round" -96..-52
+  ....  320x640 B Play the Divisional, owner card off: box top before 673; after: scrollY 629, his result 79..107, next press "Play the next round" -96..-52
+
+review walk 27: 10 checks, 2 failed
