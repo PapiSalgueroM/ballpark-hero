@@ -198,6 +198,9 @@ const CONTROLS = {
     put: '    ? ownRosterCards<P, R>(spec.own)' },
   /* N.O: the two own cards taken out (a save sitting on a card the release before dealt, "Morale +5", is paid
      nothing). */
+  /* N.F5, M.F5, H.F5, the floors (Round 1313, 5d): the "only him" card of the shared roster beat never dealt (the
+     exact half stays green: nothing dealt is wrong; the floor is what sees it). Full size only. */
+  onlyhimshut: { file: 'src/lib/careerFactBeats.ts', needs: 'N.F5,M.F5,H.F5', find: '        when: (s, r) => { const f = facts(s, r); return !!f && !f.mine && f.his; },', put: '        when: () => false,' },
   owndead: { file: 'src/lib/careerFactBeats.ts', needs: 'N.O,M.O,H.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     put: '    ? ownRosterCards<P, R>(spec.own).slice(0, 0)' },
   /* N.F5: the NFL tick rolls on the bare save, so the beat reads the season BEFORE the one just played (the two
@@ -600,7 +603,7 @@ function playFleet(M, sport, seed, per) {
       const counters = Object.fromEntries(Object.entries(c).filter(([, v]) => typeof v === 'number').sort(([a], [b]) => (a < b ? -1 : 1)));
       h.player.update(JSON.stringify({ seasons: c.seasons, counters }));
       m.careers += 1;
-      if (c.rival) pairs.push([c.rival.myYears, c.rival.myYears + c.rival.hisYears]);
+      if (c.rival) pairs.push([c.rival.myYears, c.rival.myYears + c.rival.hisYears, pos]);
       if (c.rival?.retired) { m.retired += 1; if (c.rival.myYears > c.rival.hisYears) m.badge += 1; }
     }
   } finally { Math.random = keep; }
@@ -672,6 +675,16 @@ const ONE_PLACE = ['QB', 'RB', 'TE', 'K'];
    fixed width it is held within: three times the 0.27 points one standard error came to over careers. */
 const RIVAL_1227 = { nfl: [38.7, 40.0, 39.0, 38.1, 38.9] };
 const HELD_TOL = { nfl: 0.81 };
+/* M.F3, H.F3 (Round 1313, step 5d, the critic's correction 6): my share of the head to head years once the MLB and
+   NHL rivals play on the player's own line. Each cell (the sport pooled, and every position) is held at the five
+   seed mean measured at full size (seeds 1 to 5, 1,500 careers a sport a seed) within its OWN FIXED width: three
+   standard errors, the error worked out over careers by clusterError. Typed once from one run, never widened. The
+   fresh seeds 6 to 10 test the width recipe, not the cell: each fresh mean is read against the typed band, at
+   most one cell of a sport outside and the recipe stands; more than one and every width of that sport is retyped
+   from the ten seeds' measured spread, with the date. Never drop a cell, never widen one. null: not typed yet. */
+const RIVAL_1313 = { mlb: null, nhl: null };
+/* M.F5, H.F5 floors (5d): six tenths of the five seed totals of the same run, rounded down. null: not typed yet. */
+const F5_FLOOR_1313 = { mlb: null, nhl: null };
 /* FOR THE BUILDER OF A LATER ROUND (Round B first): on an unchanged tree the run is deterministic and N.F3 is
    exact. The day a round legitimately moves one NFL draw, the typed mean above and the new run are TWO samples:
    their difference has an error of 0.27 times root two, 0.38 points, so 0.81 is about 2.1 of those and roughly
@@ -852,7 +865,12 @@ function siteCheck(M, sport) {
   const S = FLEET[sport].desc(M); const archs = S.create.archetypes; const P = FLEET[sport].pos; const X = sport === 'mlb' ? M.mlb : M.nhl;
   const score = (pos, line) => (sport === 'mlb' ? X.mlbHeadToHeadScore(pos, line) : X.nhlHeadToHeadScore(pos, line));
   const hook = (year, mine) => (sport === 'mlb' ? X.mlbRivalSeason(year, mine) : X.nhlRivalSeason(year, mine));
-  const out = { seasons: 0, matched: 0, missed: [], short: 0, powerSlate: 0, relievers: 0, powerKind: 0 };
+  const out = { seasons: 0, matched: 0, missed: [], short: 0, powerSlate: 0, relievers: 0, powerKind: 0, swap: {} };
+  /* The measuring swap of open question 1 (printed, never judged): in each season of another length, the verdict
+     the two PRINTED lines give against the verdict of the same two lines with their counts read back at a full
+     season's pace (fullSeasonOf over the work slate; rates as printed). The same year on both arms. */
+  const RATE_PARTS = new Set(['avg', 'era', 'svpct']);
+  const workOf = (pos, slate) => ((sport === 'mlb' ? ['SP', 'RP'] : ['G']).includes(pos) ? Math.min(slate, ENGINE_LEN[sport]) : slate);
   for (const [year, team] of SITE_CELLS[sport]) {
     const slate = M.shape.seasonLength(sport, year, team);
     for (let i = 0; i < SITE_PER; i += 1) {
@@ -877,6 +895,18 @@ function siteCheck(M, sport) {
         if (at < 0) { if (out.missed.length < 3) out.missed.push(`${pos} ${year} ${team}: no index of ${draws.length} draws gives back the saved rival ("${c.rival.lastLine}")`); continue; }
         out.matched += 1;
         if (slate !== ENGINE_LEN[sport]) { out.short += 1; if (replay(at, { ...truth, slate: ENGINE_LEN[sport] }).lastLine !== c.rival.lastLine) out.powerSlate += 1; }
+        if (slate !== ENGINE_LEN[sport]) {
+          const me = readBack(sport, pos, S.statLine(played.line, pos)); const his = readBack(sport, pos, c.rival.lastLine);
+          const t = (out.swap[pos] ??= { short: 0, parted: 0, unread: 0 }); t.short += 1;
+          if (!me || !his) t.unread += 1;
+          else {
+            const work = workOf(pos, slate);
+            const atPace = p => Object.fromEntries(Object.entries(p).map(([k, v]) => [k, RATE_PARTS.has(k) ? v : M.shape.fullSeasonOf(sport, v, work)]));
+            const printedSays = printedScore(M, sport, pos, me) > printedScore(M, sport, pos, his);
+            const paceSays = printedScore(M, sport, pos, atPace(me)) > printedScore(M, sport, pos, atPace(his));
+            if (printedSays !== paceSays) t.parted += 1;
+          }
+        }
         if (sport === 'mlb' && pos === 'RP') { out.relievers += 1; if (replay(at, { ...truth, kind: truth.kind === 'closer' ? 'setup' : 'closer' }).lastLine !== c.rival.lastLine) out.powerKind += 1; }
       } finally { Math.random = keep; }
     }
@@ -1129,12 +1159,29 @@ for (const sport of ['mlb', 'nhl'].filter(s => BOUND.includes(s))) {
     const SITE_FLOOR = { seasons: 1000, slate: 100, kind: 30 };
     const ok = st.missed.length === 0 && st.matched === st.seasons && st.seasons >= SITE_FLOOR.seasons && st.powerSlate >= SITE_FLOOR.slate && (sport !== 'mlb' || st.powerKind >= SITE_FLOOR.kind);
     check(`${S}.U6`, ok, `through the real season sim in ${SITE_CELLS[sport].map(([y, t]) => `${y} ${t}`).join(', ')}: the rival on the save comes back byte for byte from the TRUE facts in ${st.matched} of ${st.seasons} seasons (floor ${SITE_FLOOR.seasons}); the engine's own length would have printed another line in ${st.powerSlate} of ${st.short} seasons of another length (floor ${SITE_FLOOR.slate})${sport === 'mlb' ? `; the other bullpen job in ${st.powerKind} of ${st.relievers} relievers' seasons (floor ${SITE_FLOOR.kind})` : ''}${st.missed.length ? `: ${st.missed.join(' | ')}` : ''}`);
+    const sw = Object.entries(st.swap); const swParted = sw.reduce((a, [, t]) => a + t.parted, 0); const swShort = sw.reduce((a, [, t]) => a + t.short, 0);
+    console.log(`     the measuring swap (open question 1, printed only): in ${swShort} seasons of another length the verdict of the two printed lines parts from the same two lines read at a full season's pace in ${swParted}; by position ${sw.map(([p, t]) => `${p} ${t.parted} of ${t.short}${t.unread ? ` (${t.unread} unread)` : ''}`).join(', ')}`);
   }
   const all = Object.values(NOW[sport].total.by).reduce((a, m) => ({ judged: a.judged + m.judged, off: a.off + m.off, unread: a.unread + m.unread, disagree: a.disagree + m.disagree }), { judged: 0, off: 0, unread: 0, disagree: 0 });
   check(`${S}.F1`, all.judged > 0 && all.off === 0, `every rival line the fleet prints is in the player's own shape at his position (${all.off} of ${all.judged} off shape)`);
   const under = NOW[sport].seeds.reduce((a, s) => ({ mine: a.mine + s.below.mine, his: a.his + s.below.his, first: [...a.first, ...s.below.first] }), { mine: 0, his: 0, first: [] });
   check(`${S}.F1`, under.mine === 0 && under.his === 0, `no printed season line carries a number below zero (mine ${under.mine}, his ${under.his} of ${all.judged} judged years)${under.first.length ? `: ${under.first.slice(0, 3).join(' | ')}` : ''}`);
   check(`${S}.F2`, all.judged > 0 && all.unread === 0 && all.disagree === 0, `the verdict on the save never disagrees with the two printed lines read back and scored by the season score typed here (${all.disagree} of ${all.judged} judged years disagree, ${all.unread} unread; by position and by length in the table above)`);
+  /* F3 (Round 1313, 5d): the race. Every cell measured and printed (the five seed mean and three cluster errors);
+     at full size each is judged against its typed mean and width (RIVAL_1313). Controls: verdictswap (every
+     cell), oldscalemlb and oldscalenhl (the sport). */
+  {
+    const cellsNow = [['all', mean(NOW[sport].perSeed), NOW[sport].error],
+      ...FLEET[sport].pos.map(p => [p, shareOf(NOW[sport].total.by[p]), clusterError(NOW[sport].seeds.flatMap(s => s.pairs.filter(x => x[2] === p)))])];
+    console.log(`     ${S}.F3 measured on seeds ${SEEDS.join(', ')} (the mean, three errors over careers): ${cellsNow.map(([k, v, e]) => `${k} ${f2(v)} ${f2(3 * e)}`).join('; ')}`);
+    const typed = RIVAL_1313[sport];
+    if (!typed) console.log(`     ${S}.F3, not typed yet: printed only`);
+    else if (!FULL) console.log(`     ${S}.F3, not judged in a shrunk run`);
+    else {
+      const out = cellsNow.filter(([k, v]) => !typed[k] || Math.abs(v - typed[k][0]) > typed[k][1]);
+      check(`${S}.F3`, out.length === 0, `my share of the head to head years, every cell held at its mean typed ${typed.date} within its own width (three errors over careers): ${cellsNow.map(([k, v]) => `${k} ${f2(v)} against ${typed[k] ? `${f2(typed[k][0])} within ${f2(typed[k][1])}` : 'nothing typed'}`).join('; ')}${out.length ? `; OUTSIDE: ${out.map(([k]) => k).join(', ')}` : ''}`);
+    }
+  }
   /* F5, the exact half: every All-Star card dealt (beat 206 or 306) says and promises what the two seasons support,
      none in a year neither made it, none an own card of Round 1149; and no beat of the fleet promises a coin. */
   const cards = NOW[sport].seeds.map(s => s.roster);
@@ -1175,6 +1222,17 @@ for (const sport of ['mlb', 'nhl'].filter(s => BOUND.includes(s))) {
     check(`${S}.O`, badO.length === 0, `saves built by ${String(oldB.recordedFrom).slice(0, 8)}: the two own cards pay what they printed, the old shape lines become the position's own after one season with the tally kept, and a retired rival keeps his old line and tally${badO.length ? `: ${badO.join(' | ')}` : ''}`);
   }
   check(`${S}.F5`, cards.flat().length > 0 && wrong.length === 0 && dealt > 0 && coins.length === 0, `every All-Star card dealt says and promises what the two seasons support: ${wrong.length} of ${cards.flat().length} wrong (a seed: both ${count('both').join(', ')}; only you ${count('onlyYou').join(', ')}; only him ${count('onlyHim').join(', ')}); ${coins.length} of ${dealt} beats dealt promise a "50/50 outcome"${wrong.length ? `; the first, a ${wrong[0].pos} in ${wrong[0].year}: "${wrong[0].says}" promising "${wrong[0].does}" with mine ${wrong[0].mine}, his ${wrong[0].his}` : ''}${coins.length ? `; coin: ${coins.slice(0, 3).join(' | ')}` : ''}`);
+  /* F5, the floors (Round 1313, 5d): "only you" and "only him" each dealt at least six tenths of the five seed total
+     measured at full size (F5_FLOOR_1313); "both" floored only where it was dealt ten times or more. Control
+     onlyhimshut (the "only him" card never dealt). */
+  {
+    const sum = k => count(k).reduce((a, b) => a + b, 0);
+    const got = { onlyYou: sum('onlyYou'), onlyHim: sum('onlyHim'), both: sum('both') };
+    const fl = F5_FLOOR_1313[sport];
+    if (!fl) console.log(`     ${S}.F5 floors, not typed yet: only you ${got.onlyYou}, only him ${got.onlyHim}, both ${got.both} over the run`);
+    else if (FULL) check(`${S}.F5`, Object.entries(fl).every(([k, v]) => got[k] >= v), `the cards a season deals still turn up over the run: ${Object.keys(got).map(k => `${k} ${got[k]}${fl[k] !== undefined ? ` (floor ${fl[k]})` : ' (reported)'}`).join(', ')}`);
+    else console.log(`     ${S}.F5 floors, not judged in a shrunk run: only you ${got.onlyYou}, only him ${got.onlyHim}, both ${got.both}`);
+  }
 }
 
 /* ------------------------------------------------------------------ */
