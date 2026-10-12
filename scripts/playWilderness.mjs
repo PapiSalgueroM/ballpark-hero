@@ -40,6 +40,12 @@
  * counted against the source first), so "the board ran out of patience" must
  * fail, guarded for nosack only. Both controls exit 0 on "all N guarded checks
  * fired" and 1 otherwise. The walk also blocks the database host.
+ * Measured on 2e288252 (runner result r1314-wild1, 2026-10-12): the default
+ * seed 2899200577 was sacked at step 6 after 3 matches with 4042 page draws
+ * and a club called after 3 waits, the same in three runs and under CPU
+ * throttling at rate 4. Seeds 1 to 10 were sacked at steps 52, 2, 4, 38, 2, 4,
+ * 16, 6, 2 and 2 (25, 1, 2, 19, 1, 2, 8, 3, 1 and 1 matches), and a club called
+ * after 3, 2, 1, 2, 6, 1, 1, 8, 3 and 4 waits: all ten green, 17 to 54 s.
  */
 import fs from 'node:fs';
 import path from 'node:path';
