@@ -1,0 +1,55 @@
+# Round 1311 FINAL (head 8676802b): ten fleets with BOOK_BASE 21941630 (origin/main, Release AY), the award races and their controls, the save size, the neighbours, the facts fence, the whole unit suite
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+book-d0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d0 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=0 node scripts/simCmLeagueBook.mjs
+book-d1: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d1 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-d2: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d2 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-d3: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d3 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-d4: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d4 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f0 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f1: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f1 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f2: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f2 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f3: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f3 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f4: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f4 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simAwardRaces: TMPDIR=$(mktemp -d) node scripts/simAwardRaces.mjs
+simAwardRaces-leak: TMPDIR=$(mktemp -d) AWARD_CONTROL=leak node scripts/simAwardRaces.mjs
+simAwardRaces-oldleak: TMPDIR=$(mktemp -d) AWARD_CONTROL=oldleak node scripts/simAwardRaces.mjs
+simCmOwnGoals: TMPDIR=$(mktemp -d) node scripts/simCmOwnGoals.mjs
+simStatsCentre: TMPDIR=$(mktemp -d) node scripts/simStatsCentre.mjs
+simLiveMatch: TMPDIR=$(mktemp -d) node scripts/simLiveMatch.mjs
+simCmLeagueRules: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+saveSize-0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSaveSize.mjs
+saveSize-1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: TMPDIR=$(mktemp -d) SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: TMPDIR=$(mktemp -d) node scripts/simDailyDeals.mjs
+simDailyDeals-bind: TMPDIR=$(mktemp -d) DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: TMPDIR=$(mktemp -d) DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simManagerHotSeat: TMPDIR=$(mktemp -d) node scripts/simManagerHotSeat.mjs
+simDeadlineDay: TMPDIR=$(mktemp -d) node scripts/simDeadlineDay.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmVar: TMPDIR=$(mktemp -d) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmRealFixtures: TMPDIR=$(mktemp -d) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmShootoutOrder: TMPDIR=$(mktemp -d) node scripts/simCmShootoutOrder.mjs
+simCustomClubValues: TMPDIR=$(mktemp -d) node scripts/simCustomClubValues.mjs
+simAcademy: TMPDIR=$(mktemp -d) node scripts/simAcademy.mjs
+simClubManagerALeague: TMPDIR=$(mktemp -d) node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: TMPDIR=$(mktemp -d) node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: TMPDIR=$(mktemp -d) node scripts/simClubManagerMeters.mjs
+simClubManagerScore: TMPDIR=$(mktemp -d) node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: TMPDIR=$(mktemp -d) node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: TMPDIR=$(mktemp -d) node scripts/simCmVarLedger.mjs
+simEras: TMPDIR=$(mktemp -d) node scripts/simEras.mjs
+simPress: TMPDIR=$(mktemp -d) node scripts/simPress.mjs
+simRoles: TMPDIR=$(mktemp -d) node scripts/simRoles.mjs
+simWilderness: TMPDIR=$(mktemp -d) node scripts/simWilderness.mjs
+simCmLeagueBookFacts: node scripts/simCmLeagueBookFacts.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
