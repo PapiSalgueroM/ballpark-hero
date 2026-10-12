@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-head exit=1 27s | sweepWeight: 1 failure
+chunks-head exit=0 4s |  9836 Oct 12 20:49 NflBracket-CVaKw1z_.js
+weight-base exit=0 65s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
