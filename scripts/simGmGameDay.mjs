@@ -251,6 +251,15 @@ const CONTROLS = {
   bindrefuse: { section: 8, labels: ['the bind never refuses a game of the fleet'], patches: [{ file: BIND, from: 'if (told && toldWinner(told) !== g.winner) told = null;', to: 'if (told && (toldWinner(told) !== g.winner || key.length % 5 === 0)) told = null;' }] },
   bindchance: { section: 8, labels: ["tells the quick path's final for the chance"], patches: [{ file: BIND, from: 'const home = teams[g.home], away = teams[g.away];', to: 'const home = teams[g.away], away = teams[g.home];' }] },
   logdrop: { section: 9, labels: ["after every week the log's record is the club's", 'one entry a week, in week order'], patches: [{ file: LOG, from: 'return { v: 1, season, games: [...kept, ...games] };', to: 'return { v: 1, season, games: [...kept, ...games.filter(g => g.winner === g.home)] };' }] },
+  /* Round 1308 */
+  undo: { section: 11, labels: ['the bracket path leaves the 32 records'], clean: ["give the fixture's thirteen games", 'playBracketAll with nflPlayTie gives the same'], patches: [
+    { file: NFL_POST, from: '    teams[g.winner].wins -= 1;', to: '' },
+    { file: NFL_POST, from: '    teams[g.winner === g.home ? g.away : g.home].losses -= 1;', to: '' },
+  ] },
+  keydrift: { section: 11, labels: ["each told score is nflTell's on the fixture's own engine game", "nflRoundsOf is runPlayoffs' rounds told"], clean: ["give the fixture's thirteen games"], patches: [{ file: NFL_POST, from: 'const t = nflTell(g, teams, season, tie.round, edges);', to: 'const t = nflTell(g, teams, season, tie.id, edges);' }] },
+  trust: { section: 12, labels: ['rebuilt unplayed with the feed line'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'const repair = repairGmBracket(format, known, season, () => sport.seeds(league), isClub, seeds => sport.seedsOk(seeds, league));', to: 'const repair = { save: known ?? block, rebuilt: null, line: null, problems: [] };' }] },
+  keyrebuilt: { section: 13, labels: ["deep equal the one press path's", 'the sink holds every game'], clean: ['his playoff record in the log'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: 'if (t.last) told.push({ ...t.last, key: `${season}|${tie.round}|${t.game.home}|${t.game.away}|${t.game.homeScore}-${t.game.awayScore}` });' }] },
+  logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
   logholes: { section: 9, labels: ['with any one field of an entry damaged the log reads as absent'], patches: [{ file: LOG, from: 'if (!g || (g.home !== club && g.away !== club) || keys.has(g.key)) return null;', to: 'if (!g) continue; if ((g.home !== club && g.away !== club) || keys.has(g.key)) return null;' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown GM_GAMEDAY_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -285,13 +294,15 @@ try {
     "export { finalTie } from './src/lib/finalsBracket.ts';",
     "export * as log from './src/lib/gmGameLog.ts';",
     "export * as bind from './src/lib/frontOfficeGameDay.ts';",
+    "export * as post from './src/lib/gmPostseason.ts';",
+    "export * as nflPost from './src/lib/frontOfficePostseason.ts';",
   ], PATCHES, CONTROL || 'base'));
 } catch (e) {
   console.error(`simGmGameDay: the bundle refused${CONTROL ? ` (control ${CONTROL})` : ''}: ${e && e.message ? e.message.split('\n')[0] : e}`);
   process.exit(2);
 }
 if (fired.size !== PATCHES.length) { console.error(`control ${CONTROL}: ${fired.size} of ${PATCHES.length} patches reached their file, refusing to report`); process.exit(2); }
-const { engine: E, score: S, day: D, bracket: B, nflDay, nflData, NFL_SCORE_LAW: LAW, NFL_SCORING, NFL_CLOCK, log: L, bind: N } = M;
+const { engine: E, score: S, day: D, bracket: B, nflDay, nflData, NFL_SCORE_LAW: LAW, NFL_SCORING, NFL_CLOCK, log: L, bind: N, post: P, nflPost: NP } = M;
 const GAME_DAY = nflDay.NFL_GAME_DAY;
 const FORMAT = nflData.NFL_BRACKET;
 console.log(`bundled in ${Date.now() - t0} ms; seed sets ${SEEDSETS.join(', ')}; ${FLEET.perKind} seasons a league kind a set${CONTROL ? `; CONTROL ${CONTROL}` : ''}`);
@@ -458,6 +469,12 @@ for (const set of SEEDSETS) {
   const s9 = { weekly: tally(), order: tally(), playoff: tally(), json: tally(), other: tally(), damage: tally(), late: tally() };
   /* Round 1307, section 10: the stories of the games a log holds */
   const s10 = { story: tally(), adds: tally() };
+  /* Round 1308, sections 11 to 13: the postseason a round at a time through the NFL's bind */
+  const s11 = { weeks: tally(), all: tally(), records: tally(), told: tally(), rounds: tally() };
+  const s12 = { sound: tally(), outside: tally(), rebuilt: tally(), plays: tally() };
+  const s12kinds = new Set();
+  const s13 = { sink: tally(), when: tally(), entries: tally(), record: tally(), records: tally() };
+  const s13seen = { bye: 0, out: 0 };
   const bound = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0, differ: 0 };
   let lateSeen = '';
   const addScore = (o, home, away) => {
@@ -631,6 +648,7 @@ for (const set of SEEDSETS) {
       const pick = M.keyedRng(`log clubs|${id}`);
       const four = [table[0], table[table.length - 1]];
       while (four.length < 4) { const c = table[Math.floor(pick() * table.length)]; if (!four.includes(c)) four.push(c); }
+      const logsOf = new Map();
       for (const club of four) {
         let log = null;
         let won = 0;
@@ -649,6 +667,7 @@ for (const set of SEEDSETS) {
         /* the one press finish adds exactly his playoff games, in the order they were played, under their rounds' names */
         const mineP = post.filter(x => x.g.home === club || x.g.away === club);
         const full = L.addToGmGameLog(log, season, mineP.map(x => x.t.last));
+        logsOf.set(club, { log, full });
         const reg = L.gmLogRecord(full, club, N.nflIsRegular);
         const all = L.gmLogRecord(full, club);
         const wonP = mineP.filter(x => x.g.winner === club).length;
@@ -699,6 +718,112 @@ for (const set of SEEDSETS) {
         count(s9.late, late !== null && late.games.length === E.REGULAR_WEEKS - k + 1 && late.games.every((g, j) => g.where === `w${k + j}`) && lr.won + lr.lost === late.games.length && lr.won + lr.lost < won + lost
           && same(L.readGmGameLog(JSON.parse(JSON.stringify(late)), isClub, season, club), late), () => `${id} ${club}: begun at week ${k}`);
         if (!lateSeen && late) lateSeen = `${id} ${club}: a log begun at week ${k} holds ${late.games.length} games and reads ${lr.won}-${lr.lost}, where the league's record is ${won}-${lost}`;
+      }
+      /* Round 1308, sections 11 to 13: the postseason played a round at a time through the NFL's bind (nflPlayTie and its
+         sink), against the one press path the board takes today: the engine's own run, each game told under its round's
+         name. Both from the end of Week 17 with the same generator, installed AS Math.random. */
+      {
+        A.gen.state = regular.state;
+        const teamsE = JSON.parse(regular.teams);
+        const { value: eng, calls: engCalls } = withMathRandom(A.gen, () => {
+          const r = E.runPlayoffs(teamsE, Math.random);
+          return { ...r, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+        });
+        const onePress = eng.rounds.map(r => ({ name: r.name, told: r.games.map(g => N.nflTell(g, teamsE, A.lg.season, r.name)) }));
+        const toldRounds = onePress.map(r => ({ name: r.name, games: r.told.map(t => t.game) }));
+        const oneLasts = onePress.flatMap(r => r.told.map(t => t.last));
+        /* the recorded fixture's games: the bracket path tells other scores, never other games */
+        const fixGames = rowA.games.map(s => s.split('|'));
+        const bare = fixGames.map(([round, home, away, , , winner]) => `${round}|${home}|${away}|${winner}`);
+        /* each fixture game told by the bind under its round's name: what the bracket path must have saved */
+        const wantTold = fixGames.map(([round, home, away, hs, as, winner]) => N.nflTell({ week: 0, home, away, homeScore: Number(hs), awayScore: Number(as), winner }, teamsE, A.lg.season, round).game);
+        const paths = {};
+        for (const mode of ['weeks', 'all']) {
+          A.gen.state = regular.state;
+          const teams = JSON.parse(regular.teams);
+          const sink = [];
+          const added = [];
+          const { value: run, calls } = withMathRandom(A.gen, () => {
+            const play = NP.nflPlayTie(teams, Math.random, A.lg.season, undefined, sink);
+            let save = B.openBracket(FORMAT, A.lg.season, NP.NFL_POSTSEASON.seeds({ ...A.lg, teams }));
+            if (mode === 'all') save = B.playBracketAll(FORMAT, save, play);
+            else for (let press = 0; press < 4; press += 1) { const from = sink.length; save = JSON.parse(JSON.stringify(B.playBracketWeek(FORMAT, save, play))); added.push({ save, games: sink.slice(from) }); }
+            return { save, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+          });
+          paths[mode] = { save: run.save, sink, added, teams };
+          const rounds = B.bracketRounds(FORMAT, run.save);
+          const games = rounds.flatMap(r => r.games.map(g => `${r.name}|${g.home}|${g.away}|${g.winner}`));
+          const champ = B.bracketChampion(FORMAT, run.save);
+          count(s11[mode], same(games, bare) && champ === rowA.champion && run.next === rowA.next && calls === engCalls,
+            () => `${id} (${mode}): ${games.find((g, k) => g !== bare[k]) ?? `champion ${champ} against ${rowA.champion}, or the next draws, or ${calls} draws against the engine's ${engCalls}`}`);
+          count(s11.records, sha1(recordsOf(teams)) === rowA.records && recordsOf(teams) === regular.records, () => `${id} (${mode}): the records after the bracket are not the regular season's`);
+          const toldNow = rounds.flatMap(r => r.games);
+          const bad = toldNow.findIndex((g, k) => !wantTold[k] || g.homeScore !== wantTold[k].homeScore || g.awayScore !== wantTold[k].awayScore || g.winner !== wantTold[k].winner);
+          count(s11.told, toldNow.length === 13 && bad === -1, () => `${id} (${mode}): game ${bad + 1} saved ${toldNow[bad] ? `${toldNow[bad].homeScore}-${toldNow[bad].awayScore}` : 'nothing'}, nflTell ${wantTold[bad] ? `${wantTold[bad].homeScore}-${wantTold[bad].awayScore}` : 'nothing'}`);
+          count(s11.rounds, same(NP.nflRoundsOf(FORMAT, run.save), toldRounds), () => `${id} (${mode})`);
+          /* section 13, the whole sink: every game in play order as the one press path's log entry, keys included */
+          count(s13.sink, sink.length === 13 && same(sink, oneLasts), () => `${id} (${mode}): ${sink.length} entries; the first that differs: ${JSON.stringify(sink.find((x, k) => !same(x, oneLasts[k])) ?? null)}`);
+        }
+
+        /* section 12: the load, for the first season of each league kind, at every stop of the bracket */
+        if (i === 0) {
+          const league = { ...A.lg, teams: paths.weeks.teams, week: E.REGULAR_WEEKS + 1 };
+          const fresh = NP.NFL_POSTSEASON.seeds(league);
+          const load = (block, inPost = true) => P.loadGmPostseason(NP.NFL_POSTSEASON, league, A.lg.season, inPost, block);
+          const coin = (home, away, tie) => (M.keyedRng(`rebuilt|${id}|${tie.id}`)() < 0.5 ? { homeScore: 24, awayScore: 17, winner: home } : { homeScore: 17, awayScore: 24, winner: away });
+          const stops = [B.openBracket(FORMAT, A.lg.season, seeds), ...paths.weeks.added.map(a => a.save)];
+          stops.forEach((stop, k) => {
+            const text = JSON.stringify(stop);
+            const back = JSON.parse(text);
+            const r = load(back);
+            count(s12.sound, !!r && r.refused === null && r.format === FORMAT && r.repair.save === back && r.repair.rebuilt === null && r.repair.line === null, () => `${id} stop ${k}: ${r ? r.refused ?? r.repair.rebuilt : 'null'}`);
+            count(s12.outside, [JSON.parse(text), undefined, null, { v: 2 }, 'x'].every(b => load(b, false) === null), () => `${id} stop ${k}`);
+            const damaged = [];
+            const doc = () => JSON.parse(text);
+            if (stop.played.length >= 1) { const d = doc(); const g0 = d.played[0]; g0.games[0].winner = g0.games[0].winner === g0.home ? g0.away : g0.home; damaged.push(['a doctored winner', d, 'seeds']); }
+            if (stop.played.length >= 2) { const d = doc(); [d.played[0].away, d.played[1].away] = [d.played[1].away, d.played[0].away]; damaged.push(['a doctored pairing', d, 'seeds']); }
+            if (stop.played.some(p => FORMAT.ties.find(t => t.id === p.id).week >= 2)) { const d = doc(); d.played = d.played.filter(p => p.id !== 'NFC-WC-3'); damaged.push(['a tie out of turn', d, 'seeds']); }
+            { const d = doc(); [d.seeds[0], d.seeds[7]] = [d.seeds[7], d.seeds[0]]; damaged.push(['seeds that mix the conferences', d, 'fresh']); }
+            { const d = doc(); d.season += 1; damaged.push(['a block of another season', d, 'fresh']); }
+            { const d = doc(); d.v = 2; damaged.push(['a block of an unknown version', d, 'fresh']); }
+            for (const [what, d, kind] of damaged) {
+              s12kinds.add(what);
+              const rr = load(JSON.parse(JSON.stringify(d)));
+              const want = B.openBracket(FORMAT, A.lg.season, kind === 'seeds' ? d.seeds : fresh);
+              const ok = !!rr && rr.refused === null && rr.repair.rebuilt === kind && rr.repair.line === B.BRACKET_REBUILT_LINES[kind] && same(rr.repair.save, want);
+              count(s12.rebuilt, ok, () => `${id} stop ${k}, ${what}: ${rr ? rr.refused ?? `rebuilt ${rr.repair.rebuilt}` : 'null'}`);
+              if (!ok) continue;
+              const done = B.playBracketAll(FORMAT, rr.repair.save, coin);
+              count(s12.plays, B.bracketChampion(FORMAT, done) !== null && B.bracketProblems(FORMAT, done, isClub).length === 0, () => `${id} stop ${k}, ${what}`);
+            }
+          });
+        }
+
+        /* section 13: his log through the bracket, a round a press, for the four clubs of section 9 */
+        const w = paths.weeks;
+        const roundsW = NP.nflRoundsOf(FORMAT, w.save);
+        for (const [club, { log, full }] of logsOf) {
+          let blog = log;
+          let wrong = '';
+          let out = -1;
+          const bye = seeds[0] === club || seeds[7] === club;
+          if (bye) s13seen.bye += 1;
+          w.added.forEach((a, k) => {
+            const mine = a.games.filter(g => g.home === club || g.away === club);
+            if (k === 0 && bye && mine.length > 0) wrong = wrong || `an entry in the week he has the bye`;
+            if (out >= 0 && mine.length > 0) wrong = wrong || `an entry in press ${k + 1}, after he went out in press ${out + 1}`;
+            if (out < 0 && mine.some(g => g.winner !== club)) { out = k; s13seen.out += 1; }
+            blog = L.addToGmGameLog(blog, season, mine);
+          });
+          count(s13.when, !wrong, () => `${id} ${club}: ${wrong}`);
+          count(s13.entries, blog !== null && full !== null && same(blog, full), () => `${id} ${club}: the bracket path's log holds ${blog ? blog.games.length : 0} games, the one press path's ${full ? full.games.length : 0}`);
+          const inRounds = roundsW.flatMap(r => r.games).filter(g => g.home === club || g.away === club);
+          const wonR = inRounds.filter(g => g.winner === club).length;
+          const all = L.gmLogRecord(blog, club);
+          const reg = L.gmLogRecord(blog, club, N.nflIsRegular);
+          count(s13.record, all.won - reg.won === wonR && all.lost - reg.lost === inRounds.length - wonR, () => `${id} ${club}: the log's playoff record ${all.won - reg.won}-${all.lost - reg.lost}, nflRoundsOf's ${wonR}-${inRounds.length - wonR}`);
+        }
+        count(s13.records, recordsOf(w.teams) === regular.records, () => `${id}: the records after the last playoff game are not the regular season's`);
       }
     }
   }
@@ -763,6 +888,24 @@ for (const set of SEEDSETS) {
   settle(9, `set ${set}: a log begun at week k holds one entry a week from k on and none before, and its record is not the league's`, s9.late);
   settle(10, `set ${set}: every game of the log tells a story, from both sides`, s10.story);
   settle(10, `set ${set}: every game of the log tells a story that the same checker adds up, from both sides`, s10.adds);
+  /* Round 1308 */
+  settle(11, `set ${set}: four presses of playBracketWeek with nflPlayTie, the save through JSON between them, give the fixture's thirteen games (home, away, winner, in order), champion, next ${NEXT_DRAWS} draws and draw count`, s11.weeks);
+  settle(11, `set ${set}: playBracketAll with nflPlayTie gives the same`, s11.all);
+  settle(11, `set ${set}: the bracket path leaves the 32 records the regular season's`, s11.records);
+  settle(11, `set ${set}: each told score is nflTell's on the fixture's own engine game, under the same key`, s11.told);
+  settle(11, `set ${set}: nflRoundsOf is runPlayoffs' rounds told the one press way, name for name and game for game`, s11.rounds);
+  settle(12, `set ${set}: a sound block through JSON comes back as it is, at every stop of the bracket`, s12.sound);
+  settle(12, `set ${set}: outside the postseason the load is null, whatever the block`, s12.outside);
+  settle(12, `set ${set}: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line`, s12.rebuilt);
+  settle(12, `set ${set}: every rebuilt bracket plays to a champion the validator finds nothing in`, s12.plays);
+  check(12, `set ${set}: every damage of the section was made (${s12kinds.size} of 6)`, s12kinds.size === 6);
+  settle(13, `set ${set}: the sink holds every game in play order as the one press path's log entry, keys included`, s13.sink);
+  settle(13, `set ${set}: no log entry in a week he has the bye, and none after he is out`, s13.when);
+  settle(13, `set ${set}: his playoff entries on the bracket path deep equal the one press path's, keys included`, s13.entries);
+  settle(13, `set ${set}: his playoff record in the log is his record in nflRoundsOf`, s13.record);
+  settle(13, `set ${set}: after the last playoff game the 32 records are the regular season's`, s13.records);
+  check(13, `set ${set}: the four clubs a season took a bye (${s13seen.bye}) and went out (${s13seen.out}) somewhere in the set`, s13seen.bye > 0 && s13seen.out > 0);
+  console.log(`set ${set}, the bracket a round a press: ${s11.weeks.n} seasons; club seasons of section 13 with a bye ${s13seen.bye}, that went out ${s13seen.out}; stops loaded ${s12.sound.n}, damaged blocks rebuilt ${s12.rebuilt.n}`);
   console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; points a team game ${Bn.points.toFixed(2)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, sides on 40 or more ${Bn.forty.toFixed(4)}; ${lateSeen}`);
   const afcShare = afcTitles / lines.length;
   measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games, differShare, refused: s8.refused.bad });
