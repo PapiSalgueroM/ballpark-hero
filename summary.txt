@@ -1,0 +1,3 @@
+rivalT exit=0 29s | simUsRivalSense: 14 checks, 0 failed (full size)
+senseC exit=0 113s | simNbaAwardsSense: 172 checks, 0 failed (full size), 113s
+rivalP2base exit=1 759s | simUsRivalSense: 47 checks, 1 failed (full size), red sections: P1
