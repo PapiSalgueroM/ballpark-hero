@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cm-def-1 exit=0 280s | Played Club Manager through its own screens. 0 findings.
+cm-def-2 exit=0 281s | Played Club Manager through its own screens. 0 findings.
+cm-s1 exit=0 268s | Played Club Manager through its own screens. 0 findings.
+cm-s2 exit=0 270s | Played Club Manager through its own screens. 0 findings.
+cm-s3 exit=0 292s | Played Club Manager through its own screens. 0 findings.
+cm-s4 exit=0 270s | Played Club Manager through its own screens. 0 findings.
+cm-s5 exit=0 281s | Played Club Manager through its own screens. 0 findings.
+cm-nobusiness exit=1 2s | playClubManager control: RED before it started. The transfer business guard matched 2 time(s) in the built assets, so the swap would change nothing or the wrong thing.
