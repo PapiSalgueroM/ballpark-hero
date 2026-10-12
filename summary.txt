@@ -1,0 +1,3 @@
+shoot-unsetpath-base exit=1 28s | simCmShootoutOrder: 3 FAILURE(S)
+eraucl-poolnames-base exit=0 36s | simClubManagerEraUcl control: green. The poolnames regression was reported (55 findings in section 7).
+eraucl-oldname-base exit=0 37s | simClubManagerEraUcl control: green. The oldname regression was reported (18 findings in section 7).
