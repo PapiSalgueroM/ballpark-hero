@@ -312,4 +312,18 @@ describe('Player Bingo retained Vitinha identities and title seasons', () => {
     expect(data.clubYears.get(current.player_name)).toEqual([{ key: 'qzx fixture club', year: 2026 }, { key: 'qzx previous club', year: 2025 }]);
     expect(data.seasonStats.get(current.player_name)).toEqual([stat(current), stat(valid)]);
   });
+
+  it('gives a summer 2026 PSG arrival no 2026 title and keeps any earlier winning season', async () => {
+    // Constructed input, not a database row: club and year are what Round 450's migration
+    // (20260905_round_450_transfer_windows_2026_summer.sql) wrote to Ferran Torres's 2026 row;
+    // the other fields are fixture values. He joined PSG on 15 August 2026, after the final.
+    const arrival: Row = { ...fillers[0], id: 920001, player_name: 'Ferran Torres', nationality: 'Spain', position: 'Centre-Forward', club: 'Paris Saint-Germain', age: 26, year: 2026, market_value_usd: 54_000_000 };
+    const data = await load([arrival], [arrival]);
+    const player = data.pool.find(row => row.name === 'Ferran Torres')!;
+    expect(data.clubYears.get('Ferran Torres')).toEqual([{ key: 'paris saint-germain', year: 2026 }]);
+    expect(ucl(data).test(player, data)).toBe(false);
+    // Criterion boundary, not a historical row: an earlier winning season still counts.
+    const earlier = { ...data, clubYears: new Map(data.clubYears).set('Ferran Torres', [{ key: 'paris saint-germain', year: 2026 }, { key: 'fc barcelona', year: 2015 }]) };
+    expect(ucl(earlier).test(player, earlier)).toBe(true);
+  });
 });

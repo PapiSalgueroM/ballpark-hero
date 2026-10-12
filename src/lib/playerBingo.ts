@@ -99,6 +99,9 @@ export { isSameMan };
  *   Messi 2021 = Barcelona, 2022-2023 = PSG, 2024+ = Inter Miami,
  *   Ronaldo 2022 = Man United, 2023 = Al-Nassr (moved Jan 23). Club strings
  *   can hold mid-season moves as "Club A / Club B"; clubYears splits those.
+ *   Exception: the year 2026 rows are an autumn 2025 snapshot with the 2026
+ *   transfer overlay's moves written in, so a moved player's 2026 row holds
+ *   his NEW club (see UCL_2026_WINDOW_ARRIVALS).
  *   New tiles and their live support counts:
  *     'World Cup winner' (11): world_cup_players squad membership for the
  *       four champions the table covers (2010 Spain, 2014 Germany, 2018
@@ -107,9 +110,13 @@ export { isSameMan };
  *       year his own rows show him there (Barcelona 2005-2021, PSG
  *       2022-2023, Inter Miami 2024+) = teammates for at least part of
  *       that season. Messi himself is excluded.
- *     'Champions League winner' (62): a season row at the winning club in
- *       the season-end year of a 2011-2025 final. Squad members who did not
- *       play the final still count, matching how medals are credited.
+ *     'Champions League winner' (62 when counted for the 2011-2025 finals;
+ *       the 2026 final was added in Release BA and the support was not
+ *       recounted): a season row at the winning club in the season-end year
+ *       of a 2011-2026 final. Squad members who did not play the final still
+ *       count, matching how medals are credited. The year 2026 rows break the
+ *       convention for the players the 2026 transfer overlay moved (see
+ *       UCL_2026_WINDOW_ARRIVALS).
  *     '10M+ Instagram followers' (15 in pool): static hand-checked list,
  *       every name comfortably above 10M (see INSTAGRAM_10M).
  *   STILL REJECTED (owner also floated these; the data cannot verify them):
@@ -619,6 +626,21 @@ const UCL_WINNER_KEYS: Set<string> = new Set(
 );
 
 /**
+ * Release BA: the year 2026 rows are an autumn 2025 snapshot with the summer
+ * 2026 window written over them (scripts/transferOverlay2026.mjs, Round 450's
+ * migration 20260905_round_450_transfer_windows_2026_summer.sql). For a player
+ * that overlay moved TO a 2026 winner, the 2026 row names the club he joined
+ * after the final (30 May 2026), not the squad that won it, so that row earns
+ * no 2026 title. These four joined PSG in August 2026 (Digne 8 Aug, Akliouche
+ * 6 Aug, Ferran Torres 15 Aug, Godts 16 Aug; two sources each in the overlay).
+ * Any earlier winning season still counts. simPlayerBingoHonours fails if an
+ * overlay entry into a 2026 winner is missing here.
+ */
+const UCL_2026_WINDOW_ARRIVALS: Set<string> = new Set(
+  ['Lucas Digne', 'Ferran Torres', 'Maghnes Akliouche', 'Mika Godts'].map(normalizeName),
+);
+
+/**
  * Players with 10M+ followers on their public verified Instagram accounts.
  * Hand-checked July 2026 and deliberately conservative: every name here is
  * COMFORTABLY above 10M (most are several multiples of it, e.g. Ronaldo and
@@ -862,7 +884,8 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       icon: '🏆',
       test: (p, d) => {
         const rows = d.clubYears.get(p.name);
-        return !!rows && rows.some(r => UCL_WINNER_KEYS.has(`${r.key}|${r.year}`));
+        const windowArrival = UCL_2026_WINDOW_ARRIVALS.has(normalizeName(p.name));
+        return !!rows && rows.some(r => !(windowArrival && r.year === 2026) && UCL_WINNER_KEYS.has(`${r.key}|${r.year}`));
       },
     }),
   );

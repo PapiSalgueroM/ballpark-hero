@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
+import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 
 const root = process.cwd();
 const requestedOut = process.env.PLAYER_BINGO_HONOURS_OUT;
@@ -20,8 +21,8 @@ const testFile = path.join(root, 'src/test/playerBingoHonours.test.ts');
 const heldLib = readFileSync(libFile);
 const heldTest = readFileSync(testFile);
 const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
-assert.equal(hash(Buffer.from(source)), 'F96056EDFC854C5EF188A5D9D3D9CEAD8CFAABAF28F24436656D313350344DAB');
-assert.equal(hash(heldTest), 'D59E5466142A653A6F73B2C477B7267308FC875AC306213B3AD613CE1E42C622');
+assert.equal(hash(Buffer.from(source)), '77407F612623BAADFF5A4C35AE3D94DAAEE8572934091B29B98D8A46817FAECF');
+assert.equal(hash(heldTest), '2821DD98A4A2DDA81CA25A78916DB911C9E4141BF87180BEA85F29ECCF457E63');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
 writeFileSync(path.join(out, 'test.raw.ts'), heldTest);
@@ -29,6 +30,9 @@ const controls = [
   { id: 'remove-2026', anchor: "  { keys: ['paris saint-germain'], years: [2025, 2026] },", replacement: "  { keys: ['paris saint-germain'], years: [2025] },", failures: [
     'accepts the current PSG midfielder in 2026 without borrowing forward history',
     'preserves the verified 2025 pair and rejects non-winning PSG years',
+  ] },
+  { id: 'remove-window-arrivals', anchor: '        const windowArrival = UCL_2026_WINDOW_ARRIVALS.has(normalizeName(p.name));', replacement: '        const windowArrival = false;', failures: [
+    'gives a summer 2026 PSG arrival no 2026 title and keeps any earlier winning season',
   ] },
   { id: 'remove-vitinha-identity', anchor: "  if (normalizeName(ref.name) !== 'vitinha') return true;", replacement: '  return true;', failures: [
     'accepts the current PSG midfielder in 2026 without borrowing forward history',
@@ -72,16 +76,50 @@ function run(id, copiedSource, expectedFailures) {
   retained.rows = actual.testResults.flatMap(file => file.assertionResults); save();
   assert.equal(Number(actual.numUnhandledErrors ?? 0), 0);
   assert.equal(actual.numPendingTests, 0);
-  assert.equal(retained.rows.length, 9);
-  assert.equal(actual.numTotalTests, 9);
+  assert.equal(retained.rows.length, 10);
+  assert.equal(actual.numTotalTests, 10);
   assert.equal(actual.numFailedTests, expectedFailures.length);
-  assert.equal(actual.numPassedTests, 9 - expectedFailures.length);
+  assert.equal(actual.numPassedTests, 10 - expectedFailures.length);
   assert.equal(result.status, expectedFailures.length ? 1 : 0);
   assert.deepEqual(retained.rows.filter(row => row.status === 'failed').map(row => row.title).sort(), [...expectedFailures].sort());
   for (const row of retained.rows) assert.equal(row.status, expectedFailures.includes(row.title) ? 'failed' : 'passed', row.fullName);
   retained.status = 'pass'; save();
 }
+// Release BA: the year 2026 rows carry the summer 2026 window (scripts/transferOverlay2026.mjs), so a
+// player the overlay moved INTO a 2026 Champions League winner holds a 2026 row at that club although he
+// joined after the final. Every such entry must be in playerBingo.ts's UCL_2026_WINDOW_ARRIVALS, and every
+// name there must be such an entry (a stale name would strip a real squad member's title). Read from the
+// code with comments stripped, never from the prose about it. The drop-one and add-one controls run every
+// time and must each find exactly the name they changed.
+function windowFence() {
+  const marks = new RegExp('[' + String.fromCharCode(0x300) + '-' + String.fromCharCode(0x36f) + ']', 'g');
+  const fold = value => String(value).normalize('NFD').replace(marks, '').toLowerCase().trim();
+  const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const winners2026 = [...code.matchAll(/\{ keys: \[([^\]]*)\], years: \[([^\]]*)\] \}/g)]
+    .filter(m => m[2].split(',').map(y => y.trim()).includes('2026'))
+    .flatMap(m => [...m[1].matchAll(/'([^']+)'/g)].map(k => fold(k[1])));
+  assert.ok(winners2026.length >= 1, 'a 2026 winner pair is read from UCL_WINNER_PAIRS');
+  const list = code.match(/const UCL_2026_WINDOW_ARRIVALS[^=]*= new Set\(\s*\[([^\]]*)\]/);
+  assert.ok(list, 'UCL_2026_WINDOW_ARRIVALS is read from the code');
+  const listed = [...list[1].matchAll(/'([^']+)'/g)].map(m => fold(m[1]));
+  const arrivals = TRANSFER_OVERLAY_2026.filter(e => e.db && winners2026.includes(fold(e.db))).map(e => e.name);
+  assert.ok(arrivals.length >= 4, `the overlay's moves into a 2026 winner are found (${arrivals.length})`);
+  const check = names => ({
+    missing: arrivals.filter(n => !names.includes(fold(n))),
+    stale: names.filter(n => !arrivals.map(fold).includes(n)),
+  });
+  const healthy = check(listed);
+  const dropped = listed.slice(1);
+  const dropControl = check(dropped);
+  const addControl = check([...listed, fold('Qzx Not An Arrival')]);
+  report.fence = { winners2026, listed, arrivals, healthy, dropControl, addControl };
+  save();
+  assert.deepEqual(healthy, { missing: [], stale: [] }, 'every overlay arrival into a 2026 winner is listed, and nothing else');
+  assert.deepEqual(dropControl.missing.map(fold), [listed[0]], 'drop-one control finds exactly the dropped name');
+  assert.deepEqual(addControl.stale, ['qzx not an arrival'], 'add-one control finds exactly the added name');
+}
 try {
+  windowFence();
   run('healthy', null, []);
   for (const control of controls) {
     const record = { ...control, forwardCount: source.split(control.anchor).length - 1, sourceChanged: false, reverseCount: null, wholeUndo: false, status: 'unaccepted' };
@@ -106,10 +144,12 @@ try {
   assert.deepEqual(readFileSync(libFile), heldLib);
   assert.deepEqual(readFileSync(testFile), heldTest);
   report.status = 'pass'; save();
-  console.log('simPlayerBingoHonours: actual loader healthy9 and complete whole-undo9 pass.');
-  console.log('simPlayerBingoHonours: remove2026 rejects exactly2 retained title cases,7 unrelated cases pass.');
-  console.log('simPlayerBingoHonours: remove identity rejects exactly7 histories,2 unrelated cases pass.');
-  console.log('simPlayerBingoHonours: full source/test bytes, both unique source mutations and complete reversals retained.');
+  console.log('simPlayerBingoHonours: actual loader healthy10 and complete whole-undo10 pass.');
+  console.log('simPlayerBingoHonours: remove2026 rejects exactly2 retained title cases,8 unrelated cases pass.');
+  console.log('simPlayerBingoHonours: remove window arrivals rejects exactly1 summer 2026 arrival case,9 unrelated cases pass.');
+  console.log('simPlayerBingoHonours: remove identity rejects exactly7 histories,3 unrelated cases pass.');
+  console.log(`simPlayerBingoHonours: window fence ${report.fence.arrivals.length} overlay arrivals into a 2026 winner (${report.fence.winners2026.join(', ')}) all listed; drop-one control missed exactly ${report.fence.dropControl.missing.join(', ')}, add-one control stale exactly ${report.fence.addControl.stale.join(', ')}.`);
+  console.log('simPlayerBingoHonours: full source/test bytes, all three unique source mutations and complete reversals retained.');
   console.log('simPlayerBingoHonours PASS');
 } catch (error) {
   report.status = 'fail';
