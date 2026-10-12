@@ -60,7 +60,11 @@
  *    Round 1308, the postseason's libraries: src/lib/gmPostseason.ts (the
  *    press and load half, sport free) and src/lib/frontOfficePostseason.ts
  *    (the NFL's bind) join the modules with their tests. Nothing else
- *    imports them yet: Round 1309 puts them on the board.
+ *    imports them yet: Round 1309 puts them on the board. And the bracket
+ *    card: src/lib/gmBracketView.ts (every word it prints), the shared
+ *    card and the NFL's bound card join the modules AND the story files:
+ *    only a drawn card reads them, so no board may import one statically
+ *    (Round 1309 reaches the bound card through a lazy part).
  *
  * ROUND 1305, THE PRESS (src/lib/frontOfficeGameDay.ts, the NFL board's bind
  * to the quick path, and src/lib/gmGameLog.ts, the save field of the
@@ -210,14 +214,18 @@ const NFL_CARD = 'src/components/front-office/NflGameDay.tsx';
 /* Round 1308: the postseason a board plays a round at a time, the press and load half (sport free) and the NFL's bind */
 const POST = 'src/lib/gmPostseason.ts';
 const NFL_POST = 'src/lib/frontOfficePostseason.ts';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD, POST, NFL_POST];
+/* the bracket card: every word it prints (sport free), the shared card and the NFL's bound card; they ride with a card */
+const BRACKET_VIEW = 'src/lib/gmBracketView.ts';
+const BRACKET_CARD = 'src/components/front-office-shared/GmBracketCard.tsx';
+const NFL_BRACKET_CARD = 'src/components/front-office/NflBracket.tsx';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD, POST, NFL_POST, BRACKET_VIEW, BRACKET_CARD, NFL_BRACKET_CARD];
 /* the round whose header a new file opens with: section 5 proves the comment stripper took it out */
-const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307', [POST]: 'Round 1308', [NFL_POST]: 'Round 1308' };
+const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307', [POST]: 'Round 1308', [NFL_POST]: 'Round 1308', [BRACKET_VIEW]: 'Round 1308', [BRACKET_CARD]: 'Round 1308', [NFL_BRACKET_CARD]: 'Round 1308' };
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
 /* what only a drawn card reads: the told path, the NFL's story law, its game day law and the words of the two "?" */
-const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW, CARD, NFL_CARD];
+const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW, CARD, NFL_CARD, BRACKET_VIEW, BRACKET_CARD, NFL_BRACKET_CARD];
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
    as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
@@ -973,7 +981,8 @@ for (const set of SEEDSETS) {
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
     ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx',
-      'src/lib/gmPostseason.test.ts', 'src/lib/frontOfficePostseason.test.ts', 'src/test/gmBracketLedger.test.ts'].map(f => [f, '*']),
+      'src/lib/gmPostseason.test.ts', 'src/lib/frontOfficePostseason.test.ts', 'src/test/gmBracketLedger.test.ts',
+      'src/lib/gmBracketView.test.ts', 'src/components/front-office-shared/GmBracketCard.test.tsx'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
     [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD)])],
     /* Round 1307, the tile: the board reaches the bound card (through a lazy import: the check below) and nothing

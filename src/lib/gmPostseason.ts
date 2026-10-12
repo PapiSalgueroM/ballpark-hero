@@ -25,7 +25,7 @@
    screen: a season the sport has no bracket for, and a league whose own
    seeds do not open one (a doctored league with too few clubs in a
    conference). No clock, no randomness, no storage. */
-import { repairGmBracket, type BracketFormat, type BracketRepair } from './gmBracket';
+import { repairGmBracket, type BracketFormat, type BracketRepair, type GmBracketSave } from './gmBracket';
 
 /** What a sport hands the postseason, so no board retypes it. */
 export interface GmPostseasonSport<L> {
@@ -82,4 +82,19 @@ export function loadGmPostseason<L>(sport: GmPostseasonSport<L>, league: L, seas
   } catch (e) {
     return { kind: 'refused', refused: 'no-bracket', why: e instanceof Error ? e.message : 'the league does not open a playoff bracket' };
   }
+}
+
+/** What a board hands its bracket card (a type only: nothing of the card is in a board's chunk). Sport free: a
+ *  bound card (the NFL's is src/components/front-office/NflBracket.tsx) adds the "?", the seed numbers and the
+ *  week names. THE CARD HOLDS NO PRESS: playing a round, watching it and the rest are the board's own buttons. */
+export interface GmBracketMount {
+  format: BracketFormat;
+  save: GmBracketSave;
+  /** His club, and a club's name as a sentence and a row use it. */
+  my: string;
+  name(id: string): string;
+  /** "Your game" on a decided tie of his: the board opens his game of that tie on the tile, in the same box. */
+  onOpenGame(tieId: string): void;
+  /** Where the "?" sheet is put: an empty element inside the board's week box (as the Game Day tile's); null: not there yet. */
+  helpHost: HTMLElement | null;
 }
