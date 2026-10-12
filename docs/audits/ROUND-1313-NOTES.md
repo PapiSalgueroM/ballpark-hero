@@ -1,5 +1,8 @@
 # Round 1313 notes: the US rival Round B
 
+UNIT ONE 8c98dae1 (steps 0 and 1, pushed and green on runners, the three receipts taken again). The commit
+after it that adds these lines is docs only.
+
 Branch r1313-us-rival-b, base origin/main b6eb78e7 (Release AX). Brief:
 C:/Users/antho/dukb-handoff/2026-10-10/briefs/brief-1313.md. A later session finishes from this file.
 
@@ -60,6 +63,20 @@ the first download, both in usCareerSeasonReview-*.js); the SAME harness on a bu
 (budget 824K), /nfl-my-career 483.3K to 483.2K (budget 485K), 47 files before and after (no extra request).
 The ceiling comment of simFlagshipWeight now says the split is done, with both measurements; CEILING_KB stays
 2700.
+
+Proof of step 1 (src at a064a170; the later commits of the step touch no src):
+- r1313-s1a: simUsRivalSense RIVAL_PROVE=ecbdab63 RIVAL_MOVED=none RIVAL_CARDS=none exit 0 (47 checks: P1 and L
+  in all four sports, P2 1,000 of 1,000 whole saves byte equal in each). liftcard and rostergate FIRED.
+- r1313-s1c: owndealt and owndead FIRED; simNbaAwardsSense SENSE_PROVE_OTHERS=1 exit 0; oldgate306 (R),
+  oldgateown (S) and droppedanyyear (S) FIRED in their own sections and nowhere else.
+- r1313-s1b: tsc 0; simCareerRivalryEvents RIVALRY_PROVE=ecbdab63 0; movedrift, homeimport, homeback,
+  owndealt206, coin306, oldcard and deaf each red in their own check; FIGHT_PROVE=ecbdab63 0 (bundle text equal);
+  board replay 0 and truth digest 0 with no retake; simUsSeasonLedger 0; the four career sims, simUsCareerWeight
+  and the five fences (rival names, quotes, conduct, invented names, live scores) 0; simHarnessAnchors 1 on
+  FIGHT_PROVE's raw reads, fixed in b01bf476 and green on r1313-s1z.
+- The three receipts: printed on 1b4f0a73 (r1313-s1r), 0 of 42 values moved against each committed record (the
+  base's print), committed as 38dda01a (law), 1c16e220 (seam), 8c98dae1 (lay). On 8c98dae1 (r1313-s1z) the three
+  compares are exit 0 (11 digests, 0 moved) and the controls lawdrift, seam and lay are red at their named check.
 
 ## Owed (not this round)
 
