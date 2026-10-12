@@ -1,0 +1,10 @@
+#!serial
+head: git rev-parse HEAD^; git log -1 --format=%s HEAD^ | cut -c1-120
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSaveKeeper: node scripts/simSaveKeeper.mjs > $RC_OUT/simSaveKeeper.log 2>&1; s=$?; grep -E "front-office|gameLog" $RC_OUT/simSaveKeeper.log | cut -c1-360; tail -1 $RC_OUT/simSaveKeeper.log; exit $s
+sk-partgamelog: SIM_SAVE_KEEPER_CONTROL=partgamelog node scripts/simSaveKeeper.mjs > $RC_OUT/sk-partgamelog.log 2>&1; s=$?; tail -2 $RC_OUT/sk-partgamelog.log | cut -c1-330; exit $s
+simGmDeskHost: node scripts/simGmDeskHost.mjs > $RC_OUT/simGmDeskHost.log 2>&1; s=$?; tail -1 $RC_OUT/simGmDeskHost.log | cut -c1-300; exit $s
+vitest-keeper: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/saveKeeper.test.ts src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000 > $RC_OUT/vitest-keeper.log 2>&1; s=$?; grep -E "Test Files|Tests " $RC_OUT/vitest-keeper.log | tr "\n" " " | cut -c1-300; echo; exit $s
+vitest-round: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/nba-front-office/NbaDraftNightRivals.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts src/lib/gmGameScore.test.ts src/lib/gmGameDay.test.ts --testTimeout=600000 --hookTimeout=120000 > $RC_OUT/vitest-round.log 2>&1; s=$?; grep -E "Test Files|Tests " $RC_OUT/vitest-round.log | tr "\n" " " | cut -c1-300; echo; exit $s
+simGmGameDay: node scripts/simGmGameDay.mjs > $RC_OUT/simGmGameDay.log 2>&1; s=$?; tail -1 $RC_OUT/simGmGameDay.log | cut -c1-300; exit $s
+tree-clean: git status --porcelain --untracked-files=no | grep -v -E "^.. (\.rc/|\.github/workflows/lane-remote-check\.yml)" | wc -l

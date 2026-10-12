@@ -1,0 +1,9 @@
+head exit=0 0s | Round 1305: a log that did not read is never written back to storage
+tsc exit=0 59s | 
+simSaveKeeper exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+sk-partgamelog exit=1 4s | simSaveKeeper control partgamelog: FIRED. Section 1 is red.
+simGmDeskHost exit=0 44s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+vitest-keeper exit=0 6s |  Test Files  2 passed (2)       Tests  71 passed (71) 
+vitest-round exit=0 10s |  Test Files  9 passed (9)       Tests  156 passed (156) 
+simGmGameDay exit=0 35s | simGmGameDay: 303 checks, 0 failed
+tree-clean exit=0 0s | 0
