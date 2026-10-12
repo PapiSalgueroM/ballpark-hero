@@ -66,7 +66,13 @@
  *            guard holds as it did. (iii) the stale book: ten entries on the candidate and three on an
  *            engine from before the book leave a book that reads and does not fit, and the next entry
  *            replaces it. (iv) over the whole fleet no career that started its season with a book ends
- *            an entry on a late one
+ *            an entry on a late one. Added by the fix pass of Round 1306: a sixth save in (i), the parked
+ *            one with a goalless first round written into its table, which must get a LATE book (the
+ *            repair asks whether a league match was played, not whether a goal was scored); and (vi), with
+ *            BOOK_BASE, the transition a live save makes: three seasons in play written by the base commit
+ *            WITH its book are carried on by the candidate to the season's end, the book taken as it is
+ *            (it reads, fits and is whole), the law after every entry, never reopened late, and the rows
+ *            of clubs with no eleven growing where the base commit named nobody
  *   doors    the takeover from the picker at its three entries and the job joined today in season one
  *            and in season three: a whole book at the handover and the law after every entry to the end
  *   dailies  Manager Hot Seat (six dates, two of them across the transfer window, played to a verdict,
@@ -86,7 +92,17 @@
  *            not meant to change (needs BOOK_BASE): the entry of every rival club that had an eleven all
  *            season is byte equal, at each season's end, to the base commit's; (v) printed: the share on
  *            record and the top scorer of each league of the fleet. The first law for these clubs is
- *            section law's, as for every club
+ *            section law's, as for every club. Added by the fix pass of Round 1306 (two reviewers found
+ *            that nothing held them): (vi) WHO is given a clean sheet: in every single match of such a
+ *            club, its rostered keeper and each named man of its partial eleven's back line gain one when
+ *            it conceded nothing and no other row gains any, and at each season's end, for EVERY club (a
+ *            club with an eleven all season under section law), only a keeper's row and a row of the back
+ *            line hold a clean sheet and no man of the back line holds more than his club can have kept
+ *            by the table; (vii) one way to take an eleven: at each season's end the module's partial
+ *            eleven of every roster that fields an eleven is the engine's own eleven (the same keeper,
+ *            the same ten, no shirt), and of every roster that does not it is the harness's own reading,
+ *            man for man and shirt for shirt in order. And (iii) now fails when there is no variance to
+ *            judge a share on, instead of passing unasked
  *   boards   Round 1306, the pure reader (src/lib/clubManagerLeagueBoards.ts; nothing in src calls it
  *            yet, the harness builds its input from the save): (i) at every season's end of the fleet
  *            the book fits the table and is whole; (ii) each of the three boards, its top ten and its
@@ -166,6 +182,23 @@
  *   guard, now reached with the repair off, never throws on an entry with no rows map)
  *   readerdraw    the reader draws from Math.random once a board     -> boards (iii) and (iv)
  *   readerwrite   the reader turns the book's list of my clean sheets round in place -> boards (iii)
+ *   The six of the fix pass of Round 1306, each for a check that pass added (a control may name the words
+ *   its failures must hold, so red for another reason is not that control firing):
+ *   thinbacks     a thin club's clean sheet goes to EVERY man of its partial eleven's outfield, the
+ *                 filter for the back line dropped (the reviewer's mutation that every gate let through)
+ *                                                                    -> thin (vi), the season's end
+ *   nobacks       a thin club's clean sheet goes to its keeper and to no man of its back line
+ *                                                                    -> thin (vi), the single match
+ *   allbacks      the clean sheet of a club WITH an eleven goes to all ten of its outfield men
+ *                                                                    -> law (thin (vi) at the season's
+ *                 end, under section law for a club with an eleven; with BOOK_BASE thin (iv) goes with
+ *                 it, those entries are not the base commit's)
+ *   places433     the partial eleven is taken four, three, three     -> thin (vii), and (iii) with it
+ *   goallesswhole the repair opens a whole book when no GOAL has been scored (the wording the builder
+ *                 left for "no league match played")                 -> oldsave (i), the goalless save
+ *   stampv2       the stamp gains a mark, so every book an earlier build wrote is another season's
+ *                 (needs BOOK_BASE)                                  -> oldsave (vi) (thin (iv) goes with
+ *                 it: the stamp is in every deal key, so the same roll names another man)
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
  * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
@@ -241,6 +274,11 @@ const LEADERS_RETURN = '  return order.slice(0, Math.max(0, limit)).map(m => boa
 /* The line of noteBookMine that credits a report's line and decides whether its assist is dealt. */
 const MINE_GATE = '    if (!creditGoal(book, opp, man) || !man || line.penalty || line.freeKick) return;';
 const SCORER_PICK = ': pickWeighted(outfield, m => goalWeight(m.p, m.r), scorerRoll);';
+/* The fix pass of Round 1306. The line that says who of a thin club's partial eleven is given its clean
+   sheet beside the keeper, and the line of noteBookSide that hands out the clean sheet of a club with an
+   eleven (the anchor of control cleanside too). */
+const THIN_BACKS = "const thinBacks = (outfield: readonly BookMan[]): BookMan[] => outfield.filter(p => groupOf(p.p) === 'DEF');";
+const XI_SHEET = '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));';
 const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(m.p)).sort((a, b) => b.r - a.r); return roll < 0.42 ? (two[0] ?? null) : roll < 0.68 ? (two[1] ?? null) : null; })(outfield, scorerRoll);";
 
 /** name -> { patch: [{ file, from, to, n? }], red: the section that must go red, needs?: 'base', also?: sections
@@ -282,6 +320,12 @@ const CONTROLS = {
   readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
   readerwrite: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  input.book.my.reverse();\n${LEADERS_RETURN}` }], red: 'boards' },
   thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
+  thinbacks: { patch: [{ file: ENGINE, from: THIN_BACKS, to: 'const thinBacks = (outfield: readonly BookMan[]): BookMan[] => [...outfield];' }], red: 'thin', mentions: ['neither a keeper nor of the back line'] },
+  nobacks: { patch: [{ file: ENGINE, from: THIN_BACKS, to: 'const thinBacks = (outfield: readonly BookMan[]): BookMan[] => outfield.filter(() => false);' }], red: 'thin', mentions: ['was given no clean sheet'] },
+  allbacks: { patch: [{ file: ENGINE, from: XI_SHEET, to: "  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), xi.filter(p => p.p !== 'GK'));" }], red: 'law', also: ['thin'], mentions: ['neither a keeper nor of the back line'] },
+  places433: { patch: [{ file: BOOK, from: 'const PLACES = { DEF: 4, MID: 4, ATT: 2 } as const;', to: 'const PLACES = { DEF: 4, MID: 3, ATT: 3 } as const;' }], red: 'thin', mentions: ['is not that eleven'] },
+  goallesswhole: { patch: [{ file: ENGINE, from: '  if (state.table.every(r => r.w + r.d + r.l === 0)) {', to: '  if (state.table.every(r => r.gf === 0)) {' }], red: 'oldsave', mentions: ['goalless'] },
+  stampv2: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${leagueId}|${bookSalt(state.leagueClubs)}|v2`;' }], red: 'oldsave', needs: 'base', also: ['thin'], mentions: ['written by the base commit'] },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
@@ -430,6 +474,15 @@ async function engine(label, root, patches = []) {
  *            count the control would still stand near z 8 on defenders.
  *   boards       923 checks over 54 season ends on a full fleet. Controls: readerdraw 6 failures, readerwrite
  *            5. dropmine and byeweek turn boards red with their own section, as they must.
+ *   law, THE VIDEO REFEREE ARM, READ AGAIN (the fix pass; a reviewer found the line above stale). The "162
+ *            to 183 reviews in 228 league matches of mine" above is Round 1229's own measurement. On this
+ *            round's base, which holds Round 1303, the same arm reads far fewer: 19 33 35 39 34 reviews in
+ *            228 league matches of mine on the five full fleets and 3 10 5 5 2 in 84 on the five default
+ *            ones (remote check r1306-f1, head ecb69867), and the same 19 and 3 on the base before any edit
+ *            of this round (r1306-a). So the move is the base's, not this round's. The floor of that arm
+ *            is still "not zero" (the tick under accVar below): the gate's own seed set reads 3, and
+ *            another seed set could read none. OWED to the lead or to Round 1303's owner: more careers on
+ *            that arm or a floor from measured headroom. Not changed here.
  * Every control of the harness FIRED for its own section and no other (or with the sections its line names) on
  * seed set 0, the 21 of Round 1229 among them, after step (b) (r1306-b1, r1306-c1) and the new ones after the
  * step that added them. Wall time on a runner: full fleet 100 to 170 seconds, default 42 to 60.
@@ -684,6 +737,12 @@ const newAcc = () => ({
      took, what the harness's own copy of the rule expects of that and its variance; the club seasons whose
      keeper rows were held against the table, the clean sheets on them, and the ones kept against me. */
   thinDeal: { goals: 0, named: 0, exp: 0, vr: 0, exact: 0 }, thinKeepers: { clubSeasons: 0, sheets: 0, vsMe: 0 },
+  /* The fix pass of Round 1306, thin (vi): single matches of clubs with no eleven judged for who was given
+     the clean sheet, the ones a clean sheet was kept in, the credits that went to named men of the back
+     line, and the club entries left out because the roster moved inside the entry. And thin (vii): the
+     rosters whose eleven was held against the module's partial eleven at a season's end, clubs with an
+     eleven and clubs without. */
+  thinBacks: { matches: 0, kept: 0, toBacks: 0, moved: 0 }, elevens: { full: 0, thin: 0 },
   /* The book's entries at each season's end and the clubs that were without an eleven at any entry of it. */
   ends: [],
   /* A copy of the whole save at each season's end, for section boards. */
@@ -799,11 +858,18 @@ function watcher(mod, label, acc, opts = {}) {
   let leagueId = '';
   /* Round 1306: the clubs that were without a named eleven at any entry of this season. */
   let thinSeen = new Set();
+  /* The fix pass of Round 1306: the most clean sheets a club can have kept this season by the table, keeper
+     on record or not (where the table cannot tell, the higher number): the bound on a defender's row. */
+  let sheetsAtMost = new Map();
+  /** The rows a thin club's clean sheet goes to as the harness reads the rule: its rostered keeper and the
+   *  named men of its partial eleven's back line, as row keys. */
+  const sheetKeys = thin => [...(thin.keeper ? [`${thin.keeper.n}|GK`] : []), ...thin.named.filter(m => lineOf(m.p) === 'DEF').map(m => `${m.n}|${m.p}`)];
   const hooks = {
     opened(s, seasonIndex) {
       keptByClub = new Map();
       untold = new Map();
       thinSeen = new Set();
+      sheetsAtMost = new Map();
       myKept = 0;
       leagueId = cm.careerLeagueOf(s).id;
       tick('law');
@@ -875,6 +941,13 @@ function watcher(mod, label, acc, opts = {}) {
           else if (elsewhere > 1) untold.set(club, (untold.get(club) ?? 0) + elsewhere - 1);
           if (kept) keptByClub.set(club, (keptByClub.get(club) ?? 0) + kept);
         }
+        {
+          /* The same count for EVERY club, with or without a keeper on record, as an upper bound. */
+          let most = vsMe && mineOnThem === 0 ? 1 : 0;
+          if (elsewhere > 0 && now.ga - was.ga - mineOnThem === 0) most += elsewhere;
+          else if (elsewhere > 1) most += elsewhere - 1;
+          if (most) sheetsAtMost.set(club, (sheetsAtMost.get(club) ?? 0) + most);
+        }
         const lg = (acc.thin[leagueId] ??= { weeks: 0, bare: 0, clubs: new Map(), rivals: new Set() });
         lg.weeks += 1;
         lg.rivals.add(club);
@@ -899,9 +972,12 @@ function watcher(mod, label, acc, opts = {}) {
         let mostOnOneRow = 0;
         /* My opponent of this entry: what its rows gained, by name, for the comparison with the report. */
         const gained = club === myOpp ? { goalsBy: new Map(), assistsBy: new Map() } : null;
+        /* The rows whose clean sheet count moved in this entry, by row key (thin (vi) below). */
+        const sheetsGot = new Map();
         for (const [key, row] of Object.entries(entry.m)) {
           const old = prior.m[key] ?? [0, 0, 0, 0];
           if (row[0] === old[0] && row[1] === old[1] && row[2] === old[2]) continue;
+          if (row[2] !== old[2]) sheetsGot.set(key, row[2] - old[2]);
           const bar = key.lastIndexOf('|');
           const name = key.slice(0, bar);
           const pos = key.slice(bar + 1);
@@ -931,6 +1007,34 @@ function watcher(mod, label, acc, opts = {}) {
             ...gained, og: entry.og - prior.og, u: entry.u - prior.u, rows: Object.keys(entry.m).length, mineBefore: before.mine, mineNow,
           });
         } else if (gained) acc.report.twice += 1;
+        /* Thin (vi), the fix pass of Round 1306: WHO IS GIVEN A THIN CLUB'S CLEAN SHEET, exactly, one match
+           at a time. When a club with no eleven played its one match of the entry (against me or anybody)
+           and conceded nothing, its rostered keeper and each named man of its partial eleven's back line
+           gain one clean sheet and no other row gains any; when it conceded, no row gains one. The men are
+           the harness's own partial eleven, read before the entry and again after it: a club whose roster
+           moved inside the entry is left out and counted. A defender the row cap left without a row is
+           the one man excused. */
+        if (!xi && thin && games === 1) {
+          const want = sheetKeys(thin);
+          const after2 = thinEleven(cm.oppRosterFor(after, club), cm.strengthOf(after, club));
+          if (!after2 || sheetKeys(after2).join('\n') !== want.join('\n')) acc.thinBacks.moved += 1;
+          else {
+            const keptIt = vsMe ? mineOnThem === 0 : now.ga - was.ga === 0;
+            const full = Object.keys(entry.m).length >= mod.book.BOOK_ROWS_PER_CLUB;
+            tick('thin');
+            acc.thinBacks.matches += 1;
+            if (keptIt) acc.thinBacks.kept += 1;
+            for (const [key, n] of sheetsGot) {
+              if (!keptIt || n !== 1 || !want.includes(key)) fail('thin', `${label} ${where}: ${key} at ${club}, a club with no eleven, gained ${n} clean sheet(s) in a match it ${keptIt ? 'kept a clean sheet in and is neither its keeper nor a named man of its back line' : 'conceded in'}`);
+              else if (!key.endsWith('|GK')) acc.thinBacks.toBacks += 1;
+            }
+            if (keptIt) {
+              for (const key of want) {
+                if (!sheetsGot.has(key) && !(full && !(key in entry.m))) fail('thin', `${label} ${where}: ${key} at ${club}, a club with no eleven, was given no clean sheet for the one his side kept`);
+              }
+            }
+          }
+        }
         /* Round 1306, thin (iii). The goals of a club with no eleven against other clubs: how many a named
            row took, against the harness's own copy of the partial eleven and of the table for that roster. */
         if (club !== myOpp && !xi && thin && scored > 0) {
@@ -994,6 +1098,48 @@ function watcher(mod, label, acc, opts = {}) {
         tick('thin');
         const shirt = Object.keys(entry?.m ?? {}).find(key => key.startsWith('?'));
         if (shirt) fail('thin', `${label} ${where}: ${club} holds a row under an empty shirt's mark (${shirt})`);
+      }
+      /* Thin (vi), the fix pass of Round 1306, for EVERY club (a club that had an eleven all season is
+         section law's, like its keeper rows above): a clean sheet is a keeper's and the back line's and
+         nobody else's, and no man of the back line holds more than his club can have kept by the table.
+         These rows are written into every save and cannot be rebuilt, and the round that picks a team
+         of the season splits its back four on them. */
+      for (const club of rivalsOf(s)) {
+        const section = thinSeen.has(club) ? 'thin' : 'law';
+        const most = sheetsAtMost.get(club) ?? 0;
+        for (const [key, row] of Object.entries(book.c[club]?.m ?? {})) {
+          if (!row[2]) continue;
+          tick(section);
+          const line = lineOf(key.slice(key.lastIndexOf('|') + 1));
+          if (line !== 'GK' && line !== 'DEF') fail(section, `${label} ${where}: ${key} at ${club} holds ${row[2]} clean sheets and is neither a keeper nor of the back line`);
+          else if (line === 'DEF' && row[2] > most) fail(section, `${label} ${where}: ${key} at ${club} holds ${row[2]} clean sheets, his club kept at most ${most} by the table`);
+        }
+      }
+      /* Thin (vii), the fix pass of Round 1306: ONE WAY TO TAKE AN ELEVEN. The module's partial eleven
+         retypes the take lines of the engine's own eleven (a keeper, four, four, two, then the best left,
+         a name once) and this harness types them a third time; nothing tied the three. For a club that
+         can field an eleven the partial eleven of its roster IS that eleven (the same keeper, the same
+         ten, no shirt); for a club that cannot, it is the harness's own reading man for man and shirt for
+         shirt, in order (the order is what a roll picks by). */
+      for (const club of rivalsOf(s)) {
+        const roster = cm.oppRosterFor(s, club);
+        const strength = cm.strengthOf(s, club);
+        const part = mod.book.partialEleven(roster.map(p => ({ n: p.n, p: p.p, r: p.r })), strength, cm.groupOf);
+        const shirtsOf = men => men.filter(m => m.e).map(m => `${m.n} ${m.p} ${m.r}`).join(', ');
+        const full = cm.leagueBookEleven(s, club);
+        tick('thin');
+        if (full) {
+          acc.elevens.full += 1;
+          const want = `${full.find(p => p.p === 'GK')?.n} / ${full.filter(p => p.p !== 'GK').map(p => p.n).sort().join(', ')} / `;
+          const got = part ? `${part.keeper?.n} / ${part.outfield.filter(m => !m.e).map(m => m.n).sort().join(', ')} / ${shirtsOf(part.outfield)}` : 'nobody';
+          if (got !== want) fail('thin', `${label} ${where}: ${club} can field an eleven and the partial eleven of its roster is not that eleven (${got} against ${want})`);
+        } else {
+          acc.elevens.thin += 1;
+          const own = thinEleven(roster, strength);
+          const want = own ? `${own.keeper?.n} / ${own.named.map(m => m.n).join(', ')} / ${shirtsOf(own.shirts)}` : 'nobody';
+          const got = part ? `${part.keeper?.n} / ${part.outfield.filter(m => !m.e).map(m => m.n).join(', ')} / ${shirtsOf(part.outfield)}` : 'nobody';
+          if (got !== want) fail('thin', `${label} ${where}: ${club} cannot field an eleven and the module's partial eleven is not the harness's own reading of the rule (${got} against ${want})`);
+        }
       }
       acc.ends.push({ label, season, thinSeen: new Set(thinSeen), c: JSON.parse(JSON.stringify(book.c)), rivals: rivalsOf(s) });
       /* Section boards reads the reader module on a copy of this save AFTER the fleet has played, never in
@@ -1350,9 +1496,17 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
      roster), so its own variance, the way shapes (iv) is judged. */
   tick('thin');
   const zt = (t.named - t.exp) / Math.max(1e-9, Math.sqrt(t.vr));
-  if (t.vr > 0 && Math.abs(zt) > 4) fail('thin', `${t.named} of ${t.goals} goals of clubs with no eleven against other clubs are on a named row, the harness's own partial eleven says ${fmt(t.exp)} (z ${fmt(zt, 2)})`);
+  /* The fix pass of Round 1306: with no variance (every thin club of a fleet certain to name every goal, or
+     certain to name none) there is no share to judge, and the gate says so instead of passing unasked. */
+  if (!(t.vr > 0)) fail('thin', `the ${t.goals} goals of clubs with no eleven against other clubs carry no variance (every one certain to be named, or certain not to be): there is no share to judge`);
+  else if (Math.abs(zt) > 4) fail('thin', `${t.named} of ${t.goals} goals of clubs with no eleven against other clubs are on a named row, the harness's own partial eleven says ${fmt(t.exp)} (z ${fmt(zt, 2)})`);
   tick('thin');
   if (t.goals < THIN_FLOOR) fail('thin', `only ${t.goals} goals of clubs with no eleven against other clubs: too few to judge a share on (floor ${THIN_FLOOR})`);
+  /* (vi) and (vii) must have had something to hold: a thin club's clean sheet that went to a named man of
+     its back line, and at least one roster of each kind held against the module's partial eleven. */
+  tick('thin', 2);
+  if (!acc.thinBacks.kept || !acc.thinBacks.toBacks) fail('thin', `of ${acc.thinBacks.matches} single matches of clubs with no eleven, ${acc.thinBacks.kept} were clean sheets and ${acc.thinBacks.toBacks} credits went to named men of a back line: nothing to judge who is given one on`);
+  if (!acc.elevens.full || !acc.elevens.thin) fail('thin', `the module's partial eleven was held against ${acc.elevens.full} rosters that field an eleven and ${acc.elevens.thin} that do not: one kind was never tried`);
   /* (i) must have had something to hold: a thin club with a rostered keeper that kept one against me. */
   tick('thin');
   if (!acc.thinKeepers.clubSeasons || !acc.thinKeepers.vsMe) fail('thin', `the keeper rows of ${acc.thinKeepers.clubSeasons} club seasons with no eleven were held against the table, ${acc.thinKeepers.vsMe} of their clean sheets kept against me: nothing to judge on`);
@@ -1375,6 +1529,8 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   }
   console.log(`thin    clubs with no eleven, against other clubs: ${t.named} of ${t.goals} goals on a named row = ${fmt(100 * t.named / Math.max(1, t.goals))}% (the harness's own partial eleven says ${fmt(100 * t.exp / Math.max(1, t.goals))}%, z ${fmt(zt, 2)}, floor ${THIN_FLOOR} goals)`);
   console.log(`        keeper rows of ${acc.thinKeepers.clubSeasons} club seasons with no eleven held against the table (${acc.thinKeepers.sheets} clean sheets on them, ${acc.thinKeepers.vsMe} kept against me)`);
+  console.log(`        who is given a thin club's clean sheet: ${acc.thinBacks.matches} single matches of clubs with no eleven judged row by row, ${acc.thinBacks.kept} of them clean sheets, ${acc.thinBacks.toBacks} credits to named men of a back line, ${acc.thinBacks.moved} club entries left out for a roster that moved inside the entry`);
+  console.log(`        one way to take an eleven: the module's partial eleven held against the engine's eleven on ${acc.elevens.full} rosters and against the harness's own reading on ${acc.elevens.thin} rosters with no eleven`);
   console.log(base && CONTROL !== 'weight'
     ? `        clubs with an eleven all season: ${same} of ${compared} entries byte equal to the base commit's at the season's end`
     : '        thin (iv) NOT RUN: set BOOK_BASE to a worktree of the base commit');
@@ -1689,6 +1845,16 @@ function onStream(seed, fn) {
       return JSON.stringify(writer.cm.startNextSeason(writer.cm.finishSeason(s).state));
     });
     saves.push({ name: `Bayern Munich, parked at the first week of season two, written by the ${refs[0][0]} engine`, raw, viaLoad: false, seed: 0x7015, parked: true });
+    /* The fix pass of Round 1306: the same parked save with A GOALLESS FIRST ROUND written into its table
+       (every club one draw, nobody a goal). The repair asks whether a league MATCH has been played, not
+       whether a goal has been scored: clean sheets were kept in that round, and a book opened whole would
+       claim a season it did not see. So this one gets a LATE book. No fleet reaches a round with no goal
+       in it, which is why the save is made by hand; only the table is touched, the one thing the repair
+       reads for this. */
+    const goalless = JSON.parse(raw);
+    if (!goalless.table.every(r => played(r) === 0 && r.gf === 0)) cannot('the parked save is not at the first week of its season: the goalless round cannot be written into it');
+    for (const r of goalless.table) { r.d = 1; r.pts = 1; }
+    saves.push({ name: 'Bayern Munich at the first week of season two with a goalless first round written into its table', raw: JSON.stringify(goalless), viaLoad: false, seed: 0x7025 });
   }
   /* (i) each save on the candidate and on every reference engine, two fresh copies a pair. */
   const followUps = [];
@@ -1822,10 +1988,65 @@ function onStream(seed, fn) {
     if (!book || boards.bookIsWhole(book) || book.r0 !== want.next?.round) fail('oldsave', `the stale book was not replaced by a late book at the next entry (${book ? `r0 ${book.r0}, the next league round was ${want.next?.round}` : 'no readable book'})`);
     else if (!boards.bookFits(book, clubsOf(after))) fail('oldsave', 'the stale book: the late book that replaced it does not add up to the table');
   }
+  /* (vi) THE SAVE MOST PLAYERS HOLD ON THE DAY A RELEASE SHIPS (the fix pass of Round 1306; needs BOOK_BASE):
+     a season in play WITH the book the base commit wrote. The candidate takes that book as it is (it reads,
+     it fits, it is whole), plays the season out on it with the law after every entry, and never reopens
+     it late. Where the base commit named nobody at a club with no eleven and the candidate does, the goals
+     on those clubs' rows must grow, or the transition was not tried. Nothing but the book is compared
+     here: two copies of the engine number their youth players, press questions and messages apart. */
+  let carried = 0;
+  let carriedThin = 0;
+  if (base) {
+    const clubsOf = s => rivalsOf(s).map(club => ({ club, gf: s.table.find(r => r.club === club)?.gf ?? 0 }));
+    for (const [club, entries, seed] of [['Hertha BSC', 12, 0x7030], ['Southampton', 21, 0x7031], ['Everton', 12, 0x7032]]) {
+      const name = `${club}, ${entries} entries in with its book, written by the base commit`;
+      const from = await base.again();
+      const on = await candidate.again();
+      const raw = onStream(seed, () => {
+        let s = from.cm.startCareer(club);
+        for (let k = 0; k < entries; k++) s = from.cm.playNextEntry(s, { skipHalftime: true }).state;
+        return JSON.stringify(s);
+      });
+      if (JSON.parse(raw).leagueBook === undefined) cannot(`${name}: the tree BOOK_BASE names keeps no league book, so there is no such save to carry on`);
+      onStream(seed + 16, () => {
+        let s = wake(on, JSON.parse(raw));
+        const taken = on.cm.leagueBookOf(s);
+        tick('oldsave', 3);
+        if (!taken) { fail('oldsave', `${name}: the candidate's reader refuses the book`); return; }
+        if (!boards.bookFits(taken, clubsOf(s)) || !boards.bookIsWhole(taken)) { fail('oldsave', `${name}: the candidate reads the book as ${boards.bookIsWhole(taken) ? 'not adding up to the table' : 'a late one'}`); return; }
+        const bare = rivalsOf(s).filter(c => !on.cm.leagueBookEleven(s, c) && on.cm.oppRosterFor(s, c).some(p => p.p !== 'GK'));
+        const onRows = book => bare.reduce((n, c) => n + sumRows(book.c[c], 0), 0);
+        const rowsBefore = onRows(taken);
+        let late = 0;
+        let guard = 0;
+        let end = taken;
+        while (s.week < s.calendar.length && guard++ < 220) {
+          const r = on.cm.playNextEntry(s, { skipHalftime: true });
+          s = r.state;
+          const book = lawNow(on, s, name, `entry ${guard}`, 'oldsave');
+          if (book) end = book;
+          if (!book || !boards.bookIsWhole(book)) late += 1;
+          if (r.kind === 'seasonOver') break;
+        }
+        if (late) fail('oldsave', `${name}: ${late} of ${guard} entries ended on a late book or none: a whole book of the season in play was reopened`);
+        carried += 1;
+        if (bare.length) {
+          carriedThin += 1;
+          tick('oldsave');
+          if (!(onRows(end) > rowsBefore)) fail('oldsave', `${name}: its ${bare.length} clubs with no eleven held ${rowsBefore} goals on named rows at the handover and ${onRows(end)} at the season's end: the candidate named nobody there`);
+        }
+      });
+    }
+    tick('oldsave');
+    if (!carriedThin) fail('oldsave', `of ${carried} saves written by the base commit and carried on, none held a club with no eleven: the transition a live save makes was not tried`);
+  }
   /* (iv) NOBODY'S BOOK IS REOPENED IN A HEALTHY FLEET: over every career that started with a book. */
   tick('oldsave');
   if (acc.lateEntries) fail('oldsave', `${acc.lateEntries} entries of the fleet ended on a late book: a career that started its season with a book had it reopened (${acc.lateFirst})`);
-  console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')} (${lateSaves} of them on a late book, one parked at the first week on a whole one), the season after each, six unreadable books replaced and the match week's own guard with the repair off, the stale book, and no book of the fleet reopened`);
+  console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')} (${lateSaves} of them on a late book, one of those with a goalless first round in its table; one parked at the first week on a whole one), the season after each, six unreadable books replaced and the match week's own guard with the repair off, the stale book, and no book of the fleet reopened`);
+  console.log(base
+    ? `        (vi) ${carried} seasons in play written by the base commit WITH its book and carried on by the candidate to the season's end (${carriedThin} of them in a league with clubs that have no eleven): the book taken as it is, never reopened`
+    : '        oldsave (vi) NOT RUN: set BOOK_BASE to a worktree of the base commit');
 }
 
 /* ---------- section doors: the two ways into a season that is already running ---------- */
