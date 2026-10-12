@@ -27,8 +27,14 @@
  *     nothing of the result: the week, his record and the matchup read as
  *     before the press, Play and Watch are shut, no league grid, no result
  *     face, no text anywhere with the final or his new record, and the score
- *     bug only ever climbs to the final. At full time the page moves on and
- *     the save is the very string the press wrote;
+ *     bug only ever climbs to the final. THE OWNER CARD is read whole and is
+ *     the card of before the press (its pace line prints his wins). At full
+ *     time the page moves on, the save is the very string the press wrote,
+ *     and the owner's pace and the standing line are the SAVED league's, by
+ *     the engine's own seeding and the owner's own pace (bundled here from
+ *     source; the sentences are written out in this file). FULL TIME IS A
+ *     REVEAL: in the middle of this watch the page is scrolled to its top,
+ *     so the tile is out of view, and at full time it is back in view;
  *   4 Results is the sim to the end; a reload in the middle of a watch shows
  *     the result with no clock and the save is the string the press wrote;
  *   5 reduced motion: Watch shows the result with no clock at any sample;
@@ -42,7 +48,15 @@
  *   8 ON EVERY FACE nothing in the tile's box but the named scrollers (the
  *     story, the clock's own feed) is taller than its frame, nothing but the
  *     chip row is wider, nothing leaves the box, no text is under 12 px, and
- *     every button of the week box is at least 44 px high.
+ *     every button of the week box is at least 44 px high;
+ *   9 (390) THE OWNER CARD'S PACE, on a save that makes the case: the ask is
+ *     made a number of wins, and weeks are watched (each held to point 3's
+ *     own list) until the pace line has moved at full time, so what was held
+ *     back was the result and not a line compared with itself;
+ *  10 (390) HIS SEED, on a save that makes the case: the save is handed to
+ *     the board for the club that tops the AFC, three weeks are played, and
+ *     after each the standing line is his seed in the saved league, counted
+ *     from 1. At least one of the three must find him holding a seed.
  *
  * NEGATIVE CONTROLS (FO_GAMEDAY_WALK_CONTROL=). Each plants ONE thing in the
  * page, in the 390 walk, and names the point that must go red. A control run
@@ -51,8 +65,17 @@
  *   recordspoils  his new record written into the Record chip during a watch   point 3
  *   spoiler       the final written into the week box during a watch           point 3
  *   tall          a 300 px block put in the tile outside its scroller          point 8
+ *   noreveal      nothing in the page can scroll an element into view once he
+ *                 has scrolled away in the middle of the watch (what a reveal
+ *                 key without the watch state leaves him with)                 point 3
+ *   helpjump      the page left 150 px lower with the "?" open (a browser's
+ *                 scroll to the focused sheet, with nothing to put it back)    point 6
+ *   pacespoils    the pace line of the league after the press written into
+ *                 the owner card during a watch                                point 9
+ *   seedoff       the standing line printed with his seed as an index          point 10
  * (The hold itself removed from the board is a control of the unit test:
- * node scripts/controlFrontOfficeBoard.mjs recordspoils.)
+ * node scripts/controlFrontOfficeBoard.mjs recordspoils; pacespoils and
+ * seedoff there mutate the board itself.)
  *
  * Pictures: with RC_OUT (a runner) or FO_GAMEDAY_SHOTS set, one png a point a
  * size is written there (gd-<width>-<point>.png).
@@ -63,11 +86,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
+import { bundle } from './lib/gmGameDayFleet.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.FO_GAMEDAY_WALK_CONTROL || '';
-const CONTROLS = { recordspoils: 3, spoiler: 3, tall: 8 };
+const CONTROLS = { recordspoils: 3, spoiler: 3, tall: 8, noreveal: 3, helpjump: 6, pacespoils: 9, seedoff: 10 };
+/* the controls planted in the 390 walk itself; pacespoils and seedoff are planted in the pass after it */
+const WALK_PLANTS = ['recordspoils', 'spoiler', 'tall', 'noreveal', 'helpjump'];
 if (CONTROL && !Object.prototype.hasOwnProperty.call(CONTROLS, CONTROL)) { console.error(`playFrontOfficeGameDay: unknown control "${CONTROL}". Known: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 const OUT = process.env.RC_OUT || process.env.FO_GAMEDAY_SHOTS || '';
 const SAVE_KEY = 'front-office-save-v1';
@@ -84,6 +110,31 @@ const say = (point, ok, what) => {
 };
 const note = what => console.log(`  ....  ${what}`);
 
+/* ---- the engine's own seeding and the owner's own pace, so the page is compared with the SAVE and not with itself.
+   Bundled from the source the build was made from (the same bundler the Game Day harness uses); the sentences are
+   written out here and not taken from the lib that prints them. ---- */
+const { M: ENGINE } = await bundle([
+  "export { conferenceSeeds, conferenceOf, REGULAR_WEEKS } from './src/lib/frontOffice.ts';",
+  "export { mandatePace } from './src/lib/foOwnerMandate.ts';",
+], [], 'fo-gameday-walk');
+const NTH = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
+/** Where the saved league seeds his club: `k` is his index in the seven (-1: outside), `line` the tile's sentence for it. */
+const standingOf = raw => {
+  const s = JSON.parse(raw);
+  const conf = ENGINE.conferenceOf(s.myTeam);
+  const seeds = ENGINE.conferenceSeeds(s.league.teams, conf);
+  const k = seeds.indexOf(s.myTeam);
+  return { k, conf, n: seeds.length, top: seeds[0], line: k >= 0 ? `${conf}: ${NTH[k]} seed of ${seeds.length} as it stands.` : `${conf}: outside the ${seeds.length} seeds as it stands.` };
+};
+/** The owner card's pace line for a save, as the board works it out from the saved league; null: none is drawn. */
+const paceOf = raw => {
+  const s = JSON.parse(raw);
+  if (!s.mandate || !(s.league.week > 1 && s.league.week <= ENGINE.REGULAR_WEEKS)) return null;
+  const inCut = ENGINE.conferenceSeeds(s.league.teams, ENGINE.conferenceOf(s.myTeam)).includes(s.myTeam);
+  return ENGINE.mandatePace(s.mandate, s.league.teams[s.myTeam].wins, (s.league.week - 1) / ENGINE.REGULAR_WEEKS, inCut).line;
+};
+let seededReadings = 0;
+
 /* ---- what the page is asked, in the page ---- */
 const stateOf = () => {
   const one = sel => document.querySelector(sel);
@@ -98,7 +149,7 @@ const stateOf = () => {
     scrollY: Math.round(window.scrollY), vh: window.innerHeight, vw: window.innerWidth, docW: document.documentElement.scrollWidth,
     box: r ? { top: Math.round(r.top), pageTop: Math.round(r.top + window.scrollY), height: Math.round(r.height), width: Math.round(r.width) } : null,
     face: one('[data-gameday]')?.getAttribute('data-gameday-face') ?? null,
-    week: txt('[data-week-chip]'), record: txt('[data-record-chip]'), matchup: txt('[data-week-matchup]'),
+    week: txt('[data-week-chip]'), record: txt('[data-record-chip]'), matchup: txt('[data-week-matchup]'), owner: txt('[data-owner-mandate]'),
     play: play ? { text: (play.textContent ?? '').trim(), disabled: play.disabled, top: Math.round(play.getBoundingClientRect().top) } : null,
     watch: watch ? { text: (watch.textContent ?? '').trim(), disabled: watch.disabled } : null,
     grid: document.querySelectorAll('div.grid.max-h-56 > div').length,
@@ -195,8 +246,9 @@ async function startFranchise(page) {
   await page.waitForTimeout(900);
 }
 
-/** One watched week, sampled until full time. `speed`: the chip pressed after `after` samples (null: let the clock run). */
-async function watchWeek(page, size, point, { after = 0, speed = null, plant = '', label }) {
+/** One watched week, sampled until full time. `speed`: the chip pressed after `after` samples (null: let the clock run).
+ *  `away`: in the middle of the watch the page is scrolled to its top, so the tile is out of view when full time comes. */
+async function watchWeek(page, size, point, { after = 0, speed = null, plant = '', label, away = false }) {
   const b = await state(page);
   const svB = await saved(page);
   await page.locator('[data-watch-week]').click();
@@ -204,7 +256,7 @@ async function watchWeek(page, size, point, { after = 0, speed = null, plant = '
   const f = finals(svP);
   const forbidden = [['the final', f.bare], ['his new record', `Record ${svP.record}`], ['the next week', `Week ${svP.week}/17`], ['the next Play label', `Play Week ${svP.week}`]];
   const spoiled = [];
-  let samples = 0, bug = [0, 0];
+  let samples = 0, bug = [0, 0], awayAt = null;
   const t0 = Date.now();
   for (;;) {
     const st = await state(page);
@@ -215,6 +267,8 @@ async function watchWeek(page, size, point, { after = 0, speed = null, plant = '
       if (st.week !== b.week) spoiled.push(`the week chip reads "${st.week}"`);
       if (st.record !== b.record) spoiled.push(`the record chip reads "${st.record}"`);
       if (st.matchup !== b.matchup) spoiled.push(`the matchup reads "${st.matchup}"`);
+      /* the owner card whole: its pace line prints his wins, so read from the league after the press it is the result */
+      if (st.owner !== b.owner) spoiled.push(`the owner card reads "${st.owner.slice(-70)}" and read "${b.owner.slice(-70)}" before the press`);
       if (!st.play || !st.play.disabled || st.play.text !== b.play.text) spoiled.push('Play is open or reads another week');
       if (!st.watch || !st.watch.disabled) spoiled.push('Watch is open');
       if (st.grid !== 0) spoiled.push('the league grid is drawn');
@@ -230,23 +284,46 @@ async function watchWeek(page, size, point, { after = 0, speed = null, plant = '
         /* the record is written into the text nodes React itself owns, so the page still moves on at full time */
         if (plant === 'recordspoils') await page.evaluate(rec => { const kids = [...document.querySelector('[data-record-chip] b').childNodes].filter(n => n.nodeType === 3); const [w, l] = rec.split('-'); kids[0].nodeValue = w; kids[kids.length - 1].nodeValue = l; }, svP.record);
         if (plant === 'spoiler') await page.evaluate(str => { const p = document.createElement('p'); p.setAttribute('data-planted', ''); p.textContent = str; document.querySelector('[data-week-box]').appendChild(p); }, f.bare);
+        /* the pace line of the league AFTER the press, written into the text node React owns (what the board did before Watch held it) */
+        if (plant === 'pacespoils') await page.evaluate(line => { const p = [...document.querySelectorAll('[data-owner-mandate] p')].find(x => { const t = x.textContent ?? ''; return t.includes('wins keeps the mandate on pace.') || t.includes('-win ask.'); }); if (p && line) { const kids = [...p.childNodes].filter(n => n.nodeType === 3); kids[kids.length - 1].nodeValue = line; } }, paceOf(svP.raw));
       }
       if (speed && samples === after) await page.locator(`[data-gameday-speed="${speed}"]`).click();
+      /* he scrolls to the top of the page in the middle of the watch (after the speed chip: a click of this walk's
+         own scrolls to its button). Under `noreveal` nothing in the page can scroll an element into view from here on. */
+      if (away && !awayAt && samples === (speed ? after + 1 : 2)) {
+        if (plant === 'noreveal') await page.evaluate(() => { window.__realScrollIntoView = Element.prototype.scrollIntoView; Element.prototype.scrollIntoView = function () {}; });
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+        await page.waitForTimeout(120);
+        awayAt = await state(page);
+      }
     }
     await page.waitForTimeout(200);
   }
   await page.evaluate(() => document.querySelectorAll('[data-planted]').forEach(n => n.remove()));
-  await page.waitForTimeout(900);
+  await page.waitForTimeout(away ? 1600 : 900);
   const a = await state(page);
   const svA = await saved(page);
+  await page.evaluate(() => { if (window.__realScrollIntoView) { Element.prototype.scrollIntoView = window.__realScrollIntoView; delete window.__realScrollIntoView; } });
   say(point, samples >= 2 && spoiled.length === 0, `${size.w}, ${label}: until full time the whole page held nothing of the result (${samples} samples, ${((Date.now() - t0) / 1000).toFixed(1)} s, the bug ended on ${bug.join('-')} of ${f.home}-${f.away})${spoiled.length ? `: ${[...new Set(spoiled)].slice(0, 3).join('; ')}` : ''}`);
   say(point, a.face === 'result' && !a.clock && a.final === f.tile && a.grid === 16 && a.week.includes(`Week ${svP.week}/17`) && a.record === `Record ${svP.record}` && !!a.play && !a.play.disabled && a.play.text.endsWith(`Week ${svP.week}`),
     `${size.w}, ${label}: at full time the tile shows the saved final (${a.final}) and the page has moved on (${a.week}, ${a.record})`);
   say(point, svA.raw === svP.raw && svP.n === svB.n + 1 && svP.week === svB.week + 1, `${size.w}, ${label}: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, ${svP.raw.length} bytes)`);
-  say(point, a.box.top >= -2 && inView(a) >= MIN_LEAD && a.box.height === b.box.height, `${size.w}, ${label}: the tile stayed in view and the same size: scrollY ${b.scrollY} to ${a.scrollY}, its top at ${a.box.top} of ${a.vh}, ${inView(a)} px showing`);
+  if (away) {
+    /* FULL TIME IS A REVEAL: the tile was out of view (the reveal hook's own measure of readable) and full time brought it back */
+    const gone = !!awayAt && !(awayAt.box.top >= 0 && awayAt.vh - awayAt.box.top >= MIN_LEAD);
+    say(point, gone && a.box.top >= -2 && inView(a) >= MIN_LEAD && a.box.height === b.box.height, `${size.w}, ${label}: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at ${awayAt?.box.top} of ${awayAt?.vh}, scrollY ${awayAt?.scrollY}; out of view: ${gone}), and at full time the page brought it back: scrollY ${a.scrollY}, its top at ${a.box.top} of ${a.vh}, ${inView(a)} px showing`);
+  } else {
+    say(point, a.box.top >= -2 && inView(a) >= MIN_LEAD && a.box.height === b.box.height, `${size.w}, ${label}: the tile stayed in view and the same size: scrollY ${b.scrollY} to ${a.scrollY}, its top at ${a.box.top} of ${a.vh}, ${inView(a)} px showing`);
+  }
+  /* the two readers the review found nothing held, each against the SAVE: the owner's pace and his seed */
+  const pace = paceOf(svP.raw);
+  say(point, pace === null || a.owner.includes(pace), `${size.w}, ${label}: at full time the owner card's pace is the saved league's (${pace === null ? 'none is drawn this week' : `"${pace}"`}; the card ends "${a.owner.slice(-60)}")`);
+  const stand = standingOf(svP.raw);
+  if (stand.k >= 0) seededReadings += 1;
+  say(point, a.standing === stand.line, `${size.w}, ${label}: where he stands is the engine's own seeding of the saved league ("${a.standing}"; the save seeds him ${stand.k >= 0 ? stand.k + 1 : 'outside the seven'})`);
   await fit(page, size, `${label}, full time`);
   await shot(page, size, `${label}-fulltime`);
-  return a;
+  return { a, moved: a.owner !== b.owner, before: b.owner };
 }
 
 async function walk(browser, size) {
@@ -260,7 +337,7 @@ async function walk(browser, size) {
     res.text().then(body => scripts.push({ url, late, marked: body.includes('data-gameday-face') })).catch(() => scripts.push({ url, late, marked: false }));
   });
   await startFranchise(page);
-  const plant = size.w === 390 ? CONTROL : '';
+  const plant = size.w === 390 && WALK_PLANTS.includes(CONTROL) ? CONTROL : '';
 
   /* 1: the box, and the chunk asked for only now */
   opened = true;
@@ -287,6 +364,9 @@ async function walk(browser, size) {
   say(2, a2.lineUs.length === 5 && sum(a2.lineUs.slice(0, 4)) === f2.us && a2.lineUs[4] === f2.us && sum(a2.lineThem.slice(0, 4)) === f2.them && a2.lineThem[4] === f2.them, `${size.w}: the line score adds up to the final (${a2.lineUs.join(' ')} and ${a2.lineThem.join(' ')})`);
   say(2, a2.grid === 16 && a2.box.height === s1.box.height && a2.docW <= a2.vw, `${size.w}: sixteen scores sit under the tile, the box is the size it was and the page has no sideways scroll (${a2.docW} of ${a2.vw})`);
   say(2, a2.box.top >= -2 && inView(a2) >= MIN_LEAD, `${size.w}: the press did not take the tile out of view: scrollY ${s1.scrollY} to ${a2.scrollY}, the tile's top at ${a2.box.top} of ${a2.vh}, ${inView(a2)} px of it showing`);
+  const stand2 = standingOf(sv2.raw);
+  if (stand2.k >= 0) seededReadings += 1;
+  say(2, a2.standing === stand2.line, `${size.w}: where he stands is the engine's own seeding of the saved league ("${a2.standing}"; the save seeds him ${stand2.k >= 0 ? stand2.k + 1 : 'outside the seven'})`);
   note(`${size.w}: measured after Play: the tile's top ${s1.box.top} before and ${a2.box.top} after, the Play button's top ${a2.play?.top}, the grid's first row at ${a2.gridTop}, the story ${a2.scroller?.content} px in a frame of ${a2.scroller?.frame}`);
   if (plant === 'tall') await page.evaluate(() => { const root = document.querySelector('[data-gameday]'); const d = document.createElement('div'); d.setAttribute('data-planted', ''); d.style.cssText = 'height:300px;flex-shrink:0'; root.insertBefore(d, root.firstChild); });
   await fit(page, size, 'the result after Play');
@@ -294,7 +374,7 @@ async function walk(browser, size) {
   if (plant === 'tall') await page.evaluate(() => document.querySelector('[data-planted]')?.remove());
 
   /* 3: Watch (the clock left to run at 320, 3x elsewhere), then 4: Results */
-  await watchWeek(page, size, 3, size.w === 320 ? { label: '3-watch-1x' } : { after: 3, speed: '3x', plant, label: '3-watch-3x' });
+  await watchWeek(page, size, 3, size.w === 320 ? { label: '3-watch-1x', away: true } : { after: 3, speed: '3x', plant, label: '3-watch-3x', away: true });
   await watchWeek(page, size, 4, { after: 2, speed: 'Results', label: '4-results' });
 
   /* 4: a reload in the middle of a watch */
@@ -319,6 +399,8 @@ async function walk(browser, size) {
   const bH = await state(page);
   await page.locator('[data-gameday-help]').click();
   await page.waitForTimeout(500);
+  /* `helpjump`: the page left 150 px lower with the sheet open, as a browser's own scroll to the focused sheet leaves it when nothing puts it back */
+  if (plant === 'helpjump') { await page.evaluate(() => window.scrollBy({ top: 150, behavior: 'instant' })); await page.waitForTimeout(100); }
   const helpOf = () => {
     const sheet = document.querySelector('[data-season-help]'), wb = document.querySelector('[data-week-box]');
     if (!sheet || !wb) return null;
@@ -387,11 +469,78 @@ async function reducedWalk(browser, size) {
   await ctx.close();
 }
 
+/* 9 and 10: the two readers the review found nothing held, each on a save that MAKES the case, on the phone.
+   9, the owner card's pace: the franchise's ask is made a number of wins (the only kind of ask whose pace line
+   prints his wins), and weeks are watched until the line has moved at full time. 10, his seed: the save is handed
+   to the board for the club that tops the AFC today, in the shape of a save from before the owner, the desk and
+   the log, and three weeks are played. */
+async function ownerAndSeedWalk(browser, size) {
+  console.log(`\n=== ${size.w} by ${size.h}, the owner card's pace and his seed ===`);
+  const { ctx, page, errors } = await newPage(browser, size);
+  await startFranchise(page);
+  await page.evaluate(k => {
+    const s = JSON.parse(localStorage.getItem(k));
+    s.mandate = { tier: 'rebuild', text: 'Rebuild honestly: 6 wins keeps the project on schedule upstairs.', winFloor: 6, reqLevel: 0, season: s.league.season };
+    localStorage.setItem(k, JSON.stringify(s));
+  }, SAVE_KEY);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(900);
+  await openWeek(page);
+  await page.locator('[data-week-box] button:has-text("Play Week")').click();
+  await page.waitForTimeout(1300);
+  const p1 = await state(page);
+  const sv1 = await saved(page);
+  const pace1 = paceOf(sv1.raw);
+  say(9, pace1 !== null && /^\d+ wins /.test(pace1) && p1.owner.includes(pace1), `${size.w}: with an ask of six wins the owner card prints his wins from Week 2 on ("${pace1}"; the card ends "${p1.owner.slice(-60)}")`);
+  let watched = 0, moved = 0;
+  while (watched < 6 && moved === 0) {
+    const r = await watchWeek(page, size, 9, { after: 2, speed: 'Results', plant: CONTROL === 'pacespoils' ? CONTROL : '', label: `9-pace-${watched + 1}` });
+    watched += 1;
+    if (r.moved) moved += 1;
+  }
+  say(9, moved > 0, `${size.w}: the pace line moved at full time in ${moved} of ${watched} watched week(s), so held back it was the result and not a line compared with itself`);
+
+  /* 10 */
+  const svS = await saved(page);
+  const top = ENGINE.conferenceSeeds(JSON.parse(svS.raw).league.teams, 'AFC')[0];
+  await page.evaluate(([k, team]) => {
+    const s = JSON.parse(localStorage.getItem(k));
+    localStorage.setItem(k, JSON.stringify({ league: s.league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 }));
+  }, [SAVE_KEY, top]);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(900);
+  await openWeek(page);
+  const before = seededReadings;
+  let read = 0;
+  const wrong = [], lines = [];
+  for (let i = 0; i < 3; i += 1) {
+    await page.locator('[data-week-box] button:has-text("Play Week")').click();
+    await page.waitForTimeout(1300);
+    const sv = await saved(page);
+    const stand = standingOf(sv.raw);
+    /* `seedoff`: the line as the board printed it with the seed handed over as an index (one too good; a top seed reads 0th) */
+    if (CONTROL === 'seedoff' && stand.k >= 0) await page.evaluate(line => { const el = document.querySelector('[data-gameday-standing]'); if (el) el.textContent = line; }, `${stand.conf}: ${stand.k === 0 ? '0th' : NTH[stand.k - 1]} seed of ${stand.n} as it stands.`);
+    const st = await state(page);
+    read += 1;
+    if (stand.k >= 0) seededReadings += 1;
+    lines.push(st.standing);
+    if (sv.my !== top || st.final !== finals(sv).tile) wrong.push(`press ${i + 1}: the tile shows "${st.final}" and the save's last game of ${sv.my} is "${finals(sv).tile}"`);
+    if (st.standing !== stand.line) wrong.push(`press ${i + 1}: the tile says "${st.standing}" and the saved league seeds him ${stand.k >= 0 ? stand.k + 1 : 'outside the seven'} ("${stand.line}")`);
+  }
+  say(10, read === 3 && wrong.length === 0 && seededReadings > before, `${size.w}: on the club that topped the AFC (${top}) the standing line is his seed in the saved league, counted from 1, after each of ${read} presses, ${seededReadings - before} of them with a seed (${lines.join(' / ')})${wrong.length ? `: ${wrong.slice(0, 2).join('; ')}` : ''}`);
+  await fit(page, size, 'the result on a club that holds a seed');
+  await shot(page, size, '10-seeded');
+  const real = realErrors(errors);
+  say(0, real.length === 0, `${size.w}, the owner card and the seed: no page error (${real.length ? real[0].slice(0, 160) : 'clean'})`);
+  await ctx.close();
+}
+
 let crashed = null;
 const browser = await chromium.launch();
 try {
   for (const size of SIZES) await walk(browser, size);
   await reducedWalk(browser, SIZES[1]);
+  await ownerAndSeedWalk(browser, SIZES[1]);
 } catch (e) {
   crashed = e;
 } finally {
