@@ -1,0 +1,63 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+
+=== 390x844, reduced motion off ===
+  ok    390-motion S1: in the job at Crystal Palace, a whole book that fits
+  ok    390-motion S1: week 3, the book is whole and fits (72 goals on rows, 0 unnamed)
+  FAIL: 390-motion S1: the Stats desk shows words the round says it does not show yet: league leaders ("Manchester City · 3 league goals Sandro Tonali Tottenham · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    390-motion S1: the Stats desk shows the Golden boot and nothing new (37196 characters)
+  ok    390-motion S2: the old save keeps a late book from round index 3 (u0 74, 4 of my men with a baseline), and it fits
+  FAIL: 390-motion S2: the Stats desk of a late book save shows new words: league leaders ("du Leeds United · 4 league goals Sandro Tonali Tottenham · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    390-motion S2: a match played LIVE through its halves, week 6, the late book still fits and still says round index 3
+  ok    390-motion S3 a string: repaired at the next week, a late book from round index 5 that fits
+  ok    390-motion S3 a row with a hole: repaired at the next week, a late book from round index 5 that fits
+  ok    390-motion S4: the committed old save played to week 50; book late from round index 34, fits
+  ok    390-motion S5: the Hot Seat was opened and pressed through; no stored value of it carries a book (its keys: rules-gate-seen:/manager-hot-seat)
+  ok    390-motion: no page error in the whole walk
+
+=== 390x844, reduced motion ON ===
+  ok    390-rm S1: in the job at Crystal Palace, a whole book that fits
+  ok    390-rm S1: week 3, the book is whole and fits (72 goals on rows, 0 unnamed)
+  FAIL: 390-rm S1: the Stats desk shows words the round says it does not show yet: league leaders ("iverpool · 3 league goals Bryan Mbeumo Manchester United · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    390-rm S1: the Stats desk shows the Golden boot and nothing new (37219 characters)
+  ok    390-rm S2: the old save keeps a late book from round index 3 (u0 74, 4 of my men with a baseline), and it fits
+  FAIL: 390-rm S2: the Stats desk of a late book save shows new words: league leaders ("ewcastle · 4 league goals Erling Haaland Manchester City · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    390-rm S2: a match played LIVE through its halves, week 6, the late book still fits and still says round index 3
+  ok    390-rm S3 a string: repaired at the next week, a late book from round index 5 that fits
+  ok    390-rm S3 a row with a hole: repaired at the next week, a late book from round index 5 that fits
+  ok    390-rm S4: the committed old save played to week 50; book late from round index 34, fits
+  ok    390-rm S5: the Hot Seat was opened and pressed through; no stored value of it carries a book (its keys: rules-gate-seen:/manager-hot-seat)
+  ok    390-rm: no page error in the whole walk
+
+=== 1280x900, reduced motion off ===
+  ok    1280-motion S1: in the job at Crystal Palace, a whole book that fits
+  ok    1280-motion S1: week 3, the book is whole and fits (64 goals on rows, 0 unnamed)
+  FAIL: 1280-motion S1: the Stats desk shows words the round says it does not show yet: league leaders (" Kamara Aston Villa · 3 league goals Cole Palmer Chelsea · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    1280-motion S1: the Stats desk shows the Golden boot and nothing new (37233 characters)
+  ok    1280-motion S2: the old save keeps a late book from round index 3 (u0 66, 4 of my men with a baseline), and it fits
+  ok    1280-motion S2: the Stats desk of the late book save shows nothing new
+  ok    1280-motion S2: a match played LIVE through its halves, week 6, the late book still fits and still says round index 3
+  ok    1280-motion S3 a string: repaired at the next week, a late book from round index 5 that fits
+  ok    1280-motion S3 a row with a hole: repaired at the next week, a late book from round index 5 that fits
+  ok    1280-motion S4: the committed old save played to week 50; book late from round index 34, fits
+  ok    1280-motion S5: the Hot Seat was opened and pressed through; no stored value of it carries a book (its keys: rules-gate-seen:/manager-hot-seat)
+  ok    1280-motion: no page error in the whole walk
+
+=== 1280x900, reduced motion ON ===
+  ok    1280-rm S1: in the job at Crystal Palace, a whole book that fits
+  ok    1280-rm S1: week 3, the book is whole and fits (82 goals on rows, 0 unnamed)
+  FAIL: 1280-rm S1: the Stats desk shows words the round says it does not show yet: league leaders ("cott Bournemouth · 3 league goals Malick Thiaw Newcastle · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    1280-rm S1: the Stats desk shows the Golden boot and nothing new (37232 characters)
+  ok    1280-rm S2: the old save keeps a late book from round index 3 (u0 85, 5 of my men with a baseline), and it fits
+  FAIL: 1280-rm S2: the Stats desk of a late book save shows new words: league leaders ("Bournemouth · 4 league goals Adam Wharton Crystal Palace · carrying the Premier League leaders Settled at the end of the season, when Europe has a winner and the leagues have champ")
+  ok    1280-rm S2: a match played LIVE through its halves, week 6, the late book still fits and still says round index 3
+  ok    1280-rm S3 a string: repaired at the next week, a late book from round index 5 that fits
+  ok    1280-rm S3 a row with a hole: repaired at the next week, a late book from round index 5 that fits
+  ok    1280-rm S4: the committed old save played to week 50; book late from round index 34, fits
+  ok    1280-rm S5: the Hot Seat was opened and pressed through; no stored value of it carries a book (its keys: rules-gate-seen:/manager-hot-seat)
+  ok    1280-rm: no page error in the whole walk
+
+=== the same seeded session on the head build and on the base build (390x844, reduced motion on) ===
+  head: Crystal Palace week 3; head again: Crystal Palace week 3; base: Crystal Palace week 3
+  NOT COMPARED: two sessions on the SAME head build already differ (the page draws from Math.random in an order a seed does not pin), so a difference from the base would prove nothing
+
+walk: 7 FAILURE(S)
