@@ -181,6 +181,12 @@
  *   logplayoff  the sink takes no entry                               section 13 (the deep equal and the record)
  *   noedges     nflPlayTie plays its game without the desk's edges    section 11 with the desk on (and its sink in
  *               (still told with them)                                section 13); the desk off checks stay green
+ *   deskless    runPlayoffs plays its games without the desk's edges  section 11 (the count of club seasons the
+ *               (the engine forgets the desk in the playoffs)         edge moved: none)
+ *   inseason    loadGmPostseason loses its "not in the postseason"    section 12 (outside the postseason the load
+ *               line                                                  is null); a sound block stays green
+ *   byeplays    the NFL data's first Wild Card tie made seed 1        section 13 (no entry in a week he has the
+ *               against seed 7 (a top seed plays the bye week)        bye)
  * NOT HELD HERE: the save guard and the repair with every field damaged
  * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
  * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
@@ -322,6 +328,10 @@ const CONTROLS = {
   trust: { section: 12, labels: ['rebuilt unplayed with the feed line'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'const repair = repairGmBracket(format, known, season, () => sport.seeds(league), isClub, seeds => sport.seedsOk(seeds, league));', to: 'const repair = { save: known ?? block, rebuilt: null, line: null, problems: [] };' }] },
   keyrebuilt: { section: 13, labels: ["deep equal the one press path's", 'the sink holds every game'], clean: ['his playoff record in the log'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: 'if (t.last) told.push({ ...t.last, key: `${season}|${tie.round}|${t.game.home}|${t.game.away}|${t.game.homeScore}-${t.game.awayScore}` });' }] },
   logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
+  /* Round 1308's review: a control for each check that had none (s12.outside, s13.when and the desk's count) */
+  inseason: { section: 12, labels: ['outside the postseason the load is null'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'if (!inPostseason) return null;', to: '' }] },
+  byeplays: { section: 13, labels: ['no log entry in a week he has the bye'], patches: [{ file: NFL_DATA, from: 'home: { seed: top + 1 }, away: { seed: top + 6 }', to: 'home: { seed: top }, away: { seed: top + 6 }' }] },
+  deskless: { section: 11, labels: ['so the desk on checks hold something'], patches: [{ file: 'src/lib/frontOffice.ts', from: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges));", to: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng));" }] },
   /* Round 1308's review: the desk's edges dropped from the playoff game (still told with them) */
   noedges: { section: 11, labels: ['with the desk on (his club', 'with the desk on, nflRoundsOf'], elsewhere: ['with the desk on, the sink holds every game'], clean: ["give the fixture's thirteen games", 'playBracketAll with nflPlayTie gives the same', 'so the desk on checks hold something'], patches: [{ file: NFL_POST, from: "const g = simGame({ week: 0, home, away, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges);", to: "const g = simGame({ week: 0, home, away, homeScore: 0, awayScore: 0, winner: '' }, teams, rng);" }] },
   logholes: { section: 9, labels: ['with any one field of an entry damaged the log reads as absent'], patches: [{ file: LOG, from: 'if (!g || (g.home !== club && g.away !== club) || keys.has(g.key)) return null;', to: 'if (!g) continue; if ((g.home !== club && g.away !== club) || keys.has(g.key)) return null;' }] },
