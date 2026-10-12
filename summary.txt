@@ -1,0 +1,6 @@
+readday exit=2 0s | CONTROL readday ABORTED: a receipt of the second file on its own day is not there to change
+ledger exit=0 2s | simUsSeasonLedger: green. 3426 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+keytwice exit=1 2s | simUsSeasonLedger: CONTROL keytwice FIRED, red at exactly R6
+dash exit=1 2s | simUsSeasonLedger: CONTROL dash FIRED, red at exactly D1
+onesource exit=1 1s | simUsSeasonLedger: CONTROL onesource FIRED, red at exactly R2
+nhlfrom exit=1 1s | simUsSeasonLedger: CONTROL nhlfrom FIRED, red at exactly N6
