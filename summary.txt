@@ -1,0 +1,6 @@
+vitest-world exit=0 27s |    Duration  26.83s (transform 3.01s, setup 171ms, collect 4.29s, tests 26.80s, environment 1.19s, prepare 643ms)
+simCmUnseededWorld exit=0 194s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+simCmLedgerJourney-futureyear-EXPECT-RED exit=1 4s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 journeys hold a ledger their reader refuses
+simCmLedgerJourney exit=0 201s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote
+simCmUnseededWorld-guard-EXPECT-RED exit=1 206s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+simCmLeagueBook exit=0 79s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (79s)
