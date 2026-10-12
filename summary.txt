@@ -1,0 +1,7 @@
+ctl-undo exit=1 37s | simGmGameDay: 414 checks, 10 failed (control undo)
+simGmGameDay exit=0 37s | simGmGameDay: 414 checks, 0 failed
+ctl-keydrift exit=1 38s | simGmGameDay: 414 checks, 20 failed (control keydrift)
+ctl-trust exit=1 36s | simGmGameDay: 414 checks, 10 failed (control trust)
+ctl-keyrebuilt exit=1 36s | simGmGameDay: 414 checks, 10 failed (control keyrebuilt)
+ctl-logplayoff exit=1 38s | simGmGameDay: 414 checks, 20 failed (control logplayoff)
+simHarnessAnchors exit=0 26s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

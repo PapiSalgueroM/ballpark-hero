@@ -1,0 +1,7 @@
+simGmGameDay: node scripts/simGmGameDay.mjs
+ctl-undo: GM_GAMEDAY_CONTROL=undo node scripts/simGmGameDay.mjs
+ctl-keydrift: GM_GAMEDAY_CONTROL=keydrift node scripts/simGmGameDay.mjs
+ctl-trust: GM_GAMEDAY_CONTROL=trust node scripts/simGmGameDay.mjs
+ctl-keyrebuilt: GM_GAMEDAY_CONTROL=keyrebuilt node scripts/simGmGameDay.mjs
+ctl-logplayoff: GM_GAMEDAY_CONTROL=logplayoff node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
