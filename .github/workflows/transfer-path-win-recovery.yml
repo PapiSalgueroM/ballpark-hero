@@ -17,7 +17,7 @@ jobs:
       ENGINES: chromium
       TRANSFER_PATH_LOCAL_ONLY: '1'
       CAREER_SEASON_LOCAL_ONLY: '1'
-      TRANSFER_PATH_WIN_PHASE: baseline
+      TRANSFER_PATH_WIN_PHASE: fixed
       TRANSFER_PATH_WIN_OUT: ${{ github.workspace }}/transfer-path-win-recovery-artifacts
       PRERENDER_ONLY: /transfer-path
     steps:
