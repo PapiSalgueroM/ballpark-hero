@@ -94,6 +94,16 @@ const BASELINE = {
     '2026-11-01': '903c3cc05441b1d6e93a',
     '2026-11-09': '8bea270b4e6a58d33e87',
   },
+  /* Release AZ: recorded from the source of b6eb78e7 (the first parent of merge e) by the runner, remote check az-y3a
+     (node scripts/simDailyDeals.mjs --root <worktree of b6eb78e7> --print). Do not retake from this tree. */
+  scripted: {
+    '2026-10-10': {"digest":"32aae44ce6352f1d6b15","grade":"2d6cd0e428ddc1f0a056","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":5.1},{"t":"terms","i":0,"wage":10,"years":4,"bonus":1.8},{"t":"sell","i":0},{"t":"end"}]},
+    '2026-10-11': {"digest":"54ddbdd862aa208bf481","grade":"5a88ebc205d4a60771fc","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":13.8},{"t":"terms","i":0,"wage":29,"years":4,"bonus":5.2},{"t":"sell","i":0},{"t":"end"}]},
+    '2026-10-12': {"digest":"07b5bea1c0d000c7c5ed","grade":"9c1b770552cec662bc36","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":16.1},{"t":"terms","i":0,"wage":25,"years":4,"bonus":4.5},{"t":"sell","i":0},{"t":"end"}]},
+    '2026-10-18': {"digest":"74ffb0b07592c332e0ee","grade":"6c594ca51aa93a70c34d","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":9.6},{"t":"terms","i":0,"wage":22,"years":4,"bonus":4},{"t":"sell","i":0},{"t":"end"}]},
+    '2026-11-01': {"digest":"5ff2c5b9738492e6e3aa","grade":"933af5d62a8a638576eb","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":34.7},{"t":"terms","i":0,"wage":52,"years":4,"bonus":9.4},{"t":"sell","i":0},{"t":"end"}]},
+    '2026-11-09': {"digest":"7dd6fe553473e40bc9dd","grade":"ba0641f62509cb11fe0c","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":21.8},{"t":"terms","i":0,"wage":31,"years":4,"bonus":5.6},{"t":"sell","i":0},{"t":"end"}]},
+  },
 };
 
 const STRIPS = {
