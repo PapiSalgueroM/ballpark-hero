@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+fx-time: FX_SEASONS=15 node .rc/x/fx-time.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+managerRosterCacheControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs

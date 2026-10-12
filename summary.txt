@@ -1,0 +1,9 @@
+vitest-world exit=0 28s |    Duration  26.71s (transform 3.76s, setup 208ms, collect 5.26s, tests 25.87s, environment 1.34s, prepare 587ms)
+tsc exit=0 100s | 
+fx-time exit=0 111s | fx-time: done
+simCmLeagueRules exit=0 83s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+managerRosterCacheControl exit=0 19s | PASS Manager cache control: 96 healthy named cases, exactly one decode-count failure, complete undo and all served source held
+simCmLedgerJourney exit=0 152s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote
+simCmUnseededWorld exit=0 208s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+simCmLeagueBook exit=0 88s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (88s)
+simManagerWorldContinuity exit=0 607s | Private world variation is measured, no historical fixture was re-recorded

@@ -1,0 +1,7 @@
+Everton s5: ledger 31; market cold 43.9 warm 3.5 | stripped 3.9 / 3.7 ms; matchday 32.5 vs 20.7 ms
+Everton s10: ledger 74; market cold 44.4 warm 3.7 | stripped 3.8 / 3.5 ms; matchday 34.2 vs 20.8 ms
+Everton s15: ledger 121; market cold 39.3 warm 2.5 | stripped 2.5 / 3.7 ms; matchday 26.7 vs 16.3 ms
+Real Madrid s5: ledger 32; market cold 38.7 warm 3.7 | stripped 3.8 / 3.9 ms; matchday 28.7 vs 18.4 ms
+Real Madrid s10: ledger 74; market cold 31.1 warm 3.2 | stripped 2.4 / 2.9 ms; matchday 20.2 vs 16.6 ms
+Real Madrid s15: ledger 116; market cold 45.8 warm 3.3 | stripped 3.6 / 3.8 ms; matchday 33.2 vs 12.6 ms
+fx-time: done
