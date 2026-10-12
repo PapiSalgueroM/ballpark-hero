@@ -1,0 +1,9 @@
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+vitest-238 exit=0 5s |    Duration  4.56s (transform 1.46s, setup 197ms, collect 4.51s, tests 2.06s, environment 1.40s, prepare 539ms)
+simCareerTransferBrief exit=0 7s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerAgentReview exit=0 10s | PASS agent review product and proof source bytes held.
+simTransferBriefPageControl exit=0 9s | CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+simSoccerAgentReviewPageControl exit=0 18s | PASS actual page/component source held and exact evidence retained.
+simSoccerOfferReview exit=0 7s | Soccer offer review: passed.
+tsc exit=0 52s | 
