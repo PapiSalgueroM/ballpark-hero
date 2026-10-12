@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+nhlG: RIVAL_WALK_SPORT=nhl RIVAL_WALK_POS=G RIVAL_WALK_STRETCH=new node scripts/playUsRivalLines.mjs
+mlbShort: RIVAL_WALK_SPORT=mlb RIVAL_WALK_STRETCH=short node scripts/playUsRivalLines.mjs
+mlbOld: RIVAL_WALK_SPORT=mlb RIVAL_WALK_STRETCH=old node scripts/playUsRivalLines.mjs

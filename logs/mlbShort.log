@@ -1,0 +1,66 @@
+  ok   mlb: a y2004 career of this tree's code was driven to the 2020 season with a live rival (SP, TBD)
+short SP 2020, MLB, 390 wide, motion on
+  ok   short SP 2020, MLB, 390 wide, motion on: the save is loaded
+  ok   short SP 2020, MLB, 390 wide, motion on: the rival's line is a SP's own shape ("4-3, 5.78 ERA, 49 K")
+  ok   short SP 2020, MLB, 390 wide, motion on: the season card prints my own line in that shape ("4-3, 4.73 ERA, 61 K")
+  ok   short SP 2020, MLB, 390 wide, motion on: the note says I had the better year, and the two printed lines agree (mine 4-3, 4.73 ERA, 61 K; his 4-3, 5.78 ERA, 49 K)
+  ok   short SP 2020, MLB, 390 wide, motion on: the rival's note ends inside the season card and is not cut (52 to 358 in 32 to 358)
+  ok   short SP 2020, MLB, 390 wide, motion on: the note is set at 12px or more (14px)
+  ok   short SP 2020, MLB, 390 wide, motion on: nothing scrolls sideways on the season card (0 pixels over)
+  ok   short SP 2020, MLB, 390 wide, motion on: the season saved is the short one (2020, 60 games)
+  ok   short SP 2020, MLB, 390 wide, motion on: the rival's note is on the card, so both printed lines are that season's
+  ok   short SP 2020, MLB, 390 wide, motion on: the Rival screen's last season line is the note's line ("4-3, 5.78 ERA, 49 K")
+  ok   short SP 2020, MLB, 390 wide, motion on: that line ends inside its card and is not cut (29 to 361 in 16 to 374)
+  ok   short SP 2020, MLB, 390 wide, motion on: that line is set at 12px or more (12px)
+  ok   short SP 2020, MLB, 390 wide, motion on: nothing scrolls sideways on the Rival screen (0 pixels over)
+  ok   short SP 2020, MLB, 390 wide, motion on: no page errors (clean)
+  ok   short SP 2020, MLB, 390 wide, motion on: no request to the live database finished (0)
+short SP 2020, MLB, 390 wide, reduced motion
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the save is loaded
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the rival's line is a SP's own shape ("4-3, 5.23 ERA, 58 K")
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the season card prints my own line in that shape ("2-2, 5.30 ERA, 28 K")
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the note says he had the better year, and the two printed lines agree (mine 2-2, 5.30 ERA, 28 K; his 4-3, 5.23 ERA, 58 K)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the rival's note ends inside the season card and is not cut (52 to 358 in 32 to 358)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the note is set at 12px or more (14px)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: nothing scrolls sideways on the season card (0 pixels over)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the season saved is the short one (2020, 60 games)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the rival's note is on the card, so both printed lines are that season's
+  ok   short SP 2020, MLB, 390 wide, reduced motion: the Rival screen's last season line is the note's line ("4-3, 5.23 ERA, 58 K")
+  ok   short SP 2020, MLB, 390 wide, reduced motion: that line ends inside its card and is not cut (29 to 361 in 16 to 374)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: that line is set at 12px or more (12px)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: nothing scrolls sideways on the Rival screen (0 pixels over)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: no page errors (clean)
+  ok   short SP 2020, MLB, 390 wide, reduced motion: no request to the live database finished (0)
+short SP 2020, MLB, 1280 wide, motion on
+  ok   short SP 2020, MLB, 1280 wide, motion on: the save is loaded
+  ok   short SP 2020, MLB, 1280 wide, motion on: the rival's line is a SP's own shape ("4-3, 5.14 ERA, 57 K")
+  ok   short SP 2020, MLB, 1280 wide, motion on: the season card prints my own line in that shape ("2-1, 5.65 ERA, 26 K")
+  ok   short SP 2020, MLB, 1280 wide, motion on: the note says he had the better year, and the two printed lines agree (mine 2-1, 5.65 ERA, 26 K; his 4-3, 5.14 ERA, 57 K)
+  ok   short SP 2020, MLB, 1280 wide, motion on: the rival's note ends inside the season card and is not cut (356 to 944 in 336 to 944)
+  ok   short SP 2020, MLB, 1280 wide, motion on: the note is set at 12px or more (14px)
+  ok   short SP 2020, MLB, 1280 wide, motion on: nothing scrolls sideways on the season card (0 pixels over)
+  ok   short SP 2020, MLB, 1280 wide, motion on: the season saved is the short one (2020, 60 games)
+  ok   short SP 2020, MLB, 1280 wide, motion on: the rival's note is on the card, so both printed lines are that season's
+  ok   short SP 2020, MLB, 1280 wide, motion on: the Rival screen's last season line is the note's line ("4-3, 5.14 ERA, 57 K")
+  ok   short SP 2020, MLB, 1280 wide, motion on: that line ends inside its card and is not cut (333 to 947 in 320 to 960)
+  ok   short SP 2020, MLB, 1280 wide, motion on: that line is set at 12px or more (12px)
+  ok   short SP 2020, MLB, 1280 wide, motion on: nothing scrolls sideways on the Rival screen (0 pixels over)
+  ok   short SP 2020, MLB, 1280 wide, motion on: no page errors (clean)
+  ok   short SP 2020, MLB, 1280 wide, motion on: no request to the live database finished (0)
+short SP 2020, MLB, 1280 wide, reduced motion
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the save is loaded
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the rival's line is a SP's own shape ("4-3, 5.50 ERA, 60 K")
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the season card prints my own line in that shape ("3-1, 5.35 ERA, 24 K")
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the note says he had the better year, and the two printed lines agree (mine 3-1, 5.35 ERA, 24 K; his 4-3, 5.50 ERA, 60 K)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the rival's note ends inside the season card and is not cut (356 to 944 in 336 to 944)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the note is set at 12px or more (14px)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: nothing scrolls sideways on the season card (0 pixels over)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the season saved is the short one (2020, 60 games)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the rival's note is on the card, so both printed lines are that season's
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: the Rival screen's last season line is the note's line ("4-3, 5.50 ERA, 60 K")
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: that line ends inside its card and is not cut (333 to 947 in 320 to 960)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: that line is set at 12px or more (12px)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: nothing scrolls sideways on the Rival screen (0 pixels over)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: no page errors (clean)
+  ok   short SP 2020, MLB, 1280 wide, reduced motion: no request to the live database finished (0)
+playUsRivalLines: 61 checks, 0 failed
