@@ -222,6 +222,10 @@ async function step(page, leaveTheCard = false) {
   if (await page.locator('[data-rivalry-choice]').count()) return (await page.locator('[data-rivalry-choice] [data-rivalry-outcome]').count()) ? lastIn('[data-rivalry-choice]') : firstIn('[data-rivalry-choice]');
   if (await page.locator('[data-extension-talk]').count()) return firstIn('[data-extension-talk]');
   if (await page.locator('[data-fa-window]').count()) return firstIn('[data-fa-window]');
+  /* Round 1313: an older career meets the retirement talk ("Is it time?", FarewellCard.tsx) in place of the
+     season button; the walk plays on, the way a player who is not done would. */
+  const oneMore = page.locator('button', { hasText: 'One more year' });
+  if (await oneMore.count()) { await oneMore.first().click(); return true; }
   const hubBack = page.locator('button', { hasText: /^\s*Hub\s*$/ });
   if (await hubBack.count()) { await hubBack.first().click(); return true; }
   const options = page.locator('button[class*="bg-background px-3 py-2 text-left"]:not([disabled])');
@@ -277,7 +281,12 @@ async function playOne(page, sp, pos, what) {
     if (await step(page, true)) continue;
     if (await playButton(page).count()) await playButton(page).first().click();
   }
-  await page.waitForSelector('[data-season-reveal]', { timeout: 15000 });
+  const reached = await page.waitForSelector('[data-season-reveal]', { timeout: 15000 }).then(() => true, () => false);
+  if (!reached) {
+    await shot(page, `lost-${what.replace(/[^a-z0-9]+/gi, '-')}`);
+    say(false, `${what}: the season card came up (the walk is lost on "${(await page.locator('main').innerText()).replace(/\s+/g, ' ').slice(0, 200)}")`);
+    return null;
+  }
   await page.waitForTimeout(2600);
   const card = await page.locator('[data-season-reveal]').innerText();
   const lines = card.split('\n').map(s => s.trim()).filter(Boolean);
