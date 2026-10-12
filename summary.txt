@@ -1,0 +1,4 @@
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 36 controls is in the board exactly once.
+ctl-all exit=0 286s | controlFrontOfficeBoard: 35 of 35 control(s) fired, the board tests can fail for each named reason.
+ctl-blank exit=1 7s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
+vitest-fo exit=0 15s |    Duration  14.92s (transform 2.23s, setup 699ms, collect 7.83s, tests 25.51s, environment 5.52s, prepare 1.17s)
