@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -71,7 +72,7 @@ jobs:
           TRANSFER_PATH_CLUB_SEASONS_CONTROL=missing node scripts/simTransferPathClubSeasons.mjs
       - name: Related game and generated-site fences
         run: |
-          ONLY=simTransferPathRepeat,simTransferPathGuidance,simTransferPathSeasons,simTransferPathModes,simTransferPathHints,simTransferPathActiveIdentity,simTransferPathEmptyState,simCareerSeasonTruth,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs
+          ONLY=simTransferPathRepeat,simTransferPathGuidance,simTransferPathSeasons,simTransferPathModes,simTransferPathHints,simTransferPathActiveIdentity,simTransferPathEmptyState,simCareerSeasonTruth,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser
       - name: Mounted report at phone and desktop widths
         run: node scripts/playTransferPathClubSeasons.mjs
       - uses: actions/upload-artifact@v4

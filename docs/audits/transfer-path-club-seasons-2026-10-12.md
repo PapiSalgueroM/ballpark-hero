@@ -52,3 +52,12 @@ snapshot. All 15 generated-site fences remain in the gate. The earlier
 49f2b7d1 full-snapshot request remains separate evidence, with no full-build
 acceptance credited while it is still running. No unrelated snapshot output
 is adopted into this branch.
+
+Scoped run 38284413880 on 8cb012f8 passed types, the full app build with one
+snapshot, 16 hook cases, 11 focused outcomes and the missing-membership
+control. Its fence request passed 21 harnesses, but simCareerSeasonTruth
+could not read its historical evidence commit from the shallow checkout.
+The browser-classified simPrerenderBoot was not discovered without --browser.
+Neither its missing coverage nor the skipped report browser is credited.
+The next request fetches full Git history and explicitly includes browser
+harness discovery.
