@@ -1,0 +1,16 @@
+
+=== Hot Seat, 390x844, reduced motion ON, start by /Take today.s job/i ===
+  note  390-rm: 0 matches kicked off, 0 press answers, stored: rules-gate-seen:/manager-hot-seat (1 bytes); on screen: Skip to main content DOUKNOWBALL Back Track stats Manager Hot Seat Five games. One target. The board are watching. Back THE JOB Young Boys 2nd after 9 league games, and the board expect 1st. 3 wins an
+  FAIL: 390-rm: no Hot Seat match was played
+  ok    390-rm: 0 matches played, no stored value ever carried a league book
+  note  390-rm: the run did not end on a kept job (no "Carry on in Club Manager"), so the handover was not walked here
+  ok    390-rm: no page error
+
+=== Hot Seat, 1280x900, reduced motion off, start by /^\s*Random\s*$/i ===
+  note  1280-motion: 0 matches kicked off, 0 press answers, stored: rules-gate-seen:/manager-hot-seat (1 bytes); on screen: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Manager Hot Seat Five games. One target. The board are watching. Back THE JOB Internacional 1
+  FAIL: 1280-motion: no Hot Seat match was played
+  ok    1280-motion: 0 matches played, no stored value ever carried a league book
+  note  1280-motion: the run did not end on a kept job (no "Carry on in Club Manager"), so the handover was not walked here
+  ok    1280-motion: no page error
+
+hot seat walk: 2 FAILURE(S)
