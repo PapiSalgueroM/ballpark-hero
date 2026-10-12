@@ -1,0 +1,13 @@
+bound: node scripts/simCmLedgerBound.mjs
+bound-noprune: CM_LEDGER_BOUND_CONTROL=noprune node scripts/simCmLedgerBound.mjs
+bound-madeup: CM_LEDGER_BOUND_CONTROL=madeup node scripts/simCmLedgerBound.mjs
+bound-release: CM_LEDGER_BOUND_CONTROL=release node scripts/simCmLedgerBound.mjs
+bound-nocache: CM_LEDGER_BOUND_CONTROL=nocache node scripts/simCmLedgerBound.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+saveSize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs

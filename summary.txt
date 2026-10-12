@@ -1,0 +1,13 @@
+bound-madeup exit=1 414s | simCmLedgerBound: CONTROL madeup FIRED: section 3 red (red: 3 (592), 4 (35))
+bound exit=1 416s | simCmLedgerBound: RED, sections 4 (35)
+bound-noprune exit=1 495s | simCmLedgerBound: CONTROL noprune FIRED: section 2 red (red: 1 (1), 2 (3), 4 (3))
+tsc exit=0 88s | 
+vitest-world exit=1 22s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > lossless inactive world r
+simCmLeagueRules exit=0 63s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCmLedgerJourney exit=2 125s | simCmLedgerJourney: cannot run: the fleet never made: a retired record
+bound-release exit=1 383s | simCmLedgerBound: CONTROL release FIRED: section 4 red
+simManagerWorldContinuity exit=1 60s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:483:24
+saveSize exit=1 61s | simClubManagerSaveSize: 2 failures in sections 5, 6
+simCmUnseededWorld exit=0 178s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+slots exit=0 63s | simClubManagerSlots: all sections green
+bound-nocache exit=1 769s | simCmLedgerBound: CONTROL nocache FIRED: section 1 red (red: 1 (9), 4 (35))

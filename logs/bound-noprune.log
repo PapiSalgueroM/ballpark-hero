@@ -1,0 +1,36 @@
+  Everton season 5: save 104895 units, ledger 38 records, 3115 units
+  Everton season 10: save 121917 units, ledger 86 records, 5920 units
+  time Everton season 10: ledger 86 records; market after a deal 43.0 ms; a tap 3.1 ms against 2.9 ms with no seed or ledger; a matchday 34.4 against 16.7 ms
+  Everton season 15: save 124294 units, ledger 131 records, 8126 units
+  Everton season 20: save 128078 units, ledger 185 records, 10462 units
+  Everton season 25: save 130225 units, ledger 233 records, 12329 units
+  Everton season 30: save 132834 units, ledger 282 records, 14220 units
+  time Everton season 30: ledger 282 records; market after a deal 37.9 ms; a tap 2.1 ms against 1.7 ms with no seed or ledger; a matchday 38.1 against 9.4 ms
+  Everton: ledger slope from season 15 on 401.9 units a season (8126 at 15, 14220 at 30)
+  Real Madrid season 5: save 110701 units, ledger 42 records, 3401 units
+  Real Madrid season 10: save 120700 units, ledger 86 records, 5954 units
+  time Real Madrid season 10: ledger 86 records; market after a deal 23.6 ms; a tap 1.9 ms against 1.7 ms with no seed or ledger; a matchday 19.3 against 8.9 ms
+  FAIL section 4: Real Madrid season 11: Ethan Nwaneri, sold to Valencia in season 10 with 1 years left, is owned at Hearts and not in Valencia's squad
+  FAIL section 4: Real Madrid season 13: Estêvão, sold to Valencia in season 12 with 1 years left, is owned at Twente and not in Valencia's squad
+  Real Madrid season 15: save 124473 units, ledger 131 records, 8164 units
+  Real Madrid season 20: save 127970 units, ledger 182 records, 10403 units
+  Real Madrid season 25: save 134176 units, ledger 232 records, 12478 units
+  Real Madrid season 30: save 133700 units, ledger 284 records, 14552 units
+  time Real Madrid season 30: ledger 284 records; market after a deal 38.9 ms; a tap 2.1 ms against 1.7 ms with no seed or ledger; a matchday 37.6 against 9.6 ms
+  Real Madrid: ledger slope from season 15 on 423.9 units a season (8164 at 15, 14552 at 30)
+  Blackburn Rovers season 5: save 63102 units, ledger 41 records, 3523 units
+  FAIL section 4: Blackburn Rovers season 8: Gonzalo Higuaín, sold to Fulham in season 7 with 1 years left, is owned at Auxerre and not in Fulham's squad
+  Blackburn Rovers season 10: save 76278 units, ledger 82 records, 5802 units
+  time Blackburn Rovers season 10: ledger 82 records; market after a deal 11.0 ms; a tap 0.7 ms against 0.6 ms with no seed or ledger; a matchday 18.3 against 10.8 ms
+  Blackburn Rovers season 15: save 85199 units, ledger 136 records, 8443 units
+  Blackburn Rovers season 20: save 86040 units, ledger 188 records, 10766 units
+  Blackburn Rovers season 25: save 88431 units, ledger 238 records, 12979 units
+  Blackburn Rovers season 30: save 90717 units, ledger 283 records, 14766 units
+  time Blackburn Rovers season 30: ledger 283 records; market after a deal 30.9 ms; a tap 0.7 ms against 0.7 ms with no seed or ledger; a matchday 38.0 against 6.9 ms
+  Blackburn Rovers: ledger slope from season 15 on 421.4 units a season (8443 at 15, 14766 at 30)
+  FAIL section 1: Blackburn Rovers season 30: a matchday took 38.0 ms, over 2 x 6.9 + 20
+  FAIL section 2: Everton: the ledger grows 401.9 code units a season from season 15 on, over 60
+  FAIL section 2: Real Madrid: the ledger grows 423.9 code units a season from season 15 on, over 60
+  FAIL section 2: Blackburn Rovers: the ledger grows 421.4 code units a season from season 15 on, over 60
+simCmLedgerBound: 3 careers to season 30; 67 real men and 15 academy men sold; made up men seen at a rival 296, on the market 296; sold men past the deal they had with me 74
+simCmLedgerBound: CONTROL noprune FIRED: section 2 red (red: 1 (1), 2 (3), 4 (3))

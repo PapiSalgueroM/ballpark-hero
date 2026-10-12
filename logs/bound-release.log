@@ -1,0 +1,35 @@
+  FAIL section 4: Everton season 2: Christian Nørgaard, sold to Bournemouth in season 1 with 1 years left, is released and not in Bournemouth's squad
+  FAIL section 4: Everton season 3: Jarrad Branthwaite, sold to Bournemouth in season 2 with 1 years left, is released and not in Bournemouth's squad
+  FAIL section 4: Everton season 4: Tyrique George, sold to Bournemouth in season 3 with 1 years left, is released and not in Bournemouth's squad
+  Everton season 5: save 105169 units, ledger 22 records, 1983 units
+  FAIL section 4: Everton season 5: Erling Haaland, sold to Bournemouth in season 4 with 1 years left, is released and not in Bournemouth's squad
+  FAIL section 4: Everton season 6: Jude Bellingham, sold to Bournemouth in season 5 with 1 years left, is released and not in Bournemouth's squad
+  FAIL section 4: Everton season 7: Ayyoub Bouaddi, sold to Bournemouth in season 6 with 1 years left, is released and not in Bournemouth's squad
+  Everton season 10: save 116778 units, ledger 22 records, 1991 units
+  time Everton season 10: ledger 22 records; market after a deal 20.3 ms; a tap 2.1 ms against 1.9 ms with no seed or ledger; a matchday 13.9 against 10.1 ms
+  Everton season 15: save 117757 units, ledger 23 records, 2191 units
+  Everton season 20: save 119208 units, ledger 24 records, 2290 units
+  Everton season 25: save 119880 units, ledger 24 records, 1983 units
+  Everton season 30: save 122785 units, ledger 25 records, 2157 units
+  time Everton season 30: ledger 25 records; market after a deal 49.0 ms; a tap 3.9 ms against 3.2 ms with no seed or ledger; a matchday 23.5 against 15.6 ms
+  Everton: ledger slope from season 15 on -22.7 units a season (2191 at 15, 2157 at 30)
+  Real Madrid season 5: save 109068 units, ledger 32 records, 2689 units
+  Real Madrid season 10: save 119604 units, ledger 27 records, 2348 units
+  time Real Madrid season 10: ledger 27 records; market after a deal 35.7 ms; a tap 2.1 ms against 1.8 ms with no seed or ledger; a matchday 22.0 against 14.5 ms
+  Real Madrid season 15: save 118564 units, ledger 24 records, 2271 units
+  Real Madrid season 20: save 119270 units, ledger 17 records, 1685 units
+  Real Madrid season 25: save 119559 units, ledger 21 records, 1866 units
+  Real Madrid season 30: save 124162 units, ledger 22 records, 1980 units
+  time Real Madrid season 30: ledger 22 records; market after a deal 44.0 ms; a tap 3.6 ms against 3.0 ms with no seed or ledger; a matchday 21.3 against 14.9 ms
+  Real Madrid: ledger slope from season 15 on -17.7 units a season (2271 at 15, 1980 at 30)
+  Blackburn Rovers season 5: save 61459 units, ledger 17 records, 1920 units
+  Blackburn Rovers season 10: save 73667 units, ledger 18 records, 1857 units
+  time Blackburn Rovers season 10: ledger 18 records; market after a deal 12.6 ms; a tap 1.2 ms against 1.1 ms with no seed or ledger; a matchday 24.2 against 11.8 ms
+  Blackburn Rovers season 15: save 75283 units, ledger 21 records, 1978 units
+  Blackburn Rovers season 20: save 76356 units, ledger 21 records, 1943 units
+  Blackburn Rovers season 25: save 76856 units, ledger 19 records, 1854 units
+  Blackburn Rovers season 30: save 78136 units, ledger 18 records, 1901 units
+  time Blackburn Rovers season 30: ledger 18 records; market after a deal 7.4 ms; a tap 0.8 ms against 0.7 ms with no seed or ledger; a matchday 12.2 against 7.2 ms
+  Blackburn Rovers: ledger slope from season 15 on -6.9 units a season (1978 at 15, 1901 at 30)
+simCmLedgerBound: 3 careers to season 30; 65 real men and 15 academy men sold; made up men seen at a rival 45, on the market 45; sold men past the deal they had with me 0
+simCmLedgerBound: CONTROL release FIRED: section 4 red
