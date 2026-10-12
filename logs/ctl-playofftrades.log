@@ -1,0 +1,4 @@
+control playofftrades (trades stay open in the playoffs with the desk off): vitest exit 1; 1 red, 64 green of 65
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs a trade is refused in the bracket (GM desk on: false), and nothing is traded
+control playofftrades: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

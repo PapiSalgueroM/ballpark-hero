@@ -1,0 +1,28 @@
+control closetwice (the season is closed twice): vitest exit 1; 25 red, 40 green of 65
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+control closetwice: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

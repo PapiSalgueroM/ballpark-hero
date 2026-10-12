@@ -1,0 +1,7 @@
+control weekeighteen (the chip reads Week 18/17 in the playoffs): vitest exit 1; 4 red, 61 green of 65
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs the chip, the week box line and its buttons: no Week 18 of 17, no bye line, no old button
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs "Play Week 17" turns the chip to Playoffs and takes the old button away
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs "Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched: the recap waits for full time, and then it comes
+control weekeighteen: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

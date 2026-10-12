@@ -1,0 +1,17 @@
+#!serial
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-noplayoffs: node scripts/controlFrontOfficeBoard.mjs noplayoffs
+ctl-abandonbracket: node scripts/controlFrontOfficeBoard.mjs abandonbracket
+ctl-rebuiltkeeps: node scripts/controlFrontOfficeBoard.mjs rebuiltkeeps
+ctl-champopen: node scripts/controlFrontOfficeBoard.mjs champopen
+ctl-bracketnoedges: node scripts/controlFrontOfficeBoard.mjs bracketnoedges
+ctl-restround: node scripts/controlFrontOfficeBoard.mjs restround
+ctl-weekeighteen: node scripts/controlFrontOfficeBoard.mjs weekeighteen
+ctl-playofftrades: node scripts/controlFrontOfficeBoard.mjs playofftrades
+ctl-roundspoils: node scripts/controlFrontOfficeBoard.mjs roundspoils
+ctl-holdround: node scripts/controlFrontOfficeBoard.mjs holdround
+ctl-recapnow: node scripts/controlFrontOfficeBoard.mjs recapnow
+ctl-bracketgrid: node scripts/controlFrontOfficeBoard.mjs bracketgrid
+ctl-tiegame: node scripts/controlFrontOfficeBoard.mjs tiegame
+ctl-closetwice: node scripts/controlFrontOfficeBoard.mjs closetwice
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank

@@ -1,0 +1,4 @@
+control rebuiltkeeps (a bracket started again keeps the log of the one that is gone): vitest exit 1; 1 red, 64 green of 65
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular seaso
+control rebuiltkeeps: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
