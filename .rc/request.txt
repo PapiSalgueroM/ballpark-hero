@@ -1,0 +1,9 @@
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/sag-fixd node scripts/simSoccerAwardGenerations.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveKeeper-partballon: SIM_SAVE_KEEPER_CONTROL=partballon node scripts/simSaveKeeper.mjs > $RUNNER_TEMP/pb.log 2>&1; tail -4 $RUNNER_TEMP/pb.log | cut -c1-300; grep -q "control partballon: FIRED" $RUNNER_TEMP/pb.log && grep -q "generatedBallonPool.version=1" $RUNNER_TEMP/pb.log && echo "PARTBALLON FIRED ON ITS OWN SENTENCE"
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
