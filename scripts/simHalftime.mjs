@@ -26,6 +26,13 @@
  * reads the pre-break XI and mentality. The gain line must fail and the subs
  * and shape lines must hold: "control deaf FIRED" exits 1, "DID NOT FIRE"
  * exits 2.
+ * What deaf proves, and what it does not (fix review of Round 1314): it proves
+ * the gain line sees a WHOLLY deaf break. Almost all of the gain is the shape
+ * change: a half deaf probe that kept only the substitute off the pitch (the
+ * sub still recorded, the shape still applied; r1314-run-a, ht-halfdeaf, seed
+ * 743293878) read a gain of 2.97 against 0.92 and did not fire. So a halftime
+ * sub that never reaches the pitch passes every line of this file; that rule
+ * is held by scripts/simLiveMatch.mjs ("onPitch was not updated"), not here.
  */
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
@@ -228,8 +235,12 @@ console.log('2) A manager who works the break finishes ahead of one who does not
      3.29 against bars of about 1.1, and Release AV's lane C went red at 0.91
      against 1.11 (rAV-gC). The rule taken: the smallest size at which the ten
      seed mean gain, less its bar, is at least three times the seed to seed
-     spread of the gain. Measured on db2d5083 (origin/main 35f85630 plus this
-     round's harness edits, none to this file), runner results r1314-ht800,
+     spread of the gain. Measured on db2d5083 (origin/main 21941630, Release
+     AY, merged into this round's branch, plus this round's harness edits,
+     none to this file; AY moves no Club Manager code: git diff --stat
+     35f85630 21941630 -- src/lib lists only gmGameDayView.ts, its test and
+     gmGameLog.ts. The fix review corrected this base, which first read
+     35f85630), runner results r1314-ht800,
      r1314-ht1200a and b, r1314-ht1500a and b, seeds 1 to 10 through
      SIM_SEED with this file's RUNS changed in a probe copy:
        800:  3.20 2.80 2.79 1.74 2.32 2.10 2.99 1.15 2.51 1.88, mean 2.35,
@@ -244,9 +255,16 @@ console.log('2) A manager who works the break finishes ahead of one who does not
      800 (twice, byte equal logs), 3.02 against 0.92 at 1200 and 2.65 against
      0.82 at 1500. The break is still worth about two and a half points, a
      little under the 3.0 Round 127 measured. The bar stays two standard
-     errors: never a wider bound. Seed 4 is red at every size in SECTION 1
-     (goals for gap 4.37 against a 3 SE bar of 4.13, 60 an arm): one seed in
-     eleven read, a rare tail at three standard errors, left as it is. */
+     errors: never a wider bound. Seed 4 is red in SECTION 1 (goals for gap
+     4.37 against a 3 SE bar of 4.13, 60 an arm). That is ONE measurement:
+     section 1 runs before section 2 on the same stream, so section 2's size
+     cannot reach it, and the three sizes above read the same sample three
+     times. Twenty more seeds (11 to 30, the fix review's r1314-run-s, section
+     1 alone) were all green with signed z means near zero, so it reads as a
+     tail at three standard errors, left as it is. Seeding moves that tail
+     from each run to each engine change: a SECTION 1 red after a change to
+     Club Manager's engine (Release AZ is the first) is a moved sample to be
+     measured over several seeds, never waved through, never a wider bound. */
   const RUNS = 1200;
   const ignore = [], react = [];
   for (let i = 0; i < RUNS; i++) ignore.push(playSeason('Everton', 'skip'));
