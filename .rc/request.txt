@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+simFOSR: node scripts/simFrontOfficeSaveRecovery.mjs
+simFOSR-ctl: FRONT_OFFICE_SAVE_CONTROL=all node scripts/simFrontOfficeSaveRecovery.mjs
+simGmReload: node scripts/simGmReload.mjs
+reload-replay: GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+nfldesk-boardedges: SIM_NFL_GM_DESK_CONTROL=boardedges node scripts/simNflGmDesk.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simFoHub: node scripts/simFoHub.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simDraftNight: node scripts/simDraftNight.mjs
