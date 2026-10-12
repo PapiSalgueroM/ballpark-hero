@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+flagship: node scripts/simFlagshipWeight.mjs
+flagship-rosterlink: FLAGSHIP_LAZY_CONTROL=rosterlink node scripts/simFlagshipWeight.mjs
+flagship-allchunks: FLAGSHIP_LAZY_CONTROL=allchunks node scripts/simFlagshipWeight.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+marketTalk: node scripts/playUsMarketTalk.mjs
+seasonCentreWalk: node scripts/playUsSeasonCentre.mjs
+nbaNumbers: node scripts/playNbaNumbers.mjs
+careerHallLine: node scripts/playCareerHallLine.mjs
+games-nfl: ENGINES=chromium ONLY=/nfl-my-career node scripts/playGames.mjs
+games-nba: ENGINES=chromium ONLY=/nba-my-career node scripts/playGames.mjs
+games-mlb: ENGINES=chromium ONLY=/mlb-my-career node scripts/playGames.mjs
+games-nhl: ENGINES=chromium ONLY=/nhl-my-career node scripts/playGames.mjs
+games-soccer: ENGINES=chromium ONLY=/soccer-career node scripts/playGames.mjs

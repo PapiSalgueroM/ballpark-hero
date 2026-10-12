@@ -1,0 +1,14 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flagship-rosterlink exit=1 1s | simFlagshipWeight: 1 failure
+flagship-allchunks exit=1 1s | simFlagshipWeight: 4 failures
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+sweep exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+marketTalk exit=0 51s | playUsMarketTalk: 40 checks, 0 failed
+nbaNumbers exit=0 61s | playNbaNumbers: 85 checks, 0 failed
+games-nfl exit=0 53s | Played 1 games. 0 findings, 0 the harness could not drive.
+careerHallLine exit=0 102s | playCareerHallLine: 4 routes, 36 walks, 380 checks, all checks passed
+games-nba exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+games-mlb exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+seasonCentreWalk exit=0 235s | playUsSeasonCentre: 217 checks, 0 failed
+games-nhl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+games-soccer exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
