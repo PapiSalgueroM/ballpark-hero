@@ -1,0 +1,6 @@
+# Release AX review, engine-saves, request f: ruling C3 for pressRoom on the real page (a real save answers the press, reloads, and is damaged twelve ways in storage before the app boots), at 390 and at 1280. The sim runs first because it writes the fixture the walk reads
+#!serve
+#!playwright
+#!serial
+pm-outcomes: set -o pipefail; export TMPDIR=$(mktemp -d) SIM_NETWORK=offline ENGINES=chromium TZ=UTC; mkdir -p career-press-market-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tail -3; ls -la career-press-market-artifacts | head -8
+walkSoccerPress: node .rc/x/walkSoccerPress.mjs

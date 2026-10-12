@@ -1,0 +1,10 @@
+ok   tile: 390: on a real save's playing screen the Press room tile reads "🎙️ Press room Answer for your season 50/100"
+ok   answer: 390: an answer (ambitious) is on the save: 1 row, credibility 50, promise pending
+ok   reload: 390: after a reload the tile reads "🎙️ Press room Your answers and promises 50/100" and the part is the one that was written
+ok   damage: 390: 12 of 12 damaged parts loaded with no error screen, offered the room again at 50/100 with no past answers, and took a fresh answer
+ok   tile: 1280: on a real save's playing screen the Press room tile reads "🎙️ Press room Answer for your season 50/100"
+ok   answer: 1280: an answer (ambitious) is on the save: 1 row, credibility 50, promise pending
+ok   reload: 1280: after a reload the tile reads "🎙️ Press room Your answers and promises 50/100" and the part is the one that was written
+ok   damage: 1280: 12 of 12 damaged parts loaded with no error screen, offered the room again at 50/100 with no past answers, and took a fresh answer
+ok   page errors: 0 uncaught page error(s)
+walkSoccerPress: 9 checks, 0 failed. GREEN
