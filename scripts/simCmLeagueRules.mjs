@@ -356,6 +356,29 @@
       another size, so a deal exists or does not and the stream after it
       shifts. Written with --part=eras --write on the tree itself, then run
       green whole on the same runner.
+      Round 1306 (2026-10-11) re-took modern and eras for the rows of
+      clubs with no named eleven and nothing else. Until this round the
+      book counted every goal of such a club unnamed; now the men its
+      roster does have are dealt the shares of their places (an empty
+      shirt in every place it cannot fill, never a row for one), so those
+      clubs' entries gain rows. Attribution on a GitHub runner at 083d112f
+      (remote check r1306-b1r), two legs. Leg A, a copy of the tree in
+      which the partial eleven names nobody (the rule before the round):
+      the file as it stood, byte for byte (modern, eras and pure all
+      held), so the partial eleven is the whole cause and no result,
+      table or draw of any save moved. Leg B, the tree itself: 40 of the
+      47 saves moved, 24 modern and 16 era, in whole (39 saves) and in
+      s2_whole (8 pyramid saves, Serie A in that one alone: its second
+      season is the first with a promoted club that has no eleven), 47
+      hashes, each a hash of a whole state, which carries the book. The
+      seven saves that held are the leagues in which every club fields an
+      eleven (premier, aleague, russia, premier2005, bundesliga2005,
+      bundesliga2010, premier2020); start, wholeNext and every other view
+      held in all 47, and pure held. Written with
+      --part=modern,eras,pure --write on the tree itself, then run green
+      whole on the same runner. scripts/simCmLeagueBook.mjs section thin
+      holds the other side: the entry of every club that had an eleven
+      all season is byte equal to the base commit's.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
