@@ -82,7 +82,7 @@ export function ReportSiteIssue() {
         onClick={() => setOpen(true)}
         /* Round 209: padded so the footer report link is a real target. */
         className="inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground"
-        title="Report a problem or wrong info"
+        title="Report a problem"
       >
         <Bug className="w-3 h-3" />
         Report a problem
