@@ -1,0 +1,1 @@
+rv-mem: node --expose-gc .rc/x/rvcmw-mem.mjs
