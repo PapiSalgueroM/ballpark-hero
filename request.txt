@@ -1,0 +1,9 @@
+#!build
+leagueSeasons-future: SIM_LEAGUE_SEASONS_CONTROL=future node scripts/simCareerLeagueSeasons.mjs
+leagueFinish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+socialBrands-reorder: SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+trophyRuns-all: CAREER_TROPHY_RUNS_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+seasonHistory-all: SEASON_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+derbyHistory-all: DERBY_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+storyRole-all: CAREER_STORY_ROLE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+development-all: CAREER_DEVELOPMENT_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs

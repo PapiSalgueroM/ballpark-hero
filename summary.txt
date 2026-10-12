@@ -1,0 +1,9 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+leagueFinish-stream exit=1 13s | simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+socialBrands-reorder exit=1 22s | 2 FAILURES
+trophyRuns-all exit=0 11s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 7 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+seasonHistory-all exit=0 12s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,8 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+derbyHistory-all exit=0 14s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,10 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derb
+leagueSeasons-future exit=0 47s | CONTROL future: section c went red as it should (12 failures there, 12 in all)
+development-all exit=0 83s | simSoccerCareerDevelopment: healthy outcomes passed, 27 effective controls caught
+storyRole-all exit=0 498s | simCareerStoryRole: 16 healthy groups, 17 effective copied controls caught;12 complete AR careers and48 neutral pairs held
