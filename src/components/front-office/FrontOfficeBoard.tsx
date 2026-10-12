@@ -268,25 +268,26 @@ export default function FrontOfficeBoard() {
      game" on the bracket and the back chip under the box move it. */
   const [heldBracket, setHeldBracket] = useState<GmBracketSave | null>(null);
   const [boxGame, setBoxGame] = useState<string | null>(null);
-  /* the breakpoint the reveal's element is chosen by (sm, 640 px): see the reveal below */
-  const [wide, setWide] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 640px)').matches);
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
-    const mq = window.matchMedia('(min-width: 640px)');
-    const on = () => setWide(mq.matches);
-    mq.addEventListener?.('change', on);
-    return () => mq.removeEventListener?.('change', on);
-  }, []);
   /* THE REVEAL (Round 1307, and Round 1309's ruling from its review). The key
-     moves at a press, at full time and when a playoff round is played, and the
-     element pulled into view is his result: under sm (640 px) ONE wrapper that
-     starts at the Game Day box, as shipped; from sm up the wrapper one element
-     up, which starts at the button row and holds the box, because there a first
-     press put the tile at the top of the screen and Play and Watch above it.
-     ONE hook whose ref is handed to one wrapper or the other by the width, so a
-     window resized across sm moves no key and scrolls nothing. */
+     moves at a press, at full time and when a playoff round is played, and
+     what is pulled into view is his result. UNDER sm (640 px) the element is
+     ONE wrapper that starts at the Game Day box, aligned to its top, as
+     shipped. FROM sm UP the ruling asks for the press buttons AND the whole
+     box on the screen after a press (a first press used to put the tile at
+     the top of the screen and Play and Watch above it). A wrapper starting at
+     the buttons does not get that (measured on r1309-d-walk at 1280 by 800:
+     its top at 410 counts as readable to the hook, so nothing moved and the
+     box ended 30 px under the fold), so from sm up the element is the box's
+     bottom edge (one pixel laid over it, no layout of its own) aligned to the
+     END: when the box's bottom is off the screen the page brings it to the
+     screen's bottom, and the buttons and the box, 420 px together, are then
+     on it. Which of the two is decided by the width the page loaded at, so a
+     window resized across sm changes no key and no option and scrolls
+     nothing (useRevealScroll.ts is not edited). */
+  const [wideAtLoad] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 640px)').matches);
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}:${playoffs?.played.length ?? 0}`,
+    wideAtLoad ? { block: 'end' } : undefined,
   );
 
   useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
@@ -2097,7 +2098,6 @@ export default function FrontOfficeBoard() {
               in it, and the rest. Every button says what it asks of playWeek.
               The two rows of three are stacked under sm and three a row from
               sm up, at one height (PRESS_THREE). */}
-          <div ref={wide ? revealRef : undefined} className="space-y-3" data-reveal-wide>
           {bracketOpen ? (
             <div className={cn('grid grid-cols-1 gap-2', roundNow.mine ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
               <button
@@ -2178,11 +2178,13 @@ export default function FrontOfficeBoard() {
             )}
           </div>
           )}
-          <div ref={wide ? undefined : revealRef} className="space-y-3">
+          <div ref={wideAtLoad ? undefined : revealRef} className="space-y-3">
             {/* the board owns the tile's box: the same height while the card loads, on every face and after every press */}
             {/* Round 1309: ONE BOX, TWO FACES. In the playoffs the box shows the bracket, or his game on the tile when a
                 press logged one or he opened one ("Your game"); the row under it holds the back chip. */}
             <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
+              {/* from sm up, the reveal's element: the box's bottom edge, laid over it (see the reveal) */}
+              {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" data-reveal-edge />}
               {bracketFace && seenPlayoffs && bracketFormat ? (
                 <NflBracket
                   format={bracketFormat}
@@ -2236,7 +2238,6 @@ export default function FrontOfficeBoard() {
               })}
             </div>
           )}
-          </div>
           </div>
           <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
         </div>

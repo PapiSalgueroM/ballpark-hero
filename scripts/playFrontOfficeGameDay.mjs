@@ -67,7 +67,8 @@
  *  12 "Play Week 17" opens the bracket (week 18, the bracket on the save, the
  *     chip reads Playoffs, no "Week 18" anywhere) and the box shows his Week
  *     17 game with the back chip under it and no league grid. THE REVEAL
- *     (the ruling of Round 1307's review): from sm up, after the first press
+ *     (the ruling of Round 1307's review, met through the box's bottom edge
+ *     aligned to the end: see the board): from sm up, after the first press
  *     of a visit (a week, then a playoff round), the first button's top is
  *     on the screen and so is the whole box, at 1280 by 800 and 1280 by 900;
  *     under sm the numbers are printed. At 1280 a window resized across sm
