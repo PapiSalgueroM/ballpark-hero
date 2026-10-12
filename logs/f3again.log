@@ -1,0 +1,6 @@
+F4 seed 2: opens true, had pool false, next ballot 2035, draws 62/62, equal but the new part true, new pool true
+F4 seed 3: opens true, had pool false, next ballot 2025, draws 92/92, equal but the new part true, new pool false
+NAMED 2025-ST-1: first difference 2040 (advanceProSeason, keys marketValue,seasons,pendingSummary,popularity,awards,pendingBallonDor); replacements in 2040/2041/2042/2043/2048/2049/2052; the same seed arm equals the first parent for the whole career, so every difference is the replaced rivals
+NAMED 2025-ST-8: first difference 2040 (advanceProSeason, keys pendingBallonDor); replacements in 2040/2043/2045/2046/2048/2051; the same seed arm equals the first parent for the whole career, so every difference is the replaced rivals
+NAMED 2025-CM-6: first difference 2037 (advanceProSeason, keys pendingBallonDor); replacements in 2037/2038/2039/2041/2043/2044/2045/2046/2047/2048/2051; the same seed arm equals the first parent for the whole career, so every difference is the replaced rivals
+FLEET F3 GREEN: 96 careers in 98 s: 0 STOP, 0 not attributed, 0 with errors, 0 unreadable pools; 49 differ at all; 16 constructed clashes; F4 4/4 equal but the new part

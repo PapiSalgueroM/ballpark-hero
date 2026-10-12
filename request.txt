@@ -1,0 +1,2 @@
+rvold: git worktree add -q --detach /tmp/rvmain 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 && git worktree add -q --detach /tmp/rv234 f9f540670034df4447508350db23b297e9e1cbbc && ln -s "$PWD/node_modules" /tmp/rvmain/node_modules && ln -s "$PWD/node_modules" /tmp/rv234/node_modules && node .rc/x/rvold.mjs /tmp/rvmain /tmp/rv234 12
+f3again: git worktree add -q --detach /tmp/f3base 35f85630 && ln -s "$PWD/node_modules" /tmp/f3base/node_modules && node .rc/x/fleetF3.mjs /tmp/f3base 16 > $RUNNER_TEMP/f3.log 2>&1; e=$?; tail -6 $RUNNER_TEMP/f3.log | cut -c1-400; exit $e

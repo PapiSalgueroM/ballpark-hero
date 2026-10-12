@@ -1,0 +1,25 @@
+{
+ "A": {
+  "careers": 24,
+  "loaded": 24,
+  "refused": 0,
+  "firstNightExact": 24,
+  "firstNightChecked": 24,
+  "equalToEnd": 24,
+  "diffAfterReplacement": 0,
+  "unexplained": [],
+  "drawMismatch": 0,
+  "ballots": 106
+ },
+ "B": {
+  "careers": 6,
+  "accepted": 6,
+  "kept": 6,
+  "bad": []
+ },
+ "C": {
+  "cases": 10,
+  "ok": 10,
+  "bad": []
+ }
+}

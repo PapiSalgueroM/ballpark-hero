@@ -1,0 +1,2 @@
+rvold exit=0 9s | RVOLD GREEN: A 24/24 main saves loaded, first night exact 24/24, ballots 106, draw mismatches 0, equal to the end 24, after a replacement 0, unexplained 0; B 6/6 PR234 po
+f3again exit=0 100s | FLEET F3 GREEN: 96 careers in 98 s: 0 STOP, 0 not attributed, 0 with errors, 0 unreadable pools; 49 differ at all; 16 constructed clashes; F4 4/4 equal but the new part
