@@ -1,0 +1,22 @@
+1) A custom club cannot wear a real club's name
+   846 real club names checked, 0 wrongly accepted
+2) Day one is your club, generated squad, real market
+   replaced Hull City · squad 24 all generated · market 5104 (5104 real) · rank #20 · wants "Stay up. Avoid relegation"
+3) The displaced club appears nowhere a club can act
+   season complete, finished #20, Hull City fully absent
+4) Custom boards are honest at every tier, everywhere
+   27 leagues checked at small tier, 0 title demands expected, 0 found · Eredivisie ranks s/m/b: #12/#7/#4 · PL big rank #20
+5) Three tiers play full seasons; the rollover keeps your club
+   PL finishes · small: 20,20,20 · big: 20,16,19
+   Eredivisie finishes · small: 12,8,10 · big: 3,4,2
+   rollover kept the club (replaced: Hull City); leaving dissolved it
+6) The spec survives save/load; real careers stay untouched
+   roundtrip clean, tampered save stripped, real careers unpolluted
+7) Crest markup is deterministic, self-contained and injection-proof
+   36 shape x pattern combos sealed, injection attempts neutralized
+8) Round 160: quality slider, identity, stadium size
+   slider 88: best 93, XI 91.1, told "Win the Eredivisie" · slider 55 in the PL told "Stay up. Avoid relegation" · legacy anchor intact
+7) A custom club in any league resolves to ITS league and cup, never the Premier League fallback
+   27 leagues, each custom club resolves to its own league and cup, 0 wrong; the bare-lookup control still returns the fallback
+
+simCreateClub: green. Found a club, and the world makes room for it.

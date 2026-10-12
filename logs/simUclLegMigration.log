@@ -1,0 +1,15 @@
+
+1) A legacy calendar gains the second leg for every round still ahead
+   2 rounds repaired to two legs, the final left at one
+2) A round already played is left exactly as it was
+   the settled round untouched, the round ahead repaired
+3) Running it twice changes nothing
+   idempotent
+4) A modern calendar is untouched
+   a career built today is left alone
+5) The first knockout round this save plays really is two legged after the repair
+   QF reads as two legged off the calendar
+6) An era save, which really does play a round of 16, migrates too
+   2015-16 round of 16 repaired to two legs
+
+simUclLegMigration: all green

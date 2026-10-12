@@ -1,0 +1,13 @@
+1) The pool is the real pyramid
+   454 clubs, 21 countries: Australia, Austria, Belgium, Brazil, Croatia, Denmark, England, France, Germany, Greece, Italy, Mexico, Netherlands, Portugal, Russia, Saudi Arabia, Scotland, Spain, Switzerland, Turkey, United States
+   tier spread: {"1":8,"2":17,"3":41,"4":388}
+2) Vacancies are a subset, and churn is believable
+   77 clubs between managers on average out of 454
+3) A career in one country pulls offers from that country
+   762 offers across 300 windows, 71 percent from Spain, 92 different clubs
+4) Every offer names a club the Club Manager engine can run
+   41 offers checked, every one starts a real Club Manager save
+5) Copy check
+   clean
+
+ALL JOB MARKET CHECKS PASSED
