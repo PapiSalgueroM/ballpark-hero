@@ -1,0 +1,34 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-fo: NO_COLOR=1 node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx src/lib/gmGameDayView.test.ts src/lib/gmGameLog.test.ts src/lib/gmGameDay.test.ts src/lib/frontOfficeGameDay.test.ts --testTimeout=600000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmGameDay-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+simGmGameDay-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+simGmReload: node scripts/simGmReload.mjs
+simGmReload-replay: GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simFoHub: node scripts/simFoHub.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simNflDraftCapital: node scripts/simNflDraftCapital.mjs
+simNflPracticePromotion: node scripts/simNflPracticePromotion.mjs
+simNflRatingEvidence: node scripts/simNflRatingEvidence.mjs
+simNflOpeningRatings: node scripts/simNflOpeningRatings.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+engine-untouched: git diff --stat 999db1e4 HEAD -- src/lib/frontOffice.ts src/lib/frontOfficeSave.ts src/components/season-centre src/lib/gmGameScore.ts src/lib/gmGameDay.ts src/lib/gmBracket.ts src/lib/gameLaws src/lib/frontOfficeGameDay.ts src/lib/foHub.ts scripts/simGmReload.mjs scripts/simNflGmDesk.mjs scripts/simSessionMarks.mjs scripts/sweepWeight.mjs src/data/gameContent | wc -l
