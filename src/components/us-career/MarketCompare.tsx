@@ -15,7 +15,7 @@ export default function MarketCompare({ window: w, onBack }: { window: FaWindow;
       className={`min-h-11 rounded-xl border px-3 py-2 text-xs font-bold ${priority === m.id ? 'border-primary bg-primary/10 text-primary' : 'border-border'}`}>{m.label}</button>)}</div>
     <ol className="space-y-2">{marketOfferComparison(w, priority).map(r => <li key={r.index} data-market-compared-offer={r.index} className="rounded-xl bg-background p-3">
       <p className="break-words text-sm font-bold">{r.offer.label}{r.offer.incumbent ? ' (your team)' : ''}</p>
-      <p className="mt-1 text-xs text-muted-foreground">${r.offer.salary}M a year · ${Math.round(r.offer.salary * r.offer.years * 10) / 10}M total · {r.offer.years} years · roster {r.offer.quality}</p>
+      <p className="mt-1 text-xs text-muted-foreground">${r.offer.salary}M a year · ${Math.round(r.offer.salary * r.offer.years * 10) / 10}M total · {r.offer.years} year{r.offer.years === 1 ? '' : 's'} · roster {r.offer.quality}</p>
     </li>)}</ol>
     <button type="button" data-market-compare-back onClick={onBack} className="min-h-11 w-full rounded-xl border border-border px-3 py-2 text-sm font-bold">Back to offers</button>
   </section>;
