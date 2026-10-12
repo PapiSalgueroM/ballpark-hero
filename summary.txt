@@ -1,0 +1,10 @@
+vitest-new exit=0 3s |    Duration  2.50s (transform 569ms, setup 292ms, collect 1.21s, tests 670ms, environment 2.24s, prepare 646ms)
+simGmGameDay exit=0 57s | simGmGameDay: 451 checks, 0 failed
+ctl-noedges exit=1 54s | simGmGameDay: 451 checks, 20 failed (control noedges)
+tsc exit=0 62s | 
+ctl-inseason exit=1 53s | simGmGameDay: 451 checks, 5 failed (control inseason)
+ctl-deskless exit=1 54s | simGmGameDay: 451 checks, 25 failed (control deskless)
+ctl-byeplays exit=1 53s | simGmGameDay: 451 checks, 88 failed (control byeplays)
+usp-dangling exit=1 9s | simUsPostseason: 33 checks, 2 failed, 0 findings for the lead (control dangling)
+simUsPostseason exit=0 13s | simUsPostseason: 33 checks, 0 failed, 0 findings for the lead
+ctl-storyleak exit=1 40s | simGmGameDay: 451 checks, 1 failed (control storyleak)

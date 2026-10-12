@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/test/gmBracketLedger.test.ts src/lib/gmBracketView.test.ts src/components/front-office-shared/GmBracketCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+ctl-noedges: GM_GAMEDAY_CONTROL=noedges node scripts/simGmGameDay.mjs
+ctl-deskless: GM_GAMEDAY_CONTROL=deskless node scripts/simGmGameDay.mjs
+ctl-inseason: GM_GAMEDAY_CONTROL=inseason node scripts/simGmGameDay.mjs
+ctl-byeplays: GM_GAMEDAY_CONTROL=byeplays node scripts/simGmGameDay.mjs
+ctl-storyleak: GM_GAMEDAY_CONTROL=storyleak node scripts/simGmGameDay.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+usp-dangling: US_POST_CONTROL=dangling node scripts/simUsPostseason.mjs
