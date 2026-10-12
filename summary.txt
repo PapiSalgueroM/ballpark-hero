@@ -1,0 +1,6 @@
+m-css-customprop exit=1 1s | simSafari: 1 failure
+m-css-customprop-fixed exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+m-css-lvh exit=1 1s | simSafari: 1 failure
+m-css-svh exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+m-act-second-dotted exit=1 4s | simActivityNotCompletion: 1 failure(s)
+clean-after exit=0 0s | 0

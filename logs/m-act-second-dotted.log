@@ -1,0 +1,10 @@
+mut act-second-dotted: appended to src/pages/SoccerCareer.tsx
+1) The real hook, rendered: a match is activity, a season end is one completion
+   vitest exit 0, 2 passed (2)
+2) Soccer Career, as code: the season advance pings activity and the file owns no completion
+  FAIL: the season advance is called 2 times; a second call is a new site this check must be told about
+   advance calls: 2, ping 44 characters after the call (window 600), advance ping present: true, own completions: 0
+3) The ping is light, as code: recordActivity reaches neither the streak record nor the signed in save
+   body 755 characters, writes the anonymous row: true
+
+simActivityNotCompletion: 1 failure(s)
