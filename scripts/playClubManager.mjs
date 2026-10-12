@@ -538,15 +538,14 @@ for (let step = 0; step < MAX_STEPS; step++) {
        whoever reads the run. The review ticks its rows in, so the shot waits (at most six seconds) for the
        block's heading to finish fading in; the walk ends after the review, so the wait moves nothing it reads. */
     if (process.env.RC_OUT) {
-      const tb = page.getByText('Transfer business', { exact: true }).first();
-      if (await tb.count().catch(() => 0)) {
-        await tb.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
-        await tb.evaluate(el => new Promise(done => {
-          const t0 = performance.now();
-          const tick = () => (getComputedStyle(el).opacity === '1' || performance.now() - t0 > 6000 ? done() : requestAnimationFrame(tick));
-          tick();
-        })).catch(() => {});
-      }
+      /* Every tick-in row's own animation, finished (the heading's delay was 3.9 s on the default seed, probe
+         r1314-rv), at most eight seconds. A first version waited on the first element reading "Transfer
+         business" anywhere on the page and shot the rows still at opacity 0. */
+      await page.evaluate(() => Promise.race([
+        Promise.all(document.getAnimations().filter(a => a.animationName === 'cmTickIn').map(a => a.finished.catch(() => {}))),
+        new Promise(done => setTimeout(done, 8000)),
+      ])).catch(() => {});
+      await page.locator('.cm-tick-in', { hasText: /^Transfer business$/ }).first().scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
       await page.screenshot({ path: path.join(process.env.RC_OUT, `cm-season-review-${SEED}.png`) }).catch(() => {});
     }
     /* A render throw unmounts the root, so the tell is an empty page rather
