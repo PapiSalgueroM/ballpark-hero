@@ -1,0 +1,7 @@
+ladder exit=0 1s | ladder digest e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9
+simGmDeskHost-closedquiet exit=1 50s | simGmDeskHost CONTROL closedquiet FIRED: check 5 went red with 2076 failures (red checks 4:2 5:2076 10:1)
+simGmDeskHost-anchors exit=0 0s | simGmDeskHost anchors: 49 rewrites of 46 controls checked, 0 cannot run
+simGmDeskHost exit=0 52s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+vitest-gm exit=0 3s |    Duration  2.41s (transform 435ms, setup 243ms, collect 930ms, tests 1.40s, environment 1.72s, prepare 338ms)
+tsc exit=0 69s | 
+simGmSeat exit=0 55s | simGmSeat: all checks passed

@@ -1,0 +1,163 @@
+simGmSeat: 7 packs x 20000 tenures x seeds 1,2,3
+pack  seed  feeds badlyF badlyTop walkF walkMiss walkLv1-4      firedF empty%  titled  bad   margin bids bidsBad takes takeBad clubHits
+nfl   1     32110 17622  0        821   0        596/154/56/15  11217  56.0    0.74    0.39  0.35   0.5/0.0      0    0       11875 0       0
+nfl   2     32041 17901  0        821   0        590/162/56/13  11312  54.7    0.75    0.40  0.36   0.6/0.0      0    0       11930 0       0
+nfl   3     32089 17446  0        848   0        593/183/62/10  11320  54.6    0.72    0.41  0.31   0.5/0.0      0    0       11919 0       0
+nba   1     29560 14912  0        976   0        704/181/79/12  9865   51.0    0.79    0.43  0.36   0.6/0.0      0    0       12421 0       0
+nba   2     29579 14876  0        1020  0        737/191/76/16  9755   50.9    0.81    0.43  0.38   1.2/0.0      0    0       12422 0       0
+nba   3     29605 14885  0        1045  0        784/172/75/14  9812   51.3    0.80    0.43  0.37   1.0/0.0      0    0       12436 0       0
+nhl   1     31276 17186  0        801   0        568/168/53/12  11282  53.4    0.74    0.42  0.32   0.6/0.0      0    0       12171 0       0
+nhl   2     31293 17098  0        810   0        568/169/55/18  11356  53.0    0.77    0.42  0.35   0.7/0.0      0    0       12139 0       0
+nhl   3     31464 17138  0        847   0        592/173/68/14  11361  53.0    0.77    0.42  0.35   0.6/0.0      0    0       12126 0       0
+mlb   1     32406 17388  0        870   0        645/155/64/6   12151  54.0    0.76    0.41  0.35   0.5/0.0      0    0       12008 0       0
+mlb   2     32129 17091  0        859   0        618/171/57/13  12024  53.8    0.77    0.41  0.36   0.6/0.0      0    0       12120 0       0
+mlb   3     32339 17434  0        866   0        636/165/52/13  12173  54.0    0.75    0.41  0.34   0.8/0.0      0    0       12040 0       0
+cfb   1     32693 16681  0        492   0        370/80/37/5    12436  57.2    0.67    0.39  0.27   0.4/0.0      1724 0       11919 0       0
+cfb   2     32596 16635  0        505   0        400/71/30/4    12381  57.4    0.65    0.39  0.26   0.3/0.0      1753 0       11973 0       0
+cfb   3     32115 16429  0        500   0        371/90/33/6    12410  56.3    0.66    0.41  0.25   0.3/0.0      1781 0       12079 0       0
+cbb   1     13112 6181   0        953   0        726/166/50/11  3323   45.1    1.03    0.46  0.57   2.6/0.0      13805 0       15623 0       0
+cbb   2     13129 6061   0        972   0        710/181/66/15  3314   44.5    1.03    0.46  0.57   2.2/0.0      13725 0       15613 0       0
+cbb   3     13098 5967   0        980   0        727/181/58/14  3243   44.4    1.04    0.47  0.58   2.8/0.0      13815 0       15593 0       0
+afl   1     23578 3812   0        7240  0        4750/1165/1125/200 1789   54.3    1.33    0.27  1.06   15.9/0.0     0    0       13751 0       0
+afl   2     23634 3787   0        7189  0        4722/1143/1139/185 1811   53.9    1.29    0.30  0.99   14.1/0.0     0    0       13756 0       0
+afl   3     23664 3859   0        7251  0        4817/1114/1107/213 1912   52.9    1.32    0.31  1.01   15.6/0.1     0    0       13774 0       0
+1. seat words: buildOwnerMandate's ladder at every rank, champion flag and press tilt, in the seat's own words
+  ok: 1284 mandates keep the ladder
+  ok: no raw placeholder and no dash in any ask
+  ok: no program or club ask talks like a franchise, and no ladder ask promises a final
+2. a man who leaves straight after a 'badly' season (fired, or his contract ran out) is never offered a top tier job (every simulated feed)
+2. a man fired straight after a 'badly' season is never offered a top tier job (every simulated feed)
+  ok: nfl: 0 top tier offers in 52969 feeds after a badly exit
+  ok: nba: 0 top tier offers in 44673 feeds after a badly exit
+  ok: nhl: 0 top tier offers in 51422 feeds after a badly exit
+  ok: mlb: 0 top tier offers in 51913 feeds after a badly exit
+  ok: cfb: 0 top tier offers in 49745 feeds after a badly exit
+  ok: cbb: 0 top tier offers in 18209 feeds after a badly exit
+  ok: afl: 0 top tier offers in 11458 feeds after a badly exit
+3. the title ladder: three seasons over the ask, 0 to 6 titles, then four 'badly' seasons, sacked or walking out, every step
+   ended fired
+     0 titles: standing 34.4, 176 offers in 400 feeds, 0 top tier
+     1 titles: standing 44.6, 378 offers in 400 feeds, 0 top tier
+     2 titles: standing 54.8, 490 offers in 400 feeds, 0 top tier
+     3 titles: standing 65.0, 645 offers in 400 feeds, 0 top tier
+     4 titles: standing 75.2, 738 offers in 400 feeds, 0 top tier
+     5 titles: standing 85.4, 850 offers in 400 feeds, 0 top tier
+     6 titles: standing 95.6, 980 offers in 400 feeds, 0 top tier
+  ok: fired: every title step raises the standing
+  ok: fired: 0 top tier offers in 4257 ladder offers
+   ended walked
+     0 titles: standing 50.4, 444 offers in 400 feeds, 0 top tier
+     1 titles: standing 60.6, 585 offers in 400 feeds, 0 top tier
+     2 titles: standing 70.8, 699 offers in 400 feeds, 0 top tier
+     3 titles: standing 81.0, 782 offers in 400 feeds, 0 top tier
+     4 titles: standing 91.2, 928 offers in 400 feeds, 0 top tier
+     5 titles: standing 100.0, 1026 offers in 400 feeds, 0 top tier
+     6 titles: standing 100.0, 1030 offers in 400 feeds, 0 top tier
+  ok: walked: every title step raises the standing
+  ok: walked: 0 top tier offers in 5494 ladder offers
+4. a title winner who walks always has an offer at his level or above
+  ok: nfl: all 2490 title walkers had an offer at their level or above
+  ok: nba: all 3041 title walkers had an offer at their level or above
+  ok: nhl: all 2458 title walkers had an offer at their level or above
+  ok: mlb: all 2595 title walkers had an offer at their level or above
+  ok: cfb: all 1497 title walkers had an offer at their level or above
+  ok: cbb: all 2905 title walkers had an offer at their level or above
+  ok: afl: all 21680 title walkers had an offer at their level or above
+  ok: walkers by the tier they left: 25224 / 6235 / 4398 / 809
+  ok: no leap past the nearest tier in 7618 walker feeds where one would show
+5. the club you just left is never in the feed
+  ok: nfl: never, in 96240 feeds
+  ok: nba: never, in 88744 feeds
+  ok: nhl: never, in 94033 feeds
+  ok: mlb: never, in 96874 feeds
+  ok: cfb: never, in 97404 feeds
+  ok: cbb: never, in 39339 feeds
+  ok: afl: never, in 70876 feeds
+6. an empty feed after a sacking is possible, at a share inside the measured band (every seed)
+  ok: nfl seed 1: 56.0% empty (6279 of 11217), band 50 to 59
+  ok: nfl seed 2: 54.7% empty (6187 of 11312), band 50 to 59
+  ok: nfl seed 3: 54.6% empty (6184 of 11320), band 50 to 59
+  ok: nba seed 1: 51.0% empty (5030 of 9865), band 46 to 57
+  ok: nba seed 2: 50.9% empty (4962 of 9755), band 46 to 57
+  ok: nba seed 3: 51.3% empty (5038 of 9812), band 46 to 57
+  ok: nhl seed 1: 53.4% empty (6029 of 11282), band 48 to 58
+  ok: nhl seed 2: 53.0% empty (6019 of 11356), band 48 to 58
+  ok: nhl seed 3: 53.0% empty (6023 of 11361), band 48 to 58
+  ok: mlb seed 1: 54.0% empty (6562 of 12151), band 48 to 59
+  ok: mlb seed 2: 53.8% empty (6472 of 12024), band 48 to 59
+  ok: mlb seed 3: 54.0% empty (6575 of 12173), band 48 to 59
+  ok: cfb seed 1: 57.2% empty (7117 of 12436), band 51 to 62
+  ok: cfb seed 2: 57.4% empty (7112 of 12381), band 51 to 62
+  ok: cfb seed 3: 56.3% empty (6993 of 12410), band 51 to 62
+  ok: cbb seed 1: 45.1% empty (1499 of 3323), band 38 to 49
+  ok: cbb seed 2: 44.5% empty (1476 of 3314), band 38 to 49
+  ok: cbb seed 3: 44.4% empty (1441 of 3243), band 38 to 49
+  ok: afl seed 1: 54.3% empty (972 of 1789), band 46 to 59
+  ok: afl seed 2: 53.9% empty (977 of 1811), band 46 to 59
+  ok: afl seed 3: 52.9% empty (1012 of 1912), band 46 to 59
+7. fired after a title beats fired after two bad years, and the two bad years earn no top half job (every seed)
+  ok: nfl seed 1: best offer margin 0.35 (floor 0.2), titled n=2240, bad n=8204
+  ok: nfl seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nfl seed 2: best offer margin 0.36 (floor 0.2), titled n=2283, bad n=8322
+  ok: nfl seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nfl seed 3: best offer margin 0.31 (floor 0.2), titled n=2392, bad n=8232
+  ok: nfl seed 3: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nba seed 1: best offer margin 0.36 (floor 0.24), titled n=2123, bad n=7188
+  ok: nba seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nba seed 2: best offer margin 0.38 (floor 0.24), titled n=2250, bad n=6914
+  ok: nba seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nba seed 3: best offer margin 0.37 (floor 0.24), titled n=2136, bad n=7096
+  ok: nba seed 3: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nhl seed 1: best offer margin 0.32 (floor 0.22), titled n=2266, bad n=8290
+  ok: nhl seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nhl seed 2: best offer margin 0.35 (floor 0.22), titled n=2256, bad n=8434
+  ok: nhl seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: nhl seed 3: best offer margin 0.35 (floor 0.22), titled n=2319, bad n=8346
+  ok: nhl seed 3: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: mlb seed 1: best offer margin 0.35 (floor 0.22), titled n=2553, bad n=8844
+  ok: mlb seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: mlb seed 2: best offer margin 0.36 (floor 0.22), titled n=2532, bad n=8764
+  ok: mlb seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: mlb seed 3: best offer margin 0.34 (floor 0.22), titled n=2533, bad n=8905
+  ok: mlb seed 3: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: cfb seed 1: best offer margin 0.27 (floor 0.15), titled n=1905, bad n=9839
+  ok: cfb seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: cfb seed 2: best offer margin 0.26 (floor 0.15), titled n=1909, bad n=9749
+  ok: cfb seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: cfb seed 3: best offer margin 0.25 (floor 0.15), titled n=1819, bad n=9840
+  ok: cfb seed 3: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: cbb seed 1: best offer margin 0.57 (floor 0.35), titled n=872, bad n=2293
+  ok: cbb seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: cbb seed 2: best offer margin 0.57 (floor 0.35), titled n=891, bad n=2250
+  ok: cbb seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: cbb seed 3: best offer margin 0.58 (floor 0.35), titled n=887, bad n=2214
+  ok: cbb seed 3: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: afl seed 1: best offer margin 1.06 (floor 0.65), titled n=945, bad n=798
+  ok: afl seed 1: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: afl seed 2: best offer margin 0.99 (floor 0.65), titled n=944, bad n=835
+  ok: afl seed 2: 0.0% of the two-bad-years sacked drew a top half offer (cap 3)
+  ok: afl seed 3: best offer margin 1.01 (floor 0.65), titled n=1042, bad n=836
+  ok: afl seed 3: 0.1% of the two-bad-years sacked drew a top half offer (cap 3)
+8. taking a job moves the seat and keeps the league: its season, champions and teams
+  ok: nfl: 35724 takes, league state kept every time
+  ok: nba: 37279 takes, league state kept every time
+  ok: nhl: 36436 takes, league state kept every time
+  ok: mlb: 36168 takes, league state kept every time
+  ok: cfb: 35971 takes, league state kept every time
+  ok: cbb: 46829 takes, league state kept every time
+  ok: afl: 41281 takes, league state kept every time
+9. only a college coach is bought out, only one tier up, only after a big year
+  ok: nfl: no buyout bids, ever
+  ok: nba: no buyout bids, ever
+  ok: nhl: no buyout bids, ever
+  ok: mlb: no buyout bids, ever
+  ok: cfb: 5258 bids, every one a tier up by the league's own tiers after a title or a season over the ask
+  ok: cfb: bids after a title year 59.3% (512 of 863), design 60 +/- 7.5
+  ok: cfb: bids after a overachieved year 34.8% (4746 of 13656), design 35 +/- 2.0
+  ok: cbb: 41345 bids, every one a tier up by the league's own tiers after a title or a season over the ask
+  ok: cbb: bids after a title year 61.6% (1114 of 1808), design 60 +/- 5.2
+  ok: cbb: bids after a overachieved year 35.0% (40231 of 114809), design 35 +/- 2.0
+  ok: afl: no buyout bids, ever
+10. a league only seat (no finals): every ask can be met by a place the ladder has
+  ok: afl: all 19 contend and playoffs asks can be met by a ladder place
+simGmSeat: all checks passed
