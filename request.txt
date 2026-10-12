@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 reviewer (run lens) request W2 on 2d0c3cbe: CM_CONTROL=nobusiness alone, after it crashed on route.fetch ECONNRESET in r1314-run-w
+cm-nobusiness: CM_CONTROL=nobusiness ENGINES=chromium node scripts/playClubManager.mjs

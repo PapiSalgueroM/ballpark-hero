@@ -1,0 +1,2 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cm-nobusiness exit=1 289s | playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager
