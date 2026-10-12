@@ -199,6 +199,9 @@
  *   stampv2       the stamp gains a mark, so every book an earlier build wrote is another season's
  *                 (needs BOOK_BASE)                                  -> oldsave (vi) (thin (iv) goes with
  *                 it: the stamp is in every deal key, so the same roll names another man)
+ * The second fix pass of Round 1306 added one:
+ *   novar         the match is never told which reviews to play, so the arm with the video referee on
+ *                 sees none                                          -> law, the floor of that arm
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
  * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
@@ -326,6 +329,7 @@ const CONTROLS = {
   places433: { patch: [{ file: BOOK, from: 'const PLACES = { DEF: 4, MID: 4, ATT: 2 } as const;', to: 'const PLACES = { DEF: 4, MID: 3, ATT: 3 } as const;' }], red: 'thin', mentions: ['is not that eleven'] },
   goallesswhole: { patch: [{ file: ENGINE, from: '  if (state.table.every(r => r.w + r.d + r.l === 0)) {', to: '  if (state.table.every(r => r.gf === 0)) {' }], red: 'oldsave', mentions: ['goalless'] },
   stampv2: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${leagueId}|${bookSalt(state.leagueClubs)}|v2`;' }], red: 'oldsave', needs: 'base', also: ['thin'], mentions: ['written by the base commit'] },
+  novar: { patch: [{ file: ENGINE, from: '  const varKinds = cmVarKindsAsked(varReviews);', to: '  const varKinds = cmVarKindsAsked(varReviews).slice(0, 0);' }], red: 'law', mentions: ['under the floor of'] },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
@@ -343,6 +347,14 @@ const ALL_CLUBS = [
 const CLUBS = FULL ? ALL_CLUBS : [ALL_CLUBS[0], ALL_CLUBS[3], ALL_CLUBS[4], ALL_CLUBS[7], ALL_CLUBS[8]];
 const SEEDS = FULL ? 3 : 1;
 const seedOf = (clubIndex, k) => (0x1229 + SEEDSET * 7919 + clubIndex * 131 + k * 17) >>> 0;
+/* The arm that plays the law with the video referee on: the first two clubs of the list (both in a league
+   that uses reviews), three seeds each, on the default fleet and on the full one alike. MEASURED on GitHub
+   runners over seed sets 0 to 4 (remote check r1306-f1, the full fleet, which already played these six):
+   19 33 35 39 34 reviews in 228 league matches of mine. The floor is six tenths of the lowest of the five,
+   the rule ASSIST_FLOOR follows: 11. Control novar (no review is ever asked for) reads none. */
+const VAR_ARM = [0, 1].map(ci => [...ALL_CLUBS[ci], ci]);
+const VAR_ARM_SEEDS = 3;
+const VAR_REVIEW_FLOOR = 11;
 
 /* Each run its own temp folder: two bundling harnesses at once must never share one. */
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-book-'));
@@ -1404,11 +1416,21 @@ tCand = Date.now() - tCand;
    penalty, and the score is counted off the lines that are left; the book credits those same lines. The
    engine plays reviews when asked (the switch a player sees is another round's), so it is asked here. */
 const accVar = newAcc();
-fleet.filter(f => f.era === 'now').slice(0, FULL ? 6 : 2).forEach(f => playCareer(candidate, f.club, f.era, (f.seed ^ 0x5a5a) >>> 0, {
-  ...watcher(candidate, `${f.club} (reviews on, seed ${(f.seed ^ 0x5a5a) >>> 0})`, accVar), play: { skipHalftime: true, varReviews: true },
-}, 1));
+/* THE ARM IS THE SAME SIX SEASONS ON BOTH FLEETS (the second fix pass of Round 1306): Everton and Arsenal,
+   three seeds each, 228 league matches in a league that uses reviews. Until then the default fleet, the
+   gate's own line, played two seasons here, one of them in a league with no video referee, and since Round
+   1303 that read 2 to 10 reviews against a floor of "not zero". The six are the seasons the full fleet has
+   always played on this arm (the same clubs, the same seeds), so its readings stand for both fleets now. */
+for (const [club, era, ci] of VAR_ARM) {
+  for (let k = 0; k < VAR_ARM_SEEDS; k++) {
+    const seed = (seedOf(ci, k) ^ 0x5a5a) >>> 0;
+    playCareer(candidate, club, era, seed, {
+      ...watcher(candidate, `${club} (reviews on, seed ${seed})`, accVar), play: { skipHalftime: true, varReviews: true },
+    }, 1);
+  }
+}
 tick('law');
-if (!accVar.reviews) fail('law', 'with the video referee on, no league match of mine had a review: the arm proved nothing');
+if (accVar.reviews < VAR_REVIEW_FLOOR) fail('law', `with the video referee on, ${accVar.reviews} reviews in ${accVar.myLeagueMatches} league matches of mine, under the floor of ${VAR_REVIEW_FLOOR}: the arm proved too little`);
 /* And the week I do not play: only a league with an odd number of clubs has one, and the fleet must hold it. */
 tick('law');
 if (!acc.byeWeeks) fail('law', 'no career of the fleet had a week it did not play while the rest of its league round did: the note call of that week was never run');
