@@ -1,0 +1,12 @@
+simAwards exit=0 6s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simLoanSpell exit=0 6s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simClubVerdict exit=0 19s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.
+simCareerTransferBrief exit=0 7s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerAgentReview exit=0 10s | PASS agent review product and proof source bytes held.
+simSoccerAgentReviewPageControl exit=0 19s | PASS actual page/component source held and exact evidence retained.
+simUsCareerDeckC exit=0 50s | simUsCareerDeckC: all checks passed
+simTransferBriefPageControl exit=0 10s | CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+simUsBoardParity exit=0 59s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simLineupRecordPositions exit=0 3s | PASS simLineupRecordPositions
+simSoccerOfferReview exit=0 8s | Soccer offer review: passed.
