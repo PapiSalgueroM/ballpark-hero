@@ -129,6 +129,46 @@ describe('GmGameDayCard', () => {
     expect(watched).toHaveBeenCalledTimes(1);
   });
 
+  it('the "?" opened in the middle of a watch stops the clock, and closing it lets the game run on', async () => {
+    const watched = vi.fn();
+    render(<Host start="watch" watched={watched} />);
+    const minute = () => Number(q('[data-match-clock]')!.getAttribute('data-minute'));
+    const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
+    fireEvent.click(q('[data-gameday-speed="3x"]')!);
+    /* the clock is really running: a game is five seconds at 3x, so 300 ms is minutes of it. Every reading here
+       is one minute against another a moment later, never a minute against zero. */
+    await wait(120);
+    const a = minute();
+    await wait(300);
+    expect(minute(), 'the clock runs before the "?" is opened').toBeGreaterThan(a);
+    fireEvent.click(q('[data-gameday-help]')!);
+    expect(q('[data-season-help]')).not.toBeNull();
+    await wait(60);
+    const at = minute();
+    /* 700 ms is a seventh of the game at 3x: a clock that ran behind the sheet has moved by minutes */
+    await wait(700);
+    expect(q('[data-match-clock]'), 'the game is still on the clock behind the sheet').not.toBeNull();
+    expect(minute(), 'the clock while the "?" is open').toBe(at);
+    expect(watched).not.toHaveBeenCalled();
+    fireEvent.click(within(q('[data-season-help]') as HTMLElement).getByText('Got it'));
+    expect(q('[data-season-help]')).toBeNull();
+    await wait(120);
+    const c = minute();
+    await wait(300);
+    expect(minute(), 'the clock runs on once the "?" is closed').toBeGreaterThan(c);
+    expect(watched).not.toHaveBeenCalled();
+  });
+
+  it('the line under the next fixture is the board\'s when it hands one', () => {
+    render(<NflGameDay {...base({ log: [] })} />);
+    expect(q('[data-gameday-next-note]')!.textContent).toBe('Play it or watch it. Your result lands here.');
+    cleanup();
+    render(<NflGameDay {...base({ log: [], nextNote: 'No Watch on this one.' })} />);
+    expect(q('[data-gameday-next]')!.textContent).toBe('Next up: at Titans.');
+    expect(q('[data-gameday-next-note]')!.textContent).toBe('No Watch on this one.');
+    expect(q('[data-gameday]')!.textContent).not.toContain('watch it');
+  });
+
   it('Watch again runs the clock on the open game and comes back without telling the board', async () => {
     const watched = vi.fn();
     render(<Host start="result" watched={watched} />);
