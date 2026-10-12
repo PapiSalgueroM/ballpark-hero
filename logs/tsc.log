@@ -1,0 +1,28 @@
+src/lib/gmPostseason.test.ts(54,41): error TS2339: Property 'format' does not exist on type 'GmPostseasonLoad'.
+  Property 'format' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(56,14): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(57,14): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(58,14): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(66,14): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(67,14): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(68,14): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(77,16): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(78,16): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(79,16): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(91,16): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(92,16): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+src/lib/gmPostseason.test.ts(111,42): error TS2339: Property 'why' does not exist on type 'GmPostseasonLoad'.
+  Property 'why' does not exist on type '{ refused: null; format: BracketFormat; repair: BracketRepair; }'.
+src/lib/gmPostseason.test.ts(124,45): error TS2339: Property 'repair' does not exist on type 'GmPostseasonLoad'.
+  Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.

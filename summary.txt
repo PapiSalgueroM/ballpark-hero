@@ -1,0 +1,7 @@
+vitest-libs exit=0 3s |    Duration  2.24s (transform 561ms, setup 244ms, collect 956ms, tests 522ms, environment 2.19s, prepare 679ms)
+simGmGameDay exit=0 32s | simGmGameDay: 334 checks, 0 failed
+ctl-mounted exit=1 34s | simGmGameDay: 334 checks, 1 failed (control mounted)
+tsc exit=2 60s |   Property 'repair' does not exist on type '{ refused: GmPostseasonRefusal; why: string; }'.
+ctl-static exit=1 32s | simGmGameDay: 334 checks, 2 failed (control static)
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
