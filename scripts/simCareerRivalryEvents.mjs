@@ -82,6 +82,24 @@
  *   owndealt206 (Round 1227) the own cards of a roster beat are supported
  *              whatever the rival's season says: NFL 206's "must stay shut"
  *              fixture for a season neither made it must name it.
+ *   movedrift  (Round 1313, with RIVALRY_PROVE=<the commit before the move>)
+ *              one character of the moved block changed in memory: MOVE (ii)
+ *              must name it.
+ *   homeimport (Round 1313) careerRivalryEvents.ts read with one import line
+ *              added: section 1's HOMES must name it (the file the flagship
+ *              and the fight careers share must import nothing).
+ *   homeback   (Round 1313) the fact beat builder's text put back into
+ *              careerRivalryEvents.ts: section 1 must name the private copy.
+ *
+ *   Round 1313 moved the fact beat and roster beat builders (factBeat,
+ *   withSeasonPlayed, the roster beats and their words) into
+ *   src/lib/careerFactBeats.ts, which only the four US rivalry files import,
+ *   so Soccer Career stops downloading them. Section 1 holds each builder to
+ *   its one home there, and careerRivalryEvents.ts to no import and no re
+ *   export; MOVE (section 1m, under RIVALRY_PROVE=<commit>) proves the move
+ *   was character for character. Controls owndealt206, coin306 and oldcard
+ *   patch careerFactBeats.ts now; deaf still patches careerRivalryEvents.ts,
+ *   whose pool code did not move.
  *
  *   Each control asserts the text it rewrites is present first, so a
  *   control that rewrites a string the file does not contain cannot pass
@@ -99,7 +117,7 @@ import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RIVALRY_CONTROL || '';
-const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306', 'oldcard', 'allstar221', 'owndealt206'];
+const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306', 'oldcard', 'allstar221', 'owndealt206', 'movedrift', 'homeimport', 'homeback'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`RIVALRY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -341,19 +359,19 @@ const BEAT_CONTROLS = {
   },
   owndealt206: { /* (Round 1227) the two own cards of a roster beat supported whatever the rival's season says: the
                     "dropped off a year after" card is dealt again in a season he was judged on */
-    file: 'src/lib/careerRivalryEvents.ts',
+    file: 'src/lib/careerFactBeats.ts',
     from: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     to: '    ? ownRosterCards<P, R>(spec.own)',
   },
   coin306: { /* a fact beat back on a coin: the tap picks a card by a draw, not the card the player was shown.
                 Round 1149 moved the beat onto the shared builder, so this one swap breaks every sport on it. */
-    file: 'src/lib/careerRivalryEvents.ts',
+    file: 'src/lib/careerFactBeats.ts',
     from: '      const card = spec.cards.find(k => (!event || k.consequence === event.consequence) && k.when(s, r));',
     to: '      const card = spec.cards[Math.floor(_rng() * spec.cards.length)];',
   },
   oldcard: { /* (Round 1149) the tap no longer looks at the card it was shown: a card dealt before the beat
                 moved off its coin ("50/50 outcome") is then paid out as whatever today's facts say */
-    file: 'src/lib/careerRivalryEvents.ts',
+    file: 'src/lib/careerFactBeats.ts',
     from: '      const card = spec.cards.find(k => (!event || k.consequence === event.consequence) && k.when(s, r));',
     to: '      const card = spec.cards.find(k => k.when(s, r));',
   },
@@ -379,7 +397,7 @@ const redirectPlugin = {
   name: 'rivalry-control',
   setup(b) {
     b.onResolve({ filter: /careerRivalryEvents(\.ts)?$/ }, () => (redirects.careerRivalryEvents ? { path: redirects.careerRivalryEvents } : undefined));
-    b.onLoad({ filter: /[cC]areerRivalryEvents\.ts$/ }, args => {
+    b.onLoad({ filter: /(?:[cC]areerRivalryEvents|careerFactBeats)\.ts$/ }, args => {
       if (!beatPatch || path.resolve(args.path) !== path.resolve(beatPatch.path)) return undefined;
       return { contents: beatPatch.contents, loader: 'ts', resolveDir: path.dirname(args.path) };
     });
@@ -444,11 +462,41 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the season roll, no repeat', re: /\.filter\(e => e\.id !== lastId\)/ },
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the forced retirement lookup', re: /export function forcedRetirementEvent\b/ },
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the apply-and-log function', re: /export function applyRivalryEvent\b/ },
-    /* Round 1149: the fact beat builder and the season view the ticks hand the roll. */
-    { home: 'src/lib/careerRivalryEvents.ts', what: 'the fact beat builder', re: /export function factBeat\b/ },
-    { home: 'src/lib/careerRivalryEvents.ts', what: 'the own season roster beat', re: /export function ownRosterBeat\b/ },
-    { home: 'src/lib/careerRivalryEvents.ts', what: 'the season view a tick rolls on', re: /seasons: \[\.\.\.c\.seasons, season\]/ },
+    /* Round 1149: the fact beat builder and the season view the ticks hand the roll. Round 1313 moved them,
+       with the roster beat builders of Round 1227, into careerFactBeats.ts, which only the four US rivalry
+       files import (so Soccer Career, which shares careerRivalryEvents.ts, no longer downloads them). */
+    { home: 'src/lib/careerFactBeats.ts', what: 'the fact beat builder', re: /export function factBeat\b/ },
+    { home: 'src/lib/careerFactBeats.ts', what: 'the own season roster beat', re: /export function ownRosterBeat\b/ },
+    { home: 'src/lib/careerFactBeats.ts', what: 'the season view a tick rolls on', re: /seasons: \[\.\.\.c\.seasons, season\]/ },
+    { home: 'src/lib/careerFactBeats.ts', what: 'the roster beat on both seasons', re: /export function rosterBeat\b/ },
+    { home: 'src/lib/careerFactBeats.ts', what: 'the two roster facts of a season', re: /export function rosterFacts\b/ },
   ];
+  /* Round 1313, HOMES. Controls homeimport (careerRivalryEvents.ts read with one import line added) and homeback
+     (the fact beat builder's text put back into it), both in memory and in this section only. */
+  const EVENTS_REL = 'src/lib/careerRivalryEvents.ts'; const BEATS_REL = 'src/lib/careerFactBeats.ts';
+  if (CONTROL === 'homeimport') {
+    code.set(EVENTS_REL, `import { keyedRng } from './keyedRng';\n${code.get(EVENTS_REL)}`);
+    console.log('   CONTROL homeimport: careerRivalryEvents.ts read with one import line added');
+  }
+  if (CONTROL === 'homeback') {
+    const beats = code.get(BEATS_REL) ?? '';
+    const at = beats.indexOf('export function factBeat<'); const end = beats.indexOf('\n}\n', at);
+    if (at < 0 || end < 0) { console.error('control homeback: no factBeat function in careerFactBeats.ts to put back, so it would prove nothing'); process.exit(1); }
+    code.set(EVENTS_REL, `${code.get(EVENTS_REL)}\n${beats.slice(at, end + 3)}`);
+    console.log('   CONTROL homeback: the fact beat builder put back into careerRivalryEvents.ts');
+  }
+  {
+    const ev = code.get(EVENTS_REL) ?? '';
+    if (/^\s*import\s/m.test(ev) || /\bimport\(/.test(ev)) fail('careerRivalryEvents.ts imports something: Soccer Career and the fight careers share it, and scripts/simFightCareer.mjs copies it alone into a temp tree, so it must import nothing');
+    if (/^\s*export\s[^;]*\bfrom\s+["']/m.test(ev)) fail('careerRivalryEvents.ts re exports from another module: that puts the fact beat builders back into Soccer Career\'s download');
+    const beats = code.get(BEATS_REL) ?? '';
+    const imports = beats.match(/^\s*import\s[^\n]*/gm) ?? [];
+    if (imports.length !== 1 || !/^import type \{[^}]*\} from '\.\/careerRivalryEvents';$/.test(imports[0].trim())) fail(`careerFactBeats.ts must hold exactly one import, a type import from careerRivalryEvents (found: ${imports.join(' | ') || 'none'})`);
+    const importers = [...code].filter(([rel, t]) => rel !== BEATS_REL && /from\s+["'](?:\.\/|@\/lib\/)careerFactBeats["']/.test(t)).map(([rel]) => rel).sort();
+    const US_FOUR = ['src/lib/mlbCareerRivalryEvents.ts', 'src/lib/nbaCareerRivalryEvents.ts', 'src/lib/nflCareerRivalryEvents.ts', 'src/lib/nhlCareerRivalryEvents.ts'];
+    if (importers.join() !== US_FOUR.join()) fail(`careerFactBeats.ts is imported by exactly the four US rivalry files (found: ${importers.join(', ') || 'none'})`);
+    console.log(`   HOMES: careerRivalryEvents.ts imports and re exports nothing; careerFactBeats.ts holds one type import and is imported by ${importers.length} files`);
+  }
   for (const rule of RULES) {
     if (!rule.re.test(code.get(rule.home) ?? '')) fail(`${rule.what} is not in ${rule.home}, so the fingerprint is stale and this check proves nothing`);
     for (const [rel, text] of code) {
@@ -488,6 +536,45 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
   }
   for (const why of allWrapperProblems(ROOT)) fail(why);
   console.log(`   ${RULES.length} rule fingerprints checked, ${IMPORTS.length} bindings confirmed`);
+}
+
+/* Round 1313, MOVE (exact, a proof for that round, run under RIVALRY_PROVE=<the commit before the move>).
+   careerRivalryEvents.ts at that commit is read with git show. (i) That text with the moved block taken out
+   (from the line that opens the Round 1149 comment to the line before the comment of rivalryEventPool) equals
+   this tree's careerRivalryEvents.ts with its added header paragraph taken out, character for character.
+   (ii) The block equals this tree's careerFactBeats.ts below its header and its one import (the blank line
+   that parted the block from the kept tail is not part of it). Control movedrift: one character of the moved
+   block changed in memory, (ii) red. */
+if (process.env.RIVALRY_PROVE || CONTROL === 'movedrift') {
+  const at = process.env.RIVALRY_PROVE;
+  if (!at) { console.error('control movedrift is judged against the commit before the move: set RIVALRY_PROVE. Refusing to run.'); process.exit(2); }
+  console.log(`1m) MOVE: the fact beat builders moved out of careerRivalryEvents.ts unchanged (against ${at})`);
+  const before = norm(execSync(`git show ${at}:src/lib/careerRivalryEvents.ts`, { cwd: ROOT, maxBuffer: 1 << 26 }).toString());
+  const OPEN = '/* ─── Round 1149: a beat that reports a fact of the season ─';
+  const KEPT = '/** Every beat in the table whose gate is true right now,';
+  const HEADER_ADDED = '   Round 1313: the fact beat and roster beat builders that only the four US careers call live in\n   careerFactBeats.ts. This file imports nothing and re exports nothing, so Soccer Career never loads them.\n\n';
+  const IMPORT_LINE = "import type { RivalryEventDef } from './careerRivalryEvents';\n\n";
+  const s = before.indexOf(OPEN); const e = before.indexOf(KEPT);
+  const head = readSrc('src/lib/careerRivalryEvents.ts');
+  let beats = readSrc('src/lib/careerFactBeats.ts');
+  if (CONTROL === 'movedrift') {
+    const from = 'The first supported card is the one dealt.';
+    if (beats.split(from).length !== 2) { console.error('control movedrift: careerFactBeats.ts does not hold its anchor exactly once, so it would prove nothing'); process.exit(1); }
+    beats = beats.replace(from, 'The first supported card is the one dealt!');
+    console.log('   CONTROL movedrift: one character of the moved block changed in memory');
+  }
+  if (s < 0 || e < s) fail(`the commit ${at} does not hold the block this proof moves (open ${s}, kept tail ${e}), so it proves nothing`);
+  else if (head.split(HEADER_ADDED).length !== 2) fail('careerRivalryEvents.ts does not hold its added header paragraph exactly once');
+  else {
+    const block = before.slice(s, e);
+    const kept = before.slice(0, s) + before.slice(e);
+    if (kept !== head.replace(HEADER_ADDED, '')) fail('(i) careerRivalryEvents.ts is not the file before with the block taken out (something else in it changed)');
+    else console.log(`   ok   (i) careerRivalryEvents.ts is the file before with the block of ${block.split('\n').length - 1} lines taken out and one header paragraph added`);
+    const i = beats.indexOf(IMPORT_LINE);
+    const body = i < 0 ? '' : beats.slice(i + IMPORT_LINE.length);
+    if (i < 0 || body !== block.replace(/\n+$/, '\n')) fail('(ii) careerFactBeats.ts below its header and import is not the moved block character for character');
+    else console.log(`   ok   (ii) careerFactBeats.ts below its header and import is the moved block, ${body.length} characters`);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

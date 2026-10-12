@@ -40,9 +40,9 @@
 import type { NbaCareerState, NbaSeasonLine } from "./nbaMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed,
-  rosterBeat, rosterFacts, ALL_STAR_ROSTER,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
+import { withSeasonPlayed, rosterBeat, rosterFacts, ALL_STAR_ROSTER } from "./careerFactBeats";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
@@ -108,7 +108,7 @@ export const NBA_RIVALRY_EVENTS: RivalryEventDef<NbaCareerState, CareerRival>[] 
      engine has picked All-Stars for real since Round 1103, so the card could say you made it in a year your
      season card said you did not. Now it is dealt only when at least one of you made it, and it says and does
      only what those two facts support. Round 1149 moved it onto the shared builder (factBeat in
-     careerRivalryEvents.ts), one card a pair of facts, with not a word or a number changed. Round 1227 lifted
+     careerFactBeats.ts), one card a pair of facts, with not a word or a number changed. Round 1227 lifted
      the three cards themselves into rosterBeat there, for the sports that follow, again with nothing changed. */
   rosterBeat<NbaSeasonLine, NbaCareerState, CareerRival>({ id: 306, ...ALL_STAR_ROSTER, mine: nbaMadeAllStar }),
   {

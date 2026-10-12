@@ -44,8 +44,9 @@
 import type { MlbCareerState, MlbSeasonLine } from "./mlbMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
+import { withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER } from "./careerFactBeats";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
@@ -106,7 +107,7 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
      says whether HE made a roster: you made it, or you are off it a year after you were on it. The round that
      moves the MLB rival onto the player's line can add the cards that name his roster, the way the NBA's 306
      does. The two cards and their words are the shared ones (ownRosterBeat and ALL_STAR_OWN_ROSTER in
-     careerRivalryEvents.ts, where the rule is written): the NHL deals the same beat. */
+     careerFactBeats.ts, where the rule is written): the NHL deals the same beat. */
   ownRosterBeat<MlbCareerState, CareerRival>({ id: 206, award: MLB_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
   {
     id: 207, emoji: "⭐", title: "Rival's Ring",

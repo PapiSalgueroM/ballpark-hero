@@ -130,6 +130,26 @@ if (!pageSrc.includes('import("@/components/soccer-career/SeasonResumeChip")')) 
 if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/TrainingPanel"))')) fail('SoccerCareer.tsx no longer loads TrainingPanel with lazy(), so nothing opens the training ground');
 console.log(`   ${MUST_BE_LAZY.length} paths that must stay lazy, ${eager.length} in the static closure`);
 
+/* Round 1313: the fact beat and roster beat builders that only the four US careers call left
+   src/lib/careerRivalryEvents.ts (which Soccer Career shares) for src/lib/careerFactBeats.ts. None of that
+   module and the four US rivalry files may be in the flagship's static closure. It was already true of the
+   four files before the move, so on the source side this is a tripwire for later; section 3b below is the
+   check that holds the split on the built page. Control FLAGSHIP_LAZY_CONTROL=rosterlink hands the walker
+   careerRivalryEvents.ts with `export * from './careerFactBeats';` added (in memory) and must go red. */
+console.log('1c) the US careers\' fact beat and roster beat builders are not in the first download');
+const US_ONLY = ['src/lib/careerFactBeats.ts', 'src/lib/nflCareerRivalryEvents.ts', 'src/lib/nbaCareerRivalryEvents.ts', 'src/lib/mlbCareerRivalryEvents.ts', 'src/lib/nhlCareerRivalryEvents.ts'];
+let usClosure = flagship;
+if (process.env.FLAGSHIP_LAZY_CONTROL === 'rosterlink') {
+  const evPath = path.join(ROOT, 'src/lib/careerRivalryEvents.ts');
+  const evText = readFileSync(evPath, 'utf8');
+  if (!flagship.has('src/lib/careerRivalryEvents.ts')) throw new Error('control refused: careerRivalryEvents.ts is not in the flagship\'s closure, so the link would lead nowhere');
+  usClosure = staticClosure('src/pages/SoccerCareer.tsx', { [evPath]: `${evText}\nexport * from './careerFactBeats';\n` });
+  console.log('   CONTROL rosterlink: careerRivalryEvents.ts read with a re export of careerFactBeats.ts added');
+}
+const usIn = US_ONLY.filter(f => usClosure.has(f));
+if (usIn.length) fail(`/soccer-career statically imports ${usIn.join(', ')}, code only the US careers call, so every Soccer Career player downloads it before the first screen`);
+console.log(`   ${US_ONLY.length} US career modules checked, ${usIn.length} in the static closure`);
+
 /* ── the gates that keep it that way ───────────────────────────────────── */
 console.log('2) the job market is loaded on demand, and something loads it');
 const engine = readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf8');
@@ -254,6 +274,28 @@ if (!existsSync(ASSETS)) {
     /* Round 1313, printed and never judged (build output is not byte stable): the exact raw bytes and every
        chunk of the closure with its own, so a move between chunks can be read off two builds. */
     console.log(`   raw bytes ${raw}; the chunks: ${[...seen].sort().map(f => `${f} ${readFileSync(path.join(ASSETS, f)).length}`).join(', ')}`);
+
+    /* 3b, Round 1313: the split held on the BUILT page. Two fixed phrases of the cards that moved to
+       careerFactBeats.ts (the "both of you" All-Star card and the own record cards) must be in no chunk of the
+       flagship's static closure, AND each must be in some chunk outside it: absence alone is half a proof
+       (section 3's own rule above), a deleted card would pass it. A string is byte stable where a size is
+       not. On the build of the commit before the move this was red: the words sat in the rivalry chunk the
+       page shares with the US careers. Control FLAGSHIP_LAZY_CONTROL=allchunks hands the check a closure
+       that holds every chunk (in memory) and must go red. */
+    console.log('3b) the moved cards\' words are in no chunk of the first download, and are built');
+    const MOVED_WORDS = ['are both on them', 'It goes down as one more line in the argument'];
+    let closure3b = seen;
+    if (process.env.FLAGSHIP_LAZY_CONTROL === 'allchunks') {
+      closure3b = new Set(files);
+      console.log('   CONTROL allchunks: the check handed every chunk as the closure');
+    }
+    for (const words of MOVED_WORDS) {
+      const holders = files.filter(f => readFileSync(path.join(ASSETS, f), 'utf8').includes(words));
+      const inside = holders.filter(f => closure3b.has(f)); const outside = holders.filter(f => !closure3b.has(f));
+      if (inside.length) fail(`"${words}" is in ${inside.join(', ')}, a chunk /soccer-career loads before its first screen: the US careers' roster cards are back in the flagship's download`);
+      if (!outside.length) fail(`"${words}" is in no chunk outside the flagship's first download, so the card is not built at all and the absence above proves nothing`);
+      console.log(`   "${words}": in the first download ${inside.length}, elsewhere ${outside.length} (${outside.join(', ') || 'none'})`);
+    }
   }
 }
 

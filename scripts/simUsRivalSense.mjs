@@ -155,15 +155,15 @@ const CONTROLS = {
   workload17: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U2', find: '    const len = nflSeasonLength(year);', put: '    const len = NFL_RATE_GAMES;' },
   /* N.F5: the "only you" card dealt on the two ratings (both 80 or better) instead of the two seasons, as the
      beat was while it flipped a coin. */
-  rostergate: { file: 'src/lib/careerRivalryEvents.ts', needs: 'N.F5', find: '        when: (s, r) => { const f = facts(s, r); return !!f && f.mine && !f.his; },',
+  rostergate: { file: 'src/lib/careerFactBeats.ts', needs: 'N.F5', find: '        when: (s, r) => { const f = facts(s, r); return !!f && f.mine && !f.his; },',
     put: '        when: (s, r) => (s as { ovr?: number }).ovr! >= 80 && (r as { ovr?: number }).ovr! >= 80,' },
   /* N.F5: the two own cards supported whatever the rival's season says (the "dropped off a year after" card is
      dealt again, in a year neither made the first team). */
-  owndealt: { file: 'src/lib/careerRivalryEvents.ts', needs: 'N.F5', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
+  owndealt: { file: 'src/lib/careerFactBeats.ts', needs: 'N.F5', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     put: '    ? ownRosterCards<P, R>(spec.own)' },
   /* N.O: the two own cards taken out (a save sitting on a card the release before dealt, "Morale +5", is paid
      nothing). */
-  owndead: { file: 'src/lib/careerRivalryEvents.ts', needs: 'N.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
+  owndead: { file: 'src/lib/careerFactBeats.ts', needs: 'N.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     put: '    ? ownRosterCards<P, R>(spec.own).slice(0, 0)' },
   /* N.F5: the NFL tick rolls on the bare save, so the beat reads the season BEFORE the one just played (the two
      seasons are then two different years, the fact cards shut, and an own card is dealt). */
@@ -177,7 +177,7 @@ const CONTROLS = {
   liftkey: { file: 'src/lib/careerRival.ts', prove: true, needs: 'P1',
     find: '  let key = `${tag}|${r.name}|${year}`;', put: '  let key = `${tag}|${r.name}|${year}|`;' },
   /* L: one word of the lifted All-Star cards changed (the NBA's "both" card no longer reads as it did). */
-  liftcard: { file: 'src/lib/careerRivalryEvents.ts', prove: true, needs: 'L',
+  liftcard: { file: 'src/lib/careerFactBeats.ts', prove: true, needs: 'L',
     find: 'description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} are both on them.`,', put: 'description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} both made it.`,' },
 };
 if (CONTROL && CONTROLS[CONTROL]?.prove && !PROVE) { console.error(`control ${CONTROL} is judged against a tree before: set RIVAL_PROVE. Refusing to run.`); process.exit(2); }
@@ -208,6 +208,7 @@ const BUNDLE = {
       "export * as awards from './src/lib/careerAwards.ts';",
       "export * as rival from './src/lib/careerRival.ts';",
       "export * as events from './src/lib/careerRivalryEvents.ts';",
+      "export * as factBeats from './src/lib/careerFactBeats.ts';",
       "export * as nflEvents from './src/lib/nflCareerRivalryEvents.ts';",
       "export * as lines from './src/lib/usCareerStatLine.ts';",
       "export { keyedRng } from './src/lib/keyedRng.ts';",

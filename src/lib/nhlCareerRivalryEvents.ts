@@ -36,8 +36,9 @@
 import type { NhlCareerState, NhlSeasonLine } from "./nhlMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
+import { withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER } from "./careerFactBeats";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
@@ -94,7 +95,7 @@ export const NHL_RIVALRY_EVENTS: RivalryEventDef<NhlCareerState, CareerRival>[] 
   /* Round 1149: no coin. The beat flipped one for which of you made the All-Star ballot, in a game whose
      engine picks All-Stars for real (nhlAllStar in careerAwards.ts), so the card could say you made it in a
      year your own season card said you did not. It is read off your own season now, the one just played, on
-     the builder MLB's 206 uses (ownRosterBeat in careerRivalryEvents.ts, where the rule is written): you made
+     the builder MLB's 206 uses (ownRosterBeat in careerFactBeats.ts, where the rule is written): you made
      it, or you are off it a year after you were on it. The NHL rival's season is not on your stat line yet, so
      nothing here says whether HE made a roster. */
   ownRosterBeat<NhlCareerState, CareerRival>({ id: 306, award: NHL_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
