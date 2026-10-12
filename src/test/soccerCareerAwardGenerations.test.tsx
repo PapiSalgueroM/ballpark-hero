@@ -58,6 +58,7 @@ const actualRandom = Math.random;
 const observed: Saved[] = [];
 let fixtures: { legacy: Saved; generated: Saved; pending: Saved; legacyPending: Saved }, draws: Saved[];
 let activeObservation: Saved | null;
+const frameworkSetup: Saved = { id: 'react-async-act-setup', draws: [], storageBefore: {}, storageAfter: {} };
 function modelCall(id: string, value: Saved, action: (input: E.CareerState) => E.CareerState) {
   const input = copy(value), modelDraws: Saved[] = [], pageRandom = Math.random;
   Math.random = () => { modelDraws.push({ value: .52, stack: new Error().stack }); return .52; };
@@ -136,7 +137,18 @@ async function open(raw: string) {
   await act(async () => { await Promise.resolve(); });
   return { view, writes, removes };
 }
-beforeAll(() => {
+beforeAll(async () => {
+  frameworkSetup.storageBefore = Object.fromEntries(Object.keys(localStorage).map(key => [key, localStorage.getItem(key)]));
+  const setupRandom = Math.random;
+  Math.random = () => { frameworkSetup.draws.push({ value: .52, stack: new Error().stack }); return .52; };
+  try { await act(async () => { await Promise.resolve(); }); }
+  finally { Math.random = setupRandom; }
+  frameworkSetup.storageAfter = Object.fromEntries(Object.keys(localStorage).map(key => [key, localStorage.getItem(key)]));
+  expect(frameworkSetup.draws).toHaveLength(1);
+  expect(frameworkSetup.draws[0].value).toBe(.52);
+  expect(frameworkSetup.draws[0].stack).toContain('at enqueueTask ');
+  expect(frameworkSetup.draws[0].stack).toContain('/node_modules/react/cjs/react.development.js:2458:45');
+  expect(frameworkSetup.storageAfter).toEqual(frameworkSetup.storageBefore);
   const file = process.env.SOCCER_AWARD_GENERATIONS_FIXTURES;
   fixtures = file ? JSON.parse(fs.readFileSync(file, 'utf8')) : deriveFixtures();
   for (const value of [fixtures.legacy, fixtures.generated, fixtures.pending, fixtures.legacyPending]) expect(isSoccerCareerSave(value)).toBe(true);
@@ -159,12 +171,18 @@ afterEach(() => {
   }
   cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); Math.random = actualRandom;
 });
-afterAll(() => { if (process.env.SOCCER_AWARD_COMPONENT_OBSERVER) fs.writeFileSync(process.env.SOCCER_AWARD_COMPONENT_OBSERVER, JSON.stringify(observed)); });
+afterAll(() => {
+  const file = process.env.SOCCER_AWARD_COMPONENT_OBSERVER;
+  if (file) {
+    fs.writeFileSync(file, JSON.stringify(observed));
+    fs.writeFileSync(file.replace(/\.json$/, '-framework-setup.json'), JSON.stringify(frameworkSetup));
+  }
+});
 
 describe('Soccer Career generated-candidate save boundaries', () => {
   for (const kind of ['legacy', 'generated', 'pending', 'legacyPending'] as const) it(`holds complete ${kind} pool and old pending ballot over actual page reload`, async () => {
     const value = copy(fixtures[kind]), raw = JSON.stringify(value), start = draws.length;
-    const row: Saved = activeObservation = { id: kind, invalid: false, input: value, rawBefore: raw, callbacks: [] };
+    const row: Saved = activeObservation = { id: kind, invalid: false, input: value, rawBefore: raw, callbacks: [], frameworkSetup: copy(frameworkSetup) };
     const expectedLoad = modelCall('repairCareer-load', value, E.repairCareer);
     row.expectedLoad = expectedLoad;
     expect(value.primeType).toBeTruthy(); expect(expectedLoad.draws).toEqual([]);
@@ -232,17 +250,17 @@ describe('Soccer Career generated-candidate save boundaries', () => {
   });
   it.each(malformed)('rejects present %s pool and preserves whole raw storage over actual reload', async id => {
     const value = corrupt(fixtures.generated, id), raw = JSON.stringify(value), beforeValidation = draws.length;
-    const row: Saved = activeObservation = { id, invalid: true, input: value, rawBefore: raw };
+    const row: Saved = activeObservation = { id, invalid: true, input: value, rawBefore: raw, frameworkSetup: copy(frameworkSetup) };
     expect(isSoccerCareerSave(value)).toBe(false); expect(draws).toHaveLength(beforeValidation);
     const first = await open(raw);
     row.actualLoadDraws = copy(draws.slice(beforeValidation)); expect(draws).toHaveLength(beforeValidation);
-    expect(first.view.queryByText('TEST: route crashed')).toBeNull(); expect(first.view.getByRole('alert').textContent).toContain('couldn’t open this saved career');
+    expect(first.view.queryByText('TEST: route crashed')).toBeNull(); expect(first.view.getByRole('alert').textContent).toContain("We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.");
     expect(localStorage.getItem(KEY)).toBe(raw); expect(first.writes.mock.calls.filter(c => c[0] === KEY)).toEqual([]); expect(first.removes.mock.calls.filter(c => c[0] === KEY)).toEqual([]);
     const rawAfter = localStorage.getItem(KEY), firstWrites = copy(first.writes.mock.calls), firstRemoves = copy(first.removes.mock.calls), firstDOM = first.view.container.innerHTML;
     cleanup(); first.writes.mockRestore(); first.removes.mockRestore();
     const second = await open(raw), rawAfterReload = localStorage.getItem(KEY);
     expect(draws).toHaveLength(beforeValidation);
-    expect(second.view.queryByText('TEST: route crashed')).toBeNull(); expect(second.view.getByRole('alert').textContent).toContain('couldn’t open this saved career');
+    expect(second.view.queryByText('TEST: route crashed')).toBeNull(); expect(second.view.getByRole('alert').textContent).toContain("We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.");
     expect(rawAfterReload).toBe(raw); expect(second.writes.mock.calls.filter(c => c[0] === KEY)).toEqual([]); expect(second.removes.mock.calls.filter(c => c[0] === KEY)).toEqual([]);
     expect(localStorage.getItem(OTHER)).toBe('whole unrelated bytes'); expect(recordCompletion).not.toHaveBeenCalled();
     Object.assign(row, { rawAfter, rawAfterReload, firstWrites, firstRemoves, secondWrites: copy(second.writes.mock.calls), secondRemoves: copy(second.removes.mock.calls), allDraws: copy(draws), firstDOM, secondDOM: second.view.container.innerHTML });

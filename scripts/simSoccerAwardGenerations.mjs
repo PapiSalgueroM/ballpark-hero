@@ -9,6 +9,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import * as esbuild from 'esbuild';
+import { createAwardProofStorage } from './lib/awardProofStorage.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.SOCCER_AWARD_GENERATIONS_OUT || path.join(ROOT, 'career-award-generations-artifacts/proof'));
@@ -21,18 +22,20 @@ const copy = x => JSON.parse(json(x));
 const objects = new Map(), failures = [];
 const report = { status: 'fail', base: BASE, population: [], natural: {}, boundaries: [], controls: [], observationControls: [] };
 function verify(label, fn) { try { fn(); } catch (e) { failures.push({ label, name: e.name, message: e.message, stack: e.stack }); } }
-fs.mkdirSync(path.join(OUT, 'objects'), { recursive: true });
+fs.mkdirSync(OUT, { recursive: true });
+let proofStorage = null;
 function putBytes(raw, kind = 'json') {
   const hash = sha(raw);
   if (!objects.has(hash)) {
     const packed = zlib.gzipSync(raw, { level: 9 }), relative = `objects/${hash}.gz`;
-    fs.writeFileSync(path.join(OUT, relative), packed);
-    objects.set(hash, { hash, kind, path: relative, rawBytes: raw.length, rawSha256: hash, packedBytes: packed.length, packedSha256: sha(packed) });
+    const original = { hash, kind, path: relative, rawBytes: raw.length, rawSha256: hash, packedBytes: packed.length, packedSha256: sha(packed) };
+    proofStorage.add(raw, original);
+    objects.set(hash, original);
   }
   return hash;
 }
 const put = x => putBytes(Buffer.from(json(x)));
-const get = hash => JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(OUT, objects.get(hash).path))).toString());
+const get = hash => JSON.parse(proofStorage.getBytes(hash).toString());
 function write(name, value) { fs.mkdirSync(path.dirname(path.join(OUT, name)), { recursive: true }); fs.writeFileSync(path.join(OUT, name), json(value)); }
 function one(source, from, to) {
   assert.equal(source.split(from).length - 1, 1, `unique forward ${from}`);
@@ -430,6 +433,36 @@ async function main() {
   fs.writeFileSync(path.join(componentDir, 'stdout.log'), component.stdout ?? ''); fs.writeFileSync(path.join(componentDir, 'stderr.log'), component.stderr ?? ''); write('component/exit.json', { status: component.status, signal: component.signal, error: component.error ? String(component.error) : null });
   assert.equal(component.status, 0, 'actual separate component tests pass');
   const pageObservations = JSON.parse(fs.readFileSync(path.join(componentDir, 'observations.json'), 'utf8')); assert(pageObservations.length);
+  const frameworkSetup = JSON.parse(fs.readFileSync(path.join(componentDir, 'observations-framework-setup.json'), 'utf8'));
+  assert.deepEqual(Object.keys(frameworkSetup).sort(), ['draws', 'id', 'storageAfter', 'storageBefore']);
+  const frameworkObservation = { setup: frameworkSetup, rows: pageObservations };
+  const frameworkFindings = v => {
+    const keys = [], d = v.setup.draws;
+    if (v.setup.id !== 'react-async-act-setup' || !Array.isArray(d) || d.length !== 1 || d[0].value !== .52 || typeof d[0].stack !== 'string' || !d[0].stack.includes('at enqueueTask ') || !d[0].stack.includes('/node_modules/react/cjs/react.development.js:2458:45')) keys.push('framework-vector');
+    try { assert.deepEqual(v.setup.storageAfter, v.setup.storageBefore); } catch { keys.push('framework-storage'); }
+    if (v.rows.length !== 31) keys.push('framework-row-count');
+    if (v.rows.some(row => { try { assert.deepEqual(row.frameworkSetup, v.setup); return false; } catch { return true; } })) keys.push('framework-row-binding');
+    return keys;
+  };
+  assert.deepEqual(frameworkFindings(frameworkObservation), [], 'actual separate framework setup and all31 row bindings');
+  const frameworkFault = copy(frameworkObservation), storageFaultKey = 'labelled-copied-framework-storage-fault';
+  assert(!Object.hasOwn(frameworkFault.setup.storageAfter, storageFaultKey));
+  frameworkFault.setup.draws[0].value = .51;
+  frameworkFault.setup.storageAfter[storageFaultKey] = 'Labelled copied observation only, not an application write.';
+  frameworkFault.rows[0].frameworkSetup.id = 'labelled-copied-framework-id';
+  const frameworkOmittedRow = frameworkFault.rows.pop();
+  assert.notDeepEqual(frameworkFault, frameworkObservation);
+  const frameworkFailures = frameworkFindings(frameworkFault);
+  assert.deepEqual(frameworkFailures, ['framework-vector', 'framework-storage', 'framework-row-count', 'framework-row-binding']);
+  for (let i = 1; i < frameworkFault.rows.length; i++) assert.deepEqual(frameworkFault.rows[i], frameworkObservation.rows[i], 'every unrelated complete framework-bound page row held');
+  const frameworkFaultRef = put(frameworkFault);
+  frameworkFault.setup.draws[0].value = frameworkObservation.setup.draws[0].value;
+  delete frameworkFault.setup.storageAfter[storageFaultKey];
+  frameworkFault.rows[0].frameworkSetup.id = frameworkObservation.rows[0].frameworkSetup.id;
+  frameworkFault.rows.push(frameworkOmittedRow);
+  assert.deepEqual(frameworkFault, frameworkObservation, 'complete actual copied framework undo');
+  assert.deepEqual(frameworkFindings(frameworkFault), []);
+  const frameworkControl = { baseline: put(frameworkObservation), fault: frameworkFaultRef, omittedRow: put(frameworkOmittedRow), undo: put(frameworkFault), findings: frameworkFailures, qualification: 'Copied setup observation only. No actual app draw or write was manufactured.' };
   const pendingIndex = pageObservations.findIndex(r => r.id === 'legacyPending'); assert(pendingIndex >= 0);
   const actualPending = pageObservations[pendingIndex], revealIndex = actualPending.callbacks.findIndex(r => r.id === 'reveal'); assert(revealIndex >= 0);
   const pendingRead = { observations: pageObservations, pendingIndex, revealIndex, before: JSON.parse(actualPending.rawBefore).pendingBallonDor, after: JSON.parse(actualPending.rawAfterReload).pendingBallonDor };
@@ -452,7 +485,7 @@ async function main() {
   }, ['pending-ballot-immutability', 'read-draws', 'callback-outcome']);
   const invalidObservation = pageObservations.find(r => r.invalid && r.rawBefore === r.rawAfterReload); assert(invalidObservation);
   observationControl('raw-invalid-save-overwritten', invalidObservation, v => { v.rawAfterReload = v.rawAfterReload.slice(1); }, (v, h) => { v.rawAfterReload = h.rawAfterReload; }, v => v.rawBefore === v.rawAfterReload ? [] : ['raw-storage-held'], ['raw-storage-held']);
-  report.component = { observations: put(pageObservations), vitest: put(JSON.parse(fs.readFileSync(path.join(componentDir, 'vitest.json'), 'utf8'))) };
+  report.component = { observations: put(pageObservations), vitest: put(JSON.parse(fs.readFileSync(path.join(componentDir, 'vitest.json'), 'utf8'))), frameworkSetup: put(frameworkSetup), frameworkControl };
   for (const [p, raw] of rawBefore) assert.deepEqual(fs.readFileSync(path.join(ROOT, p)), raw, `held disk ${p}`);
   report.heldSources = [...rawBefore].map(([p, raw]) => ({ path: p, bytes: raw.length, sha256: sha(raw) }));
   report.limitations = ['Generated-only model, no real biography change.', 'Filler shortages/year gaps are declared complete saved-model boundaries.', 'Future career result/random neutrality is not claimed after candidate identities diverge.', 'Component presentation/network services are mocked, actual page loader/save effects run.', 'Existing39 recovery tests and old harness/floors remain unchanged.'];
@@ -462,7 +495,40 @@ async function main() {
   console.log('9 effective compiled source controls and3 copied observation controls restored');
   console.log('PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery');
 }
-try { await main(); } catch (e) { failures.push({ name: e.name, message: e.message, stack: e.stack }); report.status = 'fail'; process.exitCode = 1; console.error(e.stack); }
-write('failures.json', failures); write('objects.json', [...objects.values()]); write('report.json', report);
-write('size.json', { bytes: sizeOf(OUT), cap: 430_000_000, complete: true });
-if (sizeOf(OUT) >= 430_000_000) { report.status = 'fail'; failures.push({ name: 'ArtifactCapError', message: 'Complete proof exceeds430000000 bytes' }); process.exitCode = 1; write('failures.json', failures); write('report.json', report); }
+function completeProofSize() {
+  const receipt = { bytes: 0, cap: 430_000_000, complete: true, storageComplete: report.storage?.complete === true };
+  for (let attempt = 0; attempt < 12; attempt++) {
+    write('size.json', receipt);
+    const bytes = sizeOf(OUT);
+    if (receipt.bytes === bytes) return receipt;
+    receipt.bytes = bytes;
+  }
+  throw new Error('Complete self-inclusive proof size did not converge');
+}
+try { proofStorage = createAwardProofStorage(OUT); await main(); }
+catch (e) { failures.push({ name: e.name, message: e.message, stack: e.stack }); report.status = 'fail'; process.exitCode = 1; console.error(e.stack); }
+finally {
+  try {
+    assert.ok(proofStorage, 'actual storage writer created');
+    report.storage = await proofStorage.finish();
+    assert.equal(report.storage.status, 'pass', 'complete persisted byte storage');
+    assert.equal(report.storage.complete, true, 'complete persisted reconstruction and both decoder controls');
+  } catch (e) {
+    report.status = 'fail'; process.exitCode = 1;
+    failures.push({ stage: 'storage-finalization', name: e.name, message: e.message, stack: e.stack });
+    if (!report.storage) report.storage = { representation: 'cdc-byte-pack-v1', status: 'fail', complete: false, error: { name: e.name, message: e.message, stack: e.stack } };
+  }
+  write('failures.json', failures); write('objects.json', [...objects.values()]); write('report.json', report);
+  try {
+    const size = completeProofSize();
+    if (size.bytes >= 430_000_000) {
+      report.status = 'fail'; process.exitCode = 1;
+      failures.push({ name: 'ArtifactCapError', message: 'Complete proof exceeds430000000 bytes' });
+      write('failures.json', failures); write('report.json', report); completeProofSize();
+    }
+  } catch (e) {
+    report.status = 'fail'; process.exitCode = 1; report.finalInventoryComplete = false;
+    failures.push({ stage: 'proof-footer', name: e.name, message: e.message, stack: e.stack });
+    write('failures.json', failures); write('report.json', report); write('size.json', { bytes: sizeOf(OUT), cap: 430_000_000, complete: false, storageComplete: report.storage?.complete === true });
+  }
+}

@@ -40,10 +40,10 @@ jobs:
           git diff --name-status aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > career-award-generations-artifacts/changed-source.txt
           node --input-type=module - <<'JS'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
-          const base='aa564f16019b9e821981d5c4e3e0262312c73b62',allowed=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerSave.ts','scripts/lib/careerAwardsNight1172.mjs','scripts/simSoccerAwardGenerations.mjs','src/test/soccerCareerAwardGenerations.test.tsx','.github/workflows/career-award-generations-verification.yml','docs/ROUND1280-1282.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md'],changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          const base='aa564f16019b9e821981d5c4e3e0262312c73b62',allowed=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerSave.ts','scripts/lib/careerAwardsNight1172.mjs','scripts/simSoccerAwardGenerations.mjs','scripts/lib/awardProofStorage.mjs','src/test/soccerCareerAwardGenerations.test.tsx','.github/workflows/career-award-generations-verification.yml','docs/ROUND1280-1282.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md'],changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
           fs.writeFileSync('career-award-generations-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));for(const file of changed)assert(allowed.includes(file),'undeclared change '+file);
           for(const file of ['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs','src/test/soccerCareerSaveRecovery.test.tsx',...['simBallonDorFairness','simCareerAwardsNight','simBallonDorTruth','simCareerEras','simSoccerCareerSaveRetry','simSoccerCareerSaveRecovery'].map(name=>'scripts/'+name+'.mjs')])assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString(),execFileSync('git',['rev-parse',base+':'+file]).toString(),file+' complete baseline hold');
-          for(const file of allowed.slice(0,6))assert(execFileSync('git',['cat-file','-s','HEAD:'+file]).toString().trim()>0,file+' committed source is nonempty');
+          for(const file of allowed.slice(0,7))assert(execFileSync('git',['cat-file','-s','HEAD:'+file]).toString().trim()>0,file+' committed source is nonempty');
           JS
           git rev-parse HEAD > career-award-generations-artifacts/source-head.txt
           git rev-parse 'HEAD^{tree}' > career-award-generations-artifacts/source-tree.txt
@@ -93,6 +93,170 @@ jobs:
           const current={public:rows('public'),lastmod:rows('scripts/data/lastmod.json'),dist:rows('dist')},file='career-award-generations-artifacts/generated-body-inventory.json';if(process.argv.includes('--check'))assert.deepEqual(current,JSON.parse(fs.readFileSync(file,'utf8')));else fs.writeFileSync(file,JSON.stringify(current,null,2));console.log('PASS complete generated body inventory: '+current.public.length+' public files, '+current.dist.length+' dist files');
           JS
           sha256sum career-award-generations-artifacts/helpers/*.mjs > career-award-generations-artifacts/helper-source-sha256.txt
+      - name: Retain independent persisted storage consumer source
+        run: |
+          cat > career-award-generations-artifacts/helpers/check-storage.mjs <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { gzipSync, gunzipSync } from 'node:zlib';
+
+          const root = path.resolve('career-award-generations-artifacts/proof');
+          const out = path.resolve('career-award-generations-artifacts/storage-consumer.json');
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const json = bytes => JSON.parse(bytes.toString('utf8'));
+          const errorOf = error => ({ name: error.name, message: error.message, stack: error.stack });
+          const integer = value => Number.isSafeInteger(value) && value >= 0;
+          const hex = value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
+          const result = { status: 'fail', representation: null, files: [], chunks: [], objects: [], controls: [], reportEdges: [], errors: [], counts: null };
+          function keys(value, expected) { assert(value && typeof value === 'object' && !Array.isArray(value)); assert.deepEqual(Object.keys(value).sort(), [...expected].sort()); }
+          function safeFile(relative) {
+            assert.equal(typeof relative, 'string'); assert(relative.length > 0 && !relative.includes('\\') && !/[<>:"|?*\x00-\x1f]/.test(relative));
+            const parts = relative.split('/'); assert(parts.every(part => part.length > 0 && part !== '.' && part !== '..'));
+            let cursor = root;
+            for (const part of parts) { cursor = path.join(cursor, part); const stat = fs.lstatSync(cursor); assert(!stat.isSymbolicLink()); }
+            assert(fs.lstatSync(cursor).isFile()); return cursor;
+          }
+          function whole(relative) {
+            const bytes = fs.readFileSync(safeFile(relative)); result.files.push({ path: relative, bytes: bytes.length, sha256: sha(bytes) }); return bytes;
+          }
+          function declared(record, relative, packed = false) {
+            keys(record, packed ? ['path', 'bytes', 'sha256', 'rawBytes', 'rawSha256', 'codec'] : ['path', 'bytes', 'sha256']);
+            assert.equal(record.path, relative); assert(integer(record.bytes) && hex(record.sha256));
+            const bytes = whole(record.path); assert.equal(bytes.length, record.bytes); assert.equal(sha(bytes), record.sha256);
+            if (!packed) return bytes;
+            assert.equal(record.codec, 'gzip'); assert(integer(record.rawBytes) && hex(record.rawSha256));
+            const raw = gunzipSync(bytes); assert.equal(raw.length, record.rawBytes); assert.equal(sha(raw), record.rawSha256); return raw;
+          }
+          function originalShape(row) {
+            keys(row, ['hash', 'kind', 'path', 'rawBytes', 'rawSha256', 'packedBytes', 'packedSha256']);
+            assert(hex(row.hash) && row.hash === row.rawSha256 && hex(row.packedSha256)); assert.equal(row.path, `objects/${row.hash}.gz`);
+            assert(typeof row.kind === 'string' && row.kind.length > 0 && integer(row.rawBytes) && integer(row.packedBytes));
+          }
+          function preciseFailure(fn, label) {
+            let actual = null; try { fn(); } catch (error) { actual = errorOf(error); }
+            assert(actual && actual.name === 'AssertionError' && actual.message.includes(label), `independent intended ${label} rejection`); return actual;
+          }
+          async function main() {
+            const receiptBytes = whole('storage/receipt.json'), receipt = json(receiptBytes); result.representation = receipt.representation;
+            keys(receipt, ['representation', 'originalRepresentation', 'status', 'complete', 'codec', 'source', 'gear', 'pack', 'chunkLedger', 'objectReferences', 'rawInsertionInventory', 'reconstruction', 'controls', 'errors', 'attemptedObjects', 'completedObjects', 'decodedObjects', 'unreferencedChunks', 'orphanRanges']);
+            assert.equal(receipt.originalRepresentation, 'objects.json is former whole-gzip reference metadata only, those individual gzip bodies are not physically retained');
+            assert.equal(receipt.representation, 'cdc-byte-pack-v1');
+            assert.deepEqual(receipt.codec, { version: 1, min: 512, target: 2048, max: 8192, mask: 2047, gearSeed: 2654435769, gzipLevel: 9 });
+            const source = declared(receipt.source, 'storage/codec-source.mjs');
+            const moduleBytes = fs.readFileSync('scripts/lib/awardProofStorage.mjs'), methodBytes = fs.readFileSync('scripts/simSoccerAwardGenerations.mjs');
+            assert.equal(moduleBytes.length, 19121); assert.equal(sha(moduleBytes), 'bede3f0248784619669e55a4c3927b03902f28f829678458af2a33140f8e8c0c');
+            assert(source.equals(moduleBytes), 'complete actual codec source');
+            assert.equal(methodBytes.length, 54731); assert.equal(sha(methodBytes), '3105c17c7cb05a2b58a4d5948aea71c80556a44b14b78c785381976b7462a770');
+            result.source = { module: { bytes: moduleBytes.length, sha256: sha(moduleBytes) }, method: { bytes: methodBytes.length, sha256: sha(methodBytes) } };
+            const gearBytes = declared(receipt.gear, 'storage/gear-table.json'), gear = json(gearBytes);
+            let seed = receipt.codec.gearSeed;
+            const expectedGear = Array.from({ length: 256 }, () => { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return seed >>> 0; });
+            assert.deepEqual(gear, expectedGear);
+            keys(receipt.pack, ['path', 'bytes', 'sha256']); assert.equal(receipt.pack.path, 'storage/chunks.pack'); assert(integer(receipt.pack.bytes) && hex(receipt.pack.sha256));
+            const packFile = safeFile(receipt.pack.path), digest = createHash('sha256'); let packBytes = 0;
+            for await (const bytes of fs.createReadStream(packFile)) { digest.update(bytes); packBytes += bytes.length; }
+            assert.equal(packBytes, receipt.pack.bytes); assert.equal(digest.digest('hex'), receipt.pack.sha256); result.files.push(receipt.pack);
+            const chunks = json(declared(receipt.chunkLedger, 'storage/chunk-ledger.json.gz', true));
+            const rows = json(declared(receipt.objectReferences, 'storage/object-refs.json.gz', true));
+            const insertion = json(declared(receipt.rawInsertionInventory, 'storage/raw-insertion-inventory.json.gz', true));
+            const audits = json(declared(receipt.reconstruction, 'storage/whole-reconstruction.json.gz', true));
+            const controls = json(declared(receipt.controls, 'storage/controls.json')), errors = json(declared(receipt.errors, 'storage/errors.json'));
+            const originals = json(whole('objects.json')), report = json(whole('report.json'));
+            assert([chunks, rows, insertion, audits, controls, errors, originals].every(Array.isArray)); assert.deepEqual(report.storage, receipt);
+            const fd = fs.openSync(packFile, 'r'), rawChunks = [], originalIds = new Set(), chunkIds = new Set(), referenced = new Set();
+            function readChunk(chunk) {
+              const bytes = Buffer.alloc(chunk.packedBytes); let done = 0;
+              while (done < bytes.length) { const count = fs.readSync(fd, bytes, done, bytes.length - done, chunk.offset + done); assert(count > 0); done += count; } return bytes;
+            }
+            function rawChunk(id, overrides = new Map()) {
+              assert(integer(id) && id < chunks.length); const chunk = chunks[id], packed = overrides.get(id) ?? readChunk(chunk);
+              assert.equal(packed.length, chunk.packedBytes, 'complete chunk packed length'); assert.equal(sha(packed), chunk.packedSha256, 'complete chunk packed SHA');
+              const raw = rawChunks[id] ?? gunzipSync(packed); assert.equal(raw.length, chunk.rawBytes, 'complete chunk raw length'); assert.equal(sha(raw), chunk.rawSha256, 'complete chunk raw SHA'); return raw;
+            }
+            function decode(row, overrides = new Map(), verifyWhole = true) {
+              keys(row, ['index', 'original', 'status', 'chunkRefs', 'error']); originalShape(row.original); assert(integer(row.index)); assert.equal(row.status, 'packed'); assert.equal(row.error, null); assert(Array.isArray(row.chunkRefs));
+              const parts = row.chunkRefs.map(id => rawChunk(id, overrides)), raw = Buffer.concat(parts);
+              assert.equal(raw.length, row.original.rawBytes, 'complete reconstructed raw length');
+              if (verifyWhole) assert.equal(sha(raw), row.original.rawSha256, 'complete reconstructed object SHA'); return raw;
+            }
+            try {
+              let offset = 0;
+              for (let index = 0; index < chunks.length; index++) {
+                const chunk = chunks[index], observed = { index, verified: false, error: null }; result.chunks.push(observed);
+                keys(chunk, ['id', 'offset', 'rawBytes', 'rawSha256', 'packedBytes', 'packedSha256']); assert.equal(chunk.id, index); assert.equal(chunk.offset, offset);
+                assert(integer(chunk.rawBytes) && chunk.rawBytes > 0 && chunk.rawBytes <= 8192 && integer(chunk.packedBytes) && chunk.packedBytes > 0 && hex(chunk.rawSha256) && hex(chunk.packedSha256));
+                assert(!chunkIds.has(chunk.rawSha256)); chunkIds.add(chunk.rawSha256); offset += chunk.packedBytes; assert(offset <= packBytes);
+                try { rawChunks[index] = rawChunk(index); observed.verified = true; observed.rawBytes = chunk.rawBytes; observed.rawSha256 = chunk.rawSha256; } catch (error) { observed.error = errorOf(error); throw error; }
+              }
+              assert.equal(offset, packBytes, 'complete contiguous pack with no orphan ranges'); assert.equal(rows.length, originals.length); assert.equal(rows.length, insertion.length); assert.equal(rows.length, audits.length);
+              const byHash = new Map(); let references = 0, decodedRawBytes = 0;
+              for (let index = 0; index < rows.length; index++) {
+                const row = rows[index], observed = { index, hash: row.original?.hash ?? null, verified: false, error: null }; result.objects.push(observed);
+                try {
+                  assert.equal(row.index, index); originalShape(originals[index]); assert.deepEqual(row.original, originals[index]); assert(!originalIds.has(row.original.hash)); originalIds.add(row.original.hash); byHash.set(row.original.hash, row);
+                  keys(insertion[index], ['index', 'hash', 'kind', 'rawBytes', 'rawSha256']); assert.deepEqual(insertion[index], { index, hash: row.original.hash, kind: row.original.kind, rawBytes: row.original.rawBytes, rawSha256: row.original.rawSha256 });
+                  for (const id of row.chunkRefs) { assert(integer(id) && id < chunks.length); referenced.add(id); references++; }
+                  const raw = decode(row), formerPacked = gzipSync(raw, { level: 9 });
+                  assert.equal(formerPacked.length, row.original.packedBytes, 'complete former whole-gzip reference length'); assert.equal(sha(formerPacked), row.original.packedSha256, 'complete former whole-gzip reference SHA');
+                  keys(audits[index], ['index', 'hash', 'verified', 'decodedBytes', 'decodedSha256', 'error']);
+                  assert.deepEqual(audits[index], { index, hash: row.original.hash, verified: true, decodedBytes: raw.length, decodedSha256: sha(raw), error: null });
+                  decodedRawBytes += raw.length; observed.verified = true; observed.rawBytes = raw.length; observed.rawSha256 = sha(raw);
+                } catch (error) { observed.error = errorOf(error); throw error; }
+              }
+              function knownJSON(hash, label) { assert(hex(hash) && byHash.has(hash), `declared report object ${label}`); const row = byHash.get(hash); assert.equal(row.original.kind, 'json'); result.reportEdges.push({ label, hash }); return json(decode(row)); }
+              assert.deepEqual(controls.map(control => control.id), ['copied-packed-chunk-byte', 'copied-valid-same-length-reference']);
+              for (const control of controls) {
+                const observation = { id: control.id, verified: false, actualError: null, fullUndo: false }; result.controls.push(observation);
+                const w = control.witness; keys(w, ['objectIndex', 'ordinal', 'originalChunkId', 'replacementChunkId']);
+                assert(integer(w.objectIndex) && w.objectIndex < rows.length && integer(w.ordinal)); const row = rows[w.objectIndex]; assert(w.ordinal < row.chunkRefs.length);
+                assert(integer(w.originalChunkId) && w.originalChunkId < chunks.length && integer(w.replacementChunkId) && w.replacementChunkId < chunks.length); assert.equal(row.chunkRefs[w.ordinal], w.originalChunkId);
+                const raw = decode(row), originalChunk = chunks[w.originalChunkId];
+                if (control.id === 'copied-packed-chunk-byte') {
+                  keys(control, ['id', 'witness', 'originalChunk', 'byteOffset', 'oldByte', 'changedByte', 'original', 'fault', 'undo', 'completeObjectRow', 'decodedRawBytes', 'decodedRawSha256', 'wholeDecodedChunkEqual', 'paths', 'fullUndo']);
+                  const original = declared(control.original, 'storage/controls/packed/original.gz'), fault = declared(control.fault, 'storage/controls/packed/fault.gz'), undo = declared(control.undo, 'storage/controls/packed/undo.gz');
+                  assert.deepEqual(control.originalChunk, originalChunk); assert(original.equals(readChunk(originalChunk))); assert.equal(control.byteOffset, 4); assert.equal(control.oldByte, original[4]); assert.equal(control.changedByte, fault[4]);
+                  assert(original.length >= 18 && original[0] === 31 && original[1] === 139 && original[2] === 8 && original[3] === 0); assert.equal(fault.length, original.length);
+                  const reconstructedFault = Buffer.from(original); reconstructedFault[4] ^= 1; assert(reconstructedFault.equals(fault)); assert(!fault.equals(original));
+                  assert(gunzipSync(fault).equals(rawChunk(w.originalChunkId))); assert.equal(control.decodedRawBytes, originalChunk.rawBytes); assert.equal(control.decodedRawSha256, originalChunk.rawSha256); assert.equal(control.wholeDecodedChunkEqual, true);
+                  assert.deepEqual(json(declared(control.completeObjectRow, 'storage/controls/packed/object-row.json.gz', true)), row);
+                  observation.actualError = preciseFailure(() => decode(row, new Map([[w.originalChunkId, fault]])), 'complete chunk packed SHA');
+                  assert(undo.equals(original)); assert(decode(row, new Map([[w.originalChunkId, undo]])).equals(raw));
+                } else {
+                  keys(control, ['id', 'witness', 'original', 'fault', 'undo', 'changedRaw', 'everyChunkIntegrityHeld', 'paths', 'fullUndo']);
+                  const originalBytes = declared(control.original, 'storage/controls/reference/original-row.json.gz', true), faultBytes = declared(control.fault, 'storage/controls/reference/fault-row.json.gz', true), undoBytes = declared(control.undo, 'storage/controls/reference/undo-row.json.gz', true);
+                  const original = json(originalBytes), fault = json(faultBytes), undo = json(undoBytes), expectedFault = structuredClone(row); expectedFault.chunkRefs[w.ordinal] = w.replacementChunkId;
+                  assert.deepEqual(original, row); assert.deepEqual(fault, expectedFault); assert.notDeepEqual(fault, original); assert.equal(chunks[w.originalChunkId].rawBytes, chunks[w.replacementChunkId].rawBytes); assert.notEqual(chunks[w.originalChunkId].rawSha256, chunks[w.replacementChunkId].rawSha256);
+                  const changedRaw = declared(control.changedRaw, 'storage/controls/reference/fault-raw.gz', true); assert(decode(fault, new Map(), false).equals(changedRaw)); assert.equal(changedRaw.length, raw.length); assert(!changedRaw.equals(raw)); assert.equal(control.everyChunkIntegrityHeld, true);
+                  observation.actualError = preciseFailure(() => decode(fault), 'complete reconstructed object SHA');
+                  assert(undoBytes.equals(originalBytes)); assert.deepEqual(undo, row); assert(decode(undo).equals(raw));
+                }
+                assert.equal(control.fullUndo, true); keys(control.paths, ['integrated', 'persisted']);
+                for (const name of ['integrated', 'persisted']) { keys(control.paths[name], ['actualError', 'wholeUndo']); assert.equal(control.paths[name].wholeUndo, true); const e = control.paths[name].actualError; keys(e, ['name', 'message', 'stack']); assert.equal(e.name, 'AssertionError'); assert.equal(typeof e.stack, 'string'); assert(e.stack.length > 0 && e.message.includes(control.id === 'copied-packed-chunk-byte' ? 'complete chunk packed SHA' : 'complete reconstructed object SHA')); }
+                observation.verified = true; observation.fullUndo = true;
+              }
+              result.counts = { chunks: chunks.length, references, attemptedObjects: rows.length, completedObjects: rows.length, decodedObjects: result.objects.filter(row => row.verified).length, decodedRawBytes, controls: controls.length };
+              assert.equal(referenced.size, chunks.length); assert.deepEqual(receipt.unreferencedChunks, []); assert.deepEqual(receipt.orphanRanges, []); assert.deepEqual(errors, []);
+              assert.equal(receipt.attemptedObjects, rows.length); assert.equal(receipt.completedObjects, rows.length); assert.equal(receipt.decodedObjects, rows.length);
+              for (const [arm, careers] of Object.entries(report.natural)) for (const career of careers) {
+                for (const key of ['actions', 'observations', 'final', 'errors']) knownJSON(career[key], `${arm}/${career.descriptor.id}/${key}`);
+                for (const key of ['valuesAndCallerIds', 'callers']) knownJSON(career.tape[key], `${arm}/${career.descriptor.id}/tape/${key}`);
+              }
+              for (const [label, hash] of Object.entries(report.fixtures)) knownJSON(hash, `fixtures/${label}`);
+              knownJSON(report.validation, 'validation'); knownJSON(report.undo, 'undo');
+              for (const control of report.controls) for (const key of ['before', 'fault', 'undo', 'rows', 'validation', 'unrelatedReads']) knownJSON(control[key], `source-control/${control.id}/${key}`);
+              for (const control of report.observationControls) for (const key of ['baseline', 'fault', 'undo']) knownJSON(control[key], `observation-control/${control.id}/${key}`);
+              for (const key of ['observations', 'vitest', 'frameworkSetup']) knownJSON(report.component[key], `component/${key}`);
+              for (const key of ['baseline', 'fault', 'undo', 'omittedRow']) knownJSON(report.component.frameworkControl[key], `frameworkControl/${key}`);
+              assert.equal(receipt.status, 'pass'); assert.equal(receipt.complete, true); assert.equal(report.status, 'pass'); result.status = 'pass';
+            } finally { fs.closeSync(fd); }
+          }
+          try { await main(); } catch (error) { result.errors.push(errorOf(error)); process.exitCode = 1; console.error(error.stack); }
+          finally { fs.writeFileSync(out, JSON.stringify(result)); }
+          if (result.status === 'pass') console.log(`PASS independent persisted byte storage: ${result.counts.decodedObjects} complete objects, ${result.counts.chunks} chunks and both copied controls restored`);
+          JS
+          sha256sum career-award-generations-artifacts/helpers/check-storage.mjs >> career-award-generations-artifacts/helper-source-sha256.txt
       - name: Locked packages and existing remote build tools
         run: |
           npm ci
@@ -136,6 +300,9 @@ jobs:
           const text=fs.readFileSync('career-award-generations-artifacts/method-runner/children/0000-simSoccerAwardGenerations.mjs.stdout.log','utf8');assert(text.split('\n').includes('PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery'));
           JS
           exit "$failed"
+      - name: Independent complete persisted storage and decoder control verification
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node career-award-generations-artifacts/helpers/check-storage.mjs 2>&1 | tee career-award-generations-artifacts/storage-consumer.log
       - name: Independent complete focused component test result verification
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
