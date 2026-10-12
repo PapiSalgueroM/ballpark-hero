@@ -1,0 +1,10 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk1 exit=0 48s | playUsMarketTalk: 40 checks, 0 failed
+pA exit=0 49s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+rebuild exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk2 exit=0 47s | playUsMarketTalk: 40 checks, 0 failed
+walk-unspend-EXPECT1 exit=1 8s | CONTROL unspend: FIRED. The spent check went red in all 6 journeys that pushed (the push control came back enabled) and nothing else did.
+c1 exit=0 0s | simUsBoardParity control noresult: green. The control turned its own sport red for its own reason.
+pB exit=0 46s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+pC exit=0 46s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+pD exit=0 46s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.

@@ -1,0 +1,13 @@
+# Release AX fix pass: the one red parity run came at the end of a request that had built the site and run browser walks. The same order again, with the parity log kept.
+#!build
+#!playwright
+#!serial
+walk1: node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-200 | tail -1; exit ${PIPESTATUS[0]}
+pA: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-700 | tail -24; exit ${PIPESTATUS[0]}
+rebuild: node_modules/.bin/vite build > /tmp/b.log 2>&1; tail -1 /tmp/b.log
+walk2: node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-200 | tail -1; exit ${PIPESTATUS[0]}
+walk-unspend-EXPECT1: US_MARKET_TALK_CONTROL=unspend node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-200 | tail -1; exit ${PIPESTATUS[0]}
+c1: US_BOARD_PARITY_CONTROL=wheel node scripts/simUsBoardParity.mjs 2>&1 | tail -1; US_BOARD_PARITY_CONTROL=nosave node scripts/simUsBoardParity.mjs 2>&1 | tail -1; US_BOARD_PARITY_CONTROL=nophase node scripts/simUsBoardParity.mjs 2>&1 | tail -1; US_BOARD_PARITY_CONTROL=noresult node scripts/simUsBoardParity.mjs 2>&1 | tail -1
+pB: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-700 | tail -24; exit ${PIPESTATUS[0]}
+pC: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-700 | tail -24; exit ${PIPESTATUS[0]}
+pD: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-700 | tail -24; exit ${PIPESTATUS[0]}
