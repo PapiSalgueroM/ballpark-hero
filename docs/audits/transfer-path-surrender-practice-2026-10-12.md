@@ -110,3 +110,8 @@ and .tmp-fx/surrender-baseline-5ddeb073 directories. Later documentation-only
 commits do not expand runtime qualification beyond ffcf1579. No authenticated
 completion, production DB, live-site, newer-main, full-suite or integrated-build
 credit is claimed. H retains integration and publication.
+
+Draft PR245: https://github.com/PapiSalgueroM/ballpark-hero/pull/245, attached
+to this chat. Native merge preview against accepted main 48cb9d4b exited zero
+without conflicts. This is Git-only evidence; no merge or integrated runtime
+was performed.

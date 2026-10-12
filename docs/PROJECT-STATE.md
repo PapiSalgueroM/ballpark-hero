@@ -14,6 +14,8 @@ browser checks. Nine practice wins preserved the daily loss bytes; 18 reloads
 restored them; three Unlimited Next Puzzle flows preserved their existing reset.
 All 44 original fixed PNGs were reviewed and all 521 locked versions held.
 PR242, PR243 and PR244 stay frozen; H retains integration and publication.
+Draft PR245 is pushed and attached to this chat. A native merge preview against
+48cb9d4b reported no conflict, without changing the checkout or testing a merge.
 The evidence is offline and scoped. H retains merging and publishing; no live,
 newer-main, full-suite or integrated-build qualification is granted. See
 docs/audits/transfer-path-surrender-practice-2026-10-12.md.
