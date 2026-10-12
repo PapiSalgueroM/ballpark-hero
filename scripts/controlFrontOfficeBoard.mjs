@@ -163,7 +163,7 @@ const CONTROLS = {
   roundspoils: ['while he watches a playoff game the page reads the bracket AFTER the press', [['const seenPlayoffs = hold ? heldBracket : playoffs;', 'const seenPlayoffs = playoffs;']], [T.psWatchRound], [T.psKeep, T.psFaces]],
   holdround: ['a playoff press is never held (the hold asks only for the next week)', [['(league.week === held.week + 1 || held.week > REGULAR_WEEKS)', 'league.week === held.week + 1']], [T.psWatchRound, T.psTitleWatch], [T.psWatch17]],
   recapnow: ['the recap is drawn while he watches the title game', [["if (phase === 'recap' && !hold) {", "if (phase === 'recap') {"]], [T.psTitleWatch], [T.psWatchRound]],
-  bracketgrid: ['the league grid is drawn in the bracket', [['(!bracketRow) && (', '']], [T.psWatch17], [T.psFaces]],
+  bracketgrid: ['the league grid is drawn in the bracket', [['(!bracketRow) && (', '(']], [T.psWatch17], [T.psFaces]],
   tiegame: ['"Your game" opens his last game and not the game of that tie', [['const gameLogNow = logOpen ?? gameLogLive.current;', 'const gameLogNow = gameLogLive.current;']], [T.psFaces], [T.psBye, T.psWatchRound]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
