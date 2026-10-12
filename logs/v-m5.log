@@ -1,0 +1,4 @@
+mut m5: APPLIED in src/lib/clubManager.ts
+vitest tail: [41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBoards.test.ts[2m [ src/lib/clubManagerLeagueBoards.test.ts ][22m [41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBook.test.ts[2m [ src/lib/clubManagerLeagueBook.test.ts ][22m [2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m [2m      Tests [22m [2mno tests[22m 
+MUT m5 vitest=1
+MUT m5: the unit files are RED under it

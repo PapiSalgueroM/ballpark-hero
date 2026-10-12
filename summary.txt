@@ -1,0 +1,15 @@
+v-m3 exit=1 3s | MUT m3: the unit files are RED under it
+v-m2 exit=1 4s | MUT m2: the unit files are RED under it
+v-m1 exit=1 4s | MUT m1: the unit files are RED under it
+v-m4 exit=1 3s | MUT m4: the unit files are RED under it
+v-m5 exit=1 4s | MUT m5: the unit files are RED under it
+v-m6 exit=1 4s | MUT m6: the unit files are RED under it
+v-m7 exit=1 3s | MUT m7: the unit files are RED under it
+v-m9 exit=1 4s | MUT m9: the unit files are RED under it
+v-m8 exit=1 4s | MUT m8: the unit files are RED under it
+v-m10 exit=1 4s | MUT m10: the unit files are RED under it
+m6b exit=1 280s | MUT m6b KILLED (vitest=1 default=0 full=0)
+m11 exit=1 290s | MUT m11 KILLED (vitest=1 default=0 full=1)
+m13 exit=1 287s | MUT m13 KILLED (vitest=1 default=0 full=0)
+m16 exit=1 213s | MUT m16 KILLED (vitest=1 default=0 full=0)
+m17 exit=1 210s | MUT m17 KILLED (vitest=1 default=1 full=1)
