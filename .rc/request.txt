@@ -1,0 +1,2 @@
+#!serial
+inv2-simCareerLeagueFinish: git checkout 48cb9d4b -- src/lib/soccerCareerEngine.ts scripts/lib/careerAwardsNight1172.mjs && git diff --stat HEAD && node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
