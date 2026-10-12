@@ -1,0 +1,108 @@
+name: Transfer Path continuation proof
+
+on:
+  push:
+    branches: [codex/transfer-path-proof-followup]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TRANSFER_PATH_CANDIDATE_ROOT: ${{ github.workspace }}/.tmp-fx/candidate
+      TRANSFER_PATH_PROOF_OUT: ${{ github.workspace }}/transfer-path-continuation-artifacts
+      PRERENDER_ONLY: /transfer-path
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 2dfee3048450e2dd61479473c7a1f48861b7512b
+          path: .tmp-fx/candidate
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: .tmp-fx/candidate/package-lock.json
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Bind proof and frozen candidate source
+        run: |
+          mkdir -p "$TRANSFER_PATH_PROOF_OUT"
+          git rev-parse HEAD > "$TRANSFER_PATH_PROOF_OUT/proof-head.txt"
+          git -C "$TRANSFER_PATH_CANDIDATE_ROOT" rev-parse HEAD > "$TRANSFER_PATH_PROOF_OUT/candidate-head.txt"
+          test "$(cat "$TRANSFER_PATH_PROOF_OUT/candidate-head.txt")" = 2dfee3048450e2dd61479473c7a1f48861b7512b
+          git status --porcelain --untracked-files=no > "$TRANSFER_PATH_PROOF_OUT/proof-before.txt"
+          git -C "$TRANSFER_PATH_CANDIDATE_ROOT" status --porcelain --untracked-files=no > "$TRANSFER_PATH_PROOF_OUT/candidate-before.txt"
+          test ! -s "$TRANSFER_PATH_PROOF_OUT/proof-before.txt"
+          test ! -s "$TRANSFER_PATH_PROOF_OUT/candidate-before.txt"
+          sha256sum scripts/qa/transferPathClubSeasonsFleet.mjs scripts/qa/playTransferPathContinuation.mjs > "$TRANSFER_PATH_PROOF_OUT/method-hashes.txt"
+      - name: Install candidate locked dependencies and separate browser tools
+        working-directory: .tmp-fx/candidate
+        run: |
+          npm ci
+          sha256sum package.json package-lock.json > "$TRANSFER_PATH_PROOF_OUT/package-hashes.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, e]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, e.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync(process.env.TRANSFER_PATH_PROOF_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/transfer-path-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright-core" node_modules/playwright-core
+          ln -s "$TRANSFER_PATH_CANDIDATE_ROOT/node_modules" "$GITHUB_WORKSPACE/node_modules"
+          node "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          sha256sum --check "$TRANSFER_PATH_PROOF_OUT/package-hashes.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.TRANSFER_PATH_PROOF_OUT + '/installed.json'));
+          for (const p of installed) assert.equal(JSON.parse(fs.readFileSync(p.path + '/package.json')).version, p.version, p.path);
+          console.log(`Held all ${installed.length} candidate locked installed versions.`);
+          NODE
+      - name: Complete retained-pair and fallback metadata proof with controls
+        run: node scripts/qa/transferPathClubSeasonsFleet.mjs
+      - name: Frozen candidate type gate and complete app build
+        working-directory: .tmp-fx/candidate
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          npm run build:seo
+      - name: Actual saved-path, hint, reveal and reload journeys with controls
+        run: node scripts/qa/playTransferPathContinuation.mjs
+      - name: Final protected source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$TRANSFER_PATH_PROOF_OUT/method-hashes.txt"
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock
+          git -C "$TRANSFER_PATH_CANDIDATE_ROOT" diff --exit-code -- src package.json package-lock.json
+          cd "$TRANSFER_PATH_CANDIDATE_ROOT"
+          sha256sum --check "$TRANSFER_PATH_PROOF_OUT/package-hashes.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.TRANSFER_PATH_PROOF_OUT + '/installed.json'));
+          for (const p of installed) assert.equal(JSON.parse(fs.readFileSync(p.path + '/package.json')).version, p.version, p.path);
+          console.log(`Final hold: ${installed.length} installed candidate versions.`);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-path-continuation-${{ github.sha }}
+          path: transfer-path-continuation-artifacts/

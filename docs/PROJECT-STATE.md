@@ -1,3 +1,12 @@
+## Pending Transfer Path continuation proof, 2026-10-12
+
+PR242 is pushed and scoped-verified, awaiting G's integration/publication.
+A separate maintenance branch from 116568ac tests frozen candidate 2dfee304
+without editing app/data or the ready branch. It closes verification gaps for
+all 885 retained endpoint pairs and committed fallback metadata, shortened paths, browser hints,
+give-up paths and daily reloads. All execution stays remote; new results are
+pending. See docs/audits/transfer-path-continuation-proof-2026-10-12.md.
+
 ## Release AX LIVE, 2026-10-12 05:00 EDT: Build Your XI confirms more picks from its own records, real Belgian opponent names in replays, a Press room and saved contract talks (three of the other lane's pull requests), and three rounds of this lane (past seasons of Club Manager stay in their season, football scores in the NFL front office, the league book made whole)
 
 Claude lane (session G). main a89ac1df, deployment 32e67725-fd19-4149-b70a-52d446af3396, entry index-BniRpUTm.js (was index-BMYYIgf0.js, Release AW,
