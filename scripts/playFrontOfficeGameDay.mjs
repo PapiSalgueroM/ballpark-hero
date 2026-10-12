@@ -312,7 +312,11 @@ async function walk(browser, size) {
   await fit(page, size, 'the result after a reload');
   await shot(page, size, '4-reloaded');
 
-  /* 6: the "?" */
+  /* 6: the "?". The button is brought into view FIRST (a click of this walk's own scrolls to a button below the
+     fold, and that scroll is not the page's), and the page is read after that and before the press. */
+  await page.locator('[data-gameday-help]').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  const bH = await state(page);
   await page.locator('[data-gameday-help]').click();
   await page.waitForTimeout(500);
   const helpOf = () => {
@@ -324,8 +328,8 @@ async function walk(browser, size) {
   const h = await page.evaluate(helpOf);
   say(6, !!h && h.child && !h.inTile && h.dw <= 3 && h.dh <= 3 && h.text.includes('Real: a touchdown is 6') && h.text.includes('A worked example') && h.text.includes('Got it'), `${size.w}: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is ${h?.height} px high, ${h?.dw} px narrower and ${h?.dh} px shorter than the box's own frame; in the box's host: ${h?.child}; inside the tile: ${h?.inTile})`);
   /* the reveal hook's own measure of "already readable": the top on screen with 160 px of the box showing */
-  const readable = aM.weekTop !== null && aM.weekTop >= 0 && aM.vh - aM.weekTop >= MIN_LEAD;
-  say(6, !!h && (!readable || h.y === aM.scrollY), `${size.w}: opening the "?" over a week box whose top was readable did not move the page (the box's top at ${aM.weekTop} of ${aM.vh}, readable: ${readable}; scrollY ${aM.scrollY} before and ${h?.y} with the sheet open)`);
+  const readable = bH.weekTop !== null && bH.weekTop >= 0 && bH.vh - bH.weekTop >= MIN_LEAD;
+  say(6, !!h && (!readable || h.y === bH.scrollY), `${size.w}: opening the "?" over a week box whose top was readable did not move the page (the box's top at ${bH.weekTop} of ${bH.vh}, readable: ${readable}; scrollY ${bH.scrollY} before and ${h?.y} with the sheet open)`);
   await shot(page, size, '6-help');
   await page.locator('[data-season-help] button:has-text("Got it")').click();
   await page.waitForTimeout(300);
