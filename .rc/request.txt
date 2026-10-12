@@ -1,0 +1,19 @@
+# Round 1306 fix pass 2, the final proof on the pushed head 0534ef89: the type gate, the two unit files, the harness on the gate's own line and with the base, every control this pass touched, the fences that walk scripts and src
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default: node scripts/simCmLeagueBook.mjs
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B c9a1f86a && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+book-full: BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-seasonstamp: BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-seasonstamp-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-seasonstamp && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-stampv2: BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+c-stampv2-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-stampv2 && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+c-novar: BOOK_CONTROL=novar node scripts/simCmLeagueBook.mjs
+c-goallesswhole: BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+c-thinbacks: BOOK_CONTROL=thinbacks node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
