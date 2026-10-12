@@ -18,7 +18,8 @@ import { MemoryRouter } from 'react-router-dom';
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
-vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+/* every toast call the board makes, the refused write's among them (it dismisses the earlier notice first) */
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn(), dismiss: vi.fn(), message: vi.fn(), info: vi.fn(), warning: vi.fn(), loading: vi.fn() } }));
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
