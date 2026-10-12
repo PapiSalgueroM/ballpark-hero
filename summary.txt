@@ -1,0 +1,5 @@
+simInventedNames exit=0 4s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 14s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simSoccerAwardReveal exit=0 13s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught
