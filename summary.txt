@@ -1,0 +1,8 @@
+vitest exit=0 8s |    Duration  7.29s (transform 2.91s, setup 370ms, collect 4.46s, tests 4.27s, environment 2.19s, prepare 768ms)
+simAwardRaces exit=0 24s | ALL AWARD RACE CHECKS PASSED
+simAwardRaces-leak exit=0 23s |    CONTROL FIRED: leak turned section 2 red and no other
+simAwardRaces-oldleak exit=0 24s |    CONTROL FIRED: oldleak turned section 2b red and no other
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 100s | 
+book-d0 exit=0 60s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (60s)

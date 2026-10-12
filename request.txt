@@ -1,0 +1,9 @@
+# Round 1311 (head 4803a072, origin/main 48cb9d4b merged): the type gate, the round's unit files, simAwardRaces with both controls and the measure, the anchors and rival names
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simAwardRaces: node scripts/simAwardRaces.mjs
+simAwardRaces-leak: AWARD_CONTROL=leak node scripts/simAwardRaces.mjs
+simAwardRaces-oldleak: AWARD_CONTROL=oldleak node scripts/simAwardRaces.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+book-d0: node scripts/simCmLeagueBook.mjs
