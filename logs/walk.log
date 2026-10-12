@@ -1,0 +1,39 @@
+fixture: Walk Fixture age 22, last season 2030, pool entries 9
+FAIL pool-390-rm threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL pool-390-full threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL pool-1280-rm threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL pool-1280-full threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL old-390-rm threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL old-1280-full threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL bad-390-full threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+FAIL bad-1280-rm threw: TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season/ }).first() to be visible
+
+ok   info only
+NIGHTS {}
+SAME NAMES old vs bad (both start a fresh pool): true; pool rm vs full: true
+ok   whats-new 390: entry shown
+ok   whats-new 1280: entry shown
+rvwalk: 11 checks, 8 failed
