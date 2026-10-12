@@ -48,8 +48,12 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
       s: p.founderSaleRatio !== undefined ? sellValue(p) : undefined,
     }))
     /* Round 742: minus the men in my squad. A man I signed off this club was
-       still listed here with them, straight off the projection. */
-    : oppRosterFor(career, clubName);
+       still listed here with them, straight off the projection. Release AZ fix
+       (reviewer 1, minor 3): a man the world ledger puts at this club comes at
+       the end of that list, so a 162m signing sat under a 3m keeper. The list
+       is sorted by worth here, a stable sort, so a projected roster (already in
+       that order) shows exactly as it always did. */
+    : [...oppRosterFor(career, clubName)].sort((a, b) => b.v - a.v);
   const saleRatioMen = isMyCustom && career.squad.some(p => p.founderSaleRatio !== undefined);
   const salePays = saleRatioMen ? career.squad.reduce((s, p) => s + sellValue(p), 0) : 0;
   const xiAvg = isMyCustom
