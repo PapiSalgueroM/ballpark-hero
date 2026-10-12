@@ -1,0 +1,2 @@
+rivalProve5b: RIVAL_PROVE=ee33f3a6 RIVAL_MOVED=nhl RIVAL_CARDS=nhl node scripts/simUsRivalSense.mjs
+rivalPlain: node scripts/simUsRivalSense.mjs
