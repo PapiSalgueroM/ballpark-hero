@@ -61,6 +61,15 @@ New files only, plus two harnesses:
   logplayoff each exit 1 with "RED AT THE NAMED CHECK" and their clean lists held. Per seed set: 80 seasons;
   section 13's club seasons with a bye 72 to 82 and that went out 124 to 138; section 12 loaded 10 stops and
   rebuilt 52 damaged blocks.
+- r1308-d1 (f1a88a56, the ledger tie): tsc exit 0; vitest on eight files (the new ones, gmBracket, gmGameLog,
+  frontOfficeGameDay, usPostseasonFormat, usPlayoffs) 87 passed; simUsPostseason exit 0, 32 checks, 0 failed, 0
+  findings; gmclubs and the nine older controls each exit 1, fired (gmclubs: the qualifiers red in 35 of 35
+  seasons, and the title tie no longer the only cross tie); simGmGameDay 414 checks, 0 failed; mounted and static
+  fired; simHarnessAnchors 0.
+- r1308-e1 (df62a406, the card): tsc exit 0; vitest on the five new files 39 passed; vitest over
+  src/components/front-office, src/components/front-office-shared and the five library and ledger files 24 files,
+  280 passed; simGmGameDay 426 checks, 0 failed; mounted and static fired; simHarnessAnchors, simNoRivalNames,
+  simInventedNames, simNoInventedQuotes, simNumberFormatting, simStorageWrites and simAccessibility exit 0.
 
 ## Not done here, and owed to Round 1309
 
