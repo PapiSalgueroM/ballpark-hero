@@ -1,0 +1,8 @@
+# Round 1314 closing fences on the final head
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simSafari: node scripts/simSafari.mjs
+simGmXp: node scripts/simGmXp.mjs
+noShip: git diff --stat origin/main -- src public index.html package.json package-lock.json vite.config.ts tsconfig.app.json | wc -l | grep -qx 0 && echo 'nothing shipped moved'
