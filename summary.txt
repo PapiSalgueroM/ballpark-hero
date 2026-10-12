@@ -1,0 +1,5 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 81s | playFrontOfficeGameDay: 171 checks, 0 failed
+walk-recordspoils exit=1 80s | control recordspoils: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-spoiler exit=1 80s | control spoiler: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-tall exit=1 80s | control tall: RED AT THE NAMED CHECK (point 8) and nowhere else

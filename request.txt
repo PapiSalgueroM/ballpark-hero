@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-recordspoils: FO_GAMEDAY_WALK_CONTROL=recordspoils RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-spoiler: FO_GAMEDAY_WALK_CONTROL=spoiler RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-tall: FO_GAMEDAY_WALK_CONTROL=tall RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
