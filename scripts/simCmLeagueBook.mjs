@@ -236,7 +236,9 @@
  *   awardlate     the awards are read from a late book                -> awards (oldsave with it: every late
  *                                                                        book save of oldsave then takes its
  *                                                                        golden boot from the book)
- *   awardthin     the awards are read from a book under the floor     -> awards
+ *   awardthin     the awards are read from a book under the floor     -> awards (oldsave with it: a carried
+ *                                                                        save that closes under the floor is
+ *                                                                        then given awards)
  *   bookleak      every goal of a side to its taker                    -> facts (shapes and thin with it: the
  *                                                                        deal no longer follows the weight)
  *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); run it on the
@@ -382,7 +384,7 @@ const CONTROLS = {
   /* Round 1311 step 4: every goal of a side to its taker, a leak the band of section facts must catch. */
   bookleak: { patch: [{ file: BOOK, from: "      : kind !== 'open' && taker ? taker", to: '      : taker ? taker' }], red: 'facts', also: ['shapes', 'thin'] },
   awardlate: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookShare(input.book, input.clubs).share >= AWARD_FLOOR;' }], red: 'awards', also: ['oldsave'], mentions: ['a late book'] },
-  awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', mentions: ['under the floor'] },
+  awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', also: ['oldsave'], mentions: ['under the floor'] },
   teamsheets: { patch: [{ file: BOARDS, from: TEAM_DEF_ORDER, to: TEAM_DEF_SHEETS }], red: 'awards', mentions: ['back four'] },
   nocap: { patch: [{ file: ENGINE, from: '  state.history = keepTeams(state.history);', to: '' }], red: 'awards', mentions: ['team on'] },
   /* Since Round 1311 the engine itself reads leaders at a season's end (goldenBootTable and finishSeason, on a
@@ -645,6 +647,9 @@ async function engine(label, root, patches = []) {
  *            and its line says so since this pass (it read "did not fire" on r1306-f2b before that).
  * After the pass the harness holds 42 controls. Wall time on a runner: default fleet 52 to 56 seconds (72
  * with BOOK_BASE), full fleet 127 to 138 (178 with BOOK_BASE).
+ *   Round 1311 (decision 3, the critic's advice 21 (iii)): every carried save is finished at its season's
+ *            end; its closing share is printed with what it was given, and the awards must follow the floor
+ *            by the harness's own reading (decidesByHand). That is why awardthin may take oldsave with it.
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
@@ -2498,6 +2503,8 @@ function onStream(seed, fn) {
      here: two copies of the engine number their youth players, press questions and messages apart. */
   let carried = 0;
   let carriedThin = 0;
+  /** Round 1311 (decision 3, the critic's advice 21 (iii)): each carried save's closing share and what it was given. */
+  const closings = [];
   /** A season in play as `mod` writes it: a fresh copy of the engine starts `club` and plays `entries`
    *  entries on a seeded stream with the clock fixed. */
   const bookSaveBy = async (mod, club, entries, seed) => {
@@ -2524,15 +2531,33 @@ function onStream(seed, fn) {
         let late = 0;
         let guard = 0;
         let end = taken;
+        let ended = false;
         while (s.week < s.calendar.length && guard++ < 220) {
           const r = on.cm.playNextEntry(s, { skipHalftime: true });
           s = r.state;
           const book = lawNow(on, s, name, `entry ${guard}`, 'oldsave');
           if (book) end = book;
           if (!book || !boards.bookIsWhole(book)) late += 1;
-          if (r.kind === 'seasonOver') break;
+          if (r.kind === 'seasonOver') { ended = true; break; }
         }
         if (late) fail('oldsave', `${name}: ${late} of ${guard} entries ended on a late book or none: a whole book of the season in play was reopened`);
+        /* Round 1311: a save that was in play when the book shipped (thin clubs unnamed for its first
+           entries, yet whole by the rule) closes on the share it has on record, and the awards follow the
+           floor by the harness's own reading of the rule: given at or over it, withheld under it. */
+        tick('oldsave');
+        if (!ended) fail('oldsave', `${name}: the season never ended, so its awards were never judged`);
+        else {
+          const closing = on.cm.leagueBookOf(s);
+          const fin = on.cm.finishSeason(s);
+          const share = closing ? shareByHand(s, closing) : null;
+          const decided = Boolean(closing && decidesByHand(s, closing));
+          const got = fin.summary.awards ?? null;
+          tick('oldsave', 2);
+          if (decided !== Boolean(got)) fail('oldsave', `${name}: closed on record ${share} in 100 (${decided ? 'at or over' : 'under'} the floor of ${AWARD_FLOOR_RULED}) and was ${got ? '' : 'not '}given awards from the book`);
+          if (got && got.cov !== share) fail('oldsave', `${name}: its awards keep ${got.cov} in 100 on record, the book closed on ${share}`);
+          const boot = fin.summary.goldenBoot;
+          closings.push(`${name.split(',')[0]} closed on record ${share} in 100: ${got ? `awards from the book (top scorer ${got.boot?.[0]} ${got.boot?.[2]}, team ${got.xi ? 'of 11' : 'none'})` : `no awards from the book, the golden boot from the old race (${boot ? `${boot.name} ${boot.goals}` : 'nobody'})`}`);
+        }
         carried += 1;
         if (bare.length) {
           carriedThin += 1;
@@ -2588,6 +2613,7 @@ function onStream(seed, fn) {
   console.log(base
     ? `        (vi) the tree BOOK_BASE names writes the committed saves byte for byte: ${sameAsCommitted.join(', ')}`
     : '        oldsave (vi) from a base tree NOT RUN (the committed saves were): set BOOK_BASE to a worktree of the base commit');
+  for (const c of closings) console.log(`        (vi) ${c}`);
 }
 
 /* ---------- section doors: the two ways into a season that is already running ---------- */
