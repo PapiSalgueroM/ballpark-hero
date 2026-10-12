@@ -44,9 +44,9 @@
  */
 import { gmBlock, withGmBlock, type GmDesk, type GmFacts, type GmTileFace } from './gmDesk';
 import {
-  careerProfile, careerTotals, currentStint, endSeatStint, leagueTiers, newGmCareer, recordSeatSeason,
-  sanitizeGmCareer, seatOffers, sitOutYear, startSeatStint, takeSeat, BADLY_FIRED_CEILING,
-  type GmCareer, type GmSeatPack, type SeatOffer, type SeatSave, type SeatStint, type SeatTeam,
+  careerTotals, currentStint, endSeatStint, leagueTiers, newGmCareer, recordSeatSeason,
+  sanitizeGmCareer, seatNextYear, seatOffers, sitOutYear, startSeatStint, takeSeat, BADLY_FIRED_CEILING,
+  type GmCareer, type GmSeatPack, type SeatNextYear, type SeatOffer, type SeatSave, type SeatStint, type SeatTeam,
 } from './gmSeat';
 import {
   GM_MAX_LEVEL, GM_MAX_TREE_POINTS, GM_TREES, GM_TREE_INFO, XP_FIRST_LEVEL, addXp, contractAsk, craftedDeadMoney,
@@ -54,7 +54,7 @@ import {
   mandateSteps, pressOdds, scoutedNoise, spendGmPoint, tradePremium, xpForLevel,
   type GmTree, type GmXp, type GmXpAward,
 } from './gmXp';
-import { bestTierAvailable, type ClubTier } from './managerOffers';
+import type { ClubTier } from './managerOffers';
 import { keyedRng } from './keyedRng';
 import {
   applyMandateResult, gradeSeason, strengthRank,
@@ -636,17 +636,11 @@ export function hostArriving(seat: GmSeatBlock, leagueSeason: number): boolean {
 export type HostMarketState = 'offers' | 'quiet' | 'closed';
 
 /**
- * What a year out leaves for the next one, read in every state.
- *   open    still above the floor next year as things stand: his old club's
- *           tier is read today, and the year out is a real season that can
- *           move it, so the screen says "as things stand" and never more.
- *   climb   above it next year only if his old club finishes the year in a
- *           better tier than it is in today (its tier is his pedigree).
- *   shut    under it whatever happens. With an empty feed that is the closed
- *           state. With offers on the table they are the last calls he gets:
- *           the line says so, and no year out is offered or played.
+ * What a year out leaves for the next one: gmSeat.SeatNextYear, under the
+ * name this host has always exported (Round 1320 lifted the rule into
+ * gmSeat.ts so the college seat reads the same one).
  */
-export type HostNextYear = 'open' | 'climb' | 'shut';
+export type HostNextYear = SeatNextYear;
 
 /** The line of facts under an offer, read off the adapter. */
 export interface HostOfferFacts {
@@ -686,26 +680,12 @@ export function hostFeedKey(sport: GmSportKey, seat: GmSeatBlock, season: number
 }
 
 /**
- * What next year holds for a man whose feed is empty today. On 'climb',
- * `climbTo` is the lowest tier his old club must have reached by then for
- * the market to look at him again (a better tier is a bigger pedigree, so the
- * first tier that works, counting up from where the club is, is the easiest).
- *
- * 'open' is read at his old club's tier TODAY. The year out is a real season
- * and the club can drop a tier in it, which takes 4 or 5 points off his
- * standing, so a man near the floor can meet a closed market a year after
- * reading open (measured by the review on real seasons: about 1 in 40 quiet
- * markets that read open). Every line that prints it therefore says "as
- * things stand", and none promises more.
+ * What next year holds for a man whose feed is empty today: gmSeat.seatNextYear
+ * over his career (Round 1320 lifted the body there unchanged; the rule, its
+ * 'climb' and its "as things stand" caveat are documented beside it).
  */
 export function hostNextYear(seat: GmSeatBlock, tiers: Map<string, ClubTier>): { nextYear: HostNextYear; climbTo: ClubTier | null } {
-  const p = careerProfile(seat.career, tiers);
-  const later = { ...p, seasonsOut: p.seasonsOut + 1 };
-  if (bestTierAvailable(later) !== null) return { nextYear: 'open', climbTo: null };
-  for (let t = p.lastTier - 1; t >= 1; t--) {
-    if (bestTierAvailable({ ...later, lastTier: t as ClubTier }) !== null) return { nextYear: 'climb', climbTo: t as ClubTier };
-  }
-  return { nextYear: 'shut', climbTo: null };
+  return seatNextYear(seat.career, tiers);
 }
 
 /**
