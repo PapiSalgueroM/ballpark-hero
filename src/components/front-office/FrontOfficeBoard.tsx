@@ -80,8 +80,10 @@ import { addToGmGameLog, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, ty
    they are static; the bracket card and every word only it prints are not
    imported here (they ride with the card's lazy chunk). */
 import { inGmPostseason, loadGmPostseason } from '@/lib/gmPostseason';
-import { NFL_POSTSEASON } from '@/lib/frontOfficePostseason';
-import type { GmBracketSave } from '@/lib/gmBracket';
+import { NFL_POSTSEASON, nflPlayTie, nflRoundsOf } from '@/lib/frontOfficePostseason';
+import {
+  bracketChampion, bracketPairings, bracketWeek, openBracket, playBracketAll, playBracketWeek, type BracketFormat, type GmBracketSave,
+} from '@/lib/gmBracket';
 /* Round 1307: the Game Day tile of the week box. The card, the story of a
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
@@ -535,6 +537,42 @@ export default function FrontOfficeBoard() {
     persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
   };
 
+  /* Round 1309: one press in the playoffs, a round (`all` false) or the rest
+     of them. Every game is played by nflPlayTie, which is runPlayoffs' own
+     game with the win and the loss taken back and told under its round's
+     name with the edges the desk gives, so the bracket a round at a time is
+     the one press path game for game, draw for draw and key for key
+     (scripts/simGmGameDay.mjs sections 11 and 13, and the twelve cases of
+     FrontOfficePostseason.test.tsx). Nothing else is drawn: no injury pass,
+     no computer moves, no healing, exactly as runPlayoffs. His games go into
+     the log; when the title game is in, the league goes back to Week 17,
+     the bracket leaves the save and the season closes through closeSeason.
+     Reached only through playWeek, below its mark and its guards. Declared
+     above playWeek on purpose (harnesses read playWeek as the text up to
+     the next component level const). */
+  const playPlayoffs = (all: boolean) => {
+    const before = playoffsLive.current;
+    const format = league ? NFL_POSTSEASON.formatFor(league.season) : null;
+    if (!league || !before || !format) return;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    const told: GmGameLog['games'] = [];
+    const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);
+    const after = all ? playBracketAll(format, before, play) : playBracketWeek(format, before, play);
+    setGameLog(addToGmGameLog(gameLogLive.current, lg.season, told.filter(g => g.home === myTeam || g.away === myTeam)));
+    setWeekResults([]);
+    setFeedSlam(null);
+    const champ = bracketChampion(format, after);
+    if (champ) {
+      lg.week = REGULAR_WEEKS;
+      setPlayoffs(null); /* the season is closed */
+      closeSeason(lg, nflRoundsOf(format, after), champ);
+      return;
+    }
+    setPlayoffs(after);
+    setLeague(lg);
+    persist({}, lg, myTeam);
+  };
+
   const playWeek = () => {
     if (!league || !my) return;
     /* Round 828 follow up: a full roster over 53 cuts down before it plays,
@@ -550,7 +588,14 @@ export default function FrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an 18th week. */
     if (league.champions.some(c => c.season === league.season)) return;
-    /* Round 1309: past the last week only the bracket is played */
+    /* Round 1309: what the button asked (each button sets it), spent here.
+       In the playoffs a press plays a round, or the rest of them ("Sim the
+       rest"); past the last week nothing else is played. Two keys, one lock:
+       the bracket AND the week, so a bracket left on a ref can never play on
+       a league that has not finished its season. */
+    const asked = ask.current;
+    ask.current = 'week';
+    if (playoffsLive.current && league.week > REGULAR_WEEKS) { playPlayoffs(asked === 'rest'); return; }
     if (league.week > REGULAR_WEEKS) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     /* Round 1019: with the desk on, the staff's edge and the trainer ride on
@@ -587,6 +632,21 @@ export default function FrontOfficeBoard() {
     setNewsFeed(feed);
     setFeedSlam(null);
 
+    /* Round 1309: "Play Week 17" plays the week exactly as above, then
+       freezes the fourteen seeds as the engine seeds them, opens the year's
+       bracket and moves the league to Week 18, the engine's own "18 =
+       playoffs". Nothing of the playoffs is played and the season stays
+       open. The old button (`asked` 'week') runs the lines below to the
+       letter. */
+    const bracketFormat: BracketFormat | null = lg.week >= REGULAR_WEEKS && asked === 'bracket' ? NFL_POSTSEASON.formatFor(lg.season) : null;
+    if (bracketFormat) {
+      setPlayoffs(openBracket(bracketFormat, lg.season, NFL_POSTSEASON.seeds(lg)));
+      lg.week = REGULAR_WEEKS + 1;
+      setLeague(lg);
+      setGameLog(log);
+      persist({}, lg, myTeam);
+      return;
+    }
     if (lg.week >= REGULAR_WEEKS) {
       const { rounds, champion: champ } = runPlayoffs(lg.teams, Math.random, nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined);
       /* Round 1305: the thirteen playoff games are told the same way, each
@@ -1527,6 +1587,17 @@ export default function FrontOfficeBoard() {
   /* his seed today as the engine itself would seed the conference (division winners first, then three wild cards) */
   const seedsNow = conferenceSeeds(league.teams, conf);
   const gameLogNow = gameLogLive.current;
+  /* Round 1309: the playoffs on the week box. The round to play next, and
+     his tie in it when he has one (named by the bracket data's own round:
+     "AFC Wild Card"); null when he has the bye or is out. */
+  const bracketOpen = !!playoffs && seen.week > REGULAR_WEEKS;
+  const roundNow = ((): { round: string | null; mine: boolean } => {
+    const fmt = playoffs ? NFL_POSTSEASON.formatFor(league.season) : null;
+    const w = fmt && playoffs ? bracketWeek(fmt, playoffs) : null;
+    const pairs = fmt && playoffs && w !== null ? bracketPairings(fmt, playoffs, w) : null;
+    const his = pairs ? pairs.find(p => p.homeId === myTeam || p.awayId === myTeam) ?? null : null;
+    return { round: his && fmt ? fmt.ties.find(x => x.id === his.id)?.round ?? null : null, mine: !!his };
+  })();
 
   return (
     <div className="space-y-4">
@@ -1948,23 +2019,62 @@ export default function FrontOfficeBoard() {
               "whichever fits". Left to wrap, "Week 1" shared a row at 390 and
               "Week 2" did not, so the box grew a button row at the first
               press of a season and the tile moved as its result arrived. */}
-          <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
+          {/* Round 1309: Week 17 has "Play Week 17" first (it opens the
+              bracket) and the old button after it, in outline, word for word
+              and playing what it always played. In the playoffs: the round
+              (his tie's name when he plays in it), and the rest. Every button
+              says what it asks of playWeek. */}
+          <div className="flex flex-col items-center justify-center gap-2 sm:flex-row" data-press-row>
+            {bracketOpen ? (
+              <>
+                <button
+                  onClick={() => { ask.current = 'round'; playWeek(); }}
+                  disabled={overLimit > 0 || !!hold}
+                  data-press="round"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+                >
+                  <ShieldHalf className="h-4 w-4" /> {roundNow.round ? `Play the ${roundNow.round}` : 'Play the next round'}
+                </button>
+                <button
+                  onClick={() => { ask.current = 'rest'; playWeek(); }}
+                  disabled={overLimit > 0 || !!hold}
+                  data-press="rest"
+                  className="inline-flex min-h-[44px] items-center rounded-full border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:bg-muted/40 disabled:opacity-40"
+                >
+                  Sim the rest of the playoffs
+                </button>
+              </>
+            ) : (
+            <>
             <button
-              onClick={playWeek}
+              onClick={() => { ask.current = seen.week >= REGULAR_WEEKS ? 'bracket' : 'week'; playWeek(); }}
               disabled={overLimit > 0 || !!hold}
+              data-press="week"
               className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
             >
-              <ShieldHalf className="h-4 w-4" /> {seen.week >= REGULAR_WEEKS ? 'Play the final week + playoffs' : `Play Week ${seen.week}`}
+              <ShieldHalf className="h-4 w-4" /> {`Play Week ${seen.week}`}
             </button>
+            {seen.week >= REGULAR_WEEKS && (
+              <button
+                onClick={() => { ask.current = 'week'; playWeek(); }}
+                disabled={overLimit > 0 || !!hold}
+                data-press="old"
+                className="inline-flex min-h-[44px] items-center rounded-full border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:bg-muted/40 disabled:opacity-40"
+              >
+                Play the final week + playoffs
+              </button>
+            )}
             {seen.week < REGULAR_WEEKS && seenGame && (
               <button
-                onClick={() => { setHeld(league); playWeek(); }}
+                onClick={() => { ask.current = 'week'; setHeld(league); playWeek(); }}
                 disabled={overLimit > 0 || !!hold}
                 data-watch-week
                 className="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"
               >
                 Watch Week {seen.week}
               </button>
+            )}
+            </>
             )}
           </div>
           <div ref={revealRef} className="space-y-3">

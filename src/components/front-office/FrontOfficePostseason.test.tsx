@@ -201,3 +201,142 @@ describe('NFL front office: the bracket does not follow a GM into his next franc
     expect('playoffs' in read()).toBe(false);
   });
 });
+
+/* ───────────── Round 1309 (b2): the presses ─────────────
+   THE BRACKET PATH IS THE ONE PRESS PATH. The twelve saves of
+   FrontOfficeOnePress.test.tsx (both league kinds, the GM desk off and on, an
+   ordinary season, a title and a firing), built here the same way from the
+   same seeds in a fresh module graph with fixed ids: the old button's one
+   press, "Play Week 17" then a press a round, and "Play Week 17" then "Sim
+   the rest" must leave the SAME SAVE, string for string (the league with
+   every record, the champion, the told rounds, the log with its keys, the
+   trust, the mandate, the desk), after the same number of draws. With the
+   desk on, the edges reach the told scores, so a bracket played without them
+   is red here on a told score (control bracketnoedges). */
+type Kind = 'fifteen' | 'deep';
+type Ending = 'ordinary' | 'title' | 'fired';
+const useRandom = (fn: () => number) => { Math.random = fn; };
+
+async function freshGame() {
+  vi.resetModules();
+  useRandom(lehmer(1305));
+  await import('@/lib/entityIds');
+  const E = await import('@/lib/frontOffice');
+  const { FO_DEPTH } = await import('@/data/frontOfficeDepth');
+  const { openNflDesk } = await import('@/lib/nflGmDesk');
+  const { default: B } = (override
+    ? await import(/* @vite-ignore */ override)
+    : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
+  return { E, FO_DEPTH, openNflDesk, Board: B };
+}
+/** FrontOfficeOnePress.test.tsx's save on the morning of the final week, made the same way. */
+function finalWeekSave(G: Awaited<ReturnType<typeof freshGame>>, kind: Kind, desk: boolean, ending: Ending) {
+  const rng = lehmer(7);
+  const league: any = kind === 'deep' ? G.E.initLeague(rng, { depth: G.FO_DEPTH }) : G.E.initLeague(rng);
+  const team = Object.keys(league.teams)[0];
+  if (ending === 'title') { for (const p of league.teams[team].players) p.ovr = 99; league.teams[team].defense = 99; }
+  for (let w = 1; w < G.E.REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => G.E.simGame(g, league.teams, rng)); league.week += 1; }
+  const s: any = { league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 };
+  if (ending === 'fired') {
+    s.trust = 5;
+    s.mandate = { tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season: league.season };
+    for (const p of league.teams[team].players) p.ovr = 60;
+    league.teams[team].defense = 60;
+  }
+  if (desk) s.gm = G.openNflDesk(league, team);
+  return { save: s, team };
+}
+const pressOn = (sel: string) => { const b = document.querySelector(sel) as HTMLButtonElement | null; expect(b, `the button ${sel}`).toBeTruthy(); fireEvent.click(b!); };
+type Path = 'one' | 'rounds' | 'rest';
+/** One run from the morning of Week 17 to the recap: the save it leaves and the draws it took. `restAfter`: the round presses before "Sim the rest". */
+async function runPath(kind: Kind, desk: boolean, ending: Ending, seed: number, path: Path, restAfter = 0) {
+  cleanup();
+  localStorage.clear();
+  const G = await freshGame();
+  const made = finalWeekSave(G, kind, desk, ending);
+  localStorage.setItem(SAVE_KEY, JSON.stringify(made.save));
+  const draws = counted(seed);
+  const view = render(<G.Board />);
+  fireEvent.click(screen.getByText('This week'));
+  let presses = 0;
+  if (path === 'one') fireEvent.click(screen.getByText('Play the final week + playoffs'));
+  else {
+    fireEvent.click(screen.getByText('Play Week 17'));
+    const opened = read();
+    expect([opened.league.week, opened.phase, opened.seasonsPlayed, 'playoffs' in opened], '"Play Week 17" opens the bracket and closes nothing').toEqual([18, 'hub', 0, true]);
+    expect(opened.league.champions.some((c: any) => c.season === opened.league.season)).toBe(false);
+    for (; presses < restAfter && 'playoffs' in read(); presses += 1) pressOn('[data-press="round"]');
+    if (path === 'rest') pressOn('[data-press="rest"]');
+    else for (; presses < 8 && 'playoffs' in read(); presses += 1) pressOn('[data-press="round"]');
+  }
+  const raw = localStorage.getItem(SAVE_KEY)!;
+  view.unmount();
+  return { raw, draws: draws.n, team: made.team, presses };
+}
+const tookOf = (s: any, team: string): Ending => (s.fired ? 'fired' : s.postseason?.champion === team ? 'title' : 'ordinary');
+
+for (const kind of ['fifteen', 'deep'] as Kind[]) {
+  for (const desk of [false, true]) {
+    describe(`NFL front office, ${kind} league, GM desk ${desk ? 'on' : 'off'}: the bracket a round at a time is the one press`, () => {
+      for (const ending of ['ordinary', 'title', 'fired'] as Ending[]) {
+        it(`${ending}: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws`, async () => {
+          let seed = 11;
+          let one = await runPath(kind, desk, ending, seed, 'one');
+          for (; ending === 'title' && tookOf(JSON.parse(one.raw), one.team) !== 'title' && seed < 18;) one = await runPath(kind, desk, ending, (seed += 1), 'one');
+          const base = JSON.parse(one.raw);
+          expect(tookOf(base, one.team), `the case takes the ${ending} ending`).toBe(ending);
+          const rounds = await runPath(kind, desk, ending, seed, 'rounds');
+          expect(rounds.presses, 'four rounds, a press each').toBe(4);
+          const rest = await runPath(kind, desk, ending, seed, 'rest');
+          for (const [what, run] of [['a press a round', rounds], ['Sim the rest', rest]] as const) {
+            const s = JSON.parse(run.raw);
+            expect('playoffs' in s, `${what}: no bracket on the closed season`).toBe(false);
+            expect(s.league.week).toBe(17);
+            expect(s.league.champions.filter((c: any) => c.season === s.league.season)).toHaveLength(1);
+            expect(Object.values(s.league.teams).every((t: any) => t.wins + t.losses === 17), `${what}: every club on 17 games`).toBe(true);
+            expect(s.gameLog, `${what}: the log, every entry with its key`).toEqual(base.gameLog);
+            expect(run.raw, `${what}: the save, string for string`).toBe(one.raw);
+            expect(run.draws, `${what}: the draws`).toBe(one.draws);
+          }
+        });
+      }
+    });
+  }
+}
+
+describe('NFL front office: Sim the rest from any round', () => {
+  it('after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws', async () => {
+    const one = await runPath('fifteen', true, 'ordinary', 11, 'one');
+    for (const k of [1, 2, 3]) {
+      const r = await runPath('fifteen', true, 'ordinary', 11, 'rest', k);
+      expect(r.presses, `${k} rounds pressed first`).toBe(k);
+      expect(r.raw, `Sim the rest after ${k}`).toBe(one.raw);
+      expect(r.draws).toBe(one.draws);
+    }
+  });
+});
+
+describe('NFL front office: a club over the roster limit cannot press a round', () => {
+  it('the round and the rest are shut, and a press on them plays nothing', async () => {
+    const G = await freshGame();
+    const made = finalWeekSave(G, 'deep', false, 'ordinary');
+    localStorage.setItem(SAVE_KEY, JSON.stringify(made.save));
+    const first = render(<G.Board />);
+    fireEvent.click(screen.getByText('This week'));
+    fireEvent.click(screen.getByText('Play Week 17'));
+    first.unmount();
+    const s = read();
+    const club = s.league.teams[s.myTeam];
+    while (club.players.length <= DEEP_ROSTER_MAX) club.players.push(s.league.freeAgents.shift());
+    localStorage.setItem(SAVE_KEY, JSON.stringify(s));
+    const before = localStorage.getItem(SAVE_KEY);
+    render(<G.Board />);
+    fireEvent.click(screen.getByText('This week'));
+    for (const press of ['round', 'rest']) {
+      const b = document.querySelector(`[data-press="${press}"]`) as HTMLButtonElement;
+      expect(b.disabled, `${press} is shut over the limit`).toBe(true);
+      fireEvent.click(b);
+    }
+    expect(localStorage.getItem(SAVE_KEY), 'nothing was played').toBe(before);
+  });
+});

@@ -37,7 +37,10 @@
  * a round at a time), and its controls: the bracket dropped from the save
  * (noplayoffs), carried into a new franchise (abandonbracket), the log's
  * playoff games kept when a bracket is started again (rebuiltkeeps), and a
- * hub save past the last week with a champion opened (champopen).
+ * hub save past the last week with a champion opened (champopen); then the
+ * bracket played without the desk's edges (bracketnoedges: red on a told
+ * score, as Round 1305's blind spot asks) and "Sim the rest" playing one
+ * round (restround).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -85,6 +88,9 @@ const T = {
   psChamp: [PS, 'its season already has a champion'],
   psOutside: [PS, 'a bracket on a save outside the playoffs'],
   psAbandon: [PS, 'abandon in the playoffs and start again'],
+  psDeskOn: [PS, 'GM desk on: the bracket a round at a time is the one press'],
+  psDeskOff: [PS, 'GM desk off: the bracket a round at a time is the one press'],
+  psRestAny: [PS, 'Sim the rest from any round'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -130,6 +136,8 @@ const CONTROLS = {
     [["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */", '/* a new franchise */'], ["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: abandoned in the playoffs */", '/* abandoned */']], [T.psAbandon], [T.psKeep]],
   rebuiltkeeps: ['a bracket started again keeps the log of the one that is gone', [['setGameLog(regular.length > 0 && gameLogLive.current ? { ...gameLogLive.current, games: regular } : null); /* the playoff games of a bracket started again */', '/* kept */']], [T.psRebuilt], [T.psKeep]],
   champopen: ['a hub save past the last week with nothing to play opens', [["if (s.phase === 'hub' && s.league.week > REGULAR_WEEKS && !(bracketLoad && bracketLoad.kind === 'bracket')) { setSaveError(true); return; }", '']], [T.psChamp], [T.psKeep]],
+  bracketnoedges: ["the bracket is played without the desk's edges (the winners may stand; the told scores may not)", [['const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);', 'const play = nflPlayTie(lg.teams, Math.random, lg.season, undefined, told);']], [T.psDeskOn], [T.psDeskOff]],
+  restround: ['"Sim the rest" plays one round', [["playPlayoffs(asked === 'rest');", 'playPlayoffs(false);']], [T.psRestAny], [T.psKeep]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
