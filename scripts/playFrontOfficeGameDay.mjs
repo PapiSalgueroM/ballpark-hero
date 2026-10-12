@@ -57,6 +57,38 @@
  *     the board for the club that tops the AFC, three weeks are played, and
  *     after each the standing line is his seed in the saved league, counted
  *     from 1. At least one of the three must find him holding a seed.
+ * ROUND 1309, THE PLAYOFFS ON THE BOX, on saves made here from the engine's
+ * own source (A: the morning of Week 17 for a club strong enough to top its
+ * conference; B: the bracket after the Wild Card round, his club drawn
+ * against an unbeatable top seed; C: the bracket open, an ordinary league,
+ * the AFC's second seed):
+ *  11 Week 17 has "Play Week 17", "Watch Week 17" and the old button, in that
+ *     order, each at least 44 px high, none overflowing, no sideways scroll;
+ *  12 "Play Week 17" opens the bracket (week 18, the bracket on the save, the
+ *     chip reads Playoffs, no "Week 18" anywhere) and the box shows his Week
+ *     17 game with the back chip under it and no league grid. THE REVEAL
+ *     (the ruling of Round 1307's review): from sm up, after the first press
+ *     of a visit (a week, then a playoff round), the first button's top is
+ *     on the screen and so is the whole box, at 1280 by 800 and 1280 by 900;
+ *     under sm the numbers are printed. At 1280 a window resized across sm
+ *     and back scrolls nothing;
+ *  13 a desk off save refuses a trade in the bracket with the playoffs' line;
+ *  14 the title run (A): the bracket says he has the bye, a round a press,
+ *     his game on the box each time he plays and the bracket when he does
+ *     not, the box never moving under its row, then the recap with his title;
+ *     his exit (B): "Out in the AFC Divisional." (or the NFC's), "Sim the
+ *     rest" reaches the recap; a watched playoff game (C): until full time
+ *     nothing of the result anywhere on the page, every press and the back
+ *     chip shut, the bracket not drawn, then his final and the page moved on
+ *     and nothing saved by the watch. At 390 by 844 after every press he
+ *     plays, his result and the next press button are both on the screen;
+ *     at 320 by 640 the numbers are printed (the brief's ruling b);
+ *  15 a reload in the middle of the bracket shows the same bracket and plays
+ *     nothing;
+ *  16 the old button on Week 17 goes straight to the recap;
+ *  17 the bracket's "?" opens, closes, opens again and closes.
+ * Point 8 covers the bracket's faces too (its tie list and week chips are
+ * the face's named scrollers).
  *
  * NEGATIVE CONTROLS (FO_GAMEDAY_WALK_CONTROL=). Each plants ONE thing in the
  * page, in the 390 walk, and names the point that must go red. A control run
@@ -73,6 +105,14 @@
  *   pacespoils    the pace line of the league after the press written into
  *                 the owner card during a watch                                point 9
  *   seedoff       the standing line printed with his seed as an index          point 10
+ *   bracketjump   (Round 1309) a spacer put above the box after a round press  point 14
+ *   playoffspoil  (Round 1309) his final written into the week box while a
+ *                 playoff game is watched                                      point 14
+ *   lostblock     (Round 1309) the bracket taken off the save before point
+ *                 15's reload (the save error screen comes up)                 point 15
+ *   revealdown    (Round 1309) a BOARD MUTATION, not a plant: the request
+ *                 line puts the reveal's ref back on the box from sm up and
+ *                 builds again; the walk only names the point                  point 12
  * (The hold itself removed from the board is a control of the unit test:
  * node scripts/controlFrontOfficeBoard.mjs recordspoils; pacespoils and
  * seedoff there mutate the board itself.)
@@ -91,9 +131,11 @@ import { bundle } from './lib/gmGameDayFleet.mjs';
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.FO_GAMEDAY_WALK_CONTROL || '';
-const CONTROLS = { recordspoils: 3, spoiler: 3, tall: 8, noreveal: 3, helpjump: 6, pacespoils: 9, seedoff: 10 };
+const CONTROLS = { recordspoils: 3, spoiler: 3, tall: 8, noreveal: 3, helpjump: 6, pacespoils: 9, seedoff: 10, revealdown: 12, bracketjump: 14, playoffspoil: 14, lostblock: 15 };
 /* the controls planted in the 390 walk itself; pacespoils and seedoff are planted in the pass after it */
 const WALK_PLANTS = ['recordspoils', 'spoiler', 'tall', 'noreveal', 'helpjump'];
+/* Round 1309: the controls planted in the 390 playoffs walk (revealdown is a board mutation: the walk only names its point) */
+const PLAYOFF_PLANTS = ['bracketjump', 'playoffspoil', 'lostblock'];
 if (CONTROL && !Object.prototype.hasOwnProperty.call(CONTROLS, CONTROL)) { console.error(`playFrontOfficeGameDay: unknown control "${CONTROL}". Known: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 const OUT = process.env.RC_OUT || process.env.FO_GAMEDAY_SHOTS || '';
 const SAVE_KEY = 'front-office-save-v1';
@@ -179,7 +221,8 @@ const fitOf = () => {
   const box = document.querySelector('[data-gameday-box]');
   if (!box) return { bad: ['there is no tile box'], seen: 0, small: [] };
   const b = box.getBoundingClientRect();
-  const SCROLLS = '[data-gameday-scroll], [data-clock-events]';
+  /* Round 1309: and the bracket face's two (its list of ties, and its week chips sideways) */
+  const SCROLLS = '[data-gameday-scroll], [data-clock-events], [data-bracket-scroll]';
   const bad = [], small = [];
   let seen = 0;
   const nameOf = el => `${el.tagName.toLowerCase()}${[...el.attributes].filter(a => a.name.startsWith('data-')).map(a => `[${a.name}]`).join('')}.${String(el.className).split(' ').slice(0, 3).join('.')}`;
@@ -187,8 +230,8 @@ const fitOf = () => {
     if (el.closest('.sr-only') || el.closest('[data-season-help]')) continue;
     seen += 1;
     if (el.clientHeight > 0 && !el.matches(SCROLLS) && el.scrollHeight > el.clientHeight + 1) bad.push(`${nameOf(el)} is ${el.scrollHeight} tall in a frame of ${el.clientHeight}`);
-    if (el.clientWidth > 0 && !el.matches('[data-gameday-chips]') && el.scrollWidth > el.clientWidth + 1) bad.push(`${nameOf(el)} is ${el.scrollWidth} wide in a frame of ${el.clientWidth}`);
-    const inner = el.parentElement ? el.parentElement.closest(`${SCROLLS}, [data-gameday-chips]`) : null;
+    if (el.clientWidth > 0 && !el.matches('[data-gameday-chips], [data-bracket-weeks]') && el.scrollWidth > el.clientWidth + 1) bad.push(`${nameOf(el)} is ${el.scrollWidth} wide in a frame of ${el.clientWidth}`);
+    const inner = el.parentElement ? el.parentElement.closest(`${SCROLLS}, [data-gameday-chips], [data-bracket-weeks]`) : null;
     if (!inner) {
       const r = el.getBoundingClientRect();
       if (r.width > 0 && r.height > 0 && (r.right > b.right + 1 || r.left < b.left - 1 || r.bottom > b.bottom + 1 || r.top < b.top - 1)) bad.push(`${nameOf(el)} leaves the box`);
@@ -535,12 +578,342 @@ async function ownerAndSeedWalk(browser, size) {
   await ctx.close();
 }
 
+/* ---- Round 1309: the playoffs on the box (points 11 to 17). The saves are made here from the engine's own source (the
+   league, the bracket machine, the NFL's bind and the log, bundled from the tree the build was made from), so the walk
+   does not press sixteen weeks to reach Week 17. Every save is then loaded by the board itself. ---- */
+const { M: PO } = await bundle([
+  "export { initLeague, simGame, REGULAR_WEEKS } from './src/lib/frontOffice.ts';",
+  "export { NFL_POSTSEASON, nflPlayTie } from './src/lib/frontOfficePostseason.ts';",
+  "export { openBracket, playBracketWeek, bracketPairings } from './src/lib/gmBracket.ts';",
+  "export { nflTell, nflWhere } from './src/lib/frontOfficeGameDay.ts';",
+  "export { addToGmGameLog } from './src/lib/gmGameLog.ts';",
+], [], 'fo-postseason-walk');
+const lehmer = seed => { let s = seed % 2147483647; if (s <= 0) s += 2147483646; return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; };
+const shapeOf = (league, myTeam, extra = {}) => JSON.stringify({ league, myTeam, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0, ...extra });
+const seasonPlayed = (rng, weeks) => {
+  const league = PO.initLeague(rng);
+  for (let w = 1; w <= weeks; w += 1) { league.schedule[w - 1].forEach(g => PO.simGame(g, league.teams, rng)); league.week += 1; }
+  return league;
+};
+/** A: the morning of Week 17 for a club made strong from Week 1 (so it tops its conference and has the bye), his
+ *  sixteen games told into the log the way the board tells a week. */
+function week17Save() {
+  const rng = lehmer(1309);
+  const league = PO.initLeague(rng);
+  const team = Object.keys(league.teams)[0];
+  for (const p of league.teams[team].players) p.ovr = 99;
+  league.teams[team].defense = 99;
+  let log = null;
+  for (let w = 1; w < PO.REGULAR_WEEKS; w += 1) {
+    const played = league.schedule[w - 1].map(g => PO.simGame(g, league.teams, rng));
+    const mine = played.find(g => g.home === team || g.away === team);
+    const t = mine ? PO.nflTell(mine, league.teams, league.season, PO.nflWhere(w)) : null;
+    if (t && t.last) log = PO.addToGmGameLog(log, league.season, [t.last]);
+    league.week += 1;
+  }
+  return shapeOf(league, team, log ? { gameLog: log } : {});
+}
+/** B: the bracket after the Wild Card round, his club through it and drawn against a top seed made unbeatable, his
+ *  own club made weak: the Divisional round is his exit. */
+function divisionalLossSave() {
+  const rng = lehmer(1310);
+  const league = seasonPlayed(rng, PO.REGULAR_WEEKS);
+  const seeds = PO.NFL_POSTSEASON.seeds(league);
+  const format = PO.NFL_POSTSEASON.formatFor(league.season);
+  const top = seeds[0];
+  for (const p of league.teams[top].players) p.ovr = 99;
+  league.teams[top].defense = 99;
+  const told = [];
+  const block = PO.playBracketWeek(format, PO.openBracket(format, league.season, seeds), PO.nflPlayTie(league.teams, rng, league.season, undefined, told));
+  const tie = PO.bracketPairings(format, block, 2).find(p => p.homeId === top || p.awayId === top);
+  const team = tie.homeId === top ? tie.awayId : tie.homeId;
+  for (const p of league.teams[team].players) p.ovr = 40;
+  league.teams[team].defense = 40;
+  const log = PO.addToGmGameLog(null, league.season, told.filter(g => g.home === team || g.away === team));
+  return shapeOf(league, team, { playoffs: block, ...(log ? { gameLog: log } : {}) });
+}
+/** C: an ordinary league the morning after Week 17, the bracket open and unplayed, for the AFC's second seed (he
+ *  plays the Wild Card round): the watched playoff game. */
+function bracketOpenSave() {
+  const league = seasonPlayed(lehmer(1311), PO.REGULAR_WEEKS);
+  const seeds = PO.NFL_POSTSEASON.seeds(league);
+  return shapeOf(league, seeds[1], { playoffs: PO.openBracket(PO.NFL_POSTSEASON.formatFor(league.season), league.season, seeds) });
+}
+const FIXTURES = { A: week17Save(), B: divisionalLossSave(), C: bracketOpenSave() };
+
+/* in the page: the bracket's parts, the press row and where his result is */
+const playoffOf = () => {
+  const one = sel => document.querySelector(sel);
+  const rect = el => { if (!el) return null; const r = el.getBoundingClientRect(); return { top: Math.round(r.top), bottom: Math.round(r.bottom), height: Math.round(r.height) }; };
+  const row = [...document.querySelectorAll('[data-press-row] button')];
+  return {
+    face: one('[data-gameday-box]')?.getAttribute('data-box-face') ?? null,
+    place: one('[data-bracket-place]')?.getAttribute('data-bracket-place') ?? null,
+    placeLine: (one('[data-bracket-place]')?.textContent ?? '').trim(),
+    bracketText: one('[data-bracket]') ? one('[data-bracket]').innerText : '',
+    buttons: row.map(b => ({ text: (b.textContent ?? '').trim(), disabled: b.disabled, ...rect(b), over: b.scrollWidth > b.clientWidth + 1 })),
+    back: one('[data-bracket-back]') ? { disabled: one('[data-bracket-back]').disabled, ...rect(one('[data-bracket-back]')) } : null,
+    box: rect(one('[data-gameday-box]')), boxPageTop: one('[data-gameday-box]') ? Math.round(one('[data-gameday-box]').getBoundingClientRect().top + window.scrollY) : null,
+    final: rect(one('[data-gameday-final]')), finalText: (one('[data-gameday-final]')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
+    where: (one('[data-gameday-where]')?.textContent ?? '').trim(),
+    weekBox: rect(one('[data-week-box]')),
+    recap: !!one('[data-verdict-reveal]'), saveError: !!one('[data-save-error]') || (document.body.textContent ?? '').includes('Delete unusable save'),
+  };
+};
+const po = page => page.evaluate(playoffOf);
+async function loadSave(page, raw) {
+  await page.goto(`${BASE}/front-office`, { waitUntil: 'networkidle' });
+  const essential = page.locator('button:has-text("Essential only")');
+  if (await essential.count() > 0) { await essential.first().click(); await page.waitForTimeout(300); }
+  await page.evaluate(([k, v]) => localStorage.setItem(k, v), [SAVE_KEY, raw]);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(900);
+  await page.locator('button:has-text("This week")').click();
+  await page.waitForSelector('[data-gameday-box] [data-bracket], [data-gameday-box] [data-gameday]', { timeout: 20000 });
+  await page.waitForTimeout(500);
+}
+/* a press of the walk's own, by a click that does NOT scroll first: a real pointer at the button's centre (Playwright's
+   own click scrolls the button into view, which is the page moving for a reason that is not the board's) */
+async function pressAt(page, sel) {
+  const r = await page.evaluate(s => { const b = document.querySelector(s); if (!b) return null; const x = b.getBoundingClientRect(); return { x: x.left + x.width / 2, y: x.top + x.height / 2, vh: window.innerHeight }; }, sel);
+  if (!r) throw new Error(`no button ${sel}`);
+  if (r.y < 0 || r.y > r.vh) { await page.locator(sel).scrollIntoViewIfNeeded(); return pressAt(page, sel); }
+  await page.mouse.click(r.x, r.y);
+  await page.waitForTimeout(1100);
+}
+
+/* 12's reveal (the ruling of Round 1307's review): from sm up, after the FIRST press of a visit, the first button is on
+   the screen and the whole box is. Under sm the numbers are printed (point 2 holds Round 1307's there). */
+function revealSay(size, p, what) {
+  const first = p.buttons[0];
+  const line = `${size.w}x${size.h}, ${what}: the first button's top at ${first?.top}, the box from ${p.box?.top} to ${p.box?.bottom} of ${size.h}`;
+  if (size.w >= 640) say(12, !!first && first.top >= 0 && p.box.top >= 0 && p.box.bottom <= size.h, `${line}: the buttons and the whole box are on the screen`);
+  else note(line);
+}
+/* correction 27: after a playoff press, his result and the next press button inside the screen with no scroll by him;
+   asserted at 390 by 844, printed at 320 by 640 (under sm the reveal's element is the box, as shipped) */
+function inScreenSay(size, p, what) {
+  const next = p.buttons[0];
+  const res = p.face === 'game' ? p.final : null;
+  const ok = !!res && res.top >= 0 && res.bottom <= size.h && (!next || (next.top >= 0 && next.bottom <= size.h));
+  const line = `${size.w}x${size.h}, ${what}: his result from ${res?.top} to ${res?.bottom}, the next press from ${next?.top} to ${next?.bottom}`;
+  if (size.w === 390) say(14, ok, `${line}: both on the screen`);
+  else note(line);
+}
+/* the press row's last button to the box: a gap that a press must never change (the box never moves under its row) */
+const gapOf = p => (p.box && p.buttons.length ? p.box.top - p.buttons[p.buttons.length - 1].bottom : null);
+
+/* 14, the title run (A, Week 17 played): the bye on the bracket, then a round a press, his game on the box each time
+   he plays, the box never moving under its row, then the recap with his title. */
+async function titleRun(page, size, plant) {
+  await pressAt(page, '[data-bracket-back]');
+  await page.waitForSelector('[data-gameday-box] [data-bracket]', { timeout: 20000 });
+  const p0 = await po(page);
+  say(14, p0.face === 'bracket' && p0.place === 'bye', `${size.w}: the back chip shows the bracket, and the bracket says he has the bye ("${p0.placeLine}")`);
+  await fit(page, size, 'the bracket, his bye');
+  await shot(page, size, '14-bye');
+  const gap0 = gapOf(p0);
+  const steps = [];
+  for (let i = 0; i < 4; i += 1) {
+    const n0 = (await saved(page)).n;
+    await pressAt(page, '[data-press="round"]');
+    /* `bracketjump`: a spacer put above the box after the first press, what a face that grows a line would do */
+    if (plant === 'bracketjump' && i === 0) await page.evaluate(() => { const d = document.createElement('div'); d.setAttribute('data-planted', ''); d.style.height = '120px'; const box = document.querySelector('[data-gameday-box]'); box.parentElement.insertBefore(d, box); });
+    const p = await po(page);
+    if (p.recap) { steps.push('the recap'); break; }
+    const sv = await saved(page);
+    const logged = sv.n > n0;
+    steps.push(logged ? `his game (${p.where})` : `the bracket (${p.place})`);
+    say(14, logged ? p.face === 'game' && p.finalText === finals(sv).tile : p.face === 'bracket', `${size.w}: round ${i + 1}: ${logged ? `his game on the box (${p.where}: ${p.finalText})` : `no game of his, the bracket on the box ("${p.placeLine}")`}`);
+    say(14, gapOf(p) === gap0, `${size.w}: round ${i + 1}: the box did not move under its row (${gap0} px before the first press, ${gapOf(p)} now)`);
+    if (logged) inScreenSay(size, p, `round ${i + 1}`);
+    await fit(page, size, `round ${i + 1}, ${p.face}`);
+    await shot(page, size, `14-round${i + 1}`);
+    await page.evaluate(() => document.querySelectorAll('[data-planted]').forEach(n => n.remove()));
+  }
+  const s = JSON.parse((await saved(page)).raw);
+  say(14, (await po(page)).recap && s.postseason?.champion === s.myTeam && !('playoffs' in s), `${size.w}: the title run ends on the recap with his title (${steps.join(', ')}; champion ${s.postseason?.champion}, his club ${s.myTeam})`);
+  await shot(page, size, '14-title');
+}
+/* 14, his exit (B): "Out in the ... Divisional." on the bracket, then "Sim the rest" reaches the recap; the press is the
+   first of the visit, so 12's reveal is read on a playoff round too */
+async function exitRun(page, size) {
+  await loadSave(page, FIXTURES.B);
+  await pressAt(page, '[data-press="round"]');
+  const p = await po(page);
+  revealSay(size, p, 'a playoff round, the first press of a visit');
+  inScreenSay(size, p, 'his Divisional game');
+  await pressAt(page, '[data-bracket-back]');
+  await page.waitForSelector('[data-gameday-box] [data-bracket]', { timeout: 20000 });
+  const q = await po(page);
+  say(14, q.place === 'out' && /^Out in the (AFC|NFC) Divisional\.$/.test(q.placeLine), `${size.w}: beaten in the Divisional round, the bracket says so ("${q.placeLine}")`);
+  await shot(page, size, '14-exit');
+  await pressAt(page, '[data-press="rest"]');
+  say(14, (await po(page)).recap, `${size.w}: "Sim the rest of the playoffs" reaches the recap`);
+}
+/* 14, a watched playoff game (C): until full time the page holds nothing of the result; then it moves on */
+async function watchRun(page, size, plant) {
+  await loadSave(page, FIXTURES.C);
+  const b = await po(page);
+  const sv0 = await saved(page);
+  await pressAt(page, '[data-watch-round]');
+  const svP = await saved(page);
+  const f = finals(svP);
+  const spoiled = [];
+  let samples = 0;
+  const t0 = Date.now();
+  for (;;) {
+    const st = await state(page);
+    if (st.face === 'result') break;
+    if (Date.now() - t0 > 45000) { spoiled.push('the watch did not reach full time in 45 s'); break; }
+    if (st.face === 'watch') {
+      samples += 1;
+      const p = await po(page);
+      if (p.buttons.some(x => !x.disabled) || (p.back && !p.back.disabled)) spoiled.push('a press or the back chip is open');
+      if (p.buttons.map(x => x.text).join('|') !== b.buttons.map(x => x.text).join('|')) spoiled.push(`the buttons read ${p.buttons.map(x => x.text).join(' | ')}`);
+      if (p.bracketText !== '') spoiled.push('the bracket is drawn');
+      if (st.text.includes(f.bare)) spoiled.push(`the page holds the final ("${f.bare}")`);
+      if (samples === 1) {
+        await fit(page, size, 'a playoff game on the clock');
+        await shot(page, size, '14-watching');
+        if (plant === 'playoffspoil') await page.evaluate(str => { const x = document.createElement('p'); x.setAttribute('data-planted', ''); x.textContent = str; document.querySelector('[data-week-box]').appendChild(x); }, f.bare);
+      }
+      if (samples === 2) await page.locator('[data-gameday-speed="3x"]').click();
+    }
+    await page.waitForTimeout(200);
+  }
+  await page.evaluate(() => document.querySelectorAll('[data-planted]').forEach(n => n.remove()));
+  await page.waitForTimeout(900);
+  const a = await po(page);
+  say(14, samples >= 2 && spoiled.length === 0 && svP.n === sv0.n + 1, `${size.w}: a watched playoff game: until full time the page held nothing of the result (${samples} samples)${spoiled.length ? `: ${[...new Set(spoiled)].slice(0, 3).join('; ')}` : ''}`);
+  say(14, a.finalText === f.tile && a.buttons[0]?.text !== b.buttons[0]?.text && !!a.back && !a.back.disabled && (await saved(page)).raw === svP.raw, `${size.w}: at full time his final is on the box (${a.finalText}), the page has moved on ("${a.buttons[0]?.text}") and the watch saved nothing`);
+  await shot(page, size, '14-watched');
+}
+/* 15, a reload in the middle of the bracket (C, one round played), and 17, the bracket's "?" */
+async function reloadAndHelp(page, size, plant) {
+  await pressAt(page, '[data-bracket-back]');
+  await page.waitForSelector('[data-gameday-box] [data-bracket]', { timeout: 20000 });
+  const before = await po(page);
+  const sv = await saved(page);
+  /* `lostblock`: the bracket taken off the save before the reload */
+  if (plant === 'lostblock') await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)); delete s.playoffs; localStorage.setItem(k, JSON.stringify(s)); }, SAVE_KEY);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(900);
+  const err = (await po(page)).saveError;
+  if (!err) { await page.locator('button:has-text("This week")').click(); await page.waitForSelector('[data-gameday-box] [data-bracket]', { timeout: 20000 }); await page.waitForTimeout(400); }
+  const after = await po(page);
+  say(15, !err && after.face === 'bracket' && after.bracketText === before.bracketText && (await saved(page)).raw === sv.raw, `${size.w}: a reload in the middle of the bracket shows the same bracket and plays nothing (save error screen: ${err})`);
+  await shot(page, size, '15-reloaded');
+  if (err) return;
+  /* 17 */
+  const open = async () => { await page.locator('[data-bracket-help]').click(); await page.waitForTimeout(300); return !!(await page.$('[data-season-help]')); };
+  const close = async () => { await page.locator('[data-season-help] button:has-text("Got it")').click(); await page.waitForTimeout(300); return !(await page.$('[data-season-help]')); };
+  const o1 = await open();
+  await shot(page, size, '17-help');
+  const c1 = await close();
+  const o2 = await open();
+  const c2 = await close();
+  say(17, o1 && c1 && o2 && c2, `${size.w}: the bracket's "?" opens, closes, opens again and closes`);
+}
+
+/* 12's reveal at 1280 by 900 as well (the size the review measured the scroll of 0 to 778 at): the first press of a
+   visit, a week (A) and then a playoff round (B, a new visit) */
+async function revealPass(browser, size) {
+  console.log(`\n=== ${size.w} by ${size.h}, the reveal ===`);
+  const { ctx, page, errors } = await newPage(browser, size);
+  await loadSave(page, FIXTURES.A);
+  await pressAt(page, '[data-press="week"]');
+  revealSay(size, await po(page), '"Play Week 17", the first press of a visit');
+  await shot(page, size, '12-reveal-week');
+  await loadSave(page, FIXTURES.B);
+  await pressAt(page, '[data-press="round"]');
+  revealSay(size, await po(page), 'a playoff round, the first press of a visit');
+  await shot(page, size, '12-reveal-round');
+  const real = realErrors(errors);
+  say(0, real.length === 0, `${size.w}x${size.h}, the reveal: no page error (${real.length ? real[0].slice(0, 160) : 'clean'})`);
+  await ctx.close();
+}
+
+/* Points 11 to 17 at one size. Plants of the 390 walk: bracketjump (14), playoffspoil (14), lostblock (15). */
+async function playoffsWalk(browser, size) {
+  console.log(`\n=== ${size.w} by ${size.h}, the playoffs ===`);
+  const { ctx, page, errors } = await newPage(browser, size);
+  const plant = size.w === 390 && PLAYOFF_PLANTS.includes(CONTROL) ? CONTROL : '';
+
+  /* 11: Week 17's three buttons (A, the morning of Week 17) */
+  await loadSave(page, FIXTURES.A);
+  const p11 = await po(page);
+  const st11 = await state(page);
+  const labels = p11.buttons.map(b => b.text);
+  say(11, labels.join(' | ') === 'Play Week 17 | Watch Week 17 | Play the final week + playoffs', `${size.w}: Week 17 has its three buttons in order (${labels.join(' | ')})`);
+  say(11, p11.buttons.length === 3 && p11.buttons.every(b => b.height >= 43.5 && !b.over) && st11.docW <= st11.vw, `${size.w}: each is at least 44 px high and none overflows (${p11.buttons.map(b => `${b.height}${b.over ? ' OVER' : ''}`).join(', ')}; the page ${st11.docW} of ${st11.vw} wide)`);
+  await fit(page, size, 'Week 17');
+  await shot(page, size, '11-week17');
+
+  /* 12: "Play Week 17", the first press of this visit */
+  await pressAt(page, '[data-press="week"]');
+  const p12 = await po(page);
+  const st12 = await state(page);
+  const sv12 = await saved(page);
+  const s12 = JSON.parse(sv12.raw);
+  say(12, s12.league.week === 18 && 'playoffs' in s12 && s12.phase === 'hub' && st12.week.includes('Playoffs') && !/Week 18/.test(st12.text), `${size.w}: "Play Week 17" opens the bracket (week ${s12.league.week}, a bracket on the save: ${'playoffs' in s12}) and the chip reads "${st12.week}"`);
+  say(12, p12.face === 'game' && /^Wk 17/.test(p12.where) && p12.finalText === finals(sv12).tile && !!p12.back && !p12.back.disabled && st12.grid === 0, `${size.w}: the box shows his Week 17 game (${p12.where}: ${p12.finalText}) with the back chip under it, and no league grid`);
+  revealSay(size, p12, '"Play Week 17", the first press of a visit');
+  await fit(page, size, 'his Week 17 game in the bracket');
+  await shot(page, size, '12-opened');
+  if (size.w === 1280) {
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await page.waitForTimeout(200);
+    await page.setViewportSize({ width: 390, height: size.h });
+    await page.waitForTimeout(500);
+    const mid = await page.evaluate(() => Math.round(window.scrollY));
+    await page.setViewportSize({ width: size.w, height: size.h });
+    await page.waitForTimeout(500);
+    const end = await page.evaluate(() => Math.round(window.scrollY));
+    say(12, mid === 0 && end === 0, `${size.w}: a window resized across sm and back scrolled nothing (scrollY 0, then ${mid} at 390 wide, then ${end})`);
+  }
+
+  /* 13: a desk off save refuses a trade with the playoffs line */
+  await page.locator('button:has-text("Hub")').first().click();
+  await page.waitForTimeout(300);
+  await page.locator('button:has-text("Trades")').first().click();
+  await page.waitForTimeout(400);
+  const finder = page.locator('p:has-text("Trade Finder")').locator('..');
+  await finder.locator('.grid.grid-cols-2 button').first().click();
+  await finder.locator('button:has-text("Shop him around the league")').click();
+  await page.waitForTimeout(400);
+  const st13 = await state(page);
+  say(13, st13.text.includes('Trades are shut for the playoffs.') && !/Nobody bit/.test(st13.text), `${size.w}: with the desk off a trade in the bracket is refused with the playoffs' line`);
+  await page.locator('button:has-text("Hub")').first().click();
+  await page.waitForTimeout(300);
+  await page.locator('button:has-text("This week")').click();
+  await page.waitForTimeout(800);
+
+  await titleRun(page, size, plant);
+  await exitRun(page, size);
+  await watchRun(page, size, plant);
+  await reloadAndHelp(page, size, plant);
+
+  /* 16: the old button, on the morning of Week 17, goes straight to the recap as it always did */
+  await loadSave(page, FIXTURES.A);
+  await pressAt(page, '[data-press="old"]');
+  await page.waitForTimeout(600);
+  const s16 = JSON.parse((await saved(page)).raw);
+  const p16 = await po(page);
+  say(16, p16.recap && !('playoffs' in s16) && s16.league.champions.some(c => c.season === s16.league.season) && ['recap', 'fired'].includes(s16.phase), `${size.w}: "Play the final week + playoffs" goes straight to the recap (phase ${s16.phase}, champion ${s16.postseason?.champion})`);
+  const real = realErrors(errors);
+  say(0, real.length === 0, `${size.w}, the playoffs: no page error (${real.length ? real[0].slice(0, 160) : 'clean'})`);
+  await ctx.close();
+}
+
 let crashed = null;
 const browser = await chromium.launch();
 try {
   for (const size of SIZES) await walk(browser, size);
   await reducedWalk(browser, SIZES[1]);
   await ownerAndSeedWalk(browser, SIZES[1]);
+  for (const size of SIZES) await playoffsWalk(browser, size);
+  await revealPass(browser, { w: 1280, h: 900 });
 } catch (e) {
   crashed = e;
 } finally {
