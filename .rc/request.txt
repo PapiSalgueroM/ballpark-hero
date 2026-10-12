@@ -1,0 +1,7 @@
+#!serial
+dBoard: node scripts/simUsBoardParity.mjs
+dBoardOld: git show 48cb9d4b:scripts/data/usBoardFixture.json > scripts/data/usBoardFixture.json && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- scripts/data; exit $s
+dBoardCtl: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+dDigestAttrib: git show 48cb9d4b:src/test/fixtures/usCareerTruthDigest.json > src/test/fixtures/usCareerTruthDigest.json && DIGEST_RECORD=1 DIGEST_ALLOW='mlb|*,nhl|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000 --hookTimeout=120000; s=$?; if git diff --quiet -- src/test/fixtures/usCareerTruthDigest.json; then echo "RETAKE EQUALS THE COMMITTED DIGEST"; else echo "RETAKE DIFFERS FROM THE COMMITTED DIGEST"; git diff --stat -- src/test/fixtures; fi; git checkout -- src/test/fixtures; exit $s
+dDigestNone: git show 48cb9d4b:src/test/fixtures/usCareerTruthDigest.json > src/test/fixtures/usCareerTruthDigest.json && DIGEST_RECORD=1 DIGEST_ALLOW=none node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000 --hookTimeout=120000; s=$?; git checkout -- src/test/fixtures; exit $s
+u1Board: git worktree add --detach .wt/u1 8c98dae1 && ln -s "$PWD/node_modules" .wt/u1/node_modules && cd .wt/u1 && node scripts/simUsBoardParity.mjs
