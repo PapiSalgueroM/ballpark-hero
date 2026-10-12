@@ -221,7 +221,16 @@ async function step(page, leaveTheCard = false) {
   if (await page.locator('[data-rivalry-event]').count()) return lastIn('[data-rivalry-event]');
   if (await page.locator('[data-rivalry-choice]').count()) return (await page.locator('[data-rivalry-choice] [data-rivalry-outcome]').count()) ? lastIn('[data-rivalry-choice]') : firstIn('[data-rivalry-choice]');
   if (await page.locator('[data-extension-talk]').count()) return firstIn('[data-extension-talk]');
-  if (await page.locator('[data-fa-window]').count()) return firstIn('[data-fa-window]');
+  /* Round 1313: since Release AX the window's first button opens Compare, which signs nothing and replaces the
+     window (no data-fa-window on it): r1313-s5e2 found an NHL goalie's walk lost there. Leave the compare view,
+     and in the window press Sign (its first button that is not Compare otherwise). */
+  const backToOffers = page.locator('button:not([disabled])', { hasText: /^\s*Back to offers\s*$/ });
+  if (await backToOffers.count()) { await backToOffers.first().click(); return true; }
+  if (await page.locator('[data-fa-window]').count()) {
+    const sign = page.locator('[data-fa-window] button:not([disabled])', { hasText: /^\s*Sign\s*$/ });
+    if (await sign.count()) { await sign.first().click(); return true; }
+    return firstIn('[data-fa-window] :not([data-market-compare-open])');
+  }
   /* Round 1313: an older career meets the retirement talk ("Is it time?", FarewellCard.tsx) in place of the
      season button; the walk plays on, the way a player who is not done would. */
   const oneMore = page.locator('button', { hasText: 'One more year' });
