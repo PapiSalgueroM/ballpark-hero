@@ -1,0 +1,56 @@
+# Release AX join, final proof J1: Round 1304 (the era fences with every control, simEras, the A-League fence), the league rules digest, the Round 1081 pin, the dailies with both controls, and the lane B line the copied set lacks
+simEras: export TMPDIR=$(mktemp -d); node scripts/simEras.mjs
+simEra2005: export TMPDIR=$(mktemp -d); node scripts/simEra2005.mjs
+simEra2010: export TMPDIR=$(mktemp -d); node scripts/simEra2010.mjs
+simEra2015: export TMPDIR=$(mktemp -d); node scripts/simEra2015.mjs
+simEra2020: export TMPDIR=$(mktemp -d); node scripts/simEra2020.mjs
+simStatsCentre: export TMPDIR=$(mktemp -d); node scripts/simStatsCentre.mjs
+simClubManagerALeague: export TMPDIR=$(mktemp -d); node scripts/simClubManagerALeague.mjs
+simCmLeagueRules: export TMPDIR=$(mktemp -d); node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: export TMPDIR=$(mktemp -d); node scripts/simManagerAppealIsolation.mjs
+simDailyDeals: export TMPDIR=$(mktemp -d); node scripts/simDailyDeals.mjs
+simSoccerVeteranOffers: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+c05-dupe-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=dupe node scripts/simEra2005.mjs
+c05-stale-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=stale node scripts/simEra2005.mjs
+c05-twoleagues-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=twoleagues node scripts/simEra2005.mjs
+c05-euro-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=euro node scripts/simEra2005.mjs
+c05-thinswap-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=thinswap node scripts/simEra2005.mjs
+c05-nocut-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=nocut node scripts/simEra2005.mjs
+c05-nonat-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=nonat node scripts/simEra2005.mjs
+c05-leak-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=leak node scripts/simEra2005.mjs
+c05-unlisted-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2005_CONTROL=unlisted node scripts/simEra2005.mjs
+c10-dupe-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=dupe node scripts/simEra2010.mjs
+c10-stale-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=stale node scripts/simEra2010.mjs
+c10-twoleagues-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=twoleagues node scripts/simEra2010.mjs
+c10-noh2h-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=noh2h node scripts/simEra2010.mjs
+c10-misskey-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=misskey node scripts/simEra2010.mjs
+c10-leak-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=leak node scripts/simEra2010.mjs
+c10-unlisted-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2010_CONTROL=unlisted node scripts/simEra2010.mjs
+c15-dupe-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2015_CONTROL=dupe node scripts/simEra2015.mjs
+c15-stale-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2015_CONTROL=stale node scripts/simEra2015.mjs
+c15-threeleagues-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2015_CONTROL=threeleagues node scripts/simEra2015.mjs
+c15-longname-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2015_CONTROL=longname node scripts/simEra2015.mjs
+c15-leak-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2015_CONTROL=leak node scripts/simEra2015.mjs
+c15-joinage-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2015_CONTROL=joinage node scripts/simEra2015.mjs
+c20-dupe-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=dupe node scripts/simEra2020.mjs
+c20-stale-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=stale node scripts/simEra2020.mjs
+c20-fourleagues-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=fourleagues node scripts/simEra2020.mjs
+c20-nofield-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=nofield node scripts/simEra2020.mjs
+c20-swapfinish-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=swapfinish node scripts/simEra2020.mjs
+c20-nolift-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=nolift node scripts/simEra2020.mjs
+c20-modernmarket-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=modernmarket node scripts/simEra2020.mjs
+c20-eraorder-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=eraorder node scripts/simEra2020.mjs
+c20-leak-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=leak node scripts/simEra2020.mjs
+c20-joinage-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=joinage node scripts/simEra2020.mjs
+c20-shiporder-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=shiporder node scripts/simEra2020.mjs
+c20-modernnews-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=modernnews node scripts/simEra2020.mjs
+c20-modernwar-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=modernwar node scripts/simEra2020.mjs
+c20-modernjobs-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=modernjobs node scripts/simEra2020.mjs
+c20-takestale-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=takestale node scripts/simEra2020.mjs
+c20-firstsummer-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERA2020_CONTROL=firstsummer node scripts/simEra2020.mjs
+cEras-dropman-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=dropman node scripts/simEras.mjs
+cEras-unflag-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=unflag node scripts/simEras.mjs
+cEras-twoclubs-EXPECT1: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=twoclubs node scripts/simEras.mjs
+cStats-nosubs-EXPECT1: export TMPDIR=$(mktemp -d); SIM_STATS_CENTRE_CONTROL=nosubs node scripts/simStatsCentre.mjs
+dailies-bind-EXPECT1: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+dailies-binddeadline-EXPECT1: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
