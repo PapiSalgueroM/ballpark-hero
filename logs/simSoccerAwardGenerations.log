@@ -1,0 +1,21 @@
+AssertionError [ERR_ASSERTION]: entire old profile immutable except exact retirement
++ actual - expected
+
+  {
+    baseGoals: [
+      10,
+      28
+    ],
+    club: 'AC Milan',
++   entryAge: 27,
+-   entryAge: 26,
+    firstYear: 2028,
+    id: 0,
+    name: 'Ferdi Doornbos',
+    nationality: 'Belgium',
+    position: 'LW',
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:367:179)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:527:52
+ORIGINAL {"kind":"this head with the exact inverse of the pool lifecycle","rows":14,"engineSha256":"0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea","saveSha256":"b87337bb0fc4633ab9885eecea8dd9e704bfc3aa701558e7728ddae45e9ca466","headEngineSha256":"baf5cd5ba6b84aacd58c80affc8800f8910f5bb2c25fb972a72f5ce64f1e28fc","source":"67e5b124efe441e789455f17bbb55dd7c9ae92395f6d2fdb77d44ddd2aea91fb"} controls 0 observationControls 0 status fail
