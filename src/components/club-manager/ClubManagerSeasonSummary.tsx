@@ -170,7 +170,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             )}
             {awardsBy && awardsBy.by !== 'book' && (
               <p data-cm-award-withheld className="text-[10px] text-muted-foreground">{awardsBy.by === 'thin'
-                ? `Only ${awardsBy.share} in 100 of this league's goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time.`
+                ? `Only ${awardsBy.share} in 100 of the other clubs' goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time.`
                 : 'The league book only covered part of this season, so the golden boot went to the scorers\' race and there are no most assists, most clean sheets or team of the season awards this time.'}</p>
             )}
             {sm.playerOfSeason && (

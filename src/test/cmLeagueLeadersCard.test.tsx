@@ -230,7 +230,7 @@ describe('the season review', () => {
     expect('awards' in summary).toBe(false);
     const c = render(<ClubManagerSeasonSummary sm={summary} c={state} g={{ nextSeason: vi.fn(), startNew: vi.fn() }} />);
     expect(c.container.querySelector('[data-cm-award]')).toBeNull();
-    expect(c.container.querySelector('[data-cm-award-withheld]')?.textContent).toContain(`Only ${lb.share} in 100 of this league's goals had a name on them`);
+    expect(c.container.querySelector('[data-cm-award-withheld]')?.textContent).toContain(`Only ${lb.share} in 100 of the other clubs' goals had a name on them`);
     /* On such a season the summary is the base's to the byte (decision 3, held by scripts/simCmLeagueBook.mjs
      * section stream), so a pending summary the base wrote in a thin league gains exactly this line, on purpose:
      * the base settled that boot on the scorers' race too. */
