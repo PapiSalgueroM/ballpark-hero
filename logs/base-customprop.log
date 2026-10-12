@@ -1,0 +1,4 @@
+mutation css-customprop: applied to src/components/club-manager/LiveSimMotion.css
+9:.cm-stagebox{position:fixed;inset:0;--cm-stage-height:100vh;height:var(--cm-stage-height);z-index:40;overflow:hidden;b
+  FAIL: src/components/club-manager/LiveSimMotion.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+simSafari: 2 failures

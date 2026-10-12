@@ -1,0 +1,8 @@
+mkSec1: scripts/htSec1-s19.mjs written
+1) Stopping at halftime and changing nothing must not change the game
+   never sees halftime: 48.8 pts, 48.6 scored, 53.0 conceded
+   sees it, does nothing: 46.4 pts, 47.3 scored, 53.9 conceded
+   difference 2.40 points, 3 standard errors is 6.55
+   goals for gap 1.35 against 3se of 5.69, goals against gap 0.87 against 3se of 5.38
+Z points -1.10 gf -0.71 ga 0.48
+SECTION1 failures 0
