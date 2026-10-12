@@ -1,0 +1,5 @@
+# AXG: the pushed final head 354b06d6 is 999db1e4 plus origin/main's docs only commit 9235aa1f. The type gate on it, and the proof that nothing but two docs files differs from the tree the final proof ran on
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+tree-same: n=$(git diff --name-only 999db1e4 HEAD | grep -v -x -e CLAUDE.md -e docs/HANDOFF-2026-10-12.md | wc -l); echo "files that differ from 999db1e4 besides the two docs: $n"; test "$n" = 0
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

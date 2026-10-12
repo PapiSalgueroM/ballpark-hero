@@ -1,0 +1,4 @@
+tree-same exit=1 0s | files that differ from 999db1e4 besides the two docs: 3
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 60s | 
