@@ -1,0 +1,856 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2008.html
+STATUS: 200
+TITLE: 2008 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:41:12.236Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2008 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Detroit Red Wings
+
+Conn Smythe Trophy: Henrik Zetterberg (13 G, 14 A, 27 P)
+
+Assists Leaders: Sidney Crosby (21)
+
+Points Leaders: Sidney Crosby (27), Henrik Zetterberg (27)
+
+Goals Leaders: Johan Franzén (13), Henrik Zetterberg (13)
+
+Become a Stathead & surf this site ad-free.
+
+2008 NHL Playoffs Menu
+
+2008 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Detroit Red Wings over Pittsburgh Penguins	 	View Matchup »
+ 
+Conference Finals	4-2	Detroit Red Wings over Dallas Stars	 	View Matchup »
+Conference Finals	4-1	Pittsburgh Penguins over Philadelphia Flyers	 	View Matchup »
+ 
+Conference Semi-Finals	4-2	Dallas Stars over San Jose Sharks	 	View Matchup »
+Conference Semi-Finals	4-0	Detroit Red Wings over Colorado Avalanche	 	View Matchup »
+Conference Semi-Finals	4-1	Pittsburgh Penguins over New York Rangers	 	View Matchup »
+Conference Semi-Finals	4-1	Philadelphia Flyers over Montreal Canadiens	 	View Matchup »
+ 
+Conference Quarter-Finals	4-2	Dallas Stars over Anaheim Ducks	 	View Matchup »
+Conference Quarter-Finals	4-2	Colorado Avalanche over Minnesota Wild	 	View Matchup »
+Conference Quarter-Finals	4-3	San Jose Sharks over Calgary Flames	 	View Matchup »
+Conference Quarter-Finals	4-2	Detroit Red Wings over Nashville Predators	 	View Matchup »
+Conference Quarter-Finals	4-1	New York Rangers over New Jersey Devils	 	View Matchup »
+Conference Quarter-Finals	4-3	Philadelphia Flyers over Washington Capitals	 	View Matchup »
+Conference Quarter-Finals	4-0	Pittsburgh Penguins over Ottawa Senators	 	View Matchup »
+Conference Quarter-Finals	4-3	Montreal Canadiens over Boston Bruins	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Detroit Red Wings	22	16	6	0	1	1	.727	72	41	31
+2	Pittsburgh Penguins	20	14	6	0	2	0	.700	61	43	18
+3	Dallas Stars	18	10	8	0	3	1	.556	45	41	4
+4	Philadelphia Flyers	17	9	8	0	2	1	.529	52	54	-2
+5	San Jose Sharks	13	6	7	0	1	3	.462	30	32	-2
+6	New York Rangers	10	5	5	0	0	2	.500	31	27	4
+7	Montreal Canadiens	12	5	7	0	2	1	.417	33	35	-2
+8	Colorado Avalanche	10	4	6	0	1	2	.400	26	33	-7
+9	Calgary Flames	7	3	4	0	0	0	.429	17	19	-2
+10	Boston Bruins	7	3	4	0	1	1	.429	15	19	-4
+11	Washington Capitals	7	3	4	0	0	2	.429	20	23	-3
+12	Minnesota Wild	6	2	4	0	2	1	.333	12	17	-5
+13	Anaheim Ducks	6	2	4	0	0	0	.333	13	20	-7
+14	Nashville Predators	6	2	4	0	0	1	.333	12	17	-5
+15	New Jersey Devils	5	1	4	0	1	0	.200	12	19	-7
+16	Ottawa Senators	4	0	4	0	0	0	.000	5	16	-11
+	League Average	10.6	5.3	5.3	0.0	1.2	1.2	.500	28.5	28.5	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2008-04-09	MIN	Sakic, Joe	COL	3-2	MIN	1	11:11
+2008-04-11	MIN	Carney, Keith	MIN	3-2	COL	1	1:14
+2008-04-12	MTL	Kovalev, Alex	MTL	3-2	BOS	1	2:30
+2008-04-13	BOS	Savard, Marc	BOS	2-1	MTL	1	9:25
+2008-04-13	NYR	Madden, John	NJD	4-3	NYR	1	6:01
+2008-04-14	COL	Bouchard, Pierre-Marc	MIN	3-2	COL	1	11:58
+2008-04-17	PHI	Knuble, Mike	PHI	4-3	WSH	2	26:40
+2008-04-18	DET	Franzén, Johan	DET	2-1	NSH	1	1:48
+2008-04-22	WSH	Lupul, Joffrey	PHI	3-2	WSH	1	6:06
+2008-04-24	MTL	Kostopoulos, Tom	MTL	4-3	PHI	1	0:48
+2008-04-25	SJS	Morrow, Brenden	DAL	3-2	SJS	1	4:39
+2008-04-29	DAL	Norström, Mattias	DAL	2-1	SJS	1	4:37
+2008-05-02	SJS	Pavelski, Joe	SJS	3-2	DAL	1	1:05
+2008-05-04	DAL	Morrow, Brenden	DAL	2-1	SJS	4	69:03
+2008-05-04	PIT	Hossa, Marián	PIT	3-2	NYR	1	7:10
+2008-06-02	DET	Sýkora, Petr	PIT	4-3	DET	3	49:57
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Johan Franzén • DET
+13
+Henrik Zetterberg • DET
+13
+Show #2-4 
+View all players in this category
+Assists
+1.
+Sidney Crosby • PIT
+21
+Show #2-3 
+View all players in this category
+Points
+1.
+Sidney Crosby • PIT
+27
+Henrik Zetterberg • DET
+27
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Henrik Zetterberg • DET
+10.6
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Niklas Kronwall • DET
+16
+Henrik Zetterberg • DET
+16
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Scottie Upshall • PHI
+44
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+R.J. Umberger • PHI
+9
+Show #2-5 
+View all players in this category
+Power Play Goals
+1.
+Daniel Brière • PHI
+6
+Johan Franzén • DET
+6
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Johan Franzén • DET
+2
+Patrick Marleau • SJS
+2
+Mike Richards • PHI
+2
+Henrik Zetterberg • DET
+2
+Show #2-5 
+View all players in this category
+Game-Winning Goals
+1.
+Johan Franzén • DET
+5
+Show #2-3 
+View all players in this category
+Shots
+1.
+Henrik Zetterberg • DET
+116
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Andrew Brunette • COL
+27.8
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Johan Franzén • DET
+2
+Show #2 
+Goals Per Game
+1.
+Johan Franzén • DET
+0.81
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Sidney Crosby • PIT
+1.05
+Show #2-6 
+View all players in this category
+Points Per Game
+1.
+Jaromír Jágr • NYR
+1.50
+Show #2-9 
+View all players in this category
+Goals Created Per Game
+1.
+Jaromír Jágr • NYR
+0.53
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Marc-André Fleury • PIT
+20
+Show #2-9 
+View all players in this category
+Wins
+1.
+Marc-André Fleury • PIT
+14
+Chris Osgood • DET
+14
+Show #2-9 
+View all players in this category
+Losses
+1.
+Martin Biron • PHI
+8
+Marty Turco • DAL
+8
+Show #2-8 
+View all players in this category
+Goals Against
+1.
+Martin Biron • PHI
+52
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Marc-André Fleury • PIT
+610
+Show #2-10 
+View all players in this category
+Saves
+1.
+Marc-André Fleury • PIT
+569
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Dan Ellis • NSH
+.938
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Curtis Joseph • CGY
+0.76
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Marc-André Fleury • PIT
+3
+Chris Osgood • DET
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Marc-André Fleury • PIT
+1251
+Show #2-10 
+View all players in this category
+More 2008 NHL Playoff Pages
+
+2008 NHL Playoffs Overview
+
+More 2008 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2008.html Stathead > Playoffs > 2008 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2008 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Detroit Red Wings
+
+Conn Smythe Trophy: Henrik Zetterberg (13 G, 14 A, 27 P)
+
+Assists Leaders: Sidney Crosby (21)
+
+Points Leaders: Sidney Crosby (27), Henrik Zetterberg (27)
+
+Goals Leaders: Johan Franzén (13), Henrik Zetterberg (13)
+
+Become a Stathead & surf this site ad-free.
+
+2008 NHL Playoffs Menu
+
+2008 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Detroit Red Wings over Pittsburgh Penguins	 	View Matchup »
+ 
+Conference Finals	4-2	Detroit Red Wings over Dallas Stars	 	View Matchup »
+Conference Finals	4-1	Pittsburgh Penguins over Philadelphia Flyers	 	View Matchup »
+ 
+Conference Semi-Finals	4-2	Dallas Stars over San Jose Sharks	 	View Matchup »
+Conference Semi-Finals	4-0	Detroit Red Wings over Colorado Avalanche	 	View Matchup »
+Conference Semi-Finals	4-1	Pittsburgh Penguins over New York Rangers	 	View Matchup »
+Conference Semi-Finals	4-1	Philadelphia Flyers over Montreal Canadiens	 	View Matchup »
+ 
+Conference Quarter-Finals	4-2	Dallas Stars over Anaheim Ducks	 	View Matchup »
+Conference Quarter-Finals	4-2	Colorado Avalanche over Minnesota Wild	 	View Matchup »
+Conference Quarter-Finals	4-3	San Jose Sharks over Calgary Flames	 	View Matchup »
+Conference Quarter-Finals	4-2	Detroit Red Wings over Nashville Predators	 	View Matchup »
+Conference Quarter-Finals	4-1	New York Rangers over New Jersey Devils	 	View Matchup »
+Conference Quarter-Finals	4-3	Philadelphia Flyers over Washington Capitals	 	View Matchup »
+Conference Quarter-Finals	4-0	Pittsburgh Penguins over Ottawa Senators	 	View Matchup »
+Conference Quarter-Finals	4-3	Montreal Canadiens over Boston Bruins	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Detroit Red Wings	22	16	6	0	1	1	.727	72	41	31
+2	Pittsburgh Penguins	20	14	6	0	2	0	.700	61	43	18
+3	Dallas Stars	18	10	8	0	3	1	.556	45	41	4
+4	Philadelphia Flyers	17	9	8	0	2	1	.529	52	54	-2
+5	San Jose Sharks	13	6	7	0	1	3	.462	30	32	-2
+6	New York Rangers	10	5	5	0	0	2	.500	31	27	4
+7	Montreal Canadiens	12	5	7	0	2	1	.417	33	35	-2
+8	Colorado Avalanche	10	4	6	0	1	2	.400	26	33	-7
+9	Calgary Flames	7	3	4	0	0	0	.429	17	19	-2
+10	Boston Bruins	7	3	4	0	1	1	.429	15	19	-4
+11	Washington Capitals	7	3	4	0	0	2	.429	20	23	-3
+12	Minnesota Wild	6	2	4	0	2	1	.333	12	17	-5
+13	Anaheim Ducks	6	2	4	0	0	0	.333	13	20	-7
+14	Nashville Predators	6	2	4	0	0	1	.333	12	17	-5
+15	New Jersey Devils	5	1	4	0	1	0	.200	12	19	-7
+16	Ottawa Senators	4	0	4	0	0	0	.000	5	16	-11
+	League Average	10.6	5.3	5.3	0.0	1.2	1.2	.500	28.5	28.5	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2008-04-09	MIN	Sakic, Joe	COL	3-2	MIN	1	11:11
+2008-04-11	MIN	Carney, Keith	MIN	3-2	COL	1	1:14
+2008-04-12	MTL	Kovalev, Alex	MTL	3-2	BOS	1	2:30
+2008-04-13	BOS	Savard, Marc	BOS	2-1	MTL	1	9:25
+2008-04-13	NYR	Madden, John	NJD	4-3	NYR	1	6:01
+2008-04-14	COL	Bouchard, Pierre-Marc	MIN	3-2	COL	1	11:58
+2008-04-17	PHI	Knuble, Mike	PHI	4-3	WSH	2	26:40
+2008-04-18	DET	Franzén, Johan	DET	2-1	NSH	1	1:48
+2008-04-22	WSH	Lupul, Joffrey	PHI	3-2	WSH	1	6:06
+2008-04-24	MTL	Kostopoulos, Tom	MTL	4-3	PHI	1	0:48
+2008-04-25	SJS	Morrow, Brenden	DAL	3-2	SJS	1	4:39
+2008-04-29	DAL	Norström, Mattias	DAL	2-1	SJS	1	4:37
+2008-05-02	SJS	Pavelski, Joe	SJS	3-2	DAL	1	1:05
+2008-05-04	DAL	Morrow, Brenden	DAL	2-1	SJS	4	69:03
+2008-05-04	PIT	Hossa, Marián	PIT	3-2	NYR	1	7:10
+2008-06-02	DET	Sýkora, Petr	PIT	4-3	DET	3	49:57
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Johan Franzén • DET
+13
+Henrik Zetterberg • DET
+13
+Show #2-4 
+View all players in this category
+Assists
+1.
+Sidney Crosby • PIT
+21
+Show #2-3 
+View all players in this category
+Points
+1.
+Sidney Crosby • PIT
+27
+Henrik Zetterberg • DET
+27
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Henrik Zetterberg • DET
+10.6
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Niklas Kronwall • DET
+16
+Henrik Zetterberg • DET
+16
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Scottie Upshall • PHI
+44
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+R.J. Umberger • PHI
+9
+Show #2-5 
+View all players in this category
+Power Play Goals
+1.
+Daniel Brière • PHI
+6
+Johan Franzén • DET
+6
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Johan Franzén • DET
+2
+Patrick Marleau • SJS
+2
+Mike Richards • PHI
+2
+Henrik Zetterberg • DET
+2
+Show #2-5 
+View all players in this category
+Game-Winning Goals
+1.
+Johan Franzén • DET
+5
+Show #2-3 
+View all players in this category
+Shots
+1.
+Henrik Zetterberg • DET
+116
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Andrew Brunette • COL
+27.8
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Johan Franzén • DET
+2
+Show #2 
+Goals Per Game
+1.
+Johan Franzén • DET
+0.81
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Sidney Crosby • PIT
+1.05
+Show #2-6 
+View all players in this category
+Points Per Game
+1.
+Jaromír Jágr • NYR
+1.50
+Show #2-9 
+View all players in this category
+Goals Created Per Game
+1.
+Jaromír Jágr • NYR
+0.53
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Marc-André Fleury • PIT
+20
+Show #2-9 
+View all players in this category
+Wins
+1.
+Marc-André Fleury • PIT
+14
+Chris Osgood • DET
+14
+Show #2-9 
+View all players in this category
+Losses
+1.
+Martin Biron • PHI
+8
+Marty Turco • DAL
+8
+Show #2-8 
+View all players in this category
+Goals Against
+1.
+Martin Biron • PHI
+52
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Marc-André Fleury • PIT
+610
+Show #2-10 
+View all players in this category
+Saves
+1.
+Marc-André Fleury • PIT
+569
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Dan Ellis • NSH
+.938
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Curtis Joseph • CGY
+0.76
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Marc-André Fleury • PIT
+3
+Chris Osgood • DET
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Marc-André Fleury • PIT
+1251
+Show #2-10 
+View all players in this category
+More 2008 NHL Playoff Pages
+
+2008 NHL Playoffs Overview
+
+More 2008 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2008.html Stathead > Playoffs > 2008 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

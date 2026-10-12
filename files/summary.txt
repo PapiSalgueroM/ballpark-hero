@@ -1,0 +1,60 @@
+nhlrec-2006 200 main=1050 body=3571
+nhlrec-2007 200 main=1078 body=3599
+nhlrec-2008 200 main=1097 body=3618
+nhlrec-2009 200 main=1096 body=3617
+nhlrec-2010 200 main=1083 body=3604
+nhlrec-2011 200 main=1086 body=3607
+nhlrec-2012 200 main=1074 body=3595
+nhlrec-2013 200 main=1050 body=3571
+nhlrec-2014 200 main=1054 body=3575
+nhlrec-2015 200 main=1060 body=3581
+nhlrec-2016 200 main=1054 body=3575
+nhlrec-2017 200 main=1078 body=3599
+nhlrec-2018 200 main=1050 body=3571
+nhlrec-2019 200 main=2343 body=4864
+nhlrec-2020 200 main=1085 body=3606
+nhlrec-2021 200 main=1057 body=3578
+nhlrec-2022 200 main=1051 body=3572
+nhlrec-2023 200 main=1042 body=3563
+nhlrec-2024 200 main=1048 body=3569
+nhlrec-2025 200 main=1062 body=3583
+hr-2006 200 main=11429 body=11429
+hr-2007 200 main=11240 body=11240
+hr-2008 200 main=11329 body=11329
+hr-2009 200 main=11362 body=11362
+hr-2010 200 main=11353 body=11353
+hr-2011 200 main=12034 body=12034
+hr-2012 200 main=11569 body=11569
+hr-2013 200 main=11464 body=11464
+hr-2014 200 main=11368 body=11368
+hr-2015 200 main=11123 body=11123
+hr-2016 200 main=11591 body=11591
+hr-2017 200 main=10870 body=10870
+hr-2018 200 main=11018 body=11018
+hr-2019 200 main=13658 body=13658
+hr-2020 200 main=11513 body=11513
+hr-2021 200 main=11304 body=11304
+hr-2022 200 main=11515 body=11515
+hr-2023 200 main=11017 body=11017
+hr-2024 200 main=11327 body=11327
+hr-2025 200 main=11112 body=11112
+nhlrec-formats 200 main=18081 body=20602
+espn-ot 202 main=0 body=7829
+nhl-gm-ot 200 main=6509 body=8373
+si-ot 200 main=4320 body=5240
+nhl-84 200 main=14687 body=16551
+espn-84 202 main=0 body=7394
+nhl-format-today 200 main=1460 body=3238
+nbc-2020 200 main=10069 body=10046
+cbs-2020 200 main=3178 body=4499
+nbc-2021 200 main=14542 body=13963
+nhl-2021-keyq 200 main=8853 body=10717
+nhl-2012-cqf FAILED page.goto: Download is starting
+Call log:
+  - navigating to "https://www.nhl.com/news/2012-stanley-cup-playoff-matchups-
+nhl-2012-csf FAILED page.goto: Download is starting
+Call log:
+  - navigating to "https://www.nhl.com/news/2012-stanley-cup-playoffs-conferen
+nhl-2012-cf FAILED page.goto: Download is starting
+Call log:
+  - navigating to "https://www.nhl.com/news/2012-stanley-cup-playoffs-conferen

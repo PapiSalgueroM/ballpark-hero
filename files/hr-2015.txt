@@ -1,0 +1,852 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2016.html
+STATUS: 200
+TITLE: 2016 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:42:19.310Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2016 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Pittsburgh Penguins
+
+Conn Smythe Trophy: Sidney Crosby (6 G, 13 A, 19 P)
+
+Goals Leaders: Joe Pavelski (14)
+
+Points Leaders: Logan Couture (30)
+
+Assists Leaders: Logan Couture (20)
+
+Become a Stathead & surf this site ad-free.
+
+2016 NHL Playoffs Menu
+
+2016 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Pittsburgh Penguins over San Jose Sharks	 	View Matchup »
+ 
+Conference Finals	4-2	San Jose Sharks over St. Louis Blues	 	View Matchup »
+Conference Finals	4-3	Pittsburgh Penguins over Tampa Bay Lightning	 	View Matchup »
+ 
+Second Round	4-3	San Jose Sharks over Nashville Predators	 	View Matchup »
+Second Round	4-3	St. Louis Blues over Dallas Stars	 	View Matchup »
+Second Round	4-2	Pittsburgh Penguins over Washington Capitals	 	View Matchup »
+Second Round	4-1	Tampa Bay Lightning over New York Islanders	 	View Matchup »
+ 
+First Round	4-2	Washington Capitals over Philadelphia Flyers	 	View Matchup »
+First Round	4-1	Pittsburgh Penguins over New York Rangers	 	View Matchup »
+First Round	4-1	Tampa Bay Lightning over Detroit Red Wings	 	View Matchup »
+First Round	4-2	New York Islanders over Florida Panthers	 	View Matchup »
+First Round	4-3	Nashville Predators over Anaheim Ducks	 	View Matchup »
+First Round	4-1	San Jose Sharks over Los Angeles Kings	 	View Matchup »
+First Round	4-2	Dallas Stars over Minnesota Wild	 	View Matchup »
+First Round	4-3	St. Louis Blues over Chicago Blackhawks	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Pittsburgh Penguins	24	16	8	0	4	3	.667	73	55	18
+2	San Jose Sharks	24	14	10	0	1	4	.583	75	56	19
+3	Tampa Bay Lightning	17	11	6	0	3	1	.647	48	40	8
+4	St. Louis Blues	20	10	10	0	2	2	.500	57	56	1
+5	Dallas Stars	13	7	6	0	1	2	.538	35	42	-7
+6	Nashville Predators	14	7	7	0	2	0	.500	31	43	-12
+7	Washington Capitals	12	6	6	0	1	2	.500	29	22	7
+8	New York Islanders	11	5	6	0	3	2	.455	26	32	-6
+9	Chicago Blackhawks	7	3	4	0	1	1	.429	20	19	1
+10	Anaheim Ducks	7	3	4	0	0	0	.429	18	14	4
+11	Minnesota Wild	6	2	4	0	1	0	.333	17	21	-4
+12	Florida Panthers	6	2	4	0	0	3	.333	14	15	-1
+13	Philadelphia Flyers	6	2	4	0	0	0	.333	6	14	-8
+14	New York Rangers	5	1	4	0	0	0	.200	10	21	-11
+15	Detroit Red Wings	5	1	4	0	0	0	.200	8	12	-4
+16	Los Angeles Kings	5	1	4	0	1	0	.200	11	16	-5
+	League Average	11.4	5.7	5.7	0.0	1.7	1.7	.500	29.9	29.9	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2016-04-13	STL	Backes, David	STL	1-0	CHI	1	9:04
+2016-04-17	NYI	Hickey, Thomas	NYI	4-3	FLA	1	12:31
+2016-04-18	SJS	Pearson, Tanner	LAK	2-1	SJS	1	3:47
+2016-04-21	STL	Kane, Patrick	CHI	4-3	STL	2	23:07
+2016-04-22	DAL	Koivu, Mikko	MIN	5-4	DAL	1	4:55
+2016-04-22	FLA	Quine, Alan	NYI	2-1	FLA	2	36:00
+2016-04-24	NYI	Tavares, John	NYI	2-1	FLA	2	30:41
+2016-04-28	WSH	Oshie, T.J.	WSH	4-3	PIT	1	9:33
+2016-05-01	DAL	Backes, David	STL	4-3	DAL	1	10:58
+2016-05-03	NYI	Boyle, Brian	TBL	5-4	NYI	1	2:48
+2016-05-04	PIT	Hörnqvist, Patric	PIT	3-2	WSH	1	2:34
+2016-05-05	NSH	Fisher, Mike	NSH	4-3	SJS	3	51:12
+2016-05-05	STL	Eakin, Cody	DAL	3-2	STL	1	2:58
+2016-05-06	NYI	Garrison, Jason	TBL	2-1	NYI	1	1:34
+2016-05-09	NSH	Arvidsson, Viktor	NSH	4-3	SJS	1	2:03
+2016-05-10	PIT	Bonino, Nick	PIT	4-3	WSH	1	6:32
+2016-05-16	PIT	Crosby, Sidney	PIT	3-2	TBL	1	0:40
+2016-05-22	PIT	Johnson, Tyler	TBL	4-3	PIT	1	0:53
+2016-06-01	PIT	Sheary, Conor	PIT	2-1	SJS	1	2:35
+2016-06-04	SJS	Donskoi, Joonas	SJS	3-2	PIT	1	12:18
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Joe Pavelski • SJS
+14
+Show #2-5 
+View all players in this category
+Assists
+1.
+Logan Couture • SJS
+20
+Show #2-5 
+View all players in this category
+Points
+1.
+Logan Couture • SJS
+30
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Logan Couture • SJS
+10.8
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Marc-Édouard Vlasic • SJS
+14
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Alex Killorn • TBL
+42
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Joe Pavelski • SJS
+9
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Phil Kessel • PIT
+5
+Joe Pavelski • SJS
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Kyle Brodziak • STL
+1
+Marián Hossa* • CHI
+1
+Tom Kühnhackl • PIT
+1
+Trevor Lewis • LAK
+1
+Rick Nash • NYR
+1
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Joe Pavelski • SJS
+4
+Show #2-5 
+View all players in this category
+Shots
+1.
+Phil Kessel • PIT
+98
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Chris Tierney • SJS
+33.3
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Patric Hörnqvist • PIT
+1
+T.J. Oshie • WSH
+1
+Show #2 
+Goals Per Game
+1.
+Nikita Kucherov • TBL
+0.65
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Patrick Kane • CHI
+0.86
+Jonathan Toews • CHI
+0.86
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Logan Couture • SJS
+1.25
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Nikita Kucherov • TBL
+0.49
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Martin Jones • SJS
+24
+Show #2-10 
+View all players in this category
+Wins
+1.
+Matt Murray • PIT
+15
+Show #2-9 
+View all players in this category
+Losses
+1.
+Martin Jones • SJS
+10
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Martin Jones • SJS
+53
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Martin Jones • SJS
+684
+Show #2-10 
+View all players in this category
+Saves
+1.
+Martin Jones • SJS
+631
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Frederik Andersen • ANA
+.947
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Michal Neuvirth • PHI
+0.67
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Martin Jones • SJS
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Martin Jones • SJS
+1473
+Show #2-10 
+View all players in this category
+More 2016 NHL Playoff Pages
+
+2016 NHL Playoffs Overview
+
+More 2016 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2016.html Stathead > Playoffs > 2016 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2016 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Pittsburgh Penguins
+
+Conn Smythe Trophy: Sidney Crosby (6 G, 13 A, 19 P)
+
+Goals Leaders: Joe Pavelski (14)
+
+Points Leaders: Logan Couture (30)
+
+Assists Leaders: Logan Couture (20)
+
+Become a Stathead & surf this site ad-free.
+
+2016 NHL Playoffs Menu
+
+2016 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Pittsburgh Penguins over San Jose Sharks	 	View Matchup »
+ 
+Conference Finals	4-2	San Jose Sharks over St. Louis Blues	 	View Matchup »
+Conference Finals	4-3	Pittsburgh Penguins over Tampa Bay Lightning	 	View Matchup »
+ 
+Second Round	4-3	San Jose Sharks over Nashville Predators	 	View Matchup »
+Second Round	4-3	St. Louis Blues over Dallas Stars	 	View Matchup »
+Second Round	4-2	Pittsburgh Penguins over Washington Capitals	 	View Matchup »
+Second Round	4-1	Tampa Bay Lightning over New York Islanders	 	View Matchup »
+ 
+First Round	4-2	Washington Capitals over Philadelphia Flyers	 	View Matchup »
+First Round	4-1	Pittsburgh Penguins over New York Rangers	 	View Matchup »
+First Round	4-1	Tampa Bay Lightning over Detroit Red Wings	 	View Matchup »
+First Round	4-2	New York Islanders over Florida Panthers	 	View Matchup »
+First Round	4-3	Nashville Predators over Anaheim Ducks	 	View Matchup »
+First Round	4-1	San Jose Sharks over Los Angeles Kings	 	View Matchup »
+First Round	4-2	Dallas Stars over Minnesota Wild	 	View Matchup »
+First Round	4-3	St. Louis Blues over Chicago Blackhawks	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Pittsburgh Penguins	24	16	8	0	4	3	.667	73	55	18
+2	San Jose Sharks	24	14	10	0	1	4	.583	75	56	19
+3	Tampa Bay Lightning	17	11	6	0	3	1	.647	48	40	8
+4	St. Louis Blues	20	10	10	0	2	2	.500	57	56	1
+5	Dallas Stars	13	7	6	0	1	2	.538	35	42	-7
+6	Nashville Predators	14	7	7	0	2	0	.500	31	43	-12
+7	Washington Capitals	12	6	6	0	1	2	.500	29	22	7
+8	New York Islanders	11	5	6	0	3	2	.455	26	32	-6
+9	Chicago Blackhawks	7	3	4	0	1	1	.429	20	19	1
+10	Anaheim Ducks	7	3	4	0	0	0	.429	18	14	4
+11	Minnesota Wild	6	2	4	0	1	0	.333	17	21	-4
+12	Florida Panthers	6	2	4	0	0	3	.333	14	15	-1
+13	Philadelphia Flyers	6	2	4	0	0	0	.333	6	14	-8
+14	New York Rangers	5	1	4	0	0	0	.200	10	21	-11
+15	Detroit Red Wings	5	1	4	0	0	0	.200	8	12	-4
+16	Los Angeles Kings	5	1	4	0	1	0	.200	11	16	-5
+	League Average	11.4	5.7	5.7	0.0	1.7	1.7	.500	29.9	29.9	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2016-04-13	STL	Backes, David	STL	1-0	CHI	1	9:04
+2016-04-17	NYI	Hickey, Thomas	NYI	4-3	FLA	1	12:31
+2016-04-18	SJS	Pearson, Tanner	LAK	2-1	SJS	1	3:47
+2016-04-21	STL	Kane, Patrick	CHI	4-3	STL	2	23:07
+2016-04-22	DAL	Koivu, Mikko	MIN	5-4	DAL	1	4:55
+2016-04-22	FLA	Quine, Alan	NYI	2-1	FLA	2	36:00
+2016-04-24	NYI	Tavares, John	NYI	2-1	FLA	2	30:41
+2016-04-28	WSH	Oshie, T.J.	WSH	4-3	PIT	1	9:33
+2016-05-01	DAL	Backes, David	STL	4-3	DAL	1	10:58
+2016-05-03	NYI	Boyle, Brian	TBL	5-4	NYI	1	2:48
+2016-05-04	PIT	Hörnqvist, Patric	PIT	3-2	WSH	1	2:34
+2016-05-05	NSH	Fisher, Mike	NSH	4-3	SJS	3	51:12
+2016-05-05	STL	Eakin, Cody	DAL	3-2	STL	1	2:58
+2016-05-06	NYI	Garrison, Jason	TBL	2-1	NYI	1	1:34
+2016-05-09	NSH	Arvidsson, Viktor	NSH	4-3	SJS	1	2:03
+2016-05-10	PIT	Bonino, Nick	PIT	4-3	WSH	1	6:32
+2016-05-16	PIT	Crosby, Sidney	PIT	3-2	TBL	1	0:40
+2016-05-22	PIT	Johnson, Tyler	TBL	4-3	PIT	1	0:53
+2016-06-01	PIT	Sheary, Conor	PIT	2-1	SJS	1	2:35
+2016-06-04	SJS	Donskoi, Joonas	SJS	3-2	PIT	1	12:18
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Joe Pavelski • SJS
+14
+Show #2-5 
+View all players in this category
+Assists
+1.
+Logan Couture • SJS
+20
+Show #2-5 
+View all players in this category
+Points
+1.
+Logan Couture • SJS
+30
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Logan Couture • SJS
+10.8
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Marc-Édouard Vlasic • SJS
+14
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Alex Killorn • TBL
+42
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Joe Pavelski • SJS
+9
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Phil Kessel • PIT
+5
+Joe Pavelski • SJS
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Kyle Brodziak • STL
+1
+Marián Hossa* • CHI
+1
+Tom Kühnhackl • PIT
+1
+Trevor Lewis • LAK
+1
+Rick Nash • NYR
+1
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Joe Pavelski • SJS
+4
+Show #2-5 
+View all players in this category
+Shots
+1.
+Phil Kessel • PIT
+98
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Chris Tierney • SJS
+33.3
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Patric Hörnqvist • PIT
+1
+T.J. Oshie • WSH
+1
+Show #2 
+Goals Per Game
+1.
+Nikita Kucherov • TBL
+0.65
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Patrick Kane • CHI
+0.86
+Jonathan Toews • CHI
+0.86
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Logan Couture • SJS
+1.25
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Nikita Kucherov • TBL
+0.49
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Martin Jones • SJS
+24
+Show #2-10 
+View all players in this category
+Wins
+1.
+Matt Murray • PIT
+15
+Show #2-9 
+View all players in this category
+Losses
+1.
+Martin Jones • SJS
+10
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Martin Jones • SJS
+53
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Martin Jones • SJS
+684
+Show #2-10 
+View all players in this category
+Saves
+1.
+Martin Jones • SJS
+631
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Frederik Andersen • ANA
+.947
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Michal Neuvirth • PHI
+0.67
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Martin Jones • SJS
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Martin Jones • SJS
+1473
+Show #2-10 
+View all players in this category
+More 2016 NHL Playoff Pages
+
+2016 NHL Playoffs Overview
+
+More 2016 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2016.html Stathead > Playoffs > 2016 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

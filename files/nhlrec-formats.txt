@@ -1,0 +1,404 @@
+URL: https://records.nhl.com/history/playoff-formats
+STATUS: 200
+TITLE: All-Time Playoff Formats | NHL Records
+READ: 2026-10-12T17:43:52.090Z
+---MAIN---
+All-Time Playoff Formats
+1917-18: The regular season is split into two halves. The winners of both halves face each other in a two-game, total‑goals series for the NHL championship and the right to meet the Pacific Coast Hockey Association (PCHA) champion in the best-of-five Stanley Cup Final.
+1918-19: Same as 1917-18, except that the NHL Final is extended to a best-of-seven series.
+1919-20: Same as 1917-18, except that the Ottawa Senators (1917) win both halves of their split regular-season schedule to earn an automatic berth in the best-of-five Stanley Cup Final against the PCHA champions.
+1922-23: The top two teams at the conclusion of the regular season face each other in a two-game, total-goals series for the NHL championship. The NHL champion then moves on to play the PCHA champion in the best-of-three Stanley Cup Semifinal, and the winner of the Semifinal plays the WCHL champion, who had been given a bye, in the best-of-three Stanley Cup Final.
+1923-24: The top two teams at the conclusion of the regular season face each other in a two-game, total-goals series for the NHL championship. The NHL champion then moves on to play the loser of the PCHA-WCHL playoff (the winner of the PCHA-WCHL playoff earns a bye into the Stanley Cup Final) in the best-of-three Stanley Cup Semifinal. The winner of this series meets the PCHA-WCHL playoff winner in the best-of-three Stanley Cup Final.
+1924-25: The first-place team (Hamilton Tigers) at the conclusion of the regular season is scheduled to play the winner of a two-game, total-goals series between the second- (Toronto St. Patricks) and third- (Montreal Canadiens) place teams. However, Hamilton refuses to abide by this new format, demanding greater compensation than offered by the League. Thus, Toronto and Montreal play their two-game, total-goals series, and the winner (Montreal) earns the NHL title and then plays the WCHL champion (Victoria Cougars) in the best-of-five Stanley Cup Final.
+1925-26: The format that was intended for 1924-25 goes into effect. The winner of the two-game, total-goals series between the second- and third-place teams faces off against the first-place team in the two-game, total-goals NHL championship series. The NHL champion then moves on to play the Western Hockey League champion in the best-of-five Stanley Cup Final. After the 1925-26 season, the NHL becomes the only major professional hockey league still in existence and consequently takes over sole control of the Stanley Cup competition.
+1926-27: The 10-team league is divided into two divisions – Canadian and American – of five teams apiece. In each division, the winner of the two-game, total-goals series between the second- and third-place teams faces the first-place team in a two-game, total-goals series for the division title. The two division title winners then meet in the best-of-five Stanley Cup Final.
+1928-29: The first-place teams in the two divisions play each other in a best-of-five series. The second-place teams in the two divisions play each other in a two-game, total-goals series – as do the two third-place teams. The winners of these latter two series then play each other in a best-of-three series for the right to meet the winner of the series between the two first-place teams. This Stanley Cup Final is a best-of-three.
+
+Series A: Team #1 in Canadian Division vs. Team #1 in American Division (best-of-five)
+Series B: Team #2 in Canadian Division vs. Team #2 in American Division (two-game, total-goals)
+Series C: Team #3 in Canadian Division vs. Team #3 in American Division (two-game, total-goals)
+Series D: Winner of Series B vs. Winner of Series C (best-of-three)
+Series E: Winner of Series A vs. Winner of Series D (best-of-three) for Stanley Cup
+1930-31: Same as 1928-29, except that Series D is changed to a two-game, total-goals format and Series E is changed to best-of-five.
+1936-37: Same as 1931-32, except that Series B, C and D are each best-of-three.
+1938-39: With the NHL reduced to seven teams, the two-division system is replaced by one seven-team League. Based on final regular-season standings, the following playoff format is adopted:
+
+Series A: Team #1 vs. Team #2 (best-of-seven)
+Series B: Team #3 vs. Team #4 (best-of-three)
+Series C: Team #5 vs. Team #6 (best-of-three)
+Series D: Winner of Series B vs. Winner of Series C (best-of-three)
+Series E: Winner of Series A vs. Winner of Series D (best-of-seven)
+1942-43: With the NHL reduced to six teams (the “Original Six”), only the top four finishers qualify for playoff action. The best-of-seven Semifinals pits Team #1 vs. Team #3 and Team #2 vs. Team #4. The winners of each Semifinal series meet in the best-of-seven Stanley Cup Final.
+1967-68: When it doubles in size from six to 12 teams, the NHL once again is divided into two divisions – East and West – of six teams apiece. The top four teams in each division qualify for the playoffs (all series are best-of-seven):
+
+Series A: Team #1 (East) vs. Team #3 (East)
+Series B: Team #2 (East) vs. Team #4 (East)
+Series C: Team #1 (West) vs. Team #3 (West)
+Series D: Team #2 (West) vs. Team #4 (West)
+Series E: Winner of Series A vs. Winner of Series B
+Series F: Winner of Series C vs. Winner of Series D
+Series G: Winner of Series E vs. Winner of Series F
+1970-71: Same as 1967-68, except that Series E matches the winners of Series A and D, and Series F matches the winners of Series B and C.
+1971-72: Same as 1970-71, except that Series A and C match the first- and fourth-place teams, and Series B and D match the second- and third-place teams.
+1974-75: With the League now expanded to 18 teams in four divisions, a completely new playoff format is introduced. First, the #2 and #3 teams in each of the four divisions are pooled together in the Preliminary Round. These eight (#2 and #3) teams are ranked #1 to #8 based on regular-season record:
+
+Series A: Team #1 vs. Team #8 (best-of-three)
+Series B: Team #2 vs. Team #7 (best-of-three)
+Series C: Team #3 vs. Team #6 (best-of-three)
+Series D: Team #4 vs. Team #5 (best-of-three)
+
+The winners of this Preliminary Round then are pooled together with the four division winners, who had received byes into this Quarterfinals. These eight teams are again ranked #1 to #8 based on regular-season record:
+
+Series E: Team #1 vs. Team #8 (best-of-seven)
+Series F: Team #2 vs. Team #7 (best-of-seven)
+Series G: Team #3 vs. Team #6 (best-of-seven)
+Series H: Team #4 vs. Team #5 (best-of-seven)
+
+The four Quarterfinals winners, who moved on to the Semifinals, are then ranked #1 to #4 based on regular-season record:
+
+Series I: Team #1 vs. Team #4 (best-of-seven)
+Series J: Team #2 vs. Team #3 (best-of-seven)
+Series K: Winner of Series I vs. Winner of Series J (best-of-seven)
+1977-78: Same as 1974-75, except that the Preliminary Round consists of the #2 teams in the four divisions and the next four teams based on regular-season record (not their standings within their divisions).
+1979-80: The League expands its playoff structure to include 16 teams. The four first-place teams in the four divisions automatically earn playoff berths. Another 12, according to regular-season record, also earn berths. All 16 teams then are pooled together and ranked #1 to #16 based on regular-season record:
+
+Series A: Team #1 vs. Team #16 (best-of-five)
+Series B: Team #2 vs. Team #15 (best-of-five)
+Series C: Team #3 vs. Team #14 (best-of-five)
+Series D: Team #4 vs. Team #13 (best-of-five)
+Series E: Team #5 vs. Team #12 (best-of-five)
+Series F: Team #6 vs. Team #11 (best-of-five)
+Series G: Team #7 vs. Team #10 (best-of-five)
+Series H: Team #8 vs. Team # 9 (best-of-five)
+
+The eight Preliminary Round winners, ranked #1 to #8 based on regular-season record, move on to the Quarterfinals:
+
+Series I: Team #1 vs. Team #8 (best-of-seven)
+Series J: Team #2 vs. Team #7 (best-of-seven)
+Series K: Team #3 vs. Team #6 (best-of-seven)
+Series L: Team #4 vs. Team #5 (best-of-seven)
+
+The four Quarterfinals winners, ranked #1 to #4 based on regular-season record, move on to the Semifinals:
+
+Series M: Team #1 vs. Team #4 (best-of-seven)
+Series N: Team #2 vs. Team #3 (best-of-seven)
+Series O: Winner of Series M vs. winner of Series N (best-of-seven)
+1981-82: The first four teams in each division earn playoff berths. In each division, the first-place team opposes the fourth-place team and the second-place team opposes the third-place team in a best-of-five Division Semifinal (DSF) series. In each division, the two winners of the DSF meet in a best-of-seven Division Final (DF). The two DF winners in each conference meet in a best-of-seven Conference Final (CF). In the Prince of Wales Conference, the Adams Division winner opposes the Patrick Division winner; in the Clarence Campbell Conference, the Smythe Division winner opposes the Norris Division winner. The two CF winners meet in a best-of-seven Stanley Cup Final.
+1986-87: The Division Semifinals changes from best-of-five to best-of-seven.
+1993-94: The NHL’s playoff draw is conference-based rather than division-based. At the conclusion of the regular season, the top eight teams in each of the Eastern and Western Conferences qualifies for the playoffs. The teams that finish in first place in each of the League’s divisions are seeded first and second in each conference’s playoff draw and assured of home-ice advantage in the first two playoff rounds. The remaining teams are seeded based on their regular-season point totals. In each conference, the team seeded #1 plays #8; #2 vs. #7; #3 vs. #6; and #4 vs. #5. All series are best-of-seven with home ice rotating on a 2-2-1-1-1 basis, with the exception of matchups between Central and Pacific Division teams. These matchups are played on a 2-3-2 basis to reduce travel. In a 2-3-2 series, the team with the most points can choose to start the series at home or on the road. The Eastern Conference champion faces the Western Conference champion in the Stanley Cup Final.
+1994-95: Same as 1993-94, except that in first-, second- or third-round playoff series involving Central and Pacific Division teams, the team with the better record has the choice of using either a 2-3-2 or a 2-2-1-1-1 format. When a 2-3-2 format is selected, the higher-ranked team also has the choice of playing games 1, 2, 6 and 7 at home or playing games 3, 4 and 5 at home. The format for the Stanley Cup Final remains 2-2-1-1-1.
+1998-99: The NHL’s teams are realigned into two conferences, each consisting of three divisions. The number of teams qualifying for the Stanley Cup Playoffs remains at 16. First-round playoff berths are awarded to the first-place team in each division as well as to the next five best teams based on regular-season point totals in each conference. The three division winners in each conference are seeded first through third, in order of points, for the playoffs and the next five best teams, in order of points, are seeded fourth through eighth. In each conference, the team seeded #1 plays #8; #2 vs. #7; #3 vs. #6; and #4 vs. #5 in the Conference Quarterfinals. Home-ice advantage in the Conference Quarterfinals is granted to those teams seeded first through fourth in each conference. In the Conference Semifinals and Conference Finals, teams are reseeded according to the same criteria as the Conference Quarterfinals. Higher-seeded teams gain home-ice advantage. Home-ice advantage for the Stanley Cup Final is determined by regular-season points. All series remain best-of-seven.
+
+Conference Quarterfinals
+Eastern Conference
+Series A: #1 (Division Winner) vs. #8
+Series B: #2 (Division Winner) vs. #7
+Series C: #3 (Division Winner) vs. #6
+Series D: #4 vs. #5
+
+Western Conference
+Series E: #1 (Division Winner) vs. #8
+Series F: #2 (Division Winner) vs. #7
+Series G: #3 (Division Winner) vs. #6
+Series H: #4 vs. #5
+
+Conference Semifinals
+Eastern Conference
+Series I: Top-seeded winner from Series A-D vs. Lowest-seeded winner from Series A-D
+Series J: Other two winners from Series A-D
+
+Western Conference
+Series K: Top-seeded winner from Series E-H vs. Lowest-seeded winner from Series E-H
+Series L: Other two winners from Series E-H
+
+Conference Finals
+Eastern Conference
+Series M: Winner of Series I vs. Winner of Series J
+
+Western Conference
+Series N: Winner of Series K vs. Winner of Series L
+
+Stanley Cup Final
+Series O: Winner of Series M vs. Winner of Series N
+2013-14: The NHL’s teams are realigned into two conferences, each consisting of two divisions. The number of teams qualifying for the Stanley Cup Playoffs remains unchanged at 16. Twelve first-round playoff berths are awarded to the top three finishers in each of the four divisions. These teams are the first three “seeds” in each division. Two additional “Wild Card” berths are awarded to the next two highest-placed finishers in each conference, ranked on the basis of regular-season points and regardless of division. The first-place finisher with the highest number of regular-season points in the conference is matched against the Wild Card team with the lowest number of regular-season points, and the first-place finisher with the second-highest number of regular-season points in the conference is matched against the Wild Card team with the second-lowest number of regular-season points.
+
+In each division, the team seeded #1 plays #4; #2 plays #3.
+
+The two advancing teams in the West and two advancing teams in the East meet in the Conference Finals.
+
+The Eastern and Western Conference champions meet in the Stanley Cup Final.
+
+Home-ice advantage in the Stanley Cup Final is determined by regular-season points.
+
+All series remain best-of-seven.
+
+First Round
+Eastern Conference
+Series A: Team #1 Atlantic Division vs. Wild Card
+Series B: Team #2 Atlantic Division vs. Team #3 Atlantic Division
+Series C: Team #1 Metropolitan Division vs. Wild Card
+Series D: Team #2 Metropolitan Division vs. Team #3 Metropolitan Division
+
+Western Conference
+Series E: Team #1 Central Division vs. Wild Card
+Series F: Team #2 Central Division vs. Team #3 Central Division
+Series G: Team #1 Pacific Division vs. Wild Card
+Series H: Team #2 Pacific Division vs. Team #3 Pacific Division
+
+Second Round
+Eastern Conference
+Series I: Winner of Series A vs. Winner of Series B
+Series J: Winner of Series C vs. Winner of Series D
+
+Western Conference
+Series K: Winner of Series E vs. Winner of Series F
+Series L: Winner of Series G vs. Winner of Series H
+
+Conference Finals
+Eastern Conference
+Series M: Winner of Series I vs. Winner of Series J
+
+Western Conference
+Series N: Winner of Series K vs. Winner of Series L
+
+Stanley Cup Final
+Series O: Winner of Series M vs. Winner of Series N
+2019-20: The NHL announces on May 26, 2020, the conclusion of the 2019-20 regular season as well as a modified competitive playoff format that features 24 teams – the top 12 in each conference based on points percentage at the time of the League’s pause (through games of March 11, 2020).
+
+The NHL pauses its season on March 12, 2020, due to concerns about COVID-19, having played 85.1 percent of the 2019-20 regular-season schedule that started in early October 2019 (1,082 of 1,271 games). The remaining 189 games originally scheduled from March 12 – April 4, 2020, are canceled.
+
+2020 Stanley Cup Qualifiers
+The 2020 Stanley Cup Playoffs begin with the 2020 Stanley Cup Qualifiers, which feature both a Round Robin and Qualifying Round.
+
+The top four teams in each conference compete in a seeding Round Robin, which features regular-season overtime rules. Ties in the Round Robin are broken by regular-season points percentage. The seeding order for these teams remains the same throughout the 2020 Stanley Cup Playoffs.
+
+The following eight teams in each conference play in the Qualifying Round, featuring best-of-five series (#5 vs. #12, #6 vs. #11, #7 vs. #10, #8 vs. #9) to determine who advances to the First Round of the 2020 Stanley Cup Playoffs. These series use playoff overtime rules.
+
+“Seeding” Format
+In each succeeding round of the 2020 Stanley Cup Playoffs, the highest remaining seed in each conference faces the lowest remaining seed, the second-highest remaining seed in each conference faces the second-lowest remaining seed, etc.
+
+Series Lengths
+All rounds after the 2020 Stanley Cup Qualifiers feature best-of-seven series (First Round, Second Round, Conference Finals, Stanley Cup Final).
+
+“Home” Ice
+In the 2020 Stanley Cup Qualifiers, the higher-seeded team is designated as the home team in Games 1, 2 and 5. The lower-seeded team is designated as the home team in Games 3 and 4.
+
+In the 2020 First Round, Second Round and Conference Finals, the higher-seeded team is designated as the home team in Games 1, 2, 5 and 7. The lower-seeded team is designated as the home team in Games 3, 4 and 6.
+
+In the 2020 Stanley Cup Final, the team with the higher regular-season points percentage is designated as the home team in Games 1, 2, 5 and 7. The team with the lower regular-season points percentage is designated as the home team in Games 3, 4 and 6.
+
+Hub Cities
+The 12 participating Eastern Conference teams play at Scotiabank Arena in Toronto, while the 12 participating Western Conference teams compete at Rogers Place in Edmonton for the 2020 Stanley Cup Qualifiers as well as the 2020 First Round and Second Round.
+
+The 2020 Stanley Cup Playoffs shift entirely to Edmonton for the Conference Finals and Stanley Cup Final.
+2020-21: The NHL announces that the Stanley Cup Playoffs will feature 16 teams in the traditional best-of-seven, four-round format. The top four teams in each division will qualify for the postseason, with intradivisional play in the first two rounds (#1 vs. #4; #2 vs. #3). The four teams that advance to the Semifinal Round will be seeded by their regular-season point total, with the No. 1 seed playing the No. 4 seed in one series and the No. 2 and No. 3 seeds meeting in the other.
+2021-22: Following two seasons in which the playoff format was adjusted to accommodate the unique circumstances surrounding the COVID-19 pandemic, the NHL returns to the format in place from 2013-14 through 2018-19.
+---BODY---
+Regular Season
+Playoffs
+Events
+Franchises
+Awards
+Drafts
+History/Rules
+Organizations
+
+All-Time Playoff Formats
+1917-18: The regular season is split into two halves. The winners of both halves face each other in a two-game, total‑goals series for the NHL championship and the right to meet the Pacific Coast Hockey Association (PCHA) champion in the best-of-five Stanley Cup Final.
+1918-19: Same as 1917-18, except that the NHL Final is extended to a best-of-seven series.
+1919-20: Same as 1917-18, except that the Ottawa Senators (1917) win both halves of their split regular-season schedule to earn an automatic berth in the best-of-five Stanley Cup Final against the PCHA champions.
+1922-23: The top two teams at the conclusion of the regular season face each other in a two-game, total-goals series for the NHL championship. The NHL champion then moves on to play the PCHA champion in the best-of-three Stanley Cup Semifinal, and the winner of the Semifinal plays the WCHL champion, who had been given a bye, in the best-of-three Stanley Cup Final.
+1923-24: The top two teams at the conclusion of the regular season face each other in a two-game, total-goals series for the NHL championship. The NHL champion then moves on to play the loser of the PCHA-WCHL playoff (the winner of the PCHA-WCHL playoff earns a bye into the Stanley Cup Final) in the best-of-three Stanley Cup Semifinal. The winner of this series meets the PCHA-WCHL playoff winner in the best-of-three Stanley Cup Final.
+1924-25: The first-place team (Hamilton Tigers) at the conclusion of the regular season is scheduled to play the winner of a two-game, total-goals series between the second- (Toronto St. Patricks) and third- (Montreal Canadiens) place teams. However, Hamilton refuses to abide by this new format, demanding greater compensation than offered by the League. Thus, Toronto and Montreal play their two-game, total-goals series, and the winner (Montreal) earns the NHL title and then plays the WCHL champion (Victoria Cougars) in the best-of-five Stanley Cup Final.
+1925-26: The format that was intended for 1924-25 goes into effect. The winner of the two-game, total-goals series between the second- and third-place teams faces off against the first-place team in the two-game, total-goals NHL championship series. The NHL champion then moves on to play the Western Hockey League champion in the best-of-five Stanley Cup Final. After the 1925-26 season, the NHL becomes the only major professional hockey league still in existence and consequently takes over sole control of the Stanley Cup competition.
+1926-27: The 10-team league is divided into two divisions – Canadian and American – of five teams apiece. In each division, the winner of the two-game, total-goals series between the second- and third-place teams faces the first-place team in a two-game, total-goals series for the division title. The two division title winners then meet in the best-of-five Stanley Cup Final.
+1928-29: The first-place teams in the two divisions play each other in a best-of-five series. The second-place teams in the two divisions play each other in a two-game, total-goals series – as do the two third-place teams. The winners of these latter two series then play each other in a best-of-three series for the right to meet the winner of the series between the two first-place teams. This Stanley Cup Final is a best-of-three.
+
+Series A: Team #1 in Canadian Division vs. Team #1 in American Division (best-of-five)
+Series B: Team #2 in Canadian Division vs. Team #2 in American Division (two-game, total-goals)
+Series C: Team #3 in Canadian Division vs. Team #3 in American Division (two-game, total-goals)
+Series D: Winner of Series B vs. Winner of Series C (best-of-three)
+Series E: Winner of Series A vs. Winner of Series D (best-of-three) for Stanley Cup
+1930-31: Same as 1928-29, except that Series D is changed to a two-game, total-goals format and Series E is changed to best-of-five.
+1936-37: Same as 1931-32, except that Series B, C and D are each best-of-three.
+1938-39: With the NHL reduced to seven teams, the two-division system is replaced by one seven-team League. Based on final regular-season standings, the following playoff format is adopted:
+
+Series A: Team #1 vs. Team #2 (best-of-seven)
+Series B: Team #3 vs. Team #4 (best-of-three)
+Series C: Team #5 vs. Team #6 (best-of-three)
+Series D: Winner of Series B vs. Winner of Series C (best-of-three)
+Series E: Winner of Series A vs. Winner of Series D (best-of-seven)
+1942-43: With the NHL reduced to six teams (the “Original Six”), only the top four finishers qualify for playoff action. The best-of-seven Semifinals pits Team #1 vs. Team #3 and Team #2 vs. Team #4. The winners of each Semifinal series meet in the best-of-seven Stanley Cup Final.
+1967-68: When it doubles in size from six to 12 teams, the NHL once again is divided into two divisions – East and West – of six teams apiece. The top four teams in each division qualify for the playoffs (all series are best-of-seven):
+
+Series A: Team #1 (East) vs. Team #3 (East)
+Series B: Team #2 (East) vs. Team #4 (East)
+Series C: Team #1 (West) vs. Team #3 (West)
+Series D: Team #2 (West) vs. Team #4 (West)
+Series E: Winner of Series A vs. Winner of Series B
+Series F: Winner of Series C vs. Winner of Series D
+Series G: Winner of Series E vs. Winner of Series F
+1970-71: Same as 1967-68, except that Series E matches the winners of Series A and D, and Series F matches the winners of Series B and C.
+1971-72: Same as 1970-71, except that Series A and C match the first- and fourth-place teams, and Series B and D match the second- and third-place teams.
+1974-75: With the League now expanded to 18 teams in four divisions, a completely new playoff format is introduced. First, the #2 and #3 teams in each of the four divisions are pooled together in the Preliminary Round. These eight (#2 and #3) teams are ranked #1 to #8 based on regular-season record:
+
+Series A: Team #1 vs. Team #8 (best-of-three)
+Series B: Team #2 vs. Team #7 (best-of-three)
+Series C: Team #3 vs. Team #6 (best-of-three)
+Series D: Team #4 vs. Team #5 (best-of-three)
+
+The winners of this Preliminary Round then are pooled together with the four division winners, who had received byes into this Quarterfinals. These eight teams are again ranked #1 to #8 based on regular-season record:
+
+Series E: Team #1 vs. Team #8 (best-of-seven)
+Series F: Team #2 vs. Team #7 (best-of-seven)
+Series G: Team #3 vs. Team #6 (best-of-seven)
+Series H: Team #4 vs. Team #5 (best-of-seven)
+
+The four Quarterfinals winners, who moved on to the Semifinals, are then ranked #1 to #4 based on regular-season record:
+
+Series I: Team #1 vs. Team #4 (best-of-seven)
+Series J: Team #2 vs. Team #3 (best-of-seven)
+Series K: Winner of Series I vs. Winner of Series J (best-of-seven)
+1977-78: Same as 1974-75, except that the Preliminary Round consists of the #2 teams in the four divisions and the next four teams based on regular-season record (not their standings within their divisions).
+1979-80: The League expands its playoff structure to include 16 teams. The four first-place teams in the four divisions automatically earn playoff berths. Another 12, according to regular-season record, also earn berths. All 16 teams then are pooled together and ranked #1 to #16 based on regular-season record:
+
+Series A: Team #1 vs. Team #16 (best-of-five)
+Series B: Team #2 vs. Team #15 (best-of-five)
+Series C: Team #3 vs. Team #14 (best-of-five)
+Series D: Team #4 vs. Team #13 (best-of-five)
+Series E: Team #5 vs. Team #12 (best-of-five)
+Series F: Team #6 vs. Team #11 (best-of-five)
+Series G: Team #7 vs. Team #10 (best-of-five)
+Series H: Team #8 vs. Team # 9 (best-of-five)
+
+The eight Preliminary Round winners, ranked #1 to #8 based on regular-season record, move on to the Quarterfinals:
+
+Series I: Team #1 vs. Team #8 (best-of-seven)
+Series J: Team #2 vs. Team #7 (best-of-seven)
+Series K: Team #3 vs. Team #6 (best-of-seven)
+Series L: Team #4 vs. Team #5 (best-of-seven)
+
+The four Quarterfinals winners, ranked #1 to #4 based on regular-season record, move on to the Semifinals:
+
+Series M: Team #1 vs. Team #4 (best-of-seven)
+Series N: Team #2 vs. Team #3 (best-of-seven)
+Series O: Winner of Series M vs. winner of Series N (best-of-seven)
+1981-82: The first four teams in each division earn playoff berths. In each division, the first-place team opposes the fourth-place team and the second-place team opposes the third-place team in a best-of-five Division Semifinal (DSF) series. In each division, the two winners of the DSF meet in a best-of-seven Division Final (DF). The two DF winners in each conference meet in a best-of-seven Conference Final (CF). In the Prince of Wales Conference, the Adams Division winner opposes the Patrick Division winner; in the Clarence Campbell Conference, the Smythe Division winner opposes the Norris Division winner. The two CF winners meet in a best-of-seven Stanley Cup Final.
+1986-87: The Division Semifinals changes from best-of-five to best-of-seven.
+1993-94: The NHL’s playoff draw is conference-based rather than division-based. At the conclusion of the regular season, the top eight teams in each of the Eastern and Western Conferences qualifies for the playoffs. The teams that finish in first place in each of the League’s divisions are seeded first and second in each conference’s playoff draw and assured of home-ice advantage in the first two playoff rounds. The remaining teams are seeded based on their regular-season point totals. In each conference, the team seeded #1 plays #8; #2 vs. #7; #3 vs. #6; and #4 vs. #5. All series are best-of-seven with home ice rotating on a 2-2-1-1-1 basis, with the exception of matchups between Central and Pacific Division teams. These matchups are played on a 2-3-2 basis to reduce travel. In a 2-3-2 series, the team with the most points can choose to start the series at home or on the road. The Eastern Conference champion faces the Western Conference champion in the Stanley Cup Final.
+1994-95: Same as 1993-94, except that in first-, second- or third-round playoff series involving Central and Pacific Division teams, the team with the better record has the choice of using either a 2-3-2 or a 2-2-1-1-1 format. When a 2-3-2 format is selected, the higher-ranked team also has the choice of playing games 1, 2, 6 and 7 at home or playing games 3, 4 and 5 at home. The format for the Stanley Cup Final remains 2-2-1-1-1.
+1998-99: The NHL’s teams are realigned into two conferences, each consisting of three divisions. The number of teams qualifying for the Stanley Cup Playoffs remains at 16. First-round playoff berths are awarded to the first-place team in each division as well as to the next five best teams based on regular-season point totals in each conference. The three division winners in each conference are seeded first through third, in order of points, for the playoffs and the next five best teams, in order of points, are seeded fourth through eighth. In each conference, the team seeded #1 plays #8; #2 vs. #7; #3 vs. #6; and #4 vs. #5 in the Conference Quarterfinals. Home-ice advantage in the Conference Quarterfinals is granted to those teams seeded first through fourth in each conference. In the Conference Semifinals and Conference Finals, teams are reseeded according to the same criteria as the Conference Quarterfinals. Higher-seeded teams gain home-ice advantage. Home-ice advantage for the Stanley Cup Final is determined by regular-season points. All series remain best-of-seven.
+
+Conference Quarterfinals
+Eastern Conference
+Series A: #1 (Division Winner) vs. #8
+Series B: #2 (Division Winner) vs. #7
+Series C: #3 (Division Winner) vs. #6
+Series D: #4 vs. #5
+
+Western Conference
+Series E: #1 (Division Winner) vs. #8
+Series F: #2 (Division Winner) vs. #7
+Series G: #3 (Division Winner) vs. #6
+Series H: #4 vs. #5
+
+Conference Semifinals
+Eastern Conference
+Series I: Top-seeded winner from Series A-D vs. Lowest-seeded winner from Series A-D
+Series J: Other two winners from Series A-D
+
+Western Conference
+Series K: Top-seeded winner from Series E-H vs. Lowest-seeded winner from Series E-H
+Series L: Other two winners from Series E-H
+
+Conference Finals
+Eastern Conference
+Series M: Winner of Series I vs. Winner of Series J
+
+Western Conference
+Series N: Winner of Series K vs. Winner of Series L
+
+Stanley Cup Final
+Series O: Winner of Series M vs. Winner of Series N
+2013-14: The NHL’s teams are realigned into two conferences, each consisting of two divisions. The number of teams qualifying for the Stanley Cup Playoffs remains unchanged at 16. Twelve first-round playoff berths are awarded to the top three finishers in each of the four divisions. These teams are the first three “seeds” in each division. Two additional “Wild Card” berths are awarded to the next two highest-placed finishers in each conference, ranked on the basis of regular-season points and regardless of division. The first-place finisher with the highest number of regular-season points in the conference is matched against the Wild Card team with the lowest number of regular-season points, and the first-place finisher with the second-highest number of regular-season points in the conference is matched against the Wild Card team with the second-lowest number of regular-season points.
+
+In each division, the team seeded #1 plays #4; #2 plays #3.
+
+The two advancing teams in the West and two advancing teams in the East meet in the Conference Finals.
+
+The Eastern and Western Conference champions meet in the Stanley Cup Final.
+
+Home-ice advantage in the Stanley Cup Final is determined by regular-season points.
+
+All series remain best-of-seven.
+
+First Round
+Eastern Conference
+Series A: Team #1 Atlantic Division vs. Wild Card
+Series B: Team #2 Atlantic Division vs. Team #3 Atlantic Division
+Series C: Team #1 Metropolitan Division vs. Wild Card
+Series D: Team #2 Metropolitan Division vs. Team #3 Metropolitan Division
+
+Western Conference
+Series E: Team #1 Central Division vs. Wild Card
+Series F: Team #2 Central Division vs. Team #3 Central Division
+Series G: Team #1 Pacific Division vs. Wild Card
+Series H: Team #2 Pacific Division vs. Team #3 Pacific Division
+
+Second Round
+Eastern Conference
+Series I: Winner of Series A vs. Winner of Series B
+Series J: Winner of Series C vs. Winner of Series D
+
+Western Conference
+Series K: Winner of Series E vs. Winner of Series F
+Series L: Winner of Series G vs. Winner of Series H
+
+Conference Finals
+Eastern Conference
+Series M: Winner of Series I vs. Winner of Series J
+
+Western Conference
+Series N: Winner of Series K vs. Winner of Series L
+
+Stanley Cup Final
+Series O: Winner of Series M vs. Winner of Series N
+2019-20: The NHL announces on May 26, 2020, the conclusion of the 2019-20 regular season as well as a modified competitive playoff format that features 24 teams – the top 12 in each conference based on points percentage at the time of the League’s pause (through games of March 11, 2020).
+
+The NHL pauses its season on March 12, 2020, due to concerns about COVID-19, having played 85.1 percent of the 2019-20 regular-season schedule that started in early October 2019 (1,082 of 1,271 games). The remaining 189 games originally scheduled from March 12 – April 4, 2020, are canceled.
+
+2020 Stanley Cup Qualifiers
+The 2020 Stanley Cup Playoffs begin with the 2020 Stanley Cup Qualifiers, which feature both a Round Robin and Qualifying Round.
+
+The top four teams in each conference compete in a seeding Round Robin, which features regular-season overtime rules. Ties in the Round Robin are broken by regular-season points percentage. The seeding order for these teams remains the same throughout the 2020 Stanley Cup Playoffs.
+
+The following eight teams in each conference play in the Qualifying Round, featuring best-of-five series (#5 vs. #12, #6 vs. #11, #7 vs. #10, #8 vs. #9) to determine who advances to the First Round of the 2020 Stanley Cup Playoffs. These series use playoff overtime rules.
+
+“Seeding” Format
+In each succeeding round of the 2020 Stanley Cup Playoffs, the highest remaining seed in each conference faces the lowest remaining seed, the second-highest remaining seed in each conference faces the second-lowest remaining seed, etc.
+
+Series Lengths
+All rounds after the 2020 Stanley Cup Qualifiers feature best-of-seven series (First Round, Second Round, Conference Finals, Stanley Cup Final).
+
+“Home” Ice
+In the 2020 Stanley Cup Qualifiers, the higher-seeded team is designated as the home team in Games 1, 2 and 5. The lower-seeded team is designated as the home team in Games 3 and 4.
+
+In the 2020 First Round, Second Round and Conference Finals, the higher-seeded team is designated as the home team in Games 1, 2, 5 and 7. The lower-seeded team is designated as the home team in Games 3, 4 and 6.
+
+In the 2020 Stanley Cup Final, the team with the higher regular-season points percentage is designated as the home team in Games 1, 2, 5 and 7. The team with the lower regular-season points percentage is designated as the home team in Games 3, 4 and 6.
+
+Hub Cities
+The 12 participating Eastern Conference teams play at Scotiabank Arena in Toronto, while the 12 participating Western Conference teams compete at Rogers Place in Edmonton for the 2020 Stanley Cup Qualifiers as well as the 2020 First Round and Second Round.
+
+The 2020 Stanley Cup Playoffs shift entirely to Edmonton for the Conference Finals and Stanley Cup Final.
+2020-21: The NHL announces that the Stanley Cup Playoffs will feature 16 teams in the traditional best-of-seven, four-round format. The top four teams in each division will qualify for the postseason, with intradivisional play in the first two rounds (#1 vs. #4; #2 vs. #3). The four teams that advance to the Semifinal Round will be seeded by their regular-season point total, with the No. 1 seed playing the No. 4 seed in one series and the No. 2 and No. 3 seeds meeting in the other.
+2021-22: Following two seasons in which the playoff format was adjusted to accommodate the unique circumstances surrounding the COVID-19 pandemic, the NHL returns to the format in place from 2013-14 through 2018-19.
+Terms of Service
+Privacy Policy
+Cookie Policy
+Copyright Policy
+Your Privacy Choices
+CBA
+NHL.com is the official website of the National Hockey League. NHL, the NHL Shield, the word mark and image of the Stanley Cup, the Stanley Cup Playoffs logo, the Stanley Cup Final logo, Center Ice name and logo, NHL Conference logos, NHL Winter Classic name, and The Biggest Assist Happens Off The Ice are registered trademarks and NHL.TV, Vintage Hockey word mark and logo, The Game Lives Where You Do, NHL Winter Classic logo, NHL Heritage Classic name and logo, NHL Stadium Series name and logo, NHL All-Star logo, NHL Face-Off name and logo, NHL. TV, NHL Premium, NHL After Dark, NHL GameCenter, NHL GameCenter LIVE, NHL Network name and logo, NHL Tonight name and logo, On The Fly, NHL Awards name and logo, NHL Draft name and logo, Hockey Fights Cancer, Because It’s The Cup, NHL Green name and logo, NHL Vault, Hockey Is For Everyone, NHL Thanksgiving Showdown name and logo, NHL Centennial Classic name and logo, NHL Centennial Season logo, NHL100 Classic name and logo, NHL Global Series name and logo, NHL China Games name and logo, and Don’t Miss A Moment are trademarks of the National Hockey League. All NHL logos and marks and NHL team logos and marks depicted herein are the property of the NHL and the respective teams and may not be reproduced without the prior written consent of NHL Enterprises, L.P. © NHL 2026. All Rights Reserved. All NHL team jerseys customized with NHL players’ names and numbers are officially licensed by the NHL and the NHLPA. The Zamboni word mark and configuration of the Zamboni ice resurfacing machine are registered trademarks of Frank J. Zamboni & Co., Inc. © Frank J. Zamboni & Co., Inc. 2026. All Rights Reserved. Any other third-party trademarks or copyrights are the property of their respective owners. All rights reserved.
+We and our third-party partners may use cookies and similar technologies to enhance site navigation, analyze site usage, save your preferences, enable personalized advertising on and off NHL.com, and as described further in the Privacy Policy and Cookie Policy. To manage your preferences, visit Cookie Settings. By accessing or using our sites and services, you agree to this collection and disclosure of your information (including how you interact with our sites and services and any videos that you may view) and our Terms of Service.
+Cookie Settings I Understand

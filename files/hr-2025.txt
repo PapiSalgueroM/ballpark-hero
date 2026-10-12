@@ -1,0 +1,840 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2026.html
+STATUS: 200
+TITLE: 2026 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:43:43.360Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2026 NHL Stanley Cup Playoffs Summary
+Previous Year
+
+League Champion: Carolina Hurricanes
+
+Conn Smythe Trophy: Jordan Staal (8 G, 4 A, 12 P)
+
+Points Leaders: Mitch Marner (29)
+
+Assists Leaders: Jack Eichel (20)
+
+Goals Leaders: Brett Howden (14)
+
+Become a Stathead & surf this site ad-free.
+
+2026 NHL Playoffs Menu
+
+2026 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Carolina Hurricanes over Vegas Golden Knights	 	View Matchup »
+ 
+Conference Finals	4-1	Carolina Hurricanes over Montreal Canadiens	 	View Matchup »
+Conference Finals	4-0	Vegas Golden Knights over Colorado Avalanche	 	View Matchup »
+ 
+Second Round	4-2	Vegas Golden Knights over Anaheim Ducks	 	View Matchup »
+Second Round	4-1	Colorado Avalanche over Minnesota Wild	 	View Matchup »
+Second Round	4-0	Carolina Hurricanes over Philadelphia Flyers	 	View Matchup »
+Second Round	4-3	Montreal Canadiens over Buffalo Sabres	 	View Matchup »
+ 
+First Round	4-2	Anaheim Ducks over Edmonton Oilers	 	View Matchup »
+First Round	4-2	Vegas Golden Knights over Utah Hockey Club	 	View Matchup »
+First Round	4-2	Minnesota Wild over Dallas Stars	 	View Matchup »
+First Round	4-0	Colorado Avalanche over Los Angeles Kings	 	View Matchup »
+First Round	4-2	Philadelphia Flyers over Pittsburgh Penguins	 	View Matchup »
+First Round	4-0	Carolina Hurricanes over Ottawa Senators	 	View Matchup »
+First Round	4-3	Montreal Canadiens over Tampa Bay Lightning	 	View Matchup »
+First Round	4-2	Buffalo Sabres over Boston Bruins	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Carolina Hurricanes	19	16	3	0	6	1	.842	66	39	27
+2	Vegas Golden Knights	22	14	8	0	4	1	.636	76	62	14
+3	Montreal Canadiens	19	9	10	0	3	4	.474	54	56	-2
+4	Colorado Avalanche	13	8	5	0	2	0	.615	44	37	7
+5	Buffalo Sabres	13	7	6	0	0	2	.538	43	39	4
+6	Anaheim Ducks	12	6	6	0	1	1	.500	39	42	-3
+7	Minnesota Wild	11	5	6	0	1	2	.455	41	39	2
+8	Philadelphia Flyers	10	4	6	0	1	2	.400	21	24	-3
+9	Tampa Bay Lightning	7	3	4	0	2	2	.429	15	16	-1
+10	Dallas Stars	6	2	4	0	1	1	.333	15	23	-8
+11	Pittsburgh Penguins	6	2	4	0	0	1	.333	11	16	-5
+12	Boston Bruins	6	2	4	0	1	0	.333	12	20	-8
+13	Utah Mammoth	6	2	4	0	0	2	.333	18	23	-5
+14	Edmonton Oilers	6	2	4	0	0	1	.333	21	26	-5
+15	Ottawa Senators	4	0	4	0	0	1	.000	5	11	-6
+16	Los Angeles Kings	4	0	4	0	0	1	.000	5	13	-8
+	League Average	10.3	5.1	5.1	0.0	1.4	1.4	.500	30.4	30.4	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2026-04-19	TBL	Slafkovsky, Juraj	MTL	4-3	TBL	1	1:22
+2026-04-20	CAR	Martinook, Jordan	CAR	3-2	OTT	2	33:53
+2026-04-21	COL	Roy, Nicolas	COL	2-1	LAK	1	7:44
+2026-04-21	TBL	Moser, J.J.	TBL	3-2	MTL	1	12:48
+2026-04-22	MIN	Johnston, Wyatt	DAL	4-3	MIN	2	32:10
+2026-04-24	MTL	Hutson, Lane	MTL	3-2	TBL	1	2:09
+2026-04-25	MIN	Boldy, Matt	MIN	3-2	DAL	1	19:31
+2026-04-26	ANA	Poehling, Ryan	ANA	4-3	EDM	1	2:29
+2026-04-27	UTA	Theodore, Shea	VEG	5-4	UTA	1	19:08
+2026-04-28	BUF	Pastrňák, David	BOS	2-1	BUF	1	9:14
+2026-04-29	PHI	York, Cameron	PHI	1-0	PIT	1	17:32
+2026-04-29	VEG	Howden, Brett	VEG	5-4	UTA	2	25:28
+2026-05-01	MTL	Goncalves, Gage	TBL	1-0	MTL	1	9:03
+2026-05-04	CAR	Hall, Taylor	CAR	3-2	PHI	1	18:54
+2026-05-09	PHI	Blake, Jackson	CAR	3-2	PHI	1	5:31
+2026-05-12	VEG	Dorofeyev, Pavel	VEG	3-2	ANA	1	4:10
+2026-05-13	COL	Kulak, Brett	COL	4-3	MIN	1	3:52
+2026-05-18	BUF	Newhook, Alex	MTL	3-2	BUF	1	11:22
+2026-05-23	CAR	Ehlers, Nikolaj	CAR	3-2	MTL	1	3:29
+2026-05-25	MTL	Svechnikov, Andrei	CAR	3-2	MTL	1	14:06
+2026-06-04	CAR	Jarvis, Seth	CAR	4-3	VEG	1	3:56
+2026-06-06	VEG	Theodore, Shea	VEG	5-4	CAR	2	25:38
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Brett Howden • VEG
+14
+Show #2-5 
+View all players in this category
+Assists
+1.
+Jack Eichel • VEG
+20
+Show #2-5 
+View all players in this category
+Points
+1.
+Mitch Marner • VEG
+29
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Mitch Marner • VEG
+10.4
+Show #2-4 
+View all players in this category
+Plus/Minus
+1.
+Taylor Hall • CAR
+14
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Zach Benson • BUF
+64
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Brett Howden • VEG
+11
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Pavel Dorofeyev • VEG
+5
+Show #2 
+View all players in this category
+Short-Handed Goals
+1.
+Brett Howden • VEG
+3
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Brett Howden • VEG
+3
+Logan Stankoven • CAR
+3
+Sebastian Aho • CAR
+3
+Show #2-4 
+View all players in this category
+Shots
+1.
+Pavel Dorofeyev • VEG
+58
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Brett Howden • VEG
+34.1
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Mitch Marner • VEG
+2
+Show #2 
+Goals Per Game
+1.
+Brandon Hagel • TBL
+0.86
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Leon Draisaitl • EDM
+1.17
+Matt Duchene • DAL
+1.17
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Leon Draisaitl • EDM
+1.67
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Matt Boldy • MIN
+0.49
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Carter Hart • VEG
+22
+Show #2-10 
+View all players in this category
+Wins
+1.
+Carter Hart • VEG
+14
+Show #2-9 
+View all players in this category
+Losses
+1.
+Jakub Dobes • MTL
+10
+Show #2-6 
+View all players in this category
+Goals Against
+1.
+Carter Hart • VEG
+59
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Carter Hart • VEG
+637
+Show #2-10 
+View all players in this category
+Saves
+1.
+Carter Hart • VEG
+578
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Daniel Vladař • PHI
+.922
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Arturs Silovs • PIT
+1.52
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Frederik Andersen • CAR
+3
+Show #2-3 
+View all players in this category
+Minutes
+1.
+Carter Hart • VEG
+1380
+Show #2-10 
+View all players in this category
+More 2026 NHL Playoff Pages
+
+2026 NHL Playoffs Overview
+
+More 2026 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2026.html Stathead > Playoffs > 2026 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2026 NHL Stanley Cup Playoffs Summary
+Previous Year
+
+League Champion: Carolina Hurricanes
+
+Conn Smythe Trophy: Jordan Staal (8 G, 4 A, 12 P)
+
+Points Leaders: Mitch Marner (29)
+
+Assists Leaders: Jack Eichel (20)
+
+Goals Leaders: Brett Howden (14)
+
+Become a Stathead & surf this site ad-free.
+
+2026 NHL Playoffs Menu
+
+2026 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Carolina Hurricanes over Vegas Golden Knights	 	View Matchup »
+ 
+Conference Finals	4-1	Carolina Hurricanes over Montreal Canadiens	 	View Matchup »
+Conference Finals	4-0	Vegas Golden Knights over Colorado Avalanche	 	View Matchup »
+ 
+Second Round	4-2	Vegas Golden Knights over Anaheim Ducks	 	View Matchup »
+Second Round	4-1	Colorado Avalanche over Minnesota Wild	 	View Matchup »
+Second Round	4-0	Carolina Hurricanes over Philadelphia Flyers	 	View Matchup »
+Second Round	4-3	Montreal Canadiens over Buffalo Sabres	 	View Matchup »
+ 
+First Round	4-2	Anaheim Ducks over Edmonton Oilers	 	View Matchup »
+First Round	4-2	Vegas Golden Knights over Utah Hockey Club	 	View Matchup »
+First Round	4-2	Minnesota Wild over Dallas Stars	 	View Matchup »
+First Round	4-0	Colorado Avalanche over Los Angeles Kings	 	View Matchup »
+First Round	4-2	Philadelphia Flyers over Pittsburgh Penguins	 	View Matchup »
+First Round	4-0	Carolina Hurricanes over Ottawa Senators	 	View Matchup »
+First Round	4-3	Montreal Canadiens over Tampa Bay Lightning	 	View Matchup »
+First Round	4-2	Buffalo Sabres over Boston Bruins	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Carolina Hurricanes	19	16	3	0	6	1	.842	66	39	27
+2	Vegas Golden Knights	22	14	8	0	4	1	.636	76	62	14
+3	Montreal Canadiens	19	9	10	0	3	4	.474	54	56	-2
+4	Colorado Avalanche	13	8	5	0	2	0	.615	44	37	7
+5	Buffalo Sabres	13	7	6	0	0	2	.538	43	39	4
+6	Anaheim Ducks	12	6	6	0	1	1	.500	39	42	-3
+7	Minnesota Wild	11	5	6	0	1	2	.455	41	39	2
+8	Philadelphia Flyers	10	4	6	0	1	2	.400	21	24	-3
+9	Tampa Bay Lightning	7	3	4	0	2	2	.429	15	16	-1
+10	Dallas Stars	6	2	4	0	1	1	.333	15	23	-8
+11	Pittsburgh Penguins	6	2	4	0	0	1	.333	11	16	-5
+12	Boston Bruins	6	2	4	0	1	0	.333	12	20	-8
+13	Utah Mammoth	6	2	4	0	0	2	.333	18	23	-5
+14	Edmonton Oilers	6	2	4	0	0	1	.333	21	26	-5
+15	Ottawa Senators	4	0	4	0	0	1	.000	5	11	-6
+16	Los Angeles Kings	4	0	4	0	0	1	.000	5	13	-8
+	League Average	10.3	5.1	5.1	0.0	1.4	1.4	.500	30.4	30.4	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2026-04-19	TBL	Slafkovsky, Juraj	MTL	4-3	TBL	1	1:22
+2026-04-20	CAR	Martinook, Jordan	CAR	3-2	OTT	2	33:53
+2026-04-21	COL	Roy, Nicolas	COL	2-1	LAK	1	7:44
+2026-04-21	TBL	Moser, J.J.	TBL	3-2	MTL	1	12:48
+2026-04-22	MIN	Johnston, Wyatt	DAL	4-3	MIN	2	32:10
+2026-04-24	MTL	Hutson, Lane	MTL	3-2	TBL	1	2:09
+2026-04-25	MIN	Boldy, Matt	MIN	3-2	DAL	1	19:31
+2026-04-26	ANA	Poehling, Ryan	ANA	4-3	EDM	1	2:29
+2026-04-27	UTA	Theodore, Shea	VEG	5-4	UTA	1	19:08
+2026-04-28	BUF	Pastrňák, David	BOS	2-1	BUF	1	9:14
+2026-04-29	PHI	York, Cameron	PHI	1-0	PIT	1	17:32
+2026-04-29	VEG	Howden, Brett	VEG	5-4	UTA	2	25:28
+2026-05-01	MTL	Goncalves, Gage	TBL	1-0	MTL	1	9:03
+2026-05-04	CAR	Hall, Taylor	CAR	3-2	PHI	1	18:54
+2026-05-09	PHI	Blake, Jackson	CAR	3-2	PHI	1	5:31
+2026-05-12	VEG	Dorofeyev, Pavel	VEG	3-2	ANA	1	4:10
+2026-05-13	COL	Kulak, Brett	COL	4-3	MIN	1	3:52
+2026-05-18	BUF	Newhook, Alex	MTL	3-2	BUF	1	11:22
+2026-05-23	CAR	Ehlers, Nikolaj	CAR	3-2	MTL	1	3:29
+2026-05-25	MTL	Svechnikov, Andrei	CAR	3-2	MTL	1	14:06
+2026-06-04	CAR	Jarvis, Seth	CAR	4-3	VEG	1	3:56
+2026-06-06	VEG	Theodore, Shea	VEG	5-4	CAR	2	25:38
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Brett Howden • VEG
+14
+Show #2-5 
+View all players in this category
+Assists
+1.
+Jack Eichel • VEG
+20
+Show #2-5 
+View all players in this category
+Points
+1.
+Mitch Marner • VEG
+29
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Mitch Marner • VEG
+10.4
+Show #2-4 
+View all players in this category
+Plus/Minus
+1.
+Taylor Hall • CAR
+14
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Zach Benson • BUF
+64
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Brett Howden • VEG
+11
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Pavel Dorofeyev • VEG
+5
+Show #2 
+View all players in this category
+Short-Handed Goals
+1.
+Brett Howden • VEG
+3
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Brett Howden • VEG
+3
+Logan Stankoven • CAR
+3
+Sebastian Aho • CAR
+3
+Show #2-4 
+View all players in this category
+Shots
+1.
+Pavel Dorofeyev • VEG
+58
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Brett Howden • VEG
+34.1
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Mitch Marner • VEG
+2
+Show #2 
+Goals Per Game
+1.
+Brandon Hagel • TBL
+0.86
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Leon Draisaitl • EDM
+1.17
+Matt Duchene • DAL
+1.17
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Leon Draisaitl • EDM
+1.67
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Matt Boldy • MIN
+0.49
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Carter Hart • VEG
+22
+Show #2-10 
+View all players in this category
+Wins
+1.
+Carter Hart • VEG
+14
+Show #2-9 
+View all players in this category
+Losses
+1.
+Jakub Dobes • MTL
+10
+Show #2-6 
+View all players in this category
+Goals Against
+1.
+Carter Hart • VEG
+59
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Carter Hart • VEG
+637
+Show #2-10 
+View all players in this category
+Saves
+1.
+Carter Hart • VEG
+578
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Daniel Vladař • PHI
+.922
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Arturs Silovs • PIT
+1.52
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Frederik Andersen • CAR
+3
+Show #2-3 
+View all players in this category
+Minutes
+1.
+Carter Hart • VEG
+1380
+Show #2-10 
+View all players in this category
+More 2026 NHL Playoff Pages
+
+2026 NHL Playoffs Overview
+
+More 2026 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2026.html Stathead > Playoffs > 2026 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

@@ -1,0 +1,926 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2012.html
+STATUS: 200
+TITLE: 2012 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:41:45.689Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2012 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Los Angeles Kings
+
+Conn Smythe Trophy: Jonathan Quick (16-4-0, 1.41 GAA)
+
+Assists Leaders: Dustin Brown (12), Drew Doughty (12), Anže Kopitar (12)
+
+Points Leaders: Dustin Brown (20), Anže Kopitar (20)
+
+Goals Leaders: Daniel Brière (8), Dustin Brown (8), Jeff Carter (8), Claude Giroux (8), Anže Kopitar (8), Ilya Kovalchuk (8), Zach Parise (8)
+
+Become a Stathead & surf this site ad-free.
+
+2012 NHL Playoffs Menu
+
+2012 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Los Angeles Kings over New Jersey Devils	 	View Matchup »
+ 
+Conference Finals	4-1	Los Angeles Kings over Phoenix Coyotes	 	View Matchup »
+Conference Finals	4-2	New Jersey Devils over New York Rangers	 	View Matchup »
+ 
+Conference Semi-Finals	4-1	Phoenix Coyotes over Nashville Predators	 	View Matchup »
+Conference Semi-Finals	4-0	Los Angeles Kings over St. Louis Blues	 	View Matchup »
+Conference Semi-Finals	4-1	New Jersey Devils over Philadelphia Flyers	 	View Matchup »
+Conference Semi-Finals	4-3	New York Rangers over Washington Capitals	 	View Matchup »
+ 
+Conference Quarter-Finals	4-1	Nashville Predators over Detroit Red Wings	 	View Matchup »
+Conference Quarter-Finals	4-2	Phoenix Coyotes over Chicago Blackhawks	 	View Matchup »
+Conference Quarter-Finals	4-1	St. Louis Blues over San Jose Sharks	 	View Matchup »
+Conference Quarter-Finals	4-1	Los Angeles Kings over Vancouver Canucks	 	View Matchup »
+Conference Quarter-Finals	4-2	Philadelphia Flyers over Pittsburgh Penguins	 	View Matchup »
+Conference Quarter-Finals	4-3	New Jersey Devils over Florida Panthers	 	View Matchup »
+Conference Quarter-Finals	4-3	Washington Capitals over Boston Bruins	 	View Matchup »
+Conference Quarter-Finals	4-3	New York Rangers over Ottawa Senators	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Los Angeles Kings	20	16	4	0	4	0	.800	57	30	27
+2	New Jersey Devils	24	14	10	0	4	3	.583	59	58	1
+3	New York Rangers	20	10	10	0	2	3	.500	43	41	2
+4	Phoenix Coyotes	16	9	7	0	4	3	.563	37	35	2
+5	Washington Capitals	14	7	7	0	2	4	.500	29	30	-1
+6	Nashville Predators	10	5	5	0	0	1	.500	22	21	1
+7	Philadelphia Flyers	11	5	6	0	2	1	.455	41	44	-3
+8	St. Louis Blues	9	4	5	0	0	1	.444	20	23	-3
+9	Boston Bruins	7	3	4	0	2	2	.429	15	16	-1
+10	Ottawa Senators	7	3	4	0	2	0	.429	13	14	-1
+11	Florida Panthers	7	3	4	0	0	2	.429	17	18	-1
+12	Pittsburgh Penguins	6	2	4	0	0	1	.333	26	30	-4
+13	Chicago Blackhawks	6	2	4	0	2	3	.333	12	17	-5
+14	Detroit Red Wings	5	1	4	0	0	0	.200	9	13	-4
+15	Vancouver Canucks	5	1	4	0	0	1	.200	8	12	-4
+16	San Jose Sharks	5	1	4	0	1	0	.200	8	14	-6
+	League Average	10.8	5.4	5.4	0.0	1.7	1.7	.500	26.0	26.0	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2012-04-11	PIT	Voráček, Jakub	PHI	4-3	PIT	1	2:23
+2012-04-12	BOS	Kelly, Chris	BOS	1-0	WSH	1	1:18
+2012-04-12	PHX	Hanzal, Martin	PHX	3-2	CHI	1	9:29
+2012-04-12	STL	Havlát, Martin	SJS	3-2	STL	2	23:34
+2012-04-14	BOS	Bäckström, Nicklas	WSH	2-1	BOS	2	22:56
+2012-04-14	NYR	Neil, Chris	OTT	3-2	NYR	1	1:17
+2012-04-14	PHX	Bickell, Bryan	CHI	4-3	PHX	1	10:36
+2012-04-17	CHI	Bødker, Mikkel	PHX	3-2	CHI	1	13:15
+2012-04-18	OTT	Turris, Kyle	OTT	3-2	NYR	1	2:42
+2012-04-19	CHI	Bødker, Mikkel	PHX	3-2	CHI	1	2:15
+2012-04-21	PHX	Toews, Jonathan	CHI	2-1	PHX	1	2:44
+2012-04-22	VAN	Stoll, Jarret	LAK	2-1	VAN	1	4:27
+2012-04-22	WSH	Seguin, Tyler	BOS	4-3	WSH	1	3:17
+2012-04-24	NJD	Zajac, Travis	NJD	3-2	FLA	1	5:39
+2012-04-25	BOS	Ward, Joel	WSH	2-1	BOS	1	2:57
+2012-04-26	FLA	Henrique, Adam	NJD	3-2	FLA	2	23:47
+2012-04-27	PHX	Whitney, Ray	PHX	4-3	NSH	1	14:04
+2012-04-29	PHI	Brière, Daniel	PHI	4-3	NJD	1	4:36
+2012-05-02	WSH	Gáborík, Marián	NYR	2-1	WSH	3	54:41
+2012-05-03	NJD	Ponikarovsky, Alexei	NJD	4-3	PHI	1	17:21
+2012-05-07	NYR	Staal, Marc	NYR	3-2	WSH	1	1:35
+2012-05-22	PHX	Penner, Dustin	LAK	4-3	PHX	1	17:42
+2012-05-25	NJD	Henrique, Adam	NJD	3-2	NYR	1	1:03
+2012-05-30	NJD	Kopitar, Anže	LAK	2-1	NJD	1	8:13
+2012-06-02	NJD	Carter, Jeff	LAK	2-1	NJD	1	13:42
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Daniel Brière • PHI
+8
+Dustin Brown • LAK
+8
+Jeff Carter • LAK
+8
+Claude Giroux • PHI
+8
+Anže Kopitar • LAK
+8
+Ilya Kovalchuk • NJD
+8
+Zach Parise • NJD
+8
+Show #2 
+View all players in this category
+Assists
+1.
+Dustin Brown • LAK
+12
+Drew Doughty • LAK
+12
+Anže Kopitar • LAK
+12
+Show #2-4 
+View all players in this category
+Points
+1.
+Dustin Brown • LAK
+20
+Anže Kopitar • LAK
+20
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Dustin Brown • LAK
+7.5
+Anže Kopitar • LAK
+7.5
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Dustin Brown • LAK
+16
+Anže Kopitar • LAK
+16
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Zac Rinaldo • PHI
+48
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Daniel Brière • PHI
+7
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Ilya Kovalchuk • NJD
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Dustin Brown • LAK
+2
+Claude Giroux • PHI
+2
+Anže Kopitar • LAK
+2
+Maxime Talbot • PHI
+2
+Show #2-5 
+View all players in this category
+Game-Winning Goals
+1.
+Dustin Brown • LAK
+3
+Jeff Carter • LAK
+3
+David Clarkson • NJD
+3
+Dan Girardi • NYR
+3
+Adam Henrique • NJD
+3
+Show #2 
+View all players in this category
+Shots
+1.
+Zach Parise • NJD
+87
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Daniel Brière • PHI
+30.8
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Jeff Carter • LAK
+1
+Sean Couturier • PHI
+1
+Claude Giroux • PHI
+1
+Jordan Staal • PIT
+1
+Show #2 
+Goals Per Game
+1.
+Jordan Staal • PIT
+1.00
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Claude Giroux • PHI
+0.90
+Show #2-9 
+View all players in this category
+Points Per Game
+1.
+Claude Giroux • PHI
+1.70
+Show #2-9 
+View all players in this category
+Goals Created Per Game
+1.
+Claude Giroux • PHI
+0.67
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Martin Brodeur* • NJD
+24
+Show #2-9 
+View all players in this category
+Wins
+1.
+Jonathan Quick • LAK
+16
+Show #2-8 
+View all players in this category
+Losses
+1.
+Henrik Lundqvist* • NYR
+10
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Martin Brodeur* • NJD
+52
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Martin Brodeur* • NJD
+629
+Show #2-10 
+View all players in this category
+Saves
+1.
+Martin Brodeur* • NJD
+577
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Jonathan Quick • LAK
+.946
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Cory Schneider • VAN
+1.31
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Henrik Lundqvist* • NYR
+3
+Jonathan Quick • LAK
+3
+Mike Smith • PHX
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Martin Brodeur* • NJD
+1471
+Show #2-10 
+View all players in this category
+More 2012 NHL Playoff Pages
+
+2012 NHL Playoffs Overview
+
+More 2012 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2012.html Stathead > Playoffs > 2012 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2012 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Los Angeles Kings
+
+Conn Smythe Trophy: Jonathan Quick (16-4-0, 1.41 GAA)
+
+Assists Leaders: Dustin Brown (12), Drew Doughty (12), Anže Kopitar (12)
+
+Points Leaders: Dustin Brown (20), Anže Kopitar (20)
+
+Goals Leaders: Daniel Brière (8), Dustin Brown (8), Jeff Carter (8), Claude Giroux (8), Anže Kopitar (8), Ilya Kovalchuk (8), Zach Parise (8)
+
+Become a Stathead & surf this site ad-free.
+
+2012 NHL Playoffs Menu
+
+2012 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Los Angeles Kings over New Jersey Devils	 	View Matchup »
+ 
+Conference Finals	4-1	Los Angeles Kings over Phoenix Coyotes	 	View Matchup »
+Conference Finals	4-2	New Jersey Devils over New York Rangers	 	View Matchup »
+ 
+Conference Semi-Finals	4-1	Phoenix Coyotes over Nashville Predators	 	View Matchup »
+Conference Semi-Finals	4-0	Los Angeles Kings over St. Louis Blues	 	View Matchup »
+Conference Semi-Finals	4-1	New Jersey Devils over Philadelphia Flyers	 	View Matchup »
+Conference Semi-Finals	4-3	New York Rangers over Washington Capitals	 	View Matchup »
+ 
+Conference Quarter-Finals	4-1	Nashville Predators over Detroit Red Wings	 	View Matchup »
+Conference Quarter-Finals	4-2	Phoenix Coyotes over Chicago Blackhawks	 	View Matchup »
+Conference Quarter-Finals	4-1	St. Louis Blues over San Jose Sharks	 	View Matchup »
+Conference Quarter-Finals	4-1	Los Angeles Kings over Vancouver Canucks	 	View Matchup »
+Conference Quarter-Finals	4-2	Philadelphia Flyers over Pittsburgh Penguins	 	View Matchup »
+Conference Quarter-Finals	4-3	New Jersey Devils over Florida Panthers	 	View Matchup »
+Conference Quarter-Finals	4-3	Washington Capitals over Boston Bruins	 	View Matchup »
+Conference Quarter-Finals	4-3	New York Rangers over Ottawa Senators	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Los Angeles Kings	20	16	4	0	4	0	.800	57	30	27
+2	New Jersey Devils	24	14	10	0	4	3	.583	59	58	1
+3	New York Rangers	20	10	10	0	2	3	.500	43	41	2
+4	Phoenix Coyotes	16	9	7	0	4	3	.563	37	35	2
+5	Washington Capitals	14	7	7	0	2	4	.500	29	30	-1
+6	Nashville Predators	10	5	5	0	0	1	.500	22	21	1
+7	Philadelphia Flyers	11	5	6	0	2	1	.455	41	44	-3
+8	St. Louis Blues	9	4	5	0	0	1	.444	20	23	-3
+9	Boston Bruins	7	3	4	0	2	2	.429	15	16	-1
+10	Ottawa Senators	7	3	4	0	2	0	.429	13	14	-1
+11	Florida Panthers	7	3	4	0	0	2	.429	17	18	-1
+12	Pittsburgh Penguins	6	2	4	0	0	1	.333	26	30	-4
+13	Chicago Blackhawks	6	2	4	0	2	3	.333	12	17	-5
+14	Detroit Red Wings	5	1	4	0	0	0	.200	9	13	-4
+15	Vancouver Canucks	5	1	4	0	0	1	.200	8	12	-4
+16	San Jose Sharks	5	1	4	0	1	0	.200	8	14	-6
+	League Average	10.8	5.4	5.4	0.0	1.7	1.7	.500	26.0	26.0	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2012-04-11	PIT	Voráček, Jakub	PHI	4-3	PIT	1	2:23
+2012-04-12	BOS	Kelly, Chris	BOS	1-0	WSH	1	1:18
+2012-04-12	PHX	Hanzal, Martin	PHX	3-2	CHI	1	9:29
+2012-04-12	STL	Havlát, Martin	SJS	3-2	STL	2	23:34
+2012-04-14	BOS	Bäckström, Nicklas	WSH	2-1	BOS	2	22:56
+2012-04-14	NYR	Neil, Chris	OTT	3-2	NYR	1	1:17
+2012-04-14	PHX	Bickell, Bryan	CHI	4-3	PHX	1	10:36
+2012-04-17	CHI	Bødker, Mikkel	PHX	3-2	CHI	1	13:15
+2012-04-18	OTT	Turris, Kyle	OTT	3-2	NYR	1	2:42
+2012-04-19	CHI	Bødker, Mikkel	PHX	3-2	CHI	1	2:15
+2012-04-21	PHX	Toews, Jonathan	CHI	2-1	PHX	1	2:44
+2012-04-22	VAN	Stoll, Jarret	LAK	2-1	VAN	1	4:27
+2012-04-22	WSH	Seguin, Tyler	BOS	4-3	WSH	1	3:17
+2012-04-24	NJD	Zajac, Travis	NJD	3-2	FLA	1	5:39
+2012-04-25	BOS	Ward, Joel	WSH	2-1	BOS	1	2:57
+2012-04-26	FLA	Henrique, Adam	NJD	3-2	FLA	2	23:47
+2012-04-27	PHX	Whitney, Ray	PHX	4-3	NSH	1	14:04
+2012-04-29	PHI	Brière, Daniel	PHI	4-3	NJD	1	4:36
+2012-05-02	WSH	Gáborík, Marián	NYR	2-1	WSH	3	54:41
+2012-05-03	NJD	Ponikarovsky, Alexei	NJD	4-3	PHI	1	17:21
+2012-05-07	NYR	Staal, Marc	NYR	3-2	WSH	1	1:35
+2012-05-22	PHX	Penner, Dustin	LAK	4-3	PHX	1	17:42
+2012-05-25	NJD	Henrique, Adam	NJD	3-2	NYR	1	1:03
+2012-05-30	NJD	Kopitar, Anže	LAK	2-1	NJD	1	8:13
+2012-06-02	NJD	Carter, Jeff	LAK	2-1	NJD	1	13:42
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Daniel Brière • PHI
+8
+Dustin Brown • LAK
+8
+Jeff Carter • LAK
+8
+Claude Giroux • PHI
+8
+Anže Kopitar • LAK
+8
+Ilya Kovalchuk • NJD
+8
+Zach Parise • NJD
+8
+Show #2 
+View all players in this category
+Assists
+1.
+Dustin Brown • LAK
+12
+Drew Doughty • LAK
+12
+Anže Kopitar • LAK
+12
+Show #2-4 
+View all players in this category
+Points
+1.
+Dustin Brown • LAK
+20
+Anže Kopitar • LAK
+20
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Dustin Brown • LAK
+7.5
+Anže Kopitar • LAK
+7.5
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Dustin Brown • LAK
+16
+Anže Kopitar • LAK
+16
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Zac Rinaldo • PHI
+48
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Daniel Brière • PHI
+7
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Ilya Kovalchuk • NJD
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Dustin Brown • LAK
+2
+Claude Giroux • PHI
+2
+Anže Kopitar • LAK
+2
+Maxime Talbot • PHI
+2
+Show #2-5 
+View all players in this category
+Game-Winning Goals
+1.
+Dustin Brown • LAK
+3
+Jeff Carter • LAK
+3
+David Clarkson • NJD
+3
+Dan Girardi • NYR
+3
+Adam Henrique • NJD
+3
+Show #2 
+View all players in this category
+Shots
+1.
+Zach Parise • NJD
+87
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Daniel Brière • PHI
+30.8
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Jeff Carter • LAK
+1
+Sean Couturier • PHI
+1
+Claude Giroux • PHI
+1
+Jordan Staal • PIT
+1
+Show #2 
+Goals Per Game
+1.
+Jordan Staal • PIT
+1.00
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Claude Giroux • PHI
+0.90
+Show #2-9 
+View all players in this category
+Points Per Game
+1.
+Claude Giroux • PHI
+1.70
+Show #2-9 
+View all players in this category
+Goals Created Per Game
+1.
+Claude Giroux • PHI
+0.67
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Martin Brodeur* • NJD
+24
+Show #2-9 
+View all players in this category
+Wins
+1.
+Jonathan Quick • LAK
+16
+Show #2-8 
+View all players in this category
+Losses
+1.
+Henrik Lundqvist* • NYR
+10
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Martin Brodeur* • NJD
+52
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Martin Brodeur* • NJD
+629
+Show #2-10 
+View all players in this category
+Saves
+1.
+Martin Brodeur* • NJD
+577
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Jonathan Quick • LAK
+.946
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Cory Schneider • VAN
+1.31
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Henrik Lundqvist* • NYR
+3
+Jonathan Quick • LAK
+3
+Mike Smith • PHX
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Martin Brodeur* • NJD
+1471
+Show #2-10 
+View all players in this category
+More 2012 NHL Playoff Pages
+
+2012 NHL Playoffs Overview
+
+More 2012 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2012.html Stathead > Playoffs > 2012 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

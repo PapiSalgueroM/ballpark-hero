@@ -1,0 +1,880 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2025.html
+STATUS: 200
+TITLE: 2025 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:43:35.032Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2025 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Florida Panthers
+
+Conn Smythe Trophy: Sam Bennett (15 G, 7 A, 22 P)
+
+Goals Leaders: Sam Bennett (15)
+
+Assists Leaders: Connor McDavid (26)
+
+Points Leaders: Leon Draisaitl (33), Connor McDavid (33)
+
+Become a Stathead & surf this site ad-free.
+
+2025 NHL Playoffs Menu
+
+2025 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Florida Panthers over Edmonton Oilers	 	View Matchup »
+ 
+Conference Finals	4-1	Edmonton Oilers over Dallas Stars	 	View Matchup »
+Conference Finals	4-1	Florida Panthers over Carolina Hurricanes	 	View Matchup »
+ 
+Second Round	4-2	Dallas Stars over Winnipeg Jets	 	View Matchup »
+Second Round	4-1	Edmonton Oilers over Vegas Golden Knights	 	View Matchup »
+Second Round	4-1	Carolina Hurricanes over Washington Capitals	 	View Matchup »
+Second Round	4-3	Florida Panthers over Toronto Maple Leafs	 	View Matchup »
+ 
+First Round	4-2	Edmonton Oilers over Los Angeles Kings	 	View Matchup »
+First Round	4-2	Vegas Golden Knights over Minnesota Wild	 	View Matchup »
+First Round	4-3	Dallas Stars over Colorado Avalanche	 	View Matchup »
+First Round	4-3	Winnipeg Jets over St. Louis Blues	 	View Matchup »
+First Round	4-1	Carolina Hurricanes over New Jersey Devils	 	View Matchup »
+First Round	4-1	Washington Capitals over Montreal Canadiens	 	View Matchup »
+First Round	4-1	Florida Panthers over Tampa Bay Lightning	 	View Matchup »
+First Round	4-2	Toronto Maple Leafs over Ottawa Senators	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Florida Panthers	23	16	7	0	2	2	.696	94	56	38
+2	Edmonton Oilers	22	14	8	0	5	1	.636	82	73	9
+3	Carolina Hurricanes	15	9	6	0	2	1	.600	44	39	5
+4	Dallas Stars	18	9	9	0	3	0	.500	45	60	-15
+5	Toronto Maple Leafs	13	7	6	0	2	2	.538	36	42	-6
+6	Winnipeg Jets	13	6	7	0	1	1	.462	35	40	-5
+7	Washington Capitals	10	5	5	0	1	1	.500	25	27	-2
+8	Vegas Golden Knights	11	5	6	0	2	2	.455	28	35	-7
+9	Colorado Avalanche	7	3	4	0	0	2	.429	24	21	3
+10	St. Louis Blues	7	3	4	0	0	1	.429	27	21	6
+11	Ottawa Senators	6	2	4	0	1	2	.333	16	19	-3
+12	Minnesota Wild	6	2	4	0	0	2	.333	19	18	1
+13	Los Angeles Kings	6	2	4	0	0	1	.333	24	27	-3
+14	New Jersey Devils	5	1	4	0	1	1	.200	11	19	-8
+15	Montreal Canadiens	5	1	4	0	0	1	.200	12	18	-6
+16	Tampa Bay Lightning	5	1	4	0	0	0	.200	12	19	-7
+	League Average	10.8	5.4	5.4	0.0	1.3	1.3	.500	33.4	33.4	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2025-04-21	DAL	Blackwell, Colin	DAL	4-3	COL	1	17:46
+2025-04-21	WSH	Ovechkin, Alex	WSH	3-2	MTL	1	2:26
+2025-04-22	TOR	Domi, Max	TOR	3-2	OTT	1	3:09
+2025-04-23	COL	Seguin, Tyler	DAL	2-1	COL	1	5:31
+2025-04-24	OTT	Benoit, Simon	TOR	3-2	OTT	1	1:19
+2025-04-25	NJD	Nemec, Simon	NJD	3-2	CAR	2	22:36
+2025-04-26	MIN	Barbashev, Ivan	VEG	4-3	MIN	1	17:26
+2025-04-26	OTT	Sanderson, Jake	OTT	4-3	TOR	1	17:42
+2025-04-27	EDM	Draisaitl, Leon	EDM	4-3	LAK	1	18:18
+2025-04-29	CAR	Aho, Sebastian	CAR	5-4	NJD	2	24:17
+2025-04-29	VEG	Howden, Brett	VEG	3-2	MIN	1	4:05
+2025-05-04	WPG	Lowry, Adam	WPG	4-3	STL	2	36:10
+2025-05-06	WSH	Slavin, Jaccob	CAR	2-1	WSH	1	3:06
+2025-05-08	VEG	Draisaitl, Leon	EDM	5-4	VEG	1	15:20
+2025-05-09	FLA	Marchand, Brad	FLA	5-4	TOR	1	15:27
+2025-05-14	VEG	Kapanen, Kasperi	EDM	1-0	VEG	1	7:19
+2025-05-17	DAL	Harley, Thomas	DAL	2-1	WPG	1	1:33
+2025-06-04	EDM	Draisaitl, Leon	EDM	4-3	FLA	1	19:29
+2025-06-06	EDM	Marchand, Brad	FLA	5-4	EDM	2	28:05
+2025-06-12	FLA	Draisaitl, Leon	EDM	5-4	FLA	1	11:18
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Sam Bennett • FLA
+15
+Show #2-4 
+View all players in this category
+Assists
+1.
+Connor McDavid • EDM
+26
+Show #2-3 
+View all players in this category
+Points
+1.
+Leon Draisaitl • EDM
+33
+Connor McDavid • EDM
+33
+Show #2-3 
+View all players in this category
+Goals Created
+1.
+Leon Draisaitl • EDM
+11.9
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Anton Lundell • FLA
+19
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Sam Bennett • FLA
+48
+Brad Marchand • FLA
+48
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Sam Bennett • FLA
+11
+Sam Reinhart • FLA
+11
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Corey Perry • EDM
+5
+Matthew Tkachuk • FLA
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Dylan Cozens • OTT
+1
+Marcus Foligno • MIN
+1
+William Karlsson • VEG
+1
+Josh Manson • COL
+1
+Brad Marchand • FLA
+1
+Jordan Martinook • CAR
+1
+Logan O'Connor • COL
+1
+Shane Pinto • OTT
+1
+Reilly Smith • VEG
+1
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Leon Draisaitl • EDM
+4
+Show #2-5 
+View all players in this category
+Shots
+1.
+Connor McDavid • EDM
+80
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Matt Boldy • MIN
+25.0
+Nico Hischier • NJD
+25.0
+Show #2-4 
+View all players in this category
+Hat Tricks
+1.
+Mikko Rantanen • DAL
+2
+Show #2 
+Goals Per Game
+1.
+Nathan MacKinnon • COL
+1.00
+Show #2-8 
+View all players in this category
+Assists Per Game
+1.
+Connor McDavid • EDM
+1.18
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Adrian Kempe • LAK
+1.67
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Leon Draisaitl • EDM
+0.54
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Sergei Bobrovsky • FLA
+23
+Show #2-9 
+View all players in this category
+Wins
+1.
+Sergei Bobrovsky • FLA
+16
+Show #2-10 
+View all players in this category
+Losses
+1.
+Jake Oettinger • DAL
+8
+Show #2-8 
+View all players in this category
+Goals Against
+1.
+Sergei Bobrovsky • FLA
+53
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Sergei Bobrovsky • FLA
+618
+Show #2-10 
+View all players in this category
+Saves
+1.
+Sergei Bobrovsky • FLA
+565
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Logan Thompson • WSH
+.917
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Eric Comrie • WPG
+1.40
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Sergei Bobrovsky • FLA
+3
+Stuart Skinner • EDM
+3
+Show #2-5 
+View all players in this category
+Minutes
+1.
+Sergei Bobrovsky • FLA
+1443
+Show #2-10 
+View all players in this category
+More 2025 NHL Playoff Pages
+
+2025 NHL Playoffs Overview
+
+More 2025 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2025.html Stathead > Playoffs > 2025 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2025 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Florida Panthers
+
+Conn Smythe Trophy: Sam Bennett (15 G, 7 A, 22 P)
+
+Goals Leaders: Sam Bennett (15)
+
+Assists Leaders: Connor McDavid (26)
+
+Points Leaders: Leon Draisaitl (33), Connor McDavid (33)
+
+Become a Stathead & surf this site ad-free.
+
+2025 NHL Playoffs Menu
+
+2025 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Florida Panthers over Edmonton Oilers	 	View Matchup »
+ 
+Conference Finals	4-1	Edmonton Oilers over Dallas Stars	 	View Matchup »
+Conference Finals	4-1	Florida Panthers over Carolina Hurricanes	 	View Matchup »
+ 
+Second Round	4-2	Dallas Stars over Winnipeg Jets	 	View Matchup »
+Second Round	4-1	Edmonton Oilers over Vegas Golden Knights	 	View Matchup »
+Second Round	4-1	Carolina Hurricanes over Washington Capitals	 	View Matchup »
+Second Round	4-3	Florida Panthers over Toronto Maple Leafs	 	View Matchup »
+ 
+First Round	4-2	Edmonton Oilers over Los Angeles Kings	 	View Matchup »
+First Round	4-2	Vegas Golden Knights over Minnesota Wild	 	View Matchup »
+First Round	4-3	Dallas Stars over Colorado Avalanche	 	View Matchup »
+First Round	4-3	Winnipeg Jets over St. Louis Blues	 	View Matchup »
+First Round	4-1	Carolina Hurricanes over New Jersey Devils	 	View Matchup »
+First Round	4-1	Washington Capitals over Montreal Canadiens	 	View Matchup »
+First Round	4-1	Florida Panthers over Tampa Bay Lightning	 	View Matchup »
+First Round	4-2	Toronto Maple Leafs over Ottawa Senators	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Florida Panthers	23	16	7	0	2	2	.696	94	56	38
+2	Edmonton Oilers	22	14	8	0	5	1	.636	82	73	9
+3	Carolina Hurricanes	15	9	6	0	2	1	.600	44	39	5
+4	Dallas Stars	18	9	9	0	3	0	.500	45	60	-15
+5	Toronto Maple Leafs	13	7	6	0	2	2	.538	36	42	-6
+6	Winnipeg Jets	13	6	7	0	1	1	.462	35	40	-5
+7	Washington Capitals	10	5	5	0	1	1	.500	25	27	-2
+8	Vegas Golden Knights	11	5	6	0	2	2	.455	28	35	-7
+9	Colorado Avalanche	7	3	4	0	0	2	.429	24	21	3
+10	St. Louis Blues	7	3	4	0	0	1	.429	27	21	6
+11	Ottawa Senators	6	2	4	0	1	2	.333	16	19	-3
+12	Minnesota Wild	6	2	4	0	0	2	.333	19	18	1
+13	Los Angeles Kings	6	2	4	0	0	1	.333	24	27	-3
+14	New Jersey Devils	5	1	4	0	1	1	.200	11	19	-8
+15	Montreal Canadiens	5	1	4	0	0	1	.200	12	18	-6
+16	Tampa Bay Lightning	5	1	4	0	0	0	.200	12	19	-7
+	League Average	10.8	5.4	5.4	0.0	1.3	1.3	.500	33.4	33.4	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2025-04-21	DAL	Blackwell, Colin	DAL	4-3	COL	1	17:46
+2025-04-21	WSH	Ovechkin, Alex	WSH	3-2	MTL	1	2:26
+2025-04-22	TOR	Domi, Max	TOR	3-2	OTT	1	3:09
+2025-04-23	COL	Seguin, Tyler	DAL	2-1	COL	1	5:31
+2025-04-24	OTT	Benoit, Simon	TOR	3-2	OTT	1	1:19
+2025-04-25	NJD	Nemec, Simon	NJD	3-2	CAR	2	22:36
+2025-04-26	MIN	Barbashev, Ivan	VEG	4-3	MIN	1	17:26
+2025-04-26	OTT	Sanderson, Jake	OTT	4-3	TOR	1	17:42
+2025-04-27	EDM	Draisaitl, Leon	EDM	4-3	LAK	1	18:18
+2025-04-29	CAR	Aho, Sebastian	CAR	5-4	NJD	2	24:17
+2025-04-29	VEG	Howden, Brett	VEG	3-2	MIN	1	4:05
+2025-05-04	WPG	Lowry, Adam	WPG	4-3	STL	2	36:10
+2025-05-06	WSH	Slavin, Jaccob	CAR	2-1	WSH	1	3:06
+2025-05-08	VEG	Draisaitl, Leon	EDM	5-4	VEG	1	15:20
+2025-05-09	FLA	Marchand, Brad	FLA	5-4	TOR	1	15:27
+2025-05-14	VEG	Kapanen, Kasperi	EDM	1-0	VEG	1	7:19
+2025-05-17	DAL	Harley, Thomas	DAL	2-1	WPG	1	1:33
+2025-06-04	EDM	Draisaitl, Leon	EDM	4-3	FLA	1	19:29
+2025-06-06	EDM	Marchand, Brad	FLA	5-4	EDM	2	28:05
+2025-06-12	FLA	Draisaitl, Leon	EDM	5-4	FLA	1	11:18
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Sam Bennett • FLA
+15
+Show #2-4 
+View all players in this category
+Assists
+1.
+Connor McDavid • EDM
+26
+Show #2-3 
+View all players in this category
+Points
+1.
+Leon Draisaitl • EDM
+33
+Connor McDavid • EDM
+33
+Show #2-3 
+View all players in this category
+Goals Created
+1.
+Leon Draisaitl • EDM
+11.9
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Anton Lundell • FLA
+19
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Sam Bennett • FLA
+48
+Brad Marchand • FLA
+48
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Sam Bennett • FLA
+11
+Sam Reinhart • FLA
+11
+Show #2-4 
+View all players in this category
+Power Play Goals
+1.
+Corey Perry • EDM
+5
+Matthew Tkachuk • FLA
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Dylan Cozens • OTT
+1
+Marcus Foligno • MIN
+1
+William Karlsson • VEG
+1
+Josh Manson • COL
+1
+Brad Marchand • FLA
+1
+Jordan Martinook • CAR
+1
+Logan O'Connor • COL
+1
+Shane Pinto • OTT
+1
+Reilly Smith • VEG
+1
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Leon Draisaitl • EDM
+4
+Show #2-5 
+View all players in this category
+Shots
+1.
+Connor McDavid • EDM
+80
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Matt Boldy • MIN
+25.0
+Nico Hischier • NJD
+25.0
+Show #2-4 
+View all players in this category
+Hat Tricks
+1.
+Mikko Rantanen • DAL
+2
+Show #2 
+Goals Per Game
+1.
+Nathan MacKinnon • COL
+1.00
+Show #2-8 
+View all players in this category
+Assists Per Game
+1.
+Connor McDavid • EDM
+1.18
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Adrian Kempe • LAK
+1.67
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Leon Draisaitl • EDM
+0.54
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Sergei Bobrovsky • FLA
+23
+Show #2-9 
+View all players in this category
+Wins
+1.
+Sergei Bobrovsky • FLA
+16
+Show #2-10 
+View all players in this category
+Losses
+1.
+Jake Oettinger • DAL
+8
+Show #2-8 
+View all players in this category
+Goals Against
+1.
+Sergei Bobrovsky • FLA
+53
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Sergei Bobrovsky • FLA
+618
+Show #2-10 
+View all players in this category
+Saves
+1.
+Sergei Bobrovsky • FLA
+565
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Logan Thompson • WSH
+.917
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Eric Comrie • WPG
+1.40
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Sergei Bobrovsky • FLA
+3
+Stuart Skinner • EDM
+3
+Show #2-5 
+View all players in this category
+Minutes
+1.
+Sergei Bobrovsky • FLA
+1443
+Show #2-10 
+View all players in this category
+More 2025 NHL Playoff Pages
+
+2025 NHL Playoffs Overview
+
+More 2025 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2025.html Stathead > Playoffs > 2025 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

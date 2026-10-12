@@ -1,0 +1,862 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2013.html
+STATUS: 200
+TITLE: 2013 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:41:54.065Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2013 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Chicago Blackhawks
+
+Conn Smythe Trophy: Patrick Kane (9 G, 10 A, 19 P)
+
+Assists Leaders: David Krejčí (17)
+
+Points Leaders: David Krejčí (26)
+
+Goals Leaders: Patrick Sharp (10)
+
+Become a Stathead & surf this site ad-free.
+
+2013 NHL Playoffs Menu
+
+2013 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Chicago Blackhawks over Boston Bruins	 	View Matchup »
+ 
+Conference Finals	4-1	Chicago Blackhawks over Los Angeles Kings	 	View Matchup »
+Conference Finals	4-0	Boston Bruins over Pittsburgh Penguins	 	View Matchup »
+ 
+Conference Semi-Finals	4-1	Pittsburgh Penguins over Ottawa Senators	 	View Matchup »
+Conference Semi-Finals	4-1	Boston Bruins over New York Rangers	 	View Matchup »
+Conference Semi-Finals	4-3	Chicago Blackhawks over Detroit Red Wings	 	View Matchup »
+Conference Semi-Finals	4-3	Los Angeles Kings over San Jose Sharks	 	View Matchup »
+ 
+Conference Quarter-Finals	4-2	Los Angeles Kings over St. Louis Blues	 	View Matchup »
+Conference Quarter-Finals	4-0	San Jose Sharks over Vancouver Canucks	 	View Matchup »
+Conference Quarter-Finals	4-3	Detroit Red Wings over Anaheim Ducks	 	View Matchup »
+Conference Quarter-Finals	4-1	Chicago Blackhawks over Minnesota Wild	 	View Matchup »
+Conference Quarter-Finals	4-3	Boston Bruins over Toronto Maple Leafs	 	View Matchup »
+Conference Quarter-Finals	4-3	New York Rangers over Washington Capitals	 	View Matchup »
+Conference Quarter-Finals	4-1	Ottawa Senators over Montreal Canadiens	 	View Matchup »
+Conference Quarter-Finals	4-2	Pittsburgh Penguins over New York Islanders	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Chicago Blackhawks	23	16	7	0	5	2	.696	64	48	16
+2	Boston Bruins	22	14	8	0	5	3	.636	65	47	18
+3	Los Angeles Kings	18	9	9	0	1	3	.500	37	34	3
+4	Pittsburgh Penguins	15	8	7	0	2	2	.533	49	40	9
+5	San Jose Sharks	11	7	4	0	3	0	.636	25	22	3
+6	Detroit Red Wings	14	7	7	0	3	2	.500	33	37	-4
+7	Ottawa Senators	10	5	5	0	2	0	.500	31	31	0
+8	New York Rangers	12	5	7	0	1	3	.417	26	28	-2
+9	Anaheim Ducks	7	3	4	0	1	3	.429	21	18	3
+10	Toronto Maple Leafs	7	3	4	0	0	2	.429	18	22	-4
+11	Washington Capitals	7	3	4	0	2	0	.429	12	16	-4
+12	St. Louis Blues	6	2	4	0	1	1	.333	10	12	-2
+13	New York Islanders	6	2	4	0	0	2	.333	17	25	-8
+14	Minnesota Wild	5	1	4	0	1	1	.200	7	17	-10
+15	Montreal Canadiens	5	1	4	0	0	1	.200	9	20	-11
+16	Vancouver Canucks	4	0	4	0	0	2	.000	8	15	-7
+	League Average	10.8	5.4	5.4	0.0	1.7	1.7	.500	27.0	27.0	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2013-04-30	CHI	Bickell, Bryan	CHI	2-1	MIN	1	16:35
+2013-04-30	STL	Steen, Alexander	STL	2-1	LAK	1	13:26
+2013-05-02	ANA	Nyquist, Gustav	DET	5-4	ANA	1	1:21
+2013-05-03	VAN	Torres, Raffi	SJS	3-2	VAN	1	5:31
+2013-05-04	WSH	Green, Mike	WSH	1-0	NYR	1	8:00
+2013-05-05	MIN	Zucker, Jason	MIN	3-2	CHI	1	2:15
+2013-05-05	NYI	Kunitz, Chris	PIT	5-4	NYI	1	8:44
+2013-05-06	DET	Brunner, Damien	DET	3-2	ANA	1	15:10
+2013-05-07	OTT	Turris, Kyle	OTT	3-2	MTL	1	2:32
+2013-05-07	SJS	Marleau, Patrick	SJS	4-3	VAN	1	13:18
+2013-05-08	ANA	Bonino, Nick	ANA	3-2	DET	1	1:54
+2013-05-08	STL	Voynov, Slava	LAK	3-2	STL	1	8:00
+2013-05-08	TOR	Krejčí, David	BOS	4-3	TOR	1	13:06
+2013-05-10	DET	Zetterberg, Henrik	DET	4-3	ANA	1	1:04
+2013-05-10	WSH	Ribeiro, Mike	WSH	2-1	NYR	1	9:24
+2013-05-11	NYI	Orpik, Brooks	PIT	4-3	NYI	1	7:49
+2013-05-13	BOS	Bergeron, Patrice	BOS	5-4	TOR	1	6:05
+2013-05-16	BOS	Marchand, Brad	BOS	3-2	NYR	1	15:40
+2013-05-18	SJS	Couture, Logan	SJS	2-1	LAK	1	1:29
+2013-05-19	OTT	Greening, Colin	OTT	2-1	PIT	2	27:39
+2013-05-23	NYR	Kreider, Chris	NYR	4-3	BOS	1	7:03
+2013-05-29	CHI	Seabrook, Brent	CHI	2-1	DET	1	3:35
+2013-06-05	BOS	Bergeron, Patrice	BOS	2-1	PIT	2	35:19
+2013-06-08	CHI	Kane, Patrick	CHI	4-3	LAK	2	31:40
+2013-06-12	CHI	Shaw, Andrew	CHI	4-3	BOS	3	52:08
+2013-06-15	CHI	Paille, Daniel	BOS	2-1	CHI	1	13:48
+2013-06-19	BOS	Seabrook, Brent	CHI	6-5	BOS	1	9:51
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Patrick Sharp • CHI
+10
+Show #2 
+View all players in this category
+Assists
+1.
+David Krejčí • BOS
+17
+Show #2-3 
+View all players in this category
+Points
+1.
+David Krejčí • BOS
+26
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+David Krejčí • BOS
+9.4
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Nathan Horton • BOS
+20
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Chris Neil • OTT
+39
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Patrick Kane • CHI
+9
+Show #2-5 
+View all players in this category
+Power Play Goals
+1.
+Logan Couture • SJS
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Pascal Dupuis • PIT
+2
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Slava Voynov • LAK
+4
+Show #2-5 
+View all players in this category
+Shots
+1.
+Patrick Sharp • CHI
+91
+Show #2-4 
+View all players in this category
+Shooting Percentage
+1.
+Kyle Turris • OTT
+20.7
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Sidney Crosby • PIT
+1
+Patrick Kane • CHI
+1
+David Krejčí • BOS
+1
+James Neal • PIT
+1
+Jean-Gabriel Pageau • OTT
+1
+Show #2 
+Goals Per Game
+1.
+Kyle Turris • OTT
+0.60
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Kris Letang • PIT
+0.87
+Show #2-9 
+View all players in this category
+Points Per Game
+1.
+David Krejčí • BOS
+1.18
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+David Krejčí • BOS
+0.43
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Corey Crawford • CHI
+23
+Show #2-9 
+View all players in this category
+Wins
+1.
+Corey Crawford • CHI
+16
+Show #2-9 
+View all players in this category
+Losses
+1.
+Jonathan Quick • LAK
+9
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Corey Crawford • CHI
+46
+Tuukka Rask • BOS
+46
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Tuukka Rask • BOS
+761
+Show #2-10 
+View all players in this category
+Saves
+1.
+Tuukka Rask • BOS
+715
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Tuukka Rask • BOS
+.940
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Kevin Poulin • NYI
+1.14
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Jonathan Quick • LAK
+3
+Tuukka Rask • BOS
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Corey Crawford • CHI
+1504
+Show #2-10 
+View all players in this category
+More 2013 NHL Playoff Pages
+
+2013 NHL Playoffs Overview
+
+More 2013 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2013.html Stathead > Playoffs > 2013 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2013 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Chicago Blackhawks
+
+Conn Smythe Trophy: Patrick Kane (9 G, 10 A, 19 P)
+
+Assists Leaders: David Krejčí (17)
+
+Points Leaders: David Krejčí (26)
+
+Goals Leaders: Patrick Sharp (10)
+
+Become a Stathead & surf this site ad-free.
+
+2013 NHL Playoffs Menu
+
+2013 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Chicago Blackhawks over Boston Bruins	 	View Matchup »
+ 
+Conference Finals	4-1	Chicago Blackhawks over Los Angeles Kings	 	View Matchup »
+Conference Finals	4-0	Boston Bruins over Pittsburgh Penguins	 	View Matchup »
+ 
+Conference Semi-Finals	4-1	Pittsburgh Penguins over Ottawa Senators	 	View Matchup »
+Conference Semi-Finals	4-1	Boston Bruins over New York Rangers	 	View Matchup »
+Conference Semi-Finals	4-3	Chicago Blackhawks over Detroit Red Wings	 	View Matchup »
+Conference Semi-Finals	4-3	Los Angeles Kings over San Jose Sharks	 	View Matchup »
+ 
+Conference Quarter-Finals	4-2	Los Angeles Kings over St. Louis Blues	 	View Matchup »
+Conference Quarter-Finals	4-0	San Jose Sharks over Vancouver Canucks	 	View Matchup »
+Conference Quarter-Finals	4-3	Detroit Red Wings over Anaheim Ducks	 	View Matchup »
+Conference Quarter-Finals	4-1	Chicago Blackhawks over Minnesota Wild	 	View Matchup »
+Conference Quarter-Finals	4-3	Boston Bruins over Toronto Maple Leafs	 	View Matchup »
+Conference Quarter-Finals	4-3	New York Rangers over Washington Capitals	 	View Matchup »
+Conference Quarter-Finals	4-1	Ottawa Senators over Montreal Canadiens	 	View Matchup »
+Conference Quarter-Finals	4-2	Pittsburgh Penguins over New York Islanders	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Chicago Blackhawks	23	16	7	0	5	2	.696	64	48	16
+2	Boston Bruins	22	14	8	0	5	3	.636	65	47	18
+3	Los Angeles Kings	18	9	9	0	1	3	.500	37	34	3
+4	Pittsburgh Penguins	15	8	7	0	2	2	.533	49	40	9
+5	San Jose Sharks	11	7	4	0	3	0	.636	25	22	3
+6	Detroit Red Wings	14	7	7	0	3	2	.500	33	37	-4
+7	Ottawa Senators	10	5	5	0	2	0	.500	31	31	0
+8	New York Rangers	12	5	7	0	1	3	.417	26	28	-2
+9	Anaheim Ducks	7	3	4	0	1	3	.429	21	18	3
+10	Toronto Maple Leafs	7	3	4	0	0	2	.429	18	22	-4
+11	Washington Capitals	7	3	4	0	2	0	.429	12	16	-4
+12	St. Louis Blues	6	2	4	0	1	1	.333	10	12	-2
+13	New York Islanders	6	2	4	0	0	2	.333	17	25	-8
+14	Minnesota Wild	5	1	4	0	1	1	.200	7	17	-10
+15	Montreal Canadiens	5	1	4	0	0	1	.200	9	20	-11
+16	Vancouver Canucks	4	0	4	0	0	2	.000	8	15	-7
+	League Average	10.8	5.4	5.4	0.0	1.7	1.7	.500	27.0	27.0	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2013-04-30	CHI	Bickell, Bryan	CHI	2-1	MIN	1	16:35
+2013-04-30	STL	Steen, Alexander	STL	2-1	LAK	1	13:26
+2013-05-02	ANA	Nyquist, Gustav	DET	5-4	ANA	1	1:21
+2013-05-03	VAN	Torres, Raffi	SJS	3-2	VAN	1	5:31
+2013-05-04	WSH	Green, Mike	WSH	1-0	NYR	1	8:00
+2013-05-05	MIN	Zucker, Jason	MIN	3-2	CHI	1	2:15
+2013-05-05	NYI	Kunitz, Chris	PIT	5-4	NYI	1	8:44
+2013-05-06	DET	Brunner, Damien	DET	3-2	ANA	1	15:10
+2013-05-07	OTT	Turris, Kyle	OTT	3-2	MTL	1	2:32
+2013-05-07	SJS	Marleau, Patrick	SJS	4-3	VAN	1	13:18
+2013-05-08	ANA	Bonino, Nick	ANA	3-2	DET	1	1:54
+2013-05-08	STL	Voynov, Slava	LAK	3-2	STL	1	8:00
+2013-05-08	TOR	Krejčí, David	BOS	4-3	TOR	1	13:06
+2013-05-10	DET	Zetterberg, Henrik	DET	4-3	ANA	1	1:04
+2013-05-10	WSH	Ribeiro, Mike	WSH	2-1	NYR	1	9:24
+2013-05-11	NYI	Orpik, Brooks	PIT	4-3	NYI	1	7:49
+2013-05-13	BOS	Bergeron, Patrice	BOS	5-4	TOR	1	6:05
+2013-05-16	BOS	Marchand, Brad	BOS	3-2	NYR	1	15:40
+2013-05-18	SJS	Couture, Logan	SJS	2-1	LAK	1	1:29
+2013-05-19	OTT	Greening, Colin	OTT	2-1	PIT	2	27:39
+2013-05-23	NYR	Kreider, Chris	NYR	4-3	BOS	1	7:03
+2013-05-29	CHI	Seabrook, Brent	CHI	2-1	DET	1	3:35
+2013-06-05	BOS	Bergeron, Patrice	BOS	2-1	PIT	2	35:19
+2013-06-08	CHI	Kane, Patrick	CHI	4-3	LAK	2	31:40
+2013-06-12	CHI	Shaw, Andrew	CHI	4-3	BOS	3	52:08
+2013-06-15	CHI	Paille, Daniel	BOS	2-1	CHI	1	13:48
+2013-06-19	BOS	Seabrook, Brent	CHI	6-5	BOS	1	9:51
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Patrick Sharp • CHI
+10
+Show #2 
+View all players in this category
+Assists
+1.
+David Krejčí • BOS
+17
+Show #2-3 
+View all players in this category
+Points
+1.
+David Krejčí • BOS
+26
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+David Krejčí • BOS
+9.4
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Nathan Horton • BOS
+20
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Chris Neil • OTT
+39
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Patrick Kane • CHI
+9
+Show #2-5 
+View all players in this category
+Power Play Goals
+1.
+Logan Couture • SJS
+5
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Pascal Dupuis • PIT
+2
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Slava Voynov • LAK
+4
+Show #2-5 
+View all players in this category
+Shots
+1.
+Patrick Sharp • CHI
+91
+Show #2-4 
+View all players in this category
+Shooting Percentage
+1.
+Kyle Turris • OTT
+20.7
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Sidney Crosby • PIT
+1
+Patrick Kane • CHI
+1
+David Krejčí • BOS
+1
+James Neal • PIT
+1
+Jean-Gabriel Pageau • OTT
+1
+Show #2 
+Goals Per Game
+1.
+Kyle Turris • OTT
+0.60
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Kris Letang • PIT
+0.87
+Show #2-9 
+View all players in this category
+Points Per Game
+1.
+David Krejčí • BOS
+1.18
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+David Krejčí • BOS
+0.43
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Corey Crawford • CHI
+23
+Show #2-9 
+View all players in this category
+Wins
+1.
+Corey Crawford • CHI
+16
+Show #2-9 
+View all players in this category
+Losses
+1.
+Jonathan Quick • LAK
+9
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Corey Crawford • CHI
+46
+Tuukka Rask • BOS
+46
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Tuukka Rask • BOS
+761
+Show #2-10 
+View all players in this category
+Saves
+1.
+Tuukka Rask • BOS
+715
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Tuukka Rask • BOS
+.940
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Kevin Poulin • NYI
+1.14
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Jonathan Quick • LAK
+3
+Tuukka Rask • BOS
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Corey Crawford • CHI
+1504
+Show #2-10 
+View all players in this category
+More 2013 NHL Playoff Pages
+
+2013 NHL Playoffs Overview
+
+More 2013 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2013.html Stathead > Playoffs > 2013 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

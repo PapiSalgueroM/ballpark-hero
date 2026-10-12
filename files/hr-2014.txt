@@ -1,0 +1,898 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2015.html
+STATUS: 200
+TITLE: 2015 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:42:10.966Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2015 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Chicago Blackhawks
+
+Conn Smythe Trophy: Duncan Keith (3 G, 18 A, 21 P)
+
+Points Leaders: Tyler Johnson (23), Patrick Kane (23)
+
+Assists Leaders: Ryan Getzlaf (18), Duncan Keith (18)
+
+Goals Leaders: Tyler Johnson (13)
+
+Become a Stathead & surf this site ad-free.
+
+2015 NHL Playoffs Menu
+
+2015 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Chicago Blackhawks over Tampa Bay Lightning	 	View Matchup »
+ 
+Conference Finals	4-3	Tampa Bay Lightning over New York Rangers	 	View Matchup »
+Conference Finals	4-3	Chicago Blackhawks over Anaheim Ducks	 	View Matchup »
+ 
+Second Round	4-2	Tampa Bay Lightning over Montreal Canadiens	 	View Matchup »
+Second Round	4-3	New York Rangers over Washington Capitals	 	View Matchup »
+Second Round	4-1	Anaheim Ducks over Calgary Flames	 	View Matchup »
+Second Round	4-0	Chicago Blackhawks over Minnesota Wild	 	View Matchup »
+ 
+First Round	4-3	Washington Capitals over New York Islanders	 	View Matchup »
+First Round	4-1	New York Rangers over Pittsburgh Penguins	 	View Matchup »
+First Round	4-3	Tampa Bay Lightning over Detroit Red Wings	 	View Matchup »
+First Round	4-2	Montreal Canadiens over Ottawa Senators	 	View Matchup »
+First Round	4-2	Calgary Flames over Vancouver Canucks	 	View Matchup »
+First Round	4-0	Anaheim Ducks over Winnipeg Jets	 	View Matchup »
+First Round	4-2	Chicago Blackhawks over Nashville Predators	 	View Matchup »
+First Round	4-2	Minnesota Wild over St. Louis Blues	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Chicago Blackhawks	23	16	7	0	4	1	.696	69	60	9
+2	Tampa Bay Lightning	26	14	12	0	3	0	.538	65	62	3
+3	Anaheim Ducks	16	11	5	0	3	3	.688	57	42	15
+4	New York Rangers	19	11	8	0	4	1	.579	45	41	4
+5	Washington Capitals	14	7	7	0	1	3	.500	28	28	0
+6	Montreal Canadiens	12	6	6	0	2	1	.500	25	29	-4
+7	Calgary Flames	11	5	6	0	1	1	.455	27	33	-6
+8	Minnesota Wild	10	4	6	0	0	0	.400	24	27	-3
+9	New York Islanders	7	3	4	0	1	1	.429	15	16	-1
+10	Detroit Red Wings	7	3	4	0	0	1	.429	15	17	-2
+11	Ottawa Senators	6	2	4	0	0	2	.333	12	12	0
+12	Nashville Predators	6	2	4	0	0	2	.333	21	19	2
+13	Vancouver Canucks	6	2	4	0	0	0	.333	14	18	-4
+14	St. Louis Blues	6	2	4	0	0	0	.333	14	17	-3
+15	Pittsburgh Penguins	5	1	4	0	0	2	.200	8	11	-3
+16	Winnipeg Jets	4	0	4	0	0	1	.000	9	16	-7
+	League Average	11.1	5.6	5.6	0.0	1.5	1.5	.500	28.0	28.0	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2015-04-15	NSH	Keith, Duncan	CHI	4-3	NSH	2	27:49
+2015-04-17	MTL	Galchenyuk, Alex	MTL	3-2	OTT	1	3:40
+2015-04-19	NYI	Tavares, John	NYI	2-1	WSH	1	0:15
+2015-04-19	OTT	Weise, Dale	MTL	2-1	OTT	1	8:47
+2015-04-20	WPG	Rakell, Rickard	ANA	5-4	WPG	1	5:12
+2015-04-21	CHI	Seabrook, Brent	CHI	3-2	NSH	3	41:00
+2015-04-21	NYI	Bäckström, Nicklas	WSH	2-1	NYI	1	11:09
+2015-04-22	PIT	Hayes, Kevin	NYR	2-1	PIT	1	3:14
+2015-04-23	DET	Johnson, Tyler	TBL	3-2	DET	1	2:25
+2015-04-24	NYR	Hagelin, Carl	NYR	2-1	PIT	1	10:52
+2015-05-01	MTL	Kucherov, Nikita	TBL	2-1	MTL	2	22:06
+2015-05-05	CGY	Backlund, Mikael	CGY	4-3	ANA	1	4:24
+2015-05-08	NYR	McDonagh, Ryan	NYR	2-1	WSH	1	9:37
+2015-05-10	ANA	Perry, Corey	ANA	3-2	CGY	1	2:26
+2015-05-13	NYR	Stepan, Derek	NYR	2-1	WSH	1	11:24
+2015-05-19	ANA	Krüger, Marcus	CHI	3-2	ANA	3	56:12
+2015-05-20	TBL	Kucherov, Nikita	TBL	6-5	NYR	1	3:33
+2015-05-23	CHI	Vermette, Antoine	CHI	5-4	ANA	2	25:37
+2015-05-25	ANA	Beleskey, Matt	ANA	5-4	CHI	1	0:45
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Tyler Johnson • TBL
+13
+Show #2-3 
+View all players in this category
+Assists
+1.
+Ryan Getzlaf • ANA
+18
+Duncan Keith* • CHI
+18
+Show #2-4 
+View all players in this category
+Points
+1.
+Tyler Johnson • TBL
+23
+Patrick Kane • CHI
+23
+Show #2-4 
+View all players in this category
+Goals Created
+1.
+Tyler Johnson • TBL
+9.7
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Duncan Keith* • CHI
+16
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Deryk Engelland • CGY
+50
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Tyler Johnson • TBL
+10
+Show #2-5 
+View all players in this category
+Power Play Goals
+1.
+Ondřej Palát • TBL
+4
+Colin Wilson • NSH
+4
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Brian Boyle • TBL
+1
+Joe Colborne • CGY
+1
+Lars Eller • MTL
+1
+Luke Glendening • DET
+1
+Marián Hossa* • CHI
+1
+Tyler Johnson • TBL
+1
+Max Pacioretty • MTL
+1
+Cédric Paquette • TBL
+1
+Zach Parise • MIN
+1
+Brandon Saad • CHI
+1
+Alexander Steen • STL
+1
+Jonathan Toews • CHI
+1
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Tyler Johnson • TBL
+4
+Show #2 
+View all players in this category
+Shots
+1.
+Marián Hossa* • CHI
+69
+Rick Nash • NYR
+69
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Jiří Hudler • CGY
+26.7
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Derick Brassard • NYR
+1
+Filip Forsberg • NSH
+1
+Tyler Johnson • TBL
+1
+Vladimir Tarasenko • STL
+1
+Show #2 
+Goals Per Game
+1.
+Vladimir Tarasenko • STL
+1.00
+Show #2-9 
+View all players in this category
+Assists Per Game
+1.
+Kevin Shattenkirk • STL
+1.33
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Ryan Getzlaf • ANA
+1.25
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Corey Perry • ANA
+0.47
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Ben Bishop • TBL
+25
+Show #2-8 
+View all players in this category
+Wins
+1.
+Ben Bishop • TBL
+13
+Corey Crawford • CHI
+13
+Show #2-8 
+View all players in this category
+Losses
+1.
+Ben Bishop • TBL
+11
+Show #2-8 
+View all players in this category
+Goals Against
+1.
+Ben Bishop • TBL
+53
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Ben Bishop • TBL
+669
+Show #2-10 
+View all players in this category
+Saves
+1.
+Ben Bishop • TBL
+616
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Braden Holtby • WSH
+.944
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Craig Anderson • OTT
+0.97
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Ben Bishop • TBL
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Ben Bishop • TBL
+1459
+Show #2-10 
+View all players in this category
+More 2015 NHL Playoff Pages
+
+2015 NHL Playoffs Overview
+
+More 2015 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2015.html Stathead > Playoffs > 2015 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2015 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Chicago Blackhawks
+
+Conn Smythe Trophy: Duncan Keith (3 G, 18 A, 21 P)
+
+Points Leaders: Tyler Johnson (23), Patrick Kane (23)
+
+Assists Leaders: Ryan Getzlaf (18), Duncan Keith (18)
+
+Goals Leaders: Tyler Johnson (13)
+
+Become a Stathead & surf this site ad-free.
+
+2015 NHL Playoffs Menu
+
+2015 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-2	Chicago Blackhawks over Tampa Bay Lightning	 	View Matchup »
+ 
+Conference Finals	4-3	Tampa Bay Lightning over New York Rangers	 	View Matchup »
+Conference Finals	4-3	Chicago Blackhawks over Anaheim Ducks	 	View Matchup »
+ 
+Second Round	4-2	Tampa Bay Lightning over Montreal Canadiens	 	View Matchup »
+Second Round	4-3	New York Rangers over Washington Capitals	 	View Matchup »
+Second Round	4-1	Anaheim Ducks over Calgary Flames	 	View Matchup »
+Second Round	4-0	Chicago Blackhawks over Minnesota Wild	 	View Matchup »
+ 
+First Round	4-3	Washington Capitals over New York Islanders	 	View Matchup »
+First Round	4-1	New York Rangers over Pittsburgh Penguins	 	View Matchup »
+First Round	4-3	Tampa Bay Lightning over Detroit Red Wings	 	View Matchup »
+First Round	4-2	Montreal Canadiens over Ottawa Senators	 	View Matchup »
+First Round	4-2	Calgary Flames over Vancouver Canucks	 	View Matchup »
+First Round	4-0	Anaheim Ducks over Winnipeg Jets	 	View Matchup »
+First Round	4-2	Chicago Blackhawks over Nashville Predators	 	View Matchup »
+First Round	4-2	Minnesota Wild over St. Louis Blues	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Chicago Blackhawks	23	16	7	0	4	1	.696	69	60	9
+2	Tampa Bay Lightning	26	14	12	0	3	0	.538	65	62	3
+3	Anaheim Ducks	16	11	5	0	3	3	.688	57	42	15
+4	New York Rangers	19	11	8	0	4	1	.579	45	41	4
+5	Washington Capitals	14	7	7	0	1	3	.500	28	28	0
+6	Montreal Canadiens	12	6	6	0	2	1	.500	25	29	-4
+7	Calgary Flames	11	5	6	0	1	1	.455	27	33	-6
+8	Minnesota Wild	10	4	6	0	0	0	.400	24	27	-3
+9	New York Islanders	7	3	4	0	1	1	.429	15	16	-1
+10	Detroit Red Wings	7	3	4	0	0	1	.429	15	17	-2
+11	Ottawa Senators	6	2	4	0	0	2	.333	12	12	0
+12	Nashville Predators	6	2	4	0	0	2	.333	21	19	2
+13	Vancouver Canucks	6	2	4	0	0	0	.333	14	18	-4
+14	St. Louis Blues	6	2	4	0	0	0	.333	14	17	-3
+15	Pittsburgh Penguins	5	1	4	0	0	2	.200	8	11	-3
+16	Winnipeg Jets	4	0	4	0	0	1	.000	9	16	-7
+	League Average	11.1	5.6	5.6	0.0	1.5	1.5	.500	28.0	28.0	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2015-04-15	NSH	Keith, Duncan	CHI	4-3	NSH	2	27:49
+2015-04-17	MTL	Galchenyuk, Alex	MTL	3-2	OTT	1	3:40
+2015-04-19	NYI	Tavares, John	NYI	2-1	WSH	1	0:15
+2015-04-19	OTT	Weise, Dale	MTL	2-1	OTT	1	8:47
+2015-04-20	WPG	Rakell, Rickard	ANA	5-4	WPG	1	5:12
+2015-04-21	CHI	Seabrook, Brent	CHI	3-2	NSH	3	41:00
+2015-04-21	NYI	Bäckström, Nicklas	WSH	2-1	NYI	1	11:09
+2015-04-22	PIT	Hayes, Kevin	NYR	2-1	PIT	1	3:14
+2015-04-23	DET	Johnson, Tyler	TBL	3-2	DET	1	2:25
+2015-04-24	NYR	Hagelin, Carl	NYR	2-1	PIT	1	10:52
+2015-05-01	MTL	Kucherov, Nikita	TBL	2-1	MTL	2	22:06
+2015-05-05	CGY	Backlund, Mikael	CGY	4-3	ANA	1	4:24
+2015-05-08	NYR	McDonagh, Ryan	NYR	2-1	WSH	1	9:37
+2015-05-10	ANA	Perry, Corey	ANA	3-2	CGY	1	2:26
+2015-05-13	NYR	Stepan, Derek	NYR	2-1	WSH	1	11:24
+2015-05-19	ANA	Krüger, Marcus	CHI	3-2	ANA	3	56:12
+2015-05-20	TBL	Kucherov, Nikita	TBL	6-5	NYR	1	3:33
+2015-05-23	CHI	Vermette, Antoine	CHI	5-4	ANA	2	25:37
+2015-05-25	ANA	Beleskey, Matt	ANA	5-4	CHI	1	0:45
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Tyler Johnson • TBL
+13
+Show #2-3 
+View all players in this category
+Assists
+1.
+Ryan Getzlaf • ANA
+18
+Duncan Keith* • CHI
+18
+Show #2-4 
+View all players in this category
+Points
+1.
+Tyler Johnson • TBL
+23
+Patrick Kane • CHI
+23
+Show #2-4 
+View all players in this category
+Goals Created
+1.
+Tyler Johnson • TBL
+9.7
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Duncan Keith* • CHI
+16
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Deryk Engelland • CGY
+50
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Tyler Johnson • TBL
+10
+Show #2-5 
+View all players in this category
+Power Play Goals
+1.
+Ondřej Palát • TBL
+4
+Colin Wilson • NSH
+4
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Brian Boyle • TBL
+1
+Joe Colborne • CGY
+1
+Lars Eller • MTL
+1
+Luke Glendening • DET
+1
+Marián Hossa* • CHI
+1
+Tyler Johnson • TBL
+1
+Max Pacioretty • MTL
+1
+Cédric Paquette • TBL
+1
+Zach Parise • MIN
+1
+Brandon Saad • CHI
+1
+Alexander Steen • STL
+1
+Jonathan Toews • CHI
+1
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Tyler Johnson • TBL
+4
+Show #2 
+View all players in this category
+Shots
+1.
+Marián Hossa* • CHI
+69
+Rick Nash • NYR
+69
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Jiří Hudler • CGY
+26.7
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Derick Brassard • NYR
+1
+Filip Forsberg • NSH
+1
+Tyler Johnson • TBL
+1
+Vladimir Tarasenko • STL
+1
+Show #2 
+Goals Per Game
+1.
+Vladimir Tarasenko • STL
+1.00
+Show #2-9 
+View all players in this category
+Assists Per Game
+1.
+Kevin Shattenkirk • STL
+1.33
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Ryan Getzlaf • ANA
+1.25
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Corey Perry • ANA
+0.47
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Ben Bishop • TBL
+25
+Show #2-8 
+View all players in this category
+Wins
+1.
+Ben Bishop • TBL
+13
+Corey Crawford • CHI
+13
+Show #2-8 
+View all players in this category
+Losses
+1.
+Ben Bishop • TBL
+11
+Show #2-8 
+View all players in this category
+Goals Against
+1.
+Ben Bishop • TBL
+53
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Ben Bishop • TBL
+669
+Show #2-10 
+View all players in this category
+Saves
+1.
+Ben Bishop • TBL
+616
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Braden Holtby • WSH
+.944
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Craig Anderson • OTT
+0.97
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Ben Bishop • TBL
+3
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Ben Bishop • TBL
+1459
+Show #2-10 
+View all players in this category
+More 2015 NHL Playoff Pages
+
+2015 NHL Playoffs Overview
+
+More 2015 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2015.html Stathead > Playoffs > 2015 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

@@ -1,0 +1,868 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2014.html
+STATUS: 200
+TITLE: 2014 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:42:02.434Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2014 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Los Angeles Kings
+
+Conn Smythe Trophy: Justin Williams (9 G, 16 A, 25 P)
+
+Goals Leaders: Marián Gáborík (14)
+
+Assists Leaders: Anže Kopitar (21)
+
+Points Leaders: Anže Kopitar (26)
+
+Become a Stathead & surf this site ad-free.
+
+2014 NHL Playoffs Menu
+
+2014 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-1	Los Angeles Kings over New York Rangers	 	View Matchup »
+ 
+Conference Finals	4-2	New York Rangers over Montreal Canadiens	 	View Matchup »
+Conference Finals	4-3	Los Angeles Kings over Chicago Blackhawks	 	View Matchup »
+ 
+Second Round	4-3	Los Angeles Kings over Anaheim Ducks	 	View Matchup »
+Second Round	4-2	Chicago Blackhawks over Minnesota Wild	 	View Matchup »
+Second Round	4-3	New York Rangers over Pittsburgh Penguins	 	View Matchup »
+Second Round	4-3	Montreal Canadiens over Boston Bruins	 	View Matchup »
+ 
+First Round	4-3	New York Rangers over Philadelphia Flyers	 	View Matchup »
+First Round	4-2	Pittsburgh Penguins over Columbus Blue Jackets	 	View Matchup »
+First Round	4-0	Montreal Canadiens over Tampa Bay Lightning	 	View Matchup »
+First Round	4-1	Boston Bruins over Detroit Red Wings	 	View Matchup »
+First Round	4-3	Los Angeles Kings over San Jose Sharks	 	View Matchup »
+First Round	4-2	Anaheim Ducks over Dallas Stars	 	View Matchup »
+First Round	4-2	Chicago Blackhawks over St. Louis Blues	 	View Matchup »
+First Round	4-3	Minnesota Wild over Colorado Avalanche	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Los Angeles Kings	26	16	10	0	5	2	.615	88	70	18
+2	New York Rangers	25	13	12	0	2	4	.520	64	60	4
+3	Chicago Blackhawks	19	11	8	0	4	3	.579	58	55	3
+4	Montreal Canadiens	17	10	7	0	3	2	.588	51	46	5
+5	Boston Bruins	12	7	5	0	2	1	.583	30	26	4
+6	Anaheim Ducks	13	7	6	0	1	1	.538	35	37	-2
+7	Pittsburgh Penguins	13	7	6	0	0	3	.538	35	33	2
+8	Minnesota Wild	13	6	7	0	2	3	.462	35	35	0
+9	Colorado Avalanche	7	3	4	0	2	2	.429	20	22	-2
+10	Philadelphia Flyers	7	3	4	0	0	0	.429	16	19	-3
+11	San Jose Sharks	7	3	4	0	1	0	.429	22	26	-4
+12	Dallas Stars	6	2	4	0	0	1	.333	18	20	-2
+13	Columbus Blue Jackets	6	2	4	0	2	0	.333	18	21	-3
+14	St. Louis Blues	6	2	4	0	2	2	.333	14	20	-6
+15	Detroit Red Wings	5	1	4	0	0	1	.200	6	14	-8
+16	Tampa Bay Lightning	4	0	4	0	0	1	.000	10	16	-6
+	League Average	11.6	5.8	5.8	0.0	1.7	1.7	.500	32.5	32.5	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2014-04-16	TBL	Weise, Dale	MTL	5-4	TBL	1	18:08
+2014-04-17	COL	Stastny, Paul	COL	5-4	MIN	1	7:27
+2014-04-17	STL	Steen, Alexander	STL	4-3	CHI	3	40:26
+2014-04-19	PIT	Calvert, Matt	CBJ	4-3	PIT	2	21:10
+2014-04-19	STL	Jackman, Barret	STL	4-3	CHI	1	5:50
+2014-04-21	MIN	Granlund, Mikael	MIN	1-0	COL	1	5:08
+2014-04-22	LAK	Marleau, Patrick	SJS	4-3	LAK	1	6:20
+2014-04-23	CBJ	Foligno, Nick	CBJ	4-3	PIT	1	2:49
+2014-04-23	CHI	Kane, Patrick	CHI	4-3	STL	1	11:17
+2014-04-24	DET	Iginla, Jarome	BOS	3-2	DET	1	13:32
+2014-04-25	STL	Toews, Jonathan	CHI	3-2	STL	1	7:36
+2014-04-26	COL	MacKinnon, Nathan	COL	4-3	MIN	1	3:27
+2014-04-27	DAL	Bonino, Nick	ANA	5-4	DAL	1	2:47
+2014-04-30	COL	Niederreiter, Nino	MIN	5-4	COL	1	5:02
+2014-05-01	BOS	Subban, P.K.	MTL	4-3	BOS	2	24:17
+2014-05-02	PIT	Brassard, Derick	NYR	3-2	PIT	1	3:06
+2014-05-03	ANA	Gáborík, Marián	LAK	3-2	ANA	1	12:07
+2014-05-08	MTL	Fraser, Matt	BOS	1-0	MTL	1	1:19
+2014-05-13	MIN	Kane, Patrick	CHI	2-1	MIN	1	9:42
+2014-05-22	NYR	Galchenyuk, Alex	MTL	3-2	NYR	1	1:12
+2014-05-25	NYR	St. Louis, Martin	NYR	3-2	MTL	1	6:02
+2014-05-28	CHI	Handzuš, Michal	CHI	5-4	LAK	2	22:04
+2014-06-01	CHI	Martinez, Alec	LAK	5-4	CHI	1	5:47
+2014-06-04	LAK	Williams, Justin	LAK	3-2	NYR	1	4:36
+2014-06-07	LAK	Brown, Dustin	LAK	5-4	NYR	2	30:26
+2014-06-13	LAK	Martinez, Alec	LAK	3-2	NYR	2	34:43
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Marián Gáborík • LAK
+14
+Show #2-5 
+View all players in this category
+Assists
+1.
+Anže Kopitar • LAK
+21
+Show #2-4 
+View all players in this category
+Points
+1.
+Anže Kopitar • LAK
+26
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Marián Gáborík • LAK
+9.7
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Justin Williams • LAK
+13
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Kyle Clifford • LAK
+39
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Marián Gáborík • LAK
+11
+Show #2-3 
+View all players in this category
+Power Play Goals
+1.
+Jeff Carter • LAK
+4
+P.K. Subban • MTL
+4
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Carl Hagelin • NYR
+2
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Patrick Kane • CHI
+4
+Jonathan Toews • CHI
+4
+Show #2-3 
+View all players in this category
+Shots
+1.
+Rick Nash • NYR
+83
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Jonathan Toews • CHI
+27.3
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Rene Bourque • MTL
+1
+Jeff Carter • LAK
+1
+Evgeni Malkin • PIT
+1
+Wayne Simmonds • PHI
+1
+Show #2 
+Goals Per Game
+1.
+Paul Stastny • COL
+0.71
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Nathan MacKinnon • COL
+1.14
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Nathan MacKinnon • COL
+1.43
+Paul Stastny • COL
+1.43
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Ryan Getzlaf • ANA
+0.43
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Jonathan Quick • LAK
+26
+Show #2-10 
+View all players in this category
+Wins
+1.
+Jonathan Quick • LAK
+16
+Show #2-7 
+View all players in this category
+Losses
+1.
+Henrik Lundqvist* • NYR
+11
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Jonathan Quick • LAK
+69
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Jonathan Quick • LAK
+774
+Show #2-10 
+View all players in this category
+Saves
+1.
+Jonathan Quick • LAK
+705
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Steve Mason • PHI
+.939
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Steve Mason • PHI
+1.97
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Marc-André Fleury • PIT
+2
+Jonathan Quick • LAK
+2
+Tuukka Rask • BOS
+2
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Jonathan Quick • LAK
+1605
+Show #2-10 
+View all players in this category
+More 2014 NHL Playoff Pages
+
+2014 NHL Playoffs Overview
+
+More 2014 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2014.html Stathead > Playoffs > 2014 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2014 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Los Angeles Kings
+
+Conn Smythe Trophy: Justin Williams (9 G, 16 A, 25 P)
+
+Goals Leaders: Marián Gáborík (14)
+
+Assists Leaders: Anže Kopitar (21)
+
+Points Leaders: Anže Kopitar (26)
+
+Become a Stathead & surf this site ad-free.
+
+2014 NHL Playoffs Menu
+
+2014 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-1	Los Angeles Kings over New York Rangers	 	View Matchup »
+ 
+Conference Finals	4-2	New York Rangers over Montreal Canadiens	 	View Matchup »
+Conference Finals	4-3	Los Angeles Kings over Chicago Blackhawks	 	View Matchup »
+ 
+Second Round	4-3	Los Angeles Kings over Anaheim Ducks	 	View Matchup »
+Second Round	4-2	Chicago Blackhawks over Minnesota Wild	 	View Matchup »
+Second Round	4-3	New York Rangers over Pittsburgh Penguins	 	View Matchup »
+Second Round	4-3	Montreal Canadiens over Boston Bruins	 	View Matchup »
+ 
+First Round	4-3	New York Rangers over Philadelphia Flyers	 	View Matchup »
+First Round	4-2	Pittsburgh Penguins over Columbus Blue Jackets	 	View Matchup »
+First Round	4-0	Montreal Canadiens over Tampa Bay Lightning	 	View Matchup »
+First Round	4-1	Boston Bruins over Detroit Red Wings	 	View Matchup »
+First Round	4-3	Los Angeles Kings over San Jose Sharks	 	View Matchup »
+First Round	4-2	Anaheim Ducks over Dallas Stars	 	View Matchup »
+First Round	4-2	Chicago Blackhawks over St. Louis Blues	 	View Matchup »
+First Round	4-3	Minnesota Wild over Colorado Avalanche	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Los Angeles Kings	26	16	10	0	5	2	.615	88	70	18
+2	New York Rangers	25	13	12	0	2	4	.520	64	60	4
+3	Chicago Blackhawks	19	11	8	0	4	3	.579	58	55	3
+4	Montreal Canadiens	17	10	7	0	3	2	.588	51	46	5
+5	Boston Bruins	12	7	5	0	2	1	.583	30	26	4
+6	Anaheim Ducks	13	7	6	0	1	1	.538	35	37	-2
+7	Pittsburgh Penguins	13	7	6	0	0	3	.538	35	33	2
+8	Minnesota Wild	13	6	7	0	2	3	.462	35	35	0
+9	Colorado Avalanche	7	3	4	0	2	2	.429	20	22	-2
+10	Philadelphia Flyers	7	3	4	0	0	0	.429	16	19	-3
+11	San Jose Sharks	7	3	4	0	1	0	.429	22	26	-4
+12	Dallas Stars	6	2	4	0	0	1	.333	18	20	-2
+13	Columbus Blue Jackets	6	2	4	0	2	0	.333	18	21	-3
+14	St. Louis Blues	6	2	4	0	2	2	.333	14	20	-6
+15	Detroit Red Wings	5	1	4	0	0	1	.200	6	14	-8
+16	Tampa Bay Lightning	4	0	4	0	0	1	.000	10	16	-6
+	League Average	11.6	5.8	5.8	0.0	1.7	1.7	.500	32.5	32.5	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2014-04-16	TBL	Weise, Dale	MTL	5-4	TBL	1	18:08
+2014-04-17	COL	Stastny, Paul	COL	5-4	MIN	1	7:27
+2014-04-17	STL	Steen, Alexander	STL	4-3	CHI	3	40:26
+2014-04-19	PIT	Calvert, Matt	CBJ	4-3	PIT	2	21:10
+2014-04-19	STL	Jackman, Barret	STL	4-3	CHI	1	5:50
+2014-04-21	MIN	Granlund, Mikael	MIN	1-0	COL	1	5:08
+2014-04-22	LAK	Marleau, Patrick	SJS	4-3	LAK	1	6:20
+2014-04-23	CBJ	Foligno, Nick	CBJ	4-3	PIT	1	2:49
+2014-04-23	CHI	Kane, Patrick	CHI	4-3	STL	1	11:17
+2014-04-24	DET	Iginla, Jarome	BOS	3-2	DET	1	13:32
+2014-04-25	STL	Toews, Jonathan	CHI	3-2	STL	1	7:36
+2014-04-26	COL	MacKinnon, Nathan	COL	4-3	MIN	1	3:27
+2014-04-27	DAL	Bonino, Nick	ANA	5-4	DAL	1	2:47
+2014-04-30	COL	Niederreiter, Nino	MIN	5-4	COL	1	5:02
+2014-05-01	BOS	Subban, P.K.	MTL	4-3	BOS	2	24:17
+2014-05-02	PIT	Brassard, Derick	NYR	3-2	PIT	1	3:06
+2014-05-03	ANA	Gáborík, Marián	LAK	3-2	ANA	1	12:07
+2014-05-08	MTL	Fraser, Matt	BOS	1-0	MTL	1	1:19
+2014-05-13	MIN	Kane, Patrick	CHI	2-1	MIN	1	9:42
+2014-05-22	NYR	Galchenyuk, Alex	MTL	3-2	NYR	1	1:12
+2014-05-25	NYR	St. Louis, Martin	NYR	3-2	MTL	1	6:02
+2014-05-28	CHI	Handzuš, Michal	CHI	5-4	LAK	2	22:04
+2014-06-01	CHI	Martinez, Alec	LAK	5-4	CHI	1	5:47
+2014-06-04	LAK	Williams, Justin	LAK	3-2	NYR	1	4:36
+2014-06-07	LAK	Brown, Dustin	LAK	5-4	NYR	2	30:26
+2014-06-13	LAK	Martinez, Alec	LAK	3-2	NYR	2	34:43
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Marián Gáborík • LAK
+14
+Show #2-5 
+View all players in this category
+Assists
+1.
+Anže Kopitar • LAK
+21
+Show #2-4 
+View all players in this category
+Points
+1.
+Anže Kopitar • LAK
+26
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Marián Gáborík • LAK
+9.7
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Justin Williams • LAK
+13
+Show #2-5 
+View all players in this category
+Penalties in Minutes
+1.
+Kyle Clifford • LAK
+39
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Marián Gáborík • LAK
+11
+Show #2-3 
+View all players in this category
+Power Play Goals
+1.
+Jeff Carter • LAK
+4
+P.K. Subban • MTL
+4
+Show #2-3 
+View all players in this category
+Short-Handed Goals
+1.
+Carl Hagelin • NYR
+2
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Patrick Kane • CHI
+4
+Jonathan Toews • CHI
+4
+Show #2-3 
+View all players in this category
+Shots
+1.
+Rick Nash • NYR
+83
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Jonathan Toews • CHI
+27.3
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Rene Bourque • MTL
+1
+Jeff Carter • LAK
+1
+Evgeni Malkin • PIT
+1
+Wayne Simmonds • PHI
+1
+Show #2 
+Goals Per Game
+1.
+Paul Stastny • COL
+0.71
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Nathan MacKinnon • COL
+1.14
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Nathan MacKinnon • COL
+1.43
+Paul Stastny • COL
+1.43
+Show #2-10 
+View all players in this category
+Goals Created Per Game
+1.
+Ryan Getzlaf • ANA
+0.43
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Jonathan Quick • LAK
+26
+Show #2-10 
+View all players in this category
+Wins
+1.
+Jonathan Quick • LAK
+16
+Show #2-7 
+View all players in this category
+Losses
+1.
+Henrik Lundqvist* • NYR
+11
+Show #2-7 
+View all players in this category
+Goals Against
+1.
+Jonathan Quick • LAK
+69
+Show #2-10 
+View all players in this category
+Shots Against
+1.
+Jonathan Quick • LAK
+774
+Show #2-10 
+View all players in this category
+Saves
+1.
+Jonathan Quick • LAK
+705
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Steve Mason • PHI
+.939
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Steve Mason • PHI
+1.97
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Marc-André Fleury • PIT
+2
+Jonathan Quick • LAK
+2
+Tuukka Rask • BOS
+2
+Show #2-4 
+View all players in this category
+Minutes
+1.
+Jonathan Quick • LAK
+1605
+Show #2-10 
+View all players in this category
+More 2014 NHL Playoff Pages
+
+2014 NHL Playoffs Overview
+
+More 2014 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2014.html Stathead > Playoffs > 2014 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data

@@ -1,0 +1,858 @@
+URL: https://www.hockey-reference.com/playoffs/NHL_2021.html
+STATUS: 200
+TITLE: 2021 NHL Stanley Cup Playoffs Summary | Hockey-Reference.com
+READ: 2026-10-12T17:43:01.551Z
+---MAIN---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2021 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Tampa Bay Lightning
+
+Conn Smythe Trophy: Andrei Vasilevskiy (16-7-0, 1.90 GAA)
+
+Points Leaders: Nikita Kucherov (32)
+
+Assists Leaders: Nikita Kucherov (24)
+
+Goals Leaders: Brayden Point (14)
+
+Become a Stathead & surf this site ad-free.
+
+2021 NHL Playoffs Menu
+
+2021 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-1	Tampa Bay Lightning over Montreal Canadiens	 	View Matchup »
+ 
+Semi-Finals	4-2	Montreal Canadiens over Vegas Golden Knights	 	View Matchup »
+Semi-Finals	4-3	Tampa Bay Lightning over New York Islanders	 	View Matchup »
+ 
+Second Round	4-0	Montreal Canadiens over Winnipeg Jets	 	View Matchup »
+Second Round	4-1	Tampa Bay Lightning over Carolina Hurricanes	 	View Matchup »
+Second Round	4-2	Vegas Golden Knights over Colorado Avalanche	 	View Matchup »
+Second Round	4-2	New York Islanders over Boston Bruins	 	View Matchup »
+ 
+First Round	4-1	Boston Bruins over Washington Capitals	 	View Matchup »
+First Round	4-2	New York Islanders over Pittsburgh Penguins	 	View Matchup »
+First Round	4-0	Winnipeg Jets over Edmonton Oilers	 	View Matchup »
+First Round	4-3	Montreal Canadiens over Toronto Maple Leafs	 	View Matchup »
+First Round	4-2	Tampa Bay Lightning over Florida Panthers	 	View Matchup »
+First Round	4-2	Carolina Hurricanes over Nashville Predators	 	View Matchup »
+First Round	4-3	Vegas Golden Knights over Minnesota Wild	 	View Matchup »
+First Round	4-0	Colorado Avalanche over St. Louis Blues	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Tampa Bay Lightning	23	16	7	0	0	4	.696	75	45	30
+2	Montreal Canadiens	22	13	9	0	6	1	.591	51	54	-3
+3	New York Islanders	19	11	8	0	4	1	.579	54	53	1
+4	Vegas Golden Knights	19	10	9	0	2	4	.526	53	46	7
+5	Colorado Avalanche	10	6	4	0	1	1	.600	38	27	11
+6	Boston Bruins	11	6	5	0	3	2	.545	33	32	1
+7	Carolina Hurricanes	11	5	6	0	3	2	.455	31	30	1
+8	Winnipeg Jets	8	4	4	0	3	1	.500	20	22	-2
+9	Minnesota Wild	7	3	4	0	1	0	.429	13	20	-7
+10	Toronto Maple Leafs	7	3	4	0	0	2	.429	18	14	4
+11	Florida Panthers	6	2	4	0	1	0	.333	17	24	-7
+12	Pittsburgh Penguins	6	2	4	0	0	2	.333	16	21	-5
+13	Nashville Predators	6	2	4	0	2	2	.333	16	22	-6
+14	Washington Capitals	5	1	4	0	1	2	.200	10	16	-6
+15	St. Louis Blues	4	0	4	0	0	0	.000	7	20	-13
+16	Edmonton Oilers	4	0	4	0	0	3	.000	8	14	-6
+	League Average	10.5	5.3	5.3	0.0	1.8	1.8	.500	28.8	28.8	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2021-05-15	WSH	Dowd, Nic	WSH	3-2	BOS	1	4:41
+2021-05-16	PIT	Palmieri, Kyle	NYI	4-3	PIT	1	16:30
+2021-05-16	VEG	Eriksson Ek, Joel	MIN	1-0	VEG	1	3:20
+2021-05-17	WSH	Marchand, Brad	BOS	4-3	WSH	1	0:39
+2021-05-19	BOS	Smith, Craig	BOS	3-2	WSH	2	25:48
+2021-05-20	TBL	Lomberg, Ryan	FLA	6-5	TBL	1	5:56
+2021-05-21	EDM	Stastny, Paul	WPG	1-0	EDM	1	4:06
+2021-05-21	NSH	Duchene, Matt	NSH	5-4	CAR	2	34:54
+2021-05-23	NSH	Kunin, Luke	NSH	4-3	CAR	2	36:10
+2021-05-23	WPG	Ehlers, Nikolaj	WPG	5-4	EDM	1	9:13
+2021-05-24	PIT	Bailey, Josh	NYI	3-2	PIT	2	20:51
+2021-05-24	WPG	Connor, Kyle	WPG	4-3	EDM	3	46:52
+2021-05-25	CAR	Staal, Jordan	CAR	3-2	NSH	1	2:03
+2021-05-27	NSH	Aho, Sebastian	CAR	4-3	NSH	1	1:06
+2021-05-27	TOR	Suzuki, Nick	MTL	4-3	TOR	1	0:59
+2021-05-29	MTL	Kotkaniemi, Jesperi	MTL	3-2	TOR	1	15:15
+2021-05-31	BOS	Cizikas, Casey	NYI	4-3	BOS	1	14:48
+2021-06-02	COL	Rantanen, Mikko	COL	3-2	VEG	1	2:07
+2021-06-03	NYI	Marchand, Brad	BOS	2-1	NYI	1	3:36
+2021-06-03	TBL	Staal, Jordan	CAR	3-2	TBL	1	5:57
+2021-06-07	MTL	Toffoli, Tyler	MTL	3-2	WPG	1	1:39
+2021-06-08	COL	Stone, Mark	VEG	3-2	COL	1	0:50
+2021-06-18	MTL	Anderson, Josh	MTL	3-2	VEG	1	12:53
+2021-06-20	MTL	Roy, Nicolas	VEG	2-1	MTL	1	1:18
+2021-06-23	NYI	Beauvillier, Anthony	NYI	3-2	TBL	1	1:08
+2021-06-24	MTL	Lehkonen, Artturi	MTL	3-2	VEG	1	1:39
+2021-07-05	MTL	Anderson, Josh	MTL	3-2	TBL	1	3:57
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Brayden Point • TBL
+14
+Show #2 
+View all players in this category
+Assists
+1.
+Nikita Kucherov • TBL
+24
+Show #2-5 
+View all players in this category
+Points
+1.
+Nikita Kucherov • TBL
+32
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Nikita Kucherov • TBL
+10.9
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Ryan McDonagh • TBL
+18
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Matt Martin • NYI
+43
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Brayden Point • TBL
+7
+Show #2 
+View all players in this category
+Power Play Goals
+1.
+Brayden Point • TBL
+7
+Show #2-4 
+View all players in this category
+Short-Handed Goals
+1.
+Joel Armia • MTL
+2
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Brayden Point • TBL
+3
+Ryan Pulock • NYI
+3
+Max Pacioretty • VEG
+3
+Show #2-4 
+View all players in this category
+Shots
+1.
+Alex Pietrangelo • VEG
+76
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Brandon Saad • COL
+36.8
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Jonathan Marchessault • VEG
+1
+Mattias Janmark • VEG
+1
+Nathan MacKinnon • COL
+1
+David Pastrňák • BOS
+1
+Show #2 
+Goals Per Game
+1.
+Nathan MacKinnon • COL
+0.80
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Jonathan Huberdeau • FLA
+1.33
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Jonathan Huberdeau • FLA
+1.67
+Show #2-9 
+View all players in this category
+Goals Created Per Game
+1.
+Nathan MacKinnon • COL
+0.61
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Andrei Vasilevskiy • TBL
+23
+Show #2-9 
+View all players in this category
+Wins
+1.
+Andrei Vasilevskiy • TBL
+16
+Show #2-10 
+View all players in this category
+Losses
+1.
+Carey Price • MTL
+9
+Show #2-6 
+View all players in this category
+Goals Against
+1.
+Carey Price • MTL
+51
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Andrei Vasilevskiy • TBL
+699
+Show #2-10 
+View all players in this category
+Saves
+1.
+Andrei Vasilevskiy • TBL
+655
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Andrei Vasilevskiy • TBL
+.937
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Jack Campbell • TOR
+1.81
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Andrei Vasilevskiy • TBL
+5
+Show #2-3 
+View all players in this category
+Minutes
+1.
+Andrei Vasilevskiy • TBL
+1390
+Show #2-10 
+View all players in this category
+More 2021 NHL Playoff Pages
+
+2021 NHL Playoffs Overview
+
+More 2021 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2021.html Stathead > Playoffs > 2021 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
+---BODY---
+ Sports Reference ® Hub
+Baseball
+Football (college)
+Basketball (college)
+Hockey
+Soccer
+Blog
+Stathead ®
+Immaculate Grid ®
+Questions or Comments?
+Ad-Free Login
+Players
+Teams
+Seasons
+Leaders
+NHL Scores
+3
+Playoffs
+Hub
+NEW
+Stathead
+Newsletter
+Full Site Menu Below
+2021 NHL Stanley Cup Playoffs Summary
+Previous Year Next Year
+
+League Champion: Tampa Bay Lightning
+
+Conn Smythe Trophy: Andrei Vasilevskiy (16-7-0, 1.90 GAA)
+
+Points Leaders: Nikita Kucherov (32)
+
+Assists Leaders: Nikita Kucherov (24)
+
+Goals Leaders: Brayden Point (14)
+
+Become a Stathead & surf this site ad-free.
+
+2021 NHL Playoffs Menu
+
+2021 NHL Playoffs Overview
+Leaders
+Skaters
+Basic Stats
+Advanced Stats
+TOI/Shift Stats
+Hat Tricks
+Goalies
+On this page
+League Playoff Series
+Team Statistics
+Overtime Goals
+Playoff Leaders
+Full Site Menu
+
+Keyboard Shortcuts
+
+\ to toggle sidebar navigation
+
+/ to toggle search input
+
+More about this update
+
+League Playoff Series 
+Click series name to show/hide game results and schedules
+Final	4-1	Tampa Bay Lightning over Montreal Canadiens	 	View Matchup »
+ 
+Semi-Finals	4-2	Montreal Canadiens over Vegas Golden Knights	 	View Matchup »
+Semi-Finals	4-3	Tampa Bay Lightning over New York Islanders	 	View Matchup »
+ 
+Second Round	4-0	Montreal Canadiens over Winnipeg Jets	 	View Matchup »
+Second Round	4-1	Tampa Bay Lightning over Carolina Hurricanes	 	View Matchup »
+Second Round	4-2	Vegas Golden Knights over Colorado Avalanche	 	View Matchup »
+Second Round	4-2	New York Islanders over Boston Bruins	 	View Matchup »
+ 
+First Round	4-1	Boston Bruins over Washington Capitals	 	View Matchup »
+First Round	4-2	New York Islanders over Pittsburgh Penguins	 	View Matchup »
+First Round	4-0	Winnipeg Jets over Edmonton Oilers	 	View Matchup »
+First Round	4-3	Montreal Canadiens over Toronto Maple Leafs	 	View Matchup »
+First Round	4-2	Tampa Bay Lightning over Florida Panthers	 	View Matchup »
+First Round	4-2	Carolina Hurricanes over Nashville Predators	 	View Matchup »
+First Round	4-3	Vegas Golden Knights over Minnesota Wild	 	View Matchup »
+First Round	4-0	Colorado Avalanche over St. Louis Blues	 	View Matchup »
+Team Statistics 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Glossary
+Rk	Team	GP	W	L	T	OW	OL	W-L%	G	GA	DIFF
+1	Tampa Bay Lightning	23	16	7	0	0	4	.696	75	45	30
+2	Montreal Canadiens	22	13	9	0	6	1	.591	51	54	-3
+3	New York Islanders	19	11	8	0	4	1	.579	54	53	1
+4	Vegas Golden Knights	19	10	9	0	2	4	.526	53	46	7
+5	Colorado Avalanche	10	6	4	0	1	1	.600	38	27	11
+6	Boston Bruins	11	6	5	0	3	2	.545	33	32	1
+7	Carolina Hurricanes	11	5	6	0	3	2	.455	31	30	1
+8	Winnipeg Jets	8	4	4	0	3	1	.500	20	22	-2
+9	Minnesota Wild	7	3	4	0	1	0	.429	13	20	-7
+10	Toronto Maple Leafs	7	3	4	0	0	2	.429	18	14	4
+11	Florida Panthers	6	2	4	0	1	0	.333	17	24	-7
+12	Pittsburgh Penguins	6	2	4	0	0	2	.333	16	21	-5
+13	Nashville Predators	6	2	4	0	2	2	.333	16	22	-6
+14	Washington Capitals	5	1	4	0	1	2	.200	10	16	-6
+15	St. Louis Blues	4	0	4	0	0	0	.000	7	20	-13
+16	Edmonton Oilers	4	0	4	0	0	3	.000	8	14	-6
+	League Average	10.5	5.3	5.3	0.0	1.8	1.8	.500	28.8	28.8	0
+Overtime Goals 
+Share & Export
+Modify, Export & Share Table
+Get as Excel Workbook
+Get table as CSV (for Excel)
+Get Link to Table
+About Sharing Tools
+Video: SR Sharing Tools & How-to
+Video: Stats Table Tips & Tricks
+Data Usage Terms
+Date	Location	Name	Team	Final Score	Opponent	OTs	OT Time Elapsed
+2021-05-15	WSH	Dowd, Nic	WSH	3-2	BOS	1	4:41
+2021-05-16	PIT	Palmieri, Kyle	NYI	4-3	PIT	1	16:30
+2021-05-16	VEG	Eriksson Ek, Joel	MIN	1-0	VEG	1	3:20
+2021-05-17	WSH	Marchand, Brad	BOS	4-3	WSH	1	0:39
+2021-05-19	BOS	Smith, Craig	BOS	3-2	WSH	2	25:48
+2021-05-20	TBL	Lomberg, Ryan	FLA	6-5	TBL	1	5:56
+2021-05-21	EDM	Stastny, Paul	WPG	1-0	EDM	1	4:06
+2021-05-21	NSH	Duchene, Matt	NSH	5-4	CAR	2	34:54
+2021-05-23	NSH	Kunin, Luke	NSH	4-3	CAR	2	36:10
+2021-05-23	WPG	Ehlers, Nikolaj	WPG	5-4	EDM	1	9:13
+2021-05-24	PIT	Bailey, Josh	NYI	3-2	PIT	2	20:51
+2021-05-24	WPG	Connor, Kyle	WPG	4-3	EDM	3	46:52
+2021-05-25	CAR	Staal, Jordan	CAR	3-2	NSH	1	2:03
+2021-05-27	NSH	Aho, Sebastian	CAR	4-3	NSH	1	1:06
+2021-05-27	TOR	Suzuki, Nick	MTL	4-3	TOR	1	0:59
+2021-05-29	MTL	Kotkaniemi, Jesperi	MTL	3-2	TOR	1	15:15
+2021-05-31	BOS	Cizikas, Casey	NYI	4-3	BOS	1	14:48
+2021-06-02	COL	Rantanen, Mikko	COL	3-2	VEG	1	2:07
+2021-06-03	NYI	Marchand, Brad	BOS	2-1	NYI	1	3:36
+2021-06-03	TBL	Staal, Jordan	CAR	3-2	TBL	1	5:57
+2021-06-07	MTL	Toffoli, Tyler	MTL	3-2	WPG	1	1:39
+2021-06-08	COL	Stone, Mark	VEG	3-2	COL	1	0:50
+2021-06-18	MTL	Anderson, Josh	MTL	3-2	VEG	1	12:53
+2021-06-20	MTL	Roy, Nicolas	VEG	2-1	MTL	1	1:18
+2021-06-23	NYI	Beauvillier, Anthony	NYI	3-2	TBL	1	1:08
+2021-06-24	MTL	Lehkonen, Artturi	MTL	3-2	VEG	1	1:39
+2021-07-05	MTL	Anderson, Josh	MTL	3-2	TBL	1	3:57
+
+See All-time List of Playoff OT goals.
+
+ 
+
+Playoff Leaders 
+Rate Statistic Requirements Expand all Leaderboards
+Goals
+1.
+Brayden Point • TBL
+14
+Show #2 
+View all players in this category
+Assists
+1.
+Nikita Kucherov • TBL
+24
+Show #2-5 
+View all players in this category
+Points
+1.
+Nikita Kucherov • TBL
+32
+Show #2-5 
+View all players in this category
+Goals Created
+1.
+Nikita Kucherov • TBL
+10.9
+Show #2-5 
+View all players in this category
+Plus/Minus
+1.
+Ryan McDonagh • TBL
+18
+Show #2-4 
+View all players in this category
+Penalties in Minutes
+1.
+Matt Martin • NYI
+43
+Show #2-5 
+View all players in this category
+Even Strength Goals
+1.
+Brayden Point • TBL
+7
+Show #2 
+View all players in this category
+Power Play Goals
+1.
+Brayden Point • TBL
+7
+Show #2-4 
+View all players in this category
+Short-Handed Goals
+1.
+Joel Armia • MTL
+2
+Show #2 
+View all players in this category
+Game-Winning Goals
+1.
+Brayden Point • TBL
+3
+Ryan Pulock • NYI
+3
+Max Pacioretty • VEG
+3
+Show #2-4 
+View all players in this category
+Shots
+1.
+Alex Pietrangelo • VEG
+76
+Show #2-5 
+View all players in this category
+Shooting Percentage
+1.
+Brandon Saad • COL
+36.8
+Show #2-5 
+View all players in this category
+Hat Tricks
+1.
+Jonathan Marchessault • VEG
+1
+Mattias Janmark • VEG
+1
+Nathan MacKinnon • COL
+1
+David Pastrňák • BOS
+1
+Show #2 
+Goals Per Game
+1.
+Nathan MacKinnon • COL
+0.80
+Show #2-10 
+View all players in this category
+Assists Per Game
+1.
+Jonathan Huberdeau • FLA
+1.33
+Show #2-10 
+View all players in this category
+Points Per Game
+1.
+Jonathan Huberdeau • FLA
+1.67
+Show #2-9 
+View all players in this category
+Goals Created Per Game
+1.
+Nathan MacKinnon • COL
+0.61
+Show #2-10 
+View all players in this category
+Games Played (Goalie)
+1.
+Andrei Vasilevskiy • TBL
+23
+Show #2-9 
+View all players in this category
+Wins
+1.
+Andrei Vasilevskiy • TBL
+16
+Show #2-10 
+View all players in this category
+Losses
+1.
+Carey Price • MTL
+9
+Show #2-6 
+View all players in this category
+Goals Against
+1.
+Carey Price • MTL
+51
+Show #2-9 
+View all players in this category
+Shots Against
+1.
+Andrei Vasilevskiy • TBL
+699
+Show #2-10 
+View all players in this category
+Saves
+1.
+Andrei Vasilevskiy • TBL
+655
+Show #2-10 
+View all players in this category
+Save Percentage
+1.
+Andrei Vasilevskiy • TBL
+.937
+Show #2-10 
+View all players in this category
+Goals Against Average
+1.
+Jack Campbell • TOR
+1.81
+Show #2-10 
+View all players in this category
+Shutouts
+1.
+Andrei Vasilevskiy • TBL
+5
+Show #2-3 
+View all players in this category
+Minutes
+1.
+Andrei Vasilevskiy • TBL
+1390
+Show #2-10 
+View all players in this category
+More 2021 NHL Playoff Pages
+
+2021 NHL Playoffs Overview
+
+More 2021 NHL Playoff Pages
+
+Leaders Skaters Skaters - Advanced Skaters - Time on Ice Metrics Goalies
+Ad-Free Login Create Account
+You are here: /playoffs/NHL_2021.html Stathead > Playoffs > 2021 NHL > Stanley Cup Playoffs Summary
+Full Site Menu 
+Return to Top
+Players
+In the News: J. Toews, D. Keith, J. Benn, R. Getzlaf, C. Perry, A. Ovechkin ...
+All-Time Greats: W. Gretzky, R. Bourque, G. Howe, N. Lidstrom, M. Brodeur, J. Jagr ...
+Active Greats: A. Ovechkin, N. MacKinnon, S. Crosby, C. McDavid, N. Kucherov, C. Hellebuyck ...
+Teams
+Atlantic: Boston, Buffalo, Detroit, Florida, Montreal, Ottawa, Tampa Bay, Toronto
+Metropolitan: Carolina, Columbus, New Jersey, NY Rangers, NY Islanders, Philadelphia, Pittsburgh, Washington
+Central: Chicago, Colorado, Dallas, Minnesota, Nashville, St. Louis, Utah, Winnipeg
+Pacific: Anaheim, Calgary, Edmonton, Los Angeles, San Jose, Seattle, Vancouver, Vegas
+Seasons
+Current Summary/Standings, Current Schedule/Results, Current Leaders, Current Stats
+2026-27, 2025-26, 2024-25, 2023-24, ...
+NHL Leaders
+Goals, Assists, Plus/Minus, Penalty Minutes, ...
+NHL Scores
+Yesterday's Games, Search All Games in History, Season Results
+NHL Schedules
+Today's Games, Season Schedule
+NHL Standings
+Today's Standings
+Stathead
+Player Finders: Season Finder, Game Finder, Streak Finder, Span Finder
+Team Finders: Season Finder, Game Finder, Streak Finder Span Finder
+Other Finders: Versus Finder
+Coaches
+Active: Todd McLellan, Jeff Blashill, Jon Cooper
+Retired: Wayne Gretzky, Mike Keenan, Punch Imlach
+NHL Awards
+Hart, Lady Byng, Vezina, Calder, Art Ross, Norris, Conn Smythe, Hall of Fame, ...
+NHL Playoffs
+2027 Stanley Cup, 2026 Stanley Cup, 2025 Stanley Cup, 2024 Stanley Cup, All Overtime Playoff Goals, ...
+Amateurs
+Analytics
+Frivolities
+Players who played for multiple teams, Birthdays, Uniform Number Tracker, ...
+NHL Draft
+2026 Draft, 2025 Draft, 2024 Draft, 2023 Draft, ...
+Linker
+About
+Frequently Asked Questions about the NHL and Hockey ...
+Immaculate Grid
+Put your hockey knowledge to the test with our daily hockey trivia game. Can you complete the grid?
+Hockey-Reference.com Blog and Articles
+We're Social...for Statheads
+           
+
+Site Last Updated: Monday, October 12, 4:30AM
+
+Question, Comment, Feedback, or Correction?
+
+Subscribe to our Free Email Newsletter
+
+Subscribe to Stathead Hockey: Get your first month FREE
+Your All-Access Ticket to the Hockey Reference Database
+
+Do you have a sports website? Or write about sports? We have tools and resources that can help you use sports data. Find out more.
+
+FAQs, Tips & Tricks
+Do you have a blog? Join our linker program.
+Watch our How-To Videos to Become a Stathead
+Subscribe to Stathead and get access to more data than you can imagine
+
+All logos are the trademark & property of their owners and not Sports Reference LLC. We present them here for purely educational purposes. Our reasoning for presenting offensive logos.
+
+Logos were compiled by the amazing SportsLogos.net.
+
+Data Provided By
+the official stats partner of the NBA, NHL and MLB.
+
+Hockey-Reference utilizes Official NHL data for current NHL seasons.
+
+Copyright © 2000-2026 Sports Reference LLC. All rights reserved.
+
+The SPORTS REFERENCE, STATHEAD, IMMACULATE GRID, and IMMACULATE FOOTY trademarks are owned exclusively by Sports Reference LLC. Use without license or authorization is expressly prohibited.
+
+Most historical data provided by Dan Diamond and Associates.
+
+WHA hat tricks courtesy Scott Surgent. Buy his book.
+
+Some hockey portraits on this site are licensed from Images on Ice, Hockey’s Photo Agency
+
+ Sports Reference ® Hub Baseball Football (college) Basketball (college) Hockey Soccer Blog Stathead ® Immaculate Grid ®
+About • Conditions & Terms of Service • Advertise With Us • Jobs at SR • Hockey-Reference.com T-Shirts & Store • Your Privacy Choices
+
+Sports Reference Purpose: We will be the trusted source of information and tools that inspire and empower users to enjoy, understand, and share the sports they love.
+
+Privacy Policy • Gambling Revenue Policy • Accessibility Policy • Use of Data
