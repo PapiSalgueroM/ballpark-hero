@@ -1,0 +1,8 @@
+# Round 1306 fix pass 2, head 0534ef89: the remaining fences that walk scripts and src, on the head that holds the two recordings and the last comments
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
