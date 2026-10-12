@@ -1,0 +1,5 @@
+fleet-head exit=0 6s |       Tests  1 passed (1)
+fleet-base exit=0 6s |       Tests  1 passed (1)
+diff-init exit=0 0s |   $.league.teams.ARI.players.13.id: base "pfrp2e4a02pot-14" | head "pcxr9bt1hrmj7j-14"
+diff-press exit=0 0s |   $.league.teams.ARI.players.13.id: base "pfrp2e4a02pot-14" | head "pcxr9bt1hrmj7j-14"
+fleet-cmp exit=1 0s | fleet: 40 cases, 71 presses (14 on the old button), 71 differ, 0 errors

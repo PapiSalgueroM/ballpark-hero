@@ -1,0 +1,6 @@
+#!serial
+fleet-head: mkdir -p /tmp/f && cp .rc/x/r1309RunFleet.test.tsx src/test/ && FLEET_N=40 FLEET_RAW=/tmp/f/head FLEET_OUT=/tmp/f/head.json NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/r1309RunFleet.test.tsx --testTimeout=900000 > $RC_OUT/fleet-head.log 2>&1; s=$?; grep -c "^FLEET" $RC_OUT/fleet-head.log; grep -h "Tests \|ERROR" $RC_OUT/fleet-head.log | head -5; exit $s
+fleet-base: git worktree add -q /tmp/base bb051ee0665516bf5a3743486ced71fc095be57b && ln -s "$PWD/node_modules" /tmp/base/node_modules && cp .rc/x/r1309RunFleet.test.tsx /tmp/base/src/test/ && cd /tmp/base && FLEET_N=40 FLEET_RAW=/tmp/f/base FLEET_OUT=/tmp/f/base.json NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/r1309RunFleet.test.tsx --testTimeout=900000 > $RC_OUT/fleet-base.log 2>&1; s=$?; grep -c "^FLEET" $RC_OUT/fleet-base.log; grep -h "Tests \|ERROR" $RC_OUT/fleet-base.log | head -5; exit $s
+diff-init: node .rc/x/r1309RunJsonDiff.mjs /tmp/f/base-init.json /tmp/f/head-init.json
+diff-press: node .rc/x/r1309RunJsonDiff.mjs /tmp/f/base-press.json /tmp/f/head-press.json
+fleet-cmp: node -e "const a=require('/tmp/f/base.json'),b=require('/tmp/f/head.json');console.log('init shas equal: '+a.filter((x,i)=>x.init===b[i].init).length+' of '+a.length)"; node .rc/x/r1309RunFleetCmp.mjs /tmp/f/base.json /tmp/f/head.json
