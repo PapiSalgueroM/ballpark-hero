@@ -1,0 +1,8 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkNhl exit=0 548s | playUsRivalLines: 598 checks, 0 failed
+flipNhl exit=1 167s | playUsRivalLines: 185 checks, 14 failed (control rivalflip)
+walkMlb exit=0 755s | playUsRivalLines: 862 checks, 0 failed
+oldlineMlb exit=1 55s | playUsRivalLines: 32 checks, 12 failed (control oldline)
+oldlineNhl exit=1 26s | playUsRivalLines: 16 checks, 4 failed (control oldline)
+walkNfl exit=0 965s | playUsRivalLines: 821 checks, 0 failed
+flipMlb exit=1 294s | playUsRivalLines: 369 checks, 30 failed (control rivalflip)

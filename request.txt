@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walkNhl: RIVAL_WALK_SPORT=nhl node scripts/playUsRivalLines.mjs
+walkMlb: RIVAL_WALK_SPORT=mlb node scripts/playUsRivalLines.mjs
+walkNfl: RIVAL_WALK_SPORT=nfl node scripts/playUsRivalLines.mjs
+flipNhl: RIVAL_WALK_SPORT=nhl RIVAL_WALK_POS=G,C PLAY_US_RIVAL_CONTROL=rivalflip node scripts/playUsRivalLines.mjs
+flipMlb: RIVAL_WALK_SPORT=mlb RIVAL_WALK_POS=SP,RP,CF PLAY_US_RIVAL_CONTROL=rivalflip node scripts/playUsRivalLines.mjs
+oldlineMlb: RIVAL_WALK_SPORT=mlb PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
+oldlineNhl: RIVAL_WALK_SPORT=nhl PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
