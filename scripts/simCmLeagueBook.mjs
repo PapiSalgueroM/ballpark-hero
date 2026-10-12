@@ -242,6 +242,10 @@
  *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); run it on the
  *                                                                        full fleet, the only one judged
  *   nocap         the team of the season is never let go               -> awards (ii)
+ * Round 1311 derived two red lists again (remote check r1311-f1b): dropmine leaves no book that adds up, so
+ * no season is decided by it, no team is named and no 38 match season reaches section facts (awards and facts
+ * go red with it); twoman leaves a third of every side's goals unnamed, so every league falls under the
+ * awards floor and section awards has no team to judge (awards goes red with it).
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
  * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
@@ -343,7 +347,7 @@ const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', '
 const CONTROLS = {
   weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin', 'awards'] },
   mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream', also: ['oldsave', 'dailies', 'awards'] },
-  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards', 'shapes'] },
+  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards', 'shapes', 'awards', 'facts'] },
   byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin', 'boards', 'oldsave'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
@@ -352,7 +356,7 @@ const CONTROLS = {
   offbyone: { patch: [{ file: ENGINE, from: '  const lines = oppScorers.slice(0, oppGoals);', to: '  const lines = oppScorers.slice(0, Math.max(0, oppGoals - 1));' }], red: 'names' },
   penassistmine: { patch: [{ file: ENGINE, from: MINE_GATE, to: '    if (!creditGoal(book, opp, man) || !man) return;' }], red: 'names', also: ['shapes'] },
   assistbench: { patch: [{ file: ENGINE, from: '    const assist = dealAssist(`${key}|${i}`, man, there, rules);', to: '    const assist = dealAssist(`${key}|${i}`, man, theirs, rules);' }], red: 'names' },
-  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes', also: ['thin'] },
+  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes', also: ['thin', 'awards'] },
   flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes', also: ['thin'] },
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
   noog: { patch: [{ file: BOOK, from: ": ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';", to: ": 'open';" }], red: 'shapes' },
