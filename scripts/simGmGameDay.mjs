@@ -57,6 +57,10 @@
  *    card and the NFL's bound card join the modules. They are what a drawn
  *    card reads, so no board may import one statically, and the NFL board
  *    reaches the bound card through a lazy import and nothing else of them.
+ *    Round 1308, the postseason's libraries: src/lib/gmPostseason.ts (the
+ *    press and load half, sport free) and src/lib/frontOfficePostseason.ts
+ *    (the NFL's bind) join the modules with their tests. Nothing else
+ *    imports them yet: Round 1309 puts them on the board.
  *
  * ROUND 1305, THE PRESS (src/lib/frontOfficeGameDay.ts, the NFL board's bind
  * to the quick path, and src/lib/gmGameLog.ts, the save field of the
@@ -203,9 +207,12 @@ const VIEW = 'src/lib/gmGameDayView.ts';
 /* the shared tile and the NFL's bound card: one lazy chunk a week box asks for */
 const CARD = 'src/components/front-office-shared/GmGameDayCard.tsx';
 const NFL_CARD = 'src/components/front-office/NflGameDay.tsx';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD];
+/* Round 1308: the postseason a board plays a round at a time, the press and load half (sport free) and the NFL's bind */
+const POST = 'src/lib/gmPostseason.ts';
+const NFL_POST = 'src/lib/frontOfficePostseason.ts';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD, POST, NFL_POST];
 /* the round whose header a new file opens with: section 5 proves the comment stripper took it out */
-const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307' };
+const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307', [POST]: 'Round 1308', [NFL_POST]: 'Round 1308' };
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
@@ -822,7 +829,8 @@ for (const set of SEEDSETS) {
      in the commit that first imports them. */
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
-    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx'].map(f => [f, '*']),
+    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx',
+      'src/lib/gmPostseason.test.ts', 'src/lib/frontOfficePostseason.test.ts'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
     [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD)])],
     /* Round 1307, the tile: the board reaches the bound card (through a lazy import: the check below) and nothing
