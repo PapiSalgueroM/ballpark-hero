@@ -1,0 +1,2 @@
+playClubManager: seed 1542433760 (the walk's own, from its file name). Replay with PLAY_CM_SEED=1542433760
+playClubManager: unknown CM_CONTROL "bogus" (known: nobusiness, nodoctor, nosave). Refusing to run.

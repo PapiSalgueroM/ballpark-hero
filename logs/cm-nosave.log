@@ -1,0 +1,10 @@
+playClubManager: seed 1542433760 (the walk's own, from its file name). Replay with PLAY_CM_SEED=1542433760
+1) Taking a job
+   in the job at Crystal Palace: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Seaso
+  control  nosave: the save is looked for under "dukb-club-manager-save-control-nosave"
+   board confidence doctored from null to 100: the slot screen reads "Board 60/100"
+  BROKEN   the save was not there to doctor, so the board is the engine's own and the run may be sacked early
+   back on the hub; the page has drawn 4 times since this load, before the first kick off
+
+   control: 1 of 1 target finding fired, 0 other finding(s)
+playClubManager control: green. With the save looked for under a key the game never writes, exactly the one doctoring check fired ("the save was not there to doctor, so the board is the engine's own and the run may be sack"). Exiting non zero, because a run with findings fails.
