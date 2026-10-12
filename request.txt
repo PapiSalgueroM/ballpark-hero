@@ -1,0 +1,10 @@
+# Round 1314 final node proof on aa2740ce (origin/main 48cb9d4b merged): the fixed harnesses and the round's closing fences
+simSafari: node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+liveTest: if grep -lE 'integrations/supabase/client|createClient\(' scripts/simSafari.mjs scripts/simActivityNotCompletion.mjs scripts/simHalftime.mjs scripts/simEras.mjs scripts/simGmXp.mjs scripts/simGmCalendar.mjs scripts/simGmDealTableFixture.mjs scripts/simGmStaff.mjs scripts/playNationJob.mjs scripts/playFoHub.mjs scripts/playGmPress.mjs scripts/playWilderness.mjs scripts/playClubManager.mjs; then echo 'a file matches the live test'; exit 1; else echo 'none of the thirteen matches the live test'; fi
+noShip: git diff --stat origin/main -- src public index.html package.json package-lock.json vite.config.ts tsconfig.app.json | tee /dev/stderr | wc -l | grep -qx 0 && echo 'nothing shipped moved'
