@@ -534,8 +534,21 @@ for (let step = 0; step < MAX_STEPS; step++) {
        the heading and leaving. */
     const rv = t;
     reviewSeen = true;
-    /* Round 1314: the review as the walk saw it, at its own viewport, for whoever reads the run. */
-    if (process.env.RC_OUT) await page.screenshot({ path: path.join(process.env.RC_OUT, `cm-season-review-${SEED}.png`), fullPage: true }).catch(() => {});
+    /* Round 1314: the review's transfer business block as a player sees it, at the walk's own viewport, for
+       whoever reads the run. The review ticks its rows in, so the shot waits (at most six seconds) for the
+       block's heading to finish fading in; the walk ends after the review, so the wait moves nothing it reads. */
+    if (process.env.RC_OUT) {
+      const tb = page.getByText('Transfer business', { exact: true }).first();
+      if (await tb.count().catch(() => 0)) {
+        await tb.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
+        await tb.evaluate(el => new Promise(done => {
+          const t0 = performance.now();
+          const tick = () => (getComputedStyle(el).opacity === '1' || performance.now() - t0 > 6000 ? done() : requestAnimationFrame(tick));
+          tick();
+        })).catch(() => {});
+      }
+      await page.screenshot({ path: path.join(process.env.RC_OUT, `cm-season-review-${SEED}.png`) }).catch(() => {});
+    }
     /* A render throw unmounts the root, so the tell is an empty page rather
        than an error message. Round 544 put a boundary in, so the other tell is
        the boundary's own copy. */
