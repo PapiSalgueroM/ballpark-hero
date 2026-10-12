@@ -186,6 +186,11 @@ try {
     const check = (value, message) => { assert(value, `${spec.id}: ${message}`); row.checks += 1; report.checks += 1; };
     const activate = locator => spec.width < 1280 ? locator.tap() : locator.click();
     const input = () => page.getByRole('combobox', { name: 'Type a player name...' });
+    const optionDiagnostics = () => page.getByRole('option').evaluateAll(options => options.map(option => ({
+      nameText: option.querySelector('span.text-sm.font-medium')?.textContent ?? null,
+      nameInnerText: option.querySelector('span.text-sm.font-medium')?.innerText ?? null,
+      textContent: option.textContent, innerText: option.innerText,
+    })));
     const readChain = async locator => ({ players: await locator.locator('span.font-semibold.text-foreground').allTextContents(), clubs: await locator.locator('span.italic').allTextContents() });
     const snapshot = async () => {
       const minimumText = await page.locator('#dukb-main p').filter({ hasText: /^Optimal: \d+/ }).first().innerText();
@@ -209,10 +214,15 @@ try {
     }
     async function choose(name, query = name) {
       const previous = await snapshot();
+      row.lastPick = { name, query, after: previous.chain.players.at(-1) };
       await input().fill(query);
-      const option = page.getByRole('option').filter({ hasText: new RegExp(`^\\s*${esc(name)}(?:\\s|$)`) });
+      const nameSpan = page.locator('span.text-sm.font-medium').filter({ hasText: new RegExp(`^\\s*${esc(name)}\\s*$`) });
+      const option = page.getByRole('option').filter({ has: nameSpan });
       await option.waitFor({ state: 'visible', timeout: 10000 });
       check(await option.count() === 1, `Exactly one real identity can be selected: ${name}`);
+      const offeredName = (await option.locator('span.text-sm.font-medium').innerText()).trim();
+      check(offeredName === name, `The suggestion name itself is exactly ${name}: ${offeredName}`);
+      row.stages.push({ stage: 'autocomplete', name, query, offeredName, options: await optionDiagnostics() });
       await activate(option);
       await page.waitForFunction(size => document.querySelector('#dukb-main p.text-destructive') || document.querySelector('#dukb-main .space-y-0')?.querySelectorAll('span.font-semibold.text-foreground').length > size, previous.chain.players.length, { timeout: 5000 });
       const refusals = await page.locator('#dukb-main p.text-destructive').allTextContents();
@@ -269,8 +279,10 @@ try {
       row.ok = true; console.log(`PASS ${spec.id}: ${row.checks} checks${control ? ', detector control fired' : ''}`);
     } catch (error) {
       row.ok = false; row.error = String(error.stack || error);
+      row.failureOptions = await optionDiagnostics().catch(() => []);
+      row.failureSearch = await input().inputValue().catch(() => null);
       row.failureText = await page.locator('#dukb-main').innerText().catch(() => '');
-      await shot('failure').catch(() => {}); console.error(`FAIL ${spec.id}: ${row.error}`);
+      await shot('failure').catch(() => {}); console.error(`FAIL ${spec.id}: ${row.error}\nAvailable options: ${JSON.stringify(row.failureOptions)}`);
     } finally { await context.close(); }
   }
 

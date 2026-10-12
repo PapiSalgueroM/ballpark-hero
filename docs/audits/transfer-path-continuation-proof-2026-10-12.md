@@ -31,3 +31,24 @@ responses are offline fixtures; external transport is blocked. No new real
 sports facts, app/data edits, production probes or live acceptance are in scope.
 The existing PR242 proof remains qualified independently. New runtime counts,
 control results, artifacts and branch qualification are pending.
+
+First remote run 38289111499, job 114944578771, on proof head d4973ac9
+completed with a browser-method failure. The exact candidate source, 521
+locked installed versions, app type gate, complete app build and one route
+snapshot held. The independent fleet passed 2,715 rule entries: 885 retained
+pairs and all 20 actual fallback puzzles under all three rules. Five retained
+rule entries shortened; two compiled faults produced 40 and 16 independent
+findings and both selected middle-player pairs failed their owned minimum
+checks. All 3,640 statistics rows stayed unchanged.
+
+All eight natural browser journeys stopped before their first pick because
+the option selector expected whitespace between the rendered name and its
+subtitle. The actual name and subtitle are sibling spans whose textContent
+concatenates. Original captures show the visible suggestion. One omitted-move
+control passed; the two controls requiring a pick stopped at the same selector.
+No acceptance, reload, surrender or win credit is granted from this run.
+The selector repair must use the exact name span and a fresh remote run.
+
+Failed artifact 11764658245 is retained: 714,418 bytes, 22 entries, ZIP SHA256
+762328bce93d19c439595f7fc3968ca0c4802d2bc5c1f92b68b5fff3ebc8eb0b.
+Only the new proof method is being repaired; the candidate remains frozen.
