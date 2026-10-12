@@ -333,4 +333,28 @@ NOT fixed here: run minor 6, a new Club Manager career opens its hub scrolled in
 phone the hub's heading sits 1608 px above the screen after "Skip: just manage"). It is on main, under src,
 and this round ships no byte to a player: a Club Manager or visual round owns it (the lead's call).
 
-Proof of the fix pass: (filled in below as the runners report)
+Proof of the fix pass, all on head 2ec87ac6 (the notes commits after it change this file only):
+
+- `r1314-fx-a` (22:03 to 22:14 UTC): tsc exit 0 (80 s); noShip exit 0 ("nothing shipped moved" against
+  48cb9d4b); simSafari exit 0 (2077 files, 522 left out, 1555 scanned); its seven controls lookbehind,
+  testimport, barevh, vhafter, dvhcomment, customprop and lvhafter each exit 1 "FIRED" on its own section with 0
+  other failures, and bogus exits 2 refusing; simActivityNotCompletion exit 0 ("advance calls: 1, ping 44
+  characters after the call"); match, career, heavy, noping, twocalls and twodotted each exit 0 "fired in section
+  N as expected"; simHalftime exit 0 (612 s, gain 3.02 against 0.92, log md5 d110045c, byte equal to r1314-ht and
+  r1314-ht2, so the comment edit moved nothing); simHarnessAnchors, simNoRivalNames (0 findings),
+  simStorageWrites ("all green (owed: 12)") and simNoInventedQuotes exit 0.
+- `r1314-fx-m` (#!serial, real tree mutations through .rc/x/mut.mjs, tree restored in the same line,
+  clean-after 0): LiveSimMotion.css as `--cm-stage-height:100vh;height:var(--cm-stage-height);` exit 1 ("hand
+  written 100vh"); the same custom property fixed with a 100dvh line exit 0; `height:100vh;height:100lvh;` exit 1;
+  `height:100vh;height:100svh;` exit 0; SoccerCareer.tsx with a second `advanceProSeason(s.career, clubs)` exit 1
+  ("the season advance is called 2 times").
+- `r1314-fx-w` (#!serve #!playwright #!serial): playNationJob exit 0; nooffer exit 0 ("all 2 guarded checks
+  fired"); twotiles exit 0 ("all 2 guarded checks fired", the Rival watch title matched once in the build, landed
+  on 2 loads; CAUGHT on both count checks, every other check PASS); CM_CONTROL=nodoctor exit 1 with "control:
+  green" (the slot screen read "Board 60/100", 1 of 1 target, 0 other); nosave exit 1 green (1 of 1, 0 other);
+  bogus exit 2 refusing; playWilderness exit 0 (sacked at step 6, 3 matches, 4042 draws, a club after 3 waits);
+  playClubManager exit 0 (282 s, 40 full times, 44 windows, 2 signings, 47491 draws, "Board 100/100"); nobusiness
+  exit 1 with "control: green" (286 s, 2 of 2 targets, 0 other findings, no fetch retry needed).
+- Not rerun after the fix pass, because their files changed in comments only (the diff from 2d0c3cbe holds no
+  code line in either): SIM_HALFTIME_CONTROL=deaf (last FIRED on 2d0c3cbe in the run review's r1314-run-a) and
+  playWilderness's nooffers and nosack (last fired on 2d0c3cbe in r1314-run-w).
