@@ -1,0 +1,9 @@
+m-iceshare exit=1 17s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U2, H.F3, H.F5
+m-allstarcut exit=1 18s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.U2
+m-deadheat exit=1 19s | simUsRivalSense: 43 checks, 4 failed (full size), red sections: N.F2, M.F2, H.F2, H.F3
+m-slateoff exit=1 17s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: H.U2, H.F3
+m-rostermine exit=1 19s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.F5
+m-hitterkind exit=1 20s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.U2
+m-mlbfull exit=1 17s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: M.U6, M.F2
+m-nhlfull exit=1 18s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U6, H.F2, H.F3
+m-goaliewins exit=1 17s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U2, H.F2, H.F3
