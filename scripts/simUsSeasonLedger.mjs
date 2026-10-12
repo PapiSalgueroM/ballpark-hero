@@ -959,7 +959,10 @@ const MLB_OWN = 162;
    inline scores they changed), nhlcarry, mlbcarry (E8b), nhlcomeback,
    mlbcomeback (E8c). The year counts above were measured on arm b before
    Round 1313; since then they are counted on arm a (printed by
-   US_LEDGER_MEASURE=1), against the same floors. */
+   US_LEDGER_MEASURE=1), against the same floors. nhltyped and mlbtyped (a
+   typed length) still need E8a: since Round 1313 it holds that every judged
+   season on arm a is saved at its cell's own length, or the verdict check
+   would read two full lines and compare nothing. */
 {
   const S = game.shape; const FULL_YEAR = 1990;
   /* Round 1313: a printed season line read back off its text, by position (the printers' shapes, typed here). */
@@ -987,7 +990,7 @@ const MLB_OWN = 162;
   ];
   for (const sp of SPORTS) {
     const carry = (n, to) => (to === sp.own ? n : Math.round(n * to / sp.own));
-    let seasons = 0; let awardsFull = 0; let awardBad = 0; let carryBad = 0; let rateBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = ''; let verdictBad = 0; let unread = 0; let firstVerdict = ''; const byCell = {};
+    let seasons = 0; let awardsFull = 0; let awardBad = 0; let carryBad = 0; let rateBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = ''; let verdictBad = 0; let unread = 0; let firstVerdict = ''; const byCell = {}; let judgedShort = 0;
     for (const [year, team] of sp.cells) {
       const slate = S.seasonLength(sp.key, year, team);
       check('E8a', slate !== sp.own, `the ${sp.key.toUpperCase()} ${year} season of ${team} is the engine's own ${sp.own} games, so it compares nothing`);
@@ -1011,6 +1014,7 @@ const MLB_OWN = 162;
              the year is in the rival's stream key, so it is another rival season): the tally the season wrote is
              what the two printed lines score when read back off their text, and no line is unread. */
           if (a.rival.myYears > before.myYears) mine++; else his++;
+          if (A.slate === slate) judgedShort++;
           const meP = sp.readBack(pos, sp.desc.statLine(A, pos)); const himP = sp.readBack(pos, a.rival.lastLine);
           if (!meP || !himP) { unread++; if (!firstVerdict) firstVerdict = `${year} ${team} ${pos}: unread "${sp.desc.statLine(A, pos)}" or "${a.rival.lastLine}"`; }
           else if ((sp.E[sp.h2h](pos, meP) > sp.E[sp.h2h](pos, himP)) !== (a.rival.myYears > before.myYears)) {
@@ -1031,6 +1035,10 @@ const MLB_OWN = 162;
     check('E8a', verdictBad === 0 && unread === 0, `the ${U} head to head the season wrote is what the two saved lines score when read back off their printed text: ${verdictBad} of ${mine + his} judged seasons disagree (by cell: ${Object.entries(byCell).map(([k, n]) => `${k} ${n}`).join(', ') || 'none'}), ${unread} unread${firstVerdict ? ` (the first: ${firstVerdict})` : ''}`);
     check('E8a', awardsFull >= sp.floors.awards && mine >= sp.floors.mine && his >= sp.floors.his, `the ${U} fleet is too thin to compare: ${awardsFull} awards, ${mine} years won and ${his} lost against the rival over ${seasons} seasons (floors ${sp.floors.awards}, ${sp.floors.mine}, ${sp.floors.his})`);
     check('E8a', awardBad === 0, `${awardBad} of ${seasons} ${U} seasons of another length hold other awards than the same season played in full (the first: ${first})`);
+    /* Round 1313: the verdict check above has power only where the season sim really played the cell's length:
+       every judged season on arm a must be saved at the ledger's length, or the cells compare nothing (controls
+       nhltyped and mlbtyped, the length typed back into the engine). */
+    check('E8a', mine + his > 0 && judgedShort === mine + his, `every ${U} judged season on arm a is saved at its cell's own length, so the head to head reads two lines of another length (${judgedShort} of ${mine + his})`);
     check('E8b', carryBad === 0 && rateBad === 0, `${carryBad} counts on a saved ${U} line are not the full season's count carried to the season's length, and ${rateBad} rates moved`);
     check('E8b', recordBad === 0, `${recordBad} first choice ${U} starters have more wins than starts`);
 

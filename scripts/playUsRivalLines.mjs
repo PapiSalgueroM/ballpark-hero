@@ -253,7 +253,7 @@ const boxOf = (page, text) => page.evaluate(t => {
 }, text);
 const fits = box => !!box && !box.cut && box.right <= box.cardRight + 0.5 && box.left >= box.cardLeft - 0.5;
 /** The Rival screen of the News box: its "Last season he went" line, measured, then back to the hub. */
-async function rivalScreen(page, what) {
+async function rivalScreen(page, what, picture) {
   await page.locator('button:has(div.uppercase)').filter({ hasText: /News/i }).first().click();
   await page.waitForTimeout(500);
   await page.locator('button', { hasText: /^\s*\S+ Rival\s*$/ }).first().click();
@@ -263,6 +263,7 @@ async function rivalScreen(page, what) {
   const box = await boxOf(page, 'Last season he went');
   const over = await sideways(page);
   const hungUp = /He has hung them up[.]/.test(text);
+  if (picture) await shot(page, picture);
   await page.locator('button', { hasText: /^\s*Hub\s*$/ }).first().click();
   await page.waitForTimeout(400);
   if (!m) { say(false, `${what}: the Rival screen prints his last season ("${text.replace(/\s+/g, ' ').slice(0, 120)}")`); return null; }
@@ -419,14 +420,12 @@ if (STRETCH === 'all' || STRETCH === 'old') {
         const save = old[key]; const pos = save.pos; const what = `old ${key}, ${w.label}`;
         say(await load(page, sp, save), `${what}: the save is loaded`);
         if (!(await toHub(page, what))) continue;
-        const before = await rivalScreen(page, what);
-        await shot(page, `old-${key}-${tagOf(wd, reduced)}-before`);
+        const before = await rivalScreen(page, what, `old-${key}-${tagOf(wd, reduced)}-before`);
         if (CONTROL === 'oldline') { say(!!before && whole(sp, pos).test(before.line), `${what}: (control) the line of the save from before the round is held to the new shape ("${before?.line}")`, 'oldline'); continue; }
         say(!!before && before.line === save.rival.lastLine && !whole(sp, pos).test(before.line), `${what}: the Rival screen still prints the line the old code saved ("${before?.line}")`);
         const hisText = await playOne(page, sp, pos, `${what}, one season on`);
         if (!(await toHub(page, what))) continue;
-        const after = await rivalScreen(page, what);
-        await shot(page, `old-${key}-${tagOf(wd, reduced)}-after`);
+        const after = await rivalScreen(page, what, `old-${key}-${tagOf(wd, reduced)}-after`);
         say(!!after && !!hisText && after.line === hisText && whole(sp, pos).test(after.line), `${what}: after one season the Rival screen prints his position's own line ("${after?.line}")`);
         const tally = (await saveOf(page, sp))?.c?.rival;
         say(!!tally && tally.myYears + tally.hisYears === save.rival.myYears + save.rival.hisYears + 1, `${what}: the head to head kept its record and added one year (${save.rival.myYears}-${save.rival.hisYears} to ${tally?.myYears}-${tally?.hisYears})`);
@@ -436,8 +435,7 @@ if (STRETCH === 'all' || STRETCH === 'old') {
           const save = old[key]; const what = `old ${key}, ${w.label}`;
           say(await load(page, sp, save), `${what}: the save is loaded`);
           if (!(await toHub(page, what))) continue;
-          const r = await rivalScreen(page, what);
-          await shot(page, `old-${key}-${tagOf(wd, reduced)}`);
+          const r = await rivalScreen(page, what, `old-${key}-${tagOf(wd, reduced)}`);
           say(!!r && r.hungUp && r.line === save.rival.lastLine && !whole(sp, save.pos).test(r.line), `${what}: a rival who retired before the round still shows the old line, the known leftover ("${r?.line}", head to head ${save.rival.myYears}-${save.rival.hisYears})`);
         }
       }
