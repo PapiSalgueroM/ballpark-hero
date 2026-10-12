@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/r1305walk.mjs > $RC_OUT/walk.log 2>&1; s=$?; echo "ok lines $(grep -c "^ok" $RC_OUT/walk.log)"; grep "^FAIL" $RC_OUT/walk.log | cut -c1-260 | head -12; tail -1 $RC_OUT/walk.log; exit $s
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-head.log 2>&1; s=$?; grep -E "front-office|manager-hot-seat|nfl-my-career" $RC_OUT/weight-head.log | cut -c1-160 | head -8; grep -E "K gz over|FAIL|sweepWeight" $RC_OUT/weight-head.log | cut -c1-200 | tail -4; exit $s
+playOwnerMandate: ENGINES=chromium node scripts/playOwnerMandate.mjs > $RC_OUT/playOwnerMandate.log 2>&1; s=$?; grep -c FAIL $RC_OUT/playOwnerMandate.log; tail -1 $RC_OUT/playOwnerMandate.log | cut -c1-200; exit $s
+playSessionMarks: ENGINES=chromium node scripts/playSessionMarks.mjs > $RC_OUT/playSessionMarks.log 2>&1; s=$?; grep -c FAIL $RC_OUT/playSessionMarks.log; tail -1 $RC_OUT/playSessionMarks.log | cut -c1-200; exit $s
+playDraftNight: mkdir -p /tmp/dn && RC_OUT=/tmp/dn ENGINES=chromium node scripts/playDraftNight.mjs > $RC_OUT/playDraftNight.log 2>&1; s=$?; ls /tmp/dn | grep -i nba | head -3; cp $(ls /tmp/dn/*nba*.png 2>/dev/null | head -4) $RC_OUT/ 2>/dev/null; tail -1 $RC_OUT/playDraftNight.log | cut -c1-200; exit $s
+playGames-front-office: ENGINES=chromium ONLY=/front-office node scripts/playGames.mjs > $RC_OUT/playGames-fo.log 2>&1; s=$?; tail -1 $RC_OUT/playGames-fo.log | cut -c1-200; exit $s
+playGames-nba-front-office: ENGINES=chromium ONLY=/nba-front-office node scripts/playGames.mjs > $RC_OUT/playGames-nba.log 2>&1; s=$?; tail -1 $RC_OUT/playGames-nba.log | cut -c1-200; exit $s

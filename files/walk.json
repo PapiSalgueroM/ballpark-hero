@@ -1,0 +1,366 @@
+{
+ "runs": {
+  "p390": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "LA 28-10 ARI",
+     "logN": 1,
+     "last": "w1",
+     "scrollMoved": 544
+    },
+    {
+     "w": 2,
+     "rows": 16,
+     "mine": "ARI 24-37 LA",
+     "logN": 2,
+     "last": "w2",
+     "scrollMoved": 524
+    },
+    {
+     "w": 3,
+     "rows": 16,
+     "mine": "ARI 21-41 SEA",
+     "logN": 3,
+     "last": "w3",
+     "scrollMoved": -40
+    },
+    {
+     "w": 4,
+     "rows": 16,
+     "mine": "SEA 23-16 ARI",
+     "logN": 4,
+     "last": "w4",
+     "scrollMoved": 20
+    },
+    {
+     "w": 5,
+     "rows": 16,
+     "mine": "SF 16-28 ARI",
+     "logN": 5,
+     "last": "w5",
+     "scrollMoved": 0
+    },
+    {
+     "w": 6,
+     "rows": 16,
+     "mine": "ARI 23-29 SF",
+     "logN": 6,
+     "last": "w6",
+     "scrollMoved": 54
+    },
+    {
+     "w": 7,
+     "rows": 16,
+     "mine": "NYJ 10-20 ARI",
+     "logN": 7,
+     "last": "w7",
+     "scrollMoved": 36
+    },
+    {
+     "w": 8,
+     "rows": 16,
+     "mine": "ARI 34-28 NO",
+     "logN": 8,
+     "last": "w8",
+     "scrollMoved": -90
+    },
+    {
+     "w": 9,
+     "rows": 16,
+     "mine": "PIT 27-17 ARI",
+     "logN": 9,
+     "last": "w9",
+     "scrollMoved": 0
+    },
+    {
+     "w": 10,
+     "rows": 16,
+     "mine": "MIN 21-34 ARI",
+     "logN": 10,
+     "last": "w10",
+     "scrollMoved": 90
+    },
+    {
+     "w": 11,
+     "rows": 16,
+     "mine": "ARI 21-14 JAX",
+     "logN": 11,
+     "last": "w11",
+     "scrollMoved": -52
+    },
+    {
+     "w": 12,
+     "rows": 16,
+     "mine": "NYG 24-26 ARI",
+     "logN": 12,
+     "last": "w12",
+     "scrollMoved": 0
+    },
+    {
+     "w": 13,
+     "rows": 16,
+     "mine": "ARI 24-17 DEN",
+     "logN": 13,
+     "last": "w13",
+     "scrollMoved": -38
+    },
+    {
+     "w": 14,
+     "rows": 16,
+     "mine": "ARI 13-21 NE",
+     "logN": 14,
+     "last": "w14",
+     "scrollMoved": -20
+    },
+    {
+     "w": 15,
+     "rows": 16,
+     "mine": "ATL 27-24 ARI",
+     "logN": 15,
+     "last": "w15",
+     "scrollMoved": 78
+    },
+    {
+     "w": 16,
+     "rows": 16,
+     "mine": "ARI 34-6 CLE",
+     "logN": 16,
+     "last": "w16",
+     "scrollMoved": -78
+    }
+   ],
+   "lowest": 0,
+   "highest": 54,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52,
+   "hubHasLast": true,
+   "hubHasLastAfterReload": false,
+   "playoffScores": [
+    "AFC Wild Card: BUF 10-23 CIN",
+    "AFC Wild Card: JAX 31-10 NE",
+    "AFC Wild Card: KC 27-20 PIT",
+    "NFC Wild Card: LA 33-30 CHI",
+    "NFC Wild Card: GB 23-22 SEA",
+    "NFC Wild Card: TB 14-34 DET",
+    "AFC Divisional: BAL 34-21 CIN",
+    "AFC Divisional: JAX 20-24 KC",
+    "NFC Divisional: DAL 27-24 DET",
+    "NFC Divisional: LA 33-21 GB",
+    "AFC Championship: BAL 17-20 KC",
+    "NFC Championship: DAL 34-26 LA",
+    "Super Bowl: KC 17-31 DAL"
+   ],
+   "ending": {
+    "phase": "recap",
+    "champion": "DAL",
+    "fired": false,
+    "trust": 77
+   }
+  },
+  "d1280": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "LA 31-26 ARI",
+     "logN": 1,
+     "last": "w1",
+     "scrollMoved": 0
+    },
+    {
+     "w": 2,
+     "rows": 16,
+     "mine": "ARI 28-36 LA",
+     "logN": 2,
+     "last": "w2",
+     "scrollMoved": 0
+    },
+    {
+     "w": 3,
+     "rows": 16,
+     "mine": "SEA 35-6 ARI",
+     "logN": 3,
+     "last": "w3",
+     "scrollMoved": 0
+    },
+    {
+     "w": 4,
+     "rows": 16,
+     "mine": "ARI 17-27 SEA",
+     "logN": 4,
+     "last": "w4",
+     "scrollMoved": 0
+    },
+    {
+     "w": 5,
+     "rows": 16,
+     "mine": "ARI 17-24 SF",
+     "logN": 5,
+     "last": "w5",
+     "scrollMoved": 0
+    },
+    {
+     "w": 6,
+     "rows": 16,
+     "mine": "SF 42-20 ARI",
+     "logN": 6,
+     "last": "w6",
+     "scrollMoved": 0
+    },
+    {
+     "w": 7,
+     "rows": 16,
+     "mine": "ARI 30-27 MIN",
+     "logN": 7,
+     "last": "w7",
+     "scrollMoved": 0
+    },
+    {
+     "w": 8,
+     "rows": 16,
+     "mine": "HOU 20-24 ARI",
+     "logN": 8,
+     "last": "w8",
+     "scrollMoved": 0
+    },
+    {
+     "w": 9,
+     "rows": 16,
+     "mine": "ATL 19-28 ARI",
+     "logN": 9,
+     "last": "w9",
+     "scrollMoved": 0
+    },
+    {
+     "w": 10,
+     "rows": 16,
+     "mine": "ARI 31-35 LAC",
+     "logN": 10,
+     "last": "w10",
+     "scrollMoved": 0
+    },
+    {
+     "w": 11,
+     "rows": 16,
+     "mine": "CIN 33-6 ARI",
+     "logN": 11,
+     "last": "w11",
+     "scrollMoved": 0
+    },
+    {
+     "w": 12,
+     "rows": 16,
+     "mine": "DAL 31-10 ARI",
+     "logN": 12,
+     "last": "w12",
+     "scrollMoved": 0
+    },
+    {
+     "w": 13,
+     "rows": 16,
+     "mine": "ARI 24-7 NE",
+     "logN": 13,
+     "last": "w13",
+     "scrollMoved": 0
+    },
+    {
+     "w": 14,
+     "rows": 16,
+     "mine": "ARI 26-23 GB",
+     "logN": 14,
+     "last": "w14",
+     "scrollMoved": 0
+    },
+    {
+     "w": 15,
+     "rows": 16,
+     "mine": "IND 10-20 ARI",
+     "logN": 15,
+     "last": "w15",
+     "scrollMoved": 0
+    },
+    {
+     "w": 16,
+     "rows": 16,
+     "mine": "ARI 17-26 CAR",
+     "logN": 16,
+     "last": "w16",
+     "scrollMoved": 0
+    }
+   ],
+   "lowest": 0,
+   "highest": 56,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52,
+   "hubHasLast": true,
+   "hubHasLastAfterReload": false,
+   "playoffScores": [
+    "AFC Wild Card: BAL 35-30 JAX",
+    "AFC Wild Card: HOU 41-42 NE",
+    "AFC Wild Card: KC 13-31 CIN",
+    "NFC Wild Card: WAS 17-55 SF",
+    "NFC Wild Card: CHI 16-37 DET",
+    "NFC Wild Card: NO 34-31 DAL",
+    "AFC Divisional: BUF 27-24 NE",
+    "AFC Divisional: BAL 20-23 CIN",
+    "NFC Divisional: LA 20-24 SF",
+    "NFC Divisional: NO 7-37 DET",
+    "AFC Championship: BUF 24-7 CIN",
+    "NFC Championship: DET 10-17 SF",
+    "Super Bowl: BUF 31-17 SF"
+   ],
+   "ending": {
+    "phase": "recap",
+    "champion": "BUF",
+    "fired": false,
+    "trust": 47
+   }
+  },
+  "p390r": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "ARI 31-28 LA",
+     "logN": 1,
+     "last": "w1",
+     "scrollMoved": 618
+    }
+   ],
+   "lowest": 6,
+   "highest": 38,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52,
+   "hubHasLast": true,
+   "hubHasLastAfterReload": false
+  },
+  "d1280r": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "ARI 21-17 SEA",
+     "logN": 1,
+     "last": "w1",
+     "scrollMoved": 0
+    }
+   ],
+   "lowest": 7,
+   "highest": 49,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52,
+   "hubHasLast": true,
+   "hubHasLastAfterReload": false
+  }
+ }
+}

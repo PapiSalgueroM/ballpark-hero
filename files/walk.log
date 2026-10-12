@@ -1,0 +1,102 @@
+
+===== run p390: 390x844, reduced motion off =====
+ok    p390: a new franchise is saved
+ok    p390: a new franchise holds no gameLog key
+note  p390: his club is ARI, desk on, roster 52, season 2026
+ok    p390: "Play Week 1" played Week 1 (the save is on week 2)
+ok    p390: the week's grid shows sixteen finals (saw 16)
+ok    p390: his row on the grid is the game the save's log holds (LA 28, ARI 10; log LA 28-10 ARI at w1)
+ok    p390: no final on the grid is level
+ok    p390: the log is one game, w1, of this season
+FAIL  p390: the page did not jump on the press (scrollY 0 to 544)
+ok    p390: nothing overflows sideways on the week panel
+FAIL  p390: the next press button is inside the viewport after the press (y -40)
+ok    p390: the hub shows his last result with the told score 10-28
+ok    p390: a reload writes nothing and keeps the log
+note  p390: after a reload the hub no longer shows the last result (the builder says it is empty as before)
+ok    p390: after sixteen weeks the log holds sixteen games and its wins (8) are the club's (8-8)
+ok    p390: over sixteen weeks a side scored under 16, which the old scores never did (lowest 0, highest 54)
+ok    p390: the recap save holds thirteen playoff games (phase recap)
+ok    p390: every saved playoff score is printed on the recap (13 of 13)
+ok    p390: the log is seventeen weeks and then his 0 playoff game(s) (w16, w17)
+ok    p390: his record is seventeen games (8-9)
+ok    p390: the finished season rides into the draft with its log unchanged
+ok    p390: the next season's hub (phase hub, season 2027, week 1) holds no gameLog key
+note  the play button is disabled (roster over the limit): cutting down the board's own way
+ok    p390: the new season's first press starts a fresh log of one game (season 2027)
+ok    p390: a save with no log at week 10 loads, plays, and its log starts at w10
+ok    p390: a save with a damaged log opens on the hub, not on the save error screen
+ok    p390: after a damaged log the next press starts a fresh one (w10 alone)
+ok    p390: Abandon removes the save
+ok    p390: the next franchise (BUF) holds no gameLog key
+ok    p390: its first press logs one game of the new club
+ok    p390: no page error and no console error (clean)
+
+===== run d1280: 1280x900, reduced motion off =====
+ok    d1280: a new franchise is saved
+ok    d1280: a new franchise holds no gameLog key
+note  d1280: his club is ARI, desk on, roster 52, season 2026
+ok    d1280: "Play Week 1" played Week 1 (the save is on week 2)
+ok    d1280: the week's grid shows sixteen finals (saw 16)
+ok    d1280: his row on the grid is the game the save's log holds (LA 31, ARI 26; log LA 31-26 ARI at w1)
+ok    d1280: no final on the grid is level
+ok    d1280: the log is one game, w1, of this season
+ok    d1280: the page did not jump on the press (scrollY 0 to 0)
+ok    d1280: nothing overflows sideways on the week panel
+ok    d1280: the next press button is inside the viewport after the press (y 504)
+ok    d1280: the hub shows his last result with the told score 26-31
+ok    d1280: a reload writes nothing and keeps the log
+note  d1280: after a reload the hub no longer shows the last result (the builder says it is empty as before)
+ok    d1280: after sixteen weeks the log holds sixteen games and its wins (6) are the club's (6-10)
+ok    d1280: over sixteen weeks a side scored under 16, which the old scores never did (lowest 0, highest 56)
+ok    d1280: the recap save holds thirteen playoff games (phase recap)
+ok    d1280: every saved playoff score is printed on the recap (13 of 13)
+ok    d1280: the log is seventeen weeks and then his 0 playoff game(s) (w16, w17)
+ok    d1280: his record is seventeen games (6-11)
+ok    d1280: the finished season rides into the draft with its log unchanged
+ok    d1280: the next season's hub (phase hub, season 2027, week 1) holds no gameLog key
+ok    d1280: the new season's first press starts a fresh log of one game (season 2027)
+ok    d1280: a save with no log at week 10 loads, plays, and its log starts at w10
+ok    d1280: a save with a damaged log opens on the hub, not on the save error screen
+ok    d1280: after a damaged log the next press starts a fresh one (w10 alone)
+ok    d1280: Abandon removes the save
+ok    d1280: the next franchise (BUF) holds no gameLog key
+ok    d1280: its first press logs one game of the new club
+ok    d1280: no page error and no console error (clean)
+
+===== run p390r: 390x844, reduced motion ON =====
+ok    p390r: a new franchise is saved
+ok    p390r: a new franchise holds no gameLog key
+note  p390r: his club is ARI, desk on, roster 52, season 2026
+ok    p390r: "Play Week 1" played Week 1 (the save is on week 2)
+ok    p390r: the week's grid shows sixteen finals (saw 16)
+ok    p390r: his row on the grid is the game the save's log holds (ARI 31, LA 28; log ARI 31-28 LA at w1)
+ok    p390r: no final on the grid is level
+ok    p390r: the log is one game, w1, of this season
+FAIL  p390r: the page did not jump on the press (scrollY 0 to 618)
+ok    p390r: nothing overflows sideways on the week panel
+FAIL  p390r: the next press button is inside the viewport after the press (y -40)
+ok    p390r: the hub shows his last result with the told score 31-28
+ok    p390r: a reload writes nothing and keeps the log
+note  p390r: after a reload the hub no longer shows the last result (the builder says it is empty as before)
+ok    p390r: no page error and no console error (clean)
+
+===== run d1280r: 1280x900, reduced motion ON =====
+ok    d1280r: a new franchise is saved
+ok    d1280r: a new franchise holds no gameLog key
+note  d1280r: his club is ARI, desk on, roster 52, season 2026
+ok    d1280r: "Play Week 1" played Week 1 (the save is on week 2)
+ok    d1280r: the week's grid shows sixteen finals (saw 16)
+ok    d1280r: his row on the grid is the game the save's log holds (ARI 21, SEA 17; log ARI 21-17 SEA at w1)
+ok    d1280r: no final on the grid is level
+ok    d1280r: the log is one game, w1, of this season
+ok    d1280r: the page did not jump on the press (scrollY 0 to 0)
+ok    d1280r: nothing overflows sideways on the week panel
+ok    d1280r: the next press button is inside the viewport after the press (y 504)
+ok    d1280r: the hub shows his last result with the told score 21-17
+ok    d1280r: a reload writes nothing and keeps the log
+note  d1280r: after a reload the hub no longer shows the last result (the builder says it is empty as before)
+ok    d1280r: no page error and no console error (clean)
+ok    the What's New page carries the entry
+
+r1305walk: 4 failure(s)
