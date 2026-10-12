@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 closing check (fix2) request W on 747cd60a: run minor 6 measured again (pre-existing on main, not the round): where a new career's hub opens after Skip
+scrollProbe: node .rc/x/scrollProbe.mjs
