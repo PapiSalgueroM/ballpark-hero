@@ -1,0 +1,81 @@
+
+=== 390 by 844, motion on, club wanted null ===
+ok   390: the week box opens on the next face ("Next up: home to 49ers."), Play "Play Week 1" and Watch "Watch Week 1" drawn, no sideways scroll (390 of 390)
+....  390: next face: scrollY 26, tile top 924 (h 400), Play top 868, Watch top 868, grid first row null, vh 844; over: []
+ok   390: Play Week 1 shows the result ("LARI 28, SF 34", Wk 1 · vs SF; NFC: outside the 7 seeds as it stands.) and the grid of 16
+....  390: before Play scrollY 494, tile top 456 (h 400), Play top 400, Watch top 400, grid first row null, vh 844; after scrollY 494, tile top 480 (h 400), Play top 372, Watch top 424, grid first row 892, vh 844
+ok   390: after the first press the Play button is still on screen (its top at 372, bottom 416 of 844)
+BAD  390: after the first press the whole tile is on screen (top 480, bottom 880 of 844)
+....  390: line score ["ClubQ1Q2Q3Q4T","Cardinals777728","49ers10710734"]; shape "49ers took the lead for good in the fourth quarter."; plays ["Q4 13:00🏈 Touchdown, Cardinals.28-27","Q4 2:00🏈 Touchdown, 49ers.28-34"]; chips ["Wk 1L 28-34"]; story {"content":150,"frame":150}; over []
+ok   390: the "?" opens (scrollY 494, tile top 480 (h 400), Play top 372, Watch top 424, grid first row 892, vh 844)
+ok   390: the "?" closes
+ok   390-4-watch2: watched ARI week 2 (30 samples, 8.6 s): nothing of the result on the page until full time
+....  390-4-watch2: lines new on the page at the press (the feed): ["Wk 2 · at SF","SF","0-0","ARI","Q1 15:00","Kickoff.","1x","3x"]
+....  390-4-watch2: pace before "0 wins keeps the mandate on pace.", during "0 wins keeps the mandate on pace.", after "0 wins keeps the mandate on pace."; record before "Record 0-1", after "Record 0-2"; first watch face over: []
+ok   390-4-watch2: at full time the result is shown, the page moved on (2026 · Week 3/17, Record 0-2, "LARI 17, SF 37") and the watch saved nothing
+....  390-4-watch2: before the press scrollY 494, tile top 480 (h 400), Play top 372, Watch top 424, grid first row 892, vh 844; at full time scrollY 494, tile top 402 (h 400), Play top 294, Watch top 346, grid first row 814, vh 844
+ok   390-5-watch3-results: watched ARI week 3 (1 samples, 1.2 s): nothing of the result on the page until full time
+....  390-5-watch3-results: lines new on the page at the press (the feed): ["Wk 3 · vs SEA","ARI","0-0","SEA","Q1 15:00","Kickoff.","1x","3x"]
+....  390-5-watch3-results: pace before "0 wins keeps the mandate on pace.", during "0 wins keeps the mandate on pace.", after "1 wins keeps the mandate on pace."; record before "Record 0-2", after "Record 1-2"; first watch face over: []
+ok   390-5-watch3-results: at full time the result is shown, the page moved on (2026 · Week 4/17, Record 1-2, "WARI 27, SEA 6") and the watch saved nothing
+....  390-5-watch3-results: before the press scrollY 494, tile top 402 (h 400), Play top 294, Watch top 346, grid first row 814, vh 844; at full time scrollY 494, tile top 402 (h 400), Play top 294, Watch top 346, grid first row 814, vh 844
+ok   390: a reload in the middle of a watch shows the result (LARI 23, SEA 27; 2026 · Week 5/17), no clock, and the save is the press's own (4 games logged)
+ok   390: leaving for the hub in the middle of a watch ends it: back in the box the result (LARI 27, LA 38), Play "Play Week 6" open
+ok   390: 11 more weeks played: on every result nothing in the tile is taller or wider than its frame
+....  390: the tallest story: {"content":150,"frame":150,"where":"Wk 6 · at LA","plays":2}; the longest shape sentence (68 chars): "Cardinals went ahead for good after Panthers had led or drawn level."
+....  390: late season: 2026 · Week 17/17, Record 8-8, Play "Play the final week + playoffs", Watch none, 16 chips, final "LARI 9, MIA 17", standing "NFC: outside the 7 seeds as it stands.", pace "8 wins keeps the mandate on pace."
+....  390: late line score ["ClubQ1Q2Q3Q4T","Cardinals30609","Dolphins370717"]; plays ["Q1 3:00🥅 Field goal, Cardinals.3-3","Q2 2:00🏈 Touchdown, Dolphins.3-10","Q4 11:00🏈 Touchdown, Dolphins.9-17"]
+ok   390: on the final week there is no Watch button (Play reads "Play the final week + playoffs")
+....  390: the first chip opened: where "Wk 1 · vs SF", final "LARI 28, SF 34", standing "NFC: outside the 7 seeds as it stands.", over []
+ok   390: Watch again runs the clock on the old game (bug 0-7); Play stays open ("Play the final week + playoffs"); record chip "Record 8-8"
+ok   390: Results ends Watch again on the result face (where "Wk 1 · vs SF", final "LARI 28, SF 34")
+ok   390: no page error
+
+=== 1280 by 900, motion on, club wanted /Buccaneers|Commanders|Tampa|Washington/ ===
+ok   1280: the week box opens on the next face ("Next up: home to Panthers."), Play "Play Week 1" and Watch "Watch Week 1" drawn, no sideways scroll (1280 of 1280)
+....  1280: next face: scrollY 0, tile top 844 (h 352), Play top 788, Watch top 788, grid first row null, vh 900; over: []
+ok   1280: Play Week 1 shows the result ("WTB 23, CAR 20", Wk 1 · vs CAR; NFC: 3rd seed of 7 as it stands.) and the grid of 16
+....  1280: before Play scrollY 0, tile top 844 (h 352), Play top 788, Watch top 788, grid first row null, vh 900; after scrollY 778, tile top 12 (h 352), Play top -44, Watch top -44, grid first row 376, vh 900
+BAD  1280: after the first press the Play button is still on screen (its top at -44, bottom 0 of 900)
+ok   1280: after the first press the whole tile is on screen (top 12, bottom 364 of 900)
+....  1280: line score ["ClubQ1Q2Q3Q4T","Buccaneers7313023","Panthers677020"]; shape "Buccaneers went ahead for good after Panthers had led or drawn level."; plays ["Q3 7:00🏈 Touchdown, Panthers.17-20","Q3 0:00🥅 Field goal, Buccaneers.23-20"]; chips ["Wk 1W 23-20"]; story {"content":102,"frame":102}; over []
+ok   1280: the "?" opens (scrollY 686, tile top 104 (h 352), Play top 48, Watch top 48, grid first row 468, vh 900)
+ok   1280: the "?" closes
+ok   1280-4-watch2: watched TB week 2 (30 samples, 8.6 s): nothing of the result on the page until full time
+....  1280-4-watch2: lines new on the page at the press (the feed): ["Wk 2 · at CAR","CAR","0-0","TB","Q1 15:00","Kickoff.","1x","3x"]
+....  1280-4-watch2: pace before "In the postseason picture. Hold it.", during "In the postseason picture. Hold it.", after "In the postseason picture. Hold it."; record before "Record 1-0", after "Record 2-0"; first watch face over: []
+ok   1280-4-watch2: at full time the result is shown, the page moved on (2026 · Week 3/17, Record 2-0, "WTB 10, CAR 9") and the watch saved nothing
+....  1280-4-watch2: before the press scrollY 686, tile top 104 (h 352), Play top 48, Watch top 48, grid first row 468, vh 900; at full time scrollY 686, tile top 104 (h 352), Play top 48, Watch top 48, grid first row 468, vh 900
+ok   1280-5-watch3-results: watched TB week 3 (1 samples, 1.3 s): nothing of the result on the page until full time
+....  1280-5-watch3-results: lines new on the page at the press (the feed): ["Strength 83","🚑 Alex Anzalone is out 4 weeks.","🚑 Al-Quadin Muhammad is out 3 weeks.","Wk 3 · at NO","NO","0-0","TB","Q1 15:00"]
+....  1280-5-watch3-results: pace before "In the postseason picture. Hold it.", during "In the postseason picture. Hold it.", after "In the postseason picture. Hold it."; record before "Record 2-0", after "Record 2-1"; first watch face over: []
+ok   1280-5-watch3-results: at full time the result is shown, the page moved on (2026 · Week 4/17, Record 2-1, "LTB 24, NO 27") and the watch saved nothing
+....  1280-5-watch3-results: before the press scrollY 686, tile top 104 (h 352), Play top 48, Watch top 48, grid first row 468, vh 900; at full time scrollY 760, tile top 104 (h 352), Play top 48, Watch top 48, grid first row 468, vh 900
+ok   1280: a reload in the middle of a watch shows the result (WTB 7, NO 6; 2026 · Week 5/17), no clock, and the save is the press's own (4 games logged)
+ok   1280: leaving for the hub in the middle of a watch ends it: back in the box the result (WTB 38, ATL 7), Play "Play Week 6" open
+ok   1280: 11 more weeks played: on every result nothing in the tile is taller or wider than its frame
+....  1280: the tallest story: {"content":102,"frame":102,"where":"Wk 6 · vs ATL","plays":2}; the longest shape sentence (69 chars): "Patriots went ahead for good after Buccaneers had led or drawn level."
+....  1280: late season: 2026 · Week 17/17, Record 10-6, Play "Play the final week + playoffs", Watch none, 16 chips, final "WTB 31, NYG 13", standing "NFC: 3rd seed of 7 as it stands.", pace "In the postseason picture. Hold it."
+....  1280: late line score ["ClubQ1Q2Q3Q4T","Buccaneers70141031","Giants330713"]; plays ["Q1 14:00🏈 Touchdown, Buccaneers.7-0","Q4 0:00🏈 Touchdown, Buccaneers.31-13"]
+ok   1280: on the final week there is no Watch button (Play reads "Play the final week + playoffs")
+....  1280: the first chip opened: where "Wk 1 · vs CAR", final "WTB 23, CAR 20", standing "NFC: 3rd seed of 7 as it stands.", over []
+ok   1280: Watch again runs the clock on the old game (bug 7-3); Play stays open ("Play the final week + playoffs"); record chip "Record 10-6"
+ok   1280: Results ends Watch again on the result face (where "Wk 1 · vs CAR", final "WTB 23, CAR 20")
+ok   1280: no page error
+
+=== 390 by 844: abandon in the middle of a watch ===
+ok   390: after an abandon in the middle of a watch the new franchise (CHI) opens clean: face next, 2026 · Week 1/17, Record 0-0, Play "Play Week 1" open, Watch open, grid 0, 0 games logged, week box reopened
+ok   390: its first press shows its own game (WCHI 42, MIN 24, 1 chip)
+ok   390: no page error
+
+=== 390 by 844, REDUCED MOTION ===
+ok   390 reduced: Watch shows the result at once with no clock (faces and running animations sampled: result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0); "LARI 28, SF 34", 2026 · Week 2/17, Play "Play Week 2" open
+....  390 reduced: before scrollY 494, tile top 456 (h 400), Play top 400, Watch top 400, grid first row null, vh 844; after scrollY 514, tile top 460 (h 400), Play top 352, Watch top 404, grid first row 872, vh 844; Watch again offered: 0
+ok   390 reduced: no page error
+
+=== 1280 by 900, REDUCED MOTION ===
+ok   1280 reduced: Watch shows the result at once with no clock (faces and running animations sampled: result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0 result/0); "LARI 28, SF 34", 2026 · Week 2/17, Play "Play Week 2" open
+....  1280 reduced: before scrollY 0, tile top 829 (h 352), Play top 773, Watch top 773, grid first row null, vh 900; after scrollY 821, tile top 12 (h 352), Play top -44, Watch top -44, grid first row 376, vh 900; Watch again offered: 0
+ok   1280 reduced: no page error
+
+w2: 2 BAD line(s)
