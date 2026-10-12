@@ -1,0 +1,2 @@
+rules-plain exit=0 22s | simCmLeagueRules: all checks passed (modern)
+rules-write-check exit=0 142s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
