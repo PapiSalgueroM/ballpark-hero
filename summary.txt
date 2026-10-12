@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+presscov exit=1 0s | manager-press-coverage.yml first gate (git diff --exit-code against PR224 head) exits 1
+diag1311 exit=1 2s | managerWorldSizeDiagnostic with Round 1311's Slots budget: exit 1
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+units exit=1 25s | unitsCount: the receipt step of manager-world-continuity.yml would fail on this head
+simInventedNames exit=0 15s | simInventedNames: green. Every invented man on this site is invented all the way down.
+weight exit=0 160s | weightCompare: 14 rows moved or over budget

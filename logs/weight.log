@@ -1,0 +1,22 @@
+stubLz: the lz-string import is replaced in the copy
+lz-string chunk (head, base, stub):
+  /home/runner/work/ballpark-hero/ballpark-hero/dist clubManager-Bpoc7PNe.js raw 809742 gz 264150
+head sweep exit 1
+base sweep exit 1
+stub sweep exit 1
+rows: base 14, head 14, stub 14
+  /                      base 0.0K  head 242.1K (+242.1)  stub 0.0K  lz-string +242.1K  budget 243K  files 3/3
+  /club-manager          base 54.5K  head 595.1K (+540.6)  stub 54.5K  lz-string +540.6K  budget 590K  OVER  files 39/39
+  /soccer-career         base 77.3K  head 822.9K (+745.6)  stub 77.3K  lz-string +745.6K  budget 824K  files 45/45
+  /stadium-tycoon        base 23.0K  head 299.2K (+276.2)  stub 23.0K  lz-string +276.2K  budget 300K  files 23/23
+  /wonderkid-factory     base 10.6K  head 273.0K (+262.4)  stub 10.6K  lz-string +262.4K  budget 273K  files 19/19
+  /minefield             base 27.4K  head 290.9K (+263.5)  stub 27.4K  lz-string +263.5K  budget 291K  files 20/20
+  /footle                base 59.0K  head 349.9K (+290.9)  stub 59.0K  lz-string +290.9K  budget 350K  files 40/40
+  /nfl-my-career         base 49.9K  head 483.4K (+433.5)  stub 49.9K  lz-string +433.5K  budget 485K  files 47/47
+  /front-office          base 37.6K  head 364.2K (+326.6)  stub 37.6K  lz-string +326.6K  budget 366K  files 36/36
+  /soccer-grid           base 38.1K  head 315.0K (+276.9)  stub 38.1K  lz-string +276.9K  budget 315K  files 36/36
+  /leaderboard           base 0.0K  head 250.2K (+250.2)  stub 0.0K  lz-string +250.2K  budget 266K  files 9/9
+  /manager-hot-seat      base 81.5K  head 612.4K (+530.9)  stub 81.5K  lz-string +530.9K  budget 607K  OVER  files 41/41
+  /deadline-day          base 82.1K  head 622.6K (+540.5)  stub 82.1K  lz-string +540.5K  budget 617K  OVER  files 45/45
+  /transfer-path         base 86.4K  head 375.6K (+289.2)  stub 86.4K  lz-string +289.2K  budget 376K  files 40/40
+weightCompare: 14 rows moved or over budget

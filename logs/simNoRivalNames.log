@@ -1,0 +1,5 @@
+    data migration, not a copy edit: routes, save keys and one Supabase table
+  lines ending in "rival-names-allow" are skipped, for the sims that carry
+    a banned-name list of their own because checking for them IS their job
+
+No rival product names found. 0 findings.

@@ -1,0 +1,11 @@
+133:const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)
+5:AssertionError [ERR_ASSERTION]: Removing only the exact two additions restores the entire historical source
+108:    ' * asserting the text it rewrites is there exactly once, and must turn its\n' +
+262:    ' * asserting the text it rewrites is there exactly once, and must turn its\n' +
+    '    try { report = JSON.parse(fs.readFi'... 26803 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+managerWorldSizeDiagnostic with Round 1311's Slots budget: exit 1

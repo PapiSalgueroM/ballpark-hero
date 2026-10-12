@@ -1,0 +1,5 @@
+numTotalTests 140 passed 140 failed 0 (the workflow asserts 135 and 135)
+  clubManagerTrajectory.test.ts: 44 tests (44 passed)
+  clubManagerWorldRoster.test.ts: 96 tests (96 passed)
+kit BASE b6eb78e799b12c851e4e8e583e9e926aed117f1c; the workflow asserts controls.base 09df145abfb241679022b41903d2f19bc254ebf9; equal false
+unitsCount: the receipt step of manager-world-continuity.yml would fail on this head

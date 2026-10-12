@@ -1,0 +1,2 @@
+ 347 files changed, 49732 insertions(+), 1654 deletions(-)
+manager-press-coverage.yml first gate (git diff --exit-code against PR224 head) exits 1
