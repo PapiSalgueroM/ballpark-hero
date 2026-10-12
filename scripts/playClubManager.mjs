@@ -89,6 +89,19 @@
  * The nobusiness control's guard is the one followed by the "Transfer
  * business" heading: since Round 721 the bare shape also matches the Deadline
  * Day board, and the control refused to start.
+ *
+ * FIX REVIEW OF ROUND 1314: the doctoring check has its own two controls, and
+ * every control says how it ended by its exit code as well as its last line.
+ *   CM_CONTROL=nobusiness  exactly the two transfer business checks fire.
+ *   CM_CONTROL=nodoctor    the save is read but never written: exactly the
+ *                          "doctored board did not land" finding fires.
+ *   CM_CONTROL=nosave      the save is looked for under a key the game never
+ *                          writes: exactly "the save was not there" fires.
+ * nodoctor and nosave stop right after the check (about half a minute). A
+ * control that FIRED exits 1 with "control: green" as its last line (a run with
+ * findings fails); one that did not fire as designed, refused to start, or
+ * crashed exits 2 (last line "control: RED" or "control: CRASHED"). Before the
+ * fix review a RED or a crash under nobusiness exited 1 as well.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -143,6 +156,25 @@ await seedPages(ctx, SEED);
    checks that read that block have to fire, and nothing else. The shape must
    match once in the served asset or the run refuses to start. */
 const CONTROL = process.env.CM_CONTROL || '';
+/* Fix review of Round 1314: the controls this walk knows. nodoctor and nosave are the negative
+   controls of the board doctoring check (see that block): nodoctor reads the save but never writes
+   the doctored value, so exactly the "did not land" finding must fire; nosave looks for the save
+   under a key that is not there, so exactly the "not there to doctor" finding must fire. Both stop
+   right after that check. An unknown control refuses to run, and an uncaught error under any control
+   exits 2 with a CRASHED line, so a crash is never read as a fire. */
+const CONTROLS = ['nobusiness', 'nodoctor', 'nosave'];
+if (CONTROL && !CONTROLS.includes(CONTROL)) {
+  console.error(`playClubManager: unknown CM_CONTROL "${CONTROL}" (known: ${CONTROLS.join(', ')}). Refusing to run.`);
+  process.exit(2);
+}
+if (CONTROL) {
+  const crashed = e => {
+    console.error(`playClubManager control: CRASHED, which is not a verdict: ${String((e && e.stack) || e).split('\n')[0].slice(0, 200)}`);
+    process.exit(2);
+  };
+  process.on('uncaughtException', crashed);
+  process.on('unhandledRejection', crashed);
+}
 /* Round 1314: the guard that opens the "Transfer business" block, not any guard of that shape. Round
    721 (f4702db1) gave the Deadline Day board its own `g.signings.length > 0 &&`, so the bare shape
    matched two chunks and this control refused to start (r1314-cm1 on e07cd2df: "matched 2 time(s)").
@@ -161,15 +193,27 @@ if (CONTROL === 'nobusiness') {
   if (total !== 1 || (served.match(BUSINESS_GUARD) || []).length !== 1) {
     console.error(`playClubManager control: RED before it started. The transfer business guard matched ${total} time(s) in the built assets${total === 1 ? ' but did not come back from the server' : ''}, so the swap would change nothing or the wrong thing.`);
     await browser.close();
-    process.exit(1);
+    process.exit(2);
   }
   console.log(`  control  the transfer business guard confirmed once in the served /assets/${hits[0].f}`);
+  /* Fix review of Round 1314: one socket reset in route.fetch used to throw out of this handler and
+     crash the run with exit 1, the same exit code as a fire (r1314-run-w, cm-nobusiness, ECONNRESET on
+     a squadShape chunk). The fetch is tried three times; a chunk that still cannot be fetched is
+     aborted, which the walk then reports as a finding, so the verdict says RED rather than crashing. */
   await ctx.route('**/*.js', async route => {
-    const res = await route.fetch();
-    let body = await res.text();
+    let res = null;
+    for (let a = 1; a <= 3 && !res; a++) {
+      res = await route.fetch().catch(e => {
+        console.log(`  control  route.fetch failed for ${route.request().url().slice(-60)} (${String(e).split('\n')[0].slice(0, 80)}), attempt ${a} of 3`);
+        return null;
+      });
+    }
+    if (!res) { await route.abort().catch(() => {}); return; }
+    let body = await res.text().catch(() => null);
+    if (body === null) { await route.abort().catch(() => {}); return; }
     const swapped = body.replace(BUSINESS_GUARD, 'false&&');
     if (swapped !== body) { body = swapped; controlSwaps += 1; }
-    await route.fulfill({ response: res, body });
+    await route.fulfill({ response: res, body }).catch(() => {});
   });
 }
 
@@ -361,15 +405,21 @@ const DOCTORED = 100;
 let kickoffDraws = null;
 if (myClub) {
   await page.goto(BASE + '/robots.txt', { waitUntil: 'domcontentloaded', timeout: 20000 });
-  const was = await page.evaluate(v => {
-    const raw = localStorage.getItem('dukb-club-manager-save');
+  /* The nosave control looks under a key the game never writes; the nodoctor control reads the save
+     and leaves it as it was. Neither changes anything else the walk does up to the check. */
+  const SAVE_KEY = CONTROL === 'nosave' ? 'dukb-club-manager-save-control-nosave' : 'dukb-club-manager-save';
+  if (CONTROL === 'nodoctor' || CONTROL === 'nosave') console.log(`  control  ${CONTROL}: ${CONTROL === 'nosave' ? `the save is looked for under "${SAVE_KEY}"` : 'the save is read but the doctored value is never written'}`);
+  const was = await page.evaluate(([v, key, write]) => {
+    const raw = localStorage.getItem(key);
     if (!raw) return null;
     const c = JSON.parse(raw);
     const before = c.boardConfidence;
-    c.boardConfidence = v;
-    localStorage.setItem('dukb-club-manager-save', JSON.stringify(c));
+    if (write) {
+      c.boardConfidence = v;
+      localStorage.setItem(key, JSON.stringify(c));
+    }
     return before;
-  }, DOCTORED).catch(() => null);
+  }, [DOCTORED, SAVE_KEY, CONTROL !== 'nodoctor']).catch(() => null);
   await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 20000 });
   const resumeBtn = page.getByRole('button', { name: /^Resume Career$/ }).first();
   await resumeBtn.waitFor({ timeout: 15000 }).catch(() => {});
@@ -383,6 +433,24 @@ if (myClub) {
   await page.getByText(/Season 1/i).first().waitFor({ timeout: 15000 }).catch(() => {});
   kickoffDraws = await pageDraws(page);
   console.log(`   back on the hub; the page has drawn ${kickoffDraws} times since this load, before the first kick off`);
+  if (CONTROL === 'nodoctor' && was === DOCTORED) note('CONTROL', `the save already read ${DOCTORED}, so a lost edit cannot be told from a landed one`);
+}
+
+/* Fix review of Round 1314: the verdict of the two doctoring controls, right after the check they
+   test. Same convention as nobusiness for a fire (exit 1, the last line says green); a control that
+   did not fire as designed exits 2 with RED. */
+if (CONTROL === 'nodoctor' || CONTROL === 'nosave') {
+  const target = CONTROL === 'nodoctor' ? /the doctored board did not land/ : /the save was not there to doctor/;
+  const hit = findings.filter(f => target.test(f.detail));
+  const collateral = findings.filter(f => !target.test(f.detail));
+  console.log(`\n   control: ${hit.length} of 1 target finding fired, ${collateral.length} other finding(s)${collateral.length ? `: ${collateral.map(f => f.kind.trim() + ' ' + f.detail.slice(0, 80)).join(' | ')}` : ''}`);
+  await browser.close();
+  if (hit.length === 1 && collateral.length === 0) {
+    console.error(`playClubManager control: green. With the ${CONTROL === 'nodoctor' ? 'doctored value never written' : 'save looked for under a key the game never writes'}, exactly the one doctoring check fired ("${hit[0].detail.slice(0, 90)}"). Exiting non zero, because a run with findings fails.`);
+    process.exit(1);
+  }
+  console.error(`playClubManager control: RED. Expected exactly the one "${target.source}" finding, got ${hit.length} of it and ${collateral.length} other(s).`);
+  process.exit(2);
 }
 
 /* ---------- play a season ---------- */
@@ -760,9 +828,9 @@ if (CONTROL === 'nobusiness') {
   console.log(`   control: ${controlSwaps} served asset(s) rewritten, ${signingsMade} signing(s), ${hit.length} of ${BUSINESS_TARGETS.length} target checks fired, ${collateral.length} other finding(s)`);
   if (controlSwaps > 0 && hit.length === BUSINESS_TARGETS.length && collateral.length === 0) {
     console.error('playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager\'s business goes red. Exiting non zero, because a run with findings fails.');
-  } else {
-    console.error(`playClubManager control: RED. Expected exactly the two transfer business findings, got ${hit.length} of them and ${collateral.length} other(s)${controlSwaps ? '' : ', and the swap never landed on a served asset'}.`);
+    process.exit(1);
   }
-  process.exit(1);
+  console.error(`playClubManager control: RED. Expected exactly the two transfer business findings, got ${hit.length} of them and ${collateral.length} other(s)${controlSwaps ? '' : ', and the swap never landed on a served asset'}.`);
+  process.exit(2);
 }
 process.exit(findings.length === 0 ? 0 : 1);
