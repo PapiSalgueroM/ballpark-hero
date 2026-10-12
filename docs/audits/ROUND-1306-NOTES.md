@@ -111,5 +111,47 @@ Everything heavy ran on GitHub runners; a result is read with
   fit check's cost is read off the harness's own "book's own cost" line and is inside its noise.
 - `BOOK_BASE` must be a tree whose engine is the base's. The base keeps a book itself (Round 1229), so the
   saves "with no book" of section oldsave are written by the engine with the book's lines out.
-- A sweep red is not this round's until the base is green on it: see the closing report for the eleven
-  harnesses that are red on the base the same way.
+- A sweep red is not this round's until the base is green on it: see the closing report for the TEN
+  harnesses that are red on the base the same way. (The sweep itself showed twelve reds: those ten, one that
+  asks the live database, and `simBracketMoment`, which was red only because that request had no Chromium and
+  is green on head and base in `r1306-basered`. An earlier draft of this line said eleven.)
+- THE TAKER ON A TIE. `takerOf` breaks a tie of weight by the name as plain text, and an empty shirt is named
+  `?1`, `?2`, which sorts before any name that starts with a letter. So in a thin club a named striker rated
+  exactly the club's rounded strength, standing beside a striker's shirt, loses the penalties and direct free
+  kicks (12 in a hundred of the club's goals against other clubs) to the shirt, and they are counted unnamed.
+  That is the conservative side (nothing is invented, a real man is given less, never more) and the harness's
+  own copy of the rule reads it the same way (`thinNamedShare`), but it is a choice nobody ruled on.
+
+## The fix pass after the two adversarial reviews (2026-10-11)
+
+Both reviews said SHIP with no major finding and thirteen minors between them. The fix pass changed NO
+behaviour of the engine: one harness, three comments, one pin and these notes.
+
+- `scripts/simCmLeagueBook.mjs` gained four checks and six controls, each control proven to fire for its own
+  check (the result names are in the fix pass's closing report, results-g/fix-1306.md):
+  - thin (vi), WHO is given a clean sheet (a reviewer's mutation, the filter for the back line dropped, passed
+    every gate). In every single match of a club with no eleven its rostered keeper and each named man of its
+    partial eleven's back line gain one clean sheet when it conceded nothing, and no other row gains any; and
+    at each season's end, for every club, only a keeper's row and a row of the back line hold a clean sheet,
+    and no defender holds more than his club can have kept by the table. Controls `thinbacks`, `nobacks`,
+    `allbacks`. These rows go into every save and cannot be rebuilt, and Round B2's team of the season splits
+    its back four on them.
+  - thin (vii), one way to take an eleven. `partialEleven` retypes the take lines of `pickOppSquad`, and the
+    harness types them a third time. Now, at every season's end, the module's partial eleven of a roster that
+    fields an eleven IS the engine's eleven (the same keeper, the same ten, no shirt), and of a roster that
+    does not it is the harness's own reading man for man and shirt for shirt. Control `places433`. Whoever
+    changes how an eleven is taken (PR224 touches the rosters) meets this check.
+  - thin (iii) fails when there is no variance to judge a share on, where it passed unasked.
+  - oldsave (i), a sixth save: the parked one with a goalless first round written into its table must get a
+    LATE book. This holds the one deviation named above (a league MATCH played, not a goal scored). Control
+    `goallesswhole`. If the lead rules for the critic's wording instead, this save and its control go.
+  - oldsave (vi), with `BOOK_BASE`: three seasons in play written by the base commit WITH its book are
+    carried on by the candidate to the season's end: the book is taken as it is, the law holds after every
+    entry, it is never reopened late, and the rows of clubs with no eleven grow. Control `stampv2`.
+- The header of that harness now carries the video referee arm's count as it reads today (19 to 39 reviews a
+  full fleet, 2 to 10 a default one, against Round 1229's 162 to 183). The move is the base's (Round 1303) and
+  the arm's floor is still "not zero": owed to the lead or to Round 1303's owner.
+- Comments only: `leagueBookEleven` says it is the harness's door now (nothing in src calls it);
+  `BOOK_FULL_SHARE` says it is not bound and why; `BoardMine` says which fields nothing reads yet.
+- The Round 1081 pin of `src/lib/clubManager.ts` follows that one comment (c9a3d32e to 9e8c499d), in its own
+  commit. `scripts/data/cmLeagueRulesDigest.json` did not move: nothing a save holds changed.
