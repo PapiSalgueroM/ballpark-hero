@@ -262,8 +262,18 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   // Round 61: the owner's no scroll rule. When a new crossroads or a new
   // season result lands, it pulls itself into view instead of rendering
   // below the fold where a phone player never sees it.
+  /* Release AX fix pass (the screens review, major 1): a push is a new step too. Since the saved talks a push
+     swaps the whole offers window (850 to 1,100 px on a phone) for the chance wheel (375 to 430 px) in the same
+     wrapper, and the key below did not move, so a push on a lower offer left the wheel wholly above the window:
+     measured over 78 presses, off screen in 12 and under half in view in 32, and the player was left looking at
+     the hub tiles. The count of pushes made in the held talk rises by one on a push and at no other time, so
+     the wrapper pulls itself into view exactly then. It does NOT move on Continue: the offers window comes back
+     at the same top and the panel itself brings the pushed offer back into view (FreeAgencyPanel), and a second
+     scroll from here would fight that one. The hook does nothing when the wheel's top is already readable. */
+  const pushesMade = !marketTalk ? 0 : marketTalk.kind === 'extension' ? (marketTalk.talk.pushed ? 1 : 0)
+    : marketTalk.window.offers.filter(o => o.pushed).length;
   const revealRef = useRevealScroll<HTMLDivElement>(
-    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}`,
+    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}:${pushesMade}`,
   );
 
   /* Round 470: opening a hub box is a new screen, so it obeys the owner's no

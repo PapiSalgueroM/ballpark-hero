@@ -62,12 +62,26 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
   const compareReturn = useRef<number | null>(null);
   useLayoutEffect(() => {
     if (wheel && !wheel.seen) { returnPush.current = wheel.offerIndex; return; }
+    let frame = 0;
     if (returnPush.current !== null) {
       const index = returnPush.current;
       returnPush.current = null;
       const target = root.current?.querySelector<HTMLButtonElement>(`[data-fa-sign="${index}"]`)
         ?? root.current?.querySelector<HTMLButtonElement>('[data-fa-sign]');
       target?.focus({ preventScroll: true });
+      /* Release AX fix pass (the screens review, major 1): the answer to a push comes back into view by itself.
+         The wheel stood where this window's top is, so after Continue the window opens from its top and a lower
+         offer, with the receipt line that says what the push did, is under the fold (the window is 850 to
+         1,100 px tall on a phone). The pushed card is brought the least distance that shows all of it, and only
+         when part of it is outside the window; a card already in view moves nothing. One frame later, the way
+         the board returns to a hub button, so the window has laid out before it is measured. */
+      const card = root.current?.querySelector<HTMLElement>(`[data-fa-offer="${index}"]`);
+      if (card) frame = requestAnimationFrame(() => {
+        const box = card.getBoundingClientRect();
+        if ((box.top < 0 || box.bottom > window.innerHeight) && typeof card.scrollIntoView === 'function') card.scrollIntoView({
+          block: 'nearest', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        });
+      });
     }
     if (!comparing && compareReturn.current !== null) {
       const y = compareReturn.current;
@@ -75,6 +89,7 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
       root.current?.querySelector<HTMLButtonElement>('[data-market-compare-open]')?.focus({ preventScroll: true });
       window.scrollTo({ top: y, behavior: 'auto' });
     }
+    return () => { if (frame) cancelAnimationFrame(frame); };
   }, [wheel, comparing]);
   const focusRequest = useRef<PushIntent | null>(null);
   const receipt = useRef<HTMLParagraphElement>(null);
