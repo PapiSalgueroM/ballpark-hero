@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-recordspoils: FO_GAMEDAY_WALK_CONTROL=recordspoils RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-spoiler: FO_GAMEDAY_WALK_CONTROL=spoiler RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-tall: FO_GAMEDAY_WALK_CONTROL=tall RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+vitest-card: NO_COLOR=1 node_modules/.bin/vitest run src/components/front-office-shared/GmGameDayCard.test.tsx src/components/front-office/FrontOfficeTile.test.tsx --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+weight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-head.log 2>&1; s=$?; grep -E "front-office|nfl-my-career|FAIL|sweepWeight" $RC_OUT/weight-head.log | cut -c1-200; exit $s
+chunks-head: node .rc/x/chunksOf.mjs http://localhost:4173 dist /front-office /nfl-my-career > $RC_OUT/chunks-head.txt 2>&1; s=$?; grep ROUTE $RC_OUT/chunks-head.txt; exit $s
+weight-base: cp .rc/x/chunksOf.mjs /tmp/chunksOf.mjs && git worktree add -q /tmp/base 999db1e4 && cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && node_modules/.bin/vite build > $RC_OUT/base-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4174 > /dev/null 2>&1 &) && sleep 3 && cp /tmp/chunksOf.mjs scripts/.chunksOf.tmp.mjs && node scripts/.chunksOf.tmp.mjs http://localhost:4174 dist /front-office /nfl-my-career > $RC_OUT/chunks-base.txt 2>&1; grep ROUTE $RC_OUT/chunks-base.txt; BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-base.log 2>&1; s=$?; grep -E "front-office|nfl-my-career|FAIL|sweepWeight" $RC_OUT/weight-base.log | cut -c1-200; exit $s
