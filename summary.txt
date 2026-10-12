@@ -1,0 +1,6 @@
+rival-owndealt exit=1 31s | simUsRivalSense: 14 checks, 1 failed (full size), red sections: N.F5
+rival-owndead exit=1 40s | simUsRivalSense: 14 checks, 1 failed (full size), red sections: N.O
+senseC exit=0 149s | simNbaAwardsSense: 172 checks, 0 failed (full size), 148s
+sense-oldgateown exit=1 149s | simNbaAwardsSense: 169 checks, 3 failed (full size, control oldgateown), 148s
+sense-oldgate306 exit=1 165s | simNbaAwardsSense: 169 checks, 1 failed (full size, control oldgate306), 164s
+sense-droppedanyyear exit=1 110s | simNbaAwardsSense: 169 checks, 2 failed (full size, control droppedanyyear), 110s

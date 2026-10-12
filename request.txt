@@ -1,0 +1,6 @@
+rival-owndealt: US_RIVAL_CONTROL=owndealt node scripts/simUsRivalSense.mjs
+rival-owndead: US_RIVAL_CONTROL=owndead node scripts/simUsRivalSense.mjs
+senseC: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-oldgate306: SIM_NBA_SENSE_CONTROL=oldgate306 node scripts/simNbaAwardsSense.mjs
+sense-oldgateown: SIM_NBA_SENSE_CONTROL=oldgateown node scripts/simNbaAwardsSense.mjs
+sense-droppedanyyear: SIM_NBA_SENSE_CONTROL=droppedanyyear node scripts/simNbaAwardsSense.mjs
