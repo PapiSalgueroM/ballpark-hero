@@ -1,0 +1,3 @@
+control wheel: 6 wheel steps of the mlb path renamed in a copy; section A says [mlb: the recorded path holds no market wheel step, so no push is on the record]
+  CONTROL FIRED: [mlb] red on "holds no market wheel step", the rest green
+simUsBoardParity control wheel: green. The control turned its own sport red for its own reason.
