@@ -1,0 +1,16 @@
+# Release AX closing check, part b (served build, Chromium, one at a time): findings 28 and 7 on the pushed head. The walk and its controls, the screens reviewer's own push probe (head only), the recording reviewer's own mutation on a rebuilt site (last, restored after)
+#!serve
+#!playwright
+#!serial
+parity: mkdir -p "$RC_OUT"; node scripts/simUsBoardParity.mjs > "$RC_OUT/parity.log" 2>&1; s=$?; grep -n "FAIL" "$RC_OUT/parity.log" | head -5 | cut -c1-300; tail -1 "$RC_OUT/parity.log" | cut -c1-300; exit $s
+walk: mkdir -p "$RC_OUT"; node scripts/playUsMarketTalk.mjs > "$RC_OUT/walk.log" 2>&1; s=$?; cut -c1-420 "$RC_OUT/walk.log" | grep "FAIL\|aborted"; tail -1 "$RC_OUT/walk.log" | cut -c1-300; exit $s
+walk-unspend-EXPECT1: US_MARKET_TALK_CONTROL=unspend node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | tail -12; exit ${PIPESTATUS[0]}
+walk-noreveal-EXPECT1: US_MARKET_TALK_CONTROL=noreveal node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | tail -22; exit ${PIPESTATUS[0]}
+walk-droptalk-EXPECT1: US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | tail -8; exit ${PIPESTATUS[0]}
+rs-nfl: SPORT=nfl node .rc/x/rsUs2.mjs 2>&1 | cut -c1-300 | tail -3; exit ${PIPESTATUS[0]}
+rs-nba: SPORT=nba node .rc/x/rsUs2.mjs 2>&1 | cut -c1-300 | tail -3; exit ${PIPESTATUS[0]}
+rs-mlb: SPORT=mlb node .rc/x/rsUs2.mjs 2>&1 | cut -c1-300 | tail -3; exit ${PIPESTATUS[0]}
+rs-nhl: SPORT=nhl node .rc/x/rsUs2.mjs 2>&1 | cut -c1-300 | tail -3; exit ${PIPESTATUS[0]}
+mutForget-build: node .rc/x/mutForget.mjs && node_modules/.bin/vite build > /tmp/mut-build.log 2>&1; s=$?; tail -2 /tmp/mut-build.log | cut -c1-200; exit $s
+walk-mutForget-EXPECT1: node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | grep "FAIL\|playUsMarketTalk:"; exit ${PIPESTATUS[0]}
+clean: git checkout -- src && git status --short | head -5; echo "changed files: $(git status --short | wc -l)"
