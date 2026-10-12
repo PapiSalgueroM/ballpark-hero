@@ -32,7 +32,7 @@ for (const surface of surfaces) {
     };
 
     it('cannot send a category without an actual typed description', async () => {
-      const view = open(); fireEvent.click(view.getByRole('button', { name: 'Bug', exact: true }));
+      const view = open(); fireEvent.click(view.getByRole('button', { name: 'Bug' }));
       expect(view.getByRole('button', { name: surface.submit })).toBeDisabled();
       await send(view);
       expect(delivery.invoke).not.toHaveBeenCalled(); expect(delivery.insert).not.toHaveBeenCalled();
@@ -48,7 +48,7 @@ for (const surface of surfaces) {
     });
 
     it('sends trimmed details and shared diagnostics with the category', async () => {
-      const view = open(); fireEvent.click(view.getByRole('button', { name: 'Bug', exact: true }));
+      const view = open(); fireEvent.click(view.getByRole('button', { name: 'Bug' }));
       fireEvent.change(view.getByRole('textbox'), { target: { value: '  The tile rejected my player after I tapped it.  ' } }); await send(view);
       const payload = delivery.invoke.mock.calls[0][1].body;
       expect(payload).toMatchObject({ game_type: surface.gameType, description: 'Bug: The tile rejected my player after I tapped it.', game_context: { path: '/player-bingo', date: '2026-10-11', submittedAt: '2026-10-12T02:00:00.000Z', source: surface.source } });

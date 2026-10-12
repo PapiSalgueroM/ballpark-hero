@@ -73,6 +73,21 @@ jobs:
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/reportContext.test.ts src/test/reportDetails.test.tsx src/test/gameReportPlacement.test.tsx src/test/perfectSeasonReport.test.tsx src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoTransport.test.ts src/test/playerBingoLoad.test.tsx src/test/playerBingoLineFeedback.test.tsx src/test/perfectSeasonResult.test.tsx src/test/perfectSeasonVerdict.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=game-report-artifacts/units.json 2>&1 | tee game-report-artifacts/units.log
+      - name: Retain completed type and unit diagnostics before the SEO build
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          du -sb game-report-artifacts > game-report-artifacts/early-size.txt
+          bytes="$(du -sb game-report-artifacts | cut -f1)"
+          test "$bytes" -lt 200000000
+      - name: Preserve early type and unit evidence
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-report-early-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 5
+          if-no-files-found: error
+          path: game-report-artifacts/
       - name: Full production SEO build
         id: build
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}

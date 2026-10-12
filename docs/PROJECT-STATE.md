@@ -1,3 +1,11 @@
+## Report verification Source successor, 2026-10-12
+
+PR239 remains draft. Original fb446944 run38200793440 failed: two unsupported test type options, two new test selectors, the existing SEO source lookahead and one 390-pixel Stat Detective help Escape check. Its complete source, dependency census, output bodies and failures remain retained. Actual 94 of 96 unit assertions, 16 of 17 readers, all six NBA/Bingo report journeys and all six placement controls passed. This is not a complete pass or a live-site claim.
+
+The Source successor removes only the two unsupported type options, selects the actual Spin button and the existing lost-state Try a new board button, and puts Stat Detective's unchanged pageHasOwnH1 flag before its large report context. All original fixtures and assertions stay in place. The help journey waits for actual finite opening animations and public modal readiness, then records one native Escape event. Its existing two-second hidden and focus-restoration checks stay unchanged. The precise original lost-event cause remains unproven. No application help behavior changed.
+
+The workflow now preserves capped early type/unit diagnostics before the full SEO build. Full production SEO, all rebuilt readers, Bingo identity/title controls, actual report journeys, source/package holds and complete failed evidence remain required at this exact successor head. All application, compiler, build and browser execution stays on the GitHub runner. G owns integration and publication.
+
 ## Game reporting and Player Bingo Source candidate, 2026-10-11
 
 Branch `codex/game-report-details`, based on main `4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5`. Source authoring only so far. The dedicated GitHub runner owns all type, unit, build, harness and browser execution. G owns integration and publication. This candidate is not a live-site claim.

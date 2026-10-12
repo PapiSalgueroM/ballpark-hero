@@ -61,7 +61,7 @@ describe('Player Bingo minimal report context', () => {
     expect(boundary.tests).toBe(4);
     expect(boundary.context.phase).toBe('lost');
     expect(boundary.context.lastRejected).toEqual({ playerName: rows[3].name, playerYear: 2026, playerNationality: rows[3].nationality, playerPosition: rows[3].position, playerClub: rows[3].club, criterionId: 'qzx-0' });
-    fireEvent.click(view.getByRole('button', { name: 'New board' }));
+    fireEvent.click(view.getByRole('button', { name: 'Try a new board' }));
     expect(boundary.context.phase).toBe('playing');
     expect(boundary.context.playerIndex).toBe(0);
     expect(boundary.context.strikes).toBe(0);

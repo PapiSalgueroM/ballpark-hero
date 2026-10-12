@@ -41,7 +41,7 @@ describe('NBA game state in reports', () => {
     fireEvent.click(screen.getByText('Classic').closest('button')!);
     await tick(10);
     expect(context().phase).toBe('spin');
-    fireEvent.click(screen.getByText(/Spin the wheel/).closest('button')!);
+    fireEvent.click(screen.getByRole('button', { name: 'Spin the wheel' }));
     await tick(1600);
     expect(context()).toMatchObject({ phase: 'draft', spins: 1, squad: 'fixture-2001' });
     fireEvent.click(screen.getByText('Fixture Player PG').closest('button')!);
