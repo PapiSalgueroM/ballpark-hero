@@ -1,0 +1,144 @@
+name: Soccer Career guide verification
+
+on:
+  push:
+    branches:
+      - codex/career-guide-clarity
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-guide-clarity-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact source and remote dependencies
+        id: prepare
+        run: |
+          set -euo pipefail
+          mkdir -p career-guide-artifacts
+          git rev-parse HEAD > career-guide-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > career-guide-artifacts/source-tree.txt
+          git archive --format=tar HEAD > career-guide-artifacts/source.tar
+          sha256sum package.json package-lock.json > career-guide-artifacts/packages-before.txt
+          npm ci 2>&1 | tee career-guide-artifacts/install.log
+          node scripts/qa/soccerAgentReviewDependencies.mjs before 2>&1 | tee career-guide-artifacts/dependencies-before.log
+          cp soccer-agent-review-artifacts/dependencies-before.json career-guide-artifacts/dependencies-before.json
+          browser_tools="$RUNNER_TEMP/career-guide-browser-${{ github.run_id }}-${{ github.run_attempt }}"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee career-guide-artifacts/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" career-guide-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" career-guide-artifacts/browser-package-lock.json
+          node scripts/qa/soccerAgentReviewDependencies.mjs after 2>&1 | tee career-guide-artifacts/dependencies-after.log
+          cp soccer-agent-review-artifacts/dependencies-*.json career-guide-artifacts/
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee career-guide-artifacts/chromium-install.log
+          python -m pip install fonttools pillow 2>&1 | tee career-guide-artifacts/fonts-install.log
+      - name: Actual app type gate
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-guide-artifacts/types.log
+      - name: Existing contract and new option outcomes
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerAgentReview.test.ts src/test/soccerAgentReviewUi.test.tsx src/test/soccerAgentReviewPage.test.tsx src/test/soccerOfferReviewAgeRule.test.tsx src/test/soccerInternationalReturn.test.ts src/test/soccerInternationalReturnUi.test.tsx src/test/soccerInternationalReturnPage.test.tsx src/test/soccerCareerFarewell.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-guide-artifacts/units.json 2>&1 | tee career-guide-artifacts/units.log
+      - name: Full production SEO build
+        id: build
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          npm run build:seo 2>&1 | tee career-guide-artifacts/build.log
+      - name: All rebuilt readers and existing guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > career-guide-artifacts/reader-server.stdout.log 2> career-guide-artifacts/reader-server.stderr.log &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > career-guide-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/career-guide-artifacts/$harness.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "career-guide-artifacts/$harness.stdout.log" 2> "career-guide-artifacts/$harness.stderr.log"
+            status=$?
+            set -e
+            lines="$(cat "career-guide-artifacts/$harness.stdout.log" "career-guide-artifacts/$harness.stderr.log" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "career-guide-artifacts/$harness.stdout.log" "career-guide-artifacts/$harness.stderr.log" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "career-guide-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> career-guide-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 career-guide-artifacts/readers.tsv | wc -l)" -eq 16
+          exit "$failed"
+      - name: Keep generated pages and build evidence
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          if test -d dist; then cp -a dist career-guide-artifacts/dist; fi
+          cp -a public career-guide-artifacts/generated-public
+          cp scripts/data/lastmod.json career-guide-artifacts/generated-lastmod.json
+          git diff --binary HEAD -- public scripts/data/lastmod.json > career-guide-artifacts/generated.patch
+      - name: Exact source and package bytes held
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$(cat career-guide-artifacts/source-head.txt)"
+          test "$(git rev-parse 'HEAD^{tree}')" = "$(cat career-guide-artifacts/source-tree.txt)"
+          sha256sum package.json package-lock.json > career-guide-artifacts/packages-after.txt
+          cmp career-guide-artifacts/packages-before.txt career-guide-artifacts/packages-after.txt
+          git diff --exit-code HEAD -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json index.html 2>&1 | tee career-guide-artifacts/source-held.log
+      - name: Evidence size
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          du -sb career-guide-artifacts > career-guide-artifacts/size.txt
+          bytes="$(du -sb career-guide-artifacts | cut -f1)"
+          test "$bytes" -lt 500000000
+      - name: Preserve complete or failed evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-guide-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 5
+          if-no-files-found: error
+          path: career-guide-artifacts/

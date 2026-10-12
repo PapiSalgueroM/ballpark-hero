@@ -2359,12 +2359,12 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
 
       {onCareer && <AgentBrief career={career} clubs={clubs} onCareer={onCareer} />}
       {briefResult && <div data-transfer-brief-result={briefResult.status} className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
-        <p className="font-bold">{briefResult.status === 'offered' ? 'Your agent found a match' : briefResult.status === 'no_match' ? 'No clubs matched your brief' : 'No response this window'}</p>
+        <p className="font-bold">{briefResult.status === 'offered' ? 'A club matched your brief' : briefResult.status === 'no_match' ? 'No clubs matched your brief' : 'No response this window'}</p>
         <p className="text-muted-foreground">{briefResult.status === 'offered'
           ? `${briefResult.offer?.club.name}${briefResult.projection ? ` projects about ${briefResult.projection.min} to ${briefResult.projection.max} league games` : ''}. Review the actual contract before signing.`
           : briefResult.status === 'no_match' ? 'Your priority found no destination among the eligible clubs. You are staying for now.'
             : 'The transfer request did not bring an offer. You are staying for now.'}</p>
-        <p className="text-muted-foreground">Your agent's response is fixed for this window.</p>
+        <p className="text-muted-foreground">This response is fixed for the window.</p>
         {briefResult.status !== 'offered' && <Button data-transfer-brief-stay onClick={onStay} className="min-h-11 w-full whitespace-normal text-xs">Stay at {career.currentClub}</Button>}
       </div>}
       {situation.type === 'request_result' && !situation.offer && !briefResult && <div className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
