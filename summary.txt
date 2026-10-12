@@ -1,0 +1,9 @@
+simCmLeagueFixtures exit=0 16s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+tsc exit=0 93s | 
+simClubManagerScore exit=0 160s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerALeague exit=0 15s | simClubManagerALeague: all checks passed
+simInventedNames exit=0 17s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simClubManagerBudget exit=0 419s | simClubManagerBudget: PASS
+simAcademy exit=0 938s | ALL ACADEMY CHECKS PASSED

@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
