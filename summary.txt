@@ -1,0 +1,14 @@
+simGmGameDay exit=0 58s | simGmGameDay: 316 checks, 0 failed
+simGmReload exit=0 10s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simGmReload-replay exit=0 9s | control "replay": 5 failure(s) fired as expected on all four boards, the check works
+tsc exit=0 101s | 
+simNflGmDesk exit=0 35s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simFoHub exit=0 1s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simNflGmDesk-boardedges exit=0 36s | simNflGmDesk: control boardedges fired (1 failures, as it should)
+simDraftNight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+engine-untouched exit=0 0s | 0
+simGmDeskHost exit=0 63s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+vitest-all exit=0 498s |    Duration  497.67s (transform 36.56s, setup 18.68s, collect 149.88s, tests 1066.87s, environment 148.87s, prepare 31.25s)

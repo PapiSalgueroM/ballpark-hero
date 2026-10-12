@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: NO_COLOR=1 node_modules/.bin/vitest run --testTimeout=600000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmReload: node scripts/simGmReload.mjs
+simGmReload-replay: GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simNflGmDesk-boardedges: SIM_NFL_GM_DESK_CONTROL=boardedges node scripts/simNflGmDesk.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simFoHub: node scripts/simFoHub.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+engine-untouched: git diff --stat 999db1e4 HEAD -- src/lib/frontOffice.ts src/lib/frontOfficeSave.ts src/components/season-centre src/lib/gmGameScore.ts src/lib/gmGameDay.ts src/lib/gmBracket.ts src/lib/gameLaws src/lib/frontOfficeGameDay.ts src/lib/foHub.ts src/lib/dialogA11y.ts src/hooks/useRevealScroll.ts scripts/simGmReload.mjs scripts/simNflGmDesk.mjs scripts/simSessionMarks.mjs scripts/sweepWeight.mjs src/data/gameContent | wc -l
