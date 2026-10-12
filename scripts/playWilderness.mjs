@@ -188,6 +188,26 @@ const homeTab = async () => {
   return true;
 };
 let sacked = false;
+/* Round 251: 60 iterations was measured headroom in a sandbox whose
+   browser had no egress, where pages settled fast. With real egress the
+   cycle is slower, and a doctored board still holds its nerve in some
+   runs (the sack is the engine's stochastic call, and the live game
+   SAVES ITS OWN recovering confidence over the doctored number). So the
+   walk polices itself instead of hoping: every 40 iterations without a
+   sack, the save is doctored back to the floor and the career resumed,
+   which keeps the trigger inside the engine while making the outcome
+   inevitable inside a bounded walk. */
+/* Round 672: two holes in that policing, both measured on a run where the
+   45 rated squad kept winning (board confidence climbed to 30 by week 26).
+   The re-doctor edited the save from the RUNNING app and then navigated, and
+   the app saved its own state over the edit on the way out: confidence read
+   28.8 before it and 30.1 one match after. It now leaves for robots.txt
+   first, the Round 196 rule the first doctoring already follows. And a career
+   that survives to the mid-season break meets "Open the Window", which none
+   of the clicks below matched, so the walk sat on the hub "pressing Home"
+   (a button that does not exist, see homeTab) for the rest of its 120 steps.
+   Opening the window lands on the Market tab, and the Home tab is the way
+   back to the fixture list; that is how playClubManager gets past it too. */
 /* Round 1314: the walk says where it stood. The AX join's red (rAXg-F-J5) printed only the failing
    line, so whether the loop played 120 steps against a board that held, or sat on a screen none of
    its presses matches, was a reading and not a fact. Now every 40 step block prints the matches
