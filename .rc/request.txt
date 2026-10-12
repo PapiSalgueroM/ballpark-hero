@@ -1,0 +1,8 @@
+usCareerDeckC: node scripts/simUsCareerDeckC.mjs
+careerInbox: node scripts/simCareerInbox.mjs
+careerInboxBeats: node scripts/simCareerInboxBeats.mjs
+careerHub: node scripts/simCareerHub.mjs
+usCareerDefects: node scripts/simUsCareerDefects.mjs
+sportEras: node scripts/simSportEras.mjs
+dailyDeals: node scripts/simDailyDeals.mjs
+trustCopy: node scripts/simTrustCopy.mjs
