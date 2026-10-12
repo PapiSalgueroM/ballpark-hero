@@ -1,0 +1,3 @@
+probePlace: SEASONS=200 node .rc/x/probePlace.mjs
+probePlace-fixed: PROBE_CONTROL=fixed SEASONS=200 node .rc/x/probePlace.mjs
+probePlace-small: SEASONS=20 node .rc/x/probePlace.mjs
