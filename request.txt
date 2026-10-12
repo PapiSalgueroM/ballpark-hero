@@ -1,0 +1,3 @@
+# REVIEW-run Round 1306, head b7943c61: the measuring mode again (are the tables for the lead reproducible), with seeds nobody ran too
+measure: BOOK_MEASURE=leagues node scripts/simCmLeagueBook.mjs
+measure-6seeds: MEASURE_SEEDS=6 BOOK_MEASURE=leagues node scripts/simCmLeagueBook.mjs

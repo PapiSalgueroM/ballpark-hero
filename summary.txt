@@ -1,0 +1,2 @@
+measure exit=0 110s | simCmLeagueBook: MEASURE leagues done, nothing gated (109s)
+measure-6seeds exit=0 310s | simCmLeagueBook: MEASURE leagues done, nothing gated (310s)
