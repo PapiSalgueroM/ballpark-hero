@@ -1,0 +1,10 @@
+# AXG merge 2 proof, part a (head e00f621e), serial: the league rules digest's attribution legs on the merged tree, the file taken again, the Round 1081 pin
+#!serial
+head-stale-EXPECT-RED: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+leg-1304out-vs-1306file: node .rc/x/mut1304.mjs && git show ebde6a32:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+leg-1306out-vs-1304file: node .rc/x/mutOld.mjs && git show b3241abe:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+leg-bothout-vs-AWfile: node .rc/x/mut1304.mjs && node .rc/x/mutOld.mjs && git show 4aa47b12:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+leg-bothin-vs-1306file-EXPECT-RED: git show ebde6a32:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+leg-bothin-vs-1304file-EXPECT-RED: git show b3241abe:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+rules-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && sha256sum scripts/data/cmLeagueRulesDigest.json && git diff --numstat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- scripts; exit $s
+pin-head: sha256sum src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs
