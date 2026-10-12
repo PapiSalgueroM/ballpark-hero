@@ -34,7 +34,7 @@ try {
     fs.writeFileSync(path.join(output, `${name}.log`), `${run.stdout ?? ''}\n${run.stderr ?? ''}`);
     assert.equal(run.error, undefined); assert.equal(run.signal, null);
     const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
-    assert.equal(report.numTotalTests, 91, 'Every actual roster case is executed in each copied arm');
+    assert.equal(report.numTotalTests, 96, 'Every actual roster case is executed in each copied arm');
     assert.equal(report.numPendingTests, 0); assert.equal(report.numTodoTests ?? 0, 0);
     const assertions = report.testResults.flatMap(suite => suite.assertionResults);
     assert.equal(assertions.length, report.numTotalTests);
