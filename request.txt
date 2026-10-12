@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+sw-a: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > $RUNNER_TEMP/swa.log 2>&1; e=$?; grep -E "soccer-career" $RUNNER_TEMP/swa.log | head -4 | cut -c1-200; tail -1 $RUNNER_TEMP/swa.log; node scripts/simFlagshipWeight.mjs 2>&1 | tail -2; exit $e
+sw-b: R=$PWD; git worktree add -q --detach /tmp/wt2 HEAD && ln -s "$R/node_modules" /tmp/wt2/node_modules && cd /tmp/wt2 && npm run build > /tmp/wt2-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4176 > /tmp/wt2-srv.log 2>&1 &) ; sleep 5; BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/swb.log 2>&1; e=$?; grep -E "soccer-career" /tmp/swb.log | head -4 | cut -c1-200; tail -1 /tmp/swb.log; node scripts/simFlagshipWeight.mjs 2>&1 | tail -2; exit $e
