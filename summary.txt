@@ -1,0 +1,9 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ledger exit=0 4s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+plan exit=0 2s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+vitest exit=0 50s |    Duration  49.46s (transform 2.34s, setup 123ms, collect 3.82s, tests 46.16s, environment 1.01s, prepare 348ms)
+tsc exit=0 88s | 
+nhlcareer exit=0 17s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+weight exit=0 7s | weight1312 done
+parity exit=0 62s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+allcontrols exit=1 209s | allcontrols: 70 of 72 controls fired at their named checks, 2 did not
