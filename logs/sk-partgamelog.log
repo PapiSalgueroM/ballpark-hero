@@ -1,0 +1,2 @@
+simSaveKeeper control partgamelog: its own sentence: /front-office: its real save holds a version number (gameLog.v=1) and neither SAVE_VERSIONS nor PART_VERSIONS has a row for it
+simSaveKeeper control partgamelog: FIRED. Section 1 is red.

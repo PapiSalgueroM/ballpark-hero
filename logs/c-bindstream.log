@@ -1,0 +1,2 @@
+simGmGameDay: 303 checks, 31 failed (control bindstream)
+control bindstream: RED AT THE NAMED CHECK (section 7); its named checks red: 3 of 3 ("with the bind takes no draw from Math.random", "with the bind moves none of its 272 winners", "with the bind moves none of its 32 records"); sections red: 5, 7, 8
