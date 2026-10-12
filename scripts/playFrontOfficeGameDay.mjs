@@ -33,7 +33,10 @@
  *     the result with no clock and the save is the string the press wrote;
  *   5 reduced motion: Watch shows the result with no clock at any sample;
  *   6 the "?" is drawn over the whole week box and not inside the tile, holds
- *     the law's words, closes and opens again;
+ *     the law's words, closes and opens again (the page's scrollY either side
+ *     of opening it is held equal when the box's top was already readable:
+ *     the Season Center's sheet takes the focus, a browser brings a focused
+ *     sheet into view by scrolling, and the card puts the page back);
  *   7 a chip opens its game on the same box; a save with no log shows the
  *     next game and plays on;
  *   8 ON EVERY FACE nothing in the tile's box but the named scrollers (the
@@ -93,7 +96,7 @@ const stateOf = () => {
   const scroller = one('[data-gameday-scroll]');
   return {
     scrollY: Math.round(window.scrollY), vh: window.innerHeight, vw: window.innerWidth, docW: document.documentElement.scrollWidth,
-    box: r ? { top: Math.round(r.top), height: Math.round(r.height), width: Math.round(r.width) } : null,
+    box: r ? { top: Math.round(r.top), pageTop: Math.round(r.top + window.scrollY), height: Math.round(r.height), width: Math.round(r.width) } : null,
     face: one('[data-gameday]')?.getAttribute('data-gameday-face') ?? null,
     week: txt('[data-week-chip]'), record: txt('[data-record-chip]'), matchup: txt('[data-week-matchup]'),
     play: play ? { text: (play.textContent ?? '').trim(), disabled: play.disabled, top: Math.round(play.getBoundingClientRect().top) } : null,
@@ -107,6 +110,7 @@ const stateOf = () => {
     clock: !!one('[data-match-clock]'), bug: txt('[data-score-bug]'), fullTime: !!one('[data-full-time]'),
     scroller: scroller ? { content: scroller.scrollHeight, frame: scroller.clientHeight } : null,
     help: !!one('[data-season-help]'),
+    weekTop: one('[data-week-box]') ? Math.round(one('[data-week-box]').getBoundingClientRect().top) : null,
     text: document.body.innerText,
   };
 };
@@ -184,6 +188,9 @@ async function newPage(browser, size, reduced = false) {
 async function startFranchise(page) {
   await page.goto(`${BASE}/front-office`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1000);
+  /* the consent banner is pinned over the bottom of a phone: answered the private way, as a visitor who has been here before */
+  const essential = page.locator('button:has-text("Essential only")');
+  if (await essential.count() > 0) { await essential.first().click(); await page.waitForTimeout(300); }
   await page.locator('.grid button').first().click();
   await page.waitForTimeout(900);
 }
@@ -263,7 +270,7 @@ async function walk(browser, size) {
   await page.waitForTimeout(700);
   const s1 = await state(page);
   const want = size.w >= 768 ? 352 : 400;
-  say(1, !!early.box && early.box.height === want && s1.box.height === want && early.box.top === s1.box.top, `${size.w}: the tile's box is ${want} px high and where it was before its card landed (${early.box?.height} then ${s1.box?.height}, top ${early.box?.top} then ${s1.box?.top})`);
+  say(1, !!early.box && early.box.height === want && s1.box.height === want && early.box.pageTop === s1.box.pageTop, `${size.w}: the tile's box is ${want} px high and where it was before its card landed (${early.box?.height} then ${s1.box?.height}, top ${early.box?.top} then ${s1.box?.top})`);
   say(1, s1.face === 'next' && /Next up: (at|home to) \S+/.test(s1.text) && s1.play?.text === 'Play Week 1' && s1.watch?.text === 'Watch Week 1' && !s1.play.disabled && !s1.watch.disabled, `${size.w}: before a press the tile shows the next game, with Play Week 1 and Watch Week 1 open`);
   const before = scripts.filter(x => !x.late), late = scripts.filter(x => x.late);
   say(1, before.length >= 3 && before.every(x => !x.marked) && late.filter(x => x.marked).length === 1, `${size.w}: the card's chunk was asked for only when the box opened (${before.length} scripts before it, ${before.filter(x => x.marked).length} of them with the tile's marker; ${late.length} after, ${late.filter(x => x.marked).length} with it)`);
@@ -312,11 +319,13 @@ async function walk(browser, size) {
     const sheet = document.querySelector('[data-season-help]'), wb = document.querySelector('[data-week-box]');
     if (!sheet || !wb) return null;
     const a = sheet.getBoundingClientRect(), b = wb.getBoundingClientRect();
-    return { child: sheet.parentElement === wb, inTile: !!sheet.closest('[data-gameday-box]'), dw: Math.round(Math.abs(a.width - b.width)), dh: Math.round(Math.abs(a.height - b.height)), text: sheet.innerText, y: Math.round(window.scrollY), height: Math.round(a.height) };
+    return { child: sheet.parentElement?.parentElement === wb && sheet.parentElement.hasAttribute('data-gameday-help-host'), inTile: !!sheet.closest('[data-gameday-box]'), dw: Math.round(Math.abs(a.width - b.width)), dh: Math.round(Math.abs(a.height - b.height)), text: sheet.innerText, y: Math.round(window.scrollY), height: Math.round(a.height) };
   };
   const h = await page.evaluate(helpOf);
-  say(6, !!h && h.child && !h.inTile && h.dw <= 3 && h.dh <= 3 && h.text.includes('Real: a touchdown is 6') && h.text.includes('A worked example') && h.text.includes('Got it'), `${size.w}: the "?" is drawn over the whole week box (${h?.height} px high) and not inside the tile, with the law's words and a worked example`);
-  note(`${size.w}: measured at the "?": scrollY ${aM.scrollY} before and ${h?.y} with the sheet open`);
+  say(6, !!h && h.child && !h.inTile && h.dw <= 3 && h.dh <= 3 && h.text.includes('Real: a touchdown is 6') && h.text.includes('A worked example') && h.text.includes('Got it'), `${size.w}: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is ${h?.height} px high, ${h?.dw} px narrower and ${h?.dh} px shorter than the box's own frame; in the box's host: ${h?.child}; inside the tile: ${h?.inTile})`);
+  /* the reveal hook's own measure of "already readable": the top on screen with 160 px of the box showing */
+  const readable = aM.weekTop !== null && aM.weekTop >= 0 && aM.vh - aM.weekTop >= MIN_LEAD;
+  say(6, !!h && (!readable || h.y === aM.scrollY), `${size.w}: opening the "?" over a week box whose top was readable did not move the page (the box's top at ${aM.weekTop} of ${aM.vh}, readable: ${readable}; scrollY ${aM.scrollY} before and ${h?.y} with the sheet open)`);
   await shot(page, size, '6-help');
   await page.locator('[data-season-help] button:has-text("Got it")').click();
   await page.waitForTimeout(300);
@@ -333,7 +342,7 @@ async function walk(browser, size) {
   await page.locator('[data-gameday-chip]').first().click();
   await page.waitForTimeout(300);
   const a7 = await state(page);
-  say(7, a7.where.startsWith('Wk 1 ·') && a7.final !== '' && a7.box.height === b7.box.height && a7.box.top === b7.box.top && a7.face === 'result', `${size.w}: the first chip opens Week 1 on the same box (${a7.where}: ${a7.final}; the box did not move)`);
+  say(7, a7.where.startsWith('Wk 1 ·') && a7.final !== '' && a7.box.height === b7.box.height && a7.box.pageTop === b7.box.pageTop && a7.face === 'result', `${size.w}: the first chip opens Week 1 on the same box (${a7.where}: ${a7.final}; the box did not move)`);
   await fit(page, size, 'an earlier game opened from a chip');
   await shot(page, size, '7-chip');
   await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)); delete s.gameLog; localStorage.setItem(k, JSON.stringify(s)); }, SAVE_KEY);

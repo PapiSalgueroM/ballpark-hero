@@ -170,8 +170,9 @@ export default function FrontOfficeBoard() {
   const [held, setHeld] = useState<LeagueState | null>(null);
   const hold = tab === 'week' && held && league && held !== league && league.season === held.season && league.week === held.week + 1 ? held : null;
   useEffect(() => { if (held && (tab !== 'week' || !league || league === held)) setHeld(null); }, [held, tab, league]);
-  /* the week box itself: the Game Day "?" is drawn over the whole of it */
-  const [weekBox, setWeekBox] = useState<HTMLDivElement | null>(null);
+  /* where the Game Day "?" is drawn: an empty element at the end of the week
+     box, so the sheet lies over the whole box and takes none of its spacing */
+  const [helpHost, setHelpHost] = useState<HTMLDivElement | null>(null);
   /* The ref is on ONE wrapper that starts at the Game Day tile and holds the
      league grid, so the thing pulled into view is his result and never the
      grid alone; the key moves again at full time, so that is a reveal too. */
@@ -1867,7 +1868,7 @@ export default function FrontOfficeBoard() {
       )}
 
       {tab === 'week' && (
-        <div ref={setWeekBox} className="relative rounded-2xl border border-gold/40 bg-card p-4 text-center space-y-3" data-week-box>
+        <div className="relative rounded-2xl border border-gold/40 bg-card p-4 text-center space-y-3" data-week-box>
           {seenGame ? (
             <p className="text-sm text-foreground" data-week-matchup>
               Week {seen.week}: <b>{label(seenGame.away)}</b> at <b>{label(seenGame.home)}</b>
@@ -1916,7 +1917,7 @@ export default function FrontOfficeBoard() {
                 mode={hold ? 'watch' : 'result'}
                 onWatched={() => setHeld(null)}
                 standing={{ table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
-                helpHost={weekBox}
+                helpHost={helpHost}
               />
             </div>
           {weekResults.length > 0 && !hold && (
@@ -1934,6 +1935,7 @@ export default function FrontOfficeBoard() {
             </div>
           )}
           </div>
+          <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
         </div>
       )}
 

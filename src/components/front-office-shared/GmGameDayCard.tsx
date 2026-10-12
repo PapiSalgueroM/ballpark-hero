@@ -29,7 +29,7 @@
    The "?" is the Season Center's sheet (not edited), drawn over the
    board's whole week box (`helpHost`) and not over this box, where six
    paragraphs and a worked example would be read through a slot. */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MatchClock, type ClockSpeed } from '@/components/season-centre/MatchClock';
 import { SeasonCentreHelp, type HelpWords } from '@/components/season-centre/SeasonCentreHelp';
@@ -59,6 +59,21 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
   const [reduced] = useState(reducedMotion);
   const chipRow = useRef<HTMLDivElement | null>(null);
   const helpButton = useRef<HTMLButtonElement | null>(null);
+  /* THE "?" MUST NOT MOVE THE PAGE FOR NOTHING. The sheet takes the focus when it opens, and a browser brings a
+     focused box into view by scrolling the page. When the top of the box the sheet lies over was already readable
+     (the reveal hook's own measure: on screen with 160 px of it showing), that scroll is a jump, so the page is put
+     back where it was before anything is painted. When the top was off screen the browser's scroll stands. */
+  const scrollAt = useRef<number | null>(null);
+  const openHelp = () => {
+    const over = (helpHost?.parentElement ?? helpButton.current?.closest('[data-gameday]'))?.getBoundingClientRect();
+    scrollAt.current = over && over.top >= 0 && window.innerHeight - over.top >= 160 ? window.scrollY : null;
+    setHelpOpen(true);
+  };
+  useLayoutEffect(() => {
+    const y = scrollAt.current;
+    scrollAt.current = null;
+    if (helpOpen && y !== null && window.scrollY !== y) window.scrollTo({ top: y, behavior: 'instant' as ScrollBehavior });
+  }, [helpOpen]);
 
   const index = open !== null && open < log.length ? open : log.length - 1;
   const last = index >= 0 ? log[index] : null;
@@ -77,7 +92,7 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
   const face = !view ? 'next' : watching ? 'watch' : 'result';
   const where = view ? `${whereLabel(view.where)} · ${view.home ? 'vs' : 'at'} ${short(view.them)}` : '';
   const helpButtonEl = (
-    <button ref={helpButton} type="button" onClick={() => setHelpOpen(true)} aria-label="How Game Day works" className={`${ROUND_BUTTON} w-11`} data-gameday-help>?</button>
+    <button ref={helpButton} type="button" onClick={openHelp} aria-label="How Game Day works" className={`${ROUND_BUTTON} w-11`} data-gameday-help>?</button>
   );
   const sheet = helpOpen
     ? <SeasonCentreHelp words={help} onClose={() => { setHelpOpen(false); helpButton.current?.focus({ preventScroll: true }); }} />

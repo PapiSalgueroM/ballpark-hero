@@ -101,7 +101,7 @@ export interface GmGameDayMount {
   onWatched(): void;
   /** Where he stands today in the engine's own seeding; null: nothing to say. */
   standing: { table: string; seed: number | null; seeds: number } | null;
-  /** The element the "?" sheet is drawn over (a board's whole week box, which must be `relative`); null: not there yet. */
+  /** Where the "?" sheet is put: an empty element inside a board's week box (the box must be `relative`, the element must take no spacing), so the sheet lies over the whole box; null: not there yet. */
   helpHost: HTMLElement | null;
 }
 
