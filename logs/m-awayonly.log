@@ -1,0 +1,5 @@
+mutation awayonly applied to src/components/front-office/FrontOfficeBoard.tsx
+⎯⎯⎯⎯⎯⎯ Failed Tests 19 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  19 failed | 82 passed (101)
+simGmGameDay: 303 checks, 0 failed
+MUT awayonly: CAUGHT vitest=1 simGmGameDay=0

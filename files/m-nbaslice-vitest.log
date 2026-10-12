@@ -1,0 +1,63 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/nba-front-office/NbaDraftNightRivals.test.tsx > NBA draft night, GM desk off: the card shows the picks the engine made > the rival rows are the picks the engine made, in order, each on the club its row names
+NBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+stdout | src/components/nba-front-office/NbaDraftNightRivals.test.tsx > NBA draft night, GM desk off: the card shows the picks the engine made > every rival row carries the grade the draft screen printed for that prospect before the press
+NBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+stdout | src/components/nba-front-office/NbaDraftNightRivals.test.tsx > NBA draft night, GM desk on: the card shows the picks the engine made > the rival rows are the picks the engine made, in order, each on the club its row names
+NBA draft night, desk on: the engine took 5 for rival clubs, the card drew 4 rival rows
+
+stdout | src/components/nba-front-office/NbaDraftNightRivals.test.tsx > NBA draft night, GM desk on: the card shows the picks the engine made > every rival row carries the grade the draft screen printed for that prospect before the press
+NBA draft night, desk on: 4 of 4 rival rows were on the draft screen before the press, each grade equal
+
+ ❯ src/components/nba-front-office/NbaDraftNightRivals.test.tsx (8 tests | 1 failed) 173ms
+   ✓ NBA draft night, GM desk off: the card shows the picks the engine made > the case is the one it says it is: the first press leaves the draft open with no summer run 56ms
+   ✓ NBA draft night, GM desk off: the card shows the picks the engine made > exactly one row is his, and it is the man he pressed 25ms
+   ✓ NBA draft night, GM desk off: the card shows the picks the engine made > the rival rows are the picks the engine made, in order, each on the club its row names 20ms
+   ✓ NBA draft night, GM desk off: the card shows the picks the engine made > every rival row carries the grade the draft screen printed for that prospect before the press 17ms
+   ✓ NBA draft night, GM desk on: the card shows the picks the engine made > the case is the one it says it is: the first press leaves the draft open with no summer run 17ms
+   ✓ NBA draft night, GM desk on: the card shows the picks the engine made > exactly one row is his, and it is the man he pressed 11ms
+   × NBA draft night, GM desk on: the card shows the picks the engine made > the rival rows are the picks the engine made, in order, each on the club its row names 15ms
+     → expected [ 'Marcus Jarreau', …(3) ] to deeply equal [ 'Bryce Okonkwo', …(4) ]
+   ✓ NBA draft night, GM desk on: the card shows the picks the engine made > every rival row carries the grade the draft screen printed for that prospect before the press 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/nba-front-office/NbaDraftNightRivals.test.tsx > NBA draft night, GM desk on: the card shows the picks the engine made > the rival rows are the picks the engine made, in order, each on the club its row names
+AssertionError: expected [ 'Marcus Jarreau', …(3) ] to deeply equal [ 'Bryce Okonkwo', …(4) ]
+
+- Expected
++ Received
+
+  [
+-   "Bryce Okonkwo",
+    "Marcus Jarreau",
+    "Jalen Fairweather",
+    "Andre Beaudry",
+    "Tarik Jarreau",
+  ]
+
+ ❯ src/components/nba-front-office/NbaDraftNightRivals.test.tsx:174:39
+    172|       expect(n.taken.length, 'the engine picked for at least one rival…
+    173|       /* nothing dropped, nothing invented, and in the engine's order …
+    174|       expect(rivals.map(r => r.name)).toEqual(want);
+       |                                       ^
+    175|       n.rows.forEach((r, i) => expect(r.overall).toBe(i + 1));
+    176|       for (const r of rivals) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  00:06:47
+   Duration  1.12s (transform 358ms, setup 26ms, collect 544ms, tests 173ms, environment 147ms, prepare 82ms)
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nba-front-office/NbaDraftNightRivals.test.tsx,title=src/components/nba-front-office/NbaDraftNightRivals.test.tsx > NBA draft night%2C GM desk on%3A the card shows the picks the engine made > the rival rows are the picks the engine made%2C in order%2C each on the club its row names,line=174,column=39::AssertionError: expected [ 'Marcus Jarreau', …(3) ] to deeply equal [ 'Bryce Okonkwo', …(4) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "Bryce Okonkwo",%0A    "Marcus Jarreau",%0A    "Jalen Fairweather",%0A    "Andre Beaudry",%0A    "Tarik Jarreau",%0A  ]%0A%0A ❯ src/components/nba-front-office/NbaDraftNightRivals.test.tsx:174:39%0A%0A

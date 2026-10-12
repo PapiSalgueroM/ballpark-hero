@@ -1,0 +1,5 @@
+mutation finalweeklog applied to src/components/front-office/FrontOfficeBoard.tsx
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  13 failed | 88 passed (101)
+simGmGameDay: 303 checks, 0 failed
+MUT finalweeklog: CAUGHT vitest=1 simGmGameDay=0

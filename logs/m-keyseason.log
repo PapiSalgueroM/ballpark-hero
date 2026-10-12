@@ -1,0 +1,4 @@
+mutation keyseason applied to src/components/front-office/FrontOfficeBoard.tsx
+      Tests  101 passed (101)
+simGmGameDay: 303 checks, 0 failed
+MUT keyseason: SURVIVED vitest=0 simGmGameDay=0

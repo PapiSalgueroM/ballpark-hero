@@ -1,0 +1,5 @@
+mutation edgeswap applied to src/lib/frontOfficeGameDay.ts
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 100 passed (101)
+simGmGameDay: 303 checks, 0 failed
+MUT edgeswap: CAUGHT vitest=1 simGmGameDay=0

@@ -1,0 +1,5 @@
+mutation capoff applied to src/lib/gmGameLog.ts
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 100 passed (101)
+simGmGameDay: 303 checks, 0 failed
+MUT capoff: CAUGHT vitest=1 simGmGameDay=0

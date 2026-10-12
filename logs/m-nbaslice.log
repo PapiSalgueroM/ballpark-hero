@@ -1,0 +1,5 @@
+mutation nbaslice applied to src/components/nba-front-office/NbaFrontOfficeBoard.tsx
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 7 passed (8)
+simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+MUT nbaslice: CAUGHT vitest=1 simDraftNight=0

@@ -1,0 +1,11 @@
+m-keyseason exit=1 26s | MUT keyseason: SURVIVED vitest=0 simGmGameDay=0
+m-awayonly exit=0 25s | MUT awayonly: CAUGHT vitest=1 simGmGameDay=0
+m-finalweeklog exit=0 25s | MUT finalweeklog: CAUGHT vitest=1 simGmGameDay=0
+m-playoffnoedges exit=1 25s | MUT playoffnoedges: SURVIVED vitest=0 simGmGameDay=0
+m-edgeswap exit=0 25s | MUT edgeswap: CAUGHT vitest=1 simGmGameDay=0
+m-seasonkeep exit=0 25s | MUT seasonkeep: CAUGHT vitest=1 simGmGameDay=0
+m-capoff exit=0 25s | MUT capoff: CAUGHT vitest=1 simGmGameDay=0
+m-readerclub exit=0 25s | MUT readerclub: CAUGHT vitest=1 simGmGameDay=1
+m-summerkeeps exit=0 26s | MUT summerkeeps: CAUGHT vitest=1 simGmGameDay=0
+m-nbaslice exit=0 2s | MUT nbaslice: CAUGHT vitest=1 simDraftNight=0
+clean-after exit=0 0s | 0
