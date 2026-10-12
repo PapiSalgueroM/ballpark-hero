@@ -193,6 +193,9 @@ describe('GmBracketCard', () => {
     expect(gmBracketPlace(PLAY_IN, s0, 'S1', name).kind).toBe('bye');
     expect(gmBracketPlace(PLAY_IN, week1, 'S8', name)).toEqual({ kind: 'next', line: 'Next: the Play in, against Club S9.', tie: 'PI-8' });
     expect(gmBracketPlace(PLAY_IN, week1, 'S10', name)).toEqual({ kind: 'out', line: 'Out in the Play in.', tie: 'PI-910' });
+    /* beaten twice in the play in (by 7, then by 9): the tie he went out in is the LAST he lost, not the first */
+    const twice = playBracketWeek(PLAY_IN, week1, (home, away, tie) => (tie.id === 'PI-8' ? { homeScore: 99, awayScore: 104, winner: away } : { homeScore: 110, awayScore: 101, winner: home }));
+    expect(gmBracketPlace(PLAY_IN, twice, 'S8', name)).toEqual({ kind: 'out', line: 'Out in the Play in.', tie: 'PI-8' });
     const week2 = playBracketWeek(PLAY_IN, week1, alternate);
     const three = [1, 2, 3].reduce(s => playBracketGame(PLAY_IN, s, 'R1-A', alternate), week2);
     const props = { format: PLAY_IN, save: three, my: 'S1', name, onOpenGame: () => undefined, helpHost: null, help: NFL_BRACKET_HELP, seedOf: (c: string) => Number(c.slice(1)), weekLabel: (w: number) => ['Play in', 'Play in', 'First round', 'Semifinals', 'Final'][w - 1] };
