@@ -1,0 +1,33 @@
+name: Transfer Path verified club seasons
+
+on:
+  push:
+    branches: [codex/transfer-path-verified-seasons]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - run: npm ci
+      - name: Reported teammate link and existing hook behavior
+        run: node_modules/.bin/vitest run src/hooks/useTransferPathClubSeasons.test.ts src/hooks/useTransferPath.test.ts src/hooks/useTransferPathGuidance.test.ts --maxWorkers=1
+      - name: Application types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Production build
+        run: npm run build
