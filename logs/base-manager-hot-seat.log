@@ -1,0 +1,19 @@
+      /manager-hot-seat step 0: pressed "Pick a club"
+      /manager-hot-seat step 1: pressed "Arsenal"
+      /manager-hot-seat step 2: pressed "Take the job"
+      /manager-hot-seat step 3: pressed "⚔️ Attacking"
+      /manager-hot-seat step 4: pressed "These players are with me"
+      ^ new ground reached, condemned doors get another chance
+      /manager-hot-seat step 5: pressed "⚔️ Attacking"
+      /manager-hot-seat step 6: pressed "🛡️ Defensive"
+      /manager-hot-seat step 7: pressed "⚖️ Balanced"
+      /manager-hot-seat step 8: pressed "Say nothing"
+      /manager-hot-seat step 9: pressed "🧊 Calm them"
+      /manager-hot-seat step 10: pressed "🔥 Fire them up"
+      /manager-hot-seat step 11: pressed "📣 Demand more"
+      /manager-hot-seat step 12: pressed "💢 Hairdryer"
+      /manager-hot-seat step 13: pressed "Kick off"
+      ^ new ground reached, condemned doors get another chance
+  ok      /manager-hot-seat  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

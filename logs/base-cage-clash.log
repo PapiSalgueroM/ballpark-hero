@@ -1,0 +1,20 @@
+      /cage-clash step 0: pressed "?"
+      /cage-clash step 1: pressed "?"
+      ^ "?" only went back to a screen already seen
+      /cage-clash step 2: pressed "Fight"
+      ^ new ground reached, condemned doors get another chance
+      /cage-clash step 3: pressed "Pause"
+      /cage-clash step 4: pressed "Resume fight"
+      /cage-clash step 5: pressed "Pause"
+      /cage-clash step 6: pressed "Resume fight"
+      /cage-clash step 7: pressed "Pause"
+      /cage-clash step 8: pressed "Resume fight"
+      /cage-clash step 9: pressed "Submit I
+Ready"
+      /cage-clash step 10: pressed "Pause"
+      /cage-clash step 11: pressed "Resume fight"
+      /cage-clash step 12: pressed "Pause"
+      /cage-clash step 13: pressed "Resume fight"
+  ok      /cage-clash  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

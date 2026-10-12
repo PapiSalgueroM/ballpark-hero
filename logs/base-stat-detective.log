@@ -1,0 +1,29 @@
+      /stat-detective step 0: pressed "Try again"
+      /stat-detective step 1: pressed "Try again"
+      ^ "Try again" only went back to a screen already seen
+      /stat-detective step 2: pressed "Report a problem"
+      ^ new ground reached, condemned doors get another chance
+      /stat-detective step 3: pressed "Try again"
+      ^ "Try again" only went back to a screen already seen
+      /stat-detective step 4: pressed "Report a problem"
+      ^ "Report a problem" only went back to a screen already seen
+      /stat-detective step 5: pressed "Cookie choices"
+      ^ new ground reached, condemned doors get another chance
+      /stat-detective step 6: pressed "Try again"
+      ^ "Try again" only went back to a screen already seen
+      /stat-detective step 7: pressed "Report a problem"
+      ^ "Report a problem" only went back to a screen already seen
+      /stat-detective step 8: pressed "Cookie choices"
+      ^ "Cookie choices" only went back to a screen already seen
+      /stat-detective step 9: pressed "Light mode"
+      ^ new ground reached, condemned doors get another chance
+      /stat-detective step 10: pressed "Try again"
+      /stat-detective step 11: pressed "Try again"
+      ^ "Try again" only went back to a screen already seen
+      /stat-detective step 12: pressed "Report a problem"
+      ^ new ground reached, condemned doors get another chance
+      /stat-detective step 13: pressed "Try again"
+      ^ "Try again" only went back to a screen already seen
+  ok      /stat-detective  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

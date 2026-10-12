@@ -1,0 +1,69 @@
+      /dart-draft step 0: pressed "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them."
+      /dart-draft step 1: pressed "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them."
+      ^ "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them." only went back to a screen already seen
+      /dart-draft step 2: pressed "🏆
+World Cup 2026
+Only the 48 qualified nations count. Everywhere else is a wasted dart."
+      ^ "🏆
+World Cup 2026
+Only the 48 qualified nations count. Everywhere else is a wasted dart." only went back to a screen already seen
+      /dart-draft step 3: pressed "🏛️
+All-Time
+Legends join every squad. Hit Brazil and Pele himself might answer."
+      ^ "🏛️
+All-Time
+Legends join every squad. Hit Brazil and Pele himself might answer." only went back to a screen already seen
+      /dart-draft step 4: pressed "Cookie choices"
+      ^ new ground reached, condemned doors get another chance
+      /dart-draft step 5: pressed "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them."
+      ^ "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them." only went back to a screen already seen
+      /dart-draft step 6: pressed "🏆
+World Cup 2026
+Only the 48 qualified nations count. Everywhere else is a wasted dart."
+      ^ "🏆
+World Cup 2026
+Only the 48 qualified nations count. Everywhere else is a wasted dart." only went back to a screen already seen
+      /dart-draft step 7: pressed "🏛️
+All-Time
+Legends join every squad. Hit Brazil and Pele himself might answer."
+      ^ "🏛️
+All-Time
+Legends join every squad. Hit Brazil and Pele himself might answer." only went back to a screen already seen
+      /dart-draft step 8: pressed "Cookie choices"
+      ^ "Cookie choices" only went back to a screen already seen
+      /dart-draft step 9: pressed "Light mode"
+      ^ new ground reached, condemned doors get another chance
+      /dart-draft step 10: pressed "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them."
+      /dart-draft step 11: pressed "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them."
+      ^ "🌍
+Current Stars
+Every nation is live. Hit anywhere with pros and draft them." only went back to a screen already seen
+      /dart-draft step 12: pressed "🏆
+World Cup 2026
+Only the 48 qualified nations count. Everywhere else is a wasted dart."
+      ^ "🏆
+World Cup 2026
+Only the 48 qualified nations count. Everywhere else is a wasted dart." only went back to a screen already seen
+      /dart-draft step 13: pressed "🏛️
+All-Time
+Legends join every squad. Hit Brazil and Pele himself might answer."
+      ^ "🏛️
+All-Time
+Legends join every squad. Hit Brazil and Pele himself might answer." only went back to a screen already seen
+  ok      /dart-draft  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

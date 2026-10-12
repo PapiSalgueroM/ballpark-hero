@@ -1,0 +1,59 @@
+      /deadline-day step 0: pressed "Pick a club"
+      /deadline-day step 1: pressed "Arsenal"
+      /deadline-day step 2: pressed "Kevin Schade
+84
+LW, 24, Brentford
+On the list
+Desk: worth £28.5m to £28.7m"
+      /deadline-day step 3: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+      /deadline-day step 4: pressed "Kevin Schade
+84
+LW, 24, Brentford
+On the list
+Desk: worth £28.5m to £28.7m"
+      ^ "Kevin Schade
+84
+LW, 24, Brentford
+On the list
+Desk: worth £28.5m to £28.7m" only went back to a screen already seen
+      /deadline-day step 5: pressed "Call Brentford (free)"
+      ^ new ground reached, condemned doors get another chance
+      /deadline-day step 6: pressed "Back to the desk"
+      /deadline-day step 7: pressed "Kevin Schade
+84
+LW, 24, Brentford
+In talks
+They want £33.6m"
+      ^ "Kevin Schade
+84
+LW, 24, Brentford
+In talks
+They want £33.6m" only went back to a screen already seen
+      /deadline-day step 8: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+      /deadline-day step 9: pressed "Nico Williams
+86
+LW, 23, Athletic Club
+On the list
+Desk: worth £39m to £42.6m"
+      ^ new ground reached, condemned doors get another chance
+      /deadline-day step 10: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+      /deadline-day step 11: pressed "Kevin Schade
+84
+LW, 24, Brentford
+In talks
+They want £33.6m"
+      ^ "Kevin Schade
+84
+LW, 24, Brentford
+In talks
+They want £33.6m" only went back to a screen already seen
+      /deadline-day step 12: pressed "Lowball £26.9m"
+      ^ new ground reached, condemned doors get another chance
+      /deadline-day step 13: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+  ok      /deadline-day  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

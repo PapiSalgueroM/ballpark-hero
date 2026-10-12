@@ -1,0 +1,59 @@
+      /deadline-day step 0: pressed "Pick a club"
+      /deadline-day step 1: pressed "Arsenal"
+      /deadline-day step 2: pressed "Bazoumana Touré
+84
+LW, 19, Newcastle
+On the list
+Desk: worth £27.2m to £29.5m"
+      /deadline-day step 3: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+      /deadline-day step 4: pressed "Bazoumana Touré
+84
+LW, 19, Newcastle
+On the list
+Desk: worth £27.2m to £29.5m"
+      ^ "Bazoumana Touré
+84
+LW, 19, Newcastle
+On the list
+Desk: worth £27.2m to £29.5m" only went back to a screen already seen
+      /deadline-day step 5: pressed "Call Newcastle (free)"
+      ^ new ground reached, condemned doors get another chance
+      /deadline-day step 6: pressed "Back to the desk"
+      /deadline-day step 7: pressed "Bazoumana Touré
+84
+LW, 19, Newcastle
+In talks
+They want £36.4m"
+      ^ "Bazoumana Touré
+84
+LW, 19, Newcastle
+In talks
+They want £36.4m" only went back to a screen already seen
+      /deadline-day step 8: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+      /deadline-day step 9: pressed "Alberto Moleiro
+85
+LW, 22, Villarreal
+On the list
+Desk: worth £32.1m to £32.4m"
+      ^ new ground reached, condemned doors get another chance
+      /deadline-day step 10: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+      /deadline-day step 11: pressed "Bazoumana Touré
+84
+LW, 19, Newcastle
+In talks
+They want £36.4m"
+      ^ "Bazoumana Touré
+84
+LW, 19, Newcastle
+In talks
+They want £36.4m" only went back to a screen already seen
+      /deadline-day step 12: pressed "Lowball £29.1m"
+      ^ new ground reached, condemned doors get another chance
+      /deadline-day step 13: pressed "Back to the desk"
+      ^ "Back to the desk" only went back to a screen already seen
+  ok      /deadline-day  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

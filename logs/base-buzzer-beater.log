@@ -1,0 +1,27 @@
+      /buzzer-beater step 0: pressed "Today's ten"
+      /buzzer-beater step 1: pressed "Pause"
+      /buzzer-beater step 2: pressed "Resume"
+      ^ "Resume" only went back to a screen already seen
+      /buzzer-beater step 3: pressed "Pause"
+      ^ "Pause" only went back to a screen already seen
+      /buzzer-beater step 4: pressed "Report a problem"
+      ^ new ground reached, condemned doors get another chance
+      /buzzer-beater step 5: pressed "Resume"
+      ^ "Resume" only went back to a screen already seen
+      /buzzer-beater step 6: pressed "Pause"
+      ^ "Pause" only went back to a screen already seen
+      /buzzer-beater step 7: pressed "Report a problem"
+      ^ "Report a problem" only went back to a screen already seen
+      /buzzer-beater step 8: pressed "Cookie choices"
+      ^ new ground reached, condemned doors get another chance
+      /buzzer-beater step 9: pressed "Today's ten"
+      /buzzer-beater step 10: pressed "Pause"
+      ^ "Pause" only went back to a screen already seen
+      /buzzer-beater step 11: pressed "Resume"
+      ^ "Resume" only went back to a screen already seen
+      /buzzer-beater step 12: pressed "Hold to shoot"
+      ^ new ground reached, condemned doors get another chance
+      /buzzer-beater step 13: pressed "Next shot"
+  ok      /buzzer-beater  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

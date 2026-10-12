@@ -1,0 +1,17 @@
+      /soccer-career step 0: pressed "select:Choose nationality"
+      /soccer-career step 1: pressed "select:Choose position"
+      /soccer-career step 2: pressed "select:Choose era"
+      /soccer-career step 3: pressed "🎲 Generate Starting Potential"
+      /soccer-career step 4: pressed "🎲 Roll again"
+      /soccer-career step 5: pressed "🎲 Roll again"
+      /soccer-career step 6: pressed "🎲 Roll again"
+      /soccer-career step 7: pressed "🎲 Roll again"
+      /soccer-career step 8: pressed "🎲 Roll again"
+      /soccer-career step 9: pressed "🎲 Roll again"
+      /soccer-career step 10: pressed "🎲 Roll again"
+      /soccer-career step 11: pressed "🎲 Roll again"
+      /soccer-career step 12: pressed "🎲 Roll again"
+      /soccer-career step 13: pressed "🎲 Roll again"
+  ok      /soccer-career  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.

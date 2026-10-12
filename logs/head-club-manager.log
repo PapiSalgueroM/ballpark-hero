@@ -1,0 +1,50 @@
+      /club-manager step 0: pressed "📅
+2026-27
+Today. Real squads as of August 2026, thin ones topped up with made up youth.
+REAL DATA · Real players, made up youth fill gaps"
+      /club-manager step 1: pressed "📅 Starting 2026-27"
+      ^ "📅 Starting 2026-27" only went back to a screen already seen
+      /club-manager step 2: pressed "📅
+2026-27
+Today. Real squads as of August 2026, thin ones topped up with made up youth.
+REAL DATA · Real players, made up youth fill gaps"
+      ^ "📅
+2026-27
+Today. Real squads as of August 2026, thin ones topped up with made up youth.
+REAL DATA · Real players, made up youth fill gaps" only went back to a screen already seen
+      /club-manager step 3: pressed "🌍
+World editor
+Optional. Move any club to any league first: Celtic in the Premier League, your own super league."
+      ^ new ground reached, condemned doors get another chance
+      /club-manager step 4: pressed "Dundee United"
+      /club-manager step 5: pressed "All nations"
+      ^ "All nations" only went back to a screen already seen
+      /club-manager step 6: pressed "📅 Starting 2026-27"
+      ^ "📅 Starting 2026-27" only went back to a screen already seen
+      /club-manager step 7: pressed "📅
+2026-27
+Today. Real squads as of August 2026, thin ones topped up with made up youth.
+REAL DATA · Real players, made up youth fill gaps"
+      ^ "📅
+2026-27
+Today. Real squads as of August 2026, thin ones topped up with made up youth.
+REAL DATA · Real players, made up youth fill gaps" only went back to a screen already seen
+      /club-manager step 8: pressed "🌍
+World editor
+Optional. Move any club to any league first: Celtic in the Premier League, your own super league."
+      ^ "🌍
+World editor
+Optional. Move any club to any league first: Celtic in the Premier League, your own super league." only went back to a screen already seen
+      /club-manager step 9: pressed "Dundee United"
+      ^ "Dundee United" only went back to a screen already seen
+      /club-manager step 10: pressed "Cancel"
+      ^ "Cancel" only went back to a screen already seen
+      /club-manager step 11: pressed "Celtic"
+      ^ new ground reached, condemned doors get another chance
+      /club-manager step 12: pressed "All nations"
+      ^ "All nations" only went back to a screen already seen
+      /club-manager step 13: pressed "📅 Starting 2026-27"
+      ^ "📅 Starting 2026-27" only went back to a screen already seen
+  ok      /club-manager  14 interactions clean
+
+Played 1 games. 0 findings, 0 the harness could not drive.
