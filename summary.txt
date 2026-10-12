@@ -1,0 +1,5 @@
+proveAll exit=0 1304s | simUsRivalSense: 76 checks, 0 failed (full size)
+proveCutdrawnhl exit=1 1416s | simUsRivalSense: 76 checks, 4 failed (full size), red sections: P1, P2
+proveCutdrawmlb exit=1 1417s | simUsRivalSense: 76 checks, 4 failed (full size), red sections: P1, P2
+proveLiftcard exit=1 1003s | simUsRivalSense: 76 checks, 5 failed (full size), red sections: M.F5, H.F5, L
+proveTickdraws exit=1 966s | simUsRivalSense: 76 checks, 4 failed (full size), red sections: P1, P2

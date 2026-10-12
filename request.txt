@@ -1,0 +1,5 @@
+proveAll: RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl node scripts/simUsRivalSense.mjs
+proveCutdrawmlb: RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl US_RIVAL_CONTROL=cutdrawmlb node scripts/simUsRivalSense.mjs
+proveCutdrawnhl: RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl US_RIVAL_CONTROL=cutdrawnhl node scripts/simUsRivalSense.mjs
+proveLiftcard: RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl US_RIVAL_CONTROL=liftcard node scripts/simUsRivalSense.mjs
+proveTickdraws: RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl US_RIVAL_CONTROL=tickdraws node scripts/simUsRivalSense.mjs
