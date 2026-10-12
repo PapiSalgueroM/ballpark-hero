@@ -106,6 +106,7 @@
  * Run: node scripts/simClubManagerSlots.mjs
  */
 import './lib/seedRandom.mjs';
+import { expandPackedWorldRosterState } from './qa/managerWorldRosterDigest.cjs';
 import { execSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
@@ -349,7 +350,7 @@ function playOne(s) {
     message, player and reference; it drops only the label's number. */
 const GENERATED_ID = /"(desk-\d+-\d+-appeal-)?((?:youth|sc|pr|pq|msg)-[a-z0-9-]+)"/g;
 const digest = s => {
-  const { h2h, ...rest } = s;
+  const { h2h, ...rest } = expandPackedWorldRosterState(s);
   const seen = new Map();
   // Appeals embed the player's id; retain their kind, season and week.
   return JSON.stringify(rest).replace(GENERATED_ID, (_m, prefix, id) => {

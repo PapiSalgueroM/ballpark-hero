@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
-  oppRosterFor, projectedXIAvg, yearsOn, worldSeasonLabel,
+  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, yearsOn,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf, sellValue,
 } from '@/lib/clubManager';
@@ -54,7 +54,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   const salePays = saleRatioMen ? career.squad.reduce((s, p) => s + sellValue(p), 0) : 0;
   const xiAvg = isMyCustom
     ? (roster.length ? Math.round([...roster].sort((a, b) => b.r - a.r).slice(0, 11).reduce((s, p) => s + p.r, 0) / Math.min(11, roster.length)) : null)
-    : projectedXIAvg(clubName, onYears, career.eraId);
+    : worldRosterXIAvg(career, clubName);
   const squadValue = useMemo(() => roster.reduce((s, p) => s + p.v, 0), [roster]);
   /* Round 145: the board line quotes the real league demand for this club,
      lowercased into the sentence, instead of a raw "top N" rank. */
