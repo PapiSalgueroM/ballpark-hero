@@ -1,0 +1,12 @@
+# Round 1311 fixer: the eleven harnesses that read ClubManagerHelp.tsx (five of them also read ClubManagerSeasonSummary.tsx)
+simAcademy: TMPDIR=$(mktemp -d) node scripts/simAcademy.mjs
+simClubManagerALeague: TMPDIR=$(mktemp -d) node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: TMPDIR=$(mktemp -d) node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: TMPDIR=$(mktemp -d) node scripts/simClubManagerMeters.mjs
+simClubManagerScore: TMPDIR=$(mktemp -d) node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: TMPDIR=$(mktemp -d) node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: TMPDIR=$(mktemp -d) node scripts/simCmVarLedger.mjs
+simEras: TMPDIR=$(mktemp -d) node scripts/simEras.mjs
+simPress: TMPDIR=$(mktemp -d) node scripts/simPress.mjs
+simRoles: TMPDIR=$(mktemp -d) node scripts/simRoles.mjs
+simWilderness: TMPDIR=$(mktemp -d) node scripts/simWilderness.mjs

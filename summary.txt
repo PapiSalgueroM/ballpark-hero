@@ -1,0 +1,11 @@
+simClubManagerALeague exit=0 9s | simClubManagerALeague: all checks passed
+simClubManagerMeters exit=0 31s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerScore exit=0 96s | ALL SEASON SCORE CHECKS PASSED
+simCmLeagueFixtures exit=0 14s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+simClubManagerBudget exit=0 157s | simClubManagerBudget: PASS
+simAcademy exit=0 342s | ALL ACADEMY CHECKS PASSED
+simEras exit=0 1112s | ALL ERA AND AGEING CHECKS PASSED
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simRoles exit=0 1379s | ALL ROLE CHECKS PASSED
+simPress exit=0 2149s | ALL PRESS AND TEAM TALK CHECKS PASSED
