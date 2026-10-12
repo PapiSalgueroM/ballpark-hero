@@ -483,6 +483,28 @@ async function engine(label, root, patches = []) {
  *            is still "not zero" (the tick under accVar below): the gate's own seed set reads 3, and
  *            another seed set could read none. OWED to the lead or to Round 1303's owner: more careers on
  *            that arm or a floor from measured headroom. Not changed here.
+ *
+ * THE FIX PASS OF ROUND 1306, MEASURED on a GitHub runner, 2026-10-12, seed set 0 (remote check r1306-fx1,
+ * head 3c12797b, BOOK_BASE at c9a1f86a; the other seed sets are named in results-g/fix-1306.md). Every check
+ * of the pass is exact, so there is no band: the numbers are what each had to hold and what its control did.
+ *   thin (vi)    single matches of clubs with no eleven judged row by row: 9,860 on the full fleet, 2,326 of
+ *            them clean sheets, 4,313 credits to named men of a back line; 2,256, 572 and 998 on the default
+ *            fleet. No club entry was left out for a roster that moved inside the entry (0 and 0). Controls on
+ *            the default fleet: thinbacks 3,395 failures in thin, nobacks 1,155 in thin, allbacks 898 in law
+ *            (and thin (iv) with it under BOOK_BASE); cleanside, which shares the anchor, reads 336 where it
+ *            read 129, because a defender of the side that did not score now breaks his club's bound too.
+ *   thin (vii)   the module's partial eleven against the engine's eleven on 671 rosters and against the
+ *            harness's own reading on 313 with no eleven (114 and 70 on the default fleet). Control places433:
+ *            192 failures in thin. Two older controls read more for the new checks and still turn thin
+ *            red alone: thinsheet 87 where it read 17 (the single match against me), nofill 64 where it read
+ *            1 (a partial eleven with no shirt is not the harness's reading).
+ *   oldsave      6,007 checks with BOOK_BASE (4,129 without): six saves with no book, five of them on a late
+ *            book. Control goallesswhole: 3 failures, all three the goalless save's. (vi): three seasons in
+ *            play written by the base commit with its book and carried on, two of them in a league with
+ *            clubs that have no eleven. Control stampv2: 4 failures in oldsave (the reader refuses each of
+ *            the three, so the transition is not tried) and thin (iv) with it.
+ * After the pass the harness holds 41 controls. Wall time on a runner: full fleet with BOOK_BASE about 228
+ * seconds, default fleet 63 (84 with BOOK_BASE).
  * Every control of the harness FIRED for its own section and no other (or with the sections its line names) on
  * seed set 0, the 21 of Round 1229 among them, after step (b) (r1306-b1, r1306-c1) and the new ones after the
  * step that added them. Wall time on a runner: full fleet 100 to 170 seconds, default 42 to 60.
