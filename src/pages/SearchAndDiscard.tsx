@@ -325,11 +325,10 @@ export default function SearchAndDiscard() {
         )}
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType={SLUG} />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType={SLUG} />}
           pageHasOwnH1
           title="Search and Discard: The Squad Building Duel"
           description="Two managers, one shared pool of real footballers, the same 4-3-3 each. Search three players, keep one, discard two from the whole game, and settle the draft in a simulated 38 game season with head to head derbies. Versus the CPU or pass and play on one screen."

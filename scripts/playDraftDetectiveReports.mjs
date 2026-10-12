@@ -160,9 +160,9 @@ async function walk(width, height) {
         dialogs: Array.from(document.querySelectorAll('[role="dialog"]')).map(panel => ({ state: panel.getAttribute('data-state'), focused: panel.contains(document.activeElement), text: panel.textContent.slice(0, 300) })) }));
       throw error;
     }
-    await page.getByRole('button', { name: 'Report', exact: true }).click();
+    await page.locator('[data-seo-content] > [data-no-prerender]').getByRole('button', { name: 'Report a problem', exact: true }).click();
     await page.getByRole('button', { name: 'Other', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Describe what is wrong with this question' }).fill('Fictional offline fixture report');
+    await page.getByRole('textbox', { name: 'Describe the problem' }).fill('Fictional offline fixture report');
     await page.getByRole('button', { name: 'Submit Report', exact: true }).click();
     await page.getByText('Thanks for reporting!', { exact: true }).waitFor();
     const report = reports.at(-1);

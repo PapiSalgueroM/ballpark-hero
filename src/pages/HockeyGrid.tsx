@@ -413,9 +413,7 @@ const HockeyGrid = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="hockey-grid" />
-        </div>
+
 
         {/* Round 358: the archive is reachable from the game it belongs to,
             so it is part of the site rather than a page only a sitemap knows. */}
@@ -428,6 +426,7 @@ const HockeyGrid = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="hockey-grid" />}
           pageHasOwnH1
           title="NHL Franchise Grid | Daily Hockey Team Grid"
           description="A 3x3 grid puzzle where each cell needs an NHL player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 500 points, 300 goals or 1000 games played."

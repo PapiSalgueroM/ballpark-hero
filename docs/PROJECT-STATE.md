@@ -1,3 +1,20 @@
+## Game reporting and Player Bingo Source candidate, 2026-10-11
+
+Branch `codex/game-report-details`, based on main `4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5`. Source authoring only so far. The dedicated GitHub runner owns all type, unit, build, harness and browser execution. G owns integration and publication. This candidate is not a live-site claim.
+
+Both report forms now require typed details, retain relay and direct-insert fallback, and include the route, Eastern day, UTC submission time, bounded game details and small browser diagnostics. The production entry filename identifies the actual build. The shared context stays valid JSON below the relay's existing 1500-character email budget, puts game fields before optional diagnostics, and flags shortened game state. It reads no account or browser storage. The privacy disclosure follows the actual payload.
+
+The game control is above the guide, after play. Seventy-five existing page controls move there with their exact original game type and context props held. Three child boards keep their own contextual control; archives with no guide keep the after-content fallback. The footer control remains available. NBA Perfect Season reports now carry phase, mode, draft slots, squad, rerolls and result. Player Bingo reports retain the last rejected card's identity and tile after advancing.
+
+Vitinha's reported rejection was reproduced at the Source/data boundary: the current PSG midfielder is a 2026 row, the title map stopped at 2025, and the existing age/name guard merged a separate Portuguese forward's history. The update adds PSG's verified 2026 title and scopes the extra nationality/role identity guard to Vitinha. Other players retain the prior position-history behavior. No database row or real statistic was invented or changed. Title and identity provenance is recorded below.
+
+- UEFA, 2026 final and winning lineup: https://www.uefa.com/uefachampionsleague/news/02a5-20c02e59f219-15e92acdc717-1000--paris-retain-champions-league-holders-edge-arsenal-on-pena/
+- PSG, second consecutive title: https://www.psg.fr/en/content/pr-paris-saint-germain-win-the-champions-league-for-the-second-successive-season
+- Midfielder identity: https://www.psg.fr/en/players/vitinha and https://www.uefa.com/uefachampionsleague/clubs/players/250101444--vitinha/
+- Forward identity: https://genoacfc.it/2024/02/01/vitinha-ufficiale-il-colpo-di-mercato-del-genoa/ and https://www.fpf.pt/Jogadores/Jogador/playerId/797077 (official indexed text, direct HTTP403 retained).
+
+The bare NBA email provides no action, symptom or replayable session. No specific NBA failure or logic fix is claimed. New checks exercise both report forms, fallback and retry, exact context bounds, placement, actual NBA draft state, retained Vitinha rows and effective title/identity controls. Remote built-page checks cover NBA and Bingo at 320, 390 and 1440 pixels, the below-guide negative control, and the existing Dart Draft/Stat Detective report journey. Full production SEO, all rebuilt readers, source/package holds and complete failed evidence remain required before G can accept this candidate.
+
 ## Release AW LIVE, 2026-10-11 20:55 EDT: VAR in Club Manager (goals, in the competitions that really use it), and eight of the other lane's pull requests for Soccer Career (pay by age and form from 30, veteran contract talks, the agent review, the agent brief, a national team comeback, an announced farewell season)
 
 Claude lane (session G). main ee0ec4b8, deployment cd8577d0-5d1e-41f5-8423-908931ff559a, entry index-BMYYIgf0.js (was index-BXY5no68.js, Release AV,

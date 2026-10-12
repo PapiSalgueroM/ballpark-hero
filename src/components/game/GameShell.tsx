@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import { GameReportContext } from '@/components/game/GameReportContext';
 
 interface GameShellProps {
   /** Two width variants only: narrow (max-w-2xl) for 1-2 column comparison/card games,
@@ -33,6 +34,8 @@ interface GameShellProps {
    *  Defaults to false so pages with own report flows keep one control.
    */
   showReportQuestion?: boolean;
+  /** Archive pages without a guide keep their report below the content. */
+  reportPlacement?: 'guide' | 'after-content';
   /** Override the report game_type if slug naming cannot be inferred from the
    *  route path. */
   reportGameType?: string;
@@ -57,6 +60,7 @@ export function GameShell({
   className,
   help = 'auto',
   showReportQuestion = false,
+  reportPlacement = 'guide',
   reportGameType,
   reportGameContext,
 }: GameShellProps) {
@@ -64,10 +68,14 @@ export function GameShell({
   const TitleHeading = headingLevel === 2 ? 'h2' : 'h1';
 
   return (
-    /* Round 306: the id the skip link points at. The doc comment above always
+    <GameReportContext.Provider value={{
+      gameType: reportGameType || pathname.replace(/^\//, ''),
+      gameContext: reportGameContext,
+    }}>
+    {/* Round 306: the id the skip link points at. The doc comment above always
        promised it; the JSX never had it, so on 69 game pages the site's one
        keyboard affordance focused nothing. tabIndex -1 so the jump moves real
-       focus, not just the scroll. */
+       focus, not just the scroll. */}
     <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
       <GameNavbar />
       <div
@@ -113,7 +121,7 @@ export function GameShell({
           </header>
         )}
         {children}
-        {showReportQuestion && (
+        {showReportQuestion && reportPlacement === 'after-content' && (
           <div className="mt-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
               Report a problem
@@ -130,6 +138,7 @@ export function GameShell({
             screenshotted. simSingleFooter enforces the rule now. */}
       </div>
     </main>
+    </GameReportContext.Provider>
   );
 }
 

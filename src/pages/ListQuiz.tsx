@@ -399,11 +399,10 @@ const ListQuiz = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="list-quiz" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="list-quiz" />}
           pageHasOwnH1
           title="Name Them All: Sports List Quizzes"
           description="Timed recall quizzes built on real records: champions, MVPs and title winners across ten sports. Play relaxed or race a three minute clock."

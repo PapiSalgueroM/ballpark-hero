@@ -237,6 +237,7 @@ export default function Olympics() {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="olympics" gameContext={{ athleteName: athlete.name }} />}
           pageHasOwnH1
           title="Olympic Athlete Trivia | DoUKnowBall"
           description="Guess the mystery Olympic athlete from progressive clues about their sport, medal count, nationality, and iconic moments. Covers Summer and Winter Games."
@@ -257,9 +258,7 @@ export default function Olympics() {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="olympics" gameContext={{ athleteName: athlete.name }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

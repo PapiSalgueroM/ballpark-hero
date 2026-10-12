@@ -341,11 +341,10 @@ export default function NbaStatLine() {
         )}
 
         {(phase === 'setup' || phase === 'playing' || phase === 'done') && <AdBanner slot="7540487748" format="horizontal" className="mt-8" />}
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType={SLUG} />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType={SLUG} />}
           pageHasOwnH1
           title="NBA Stat Line: Build the Target Per 36 Line"
           description="A target per-36 stat line from real NBA history, five player seasons of your choosing, and one minutes weighted combined line scored 0 to 100 by similarity. A shared daily target with one scored run, plus an unlimited mode with a fresh target every time."

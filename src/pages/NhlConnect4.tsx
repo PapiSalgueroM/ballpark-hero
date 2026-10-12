@@ -269,6 +269,7 @@ const NhlConnect4 = () => {
         />
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nhl-connect-4" gameContext={{ board: board?.id }} />}
           pageHasOwnH1
           title="NHL Connect 4 | DoUKnowBall"
           description="Connect four hockey answers in a row: every cell needs a player matching both the franchise column and the trophy or milestone row."
@@ -290,9 +291,7 @@ const NhlConnect4 = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nhl-connect-4" gameContext={{ board: board?.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

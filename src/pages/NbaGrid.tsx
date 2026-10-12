@@ -413,9 +413,7 @@ const NbaGrid = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-grid" />
-        </div>
+
 
         {/* Round 354: the archive is reachable from the game it belongs to, so
             it is part of the site rather than a page only a sitemap knows. */}
@@ -428,6 +426,7 @@ const NbaGrid = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-grid" />}
           pageHasOwnH1
           title="NBA Franchise Grid | Daily Basketball Team Grid"
           description="A 3x3 grid puzzle where each cell needs an NBA player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 10,000 points, 5,000 rebounds or 900 games played."

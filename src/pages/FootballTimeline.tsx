@@ -170,6 +170,7 @@ const FootballTimeline = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="football-timeline" gameContext={{ puzzleId: puzzle.id }} />}
           pageHasOwnH1
           title="Pro Football Timeline | DoUKnowBall"
           description="A daily puzzle where you order 5 NFL players by the year they were drafted. Test your football knowledge with this chronological challenge."
@@ -190,9 +191,7 @@ const FootballTimeline = () => {
         />
 
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="football-timeline" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
 

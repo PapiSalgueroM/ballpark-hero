@@ -275,6 +275,7 @@ const NbaChain = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-chain" gameContext={{ lastPlayer, chainLength: score }} />}
           pageHasOwnH1
           title="Pro Basketball Chain Game | DoUKnowBall"
           description="Chain together players who shared a team. How long can you keep the chain going before you get stuck?"
@@ -296,9 +297,7 @@ const NbaChain = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-chain" gameContext={{ lastPlayer, chainLength: score }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

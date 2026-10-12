@@ -644,11 +644,10 @@ const PerfectSeasonNhl = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="perfect-season-nhl" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="perfect-season-nhl" />}
           pageHasOwnH1
           title="82-0 NHL Perfect Season Challenge"
           description="Draft across every era of NHL history. The wheel decides which franchise and decade you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games."

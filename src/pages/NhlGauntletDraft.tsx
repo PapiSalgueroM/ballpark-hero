@@ -26,11 +26,10 @@ export default function NhlGauntletDraft() {
         <GauntletBoard config={NHL_GAUNTLET_CONFIG} />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nhl-gauntlet-draft" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nhl-gauntlet-draft" />}
           pageHasOwnH1
           title="Gauntlet Draft: NHL, Draft Your Lines, Win the Cup"
           description="The NHL draft mode: each of the eleven spots in the lineup, two forward lines, two defense pairs and a goalie, deals five real players from a star to a bargain, you keep one per spot, and the finished lineup runs a five round playoff against ever stronger invented opposition. Players and ratings come from real 2026-27 rosters, with skaters rated off their scoring and goalies off their save percentage and wins. One shared daily draft, unlimited redrafts, and a fully deterministic run so the draft is the game."

@@ -146,6 +146,7 @@ const AflHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="afl-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="AFL Higher or Lower | DoUKnowBall"
           description="Two footy legends, side by side. Which one kicked more career goals? From Gordon Coventry in the 1920s to Buddy Franklin, the whole history of the game is in the pool."
@@ -165,9 +166,7 @@ const AflHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="afl-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

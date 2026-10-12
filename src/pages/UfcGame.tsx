@@ -159,6 +159,7 @@ const UfcGame = () => {
         </div>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="ufc" gameContext={{ targetFighter: targetFighter?.name }} />}
           pageHasOwnH1
           title="UFC Guesser: Guess the MMA Fighter | DoUKnowBall"
           description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."
@@ -180,9 +181,7 @@ const UfcGame = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="ufc" gameContext={{ targetFighter: targetFighter?.name }} />
-        </div>
+
         <GameNav />
 
         <UfcHowToPlay open={showRules} onOpenChange={setShowRules} />

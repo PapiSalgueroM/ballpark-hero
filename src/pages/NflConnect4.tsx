@@ -278,6 +278,7 @@ const NflConnect4 = () => {
         />
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nfl-connect-4" gameContext={{ board: board?.id }} />}
           pageHasOwnH1
           title="NFL Connect 4 | DoUKnowBall"
           description="Connect four football answers in a row: every cell needs a player matching both the franchise column and the achievement row."
@@ -299,9 +300,7 @@ const NflConnect4 = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nfl-connect-4" gameContext={{ board: board?.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

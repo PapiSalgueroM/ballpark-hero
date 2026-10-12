@@ -153,6 +153,7 @@ const NflHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nfl-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="NFL Higher or Lower | DoUKnowBall"
           description="A different stat every round: passing yards, passing TDs, rushing yards, receiving yards, receptions and touchdowns scored. Which NFL star has the bigger career number?"
@@ -172,9 +173,7 @@ const NflHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nfl-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

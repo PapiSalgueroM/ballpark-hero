@@ -11,10 +11,9 @@
    and the target.
 
    What it holds (source read as code, comments and strings stripped):
-     1. ReportQuestion builds its context from window.location.pathname and
-        getTodayET(), spreads the page's fields over them, and sends THAT
-        object on both delivery paths (the relay function and the direct
-        insert), with no path still sending the bare page object.
+     1. Both report forms call the shared context helper, which retains the
+        route, Eastern date, UTC timestamp and bounded explicit game fields.
+        Each sends that same object on the relay and direct insert paths.
      2. Footle's element passes mode and tier and no longer passes difficulty.
      3. An inventory, printed and not failed: how many pages pass an empty
         context or none at all. Measured on 2026-09-01 so the next reader
@@ -23,7 +22,7 @@
         and limited game context already sent by the shared report flow.
 
    Negative controls (house rule: prove each check can fail):
-     SIM_REPORT_CONTROL=nopath   deletes the path line from the component
+     SIM_REPORT_CONTROL=nopath   deletes the path line from the helper
                                  source in memory; section 1 must go red.
      SIM_REPORT_CONTROL=footle   restores Footle's old element in memory;
                                  section 2 must go red.
@@ -51,21 +50,36 @@ const asCode = src => src
   .replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, '""');
 
 section = 1;
-console.log('1) ReportQuestion sends the route and the Eastern date with every report, on both delivery paths');
+console.log('1) Both report forms use the bounded shared context on both delivery paths');
 {
-  let code = asCode(fs.readFileSync(path.join(ROOT, 'src/components/game/ReportQuestion.tsx'), 'utf8'));
+  const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
+  let helper = asCode(read('src/lib/reportContext.ts'));
   const pathLine = /path:\s*window\.location\.pathname/;
   if (CONTROL === 'nopath') {
-    if (!pathLine.test(code)) abort('control cannot run: the path line it is meant to delete is not there');
-    code = code.replace(pathLine, '');
+    if (!pathLine.test(helper)) abort('control cannot run: the shared path line it is meant to delete is not there');
+    const changed = helper.replace(pathLine, '');
+    if (changed === helper) abort('control cannot run: deleting the path line changed nothing');
+    helper = changed;
   }
-  if (!pathLine.test(code)) fail('the context has no path: window.location.pathname');
-  if (!/date:\s*getTodayET\(\)/.test(code)) fail('the context has no date: getTodayET()');
-  if (!/\.\.\.gameContext/.test(code)) fail('the page fields are not spread over the context');
-  const sends = code.match(/game_context:\s*context\b/g) || [];
-  if (sends.length < 2) fail(`the enriched context is sent on ${sends.length} delivery path(s), both the relay and the insert must send it`);
-  if (/game_context:\s*gameContext\b/.test(code)) fail('a delivery path still sends the bare page object');
-  console.log(`   path, date, spread, ${sends.length} delivery paths`);
+  if (!pathLine.test(helper)) fail('the shared context has no path: window.location.pathname');
+  if (!/date:\s*getTodayET\(\)/.test(helper)) fail('the shared context has no date: getTodayET()');
+  if (!/submittedAt:\s*new Date\(\)\.toISOString\(\)/.test(helper)) fail('the shared context has no UTC report timestamp');
+  if (!/Object\.entries\(gameContext\)/.test(helper)) fail('the shared context does not read the explicit game fields');
+  if (!/JSON\.stringify\(value\)\.length\s*<\s*CONTEXT_LIMIT/.test(helper) || !/const CONTEXT_LIMIT\s*=\s*1500/.test(helper)) fail('the context no longer fits the existing relay email budget');
+  const surfaces = [
+    ['src/components/game/ReportQuestion.tsx', /buildReportContext\(gameContext\)/],
+    ['src/components/game/ReportSiteIssue.tsx', /buildReportContext\(\{\},\s*""\)/],
+  ];
+  for (const [file, call] of surfaces) {
+    const source = read(file);
+    const imports = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const code = asCode(source);
+    if (!/import\s*\{\s*buildReportContext\s*\}\s*from ['"]@\/lib\/reportContext['"]/.test(imports) || !call.test(code)) fail(`${file} does not use the actual shared context helper`);
+    const sends = code.match(/game_context:\s*context\b/g) || [];
+    if (sends.length !== 2) fail(`${file} sends the enriched context on ${sends.length} paths, expected relay and direct fallback`);
+    if (/game_context:\s*gameContext\b/.test(code)) fail(`${file} still sends bare page fields on a delivery path`);
+    console.log(`   ${file}: shared context, ${sends.length} delivery paths`);
+  }
 }
 
 section = 2;

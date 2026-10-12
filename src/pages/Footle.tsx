@@ -473,15 +473,13 @@ const Index = () => {
         {/* Ad placement */}
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
           {/* Round 390: the mode and the tier that mode actually used. The old
               `difficulty` was the unlimited selector, which reads "easy" on
               every daily report ever filed. */}
-          <ReportQuestion gameType="footle" gameContext={{ mode, tier: mode === 'daily' ? dailyTier : difficulty, targetPlayer: targetPlayer?.name }} />
-        </div>
 
         {/* Game Navigation */}
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="footle" gameContext={{ mode, tier: mode === 'daily' ? dailyTier : difficulty, targetPlayer: targetPlayer?.name }} />}
           pageHasOwnH1
           title="Footle: Soccer Player Guessing Game"
           description={`Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of ${GAME_COUNT_LABEL} free sports games on DoUKnowBall.`}

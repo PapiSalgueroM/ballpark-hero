@@ -277,6 +277,7 @@ const Connections = () => {
         </div>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="connections" gameContext={{ puzzleId: puzzle?.id }} />}
           pageHasOwnH1
           title="Soccer Connections | DoUKnowBall"
           description="Sixteen soccer players hide four groups of four, tied by a club, a country, a trophy or a record. Pick four that belong together, and every wrong guess costs one of your four lives."
@@ -298,9 +299,7 @@ const Connections = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="connections" gameContext={{ puzzleId: puzzle?.id }} />
-        </div>
+
         <GameNav />
 
         <ConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />

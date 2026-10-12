@@ -400,6 +400,7 @@ const NbaLineup = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-starting-5" gameContext={{ team: currentTeam }} />}
           pageHasOwnH1
           title="Pro Basketball Starting 5 | DoUKnowBall"
           description="Build the starting five that matches all the given criteria. Tests your knowledge of NBA rosters, positions and player history."
@@ -421,9 +422,7 @@ const NbaLineup = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-starting-5" gameContext={{ team: currentTeam }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

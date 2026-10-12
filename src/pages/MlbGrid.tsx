@@ -415,9 +415,7 @@ const MlbGrid = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="mlb-grid" />
-        </div>
+
 
         {/* Round 358: the archive is reachable from the game it belongs to,
             so it is part of the site rather than a page only a sitemap knows. */}
@@ -430,6 +428,7 @@ const MlbGrid = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="mlb-grid" />}
           pageHasOwnH1
           title="MLB Franchise Grid | Daily Baseball Legends Grid"
           description="A 3x3 grid puzzle where each cell needs an MLB legend whose career satisfies both the row and column. Franchises count across relocations, and milestones include 2,000 hits, 300 home runs and 2,000 games."

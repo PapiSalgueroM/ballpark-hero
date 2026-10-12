@@ -255,6 +255,7 @@ const GuessTheGolfer = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="guess-the-golfer" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Guess The Golfer | DoUKnowBall"
           description="Six clues stand between you and a mystery major champion: era, nationality, major count, which majors, initials, first name. How few do you need?"
@@ -273,9 +274,7 @@ const GuessTheGolfer = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="guess-the-golfer" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

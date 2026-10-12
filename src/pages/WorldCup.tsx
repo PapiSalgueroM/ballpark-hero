@@ -347,6 +347,7 @@ const WorldCup = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="world-cup" gameContext={{ answer: puzzle.answer, year: puzzle.year }} />}
           pageHasOwnH1
           title="World Cup Trivia Game | DoUKnowBall"
           description="Guess the mystery World Cup player from progressive clues spanning every tournament from 1970 to 2026. Daily challenge: the same puzzle for everyone, resetting at midnight."
@@ -369,9 +370,7 @@ const WorldCup = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="world-cup" gameContext={{ answer: puzzle.answer, year: puzzle.year }} />
-        </div>
+
         <GameNav />
 
         <WorldCupHowToPlay open={showRules} onOpenChange={setShowRules} />

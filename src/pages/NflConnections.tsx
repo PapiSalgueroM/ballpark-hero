@@ -216,6 +216,7 @@ const NflConnections = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nfl-connections" gameContext={{ puzzleId: puzzle?.id }} />}
           pageHasOwnH1
           title="NFL Connections | DoUKnowBall"
           description="A daily puzzle where you group NFL players by what connects them: same franchise, same college, same draft slot, or same career milestone."
@@ -236,9 +237,7 @@ const NflConnections = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nfl-connections" gameContext={{ puzzleId: puzzle?.id }} />
-        </div>
+
         <GameNav />
 
         <NflConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />

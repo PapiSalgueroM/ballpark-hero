@@ -191,6 +191,7 @@ const WhodTheyBeat = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="whod-they-beat" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Who'd They Beat? | DoUKnowBall"
           description="A daily quiz about the other side of the trophy photo. We give you the champion and the year across the Super Bowl, NBA Finals, World Series, Stanley Cup and WNBA Finals; you name the beaten finalist. Every option is a real runner-up from the record books."
@@ -210,9 +211,7 @@ const WhodTheyBeat = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="whod-they-beat" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

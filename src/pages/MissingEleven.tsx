@@ -327,6 +327,7 @@ const MissingEleven = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="missing-eleven" gameContext={{ lineup: lineup.id }} />}
           pageHasOwnH1
           title="Missing Eleven | DoUKnowBall"
           description="A verified real Super Bowl starting lineup, offense or defense, is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
@@ -346,9 +347,7 @@ const MissingEleven = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="missing-eleven" gameContext={{ lineup: lineup.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

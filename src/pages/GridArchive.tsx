@@ -72,6 +72,7 @@ const GridArchive = ({ sport }: { sport: string }) => {
         title={`${data.label} Grid Answers: Past Daily Boards`}
         subtitle={`Past boards from ${oldest ? longDate(oldest) : 'the first day'}, with the players who solve each crossing`}
         showReportQuestion
+        reportPlacement="after-content"
         reportGameType={`${sport}-grid-archive`}
       >
         <div className="max-w-2xl mx-auto">

@@ -325,6 +325,7 @@ const FaceOff = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="face-off" gameContext={{ mode: g.mode, rival: g.difficulty, pair: g.current ? `${g.current.a.name} v ${g.current.b.name} (${g.current.category})` : null }} />}
           pageHasOwnH1
           title="Face Off | DoUKnowBall"
           description="A head to head sports stats duel on a ten second shot clock. Two athletes, one career stat, pick who has more before the rival does, across soccer, the NBA, MLB, NFL, NHL, college football, F1, tennis, golf and the AFL. Three rivals to beat and a daily duel shared by everyone."
@@ -343,9 +344,7 @@ const FaceOff = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="face-off" gameContext={{ mode: g.mode, rival: g.difficulty, pair: g.current ? `${g.current.a.name} v ${g.current.b.name} (${g.current.category})` : null }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

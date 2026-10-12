@@ -222,11 +222,10 @@ const HigherLowerTransfers = () => {
         )}
 
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="higher-lower-transfers" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="higher-lower-transfers" />}
           pageHasOwnH1
           title="Higher or Lower: Transfer Market Edition"
           description="An endless streak game built on real market values from the world of football. See one player's value, then decide if the next player is worth more or less."

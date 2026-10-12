@@ -56,6 +56,7 @@ const PlayerBingo = () => {
   const [choice, setChoice] = useState(false); // first-line bank/continue prompt is open
   const [lineFlash, setLineFlash] = useState<{ lines: number; points: number } | null>(null); // transient extra-line banner
   const [endReason, setEndReason] = useState<EndReason>(null);
+  const [lastRejected, setLastRejected] = useState<{ playerName: string; playerYear: number; playerNationality: string; playerPosition: string; playerClub: string; criterionId: string } | null>(null);
   const loadRef = useRef<{ controller: AbortController; timer: ReturnType<typeof setTimeout> } | null>(null);
 
   const criteria = useMemo(() => (data ? buildCriteria(data) : []), [data]);
@@ -108,6 +109,7 @@ const PlayerBingo = () => {
       setChoice(false);
       setLineFlash(null);
       setEndReason(null);
+      setLastRejected(null);
       setPhase('playing');
     },
     [],
@@ -207,6 +209,7 @@ const PlayerBingo = () => {
       if (linesNow > linesCompleted) setLineFlash({ lines: linesNow, points: (linesNow - linesCompleted) * 100 });
       advanceOrEnd(linesNow);
     } else {
+      setLastRejected({ playerName: current.name, playerYear: current.year, playerNationality: current.nationality, playerPosition: current.position, playerClub: current.club, criterionId: cell.id });
       setShakeId(cell.id);
       const s = strikes + 1;
       setStrikes(s);
@@ -276,6 +279,11 @@ const PlayerBingo = () => {
         title="PLAYER BINGO"
         subtitle="Complete a row, column, or diagonal, then keep the board alive for bonus lines and a blackout."
         showReportQuestion
+        reportGameContext={{
+          mode: extended ? 'extended' : 'standard', phase,
+          currentPlayer: current ? { name: current.name, nationality: current.nationality, position: current.position, club: current.club, year: current.year } : null,
+          playerIndex: pos, strikes, criterionIds: board.map(cell => cell.id), claimedCells: [...lockedIndexes], choice, endReason, lastRejected,
+        }}
         headerExtra={
           <>
             <RulesGate title="How to Play Player Bingo" floatingTrigger>

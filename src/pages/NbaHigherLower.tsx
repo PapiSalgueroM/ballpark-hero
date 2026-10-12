@@ -146,6 +146,7 @@ const NbaHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="NBA Higher or Lower | DoUKnowBall"
           description="Two NBA players, side by side. Which one scored more career points? Daily challenge and unlimited mode with streak bonuses, drawn from the all-time top 80 scorers."
@@ -166,9 +167,7 @@ const NbaHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

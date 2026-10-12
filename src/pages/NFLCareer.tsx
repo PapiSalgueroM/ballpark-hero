@@ -174,6 +174,7 @@ const NFLCareer = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nfl-career" gameContext={{ targetPlayer: targetPlayer?.name }} />}
           pageHasOwnH1
           title="NFL Career Path | DoUKnowBall"
           description="Guess the mystery NFL player from progressive career clues. Draft round, college, teams, stats, and jersey numbers."
@@ -195,9 +196,7 @@ const NFLCareer = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <NFLCareerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nfl-career" gameContext={{ targetPlayer: targetPlayer?.name }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

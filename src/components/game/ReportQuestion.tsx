@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
-import { getTodayET } from '@/lib/dateUtils';
+import { buildReportContext } from '@/lib/reportContext';
 import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';
 
 interface ReportQuestionProps {
@@ -27,19 +27,12 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleSubmit = async () => {
-    if (!reason.trim() && !details.trim()) return;
+    const text = details.trim();
+    if (!text || status === 'loading') return;
     setStatus('loading');
     try {
-      const description = [reason, details].filter(Boolean).join(': ');
-      /* Round 390: game_context is the only context an investigation ever
-         gets, and most pages send a field or two at best. The route and the
-         Eastern date go on every report from here, so a daily can be re-run
-         for the day it was reported; a page's own fields come last and win. */
-      const context: Record<string, unknown> = {
-        path: window.location.pathname,
-        date: getTodayET(),
-        ...gameContext,
-      };
+      const description = [reason, text].filter(Boolean).join(': ');
+      const context = buildReportContext(gameContext);
       // Preferred path: the report-relay edge function stores the report AND
       // emails it to the owner's inbox. If the function is unreachable, fall
       // back to the direct table insert so no report is ever lost.
@@ -82,7 +75,7 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
         title="Report an issue"
       >
         <Flag className="w-3 h-3" />
-        Report
+        Report a problem
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -90,10 +83,10 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Flag className="w-4 h-4 text-destructive" />
-              Report an Issue
+              Report a problem
             </DialogTitle>
             <DialogDescription>
-              Help us fix wrong answers or outdated info.
+              Tell us what you did and what happened. Limited game and browser details are attached to help us reproduce it.
             </DialogDescription>
           </DialogHeader>
 
@@ -126,8 +119,9 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
               <textarea
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                placeholder="Add more details (optional)..."
-                aria-label="Describe what is wrong with this question"
+                placeholder="What did you do, what happened, and what did you expect?"
+                aria-label="Describe the problem"
+                required
                 rows={3}
                 maxLength={500}
                 className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
@@ -139,10 +133,10 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
 
               <button
                 onClick={handleSubmit}
-                disabled={(!reason && !details.trim()) || status === 'loading'}
+                disabled={!details.trim() || status === 'loading'}
                 className={cn(
                   'w-full py-2.5 rounded-xl font-semibold text-sm transition-all inline-flex items-center justify-center gap-2',
-                  reason || details.trim()
+                  details.trim()
                     ? 'bg-primary text-primary-foreground hover:opacity-90'
                     : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
                 )}

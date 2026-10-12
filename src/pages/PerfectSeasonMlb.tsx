@@ -648,11 +648,10 @@ const PerfectSeasonMlb = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="perfect-season-mlb" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="perfect-season-mlb" />}
           pageHasOwnH1
           title="162-0 MLB Perfect Season Challenge"
           description="Draft across every era of baseball history. The wheel decides which team-season you draft from, one player per spin, no repeats. Then the sim decides your fate over 162 games."

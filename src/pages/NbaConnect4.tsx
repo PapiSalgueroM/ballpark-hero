@@ -251,6 +251,7 @@ const NbaConnect4 = () => {
         />
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-connect-4" gameContext={{ board: board?.id }} />}
           pageHasOwnH1
           title="Pro Basketball Connect 4 | DoUKnowBall"
           description="Red and Blue take turns on one board. Drop into a column, then name an NBA player who fits both that column and the row your piece lands in, like the Lakers and an MVP award. First to four in a row wins, and nobody can be used twice."
@@ -272,9 +273,7 @@ const NbaConnect4 = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-connect-4" gameContext={{ board: board?.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

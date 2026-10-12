@@ -327,6 +327,7 @@ const FootballDraft = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="football-draft" gameContext={{ puzzleId: puzzle.id }} />}
           pageHasOwnH1
           title="Pro Football Draft Guesser | DoUKnowBall"
           description="A daily game where you guess what round NFL players were drafted based on progressively revealed clues: college, combine stats, and more."
@@ -349,9 +350,7 @@ const FootballDraft = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="football-draft" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
 

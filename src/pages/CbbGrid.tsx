@@ -394,9 +394,7 @@ const CbbGrid = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="cbb-grid" />
-        </div>
+
 
         {/* The archive is reachable from the game it belongs to, so it is part
             of the site rather than a page only a sitemap knows about. */}
@@ -409,6 +407,7 @@ const CbbGrid = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="cbb-grid" />}
           pageHasOwnH1
           title="College Basketball Grid | Daily CBB Team Grid"
           description="A 3x3 grid puzzle where each cell needs a college basketball player who both suited up for the school in that row and reached the career achievement in that column, drawn from nearly 40,000 players across 407 programs."

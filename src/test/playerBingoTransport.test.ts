@@ -79,7 +79,7 @@ describe('Player Bingo bounded cancellable transport', () => {
     for (const group of groups) {
       const pages = history.filter(query => JSON.stringify(query.calls.find(([method]) => method === 'in')![1][1]) === JSON.stringify(group));
       expect(pages.map(query => query.calls.find(([method]) => method === 'range')![1])).toEqual(group.length === 80 ? [[0, 999], [1000, 1999]] : [[0, 999]]);
-      for (const query of pages) expect(query.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards']], ['in', ['player_name', group]], ['order', ['id', { ascending: true }]], ['range', query.calls.find(([method]) => method === 'range')![1]]]);
+      for (const query of pages) expect(query.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, nationality, position, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards']], ['in', ['player_name', group]], ['order', ['id', { ascending: true }]], ['range', query.calls.find(([method]) => method === 'range')![1]]]);
     }
     expect(transport.queries.find(query => query.phase === 'wc')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, world_cup_year, nationality']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]]);
     expect(transport.queries.find(query => query.phase === 'awards')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, rank, award_type']]]);

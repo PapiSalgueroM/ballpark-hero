@@ -624,11 +624,10 @@ const WhoAmI = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="who-am-i" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="who-am-i" />}
           pageHasOwnH1
           title="Who Am I? The Secret Footballer Game"
           description="Guess the secret footballer. You can search any soccer player, big name or obscure, and every guess gets a similarity score from 0 to 100 built on nationality, position, club, age and market value. Score gets higher the closer you are. 100 means you found him."

@@ -234,6 +234,7 @@ const BaseballCareer = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="baseball-career" gameContext={{ puzzleId: puzzle.id }} />}
           pageHasOwnH1
           title="Baseball Career Path | DoUKnowBall"
           description="A daily game where you guess a mystery baseball player from progressive clues: position, draft info, teams, stats, and awards."
@@ -255,9 +256,7 @@ const BaseballCareer = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="baseball-career" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
 
