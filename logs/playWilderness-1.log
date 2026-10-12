@@ -1,0 +1,19 @@
+1) Take a job, then lose it
+  PASS  the career is running
+  PASS  the save was doctored to a board about to pull the trigger
+  PASS  the board ran out of patience and the wilderness opened
+2) The wilderness has a way onward
+  PASS  the screen says he is out of work
+  PASS  there is a way to wait for the phone
+  PASS  starting over is still offered, it is just no longer the only door
+3) Waiting brings jobs in
+  PASS  a club called after waiting (1 on the table)
+  PASS  the offer states what the board will expect
+  PASS  the club that sacked him did not call back (Preston North End)
+4) Taking the job puts him back to work
+  PASS  the sacked screen is gone
+  PASS  the hub is showing the new club (Preston North End)
+  PASS  the wilderness closed behind him
+  PASS  no real page errors on the walk (clean)
+
+playWilderness: green. Getting sacked is a chapter now, not the last page.

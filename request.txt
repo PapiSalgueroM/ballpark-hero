@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 step 1, request B: the owed walks on 1f99084f (origin/main 21941630, Release AY, merged), served, one at a time
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playGmPress: ENGINES=chromium node scripts/playGmPress.mjs
+playWilderness-1: ENGINES=chromium node scripts/playWilderness.mjs
+playWilderness-2: ENGINES=chromium node scripts/playWilderness.mjs
+playWilderness-3: ENGINES=chromium node scripts/playWilderness.mjs
+playClubManager-1: ENGINES=chromium node scripts/playClubManager.mjs
+playClubManager-2: ENGINES=chromium node scripts/playClubManager.mjs
+playClubManager-3: ENGINES=chromium node scripts/playClubManager.mjs

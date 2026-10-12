@@ -1,0 +1,10 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playNationJob exit=1 36s | Node.js v24.21.0
+playFoHub exit=1 47s | playFoHub: 26 failures
+playGmPress exit=1 30s | playGmPress: 2 failures
+playWilderness-1 exit=0 17s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+playWilderness-2 exit=0 59s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+playWilderness-3 exit=0 16s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+playClubManager-1 exit=0 272s | Played Club Manager through its own screens. 0 findings.
+playClubManager-2 exit=0 269s | Played Club Manager through its own screens. 0 findings.
+playClubManager-3 exit=0 276s | Played Club Manager through its own screens. 0 findings.
