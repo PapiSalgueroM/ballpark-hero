@@ -1,0 +1,5 @@
+#!serial
+m-ledger: ([ -f .git/MERGE_HEAD ] || (git fetch -q origin r1313-us-rival-b && git -c user.email=r@x -c user.name=r merge --no-commit --no-ff FETCH_HEAD >/dev/null)) && echo "merged $(git rev-parse --short MERGE_HEAD)" && git diff --cached --name-only | wc -l && node scripts/simUsSeasonLedger.mjs
+m-controls: ([ -f .git/MERGE_HEAD ] || (git fetch -q origin r1313-us-rival-b && git -c user.email=r@x -c user.name=r merge --no-commit --no-ff FETCH_HEAD >/dev/null)) && bash .rc/x/allcontrols.sh
+m-plan: ([ -f .git/MERGE_HEAD ] || (git fetch -q origin r1313-us-rival-b && git -c user.email=r@x -c user.name=r merge --no-commit --no-ff FETCH_HEAD >/dev/null)) && node scripts/simUsPlanSeason.mjs
+m-tsc: ([ -f .git/MERGE_HEAD ] || (git fetch -q origin r1313-us-rival-b && git -c user.email=r@x -c user.name=r merge --no-commit --no-ff FETCH_HEAD >/dev/null)) && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
