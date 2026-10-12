@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+base-simWritesAreSent: git worktree add -q /tmp/base 999db1e4 && cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && node_modules/.bin/vite build > $RC_OUT/base-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4174 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ENGINES=chromium node scripts/simWritesAreSent.mjs
