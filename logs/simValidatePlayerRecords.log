@@ -1,0 +1,31 @@
+1) every club string the map names exists in the table
+   35 club strings across 30 clubs, 35 found in the table
+2) the impostors exist and are refused
+   20 impostor clubs present in the table, 0 of them accepted
+3) the truth battery
+   14/14 true pairs confirmed without the model, 0/10 false pairs wrongly confirmed
+4) the club and the position come from one row, because a name is not a person
+   "Paulinho" is at Tottenham Hotspur as a Central Midfield; another Paulinho is a Left Winger
+5) a records confirm still cannot become a records refusal
+   records block confirms only, the model still runs after it, the refusal still exists
+6) the armband is a column, not part of the name
+   0 names still carrying an annotation, 102 rows flagged as captain
+7) the dropdown and the validator name the same thirty clubs
+   30 clubs compared, 0 disagreement(s)
+8) a nation slot shows proven internationals in the eight names on screen
+   Argentina "mar": 8 shown, proven internationals 6 -> 8
+   Argentina "san": 8 shown, proven internationals 2 -> 3
+   Argentina "car": 8 shown, proven internationals 0 -> 0
+   England "mar": 8 shown, proven internationals 2 -> 2
+   England "san": 4 shown, proven internationals 0 -> 0
+   England "car": 8 shown, proven internationals 0 -> 0
+   Japan "mar": 2 shown, proven internationals 0 -> 0
+   Japan "san": 4 shown, proven internationals 2 -> 2
+   Spain "mar": 8 shown, proven internationals 4 -> 5
+   Spain "san": 8 shown, proven internationals 0 -> 0
+   Spain "car": 8 shown, proven internationals 1 -> 1
+   1 query/nation pairs returned an empty pool and were not counted
+   across 11 queries: 17 proven names in the top 8 before, 21 after, improved on 3
+   25/25 nations still have a fillable pool
+
+simValidatePlayerRecords: green. The records answer first and can only ever confirm.
