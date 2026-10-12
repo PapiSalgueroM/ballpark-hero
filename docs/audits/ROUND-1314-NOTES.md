@@ -21,11 +21,11 @@ of the walks drive). Seconds are the runner's.
 | simGmCalendar | s1a: exit 1, 1 s | `Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123` (6 failures: seasonDays and monthGrid of Everton, Augsburg, Norwich City) | Club Manager's calendar did not move in the lift into shared modules | STALE pin, mover not yet found | Round 1316 |
 | simGmDealTableFixture | s1a: exit 1, 1 s | `section B no longer replays (720 lines recorded, 720 now)`, `section C no longer replays (101 lines recorded, 126 now)` | Club Manager's deal table did not move in the lift | STALE pin: the modern market moved; section A still replays | Round 1316 |
 | simGmStaff | s1a: exit 1, 2 s | `Arsenal natural: line 5 of 81 differs` (16 failures, all section 1; `day one levels: 846 clubs hash 07703bf4bf47a880, the fixture has 760 at e67d11c154e316d0`) | Club Manager's staff desk did not move in the lift | STALE pin: picks by index and an all club hash move with every league added | Round 1316 |
-| playNationJob | s1b: PENDING | | You can be offered your country's job and take it | | 3.5, done (proof pending) |
-| playFoHub | s1b: PENDING | | The four front office hubs open on the boxes they name | | Round 1317 |
-| playGmPress | s1b: PENDING | | What you say at the podium softens next season's mandate | | Round 1317 |
-| playWilderness | s1b: PENDING (three runs) | | A sacked manager has a way back into work | COIN TOSS (unseeded page) | 3.6 |
-| playClubManager | s1b: PENDING (three runs) | | A full season plays through the real screens, signings and the review included | COIN TOSS (unseeded page) | 3.7 |
+| playNationJob | s1b: exit 1, 36 s | `TimeoutError: locator.click: Timeout 30000ms exceeded ... waiting for locator('text=Take the job')` at line 47 | You can be offered your country's job and take it | STALE walk, two presses: the Round 1052 sentence under the title takes 'text=Premier League', and the Round 928 "Managers" switcher takes the MANAGER substring | 3.5, done |
+| playFoHub | s1b: exit 1, 47 s, 26 failures | `NFL: the hub opens on five boxes (saw 9)`, then the same on MLB, NBA and NHL; NBA also `the roster box names Nikola Jokic` and `a fit squad puts the dot out` | The four front office hubs open on the boxes they name | STALE walk: nine boxes since the GM desks (Staff, Re-sign desk, Draft picks, Trade desk), each box carries 4 lines; the NBA roster box obeys Round 722's floor line. Release AY's Game Day tile did NOT change the NFL hub's count or titles (Roster, Free agency, Trades, This week, Standings and the four desk boxes) | Round 1317 |
+| playGmPress | s1b: exit 1, 30 s, 2 failures | step 4: `the offseason set a new mandate` AND `the feed credits the press answer for the softer bar` | What you say at the podium softens next season's mandate | PENDING the probe of correction 1 (request r1314-wild1, label gmPressProbe) | Round 1317 |
+| playWilderness | s1b: exit 0 three times, 17, 59 and 16 s | none on these runs (rAXg-F-J5 red at 98 s) | A sacked manager has a way back into work | COIN TOSS (unseeded page) | 3.6 |
+| playClubManager | s1b: exit 0 three times, 272, 269 and 276 s; each "played the season out", 2 signings, 43 to 44 windows | none on these runs (Round 1304: 5 red in 22) | A full season plays through the real screens, signings and the review included | COIN TOSS (unseeded page; a sack before the first signing) | 3.7 |
 
 ## Why the list of thirteen is complete
 
@@ -80,3 +80,18 @@ cushiongain 1).
 `r1314-s2` on bcbc7f27: simHarnessAnchors exit 0 (45 s), simNoRivalNames exit 0 (23 s, 0 findings),
 simNoInventedQuotes exit 0 (30 s). `git diff --stat origin/main -- src public index.html package.json
 package-lock.json vite.config.ts tsconfig.app.json` prints nothing at every push (merges of main aside).
+
+### 3.5 playNationJob (commit 0cc1de05)
+
+The league press is the league tile (`button:has-text("Premier League")`, as in the sibling walks since Round
+1304); the three Manager tile lookups are one helper that takes the button whose title element (`div.uppercase`)
+reads exactly Manager, asserted to be exactly one. The walk blocks the database host and leaves a 390 screenshot
+of the job card after the reload in $RC_OUT.
+
+Control NATION_JOB_CONTROL=nooffer (servedCodeControl: exit 0 on "all N guarded checks fired", 1 otherwise): the
+served offer becomes `null&&{nation:...}`, anchored on the minified return `{nation:X,blurb:\`${X} want you for
+the national team alongside the ` (property names and the literal survive minifying, nationOfferFor's name does
+not); the run refuses unless the anchor matches exactly once in dist/assets. Guarded: the tile says the country
+is calling, the offer card is on the manager panel. Proof `r1314-s3` on 0cc1de05: playNationJob-1 and -2 exit 0
+(15 s each); nj-nooffer exit 0, "all 2 guarded checks fired (mutations landed: {"nationOffer":2})" (two page
+loads, one hit each).
