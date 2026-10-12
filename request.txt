@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+walk: node .rc/x/walk.mjs
+basecmp: bash .rc/x/basecmp.sh
