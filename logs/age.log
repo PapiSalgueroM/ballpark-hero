@@ -1,0 +1,10 @@
+(a) Bournemouth live: boards yes; book in save true stamp(save) "premier|f6rqwq" stamp(now) (bookStampOf not exported); read true; r0 undefined; off 0: ; next entry league week 28
+(a) after a JSON round trip: boards yes
+(a) entries after which the door is null (of the first 40): none
+(b) premier Brentford: S1:100Dax(u0) S2:100Dax(u0) S3:100Dax(u0) S4:100Dax(u0) S5:94Dax(u7) S6:93Dax(u7) S7:92Dax(u7) S8:93Dax(u7)
+(b) laliga Barcelona: S1:98Dax(u1) S2:98Dax(u4) S3:98Dax(u2) S4:96Dax(u3) S5:32t(u19) S6:98Dax(u2) S7:28t(u19) S8:98Dax(u2)
+(b) bundesliga Borussia Dortmund: S1:100Dax(u0) S2:99Dax(u1) S3:99Dax(u1) S4:100Dax(u0) S5:51t(u16) S6:99Dax(u1) S7:56t(u15) S8:52t(u16)
+(b) seriea Como: S1:100Dax(u0) S2:99Dax(u1) S3:100Dax(u0) S4:99Dax(u1) S5:49t(u18) S6:56t(u16) S7:100Dax(u0) S8:51t(u17)
+(b) ligue1 Le Havre: S1:97Dax(u2) S2:98Dax(u1) S3:97Dax(u2) S4:26t(u17) S5:29t(u16) S6:28t(u17) S7:23t(u17) S8:98Dax(u2)
+(b) championship Bristol City: S1:91Dax(u7) S2:93Dax(u7) S3:94Dax(u7) S4:94Dax(u7) S5:93Dax(u7) S6:93Dax(u7) S7:95Dax(u7) S8:93Dax(u7)
+age: done
