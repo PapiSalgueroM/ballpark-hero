@@ -30,7 +30,7 @@
  *                    buyer every summer until the ledger says he retired, and at least MIN_RUNOUT such men were seen.
  *
  * CONTROLS, each must go red on its own section (exit 1, the last line says FIRED):
- *   CM_LEDGER_BOUND_CONTROL=noprune  the refresh keeps every record again: section 2 red
+ *   CM_LEDGER_BOUND_CONTROL=noprune  the summer rollover keeps every record again: section 2 red
  *   CM_LEDGER_BOUND_CONTROL=madeup   only a generated payload is marked again: section 3 red
  *   CM_LEDGER_BOUND_CONTROL=release  a man is released at the end of the deal he had with me again: section 4 red
  *   CM_LEDGER_BOUND_CONTROL=nocache  the shared read, the refresh memo and the market memo are off: section 1 red
@@ -51,8 +51,8 @@ const cannot = why => { console.log(`simCmLedgerBound: cannot run: ${why}`); pro
 const CORE = 'src/lib/clubManager.ts', LEDGER = 'src/lib/clubManagerWorldRoster.ts';
 const lf = s => s.split('\r\n').join('\n');
 const EDITS = {
-  noprune: [[CORE, '  const kept = eraRostersLoaded(career.eraId) ? records.filter(record => record.status === \'owned\' || listed(record)) : records;\n',
-    '  const kept = records;\n']],
+  noprune: [[CORE, '  const kept = held.records.filter(record => record.status === \'owned\' || record.status === \'retired\' && record.year >= year || listed(record));\n',
+    '  const kept = held.records;\n']],
   madeup: [[CORE, '      ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,\n',
     '      ...(p.generated ? { g: true } : {}), anchor: original?.anchor ?? p.rating,\n']],
   release: [[CORE, '      if (status === \'owned\' && (player.contractYears ?? 1) <= 0) player = { ...player, contractYears: renewalTerms(player).years };\n',
@@ -117,7 +117,9 @@ function slopeOf(points) {
   return points.reduce((a, p) => a + (p[0] - mx) * (p[1] - my), 0) / points.reduce((a, p) => a + (p[0] - mx) ** 2, 0);
 }
 function sellTo(s, p, buyer) {
-  const t = { ...s, incomingBids: [...(s.incomingBids ?? []), { playerId: p.id, playerName: p.name, club: buyer, offer: Math.max(1, p.value ?? 5), status: 'open' }] };
+  /* Any other bid for him goes first: acceptBid takes the first bid it finds for that man, and a rival's bid (a
+     release clause met in the season) would otherwise sell him to another club than the one this run tracks. */
+  const t = { ...s, incomingBids: [...(s.incomingBids ?? []).filter(b => b.playerId !== p.id), { playerId: p.id, playerName: p.name, club: buyer, offer: Math.max(1, p.value ?? 5), status: 'open' }] };
   return cm.acceptBid(t, p.id);
 }
 function measureTime(s, label) {
@@ -205,8 +207,11 @@ for (const [club, eraId, seed] of CAREERS) {
     }
     for (const man of sold) {
       if (man.done) continue;
+      /* retireChance is 0 under 32, so until then he cannot have retired and must be at the buyer. From 32 on he
+         may retire, and a retired man's record goes once it changes no roster, so tracking stops there. */
+      if (cm.worldYear(s) - man.birth >= 32) { man.done = true; continue; }
       const record = held?.records.find(r => r.origin.name === man.name && r.origin.birthYear === man.birth);
-      if (!record) { if (!man.madeUp) fail(4, `${club} season ${season + 1}: ${man.name}, sold in season ${man.season}, has no ledger record`); man.done = true; continue; }
+      if (!record) { fail(4, `${club} season ${season + 1}: ${man.name}, sold in season ${man.season}, has no ledger record`); man.done = true; continue; }
       if (record.status === 'retired') { man.done = true; continue; }
       /* The ledger takes a year off his old deal each summer, so by this summer it has run out once as many
          summers have passed as he had years left when he was sold. */
@@ -224,21 +229,30 @@ for (const [club, eraId, seed] of CAREERS) {
 }
 
 /* ---------- the verdict ---------- */
-/* Section 1, TIME. Bands from measured headroom: see the header of this section's numbers below. */
-const TAP_RATIO = 3, TAP_FLOOR = 5, DAY_RATIO = 2, DAY_FLOOR = 20;
+/* Section 1, TIME. Measured on a GitHub runner (remote check azfx-2, 6 readings: 3 careers at seasons 10 and 30):
+   a tap 1.1 to 3.4 ms against 1.1 to 2.9 ms with no seed or ledger (at most 1.2 times); a matchday 12.0 to 25.4 ms
+   against 8.0 to 15.8 ms (1.5 to 1.6 times). The nocache control (the shared read and both memos off): a tap 81 to
+   827 ms against 0.9 to 3.9 (90 to 230 times), a matchday 3.7 to 4.5 times. So a tap may take 3 times plus 5 ms and
+   a matchday 2.5 times plus 5 ms: about twice the healthy worst, and every control reading lands outside. */
+const TAP_RATIO = 3, TAP_FLOOR = 5, DAY_RATIO = 2.5, DAY_FLOOR = 5;
 for (const row of timing) {
   if (row.tap > TAP_RATIO * row.bareTap + TAP_FLOOR) fail(1, `${row.label}: a tap built the market in ${row.tap.toFixed(1)} ms, over ${TAP_RATIO} x ${row.bareTap.toFixed(1)} + ${TAP_FLOOR}`);
   if (row.day > DAY_RATIO * row.bareDay + DAY_FLOOR) fail(1, `${row.label}: a matchday took ${row.day.toFixed(1)} ms, over ${DAY_RATIO} x ${row.bareDay.toFixed(1)} + ${DAY_FLOOR}`);
 }
 if (timing.length < CAREERS.length) fail(1, `only ${timing.length} timings were taken`);
-/* Section 2, BOUND. */
-const SLOPE_CAP = 60;
+/* Section 2, BOUND. Measured (azfx-2, the prune then inside the refresh): the stored ledger's slope from season 15
+   to 30 was -11.0, -42.4 and -34.7 code units a season (a plateau near 2,200 to 3,000 units, 22 to 36 records);
+   the noprune control 402 to 424 a season (282 to 284 records by season 30), the growth reviewer 2 measured. The
+   cap sits between them with room on both sides. */
+const SLOPE_CAP = 150;
 for (const row of slopes) if (row.slope > SLOPE_CAP) fail(2, `${row.club}: the ledger grows ${row.slope.toFixed(1)} code units a season from season 15 on, over ${SLOPE_CAP}`);
 /* Section 3, MADE UP. */
-if (madeUpSeen < 1) fail(3, 'no made up man was ever seen at a rival through the ledger, so the section proved nothing');
-if (madeUpMarket < 1) fail(3, 'no academy man sold was ever seen on the market, so the market half proved nothing');
+/* Coverage floors, a tenth of what the run makes (azfx-2: 296 sightings at a rival and 296 on the market; 74 sold
+   men outlived the deal they had with me), so a run that stops dealing cannot pass by having nothing to check. */
+if (madeUpSeen < 30) fail(3, `only ${madeUpSeen} made up men were seen at a rival through the ledger, under 30`);
+if (madeUpMarket < 30) fail(3, `only ${madeUpMarket} academy men sold were seen on the market, under 30`);
 /* Section 4, SOLD MEN. */
-const MIN_RUNOUT = 3;
+const MIN_RUNOUT = 7;
 if (runOutSeen < MIN_RUNOUT) fail(4, `only ${runOutSeen} sold men outlived the deal they had with me at the buyer, under ${MIN_RUNOUT}`);
 console.log(`simCmLedgerBound: ${CAREERS.length} careers to season ${SEASONS}; ${soldCount} real men and ${academySold} academy men sold; made up men seen at a rival ${madeUpSeen}, on the market ${madeUpMarket}; sold men past the deal they had with me ${runOutSeen}`);
 const red = Object.entries(failures).filter(([, list]) => list.length).map(([k, list]) => `${k} (${list.length})`);
