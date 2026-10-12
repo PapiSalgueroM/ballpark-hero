@@ -75,6 +75,36 @@ export function readGmGameLog(value: unknown, isClub: (id: string) => boolean, s
   }
 }
 
+/* Round 1307: THE TILE'S BOX AND WHAT A BOARD HANDS IT. Both live here and
+   not with the card, because a board needs them before the card's chunk
+   has landed: the box is the board's own markup, so the page is the same
+   height while the card loads, after it has loaded and on every face of
+   it. One height a breakpoint (the match clock's feed is taller from md
+   up, and a phone's lines wrap more); the card fills the box and only its
+   named scroller ever scrolls. The two numbers are THIS SIM'S OWN and are
+   only right while a browser walk says so: at 320, 390 and 1280 nothing
+   in the box but that scroller may be taller than its own frame. */
+export const GM_GAME_DAY_BOX = 'relative h-[400px] md:h-[352px]';
+
+/** What a board hands its Game Day tile. Sport free: a bound card (the NFL's is src/components/front-office/NflGameDay.tsx) adds the law. */
+export interface GmGameDayMount {
+  /** His told games of the season, oldest first; the tile opens on the last. Empty: nothing told yet. */
+  log: readonly GmLastGame[];
+  /** His club, and the two words a club has: the one a sentence uses and the short one a score line uses. */
+  my: string;
+  name(id: string): string;
+  short(id: string): string;
+  /** His next game in the board's words; null: a bye, or the season is over. */
+  next: { label: string; home: boolean } | null;
+  /** 'watch': the last game of `log` was just played and he asked to watch it. Nothing of its result is drawn until the clock is done, and `onWatched` then says so once. */
+  mode: 'result' | 'watch';
+  onWatched(): void;
+  /** Where he stands today in the engine's own seeding; null: nothing to say. */
+  standing: { table: string; seed: number | null; seeds: number } | null;
+  /** The element the "?" sheet is drawn over (a board's whole week box, which must be `relative`); null: not there yet. */
+  helpHost: HTMLElement | null;
+}
+
 /** His last told game, or null when the log holds none. */
 export function lastGmGame(log: GmGameLog | null): GmLastGame | null {
   return log && log.games.length > 0 ? log.games[log.games.length - 1] : null;

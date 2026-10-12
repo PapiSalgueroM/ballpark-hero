@@ -53,6 +53,10 @@
  *    else. And no board imports the told path, a story law, a game day law
  *    or the words of a "?" STATICALLY (read from the syntax tree): what only
  *    a drawn card reads must not sit in a board's own chunk.
+ *    Round 1307, the tile: the view lib (src/lib/gmGameDayView.ts), the shared
+ *    card and the NFL's bound card join the modules. They are what a drawn
+ *    card reads, so no board may import one statically, and the NFL board
+ *    reaches the bound card through a lazy import and nothing else of them.
  *
  * ROUND 1305, THE PRESS (src/lib/frontOfficeGameDay.ts, the NFL board's bind
  * to the quick path, and src/lib/gmGameLog.ts, the save field of the
@@ -188,14 +192,16 @@ const NFL_HELP = 'src/data/gmBrackets/nflHelp.ts';
 /* Round 1305: the save field of the season's results and the NFL board's bind to the quick path */
 const LOG = 'src/lib/gmGameLog.ts';
 const BIND = 'src/lib/frontOfficeGameDay.ts';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND];
+/* Round 1307: every word on the tile, decided in a lib; it rides with a card */
+const VIEW = 'src/lib/gmGameDayView.ts';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW];
 /* the round whose header a new file opens with: section 5 proves the comment stripper took it out */
-const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305' };
+const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307' };
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
 /* what only a drawn card reads: the told path, the NFL's story law, its game day law and the words of the two "?" */
-const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP];
+const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW];
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
    as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
@@ -793,7 +799,7 @@ for (const set of SEEDSETS) {
      in the commit that first imports them. */
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
-    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts'].map(f => [f, '*']),
+    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
     [NFL_BOARD, new Set([noExt(BIND), noExt(LOG)])],
     /* its board tests read the log, the bind's words for a week and the quick path's final */
