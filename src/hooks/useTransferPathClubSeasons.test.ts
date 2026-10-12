@@ -13,6 +13,13 @@ vi.mock('@/lib/fetchTransferPathPuzzles', () => ({
   }]),
 }));
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: vi.fn() }));
+vi.mock('@/data/transferPathClubSeasons', async () => {
+  const actual = await vi.importActual<typeof import('@/data/transferPathClubSeasons')>('@/data/transferPathClubSeasons');
+  if (process.env.TRANSFER_PATH_CLUB_SEASONS_CONTROL !== 'missing') return actual;
+  if (actual.VERIFIED_TRANSFER_PATH_CLUB_SEASONS.length !== 2) throw new Error('Control requires both verified memberships');
+  console.log('TRANSFER_PATH_MEMBERSHIP_CONTROL removed=2');
+  return { VERIFIED_TRANSFER_PATH_CLUB_SEASONS: [] };
+});
 
 beforeEach(() => {
   localStorage.clear();
@@ -53,5 +60,23 @@ describe('Transfer Path verified club seasons', () => {
     let move: ReturnType<typeof rendered.result.current.addPlayer>;
     act(() => { move = rendered.result.current.addPlayer('Mohamed Salah'); });
     expect(move!).toEqual({ ok: true, club: 'Liverpool' });
+  });
+
+  it('keeps accepted daily actions when reloaded', async () => {
+    const rendered = renderHook(() => useTransferPath());
+    await waitFor(() => expect(rendered.result.current.isLoadingPool).toBe(false));
+    await waitFor(() => expect(rendered.result.current.isLoading).toBe(false));
+    let move: ReturnType<typeof rendered.result.current.addPlayer>;
+    act(() => { move = rendered.result.current.addPlayer('Kylian Mbappé'); });
+    expect(move!).toEqual({ ok: true, club: 'Real Madrid' });
+    const saved = Object.fromEntries(Object.keys(localStorage).map(key => [key, localStorage.getItem(key)]));
+    const chain = [...rendered.result.current.chain];
+    rendered.unmount();
+    const reloaded = renderHook(() => useTransferPath());
+    await waitFor(() => expect(reloaded.result.current.isLoadingPool).toBe(false));
+    await waitFor(() => expect(reloaded.result.current.isLoading).toBe(false));
+    expect(reloaded.result.current.puzzle.id).toBe('tpa-770');
+    expect(reloaded.result.current.chain).toEqual(chain);
+    expect(Object.fromEntries(Object.keys(localStorage).map(key => [key, localStorage.getItem(key)]))).toEqual(saved);
   });
 });

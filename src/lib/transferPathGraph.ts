@@ -1,4 +1,4 @@
-import type { CareerPlayer } from '@/types/career';
+import type { CareerSeason } from '@/types/career';
 import { seasonSpan } from '@/lib/transferPathModes';
 
 /* Round 475: the link rule, in one place the page can be read from.
@@ -59,7 +59,7 @@ function addSpell(keys: ClubSeasonKeys, club: string, season: string): void {
 }
 
 /** name -> the keys the link rule is judged on */
-export function clubSeasonsOf(players: CareerPlayer[]): Map<string, ClubSeasonKeys> {
+export function clubSeasonsOf(players: readonly { name: string; career: readonly Pick<CareerSeason, 'club' | 'season'>[] }[]): Map<string, ClubSeasonKeys> {
   const map = new Map<string, ClubSeasonKeys>();
   for (const p of players) {
     const keys: ClubSeasonKeys = { exact: new Set(), calendar: new Set(), span: new Set() };

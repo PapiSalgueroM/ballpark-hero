@@ -65,7 +65,7 @@ export function TransferPathBoard() {
     if (reason === 'duplicate') return `${name} is already in the path`;
     if (reason === 'unverified-active') return `${name} isn't in our verified ${ACTIVE_YEAR} active-player records, so Active players only leaves them out`;
     if (reason === 'outside-europe') return `${name} only links to ${last} through a club outside Europe`;
-    return `${name} was never at the same club as ${last} in the same season`;
+    return `Our verified season records do not connect ${name} with ${last} yet`;
   };
 
   const handleSelect = (name: string) => {

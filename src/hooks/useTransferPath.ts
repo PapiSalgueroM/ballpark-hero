@@ -7,13 +7,13 @@ import { fetchTransferPathPuzzles } from '@/lib/fetchTransferPathPuzzles';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import {
   buildSeasonIndex,
-  clubSeasonsOf,
   doorsFrom,
   linkedFrom,
   moreHelpLines,
   shareClub,
   type TransferPathDoors,
 } from '@/lib/transferPathGraph';
+import { refreshTransferPathPuzzles, transferPathSpells, verifiedClubSeasonsOf } from '@/lib/transferPathClubSeasons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isTransferPathLog } from '@/lib/dailySaveShapes';
@@ -94,9 +94,10 @@ export interface TransferPathState {
 
 export function useTransferPath(): TransferPathState {
   // ── Pool state + dual fetch ────────────────────────────────────────────────
-  const [puzzlePool, setPuzzlePool] = useState<TransferPathPuzzle[]>(fallbackPuzzles);
+  const [storedPuzzlePool, setPuzzlePool] = useState<TransferPathPuzzle[]>(fallbackPuzzles);
   const [playerPool, setPlayerPool] = useState<CareerPlayer[]>(fallbackPlayers);
   const [isLoadingPool, setIsLoadingPool] = useState(true);
+  const puzzlePool = useMemo(() => refreshTransferPathPuzzles(storedPuzzlePool, playerPool), [storedPuzzlePool, playerPool]);
 
   useEffect(() => {
     let cancelled = false;
@@ -217,7 +218,7 @@ export function useTransferPath(): TransferPathState {
 
   const playerToClubs = useMemo(() => {
     const map = new Map<string, Set<string>>();
-    for (const p of playerPool) {
+    for (const p of transferPathSpells(playerPool)) {
       map.set(p.name, new Set(p.career.map(s => s.club)));
     }
     return map;
@@ -225,13 +226,13 @@ export function useTransferPath(): TransferPathState {
 
   /* The everyday graph, kept beside the rule graph so a refusal can say why:
      a name the rule removed, or a link the rule does not allow. */
-  const everydayClubSeasons = useMemo(() => clubSeasonsOf(playerPool), [playerPool]);
+  const everydayClubSeasons = useMemo(() => verifiedClubSeasonsOf(playerPool), [playerPool]);
   const activeNames = useMemo(
     () => new Set(playerPool.filter(isActivePlayer).map(p => p.name)),
     [playerPool],
   );
 
-  const playerToClubSeasons = useMemo(() => clubSeasonsOf(rulePlayers), [rulePlayers]);
+  const playerToClubSeasons = useMemo(() => verifiedClubSeasonsOf(rulePlayers, activeRule), [rulePlayers, activeRule]);
 
   const playersShareClub = useMemo(
     () => (a: string, b: string): string | null => shareClub(playerToClubSeasons, a, b),
