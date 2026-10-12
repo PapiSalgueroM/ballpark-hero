@@ -1,0 +1,3 @@
+rivalFull: node scripts/simUsRivalSense.mjs
+rivalFresh: RIVAL_SEEDS=6,7,8,9,10 node scripts/simUsRivalSense.mjs
+c-onlyhimshut: US_RIVAL_CONTROL=onlyhimshut node scripts/simUsRivalSense.mjs
