@@ -1,0 +1,53 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/lib/gmBracketView.test.ts src/components/front-office-shared/GmBracketCard.test.tsx src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/test/gmBracketLedger.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/lib/gmBracket.test.ts src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts src/test/usPostseasonFormat.test.ts src/test/usPlayoffs.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+ctl-winner: GM_GAMEDAY_CONTROL=winner node scripts/simGmGameDay.mjs
+ctl-level: GM_GAMEDAY_CONTROL=level node scripts/simGmGameDay.mjs
+ctl-refuse: GM_GAMEDAY_CONTROL=refuse node scripts/simGmGameDay.mjs
+ctl-twopaths: GM_GAMEDAY_CONTROL=twopaths node scripts/simGmGameDay.mjs
+ctl-tries: GM_GAMEDAY_CONTROL=tries node scripts/simGmGameDay.mjs
+ctl-offbyone: GM_GAMEDAY_CONTROL=offbyone node scripts/simGmGameDay.mjs
+ctl-olddraw: GM_GAMEDAY_CONTROL=olddraw node scripts/simGmGameDay.mjs
+ctl-pairing: GM_GAMEDAY_CONTROL=pairing node scripts/simGmGameDay.mjs
+ctl-validator: GM_GAMEDAY_CONTROL=validator node scripts/simGmGameDay.mjs
+ctl-strict: GM_GAMEDAY_CONTROL=strict node scripts/simGmGameDay.mjs
+ctl-outofturn: GM_GAMEDAY_CONTROL=outofturn node scripts/simGmGameDay.mjs
+ctl-enginedrift: GM_GAMEDAY_CONTROL=enginedrift node scripts/simGmGameDay.mjs
+ctl-random: GM_GAMEDAY_CONTROL=random node scripts/simGmGameDay.mjs
+ctl-stream: GM_GAMEDAY_CONTROL=stream node scripts/simGmGameDay.mjs
+ctl-unkeyed: GM_GAMEDAY_CONTROL=unkeyed node scripts/simGmGameDay.mjs
+ctl-ceiling: GM_GAMEDAY_CONTROL=ceiling node scripts/simGmGameDay.mjs
+ctl-lawmax: GM_GAMEDAY_CONTROL=lawmax node scripts/simGmGameDay.mjs
+ctl-lowmax: GM_GAMEDAY_CONTROL=lowmax node scripts/simGmGameDay.mjs
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+ctl-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+ctl-bindstream: GM_GAMEDAY_CONTROL=bindstream node scripts/simGmGameDay.mjs
+ctl-bindold: GM_GAMEDAY_CONTROL=bindold node scripts/simGmGameDay.mjs
+ctl-bindrefuse: GM_GAMEDAY_CONTROL=bindrefuse node scripts/simGmGameDay.mjs
+ctl-bindchance: GM_GAMEDAY_CONTROL=bindchance node scripts/simGmGameDay.mjs
+ctl-logdrop: GM_GAMEDAY_CONTROL=logdrop node scripts/simGmGameDay.mjs
+ctl-logholes: GM_GAMEDAY_CONTROL=logholes node scripts/simGmGameDay.mjs
+ctl-undo: GM_GAMEDAY_CONTROL=undo node scripts/simGmGameDay.mjs
+ctl-keydrift: GM_GAMEDAY_CONTROL=keydrift node scripts/simGmGameDay.mjs
+ctl-trust: GM_GAMEDAY_CONTROL=trust node scripts/simGmGameDay.mjs
+ctl-keyrebuilt: GM_GAMEDAY_CONTROL=keyrebuilt node scripts/simGmGameDay.mjs
+ctl-logplayoff: GM_GAMEDAY_CONTROL=logplayoff node scripts/simGmGameDay.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+usp-gmclubs: US_POST_CONTROL=gmclubs node scripts/simUsPostseason.mjs
+usp-onesrc: US_POST_CONTROL=onesrc node scripts/simUsPostseason.mjs
+usp-sum: US_POST_CONTROL=sum node scripts/simUsPostseason.mjs
+usp-drop: US_POST_CONTROL=drop node scripts/simUsPostseason.mjs
+usp-clinch: US_POST_CONTROL=clinch node scripts/simUsPostseason.mjs
+usp-allhome: US_POST_CONTROL=allhome node scripts/simUsPostseason.mjs
+usp-open: US_POST_CONTROL=open node scripts/simUsPostseason.mjs
+usp-tries: US_POST_CONTROL=tries node scripts/simUsPostseason.mjs
+usp-thin: US_POST_CONTROL=thin node scripts/simUsPostseason.mjs
+usp-stream: US_POST_CONTROL=stream node scripts/simUsPostseason.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simAccessibility: node scripts/simAccessibility.mjs
