@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs; s=$?; node -e "const r=require(process.env.RUNNER_TEMP+'/ba-loan/report.json');console.log('compiledCradle',JSON.stringify(r.appearance.compiledCradle),'status',r.status)"; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simReportContext-diagnostics: SIM_REPORT_CONTROL=diagnostics NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs > /tmp/rcd.log 2>&1; tail -2 /tmp/rcd.log; grep -q 'control "diagnostics": [1-9][0-9]* failure(s) fired in section 4 as expected' /tmp/rcd.log
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simSoccerCareerSaveRecovery-all: SOCCER_CAREER_SAVE_CONTROL=all node scripts/simSoccerCareerSaveRecovery.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+vitest-touched: node_modules/.bin/vitest run src/test/reportDetails.test.tsx src/test/reportContext.test.ts src/test/gameReportPlacement.test.tsx src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/soccerAgentReviewUi.test.tsx src/test/soccerAgentReviewPage.test.tsx --testTimeout=300000 --hookTimeout=120000

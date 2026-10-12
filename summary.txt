@@ -1,0 +1,13 @@
+simHarnessAnchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simSoccerLoanMinutes exit=0 72s | compiledCradle {"original":{"current":false,"original":false},"current":{"current":false,"original":false},"remove-filter":{"current":false,"original":false},"undo":{"cur
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simReportContext exit=0 0s | simReportContext: all green
+simReportContext-diagnostics exit=0 0s | control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works
+simPlayerBingoHonours exit=0 9s | simPlayerBingoHonours PASS
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simSoccerCareerSaveRecovery exit=0 11s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simSiteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+tsc exit=0 100s | 
+vitest-touched exit=0 9s |    Duration  8.30s (transform 3.78s, setup 516ms, collect 8.72s, tests 7.69s, environment 3.61s, prepare 1.01s)
+simSoccerCareerSaveRecovery-all exit=0 30s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.

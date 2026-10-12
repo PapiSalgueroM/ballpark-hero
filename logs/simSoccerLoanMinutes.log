@@ -1,0 +1,6 @@
+Loan minutes: 160 labelled saved boundaries; 640 complete arm cases
+Loan minutes: 144 filtered forced offers; 16 actual empty listings
+Loan minutes: 112 actual returns; 4512 complete action frames
+Loan minutes: 160 exact missing-filter findings; 98478027 retained bytes
+PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+compiledCradle {"original":{"current":false,"original":false},"current":{"current":false,"original":false},"remove-filter":{"current":false,"original":false},"undo":{"current":false,"original":false}} status pass
