@@ -1,0 +1,8 @@
+head-stale-EXPECT-RED exit=1 15s | simCmLeagueRules: 16 failure(s)
+leg-1304out-vs-1306file exit=0 16s | simCmLeagueRules: all checks passed (modern, eras, pure)
+leg-1306out-vs-1304file exit=0 15s | simCmLeagueRules: all checks passed (modern, eras, pure)
+leg-bothout-vs-AWfile exit=0 15s | simCmLeagueRules: all checks passed (modern, eras, pure)
+leg-bothin-vs-1306file-EXPECT-RED exit=1 15s | simCmLeagueRules: 20 failure(s)
+leg-bothin-vs-1304file-EXPECT-RED exit=1 16s | simCmLeagueRules: 40 failure(s)
+rules-write exit=0 43s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+pin-head exit=0 20s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
