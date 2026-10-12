@@ -1,0 +1,24 @@
+UNMUTATED fence: main 0 and every control FIRED | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=1 staleowed=1 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+MUTANT hostclause: KILLED by samehost
+   samehost exit=3: simCmLeagueBookFacts control samehost: DID NOT FIRE, 0 other failure(s).
+MUTANT bothclauses: KILLED by onesource, samehost, pausedrow
+   onesource exit=3: simCmLeagueBookFacts control onesource: DID NOT FIRE, 0 other failure(s).
+   samehost exit=3: simCmLeagueBookFacts control samehost: DID NOT FIRE, 0 other failure(s).
+   pausedrow exit=3: simCmLeagueBookFacts control pausedrow: DID NOT FIRE, 0 other failure(s).
+MUTANT seasonstrip: KILLED by seasontoken
+   seasontoken exit=3: simCmLeagueBookFacts control seasontoken: DID NOT FIRE, 0 other failure(s).
+MUTANT pausedskip: KILLED by pausedrow
+   pausedrow exit=3: simCmLeagueBookFacts control pausedrow: DID NOT FIRE, 0 other failure(s).
+MUTANT boundary: KILLED by boundary
+   boundary exit=3: simCmLeagueBookFacts control boundary: DID NOT FIRE, 0 other failure(s).
+MUTANT stale: KILLED by staleowed
+   staleowed exit=3: simCmLeagueBookFacts control staleowed: DID NOT FIRE, 0 other failure(s).
+MUTANT keeperowed: KILLED by keeperowed
+   keeperowed exit=3: simCmLeagueBookFacts control keeperowed: DID NOT FIRE, 0 other failure(s).
+MUTANT matchrule: KILLED by main
+   main exit=1: simCmLeagueBookFacts: 9 of 5894 checks FAILED.
+MUTANT wikiold: KILLED by wikimirror
+   wikimirror exit=3: simCmLeagueBookFacts control wikimirror: DID NOT FIRE, 1 other failure(s).
+MUTANT hostthrows: KILLED by badurl
+   badurl exit=1: Node.js v24.21.0
+mutfix: every mutant killed
