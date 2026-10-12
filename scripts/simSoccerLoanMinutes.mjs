@@ -1,6 +1,8 @@
 /** Projected forced-loan minutes over declared saved boundaries, not natural careers.
- * All execution belongs in Actions. The missing-filter arm must recover AA's
- * complete engine, outcomes and draws; unsuitable already saved offers remain usable.
+ * All execution belongs in Actions. The missing-filter arm must recover the engine before
+ * PR235 (merge c's first parent, cf559ebb^1), its outcomes and draws; unsuitable already saved
+ * offers remain usable. Until Release BA that base was a pinned commit (aa564f16, "AA" in
+ * older records); it is now this head with the declared inverses applied (see below).
  */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -20,8 +22,20 @@ const OUT = path.resolve(process.env.SOCCER_LOAN_MINUTES_OUT || path.join(ROOT, 
    commits by the merge), a runner checkout without that commit cannot read it, and every later Soccer Career change
    would break it again. Proven at merge c (cf559ebb): both inverses applied to the merged head give its first
    parent's engine and appearance files byte for byte, and the undo restores the head. With a self relative original
-   three equalities below are tautologies and stay only as round trip checks, not as evidence: the fault source
-   equals the original, the two compiled hashes are equal, and the two arms' outcomes are equal. Owed back. */
+   FIVE checks below are true by construction and stay only as round trip checks, not as evidence (the Release BA
+   harness integrity review counted the last two): (1) the fault source equals the original ('missing-filter full
+   source equals the original'), (2) the original and remove-filter compiled hashes are equal, (3) the two arms'
+   outcomes are equal ('remove-filter/whole-original-outcomes'), (4) every other src module the bundle loads equals
+   its base ('unchanged loaded source', since base is the same bytes as raw), and (5) 'remove-filter/exact-map', the
+   remove-filter arm's law findings deepEqual the original arm's, which run the same engine on the same inputs.
+   What still bites: the current arm's law, terms, parent identity and returns, the same-input acknowledgement and
+   season replays against the original, the remove-filter control's effectiveness (all three law groups) and the
+   four comparison controls.
+   THE CRADLE INVERSE NEVER REACHES COMPILED CODE. The appearance module is in every bundle, but the engine imports
+   only the PlayerAppearance type from it, so CELEBRATIONS is tree shaken and neither cradle line is in any arm's
+   compiled output (report.appearance.compiledCradle records it per arm). servedByArm says which source each arm was
+   SERVED, not what it ran. PR235's cradle sentence is held here only as an anchor (replaceOne throws if it changes),
+   never exercised. Pre-existing in PR235's harness; owed back with it. */
 const BASE = 'self: this head with the declared filter and cradle inverses applied';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const APPEARANCE = 'src/lib/soccerCareerAppearance.ts';
@@ -80,8 +94,10 @@ function replaceOne(source, from, to) { assert.equal(count(source, from), 1, 'un
 function check(id, predicate, detail) { if (!predicate) failures.push({ id, detail }); }
 function captureCheck(id, fn) { try { fn(); } catch (error) { failures.push({ id, error: { name: error.name, message: error.message, stack: error.stack } }); } }
 function mulberry32(seed) { let value = seed >>> 0; return () => { value += 0x6D2B79F5; let t = Math.imul(value ^ value >>> 15, value | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-/* Release BA: the engine is normalised on read, because the anchor below runs across lines and a raw read cannot
-   match it on a CRLF checkout (simHarnessAnchors). The receipt named currentRaw therefore holds the LF text, which
+/* Release BA: the engine is normalised on read, in the read call itself. The code this replaced (leg c2b) already
+   folded CRLF a line later (lf(currentRaw.toString())), so its behaviour was the same; c2b and c2c only changed the
+   shape simHarnessAnchors scans, which looks for the fold at the read because the anchor below runs across lines.
+   The record that said a raw read "cannot match" here overstated it. The receipt named currentRaw holds the LF text, which
    is the file byte for byte on an LF checkout such as the runner's. The bundle plugin's module reads and the read of
    this harness's own source are normalised the same way, for the same reason. The inventory's read of the binary
    proof files cannot be (it would change their hashes), so it sits in a block of its own, where the anchor scan can
@@ -92,7 +108,7 @@ const from = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.len
 const to = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));\n        if (!candidates.length) continue;';
 const faultSource = replaceOne(currentSource, from, to), undoSource = replaceOne(faultSource, to, from);
 const baseSource = faultSource, baseRaw = Buffer.from(baseSource);
-assert.equal(faultSource, baseSource, 'missing-filter full source equals immutable AA');
+assert.equal(faultSource, baseSource, 'missing-filter full source equals the original (true by construction)');
 assert.equal(undoSource, currentSource, 'complete source undo');
 report.production = { baseRaw: save('sources/base-engine.raw.ts', baseRaw), currentRaw: save('sources/current-engine.raw.ts', currentRaw),
   baseLF: save('sources/base-engine.lf.ts', baseSource), currentLF: save('sources/current-engine.lf.ts', currentSource),
@@ -124,7 +140,8 @@ async function bundle(id, source) {
       const served = rel === ENGINE ? source : rel === APPEARANCE ? (id === 'original' ? baseAppearanceSource : currentAppearanceSource) : lf(held.raw.toString());
       if (rel === APPEARANCE) {
         assert.equal(lf(held.raw.toString()), currentAppearanceSource, 'exact current loaded appearance');
-        assert.equal(lf(held.base.toString()), baseAppearanceSource, 'exact AA loaded appearance');
+        assert.equal(lf(held.base.toString()), baseAppearanceSource, 'exact original loaded appearance');
+        // True by construction since Release BA (header item 4): base is raw for every other src module.
       } else if (held.base && rel !== ENGINE) assert.equal(served, lf(held.base.toString()), `unchanged loaded source ${rel}`);
       loaded.push({ path: rel, raw: save(`bundles/${id}/loaded/${rel}.raw`, held.raw), served: save(`bundles/${id}/loaded/${rel}.served`, served),
         base: held.base ? save(`bundles/${id}/loaded/${rel}.base`, held.base) : null,
@@ -133,6 +150,10 @@ async function bundle(id, source) {
     }); } }] });
   const code = result.outputFiles[0].contents;
   const receipt = { id, entry: save(`bundles/${id}/entry.ts`, entry), compiled: save(`bundles/${id}/compiled.cjs`, code), metafile: save(`bundles/${id}/metafile.json`, JSON.stringify(result.metafile)), loaded: put(loaded) };
+  // Recorded, not asserted (header): whether either cradle line reached this arm's compiled code.
+  const compiledText = Buffer.from(code).toString(), cradleLine = s => s.match(/line: "([^"]+)"/)[1];
+  report.appearance.compiledCradle ??= {};
+  report.appearance.compiledCradle[id] = { current: compiledText.includes(cradleLine(appearanceTo)), original: compiledText.includes(cradleLine(appearanceFrom)) };
   const compiledInputs = Object.keys(result.metafile.inputs).filter(name => !['loan-proof-entry.ts', '<stdin>'].includes(name));
   assert.equal(loaded.length, compiledInputs.length, 'every actual compiled input retained');
   assert.equal(new Set(loaded.map(row => row.path)).size, loaded.length, 'unique loaded source records');
@@ -219,7 +240,7 @@ for (const kind of ['voluntary', 'sale', 'release', 'repeat-release', 'already-l
 assert.equal(descriptors.length, 160);
 let subjectRows = [];
 function subject(B, captured, descriptor) {
-  const state = clone(captured), club = B.E.FALLBACK_CLUBS.find(row => row.name === descriptor.parent); assert.ok(club, 'existing parent in actual AA pool');
+  const state = clone(captured), club = B.E.FALLBACK_CLUBS.find(row => row.name === descriptor.parent); assert.ok(club, 'existing parent in actual pool');
   Object.assign(state, { age: 21, overall: descriptor.overall, peakOverall: descriptor.overall, weeklyWage: 100000, contractYearsLeft: 4,
     currentClub: club.name, currentClubCountry: club.country, currentClubTier: club.tier, currentClubColor: club.color, currentLeague: club.league,
     phase: 'red_card_appeal_result', rival: null, loan: null, pendingLoanOffers: null, pendingAppealResult: null, pendingEvents: [], badSeasonStreak: 0 });
@@ -240,7 +261,7 @@ function subject(B, captured, descriptor) {
   }
   if (descriptor.kind === 'saved-unsuitable') {
     const offers = call(B, 'determineTransferSituation', state, [B.E.FALLBACK_CLUBS], descriptor.seed); preparation.push(offers.frame);
-    assert.equal(offers.state.type, 'frozen_out'); assert.ok(offers.state.offers.some(row => B.E.projectLeagueApps(state.overall, row.club.tier, row.club.name, 0).min < 20), 'actual AA unsuitable saved loan offer');
+    assert.equal(offers.state.type, 'frozen_out'); assert.ok(offers.state.offers.some(row => B.E.projectLeagueApps(state.overall, row.club.tier, row.club.name, 0).min < 20), 'actual unsuitable saved loan offer');
     state.phase = 'transfer_window'; state.transferSituation = offers.state;
   }
   return { descriptor, input: snapshot(state), changes: put(differing(captured, state)), preparation, state };
@@ -398,8 +419,8 @@ function desiredLaw(row) {
 try {
   const B = {};
   for (const [id, source] of [['original', baseSource], ['current', currentSource], ['remove-filter', faultSource], ['undo', undoSource]]) B[id] = await bundle(id, source);
-  // A tautology since Release BA (the original is this head with the filter removed): a round trip check only.
-  assert.equal(bundles.original.compiled.sha256, bundles['remove-filter'].compiled.sha256, 'actual fault compiled code equals AA');
+  // True by construction since Release BA (the original is this head with the filter removed): a round trip check only.
+  assert.equal(bundles.original.compiled.sha256, bundles['remove-filter'].compiled.sha256, 'actual fault compiled code equals the original (true by construction)');
   assert.equal(bundles.current.compiled.sha256, bundles.undo.compiled.sha256, 'actual whole compiled undo');
   assert.equal(bundles.original.startup, bundles.current.startup, 'full startup draws held');
   assert.equal(bundles.current.startup, bundles['remove-filter'].startup, 'fault startup draws held');
@@ -446,7 +467,7 @@ try {
     report.sameInputAcknowledgements ??= []; report.sameInputAcknowledgements.push({ id: row.id, input: ackInput, original: replayOriginal.frame, current: replayCurrent.frame });
     captureCheck(`${row.id}/same-input-acknowledgement`, () => assert.deepEqual(comparableFrame(replayCurrent.frame), comparableFrame(replayOriginal.frame)));
   }
-  // Every current loan input replays its complete actual injury/return progression in AA.
+  // Every current loan input replays its complete actual injury/return progression in the original arm.
   report.sameInputSeasons = [];
   for (const row of armRows.current.filter(item => item.lifecycle && !item.error)) {
     const first = row.frames.find(frame => frame.method === 'advanceProSeason');
@@ -468,9 +489,10 @@ try {
   report.controls.push({ id: 'remove-filter', intended: put(expected), actual: put(actual), failures: actual.length,
     effective: actual.length > 0 && actual.some(row => row.group === 'eligible-offers') && actual.some(row => row.group === 'automatic-minutes') && actual.some(row => row.group === 'empty-market'),
     fullOriginal: report.arms.original.rows, fullFault: report.arms['remove-filter'].rows, fullHealthy: report.arms.current.rows, fullUndo: report.arms.undo.rows });
+  // True by construction since Release BA (header item 5): both arms run the same engine on the same inputs.
   captureCheck('remove-filter/exact-map', () => assert.deepEqual(actual, expected));
   check('remove-filter/effectiveness', report.controls[0].effective, report.controls[0]);
-  captureCheck('remove-filter/whole-AA-outcomes', () => assert.equal(report.arms['remove-filter'].rows, report.arms.original.rows, 'complete raw original/fault identity'));
+  captureCheck('remove-filter/whole-original-outcomes', () => assert.equal(report.arms['remove-filter'].rows, report.arms.original.rows, 'complete raw original/fault identity'));
   captureCheck('undo/whole-current-outcomes', () => assert.equal(report.arms.undo.rows, report.arms.current.rows, 'complete raw current/undo identity'));
   report.comparisonControls = []; captureCheck('comparison-controls/complete', () => { report.comparisonControls = comparisonControls(); });
   report.comparisonTransport = { source: progressionSource, comparisons: put(progressionComparisons), scope: 'Only current recorded-versus-replayed progression callers may use the exact raw forwardSeason prefix and independently source-bound outer routes; all ordinary comparisons remain coordinates-only.' };
