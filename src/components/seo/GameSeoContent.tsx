@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useRoutePath } from '@/hooks/useRoutePath';
@@ -15,6 +15,8 @@ import { flatGuide, guideH2Titles } from '@/data/gameContent/guideShape';
 // Round 181: the deterministic related-games graph (S-6 internal links).
 import { relatedGamesFor } from '@/lib/relatedGames';
 import { stripBrand, useSeoMetaTitle } from '@/components/seo/PageSeo';
+import ReportQuestion from '@/components/game/ReportQuestion';
+import { GameReportContext } from '@/components/game/GameReportContext';
 
 interface GameSeoContentProps {
   title: string;
@@ -38,6 +40,9 @@ interface GameSeoContentProps {
   /** Round 655: a page's own readable addition, drawn below the guide and
    *  above the related games, so it sits in this block rather than the game. */
   children?: ReactNode;
+  reportGameContext?: Record<string, unknown>;
+  /** Pass an existing control here, or false if the board owns one above the guide. */
+  reportControl?: ReactNode;
 }
 
 // Round 48 (AdSense content build): this block grew from title + description only
@@ -104,9 +109,10 @@ const GuideStory = ({ sections }: { sections: GuideStorySection[] }) => (
   </div>
 );
 
-const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children }: GameSeoContentProps) => {
+const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children, reportGameContext, reportControl }: GameSeoContentProps) => {
   /* Round 745: the one spelling of the route, so /soccer-career/ finds its guide. */
   const path = useRoutePath();
+  const report = useContext(GameReportContext);
 
   const game = ALL_GAMES.find(g => g.path === path);
   /* Round 651: the heading is the game's search title, never the old page
@@ -220,6 +226,14 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children 
       className="max-w-2xl mx-auto mt-12 mb-8 px-4"
       data-seo-content={content === undefined ? 'loading' : 'ready'}
     >
+      {reportControl !== false && (game || reportControl) && (
+        <div className="flex justify-center mb-8" data-no-prerender>
+          {reportControl ?? <ReportQuestion
+            gameType={report.gameType || path.replace(/^\//, '')}
+            gameContext={reportGameContext ?? report.gameContext}
+          />}
+        </div>
+      )}
       <div className="text-center">
         {/* Round 198: the heading level follows the page, see the prop's
             comment above. Identical classes either way, so nothing moves

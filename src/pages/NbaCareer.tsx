@@ -195,6 +195,7 @@ const NbaCareer = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-career" gameContext={{ puzzleId: puzzle.id }} />}
           pageHasOwnH1
           title="NBA Career Path | DoUKnowBall"
           description="A daily game where you guess a mystery NBA player from progressive clues: position, country, draft, teams, stats, and awards."
@@ -214,9 +215,7 @@ const NbaCareer = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-career" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
       <NbaCareerHowToPlay open={showRules} onOpenChange={setShowRules} />

@@ -292,6 +292,7 @@ const MissingFive = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="missing-five" gameContext={{ lineup: lineup.id }} />}
           pageHasOwnH1
           title="Missing Five | DoUKnowBall"
           description="A verified real NBA starting five is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
@@ -309,9 +310,7 @@ const MissingFive = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="missing-five" gameContext={{ lineup: lineup.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

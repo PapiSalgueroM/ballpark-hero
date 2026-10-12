@@ -556,11 +556,10 @@ const SportsMillionaire = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="sports-millionaire" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="sports-millionaire" />}
           pageHasOwnH1
           title="Sports Millionaire: The Money Ladder Trivia Game"
           description="Climb a money ladder where every right answer raises the stakes. Fifteen questions built from real market values, nationalities, positions, and Ballon d'Or history. Use your lifelines wisely."

@@ -269,6 +269,7 @@ const MlbConnect4 = () => {
         />
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="mlb-connect-4" gameContext={{ board: board?.id }} />}
           pageHasOwnH1
           title="MLB Connect 4 | DoUKnowBall"
           description="Connect four baseball answers in a row: every cell needs a player matching both the franchise column and the achievement row."
@@ -290,9 +291,7 @@ const MlbConnect4 = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="mlb-connect-4" gameContext={{ board: board?.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

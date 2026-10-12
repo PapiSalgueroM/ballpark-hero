@@ -25,11 +25,10 @@ export default function NbaGauntletDraft() {
         <GauntletBoard config={NBA_GAUNTLET_CONFIG} />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-gauntlet-draft" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nba-gauntlet-draft" />}
           pageHasOwnH1
           title="Gauntlet Draft: NBA, Pick Five, Survive Five"
           description="The NBA draft mode: each of the five starting five slots deals five real players from a star to a bargain, you keep one per slot, and the finished five runs a five round knockout against ever stronger invented opposition. One shared daily draft, unlimited redrafts, and a fully deterministic cup run so the draft is the game."

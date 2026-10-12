@@ -246,6 +246,8 @@ export function isAcademyRow(row: { age: number | null; value: number | null }):
 
 interface HistoryRow {
   player_name: string | null;
+  nationality: string | null;
+  position: string | null;
   club: string | null;
   year: number | null;
   age: number | null;
@@ -255,6 +257,18 @@ interface HistoryRow {
   matches: number | null;
   yellow_cards: number | null;
   red_cards: number | null;
+}
+
+function matchesBingoHistory(ref: BingoPlayer, row: HistoryRow): boolean {
+  if (!isSameMan(ref, { age: row.age, year: row.year })) return false;
+  if (normalizeName(ref.name) !== 'vitinha') return true;
+  // The Portuguese midfielder and forward share this name and birth year.
+  const nationality = primaryNationality(ref.nationality);
+  if (!nationality || nationality !== primaryNationality(row.nationality ?? '')) return false;
+  const role = (position: string): 'MID' | 'FWD' | null =>
+    /midfield/i.test(position) ? 'MID' : /wing|striker|forward|attack/i.test(position) ? 'FWD' : null;
+  const referenceRole = role(ref.position);
+  return referenceRole !== null && referenceRole === role(row.position ?? '');
 }
 
 /**
@@ -278,7 +292,7 @@ async function fetchClubHistoryAndStats(
 }> {
   const names = pool.map(p => p.name);
   // ROUND 385: the pool row is the reference a history row must walk with.
-  const refs = new Map(pool.map(p => [p.name, { age: p.age, year: p.year }]));
+  const refs = new Map(pool.map(p => [p.name, p]));
   const clubHistory = new Map<string, Set<string>>();
   const clubYears = new Map<string, ClubYear[]>();
   const seasonStats = new Map<string, SeasonStat[]>();
@@ -294,7 +308,7 @@ async function fetchClubHistoryAndStats(
         checkBingoLoad(signal);
         const { data, error } = await supabase
           .from('player_market_values')
-          .select('player_name, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards')
+          .select('player_name, nationality, position, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards')
           .in('player_name', chunk)
           .order('id', { ascending: true })
           .range(from, from + HISTORY_PAGE - 1)
@@ -304,7 +318,7 @@ async function fetchClubHistoryAndStats(
           const name = (r.player_name ?? '').trim();
           if (!name) continue;
           const ref = refs.get(name);
-          if (ref && !isSameMan(ref, { age: r.age, year: r.year })) continue;
+          if (ref && !matchesBingoHistory(ref, r)) continue;
           const academy = isAcademyRow({ age: r.age, value: r.market_value_usd });
 
           const key = clubKey(r.club ?? '');
@@ -582,14 +596,14 @@ const MESSI_CLUB_SPANS: { key: string; from: number; to: number }[] = [
 ];
 
 /**
- * UEFA Champions League winners 2011-2025 as (clubKey, season-end year)
+ * UEFA Champions League winners 2011-2026 as (clubKey, season-end year)
  * pairs, matching the year convention above. Indisputable public record:
  * 2011 + 2015 Barcelona, 2012 + 2021 Chelsea, 2013 + 2020 Bayern (both club
  * spellings in the table are listed), 2014/2016/2017/2018/2022/2024 Real
- * Madrid, 2019 Liverpool, 2023 Manchester City, 2025 PSG. A year-N row at
+ * Madrid, 2019 Liverpool, 2023 Manchester City, 2025 + 2026 PSG. A year-N row at
  * the winning club = in that club's squad when the final was won; squad
  * members who did not play the final still count, matching how winners'
- * medals are commonly credited. SQL-verified support in the live pool: 62.
+ * medals are commonly credited. Previously SQL-verified pool support: 62.
  */
 const UCL_WINNER_PAIRS: { keys: string[]; years: number[] }[] = [
   { keys: ['fc barcelona'], years: [2011, 2015] },
@@ -598,7 +612,7 @@ const UCL_WINNER_PAIRS: { keys: string[]; years: number[] }[] = [
   { keys: ['real madrid'], years: [2014, 2016, 2017, 2018, 2022, 2024] },
   { keys: ['liverpool fc'], years: [2019] },
   { keys: ['manchester city'], years: [2023] },
-  { keys: ['paris saint-germain'], years: [2025] },
+  { keys: ['paris saint-germain'], years: [2025, 2026] },
 ];
 const UCL_WINNER_KEYS: Set<string> = new Set(
   UCL_WINNER_PAIRS.flatMap(p => p.keys.flatMap(k => p.years.map(y => `${k}|${y}`))),
@@ -839,7 +853,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     }),
   );
   // Champions League winner via (club, season-end year) rows against the
-  // verified 2011-2025 winner pairs. See UCL_WINNER_PAIRS for method.
+  // verified 2011-2026 winner pairs. See UCL_WINNER_PAIRS for method.
   out.push(
     withSupport(data, {
       id: 'ucl-winner',

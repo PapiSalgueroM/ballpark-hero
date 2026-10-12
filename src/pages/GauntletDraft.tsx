@@ -258,11 +258,10 @@ export default function GauntletDraft() {
         )}
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType={SLUG} />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType={SLUG} />}
           pageHasOwnH1
           title="Gauntlet Draft: Soccer, Pick Five, Survive Five"
           description="The draft mode: a formation is drawn, each of its eleven slots deals five real players from a star to a bargain, you keep one per slot, and the finished XI runs a five round knockout against ever stronger invented opposition. One shared daily draft, unlimited redrafts, and a fully deterministic cup run so the draft is the game."

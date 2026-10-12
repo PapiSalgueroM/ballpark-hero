@@ -176,6 +176,7 @@ const HockeyHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="hockey-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Hockey Higher or Lower | DoUKnowBall"
           description="Two hockey players, side by side. Which one has more career points? Daily challenge and unlimited mode with streak bonuses."
@@ -197,9 +198,7 @@ const HockeyHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="hockey-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
 
         <HockeyHLHowToPlay open={showRules} onOpenChange={setShowRules} />

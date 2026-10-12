@@ -234,6 +234,7 @@ const ChampOrNot = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="champ-or-not" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Champ or Not | DoUKnowBall"
           description="A daily true or false gauntlet over real title history. Every claim names a genuine champion; the catch is whether they won THAT year. Covers the Super Bowl, NBA, World Series, Stanley Cup, WNBA, college football and hoops, English soccer, the AFL and the NRL."
@@ -253,9 +254,7 @@ const ChampOrNot = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="champ-or-not" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>
