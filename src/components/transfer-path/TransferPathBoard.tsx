@@ -318,7 +318,7 @@ export function TransferPathBoard() {
                 </div>
               )
             )}
-            <GiveUpButton onGiveUp={giveUp} label="Give up and see a path" />
+            <GiveUpButton key={`${mode}:${puzzle.id}:${activeRule}:${unlimitedIndex}`} onGiveUp={giveUp} label="Give up and see a path" />
           </div>
         )}
 
