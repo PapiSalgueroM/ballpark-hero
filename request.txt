@@ -1,0 +1,15 @@
+# Round 1311 (head 8676802b): simClubManagerSlots section 2's characters on six streams and the dupe control, on the head and on the base 21941630, for its budget
+head-0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSlots.mjs
+base-0: (git worktree add -q /tmp/sb0 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sb0/node_modules; cd /tmp/sb0 && TMPDIR=$(mktemp -d) node scripts/simClubManagerSlots.mjs)
+head-1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+base-1: (git worktree add -q /tmp/sb1 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sb1/node_modules; cd /tmp/sb1 && TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSlots.mjs)
+head-2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+base-2: (git worktree add -q /tmp/sb2 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sb2/node_modules; cd /tmp/sb2 && TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSlots.mjs)
+head-3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+base-3: (git worktree add -q /tmp/sb3 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sb3/node_modules; cd /tmp/sb3 && TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSlots.mjs)
+head-4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSlots.mjs
+base-4: (git worktree add -q /tmp/sb4 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sb4/node_modules; cd /tmp/sb4 && TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSlots.mjs)
+head-5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSlots.mjs
+base-5: (git worktree add -q /tmp/sb5 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sb5/node_modules; cd /tmp/sb5 && TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSlots.mjs)
+head-dupe: TMPDIR=$(mktemp -d) SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+base-dupe: (git worktree add -q /tmp/sbd 21941630 2>/dev/null; ln -sf "$PWD/node_modules" /tmp/sbd/node_modules; cd /tmp/sbd && TMPDIR=$(mktemp -d) SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs)

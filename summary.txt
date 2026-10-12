@@ -1,0 +1,14 @@
+base-0 exit=0 43s | simClubManagerSlots: all sections green
+head-0 exit=1 44s | simClubManagerSlots: RED, sections 2 (1 failures)
+head-1 exit=1 45s | simClubManagerSlots: RED, sections 2 (1 failures)
+head-2 exit=1 41s | simClubManagerSlots: RED, sections 2 (1 failures)
+base-1 exit=0 45s | simClubManagerSlots: all sections green
+base-2 exit=0 45s | simClubManagerSlots: all sections green
+head-4 exit=1 40s | simClubManagerSlots: RED, sections 2 (1 failures)
+head-3 exit=1 46s | simClubManagerSlots: RED, sections 2 (1 failures)
+base-3 exit=0 46s | simClubManagerSlots: all sections green
+base-4 exit=0 44s | simClubManagerSlots: all sections green
+head-5 exit=1 45s | simClubManagerSlots: RED, sections 2 (1 failures)
+base-5 exit=0 43s | simClubManagerSlots: all sections green
+head-dupe exit=1 36s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+base-dupe exit=1 35s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
