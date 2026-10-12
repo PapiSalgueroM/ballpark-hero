@@ -25,6 +25,14 @@
  * not in the board exactly once: a mutation that changes nothing proves
  * nothing, so this refuses to write the copy).
  *
+ * Round 1307 added the third board test, FrontOfficeTile.test.tsx (the Game
+ * Day tile and Watch), and four controls of it: the hold not read while a
+ * game is watched, the league grid drawn during a watch, the hold kept when
+ * he leaves the week box, and the tile handed no log. Every control now runs
+ * all three files. Its fix pass added two more, for two readers the review
+ * found nothing held: the owner card's pace read after the press during a
+ * watch (pacespoils) and the seed handed over as an index (seedoff).
+ *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
@@ -43,6 +51,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const GD = 'src/components/front-office/FrontOfficeGameDay.test.tsx';
 const OP = 'src/components/front-office/FrontOfficeOnePress.test.tsx';
+/* Round 1307: the tile and Watch */
+const TL = 'src/components/front-office/FrontOfficeTile.test.tsx';
 
 /* The tests by the words of their titles. */
 const T = {
@@ -56,6 +66,12 @@ const T = {
   deskWeek: [GD, 'with the GM desk on, his game is told at the chance it was played at'],
   ordinary: [OP, 'ordinary: the save at the recap'],
   title: [OP, 'title: the save at the recap'],
+  tile: [TL, 'the week box holds a tile'],
+  watch: [TL, 'WATCH IS THE SAME PRESS'],
+  leave: [TL, 'leaving the week box in the middle of a watch'],
+  adopt: [TL, 'a save from before the log shows the next game'],
+  pace: [TL, 'NO SPOILER ON THE OWNER CARD'],
+  seed: [TL, 'HIS SEED IS COUNTED FROM 1'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -83,6 +99,18 @@ const CONTROLS = {
   noseason: ['the lifted close forgets to count the season', [['const newSeasons = seasonsPlayed + 1;', 'const newSeasons = seasonsPlayed;']], [T.pressOff, T.ordinary], [T.week]],
   closetwice: ['the season is closed twice', [['closeSeason(lg, toldRounds, champ);', 'closeSeason(lg, toldRounds, champ); closeSeason(lg, toldRounds, champ);']], [T.ordinary], [T.week]],
   titles: ['a title counts double', [['const newTitles = titles + (won ? 1 : 0);', 'const newTitles = titles + (won ? 2 : 0);']], [T.title], [T.ordinary, T.week]],
+  /* Round 1307, the tile and Watch (FrontOfficeTile.test.tsx) */
+  recordspoils: ['while a game is watched the page shows the league AFTER the press (the hold is not read)', [['const seen = hold ?? league;', 'const seen = league;']], [T.watch], [T.tile, T.week]],
+  gridspoils: ['the league grid is drawn while a game is watched', [['{weekResults.length > 0 && !hold && (', '{weekResults.length > 0 && (']], [T.watch], [T.tile, T.week]],
+  holdkept: ['the hold is not let go when he leaves the week box', [["if (held && (tab !== 'week' || !league || league === held)) setHeld(null);", 'if (held && (!league || league === held)) setHeld(null);']], [T.leave], [T.tile, T.watch]],
+  tilenolog: ['the tile is handed no log', [['log={gameLogNow?.games ?? []}', 'log={[]}']], [T.tile, T.adopt], [T.week]],
+  /* Round 1307, the fix pass: two ruled readers that nothing held (the review's mutants `pace` and `seedoff`, each green on every test and on the walk before these) */
+  pacespoils: ["the owner card's pace reads the league AFTER the press while a game is watched (the line the board had before Watch)",
+    [['pace={seen.week > 1 && seen.week <= REGULAR_WEEKS', 'pace={league.week > 1 && league.week <= REGULAR_WEEKS'],
+      ['mandatePace(mandate, seenMy.wins, (seen.week - 1) / REGULAR_WEEKS, conferenceSeeds(seen.teams, conferenceOf(myTeam))', 'mandatePace(mandate, my.wins, (league.week - 1) / REGULAR_WEEKS, conferenceSeeds(league.teams, conferenceOf(myTeam))']],
+    [T.pace], [T.watch, T.tile, T.seed]],
+  seedoff: ['the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)',
+    [['seedsNow.indexOf(myTeam) + 1 : null', 'seedsNow.indexOf(myTeam) : null']], [T.seed], [T.watch, T.pace, T.week]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
@@ -122,7 +150,7 @@ function run(name) {
   fs.writeFileSync(copy, src);
   let r, json = null;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
       { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NFL: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
     if (fs.existsSync(report)) json = JSON.parse(fs.readFileSync(report, 'utf8'));
   } finally {
@@ -136,7 +164,7 @@ function run(name) {
   console.log(`control ${name} (${why}): vitest exit ${r.status}; ${reds.length} red, ${rows.filter(x => x.status === 'passed').length} green of ${rows.length}`);
   for (const x of reds) console.log(`   red: ${path.basename(x.file)} > ${x.title.slice(0, 150)}`);
   /* a copy that did not load is not a firing */
-  const unloaded = [GD, OP].filter(f => !rows.some(x => x.file.endsWith(f)));
+  const unloaded = [GD, OP, TL].filter(f => !rows.some(x => x.file.endsWith(f)));
   if (unloaded.length || json.testResults.some(f => LOAD_ERROR.test(f.message || '')) || reds.some(x => LOAD_ERROR.test(x.why))) {
     return { name, fired: false, said: `the copy did not load or a test file did not run (${unloaded.join(', ') || 'a load error in the report'}), so a red here is not the check: ${tail}` };
   }
