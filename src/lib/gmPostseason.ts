@@ -52,8 +52,8 @@ export type GmPostseasonRefusal = 'no-format' | 'no-bracket';
 /** What a load hands a board: the bracket to play on (with the repair's feed line when it had to start
  *  it again), or a refusal. */
 export type GmPostseasonLoad =
-  | { refused: null; format: BracketFormat; repair: BracketRepair }
-  | { refused: GmPostseasonRefusal; why: string };
+  | { kind: 'bracket'; format: BracketFormat; repair: BracketRepair }
+  | { kind: 'refused'; refused: GmPostseasonRefusal; why: string };
 
 const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x);
 
@@ -67,7 +67,7 @@ export function loadGmPostseason<L>(sport: GmPostseasonSport<L>, league: L, seas
   } catch {
     format = null;
   }
-  if (!format) return { refused: 'no-format', why: `there is no playoff bracket for the ${season} season` };
+  if (!format) return { kind: 'refused', refused: 'no-format', why: `there is no playoff bracket for the ${season} season` };
   /* a version this build does not know is read as nothing at all (and a block that throws when asked is one) */
   let known: unknown;
   try {
@@ -78,8 +78,8 @@ export function loadGmPostseason<L>(sport: GmPostseasonSport<L>, league: L, seas
   try {
     const isClub = sport.isClub(league);
     const repair = repairGmBracket(format, known, season, () => sport.seeds(league), isClub, seeds => sport.seedsOk(seeds, league));
-    return { refused: null, format, repair };
+    return { kind: 'bracket', format, repair };
   } catch (e) {
-    return { refused: 'no-bracket', why: e instanceof Error ? e.message : 'the league does not open a playoff bracket' };
+    return { kind: 'refused', refused: 'no-bracket', why: e instanceof Error ? e.message : 'the league does not open a playoff bracket' };
   }
 }

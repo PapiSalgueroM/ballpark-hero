@@ -51,8 +51,8 @@ describe('loadGmPostseason', () => {
   it('hands a sound block back as it is', () => {
     const block = played();
     const r = loadGmPostseason(toy(), LEAGUE, 2026, true, block);
-    expect(r && r.refused === null && r.format).toBe(FOUR);
-    if (!r || r.refused !== null) throw new Error('refused');
+    expect(r && r.kind === 'bracket' && r.format).toBe(FOUR);
+    if (!r || r.kind !== 'bracket') throw new Error('refused');
     expect(r.repair.save).toBe(block);
     expect(r.repair.rebuilt).toBeNull();
     expect(r.repair.line).toBeNull();
@@ -62,7 +62,7 @@ describe('loadGmPostseason', () => {
     const block = played();
     block.played[0].games[0].winner = block.played[0].away;
     const r = loadGmPostseason(toy(), LEAGUE, 2026, true, block);
-    if (!r || r.refused !== null) throw new Error('refused');
+    if (!r || r.kind !== 'bracket') throw new Error('refused');
     expect(r.repair.rebuilt).toBe('seeds');
     expect(r.repair.line).toBe(BRACKET_REBUILT_LINES.seeds);
     expect(r.repair.save).toEqual(openBracket(FOUR, 2026, block.seeds));
@@ -73,7 +73,7 @@ describe('loadGmPostseason', () => {
     const strangers = { ...openBracket(FOUR, 2026, ['ANT', 'BEE', 'CAT', 'EEL']) };
     for (const block of [undefined, null, 'x', other, strangers]) {
       const r = loadGmPostseason(toy(), LEAGUE, 2026, true, block);
-      if (!r || r.refused !== null) throw new Error('refused');
+      if (!r || r.kind !== 'bracket') throw new Error('refused');
       expect(r.repair.rebuilt).toBe('fresh');
       expect(r.repair.line).toBe(BRACKET_REBUILT_LINES.fresh);
       expect(r.repair.save).toEqual(openBracket(FOUR, 2026, ['ANT', 'BEE', 'CAT', 'DOG']));
@@ -87,7 +87,7 @@ describe('loadGmPostseason', () => {
       const read: string[] = [];
       const spy = new Proxy(sound, { get: (t, k) => { read.push(String(k)); return t[k as string]; } });
       const r = loadGmPostseason(toy(), { ...LEAGUE, table: ['DOG', 'CAT', 'BEE', 'ANT', 'EEL', 'FOX'] }, 2026, true, spy);
-      if (!r || r.refused !== null) throw new Error('refused');
+      if (!r || r.kind !== 'bracket') throw new Error('refused');
       expect(r.repair.rebuilt, `v ${String(v)}`).toBe('fresh');
       expect(r.repair.save.seeds).toEqual(['DOG', 'CAT', 'BEE', 'ANT']);
       expect(read.filter(k => k !== 'v'), `v ${String(v)}`).toEqual([]);
@@ -95,9 +95,10 @@ describe('loadGmPostseason', () => {
   });
 
   it('refuses a season it has no bracket for, and a sport whose format cannot be read', () => {
-    expect(loadGmPostseason(toy(), { ...LEAGUE, season: 2025 }, 2025, true, played())).toEqual({ refused: 'no-format', why: 'there is no playoff bracket for the 2025 season' });
+    expect(loadGmPostseason(toy(), { ...LEAGUE, season: 2025 }, 2025, true, played())).toEqual({ kind: 'refused', refused: 'no-format', why: 'there is no playoff bracket for the 2025 season' });
     const broken = toy({ formatFor: () => { throw new Error('no data'); } });
-    expect(loadGmPostseason(broken, LEAGUE, 2026, true, undefined)?.refused).toBe('no-format');
+    const b = loadGmPostseason(broken, LEAGUE, 2026, true, undefined);
+    expect(b && b.kind === 'refused' ? b.refused : null).toBe('no-format');
   });
 
   it('refuses a league whose own seeds do not open a bracket, rather than save one no press can play', () => {
@@ -107,8 +108,8 @@ describe('loadGmPostseason', () => {
     const noClubs = toy({ isClub: () => { throw new Error('no clubs'); } });
     for (const sport of [three, twice, throws, noClubs]) {
       const r = loadGmPostseason(sport, LEAGUE, 2026, true, { v: 3 });
-      expect(r?.refused).toBe('no-bracket');
-      expect(r && r.refused !== null ? r.why : '').not.toBe('');
+      expect(r && r.kind === 'refused' ? r.refused : null).toBe('no-bracket');
+      expect(r && r.kind === 'refused' ? r.why : '').not.toBe('');
     }
   });
 
@@ -120,8 +121,8 @@ describe('loadGmPostseason', () => {
     const getter = Object.defineProperty({}, 'v', { get: () => { throw new Error('v'); }, enumerable: true });
     for (const block of [cyclic, trap, getter, { v: 1, played: 'x' }, { v: 1, seeds: [1, 2] }, Object.create(null)]) {
       const r = loadGmPostseason(toy(), LEAGUE, 2026, true, block);
-      expect(r?.refused ?? 'not refused').toBe('not refused');
-      if (r && r.refused === null) expect(r.repair.rebuilt).not.toBeNull();
+      expect(r?.kind).toBe('bracket');
+      if (r && r.kind === 'bracket') expect(r.repair.rebuilt).not.toBeNull();
     }
   });
 });

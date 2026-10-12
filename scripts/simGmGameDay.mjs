@@ -776,7 +776,7 @@ for (const set of SEEDSETS) {
             const text = JSON.stringify(stop);
             const back = JSON.parse(text);
             const r = load(back);
-            count(s12.sound, !!r && r.refused === null && r.format === FORMAT && r.repair.save === back && r.repair.rebuilt === null && r.repair.line === null, () => `${id} stop ${k}: ${r ? r.refused ?? r.repair.rebuilt : 'null'}`);
+            count(s12.sound, !!r && r.kind === 'bracket' && r.format === FORMAT && r.repair.save === back && r.repair.rebuilt === null && r.repair.line === null, () => `${id} stop ${k}: ${r ? (r.kind === 'refused' ? r.refused : r.repair.rebuilt) : 'null'}`);
             count(s12.outside, [JSON.parse(text), undefined, null, { v: 2 }, 'x'].every(b => load(b, false) === null), () => `${id} stop ${k}`);
             const damaged = [];
             const doc = () => JSON.parse(text);
@@ -790,8 +790,8 @@ for (const set of SEEDSETS) {
               s12kinds.add(what);
               const rr = load(JSON.parse(JSON.stringify(d)));
               const want = B.openBracket(FORMAT, A.lg.season, kind === 'seeds' ? d.seeds : fresh);
-              const ok = !!rr && rr.refused === null && rr.repair.rebuilt === kind && rr.repair.line === B.BRACKET_REBUILT_LINES[kind] && same(rr.repair.save, want);
-              count(s12.rebuilt, ok, () => `${id} stop ${k}, ${what}: ${rr ? rr.refused ?? `rebuilt ${rr.repair.rebuilt}` : 'null'}`);
+              const ok = !!rr && rr.kind === 'bracket' && rr.repair.rebuilt === kind && rr.repair.line === B.BRACKET_REBUILT_LINES[kind] && same(rr.repair.save, want);
+              count(s12.rebuilt, ok, () => `${id} stop ${k}, ${what}: ${rr ? (rr.kind === 'refused' ? rr.refused : `rebuilt ${rr.repair.rebuilt}`) : 'null'}`);
               if (!ok) continue;
               const done = B.playBracketAll(FORMAT, rr.repair.save, coin);
               count(s12.plays, B.bracketChampion(FORMAT, done) !== null && B.bracketProblems(FORMAT, done, isClub).length === 0, () => `${id} stop ${k}, ${what}`);
