@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-e2: node_modules/.bin/vitest run src/test/soccerBallonPoolReadAsAbsent.test.tsx --testTimeout=300000 --hookTimeout=300000
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+vitest-pr234: node_modules/.bin/vitest run src/test/soccerCareerAwardGenerations.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -60
