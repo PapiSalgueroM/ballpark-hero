@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-playoffspoil exit=1 227s | control playoffspoil: RED AT THE NAMED CHECK (point 14) and nowhere else
+walk exit=0 230s | playFrontOfficeGameDay: 367 checks, 0 failed
+walk-bracketjump exit=1 231s | control bracketjump: RED AT THE NAMED CHECK (point 14) and nowhere else
+walk-lostblock exit=1 222s | control lostblock: RED AT THE NAMED CHECK (point 15) and nowhere else
