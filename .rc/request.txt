@@ -1,0 +1,44 @@
+# Release AX fix pass, final proof part 1: the type gate, the whole unit suite, every harness and control this pass touched or that was red, the fences
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+saveRetry: node scripts/simUsCareerSaveRetry.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+practice: node scripts/simUsCareerPractice.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+practice-reset: US_CAREER_PRACTICE_CONTROL=reset node scripts/simUsCareerPractice.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+action: node scripts/simUsCareerActionConfirm.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+faFeedback: node scripts/simFreeAgencyFeedback.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+faFeedback-consumed: FREE_AGENCY_FEEDBACK_CONTROL=consumed node scripts/simFreeAgencyFeedback.mjs 2>&1 | grep -o "Free-agency feedback [a-z]*: [0-9]* intended failures, [0-9]* independent passes, no skipped cases.\|AssertionError.*" | head -3; exit ${PIPESTATUS[0]}
+faFeedback-status: FREE_AGENCY_FEEDBACK_CONTROL=status node scripts/simFreeAgencyFeedback.mjs 2>&1 | grep -o "Free-agency feedback [a-z]*: [0-9]* intended failures, [0-9]* independent passes, no skipped cases.\|AssertionError.*" | head -3; exit ${PIPESTATUS[0]}
+faFeedback-restored: FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs 2>&1 | grep -o "Free-agency feedback [a-z]*: [0-9]* intended failures, [0-9]* independent passes, no skipped cases.\|AssertionError.*" | head -3; exit ${PIPESTATUS[0]}
+faFeedback-replacement: FREE_AGENCY_FEEDBACK_CONTROL=replacement node scripts/simFreeAgencyFeedback.mjs 2>&1 | grep -o "Free-agency feedback [a-z]*: [0-9]* intended failures, [0-9]* independent passes, no skipped cases.\|AssertionError.*" | head -3; exit ${PIPESTATUS[0]}
+faFeedback-finite: FREE_AGENCY_FEEDBACK_CONTROL=finite node scripts/simFreeAgencyFeedback.mjs 2>&1 | grep -o "Free-agency feedback [a-z]*: [0-9]* intended failures, [0-9]* independent passes, no skipped cases.\|AssertionError.*" | head -3; exit ${PIPESTATUS[0]}
+faFeedback-reduced: FREE_AGENCY_FEEDBACK_CONTROL=reduced node scripts/simFreeAgencyFeedback.mjs 2>&1 | grep -o "Free-agency feedback [a-z]*: [0-9]* intended failures, [0-9]* independent passes, no skipped cases.\|AssertionError.*" | head -3; exit ${PIPESTATUS[0]}
+extMotion: node scripts/simExtensionResponseMotion.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+extMotion-unreply: EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simLegalPages: node scripts/simLegalPages.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simUsPostseason: node scripts/simUsPostseason.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerSeasonTruth: CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simExtension: node scripts/simExtension.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simFreeAgency: node scripts/simFreeAgency.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simSessionMarks: node scripts/simSessionMarks.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerHub: node scripts/simCareerHub.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simHomeFront: node scripts/simHomeFront.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simMoneyAppFeedback: node scripts/simMoneyAppFeedback.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerBadgeMotion: node scripts/simCareerBadgeMotion.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerSeasonReview: node scripts/simCareerSeasonReview.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerDecisionOutcome: node scripts/simCareerDecisionOutcome.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simSaveKeeper: node scripts/simSaveKeeper.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCareerParity: node scripts/simCareerParity.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simTrustCopy: node scripts/simTrustCopy.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simAccessibility: node scripts/simAccessibility.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+pm: set -o pipefail; mkdir -p career-press-market-artifacts && export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log | tail -4 && node scripts/qa/checkCareerPressMarket.mjs outcomes && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log | tail -6 && node scripts/qa/checkCareerPressMarket.mjs native
