@@ -1,0 +1,27 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivalryEvents: RIVALRY_PROVE=ecbdab63 node scripts/simCareerRivalryEvents.mjs
+rc-movedrift: RIVALRY_PROVE=ecbdab63 RIVALRY_CONTROL=movedrift node scripts/simCareerRivalryEvents.mjs
+rc-homeimport: RIVALRY_CONTROL=homeimport node scripts/simCareerRivalryEvents.mjs
+rc-homeback: RIVALRY_CONTROL=homeback node scripts/simCareerRivalryEvents.mjs
+rc-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+rc-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rc-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+rc-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+fightProve: FIGHT_PROVE=ecbdab63 node scripts/simFightCareer.mjs
+board: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
+ledger: node scripts/simUsSeasonLedger.mjs
+mlbCareer: node scripts/simMlbCareer.mjs
+nhlCareer: node scripts/simNhlCareer.mjs
+nflCareer: node scripts/simNflCareer.mjs
+nbaCareer: node scripts/simNbaCareer.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalNames: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+invented: node scripts/simInventedNames.mjs
+liveScores: node scripts/simLiveScores.mjs
+lawCmp: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seamCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+layCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
