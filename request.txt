@@ -1,0 +1,2 @@
+# Review (run lens) of Round 1311 at 9c262ba4: old save probe again, printing where the finished saves differ
+old-18: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-old18 && git worktree add -q $B 48cb9d4b && OLD_BASE=$B OLD_ENTRIES=18 node .rc/x/r1311run-old.mjs

@@ -1,0 +1,1 @@
+old-18 exit=1 36s | old: RED, 27 failures over 135 checks on 27 leagues
