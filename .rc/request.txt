@@ -1,0 +1,24 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simCareerSeasonRatings: node scripts/simCareerSeasonRatings.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
