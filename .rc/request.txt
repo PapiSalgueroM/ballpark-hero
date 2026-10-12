@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+flagship: node scripts/simFlagshipWeight.mjs
+flagship-rosterlink: FLAGSHIP_LAZY_CONTROL=rosterlink node scripts/simFlagshipWeight.mjs
+flagship-allchunks: FLAGSHIP_LAZY_CONTROL=allchunks node scripts/simFlagshipWeight.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+step0build3b: R=$PWD; git worktree add -q /tmp/s0 ecbdab63 && ln -s $R/node_modules /tmp/s0/node_modules && cp $R/scripts/simFlagshipWeight.mjs /tmp/s0/scripts/ && cd /tmp/s0 && npm run build > /tmp/s0build.log 2>&1 && node scripts/simFlagshipWeight.mjs
