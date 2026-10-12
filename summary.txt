@@ -1,0 +1,8 @@
+u1wt exit=0 1s | 8c98dae1b Round 1313: step 1, the lay receipt taken again (no value moved)
+u1tsc exit=0 63s | 
+u1prove exit=0 759s | simUsRivalSense: 47 checks, 0 failed (full size)
+u1move exit=0 5s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+u1movedrift exit=1 6s | simCareerRivalryEvents: 1 failure
+u1homeback exit=1 6s | simCareerRivalryEvents: 1 failure
+u1ledger exit=0 3s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+u1vitest exit=0 38s |    Duration  37.42s (transform 2.27s, setup 118ms, collect 3.94s, tests 34.62s, environment 692ms, prepare 308ms)
