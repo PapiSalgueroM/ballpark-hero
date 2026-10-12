@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvwalk.mjs
+rvold-ctl: R=$PWD; git worktree add -q --detach /tmp/rvx HEAD && ln -s "$R/node_modules" /tmp/rvx/node_modules && node .rc/x/rvmut.mjs X1 /tmp/rvx && git worktree add -q --detach /tmp/rvmain 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 && git worktree add -q --detach /tmp/rv234 f9f540670034df4447508350db23b297e9e1cbbc && ln -s "$R/node_modules" /tmp/rvmain/node_modules && ln -s "$R/node_modules" /tmp/rv234/node_modules && cd /tmp/rvx && node "$R/.rc/x/rvold.mjs" /tmp/rvmain /tmp/rv234 4 > /tmp/rvx.log 2>&1; e=$?; tail -1 /tmp/rvx.log | cut -c1-400; echo "probe exit=$e"; [ $e -eq 1 ] && grep -q "RVOLD RED" /tmp/rvx.log && ! grep -q "draw mismatches 0," /tmp/rvx.log && echo "RVOLD CONTROL FIRED: an extra draw is seen"
