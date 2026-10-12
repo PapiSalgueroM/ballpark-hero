@@ -1,0 +1,15 @@
+vitest-round exit=0 23s |    Duration  21.74s (transform 5.70s, setup 913ms, collect 18.74s, tests 28.70s, environment 5.53s, prepare 1.37s)
+tsc exit=0 102s | 
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+partballon exit=0 5s | PARTBALLON FIRED ON ITS OWN SENTENCE
+simCareerAwardsNight exit=0 105s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSoccerAwardReveal exit=0 37s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught
+simBallonDorFairness exit=0 4s | PASS: 100.0% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats
+simBallonDorTruth exit=0 5s | simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
+simCareerEras exit=0 0s | simCareerEras: all green
+simSoccerCareerSaveRetry exit=0 15s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+simHarnessAnchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSoccerCareerSaveRecovery exit=0 10s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simAwards exit=0 10s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+sag exit=0 1092s | PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
