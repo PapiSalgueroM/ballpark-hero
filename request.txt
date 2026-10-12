@@ -1,0 +1,15 @@
+# Round 1311 step 3 (head 2ee92ebc): the type gate, the unit files, the new walk on a served build with its six controls and a measuring pass
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: mkdir -p "$RC_OUT/walk" && RC_OUT="$RC_OUT/walk" node scripts/playCmLeagueLeaders.mjs
+walk-report: RC_OUT=$(mktemp -d) LEADERS_REPORT=1 node scripts/playCmLeagueLeaders.mjs
+c-swap: RC_OUT=$(mktemp -d) LEADERS_CONTROL=swap node scripts/playCmLeagueLeaders.mjs
+c-wide: RC_OUT=$(mktemp -d) LEADERS_CONTROL=wide node scripts/playCmLeagueLeaders.mjs
+c-stack: RC_OUT=$(mktemp -d) LEADERS_CONTROL=stack node scripts/playCmLeagueLeaders.mjs
+c-thin: RC_OUT=$(mktemp -d) LEADERS_CONTROL=thin node scripts/playCmLeagueLeaders.mjs
+c-younglate: RC_OUT=$(mktemp -d) LEADERS_CONTROL=younglate node scripts/playCmLeagueLeaders.mjs
+c-write: RC_OUT=$(mktemp -d) LEADERS_CONTROL=write node scripts/playCmLeagueLeaders.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

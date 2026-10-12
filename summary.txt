@@ -1,0 +1,13 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 8s |    Duration  7.20s (transform 2.89s, setup 376ms, collect 4.00s, tests 4.14s, environment 2.37s, prepare 934ms)
+walk exit=2 10s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+walk-report exit=2 9s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+c-swap exit=2 8s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+c-wide exit=2 8s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+c-stack exit=2 8s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+c-thin exit=2 8s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+c-younglate exit=2 8s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+c-write exit=2 10s | playCmLeagueLeaders: COULD NOT RUN: S4 could not be built (sacked or empty)
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 88s | 
