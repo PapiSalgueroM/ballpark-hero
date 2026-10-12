@@ -1,8 +1,15 @@
 /* Round 1211: holds the two season ledgers (src/data/usSeasonLedgerMlb.ts and
    src/data/usSeasonLedgerNhl.ts) to themselves, to their receipts
-   (scripts/data/usSeasonSources1211.json), to this file's own typed table and
+   (scripts/data/usSeasonSources1211.json, and since Round 1312
+   scripts/data/usSeasonSources1312.json), to this file's own typed table and
    to the game's own team lists. It is a pure data harness: no career is
    played, no clock is read, no network is touched, and no engine is edited.
+
+   TWO RECEIPTS FILES (Round 1312). Each file was read on its own day (its
+   `readOn`), every receipt in it carries that day, and a key lives in exactly
+   one file: a page read again on a later day is a new key in the later file
+   (R3, R6). A ledger names the days it was read on, and every receipt it
+   cites must be of one of them.
 
    WHAT A RED MEANS. A check below fails only on the LEDGER (a season missing,
    club games that do not add up, an id the game does not hold under that
@@ -138,8 +145,13 @@ try { unlinkSync(OUT); } catch { /* a temp file left behind is harmless */ }
 const clone = x => JSON.parse(JSON.stringify(x));
 const mlb = clone({ ...game.mlb });
 const nhl = clone({ ...game.nhl });
-const receipts = JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/usSeasonSources1211.json'), 'utf8'));
-const SRC = receipts.sources;
+/* Round 1312: two receipts files, merged by key. A key in both is red at R6 and the first file's copy is
+   the one cited, so a later reading can never quietly stand in for an earlier one. */
+const RECEIPT_FILES = ['scripts/data/usSeasonSources1211.json', 'scripts/data/usSeasonSources1312.json'];
+const receiptFiles = RECEIPT_FILES.map(f => ({ file: f, ...JSON.parse(readFileSync(path.join(ROOT, f), 'utf8')) }));
+const SRC = {};
+const fileOf = {};
+for (const rf of receiptFiles) for (const [k, s] of Object.entries(rf.sources)) if (!(k in SRC)) { SRC[k] = s; fileOf[k] = rf; }
 
 const label = t => `${t.city} ${t.name}`;
 /* The game's own lists, and the first year a career on each can play. */
@@ -202,6 +214,8 @@ const OWN = {
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
   thin: { mlb: 10, nhl: 9 },
+  /* Round 1312: each receipts file and the day it was read on. */
+  receiptDays: { 'scripts/data/usSeasonSources1211.json': '2026-10-10', 'scripts/data/usSeasonSources1312.json': '2026-10-12' },
   /* The first rounds whose length is thin (played, and only one source gave its length), by their
      place in the list, so a moved year cannot hide one. None since Round 1226's fix pass filled the
      best of three of 2020 on two sources (ESPN and CBS Sports). */
@@ -294,6 +308,11 @@ const CONTROLS = {
   nhlformula: { expect: ['N5'], run() { must(nhl.NHL_FORMULA_84.division.games === 4, 'the four division games'); nhl.NHL_FORMULA_84.division.games = 3; } },
   nhlplayoff: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.series[0][1] === 7, 'the best of seven'); nhl.NHL_PLAYOFF_FORMAT.series[0] = [3, 5]; } },
   nhlscore: { expect: ['N7'], run() { must(nhl.NHL_OVERTIME.now.shootouts === 119, 'the 119 shootouts'); nhl.NHL_OVERTIME.now.shootouts = 0; } },
+  /* Round 1312: a receipt of the first file copied into the second under the same key, dated the second
+     file's day so that only the one key rule can see it. */
+  keytwice: { expect: ['R6'], run() { const a = receiptFiles[0].sources['hr-playoffs']; const b = receiptFiles[1]; must(a && b && !b.sources['hr-playoffs'], 'the playoffs receipt in the first file alone'); b.sources['hr-playoffs'] = { ...clone(a), read: b.readOn }; } },
+  /* Round 1312: a receipt of the second file dated the first file's day. */
+  readday: { expect: ['R3'], run() { const b = receiptFiles[1]; const k = Object.keys(b.sources)[0]; must(k && b.sources[k].read === b.readOn && b.readOn !== receiptFiles[0].readOn, 'a receipt of the second file on its own day'); b.sources[k].read = receiptFiles[0].readOn; } },
 };
 for (const [name, k] of Object.entries(ENGINE_CONTROLS)) CONTROLS[name] = { expect: k.expect, run() {} };
 if (CONTROL === 'list') { console.log(Object.keys(CONTROLS).join(' ')); process.exit(0); }
@@ -621,15 +640,33 @@ const OWN_MLB_DIVISIONS = {
     /* R4: nothing leans on a receipt marked thin. */
     check('R4', got.every(s => !s || !s.thin), `${where} leans on a receipt marked thin`);
   }
-  /* R3: every receipt is whole, was read on the ledger's day, and none is a wiki. */
-  for (const [k, s] of Object.entries(SRC)) {
-    const text = `${s.publisher} ${s.url} ${s.title}`.toLowerCase();
-    check('R3', !/wiki|fandom/.test(text), `the receipt "${k}" is a wiki: ${s.url}`);
-    check('R3', /^https:\/\//.test(s.url ?? '') && s.read === receipts.readOn && !!s.publisher && !!s.title && !!s.group && (s.sport === 'mlb' || s.sport === 'nhl'), `the receipt "${k}" is not whole`);
-    check('R3', Array.isArray(s.says) ? s.says.length > 0 : !!s.years && Object.keys(s.years).length > 0, `the receipt "${k}" says nothing`);
+  /* R3: every receipt is whole, was read on its own file's day, and none is a wiki. Round 1312: every
+     file of every receipts file, each held to its own `readOn`, and each file's day to this harness's own table. */
+  for (const rf of receiptFiles) {
+    check('R3', rf.readOn === OWN.receiptDays[rf.file], `${rf.file} says it was read on ${rf.readOn}, this harness's own table says ${OWN.receiptDays[rf.file]}`);
+    for (const [k, s] of Object.entries(rf.sources)) {
+      const text = `${s.publisher} ${s.url} ${s.title}`.toLowerCase();
+      check('R3', !/wiki|fandom/.test(text), `the receipt "${k}" is a wiki: ${s.url}`);
+      check('R3', /^https:\/\//.test(s.url ?? '') && s.read === rf.readOn && !!s.publisher && !!s.title && !!s.group && (s.sport === 'mlb' || s.sport === 'nhl'), `the receipt "${k}" of ${rf.file} is not whole, or was not read on the file's day ${rf.readOn}`);
+      check('R3', Array.isArray(s.says) ? s.says.length > 0 : !!s.years && Object.keys(s.years).length > 0, `the receipt "${k}" says nothing`);
+    }
   }
-  check('R3', receipts.readOn === mlb.MLB_LEDGER_READ_ON && receipts.readOn === nhl.NHL_LEDGER_READ_ON, 'the ledgers and the receipts were not read on the same day');
-  console.log(`receipts: ${Object.keys(SRC).length}, cited from ${cited.length} places, ${Object.values(SRC).filter(s => s.thin).length} marked thin and cited by nothing`);
+  check('R3', sameSet(receiptFiles.map(rf => rf.file), Object.keys(OWN.receiptDays)), `the receipts files are ${receiptFiles.map(rf => rf.file).join(', ')}, this harness's own table holds ${Object.keys(OWN.receiptDays).join(', ')}`);
+  /* The ledgers and the receipts were read on the same day, file by file: the first file on the first day
+     each ledger names, and every receipt a ledger cites on a day that ledger names. The NHL ledger names
+     two days (NHL_LEDGER_READ_ON, and NHL_LEDGER_READ_AGAIN_ON once it cites the second file). */
+  check('R3', receiptFiles[0].readOn === mlb.MLB_LEDGER_READ_ON && receiptFiles[0].readOn === nhl.NHL_LEDGER_READ_ON, 'the ledgers and the first receipts file were not read on the same day');
+  const ledgerDays = { MLB: [mlb.MLB_LEDGER_READ_ON], NHL: [nhl.NHL_LEDGER_READ_ON, nhl.NHL_LEDGER_READ_AGAIN_ON].filter(d => typeof d === 'string') };
+  for (const [where, , keys] of cited) {
+    const days = ledgerDays[where.slice(0, 3)];
+    check('R3', !!days, `${where} is in neither ledger`);
+    for (const k of keys) if (days && fileOf[k]) check('R3', days.includes(fileOf[k].readOn), `${where} cites "${k}", read on ${fileOf[k].readOn}, a day its ledger does not name (${days.join(', ')})`);
+  }
+  /* R6 (Round 1312): a key lives in exactly one receipts file. */
+  const homes = {};
+  for (const rf of receiptFiles) for (const k of Object.keys(rf.sources)) (homes[k] ??= []).push(rf.file);
+  for (const [k, files] of Object.entries(homes)) check('R6', files.length === 1, `the receipt "${k}" is in ${files.join(' and ')}`);
+  console.log(`receipts: ${Object.keys(SRC).length} in ${receiptFiles.length} files (${receiptFiles.map(rf => `${Object.keys(rf.sources).length} read on ${rf.readOn}`).join(', ')}), cited from ${cited.length} places, ${Object.values(SRC).filter(s => s.thin).length} marked thin and cited by nothing`);
 
   /* R5: a number only one source gave stays empty, and is named. */
   const empty = [
@@ -647,7 +684,7 @@ const OWN_MLB_DIVISIONS = {
 
   /* D1: no en dash and no em dash in the ledgers, the receipts, this file or the round's notes. */
   const dashes = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
-  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', 'scripts/data/usSeasonSources1211.json', 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md']) {
+  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', ...RECEIPT_FILES, 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md', 'docs/audits/ROUND-1312-NOTES.md']) {
     const text = readFileSync(path.join(ROOT, f), 'utf8') + EXTRA.text;
     check('D1', !dashes.some(d => text.includes(d)), `${f} holds an en dash or an em dash`);
   }

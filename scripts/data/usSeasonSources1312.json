@@ -1,0 +1,11 @@
+{
+  "round": 1312,
+  "readOn": "2026-10-12",
+  "about": "Receipts for the facts Round 1312 added to src/data/usSeasonLedgerNhl.ts, read on 2026-10-12, each page drawn by script in a real browser (Chromium) and its own words read. A receipt of scripts/data/usSeasonSources1211.json is never repeated here: a page read again today is a new key in this file. Groups as in that file: the league's own site, its records site and its feed are one source (nhl); NBC Sports and NBC Chicago are one (nbc); Hockey Reference is one (sportsreference-hockey).",
+  "groups": {
+    "nhl": "The National Hockey League: its own site, its records site and its standings feed are one source, never two.",
+    "nbc": "NBC Sports and NBC Chicago are one source.",
+    "sportsreference-hockey": "Hockey Reference."
+  },
+  "sources": {}
+}
