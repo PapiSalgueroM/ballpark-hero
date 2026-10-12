@@ -1,0 +1,13 @@
+1) the stamp is the overall the season was played at
+   140 careers, 2752 rows appended; played rows: 2327 normal, 78 severe injury, 67 keep playing; 0 without ovr, 0 with the wrong one; 0 unplayed rows carrying one
+2) the rating reader: the stored rating for a played season, null for one nobody played
+   2472 played rows read their own rating; 280 other rows read null, 140 of them stored with rating 0: retired 140; 7 fixtures null
+3) the stream did not move: the engine and a copy without the stamp, side by side
+   16 of 16 careers equal at every step, 3222 steps compared on Math.random calls and state
+4) a save from before this round: real ratings, no invented overall, and the stamp picks up from the next season
+   12 fresh careers carry no "kept from" caption; 12 old saves, 60 old played type rows read ovr null with their real rating; 36 seasons played on them after the update, 36 with ovr
+5) per position stats are the row's own fields, and a clean sheet never drawn reads blank
+   2472 rows checked field by field; 0 blank clean sheet cells, all on unstamped back line zeros; 0 stamped zeros printed as 0; fixtures: 17 pre 667 CB rows blank, 17 stamped zero rows printed
+   back line rows with 10 or more apps: 718 of 718 kept a clean sheet (100.0%)
+
+simCareerSeasonRatings: green. 140 careers, 2472 played rows stamped true, 2472 ratings read back, 16 of 16 streams unmoved, 12 old saves honest, 2472 stat rows from real fields.
