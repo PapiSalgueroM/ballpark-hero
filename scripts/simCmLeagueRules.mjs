@@ -379,6 +379,25 @@
       whole on the same runner. scripts/simCmLeagueBook.mjs section thin
       holds the other side: the entry of every club that had an eleven
       all season is byte equal to the base commit's.
+      Release AX, the join (2026-10-12) re-took the whole state hash of
+      16 era entries and nothing else, when Rounds 1304 and 1306 met on
+      one tree. Each round had written those 16 lines for its own cause
+      (Round 1304 the buyers of a past season, in all 20 era entries;
+      Round 1306 the rows of clubs with no named eleven, in 16 of the
+      20: every era league but premier2005, bundesliga2005,
+      bundesliga2010 and premier2020), so git could keep neither value.
+      Attribution on a GitHub runner at e00f621e (remote check rAXg-m2a),
+      on the merged tree. With the era branch of actingClubsByLeague
+      out (the rule before Round 1304): Round 1306's file as it stood,
+      green whole. With the partial eleven naming nobody (the rule
+      before Round 1306): Round 1304's file as it stood, green whole.
+      With both out: Release AW's file as it stood, green whole, so
+      nothing else in the join moved a hash. With both in: 20 failures
+      against Round 1306's file, 40 against Round 1304's, and 16 against
+      git's own merge of the two, each of them "differs in whole" on one
+      of the 16 entries. Written with --part=modern,eras,pure --write on
+      the tree itself (16 lines changed and no other), then run green
+      whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
