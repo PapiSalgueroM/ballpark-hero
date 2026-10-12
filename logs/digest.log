@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 35528[2mms[22m[39m
+[31m   [31m×[31m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it[39m[33m 35527[2mms[22m[39m
+[31m     → keys that moved against the committed fixture: expected [ 'mlb|now|SP', 'mlb|now|RP', …(20) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerTruthDigest.test.ts[2m > [22mRound 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[31m[1mAssertionError[22m: keys that moved against the committed fixture: expected [ 'mlb|now|SP', 'mlb|now|RP', …(20) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "mlb|now|SP",[39m
+[31m+   "mlb|now|RP",[39m
+[31m+   "mlb|now|C",[39m
+[31m+   "mlb|now|1B",[39m
+[31m+   "mlb|now|2B",[39m
+[31m+   "mlb|now|3B",[39m
+[31m+   "mlb|now|SS",[39m
+[31m+   "mlb|now|LF",[39m
+[31m+   "mlb|now|CF",[39m
+[31m+   "mlb|now|RF",[39m
+[31m+   "mlb|now|DH",[39m
+[31m+   "mlb|y2004|SP",[39m
+[31m+   "mlb|y2004|RP",[39m
+[31m+   "mlb|y2004|C",[39m
+[31m+   "mlb|y2004|1B",[39m
+[31m+   "mlb|y2004|2B",[39m
+[31m+   "mlb|y2004|3B",[39m
+[31m+   "mlb|y2004|SS",[39m
+[31m+   "mlb|y2004|LF",[39m
+[31m+   "mlb|y2004|CF",[39m
+[31m+   "mlb|y2004|RF",[39m
+[31m+   "mlb|y2004|DH",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/usCareerTruthDigest.test.ts:[2m120:70[22m[39m
+    [90m118| [39m    const moved = names.filter(k => committed.keys[k].digest !== now.k…
+    [90m119| [39m    [35mif[39m ([33m![39mrecord) {
+    [90m120| [39m      expect(moved, 'keys that moved against the committed fixture').t…
+    [90m   | [39m                                                                     [31m^[39m
+    [90m121| [39m      [35mreturn[39m[33m;[39m
+    [90m122| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 18:59:09
+[2m   Duration [22m 37.98s[2m (transform 1.19s, setup 60ms, collect 1.52s, tests 35.53s, environment 324ms, prepare 144ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only where this step is allowed to move it,line=120,column=70::AssertionError: keys that moved against the committed fixture: expected [ 'mlb|now|SP', 'mlb|now|RP', …(20) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "mlb|now|SP",%0A+   "mlb|now|RP",%0A+   "mlb|now|C",%0A+   "mlb|now|1B",%0A+   "mlb|now|2B",%0A+   "mlb|now|3B",%0A+   "mlb|now|SS",%0A+   "mlb|now|LF",%0A+   "mlb|now|CF",%0A+   "mlb|now|RF",%0A+   "mlb|now|DH",%0A+   "mlb|y2004|SP",%0A+   "mlb|y2004|RP",%0A+   "mlb|y2004|C",%0A+   "mlb|y2004|1B",%0A+   "mlb|y2004|2B",%0A+   "mlb|y2004|3B",%0A+   "mlb|y2004|SS",%0A+   "mlb|y2004|LF",%0A+   "mlb|y2004|CF",%0A+   "mlb|y2004|RF",%0A+   "mlb|y2004|DH",%0A+ ]%0A%0A ❯ src/test/usCareerTruthDigest.test.ts:120:70%0A%0A

@@ -1,0 +1,19 @@
+A) the fixture is whole
+   recorded from 5d5926f687b49bbb1c7e2d5c2c4fdea3ba052a28 (not main: src differs from feb919f144e8e2e1b870f6ccd865d4ec3762dc69)
+   nfl: 475 clicks, 24 seasons, 19 fixed saves, 928 screen steps; 16 wheel steps, 13 steps saved in an extension talk, 27 in free agency
+   nba: 521 clicks, 24 seasons, 19 fixed saves, 932 screen steps; 14 wheel steps, 13 steps saved in an extension talk, 20 in free agency
+   mlb: 455 clicks, 24 seasons, 19 fixed saves, 886 screen steps; 6 wheel steps, 5 steps saved in an extension talk, 13 in free agency
+   nhl: 421 clicks, 24 seasons, 19 fixed saves, 900 screen steps; 6 wheel steps, 11 steps saved in an extension talk, 6 in free agency
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nfl, nba, nhl], failed [mlb]
+   mlb click path step 10 (after "hub: Play the 2026 season"): the save differs first in c.rival; the markup differs under the same words ("The 2026 seasonCincinnati Reds · age 21 · CFMissed October.2")
+   mlb click path step 11 (after "curtain: Continue"): the save differs
+   mlb click path step 12 (after "event: Play both ends, all eighteen inningsRespect, real cost"): the save differs
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nfl, nba, nhl], not all four sports
+  FAIL: 64 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/test/usRivalLine.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 633[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1227: a picker returns exactly what its printer prints[2m > [22mNFL: every position, printed parts only, a back's catches at the bridge [33m 314[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSaves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonMlb.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 6426[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 1334[2mms[22m[39m
+   [33m[2m✓[22m[39m the innings of a game[2m > [22mspreads a side's runs the way the score law draws an inning: they add up, the minimums hold, nothing passes nine [33m 2468[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 444[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 1892[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 18:56:28
+[2m   Duration [22m 9.17s[2m (transform 2.10s, setup 499ms, collect 4.18s, tests 7.14s, environment 2.22s, prepare 683ms)[22m
+
