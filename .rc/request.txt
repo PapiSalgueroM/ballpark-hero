@@ -1,0 +1,9 @@
+#!serial
+recordBoard: git worktree add -q /tmp/h 560a3f856d2bb3b7b710593f6e230bd64b11b30b && ln -s "$PWD/node_modules" /tmp/h/node_modules && (cd /tmp/h && node scripts/recordUsBoardFixture.mjs /tmp/new-board.json) && cp /tmp/new-board.json $RC_OUT/usBoardFixture.json && head -c 700 /tmp/new-board.json && echo && ls -l /tmp/new-board.json
+attribIII: node scripts/qa/compareUsBoardFixture.mjs --rival mlb,nhl scripts/data/usBoardFixture.json /tmp/new-board.json
+attribDefault: node scripts/qa/compareUsBoardFixture.mjs scripts/data/usBoardFixture.json /tmp/new-board.json
+boardHead: node scripts/simUsBoardParity.mjs
+boardNew: cp /tmp/new-board.json scripts/data/usBoardFixture.json && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- scripts/data/usBoardFixture.json; exit $s
+digestMlbOnly: DIGEST_RECORD=1 DIGEST_ALLOW='mlb|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000; s=$?; git checkout -- src/test/fixtures/usCareerTruthDigest.json; exit $s
+digestRecord: DIGEST_RECORD=1 DIGEST_ALLOW='mlb|*,nhl|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000 && cp src/test/fixtures/usCareerTruthDigest.json $RC_OUT/usCareerTruthDigest.json
+digestPlainNew: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000; s=$?; git checkout -- src/test/fixtures/usCareerTruthDigest.json; exit $s
