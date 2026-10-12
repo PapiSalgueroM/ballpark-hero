@@ -1,0 +1,17 @@
+vitest-libs exit=0 7s |    Duration  5.82s (transform 2.06s, setup 780ms, collect 3.44s, tests 3.11s, environment 3.98s, prepare 1.20s)
+simUsPostseason exit=0 20s | simUsPostseason: 32 checks, 0 failed, 0 findings for the lead
+usp-gmclubs exit=1 17s | simUsPostseason: 32 checks, 2 failed, 0 findings for the lead (control gmclubs)
+usp-onesrc exit=1 17s | simUsPostseason: 32 checks, 1 failed, 0 findings for the lead (control onesrc)
+usp-sum exit=1 16s | simUsPostseason: 32 checks, 1 failed, 0 findings for the lead (control sum)
+usp-drop exit=1 16s | simUsPostseason: 32 checks, 2 failed, 0 findings for the lead (control drop)
+usp-clinch exit=1 17s | simUsPostseason: 32 checks, 1 failed, 0 findings for the lead (control clinch)
+usp-allhome exit=1 18s | simUsPostseason: 32 checks, 1 failed, 1 findings for the lead (control allhome)
+tsc exit=0 74s | 
+usp-open exit=1 18s | simUsPostseason: 32 checks, 1 failed, 0 findings for the lead (control open)
+usp-thin exit=1 2s | simUsPostseason: 31 checks, 11 failed, 0 findings for the lead (control thin)
+usp-tries exit=1 8s | simUsPostseason: 32 checks, 1 failed, 1 findings for the lead (control tries)
+usp-stream exit=1 16s | simUsPostseason: 32 checks, 1 failed, 1 findings for the lead (control stream)
+ctl-mounted exit=1 45s | simGmGameDay: 414 checks, 1 failed (control mounted)
+simGmGameDay exit=0 50s | simGmGameDay: 414 checks, 0 failed
+ctl-static exit=1 47s | simGmGameDay: 414 checks, 2 failed (control static)
+simHarnessAnchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
