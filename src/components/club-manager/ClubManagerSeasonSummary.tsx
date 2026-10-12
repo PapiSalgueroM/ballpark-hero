@@ -128,18 +128,18 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             })}
             {sm.topScorer && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">⚽</span>Top scorer: {sm.topScorer.name} ({sm.topScorer.goals} goals)
+                <span className="shrink-0">⚽</span><span>Your top scorer: {sm.topScorer.name} ({sm.topScorer.goals} goals)</span>
               </p>
             )}
             {sm.topAssister && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🎯</span>Most assists: {sm.topAssister.name} ({sm.topAssister.assists})
+                <span className="shrink-0">🎯</span><span>Your most assists: {sm.topAssister.name} ({sm.topAssister.assists})</span>
               </p>
             )}
             {/* Round 165: the season's individual honours. */}
             {sm.goldenBoot && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">👟</span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)
+                <span className="shrink-0">👟</span><span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)</span>
               </p>
             )}
             {awards?.ast && (
@@ -175,7 +175,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             )}
             {sm.playerOfSeason && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🎖️</span>Player of the season: <span className="font-bold">{sm.playerOfSeason.name}</span> ({sm.playerOfSeason.club})
+                <span className="shrink-0">🎖️</span><span>Player of the season: <span className="font-bold">{sm.playerOfSeason.name}</span> ({sm.playerOfSeason.club})</span>
               </p>
             )}
             {sm.ballonDor && (
