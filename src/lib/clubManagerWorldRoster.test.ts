@@ -529,6 +529,46 @@ describe('actual world roster continuity through manager callbacks', () => {
     expect(moved.worldRoster).toBeUndefined(); expect(moved.worldSeed).toBeUndefined();
   });
 
+  /* Release AZ, the lead's ruling Y2: a ledger the reader cannot verify reads as absent (the save plays its seeded
+     projection), and the next recorded deal writes a fresh ledger instead of leaving the feature off for good. */
+  it.each([
+    { label: 'a wrong shape', edit: (c: CareerState) => ({ ...c, worldRoster: { version: 1, eraId: 'now' } }) as unknown as CareerState },
+    { label: 'another version', edit: (c: CareerState) => ({ ...c, worldRoster: { ...c.worldRoster!, version: 2 } }) as unknown as CareerState },
+    { label: 'one bad record', edit: (c: CareerState) => mutate(c as unknown as WorldRosterCareer, s => { s.records[0].year += 1; }) as unknown as CareerState },
+  ])('reads $label as no ledger, plays the seeded projection and writes a fresh ledger on the next deal', ({ edit }) => {
+    const c = realCareer();
+    const market = buildMarket(c);
+    const first = market.find(p => p.club === 'Arsenal' && p.age < 29 && p.position !== 'GK')!;
+    const signed = buyPlayer(c, first)!; expect(readWorldRoster(signed)).not.toBeNull();
+    const bad = edit(signed);
+    expect(readWorldRoster(bad)).toBeNull();
+    const plain = { ...bad }; delete plain.worldRoster;
+    expect(worldRosterFor(bad, 'Chelsea')).toEqual(worldRosterFor(plain, 'Chelsea'));
+    expect(buildMarket(bad)).toEqual(buildMarket(plain));
+    const second = buildMarket(plain).find(p => p.club === 'Chelsea' && p.position !== 'GK' && p.name !== first.name)!;
+    const next = buyPlayer(bad, second)!; expect(next).not.toBeNull();
+    const fresh = readWorldRoster(next)!;
+    expect(fresh).not.toBeNull(); expect(fresh.records).toHaveLength(1);
+    expect(fresh.records[0].origin.name).toBe(second.name); expect(fresh.records[0].owner).toBe(c.clubName);
+  });
+
+  it('reads a packed string cut in half as no ledger and writes a fresh ledger on the next deal', () => {
+    const c = realCareer();
+    const market = buildMarket(c);
+    const first = market.find(p => p.club === 'Arsenal' && p.age < 29 && p.position !== 'GK')!;
+    const signed = buyPlayer(c, first)!;
+    const released = releasePlayer(signed, signed.squad.find(p => p.name === first.name)!.id)!;
+    const packed = released.worldRoster!.packedRecords!; expect(typeof packed).toBe('string');
+    const bad = { ...released, worldRoster: { ...released.worldRoster!, packedRecords: packed.slice(0, Math.floor(packed.length / 2)) } };
+    expect(readWorldRoster(bad)).toBeNull();
+    const plain = { ...bad }; delete plain.worldRoster;
+    expect(worldRosterFor(bad, 'Arsenal')).toEqual(worldRosterFor(plain, 'Arsenal'));
+    const second = buildMarket(plain).find(p => p.club === 'Chelsea' && p.position !== 'GK')!;
+    const next = buyPlayer(bad, second)!; expect(next).not.toBeNull();
+    const fresh = readWorldRoster(next)!;
+    expect(fresh).not.toBeNull(); expect(fresh.records.map(r => r.origin.name)).toEqual([second.name]);
+  });
+
   it('uses no global read draws and keeps the entire stale input unchanged during year refresh', () => {
     const c = bought(); const future = { ...c, clubName: 'Liverpool', season: 2, squad: [] };
     const before = structuredClone(future);

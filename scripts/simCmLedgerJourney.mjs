@@ -173,8 +173,9 @@ for (const era of ERAS) {
   if (!leagues?.length) cannot(`the era ${era} has no leagues`);
   const all = [...new Set(leagues.flatMap(l => l.clubs))];
   const size = c => M0.eras.projectedRoster(c, 0, era).length;
-  const thin = [...all].sort((x, y) => size(x) - size(y) || x.localeCompare(y))[0];
-  const picks = [leagues[0].clubs[2], leagues[1]?.clubs[4] ?? leagues[0].clubs[7], thin];
+  const two = [leagues[0].clubs[2], leagues[1]?.clubs[4] ?? leagues[0].clubs[7]];
+  const thin = [...all].filter(c => !two.includes(c)).sort((x, y) => size(x) - size(y) || x.localeCompare(y))[0];
+  const picks = [...two, thin];
   console.log(`  ${era}: ${picks.join(', ')} (the last has the era's thinnest roster, ${size(thin)} projected men)`);
   for (const club of picks) for (const seed of SEEDS) await journey(era, club, seed, acc);
 }

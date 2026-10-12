@@ -183,8 +183,12 @@ export function worldRosterKey(career: CareerState, originClub: string, player: 
 export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRosterTransfer): WorldRosterCareer {
   const year = yearOf(career);
   const held = readWorldRoster(career);
-  const existing = (career as WorldRosterCareer).worldRoster;
-  if (year === null || (existing !== undefined && !held) || !validPlayer(transfer.player) || (transfer.from !== null && !text(transfer.from))
+  /* Release AZ, the lead's ruling Y2 (ruling C3 of Release AW): a ledger the reader cannot verify reads as
+     absent, and the next honest write overwrites it with a fresh one. Until this release an unreadable ledger
+     was returned unchanged here for every later deal, so the feature stayed off for the rest of that save while
+     its string kept its place in the save. src/lib/clubManagerWorldRoster.test.ts holds it (the four unreadable
+     ledgers of ruling Y2). */
+  if (year === null || !validPlayer(transfer.player) || (transfer.from !== null && !text(transfer.from))
     || (transfer.originPosition !== undefined && !positions.has(transfer.originPosition))
     || transfer.player.onLoan === true || transfer.kind === 'loan' || transfer.kind === 'loan-return') return career;
   if (transfer.kind !== 'permanent' && transfer.kind !== 'release' && transfer.kind !== 'retire') return career;
