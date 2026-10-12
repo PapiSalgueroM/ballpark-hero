@@ -1,0 +1,5 @@
+vitest-card exit=0 3s |    Duration  2.70s (transform 250ms, setup 211ms, collect 576ms, tests 1.36s, environment 1.29s, prepare 584ms)
+simNoInventedQuotes exit=0 31s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simGmGameDay exit=0 51s | simGmGameDay: 315 checks, 0 failed
+tsc exit=0 80s | 

@@ -1,0 +1,16 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/components/front-office-shared/GmGameDayCard.test.tsx (10 tests) 403ms
+stdout | src/lib/gmGameDayView.test.ts > gameDayView > every sentence is the law's own for the story the told path tells
+gmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+ ✓ src/lib/gmGameDayView.test.ts (8 tests) 953ms
+   ✓ gameDayView > prints the saved final from his side, and the periods add up to it, from both sides  430ms
+   ✓ gameDayView > every sentence is the law's own for the story the told path tells  327ms
+
+ Test Files  2 passed (2)
+      Tests  18 passed (18)
+   Start at  05:34:17
+   Duration  2.70s (transform 250ms, setup 211ms, collect 576ms, tests 1.36s, environment 1.29s, prepare 584ms)
+
