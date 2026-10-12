@@ -90,12 +90,27 @@ const cannotRun = why => { console.error(`control cannot run: ${why}`); console.
 
 const SECTION_NAMES = {
   1: 'what must not move: the season before the draft, and the desk off fixture',
+  6: 'the class: today\'s twelve, then the curve, slots plus four, never over 70',
   7: 'the table: the old arm on the fleet (FLEET=full only)',
 };
 
 /* control -> { expect: the sections that must go red, swaps: { file key: [[from, to]] } } */
 const CONTROLS = {
   touchseason: { expect: [1], swaps: { engine: [['  const confWinners: string[] = [];', '  rng(); const confWinners: string[] = [];']] } },
+  /* every man after today's twelve drawn as the old class draws them, 70 to 87 */
+  fatclass: { expect: [6], swaps: { engine: [
+    ['  { from: 13, to: 30, ovr: [72, 80] },', '  { from: 13, to: 30, ovr: [70, 87] },'],
+    ['  { from: 31, to: 45, ovr: [69, 76] },', '  { from: 31, to: 45, ovr: [70, 87] },'],
+    ['  { from: 46, to: 70, ovr: [66, 72] },', '  { from: 46, to: 70, ovr: [70, 87] },'],
+  ] } },
+  /* the class ignores the curve and draws every man after the twelve as the old class does */
+  nocurve: { expect: [6], swaps: { engine: [['    const trueOvr = lo + Math.floor(rng() * (hi - lo + 1));', '    const trueOvr = 70 + Math.floor(rng() * 18) + 0 * (lo + hi);']] } },
+  /* the curve flattened: every band one range */
+  flatclass: { expect: [6], swaps: { engine: [
+    ['  { from: 13, to: 30, ovr: [72, 80] },', '  { from: 13, to: 30, ovr: [66, 80] },'],
+    ['  { from: 31, to: 45, ovr: [69, 76] },', '  { from: 31, to: 45, ovr: [66, 80] },'],
+    ['  { from: 46, to: 70, ovr: [66, 72] },', '  { from: 46, to: 70, ovr: [66, 80] },'],
+  ] } },
 };
 
 if (CONTROL === 'all') {
@@ -308,6 +323,95 @@ open(1);
   const diff = spawnSync('git', ['diff', '--quiet', fixture.recordedFrom, '--', ...held], { cwd: ROOT, encoding: 'utf8' });
   check(diff.status === 0, `git diff --quiet ${fixture.recordedFrom} -- ${held.join(' ')} exited ${diff.status}${diff.status === 1 ? ': one of them moved' : ': git could not answer'}`);
   console.log(`   1b: git diff --quiet ${fixture.recordedFrom} -- ${held.length} files: exit ${diff.status}`);
+}
+
+/* ================================================================== */
+open(6);
+{
+  /* The class of an earned draft. Today's twelve are found by replaying nbaDraftClass on a twin of the generator,
+     the old draft's own function, never a copy of the new one; every other man is held, number for number over
+     the fleet of classes, to the curve the engine exports. */
+  const CURVE = E.NBA_EARNED_CLASS_CURVE;
+  /* THE CURVE'S SHAPE, whatever its tuned numbers: it covers every man from 13 to 70 once, in order; it falls band
+     after band (both ends never up, the middle always down); and by the last pick it is at the minimum man's band
+     (nbaMinimumMan rates 66 to 71, and 66 is the grade's own floor), so the class runs down to the end of a bench. */
+  CURVE.forEach((b, i) => {
+    check(b.from === (i === 0 ? 13 : CURVE[i - 1].to + 1) && b.to >= b.from && b.ovr[0] <= b.ovr[1], `the curve's band ${i + 1} (${J(b)}) does not follow the one before it`);
+    if (i === 0) return;
+    const a = CURVE[i - 1];
+    check(b.ovr[0] <= a.ovr[0] && b.ovr[1] <= a.ovr[1] && b.ovr[0] + b.ovr[1] < a.ovr[0] + a.ovr[1], `the curve does not fall from band ${i} ${J(a.ovr)} to band ${i + 1} ${J(b.ovr)}`);
+  });
+  const tail = CURVE[CURVE.length - 1];
+  check(tail.to === 70 && tail.ovr[0] >= 66 && tail.ovr[1] <= 72, `the curve's last band ${J(tail)} does not reach slot 70 at the minimum man's band (66 to 72)`);
+  const SLOTS = 60;
+  const N = 1500;
+  const size = Math.min(70, SLOTS + 4);
+  const observed = new Map();
+  const bandSum = [];
+  const bandN = [];
+  let men = 0;
+  let headMatched = 0;
+  for (let i = 0; i < N; i += 1) {
+    const cls = E.nbaEarnedDraftClass(mulberry32(60000 + i), SLOTS, new Set());
+    const twin = E.nbaDraftClass(mulberry32(60000 + i), 24, new Set()).slice(0, 12);
+    check(cls.length === size, () => `class ${i}: ${cls.length} men for ${SLOTS} slots, the rule is ${size}`);
+    const names = new Set(cls.map(p => p.name));
+    check(names.size === cls.length && new Set(cls.map(p => p.id)).size === cls.length, () => `class ${i}: two men share a name or an id`);
+    for (let k = 1; k < cls.length; k += 1) check(cls[k - 1].grade >= cls[k].grade, () => `class ${i}: not sorted by grade at ${k}`);
+    const head = new Set();
+    for (const t of twin) {
+      const p = cls.find(x => x.name === t.name);
+      const same = !!p && p.trueOvr === t.trueOvr && p.grade === t.grade && p.pos === t.pos && p.age === t.age;
+      check(same, () => `class ${i}: today's man ${t.name} (${t.trueOvr}) is not in the earned class as drawn`);
+      if (same) { head.add(p); headMatched += 1; }
+    }
+    cls.forEach((p, k) => {
+      /* The board's load guard on a saved class (NbaFrontOfficeBoard.tsx, the restore of a draft). */
+      check(typeof p.name === 'string' && p.name.trim() !== '' && ['G', 'F', 'C'].includes(p.pos) && Number.isInteger(p.age) && p.age > 0
+        && Number.isFinite(p.grade) && p.grade >= 0 && p.grade <= 99 && Number.isFinite(p.trueOvr) && p.trueOvr >= 0 && p.trueOvr <= 99,
+      () => `class ${i}: ${J(p)} fails the board's load guard`);
+      const band = Math.floor(k / 10);
+      bandSum[band] = (bandSum[band] ?? 0) + p.trueOvr;
+      bandN[band] = (bandN[band] ?? 0) + 1;
+      if (head.has(p)) return;
+      observed.set(p.trueOvr, (observed.get(p.trueOvr) ?? 0) + 1);
+      men += 1;
+    });
+  }
+  /* What the curve says men 13 to `size` are, rating by rating, over N classes. */
+  const expected = new Map();
+  const variance = new Map();
+  for (let man = 13; man <= size; man += 1) {
+    const b = CURVE.find(x => man >= x.from && man <= x.to) ?? CURVE[CURVE.length - 1];
+    const w = b.ovr[1] - b.ovr[0] + 1;
+    for (let v = b.ovr[0]; v <= b.ovr[1]; v += 1) {
+      expected.set(v, (expected.get(v) ?? 0) + N / w);
+      variance.set(v, (variance.get(v) ?? 0) + (N / w) * (1 - 1 / w));
+    }
+  }
+  let worstZ = 0;
+  for (let v = 0; v <= 99; v += 1) {
+    const o = observed.get(v) ?? 0;
+    const e = expected.get(v) ?? 0;
+    if (e === 0) { check(o === 0, `${o} men after today's twelve are rated ${v}, which the curve never draws`); continue; }
+    const z = Math.abs(o - e) / Math.sqrt(variance.get(v));
+    worstZ = Math.max(worstZ, z);
+    check(z <= 4.5, () => `men after today's twelve rated ${v}: ${o}, the curve says ${e.toFixed(0)} (${z.toFixed(1)} standard errors)`);
+  }
+  const bands = bandSum.map((s, b) => s / bandN[b]);
+  const steps = bands.slice(1).map((m, b) => bands[b] - m);
+  /* Floor: 70 percent of the smallest step measured on these fixed classes (1.70, 2026-10-12, the starting curve;
+     the house rule), see MEASURED. A tuned curve is remeasured here and the floor moves with it. */
+  const STEP_FLOOR = 1.19;
+  steps.forEach((d, b) => check(d > STEP_FLOOR, `the mean true rating does not fall from slots ${b * 10 + 1}-${b * 10 + 10} to ${b * 10 + 11}-${Math.min(size, b * 10 + 20)} (${d.toFixed(2)})`));
+  /* The size rule at every number of slots a draft can have, and two it cannot. */
+  for (const s of [-3, 0, 1, 7, 8, 12, 30, 59, 60, 61, 66, 70, 75]) {
+    const n = E.nbaEarnedDraftClass(mulberry32(6100 + s + 3), s, new Set()).length;
+    check(n === Math.min(70, Math.max(0, s) + 4), `${s} slots gave a class of ${n}`);
+  }
+  check(men > 0 && headMatched === N * 12, `the fleet of classes read ${men} men after the twelve and matched ${headMatched} of today's ${N * 12}`);
+  console.log(`   ${N} classes of ${size} for ${SLOTS} slots: today's twelve found in every one, ${men} men after them held to the curve rating by rating (worst ${worstZ.toFixed(2)} standard errors, band 4.5)`);
+  console.log(`   mean true rating by ten slots: ${bands.map(m => m.toFixed(2)).join(', ')}; steps ${steps.map(d => d.toFixed(2)).join(', ')}`);
 }
 
 /* ================================================================== */

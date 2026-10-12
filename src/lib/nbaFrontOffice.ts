@@ -851,3 +851,76 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   league.schedule = nbaBookSeason(league, rng);
   return notes;
 }
+
+/* ------------------------------------------------------------------ */
+/* Round 1321: the earned draft's class, need and markers              */
+/* ------------------------------------------------------------------ */
+/* Part A of the earned draft (src/lib/nbaEarnedDraft.ts binds the shared
+   draft night to this engine). New exports only: nbaDraftClass,
+   nbaAiDraftPicks, nbaConsumeDraftPick and nbaProspectToPlayer above are the
+   old draft's and are not touched, so a save on the old draft and the desk
+   off fixture play draw for draw as before. Nothing in the game calls these
+   yet; scripts/simNbaEarnedDraft.mjs measures them. */
+
+/** The game's own bands of slots and true rating ranges for men 13 on of an
+    earned draft class, from the high 70s down to the minimum man's band
+    (nbaMinimumMan, 66 to 71) by the last pick. The game's own numbers, a
+    starting shape tuned against the balance table of the harness. */
+export const NBA_EARNED_CLASS_CURVE: readonly { from: number; to: number; ovr: readonly [number, number] }[] = [
+  { from: 13, to: 30, ovr: [72, 80] },
+  { from: 31, to: 45, ovr: [69, 76] },
+  { from: 46, to: 70, ovr: [66, 72] },
+];
+
+/** A class for an earned draft of `slots` picks: four men more than the
+    picks, so the last club still has a choice, and never more than the 70 a
+    saved class may hold. Its best twelve are today's twelve, drawn exactly as
+    today (the twelve best by grade of nbaDraftClass(rng, 24, taken)); every
+    man after them is drawn along NBA_EARNED_CLASS_CURVE with nbaDraftClass's
+    own draws and clamps. Sorted by grade, best first, as nbaDraftClass is. */
+export function nbaEarnedDraftClass(rng: () => number, slots: number, taken: Set<string> = new Set()): NbaProspect[] {
+  const size = Math.min(70, Math.max(0, Math.floor(slots)) + 4);
+  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(12, size));
+  const POS: NbaPos[] = ['G', 'G', 'F', 'F', 'C'];
+  const last = NBA_EARNED_CLASS_CURVE[NBA_EARNED_CLASS_CURVE.length - 1];
+  for (let man = out.length + 1; man <= size; man++) {
+    const [lo, hi] = (NBA_EARNED_CLASS_CURVE.find(b => man >= b.from && man <= b.to) ?? last).ovr;
+    const trueOvr = lo + Math.floor(rng() * (hi - lo + 1));
+    out.push({
+      id: fid(), name: nbaGenName(rng, taken), pos: POS[Math.floor(rng() * POS.length)],
+      age: 19 + Math.floor(rng() * 3),
+      grade: Math.max(66, Math.min(94, trueOvr + Math.floor(rng() * 9) - 4)),
+      trueOvr,
+    });
+  }
+  return out.sort((a, b) => b.grade - a.grade);
+}
+
+/** What one whole point of need is worth beside a read, in rating points. Small:
+    nbaStrength reads no position, so need only splits men whose reads are close. */
+export const NBA_DRAFT_NEED_WEIGHT = 2;
+
+/** How short a club's best eight (nbaRotationSlots) are of three guards, three
+    forwards and two centres, 0 to 1 a position. The game's own. */
+export function nbaDraftNeed(t: Pick<NbaGmTeam, 'players' | 'rotation'>): Record<NbaPos, number> {
+  const want: Record<NbaPos, number> = { G: 3, F: 3, C: 2 };
+  const have: Record<NbaPos, number> = { G: 0, F: 0, C: 0 };
+  for (const p of nbaRotationSlots(t)) if (p) have[p.pos] += 1;
+  return {
+    G: Math.max(0, want.G - have.G) / want.G,
+    F: Math.max(0, want.F - have.F) / want.F,
+    C: Math.max(0, want.C - have.C) / want.C,
+  };
+}
+
+/** Spend the club's marker OF THAT ROUND, the first one equal to it. False
+    when the list is not a draft list or holds no marker of the round. The old
+    nbaConsumeDraftPick spends the lowest marker whatever the slot's round,
+    which an earned night with a traded first cannot use. */
+export function nbaConsumeDraftRound(t: Pick<NbaGmTeam, 'picks'>, round: 1 | 2): boolean {
+  if (nbaDraftCapital(t) === null) return false;
+  const at = t.picks.indexOf(round);
+  if (at < 0) return false;
+  t.picks.splice(at, 1);
+  return true;
+}
