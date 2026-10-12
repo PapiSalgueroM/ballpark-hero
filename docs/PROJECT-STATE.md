@@ -3,10 +3,11 @@
 PR242 and PR243 stay frozen for H's integration. This chat's continued route
 review found that direct puzzles advertise one link but always hide the target
 from autocomplete. The hook already verifies and accepts a direct target.
-A separate branch from 48cb9d4b prepares remote red evidence before a minimal
-UI correction. It will offer the target only when the active optimum is one,
+A separate branch from 48cb9d4b reproduced the defect remotely: two exact UI
+failures, 32 other cases green and nine actual target exclusions. The minimal
+Board correction now permits the target only when the active optimum is one,
 keep played names and longer-puzzle targets excluded, and hold data, graph,
-scoring and save format. No runtime or product acceptance yet. See
+scoring and save format. Fresh fixed-source proof is pending. See
 docs/audits/transfer-path-direct-target-2026-10-12.md.
 
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)

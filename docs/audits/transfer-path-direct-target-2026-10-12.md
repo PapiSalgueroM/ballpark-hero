@@ -31,3 +31,24 @@ even under deliberately incorrect one-link metadata and detect omitted picks
 and deleted real saved results. Every app runtime stays remote; statistics come
 unchanged from committed records, all transport uses fixtures or is blocked.
 No sports fact, production DB operation, release output adoption or live claim.
+
+Remote baseline 501640a7a66df7cb330bb9f156a622970d4c94ca reproduced the
+defect in run 38296133483, job 114967545053. Both exact new UI cases failed
+with one expected option versus zero found, and all 32 other unit/hook cases
+passed. Nine real browser searches passed 90 baseline checks and each settled
+on the target-exclusion message; Enter could not create a move or win. The
+browser intentionally exited one and the strict baseline wrapper verified its
+status, nine exclusions and zero setup failures. This is defect reproduction,
+not product acceptance. Types/build and all 521 installed versions/source
+holds passed. Fixed-phase route/build-reader fences were deliberately skipped.
+
+Baseline artifact 11767788567 is retained on GitHub: 533,700 bytes, ZIP SHA256
+84e0d5ea39a51bef6035dab3982ec6bb8cf65337d1089938199669d614c0b8db.
+The subsequent Board edit only changes the exclusion set when the active
+optimal is one, shares that set with empty-list wording and adds one help line.
+The browser method and tests stay held. Fresh fixed-source proof is pending.
+The full baseline artifact is retained locally: 19 entries including nine
+original PNGs, all independently inspected. Its report records 72 fixture reads,
+45 blocked external requests, zero app/asset errors and unchanged source.
+Native product/control review found no blocker; all actual fixed runtime gates
+remain required before qualification.
