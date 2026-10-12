@@ -1,0 +1,3 @@
+simGmGameDay: node scripts/simGmGameDay.mjs
+ctl-noedges: GM_GAMEDAY_CONTROL=noedges node scripts/simGmGameDay.mjs
+ctl-undo: GM_GAMEDAY_CONTROL=undo node scripts/simGmGameDay.mjs

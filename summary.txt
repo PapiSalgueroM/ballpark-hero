@@ -1,0 +1,3 @@
+ctl-noedges exit=1 65s | simGmGameDay: 451 checks, 20 failed (control noedges)
+simGmGameDay exit=0 67s | simGmGameDay: 451 checks, 0 failed
+ctl-undo exit=1 72s | simGmGameDay: 451 checks, 15 failed (control undo)
