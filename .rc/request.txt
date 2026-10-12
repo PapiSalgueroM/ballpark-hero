@@ -1,0 +1,3 @@
+#!serial
+vitest-oldrefusal: node .rc/x/oldrefusal.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts -t "ledger on the next deal" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
