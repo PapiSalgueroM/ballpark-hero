@@ -1,0 +1,4 @@
+chunks: 511 names, 511 equal after hash normalising, 0 differ, 0 on one side only
+  LEAK "Conference Semifinals" in head SeasonVerdict.js
+ledger key six-2006: base usSeasonShape.js | head usSeasonShape.js
+distcmp: 1 new block words built; the ledger chunk is EQUAL at base and head
