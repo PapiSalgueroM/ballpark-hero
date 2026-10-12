@@ -1,0 +1,22 @@
+# Round 1314 reviewer (run lens) request S on 2d0c3cbe: main's simSafari against the custom property mutation, and simHalftime section 1 over twenty more seeds
+base-customprop: R=$PWD; git worktree add -q /tmp/b 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 && cd /tmp/b && node $R/.rc/x/mut.mjs css-customprop && grep -n "100vh" src/components/club-manager/LiveSimMotion.css | cut -c1-120; node scripts/simSafari.mjs 2>&1 | grep -E "LiveSimMotion|failure|green"; exit 0
+sec1-s11: node .rc/x/mkSec1.mjs s11 && SIM_SEED=11 node scripts/htSec1-s11.mjs
+sec1-s12: node .rc/x/mkSec1.mjs s12 && SIM_SEED=12 node scripts/htSec1-s12.mjs
+sec1-s13: node .rc/x/mkSec1.mjs s13 && SIM_SEED=13 node scripts/htSec1-s13.mjs
+sec1-s14: node .rc/x/mkSec1.mjs s14 && SIM_SEED=14 node scripts/htSec1-s14.mjs
+sec1-s15: node .rc/x/mkSec1.mjs s15 && SIM_SEED=15 node scripts/htSec1-s15.mjs
+sec1-s16: node .rc/x/mkSec1.mjs s16 && SIM_SEED=16 node scripts/htSec1-s16.mjs
+sec1-s17: node .rc/x/mkSec1.mjs s17 && SIM_SEED=17 node scripts/htSec1-s17.mjs
+sec1-s18: node .rc/x/mkSec1.mjs s18 && SIM_SEED=18 node scripts/htSec1-s18.mjs
+sec1-s19: node .rc/x/mkSec1.mjs s19 && SIM_SEED=19 node scripts/htSec1-s19.mjs
+sec1-s20: node .rc/x/mkSec1.mjs s20 && SIM_SEED=20 node scripts/htSec1-s20.mjs
+sec1-s21: node .rc/x/mkSec1.mjs s21 && SIM_SEED=21 node scripts/htSec1-s21.mjs
+sec1-s22: node .rc/x/mkSec1.mjs s22 && SIM_SEED=22 node scripts/htSec1-s22.mjs
+sec1-s23: node .rc/x/mkSec1.mjs s23 && SIM_SEED=23 node scripts/htSec1-s23.mjs
+sec1-s24: node .rc/x/mkSec1.mjs s24 && SIM_SEED=24 node scripts/htSec1-s24.mjs
+sec1-s25: node .rc/x/mkSec1.mjs s25 && SIM_SEED=25 node scripts/htSec1-s25.mjs
+sec1-s26: node .rc/x/mkSec1.mjs s26 && SIM_SEED=26 node scripts/htSec1-s26.mjs
+sec1-s27: node .rc/x/mkSec1.mjs s27 && SIM_SEED=27 node scripts/htSec1-s27.mjs
+sec1-s28: node .rc/x/mkSec1.mjs s28 && SIM_SEED=28 node scripts/htSec1-s28.mjs
+sec1-s29: node .rc/x/mkSec1.mjs s29 && SIM_SEED=29 node scripts/htSec1-s29.mjs
+sec1-s30: node .rc/x/mkSec1.mjs s30 && SIM_SEED=30 node scripts/htSec1-s30.mjs
