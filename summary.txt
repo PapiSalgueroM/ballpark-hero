@@ -1,0 +1,8 @@
+lawCmp exit=0 28s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+seamCmp exit=0 31s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+layCmp exit=0 26s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+tsc exit=0 94s | 
+ledger exit=0 3s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+board exit=0 70s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+rivalryEvents exit=0 7s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+digest exit=0 50s |    Duration  49.76s (transform 1.39s, setup 76ms, collect 1.77s, tests 47.02s, environment 370ms, prepare 151ms)

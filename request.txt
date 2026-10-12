@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+lawCmp: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seamCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+layCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+board: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
+ledger: US_LEDGER_MEASURE=1 node scripts/simUsSeasonLedger.mjs
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
