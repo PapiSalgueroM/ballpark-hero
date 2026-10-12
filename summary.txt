@@ -1,0 +1,1 @@
+fleetF3 exit=0 56s | FLEET F3 GREEN: 96 careers in 56 s: 0 STOP, 0 not attributed, 0 with errors, 0 unreadable pools; 49 differ at all; 16 constructed clashes; F4 4/4 equal but the new part
