@@ -1,0 +1,5 @@
+# Release AX, final proof, gate part S (the lines of Release AW's proof request rAW-F-S, so each line compares with the base)
+summer-nfl: SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+summer-nba: SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+summer-mlb: SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
+summer-nhl: SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
