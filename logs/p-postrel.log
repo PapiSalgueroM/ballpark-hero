@@ -1,0 +1,4 @@
+PLANT postrel into src/components/mlb-front-office/MlbFrontOfficeBoard.tsx
+  FAIL (section 6): no file under src imports the new modules but the files on the mount list, each within its own line of it (2033 files read): src/components/mlb-front-office/MlbFrontOfficeBoard.tsx
+simGmGameDay: 150 checks, 1 failed
+PLANT postrel CAUGHT: simGmGameDay exit 1

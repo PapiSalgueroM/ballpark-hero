@@ -1,0 +1,5 @@
+PLANT viewnfl into src/components/front-office/FrontOfficeBoard.tsx
+  FAIL (section 6): no file under src imports the new modules but the files on the mount list, each within its own line of it (2033 files read): src/components/front-office/FrontOfficeBoard.tsx (reaches src/lib/gmBracketView, which its line of the mount list d
+  FAIL (section 6): the four boards import no story law, no game day law and no help words statically (132 static imports read): src/components/front-office/FrontOfficeBoard.tsx imports src/lib/gmBracketView
+simGmGameDay: 150 checks, 2 failed
+PLANT viewnfl CAUGHT: simGmGameDay exit 1

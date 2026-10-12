@@ -1,0 +1,6 @@
+#!serial
+p-card: bash .rc/x/plantrun.sh card
+p-postrel: bash .rc/x/plantrun.sh postrel
+p-viewnfl: bash .rc/x/plantrun.sh viewnfl
+p-lazynba: bash .rc/x/plantrun.sh lazynba
+p-bindnhl: bash .rc/x/plantrun.sh bindnhl

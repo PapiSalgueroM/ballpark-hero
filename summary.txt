@@ -1,0 +1,5 @@
+p-card exit=1 10s | PLANT card CAUGHT: simGmGameDay exit 1
+p-postrel exit=1 9s | PLANT postrel CAUGHT: simGmGameDay exit 1
+p-viewnfl exit=1 9s | PLANT viewnfl CAUGHT: simGmGameDay exit 1
+p-lazynba exit=1 9s | PLANT lazynba CAUGHT: simGmGameDay exit 1
+p-bindnhl exit=1 9s | PLANT bindnhl CAUGHT: simGmGameDay exit 1
