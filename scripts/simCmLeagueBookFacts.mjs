@@ -25,7 +25,9 @@
  *
  * Controls, CM_FACTS_CONTROL=wiki | bannedhost | figure | onesource | disagree | receipt | srcname | dash | length
  * | samehost (a USED figure's second publisher moved onto the first one's host: two publishers on one host are THIN)
- * | pausedrow (the Premier League's second 2019-20 table taken out: its length must read THIN, no span row speaks for it).
+ * | pausedrow (the Premier League's second 2019-20 table taken out: its length must read THIN, no span row speaks for it)
+ * | staleowed (an owed entry planted for a USED cell) | keeperowed (the Bundesliga's keeper owed entry taken out)
+ * | seasontoken (both rows of a cell given the 16 of 2015/16) | boundary (both rows given one digit of the 25 printed).
  * Each changes the parsed copy in memory, proves it changed something, and must go red for its own reason: it ends
  * "FIRED" and exits 1. One that changes nothing or is not caught exits 3; an unknown control exits 2.
  */
@@ -55,6 +57,10 @@ const EXPECT = {
   length: /says (34|38) matches a club and its format rows give/,
   samehost: /Premier League 2015-16 topScorerGoals is THIN \([a-z0-9]+, [a-z0-9]+\)/,
   pausedrow: /Premier League 2019-20 topScorerGoals is USED but its length is THIN/,
+  staleowed: /Premier League 2015-16 topScorerGoals is USED and owed still names it \(stale\)/,
+  keeperowed: /Bundesliga 2015-16 keeperCleanSheets is \S+ .*not named under owed/,
+  seasontoken: /-pl-2015-16: topScorerGoals 16 is not printed in its literals/,
+  boundary: /-pl-2015-16: topScorerGoals \d is not printed in its literals/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmLeagueBookFacts: unknown control ${CONTROL}`); process.exit(2); }
 
@@ -117,6 +123,25 @@ if (CONTROL === 'samehost') {
 if (CONTROL === 'pausedrow') {
   const tables = facts.rows.filter(r => r.competition === 'Premier League' && r.season === PAUSED && (Number.isInteger(r.figures?.clubs) || Number.isInteger(r.figures?.matchesPerClub)));
   if (tables.length >= 2) { facts.rows = facts.rows.filter(r => !tables.slice(1).includes(r)); changed = true; }
+}
+/* staleowed: an owed entry naming a cell that is USED. Owed says what is still missing and nothing else. */
+if (CONTROL === 'staleowed') {
+  facts.owed = [...(facts.owed ?? []), { id: 'staleowed-control', competition: 'Premier League', seasons: '2015-16', quantities: [CORE], lookedFor: 'planted by the staleowed control: an owed entry for a cell that is USED' }];
+  changed = true;
+}
+/* keeperowed: the Bundesliga's keeper owed entry taken out, so its keeper cells are a hole nobody named. */
+if (CONTROL === 'keeperowed') {
+  const before = (facts.owed ?? []).length;
+  facts.owed = (facts.owed ?? []).filter(o => !(o.competition === 'Bundesliga' && (o.quantities ?? []).includes(KEEPER)));
+  changed = facts.owed.length < before;
+}
+/* seasontoken and boundary: both rows of a USED cell given the same number that sits on their lines only inside a
+   season (the 16 of 2015/16) or inside the figure (one digit of 25). Both rows agree, so only check 1 can catch it. */
+if (CONTROL === 'seasontoken' || CONTROL === 'boundary') {
+  const rows = coreRow('Premier League', '2015-16'), v = rows[0]?.figures[CORE];
+  const plant = CONTROL === 'seasontoken' ? 16 : Number(String(v)[0]);
+  const fits = CONTROL === 'seasontoken' ? rows.every(r => r.literal.some(l => l.includes('2015/16') || l.includes('2015-16'))) : v >= 10 && rows.every(r => r.figures[CORE] === v);
+  if (rows.length >= 2 && fits && plant !== v) { for (const r of rows) r.figures[CORE] = plant; changed = true; }
 }
 if (CONTROL && !changed) { console.log(`simCmLeagueBookFacts control ${CONTROL}: ABORTED, the control changed nothing.`); process.exit(3); }
 
