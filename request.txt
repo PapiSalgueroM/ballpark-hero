@@ -1,0 +1,3 @@
+simClubManager: node scripts/simClubManager.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
