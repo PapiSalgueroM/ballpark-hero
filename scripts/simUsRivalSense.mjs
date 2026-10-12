@@ -193,6 +193,9 @@ const CONTROLS = {
      the player's after his stat line moves, in every MLB season). */
   cutdrawmlb: { file: 'src/lib/mlbMyCareer.ts', prove: true, needs: 'P1,P2',
     find: '  const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;', put: '  rng(); const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;' },
+  /* P1, P2 (Round 1313): the NHL line function takes one draw more than the block it was cut from. */
+  cutdrawnhl: { file: 'src/lib/nhlMyCareer.ts', prove: true, needs: 'P1,P2',
+    find: '  const iceShare = x.iceShare;', put: '  rng(); const iceShare = x.iceShare;' },
   /* P1: the lifted stream keyed one character off the NBA's own key of Round 1112 (the NBA rival's whole trail
      moves, and nothing of the player's does). */
   liftkey: { file: 'src/lib/careerRival.ts', prove: true, needs: 'P1',
