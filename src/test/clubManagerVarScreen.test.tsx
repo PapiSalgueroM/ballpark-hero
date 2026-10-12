@@ -45,6 +45,18 @@
  * the end of a half. Three of those four are wrong on the screen as it stands and are kept as cases marked
  * `fails`, open and unreachable today (see the comment above LATE_AWARDED). So: two cases staged by hand, five
  * marked `fails`, and every other case a half the engine drew, untouched, that must pass.
+ * Round 1303 moved two penalty cases to halves that hold their review on the lower penalty rate, and added a second
+ * block at the foot of the file that is NOT about reviews: finding 6 of Round 1302 (a real goal that is the last kick
+ * of a half), reproduced on halves nobody asks a review in, as three cases marked `fails`. The fix pass of Round 1303
+ * mended the screen, so those are plain cases now, with two more beside them (reduced motion, and Skip during the
+ * card). The same fix mended one of Round 1302's five open rows on the way (the kick of a penalty a review gives in
+ * the place before a real last kick is played now). So: 43 cases, 39 plain and 4 that pass by failing (all four are
+ * about a penalty a review gives, a kind of review the game does not play).
+ * The second fix pass of Round 1303 took the mark `fails` off those four. A case marked `fails` is green on any
+ * throw and on a timeout, so a crash or a hang read as "the defect is still there". Each is a plain case now that
+ * asserts the open defect ITSELF (a real action under that card, that kick not played out): green only while
+ * exactly that is on the screen, red on a timeout or any other throw, and red the day the defect is mended. They
+ * are still titled KNOWN OPEN and their rows still say OPEN. No case of this file passes by failing any more.
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -93,7 +105,11 @@ function half(k: number, hint: number, want: (feed: LiveFeedEvent[], live: LiveM
     if (res.kind !== 'halftime' || !res.state.live || res.state.live.varReviews !== true) continue;
     const feed = liveFeed(res.state.live);
     const review = want(feed, res.state.live);
-    if (review) return { career: structuredClone(res.state), review, feed, live: res.state.live, whistle: 45 + (res.state.live.added?.h1 ?? 0), seed };
+    if (review) {
+      /* A hint that no longer holds its case costs up to 2,500 halves a run: say so, so it gets a new one. */
+      if (seed !== hint) console.info(`clubManagerVarScreen: STALE HINT, league match ${k + 1} hint ${hint}: the case was found on seed ${seed}`);
+      return { career: structuredClone(res.state), review, feed, live: res.state.live, whistle: 45 + (res.state.live.added?.h1 ?? 0), seed };
+    }
   }
   throw new Error(`no first half of league match ${k + 1} holds the review this case is about`);
 }
@@ -245,7 +261,7 @@ describe('Club Manager: the review screen', () => {
 
   it.each([
     { call: 'disallowed', match: 1, hint: 1724 },
-    { call: 'awarded', match: 2, hint: 1894 },
+    { call: 'awarded', match: 2, hint: 2099 },
   ])('a review never opens over another action: the goal of the minute before is in and counted first ($call)', async ({ call, match, hint }) => {
     const h = half(match, hint, feed => {
       const all = reviewsOf(feed);
@@ -333,7 +349,10 @@ describe('Club Manager: the review screen', () => {
   }, 120000);
 
   it('a penalty a review gives that is saved: the save is drawn after the card and the score stays', async () => {
-    const h = half(2, 2193, awardedAlone('saved'));
+    /* Round 1303: the penalty rate fell with the ledger's standard (0.004902 to 0.003605 a foul) and a review's id
+       holds the fixture, the minute and the man, so the first four matches of this career hold no saved penalty
+       by review any more (120,000 first halves, runner result r1303-scan). The tenth entry does (r1303-scan2). */
+    const h = half(9, 1832, awardedAlone('saved'));
     const v = h.review, id = v.review!.id, before = scoreBy(h.feed, place(v) - 1);
     expect(scoreBy(h.feed, place(v))).toBe(before);
     const mounted = openAt(h, v.minute - 1);
@@ -576,12 +595,17 @@ describe('Club Manager: the review screen', () => {
   };
   const at = (x: LateShape, back: number) => x.real.some(e => place(e) === x.whistle - back);
   /** The real chances of the end of a half that the pitch plays, in order, by its own two rules (scene.ts): one
-   *  action a clock place (of two lines the later), and nothing the place before a last kick (its wind up is there). */
+   *  action a clock place (of two lines the later), and the place before a last kick is that kick's wind up.
+   *  Round 1303 fix: a GOAL in that place is played all the same, with the clock stopped (the first when there are
+   *  two); a shot or a save there still is not. */
   function playedReal(h: Half, from: number): LiveFeedEvent[] {
     const chances = h.feed.filter(e => isChance(e) && place(e) >= from && place(e) <= h.whistle);
     const lastKick = chances.some(e => place(e) === h.whistle);
     const byPlace = new Map<number, LiveFeedEvent>();
-    for (const e of chances) if (!(lastKick && place(e) === h.whistle - 1)) byPlace.set(place(e), e);
+    for (const e of chances) {
+      if (!(lastKick && place(e) === h.whistle - 1)) byPlace.set(place(e), e);
+      else if (e.kind === 'goal' && !byPlace.has(place(e))) byPlace.set(place(e), e);
+    }
     return [...byPlace.values()].sort((a, b) => place(a) - place(b));
   }
   it.each([
@@ -662,9 +686,9 @@ describe('Club Manager: the review screen', () => {
          says "Penalty to ..." and no kick is ever drawn: the score moves at the whistle. On 6428 the card comes
          late (after the real shots), the kick starts, and the whistle goes before it is played out.
      Both are OPEN, unreachable today (VAR is dark, and penalties by review are held off by the ledger's owed entry
-     penalties-total) and written up in docs/audits/ROUND-1302-NOTES.md. They are kept below as cases marked
-     `fails`: each is green while the defect is there and goes RED the day it is mended, and then it becomes a
-     plain row. A ruled out goal got the stoppage for this corner; a penalty needs its twin (the card on a quiet
+     penalties-total) and written up in docs/audits/ROUND-1302-NOTES.md. They are kept below as cases titled KNOWN
+     OPEN (marked `fails` until the second fix of Round 1303, plain cases that assert the defect itself since): each
+     is green while the defect is there and goes RED the day it is mended, and then it becomes a plain row. A ruled out goal got the stoppage for this corner; a penalty needs its twin (the card on a quiet
      pitch, then the kick with the clock stopped). */
   const lateAwarded = (shape: (x: LateShape) => boolean) => (feed: LiveFeedEvent[], live: LiveMatch) => {
     const whistle = 45 + (live.added?.h1 ?? 0), shown = reviewsOf(feed).filter(v => place(v) >= 44), r = shown[0];
@@ -675,9 +699,15 @@ describe('Club Manager: the review screen', () => {
   type AwardedRow = { what: string; match: number; hint: number; shape: (x: LateShape) => boolean; under: 'quiet' | 'OPEN'; kick: 'played' | 'OPEN' };
   const LATE_AWARDED: AwardedRow[] = [
     { what: 'a real goal is the last kick after it and a real goal has the place before it', match: 1, hint: 10321, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
-    { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
+    /* Round 1303 fix: this row's kick was OPEN (never drawn: the plan plays nothing in the place before a last kick).
+       A real goal in that place has a stoppage of its own now (finding 6 of Round 1302, `goalStop` on the screen),
+       and the goal of a penalty a review gives is such a goal, so the kick is played out after its card. The case
+       marked `fails` for it went red on the runner the day the screen was mended (r1303-fx-e), as it was built to. */
+    { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
     { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
-    { what: 'two places before the whistle, a real chance at its place and one after', match: 2, hint: 8615, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
+    /* Round 1303: on the lower penalty rate the half this row stood on (match 3, seed 8615) holds no review. A scan of
+       200,000 first halves of entries 5 to 24 (runner result r1303-scan2) found one half of this shape: entry 11, seed 2022. */
+    { what: 'two places before the whistle, a real chance at its place and one after', match: 10, hint: 2022, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
   ];
   type AwardedRun = { h: Half; frames: Frame[]; last: number; whistle: number };
   const awardedRuns = new Map<number, AwardedRun>();
@@ -708,17 +738,25 @@ describe('Club Manager: the review screen', () => {
     if (row.under === 'quiet') nothingUnder(frames, new Map());
     if (row.kick === 'played') expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
   }, 240000);
-  /* A case marked `fails` is green on ANY throw, so each of these two does its own work outside the one assertion
-     that is the defect: if the half or its run is gone, it returns, and a `fails` case that returns is RED. */
-  it.fails.each(LATE_AWARDED.filter(r => r.under === 'OPEN'))('KNOWN OPEN, dark: a real action is under the card of a penalty a review gives ($what)', async row => {
-    let got: AwardedRun;
-    try { got = await awardedRun(row); } catch { return; }
-    nothingUnder(got.frames, new Map());
+  /* Round 1303 fix 2 (the closing check's open item 5, the rest of the review's minor 14). These two were marked
+     `fails`. A case marked `fails` is green on ANY throw and on a timeout, so a hang in the run or a crash in a
+     helper read as "the defect is still there". They are plain cases now and assert the open defect ITSELF, by its
+     own shape: the card came up, and a real action is under it (or the kick it gave was not played out). Green only
+     while exactly that is on the screen; red on a timeout, on any other throw, and on the day the defect is mended,
+     and then the row says quiet or played and joins the plain checks above. */
+  it.each(LATE_AWARDED.filter(r => r.under === 'OPEN'))('KNOWN OPEN, dark: a real action is under the card of a penalty a review gives ($what)', async row => {
+    const got = await awardedRun(row);
+    const up = got.frames.filter(cardUp);
+    expect(up.length, 'the card of the penalty a review gives never came up').toBeGreaterThan(0);
+    expect(got.frames[got.last].cardText).toContain('VAR: penalty awarded');
+    const actions = [...new Set(up.map(f => `${f.motion}/${f.phase}`))].filter(a => a !== 'pass/pass');
+    expect(actions.length, "the pitch under this card is quiet now: the open defect is mended, so set this row's under to 'quiet'").toBeGreaterThan(0);
   }, 240000);
-  it.fails.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is not played out ($what)', async row => {
-    let got: AwardedRun;
-    try { got = await awardedRun(row); } catch { return; }
-    expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
+  it.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is not played out ($what)', async row => {
+    const got = await awardedRun(row);
+    expect(got.frames.some(cardUp), 'the card of the penalty a review gives never came up').toBe(true);
+    expect(got.frames[got.last].cardText).toContain('VAR: penalty awarded');
+    expect(kickPlayed(got), "the kick this card gave is played out now: the open defect is mended, so set this row's kick to 'played'").toBe(false);
   }, 240000);
 
   /* ---- Round 1302: the cases nobody had played (fix-AT section 7 item 8) ----
@@ -750,7 +788,7 @@ describe('Club Manager: the review screen', () => {
   }, 180000);
 
   it.each([
-    { what: 'injury', match: 2, hint: 3046, says: 'Injury: ', shared: false },
+    { what: 'injury', match: 2, hint: 8058, says: 'Injury: ', shared: false },
     { what: 'injury', match: 0, hint: 3861, says: 'Injury: ', shared: true },
     { what: 'red', match: 1, hint: 3827, says: 'RED CARD! ', shared: false },
   ] as const)("a review in the same minute as the other side's $what (a chance at the same place: $shared): both are told, and the card sits over nothing", async ({ what, match, hint, says, shared }) => {
@@ -881,4 +919,184 @@ describe('Club Manager: the review screen', () => {
       expect(card?.goalCard).toContain('(P)');
     }
   }, 240000);
+});
+
+/* ---- Round 1303. NOT a review case: finding 6 of Round 1302's fix report, which was live with VAR off ----
+   The lead's decision 4 of Round 1303 asked for it reproduced by a test that fails first, and then fixed. The
+   builder's pass left the first half of that here as three cases marked `fails` (green while the defect was
+   there); the fix pass mended the screen (a real goal's own stoppage, `goalStop` in LiveSimScreen.tsx) and the
+   mark came off, so they are plain cases now and must pass. Nobody asks for a review in these halves: they are the
+   game as it ships, on the halves the run review of Round 1302 named (league match 1, seeds 1742 and 1860: a real
+   goal at the whistle's own place; seed 1773: goals at 45+2 and 45+3 with the whistle at 45+3).
+   What they hold: the last kick's goal gets its scorer card, with its ball in the net and the goal on the score,
+   for as long as any goal's card stays up, and the whistle waits for it; and a goal in the clock place before a
+   last kick is drawn whole, with its own card, before that kick is wound up. */
+describe('Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)', () => {
+  type Late = { career: CareerState; feed: LiveFeedEvent[]; whistle: number; late: LiveFeedEvent[]; seed: number };
+  /** The first half of league match 1 on this seed, nobody asking for reviews, when it holds what the case is about. */
+  function lateGoals(hint: number, want: (late: LiveFeedEvent[], whistle: number) => boolean): Late {
+    for (const seed of [hint, ...Array.from({ length: 1500 }, (_, i) => 1700 + i)]) {
+      const res = seeded(seed, () => playNextEntry(entry(0), {}));
+      if (res.kind !== 'halftime' || !res.state.live || 'varReviews' in res.state.live) continue;
+      const feed = liveFeed(res.state.live), whistle = 45 + (res.state.live.added?.h1 ?? 0);
+      const late = feed.filter(e => e.kind === 'goal' && place(e) >= whistle - 1);
+      if (want(late, whistle)) {
+        if (seed !== hint) console.info(`clubManagerVarScreen: STALE HINT, the last kick of a half, hint ${hint}: the case was found on seed ${seed}`);
+        return { career: structuredClone(res.state), feed, whistle, late, seed };
+      }
+    }
+    throw new Error('no first half of the opener ends the way this case is about');
+  }
+  /** The half played from 44.2 to the interval and 3.2 seconds on. */
+  async function played(h: Late, reduced = false): Promise<{ frames: Frame[]; whistle: number }> {
+    if (reduced) {
+      const original = window.matchMedia;
+      vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ ...original(query), matches: true }));
+    }
+    const career = structuredClone(h.career);
+    career.live!.minute = 44.2;
+    const mounted = mount(career);
+    let frames = await run(mounted, 40000, fs => fs[fs.length - 1].stage === 'interval');
+    const whistle = frames.findIndex(f => f.stage === 'interval');
+    expect(whistle, 'the half never reached the interval').toBeGreaterThan(0);
+    frames = await run(mounted, 3200, undefined, 1, frames);
+    expect(mounted.callbacks.onMark.mock.calls, 'the interval was not marked exactly once').toEqual([[45]]);
+    return { frames, whistle };
+  }
+  /** The frames a goal's scorer card was up in. */
+  const cardsOf = (frames: Frame[], goal: LiveFeedEvent) => frames.map((f, i) => (f.goalCard !== null && f.goalCard.includes(goal.text) ? i : -1)).filter(i => i >= 0);
+
+  it.each([
+    { seed: 1742, reduced: false },
+    { seed: 1860, reduced: false },
+    { seed: 1742, reduced: true },
+  ])('a real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed $seed, reduced motion $reduced)', async ({ seed, reduced }) => {
+    const h = lateGoals(seed, (late, whistle) => late.filter(g => place(g) === whistle).length === 1 && late.length === 1);
+    const { frames, whistle } = await played(h, reduced);
+    const goal = h.late[0], after = scoreBy(h.feed, h.whistle), before = scoreBy(h.feed, h.whistle - 1);
+    const cards = cardsOf(frames, goal);
+    console.info(`clubManagerVarScreen: the last kick of the half, hint ${seed}, found on seed ${h.seed}: whistle ${h.whistle}, ${goal.side} goal by ${goal.text}, score at the end ${frames[frames.length - 1].score}, scorer cards seen ${cards.length} frames`);
+    expect(frames[frames.length - 1].score).toBe(after);
+    expect(cards.length, 'the goal that is the last kick of the half got no scorer card').toBeGreaterThan(0);
+    /* The card is up before the whistle and down at it; under it the ball is in the net and the goal is counted. */
+    expect(cards[cards.length - 1], 'the card of the last kick was still up at the interval').toBeLessThan(whistle);
+    for (const i of cards) {
+      expect(`${frames[i].motion}/${frames[i].phase}`, `what the pitch shows under the card at ${frames[i].ms} ms`).toBe('goal/net');
+      expect(frames[i].score, `the score under the card at ${frames[i].ms} ms`).toBe(after);
+      expect(frames[i].minute + frames[i].plus, 'the clock under the card').toBe(h.whistle);
+    }
+    /* Nothing says the new score before the ball is in the net: the first frame that shows it has the net. */
+    const counted = frames.findIndex(f => f.score === after);
+    expect(frames[counted - 1].score, 'the score right before the last kick counted').toBe(before);
+    expect(`${frames[counted].motion}/${frames[counted].phase}`, 'what the pitch shows when the last kick is counted').toBe('goal/net');
+    /* The card has a goal's own time (1.8 seconds at the 2x a match opens at), and the whistle goes right after. */
+    const up = frames[cards[cards.length - 1]].ms - frames[cards[0]].ms;
+    expect(up, 'how long the card of the last kick was up, in ms').toBeGreaterThanOrEqual(1600);
+    expect(up).toBeLessThanOrEqual(2100);
+    expect(frames[whistle].ms - frames[cards[cards.length - 1]].ms, 'the whistle did not follow the card').toBeLessThanOrEqual(100);
+  }, 240000);
+
+  it('two goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)', async () => {
+    const h = lateGoals(1773, (late, whistle) => late.length === 2 && late.some(g => place(g) === whistle) && late.some(g => place(g) === whistle - 1));
+    const { frames, whistle } = await played(h);
+    const [first, last] = [...h.late].sort((a, b) => place(a) - place(b));
+    const upTo = frames.slice(0, whistle + 1);
+    const drawn = actionRuns(upTo).filter(r => r.kind === 'goal');
+    console.info(`clubManagerVarScreen: two goals in the last two places, hint 1773, found on seed ${h.seed}: whistle ${h.whistle}, goals at ${h.late.map(place).join(' and ')}, goals drawn ${drawn.length}, score at the end ${frames[frames.length - 1].score}`);
+    expect(frames[frames.length - 1].score).toBe(scoreBy(h.feed, h.whistle));
+    expect(drawn.length, 'a goal in the place before a last kick was counted and never drawn').toBe(2);
+    const a = cardsOf(frames, first), b = cardsOf(frames, last);
+    /* When one man scores both, the two cards are told apart by their minute. */
+    const mine = (goal: LiveFeedEvent, idx: number[]) => idx.filter(i => frames[i].goalCard!.includes(`${goal.minute}${goal.plus ? `+${goal.plus}` : ''}'`));
+    const ca = mine(first, a), cb = mine(last, b);
+    expect(ca.length, 'the goal in the place before the last kick got no scorer card').toBeGreaterThan(0);
+    expect(cb.length, 'the last kick got no scorer card').toBeGreaterThan(0);
+    expect(ca[ca.length - 1], 'the two cards were not one after the other').toBeLessThan(cb[0]);
+    expect(cb[cb.length - 1]).toBeLessThan(whistle);
+    /* The first goal is played with the match clock standing at its own place, wound up, struck and in. */
+    for (const i of ca) {
+      expect(frames[i].minute + frames[i].plus, 'the clock under the card of the goal before the last kick').toBe(place(first));
+      expect(`${frames[i].motion}/${frames[i].phase}`).toBe('goal/net');
+      expect(frames[i].score, 'the score under the first card').toBe(scoreBy(h.feed, place(first)));
+    }
+    expect(frames.slice(drawn[0].from, ca[0]).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the goal before the last kick was not played out before its card').toBe(true);
+    /* Its goal is not on the score before its ball is in the net. */
+    const counted = frames.findIndex(f => f.score === scoreBy(h.feed, place(first)));
+    expect(frames[counted - 1].score, 'the score right before the goal before the last kick counted').toBe(scoreBy(h.feed, place(first) - 1));
+    expect(`${frames[counted].motion}/${frames[counted].phase}`, 'what the pitch shows when that goal is counted').toBe('goal/net');
+    /* And the last kick is wound up whole after it: planted, struck, in, then its card. */
+    expect(drawn[1].from, 'the last kick was wound up under the card of the goal before it').toBeGreaterThan(ca[ca.length - 1]);
+    expect(frames.slice(drawn[1].from, cb[0]).some(f => f.motion === 'goal' && f.phase === 'flight'), 'the last kick was not played out').toBe(true);
+    for (const i of cb) expect(frames[i].score).toBe(scoreBy(h.feed, h.whistle));
+  }, 240000);
+
+  it('Skip during the card of the last kick ends the half at once, on the engine score (seed 1742)', async () => {
+    const h = lateGoals(1742, (late, whistle) => late.filter(g => place(g) === whistle).length === 1 && late.length === 1);
+    const career = structuredClone(h.career);
+    career.live!.minute = 44.2;
+    const mounted = mount(career);
+    const frames = await run(mounted, 40000, fs => fs[fs.length - 1].goalCard !== null);
+    expect(frames[frames.length - 1].goalCard, 'the card of the last kick never came up').toContain(h.late[0].text);
+    expect(frames[frames.length - 1].stage).toBe('first');
+    fireEvent.click(mounted.getByRole('button', { name: /Skip/ }));
+    const after = await run(mounted, 400, undefined, 1, frames);
+    expect(after[after.length - 1].stage).toBe('interval');
+    expect(after[after.length - 1].goalCard).toBeNull();
+    expect(after[after.length - 1].score).toBe(scoreBy(h.feed, h.whistle));
+    expect(mounted.callbacks.onMark.mock.calls).toEqual([[45]]);
+  }, 240000);
+});
+
+/* ---- Round 1303 fix: the match's own help says what the kinds of review THIS match plays do ----
+   The run review of Round 1303 turned `penalties` on for any list of kinds (a goals only match then tells the
+   player of a penalty a review gives) and every unit file and harness of the round stayed green: those words were
+   held only by the browser walk, which needs a build that plays a kind. They are held here, on the real screen,
+   for the three states a saved match can be in. And no help of a match names a real season or prints a number of
+   its own about reviews (the lead's decision 1: the Help never states a real league's rate). */
+describe('Club Manager: the match help follows the kinds of review the match was kicked off with', () => {
+  function helpOf(ask: Parameters<typeof playNextEntry>[1]): { text: string; parts: string[]; live: LiveMatch } {
+    for (const seed of [1701, 1702, 1703, 1704, 1705, 1706]) {
+      const res = seeded(seed, () => playNextEntry(entry(0), ask));
+      if (res.kind !== 'halftime' || !res.state.live) continue;
+      const mounted = mount(structuredClone(res.state));
+      fireEvent.click(mounted.getByRole('button', { name: 'How watching a match works' }));
+      const help = mounted.container.querySelector('[data-cm-live-help]');
+      const text = help?.textContent ?? '', parts = [...(help?.querySelectorAll('li, p') ?? [])].map(el => el.textContent ?? '');
+      cleanup();
+      return { text, parts, live: res.state.live };
+    }
+    throw new Error('no first half of the opener was kicked off');
+  }
+  const PENALTY_WORDS = ['A penalty a review gives', 'can become a penalty', 'goals and penalties', 'penalty calls only', 'a review gives a penalty'];
+
+  it('a match that reviews goals only says so, and says nothing of a penalty by review', () => {
+    const { text, live } = helpOf({ varReviews: ['goal'] });
+    expect(live.varKinds).toEqual(['goal']);
+    expect(text).toContain('VAR here reviews goals only, and you only see a review that changed the call.');
+    expect(text).toContain('A goal that gets ruled out goes in first');
+    expect(text).toContain('VAR example: At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal.');
+    for (const words of PENALTY_WORDS) expect(text, `a goals only match tells of "${words}"`).not.toContain(words);
+    expect(text).toContain('The score changes when the ball is in the net, not before.');
+  });
+
+  it('a match kicked off with every kind says both, and one nobody asked a review in says nothing about VAR', () => {
+    const all = helpOf({ varReviews: true });
+    expect(all.text).toContain('VAR here reviews goals and penalties only');
+    expect(all.text).toContain('A foul the referee missed can become a penalty');
+    expect(all.text).toContain('A penalty a review gives waits for the review first.');
+    const none = helpOf({});
+    expect('varReviews' in none.live).toBe(false);
+    expect(none.text).toContain('Watching the match');
+    expect(none.text).not.toContain('VAR');
+    for (const words of PENALTY_WORDS) expect(none.text).not.toContain(words);
+  });
+
+  it('no help of a match names a season or prints a figure about reviews', () => {
+    for (const help of [helpOf({ varReviews: ['goal'] }), helpOf({ varReviews: true })]) {
+      const about = help.parts.filter(part => part.includes('VAR') || part.includes('review'));
+      expect(about.length, 'the lines of the help that are about reviews').toBeGreaterThanOrEqual(2);
+      /* The only digits a line about reviews may hold are the 0-0 of its worked example. */
+      for (const part of about) expect(part.replace(/0-0/g, ''), `a figure in "${part}"`).not.toMatch(/[0-9]/);
+    }
+  });
 });

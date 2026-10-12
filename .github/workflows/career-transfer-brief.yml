@@ -1,0 +1,119 @@
+name: Career Agent Destination Brief
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-transfer-brief.yml
+      - src/lib/soccerCareerTransferBrief*
+      - src/lib/soccerCareerEngine.ts
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/AgentBrief.tsx
+      - src/components/CookieConsent.tsx
+      - src/test/soccer*TransferBrief*
+      - scripts/*CareerTransferBrief.mjs
+      - scripts/qa/*TransferBrief*.mjs
+      - scripts/simTransferBriefPageControl.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-transfer-brief-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      FREE_KICK_FONT_CACHE: career-transfer-brief-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Remote dependencies and font receipts
+        run: |
+          mkdir -p career-transfer-brief-artifacts
+          git rev-parse HEAD > career-transfer-brief-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-transfer-brief-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-transfer-brief-artifacts/fonts.log
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-transfer-brief-artifacts/types.log
+          npm run build 2>&1 | tee career-transfer-brief-artifacts/build.log
+      - name: Actual focused helper page and UI tests
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerCareerSaveRetry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-transfer-brief-artifacts/units.json 2>&1 | tee career-transfer-brief-artifacts/units.log
+          node scripts/qa/checkCareerTransferBrief.mjs units
+      - name: Actual outcomes and eight effective copied source controls
+        id: outcomes
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs 2>&1 | tee career-transfer-brief-artifacts/outcomes.log
+          node scripts/qa/checkCareerTransferBrief.mjs outcomes
+      - name: Actual captured rapid-click copied page fault
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTransferBriefPageControl.mjs 2>&1 | tee career-transfer-brief-artifacts/page-control.log
+          node scripts/qa/checkCareerTransferBrief.mjs page-control
+      - name: Actual production destination brief journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.outcomes.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTransferBrief.mjs 2>&1 | tee career-transfer-brief-artifacts/native.log
+          node scripts/qa/checkCareerTransferBrief.mjs native
+      - name: Early focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-transfer-brief-early-${{ github.run_id }}
+          path: career-transfer-brief-artifacts/
+          retention-days: 5
+      - name: Related Soccer source and save regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simCareerLifeCooldowns simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simCareerRivalryEvents simCareerHub simSoccerOfferReview simClubVerdict simLoanSpell simSoccerContractMoves; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-transfer-brief-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-transfer-brief-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-transfer-brief-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-transfer-brief-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact tested source held
+        if: ${{ !cancelled() }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(cat career-transfer-brief-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat career-transfer-brief-artifacts/source-tree.txt)"
+          git diff --exit-code HEAD -- src scripts .github/workflows 2>&1 | tee career-transfer-brief-artifacts/source-held.log
+      - name: Final focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-transfer-brief-final-${{ github.run_id }}
+          path: career-transfer-brief-artifacts/
+          retention-days: 5

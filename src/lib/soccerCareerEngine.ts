@@ -2,13 +2,16 @@
 
 import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
+import type { SoccerAgentReview } from './soccerAgentReview';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';
 import { personalGoalMilestoneNews } from './soccerCareerMilestone';
-import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
+import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';
 import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
-import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
+import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';
+import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
@@ -36,6 +39,7 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+import type { SoccerInternationalReturn } from './soccerInternationalReturn';
 /* Round 929: every season's league finish, and the era aware elite rule. */
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
@@ -870,6 +874,7 @@ export interface CareerState {
   reducedRole?: ReducedRolePlan;
   programme?: SoccerProgrammeState;
   chanceWheel?: CareerChanceWheelReceipt;
+  transferBrief?: SoccerTransferBrief;
   playerName: string;
   nationality: string;
   position: string;
@@ -947,6 +952,7 @@ export interface CareerState {
   eventLastFired?: Record<string, number>;
   statBoostNextSeason: Partial<Record<"pace"|"shooting"|"passing"|"dribbling"|"defending"|"physical"|"reflexes", number>>;
   internationalCareer: boolean;
+  internationalReturn?: SoccerInternationalReturn;
   sponsorDeal: string | null;
   totalEarnings: number;
   popularity: number;
@@ -1013,6 +1019,7 @@ export interface CareerState {
   punditState: PunditState | null;
   ownerState: OwnerState | null;
   isFinalSeason: boolean;
+  farewellSeason?: SoccerFarewellPlan;
   isPundit: boolean;
   punditEvents: string[];
   primeType: PrimeType;
@@ -1087,6 +1094,7 @@ export interface CareerState {
   /** Round 49 life layer. Optional so pre-R49 saves keep loading. */
   personality?: string | null; // showman | iceman | hothead | professor | enigma
   agentId?: string | null;     // cousin | shark | super | self
+  agentReview?: SoccerAgentReview;
   lifeFlags?: Record<string, number>; // chained life-event arcs
   /** Round 54 realism layer. All optional so pre-R54 saves keep loading. */
   appearance?: PlayerAppearance | null; // create-your-look, rendered by PlayerAvatar
@@ -1786,6 +1794,7 @@ function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
  * something the save remembers rather than a line that scrolls away.
  */
 export function applyRehabChoice(prev: CareerState, choiceIndex: number): CareerState {
+  if (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = { ...prev };
   const r = s.pendingRehab;
   s.pendingRehab = null;
@@ -1847,6 +1856,10 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   s.seriousInjuries = history;
   if (history.length >= 2) {
     s.events.push(`⭐ That is ${history.length} serious injuries you have come back from.`);
+  }
+  if (farewellSeasonComplete(s)) {
+    s.pendingSummary = s.seasons[s.seasons.length - 1];
+    s.phase = "season_summary";
   }
   return s;
 }
@@ -4417,6 +4430,7 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   const s = { ...prev };
   if (s.loan || !offer.isLoan) return s;
   cancelReducedRole(s);
+  clearTransferBrief(s, prev, projectLeagueApps);
   s.loan = {
     parentClub: s.currentClub, parentTier: s.currentClubTier, parentLeague: s.currentLeague,
     parentCountry: s.currentClubCountry, parentColor: s.currentClubColor,
@@ -4461,15 +4475,16 @@ export function completeClubVerdictMove(prev: CareerState): CareerState {
   return moved;
 }
 
-function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
-  const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
+function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, seasons: CareerState['seasons'], isDream = false, preferredCandidates?: ClubData[]): ContractOffer | null {
+  const candidates = preferredCandidates ?? getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
   if (candidates.length === 0) return null;
   const club = pickAcrossLeagues(candidates);
   exclude.add(club.name);
-  let wage = wageForTier(tier, overall);
+  let wage = wageForTier(preferredCandidates ? club.tier : tier, overall);
   if (isDream) wage = Math.round(wage * 0.65);
   const fee = realisticTransferFee(overall, age);
-  return { club, contractYears: rand(1, 5), wage, transferFee: fee, isDreamClub: isDream, isPayCut: isDream };
+  const terms = soccerTransferTerms({ age, overall, weeklyWage: wage, seasons }, wage, rand(1, 5));
+  return { club, contractYears: terms.contractYears, wage: terms.wage, transferFee: fee, isDreamClub: isDream, isPayCut: isDream };
 }
 
 /* ─── Round 257: the club gets an opinion ────────────────────────────────────
@@ -4600,7 +4615,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
          his rating would normally attract and the money is worse. */
       const tiers = [...new Set(getInterestedTiers(overall, age).map(t => Math.min(4, t + 1)))];
       for (let i = 0; i < 3 && offers.length < 3; i++) {
-        const offer = makeOffer(clubs, pick(tiers), overall, age, exclude, marketValue);
+        const offer = makeOffer(clubs, pick(tiers), overall, age, exclude, marketValue, state.seasons);
         if (!offer) continue;
         if (verdict.mode === "released") { offer.transferFee = 0; offer.isPayCut = true; }
         offer.wage = Math.round(offer.wage * (verdict.mode === "released" ? 0.7 : 0.85));
@@ -4609,7 +4624,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
       /* A released player with nowhere to go would be stuck on this screen
          forever, so the bottom of the pyramid always answers the phone. */
       if (verdict.mode === "released" && !offers.length) {
-        const last = makeOffer(clubs, 4, overall, age, exclude, 0);
+        const last = makeOffer(clubs, 4, overall, age, exclude, 0, state.seasons);
         if (last) {
           last.transferFee = 0;
           last.isPayCut = true;
@@ -4630,7 +4645,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   if (contractYearsLeft <= 1) {
     const offers: ContractOffer[] = [];
     for (let i = 0; i < rand(2, 4); i++) {
-      const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, 0);
+      const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, 0, state.seasons);
       if (offer) { offer.transferFee = 0; offer.wage = Math.round(offer.wage * 0.85); offers.push(offer); }
     }
     return { type: "contract_expiry", offers };
@@ -4640,15 +4655,15 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   const lastRating = lastSeason?.rating ?? 6;
 
   if (aboveLevel >= 10 && lastRating >= 7.5 && Math.random() < 0.30) {
-    const offerA = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
-    const offerB = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
+    const offerA = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue, state.seasons);
+    const offerB = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue, state.seasons);
     if (offerA && offerB) return { type: "bidding_war", offerA, offerB };
   }
 
   // Round 49: a super agent gets dream clubs to actually pick up the phone
   const dreamChance = state.agentId === "super" ? 0.25 : 0.15;
   if (overall >= 75 && Math.abs(overall - 80) <= 5 && currentClubTier > 1 && Math.random() < dreamChance) {
-    const dreamOffer = makeOffer(clubs, 1, overall, age, exclude, marketValue, true);
+    const dreamOffer = makeOffer(clubs, 1, overall, age, exclude, marketValue, state.seasons, true);
     if (dreamOffer) return { type: "dream_club", offer: dreamOffer };
   }
 
@@ -4667,7 +4682,8 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
         isHomegrown: true,
         isPayCut: true,
       };
-      return { type: "one_offer", offer: homecoming };
+      const terms = soccerTransferTerms(state, homecoming.wage, homecoming.contractYears);
+      return { type: "one_offer", offer: { ...homecoming, ...terms } };
     }
   }
 
@@ -4679,7 +4695,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   const interestChance = (aboveLevel >= 15 ? 0.7 : aboveLevel >= 5 ? 0.5 : aboveLevel >= 0 ? 0.3 : 0.1)
     + (banked > 0 ? 0.3 : 0);
   if (Math.random() < interestChance) {
-    const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
+    const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue, state.seasons);
     if (offer) return { type: "one_offer", offer };
   }
 
@@ -4691,10 +4707,51 @@ export function requestTransfer(state: CareerState, clubs: ClubData[]): Transfer
   clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1), (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
   if (Math.random() < 0.5 || programmePromiseBroken(state)) {
     const exclude = new Set<string>([state.currentClub]);
-    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
+    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue, state.seasons);
     return { type: "request_result", offer };
   }
   return { type: "request_result", offer: null };
+}
+
+function transferBriefPool(state: CareerState, clubs: ClubData[]): ClubData[] {
+  const year = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
+  const tiers = getInterestedTiers(state.overall, state.age);
+  return projectLeagueWorldClubs(state, adjustClubsForYear(clubs, year), year)
+    .filter(club => tiers.includes(club.tier) && clubKeyOf(club.name) !== clubKeyOf(state.currentClub));
+}
+
+export function transferBriefPreview(state: CareerState, clubs: ClubData[]): TransferBriefPreview {
+  return previewTransferBrief(state, transferBriefPool(state, clubs), projectLeagueApps);
+}
+
+export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): CareerState {
+  const brief = readTransferBrief(prev, projectLeagueApps);
+  if (brief?.result) return prev;
+  if (prev.phase !== 'transfer_window' || !prev.transferSituation
+    || !['no_interest', 'one_offer', 'dream_club'].includes(prev.transferSituation.type)) return prev;
+  if (!brief) {
+    const result = requestTransfer(prev, clubs);
+    const next = { ...prev, transferSituation: result };
+    if (result.type === 'request_result' && !result.offer) {
+      next.phase = 'playing';
+      next.transferSituation = null;
+    }
+    return next;
+  }
+  const pool = transferBriefPool(prev, clubs);
+  const candidates = transferBriefCandidates(prev, pool, projectLeagueApps);
+  const option = previewTransferBrief(prev, pool, projectLeagueApps).options.find(row => row.id === brief.priority)!;
+  /* Release AW: the same rule as requestTransfer above. The coin is drawn first, as the plain request draws
+     it, and a club that broke its appearance promise answers whatever it shows. */
+  if (Math.random() >= 0.5 && !programmePromiseBroken(prev)) {
+    return storeTransferBriefResult(prev, { status: 'no_interest', offer: null,
+      eligibleCount: option.eligibleCount, matchingCount: option.matchingCount, projection: option.projection });
+  }
+  const tier = pick(getInterestedTiers(prev.overall, prev.age));
+  const offer = makeOffer(pool, tier, prev.overall, prev.age, new Set([prev.currentClub]), prev.marketValue, prev.seasons, false, candidates);
+  return storeTransferBriefResult(prev, { status: offer ? 'offered' : 'no_match', offer,
+    eligibleCount: option.eligibleCount, matchingCount: option.matchingCount,
+    projection: offer ? projectLeagueApps(prev.overall, offer.club.tier, offer.club.name, 0) : null });
 }
 
 /* ─── Init career ─── */
@@ -4870,6 +4927,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerState {
   const s = { ...prev };
   if (offer.club.name !== prev.currentClub || prev.loan) cancelReducedRole(s);
+  clearTransferBrief(s, prev, projectLeagueApps);
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
   if (s.currentClub !== prev.currentClub) {
     delete s.seasonAmbition;
@@ -5111,6 +5169,7 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
 }
 
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
+  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
   receivePhoneTexts(s, "pro");
@@ -5233,6 +5292,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
     settleCareerPreparation(s, s.seasons[s.seasons.length - 1]);
     Object.assign(s, recordMentorSeason(s, s.seasons[s.seasons.length - 1]));
+    if (farewellSeasonComplete(s)) s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -5318,7 +5378,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
 
   // Retirement suggestion, when overall drops 10+ from peak OR drops to 75 or below (age 30+)
-  if (!s.retirementSuggested && s.age >= 30) {
+  if (!readSoccerFarewell(s) && !s.retirementSuggested && s.age >= 30) {
     const dropFromPeak = s.peakOverall - s.overall;
     if (dropFromPeak >= 10 || s.overall <= 75) {
       s.retirementSuggested = true;
@@ -5327,7 +5387,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
   // Also show suggestion again each season if OVR <=65 and age >=34 (body wearing out)
-  if (s.age >= 34 && s.overall <= 65 && Math.random() < 0.4) {
+  if (!readSoccerFarewell(s) && s.age >= 34 && s.overall <= 65 && Math.random() < 0.4) {
     s.phase = "retirement_suggestion";
     return s;
   }
@@ -6172,6 +6232,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
 
 /* ─── Dismiss newspaper ─── */
 export function dismissNewspaper(prev: CareerState): CareerState {
+  if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev };
   s.pendingNews = [];
   /* Round 850: a conviction saved by an older version sits here with the
@@ -6209,6 +6270,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
      Guarded by shape rather than by naming the one offender: never leave the
      player on a screen that cannot draw. If there is nothing to summarise,
      hand the career back in the phase that has the buttons. */
+  if (farewellSeasonComplete(s)) s.pendingSummary = s.seasons[s.seasons.length - 1];
   s.phase = s.pendingSummary ? "season_summary" : "playing";
   return s;
 }
@@ -6339,8 +6401,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Accept lower wage, stay loyal", emoji: "🤝", color: "bg-blue-600", consequence: "Wage -15%, Morale +5",
           apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 0.85); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📝 Accepted lower wage, stayed loyal"]; return s; } },
-        { label: "Push for more money", emoji: "💰", color: "bg-amber-600", consequence: "50% chance: Wage +20% or relationship damaged",
-          apply: s => { if (rollCareerChance(s, 0.5, 'Contract negotiation', '20% wage raise', 'Relationship damaged')) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.events = [...s.events, "📝 Pushed for more, got a raise!"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
+        { label: "Push for more money", emoji: "💰", color: "bg-amber-600", consequence: soccerWageDemand(state).consequence,
+          apply: s => { const demand = soccerWageDemand(s); if (rollCareerChance(s, 0.5, 'Contract negotiation', demand.hit, 'Relationship damaged')) { s.weeklyWage = demand.weeklyWage; s.events = [...s.events, demand.event]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
         { label: "Walk away when contract expires", emoji: "🚶", color: "bg-red-600", consequence: "Contract not renewed, become free agent sooner",
           apply: s => { s.contractYearsLeft = Math.min(s.contractYearsLeft, 1); s.events = [...s.events, "📝 Walking away, will leave on free"]; return s; } },
       ] },
@@ -7418,6 +7480,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "rivalry_event";
     return s;
   }
+  if (farewellSeasonComplete(s)) return manualRetire(s);
   // Social media action, once per season, only during playing phase for pro players
   if (!s.socialMediaActionUsedThisSeason && s.age >= 18 && !s.retired) {
     s.phase = "social_media_action";
@@ -7446,6 +7509,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
 
 /* ─── Dismiss summary ─── */
 export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
+  if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev }; s.pendingSummary = null;
   if (s.retired) { s.phase = "retired"; return s; }
   return advanceToNextPhase(s, clubs);
@@ -7781,6 +7845,7 @@ export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): Caree
 /* ─── Stay at current club ─── */
 export function stayAtClub(prev: CareerState): CareerState {
   const s = { ...prev }; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
+  clearTransferBrief(s, prev, projectLeagueApps);
   /* Round 257: refusing to leave when the club has listed you is a real
      choice with a real price. The verdict is read off the situation that was
      still on the state a line ago, so the UI needs no extra plumbing. */
@@ -7802,6 +7867,7 @@ export function stayAtClub(prev: CareerState): CareerState {
 /* ─── Sign extension ─── */
 export function signExtension(prev: CareerState): CareerState {
   const s = { ...prev };
+  clearTransferBrief(s, prev, projectLeagueApps);
   const quote = soccerExtensionQuote(s);
   const extraYears = quote.contractYears ?? rand(2, 4);
   s.contractYearsLeft = extraYears;
@@ -8345,11 +8411,20 @@ export function calculateLegacy(state: CareerState): LegacyResult {
 
 /* ─── Manual Retirement ─── */
 export function manualRetire(prev: CareerState): CareerState {
+  if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev };
   delete s.seasonAmbition;
   delete s.seasonPreparation;
   Object.assign(s, endCareerMentorForRetirement(s));
   cancelReducedRole(s);
+  if (readSoccerFarewell(s) && s.loan) {
+    const back = s.loan;
+    s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
+    s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
+    s.currentClubColor = back.parentColor;
+    s.loan = null;
+    s.events = [...s.events, `🔙 The loan ends. You return to ${back.parentClub} before retiring.`];
+  }
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   endClubCaptaincy(s, "retirement");
@@ -8458,6 +8533,7 @@ function applyRetirementMoneySeason(s: CareerState, seasonsSinceRetiring: number
 
 /* ─── Retirement Suggestion, player can choose to continue or retire ─── */
 export function acceptRetirementSuggestion(prev: CareerState): CareerState {
+  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = { ...prev };
   delete s.seasonAmbition;
   delete s.seasonPreparation;
@@ -8479,7 +8555,14 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   return s;
 }
 
+export function announceFarewellSeason(prev: CareerState, clubs: ClubData[]): CareerState {
+  const announced = announceSoccerFarewell(prev);
+  if (announced === prev) return prev;
+  return prev.phase === "retirement_suggestion" ? declineRetirementSuggestion(announced, clubs) : announced;
+}
+
 export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]): CareerState {
+  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   /* Round 850: Keep Playing plays the season he just aged into. The year was
      already started when the suggestion came up (advanceProSeason ran up to
      it), so this resumes that same advance at the season and nothing above it

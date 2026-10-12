@@ -29,6 +29,7 @@ import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, D
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { CM_VAR_LIVE } from '@/lib/clubManagerVarLive';
+import { cmVarGameAsk } from '@/lib/clubManagerVar';
 import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/lib/clubManagerEras';
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
@@ -695,7 +696,7 @@ export function useClubManager() {
   /* ---------- season progression ---------- */
   const runEntry = useCallback((skipHalftime: boolean) => {
     if (!career) return;
-    const res = playNextEntry(career, { skipHalftime, ...(CM_VAR_LIVE ? { varReviews: true } : {}) });
+    const res = playNextEntry(career, { skipHalftime, ...cmVarGameAsk(CM_VAR_LIVE) });
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
        built for eleven rounds happens between fixtures; this is the one moment
@@ -746,7 +747,7 @@ export function useClubManager() {
      runs it to a week and does what the screens need with how it stopped. */
   const simToWeek = useCallback((targetWeek: number) => {
     if (!career) return;
-    const run = runSimToWeek(career, targetWeek, CM_VAR_LIVE ? { varReviews: true } : undefined);
+    const run = runSimToWeek(career, targetWeek, cmVarGameAsk(CM_VAR_LIVE));
     if (run.halt === 'window') {
       setCareer(run.state);
       setActiveTab('transfers');

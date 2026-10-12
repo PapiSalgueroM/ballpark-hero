@@ -153,6 +153,9 @@ import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs
    takes them out of the copied files the historical bundle loads, so the recording made before them still
    replays: scripts/lib/careerNextTenAttribution1197.mjs. */
 import { inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
+/* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. The historical bundle
+   takes that out of a copy of the contracts file too: scripts/lib/careerVeteranPay1262.mjs. */
+import { VETERAN_PAY_ADDITIONS, inverseVeteranPay } from './lib/careerVeteranPay1262.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -174,7 +177,7 @@ for (const relative of heldPaths) {
   const bytes = fs.readFileSync(path.join(ROOT, relative));
   sourceBefore[relative] = sha(bytes);
 }
-const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [] };
+const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [] };
 function retain(name, value) {
   if (!ARTIFACTS) return;
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -364,13 +367,14 @@ if (SECTIONS.includes('1')) {
       /* Release AT: under SOCIAL_BRANDS_ATTRIBUTION=train1178 this bundle keeps the train out too, so the
          fixture from before the train is asked of a tree with both taken out. */
       /* The wheel alone moves this recording (remote check rAU-G2), so the wheel alone is taken out. */
-      const controlled = inverseCareerNextTen(relative, trainOut ? trainOut.rewrite(relative, source) : rewrite(relative, source), report.nextTenInverses, ['wheel']);
+      const controlled = inverseVeteranPay(relative, inverseCareerNextTen(relative, trainOut ? trainOut.rewrite(relative, source) : rewrite(relative, source), report.nextTenInverses, ['wheel']), report.veteranPayInverses);
       return relative === 'src/lib/soccerCareerEngine.ts' ? inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses) : controlled;
     });
     assert.equal(controlFired - beforeControlCount, CONTROL ? 1 : 0, 'The additional historical bundle retains exactly the same effective copied fault');
     assert.equal(report.inverses.length, 1, 'One copied engine receives the bounded historical inverse');
     assert.equal(report.storyRoleInverses.length, 1, 'The same copied engine receives the story and role inverse once');
     assert.equal(report.nextTenInverses.length, 1, 'The copied wheel library receives the Rounds 1197 to 1208 inverse once');
+    assert.equal(report.veteranPayInverses.length, VETERAN_PAY_ADDITIONS.length, 'The copied contracts file receives the veteran pay inverse of Release AW once for each addition');
     compared = probeSoccerBrand(historical);
     const inverseText = JSON.stringify(compared);
     retain('inverse.json', compared);

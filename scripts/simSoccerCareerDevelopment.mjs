@@ -9,6 +9,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
+import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
@@ -175,7 +176,9 @@ if (!IMPORT_ONLY) {
      tie (scripts/lib/careerNextTenAttribution1197.mjs). The two groups that compare whole saves with the base load a
      COPY of the source with exactly those two taken out, each at its one line (a control's own patch first, so a
      control still reaches them); every other group runs on the tree as it ships. */
-  const nextTen = nextTenPatches().map(patch => ({ ...patch, name: patch.id }));
+  /* Release AW: the same two bundles take the veteran pay of Rounds 1262 to 1264 out as well, at its one condition in
+     the contracts file (scripts/lib/careerVeteranPay1262.mjs): a career of 30 or more is offered other money on purpose. */
+  const nextTen = [...nextTenPatches(), ...veteranPayPatches()].map(patch => ({ ...patch, name: patch.id }));
   const neutralB = await developmentBundle({ patches: [...activePatches, ...nextTen] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
   const mentorMetadata = seeded(118500, () => B.soccer.getAllEvents(developmentFixture(B)).find(event => event.id === 6)).value;
   async function check(name, fn) {

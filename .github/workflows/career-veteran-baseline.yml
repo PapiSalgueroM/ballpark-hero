@@ -1,0 +1,140 @@
+name: Veteran offer baseline diagnostics
+on:
+  push:
+    branches: [codex/career-veteran-offers]
+    paths: [.github/workflows/career-veteran-baseline.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-veteran-baseline-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Pin complete original and candidate sources
+        id: prep
+        run: |
+          mkdir -p career-veteran-baseline-artifacts original-source
+          test "$(git rev-parse 'f78037dcddea12c1a02586c7d5c0e185efb86121^{tree}')" = 1c9e7dcb11992442060cb162c288d0bcf37db0c2
+          test "$(git rev-parse '6b1bc27abf56f093c418bdb66296de4fe49144c9^{tree}')" = 868729dd50d9322d6c388899b5d001290eb1b8e4
+          git diff --exit-code 6b1bc27abf56f093c418bdb66296de4fe49144c9 HEAD -- src scripts package.json package-lock.json
+          git rev-parse HEAD > career-veteran-baseline-artifacts/driver-head.txt
+          git rev-parse 'HEAD^{tree}' > career-veteran-baseline-artifacts/driver-tree.txt
+          git archive --format=zip --output=career-veteran-baseline-artifacts/driver-source.zip HEAD
+          git archive --format=zip --output=career-veteran-baseline-artifacts/original-source.zip f78037dcddea12c1a02586c7d5c0e185efb86121
+          git archive --format=zip --output=career-veteran-baseline-artifacts/candidate-source.zip 6b1bc27abf56f093c418bdb66296de4fe49144c9
+          git ls-tree -r f78037dcddea12c1a02586c7d5c0e185efb86121 > career-veteran-baseline-artifacts/original-inventory.txt
+          git ls-tree -r 6b1bc27abf56f093c418bdb66296de4fe49144c9 > career-veteran-baseline-artifacts/candidate-inventory.txt
+          unzip -q career-veteran-baseline-artifacts/original-source.zip -d original-source
+          sha256sum package.json package-lock.json > career-veteran-baseline-artifacts/packages-before.txt
+          npm ci
+          DEPENDENCY_OUT=career-veteran-baseline-artifacts/dependencies-before.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          npm install --no-save playwright@1.64.0
+          sha256sum package.json package-lock.json > career-veteran-baseline-artifacts/packages-after-setup.txt
+          cmp career-veteran-baseline-artifacts/packages-before.txt career-veteran-baseline-artifacts/packages-after-setup.txt
+          ln -s "$PWD/node_modules" original-source/node_modules
+          (cd original-source && find src scripts -type f -print0 | sort -z | xargs -0 sha256sum) > career-veteran-baseline-artifacts/original-before.txt
+          find src scripts -type f -print0 | sort -z | xargs -0 sha256sum > career-veteran-baseline-artifacts/candidate-before.txt
+      - name: Unchanged original full LeagueWorld, actual exit retained
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          set +e
+          (cd original-source && SIM_OFFLINE_RECEIPT="$PWD/../career-veteran-baseline-artifacts/original-world-traffic.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueWorld.mjs) 2>&1 | tee career-veteran-baseline-artifacts/original-world.log
+          status=${PIPESTATUS[0]}
+          printf '%s\n' "$status" > career-veteran-baseline-artifacts/original-world-status.txt
+          exit "$status"
+      - name: Unchanged candidate full LeagueWorld, actual exit retained
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          set +e
+          SIM_OFFLINE_RECEIPT="$PWD/career-veteran-baseline-artifacts/candidate-world-traffic.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueWorld.mjs 2>&1 | tee career-veteran-baseline-artifacts/candidate-world.log
+          status=${PIPESTATUS[0]}
+          printf '%s\n' "$status" > career-veteran-baseline-artifacts/candidate-world-status.txt
+          exit "$status"
+      - name: Unchanged original fallback, actual offline result retained
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          set +e
+          (cd original-source && SIM_OFFLINE_RECEIPT="$PWD/../career-veteran-baseline-artifacts/original-fallback-traffic.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerFallback.mjs) 2>&1 | tee career-veteran-baseline-artifacts/original-fallback-full.log
+          direct_status=${PIPESTATUS[0]}
+          printf '%s\n' "$direct_status" > career-veteran-baseline-artifacts/original-fallback-script-status.txt
+          (cd original-source && ONLY=simCareerFallback node scripts/runAllSims.mjs --browser) 2>&1 | tee career-veteran-baseline-artifacts/original-fallback.log
+          status=${PIPESTATUS[0]}
+          printf '%s\n' "$status" > career-veteran-baseline-artifacts/original-fallback-status.txt
+          if [ "$direct_status" -ne 0 ]; then exit "$direct_status"; fi
+          exit "$status"
+      - name: Unchanged candidate fallback, actual offline result retained
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          set +e
+          SIM_OFFLINE_RECEIPT="$PWD/career-veteran-baseline-artifacts/candidate-fallback-traffic.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerFallback.mjs 2>&1 | tee career-veteran-baseline-artifacts/candidate-fallback-full.log
+          direct_status=${PIPESTATUS[0]}
+          printf '%s\n' "$direct_status" > career-veteran-baseline-artifacts/candidate-fallback-script-status.txt
+          ONLY=simCareerFallback node scripts/runAllSims.mjs --browser 2>&1 | tee career-veteran-baseline-artifacts/candidate-fallback.log
+          status=${PIPESTATUS[0]}
+          printf '%s\n' "$status" > career-veteran-baseline-artifacts/candidate-fallback-status.txt
+          if [ "$direct_status" -ne 0 ]; then exit "$direct_status"; fi
+          exit "$status"
+      - name: All source and package bodies held
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          (cd original-source && find src scripts -type f -print0 | sort -z | xargs -0 sha256sum) > career-veteran-baseline-artifacts/original-after.txt
+          find src scripts -type f -print0 | sort -z | xargs -0 sha256sum > career-veteran-baseline-artifacts/candidate-after.txt
+          cmp career-veteran-baseline-artifacts/original-before.txt career-veteran-baseline-artifacts/original-after.txt
+          cmp career-veteran-baseline-artifacts/candidate-before.txt career-veteran-baseline-artifacts/candidate-after.txt
+          sha256sum package.json package-lock.json > career-veteran-baseline-artifacts/packages-final.txt
+          cmp career-veteran-baseline-artifacts/packages-before.txt career-veteran-baseline-artifacts/packages-final.txt
+          DEPENDENCY_OUT=career-veteran-baseline-artifacts/dependencies-final.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          cmp career-veteran-baseline-artifacts/dependencies-before.json career-veteran-baseline-artifacts/dependencies-final.json
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json > career-veteran-baseline-artifacts/source-held.log
+          du -sb career-veteran-baseline-artifacts > career-veteran-baseline-artifacts/artifact-size.log
+          test "$(du -sb career-veteran-baseline-artifacts | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-veteran-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-veteran-baseline-artifacts/
+          retention-days: 5
+          if-no-files-found: error

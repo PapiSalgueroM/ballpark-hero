@@ -30,3 +30,32 @@ export function soccerExtensionQuote(career: ExtensionCareer, kind: 'extension' 
       : 'A shorter deal and lower wage reflect your age, level and latest season.',
   };
 }
+/** Apply the existing age and form policy to a new club's drawn terms. */
+export function soccerTransferTerms(career: ExtensionCareer, offeredWage: number, offeredYears: number) {
+  if (career.age < 30) return { wage: offeredWage, contractYears: offeredYears };
+  const quote = soccerExtensionQuote({ ...career, weeklyWage: offeredWage }, 'renewal');
+  return { wage: quote.weeklyWage, contractYears: offeredYears };
+}
+
+/** Project one money-talk outcome without renewing the contract or drawing. */
+export function soccerWageDemand(career: ExtensionCareer) {
+  if (career.age < 30) return {
+    weeklyWage: Math.round(career.weeklyWage * 1.2),
+    consequence: '50% chance: Wage +20% or relationship damaged',
+    hit: '20% wage raise',
+    event: '📝 Pushed for more, got a raise!',
+  };
+  const weeklyWage = Math.max(career.weeklyWage, soccerExtensionQuote(career, 'renewal').weeklyWage);
+  const raised = weeklyWage > career.weeklyWage;
+  const hit = raised ? `Wage €${weeklyWage}/wk` : `Current wage held (€${weeklyWage}/wk)`;
+  return {
+    weeklyWage, hit,
+    consequence: `50% chance: ${hit} or relationship damaged`,
+    event: raised ? '📝 Pushed for more, got a raise!' : '📝 Pushed for more, kept current wage',
+  };
+}
+
+/** Refresh only an unanswered money-talk label, including an older saved card. */
+export function soccerEventChoiceConsequence(career: ExtensionCareer, eventId: number, choiceIndex: number, saved: string) {
+  return eventId === 16 && choiceIndex === 1 ? soccerWageDemand(career).consequence : saved;
+}

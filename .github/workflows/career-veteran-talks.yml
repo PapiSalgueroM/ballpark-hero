@@ -1,0 +1,194 @@
+name: Soccer veteran contract talks
+on:
+  push:
+    branches: [codex/career-veteran-talks]
+    paths:
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerContracts.ts
+      - src/pages/SoccerCareer.tsx
+      - scripts/playSoccerVeteranTalks.mjs
+      - scripts/simSoccerVeteranTalks.mjs
+      - .github/workflows/career-veteran-talks.yml
+  pull_request:
+    paths:
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerContracts.ts
+      - src/pages/SoccerCareer.tsx
+      - scripts/playSoccerVeteranTalks.mjs
+      - scripts/simSoccerVeteranTalks.mjs
+      - .github/workflows/career-veteran-talks.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-veteran-talks-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+      FREE_KICK_FONT_CACHE: career-veteran-talks-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and locked dependency preparation
+        run: |
+          mkdir -p career-veteran-talks-artifacts
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse 'f3c32fcb7937b80f5be3ac67152c781dd4cc4a8c^{tree}')" = 89e22cb9828cea7ecd734f9662e13424b4fed9b3
+          git diff --exit-code f3c32fcb7937b80f5be3ac67152c781dd4cc4a8c HEAD -- src package.json package-lock.json scripts/lib ':!src/lib/soccerCareerEngine.ts' ':!src/lib/soccerCareerContracts.ts' ':!src/pages/SoccerCareer.tsx'
+          git rev-parse HEAD > career-veteran-talks-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > career-veteran-talks-artifacts/source-tree.txt
+          git archive --format=zip --output=career-veteran-talks-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > career-veteran-talks-artifacts/source-inventory.txt
+          sha256sum package.json package-lock.json > career-veteran-talks-artifacts/packages-before.txt
+          npm ci
+          DEPENDENCY_OUT=career-veteran-talks-artifacts/dependencies-before.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-veteran-talks-artifacts/fonts.log
+          sha256sum package.json package-lock.json > career-veteran-talks-artifacts/packages-after-setup.txt
+          cmp career-veteran-talks-artifacts/packages-before.txt career-veteran-talks-artifacts/packages-after-setup.txt
+      - name: Actual app type gate
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-veteran-talks-artifacts/types.log
+      - name: Existing saved-wheel units, actual results retained
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/careerChanceWheel.test.ts src/test/careerChanceWheelUi.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-veteran-talks-artifacts/wheel-units.json 2>&1 | tee career-veteran-talks-artifacts/wheel-units.log
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const result=JSON.parse(fs.readFileSync('career-veteran-talks-artifacts/wheel-units.json','utf8'));const rows=result.testResults.flatMap(file=>file.assertionResults);assert(rows.length>0);assert(rows.every(row=>row.status==='passed'));assert.equal(result.numFailedTests,0);console.log('PASS every actual saved-wheel unit:'+rows.length);
+          JS
+      - name: Actual veteran method preflight, no final build credit
+        run: |
+          SOCCER_VETERAN_TALKS_OUT=career-veteran-talks-preflight-artifacts NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs 2>&1 | tee career-veteran-talks-artifacts/preflight-proof.log
+          du -sb -c career-veteran-talks-preflight-artifacts career-veteran-talks-artifacts > career-veteran-talks-artifacts/preflight-artifact-size.log
+          test "$(du -sb -c career-veteran-talks-preflight-artifacts career-veteran-talks-artifacts | tail -n1 | cut -f1)" -lt 500000000
+      - name: Retain complete preflight
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-veteran-talks-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            career-veteran-talks-preflight-artifacts/
+            career-veteran-talks-artifacts/
+          retention-days: 5
+          if-no-files-found: error
+      - name: Full production SEO build
+        id: build
+        run: |
+          npm run build:seo 2>&1 | tee career-veteran-talks-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > career-veteran-talks-artifacts/generated-public.patch
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > career-veteran-talks-artifacts/generated-public-sha256.txt
+          tar -czf career-veteran-talks-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          sha256sum career-veteran-talks-artifacts/generated-public-and-lastmod.tar.gz > career-veteran-talks-artifacts/generated-public-archive-sha256.txt
+          sha256sum scripts/data/lastmod.json > career-veteran-talks-artifacts/generated-lastmod-sha256.txt
+      - name: Actual contract-talk choices, reloads and copied-source controls
+        id: talks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          SOCCER_VETERAN_TALKS_OUT=career-veteran-talks-artifacts/proof NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs 2>&1 | tee career-veteran-talks-artifacts/veteran-talks.log
+      - name: Actual contract-talk card, wheel, reload and currency journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.talks.outcome == 'success' }}
+        run: |
+          SOCCER_VETERAN_TALKS_INPUT=career-veteran-talks-artifacts/proof SOCCER_VETERAN_TALKS_BROWSER_OUT=career-veteran-talks-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerVeteranTalks.mjs 2>&1 | tee career-veteran-talks-artifacts/browser.log
+      - name: Retain post-build evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-veteran-talks-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-veteran-talks-artifacts/
+          retention-days: 5
+      - name: Related actual contract and career outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simSoccerContractMoves simContractPreview simCareerDecisionOutcome simCareerLifeCooldowns simCareerDilemmaTruth simCareerDilemmaReach simCareerRecordedStats simCareerNoDeadEnd simCareerLife simNoInventedQuotes simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-veteran-talks-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "career-veteran-talks-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-veteran-talks-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Unchanged parent programme and wheel outcome checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          status=0
+          ONLY=simCareerProgramme node scripts/runAllSims.mjs --browser 2>&1 | tee career-veteran-talks-artifacts/simCareerProgramme.log || status=1
+          if [ -d career-programme-artifacts ]; then cp -a career-programme-artifacts career-veteran-talks-artifacts/related-programme; fi
+          grep -Eq "PASS[[:space:]]+simCareerProgramme\\.mjs([[:space:]]|$)" career-veteran-talks-artifacts/simCareerProgramme.log || status=1
+          if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' career-veteran-talks-artifacts/simCareerProgramme.log; then status=1; fi
+          exit "$status"
+      - name: All fifteen rebuilt output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-veteran-talks-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "career-veteran-talks-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-veteran-talks-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Sources packages and installed dependencies held
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f career-veteran-talks-artifacts/generated-lastmod-sha256.txt ]; then sha256sum --check career-veteran-talks-artifacts/generated-lastmod-sha256.txt; fi
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json ':!scripts/data/lastmod.json' > career-veteran-talks-artifacts/source-held.log
+          sha256sum package.json package-lock.json > career-veteran-talks-artifacts/packages-final.txt
+          cmp career-veteran-talks-artifacts/packages-before.txt career-veteran-talks-artifacts/packages-final.txt
+          DEPENDENCY_OUT=career-veteran-talks-artifacts/dependencies-final.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          cmp career-veteran-talks-artifacts/dependencies-before.json career-veteran-talks-artifacts/dependencies-final.json
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS actual pinned Playwright1.64.0');
+          JS
+          du -sb career-veteran-talks-artifacts > career-veteran-talks-artifacts/artifact-size.log
+          test "$(du -sb career-veteran-talks-artifacts | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-veteran-talks-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-veteran-talks-artifacts/
+          retention-days: 5
+          if-no-files-found: error

@@ -160,8 +160,13 @@ const TRIAL_SUMMER = '    runTournamentSummer(s, s.seasons[s.seasons.length - 1]
    nothing to settle, and a career in this harness holds no target, plan, mentor or role for them to act on. */
 const TRIAL_HOOKS = '    settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);\n    settleCareerPreparation(s, s.seasons[s.seasons.length - 1]);\n    Object.assign(s, recordMentorSeason(s, s.seasons[s.seasons.length - 1]));\n';
 const REHAB_HOOKS = '      settleCareerAmbition(s, injuryRow);\n      settleCareerPreparation(s, injuryRow);\n      Object.assign(s, recordMentorSeason(s, injuryRow));\n';
+/* Release AW: the farewell season (Rounds 1238 to 1240) queues its last summary on the conviction row, between the hooks
+   and the phase, so that line sits inside this row too and goes with it, for the reason written above: a row that is
+   never written has nothing to queue, and a career in this harness announces no farewell. The controls that change
+   the row leave the line standing. */
+const TRIAL_FAREWELL = '    if (farewellSeasonComplete(s)) s.pendingSummary = s.seasons[s.seasons.length - 1];\n';
 const ROWS = {
-  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
   /* Release AU: PR216 (Rounds 1197 to 1208) settles the season plan on the injury row, between the money and the summer, so
      that call sits inside this row as well and goes with it, for the reason written above: a career in this harness
      holds no plan for it to act on. */
@@ -183,14 +188,17 @@ for (const [k, [from, to]] of Object.entries(ROWS)) BASELINE_SRC = swap(BASELINE
 /* the negative controls mutate the CURRENT engine */
 const RESUME = '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return playPendingProSeason(s, clubs);';
 const PUSH_LINE = '  s.events = [...s.events, "\u{1F4AA} Decided to push on, not ready to hang up the boots yet"];\n';
-const ACCEPT_HEAD = 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...prev };';
+/* Release AW: the farewell season (Rounds 1238 to 1240) put its guard between the head and the copy, so the anchor
+   carries that line and the control leaves it standing. The line the control changes is the same one as before. */
+const ACCEPT_GUARD = '  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;\n';
+const ACCEPT_HEAD = 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n' + ACCEPT_GUARD + '  const s = { ...prev };';
 const CONTROLS = {
   olddecline: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  s.phase = "playing";\n  return s;'],
   readvance: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return advanceProSeason({ ...s, phase: "playing" }, clubs);'],
   stuck: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return { ...playPendingProSeason(s, clubs), phase: "retirement_suggestion" };'],
   offphase: ['  if (prev.phase !== "retirement_suggestion" || prev.retired) {', '  if (prev.retired) {'],
   pushtwice: [PUSH_LINE, PUSH_LINE + PUSH_LINE],
-  acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
+  acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n' + ACCEPT_GUARD + '  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
   norehabrow: ROWS.rehab,
   zerorehab: ['      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };', '      const injuryRow: SeasonRecord = yearOutRow(s, null);'],
   noconvictionrow: ROWS.conviction,
@@ -199,10 +207,10 @@ const CONTROLS = {
   noconvictionsave: ROWS.newsSave,
   convictiontwice: [ROWS.newsSave[0], '    if (lastRow) {\n      s.events = [...s.events];'],
   nomoney: ['      settleReducedRole(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);', '      settleReducedRole(s, injuryRow);'],
-  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";'],
+  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";', TRIAL_SUMMER + TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";'],
   nomoneysave: ['    s.seasons = [...s.seasons, row];\n    simulateSeasonFinances(s, row);', '    s.seasons = [...s.seasons, row];'],
   nosummer: ['      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n', ''],
-  nosummertrial: [TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', TRIAL_HOOKS + '    s.phase = "newspaper";'],
+  nosummertrial: [TRIAL_SUMMER + TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";', TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";'],
   nosummersave: ['    simulateSeasonFinances(s, row);\n    runTournamentSummer(s, row, row.year, true);', '    simulateSeasonFinances(s, row);'],
 };
 /* and one that mutates the page's call instead of the engine */

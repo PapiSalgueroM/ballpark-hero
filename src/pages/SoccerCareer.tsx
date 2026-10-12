@@ -1,4 +1,5 @@
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
+import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
 import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -21,6 +22,8 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";
+import { AgentReviewCard } from "@/components/soccer-career/AgentReviewCard";
+import { agentReviewEligibility, changeCareerAgent } from "@/lib/soccerAgentReview";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
@@ -33,11 +36,11 @@ import {
   type SocialMediaAction, type SponsorshipTier,
   type MoralDilemma, type MoralDilemmaChoice,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
-  dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
+  dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
-  acceptRetirementSuggestion, declineRetirementSuggestion,
+  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
@@ -60,12 +63,16 @@ import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
+import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
+import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";
+import AgentBrief from '@/components/soccer-career/AgentBrief';
+import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
    transfer fee all follow the same chosen currency. Display only: every
    number in the save stays in euros. */
-import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
+import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
 /* Round 262: the squad you are actually in. Display only, and it renders
    nothing at all when we have no honest answer for that club and season. */
 import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
@@ -114,6 +121,8 @@ import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview"
 import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
+import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";
+import { internationalReturnEligibility, makeInternationallyAvailable } from "@/lib/soccerInternationalReturn";
 import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
 import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
@@ -921,6 +930,7 @@ export default function SoccerCareer() {
     } catch { return { career: null, invalid: true }; }
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
+  const agentReviewAttempt = useRef<CareerState | null>(null);
   const [saveError, setSaveError] = useState(restoredSave.invalid);
   const [saveFailed, setSaveFailed] = useState(false);
   const [clubs, setClubs] = useState<ClubData[]>([]);
@@ -951,6 +961,10 @@ export default function SoccerCareer() {
      out of the academy byte for byte the save it always was. */
   const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const internationalReturnAttempt = useRef<CareerState | null>(null);
+  const farewellAnnouncement = useRef<CareerState | null>(null);
+  const farewellAdvance = useRef<CareerState | null>(null);
+  const transferRequestInFlight = useRef<CareerState | null>(null);
   /* Round 1188: desktop keeps its dock and footer lift. On a phone these
      controls live in the page, leaving the season buttons clear. */
   const floatingButtonLift = useFooterLift(!!career);
@@ -1072,6 +1086,10 @@ export default function SoccerCareer() {
 
   const handleNextSeason = () => {
     if (!career) return;
+    if (readSoccerFarewell(career)) {
+      if (farewellAdvance.current === career) return;
+      farewellAdvance.current = career;
+    }
     if (career.phase === "youth") {
       const next = advanceYouthYear(career, clubs);
       setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
@@ -1155,14 +1173,15 @@ export default function SoccerCareer() {
 
   const handleRequestTransfer = () => {
     if (!career) return;
-    const result = requestTransfer(career, clubs);
-    const s = { ...career, transferSituation: result };
-    if (result.type === "request_result" && !result.offer) {
-      toast.error("No clubs are interested right now. You must stay.");
-      s.phase = "playing" as const;
-      s.transferSituation = null;
+    if (readTransferBrief(career, projectLeagueApps)) {
+      if (transferRequestInFlight.current === career) return;
+      transferRequestInFlight.current = career;
     }
-    setCareer(s);
+    const next = requestTransferDecision(career, clubs);
+    if (next.phase === "playing" && !next.transferSituation) {
+      toast.error("No clubs are interested right now. You must stay.");
+    }
+    setCareer(next);
   };
 
   const handleEventChoice = (choiceIndex: number) => {
@@ -1171,7 +1190,8 @@ export default function SoccerCareer() {
     if (!event) return;
     const result = applyEventChoice(career, choiceIndex, clubs);
     setCareer(result);
-    toast(event.choices[choiceIndex].consequence);
+    const consequence = soccerEventChoiceConsequence(career, event.id, choiceIndex, event.choices[choiceIndex].consequence);
+    toast(event.id === 16 && choiceIndex === 1 ? moneyLine(consequence) : consequence);
   };
 
   const handleDismissDebut = () => {
@@ -1191,10 +1211,23 @@ export default function SoccerCareer() {
     setCareer(dismissWorldCup(career, clubs));
   };
 
+  const handleChangeAgent = (agentId: string) => {
+    if (!career || agentReviewAttempt.current === career || !agentReviewEligibility(career).available
+      || !getAgentDef(agentId) || agentId === career.agentId) return;
+    agentReviewAttempt.current = career;
+    setCareer(prev => prev === career ? changeCareerAgent(prev, agentId) : prev);
+  };
+
   const handleRetireInternational = () => {
     if (!career) return;
     setCareer(retireFromInternational(career));
     toast("Retired from international football");
+  };
+
+  const handleReturnInternational = () => {
+    if (!career || internationalReturnAttempt.current === career || !internationalReturnEligibility(career).available) return;
+    internationalReturnAttempt.current = career;
+    setCareer(prev => prev === career ? makeInternationallyAvailable(prev) : prev);
   };
 
   const handleDismissRivalryEvent = () => {
@@ -1328,6 +1361,12 @@ export default function SoccerCareer() {
   const handleDeclineRetirement = () => {
     if (!career) return;
     setCareer(declineRetirementSuggestion(career, clubs));
+  };
+
+  const handleAnnounceFarewell = () => {
+    if (!career || farewellAnnouncement.current === career || !farewellEligibility(career).eligible) return;
+    farewellAnnouncement.current = career;
+    setCareer(announceFarewellSeason(career, clubs));
   };
 
   const handlePunditAction = (action: PunditAction) => {
@@ -1482,6 +1521,7 @@ export default function SoccerCareer() {
               onAcademyFocus={handleAcademyFocus}
               onCareerPatch={handleCareerPatch}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
+              onAgentChange={handleChangeAgent}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
@@ -1495,6 +1535,7 @@ export default function SoccerCareer() {
               onDismissWorldCup={handleDismissWorldCup}
               onWorldCupSpeech={handleWorldCupSpeech}
               onRetireInternational={handleRetireInternational}
+              onReturnInternational={handleReturnInternational}
               onDismissRivalryEvent={handleDismissRivalryEvent}
               onDismissBallonDor={handleDismissBallonDor}
               onBdorSpeech={handleBdorSpeech}
@@ -1515,6 +1556,7 @@ export default function SoccerCareer() {
               onDismissAppeal={handleDismissAppeal}
               onAcceptRetirement={handleAcceptRetirement}
               onDeclineRetirement={handleDeclineRetirement}
+              onAnnounceFarewell={handleAnnounceFarewell}
               onPunditAction={handlePunditAction}
               onEndPundit={handleEndPundit}
               onAdvanceOwner={handleAdvanceOwner}
@@ -2269,9 +2311,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
 }
 
 /* ─── Transfer Window Card ─── */
-function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignExtension, onRequestTransfer, onAcceptLoan }: {
+function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer, onStay, onSignExtension, onRequestTransfer, onAcceptLoan }: {
   situation: TransferSituation;
   career: CareerState;
+  clubs: ClubData[];
+  onCareer?: (fn: (previous: CareerState) => CareerState) => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onStay: () => void;
   onSignExtension: () => void;
@@ -2284,6 +2328,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
   const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
   const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
   const extension = soccerExtensionQuote(career);
+  const briefResult = transferBriefResult(career, projectLeagueApps);
   if (situation.type === "club_move") return <div data-club-move data-club-move-mode={situation.mode} className="space-y-3 rounded-xl border border-border bg-card p-4">
     <h3 className="text-lg font-black">{situation.mode === "loan" ? "🛫 Your club arranged a loan" : "📤 Your club sold you"}</h3>
     <p className="text-sm font-semibold">{situation.fromClub} → {situation.toClub}</p>
@@ -2310,6 +2355,21 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           Projected at {career.currentClub} next season: <span className="font-bold text-foreground">about {projHere.min} to {projHere.max} league games</span>
         </p>
       </div>
+
+      {onCareer && <AgentBrief career={career} clubs={clubs} onCareer={onCareer} />}
+      {briefResult && <div data-transfer-brief-result={briefResult.status} className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
+        <p className="font-bold">{briefResult.status === 'offered' ? 'Your agent found a match' : briefResult.status === 'no_match' ? 'No clubs matched your brief' : 'No response this window'}</p>
+        <p className="text-muted-foreground">{briefResult.status === 'offered'
+          ? `${briefResult.offer?.club.name}${briefResult.projection ? ` projects about ${briefResult.projection.min} to ${briefResult.projection.max} league games` : ''}. Review the actual contract before signing.`
+          : briefResult.status === 'no_match' ? 'Your priority found no destination among the eligible clubs. You are staying for now.'
+            : 'The transfer request did not bring an offer. You are staying for now.'}</p>
+        <p className="text-muted-foreground">Your agent's response is fixed for this window.</p>
+        {briefResult.status !== 'offered' && <Button data-transfer-brief-stay onClick={onStay} className="min-h-11 w-full whitespace-normal text-xs">Stay at {career.currentClub}</Button>}
+      </div>}
+      {situation.type === 'request_result' && !situation.offer && !briefResult && <div className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
+        <p>No offer is available in this saved window.</p>
+        <Button data-transfer-brief-stay onClick={onStay} className="min-h-11 w-full whitespace-normal text-xs">Stay at {career.currentClub}</Button>
+      </div>}
 
       {/* Round 217: the loan window. Only appears when the projection above
           says fringe and the player is young with contract to run. */}
@@ -2452,10 +2512,10 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         <div className="bg-card border border-border rounded-xl p-4 space-y-3">
           <p className="text-sm text-center">No clubs have made an offer. Your club wants to keep you.</p>
           <div className="flex gap-2">
-            <Button onClick={onStay} className="flex-1 h-9 text-sm bg-emerald-600 hover:bg-emerald-500 text-black">
+            <Button onClick={onStay} className="min-h-11 h-auto flex-1 whitespace-normal px-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-black">
               Stay and fight for place 💪
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+            <Button data-request-transfer variant="outline" onClick={onRequestTransfer} className="min-h-11 h-auto flex-1 whitespace-normal px-2 text-sm">
               Request transfer 📤
             </Button>
           </div>
@@ -2470,7 +2530,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <Button variant="outline" onClick={onStay} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Reject & Stay
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
+            <Button data-request-transfer variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Reject & Request Transfer 📤
             </Button>
           </div>
@@ -2503,7 +2563,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <Button variant="outline" onClick={onStay} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Stay at your club
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
+            <Button data-request-transfer variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Wait for better offer 🔍
             </Button>
           </div>
@@ -2537,7 +2597,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <span className="text-sm font-bold">📩 A club has responded to your transfer request!</span>
           </div>
           <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
-          <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
+          <Button data-transfer-brief-stay variant="outline" onClick={onStay} className="min-h-11 h-auto w-full whitespace-normal text-sm">
             Changed my mind, stay at {career.currentClub}
           </Button>
         </div>
@@ -2547,7 +2607,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
 }
 
 /* ─── Random Event Card ─── */
-function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; remaining: number; onChoice: (idx: number) => void }) {
+function RandomEventCard({ career, event, remaining, onChoice }: { career: CareerState; event: RandomEvent; remaining: number; onChoice: (idx: number) => void }) {
   const categoryColors: Record<string, string> = {
     positive: "border-emerald-500/40 bg-emerald-500/5",
     negative: "border-red-500/40 bg-red-500/5",
@@ -2581,7 +2641,7 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
               <span className="text-lg">{choice.emoji}</span>
               <span className="font-bold text-sm">{choice.label}</span>
             </div>
-            <div className="text-[11px] mt-1 opacity-80 ml-8">{money(choice.consequence)}</div>
+            <div className="text-[11px] mt-1 opacity-80 ml-8">{moneyLine(soccerEventChoiceConsequence(career, event.id, idx, choice.consequence))}</div>
           </button>
         ))}
       </div>
@@ -2708,7 +2768,7 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
 }
 
 /* ─── International Stats Panel ─── */
-function InternationalStatsPanel({ career, onRetire }: { career: CareerState; onRetire: () => void }) {
+function InternationalStatsPanel({ career, onRetire, onReturn }: { career: CareerState; onRetire: () => void; onReturn: () => void }) {
   const is = career.intStats;
   const hasHistory = (career.intlHistory ?? []).length > 0;
   if (!career.internationalCareer && !is.isRetired && is.caps === 0 && !hasHistory) return null;
@@ -2752,6 +2812,7 @@ function InternationalStatsPanel({ career, onRetire }: { career: CareerState; on
         last={career.lastTournament ?? null}
       />
       {is.isRetired && <div className="text-[11px] text-muted-foreground italic">Retired from international football</div>}
+      <InternationalReturnCard career={career} onReturn={onReturn} />
       {career.internationalCareer && !is.isRetired && (
         <Button variant="outline" onClick={onRetire} className="w-full h-8 text-xs">
           Retire from International Football 🚶
@@ -2904,7 +2965,7 @@ function ordinalPlace(n: number): string {
   return `${n}${suf}`;
 }
 
-function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onCurrencyChange?: () => void }) {
+function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: CareerState; onCurrencyChange?: () => void; onAgentChange?: (agentId: string) => void }) {
   const lifestyleEmoji: Record<string, string> = {
     "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Untouchable": "👑",
   };
@@ -3016,6 +3077,8 @@ function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onC
           })()}
         </div>
       )}
+
+      {onAgentChange && <AgentReviewCard career={career} onChange={onAgentChange} />}
 
       {/* Popularity & Morale bars */}
       <div className="space-y-1.5">
@@ -3720,7 +3783,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
@@ -3743,6 +3806,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissWorldCup: () => void;
   onWorldCupSpeech: (choice: WorldCupSpeechChoice) => void;
   onRetireInternational: () => void;
+  onReturnInternational: () => void;
   onDismissRivalryEvent: () => void;
   onDismissBallonDor: () => void;
   onBdorSpeech: (choice: BdorSpeechChoice) => void;
@@ -3763,6 +3827,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissAppeal: () => void;
   onAcceptRetirement: () => void;
   onDeclineRetirement: () => void;
+  onAnnounceFarewell: () => void;
   onPunditAction: (action: PunditAction) => void;
   onEndPundit: () => void;
   onAdvanceOwner: () => void;
@@ -3770,6 +3835,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   /* Round 258: bumping this re-renders every money figure on the page
      after the currency picker changes. */
   onCurrencyChange?: () => void;
+  onAgentChange: (agentId: string) => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const visibleCareer = careerBeforeBallonDorReveal(career);
@@ -3997,8 +4063,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
 
-      {/* FINAL SEASON BANNER */}
-      {career.isFinalSeason && !career.retired && (
+      {/* FINAL SEASON BANNER. Release AW fix pass: an announced farewell season has its own card right
+          below (it names the year and holds the rules), and announcing is the only thing that sets this
+          flag, so the two stacked boxes said one thing twice on every screen of that season and filled a
+          320 by 568 phone's first screen. While a plan is held the card speaks alone. */}
+      {career.isFinalSeason && !career.retired && !readSoccerFarewell(career) && (
         <div className="bg-amber-500/15 border-2 border-amber-500/40 rounded-xl p-3 text-center animate-pulse">
           <span className="text-sm font-black text-amber-400 uppercase tracking-widest">⚠️ FINAL SEASON</span>
           <p className="text-[10px] text-muted-foreground mt-0.5">This will be your last season as a professional footballer</p>
@@ -4006,6 +4075,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       )}
 
       {/* Main panels */}
+      {(career.phase === "playing" || (career.phase !== "retirement_suggestion" && readSoccerFarewell(career))) && <FarewellSeasonCard career={career} onAnnounce={onAnnounceFarewell} />}
       <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
         {/* LEFT, Timeline. md:self-start (Release AM): the card ends where its
             list ends, where it used to stretch the full height of the hub beside
@@ -4073,6 +4143,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Random Events */}
           {career.phase === "random_events" && career.pendingEvents.length > 0 && (
             <RandomEventCard
+              career={career}
               event={career.pendingEvents[0]}
               remaining={career.pendingEvents.length}
               onChoice={onEventChoice}
@@ -4229,6 +4300,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <Button onClick={onDeclineRetirement} variant="outline" className="w-full h-11 text-sm font-bold">
                   💪 Not Done Yet: Keep Playing
                 </Button>
+                <FarewellSeasonCard career={career} onAnnounce={onAnnounceFarewell} />
               </div>
             </div>
           )}
@@ -4321,6 +4393,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <TransferWindowCard
               situation={career.transferSituation}
               career={career}
+              clubs={clubs}
+              onCareer={onCareerPatch}
               onAcceptOffer={onAcceptOffer}
               onStay={onStay}
               onSignExtension={onSignExtension}
@@ -4373,7 +4447,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {validChanceWheel(career.chanceWheel) && !career.chanceWheel.seen && onCareerPatch && (
             <CentreMountBoundary what="chance wheel" onClose={() => onCareerPatch(acknowledgeChanceWheel)}>
               <Suspense fallback={null}>
-                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
+                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel.title === 'Contract negotiation' ? { ...career.chanceWheel, hit: moneyLine(career.chanceWheel.hit), miss: moneyLine(career.chanceWheel.miss) } : career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
               </Suspense>
             </CentreMountBoundary>
           )}
@@ -4387,7 +4461,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
-            <FinancialPanel career={career} onCurrencyChange={onCurrencyChange} />
+            <FinancialPanel career={career} onCurrencyChange={onCurrencyChange} onAgentChange={onAgentChange} />
           )}
 
           {/* Round 134: My Life used to be a wall of eight tabs and a hundred
@@ -4584,7 +4658,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
 
           {/* International Stats */}
-          <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
+          <InternationalStatsPanel career={career} onRetire={onRetireInternational} onReturn={onReturnInternational} />
 
           {/* Rival Comparison */}
           <RivalComparisonPanel career={visibleCareer} />
