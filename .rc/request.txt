@@ -1,0 +1,33 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simCmLeagueBookFacts.mjs
+c-wiki: CM_FACTS_CONTROL=wiki node scripts/simCmLeagueBookFacts.mjs
+c-bannedhost: CM_FACTS_CONTROL=bannedhost node scripts/simCmLeagueBookFacts.mjs
+c-figure: CM_FACTS_CONTROL=figure node scripts/simCmLeagueBookFacts.mjs
+c-onesource: CM_FACTS_CONTROL=onesource node scripts/simCmLeagueBookFacts.mjs
+c-disagree: CM_FACTS_CONTROL=disagree node scripts/simCmLeagueBookFacts.mjs
+c-receipt: CM_FACTS_CONTROL=receipt node scripts/simCmLeagueBookFacts.mjs
+c-srcname: CM_FACTS_CONTROL=srcname node scripts/simCmLeagueBookFacts.mjs
+c-dash: CM_FACTS_CONTROL=dash node scripts/simCmLeagueBookFacts.mjs
+c-length: CM_FACTS_CONTROL=length node scripts/simCmLeagueBookFacts.mjs
+c-samehost: CM_FACTS_CONTROL=samehost node scripts/simCmLeagueBookFacts.mjs
+c-pausedrow: CM_FACTS_CONTROL=pausedrow node scripts/simCmLeagueBookFacts.mjs
+c-staleowed: CM_FACTS_CONTROL=staleowed node scripts/simCmLeagueBookFacts.mjs
+c-keeperowed: CM_FACTS_CONTROL=keeperowed node scripts/simCmLeagueBookFacts.mjs
+c-seasontoken: CM_FACTS_CONTROL=seasontoken node scripts/simCmLeagueBookFacts.mjs
+c-boundary: CM_FACTS_CONTROL=boundary node scripts/simCmLeagueBookFacts.mjs
+c-wikimirror: CM_FACTS_CONTROL=wikimirror node scripts/simCmLeagueBookFacts.mjs
+c-badurl: CM_FACTS_CONTROL=badurl node scripts/simCmLeagueBookFacts.mjs
+c-unknown: CM_FACTS_CONTROL=nosuch node scripts/simCmLeagueBookFacts.mjs
+mut: node .rc/x/mutfix.mjs; s=$?; rm -f scripts/.mut-fence.mjs; exit $s
+runall: ONLY=simCmLeagueBookFacts node scripts/runAllSims.mjs
+sha: tr -d '\r' < scripts/data/cmLeagueBookFacts.json | sha256sum; grep sha256 scripts/data/cmLeagueBookFacts.receipt.json
+crlf: sed -i 's/$/\r/' scripts/data/cmLeagueBookFacts.json scripts/data/cmLeagueBookFacts.receipt.json && echo "CR lines: $(grep -c $'\r' scripts/data/cmLeagueBookFacts.json)" && node scripts/simCmLeagueBookFacts.mjs; s=$?; git checkout -- scripts/data; exit $s
+difffiles: git diff --name-only origin/main...d98a7746 && test "$(git diff --name-only origin/main...d98a7746 | wc -l)" = "4" && test "$(git diff --name-only origin/main...d98a7746 | grep -cx 'docs/audits/ROUND-1310-NOTES.md\|scripts/data/cmLeagueBookFacts.json\|scripts/data/cmLeagueBookFacts.receipt.json\|scripts/simCmLeagueBookFacts.mjs')" = "4" && echo "exactly the four files"
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
