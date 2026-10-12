@@ -1,0 +1,4 @@
+f1 exit=0 169s | F1 done: 620 careers, 0 differ, every one first at a loan listed window the filter bit
+f1-control-seed exit=0 7s | F1 STOP: 3 careers differ for a reason other than the filter
+simClubVerdict-head exit=0 16s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.
+simClubVerdict-base exit=0 16s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.

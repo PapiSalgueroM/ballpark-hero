@@ -1,0 +1,3 @@
+{"base":{"careers":0,"loanListedWindows":0,"loanListedZeroOffer":0,"loanListedOffers":0,"loanTiers":{},"loansTaken":71},"head":{"careers":0,"loanListedWindows":0,"loanListedZeroOffer":0,"loanListedOffers":0,"loanTiers":{},"loansTaken":71}}
+{"verdictCareers":220,"yesCareers":400,"yesTried":559,"careers":620,"equalToEnd":620,"differ":0,"differByPolicy":{"verdict":0,"yes":0},"unattributed":0,"offersAtFirstDiff":{"base":0,"head":0},"zeroOfferAtFirstDiff":{"base":0,"head":0},"nextSeasonMean":{"base":0,"head":0},"nextSeasonOnLoan":{"base":0,"head":0}}
+F1 done: 620 careers, 0 differ, every one first at a loan listed window the filter bit

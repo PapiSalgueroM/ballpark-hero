@@ -1,0 +1,7 @@
+CONTROL FIRED f1 seed
+loanListedWindows":0,"loanListedZeroOffer":0,"loanListedOffers":0,"loanTiers":{},"loansTaken":2},"head":{"careers":0,"loanListedWindows":0,"loanListedZeroOffer":0,"loanListedOffers":0,"loanTiers":{},"loansTaken":2}}
+DIFF verdict 0 step 0 age 17 ovr 44 tier 4 UNATTRIBUTED offers [] -> [] next league games 11 -> 10
+DIFF verdict 10 step 0 age 17 ovr 55 tier 3 UNATTRIBUTED offers [] -> [] next league games 23 -> 6
+DIFF verdict 20 step 0 age 17 ovr 63 tier 3 UNATTRIBUTED offers [] -> [] next league games 27 -> 21
+{"verdictCareers":30,"yesCareers":0,"yesTried":0,"careers":30,"equalToEnd":27,"differ":3,"differByPolicy":{"verdict":3,"yes":0},"unattributed":3,"offersAtFirstDiff":{"base":0,"head":0},"zeroOfferAtFirstDiff":{"base":3,"head":3},"nextSeasonMean":{"base":20.33,"head":12.33},"nextSeasonOnLoan":{"base":0,"head":0}}
+F1 STOP: 3 careers differ for a reason other than the filter

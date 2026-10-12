@@ -1,0 +1,5 @@
+#!serial
+f1: node .rc/x/fleetF1.mjs 220 400
+f1-control-seed: F1_CONTROL=seed node .rc/x/fleetF1.mjs 30 0 2>&1 | tee /dev/stderr | grep -q "F1 STOP" && echo "CONTROL FIRED f1 seed"
+simClubVerdict-head: node scripts/simClubVerdict.mjs
+simClubVerdict-base: node .rc/x/unfilter.mjs && node scripts/simClubVerdict.mjs; s=$?; git checkout -- src; exit $s

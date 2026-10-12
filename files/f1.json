@@ -1,0 +1,258 @@
+{
+ "summary": {
+  "verdictCareers": 30,
+  "yesCareers": 0,
+  "yesTried": 0,
+  "careers": 30,
+  "equalToEnd": 27,
+  "differ": 3,
+  "differByPolicy": {
+   "verdict": 3,
+   "yes": 0
+  },
+  "unattributed": 3,
+  "offersAtFirstDiff": {
+   "base": 0,
+   "head": 0
+  },
+  "zeroOfferAtFirstDiff": {
+   "base": 3,
+   "head": 3
+  },
+  "nextSeasonLeagueApps": {
+   "base": [
+    11,
+    23,
+    27
+   ],
+   "head": [
+    10,
+    6,
+    21
+   ]
+  },
+  "nextSeasonMean": {
+   "base": 20.33,
+   "head": 12.33
+  },
+  "nextSeasonOnLoan": {
+   "base": 0,
+   "head": 0
+  },
+  "tally": {
+   "base": {
+    "careers": 0,
+    "loanListedWindows": 0,
+    "loanListedZeroOffer": 0,
+    "loanListedOffers": 0,
+    "loanTiers": {},
+    "loansTaken": 2
+   },
+   "head": {
+    "careers": 0,
+    "loanListedWindows": 0,
+    "loanListedZeroOffer": 0,
+    "loanListedOffers": 0,
+    "loanTiers": {},
+    "loansTaken": 2
+   }
+  }
+ },
+ "differing": [
+  {
+   "id": 0,
+   "policy": "verdict",
+   "seed": 797034451,
+   "steps": 126,
+   "equal": false,
+   "firstDiff": {
+    "step": 0,
+    "phaseBefore": "youth",
+    "phaseAfter": [
+     "contract_offer",
+     "contract_offer"
+    ],
+    "age": 17,
+    "overall": 44,
+    "tier": 4,
+    "club": "Portsmouth Youth",
+    "year": 2021,
+    "drawsThisStep": [
+     34,
+     34
+    ],
+    "offersBase": [],
+    "offersHead": [],
+    "filterBit": false,
+    "headAllAtLeast20": true,
+    "attributed": false
+   },
+   "rowsAtDiff": [
+    2,
+    2
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2022,
+     "age": 18,
+     "club": "Preston North End",
+     "tier": 4,
+     "leagueApps": 11,
+     "apps": 12,
+     "onLoan": false
+    },
+    "head": {
+     "year": 2022,
+     "age": 18,
+     "club": "Portsmouth",
+     "tier": 4,
+     "leagueApps": 10,
+     "apps": 15,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    }
+   }
+  },
+  {
+   "id": 10,
+   "policy": "verdict",
+   "seed": 797034461,
+   "steps": 127,
+   "equal": false,
+   "firstDiff": {
+    "step": 0,
+    "phaseBefore": "youth",
+    "phaseAfter": [
+     "contract_offer",
+     "contract_offer"
+    ],
+    "age": 17,
+    "overall": 55,
+    "tier": 3,
+    "club": "Kawasaki Frontale Youth",
+    "year": 2021,
+    "drawsThisStep": [
+     35,
+     35
+    ],
+    "offersBase": [],
+    "offersHead": [],
+    "filterBit": false,
+    "headAllAtLeast20": true,
+    "attributed": false
+   },
+   "rowsAtDiff": [
+    2,
+    2
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2022,
+     "age": 18,
+     "club": "Urawa Red Diamonds",
+     "tier": 4,
+     "leagueApps": 23,
+     "apps": 27,
+     "onLoan": false
+    },
+    "head": {
+     "year": 2022,
+     "age": 18,
+     "club": "Kawasaki Frontale",
+     "tier": 3,
+     "leagueApps": 6,
+     "apps": 7,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    }
+   }
+  },
+  {
+   "id": 20,
+   "policy": "verdict",
+   "seed": 797034471,
+   "steps": 187,
+   "equal": false,
+   "firstDiff": {
+    "step": 0,
+    "phaseBefore": "youth",
+    "phaseAfter": [
+     "contract_offer",
+     "contract_offer"
+    ],
+    "age": 17,
+    "overall": 63,
+    "tier": 3,
+    "club": "Fulham Youth",
+    "year": 2021,
+    "drawsThisStep": [
+     34,
+     34
+    ],
+    "offersBase": [],
+    "offersHead": [],
+    "filterBit": false,
+    "headAllAtLeast20": true,
+    "attributed": false
+   },
+   "rowsAtDiff": [
+    2,
+    2
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2022,
+     "age": 18,
+     "club": "Aston Villa",
+     "tier": 3,
+     "leagueApps": 27,
+     "apps": 29,
+     "onLoan": false
+    },
+    "head": {
+     "year": 2022,
+     "age": 18,
+     "club": "Fulham",
+     "tier": 3,
+     "leagueApps": 21,
+     "apps": 27,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 37,
+     "retired": true,
+     "seasons": 22
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 17
+    }
+   }
+  }
+ ]
+}
