@@ -1,0 +1,37 @@
+1) the bound: an assistant moves his end of the floor at most 3 points, for any rating
+   team strength, what the win model reads: 38480 staff pairs probed, off the end edges 0, past the bound 0; a 95 pair moves it 3.00
+   edge at 0/45/70/95/150: -3.00 / -3.00 / 0.00 / 3.00 / 3.00; salary at 45/70/95: 3 / 10 / 16
+2) offense: over 300 seeds a better offensive assistant scores more, never past his cap
+   points scored per game at 45/55/65/70/75/85/95: 69.94 / 72.17 / 74.43 / 75.50 / 76.61 / 78.84 / 81.00
+   45 to 95 uplift 11.06 (band 9 to 13), smallest step 1.07, seeds that went the wrong way 0, games compared 34637 (+1363 that flipped), cap breaks 0
+   wins a season at 45/95: 13.227 / 15.783, gain 2.557 (band 1.9 to 3.5), seed steps that lost wins 0
+3) defense: over 300 seeds a better defensive assistant allows less, never past his cap
+   points allowed per game at 45/55/65/70/75/85/95: 73.74 / 71.54 / 69.38 / 68.30 / 67.23 / 65.03 / 62.94
+   45 to 95 drop 10.80 (band 9 to 13), smallest step 1.06, seeds that went the wrong way 0, games compared 34628 (+1372 that flipped), cap breaks 0
+   wins a season at 45/95: 13.223 / 15.807, gain 2.583 (band 1.9 to 3.5), seed steps that lost wins 0
+4) ten season dynasties over 20 seeds complete, and the budget never goes negative
+   provoked: a 10 point hire on a 9 point pot was refused
+   thinnest real budget 41 (BUT, no wins, rivalry lost by 25+), two 95s cost 32: covered, nobody walks in play
+   provoked payroll walk: a 41 point budget against two 30 point salaries walked someone in 10 of 10 seeds, broken 0; chargePayroll grid 1150 cases, broken 0
+   200 seasons: budget negative 0 time(s), hires 99, refused 176 (broken refusals 0), walked on payroll 0
+   empty Player of the Year races 0, bad fields 0, teams off 20 games 0, PG or C holes 0, empty AI chairs 0, logs not reset 0
+   1767400 games read so far (1767400 with the layer on): winner on fewer or equal points 0
+5) rivalry night: one rival each, in-state pairs are real geography, no rematch, swings stay in range
+   20 pairs: 8 in-state, 12 generated; in-state AUB-BAMA, UCLA-SDSU, PUR-IU, UK-LOU, MSU-MICH, DUKE-UNC, TENN-MEM, HOU-BAY
+   4000 rivalry games played: swings out of range 0, morale not reaching strength 0, budgets off the swing 0 (over 200 of my own), rivals not meeting exactly once 0, rivalry nights not two games each 0
+6) strength of schedule: the number is the opponents actually played, and the committee reads it
+   8000 team seasons checked against the game log: mismatches 0, order disagreements 0
+   constructed pair: SOS 83.8 vs 75.9, ranked 1 and 2
+   the weight: B 1.00 stronger; A's schedule 1.05 tougher puts A first, 0.95 tougher puts B first
+   the schedule changed the March field in 138 of 200 seasons (floor 75)
+7) old saves: a pre-823 save plays exactly as it did, and upgrades at its offseason
+   legacy digest 7a9b8921588a21be..., golden 7a9b8921588a21be...
+   upgraded save: 10 seasons played, staff on every program, rivalry night played
+8) the board: an old save loads and upgrades at its offseason, a new dynasty has its staff, the window refuses what it cannot afford
+   vitest exit 0, 6 passed (6)
+9) league balance: over 600 seasons the program layer tilts the league no further than measured
+   upsets 17.80% legacy, 16.23% with the layer, drift -1.56 (band -3 to -0.5)
+   BUT regular season wins 2.13 legacy, 2.13 with the layer, drift -0.00 (band -0.6 to 0.5); top six prestige titles 96.7% and 97.8%
+   measured: OC uplift 11.06 win gain 2.557 step 1.07; DC drop 10.80 win gain 2.583 step 1.06; fields 144/209; upset drift -1.56; weak drift -0.00
+
+simCbbStaff: all green

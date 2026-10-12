@@ -1,0 +1,11 @@
+ladder exit=0 0s | ladder digest e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9
+simCollegeDynastyBoard exit=0 5s | simCollegeDynastyBoard: all green
+simGmDeskHost-closedquiet exit=1 64s | simGmDeskHost CONTROL closedquiet FIRED: check 5 went red with 2076 failures (red checks 4:2 5:2076 10:1)
+simGmDeskHost exit=0 75s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simCfbDynasty exit=0 4s | simCfbDynasty: all green
+tsc exit=0 91s | 
+simCfbStaff exit=0 18s | simCfbStaff: all green
+simCoachCalls exit=0 4s | simCoachCalls: 75 checks, 0 failed
+simCbbStaff exit=0 23s | simCbbStaff: all green
+vitest-units exit=0 21s |    Duration  20.31s (transform 4.86s, setup 2.03s, collect 12.08s, tests 27.21s, environment 10.53s, prepare 2.60s)
+simGmSeat exit=0 87s | simGmSeat: all checks passed
