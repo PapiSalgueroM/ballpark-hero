@@ -16,7 +16,7 @@ import path from 'node:path';
 import { EXAMPLE_ELEVEN, LeagueLeadersCard, ordinal, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
-import { bookAwardsState, finishSeason, keepTeams, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
+import { REAL_LEAGUES, bookAwardsState, finishSeason, keepTeams, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
 import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, seasonAwards, type BoardKind } from '@/lib/clubManagerLeagueBoards';
 import { dealShares } from '@/lib/clubManagerLeagueBook';
 
@@ -307,8 +307,8 @@ describe('past winners', () => {
     const aw = seasonAwards(leagueBoardsOf(s)!.input)!;
     const rec = s.history[0] ?? { season: 0, club: s.clubName, position: 1, points: 0, trophies: [] };
     s.history = [
-      { ...rec, season: 1, awards: { ...aw, cov: 80 } },
-      { ...rec, season: 2, awards: aw },
+      { ...rec, season: 1, leagueId: undefined, awards: { ...aw, cov: 80 } },
+      { ...rec, season: 2, leagueId: 'championship', awards: aw },
     ];
     const tiles = draw(s);
     expect(tiles.q('[data-cm-leaders-tile="past"]')).not.toBeNull();
@@ -318,12 +318,15 @@ describe('past winners', () => {
     const p = draw(s, 'past');
     expect(p.q('[data-cm-past-season]')?.getAttribute('data-cm-past-season')).toBe('2');
     expect(p.q('[data-cm-past-count]')?.textContent).toBe('1 of 2');
+    /* Review-read m11: the record's own league is named, so a season played elsewhere reads as such. */
+    expect(p.q('[data-cm-past-league]')?.textContent).toBe(` · ${REAL_LEAGUES.find(l => l.id === 'championship')!.name}`);
     expect((p.q('[data-cm-past-step="newer"]') as HTMLButtonElement).disabled).toBe(true);
     expect(p.container.textContent).toContain(`${aw.boot![0]}`);
     expect(p.container.textContent).not.toContain('The data covered only part of that league');
     fireEvent.click(p.q('[data-cm-past-step="older"]')!);
     expect(p.q('[data-cm-past-season]')?.getAttribute('data-cm-past-season')).toBe('1');
     expect(p.container.textContent).toContain('The data covered only part of that league: 80 in 100');
+    expect(p.q('[data-cm-past-league]')).toBeNull();
     expect((p.q('[data-cm-past-step="older"]') as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(p.q('[data-cm-leaders-back]')!);
     expect(p.onBoard).toHaveBeenLastCalledWith(null);

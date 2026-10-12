@@ -13,7 +13,7 @@
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { careerLeagueOf, leagueBoardsOf, leagueBookRules } from '@/lib/clubManager';
+import { REAL_LEAGUES, careerLeagueOf, leagueBoardsOf, leagueBookRules } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { AWARD_FLOOR, BOOK_FULL_SHARE, TEAMS_KEPT, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
@@ -97,6 +97,9 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
   const i = Math.min(at, Math.max(0, seasons.length - 1));
   const rec = seasons[i];
   const aw = rec?.awards;
+  /* The record keeps the league it was played in (review-read m11): a manager who went up, down or to a
+     new job can tell whose winners these are. A record without one prints as before. */
+  const leagueName = rec?.leagueId ? REAL_LEAGUES.find(l => l.id === rec.leagueId)?.name ?? null : null;
   return (
     <div data-cm-leaders data-cm-board="past" className="bg-card border border-border rounded-2xl p-3 space-y-2">
       <button type="button" onClick={onBack} data-cm-leaders-back
@@ -108,7 +111,7 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
         ? <p className="text-xs text-muted-foreground">No season has finished with the league's awards yet.</p>
         : (
           <div data-cm-past-season={rec.season} className="space-y-1">
-            <div className="text-xs text-muted-foreground">Season {rec.season} · {rec.club}</div>
+            <div className="text-xs text-muted-foreground">Season {rec.season} · {rec.club}{leagueName && <span data-cm-past-league> · {leagueName}</span>}</div>
             <SeasonHonoursCard awards={aw} recent={i < TEAMS_KEPT} />
             {aw.cov < BOOK_FULL_SHARE && <p className="text-[9px] text-yellow-500/80">The data covered only part of that league: {aw.cov} in 100 of the other clubs' goals had a name on them.</p>}
           </div>
