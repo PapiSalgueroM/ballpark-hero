@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+pd-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+pd-b: SEEDSET=b node scripts/simCareerPreDraft.mjs
+pd-c: SEEDSET=c node scripts/simCareerPreDraft.mjs
+pd-d: SEEDSET=d node scripts/simCareerPreDraft.mjs
+pd-e: SEEDSET=e node scripts/simCareerPreDraft.mjs
+weight4: node .rc/x/weight4.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+season-law: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+season-lay: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+season-seam: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs

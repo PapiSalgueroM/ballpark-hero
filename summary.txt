@@ -1,0 +1,11 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pd-b exit=0 2s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-c exit=0 2s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-a exit=0 2s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-e exit=0 2s | simCareerPreDraft [seed set e]: ALL GREEN
+pd-d exit=0 2s | simCareerPreDraft [seed set d]: ALL GREEN
+weight4 exit=0 8s | WEIGHT4 done
+season-law exit=0 17s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+season-lay exit=0 17s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+season-seam exit=0 15s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
