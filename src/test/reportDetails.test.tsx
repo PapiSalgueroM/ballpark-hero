@@ -77,6 +77,21 @@ for (const surface of surfaces) {
       expect(delivery.invoke).toHaveBeenCalledTimes(2); expect(view.getByText(surface.success)).toBeInTheDocument();
     });
 
+    it('gives focus back to the Report a problem button when the form closes', async () => {
+      // Release BA: the button is not a DialogTrigger, so without the component's own
+      // onCloseAutoFocus Radix restores nothing and focus falls to the page body.
+      const view = render(surface.page());
+      const button = view.getByRole('button', { name: 'Report a problem' });
+      button.focus();
+      fireEvent.click(button);
+      expect(view.getByRole('dialog')).toBeInTheDocument();
+      expect(document.activeElement).not.toBe(button);
+      fireEvent.keyDown(document.activeElement ?? document.body, { key: 'Escape' });
+      await act(async () => { vi.advanceTimersByTime(50); });
+      expect(view.queryByRole('dialog')).toBeNull();
+      expect(document.activeElement).toBe(button);
+    });
+
     it('keeps the send control disabled while the actual relay request is pending', async () => {
       let resolveRelay!: (value: unknown) => void;
       delivery.invoke.mockImplementation(() => new Promise(resolve => { resolveRelay = resolve; }));
