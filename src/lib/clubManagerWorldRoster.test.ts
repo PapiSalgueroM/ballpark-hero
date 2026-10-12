@@ -503,6 +503,32 @@ describe('actual world roster continuity through manager callbacks', () => {
     expect(worldRosterFor(destination, offer.club).some(x => x.n === p.name)).toBe(false);
   });
 
+  /* Release AZ, the lead's ruling Y1: a save from before the release has no world seed, and it never writes a
+     ledger, through any deal the recorder sees, so it keeps playing the world it always had. */
+  it('never writes a ledger for a career with no world seed, through every deal the recorder sees', () => {
+    const c = realCareer(); delete c.worldSeed;
+    const market = buildMarket(c);
+    const offer = market.find(p => p.club === 'Arsenal' && p.age < 29 && p.position !== 'GK')!;
+    const signed = buyPlayer(c, offer)!; expect(signed).not.toBeNull();
+    expect(signed.worldRoster).toBeUndefined();
+    const p = signed.squad.find(x => x.name === offer.name)!;
+    expect(p.worldRosterKey).toBeUndefined();
+    const sold = acceptBid({ ...signed, incomingBids: [{ playerId: p.id, playerName: p.name, club: 'Chelsea', offer: 25, status: 'open' }] }, p.id)!;
+    expect(sold).not.toBeNull(); expect(sold.worldRoster).toBeUndefined();
+    const second = market.find(x => x.rating < 76 && x.position !== 'GK' && x.age < 30 && x.name !== offer.name)!;
+    const bought = buyPlayer(sold, second)!; expect(bought).not.toBeNull(); expect(bought.worldRoster).toBeUndefined();
+    const released = releasePlayer(bought, bought.squad.find(x => x.name === second.name)!.id)!;
+    expect(released).not.toBeNull(); expect(released.worldRoster).toBeUndefined();
+    const loanOffer = buildMarket(released).find(x => x.age <= 23 && x.rating <= 84 && (x.value ?? x.price) <= 25 && x.position !== 'GK')!;
+    const loaned = loanIn(released, loanOffer)!; expect(loaned).not.toBeNull();
+    const exercised = exerciseLoanOption(loaned, loaned.squad.find(x => x.name === loanOffer.name)!.id)!;
+    expect(exercised).not.toBeNull(); expect(exercised.worldRoster).toBeUndefined();
+    const stayed = withRoll(0.6, () => startNextSeason(exercised));
+    expect(stayed.worldRoster).toBeUndefined(); expect(stayed.worldSeed).toBeUndefined();
+    const moved = withRoll(0.6, () => startNextSeason(exercised, 'Liverpool'));
+    expect(moved.worldRoster).toBeUndefined(); expect(moved.worldSeed).toBeUndefined();
+  });
+
   it('uses no global read draws and keeps the entire stale input unchanged during year refresh', () => {
     const c = bought(); const future = { ...c, clubName: 'Liverpool', season: 2, squad: [] };
     const before = structuredClone(future);

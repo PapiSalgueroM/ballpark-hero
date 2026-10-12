@@ -348,6 +348,11 @@ function worldMarket(career: CareerState): MarketPlayer[] {
 
 /** Only a projected source or an already certified ownership record supplies deal provenance. */
 function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire'): CareerState {
+  /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
+     Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
+     turns on the same branches the seed does, so this is the one place both are kept off together.
+     scripts/simCmUnseededWorld.mjs holds it (CM_UNSEEDED_CONTROL=guard takes this line out). */
+  if (worldSeedOf(state) === undefined) return state;
   const held = readWorldRoster(state);
   const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
   const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
