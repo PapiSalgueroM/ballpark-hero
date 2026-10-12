@@ -1,0 +1,29 @@
+# Round 1311 FINAL, served (head 8676802b): weight rows, sweepGames in Chromium, the league leaders walk and its six controls, the Club Manager walks
+#!serve
+#!playwright
+#!serial
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk: mkdir -p "$RC_OUT/walk" && RC_OUT="$RC_OUT/walk" node scripts/playCmLeagueLeaders.mjs
+walk-report: RC_OUT=$(mktemp -d) LEADERS_REPORT=1 node scripts/playCmLeagueLeaders.mjs
+c-swap: RC_OUT=$(mktemp -d) LEADERS_CONTROL=swap node scripts/playCmLeagueLeaders.mjs
+c-wide: RC_OUT=$(mktemp -d) LEADERS_CONTROL=wide node scripts/playCmLeagueLeaders.mjs
+c-stack: RC_OUT=$(mktemp -d) LEADERS_CONTROL=stack node scripts/playCmLeagueLeaders.mjs
+c-thin: RC_OUT=$(mktemp -d) LEADERS_CONTROL=thin node scripts/playCmLeagueLeaders.mjs
+c-younglate: RC_OUT=$(mktemp -d) LEADERS_CONTROL=younglate node scripts/playCmLeagueLeaders.mjs
+c-write: RC_OUT=$(mktemp -d) LEADERS_CONTROL=write node scripts/playCmLeagueLeaders.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playClubManager: node scripts/playClubManager.mjs
+playClubManager-again: node scripts/playClubManager.mjs
+playLeagueTableFit: node scripts/playLeagueTableFit.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playClubManagerSaveLeave: node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: node scripts/playClubManagerSlots.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
+sweepGames: ENGINES=chromium node scripts/sweepGames.mjs

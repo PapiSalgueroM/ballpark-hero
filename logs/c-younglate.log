@@ -1,0 +1,18 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners; CONTROL younglate
+playCmLeagueLeaders: page seed 2362537418
+  FAIL 3: S1-320: Back from the goals board left the page at 434, it stood at 120
+  FAIL 3: S1-320: Back from the assists board left the page at 487, it stood at 120
+  FAIL 3: S1-320: Back from the sheets board left the page at 541, it stood at 120
+  FAIL 3: S2-320: Back from the goals board left the page at 561, it stood at 120
+  FAIL 3: S2-320: Back from the assists board left the page at 614, it stood at 120
+  FAIL 3: S2-320: Back from the sheets board left the page at 668, it stood at 120
+  FAIL 4: S3-320: a young late book in a whole league draws the thin data line: "The data covers only part of this league."
+  FAIL 4: S3-390: a young late book in a whole league draws the thin data line: "The data covers only part of this league."
+  FAIL 4: S3-1280: a young late book in a whole league draws the thin data line: "The data covers only part of this league."
+5       the page drew 7 and 7 times before the match; the two saves are equal (121105 characters)
+green 1 the page is the reader: 18 checks
+green 2 the fit: 141 checks
+RED   3 nothing stacks or jumps: 57 checks, 6 failed
+RED   4 the lines: 48 checks, 3 failed
+green 5 a match with the boards open: 2 checks
+playCmLeagueLeaders: CONTROL younglate DID NOT FIRE as it must: section 4 has 3 failures, other red sections [3]
