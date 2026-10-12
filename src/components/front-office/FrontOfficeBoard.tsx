@@ -1889,8 +1889,12 @@ export default function FrontOfficeBoard() {
           {/* Round 1307: Play plays the week exactly as it always did. Watch is
               the same press, with his game then run on the clock in the tile
               below; the final week has none, because its press goes to the
-              recap. Both are shut while a game is being watched. */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
+              recap. Both are shut while a game is being watched. ONE LAYOUT A
+              WIDTH: stacked on a phone and side by side from sm up, never
+              "whichever fits". Left to wrap, "Week 1" shared a row at 390 and
+              "Week 2" did not, so the box grew a button row at the first
+              press of a season and the tile moved as its result arrived. */}
+          <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
             <button
               onClick={playWeek}
               disabled={overLimit > 0 || !!hold}
