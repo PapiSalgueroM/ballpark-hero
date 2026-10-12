@@ -15,7 +15,7 @@
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, fireEvent, cleanup, within } from '@testing-library/react';
-import { GmBracketCard } from './GmBracketCard';
+import { GmBracketCard, scrollToShow } from './GmBracketCard';
 import NflBracket, { nflSeedOf, nflWeekLabel } from '@/components/front-office/NflBracket';
 import { openBracket, playBracketAll, playBracketGame, playBracketWeek, type BracketFormat, type GmBracketSave, type PlayTie } from '@/lib/gmBracket';
 import { gmBracketPlace } from '@/lib/gmBracketView';
@@ -131,6 +131,15 @@ describe('GmBracketCard', () => {
     fireEvent.click(q('[data-bracket-week="1"]')!);
     rerender(<NflBracket {...mount(playBracketWeek(NFL_BRACKET, openBracket(NFL_BRACKET, 2027, [...SEEDS].reverse()), chalk()), 'S1')} />);
     expect(q('[data-bracket-week="2"]')!.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('his chip and his tie are brought into view by the card\'s own scrollers, moved as little as they can be', () => {
+    /* the arithmetic the card uses for its chip row and its tie list (jsdom lays nothing out; the browser walk measures it) */
+    expect(scrollToShow(0, 100, 20, 30)).toBe(0);
+    expect(scrollToShow(0, 100, 150, 30)).toBe(80);
+    expect(scrollToShow(120, 100, 40, 30)).toBe(40);
+    expect(scrollToShow(0, 100, 50, 140)).toBe(50);
+    expect(scrollToShow(60, 100, 100, 50)).toBe(60);
   });
 
   it('the "?" opens, closes and opens again, over the host it is handed', () => {

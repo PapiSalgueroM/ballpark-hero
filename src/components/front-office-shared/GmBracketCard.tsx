@@ -34,6 +34,15 @@ export interface GmBracketCardProps extends GmBracketMount {
 
 const ROUND_BUTTON = 'inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-xs font-bold text-foreground hover:bg-muted/40';
 
+/** Where a scroller must stand so an item from `start` to `start + size` is in its view of `view`, moving as little as
+ *  it can: unmoved when the item is already in view, its start when it is above (or longer than the view), its end
+ *  when it is below. Only the card's own two scrollers are moved by it, never the page. */
+export function scrollToShow(at: number, view: number, start: number, size: number): number {
+  if (start < at || size > view) return start;
+  if (start + size > at + view) return start + size - view;
+  return at;
+}
+
 export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, help, seedOf, weekLabel }: GmBracketCardProps) {
   const { weeks, open } = gmBracketWeeks(format, save);
   /* the week he asked to see, kept only while the card shows the same bracket standing where it stood when he asked
@@ -59,6 +68,30 @@ export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, he
   const week = asked && asked.open === open && asked.bracket === bracket && weeks.includes(asked.week) ? asked.week : open;
   const place = gmBracketPlace(format, save, my, name);
   const rows = gmBracketRows(format, save, week, my);
+
+  /* HIS PART OF THE CARD IS IN VIEW (the review of 2026-10-12, at 320, 390 and 1280): the week shown has its chip in
+     the chip row's view, and his tie, when the week holds one, is in the list's view; with none the list starts at its
+     top. Each time the face changes (another week, another game played, another club), and only then, so a list he
+     scrolled himself is left where he put it. The card's own scrollers move; the page never does. */
+  const chipRow = useRef<HTMLDivElement | null>(null);
+  const tieList = useRef<HTMLOListElement | null>(null);
+  const mineId = rows.find(r => r.mine)?.id ?? null;
+  const games = save.played.reduce((n, p) => n + p.games.length, 0);
+  const face = `${bracket}|${week}|${my}|${mineId}|${games}`;
+  useLayoutEffect(() => {
+    const row = chipRow.current;
+    const chip = row?.querySelector<HTMLElement>(`[data-bracket-week="${week}"]`);
+    if (row && chip) {
+      const r = row.getBoundingClientRect(), c = chip.getBoundingClientRect();
+      row.scrollLeft = scrollToShow(row.scrollLeft, row.clientWidth, c.left - r.left + row.scrollLeft, c.width);
+    }
+    const list = tieList.current;
+    if (!list) return;
+    const mine = mineId ? list.querySelector<HTMLElement>(`[data-bracket-tie="${mineId}"]`) : null;
+    if (!mine) { list.scrollTop = 0; return; }
+    const l = list.getBoundingClientRect(), m = mine.getBoundingClientRect();
+    list.scrollTop = scrollToShow(list.scrollTop, list.clientHeight, m.top - l.top + list.scrollTop, m.height);
+  }, [face, week, mineId]);
   const sheet = helpOpen
     ? <SeasonCentreHelp words={help} onClose={() => { setHelpOpen(false); helpButton.current?.focus({ preventScroll: true }); }} />
     : null;
@@ -69,7 +102,7 @@ export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, he
         <span className="min-w-0 text-xs font-bold uppercase tracking-wider text-muted-foreground">{GM_BRACKET_WORDS.title}</span>
         <button ref={helpButton} type="button" onClick={openHelp} aria-label={GM_BRACKET_WORDS.help} className={`${ROUND_BUTTON} w-11`} data-bracket-help>?</button>
       </div>
-      <div className="flex shrink-0 gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }} role="group" aria-label={GM_BRACKET_WORDS.weeks} data-bracket-weeks>
+      <div ref={chipRow} className="flex shrink-0 gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }} role="group" aria-label={GM_BRACKET_WORDS.weeks} data-bracket-weeks>
         {weeks.map(w => (
           <button key={w} type="button" onClick={() => setAsked({ week: w, open, bracket })} aria-pressed={w === week}
             className={`inline-flex h-11 shrink-0 items-center rounded-lg border px-3 text-xs font-bold ${w === week ? 'border-primary bg-primary/10 text-foreground' : 'border-border bg-card text-muted-foreground'}`}
@@ -77,7 +110,7 @@ export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, he
         ))}
       </div>
       <p className="shrink-0 text-sm font-bold text-foreground" data-bracket-place={place.kind}>{place.line}</p>
-      <ol className="min-h-0 flex-1 space-y-1.5 overflow-y-auto" data-bracket-scroll>
+      <ol ref={tieList} className="min-h-0 flex-1 space-y-1.5 overflow-y-auto" data-bracket-scroll>
         {rows.map(r => (
           <li key={r.id} className={`rounded-lg border px-2 py-1 ${r.mine ? 'border-primary bg-primary/5' : 'border-border'}`} data-bracket-tie={r.id} data-bracket-mine={r.mine ? 'true' : undefined}>
             <div className="flex items-center justify-between gap-2">
