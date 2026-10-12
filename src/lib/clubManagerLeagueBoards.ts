@@ -50,8 +50,7 @@ export const BOARD_ROWS = 10;
 /** One rival club as the save's table has it. `place` is its place in the table, 1 for the leader. */
 export interface BoardClub { club: string; gf: number; place: number; keeperOnRecord: boolean }
 /** One man of my squad: his own league line. `rating` and `apps`, and `ratingOf` and `lineOf` of the
- *  input below, are read by NO function of this module yet: they are what the team of the season of the
- *  round that follows picks and splits on, carried now so the engine's door to this module is built once. */
+ *  input below, are read only by teamOfSeason: what the team of the season picks and splits its lines on. */
 export interface BoardMine { id: string; name: string; pos: Position; rating: number; apps: number; goals: number; assists: number; gen?: boolean }
 
 export interface BoardInput {
