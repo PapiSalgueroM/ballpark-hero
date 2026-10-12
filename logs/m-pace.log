@@ -1,0 +1,42 @@
+mut pace: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (2 edit(s))
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 2919[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 608[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeTile.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 826[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeTagDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 623[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the depth chart and the franchise tag on the board[2m > [22mopens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength [33m 435[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmGameDayCard.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmDeskMount.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficePromotion.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 1096[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL practice promotion cap outcomes[2m > [22msaves the exact affordable player and depth and restores that promotion once [33m 379[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeFullRoster.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1241[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a full roster on the board[2m > [22mlocks Play with the count owed until a GM over 53 cuts down himself [33m 357[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLotteryCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 163[2mms[22m[39m
+[90mstdout[2m | src/lib/gmGameDayView.test.ts[2m > [22m[2mgameDayView[2m > [22m[2mevery sentence is the law's own for the story the told path tells
+[22m[39mgmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+ [32m✓[39m src/lib/gmGameDayView.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 402[2mms[22m[39m
+ [32m✓[39m src/test/frontOfficeSaveRecovery.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 3344[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mrestores current progress, contracts and counters without rewriting storage [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 333[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 450[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 370[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLineupPanel.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 135[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmSeatCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeRatingEvidence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 651[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[32m246 passed[39m[22m[90m (246)[39m
+[2m   Start at [22m 09:23:21
+[2m   Duration [22m 13.77s[2m (transform 2.67s, setup 941ms, collect 7.47s, tests 21.15s, environment 6.71s, prepare 1.45s)[22m
+
+MUTANT pace vitest exit=0

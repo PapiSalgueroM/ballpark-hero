@@ -1,0 +1,42 @@
+mut watch17: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmDeskMount.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 157[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmSeatCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeTile.test.tsx[2m > [22mNFL front office: the Game Day tile[2m > [22mthe final week has no Watch: its press goes to the recap
+[31m[1mAssertionError[22m: expected <button …(2)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  class="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"
+  data-watch-week="true"
+>
+  Watch Week 
+  17
+</button>
+
+[36m [2m❯[22m src/components/front-office/FrontOfficeTile.test.tsx:[2m233:36[22m[39m
+    [90m231| [39m    [35mawait[39m [34mopenWeek[39m()[33m;[39m
+    [90m232| [39m    expect(screen.getByText('Play the final week + playoffs')).toBeTru…
+    [90m233| [39m    [34mexpect[39m([34mq[39m([32m'[data-watch-week]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m234| [39m    [34mexpect[39m(screen[33m.[39m[34mqueryByText[39m([36m/^Watch Week/[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m235| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m245 passed[39m[22m[90m (246)[39m
+[2m   Start at [22m 09:24:05
+[2m   Duration [22m 13.83s[2m (transform 2.50s, setup 882ms, collect 7.72s, tests 20.91s, environment 6.49s, prepare 1.42s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTile.test.tsx,title=src/components/front-office/FrontOfficeTile.test.tsx > NFL front office%3A the Game Day tile > the final week has no Watch%3A its press goes to the recap,line=233,column=36::AssertionError: expected <button …(2)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"%0A  data-watch-week="true"%0A>%0A  Watch Week %0A  17%0A</button>%0A%0A ❯ src/components/front-office/FrontOfficeTile.test.tsx:233:36%0A%0A
+MUTANT watch17 vitest exit=1

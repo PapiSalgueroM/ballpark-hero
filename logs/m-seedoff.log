@@ -1,0 +1,42 @@
+mut seedoff: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mthe told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his
+[22m[39mFO_GAMEDAY one press: his club ARI played 3 playoff games; the log holds w17, NFC Divisional, NFC Championship, Super Bowl
+FO_GAMEDAY one press, the desk on: the law told 13 of the thirteen playoff games another score than the engine's
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mwith the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+[22m[39mFO_GAMEDAY desk on: the edge of his staff is 1.0266666666666666; told with it 37-6, without it 37-6; the log holds 37-6
+
+ [32m✓[39m src/components/front-office/FrontOfficeGameDay.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1563[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: a log that does not read whole is absent, and never refuses the save[2m > [22ma damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log [33m 519[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the log does not follow a GM into his next franchise[2m > [22mabandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club [33m 386[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeFullRoster.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1416[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a full roster on the board[2m > [22mcalls a practice squad man up while there is a spot, and greys the button at 53 [33m 338[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a full roster on the board[2m > [22mlocks Play with the count owed until a GM over 53 cuts down himself [33m 445[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeDraftCapital.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 2039[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficePromotion.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 1086[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL practice promotion cap outcomes[2m > [22msaves the exact affordable player and depth and restores that promotion once [33m 326[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeCuts.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 1261[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeTile.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 948[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mthe week box holds a tile: the next game before a press, his saved final after it, and again after a remount [33m 309[2mms[22m[39m
+[90mstdout[2m | src/lib/gmGameDayView.test.ts[2m > [22m[2mgameDayView[2m > [22m[2mevery sentence is the law's own for the story the told path tells
+[22m[39mgmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+ [32m✓[39m src/lib/gmGameDayView.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 385[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeTagDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 595[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the depth chart and the franchise tag on the board[2m > [22mopens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength [33m 371[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeRatingEvidence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 682[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 189[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLotteryCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 149[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmGameDayCard.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLineupPanel.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmDeskMount.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmSeatCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[32m246 passed[39m[22m[90m (246)[39m
+[2m   Start at [22m 09:23:36
+[2m   Duration [22m 14.15s[2m (transform 2.57s, setup 835ms, collect 7.95s, tests 21.74s, environment 6.32s, prepare 1.47s)[22m
+
+MUTANT seedoff vitest exit=0

@@ -1,0 +1,4 @@
+m-pace exit=0 15s | MUTANT pace vitest exit=0
+m-seedoff exit=0 15s | MUTANT seedoff vitest exit=0
+m-matchup exit=1 14s | MUTANT matchup vitest exit=1
+m-watch17 exit=1 14s | MUTANT watch17 vitest exit=1
