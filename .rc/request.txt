@@ -1,0 +1,12 @@
+#!serial
+m-edges: bash .rc/x/mutrun.sh edges
+m-confs: bash .rc/x/mutrun.sh confs
+m-version: bash .rc/x/mutrun.sh version
+m-sidescore: bash .rc/x/mutrun.sh sidescore
+m-outfirst: bash .rc/x/mutrun.sh outfirst
+m-opponent: bash .rc/x/mutrun.sh opponent
+m-period: bash .rc/x/mutrun.sh period
+m-wclabel: bash .rc/x/mutrun.sh wclabel
+m-seedi: bash .rc/x/mutrun.sh seedi
+m-tellfirst: bash .rc/x/mutrun.sh tellfirst
+m-seedlen: bash .rc/x/mutrun.sh seedlen
