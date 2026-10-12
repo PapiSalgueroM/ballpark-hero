@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 probe on c1195372: does the season review's transfer business block ever fade in? (not committed)
+reviewProbe: node .rc/x/mkReviewProbe.mjs && PLAY_CM_SEED=1542433760 ENGINES=chromium node scripts/playClubManagerReview.mjs
