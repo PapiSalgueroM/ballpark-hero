@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/aw-m1 node scripts/simSoccerAwardGenerations.mjs
+vitest-pr234: node_modules/.bin/vitest run src/test/soccerCareerAwardGenerations.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
