@@ -1,0 +1,16 @@
+vitest-book exit=0 4s |    Duration  2.60s (transform 229ms, setup 111ms, collect 318ms, tests 1.35s, environment 859ms, prepare 459ms)
+book-default exit=0 51s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (50s)
+tsc exit=0 70s | 
+book-default-base exit=0 65s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (65s)
+m5 exit=1 219s | MUT m5 KILLED (vitest=1 default=1 full=1)
+m6 exit=1 222s | MUT m6 KILLED (vitest=1 default=1 full=1)
+m6b exit=1 222s | MUT m6b KILLED (vitest=1 default=1 full=1)
+c-nobacks exit=1 48s | simCmLeagueBook: CONTROL nobacks FIRED: section thin went red (1155 failures) and no other section did (49s)
+c-thinbacks exit=1 49s | simCmLeagueBook: CONTROL thinbacks FIRED: section thin went red (3395 failures) and no other section did (49s)
+c-allbacks exit=1 46s | simCmLeagueBook: CONTROL allbacks FIRED: section law went red (898 failures) and no other section did (46s)
+c-places433 exit=1 48s | simCmLeagueBook: CONTROL places433 FIRED: section thin went red (192 failures) and no other section did (48s)
+c-goallesswhole exit=1 46s | simCmLeagueBook: CONTROL goallesswhole FIRED: section oldsave went red (3 failures) and no other section did (46s)
+c-stampv2 exit=1 62s | simCmLeagueBook: CONTROL stampv2 FIRED: section oldsave went red (4 failures), with thin as it must and no other section did (61s)
+simManagerAppealIsolation exit=0 42s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+m11 exit=1 223s | MUT m11 KILLED (vitest=1 default=1 full=1)

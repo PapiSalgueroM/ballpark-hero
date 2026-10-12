@@ -1,0 +1,17 @@
+# Round 1306 closing check, head 8318bafb: the type gate, the unit files, the harness green with and without the base, the run reviewer's own mutations m5 m6 m6b m11 again, the six controls of the fix pass, the pin
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default: node scripts/simCmLeagueBook.mjs
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B c9a1f86a && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+m5: bash .rc/x/mutrun2.sh m5 c9a1f86a all
+m6: bash .rc/x/mutrun2.sh m6 c9a1f86a all
+m6b: bash .rc/x/mutrun2.sh m6b c9a1f86a all
+m11: bash .rc/x/mutrun2.sh m11 c9a1f86a all
+c-thinbacks: BOOK_CONTROL=thinbacks node scripts/simCmLeagueBook.mjs
+c-nobacks: BOOK_CONTROL=nobacks node scripts/simCmLeagueBook.mjs
+c-allbacks: BOOK_CONTROL=allbacks node scripts/simCmLeagueBook.mjs
+c-places433: BOOK_CONTROL=places433 node scripts/simCmLeagueBook.mjs
+c-goallesswhole: BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+c-stampv2: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-stampv2 && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
