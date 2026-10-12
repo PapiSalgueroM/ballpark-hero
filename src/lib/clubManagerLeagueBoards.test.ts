@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { creditMine, openBook, openLateBook, readBook, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 import {
-  AWARD_FLOOR, BOARD_ROWS, BOOK_FULL_SHARE, TEAM_LINES, TEAMS_KEPT, bestOfMine, seasonAwards, teamOfSeason, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
+  AWARD_FLOOR, BOARD_ROWS, BOOK_FULL_SHARE, TEAM_LINES, TEAMS_KEPT, bestOfMine, seasonAwards, teamOfSeason, bookDecides, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
   type BoardClub, type BoardInput, type BoardMine,
 } from '@/lib/clubManagerLeagueBoards';
 
@@ -152,6 +152,21 @@ describe('the ruled numbers', () => {
     expect(BOOK_FULL_SHARE).toBe(95);
     expect(AWARD_FLOOR).toBe(73);
     expect(AWARD_FLOOR).toBeLessThan(BOOK_FULL_SHARE);
+  });
+
+  /* The floor's edge, held exactly: no season of any fleet has closed on 73, so without this line a `>`
+   * for the `>=` passed every gate (review r1311-run-m, mutation floorgt). One rival club, a whole book. */
+  it('a whole book on exactly 73 in 100 decides the awards, on 72 it does not, and a late book never does', () => {
+    const at = (named: number, late = false): BoardInput => {
+      const b = late ? { ...openBook(STAMP), r0: 3, b: [], u0: 0 } : openBook(STAMP);
+      b.c.Alpha = { m: { 'Striker A|ST': [named, 0, 0, 0] }, og: 0, u: 100 - named };
+      return { book: b, clubs: [{ club: 'Alpha', gf: 100, place: 1, keeperOnRecord: false }], mine: [], myClub: 'Mine FC', myPlace: 2, ratingOf: () => 0, lineOf: LINE };
+    };
+    expect(bookShare(at(AWARD_FLOOR).book, at(AWARD_FLOOR).clubs).share).toBe(AWARD_FLOOR);
+    expect(bookDecides(at(AWARD_FLOOR))).toBe(true);
+    expect(bookShare(at(AWARD_FLOOR - 1).book, at(AWARD_FLOOR - 1).clubs).share).toBe(AWARD_FLOOR - 1);
+    expect(bookDecides(at(AWARD_FLOOR - 1))).toBe(false);
+    expect(bookDecides(at(100, true))).toBe(false);
   });
 });
 
