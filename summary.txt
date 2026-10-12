@@ -1,0 +1,6 @@
+simManagerWorldBrowser exit=0 6s | simManagerWorldBrowser: 13 actual world outcomes passed.
+simManagerMatchPlans exit=0 5s | simManagerMatchPlans: 13 actual outcomes passed.
+simManagerAppealIsolation exit=1 6s | Node.js v24.21.0
+simCmShootoutOrder exit=1 22s | simCmShootoutOrder: 3 FAILURE(S)
+simWorldEditor exit=0 6s | simWorldEditor: 2478 checks, 0 failures
+tsc exit=0 49s | 

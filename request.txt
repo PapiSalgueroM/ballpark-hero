@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
