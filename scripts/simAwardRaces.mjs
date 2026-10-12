@@ -19,7 +19,10 @@
  * section 2b plays the same ten clubs with no book at all (the Hot Seat's own
  * path: the book taken off the save and noBook passed), with the old band and
  * the old leak control, now named oldleak. Section 8 holds the summary to the
- * book on a season it decides and to the old race on one it does not.
+ * book on a season it decides and to the old race on one it does not. Since
+ * step 5 the awards also carry the team of the season (xi): section 8 expects
+ * the pure module's teamOfSeason over the same input, and simCmLeagueBook's
+ * section awards checks how that team is picked (controls teamsheets, nocap).
  *
  * Controls (each prints CONTROL FIRED and exits 0 when its section went red,
  * CONTROL DID NOT FIRE and exits 1 when not, 2 when its anchor is missing):
@@ -410,6 +413,8 @@ console.log('8) The summary\'s golden boot is the Goals board\'s first where the
       const flags = m => (m.gen ? 1 : 0) + (m.mine ? 2 : 0);
       const want = { cov: lb.share };
       for (const [key, kind] of [['boot', 'goals'], ['ast', 'assists'], ['glove', 'sheets']]) { const m = first(kind); if (m) want[key] = [m.name, m.club, m.n, flags(m)]; }
+      const xi = boards.teamOfSeason(lb.input);
+      if (xi) want.xi = xi;
       if (JSON.stringify(summary.awards) !== JSON.stringify(want)) fail(`${where}: the summary's awards ${JSON.stringify(summary.awards)} are not the first of each board ${JSON.stringify(want)}`);
       if (JSON.stringify(record?.awards) !== JSON.stringify(want)) fail(`${where}: the season's record keeps ${JSON.stringify(record?.awards)}, not the summary's awards`);
       if (JSON.stringify(JSON.parse(JSON.stringify(record))) !== JSON.stringify(record)) fail(`${where}: the record does not survive a JSON round trip`);
@@ -418,7 +423,7 @@ console.log('8) The summary\'s golden boot is the Goals board\'s first where the
       if ('awards' in summary || (record && 'awards' in record)) fail(`${where}: awards were written on a season the book did not decide`);
       if (!race || !summary.goldenBoot || summary.goldenBoot.name !== race.name || summary.goldenBoot.goals !== race.goals) fail(`${where}: the summary's golden boot ${JSON.stringify(summary.goldenBoot)} is not the old race's first ${JSON.stringify(race)}`);
     }
-    console.log(`   ${where}: boot ${summary.goldenBoot?.name} (${summary.goldenBoot?.goals})${summary.awards ? `, assists ${summary.awards.ast?.[0]} (${summary.awards.ast?.[2]}), clean sheets ${summary.awards.glove?.[0]} (${summary.awards.glove?.[2]}), on record ${summary.awards.cov}` : ', no awards from the book'}`);
+    console.log(`   ${where}: boot ${summary.goldenBoot?.name} (${summary.goldenBoot?.goals})${summary.awards ? `, assists ${summary.awards.ast?.[0]} (${summary.awards.ast?.[2]}), clean sheets ${summary.awards.glove?.[0]} (${summary.awards.glove?.[2]}), team ${summary.awards.xi ? `of ${summary.awards.xi.length}` : 'none'}, on record ${summary.awards.cov}`: ', no awards from the book'}`);
   }
   if (!seen.book) fail('no season of section 8 was decided by the book, so the book side was never checked');
   if (!seen.other) fail('every season of section 8 was decided by the book, so the old race side was never checked');
