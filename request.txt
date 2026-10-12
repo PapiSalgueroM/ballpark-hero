@@ -1,0 +1,5 @@
+#!serial
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+anchors-at-merge: git worktree add /tmp/m 3bf6aecf >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m/node_modules && cd /tmp/m && node scripts/simHarnessAnchors.mjs > /tmp/m-ha.log 2>&1; s=$?; grep "FAIL" /tmp/m-ha.log | head -5; tail -1 /tmp/m-ha.log; exit $s
+story-measure: node .rc/x/patchStory.mjs && node_modules/.bin/vitest run src/test/careerStory.test.tsx -t "stays under the bound" --testTimeout=300000 > /tmp/sm.log 2>&1; s=$?; grep "pool part\|save parts\] seed [0-9]*: rest\|Tests " /tmp/sm.log; git checkout -- src; exit $s
+story-main: git worktree add /tmp/wm 48cb9d4b >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wm/node_modules && cd /tmp/wm && node_modules/.bin/vitest run src/test/careerStory.test.tsx -t "stays under the bound" --testTimeout=300000 > /tmp/wm.log 2>&1; s=$?; grep "save parts\] seed [0-9]*: rest\|story size\|Tests " /tmp/wm.log; exit $s

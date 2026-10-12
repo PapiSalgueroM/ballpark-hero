@@ -1,0 +1,2 @@
+   FAIL simSoccerAwardGenerations.mjs reads src/lib/soccerCareerEngine.ts raw at line 58 and searches it with a multi line anchor (line 52), so on a CRLF checkout it matches nothing (4 raw reads in all)
+simHarnessAnchors: 1 failure(s)

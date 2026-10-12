@@ -1,0 +1,4 @@
+simHarnessAnchors exit=1 25s | simHarnessAnchors: 1 failure(s)
+anchors-at-merge exit=1 25s | simHarnessAnchors: 1 failure(s)
+story-measure exit=0 5s |       Tests  3 passed | 10 skipped (13)
+story-main exit=0 5s |       Tests  3 passed | 10 skipped (13)

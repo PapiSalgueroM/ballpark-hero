@@ -1,0 +1,8 @@
+PATCHED: the pool is its own part, logged
+[save parts] seed 9748: rest 61936 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+[pool part] seed 9748: pool 4700 bytes over 23 entries, rest without it 61936 bytes
+[save parts] seed 9749: rest 74528 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+[pool part] seed 9749: pool 5513 bytes over 27 entries, rest without it 74528 bytes
+[save parts] seed 9750: rest 79485 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+[pool part] seed 9750: pool 5513 bytes over 27 entries, rest without it 79485 bytes
+[2m      Tests [22m [1m[32m3 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (13)[39m
