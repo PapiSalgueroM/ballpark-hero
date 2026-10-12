@@ -1,0 +1,8 @@
+saveSize-s3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-s4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-s5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+slots-s3: SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+dd-seed: DAILY_DEALS_CONTROL=seed node scripts/simDailyDeals.mjs
+dd-seeddeadline: DAILY_DEALS_CONTROL=seeddeadline node scripts/simDailyDeals.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs

@@ -1,0 +1,8 @@
+saveSize-s5 exit=0 277s | simClubManagerSaveSize: all sections green
+saveSize-s4 exit=0 282s | simClubManagerSaveSize: all sections green
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-seed exit=1 4s | simDailyDeals: CONTROL seed FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+dd-seeddeadline exit=1 4s | simDailyDeals: CONTROL seeddeadline FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+saveSize-s3 exit=1 310s | simClubManagerSaveSize: 2 failures in sections 5, 6
+slots-s3 exit=1 206s | simClubManagerSlots: RED, sections 2 (1 failures)
