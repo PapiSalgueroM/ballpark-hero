@@ -102,6 +102,33 @@
  *    own checker, which calls neither the story's own sums nor the law.
  *    Control: offbyone, which must turn this red beside section 2.
  *
+ * ROUND 1308, THE POSTSEASON A ROUND AT A TIME (src/lib/gmPostseason.ts, the
+ * press and load half every board shares, and src/lib/frontOfficePostseason.ts,
+ * the NFL's bind: nflPlayTie and its sink, nflRoundsOf). Each season of the
+ * fleet from the end of Week 17, the generator installed AS Math.random.
+ * 11 THE BRACKET PATH IS THE ONE PRESS PATH. Four presses of playBracketWeek
+ *    (the save through JSON between them) and playBracketAll, each with
+ *    nflPlayTie, give the recorded fixture's thirteen games (round, home,
+ *    away, winner, in order), champion, next 64 draws and the engine's draw
+ *    count; the 32 records after are the regular season's; every told score
+ *    is nflTell's on the fixture's own engine game under the same key; and
+ *    nflRoundsOf is runPlayoffs' rounds told the one press way, as JSON text.
+ * 12 THE LOAD (the library half; the validator's is Round 1309's). The first
+ *    season of each league kind a set, at five stops (opened, then after
+ *    each week): a sound block through JSON comes back as it is; outside the
+ *    postseason the load is null whatever the block; a doctored winner, a
+ *    doctored pairing and a tie out of turn are rebuilt from the block's own
+ *    seeds, and seeds that mix the conferences, another season and an
+ *    unknown version from fresh ones, each with the feed line, and every
+ *    rebuilt bracket plays to a champion.
+ * 13 THE LOG THROUGH A POSTSEASON, through the sink. The whole sink deep
+ *    equals the one press path's thirteen log entries, keys included; for
+ *    section 9's four GM clubs a season the log built a press at a time deep
+ *    equals the one press path's log, with no entry in a week he has the bye
+ *    and none after he is out, his playoff record is his record in
+ *    nflRoundsOf, and after the last game the 32 records are the regular
+ *    season's.
+ *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
  * when its NAMED checks are among the reds, and exits 2 when they are not:
@@ -136,6 +163,11 @@
  *   bindrefuse  nflTell refuses a game in five by its key            section 8 (the bind never refuses)
  *   logdrop     addToGmGameLog drops every road win                  section 9 (the record a week, one entry a week)
  *   logholes    readGmGameLog skips an entry it cannot read          section 9 (a damaged entry: the log is absent)
+ *   undo        nflPlayTie takes neither the win nor the loss back    section 11 (the records; the games stay green)
+ *   keydrift    nflPlayTie tells under the tie's id, not its round    section 11 (the told scores and the rounds)
+ *   trust       loadGmPostseason hands any block back unrepaired      section 12 (the damages; a sound block stays green)
+ *   keyrebuilt  the sink's key built from the told score              section 13 (the deep equal and the sink; the record stays green)
+ *   logplayoff  the sink takes no entry                               section 13 (the deep equal and the record)
  * NOT HELD HERE: the save guard and the repair with every field damaged
  * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
  * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
@@ -184,6 +216,10 @@
  *   because the bind's key and chance are the quick path's.
  *   Section 9 has no band: every check is an equality over 320 club seasons
  *   a set (four clubs in each of 80 seasons).
+ * MEASURED FOR ROUND 1308 (2026-10-12, runner result r1308-c1): sections 11
+ *   to 13 hold no band, every check is an equality. Per seed set: 80
+ *   seasons; of section 13's 320 club seasons 72 to 82 had a bye and 124 to
+ *   138 went out; section 12 loaded 10 stops and rebuilt 52 damaged blocks.
  *
  * Nothing here reads the network. The clock is read only to time the run
  * for its own log lines: no check and nothing that is played depends on it.
