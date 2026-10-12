@@ -155,3 +155,46 @@ behaviour of the engine: one harness, three comments, one pin and these notes.
   `BOOK_FULL_SHARE` says it is not bound and why; `BoardMine` says which fields nothing reads yet.
 - The Round 1081 pin of `src/lib/clubManager.ts` follows that one comment (c9a3d32e to 9e8c499d), in its own
   commit. `scripts/data/cmLeagueRulesDigest.json` did not move: nothing a save holds changed.
+
+## The second fix pass (2026-10-11, after the closing check)
+
+The closing check found no red and listed seven things still open. This pass closed what a fixer can close
+without ruling for the lead and without touching the engine: one harness, two new recordings, one unread
+constant, comments in two unit files. `src/lib/clubManager.ts` is untouched, so no pin and no digest moved.
+
+- THE VIDEO REFEREE ARM of section law (`scripts/simCmLeagueBook.mjs`). It was the first two "now" careers
+  of whichever fleet ran, so the default fleet, the gate's own line, played Everton and Southampton (a league
+  with no video referee): 84 matches and 2 to 10 reviews since Round 1303, against a floor of "not zero". It
+  is now `VAR_ARM`, Everton and Arsenal with three seeds each, on both fleets: the six seasons the full fleet
+  always played there. Five seed sets read 19 33 35 39 34 reviews in 228 league matches of mine, on the full
+  fleet before the change and on the default fleet after it. `VAR_REVIEW_FLOOR` is 11, six tenths of the
+  lowest (the rule `ASSIST_FLOOR` follows). Control `novar` (the match is never told which reviews to play)
+  reads none and turns section law red alone.
+- OLDSAVE (vi), THE SAVE A PLAYER HOLDS ON THE DAY THIS SHIPS, no longer needs `BOOK_BASE`. Two saves of a
+  season in play, written by the engine of the commit before the round (c9a1f86a; its engine files are those
+  of Release AW as it went live, and a worktree of origin/main wrote the same bytes), are committed as
+  `scripts/data/cmBookSaveHerthaFixture.json` (a league where seventeen rival clubs have no named eleven) and
+  `scripts/data/cmBookSaveEvertonFixture.json` (a league where every club has one). Every run carries both on
+  to the season's end: the old book is taken as it is, the law holds after every entry, it is never reopened
+  late, and at Hertha BSC's rivals the goals on named rows grow. Each file is held by its sha256 in
+  `BOOK_SAVES`; a file that is not the recording named there stops the run. A recording is taken again with
+  `BOOK_BASE` and `BOOK_WRITE_SAVES=<folder>`, never edited. Control `stampv2` now fires on the default line
+  too. With `BOOK_BASE` the three saves the base tree writes in the run are carried on as before.
+- STILL A ROUND'S PROOF AND NOT THE GATE'S: thin (iv), the stream's base arm and the controls `weight` and
+  `thinall` compare the candidate with the commit before the round ("what was not meant to change"). A gate
+  line pinned to that commit would go red at the first later round that means to change the book, so they
+  stay with `BOOK_BASE`, run by the round's own requests.
+- `BOOK_FULL_SHARE` IS GONE from `src/lib/clubManagerLeagueBoards.ts`, with the unit line that pinned 95.
+  Nothing read it. The number is not ruled: seven of 47 leagues sit within two points of 95 and the gaps'
+  middles are 84 and 89. The comment where the constant stood holds the table; the round that draws the
+  honest line adds the constant with the number the lead ruled.
+- THE TWO UNIT FILES of the round say at their top what they do not hold: who the engine hands a clean sheet
+  to, and when a save with no book gets a whole book or a late one. Both are the harness's.
+- NOT CHANGED, on purpose: the wording of the one deviation named above (a league MATCH played, not a goal
+  scored). A book opened after a goalless round would miss that round's clean sheets, so it is a late book.
+- ONE OLDER CONTROL FOLLOWED THE RECORDINGS: `seasonstamp` (the season's number put back into the stamp)
+  turns oldsave (vi) red together with doors now, for the reason `stampv2` does: under that stamp both
+  committed recordings are another season's book and the reader refuses them. Its line names oldsave as a
+  section that goes with it and the words its own failure in doors must hold ("has no readable book"). The
+  first run after the recordings were wired read "did not fire" for it (remote check r1306-f2b), which is
+  how this was found. The harness holds 42 controls.
