@@ -1,0 +1,6 @@
+simEra2010 exit=0 19s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2005 exit=0 20s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simEra2015 exit=0 18s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simStatsCentre exit=0 4s | ALL STATS CENTRE CHECKS PASSED
+simEra2020 exit=0 44s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simEras exit=1 1421s | 1 FAILURES
