@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playDraftDetectiveReports exit=0 9s | playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
