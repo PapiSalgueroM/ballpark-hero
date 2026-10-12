@@ -329,8 +329,13 @@ export function worldRosterFor(career: CareerState, club: string, onYears = year
     const original = fallback.find(b => b.worldRosterKey === p.worldRosterKey && b.worldRosterKey !== undefined
       || b.n === p.name && b.p === p.position && b.a === p.age);
     if (original && p.worldRosterKey === undefined) return original;
+    /* Release AZ fix (reviewer 4, MAJOR 1): a boy from my academy or a youth pad is a name this game made up,
+       and once I sell him the ledger lists him at a real club. He carries academyGrad or isYouth rather than
+       generated, so every reader of this list (the club screen, the market, the scorer race) showed him with no
+       MADE UP tag under a caption that promises every made up man is marked. Real footballers never carry
+       either flag. scripts/simCmLedgerBound.mjs holds it. */
     return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
-      ...(p.generated ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
+      ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
       since: p.worldRosterSince ?? original?.since ?? 0,
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}),
       ...(p.potential === undefined ? {} : { potential: p.potential }) };
