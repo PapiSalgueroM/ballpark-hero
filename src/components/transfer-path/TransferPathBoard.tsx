@@ -275,6 +275,7 @@ export function TransferPathBoard() {
               onChange={value => { setInput(value); setError(''); }}
               onSelect={handleAutocompleteSelect}
               searchOptions={{ source: TRANSFER_PATH_PLAYER_SOURCE, exclude: excludeNames, minChars: 2 }}
+              localNames={allNames}
               placeholder="Type a player name..."
               autoFocus
               validateOnly
