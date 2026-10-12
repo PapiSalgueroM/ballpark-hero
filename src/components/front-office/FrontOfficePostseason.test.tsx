@@ -18,9 +18,9 @@
  * Negative controls: scripts/controlFrontOfficeBoard.mjs (noplayoffs,
  * abandonbracket, rebuiltkeeps, champopen, bracketnoedges, restround,
  * weekeighteen, playofftrades, roundspoils, holdround, recapnow,
- * bracketgrid, tiegame, and from the fix pass trustspoils, pressspoils
- * and donenow), which point this file at a copy of the board through
- * FO_BOARD_NFL.
+ * bracketgrid, tiegame, and from the fix pass trustspoils, pressspoils,
+ * donenow and tiewhere), which point this file at a copy of the board
+ * through FO_BOARD_NFL.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
@@ -58,8 +58,8 @@ const { default: Board } = (override
 afterEach(() => { cleanup(); Math.random = REAL_RANDOM; localStorage.clear(); });
 
 /** A fifteen man league with its regular season played (the morning after Week 17: week 18), its bracket's format and seeds. */
-function seasonOver() {
-  const rng = lehmer(7);
+function seasonOver(seed = 7) {
+  const rng = lehmer(seed);
   const league: any = initLeague(rng);
   /* simGame hands back the played game and leaves the schedule's row as it was (the board keeps no result there) */
   const played: any[][] = [];
@@ -550,6 +550,39 @@ describe('NFL front office: one box, two faces in the playoffs', () => {
     expect(face()).toBe('bracket');
     expect(read().playoffs.played.length, 'the round was played').toBeGreaterThan(0);
     expect(logOf(read())!.games).toEqual(log.games);
+  });
+
+  /* The fix pass (the review's mutant tiewhere: with the round dropped from the search, "Your game" opened the first
+     game between the two clubs, a regular season one, and every test above stayed green: their ties were between
+     clubs that never met before the playoffs). Leagues of other seeds, the first round played through the NFL's bind. */
+  it('"Your game" on a tie against a club he met in the regular season opens the playoff game, not the regular one', async () => {
+    motion();
+    let met = 0;
+    for (let seed = 1; seed <= 24 && met < 3; seed += 1) {
+      const o = seasonOver(seed);
+      for (const team of o.seeds.slice(1, 7)) {
+        if (met >= 3) break;
+        const told: GmGameLog['games'] = [];
+        const block = playBracketWeek(o.format, openBracket(o.format, o.league.season, o.seeds), nflPlayTie(o.league.teams, lehmer(3), o.league.season, undefined, told));
+        const mine = told.filter(g => g.home === team || g.away === team);
+        const reg = regularLog({ ...o, team });
+        if (mine.length !== 1) continue;
+        const both = (g: { home: string; away: string }) => [g.home, g.away].includes(mine[0].home) && [g.home, g.away].includes(mine[0].away);
+        if (!reg.games.some(both)) continue;
+        met += 1;
+        cleanup();
+        localStorage.clear();
+        save(shape(o.league, team, { playoffs: block, gameLog: addToGmGameLog(reg, o.league.season, mine)! }));
+        counted(5);
+        render(<Board />);
+        await openBox();
+        fireEvent.click(btn('[data-bracket-week="1"]'));
+        fireEvent.click(btn('[data-bracket-mine="true"] [data-bracket-open]'));
+        await waitFor(() => expect(q('[data-gameday]')).not.toBeNull());
+        expect(textOf('[data-gameday-where]'), `seed ${seed}, ${team}: his ${mine[0].where} game`).toContain(mine[0].where);
+      }
+    }
+    expect(met, 'ties against a club he met in the regular season, in leagues of 24 seeds').toBe(3);
   });
 });
 
