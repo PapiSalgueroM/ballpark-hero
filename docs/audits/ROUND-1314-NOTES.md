@@ -198,3 +198,45 @@ Deadline Day board its own `g.signings.length > 0 &&`, so the bare minified shap
 matched two chunks. Commit 48a3e61f anchors the guard on the one followed within 400 characters by the block's
 "Transfer business" heading (a literal minifying keeps; checked against a local September build: the
 season summary chunk alone, once). The control ALWAYS exits 1 and says green or RED in its last line.
+
+### 3.4 simHalftime (commit 9e9480c3)
+
+3.4a, measured first with no edit to the committed harness: seeds 1 to 10 through
+`SIM_SEED=N node --import ./scripts/lib/seedRandom.mjs`, at 1200 and 1500 an arm through a probe copy with only
+section 2's RUNS changed (copied to a name per label, correction 15 (ii)). All on db2d5083. Gains against their
+bars (two standard errors):
+
+| Seed | 800 (`r1314-ht800`) | 1200 (`r1314-ht1200a`, `-b`) | 1500 (`r1314-ht1500a`, `-b`) |
+|---|---|---|---|
+| 1 | 3.20 / 1.15 | 2.33 / 0.92 | 1.93 / 0.82 |
+| 2 | 2.80 / 1.14 | 2.38 / 0.91 | 2.29 / 0.82 |
+| 3 | 2.79 / 1.13 | 2.72 / 0.91 | 2.79 / 0.81 |
+| 4 | 1.74 / 1.09 (section 1 red) | 1.61 / 0.91 (section 1 red) | 2.34 / 0.81 (section 1 red) |
+| 5 | 2.32 / 1.12 | 2.17 / 0.90 | 2.17 / 0.81 |
+| 6 | 2.10 / 1.10 | 2.30 / 0.92 | 2.78 / 0.81 |
+| 7 | 2.99 / 1.10 | 2.54 / 0.91 | 2.46 / 0.82 |
+| 8 | 1.15 / 1.13 | 2.24 / 0.92 | 2.91 / 0.80 |
+| 9 | 2.51 / 1.12 | 2.83 / 0.91 | 2.25 / 0.82 |
+| 10 | 1.88 / 1.08 | 2.60 / 0.87 | 2.35 / 0.79 |
+| mean, spread, mean bar | 2.35, 0.64, 1.12 | 2.37, 0.34, 0.91 | 2.43, 0.31, 0.81 |
+| (mean less bar) in spreads | 1.9: fails | 4.3: passes | 5.2 |
+| default seed 743293878 | 2.74 / 1.11, twice, logs byte equal (md5 37b2e157) | 3.02 / 0.92 | 2.65 / 0.82 |
+| seconds a run on a runner | 486 to 529 | 659 to 963 | 653 to 1118 |
+
+3.4b: seedRandom.mjs is the first import and section 2 plays 1200 an arm, the smallest size passing the rule.
+The stop rule (a ten seed mean under 1.5 at 1500) did not trigger: 2.43. The bar stays two standard errors.
+The bundle, entry and engine copy moved into a mkdtemp folder removed on exit: hygiene only (a runner gives each
+label its own temp folder; this cured no red).
+
+Found while measuring, not changed: seed 4 is red at every size in SECTION 1 ("goals scored moved by 4.4 just
+from playing two halves", gap 4.37 against a 3 SE bar of 4.13, 60 seasons an arm). Section 1 runs first on the
+same stream at every size, so it is one sample, one seed in eleven read. Signs of the gap differ across seeds, so
+it reads as a three standard error tail rather than a shift; the default seed's section 1 reads gaps of 0.12. A
+section 1 red after an engine change is therefore possible about as often as a 3 SE tail (around one in a
+hundred by the normal reading, one in eleven by this small sample): the lead may want section 1 measured the same
+way in a later round.
+
+Control SIM_HALFTIME_CONTROL=deaf (a subject control, advice 15 (i)): the engine copy's two lines that apply a
+break's change (`live.onPitch[idx] = change.inId;`, and the pair setting `live.mentality` and `state.mentality`)
+are removed, each asserted present exactly once or the run refuses. Proof: request `r1314-ht` on 9e9480c3
+(PENDING at the time of this push).
