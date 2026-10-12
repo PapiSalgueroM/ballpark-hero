@@ -1,0 +1,5 @@
+# Round 1306 fix pass, head 2d0aa866 (origin/main 4aa47b12 merged): the weight rows of the merged head against the Release AW budgets
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
