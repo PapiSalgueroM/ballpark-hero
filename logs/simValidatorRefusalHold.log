@@ -1,0 +1,20 @@
+football-grid-validate
+  ok    football-grid-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true
+college-grid-validate
+  ok    college-grid-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true
+soccer-grid-validate
+  ok    soccer-grid-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true
+validate-player
+  ok    validate-player: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true
+football-connect4-validate
+  ok    football-connect4-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true; a proved half is not outvoted by the model
+nba-connect4-validate
+  ok    nba-connect4-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true; a proved half is not outvoted by the model
+nfl-connect4-validate
+  ok    nfl-connect4-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true; a proved half is not outvoted by the model
+nhl-connect4-validate
+  ok    nhl-connect4-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true; a proved half is not outvoted by the model
+mlb-connect4-validate
+  ok    mlb-connect4-validate: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true; a proved half is not outvoted by the model
+
+simValidatorRefusalHold: green. 9 validators run: a stored refusal waits for the records, and every failure mode fails closed.
