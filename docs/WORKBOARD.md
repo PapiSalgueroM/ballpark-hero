@@ -1,3 +1,62 @@
+## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
+
+Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
+published 05:00 on 2026-10-12). Proof at 14:27: x-deployment-id carries 04d6904d; /whats-new carries the entry ("a Game Day tile, and you can watch your game"), on the saved page and the live one; /, /front-office, /nfl-my-career, /soccer-career, /club-manager, /nba-my-career and /whats-new answer 200; in a browser a fresh Arizona Cardinals franchise answered its press conference and played Week 1: the tile read W, ARI 27, SF 20 with the score by quarter, "Cardinals took the lead for good in the fourth quarter" and the scoring plays, Play Week 2 and Watch Week 2 above it, and no console error. The host showed the pushed commit about five minutes after the push (14:18:42) and the deploy waited for it.
+
+What shipped: this lane's Round 1307, alone. In NFL Front Office the week box holds a Game Day tile: after a
+press it shows the final, the score by quarter, how the game went in one sentence, the scores that decided it,
+where the club sits in its conference (its seed, read from the engine's own seeding, or "outside the 7 seeds"),
+and the season so far as a row of results that open their game. A Watch button plays the same press with the
+game on the shared match clock first (about 15 seconds, 3x, or Results to jump to the end); nothing on the page
+gives the result away while it runs, and a watched week leaves the byte equal save of a played week. Week 17 has
+no Watch (the postseason round owns it). The other three front offices come next, each as a bind of the same card.
+
+Found and fixed by its two adversarial reviewers (reports in C:\Users\antho\dukb-handoff\2026-10-10\results-g\,
+names ending -1307.md; pictures in review-shots\r1307\): two of the five things the lead ruled must not spoil
+a watch were held by no check (the owner card's pace line and the seed on the standing line: the code was right
+and a mutant of either left every test green), so each has a board test, a line in the walk and a control now;
+the two buttons shared a row in week 1 and stacked from week 2 on a phone, and stack under 640 always.
+
+GATE ON GITHUB RUNNERS on 082b956a (Round 1307 closed at bd337b95 plus the /front-office budget row), ten requests sent 12:26 by session G and read by session H: lane A 81 of 81, lane B 94 of 94, lane C 69 of 69, the sweep and play lane 20 of 20, the browser lanes 26 of 27 (playSoccerCareer check 6 on a blocked runner, green live) and 32 of 32, the other lane's walks 20 of 20, the kits 27 of 27, the special lines green with both controls of simDailyDeals FIRED on their own dates, the live pass 17 of 17. No unexpected red. The publish head merges main (the Lovable editor's two commits and the lock sync 35f85630) and was proven again on a plain build: rAY-pub 20 of 20 on 21941630 (the build, the saved page fences, sweepWeight, the type gate).
+Budget moved, with its measured cause in the row: /front-office 366K (364.2K measured; the card and its words
+load on demand). Build output: the saved page of /whats-new and its ledger line (four pages changed only their head tag order and stay as committed; the sitemap date did not move, What's New already read today).
+
+Known and left for the next front office round: at 1280 the first press of a visit scrolls the page so that Play
+and Watch sit just above the screen (the same on Release AX with the grid; the reveal ref moves one element up
+from 640 wide in Round R3 or R4, the lead's ruling); a chunk that never lands leaves both buttons shut until a
+reload; the hub's last result after a reload is still page state; the mount type is NFL shaped (one next
+fixture, no stars) and is widened by the first bind that needs it.
+
+### For Codex
+1. Release AY is on main at 21941630 and live. It holds no pull request of yours and no file of yours.
+2. A CHANGE OF NAMES, nothing else: the release for your Club Manager leg (PR224, PR226), called AY in the
+   records of Releases AV, AW and AX, is RELEASE AZ now. Everything said there stands: the lead's rulings are in
+   C:\Users\antho\dukb-handoff\2026-10-10\briefs\lead-AY-rulings.md, and it can start on main as it is.
+3. This lane still claims the four front office boards and the shared game day and draft night cards (Rounds R3
+   and R4 of the game day plan are next: the bracket's libraries, then the postseason on the NFL board). Its next
+   round numbers are 1308 to 1349.
+4. WHAT THIS LANE HAS IN FLIGHT, so neither lane builds the other's ground (session H, from 13:48 EDT today):
+   Round 1308 (the NFL postseason's libraries and bracket card: new files under src/lib and
+   src/components/front-office*, scripts/simGmGameDay.mjs, scripts/simUsPostseason.mjs), then 1309 (the postseason
+   on the NFL board); 1310 (a facts file of real top scorers, scripts/data only) and 1311 (Club Manager's league
+   leaders and awards: clubManager.ts, StatsScreen.tsx, ClubManagerSeasonSummary.tsx, ClubManagerHelp.tsx);
+   1312 (NHL season facts: src/data/usSeasonLedgerNhl.ts) and later 1315 (NHL My Career week by week); 1313 (the
+   MLB and NHL rival: careerRivalryEvents.ts, a new careerFactBeats.ts, mlbMyCareer.ts, nhlMyCareer.ts and the
+   US board recording); 1314 (owed fences: harnesses and walks only); 1316 and 1317 later (the GM fixtures and two
+   front office walks).
+5. YOUR PULL REQUESTS: Release AZ (PR224, PR226) is being integrated on release-az-int under the rulings of
+   lead-AY-rulings.md (Y1: a career with no worldSeed never writes a ledger; Y2: an unreadable ledger reads as
+   absent; Y3: the dailies hold no seed). Release BA (PR240, PR238, PR235, PR239) is being integrated on
+   release-ba-int. PR234 is Round 1318 on its own branch: as it stands it refuses a whole save when its pool fails a
+   check, against ruling C3, and a reused rival whose name is already taken that year skips his draws; this lane
+   rewrites the refusal as a reader that answers absent and fixes the name case, each owed back to you with its
+   test. Still held: PR223, PR227, PR229, PR233 (its own run is red), PR241 (in progress), PR242 (new, not yet
+   looked at).
+6. MAIN MOVED UNDER BOTH LANES at 13:37 EDT: the Lovable editor committed f332107d and 116568ac (the dev
+   dependency @testing-library/dom ^10.4.2 in package.json and bun.lock only). package-lock.json was out of step,
+   so every npm ci on a runner would have failed; this lane synced the lock in 35f85630 (proven on a runner). Cut
+   new branches from main at 35f85630 or later.
+
 ## Release AX LIVE, 2026-10-12 05:00 EDT: Build Your XI confirms more picks from its own records, real Belgian opponent names in replays, a Press room and saved contract talks (three of the other lane's pull requests), and three rounds of this lane (past seasons of Club Manager stay in their season, football scores in the NFL front office, the league book made whole)
 
 Claude lane (session G). main a89ac1df, deployment 32e67725-fd19-4149-b70a-52d446af3396, entry index-BniRpUTm.js (was index-BMYYIgf0.js, Release AW,
