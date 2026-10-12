@@ -1,0 +1,28 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-fo: NO_COLOR=1 node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/lib/gmGameDayView.test.ts src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-pacespoils: node scripts/controlFrontOfficeBoard.mjs pacespoils
+ctl-seedoff: node scripts/controlFrontOfficeBoard.mjs seedoff
+ctl-recordspoils: node scripts/controlFrontOfficeBoard.mjs recordspoils
+ctl-gridspoils: node scripts/controlFrontOfficeBoard.mjs gridspoils
+ctl-holdkept: node scripts/controlFrontOfficeBoard.mjs holdkept
+ctl-tilenolog: node scripts/controlFrontOfficeBoard.mjs tilenolog
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmGameDay-offbyone: GM_GAMEDAY_CONTROL=offbyone node scripts/simGmGameDay.mjs
+simGmGameDay-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+simGmGameDay-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simGmReload: node scripts/simGmReload.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simFoHub: node scripts/simFoHub.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+m-helppause: node .rc/x/fxmut.mjs helppause && node_modules/.bin/vitest run src/components/front-office-shared/GmGameDayCard.test.tsx --testTimeout=300000 2>&1 | tail -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT helppause vitest exit=$s"; exit $s
+vitest-all: NO_COLOR=1 node_modules/.bin/vitest run --testTimeout=600000 --hookTimeout=120000 2>&1 | tail -40; exit ${PIPESTATUS[0]}

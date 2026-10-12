@@ -1,0 +1,5 @@
+control recordspoils (while a game is watched the page shows the league AFTER the press (the hold is not read)): vitest exit 1; 2 red, 29 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+control recordspoils: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

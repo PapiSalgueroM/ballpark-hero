@@ -1,0 +1,40 @@
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Escape
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns focus after the controlling parent closes its dialog
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to the help control belonging to the closed dialog
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > preserves controlled open callbacks, exact content and trigger label
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ ✓ src/test/helpDialogFocus.test.tsx (6 tests) 539ms
+ ✓ src/lib/fightPromoter.test.ts (7 tests) 38ms
+ ✓ src/data/pollFixtures.test.ts (4 tests) 34ms
+ ✓ src/test/managerPenaltyMarkers.test.tsx (4 tests) 200ms
+ ✓ src/hooks/useConquestNba.test.tsx (2 tests) 1294ms
+   ✓ NBA Conquest Arcade territory resolution > tells the player that the failed away raid was repelled  1243ms
+ ✓ src/lib/clubManagerGoalWeight.test.ts (3 tests) 52ms
+ ✓ src/components/home/PollOfTheDay.test.tsx (4 tests) 272ms
+ ✓ src/test/ownerMandateMotion.test.tsx (7 tests) 193ms
+ ✓ src/test/soccerAwardGeneration.test.ts (2 tests) 164ms
+ ✓ src/test/reservedNames.test.ts (89 tests) 33ms
+stdout | src/test/careerWallShotFriendly.test.ts > career wall shot forgiveness > scores more with modest aiming and timing errors than the previous ladder
+wall shot forgiveness: 12810/18000 scored, previous 12565/18000
+
+ ✓ src/test/careerWallShotFriendly.test.ts (3 tests) 148ms
+ ✓ src/test/liveScoresTransport.test.ts (3 tests) 14ms
+ ✓ src/lib/careerChanceWheel.test.ts (10 tests) 11ms
+ ✓ src/components/front-office-shared/GmInboxPanel.test.tsx (3 tests) 76ms
+ ✓ src/lib/gridRarity.test.ts (4 tests) 5ms
+ ✓ src/pages/NotFound.test.tsx (1 test) 181ms
+ ✓ src/data/gameRegistry.test.ts (1 test) 4ms
+ ✓ src/test/example.test.ts (1 test) 2ms
+
+ Test Files  476 passed | 2 skipped (478)
+      Tests  7291 passed | 58 skipped (7349)
+   Start at  15:56:09
+   Duration  637.87s (transform 36.68s, setup 28.05s, collect 178.94s, tests 1361.99s, environment 205.19s, prepare 42.20s)
+

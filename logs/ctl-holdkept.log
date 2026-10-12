@@ -1,0 +1,4 @@
+control holdkept (the hold is not let go when he leaves the week box): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+control holdkept: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

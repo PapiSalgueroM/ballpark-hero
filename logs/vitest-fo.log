@@ -1,0 +1,40 @@
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+ ✓ src/components/front-office-shared/GmGameDayCard.test.tsx (12 tests) 1928ms
+   ✓ GmGameDayCard > the "?" opened in the middle of a watch stops the clock, and closing it lets the game run on  1639ms
+ ✓ src/components/front-office/FrontOfficeTagDepth.test.tsx (4 tests) 731ms
+   ✓ NFL Front Office: the depth chart and the franchise tag on the board > opens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength  450ms
+ ✓ src/components/front-office-shared/GmDeskMount.test.tsx (16 tests) 231ms
+ ✓ src/components/front-office/FrontOfficePromotion.test.tsx (26 tests) 1492ms
+   ✓ NFL practice promotion cap outcomes > shows the real price and refusal while a rejected Board click leaves the save exact  342ms
+   ✓ NFL practice promotion cap outcomes > saves the exact affordable player and depth and restores that promotion once  517ms
+ ✓ src/components/front-office-shared/GmLotteryCard.test.tsx (7 tests) 230ms
+ ✓ src/components/front-office/FrontOfficeFullRoster.test.tsx (6 tests) 1846ms
+   ✓ NFL Front Office: a full roster on the board > opens the Roster box on group tiles, never a list of every man  304ms
+   ✓ NFL Front Office: a full roster on the board > calls a practice squad man up while there is a spot, and greys the button at 53  419ms
+   ✓ NFL Front Office: a full roster on the board > marks a rating that is only a draft spot on the depth chart and both trade lists  319ms
+   ✓ NFL Front Office: a full roster on the board > locks Play with the count owed until a GM over 53 cuts down himself  576ms
+ ✓ src/test/frontOfficeSaveRecovery.test.tsx (36 tests) 4748ms
+   ✓ NFL actual save recovery > restores current progress, contracts and counters without rewriting storage  592ms
+   ✓ NFL actual save recovery > loads supported older saves and advances the same league once  569ms
+   ✓ NFL actual save recovery > allows a fresh club to replace the unusable save without clearing another game  435ms
+   ✓ NHL actual save recovery > loads supported older saves and advances the same league once  514ms
+   ✓ NHL actual save recovery > allows a fresh club to replace the unusable save without clearing another game  433ms
+stdout | src/lib/gmGameDayView.test.ts > gameDayView > every sentence is the law's own for the story the told path tells
+gmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+ ✓ src/lib/gmGameDayView.test.ts (8 tests) 572ms
+ ✓ src/components/front-office-shared/GmLineupPanel.test.tsx (4 tests) 207ms
+ ✓ src/components/front-office/FrontOfficeRatingEvidence.test.tsx (4 tests) 910ms
+   ✓ NFL saved opening rating evidence > explains a partial new estimate instead of reusing the old draft-only claim  305ms
+ ✓ src/components/front-office-shared/GmSeatCard.test.tsx (4 tests) 114ms
+ ✓ src/components/front-office-shared/GmBooksPanel.test.tsx (5 tests) 176ms
+ ✓ src/components/front-office-shared/GmInboxPanel.test.tsx (3 tests) 64ms
+
+ Test Files  20 passed (20)
+      Tests  250 passed (250)
+   Start at  15:48:20
+   Duration  19.78s (transform 3.32s, setup 1.18s, collect 9.93s, tests 31.53s, environment 8.96s, prepare 2.05s)
+
