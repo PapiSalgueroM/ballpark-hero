@@ -1,0 +1,375 @@
+name: Career award generations verification
+on:
+  push:
+    branches: [codex/career-award-generations]
+permissions:
+  contents: read
+concurrency:
+  group: career-award-generations-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Complete exact current and baseline source archives
+        run: |
+          mkdir -p career-award-generations-artifacts/helpers
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git rev-parse 'aa564f16019b9e821981d5c4e3e0262312c73b62^{tree}')" = e3e5332ddf95b79802c82487a03df3c0aca32e75
+          git diff --name-status aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > career-award-generations-artifacts/changed-source.txt
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const base='aa564f16019b9e821981d5c4e3e0262312c73b62',allowed=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerSave.ts','scripts/lib/careerAwardsNight1172.mjs','scripts/simSoccerAwardGenerations.mjs','scripts/lib/awardProofStorage.mjs','src/test/soccerCareerAwardGenerations.test.tsx','.github/workflows/career-award-generations-verification.yml','docs/ROUND1280-1282.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md'],changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          fs.writeFileSync('career-award-generations-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));for(const file of changed)assert(allowed.includes(file),'undeclared change '+file);
+          for(const file of ['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs','src/test/soccerCareerSaveRecovery.test.tsx',...['simBallonDorFairness','simCareerAwardsNight','simBallonDorTruth','simCareerEras','simSoccerCareerSaveRetry','simSoccerCareerSaveRecovery'].map(name=>'scripts/'+name+'.mjs')])assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString(),execFileSync('git',['rev-parse',base+':'+file]).toString(),file+' complete baseline hold');
+          for(const file of allowed.slice(0,7))assert(execFileSync('git',['cat-file','-s','HEAD:'+file]).toString().trim()>0,file+' committed source is nonempty');
+          JS
+          git rev-parse HEAD > career-award-generations-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > career-award-generations-artifacts/source-tree.txt
+          git -c core.autocrlf=false archive --format=zip --output=career-award-generations-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > career-award-generations-artifacts/source-inventory.txt
+          git -c core.autocrlf=false archive --format=zip --output=career-award-generations-artifacts/base-source.zip aa564f16019b9e821981d5c4e3e0262312c73b62
+          git ls-tree -r aa564f16019b9e821981d5c4e3e0262312c73b62 > career-award-generations-artifacts/base-source-inventory.txt
+          sha256sum career-award-generations-artifacts/source.zip career-award-generations-artifacts/base-source.zip > career-award-generations-artifacts/source-archive-sha256.txt
+          sha256sum package.json package-lock.json > career-award-generations-artifacts/packages-before.txt
+          cat > career-award-generations-artifacts/helpers/dependencies.mjs <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const name=expected.name??directory.split('node_modules/').at(-1),file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' omission requires an actual OS or CPU reason');omitted.push({directory,name,version:expected.version,optional:true,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.name,name,directory+' locked name');assert.equal(actual.version,expected.version,directory);installed.push({directory,name:actual.name,version:actual.version});
+          }
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify({platform:process.platform,arch:process.arch,installed,omitted},null,2));assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          console.log('PASS complete locked census: 521 installed and 78 platform-qualified optional omissions');
+          JS
+          cat > career-award-generations-artifacts/helpers/observe-runner.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import {syncBuiltinESMExports} from 'node:module';import {pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';
+          const out=path.resolve(process.env.AWARD_RUNNER_DIR),names=fs.readdirSync('scripts').filter(x=>/^(sim|play|sweep)[A-Za-z0-9]*\.mjs$/.test(x)&&x!=='runAllSims.mjs').sort(),selected=(process.env.ONLY||'').split(',').filter(Boolean),expected=selected.length?names.filter(x=>selected.includes(x.replace(/\.mjs$/,''))):names;
+          const hash=b=>createHash('sha256').update(b).digest('hex'),nativeSpawn=cp.spawn,children=[];fs.mkdirSync(path.join(out,'children'),{recursive:true});
+          const discovery=names.map(file=>({file,bytes:fs.statSync('scripts/'+file).size,sha256:hash(fs.readFileSync('scripts/'+file))}));fs.writeFileSync(path.join(out,'discovery.json'),JSON.stringify({network:process.env.SIM_NETWORK,browser:process.argv.includes('--browser'),selected,expected,discovery,runnerSha256:hash(fs.readFileSync('scripts/runAllSims.mjs'))},null,2));
+          cp.spawn=function(command,args,options){
+           const child=nativeSpawn.call(this,command,args,options),file=path.basename(args?.[0]??'');
+           if(command===process.execPath&&path.dirname(path.resolve(args?.[0]??''))===path.resolve('scripts')&&names.includes(file)){
+            const base=path.join(out,'children',String(children.length).padStart(4,'0')+'-'+file),row={file,sourceSha256:discovery.find(row=>row.file===file).sha256,startedAt:Date.now(),closedAt:null,args,cwd:options?.cwd??null,environment:Object.fromEntries(['SIM_NETWORK','ENGINES','TZ','NODE_OPTIONS','BASE','SWEEP_BASE','PORT','ONLY','SOCCER_AWARD_GENERATIONS_OUT'].map(key=>[key,options?.env?.[key]??null])),stdout:base+'.stdout.log',stderr:base+'.stderr.log',stdoutBytes:0,stderrBytes:0,chunks:[],exitCode:null,signal:null};children.push(row);fs.writeFileSync(row.stdout,'');fs.writeFileSync(row.stderr,'');
+            child.stdout.on('data',data=>{row.chunks.push({stream:'stdout',start:row.stdoutBytes,bytes:data.length});fs.appendFileSync(row.stdout,data);row.stdoutBytes+=data.length;});child.stderr.on('data',data=>{row.chunks.push({stream:'stderr',start:row.stderrBytes,bytes:data.length});fs.appendFileSync(row.stderr,data);row.stderrBytes+=data.length;});child.on('close',(code,signal)=>{row.exitCode=code;row.signal=signal;row.closedAt=Date.now();});
+           }return child;
+          };syncBuiltinESMExports();process.on('exit',code=>fs.writeFileSync(path.join(out,'process.json'),JSON.stringify({runnerExit:code,children},null,2)));await import(pathToFileURL(path.resolve('scripts/runAllSims.mjs')).href);
+          JS
+          cat > career-award-generations-artifacts/helpers/check-runner.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=path.resolve(process.env.AWARD_RUNNER_DIR),discovery=JSON.parse(fs.readFileSync(path.join(out,'discovery.json'),'utf8')),processes=JSON.parse(fs.readFileSync(path.join(out,'process.json'),'utf8')),text=fs.readFileSync(path.join(out,'runner.log'),'utf8'),classifications=[...text.matchAll(/^\s+(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$/gm)].map(m=>({verdict:m[1],file:m[2]})),omissions=[];
+          const hash=b=>createHash('sha256').update(b).digest('hex');for(const row of processes.children){const offsets={stdout:0,stderr:0};for(const key of ['stdout','stderr'])assert.equal(fs.statSync(row[key]).size,row[key+'Bytes']);for(const chunk of row.chunks){assert(['stdout','stderr'].includes(chunk.stream));assert.equal(chunk.start,offsets[chunk.stream]);assert(Number.isInteger(chunk.bytes)&&chunk.bytes>0);offsets[chunk.stream]+=chunk.bytes;}assert.equal(offsets.stdout,row.stdoutBytes);assert.equal(offsets.stderr,row.stderrBytes);const output=fs.readFileSync(row.stdout,'utf8')+'\n'+fs.readFileSync(row.stderr,'utf8');omissions.push({file:row.file,lines:output.split('\n').filter(line=>/\bskip(?:ped|ping)?\b|\bnot (?:run|checked)\b|\blive.only\b/i.test(line)),stdoutSha256:hash(fs.readFileSync(row.stdout)),stderrSha256:hash(fs.readFileSync(row.stderr))});}
+          const failures=classifications.filter(x=>x.verdict!=='PASS');fs.writeFileSync(path.join(out,'scope.json'),JSON.stringify({expected:discovery.expected,actual:processes.children.map(x=>x.file),classifications,failures,internalOmissions:omissions,qualification:'Internal omissions are retained and receive no live or database coverage credit.'},null,2));
+          assert(discovery.selected.length>0,'focused workflow requires an explicit selected scope');assert.deepEqual([...discovery.expected].sort(),discovery.selected.map(name=>name+'.mjs').sort(),'every explicitly selected harness exists');assert.equal(discovery.network,'offline');assert.equal(discovery.browser,true);assert.equal(hash(fs.readFileSync('scripts/runAllSims.mjs')),discovery.runnerSha256);assert.deepEqual(processes.children.map(x=>x.file).sort(),[...discovery.expected].sort());assert.deepEqual(classifications.map(x=>x.file).sort(),[...discovery.expected].sort());assert.equal(failures.length,0,'FAIL, EMPTY and SKIP remain unwaived');assert.equal(processes.runnerExit,0);for(const row of processes.children){assert.equal(row.sourceSha256,discovery.discovery.find(source=>source.file===row.file).sha256);assert.equal(row.exitCode,0,row.file);assert.equal(row.signal,null,row.file);}
+          console.log('PASS exact unchanged runner coverage: '+classifications.length+' named results, no FAIL, EMPTY or SKIP');
+          JS
+          cat > career-award-generations-artifacts/helpers/generated.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex');function rows(root){if(!fs.existsSync(root))return[];const stat=fs.lstatSync(root);assert(!stat.isSymbolicLink(),'symlink '+root);if(stat.isFile())return[{file:root,bytes:stat.size,sha256:hash(fs.readFileSync(root))}];assert(stat.isDirectory(),root);return fs.readdirSync(root).sort().flatMap(name=>rows(path.join(root,name)));}
+          const current={public:rows('public'),lastmod:rows('scripts/data/lastmod.json'),dist:rows('dist')},file='career-award-generations-artifacts/generated-body-inventory.json';if(process.argv.includes('--check'))assert.deepEqual(current,JSON.parse(fs.readFileSync(file,'utf8')));else fs.writeFileSync(file,JSON.stringify(current,null,2));console.log('PASS complete generated body inventory: '+current.public.length+' public files, '+current.dist.length+' dist files');
+          JS
+          sha256sum career-award-generations-artifacts/helpers/*.mjs > career-award-generations-artifacts/helper-source-sha256.txt
+      - name: Retain independent persisted storage consumer source
+        run: |
+          cat > career-award-generations-artifacts/helpers/check-storage.mjs <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { gzipSync, gunzipSync } from 'node:zlib';
+
+          const root = path.resolve('career-award-generations-artifacts/proof');
+          const out = path.resolve('career-award-generations-artifacts/storage-consumer.json');
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const json = bytes => JSON.parse(bytes.toString('utf8'));
+          const errorOf = error => ({ name: error.name, message: error.message, stack: error.stack });
+          const integer = value => Number.isSafeInteger(value) && value >= 0;
+          const hex = value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
+          const result = { status: 'fail', representation: null, files: [], chunks: [], objects: [], controls: [], reportEdges: [], errors: [], counts: null };
+          function keys(value, expected) { assert(value && typeof value === 'object' && !Array.isArray(value)); assert.deepEqual(Object.keys(value).sort(), [...expected].sort()); }
+          function safeFile(relative) {
+            assert.equal(typeof relative, 'string'); assert(relative.length > 0 && !relative.includes('\\') && !/[<>:"|?*\x00-\x1f]/.test(relative));
+            const parts = relative.split('/'); assert(parts.every(part => part.length > 0 && part !== '.' && part !== '..'));
+            let cursor = root;
+            for (const part of parts) { cursor = path.join(cursor, part); const stat = fs.lstatSync(cursor); assert(!stat.isSymbolicLink()); }
+            assert(fs.lstatSync(cursor).isFile()); return cursor;
+          }
+          function whole(relative) {
+            const bytes = fs.readFileSync(safeFile(relative)); result.files.push({ path: relative, bytes: bytes.length, sha256: sha(bytes) }); return bytes;
+          }
+          function declared(record, relative, packed = false) {
+            keys(record, packed ? ['path', 'bytes', 'sha256', 'rawBytes', 'rawSha256', 'codec'] : ['path', 'bytes', 'sha256']);
+            assert.equal(record.path, relative); assert(integer(record.bytes) && hex(record.sha256));
+            const bytes = whole(record.path); assert.equal(bytes.length, record.bytes); assert.equal(sha(bytes), record.sha256);
+            if (!packed) return bytes;
+            assert.equal(record.codec, 'gzip'); assert(integer(record.rawBytes) && hex(record.rawSha256));
+            const raw = gunzipSync(bytes); assert.equal(raw.length, record.rawBytes); assert.equal(sha(raw), record.rawSha256); return raw;
+          }
+          function originalShape(row) {
+            keys(row, ['hash', 'kind', 'path', 'rawBytes', 'rawSha256', 'packedBytes', 'packedSha256']);
+            assert(hex(row.hash) && row.hash === row.rawSha256 && hex(row.packedSha256)); assert.equal(row.path, `objects/${row.hash}.gz`);
+            assert(typeof row.kind === 'string' && row.kind.length > 0 && integer(row.rawBytes) && integer(row.packedBytes));
+          }
+          function preciseFailure(fn, label) {
+            let actual = null; try { fn(); } catch (error) { actual = errorOf(error); }
+            assert(actual && actual.name === 'AssertionError' && actual.message.includes(label), `independent intended ${label} rejection`); return actual;
+          }
+          async function main() {
+            const receiptBytes = whole('storage/receipt.json'), receipt = json(receiptBytes); result.representation = receipt.representation;
+            keys(receipt, ['representation', 'originalRepresentation', 'status', 'complete', 'codec', 'source', 'gear', 'pack', 'chunkLedger', 'objectReferences', 'rawInsertionInventory', 'reconstruction', 'controls', 'errors', 'attemptedObjects', 'completedObjects', 'decodedObjects', 'unreferencedChunks', 'orphanRanges']);
+            assert.equal(receipt.originalRepresentation, 'objects.json is former whole-gzip reference metadata only, those individual gzip bodies are not physically retained');
+            assert.equal(receipt.representation, 'cdc-byte-pack-v1');
+            assert.deepEqual(receipt.codec, { version: 1, min: 512, target: 2048, max: 8192, mask: 2047, gearSeed: 2654435769, gzipLevel: 9 });
+            const source = declared(receipt.source, 'storage/codec-source.mjs');
+            const moduleBytes = fs.readFileSync('scripts/lib/awardProofStorage.mjs'), methodBytes = fs.readFileSync('scripts/simSoccerAwardGenerations.mjs');
+            assert.equal(moduleBytes.length, 19121); assert.equal(sha(moduleBytes), 'bede3f0248784619669e55a4c3927b03902f28f829678458af2a33140f8e8c0c');
+            assert(source.equals(moduleBytes), 'complete actual codec source');
+            assert.equal(methodBytes.length, 54731); assert.equal(sha(methodBytes), '3105c17c7cb05a2b58a4d5948aea71c80556a44b14b78c785381976b7462a770');
+            result.source = { module: { bytes: moduleBytes.length, sha256: sha(moduleBytes) }, method: { bytes: methodBytes.length, sha256: sha(methodBytes) } };
+            const gearBytes = declared(receipt.gear, 'storage/gear-table.json'), gear = json(gearBytes);
+            let seed = receipt.codec.gearSeed;
+            const expectedGear = Array.from({ length: 256 }, () => { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return seed >>> 0; });
+            assert.deepEqual(gear, expectedGear);
+            keys(receipt.pack, ['path', 'bytes', 'sha256']); assert.equal(receipt.pack.path, 'storage/chunks.pack'); assert(integer(receipt.pack.bytes) && hex(receipt.pack.sha256));
+            const packFile = safeFile(receipt.pack.path), digest = createHash('sha256'); let packBytes = 0;
+            for await (const bytes of fs.createReadStream(packFile)) { digest.update(bytes); packBytes += bytes.length; }
+            assert.equal(packBytes, receipt.pack.bytes); assert.equal(digest.digest('hex'), receipt.pack.sha256); result.files.push(receipt.pack);
+            const chunks = json(declared(receipt.chunkLedger, 'storage/chunk-ledger.json.gz', true));
+            const rows = json(declared(receipt.objectReferences, 'storage/object-refs.json.gz', true));
+            const insertion = json(declared(receipt.rawInsertionInventory, 'storage/raw-insertion-inventory.json.gz', true));
+            const audits = json(declared(receipt.reconstruction, 'storage/whole-reconstruction.json.gz', true));
+            const controls = json(declared(receipt.controls, 'storage/controls.json')), errors = json(declared(receipt.errors, 'storage/errors.json'));
+            const originals = json(whole('objects.json')), report = json(whole('report.json'));
+            assert([chunks, rows, insertion, audits, controls, errors, originals].every(Array.isArray)); assert.deepEqual(report.storage, receipt);
+            const fd = fs.openSync(packFile, 'r'), rawChunks = [], originalIds = new Set(), chunkIds = new Set(), referenced = new Set();
+            function readChunk(chunk) {
+              const bytes = Buffer.alloc(chunk.packedBytes); let done = 0;
+              while (done < bytes.length) { const count = fs.readSync(fd, bytes, done, bytes.length - done, chunk.offset + done); assert(count > 0); done += count; } return bytes;
+            }
+            function rawChunk(id, overrides = new Map()) {
+              assert(integer(id) && id < chunks.length); const chunk = chunks[id], packed = overrides.get(id) ?? readChunk(chunk);
+              assert.equal(packed.length, chunk.packedBytes, 'complete chunk packed length'); assert.equal(sha(packed), chunk.packedSha256, 'complete chunk packed SHA');
+              const raw = rawChunks[id] ?? gunzipSync(packed); assert.equal(raw.length, chunk.rawBytes, 'complete chunk raw length'); assert.equal(sha(raw), chunk.rawSha256, 'complete chunk raw SHA'); return raw;
+            }
+            function decode(row, overrides = new Map(), verifyWhole = true) {
+              keys(row, ['index', 'original', 'status', 'chunkRefs', 'error']); originalShape(row.original); assert(integer(row.index)); assert.equal(row.status, 'packed'); assert.equal(row.error, null); assert(Array.isArray(row.chunkRefs));
+              const parts = row.chunkRefs.map(id => rawChunk(id, overrides)), raw = Buffer.concat(parts);
+              assert.equal(raw.length, row.original.rawBytes, 'complete reconstructed raw length');
+              if (verifyWhole) assert.equal(sha(raw), row.original.rawSha256, 'complete reconstructed object SHA'); return raw;
+            }
+            try {
+              let offset = 0;
+              for (let index = 0; index < chunks.length; index++) {
+                const chunk = chunks[index], observed = { index, verified: false, error: null }; result.chunks.push(observed);
+                keys(chunk, ['id', 'offset', 'rawBytes', 'rawSha256', 'packedBytes', 'packedSha256']); assert.equal(chunk.id, index); assert.equal(chunk.offset, offset);
+                assert(integer(chunk.rawBytes) && chunk.rawBytes > 0 && chunk.rawBytes <= 8192 && integer(chunk.packedBytes) && chunk.packedBytes > 0 && hex(chunk.rawSha256) && hex(chunk.packedSha256));
+                assert(!chunkIds.has(chunk.rawSha256)); chunkIds.add(chunk.rawSha256); offset += chunk.packedBytes; assert(offset <= packBytes);
+                try { rawChunks[index] = rawChunk(index); observed.verified = true; observed.rawBytes = chunk.rawBytes; observed.rawSha256 = chunk.rawSha256; } catch (error) { observed.error = errorOf(error); throw error; }
+              }
+              assert.equal(offset, packBytes, 'complete contiguous pack with no orphan ranges'); assert.equal(rows.length, originals.length); assert.equal(rows.length, insertion.length); assert.equal(rows.length, audits.length);
+              const byHash = new Map(); let references = 0, decodedRawBytes = 0;
+              for (let index = 0; index < rows.length; index++) {
+                const row = rows[index], observed = { index, hash: row.original?.hash ?? null, verified: false, error: null }; result.objects.push(observed);
+                try {
+                  assert.equal(row.index, index); originalShape(originals[index]); assert.deepEqual(row.original, originals[index]); assert(!originalIds.has(row.original.hash)); originalIds.add(row.original.hash); byHash.set(row.original.hash, row);
+                  keys(insertion[index], ['index', 'hash', 'kind', 'rawBytes', 'rawSha256']); assert.deepEqual(insertion[index], { index, hash: row.original.hash, kind: row.original.kind, rawBytes: row.original.rawBytes, rawSha256: row.original.rawSha256 });
+                  for (const id of row.chunkRefs) { assert(integer(id) && id < chunks.length); referenced.add(id); references++; }
+                  const raw = decode(row), formerPacked = gzipSync(raw, { level: 9 });
+                  assert.equal(formerPacked.length, row.original.packedBytes, 'complete former whole-gzip reference length'); assert.equal(sha(formerPacked), row.original.packedSha256, 'complete former whole-gzip reference SHA');
+                  keys(audits[index], ['index', 'hash', 'verified', 'decodedBytes', 'decodedSha256', 'error']);
+                  assert.deepEqual(audits[index], { index, hash: row.original.hash, verified: true, decodedBytes: raw.length, decodedSha256: sha(raw), error: null });
+                  decodedRawBytes += raw.length; observed.verified = true; observed.rawBytes = raw.length; observed.rawSha256 = sha(raw);
+                } catch (error) { observed.error = errorOf(error); throw error; }
+              }
+              function knownJSON(hash, label) { assert(hex(hash) && byHash.has(hash), `declared report object ${label}`); const row = byHash.get(hash); assert.equal(row.original.kind, 'json'); result.reportEdges.push({ label, hash }); return json(decode(row)); }
+              assert.deepEqual(controls.map(control => control.id), ['copied-packed-chunk-byte', 'copied-valid-same-length-reference']);
+              for (const control of controls) {
+                const observation = { id: control.id, verified: false, actualError: null, fullUndo: false }; result.controls.push(observation);
+                const w = control.witness; keys(w, ['objectIndex', 'ordinal', 'originalChunkId', 'replacementChunkId']);
+                assert(integer(w.objectIndex) && w.objectIndex < rows.length && integer(w.ordinal)); const row = rows[w.objectIndex]; assert(w.ordinal < row.chunkRefs.length);
+                assert(integer(w.originalChunkId) && w.originalChunkId < chunks.length && integer(w.replacementChunkId) && w.replacementChunkId < chunks.length); assert.equal(row.chunkRefs[w.ordinal], w.originalChunkId);
+                const raw = decode(row), originalChunk = chunks[w.originalChunkId];
+                if (control.id === 'copied-packed-chunk-byte') {
+                  keys(control, ['id', 'witness', 'originalChunk', 'byteOffset', 'oldByte', 'changedByte', 'original', 'fault', 'undo', 'completeObjectRow', 'decodedRawBytes', 'decodedRawSha256', 'wholeDecodedChunkEqual', 'paths', 'fullUndo']);
+                  const original = declared(control.original, 'storage/controls/packed/original.gz'), fault = declared(control.fault, 'storage/controls/packed/fault.gz'), undo = declared(control.undo, 'storage/controls/packed/undo.gz');
+                  assert.deepEqual(control.originalChunk, originalChunk); assert(original.equals(readChunk(originalChunk))); assert.equal(control.byteOffset, 4); assert.equal(control.oldByte, original[4]); assert.equal(control.changedByte, fault[4]);
+                  assert(original.length >= 18 && original[0] === 31 && original[1] === 139 && original[2] === 8 && original[3] === 0); assert.equal(fault.length, original.length);
+                  const reconstructedFault = Buffer.from(original); reconstructedFault[4] ^= 1; assert(reconstructedFault.equals(fault)); assert(!fault.equals(original));
+                  assert(gunzipSync(fault).equals(rawChunk(w.originalChunkId))); assert.equal(control.decodedRawBytes, originalChunk.rawBytes); assert.equal(control.decodedRawSha256, originalChunk.rawSha256); assert.equal(control.wholeDecodedChunkEqual, true);
+                  assert.deepEqual(json(declared(control.completeObjectRow, 'storage/controls/packed/object-row.json.gz', true)), row);
+                  observation.actualError = preciseFailure(() => decode(row, new Map([[w.originalChunkId, fault]])), 'complete chunk packed SHA');
+                  assert(undo.equals(original)); assert(decode(row, new Map([[w.originalChunkId, undo]])).equals(raw));
+                } else {
+                  keys(control, ['id', 'witness', 'original', 'fault', 'undo', 'changedRaw', 'everyChunkIntegrityHeld', 'paths', 'fullUndo']);
+                  const originalBytes = declared(control.original, 'storage/controls/reference/original-row.json.gz', true), faultBytes = declared(control.fault, 'storage/controls/reference/fault-row.json.gz', true), undoBytes = declared(control.undo, 'storage/controls/reference/undo-row.json.gz', true);
+                  const original = json(originalBytes), fault = json(faultBytes), undo = json(undoBytes), expectedFault = structuredClone(row); expectedFault.chunkRefs[w.ordinal] = w.replacementChunkId;
+                  assert.deepEqual(original, row); assert.deepEqual(fault, expectedFault); assert.notDeepEqual(fault, original); assert.equal(chunks[w.originalChunkId].rawBytes, chunks[w.replacementChunkId].rawBytes); assert.notEqual(chunks[w.originalChunkId].rawSha256, chunks[w.replacementChunkId].rawSha256);
+                  const changedRaw = declared(control.changedRaw, 'storage/controls/reference/fault-raw.gz', true); assert(decode(fault, new Map(), false).equals(changedRaw)); assert.equal(changedRaw.length, raw.length); assert(!changedRaw.equals(raw)); assert.equal(control.everyChunkIntegrityHeld, true);
+                  observation.actualError = preciseFailure(() => decode(fault), 'complete reconstructed object SHA');
+                  assert(undoBytes.equals(originalBytes)); assert.deepEqual(undo, row); assert(decode(undo).equals(raw));
+                }
+                assert.equal(control.fullUndo, true); keys(control.paths, ['integrated', 'persisted']);
+                for (const name of ['integrated', 'persisted']) { keys(control.paths[name], ['actualError', 'wholeUndo']); assert.equal(control.paths[name].wholeUndo, true); const e = control.paths[name].actualError; keys(e, ['name', 'message', 'stack']); assert.equal(e.name, 'AssertionError'); assert.equal(typeof e.stack, 'string'); assert(e.stack.length > 0 && e.message.includes(control.id === 'copied-packed-chunk-byte' ? 'complete chunk packed SHA' : 'complete reconstructed object SHA')); }
+                observation.verified = true; observation.fullUndo = true;
+              }
+              result.counts = { chunks: chunks.length, references, attemptedObjects: rows.length, completedObjects: rows.length, decodedObjects: result.objects.filter(row => row.verified).length, decodedRawBytes, controls: controls.length };
+              assert.equal(referenced.size, chunks.length); assert.deepEqual(receipt.unreferencedChunks, []); assert.deepEqual(receipt.orphanRanges, []); assert.deepEqual(errors, []);
+              assert.equal(receipt.attemptedObjects, rows.length); assert.equal(receipt.completedObjects, rows.length); assert.equal(receipt.decodedObjects, rows.length);
+              for (const [arm, careers] of Object.entries(report.natural)) for (const career of careers) {
+                for (const key of ['actions', 'observations', 'final', 'errors']) knownJSON(career[key], `${arm}/${career.descriptor.id}/${key}`);
+                for (const key of ['valuesAndCallerIds', 'callers']) knownJSON(career.tape[key], `${arm}/${career.descriptor.id}/tape/${key}`);
+              }
+              for (const [label, hash] of Object.entries(report.fixtures)) knownJSON(hash, `fixtures/${label}`);
+              knownJSON(report.validation, 'validation'); knownJSON(report.undo, 'undo');
+              for (const control of report.controls) for (const key of ['before', 'fault', 'undo', 'rows', 'validation', 'unrelatedReads']) knownJSON(control[key], `source-control/${control.id}/${key}`);
+              for (const control of report.observationControls) for (const key of ['baseline', 'fault', 'undo']) knownJSON(control[key], `observation-control/${control.id}/${key}`);
+              for (const key of ['observations', 'vitest', 'frameworkSetup']) knownJSON(report.component[key], `component/${key}`);
+              for (const key of ['baseline', 'fault', 'undo', 'omittedRow']) knownJSON(report.component.frameworkControl[key], `frameworkControl/${key}`);
+              assert.equal(receipt.status, 'pass'); assert.equal(receipt.complete, true); assert.equal(report.status, 'pass'); result.status = 'pass';
+            } finally { fs.closeSync(fd); }
+          }
+          try { await main(); } catch (error) { result.errors.push(errorOf(error)); process.exitCode = 1; console.error(error.stack); }
+          finally { fs.writeFileSync(out, JSON.stringify(result)); }
+          if (result.status === 'pass') console.log(`PASS independent persisted byte storage: ${result.counts.decodedObjects} complete objects, ${result.counts.chunks} chunks and both copied controls restored`);
+          JS
+          sha256sum career-award-generations-artifacts/helpers/check-storage.mjs >> career-award-generations-artifacts/helper-source-sha256.txt
+      - name: Locked packages and existing remote build tools
+        run: |
+          npm ci
+          DEPENDENCY_OUT=career-award-generations-artifacts/dependencies-before.json node career-award-generations-artifacts/helpers/dependencies.mjs
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > career-award-generations-artifacts/packages-after-setup.txt
+          cmp career-award-generations-artifacts/packages-before.txt career-award-generations-artifacts/packages-after-setup.txt
+          DEPENDENCY_OUT=career-award-generations-artifacts/dependencies-after-setup.json node career-award-generations-artifacts/helpers/dependencies.mjs
+          cmp career-award-generations-artifacts/dependencies-before.json career-award-generations-artifacts/dependencies-after-setup.json
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS existing pinned Playwright 1.64.0');
+          JS
+      - name: Actual app type gate
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-award-generations-artifacts/types.log
+      - name: Full production SEO build
+        id: build
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee career-award-generations-artifacts/build.log
+      - name: Complete build output retention
+        if: ${{ !cancelled() }}
+        run: |
+          node career-award-generations-artifacts/helpers/generated.mjs
+          git diff --binary HEAD -- public scripts/data/lastmod.json > career-award-generations-artifacts/generated-public.patch
+          tar -czf career-award-generations-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          if [ -d dist ]; then tar -czf career-award-generations-artifacts/dist.tar.gz dist; fi
+          sha256sum career-award-generations-artifacts/*.tar.gz > career-award-generations-artifacts/generated-archive-sha256.txt
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > career-award-generations-artifacts/post-build-source-held.log
+      - name: Actual lifecycle careers source controls and component execution
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          AWARD_RUNNER_DIR=career-award-generations-artifacts/method-runner SOCCER_AWARD_GENERATIONS_OUT=career-award-generations-artifacts/proof ONLY=simSoccerAwardGenerations NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node career-award-generations-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee career-award-generations-artifacts/award-generations.log || failed=1
+          cp career-award-generations-artifacts/award-generations.log career-award-generations-artifacts/method-runner/runner.log
+          AWARD_RUNNER_DIR=career-award-generations-artifacts/method-runner node career-award-generations-artifacts/helpers/check-runner.mjs || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const r=JSON.parse(fs.readFileSync('career-award-generations-artifacts/proof/report.json','utf8'));assert.equal(r.status,'pass');assert.equal(r.head,execFileSync('git',['rev-parse','HEAD']).toString().trim());assert.equal(r.tree,execFileSync('git',['rev-parse','HEAD^{tree}']).toString().trim());assert.equal(r.base,'aa564f16019b9e821981d5c4e3e0262312c73b62');
+          const ids=[2010,2025].flatMap(year=>['ST','CM','GK'].flatMap(position=>Array.from({length:8},(_,index)=>year+'-'+position+'-'+(index+1))));assert.deepEqual(r.population.map(row=>row.id),ids);assert.deepEqual(Object.keys(r.natural),['original-plain','original-observed','current-plain','current-observed']);for(const rows of Object.values(r.natural))assert.deepEqual(rows.map(row=>row.descriptor.id),ids);
+          assert.deepEqual(r.controls.map(row=>row.id),['new-profile-tuple-alias','wrong-goal-tuple-accepted','frozen-age','missing-retirement','retired-slot-reuse','filler-reroll','previous-pool-mutation','extra-generated-draw','malformed-pool-accepted']);assert.deepEqual(r.observationControls.map(row=>row.id),['retired-name-collision','old-pending-ballot-changed','raw-invalid-save-overwritten']);
+          const text=fs.readFileSync('career-award-generations-artifacts/method-runner/children/0000-simSoccerAwardGenerations.mjs.stdout.log','utf8');assert(text.split('\n').includes('PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery'));
+          JS
+          exit "$failed"
+      - name: Independent complete persisted storage and decoder control verification
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node career-award-generations-artifacts/helpers/check-storage.mjs 2>&1 | tee career-award-generations-artifacts/storage-consumer.log
+      - name: Independent complete focused component test result verification
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const root='career-award-generations-artifacts/proof/component/',r=JSON.parse(fs.readFileSync(root+'vitest.json','utf8')),exit=JSON.parse(fs.readFileSync(root+'exit.json','utf8')),observations=JSON.parse(fs.readFileSync(root+'observations.json','utf8')),results=r.testResults.flatMap(file=>file.assertionResults),hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          const retained={status:r.success,total:r.numTotalTests,passed:r.numPassedTests,failed:r.numFailedTests,pending:r.numPendingTests,todo:r.numTodoTests,exit,named:results.map(row=>({name:row.fullName,status:row.status})),observationIds:observations.map(row=>row.id),files:['vitest.json','exit.json','observations.json','stdout.log','stderr.log'].map(file=>({file,bytes:fs.statSync(root+file).size,sha256:hash(root+file)})),qualification:'Independent validation of the separate component test process already executed by the actual method with its genuine fixtures. No duplicate test execution.'};fs.writeFileSync('career-award-generations-artifacts/component-test-verification.json',JSON.stringify(retained,null,2));
+          const ids=['legacy','generated','pending','legacyPending','null','unknown-version','missing-entries','empty-entries','fraction-year','future-year','string-year','wrong-next-id','noncontiguous-id','invalid-role','negative-slot','over-slot','fraction-seed','future-first-year','young-entry-age','old-entry-age','empty-name','empty-nationality','empty-club','invalid-position','wrong-tuple','huge-tuple','string-tuple','short-tuple','wrong-retirement-year','duplicate-name','duplicate-active-slot'],expected=ids.map((id,index)=>index<4?'holds complete '+id+' pool and old pending ballot over actual page reload':'rejects present '+id+' pool and preserves whole raw storage over actual reload');
+          assert.equal(exit.status,0);assert.equal(exit.signal,null);assert.equal(exit.error,null);assert.equal(r.success,true);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests??0,0);assert.equal(r.numTotalTests,31);assert.equal(r.numPassedTests,31);assert.equal(r.testResults.length,1);assert(r.testResults[0].name.replaceAll('\\','/').endsWith('/src/test/soccerCareerAwardGenerations.test.tsx'));assert.equal(results.length,31);assert.equal(new Set(results.map(row=>row.fullName)).size,31);assert(results.every(row=>row.status==='passed'));assert.deepEqual(results.map(row=>row.title).sort(),expected.sort());assert.deepEqual(observations.map(row=>row.id),ids);
+          console.log('PASS all '+results.length+' actual named component cases, no pending or todo cases');
+          JS
+      - name: Early complete artifact cap
+        if: ${{ !cancelled() }}
+        run: |
+          du -sb career-award-generations-artifacts > career-award-generations-artifacts/early-artifact-size.log
+          test "$(du -sb career-award-generations-artifacts | cut -f1)" -lt 500000000
+      - name: Retain complete early evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-award-generations-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-award-generations-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error
+      - name: Six unchanged award era and save harnesses
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          AWARD_RUNNER_DIR=career-award-generations-artifacts/related ONLY=simBallonDorFairness,simCareerAwardsNight,simBallonDorTruth,simCareerEras,simSoccerCareerSaveRetry,simSoccerCareerSaveRecovery NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node career-award-generations-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee career-award-generations-artifacts/related.log || failed=1
+          cp career-award-generations-artifacts/related.log career-award-generations-artifacts/related/runner.log
+          AWARD_RUNNER_DIR=career-award-generations-artifacts/related node career-award-generations-artifacts/helpers/check-runner.mjs || failed=1
+          exit "$failed"
+      - name: All fifteen rebuilt output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          AWARD_RUNNER_DIR=career-award-generations-artifacts/readers ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node career-award-generations-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee career-award-generations-artifacts/readers.log || failed=1
+          cp career-award-generations-artifacts/readers.log career-award-generations-artifacts/readers/runner.log
+          AWARD_RUNNER_DIR=career-award-generations-artifacts/readers node career-award-generations-artifacts/helpers/check-runner.mjs || failed=1
+          exit "$failed"
+      - name: Final complete source package census generated and cap holds
+        if: ${{ !cancelled() }}
+        run: |
+          failed=0
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > career-award-generations-artifacts/source-held.log || failed=1
+          git ls-files --others --exclude-standard -- src scripts .github/workflows > career-award-generations-artifacts/unexpected-source-files.txt
+          test ! -s career-award-generations-artifacts/unexpected-source-files.txt || failed=1
+          sha256sum package.json package-lock.json > career-award-generations-artifacts/packages-final.txt
+          cmp career-award-generations-artifacts/packages-before.txt career-award-generations-artifacts/packages-final.txt || failed=1
+          DEPENDENCY_OUT=career-award-generations-artifacts/dependencies-final.json node career-award-generations-artifacts/helpers/dependencies.mjs || failed=1
+          cmp career-award-generations-artifacts/dependencies-before.json career-award-generations-artifacts/dependencies-final.json || failed=1
+          sha256sum --check career-award-generations-artifacts/helper-source-sha256.txt || failed=1
+          if [ -f career-award-generations-artifacts/generated-body-inventory.json ]; then node career-award-generations-artifacts/helpers/generated.mjs --check || failed=1; fi
+          if [ -f career-award-generations-artifacts/generated-archive-sha256.txt ]; then sha256sum --check career-award-generations-artifacts/generated-archive-sha256.txt || failed=1; fi
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS final actual Playwright 1.64.0');
+          JS
+          du -sb career-award-generations-artifacts > career-award-generations-artifacts/artifact-size.log
+          find career-award-generations-artifacts -type f ! -name artifact-member-sha256.txt -print0 | sort -z | xargs -0 sha256sum > career-award-generations-artifacts/artifact-member-sha256.txt
+          test "$(du -sb career-award-generations-artifacts | cut -f1)" -lt 500000000 || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-award-generations-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-award-generations-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error
