@@ -15,7 +15,7 @@ import { ChevronLeft, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { careerLeagueOf, leagueBoardsOf, leagueBookRules } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { BOOK_FULL_SHARE, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
+import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
@@ -78,6 +78,7 @@ function LeadersRules() {
       <p data-cm-leaders-example>Worked example: a side with a striker on {ratings('striker')[0]}, a winger on {ratings('winger')[0]}, a number ten on {ratings('number ten')[0]}, central midfielders on {mids.join(' and ')}, a holder on {ratings('holder')[0]} and a back four on {Math.min(...backs)} to {Math.max(...backs)}. Of every 100 goals it scores, {parts.join(', ')}, and the back four {ex.backFour} between them. About {ex.ownGoals} are own goals.</p>
       <p>Your own players are counted off their own league lines. A man you sign in mid season starts from nought here, and what he scored for his old club stays in that club's total.</p>
       <p>The Clean sheets board is the keepers': one for every league match his side keeps everybody out.</p>
+      <p data-cm-leaders-awards>When the season ends, the first man on each board wins it: the golden boot, the most assists and the most clean sheets, all in your season review. That takes a book of the whole season with at least {AWARD_FLOOR} in 100 of the other clubs' goals on record. Short of that the golden boot goes to the older scorers' race and the other two wait for next season.</p>
       <p>Where the data on a squad is thin, the goals of the places it does not cover count for the club and no name. A save that had no book when its season began starts one at its next league match, and the boards count from that round for everybody.</p>
     </div>
   );

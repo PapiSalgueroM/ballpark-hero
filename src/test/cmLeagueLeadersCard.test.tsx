@@ -8,14 +8,16 @@
  * the worked example against dealShares over the engine's own rule object; no string may hold a dash of
  * either banned kind.
  */
+import type { ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { EXAMPLE_ELEVEN, LeagueLeadersCard, ordinal, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
-import { leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
-import { BOOK_FULL_SHARE, bestOfMine, leaders, type BoardKind } from '@/lib/clubManagerLeagueBoards';
+import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
+import { finishSeason, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
+import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, type BoardKind } from '@/lib/clubManagerLeagueBoards';
 import { dealShares } from '@/lib/clubManagerLeagueBook';
 
 afterEach(cleanup);
@@ -161,5 +163,60 @@ describe('the Stats screen with a board open', () => {
     expect(q('[data-cm-leaders-tile="goals"]')).not.toBeNull();
     expect(view.container.textContent).toContain('Every player');
     noDash(view.container);
+  });
+});
+
+/* Round 1311 step 2: the season review. The result screen's frame is not what is tested here: it is drawn
+   as its playNext block alone, which is where the honours live. */
+vi.mock('@/components/game/ResultScreen', () => ({ ResultScreen: ({ playNext }: { playNext?: ReactNode }) => <div>{playNext}</div> }));
+
+function toSeasonEnd(s: CareerState, seed: number): CareerState {
+  vi.spyOn(Math, 'random').mockImplementation(seeded(seed));
+  let next = s;
+  for (let k = 0; k < 160 && next.week < next.calendar.length; k += 1) {
+    const r = playNextEntry(next, { skipHalftime: true });
+    next = r.state;
+    if (r.kind === 'seasonOver') break;
+  }
+  return next;
+}
+
+describe('the season review', () => {
+  it('names the league\'s most assists and most clean sheets from the book, and an older summary prints as it did', () => {
+    const end = toSeasonEnd(everton(), 13111);
+    const lb = leagueBoardsOf(end)!;
+    const { state, summary } = finishSeason(end);
+    vi.restoreAllMocks();
+    expect(summary.awards).toBeDefined();
+    const g = { nextSeason: vi.fn(), startNew: vi.fn() };
+    const a = render(<ClubManagerSeasonSummary sm={summary} c={state} g={g} />);
+    const ast = leaders(lb.input, 'assists', 1)[0];
+    const glove = leaders(lb.input, 'sheets', 1)[0];
+    expect(a.container.querySelector('[data-cm-award="ast"]')?.textContent).toContain(`${ast.name} (${ast.club}, ${ast.n})`);
+    expect(a.container.querySelector('[data-cm-award="glove"]')?.textContent).toContain(`${glove.name} (${glove.club}, ${glove.n})`);
+    expect(a.container.textContent).toContain(`Golden boot: ${summary.goldenBoot!.name}`);
+    expect(a.container.querySelector('[data-cm-award-withheld]')).toBeNull();
+    noDash(a.container);
+    cleanup();
+    /* A summary from before the awards: no awards field, and it prints what it always did. */
+    const old = { ...summary };
+    delete old.awards;
+    const b = render(<ClubManagerSeasonSummary sm={old} c={state} g={g} />);
+    expect(b.container.querySelector('[data-cm-award]')).toBeNull();
+    expect(b.container.querySelector('[data-cm-award-withheld]')).toBeNull();
+    expect(b.container.textContent).toContain(`Golden boot: ${summary.goldenBoot!.name}`);
+  });
+
+  it('withholds the new awards in a league whose data is too thin, and says why', () => {
+    const end = toSeasonEnd(hertha(), 13112);
+    const lb = leagueBoardsOf(end)!;
+    const { state, summary } = finishSeason(end);
+    vi.restoreAllMocks();
+    expect(lb.share).toBeLessThan(AWARD_FLOOR);
+    expect('awards' in summary).toBe(false);
+    const c = render(<ClubManagerSeasonSummary sm={summary} c={state} g={{ nextSeason: vi.fn(), startNew: vi.fn() }} />);
+    expect(c.container.querySelector('[data-cm-award]')).toBeNull();
+    expect(c.container.querySelector('[data-cm-award-withheld]')?.textContent).toContain(`Only ${lb.share} in 100 of this league's goals had a name on them`);
+    noDash(c.container);
   });
 });

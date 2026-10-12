@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ballonDorWatch } from '@/lib/clubManager';
+import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ballonDorWatch, bookAwardsState, leagueBoardsOf } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, CompBucket, CompStatLine } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { LeagueLeadersCard, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
@@ -64,8 +64,11 @@ const avg = (l: Line): number => (l.apps > 0 ? l.ratingSum / l.apps : 0);
  * players are marked, exactly like everywhere else.
  */
 function AwardRacesCard({ career }: { career: CareerState }) {
-  const boot = useMemo(() => goldenBootTable(career, 8), [career]);
-  const poty = useMemo(() => playerOfSeasonRace(career, 3), [career]);
+  /* Round 1311: the league book's door asked once for the three readers below. */
+  const boards = useMemo(() => leagueBoardsOf(career), [career]);
+  const byBook = useMemo(() => bookAwardsState(career, boards).by === 'book', [career, boards]);
+  const boot = useMemo(() => goldenBootTable(career, 8, boards), [career, boards]);
+  const poty = useMemo(() => playerOfSeasonRace(career, 3, boards), [career, boards]);
   const watch = useMemo(() => ballonDorWatch(career, 4), [career]);
   const anyGoals = boot.some(e => e.goals > 0);
   if (!anyGoals) {
@@ -79,20 +82,26 @@ function AwardRacesCard({ career }: { career: CareerState }) {
   return (
     <div className="bg-card border border-border rounded-2xl p-3 space-y-2">
       <div className="text-[10px] text-muted-foreground uppercase tracking-wider">🏅 Award races</div>
-      <div>
-        <div className="text-[9px] text-muted-foreground uppercase tracking-wider">👟 Golden boot race</div>
-        {/* Round 1311: on one screen with the league leaders, so it says what it is. */}
-        <p data-cm-boot-race-note className="text-[8px] text-muted-foreground mb-1">The award race this season follows two main scorers a club and all of yours. The Top scorers board above is the league book's own count.</p>
-        {boot.filter(e => e.goals > 0).map((e, i) => (
-          <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
-            <span className="w-4 text-muted-foreground font-bold shrink-0">{i + 1}</span>
-            <span className={cn('truncate', e.mine ? 'text-primary font-bold' : 'text-foreground')}>{e.name}</span>
-            {e.gen && <MadeUpTag />}
-            <span className="text-[10px] text-muted-foreground truncate">{e.club}</span>
-            <span className="ml-auto font-bold text-foreground shrink-0">{e.goals}</span>
-          </div>
-        ))}
-      </div>
+      {/* Round 1311: on a season the league book decides, the Top scorers board above IS the golden
+          boot, so its lines are not printed twice. On any other season the old race settles it, and its
+          lines say what they are. */}
+      {byBook ? (
+        <p data-cm-boot-by-book className="text-[10px] text-muted-foreground">👟 The golden boot this season is the Top scorers board above.</p>
+      ) : (
+        <div data-cm-boot-race>
+          <div className="text-[9px] text-muted-foreground uppercase tracking-wider">👟 Golden boot race</div>
+          <p data-cm-boot-race-note className="text-[8px] text-muted-foreground mb-1">The award race this season follows two main scorers a club and all of yours. The Top scorers board above is the league book's own count.</p>
+          {boot.filter(e => e.goals > 0).map((e, i) => (
+            <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
+              <span className="w-4 text-muted-foreground font-bold shrink-0">{i + 1}</span>
+              <span className={cn('truncate', e.mine ? 'text-primary font-bold' : 'text-foreground')}>{e.name}</span>
+              {e.gen && <MadeUpTag />}
+              <span className="text-[10px] text-muted-foreground truncate">{e.club}</span>
+              <span className="ml-auto font-bold text-foreground shrink-0">{e.goals}</span>
+            </div>
+          ))}
+        </div>
+      )}
       {poty.length > 0 && poty[0].goals > 0 && (
         <div>
           <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">🎖️ Player of the season watch</div>

@@ -284,6 +284,8 @@ const HOT_CALL = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: tr
 const HOT_CALL_BOOKED = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: true })`;
 /* The line of noteBookSide that picks a club's eleven (null for a club that cannot field a named one). */
 const SIDE_XI = '  const xi = pickOppSquad(roster)?.xi ?? null;';
+/* Round 1311: the line of the reader module that says whether the book decides the awards. */
+const DECIDES = '  return bookIsWhole(input.book) && bookShare(input.book, input.clubs).share >= AWARD_FLOOR;';
 /* The line of the reader module that hands a board back (leaders). */
 const LEADERS_RETURN = '  return order.slice(0, Math.max(0, limit)).map(m => boardMan(m, kind));';
 /* The line of noteBookMine that credits a report's line and decides whether its assist is dealt. */
@@ -300,8 +302,8 @@ const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', '
  *  that go red with it for the same reason and are allowed to (the law is checked in four sections, and the
  *  weight table is what the deal is judged against) } */
 const CONTROLS = {
-  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin'] },
-  mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream', also: ['oldsave', 'dailies'] },
+  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin', 'awards'] },
+  mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream', also: ['oldsave', 'dailies', 'awards'] },
   dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards', 'shapes'] },
   byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin', 'boards', 'oldsave'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
@@ -332,6 +334,10 @@ const CONTROLS = {
   hotseatbook1: { patch: [{ file: HOT, from: HOT_CALL('run.state'), to: HOT_CALL_BOOKED('run.state') }], red: 'dailies' },
   hotseatbook2: { patch: [{ file: HOT, from: HOT_CALL('s'), to: HOT_CALL_BOOKED('s') }], red: 'dailies' },
   hotseatbook3: { patch: [{ file: HOT, from: HOT_CALL('ready'), to: HOT_CALL_BOOKED('ready') }], red: 'dailies' },
+  /* Round 1311: the awards are read from a late book, or from a book under the floor. awardlate moves the
+     golden boot of every late book save of section oldsave too, which judges it against the old race. */
+  awardlate: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookShare(input.book, input.clubs).share >= AWARD_FLOOR;' }], red: 'awards', also: ['oldsave'], mentions: ['a late book'] },
+  awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', mentions: ['under the floor'] },
   readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
   readerwrite: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  input.book.my.reverse();\n${LEADERS_RETURN}` }], red: 'boards' },
   thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
@@ -615,9 +621,40 @@ function seeded(seed) {
   return draw;
 }
 
-/** The whole save but the book, as text: what "the engine's stream did not move" is judged on. */
-const withoutBook = s => JSON.stringify(s, (k, v) => (k === 'leagueBook' ? undefined : v));
+/** The whole save but the book, as text: what "the engine's stream did not move" is judged on. Since Round
+ *  1311 the honours a season's end reads from the book are left out with it, and nothing else: the four
+ *  moved fields of the summary (goldenBoot, playerOfSeason, ballonDor, awards) and the awards of each
+ *  season's record. Section awards holds those, and holds the WHOLE summary and record to the base commit
+ *  on every season the book does not decide. */
+const MOVED = ['goldenBoot', 'playerOfSeason', 'ballonDor', 'awards'];
+const withoutBook = s => JSON.stringify(s, (k, v) => {
+  if (k === 'leagueBook') return undefined;
+  if (k === 'pendingSummary' && v && typeof v === 'object') { const o = { ...v }; for (const m of MOVED) delete o[m]; return o; }
+  if (k === 'history' && Array.isArray(v)) return v.map(h => { if (!h || typeof h !== 'object') return h; const { awards, ...rest } = h; void awards; return rest; });
+  return v;
+});
 const sha = text => createHash('sha256').update(text).digest('hex').slice(0, 24);
+
+/* Round 1311: THE AWARDS RULE, typed here on purpose (the module's AWARD_FLOOR and bookDecides are what is
+   judged): a whole book (no r0) with at least this many in 100 rival goals on record (a named row or an own
+   goal; the goals a late book was opened with left out). */
+const AWARD_FLOOR_RULED = 73;
+function shareByHand(s, book) {
+  let on = 0;
+  let u = 0;
+  for (const club of s.leagueClubs.filter(c => c !== s.clubName)) {
+    const e = book.c[club];
+    if (!e) continue;
+    for (const row of Object.values(e.m)) on += row[0];
+    on += e.og;
+    u += e.u;
+  }
+  u = Math.max(0, u - (book.u0 ?? 0));
+  return on + u ? Math.floor(100 * on / (on + u)) : 100;
+}
+function decidesByHand(s, book) {
+  return book.r0 === undefined && shareByHand(s, book) >= AWARD_FLOOR_RULED;
+}
 
 /* ---------- the rule, typed out here once more ON PURPOSE ---------- */
 /* The harness judges "the deal follows the weight" against its OWN copy of the table and the shares, never
@@ -783,6 +820,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
       hooks.seasonEnd?.(s, season);
       if (hooks.stopAfterSeason?.(season)) break;
       const fin = cm.finishSeason(s);
+      hooks.finished?.(s, fin, season);
       s = cm.startNextSeason(fin.state);
       faces.push(`${sha(withoutBook(s))}|${draw.calls()}`);
       hooks.opened?.(s, season + 1);
@@ -795,7 +833,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
 }
 
 /* ---------- the sections ---------- */
-const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin', 'boards'];
+const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin', 'boards', 'awards'];
 const red = new Map(SECTIONS.map(s => [s, []]));
 const checked = new Map(SECTIONS.map(s => [s, 0]));
 const fail = (section, message) => { red.get(section).push(message); };
@@ -1346,6 +1384,55 @@ function readLeagueSeason(mod, s) {
   return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, late, misfit, rivalTop, raceTop, myTop, thin, gaps, bytes: JSON.stringify(s.leagueBook).length, saveBytes: JSON.stringify(s).length };
 }
 
+/**
+ * Round 1311, BOOK_MEASURE=floor: the awards floor in every league of every era, on the engine as committed.
+ * MEASURE_SEEDS careers a league (default 2), one season each, judged at its end: the share on record, who
+ * settled the golden boot (the book, or the old race under the floor or on a late book), and how often one of
+ * MY men won it, beside how often he would have on the book's board and on the old race. Gates nothing.
+ */
+async function measureFloor(mod) {
+  const seeds = Number(process.env.MEASURE_SEEDS ?? 2);
+  const { cm } = mod;
+  const only = (process.env.MEASURE_ONLY ?? '').split(',').filter(Boolean);
+  const leagues = [...cm.REAL_LEAGUES.map(l => ['now', l]), ...Object.entries(cm.ERA_LEAGUES).flatMap(([era, ls]) => ls.map(l => [era, l]))]
+    .filter(([, l]) => !only.length || only.includes(l.id));
+  console.log(`simCmLeagueBook: MEASURE floor: ${leagues.length} leagues of every era, ${seeds} careers each, one season, the floor at ${mod.boards.AWARD_FLOOR} (the harness reads it as ${AWARD_FLOOR_RULED})`);
+  const rows = [];
+  leagues.forEach(([era, league], li) => {
+    const club = league.clubs[0];
+    const xs = [];
+    for (let k = 0; k < seeds; k++) {
+      const seed = (0x1311 + li * 257 + k * 31) >>> 0;
+      try {
+        playCareer(mod, club, era, seed, {
+          finished(before, fin) {
+            const book = cm.leagueBookOf(before);
+            const lb = cm.leagueBoardsOf(before);
+            const bookTop = lb ? mod.boards.leaders(lb.input, 'goals', 1)[0] : null;
+            const raceTop = cm.goldenBootTable(before, 1, null)[0];
+            xs.push({
+              share: book ? shareByHand(before, book) : null, decided: Boolean(book && lb && decidesByHand(before, book)), late: Boolean(book && book.r0 !== undefined),
+              by: cm.bookAwardsState(before, lb).by, won: fin.summary.goldenBoot?.club === before.clubName, bookMine: Boolean(bookTop?.mine), raceMine: Boolean(raceTop?.mine),
+            });
+          },
+        }, 1);
+      } catch (e) { xs.push({ error: String(e?.message ?? e).slice(0, 100) }); }
+    }
+    const ok = xs.filter(x => !x.error);
+    const row = { era, league: league.id, n: ok.length, shares: ok.map(x => x.share), decided: ok.filter(x => x.decided).length, by: ok.map(x => x.by), won: ok.filter(x => x.won).length, bookMine: ok.filter(x => x.bookMine).length, raceMine: ok.filter(x => x.raceMine).length, errors: xs.length - ok.length };
+    rows.push(row);
+    console.log(`floor ${era.padEnd(7)} ${league.id.padEnd(14)} on record ${row.shares.join(' ')}; settled by ${row.by.join(' ')}; decided by the book ${row.decided} of ${row.n}; one of mine won the boot ${row.won} of ${row.n} (on the book's board ${row.bookMine}, on the old race ${row.raceMine})${row.errors ? `; ${row.errors} careers did not finish` : ''}`);
+  });
+  const under = rows.filter(r => r.decided < r.n);
+  const all = rows.reduce((a, r) => ({ n: a.n + r.n, won: a.won + r.won, book: a.book + r.bookMine, race: a.race + r.raceMine }), { n: 0, won: 0, book: 0, race: 0 });
+  const sub = xs => xs.reduce((a, r) => ({ n: a.n + r.n, won: a.won + r.won, book: a.book + r.bookMine, race: a.race + r.raceMine }), { n: 0, won: 0, book: 0, race: 0 });
+  const u = sub(under);
+  const o = sub(rows.filter(r => r.decided === r.n));
+  console.log(`floor ${rows.length} leagues, ${all.n} careers: ${rows.filter(r => r.decided === r.n).length} leagues decided by the book in every career, ${rows.filter(r => r.decided === 0).length} in none, ${rows.filter(r => r.decided > 0 && r.decided < r.n).length} split`);
+  console.log(`floor one of mine won the boot: ${all.won} of ${all.n} careers in all; where the book never or not always decides ${u.won} of ${u.n} (the book's board would give ${u.book}, the old race ${u.race}); where it always decides ${o.won} of ${o.n} (old race ${o.race})`);
+  console.log(`simCmLeagueBook: MEASURE floor done, nothing gated (${Math.round((Date.now() - T0) / 1000)}s)`);
+}
+
 async function measureLeagues(arms) {
   const seeds = Number(process.env.MEASURE_SEEDS ?? 2);
   const { cm } = arms[0][1];
@@ -1422,6 +1509,11 @@ if (!candidate.boards) cannot('the league boards module is not in this tree');
 for (const pos of ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST']) {
   if (candidate.cm.groupOf(pos) !== lineOf(pos)) cannot(`the harness reads ${pos} as ${lineOf(pos)}, the engine as ${candidate.cm.groupOf(pos)}`);
 }
+if (process.env.BOOK_MEASURE === 'floor') {
+  if (CONTROL) cannot('the measuring mode runs with no control');
+  await measureFloor(candidate);
+  process.exit(0);
+}
 if (process.env.BOOK_MEASURE === 'leagues') {
   if (CONTROL) cannot('the measuring mode runs with no control');
   let literal;
@@ -1439,12 +1531,17 @@ const acc = newAcc();
 /* A save from the middle of a season, kept for the purchase probe of section names. */
 const midSaves = [];
 let tCand = Date.now();
-const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.seed, watcher(candidate, `${f.club} (${f.era}, seed ${f.seed})`, acc, {
-  onEntry(after, r, season) {
-    if (season !== 0 || i >= 4 || after.week < 22 || after.sacked || midSaves.some(m => m.f === f)) return;
-    midSaves.push({ f, state: JSON.parse(JSON.stringify(after)) });
-  },
-})));
+const awardEnds = new Map();
+const awardStats = [];
+const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.seed, {
+  ...watcher(candidate, `${f.club} (${f.era}, seed ${f.seed})`, acc, {
+    onEntry(after, r, season) {
+      if (season !== 0 || i >= 4 || after.week < 22 || after.sacked || midSaves.some(m => m.f === f)) return;
+      midSaves.push({ f, state: JSON.parse(JSON.stringify(after)) });
+    },
+  }),
+  finished: (before, fin, season) => judgeAwards(candidate, `${f.club} (${f.era}, seed ${f.seed})`, before, fin, season),
+}));
 tCand = Date.now() - tCand;
 /* THE FLEET IS WHAT IT SAYS, or the run says so and judges nothing: a data update that moves one of these
    clubs into another league must not quietly drop the arm it was picked for (the boards are only printed). */
@@ -1508,11 +1605,14 @@ const compareFaces = (name, faces) => {
 let base = null;
 /* Round 1306, thin (iv): the base commit's book entries at each season's end, by career and season. */
 const baseEnds = new Map();
+/* Round 1311, section awards (iii): the base commit's summary and record at each season's end. */
+const baseAwardEnds = new Map();
 if (BASE) {
   try { base = await engine('base', BASE); } catch (e) { cannot(`the base tree at ${BASE} did not build: ${String(e?.message ?? e)}`); }
   const n = fleet.length * SEASONS * 2;
   console.log(`stream  ${compareFaces('base', fleet.map(f => playCareer(base, f.club, f.era, f.seed, {
     seasonEnd(s, season) { baseEnds.set(`${f.club} (${f.era}, seed ${f.seed})|${season}`, JSON.parse(JSON.stringify(s.leagueBook?.c ?? null))); },
+    finished(before, fin, season) { baseAwardEnds.set(`${f.club} (${f.era}, seed ${f.seed})|${season}`, { summary: JSON.stringify(fin.summary), record: JSON.stringify(fin.state.history.find(h => h.season === before.season) ?? null) }); },
   })))} of ${n} faces equal to the source of the base commit`);
 } else {
   console.log('stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit');
@@ -1810,6 +1910,89 @@ function readEverything(mod, s) {
   }
 }
 
+/* ---------- section awards (Round 1311): the season's honours from the book, and only where it decides ---------- */
+/**
+ * One season's end, judged by the harness's own reading of the rule (decidesByHand). (i) On a season the book
+ * decides, the summary's golden boot is the Goals board's first and its awards are the first of each board
+ * with the share on record; the season's record keeps the same awards. On any other season (a late book, no
+ * book that adds up, a share under the floor) nothing new is written and the golden boot is the old race's.
+ */
+function judgeAwards(mod, label, before, fin, season) {
+  const { cm, boards } = mod;
+  const where = `${label} at the end of season ${season + 1}`;
+  const book = cm.leagueBookOf(before);
+  const lb = cm.leagueBoardsOf(before);
+  const share = book ? shareByHand(before, book) : null;
+  const decided = Boolean(book && lb && decidesByHand(before, book));
+  const { summary } = fin;
+  const record = fin.state.history.find(h => h.season === before.season) ?? null;
+  tick('awards', 3);
+  if (decided) {
+    const first = kind => boards.leaders(lb.input, kind, 1)[0] ?? null;
+    const g = first('goals');
+    const boot = g ? { name: g.name, club: g.club, goals: g.n } : null;
+    if (JSON.stringify(summary.goldenBoot ?? null) !== JSON.stringify(boot)) fail('awards', `${where}: the summary's golden boot ${JSON.stringify(summary.goldenBoot)} is not the Goals board's first ${JSON.stringify(boot)}`);
+    const want = { cov: share };
+    for (const [key, kind] of [['boot', 'goals'], ['ast', 'assists'], ['glove', 'sheets']]) {
+      const m = first(kind);
+      if (m) want[key] = [m.name, m.club, m.n, (m.gen ? 1 : 0) + (m.mine ? 2 : 0)];
+    }
+    if (JSON.stringify(summary.awards ?? null) !== JSON.stringify(want)) fail('awards', `${where}: the summary's awards ${JSON.stringify(summary.awards)} are not the first of each board with the share on record ${JSON.stringify(want)}`);
+    if (JSON.stringify(record?.awards ?? null) !== JSON.stringify(want)) fail('awards', `${where}: the season's record keeps ${JSON.stringify(record?.awards)}, not the summary's awards`);
+  } else {
+    const why = !book || !lb ? 'no book that adds up' : book.r0 !== undefined ? 'a late book' : `under the floor: ${share} in 100 on record`;
+    if ('awards' in summary || (record && 'awards' in record)) fail('awards', `${where}: awards were written on a season the book does not decide (${why})`);
+    const race = cm.goldenBootTable(before, 1, null)[0] ?? null;
+    const boot = race && race.goals > 0 ? { name: race.name, club: race.club, goals: race.goals } : null;
+    if (JSON.stringify(summary.goldenBoot ?? null) !== JSON.stringify(boot)) fail('awards', `${where}: the summary's golden boot ${JSON.stringify(summary.goldenBoot)} is not the old race's ${JSON.stringify(boot)} (${why})`);
+  }
+  awardEnds.set(`${label}|${season}`, { decided, summary: JSON.stringify(summary), record: JSON.stringify(record) });
+  awardStats.push({ league: cm.careerLeagueOf(before).id, share, decided, late: Boolean(book && book.r0 !== undefined), mineBoot: summary.goldenBoot?.club === before.clubName });
+}
+{
+  /* (i) on a LATE book: two careers of the fleet whose book is taken off the save ten entries in, so the next
+     entry opens a late one; their season's end is judged like every other. */
+  let lateEnds = 0;
+  const lateMod = await candidate.again();
+  for (const f of fleet.slice(0, 2)) {
+    let n = 0;
+    playCareer(lateMod, f.club, f.era, (f.seed ^ 0x1311) >>> 0, {
+      entry(b, after) { n += 1; if (n === 10) delete after.leagueBook; },
+      finished(before, fin, season) { if (before.leagueBook?.r0 !== undefined) lateEnds += 1; judgeAwards(lateMod,`${f.club} (${f.era}, a late book)`, before, fin, season); },
+    }, 1);
+  }
+  tick('awards');
+  if (!lateEnds) fail('awards', 'the late arm never ended a season on a late book: the rule for a late book was not tried');
+  /* (iii) WHAT WAS NOT MEANT TO CHANGE (needs BOOK_BASE): on a season the book does not decide, the WHOLE
+     summary and record are the base commit's; on one it decides, all of them but the four moved fields. */
+  let same = 0;
+  let compared = 0;
+  if (base) {
+    for (const [key, c] of awardEnds) {
+      const b = baseAwardEnds.get(key);
+      if (!b) continue;
+      compared += 1;
+      tick('awards', 2);
+      const strip = json => JSON.stringify(json === 'null' ? null : (() => { const o = JSON.parse(json); for (const m of MOVED) delete o[m]; return o; })());
+      const sumA = c.decided ? strip(c.summary) : c.summary;
+      const sumB = c.decided ? strip(b.summary) : b.summary;
+      const recA = c.decided ? strip(c.record) : c.record;
+      const recB = c.decided ? strip(b.record) : b.record;
+      if (sumA !== sumB) fail('awards', `${key}: the summary ${c.decided ? 'but its four moved fields ' : ''}differs from the base commit's${c.decided ? '' : ' on a season the book does not decide'}`);
+      else if (recA !== recB) fail('awards', `${key}: the season's record ${c.decided ? 'but its awards ' : ''}differs from the base commit's`);
+      else same += 1;
+    }
+    tick('awards');
+    if (!compared) fail('awards', 'no season end was compared with the base commit');
+  }
+  const decidedN = awardStats.filter(x => x.decided).length;
+  console.log(`awards  ${checked.get('awards')} checks over ${awardStats.length} season ends: ${decidedN} decided by the book, ${awardStats.filter(x => !x.decided && !x.late).length} under the floor or with no book, ${awardStats.filter(x => x.late).length} on a late book (${lateEnds} from the late arm)`);
+  console.log(base ? `        ${same} of ${compared} season ends equal to the base commit (the whole summary and record where the book does not decide, all but the four moved fields where it does)` : '        awards (iii) NOT RUN: set BOOK_BASE to a worktree of the base commit');
+  const byLeague = new Map();
+  for (const x of awardStats) { const l = byLeague.get(x.league) ?? []; l.push(x); byLeague.set(x.league, l); }
+  for (const [league, xs] of byLeague) console.log(`        ${league.padEnd(12)} ${xs.length} season ends: on record ${xs.map(x => x.share).join(' ')}, decided by the book ${xs.filter(x => x.decided).length}, one of mine won the boot ${xs.filter(x => x.mineBoot).length}`);
+}
+
 /* ---------- section names: the man I bought gains nothing more for the club he left ---------- */
 {
   let probes = 0;
@@ -1931,8 +2114,13 @@ function onStream(seed, fn) {
       if (r.kind === 'seasonOver') break;
     }
     const board = JSON.stringify(mod.cm.goldenBootTable(s, 12));
+    /* Round 1311: does the book decide this season (by the harness's own reading of the rule)? Then the
+       board and the boot must be the book's Goals board, and the reference engines' old race is not asked. */
+    const ownBook = mod.cm.leagueBoardsOf ? mod.cm.leagueBoardsOf(s) : null;
+    const decided = Boolean(ownBook && decidesByHand(s, ownBook.input.book));
+    const bookBoard = decided ? JSON.stringify(mod.boards.leaders(ownBook.input, 'goals', 12).map(m => [m.name, m.club, m.n])) : null;
     const fin = mod.cm.finishSeason(s);
-    return { faces, bookAtLoad, late, wantLate: Boolean(want?.next && !want.whole), board, boot: JSON.stringify(fin.summary.goldenBoot ?? null), next: mod.cm.startNextSeason(fin.state) };
+    return { faces, bookAtLoad, late, wantLate: Boolean(want?.next && !want.whole), board, boot: JSON.stringify(fin.summary.goldenBoot ?? null), decided, bookBoard, next: mod.cm.startNextSeason(fin.state) };
   });
   const saves = [
     { name: 'the committed save of Round 1052 (Sevilla)', raw: fs.readFileSync(path.join(ROOT, 'scripts/data/cmOldSave1052Fixture.json'), 'utf8'), viaLoad: true, seed: 0x7001 },
@@ -1988,8 +2176,15 @@ function onStream(seed, fn) {
       tick('oldsave', a.faces.length);
       if (a.faces.length !== b.faces.length || firstOff >= 0) fail('oldsave', `${save.name}: the save but its book differs from the ${refName} engine's from entry ${firstOff} of ${a.faces.length}`);
       tick('oldsave', 2);
-      if (a.board !== b.board) fail('oldsave', `${save.name}: the golden boot board differs from the ${refName} engine's (a late book feeds no race)`);
-      if (a.boot !== b.boot) fail('oldsave', `${save.name}: the summary's golden boot differs from the ${refName} engine's`);
+      if (a.decided) {
+        /* Round 1311: a season the book decides (the parked save opens a whole book): the board is the book's. */
+        const top = JSON.parse(a.bookBoard)[0] ?? null;
+        if (JSON.stringify(JSON.parse(a.board).map(e => [e.name, e.club, e.goals])) !== a.bookBoard) fail('oldsave', `${save.name}: on a season the book decides the golden boot board is not the book's Goals board`);
+        if (a.boot !== JSON.stringify(top ? { name: top[0], club: top[1], goals: top[2] } : null)) fail('oldsave', `${save.name}: on a season the book decides the summary's golden boot is not the Goals board's first`);
+      } else {
+        if (a.board !== b.board) fail('oldsave', `${save.name}: the golden boot board differs from the ${refName} engine's (a late book feeds no race)`);
+        if (a.boot !== b.boot) fail('oldsave', `${save.name}: the summary's golden boot differs from the ${refName} engine's`);
+      }
       if (first) {
         tick('oldsave', 2);
         if (save.parked && a.late) fail('oldsave', `${save.name}: no league match had been played and the season was kept on a late book`);

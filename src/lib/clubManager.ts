@@ -54,7 +54,7 @@ import {
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
-import { bookShare, keepersOnRecord, type BoardClub, type BoardInput } from '@/lib/clubManagerLeagueBoards';
+import { bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -453,6 +453,15 @@ export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
   return { input, share: bookShare(book, clubs).share, from: book.r0 ?? null, keepers: keepersOnRecord(clubs) };
 }
 
+/** Round 1311: who settles this season's golden boot and awards. 'book' on a season the league book
+ *  decides; otherwise why not: no readable book that adds up, a book that started late, or one with too
+ *  little of the league on record (the share comes with it). The screens print the reason in plain words. */
+export function bookAwardsState(state: CareerState, boards: LeagueBoards | null = leagueBoardsOf(state)): { by: 'book' | 'none' | 'late' | 'thin'; share: number | null } {
+  if (!boards) return { by: 'none', share: null };
+  if (boards.from !== null) return { by: 'late', share: boards.share };
+  return { by: bookDecides(boards.input) ? 'book' : 'thin', share: boards.share };
+}
+
 /** Round 1311: the rule a rival's goals are dealt by, for the league leaders card's worked example (the
  *  card computes it from this object with dealShares, never from typed numbers). */
 export function leagueBookRules(): BookRules {
@@ -586,8 +595,20 @@ function noteBookMine(
  * The live golden boot board: AI entries plus every one of MY players with a
  * league goal, read straight from his per-competition line so the race and
  * the stats centre are one bookkeeping.
+ *
+ * Round 1311: on a season the league book decides (a WHOLE book with at least
+ * AWARD_FLOOR in 100 rival goals on record, bookDecides) the board IS the
+ * book's Goals board, so the golden boot, the player of the season and the
+ * world award read it. Any other season (a late book, no book, or a league
+ * whose data is too thin) keeps the old race below, to the letter. `boards`
+ * lets a caller that already asked the door hand its answer in.
  */
-export function goldenBootTable(state: CareerState, limit = 12): RaceScorer[] {
+export function goldenBootTable(state: CareerState, limit = 12, boards: LeagueBoards | null = leagueBoardsOf(state)): RaceScorer[] {
+  if (boards && bookDecides(boards.input)) {
+    return leaders(boards.input, 'goals', limit).map(m => ({
+      name: m.name, club: m.club, goals: m.n, ...(m.mine ? { mine: true } : {}), ...(m.gen ? { gen: true } : {}),
+    }));
+  }
   /* Round 742: a rival entry carrying the name of a man now in my squad is
      his old club's, seeded before he moved (or a namesake), so it is dropped
      at read time rather than rewritten into the save. He is on the board
@@ -617,13 +638,13 @@ export interface PotyLine {
  * in the table carries weight. One formula for everyone, mine included, so
  * the ranking cannot quietly favour my own squad.
  */
-export function playerOfSeasonRace(state: CareerState, limit = 5): PotyLine[] {
+export function playerOfSeasonRace(state: CareerState, limit = 5, boards: LeagueBoards | null = leagueBoardsOf(state)): PotyLine[] {
   const table = sortedLeagueTable(state);
   const posOf = (club: string): number => {
     const i = table.findIndex(r => r.club === club);
     return i >= 0 ? i + 1 : table.length;
   };
-  return goldenBootTable(state, 40)
+  return goldenBootTable(state, 40, boards)
     .map(e => ({
       name: e.name,
       club: e.club,
@@ -1747,6 +1768,10 @@ export interface SeasonRecord {
    *  neither on its old seasons. */
   leagueId?: string;
   leagueSize?: number;
+  /** Round 1311: the league's top scorer, most assists and most clean sheets, read from the book, on a
+   *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
+   *  with him (joinClubNow copies the history). An older record has none. */
+  awards?: SeasonAwards;
 }
 
 export interface CareerStats {
@@ -2373,6 +2398,8 @@ export interface SeasonSummary {
   goldenBoot?: { name: string; club: string; goals: number } | null;
   playerOfSeason?: { name: string; club: string } | null;
   ballonDor?: { name: string; club: string } | null;
+  /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
+  awards?: SeasonAwards;
 }
 
 export interface CareerState {
@@ -19370,11 +19397,13 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   }
 
   /* ----- Round 165: the individual honours settle with the season ----- */
-  const bootTop = goldenBootTable(state, 1)[0] ?? null;
+  /* Round 1311: the league book's door, asked once for every honour below. Pure reads: nothing is drawn. */
+  const bookBoards = leagueBoardsOf(state);
+  const bootTop = goldenBootTable(state, 1, bookBoards)[0] ?? null;
   const goldenBoot = bootTop && bootTop.goals > 0
     ? { name: bootTop.name, club: bootTop.club, goals: bootTop.goals }
     : null;
-  const potyTop = playerOfSeasonRace(state, 1)[0] ?? null;
+  const potyTop = playerOfSeasonRace(state, 1, bookBoards)[0] ?? null;
   const playerOfSeason = potyTop && potyTop.goals > 0
     ? { name: potyTop.name, club: potyTop.club }
     : null;
@@ -19413,6 +19442,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const best = cands.sort((a, b) => b.score - a.score)[0];
     return { name: best.name, club: best.club };
   })();
+  /* Round 1311: the top scorer, most assists and most clean sheets of the league, from the book. Only on
+     a season the book decides; any other season writes nothing new, so its summary and its record are
+     exactly what they were before the book was read. */
+  const awards = bookBoards ? seasonAwards(bookBoards.input) : null;
 
   const summary: SeasonSummary = {
     season: state.season,
@@ -19443,11 +19476,12 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     goldenBoot,
     playerOfSeason,
     ballonDor,
+    ...(awards ? { awards } : {}),
   };
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}) },
   ];
   state.pendingSummary = summary;
   return { state, summary };

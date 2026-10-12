@@ -2,7 +2,9 @@ import { Trophy } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
-import { money } from '@/lib/clubManager';
+import { bookAwardsState, money } from '@/lib/clubManager';
+import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
+import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
 
@@ -32,6 +34,13 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const summerMove = c.jobHunt?.summerMove ?? null;
   let tick = 0;
   const tickIn = () => ({ animationDelay: revealDelay(tick++) });
+  /* Round 1311: the league's awards from the book. A summary written before them has no `awards`; it
+     prints as it always did, plus, on a season the book could not settle, one line that says why. */
+  const awards = sm.awards;
+  const awardsBy = awards ? null : bookAwardsState(c);
+  const winner = (m: AwardMan) => (
+    <><span className={cn('font-bold', (m[3] & 2) !== 0 && 'text-primary')}>{m[0]}</span>{(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} ({m[1]}, {m[2]})</>
+  );
   return (
 <ResultScreen
           won={sm.verdictGrade === 'A' || sm.verdictGrade === 'B' ? true : sm.verdictGrade === 'C' ? undefined : false}
@@ -128,6 +137,24 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">👟</span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)
               </p>
+            )}
+            {awards?.ast && (
+              <p data-cm-award="ast" className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">🅰️</span><span>Most assists in the league: {winner(awards.ast)}</span>
+              </p>
+            )}
+            {awards?.glove && (
+              <p data-cm-award="glove" className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">🧤</span><span>Most clean sheets: {winner(awards.glove)}</span>
+              </p>
+            )}
+            {awards && awards.cov < BOOK_FULL_SHARE && (
+              <p data-cm-award-thin className="text-[9px] text-yellow-500/80">The data covers only part of this league: {awards.cov} in 100 of the other clubs' goals had a name on them this season.</p>
+            )}
+            {awardsBy && awardsBy.by !== 'book' && (
+              <p data-cm-award-withheld className="text-[10px] text-muted-foreground">{awardsBy.by === 'thin'
+                ? `Only ${awardsBy.share} in 100 of this league's goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists or most clean sheets awards this time.`
+                : 'The league book only covered part of this season, so the golden boot went to the scorers\' race and there are no most assists or most clean sheets awards this time.'}</p>
             )}
             {sm.playerOfSeason && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>

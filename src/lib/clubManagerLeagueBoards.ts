@@ -163,3 +163,34 @@ export function bestOfMine(input: BoardInput, kind: BoardKind): { place: number;
   const i = order.findIndex(m => m.mine);
   return i < 0 ? null : { place: i + 1, man: boardMan(order[i], kind) };
 }
+
+/* ---------- Round 1311: the season's awards, read from the book ---------- */
+
+/** One winner as the save keeps him: name, club, his number, and flags (1 made up, 2 one of mine). A
+ *  tuple of fixed length, no holes, so it survives the JSON clone every entry point makes. */
+export type AwardMan = [name: string, club: string, n: number, flags: number];
+
+/** A season's awards from the book. `cov` is the share on record when the season closed. A board with
+ *  nobody on it gives no winner (the field is left out). */
+export interface SeasonAwards { cov: number; boot?: AwardMan; ast?: AwardMan; glove?: AwardMan }
+
+/** Do the awards come from the book? Only off a WHOLE book with at least AWARD_FLOOR in 100 on record. */
+export function bookDecides(input: BoardInput): boolean {
+  return bookIsWhole(input.book) && bookShare(input.book, input.clubs).share >= AWARD_FLOOR;
+}
+
+const awardMan = (m: BoardMan): AwardMan => [m.name, m.club, m.n, (m.gen ? 1 : 0) + (m.mine ? 2 : 0)];
+
+/** The season's top scorer, most assists and most clean sheets: the first of each board. Null when the
+ *  book does not decide (a late book, or under the floor): those awards are then withheld. */
+export function seasonAwards(input: BoardInput): SeasonAwards | null {
+  if (!bookDecides(input)) return null;
+  const out: SeasonAwards = { cov: bookShare(input.book, input.clubs).share };
+  const [boot] = leaders(input, 'goals', 1);
+  const [ast] = leaders(input, 'assists', 1);
+  const [glove] = leaders(input, 'sheets', 1);
+  if (boot) out.boot = awardMan(boot);
+  if (ast) out.ast = awardMan(ast);
+  if (glove) out.glove = awardMan(glove);
+  return out;
+}
