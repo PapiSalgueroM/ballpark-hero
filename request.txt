@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/aw-fin2 node scripts/simSoccerAwardGenerations.mjs; s=$?; node -e "const r=JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP+'/aw-fin2/report.json','utf8'));console.log('ORIGINAL '+JSON.stringify(r.original)+' controls '+r.controls.length+' observationControls '+r.observationControls.length+' status '+r.status)"; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs

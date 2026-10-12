@@ -1,0 +1,6 @@
+tsc exit=0 80s | 
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCareerAwardsNight exit=0 88s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+vitest-all exit=0 499s |    Duration  498.16s (transform 34.49s, setup 19.17s, collect 147.63s, tests 1057.37s, environment 150.65s, prepare 31.30s)
+simSoccerAwardGenerations exit=0 831s | ORIGINAL {"kind":"this head with the exact inverse of the pool lifecycle","rows":14,"engineSha256":"0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea","sav
