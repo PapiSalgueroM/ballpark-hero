@@ -1,0 +1,4 @@
+c-twoman exit=1 75s | simCmLeagueBook: CONTROL twoman FIRED: section shapes went red (5 failures), with thin, awards as it must and no other section did (75s)
+c-dropmine exit=1 77s | simCmLeagueBook: CONTROL dropmine FIRED: section law went red (637 failures), with names, oldsave, doors, thin, boards, shapes, awards, facts as it must and no other sect
+book-d0 exit=0 81s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (81s)
+simHarnessAnchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
