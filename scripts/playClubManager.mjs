@@ -78,6 +78,17 @@
  * line (a lost edit is a BROKEN finding). The sack is playWilderness's to
  * cover. The SHALLOW lines are unchanged: they are the coverage claim. The
  * walk also blocks the database host.
+ * Measured on e07cd2df (runner results r1314-cm1 and r1314-cm2, 2026-10-12),
+ * all at Crystal Palace, board doctored from 60 to 100 and read back as
+ * "Board 100/100" every time, 4 page draws before the first kick off. The
+ * default seed 1542433760: played the season out, 40 full times, 44 windows,
+ * 2 signings, 0 findings, 47491 draws, identical in two runs and under CPU
+ * throttling at rate 4. Seeds 1 to 10: nine played the season out (39 to 42
+ * full times, 43 to 46 windows) and seed 10 was sacked after 27 full times,
+ * every one with 2 signings and 0 findings, 190 to 292 s.
+ * The nobusiness control's guard is the one followed by the "Transfer
+ * business" heading: since Round 721 the bare shape also matches the Deadline
+ * Day board, and the control refused to start.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -132,7 +143,11 @@ await seedPages(ctx, SEED);
    checks that read that block have to fire, and nothing else. The shape must
    match once in the served asset or the run refuses to start. */
 const CONTROL = process.env.CM_CONTROL || '';
-const BUSINESS_GUARD = /\w+\.signings\.length>0&&/g;
+/* Round 1314: the guard that opens the "Transfer business" block, not any guard of that shape. Round
+   721 (f4702db1) gave the Deadline Day board its own `g.signings.length > 0 &&`, so the bare shape
+   matched two chunks and this control refused to start (r1314-cm1 on e07cd2df: "matched 2 time(s)").
+   The block's heading literal survives minifying, so the guard is the one followed by it. */
+const BUSINESS_GUARD = /[\w$]+\.signings\.length>0&&(?=[\s\S]{0,400}?Transfer business)/g;
 const BUSINESS_TARGETS = [/review shows no transfer business block/, /block rendered no IN or OUT rows/];
 let controlSwaps = 0;
 if (CONTROL === 'nobusiness') {
