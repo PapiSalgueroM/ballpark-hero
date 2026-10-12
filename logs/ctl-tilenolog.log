@@ -1,0 +1,9 @@
+control tilenolog (the tile is handed no log): vitest exit 1; 6 red, 23 green of 29
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile the week box holds a tile: the next game before a press, his saved final after it, and again after a remount
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a reload in the middle of a watch shows the result, never a clock, and plays nothing twice
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile reduced motion: Watch shows the result at once, with no clock
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a save from before the log shows the next game, and after its first press the chips start at that week
+control tilenolog: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

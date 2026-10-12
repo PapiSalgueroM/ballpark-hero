@@ -1,0 +1,4 @@
+control gridspoils (the league grid is drawn while a game is watched): vitest exit 1; 1 red, 28 green of 29
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+control gridspoils: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
