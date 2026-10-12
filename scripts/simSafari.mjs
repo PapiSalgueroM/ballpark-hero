@@ -29,6 +29,8 @@
  *   SIM_SAFARI_CONTROL=barevh      height:100vh with no dvh line: section 4
  *   SIM_SAFARI_CONTROL=vhafter     the 100dvh line BEFORE the 100vh: section 4
  *   SIM_SAFARI_CONTROL=dvhcomment  the dvh line only inside a comment: section 4
+ *   SIM_SAFARI_CONTROL=customprop  a custom property set to 100vh: section 4
+ *   SIM_SAFARI_CONTROL=lvhafter    a 100lvh line after the 100vh: section 4
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -80,6 +82,8 @@ const CONTROLS = {
   barevh: { file: 'barevh.css', section: 4, text: '.ctl-box { height: 100vh; }\n' },
   vhafter: { file: 'vhafter.css', section: 4, text: '.ctl-box { height: 100dvh; height: 100vh; }\n' },
   dvhcomment: { file: 'dvhcomment.css', section: 4, text: '.ctl-box { height: 100vh; /* height: 100dvh; */ }\n' },
+  customprop: { file: 'customprop.css', section: 4, text: '.ctl-box { --ctl-stage-height: 100vh; height: var(--ctl-stage-height); }\n' },
+  lvhafter: { file: 'lvhafter.css', section: 4, text: '.ctl-box { height: 100vh; height: 100lvh; }\n' },
 };
 const CONTROL = process.env.SIM_SAFARI_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -202,24 +206,34 @@ console.log('4) No raw 100vh, because mobile Safari measures it wrong');
      hand written 100vh in styles, where a dvh unit is the fix. */
   /* Round 1314: the fix is allowed to keep 100vh as a FALLBACK. A block
      that sets the property in 100vh and then sets the SAME property again
-     in dvh, svh or lvh after it (Round 1101's LiveSimMotion.css stage box)
+     in dvh or svh after it (Round 1101's LiveSimMotion.css stage box)
      is exactly the cure: a browser without the new units keeps the 100vh,
      and every Safari since 15.4 (desktop and iOS) takes the line after it.
+     lvh is NOT a cure: 100lvh is the large viewport, the same size as
+     100vh, so the block still runs under the toolbar (control lvhafter;
+     W3C css-values-4 and WebKit's Safari 15.4 post say the same).
      The block is read from the 100vh to the next } after it, with
      comments stripped first, so a dvh line that only sits inside
      a comment is no fallback at all (control dvhcomment). A bare 100vh, or
-     a 100vh that comes after the dvh line, still fails. */
-  const VH = /(^|[^-\w])((?:min-|max-)?height)\s*:\s*100vh(?![\w%])/g;
+     a 100vh that comes after the dvh line, still fails.
+     The property is read with no left boundary, as before this round, so a
+     custom property holding 100vh (the old --app-height trick, or
+     --cm-stage-height: 100vh read back through var()) is caught as well:
+     ANY custom property set to 100vh counts as bare unless the same block
+     sets that same custom property again in dvh or svh (control
+     customprop). The boundary lives only in the fallback search, so a
+     min-height line never stands in for a height one. */
+  const VH = /(--[\w-]+|(?:min-|max-)?height)\s*:\s*100vh(?![\w%])/g;
   const stripStyle = (f, t) => (/\.css$/.test(f) ? t.replace(/\/\*[\s\S]*?\*\//g, '') : stripJsComments(t));
   for (const f of FILES) {
     const t = stripStyle(f, read(f));
     let bare = false;
     for (const m of t.matchAll(VH)) {
-      const prop = m[2];
+      const prop = m[1];
       const end = m.index + m[0].length;
       const close = t.indexOf('}', end);
       const rest = t.slice(end, close === -1 ? t.length : close);
-      const after = new RegExp(`(^|[^-\\w])${prop}\\s*:\\s*[^;{}]*?\\d*\\.?\\d+[dsl]vh(?![\\w%])`);
+      const after = new RegExp(`(^|[^-\\w])${prop}\\s*:\\s*[^;{}]*?\\d*\\.?\\d+[ds]vh(?![\\w%])`);
       if (!after.test(rest)) { bare = true; break; }
     }
     if (bare) fail(`${rel(f)}: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)`);
