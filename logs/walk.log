@@ -1,0 +1,63 @@
+== nhl-390-motion-throwback
+ok   nhl-390-motion-throwback: the rules or a how to play affordance is on the landing
+ok   nhl-390-motion-throwback: the How to play dialog is up before play
+ok   nhl-390-motion-throwback: the How to play dialog closes
+ok   nhl-390-motion-throwback: a ? button to reopen the rules is on the page
+ok   nhl-390-motion-throwback: the name box is on the create screen
+ok   nhl-390-motion-throwback: the throwback era button is there
+ok   nhl-390-motion-throwback: played 8 of 8 seasons in 40 steps
+   save seasons (year:games/slate:team): 2006:81:NYI 2007:82:NYI 2008:80:NYI 2009:79:NYI 2010:79:NYI 2011:81:NYI
+ok   nhl-390-motion-throwback: 2006 games 81 within an NHL season
+ok   nhl-390-motion-throwback: 2007 games 82 within an NHL season
+ok   nhl-390-motion-throwback: 2008 games 80 within an NHL season
+ok   nhl-390-motion-throwback: 2009 games 79 within an NHL season
+ok   nhl-390-motion-throwback: 2010 games 79 within an NHL season
+ok   nhl-390-motion-throwback: 2011 games 81 within an NHL season
+ok   nhl-390-motion-throwback: no sideways scroll (0px)
+ok   nhl-390-motion-throwback: no page error
+== nhl-390-rm-now
+ok   nhl-390-rm-now: the rules or a how to play affordance is on the landing
+ok   nhl-390-rm-now: the How to play dialog is up before play
+ok   nhl-390-rm-now: the How to play dialog closes
+ok   nhl-390-rm-now: a ? button to reopen the rules is on the page
+ok   nhl-390-rm-now: the name box is on the create screen
+ok   nhl-390-rm-now: played 3 of 3 seasons in 15 steps
+   save seasons (year:games/slate:team): 2026:83/84:OTT 2027:82/84:OTT
+ok   nhl-390-rm-now: 2026 games 83/84 within an NHL season
+ok   nhl-390-rm-now: 2027 games 82/84 within an NHL season
+ok   nhl-390-rm-now: no sideways scroll (0px)
+ok   nhl-390-rm-now: no page error
+== nhl-1280-rm-throwback
+ok   nhl-1280-rm-throwback: the rules or a how to play affordance is on the landing
+ok   nhl-1280-rm-throwback: the How to play dialog is up before play
+ok   nhl-1280-rm-throwback: the How to play dialog closes
+ok   nhl-1280-rm-throwback: a ? button to reopen the rules is on the page
+ok   nhl-1280-rm-throwback: the name box is on the create screen
+ok   nhl-1280-rm-throwback: the throwback era button is there
+ok   nhl-1280-rm-throwback: played 8 of 8 seasons in 30 steps
+   save seasons (year:games/slate:team): 2006:82:PIT 2007:80:PIT 2008:81:PIT 2009:82:PIT 2010:81:PIT 2011:81:PIT
+ok   nhl-1280-rm-throwback: 2006 games 82 within an NHL season
+ok   nhl-1280-rm-throwback: 2007 games 80 within an NHL season
+ok   nhl-1280-rm-throwback: 2008 games 81 within an NHL season
+ok   nhl-1280-rm-throwback: 2009 games 82 within an NHL season
+ok   nhl-1280-rm-throwback: 2010 games 81 within an NHL season
+ok   nhl-1280-rm-throwback: 2011 games 81 within an NHL season
+ok   nhl-1280-rm-throwback: no sideways scroll (0px)
+ok   nhl-1280-rm-throwback: no page error
+== nhl-1280-motion-now
+ok   nhl-1280-motion-now: the rules or a how to play affordance is on the landing
+ok   nhl-1280-motion-now: the How to play dialog is up before play
+ok   nhl-1280-motion-now: the How to play dialog closes
+ok   nhl-1280-motion-now: a ? button to reopen the rules is on the page
+ok   nhl-1280-motion-now: the name box is on the create screen
+ok   nhl-1280-motion-now: played 3 of 3 seasons in 10 steps
+   save seasons (year:games/slate:team): 2026:82/84:SJS 2027:84/84:SJS
+ok   nhl-1280-motion-now: 2026 games 82/84 within an NHL season
+ok   nhl-1280-motion-now: 2027 games 84/84 within an NHL season
+ok   nhl-1280-motion-now: no sideways scroll (0px)
+ok   nhl-1280-motion-now: no page error
+ok   mlb 390: no page error
+ok   mlb 390: no sideways scroll
+ok   mlb 1280: no page error
+ok   mlb 1280: no sideways scroll
+walk1312: green
