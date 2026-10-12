@@ -1,0 +1,614 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 0 fifteen desk off week 1 init 55647e15210c0ca3: Play Week 1 -> 7899abaccaa21426 (564 draws, week 2 hub) | Play Week 2 -> dcdf3c02abe20496 (1128 draws, week 3 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 1 deep desk off week 6 init 8e6cbae1ba8bc8f9: Play Week 6 -> b68ceafb3b9c3bb5 (1734 draws, week 7 hub) | Play Week 7 -> 357691e9b7dc8c76 (3458 draws, week 8 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 2 fifteen desk on week 11 init f32d50a80ac0bbee: Play Week 11 -> 9359ed188b5f39a6 (563 draws, week 12 hub) | Play Week 12 -> 1a9185e0ecbe563a (1125 draws, week 13 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 3 deep desk on week 16 init b1b312f3250bda11: Play Week 16 -> 9eff4b0f66b0c183 (1734 draws, week 17 hub) | Play the final week + playoffs -> 883c96a4c599b450 (3490 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 4 fifteen desk off week 17 init adf2ff1fed4810a2: Play the final week + playoffs -> bfeb8112fc23596d (605 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 5 deep desk off week 9 init 5165a32175ae477b: Play Week 9 -> dda6753e1580df01 (1729 draws, week 10 hub) | Play Week 10 -> 41a7a5d741ff437e (3451 draws, week 11 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 6 fifteen desk on week 14 init 0d1ba6e9c1a05646: Play Week 14 -> 86a09aa09df421f3 (563 draws, week 15 hub) | Play Week 15 -> 05726502a1af6cf4 (1126 draws, week 16 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 7 deep desk on week 2 init 9108736c3ec71119: Play Week 2 -> 9d72452532577e85 (1732 draws, week 3 hub) | Play Week 3 -> 095e2aac487396a8 (3458 draws, week 4 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 8 fifteen desk off week 7 init 186a570c4a9d4e19: Play Week 7 -> ea3247e239c3cb62 (566 draws, week 8 hub) | Play Week 8 -> 66e34378f0cfda77 (1120 draws, week 9 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 9 deep desk off week 17 init 5f7fc2e2cffca631: Play the final week + playoffs -> 0253d84bc3ccd30c (1784 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 10 fifteen desk on week 17 init 9b056fdce47a26b2: Play the final week + playoffs -> 6ab45d7a50a6a3a3 (604 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 11 deep desk on week 5 init 13e57feacdedb9c0: Play Week 5 -> cf3a78076026835c (1744 draws, week 6 hub) | Play Week 6 -> 818614e730c023b1 (3456 draws, week 7 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 12 fifteen desk off week 10 init fe18691366cd2b99: Play Week 10 -> 3f2739654f002517 (562 draws, week 11 hub) | Play Week 11 -> d5cdc97a4e27166f (1130 draws, week 12 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 13 deep desk off week 15 init 7478e9660cc094c5: Play Week 15 -> 9951e2ac77c1ad7c (1737 draws, week 16 hub) | Play Week 16 -> 85507b45a3ff2549 (3454 draws, week 17 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 14 fifteen desk on week 17 init 5390992f87a548bc: Play the final week + playoffs -> 8448049e89b422dd (600 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 15 deep desk on week 8 init 32da42d46537a500: Play Week 8 -> e46f0b5bf6d982e3 (1739 draws, week 9 hub) | Play Week 9 -> 397f13e904f2a219 (3453 draws, week 10 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 16 fifteen desk off week 13 init 659b5c135b454f2d: Play Week 13 -> bcc141f20f590c72 (565 draws, week 14 hub) | Play Week 14 -> 2511f3f14a94cd3c (1126 draws, week 15 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 17 deep desk off week 1 init 9aa1e54cc70e89fb: Play Week 1 -> 1f7c6a2646f76eb3 (1749 draws, week 2 hub) | Play Week 2 -> dc9e041e4bf7299c (3453 draws, week 3 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 18 fifteen desk on week 6 init 89b43c9bb508feab: Play Week 6 -> 7c64946e4cd52268 (567 draws, week 7 hub) | Play Week 7 -> c06b8bf1a2d30054 (1127 draws, week 8 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 19 deep desk on week 17 init bb14b54577bdbb1c: Play the final week + playoffs -> 534cfe1782a999ce (1768 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 20 fifteen desk off week 16 init 170d55fb6c09dc2f: Play Week 16 -> bd37491b3233c6b8 (565 draws, week 17 hub) | Play the final week + playoffs -> faa6986ff484b261 (1164 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 21 deep desk off week 4 init 114eadf1259ed7f9: Play Week 4 -> e28c83538fd95a3b (1738 draws, week 5 hub) | Play Week 5 -> 6280e05c2a3d58f7 (3457 draws, week 6 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 22 fifteen desk on week 9 init 6d6a2fd44d38eff8: Play Week 9 -> 4bf356ed813219f9 (566 draws, week 10 hub) | Play Week 10 -> 8044912d3e228e85 (1127 draws, week 11 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 23 deep desk on week 14 init b36bffebb5bc09d2: Play Week 14 -> 705ddbc06882b890 (1738 draws, week 15 hub) | Play Week 15 -> aba025b47f87f453 (3451 draws, week 16 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 24 fifteen desk off week 17 init eb54d8e34ba8c455: Play the final week + playoffs -> 943ebd160fbea397 (604 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 25 deep desk off week 7 init e2c0e5706eb5a264: Play Week 7 -> 716810998b3eb2fc (1743 draws, week 8 hub) | Play Week 8 -> 41a70caefcb8c320 (3450 draws, week 9 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 26 fifteen desk on week 12 init f2fb46f4e5146880: Play Week 12 -> ed646329881430d6 (565 draws, week 13 hub) | Play Week 13 -> f8490e7b79da2960 (1131 draws, week 14 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 27 deep desk on week 17 init ffe3fe4a4922189c: Play the final week + playoffs -> 73074d305765e1e7 (1775 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 28 fifteen desk off week 5 init 842c1bc1aa302a65: Play Week 5 -> 166ca2d67f441c31 (565 draws, week 6 hub) | Play Week 6 -> 511a7621f4dc666e (1124 draws, week 7 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 29 deep desk off week 17 init e1d0688cc3ae23f6: Play the final week + playoffs -> e1d0688cc3ae23f6 (0 draws, week 17 hub) | Play the final week + playoffs -> e1d0688cc3ae23f6 (0 draws, week 17 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 30 fifteen desk on week 15 init 40dca266cba70db6: Play Week 15 -> 592633ac133f3b63 (563 draws, week 16 hub) | Play Week 16 -> 55f2464ca5ecfb7b (1124 draws, week 17 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 31 deep desk on week 3 init 6d5da8ed0aa66001: Play Week 3 -> e8269cc22f6bb602 (1735 draws, week 4 hub) | Play Week 4 -> 7f5c4fca509e3ef8 (3455 draws, week 5 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 32 fifteen desk off week 8 init f1f597c480b70c35: Play Week 8 -> be2185ab69808bd8 (566 draws, week 9 hub) | Play Week 9 -> a58d156bdab1ac0d (1121 draws, week 10 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 33 deep desk off week 13 init 7f2335c57f9f393d: Play Week 13 -> c4f7a9ad824c26c9 (1733 draws, week 14 hub) | Play Week 14 -> b51ae3d5c143c90d (3450 draws, week 15 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 34 fifteen desk on week 17 init b3b924b1dc0759a4: Play the final week + playoffs -> 017c575f324d365a (603 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 35 deep desk on week 6 init 94ff416594898367: Play Week 6 -> f8874b4e58c642c4 (1736 draws, week 7 hub) | Play Week 7 -> dd153c57896599a3 (3458 draws, week 8 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 36 fifteen desk off week 11 init a8bbd2ec1cda3d9c: Play Week 11 -> ca211c5c9712267f (566 draws, week 12 hub) | Play Week 12 -> 9cfcea9f50a111e0 (1124 draws, week 13 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 37 deep desk off week 16 init 6e60b264e47b73a5: Play Week 16 -> 2f7e285c37b714e3 (1729 draws, week 17 hub) | Play the final week + playoffs -> 02829515612daefd (3487 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 38 fifteen desk on week 4 init 0d5a01f46efc0cd8: Play Week 4 -> 3d591a3215cb62a5 (563 draws, week 5 hub) | Play Week 5 -> 30f3d6ee1d586a04 (1123 draws, week 6 hub)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 39 deep desk on week 17 init 86fa91be4db2bc07: Play the final week + playoffs -> 56a1a13e2b1fe17c (1774 draws, week 17 recap)
+
+stderr | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ ✓ src/test/r1309RunFleet.test.tsx (1 test) 7093ms
+   ✓ the default path over a fleet > 40 saves, one or two regular presses each  7091ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  22:12:20
+   Duration  8.04s (transform 1.19s, setup 55ms, collect 127ms, tests 7.09s, environment 328ms, prepare 138ms)
+

@@ -1,0 +1,6 @@
+fleet-head exit=0 9s |       Tests  1 passed (1)
+fleet-base exit=0 10s |       Tests  1 passed (1)
+diff-init exit=0 1s | /tmp/f/base-init.json vs /tmp/f/head-init.json: identical
+fleet-cmp exit=0 1s | fleet: 40 cases, 71 presses (14 on the old button), 0 differ, 0 errors
+fleet-ctl-whereoff exit=0 9s | fleet: 40 cases, 71 presses (14 on the old button), 69 differ, 0 errors
+fleet-ctl-oldask exit=0 8s | fleet: 40 cases, 71 presses (14 on the old button), 12 differ, 0 errors
