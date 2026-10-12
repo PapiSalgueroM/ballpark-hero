@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-pacespoils: FO_GAMEDAY_WALK_CONTROL=pacespoils ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-seedoff: FO_GAMEDAY_WALK_CONTROL=seedoff ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-noreveal: FO_GAMEDAY_WALK_CONTROL=noreveal ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-helpjump: FO_GAMEDAY_WALK_CONTROL=helpjump ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-recordspoils: FO_GAMEDAY_WALK_CONTROL=recordspoils ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-spoiler: FO_GAMEDAY_WALK_CONTROL=spoiler ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-tall: FO_GAMEDAY_WALK_CONTROL=tall ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+seasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+seasonCentreMotion: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+usSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+weight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-head.log 2>&1; s=$?; grep -E "front-office|FAIL|sweepWeight" $RC_OUT/weight-head.log | cut -c1-200; exit $s
+lazy-chunk: for f in dist/assets/NflGameDay-*.js dist/assets/MatchClock-*.js dist/assets/SeasonCentreHelp-*.js dist/assets/FrontOffice-*.js; do echo "$f $(gzip -c $f | wc -c)"; done
