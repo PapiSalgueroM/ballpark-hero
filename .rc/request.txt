@@ -1,0 +1,4 @@
+# REVIEW-run Round 1306, head b7943c61: Manager Hot Seat played to its verdict and handed over to Club Manager
+#!serve
+#!playwright
+hotseat: node .rc/x/walk3.mjs
