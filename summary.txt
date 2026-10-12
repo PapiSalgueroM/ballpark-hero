@@ -1,0 +1,9 @@
+vitest-book exit=0 4s |    Duration  3.72s (transform 234ms, setup 237ms, collect 321ms, tests 2.07s, environment 1.24s, prepare 491ms)
+book-default exit=0 74s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (74s)
+c-seasonstamp exit=1 72s | simCmLeagueBook: CONTROL seasonstamp FIRED: section doors went red (1 failures), with oldsave as it must and no other section did (72s)
+tsc exit=0 100s | 
+c-stampv2 exit=1 78s | simCmLeagueBook: CONTROL stampv2 FIRED: section oldsave went red (3 failures) and no other section did (77s)
+c-novar exit=1 77s | simCmLeagueBook: CONTROL novar FIRED: section law went red (1 failures) and no other section did (76s)
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
