@@ -1,0 +1,10 @@
+fleet-head exit=0 8s | F lines 232 stuck 0
+fleet-base exit=0 8s | F lines 232 stuck 0
+fleet-diff exit=0 0s | FLEET head 232 lines, base 232 lines, diff 0 lines, diff exit 0
+x-head-on-basesaves exit=0 9s | X lines 224 refused 0
+x-base-on-basesaves exit=0 9s | X lines 224 refused 0
+x-diff-basesaves exit=0 0s | CROSS on base saves: head 224 lines, base 224 lines, diff 0 lines, diff exit 0
+x-base-on-headsaves exit=0 9s | X lines 224 refused 0
+x-head-on-headsaves exit=0 9s | X lines 224 refused 0
+x-diff-headsaves exit=0 0s | CROSS on head saves: base 224 lines, head 224 lines, diff 0 lines, diff exit 0
+sizes exit=0 0s | 0

@@ -1,0 +1,501 @@
+
+ RUN  v3.2.7 /tmp/base
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|hub2
+R1305X|deep|desk off|seed 21|hub2|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 21|hub2|load|7a51b52c660af15b11470fec75a6630f364052dc|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 21|hub2|load|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 21|hub2|press1|3c40117441a4ac6306196c85042686ae18ab2be8|phase=hub|season=2027|week=2
+R1305L|deep|desk off|seed 21|hub2|press1|hasLog=0|club=0-1
+R1305X|deep|desk off|seed 21|hub2|press2|6c28965ee4c4983ba19d20deafaec9c1d8a4e306|phase=hub|season=2027|week=3
+R1305L|deep|desk off|seed 21|hub2|press2|hasLog=0|club=0-2
+R1305X|deep|desk off|seed 21|hub2|press3|37e244fdc35afd3ed4e4c7625a4564ad39c0d0ac|phase=hub|season=2027|week=4
+R1305L|deep|desk off|seed 21|hub2|press3|hasLog=0|club=1-2
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|pick1
+R1305X|deep|desk off|seed 21|pick1|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 21|pick1|load|c80892f355d920514c89f4a9eeecec65d8a66129|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 21|pick1|load|hasLog=0|club=9-8
+R1305X|deep|desk off|seed 21|pick1|xpick1|ae933f4aed9e9d49496020aba095a109e91412de|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 21|pick1|xpick1|hasLog=0|club=9-8
+R1305X|deep|desk off|seed 21|pick1|xpick2|282b64a901897211a770bd6e83567d08dd58c3b5|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 21|pick1|xpick2|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 21|pick1|after-summer-reload|282b64a901897211a770bd6e83567d08dd58c3b5|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 21|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 21|pick1|press1|25e8895206e7229a219a89179d2dcb54edb44a19|phase=hub|season=2027|week=2
+R1305L|deep|desk off|seed 21|pick1|press1|hasLog=0|club=1-0
+R1305X|deep|desk off|seed 21|pick1|press2|b52952694e0c90e987a0dc0c12bf11ab735ee661|phase=hub|season=2027|week=3
+R1305L|deep|desk off|seed 21|pick1|press2|hasLog=0|club=2-0
+R1305X|deep|desk off|seed 21|pick1|press3|fa5570b9171ab894437b4df0c184bc3cf3d7eb00|phase=hub|season=2027|week=4
+R1305L|deep|desk off|seed 21|pick1|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|recap
+R1305X|deep|desk off|seed 21|recap|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 21|recap|load|6a0de343d57ed4d534298a73c0b9920ffd982e68|phase=recap|season=2026|week=17
+R1305L|deep|desk off|seed 21|recap|load|hasLog=0|club=9-8
+R1305X|deep|desk off|seed 21|recap|draft|de006da6fabbcdc13694ae2bc7effa0df818a8ff|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 21|recap|draft|hasLog=0|club=9-8
+R1305X|deep|desk off|seed 21|recap|xpick1|9df7c4cd326a0f5b1ca734587dd00bd0322d97a6|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 21|recap|xpick1|hasLog=0|club=9-8
+R1305X|deep|desk off|seed 21|recap|xpick2|948cff2f486ac79a192397e5bd9e7538c776e3b7|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 21|recap|xpick2|hasLog=0|club=9-8
+R1305X|deep|desk off|seed 21|recap|xpick3|b42ff05f329a1937dc5e906c62f7f21d0bec8724|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 21|recap|xpick3|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 21|recap|after-summer-reload|b42ff05f329a1937dc5e906c62f7f21d0bec8724|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 21|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 21|recap|press1|956d62f81b4c9db72fcddec0c550e9da7ff6d77e|phase=hub|season=2027|week=2
+R1305L|deep|desk off|seed 21|recap|press1|hasLog=0|club=1-0
+R1305X|deep|desk off|seed 21|recap|press2|a1b5f1d63b38eca215990b1bd2d5350b7b90a9fe|phase=hub|season=2027|week=3
+R1305L|deep|desk off|seed 21|recap|press2|hasLog=0|club=2-0
+R1305X|deep|desk off|seed 21|recap|press3|b284c3e0f5df22748ab54cf3ca549aeb3554814e|phase=hub|season=2027|week=4
+R1305L|deep|desk off|seed 21|recap|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|w8
+R1305X|deep|desk off|seed 21|w8|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 21|w8|load|555c2b789418397f7ffa01c06287285f784559af|phase=hub|season=2026|week=9
+R1305L|deep|desk off|seed 21|w8|load|hasLog=0|club=4-4
+R1305X|deep|desk off|seed 21|w8|press1|dde6fc8c7ef97e52ccf87b43400e06e96b0748be|phase=hub|season=2026|week=10
+R1305L|deep|desk off|seed 21|w8|press1|hasLog=0|club=4-5
+R1305X|deep|desk off|seed 21|w8|press2|62104848a4787a1e742c7d625b0419e97de0a440|phase=hub|season=2026|week=11
+R1305L|deep|desk off|seed 21|w8|press2|hasLog=0|club=5-5
+R1305X|deep|desk off|seed 21|w8|press3|3e11ae397752391ff28593c99bf739131f86f0b0|phase=hub|season=2026|week=12
+R1305L|deep|desk off|seed 21|w8|press3|hasLog=0|club=6-5
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 3|hub2
+R1305X|deep|desk off|seed 3|hub2|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 3|hub2|load|fb6306c6c07b47cce042b44cbdebea1fcf7141ed|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 3|hub2|load|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 3|hub2|press1|d7d1e455d3dd99885cb08c1c2edaced933e315e4|phase=hub|season=2027|week=2
+R1305L|deep|desk off|seed 3|hub2|press1|hasLog=0|club=0-1
+R1305X|deep|desk off|seed 3|hub2|press2|387bb593dc5c655fdad1bbe795be7baa4deb287e|phase=hub|season=2027|week=3
+R1305L|deep|desk off|seed 3|hub2|press2|hasLog=0|club=1-1
+R1305X|deep|desk off|seed 3|hub2|press3|f249bb032a258c2a0716b9891d0d5b3f13883afb|phase=hub|season=2027|week=4
+R1305L|deep|desk off|seed 3|hub2|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 3|pick1
+R1305X|deep|desk off|seed 3|pick1|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 3|pick1|load|dc6795b962e4dfbd3250af8fa83cc0eb3bf50ce9|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 3|pick1|load|hasLog=0|club=15-2
+R1305X|deep|desk off|seed 3|pick1|xpick1|4b2ff3d7bd1b07857c45c986adeda7326e7ff5ff|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 3|pick1|xpick1|hasLog=0|club=15-2
+R1305X|deep|desk off|seed 3|pick1|xpick2|5d1fa5b401e3183d2fd3c8f69dd0178a8f6f61e7|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 3|pick1|xpick2|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 3|pick1|after-summer-reload|5d1fa5b401e3183d2fd3c8f69dd0178a8f6f61e7|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 3|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 3|pick1|press1|99f48881fefac17b49f53528d6ccc3e87ad7eab2|phase=hub|season=2027|week=2
+R1305L|deep|desk off|seed 3|pick1|press1|hasLog=0|club=0-1
+R1305X|deep|desk off|seed 3|pick1|press2|85d7f21ed34c882e3234ae591c1d99a8c577f356|phase=hub|season=2027|week=3
+R1305L|deep|desk off|seed 3|pick1|press2|hasLog=0|club=1-1
+R1305X|deep|desk off|seed 3|pick1|press3|7633b62d4e394ba4ebc6b37fdb66f9cd66409850|phase=hub|season=2027|week=4
+R1305L|deep|desk off|seed 3|pick1|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 3|recap
+R1305X|deep|desk off|seed 3|recap|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 3|recap|load|a78789a43c8aa9f4b99a7c58535e7f48673664fc|phase=recap|season=2026|week=17
+R1305L|deep|desk off|seed 3|recap|load|hasLog=0|club=15-2
+R1305X|deep|desk off|seed 3|recap|draft|20bb60a33bfaa6beeac3215aaee5d7ffaa649b7c|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 3|recap|draft|hasLog=0|club=15-2
+R1305X|deep|desk off|seed 3|recap|xpick1|b813fd05267e8320bc51658f33a44a629b9f2877|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 3|recap|xpick1|hasLog=0|club=15-2
+R1305X|deep|desk off|seed 3|recap|xpick2|8bf3b789bcc16e9382f25bf295aaf4cf43cd865c|phase=draft|season=2026|week=17
+R1305L|deep|desk off|seed 3|recap|xpick2|hasLog=0|club=15-2
+R1305X|deep|desk off|seed 3|recap|xpick3|46bda5a022cab7c55b47fede5763e8c729571344|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 3|recap|xpick3|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 3|recap|after-summer-reload|46bda5a022cab7c55b47fede5763e8c729571344|phase=hub|season=2027|week=1
+R1305L|deep|desk off|seed 3|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk off|seed 3|recap|press1|4a5ceed042e3492b3120ea1fa91f89385b4e1dfd|phase=hub|season=2027|week=2
+R1305L|deep|desk off|seed 3|recap|press1|hasLog=0|club=0-1
+R1305X|deep|desk off|seed 3|recap|press2|89cb1509330af6732b3541e7fd4ba9350730fa6a|phase=hub|season=2027|week=3
+R1305L|deep|desk off|seed 3|recap|press2|hasLog=0|club=1-1
+R1305X|deep|desk off|seed 3|recap|press3|ee686d41be095c0ebe7c3e6ebe6ae4ec7f52a892|phase=hub|season=2027|week=4
+R1305L|deep|desk off|seed 3|recap|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 3|w8
+R1305X|deep|desk off|seed 3|w8|mounted|sameBytes=true|refused=false
+R1305X|deep|desk off|seed 3|w8|load|78ffead601a793a628bc97ac3acf8b6721879665|phase=hub|season=2026|week=9
+R1305L|deep|desk off|seed 3|w8|load|hasLog=0|club=7-1
+R1305X|deep|desk off|seed 3|w8|press1|f23c515ae3ee89b2f7cf2b60808b8f81948c0cd6|phase=hub|season=2026|week=10
+R1305L|deep|desk off|seed 3|w8|press1|hasLog=0|club=8-1
+R1305X|deep|desk off|seed 3|w8|press2|aa11ab4dd7a4345aad20fb38029ea442c8406cbc|phase=hub|season=2026|week=11
+R1305L|deep|desk off|seed 3|w8|press2|hasLog=0|club=8-2
+R1305X|deep|desk off|seed 3|w8|press3|96faba6af6a04c67d64b4c867c2e8ee966c3e50b|phase=hub|season=2026|week=12
+R1305L|deep|desk off|seed 3|w8|press3|hasLog=0|club=8-3
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 21|hub2
+R1305X|deep|desk on|seed 21|hub2|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 21|hub2|load|d82f051611081308f34e516454729ae6e7f8629e|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 21|hub2|load|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 21|hub2|press1|f9ad38b55e4a933a4bc304f7721a4a5dd5272c7d|phase=hub|season=2027|week=2
+R1305L|deep|desk on|seed 21|hub2|press1|hasLog=0|club=0-1
+R1305X|deep|desk on|seed 21|hub2|press2|dd62b33346c33d9c925fefb8fb3b5dc62eb68da1|phase=hub|season=2027|week=3
+R1305L|deep|desk on|seed 21|hub2|press2|hasLog=0|club=0-2
+R1305X|deep|desk on|seed 21|hub2|press3|45ddd3848be2da49e5cded4cf422bdbd045b4144|phase=hub|season=2027|week=4
+R1305L|deep|desk on|seed 21|hub2|press3|hasLog=0|club=1-2
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 21|pick1
+R1305X|deep|desk on|seed 21|pick1|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 21|pick1|load|682b8db5b8d227862044bdbc95109dd689d3d158|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 21|pick1|load|hasLog=0|club=9-8
+R1305X|deep|desk on|seed 21|pick1|xpick1|cd469aabd33b0d294f7b51f3252fcaba77a1e53f|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 21|pick1|xpick1|hasLog=0|club=9-8
+R1305X|deep|desk on|seed 21|pick1|xpick2|b3da5bc455520468359e714442a4b463875e92ad|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 21|pick1|xpick2|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 21|pick1|after-summer-reload|b3da5bc455520468359e714442a4b463875e92ad|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 21|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 21|pick1|press1|cb2ac45853c2c5de9a0e7c6a1dbea901f1a2026f|phase=hub|season=2027|week=2
+R1305L|deep|desk on|seed 21|pick1|press1|hasLog=0|club=1-0
+R1305X|deep|desk on|seed 21|pick1|press2|82b206f52b1fab4dacf8561f21f338cabe9d8ee0|phase=hub|season=2027|week=3
+R1305L|deep|desk on|seed 21|pick1|press2|hasLog=0|club=2-0
+R1305X|deep|desk on|seed 21|pick1|press3|f3d9e411c282a376493936b0a1d78587ab888285|phase=hub|season=2027|week=4
+R1305L|deep|desk on|seed 21|pick1|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 21|recap
+R1305X|deep|desk on|seed 21|recap|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 21|recap|load|5d38c2a66aa356af2244abba37da23b93954f13f|phase=recap|season=2026|week=17
+R1305L|deep|desk on|seed 21|recap|load|hasLog=0|club=9-8
+R1305X|deep|desk on|seed 21|recap|draft|9434ae942627f904a0aeeaed7a3d52b6191f7a90|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 21|recap|draft|hasLog=0|club=9-8
+R1305X|deep|desk on|seed 21|recap|xpick1|127ca5e379a45b7206355d08c5f055c77aede9e3|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 21|recap|xpick1|hasLog=0|club=9-8
+R1305X|deep|desk on|seed 21|recap|xpick2|e9219f10f9ecc9d9ba067a795460cd02cb25bc12|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 21|recap|xpick2|hasLog=0|club=9-8
+R1305X|deep|desk on|seed 21|recap|xpick3|250f520e197f2fb01c61a8c7b97b82ee25d5c149|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 21|recap|xpick3|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 21|recap|after-summer-reload|250f520e197f2fb01c61a8c7b97b82ee25d5c149|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 21|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 21|recap|press1|d8414bedd0497d46afefb200b36b6b4fb89a1a42|phase=hub|season=2027|week=2
+R1305L|deep|desk on|seed 21|recap|press1|hasLog=0|club=0-1
+R1305X|deep|desk on|seed 21|recap|press2|9c82084249db9f1c8cb92a91789ebef60dc420fd|phase=hub|season=2027|week=3
+R1305L|deep|desk on|seed 21|recap|press2|hasLog=0|club=1-1
+R1305X|deep|desk on|seed 21|recap|press3|028c342fba68358a96753efe0773f5a131269515|phase=hub|season=2027|week=4
+R1305L|deep|desk on|seed 21|recap|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 21|w8
+R1305X|deep|desk on|seed 21|w8|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 21|w8|load|7d544c907b71dabc2fe46cafa7b58d34306cfdb4|phase=hub|season=2026|week=9
+R1305L|deep|desk on|seed 21|w8|load|hasLog=0|club=4-4
+R1305X|deep|desk on|seed 21|w8|press1|18e80e2cc2ccbfcf8413a543f25c4fc958b36088|phase=hub|season=2026|week=10
+R1305L|deep|desk on|seed 21|w8|press1|hasLog=0|club=5-4
+R1305X|deep|desk on|seed 21|w8|press2|c7cc5ac3e6916949df3a88e79522ddd281bd6c0f|phase=hub|season=2026|week=11
+R1305L|deep|desk on|seed 21|w8|press2|hasLog=0|club=6-4
+R1305X|deep|desk on|seed 21|w8|press3|31f97aa0ebdd36fdf62d1403e8a1b47479c4e026|phase=hub|season=2026|week=12
+R1305L|deep|desk on|seed 21|w8|press3|hasLog=0|club=7-4
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 3|hub2
+R1305X|deep|desk on|seed 3|hub2|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 3|hub2|load|7e339187f8d7a3f2e1302c472d9cd1fb18d564f7|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 3|hub2|load|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 3|hub2|press1|c01c159acf62fb5d03dd8c6b18abd2bbef2257b5|phase=hub|season=2027|week=2
+R1305L|deep|desk on|seed 3|hub2|press1|hasLog=0|club=1-0
+R1305X|deep|desk on|seed 3|hub2|press2|092cf438e66b832353c93675585978d5162d02cc|phase=hub|season=2027|week=3
+R1305L|deep|desk on|seed 3|hub2|press2|hasLog=0|club=2-0
+R1305X|deep|desk on|seed 3|hub2|press3|6d852e9913f3f87e84ebad9546f9a7d4ee84b2a8|phase=hub|season=2027|week=4
+R1305L|deep|desk on|seed 3|hub2|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 3|pick1
+R1305X|deep|desk on|seed 3|pick1|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 3|pick1|load|9e048d81ec674cd3b88d8003f121cfea58da87cc|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 3|pick1|load|hasLog=0|club=15-2
+R1305X|deep|desk on|seed 3|pick1|xpick1|f78d22fb7a21a46fcb045c7d69cecc4e24070d12|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 3|pick1|xpick1|hasLog=0|club=15-2
+R1305X|deep|desk on|seed 3|pick1|xpick2|37b45ba27a25e2f6ee7fe26b34aee32870412c65|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 3|pick1|xpick2|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 3|pick1|after-summer-reload|37b45ba27a25e2f6ee7fe26b34aee32870412c65|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 3|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 3|pick1|press1|2a2278ffd30fbe3eca09a1b4ce33f3d4ab6be070|phase=hub|season=2027|week=2
+R1305L|deep|desk on|seed 3|pick1|press1|hasLog=0|club=1-0
+R1305X|deep|desk on|seed 3|pick1|press2|88f053896eac98e72663bba86f795e278f0dd190|phase=hub|season=2027|week=3
+R1305L|deep|desk on|seed 3|pick1|press2|hasLog=0|club=2-0
+R1305X|deep|desk on|seed 3|pick1|press3|3da7200ee646d6e4fb7128d0f25d7f8299564569|phase=hub|season=2027|week=4
+R1305L|deep|desk on|seed 3|pick1|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 3|recap
+R1305X|deep|desk on|seed 3|recap|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 3|recap|load|45f4416a9cadfc2abae8c1716347866395e37832|phase=recap|season=2026|week=17
+R1305L|deep|desk on|seed 3|recap|load|hasLog=0|club=15-2
+R1305X|deep|desk on|seed 3|recap|draft|6725d25adeac9f8ca3cebe425cf940243e26efe9|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 3|recap|draft|hasLog=0|club=15-2
+R1305X|deep|desk on|seed 3|recap|xpick1|001951227d5fc3d658dd83b6fffa1ffe795272cd|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 3|recap|xpick1|hasLog=0|club=15-2
+R1305X|deep|desk on|seed 3|recap|xpick2|ae53364f0c6c954aec5ebfd4bd66e6485afba86b|phase=draft|season=2026|week=17
+R1305L|deep|desk on|seed 3|recap|xpick2|hasLog=0|club=15-2
+R1305X|deep|desk on|seed 3|recap|xpick3|77332eb2d02269a99e5939d82089046b5e538c6a|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 3|recap|xpick3|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 3|recap|after-summer-reload|77332eb2d02269a99e5939d82089046b5e538c6a|phase=hub|season=2027|week=1
+R1305L|deep|desk on|seed 3|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|deep|desk on|seed 3|recap|press1|28c9270ad8ac7039183845c614cd2fc4fbfea49a|phase=hub|season=2027|week=2
+R1305L|deep|desk on|seed 3|recap|press1|hasLog=0|club=0-1
+R1305X|deep|desk on|seed 3|recap|press2|49b7145f5f41b3a909bfba2c5e40c75948b9e508|phase=hub|season=2027|week=3
+R1305L|deep|desk on|seed 3|recap|press2|hasLog=0|club=1-1
+R1305X|deep|desk on|seed 3|recap|press3|9c8e070a93fe40bccbcb43d3543309b611490964|phase=hub|season=2027|week=4
+R1305L|deep|desk on|seed 3|recap|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 3|w8
+R1305X|deep|desk on|seed 3|w8|mounted|sameBytes=true|refused=false
+R1305X|deep|desk on|seed 3|w8|load|6ef3a132039707daadc1d583a350cdfa5008e78c|phase=hub|season=2026|week=9
+R1305L|deep|desk on|seed 3|w8|load|hasLog=0|club=7-1
+R1305X|deep|desk on|seed 3|w8|press1|7074e2dc32e9a1cb3c6a2b680c601e7a0e021d51|phase=hub|season=2026|week=10
+R1305L|deep|desk on|seed 3|w8|press1|hasLog=0|club=8-1
+R1305X|deep|desk on|seed 3|w8|press2|99f8b00ccb1f16003fa08b75ca08d92371f7983e|phase=hub|season=2026|week=11
+R1305L|deep|desk on|seed 3|w8|press2|hasLog=0|club=8-2
+R1305X|deep|desk on|seed 3|w8|press3|d47f8f01dee1f1c75b228e852d7541a20dc77900|phase=hub|season=2026|week=12
+R1305L|deep|desk on|seed 3|w8|press3|hasLog=0|club=8-3
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 21|hub2
+R1305X|fifteen|desk off|seed 21|hub2|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 21|hub2|load|754075b77452f6c394ebb76fd009907468cb4918|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 21|hub2|load|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 21|hub2|press1|7a69ed5224edfea8275e144eba4582b1d2c213ef|phase=hub|season=2027|week=2
+R1305L|fifteen|desk off|seed 21|hub2|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk off|seed 21|hub2|press2|21fd0b19dfd48abbbb0cf285ef6e3219a651e9a2|phase=hub|season=2027|week=3
+R1305L|fifteen|desk off|seed 21|hub2|press2|hasLog=0|club=2-0
+R1305X|fifteen|desk off|seed 21|hub2|press3|cde273848c23b4e7422ad3dcaba68a56a1f9ac3f|phase=hub|season=2027|week=4
+R1305L|fifteen|desk off|seed 21|hub2|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 21|pick1
+R1305X|fifteen|desk off|seed 21|pick1|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 21|pick1|load|fd237ab42fbb37ab2cef2a57d3b001a89bd647af|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 21|pick1|load|hasLog=0|club=11-6
+R1305X|fifteen|desk off|seed 21|pick1|xpick1|9d4e160e86dcef79864e7266062bb8c38623aac1|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 21|pick1|xpick1|hasLog=0|club=11-6
+R1305X|fifteen|desk off|seed 21|pick1|xpick2|4a65bda33c329e04166bffed318bfb45bc36266d|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 21|pick1|xpick2|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 21|pick1|after-summer-reload|4a65bda33c329e04166bffed318bfb45bc36266d|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 21|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 21|pick1|press1|120501cf51ae8f7ad6c0993da76ab26b604da665|phase=hub|season=2027|week=2
+R1305L|fifteen|desk off|seed 21|pick1|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk off|seed 21|pick1|press2|92fa34ee2013fe5158aa834ba3485fe07132c8f3|phase=hub|season=2027|week=3
+R1305L|fifteen|desk off|seed 21|pick1|press2|hasLog=0|club=2-0
+R1305X|fifteen|desk off|seed 21|pick1|press3|c2fc147122f4f00f2058e6b85db48942f59ea9f2|phase=hub|season=2027|week=4
+R1305L|fifteen|desk off|seed 21|pick1|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 21|recap
+R1305X|fifteen|desk off|seed 21|recap|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 21|recap|load|2627902210f00afc426af40fe650596c15290ab7|phase=recap|season=2026|week=17
+R1305L|fifteen|desk off|seed 21|recap|load|hasLog=0|club=11-6
+R1305X|fifteen|desk off|seed 21|recap|draft|39251fe8cbef93d0c03e762861933d1bacc05387|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 21|recap|draft|hasLog=0|club=11-6
+R1305X|fifteen|desk off|seed 21|recap|xpick1|204a54403e8438d33f91e73666bc8fb3410cecf6|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 21|recap|xpick1|hasLog=0|club=11-6
+R1305X|fifteen|desk off|seed 21|recap|xpick2|2c02d1064a45840ab2cce6e1b2b7d7861dd7e341|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 21|recap|xpick2|hasLog=0|club=11-6
+R1305X|fifteen|desk off|seed 21|recap|xpick3|bfaad29148268b586476e69f28044103fa48eb23|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 21|recap|xpick3|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 21|recap|after-summer-reload|bfaad29148268b586476e69f28044103fa48eb23|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 21|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 21|recap|press1|9408723d4ec65f9bab0849b21c39013b79aa4365|phase=hub|season=2027|week=2
+R1305L|fifteen|desk off|seed 21|recap|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk off|seed 21|recap|press2|c455696c99d7589134b85e71bdf632eeea34cff8|phase=hub|season=2027|week=3
+R1305L|fifteen|desk off|seed 21|recap|press2|hasLog=0|club=1-1
+R1305X|fifteen|desk off|seed 21|recap|press3|f755c5c52964aeeba1a3c8efcfb6f882206acef8|phase=hub|season=2027|week=4
+R1305L|fifteen|desk off|seed 21|recap|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 21|w8
+R1305X|fifteen|desk off|seed 21|w8|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 21|w8|load|614e96dbd774de777a538a897c17f2cf13a507bd|phase=hub|season=2026|week=9
+R1305L|fifteen|desk off|seed 21|w8|load|hasLog=0|club=7-1
+R1305X|fifteen|desk off|seed 21|w8|press1|87efa63d3f1ccca304ce06e0a02dab54b6b8f98f|phase=hub|season=2026|week=10
+R1305L|fifteen|desk off|seed 21|w8|press1|hasLog=0|club=7-2
+R1305X|fifteen|desk off|seed 21|w8|press2|840d203eec25ac86f19debb07e41bcc33a25f8da|phase=hub|season=2026|week=11
+R1305L|fifteen|desk off|seed 21|w8|press2|hasLog=0|club=8-2
+R1305X|fifteen|desk off|seed 21|w8|press3|d272349641b4fb9c49649e79a314e9256e6bf530|phase=hub|season=2026|week=12
+R1305L|fifteen|desk off|seed 21|w8|press3|hasLog=0|club=8-3
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 3|hub2
+R1305X|fifteen|desk off|seed 3|hub2|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 3|hub2|load|d1e708accd6de0ab170fc12a0405b5d5ede9435e|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 3|hub2|load|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 3|hub2|press1|be694142712641c90a7ddeb9a09bf33ead625ec2|phase=hub|season=2027|week=2
+R1305L|fifteen|desk off|seed 3|hub2|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk off|seed 3|hub2|press2|4d1a04dcbabdd4a3c52ad15aa6bbbfeb5d38e392|phase=hub|season=2027|week=3
+R1305L|fifteen|desk off|seed 3|hub2|press2|hasLog=0|club=1-1
+R1305X|fifteen|desk off|seed 3|hub2|press3|5511f54b6f71210bbc4e806761d80f92ce49fa5b|phase=hub|season=2027|week=4
+R1305L|fifteen|desk off|seed 3|hub2|press3|hasLog=0|club=1-2
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 3|pick1
+R1305X|fifteen|desk off|seed 3|pick1|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 3|pick1|load|1637db2cf5129028a72a5bf0de8b207c020853d5|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 3|pick1|load|hasLog=0|club=12-5
+R1305X|fifteen|desk off|seed 3|pick1|xpick1|0f16b4d7934e39a18459b6180a3a74111f30be27|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 3|pick1|xpick1|hasLog=0|club=12-5
+R1305X|fifteen|desk off|seed 3|pick1|xpick2|646cf5c50d835fcd9b10003c2888185f9d44bd72|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 3|pick1|xpick2|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 3|pick1|after-summer-reload|646cf5c50d835fcd9b10003c2888185f9d44bd72|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 3|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 3|pick1|press1|b66909addfa92f3621ddea35708803ac38fb582c|phase=hub|season=2027|week=2
+R1305L|fifteen|desk off|seed 3|pick1|press1|hasLog=0|club=0-1
+R1305X|fifteen|desk off|seed 3|pick1|press2|f8988e98065941ec70a683445cf04920afeb7d7b|phase=hub|season=2027|week=3
+R1305L|fifteen|desk off|seed 3|pick1|press2|hasLog=0|club=0-2
+R1305X|fifteen|desk off|seed 3|pick1|press3|3bf07e2b3efbd744c0b83e32f5f19b3037447432|phase=hub|season=2027|week=4
+R1305L|fifteen|desk off|seed 3|pick1|press3|hasLog=0|club=1-2
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 3|recap
+R1305X|fifteen|desk off|seed 3|recap|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 3|recap|load|095a867951242e3f4070110df0d06c2bba0130d4|phase=recap|season=2026|week=17
+R1305L|fifteen|desk off|seed 3|recap|load|hasLog=0|club=12-5
+R1305X|fifteen|desk off|seed 3|recap|draft|796c78c39fcf5e4cc94c199d86fec2c967ed2212|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 3|recap|draft|hasLog=0|club=12-5
+R1305X|fifteen|desk off|seed 3|recap|xpick1|f224e5b2fb55d2377689576aab6187a394bf98c2|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 3|recap|xpick1|hasLog=0|club=12-5
+R1305X|fifteen|desk off|seed 3|recap|xpick2|c839273f07d11c31b3272bc82e9a090882053db7|phase=draft|season=2026|week=17
+R1305L|fifteen|desk off|seed 3|recap|xpick2|hasLog=0|club=12-5
+R1305X|fifteen|desk off|seed 3|recap|xpick3|550fbc3b38136e24897ef82d1cc1bd9d9909005f|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 3|recap|xpick3|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 3|recap|after-summer-reload|550fbc3b38136e24897ef82d1cc1bd9d9909005f|phase=hub|season=2027|week=1
+R1305L|fifteen|desk off|seed 3|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk off|seed 3|recap|press1|e098e2c49ff5f608960f78a0516eb79a5dc53943|phase=hub|season=2027|week=2
+R1305L|fifteen|desk off|seed 3|recap|press1|hasLog=0|club=0-1
+R1305X|fifteen|desk off|seed 3|recap|press2|bd2b90ac08aacf2450cb0cd0635431b8f09671a5|phase=hub|season=2027|week=3
+R1305L|fifteen|desk off|seed 3|recap|press2|hasLog=0|club=0-2
+R1305X|fifteen|desk off|seed 3|recap|press3|8d5b3adf2e37ab30e5ffd0fdec7bd2c69795c413|phase=hub|season=2027|week=4
+R1305L|fifteen|desk off|seed 3|recap|press3|hasLog=0|club=0-3
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk off|seed 3|w8
+R1305X|fifteen|desk off|seed 3|w8|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk off|seed 3|w8|load|9e41f5bddec429e705914b936de143a3a5db322b|phase=hub|season=2026|week=9
+R1305L|fifteen|desk off|seed 3|w8|load|hasLog=0|club=6-2
+R1305X|fifteen|desk off|seed 3|w8|press1|d59120141cc895868b198c0f889755ce8d7e0286|phase=hub|season=2026|week=10
+R1305L|fifteen|desk off|seed 3|w8|press1|hasLog=0|club=7-2
+R1305X|fifteen|desk off|seed 3|w8|press2|41cd67f7806a9517355fd3d41c6c5364a95c928a|phase=hub|season=2026|week=11
+R1305L|fifteen|desk off|seed 3|w8|press2|hasLog=0|club=8-2
+R1305X|fifteen|desk off|seed 3|w8|press3|a892ca8d780bdffc773ff49f007a636d0f53ccb9|phase=hub|season=2026|week=12
+R1305L|fifteen|desk off|seed 3|w8|press3|hasLog=0|club=9-2
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 21|hub2
+R1305X|fifteen|desk on|seed 21|hub2|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 21|hub2|load|abf29f76e64376010eb9d9974e56df5821a47dbf|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 21|hub2|load|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 21|hub2|press1|7e472598d4b47e99c710956075db0225ca453113|phase=hub|season=2027|week=2
+R1305L|fifteen|desk on|seed 21|hub2|press1|hasLog=0|club=0-1
+R1305X|fifteen|desk on|seed 21|hub2|press2|6013f8529a9dc44f4db6e88b260919a348332bef|phase=hub|season=2027|week=3
+R1305L|fifteen|desk on|seed 21|hub2|press2|hasLog=0|club=1-1
+R1305X|fifteen|desk on|seed 21|hub2|press3|851ada11f1d3020aef71fbb860aea6db289e0a0b|phase=hub|season=2027|week=4
+R1305L|fifteen|desk on|seed 21|hub2|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 21|pick1
+R1305X|fifteen|desk on|seed 21|pick1|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 21|pick1|load|21b25047900e68a02654e5b2cc6e717ceffb2122|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 21|pick1|load|hasLog=0|club=14-3
+R1305X|fifteen|desk on|seed 21|pick1|xpick1|d1d153e4fd764e6930e4076ce53c419c5f98ea3e|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 21|pick1|xpick1|hasLog=0|club=14-3
+R1305X|fifteen|desk on|seed 21|pick1|xpick2|8759df08e5de4deed0b59d5498a48f9ec9bf0739|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 21|pick1|xpick2|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 21|pick1|after-summer-reload|8759df08e5de4deed0b59d5498a48f9ec9bf0739|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 21|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 21|pick1|press1|cdf3d3e065eb541a6542ab2f6782aa0bc1af0ff3|phase=hub|season=2027|week=2
+R1305L|fifteen|desk on|seed 21|pick1|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk on|seed 21|pick1|press2|e0dfdedc932571d9a01c7e59982d508fa0757c9f|phase=hub|season=2027|week=3
+R1305L|fifteen|desk on|seed 21|pick1|press2|hasLog=0|club=2-0
+R1305X|fifteen|desk on|seed 21|pick1|press3|1f338d310b24f98fd650c4faf4ebb94bd0e4b5b6|phase=hub|season=2027|week=4
+R1305L|fifteen|desk on|seed 21|pick1|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 21|recap
+R1305X|fifteen|desk on|seed 21|recap|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 21|recap|load|c7f11acd348fa7cfaeed4f5773b5ae5185516083|phase=recap|season=2026|week=17
+R1305L|fifteen|desk on|seed 21|recap|load|hasLog=0|club=14-3
+R1305X|fifteen|desk on|seed 21|recap|draft|53cdb304f0b8db0a1c22184a1f45c771e9c5aff3|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 21|recap|draft|hasLog=0|club=14-3
+R1305X|fifteen|desk on|seed 21|recap|xpick1|42d9ac1ed36bfe4a7495863086a2582e65976424|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 21|recap|xpick1|hasLog=0|club=14-3
+R1305X|fifteen|desk on|seed 21|recap|xpick2|ba60e473438bf9cfc3a77f022e27022591fc99c4|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 21|recap|xpick2|hasLog=0|club=14-3
+R1305X|fifteen|desk on|seed 21|recap|xpick3|5c29fa48d400f051de0c166cc894617fe662e859|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 21|recap|xpick3|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 21|recap|after-summer-reload|5c29fa48d400f051de0c166cc894617fe662e859|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 21|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 21|recap|press1|a6cce2e20bf8ae2af123b88fe1be8741c7bc984d|phase=hub|season=2027|week=2
+R1305L|fifteen|desk on|seed 21|recap|press1|hasLog=0|club=0-1
+R1305X|fifteen|desk on|seed 21|recap|press2|fddd29d847222531a6e5b6981e5c0e4469c5cbda|phase=hub|season=2027|week=3
+R1305L|fifteen|desk on|seed 21|recap|press2|hasLog=0|club=1-1
+R1305X|fifteen|desk on|seed 21|recap|press3|6bb28a13adca9451827f7c15b0d5409debf7fb3d|phase=hub|season=2027|week=4
+R1305L|fifteen|desk on|seed 21|recap|press3|hasLog=0|club=2-1
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 21|w8
+R1305X|fifteen|desk on|seed 21|w8|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 21|w8|load|f93a3d291c4c4c142c7d62af6581cf8ab3c3610e|phase=hub|season=2026|week=9
+R1305L|fifteen|desk on|seed 21|w8|load|hasLog=0|club=7-1
+R1305X|fifteen|desk on|seed 21|w8|press1|e01061fc8cb007fbd9e7909528bcf6d5621092a3|phase=hub|season=2026|week=10
+R1305L|fifteen|desk on|seed 21|w8|press1|hasLog=0|club=7-2
+R1305X|fifteen|desk on|seed 21|w8|press2|927e4293adb07e66b8dd2d1e08fdab3f506088af|phase=hub|season=2026|week=11
+R1305L|fifteen|desk on|seed 21|w8|press2|hasLog=0|club=8-2
+R1305X|fifteen|desk on|seed 21|w8|press3|60f7af86b75d90300b5c5307c2f3c5698842e1cb|phase=hub|season=2026|week=12
+R1305L|fifteen|desk on|seed 21|w8|press3|hasLog=0|club=8-3
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 3|hub2
+R1305X|fifteen|desk on|seed 3|hub2|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 3|hub2|load|d992efb48bef1ffecbc8e37070d71d6afecbf448|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 3|hub2|load|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 3|hub2|press1|63231a9190d521c2866c4c1ce70f504fd078cc67|phase=hub|season=2027|week=2
+R1305L|fifteen|desk on|seed 3|hub2|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk on|seed 3|hub2|press2|846b2cb4fed3367e14d1bab61d714b8a2ce8f0a3|phase=hub|season=2027|week=3
+R1305L|fifteen|desk on|seed 3|hub2|press2|hasLog=0|club=2-0
+R1305X|fifteen|desk on|seed 3|hub2|press3|14934a8687d41dc612d55669b79aa94001dab677|phase=hub|season=2027|week=4
+R1305L|fifteen|desk on|seed 3|hub2|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 3|pick1
+R1305X|fifteen|desk on|seed 3|pick1|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 3|pick1|load|179028a53456b9372196c4cc8d56d8bc881bc6da|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 3|pick1|load|hasLog=0|club=12-5
+R1305X|fifteen|desk on|seed 3|pick1|xpick1|72c21de6f14ed3b37f1abf50ddd58c9dc959b88e|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 3|pick1|xpick1|hasLog=0|club=12-5
+R1305X|fifteen|desk on|seed 3|pick1|xpick2|e4e9b2ea0bf26aec8b43ca9af4ae53f054c21b50|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 3|pick1|xpick2|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 3|pick1|after-summer-reload|e4e9b2ea0bf26aec8b43ca9af4ae53f054c21b50|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 3|pick1|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 3|pick1|press1|dae5b3c87166345bfdc8c350afcdd07763ad29d3|phase=hub|season=2027|week=2
+R1305L|fifteen|desk on|seed 3|pick1|press1|hasLog=0|club=1-0
+R1305X|fifteen|desk on|seed 3|pick1|press2|034003dbc5caef01378bd5f5029e4542a080802c|phase=hub|season=2027|week=3
+R1305L|fifteen|desk on|seed 3|pick1|press2|hasLog=0|club=2-0
+R1305X|fifteen|desk on|seed 3|pick1|press3|556f6f60103f69a9b91534d5b41db2b67a8d00c8|phase=hub|season=2027|week=4
+R1305L|fifteen|desk on|seed 3|pick1|press3|hasLog=0|club=3-0
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 3|recap
+R1305X|fifteen|desk on|seed 3|recap|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 3|recap|load|0bb6704ec7015cff7e402e4a9485ab18a5c7ea9c|phase=recap|season=2026|week=17
+R1305L|fifteen|desk on|seed 3|recap|load|hasLog=0|club=12-5
+R1305X|fifteen|desk on|seed 3|recap|draft|19ce97c9f70a4f96060e8cf50bb75d4d39b0eada|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 3|recap|draft|hasLog=0|club=12-5
+R1305X|fifteen|desk on|seed 3|recap|xpick1|bed2feba81a11480eea585f0c76cdbb255037152|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 3|recap|xpick1|hasLog=0|club=12-5
+R1305X|fifteen|desk on|seed 3|recap|xpick2|665e9eed1662ec41b88e2a034ea6054c83cd282f|phase=draft|season=2026|week=17
+R1305L|fifteen|desk on|seed 3|recap|xpick2|hasLog=0|club=12-5
+R1305X|fifteen|desk on|seed 3|recap|xpick3|c1f0243504931c24d97ee60ca92b9ddf360b6d9e|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 3|recap|xpick3|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 3|recap|after-summer-reload|c1f0243504931c24d97ee60ca92b9ddf360b6d9e|phase=hub|season=2027|week=1
+R1305L|fifteen|desk on|seed 3|recap|after-summer-reload|hasLog=0|club=0-0
+R1305X|fifteen|desk on|seed 3|recap|press1|658b7673b083bb00faf26d1ef15821332aeab81e|phase=hub|season=2027|week=2
+R1305L|fifteen|desk on|seed 3|recap|press1|hasLog=0|club=0-1
+R1305X|fifteen|desk on|seed 3|recap|press2|61cec4fe05f90eeadcfdb4b368755b374ffc7d64|phase=hub|season=2027|week=3
+R1305L|fifteen|desk on|seed 3|recap|press2|hasLog=0|club=0-2
+R1305X|fifteen|desk on|seed 3|recap|press3|b2014f7782fd2f0818bb28ba6efc4df8e40189a6|phase=hub|season=2027|week=4
+R1305L|fifteen|desk on|seed 3|recap|press3|hasLog=0|club=1-2
+
+stdout | src/test/r1305RunFleet.test.tsx > R1305 reviewer cross: saves of one build continued on this one > fifteen|desk on|seed 3|w8
+R1305X|fifteen|desk on|seed 3|w8|mounted|sameBytes=true|refused=false
+R1305X|fifteen|desk on|seed 3|w8|load|148fdc53598ff5fa7293e6c6a6925bcf27bc901d|phase=hub|season=2026|week=9
+R1305L|fifteen|desk on|seed 3|w8|load|hasLog=0|club=4-4
+R1305X|fifteen|desk on|seed 3|w8|press1|c0ea04312e0e28004d1ff682f488e6a07e7550b7|phase=hub|season=2026|week=10
+R1305L|fifteen|desk on|seed 3|w8|press1|hasLog=0|club=5-4
+R1305X|fifteen|desk on|seed 3|w8|press2|0ff553d2218a7edc61f58aa772f91be9e8917245|phase=hub|season=2026|week=11
+R1305L|fifteen|desk on|seed 3|w8|press2|hasLog=0|club=6-4
+R1305X|fifteen|desk on|seed 3|w8|press3|4fc9a03e19ed2fb99874a69e194df1ffae692cc1|phase=hub|season=2026|week=12
+R1305L|fifteen|desk on|seed 3|w8|press3|hasLog=0|club=7-4
+
+ ✓ src/test/r1305RunFleet.test.tsx (32 tests) 7460ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|hub2  1489ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|pick1  354ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 21|recap  366ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk off|seed 3|recap  347ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 21|pick1  328ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 21|recap  392ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 3|pick1  326ms
+   ✓ R1305 reviewer cross: saves of one build continued on this one > deep|desk on|seed 3|recap  371ms
+
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+   Start at  00:06:38
+   Duration  8.39s (transform 1.04s, setup 51ms, collect 196ms, tests 7.46s, environment 294ms, prepare 108ms)
+
