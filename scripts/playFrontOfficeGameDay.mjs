@@ -87,7 +87,12 @@
  *  15 a reload in the middle of the bracket shows the same bracket and plays
  *     nothing;
  *  16 the old button on Week 17 goes straight to the recap;
- *  17 the bracket's "?" opens, closes, opens again and closes.
+ *  17 the bracket's "?" opens, closes, opens again and closes;
+ *  18 (the fix pass) the title game watched (D: his club in the final, a
+ *     title mandate, trust 60): its press closes the season, so until full
+ *     time the press card and the owner card read as before the press, no
+ *     answer of the card is open and no recap is drawn; at full time the
+ *     recap comes with the room the result called (the podium or the scrum).
  * Point 8 covers the bracket's faces too (its tie list and week chips are
  * the face's named scrollers).
  *
@@ -114,6 +119,8 @@
  *   revealdown    (Round 1309) a BOARD MUTATION, not a plant: the request
  *                 line puts the reveal's ref back on the box from sm up and
  *                 builds again; the walk only names the point                  point 12
+ *   titlespoil    (the fix pass) the room's verdict written into the owner
+ *                 card while the title game is watched                         point 18
  * (The hold itself removed from the board is a control of the unit test:
  * node scripts/controlFrontOfficeBoard.mjs recordspoils; pacespoils and
  * seedoff there mutate the board itself.)
@@ -132,11 +139,11 @@ import { bundle } from './lib/gmGameDayFleet.mjs';
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.FO_GAMEDAY_WALK_CONTROL || '';
-const CONTROLS = { recordspoils: 3, spoiler: 3, tall: 8, noreveal: 3, helpjump: 6, pacespoils: 9, seedoff: 10, revealdown: 12, bracketjump: 14, playoffspoil: 14, lostblock: 15 };
+const CONTROLS = { recordspoils: 3, spoiler: 3, tall: 8, noreveal: 3, helpjump: 6, pacespoils: 9, seedoff: 10, revealdown: 12, bracketjump: 14, playoffspoil: 14, lostblock: 15, titlespoil: 18 };
 /* the controls planted in the 390 walk itself; pacespoils and seedoff are planted in the pass after it */
 const WALK_PLANTS = ['recordspoils', 'spoiler', 'tall', 'noreveal', 'helpjump'];
 /* Round 1309: the controls planted in the 390 playoffs walk (revealdown is a board mutation: the walk only names its point) */
-const PLAYOFF_PLANTS = ['bracketjump', 'playoffspoil', 'lostblock'];
+const PLAYOFF_PLANTS = ['bracketjump', 'playoffspoil', 'lostblock', 'titlespoil'];
 if (CONTROL && !Object.prototype.hasOwnProperty.call(CONTROLS, CONTROL)) { console.error(`playFrontOfficeGameDay: unknown control "${CONTROL}". Known: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 const OUT = process.env.RC_OUT || process.env.FO_GAMEDAY_SHOTS || '';
 const SAVE_KEY = 'front-office-save-v1';
@@ -585,7 +592,7 @@ async function ownerAndSeedWalk(browser, size) {
 const { M: PO } = await bundle([
   "export { initLeague, simGame, REGULAR_WEEKS } from './src/lib/frontOffice.ts';",
   "export { NFL_POSTSEASON, nflPlayTie } from './src/lib/frontOfficePostseason.ts';",
-  "export { openBracket, playBracketWeek, bracketPairings } from './src/lib/gmBracket.ts';",
+  "export { openBracket, playBracketWeek, bracketPairings, bracketWeek } from './src/lib/gmBracket.ts';",
   "export { nflTell, nflWhere } from './src/lib/frontOfficeGameDay.ts';",
   "export { addToGmGameLog } from './src/lib/gmGameLog.ts';",
 ], [], 'fo-postseason-walk');
@@ -640,7 +647,38 @@ function bracketOpenSave() {
   const seeds = PO.NFL_POSTSEASON.seeds(league);
   return shapeOf(league, seeds[1], { playoffs: PO.openBracket(PO.NFL_POSTSEASON.formatFor(league.season), league.season, seeds) });
 }
-const FIXTURES = { A: week17Save(), B: divisionalLossSave(), C: bracketOpenSave() };
+/** D (the fix pass): the bracket three rounds on with his club (the top seed) in the title game, a title mandate and
+ *  trust 60, so a title (the podium) or a loss (the scrum) both move what the press card and the owner card say. His
+ *  club is strong for those three rounds only and saved with its own ratings, so its final is an ordinary game. A few
+ *  streams, because a final the law will not tell has no clock and its watch ends at once (the tile's rule): the walk
+ *  takes the first whose watch runs a clock. */
+function titleGameSaves() {
+  const out = [];
+  for (let k = 1; k <= 12 && out.length < 4; k += 1) {
+    const league = seasonPlayed(lehmer(7), PO.REGULAR_WEEKS);
+    const seeds = PO.NFL_POSTSEASON.seeds(league);
+    const format = PO.NFL_POSTSEASON.formatFor(league.season);
+    const team = seeds[0];
+    const club = league.teams[team];
+    const own = { ovr: club.players.map(p => p.ovr), defense: club.defense };
+    for (const p of club.players) p.ovr = 99;
+    club.defense = 99;
+    const told = [];
+    const play = PO.nflPlayTie(league.teams, lehmer(k), league.season, undefined, told);
+    let block = PO.openBracket(format, league.season, seeds);
+    for (let w = 0; w < 3; w += 1) block = PO.playBracketWeek(format, block, play);
+    club.players.forEach((p, i) => { p.ovr = own.ovr[i]; });
+    club.defense = own.defense;
+    const week = PO.bracketWeek(format, block);
+    const final = week === null ? null : PO.bracketPairings(format, block, week);
+    if (!final || !final.some(p => p.homeId === team || p.awayId === team)) continue;
+    const log = PO.addToGmGameLog(null, league.season, told.filter(g => g.home === team || g.away === team));
+    const mandate = { tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season: league.season };
+    out.push(shapeOf(league, team, { playoffs: block, ...(log ? { gameLog: log } : {}), trust: 60, mandate }));
+  }
+  return out;
+}
+const FIXTURES = { A: week17Save(), B: divisionalLossSave(), C: bracketOpenSave(), D: titleGameSaves() };
 
 /* in the page: the bracket's parts, the press row and where his result is */
 const playoffOf = () => {
@@ -817,6 +855,52 @@ async function reloadAndHelp(page, size, plant) {
   say(17, o1 && c1 && o2 && c2, `${size.w}: the bracket's "?" opens, closes, opens again and closes`);
 }
 
+/* 18 (the fix pass), the title game watched (D): its press closes the season, so until full time the press card and
+   the owner card read as they did before the press, the card's answers are shut and no recap is drawn; at full time
+   the recap comes with the room the result called. */
+const roomOf = () => {
+  const txt = sel => (document.querySelector(sel)?.textContent ?? '').replace(/\s+/g, ' ').trim();
+  return { press: txt('[data-gm-press]'), owner: txt('[data-owner-mandate]'), open: [...document.querySelectorAll('[data-gm-press] button')].filter(b => !b.disabled).length, recap: !!document.querySelector('[data-verdict-reveal]') };
+};
+async function titleWatchRun(page, size, plant) {
+  let tried = 0, samples = 0, before = null, sv = null;
+  const spoiled = [];
+  for (const raw of FIXTURES.D) {
+    tried += 1;
+    await loadSave(page, raw);
+    before = await page.evaluate(roomOf);
+    await pressAt(page, '[data-watch-round]');
+    if ((await state(page)).face !== 'watch') continue;
+    sv = JSON.parse((await saved(page)).raw);
+    const t0 = Date.now();
+    for (;;) {
+      const st = await state(page);
+      const room = await page.evaluate(roomOf);
+      if (st.face !== 'watch' || room.recap) break;
+      if (Date.now() - t0 > 45000) { spoiled.push('the watch did not reach full time in 45 s'); break; }
+      samples += 1;
+      if (room.press !== before.press) spoiled.push(`the press card reads "${room.press.slice(0, 60)}"`);
+      if (room.owner !== before.owner) spoiled.push(`the owner card reads "${room.owner.slice(0, 60)}"`);
+      if (room.open > 0) spoiled.push('an answer of the press card is open');
+      if (samples === 1) {
+        await shot(page, size, '18-title-watching');
+        /* `titlespoil`: the room's verdict written into the owner card while he watches */
+        if (plant === 'titlespoil') await page.evaluate(() => { const x = document.createElement('p'); x.setAttribute('data-planted', ''); x.textContent = 'The podium'; document.querySelector('[data-owner-mandate]').appendChild(x); });
+      }
+      if (samples === 2) await page.locator('[data-gameday-speed="3x"]').click();
+      await page.waitForTimeout(200);
+    }
+    break;
+  }
+  await page.evaluate(() => document.querySelectorAll('[data-planted]').forEach(n => n.remove()));
+  await page.waitForTimeout(900);
+  const after = await page.evaluate(roomOf);
+  const won = !!sv && sv.postseason?.champion === sv.myTeam;
+  say(18, !!sv && samples >= 2 && spoiled.length === 0 && sv.phase === 'recap' && sv.trust !== 60, `${size.w}: the title game watched (stream ${tried} of ${FIXTURES.D.length}; the save closed at the press: ${won ? 'won' : 'lost'}, trust 60 to ${sv?.trust}): until full time the press card ("${before?.press.slice(0, 30)}") and the owner card held, no answer open (${samples} samples)${spoiled.length ? `: ${[...new Set(spoiled)].slice(0, 3).join('; ')}` : ''}`);
+  say(18, after.recap && (won ? /The podium/ : /The accountability scrum/).test(after.press), `${size.w}: at full time the recap comes with the room the result called ("${after.press.slice(0, 50)}")`);
+  await shot(page, size, '18-title-watched');
+}
+
 /* 12's reveal at 1280 by 900 as well (the size the review measured the scroll of 0 to 778 at): the first press of a
    visit, a week (A) and then a playoff round (B, a new visit) */
 async function revealPass(browser, size) {
@@ -835,7 +919,7 @@ async function revealPass(browser, size) {
   await ctx.close();
 }
 
-/* Points 11 to 17 at one size. Plants of the 390 walk: bracketjump (14), playoffspoil (14), lostblock (15). */
+/* Points 11 to 18 at one size. Plants of the 390 walk: bracketjump (14), playoffspoil (14), lostblock (15), titlespoil (18). */
 async function playoffsWalk(browser, size) {
   console.log(`\n=== ${size.w} by ${size.h}, the playoffs ===`);
   const { ctx, page, errors } = await newPage(browser, size);
@@ -894,6 +978,7 @@ async function playoffsWalk(browser, size) {
   await exitRun(page, size);
   await watchRun(page, size, plant);
   await reloadAndHelp(page, size, plant);
+  await titleWatchRun(page, size, plant);
 
   /* 16: the old button, on the morning of Week 17, goes straight to the recap as it always did */
   await loadSave(page, FIXTURES.A);
