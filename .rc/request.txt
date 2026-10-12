@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+cdwalk: node .rc/x/mkSaveCD.mjs && node .rc/x/walkCD.mjs
