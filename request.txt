@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+parity: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-500 | tail -12; exit ${PIPESTATUS[0]}
+newTests: node_modules/.bin/vitest run src/test/usCareerMarketSecondTab.test.tsx src/test/soccerPressSettlementOrder.test.ts --testTimeout=300000 2>&1 | grep "Test Files\|Tests " ; exit ${PIPESTATUS[0]}

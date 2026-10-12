@@ -1,0 +1,6 @@
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+newTests exit=0 8s |       Tests  14 passed (14)
+tsc exit=0 91s | 
+parity exit=0 63s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
