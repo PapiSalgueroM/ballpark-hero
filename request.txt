@@ -1,0 +1,2 @@
+rivalProve5a: RIVAL_PROVE=8fde50f0 RIVAL_MOVED=mlb RIVAL_CARDS=mlb node scripts/simUsRivalSense.mjs
+rivalPlain: node scripts/simUsRivalSense.mjs

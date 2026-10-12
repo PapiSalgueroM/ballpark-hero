@@ -1,0 +1,2 @@
+rivalPlain exit=0 19s | simUsRivalSense: 31 checks, 0 failed (full size)
+rivalProve5a exit=0 724s | simUsRivalSense: 64 checks, 0 failed (full size)
