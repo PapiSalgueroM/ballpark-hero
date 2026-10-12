@@ -1,0 +1,6 @@
+vitest-world: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmUnseededWorld-guard-EXPECT-RED: CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+simCmLedgerJourney-futureyear-EXPECT-RED: CM_LEDGER_CONTROL=futureyear node scripts/simCmLedgerJourney.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
