@@ -1,0 +1,9 @@
+#!serial
+rules-attr-old-inv: node scripts/lib/cmWorldSeed1250.mjs --apply && git show b6eb78e7:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+rules-attr-new-inv: node scripts/lib/cmWorldSeed1250.mjs --apply && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+rules-old-head: git show b6eb78e7:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- scripts; exit $s
+shoot-field: node .rc/x/mutPR.mjs shootfield && node scripts/simCmShootoutOrder.mjs; s=$?; git checkout -- src scripts; exit $s
+shoot-noarm: node .rc/x/mutPR.mjs shootnoarm && node scripts/simCmShootoutOrder.mjs; s=$?; git checkout -- src scripts; exit $s
+var-fix: node .rc/x/mutPR.mjs varfix && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+var-inv: node scripts/lib/cmWorldSeed1250.mjs --apply && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+var-fix-all: node .rc/x/mutPR.mjs varfix && CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
