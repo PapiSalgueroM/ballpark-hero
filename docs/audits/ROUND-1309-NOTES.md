@@ -55,8 +55,10 @@ box, no layout of its own) with `block: 'end'`, so a box whose bottom is off the
 bottom, and the buttons and the box (420 px together) are then on it; under sm the element is the box's wrapper,
 top aligned, as shipped. The width the page LOADED at decides (no live breakpoint), so a resize across sm changes no
 key and no option and scrolls nothing (walk point 12 holds it at 1280).
-The edge sits on the box's bottom border (`-bottom-px`): laid inside the border the first try left the border's last
-pixel one past the screen (box 449 to 801 of 800, r1309-d2-walk).
+The edge sits inside the box's bottom border with a one pixel scroll margin (`scroll-mb-px`): laid inside the border with
+no margin it left the border's pixel one past the screen (box 449 to 801 of 800, r1309-d2-walk), and laid ON the border
+(`-bottom-px`, 78a19441) it made the box (overflow hidden, so a scroll container) scroll a pixel inside itself with the
+same result (r1309-fin-w).
 
 ## The bracket path is the one press path
 

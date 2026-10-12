@@ -2183,8 +2183,8 @@ export default function FrontOfficeBoard() {
             {/* Round 1309: ONE BOX, TWO FACES. In the playoffs the box shows the bracket, or his game on the tile when a
                 press logged one or he opened one ("Your game"); the row under it holds the back chip. */}
             <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
-              {/* from sm up, the reveal's element: the box's bottom edge, laid over it (see the reveal) */}
-              {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 -bottom-px h-px" data-reveal-edge />}
+              {/* from sm up, the reveal's element: the box's bottom edge, inside its border (laid ON the border it made the box scroll a pixel inside itself), with a one pixel scroll margin for the border (see the reveal) */}
+              {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px scroll-mb-px" data-reveal-edge />}
               {bracketFace && seenPlayoffs && bracketFormat ? (
                 <NflBracket
                   format={bracketFormat}
