@@ -1,0 +1,14 @@
+mut seedoff: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+[22m[39mTRUTH|96 result faces read over 6 seasons|seeded 35 (top seed 8)|outside 61|away games 50|deciding plays 239|wrong 35
+TRUTH-WRONG|NE seed 3 week 1: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 2: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 3: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 4: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 5: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 6: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 7: standing "AFC: 0th seed of 7 as it stands." for "AFC: 1st seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 8: standing "AFC: 1st seed of 7 as it stands." for "AFC: 2nd seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 9: standing "AFC: 2nd seed of 7 as it stands." for "AFC: 3rd seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 10: standing "AFC: 2nd seed of 7 as it stands." for "AFC: 3rd seed of 7 as it stands."
+TRUTH-WRONG|NE seed 3 week 11: standing "AFC: 2nd seed of 7 as it stands." for "AFC: 3rd seed of 7 as it stands."
+TRUTH under mutant seedoff exit=1

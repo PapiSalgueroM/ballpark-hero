@@ -1,0 +1,2 @@
+truth exit=0 2s | TRUTH clean exit=0
+truth-seedoff exit=1 2s | TRUTH under mutant seedoff exit=1
