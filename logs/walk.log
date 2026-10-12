@@ -1,0 +1,93 @@
+fixture: Walk Fixture age 22, last season 2030, pool entries 9
+pool-390-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-390-rm: 1 dialog(s) open at start, pressing Escape
+ok   pool-390-rm: the career opens, no broken save card
+ok   pool-390-rm night 2031: the card lists the 10 saved names in order
+ok   pool-390-rm night 2031: no sideways scroll
+ok   pool-390-rm night 2032: the card lists the 10 saved names in order
+ok   pool-390-rm night 2032: no sideways scroll
+ok   pool-390-rm: reached two Ballon d'Or nights (2031, 2032)
+ok   pool-390-rm: each night saved a pool the reader accepts
+ok   pool-390-rm: 4 made up rivals on both nights keep their names and age a year
+ok   pool-390-rm: no page errors 
+pool-390-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-390-full: 1 dialog(s) open at start, pressing Escape
+ok   pool-390-full: the career opens, no broken save card
+ok   pool-390-full night 2031: the card lists the 10 saved names in order
+ok   pool-390-full night 2031: no sideways scroll
+ok   pool-390-full night 2032: the card lists the 10 saved names in order
+ok   pool-390-full night 2032: no sideways scroll
+ok   pool-390-full: reached two Ballon d'Or nights (2031, 2032)
+ok   pool-390-full: each night saved a pool the reader accepts
+ok   pool-390-full: 3 made up rivals on both nights keep their names and age a year
+ok   pool-390-full: no page errors 
+pool-1280-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-1280-rm: 1 dialog(s) open at start, pressing Escape
+ok   pool-1280-rm: the career opens, no broken save card
+ok   pool-1280-rm night 2031: the card lists the 10 saved names in order
+ok   pool-1280-rm night 2031: no sideways scroll
+ok   pool-1280-rm night 2032: the card lists the 10 saved names in order
+ok   pool-1280-rm night 2032: no sideways scroll
+ok   pool-1280-rm: reached two Ballon d'Or nights (2031, 2032)
+ok   pool-1280-rm: each night saved a pool the reader accepts
+ok   pool-1280-rm: 2 made up rivals on both nights keep their names and age a year
+ok   pool-1280-rm: no page errors 
+pool-1280-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-1280-full: 1 dialog(s) open at start, pressing Escape
+ok   pool-1280-full: the career opens, no broken save card
+ok   pool-1280-full night 2031: the card lists the 10 saved names in order
+ok   pool-1280-full night 2031: no sideways scroll
+ok   pool-1280-full night 2032: the card lists the 10 saved names in order
+ok   pool-1280-full night 2032: no sideways scroll
+ok   pool-1280-full: reached two Ballon d'Or nights (2031, 2032)
+ok   pool-1280-full: each night saved a pool the reader accepts
+ok   pool-1280-full: 4 made up rivals on both nights keep their names and age a year
+ok   pool-1280-full: no page errors 
+old-390-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+old-390-rm: 1 dialog(s) open at start, pressing Escape
+ok   old-390-rm: the career opens, no broken save card
+ok   old-390-rm night 2031: the card lists the 10 saved names in order
+ok   old-390-rm night 2031: no sideways scroll
+ok   old-390-rm night 2032: the card lists the 10 saved names in order
+ok   old-390-rm night 2032: no sideways scroll
+ok   old-390-rm: reached two Ballon d'Or nights (2031, 2032)
+ok   old-390-rm: each night saved a pool the reader accepts
+ok   old-390-rm: 3 made up rivals on both nights keep their names and age a year
+ok   old-390-rm: no page errors 
+old-1280-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+old-1280-full: 1 dialog(s) open at start, pressing Escape
+ok   old-1280-full: the career opens, no broken save card
+ok   old-1280-full night 2031: the card lists the 10 saved names in order
+ok   old-1280-full night 2031: no sideways scroll
+ok   old-1280-full night 2033: the card lists the 10 saved names in order
+ok   old-1280-full night 2033: no sideways scroll
+ok   old-1280-full: reached two Ballon d'Or nights (2031, 2033)
+ok   old-1280-full: each night saved a pool the reader accepts
+ok   old-1280-full: 4 made up rivals on both nights keep their names and age a year
+ok   old-1280-full: no page errors 
+bad-390-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+bad-390-full: 1 dialog(s) open at start, pressing Escape
+ok   bad-390-full: the career opens, no broken save card
+ok   bad-390-full night 2031: the card lists the 10 saved names in order
+ok   bad-390-full night 2031: no sideways scroll
+ok   bad-390-full night 2032: the card lists the 10 saved names in order
+ok   bad-390-full night 2032: no sideways scroll
+ok   bad-390-full: reached two Ballon d'Or nights (2031, 2032)
+ok   bad-390-full: each night saved a pool the reader accepts
+ok   bad-390-full: 3 made up rivals on both nights keep their names and age a year
+ok   bad-390-full: no page errors 
+bad-1280-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+bad-1280-rm: 1 dialog(s) open at start, pressing Escape
+ok   bad-1280-rm: the career opens, no broken save card
+ok   bad-1280-rm night 2031: the card lists the 10 saved names in order
+ok   bad-1280-rm night 2031: no sideways scroll
+ok   bad-1280-rm night 2032: the card lists the 10 saved names in order
+ok   bad-1280-rm night 2032: no sideways scroll
+ok   bad-1280-rm: reached two Ballon d'Or nights (2031, 2032)
+ok   bad-1280-rm: each night saved a pool the reader accepts
+ok   bad-1280-rm: 4 made up rivals on both nights keep their names and age a year
+ok   bad-1280-rm: no page errors 
+NIGHTS {"pool-390-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-pool-390-rm-1.png"},{"year":2032,"gen":9,"pool":15,"shot":"night-pool-390-rm-2.png"}],"pool-390-full":[{"year":2031,"gen":5,"pool":12,"shot":"night-pool-390-full-1.png"},{"year":2032,"gen":10,"pool":15,"shot":"night-pool-390-full-2.png"}],"pool-1280-rm":[{"year":2031,"gen":4,"pool":12,"shot":"night-pool-1280-rm-1.png"},{"year":2032,"gen":9,"pool":15,"shot":"night-pool-1280-rm-2.png"}],"pool-1280-full":[{"year":2031,"gen":5,"pool":12,"shot":"night-pool-1280-full-1.png"},{"year":2032,"gen":10,"pool":15,"shot":"night-pool-1280-full-2.png"}],"old-390-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-old-390-rm-1.png"},{"year":2032,"gen":10,"pool":15,"shot":"night-old-390-rm-2.png"}],"old-1280-full":[{"year":2031,"gen":4,"pool":12,"shot":"night-old-1280-full-1.png"},{"year":2033,"gen":10,"pool":15,"shot":"night-old-1280-full-2.png"}],"bad-390-full":[{"year":2031,"gen":5,"pool":12,"shot":"night-bad-390-full-1.png"},{"year":2032,"gen":10,"pool":15,"shot":"night-bad-390-full-2.png"}],"bad-1280-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-bad-1280-rm-1.png"},{"year":2032,"gen":10,"pool":15,"shot":"night-bad-1280-rm-2.png"}]}
+ok   whats-new 390: entry shown
+ok   whats-new 1280: entry shown
+rvwalk: 74 checks, 0 failed
