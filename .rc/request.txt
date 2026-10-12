@@ -1,0 +1,1 @@
+fleetF3: git worktree add /tmp/base 35f85630 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && node .rc/x/fleetF3.mjs /tmp/base 16
