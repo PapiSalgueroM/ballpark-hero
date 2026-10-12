@@ -7231,7 +7231,7 @@ export function topUpFreeAgents(state: CareerState): void {
     ...(state.releasedNames ?? []),
     ...(state.academy?.prospects ?? []).map(pr => pr.name),
     ...(state.loanedOut ?? []).map(l => l.player.name),
-    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+    ...marketBase(yearsOn(state), state.eraId, worldSeedOf(state)).map(m => m.name),
   ]);
   const out = [...pool];
   for (let k = 0; have < FREE_AGENT_POOL_TARGET && k < FREE_AGENT_POOL_TARGET * 3; k++) {
@@ -7279,7 +7279,7 @@ export function seedRealFreeAgents(state: CareerState): void {
   const taken = new Set<string>([
     ...state.squad.map(p => p.name),
     ...pool.map(f => f.name),
-    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+    ...marketBase(yearsOn(state), state.eraId, worldSeedOf(state)).map(m => m.name),
   ]);
   const real: FreeAgent[] = CM_REAL_FREE_AGENTS
     .filter(r => !taken.has(r.name))
@@ -19712,10 +19712,14 @@ function fillSquadGaps(
   clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
   retiredNames: string[], eraId: string = 'now', realPool: FreeAgent[] = [],
   released: string[] = [],
-): { squad: CMPlayer[]; signed: string[] } {
+  worldSeed?: number,
+): { squad: CMPlayer[]; signed: string[]; from: Map<string, string> } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
-  if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
-  const baseline = projectedXIAvg(clubName, yearsOnNow, eraId)
+  if (seniors >= SENIOR_FLOOR) return { squad, signed: [], from: new Map() };
+  /* Release AZ fix (reviewer 1, minor 2): a seeded career fills its gaps from ITS world (the seed is undefined on
+     every other career, so theirs read exactly what they always read), and each man taken off a club's list is
+     recorded from that club below, so a man signed here and sold later is not left on his old club's list too. */
+  const baseline = projectedXIAvg(clubName, yearsOnNow, eraId, worldSeed)
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);
@@ -19745,15 +19749,16 @@ function fillSquadGaps(
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
-  const invented = marketBase(yearsOnNow, eraId)
+  const invented = marketBase(yearsOnNow, eraId, worldSeed)
     .filter(p => !letGo.has(p.name) && !taken.has(p.name) && !retired.has(p.name) && band(p.rating)
       && !fromReal.some(f => f.name === p.name))
     .sort((a, b) => a.rating - b.rating);
   const pool = [...fromReal.sort((a, b) => a.rating - b.rating), ...invented];
-  if (!pool.length) return { squad, signed: [] };
+  if (!pool.length) return { squad, signed: [], from: new Map() };
   const want = clamp(SENIOR_FLOOR - seniors, 0, 4);
   const out = [...squad];
   const signed: string[] = [];
+  const from = new Map<string, string>();
   for (let i = 0; i < want; i++) {
     // The thinnest position first, so an emergency window does not hand you
     // six strikers and no keeper.
@@ -19766,6 +19771,7 @@ function fillSquadGaps(
     const mp = (fits.length ? fits : pool.filter(p => !signed.includes(p.name)))[0];
     if (!mp) break;
     signed.push(mp.name);
+    if (mp.club) from.set(mp.name, mp.club);
     const player: CMPlayer = {
       /* Round 567's rule, which this signing skipped: unique inside the squad. */
       id: freeSquadId(out, `fa-${slug(mp.name)}-s${season}`),
@@ -19791,7 +19797,7 @@ function fillSquadGaps(
     if (ratio !== undefined) player.founderSaleRatio = ratio;
     out.push(player);
   }
-  return { squad: out, signed };
+  return { squad: out, signed, from };
 }
 
 /**
@@ -19988,6 +19994,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const freeAgentNews: string[] = [];
   const releasedNews: string[] = [];
   const freeAgentsIn: string[] = [];
+  let emergencyFrom = new Map<string, string>();
   const retiredNow: { name: string; age: number; rating: number }[] = [];
   /* Round 619: men whose deals ran out this summer, collected here and
      written into the new season's free agent pool below. */
@@ -20070,9 +20077,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       eraId,
       career.freeAgents ?? [],
       [...releasedByYouNames(career)],
+      worldSeedOf(career),
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);
+    emergencyFrom = emergency.from;
     squad = ensureSquadCoverage(squad);
     /* Round 132: and the books get balanced. Keeping veterans alive (see
        renewalTerms) plus a bigger intake pushed a well managed squad to 41
@@ -20103,6 +20112,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   rosterCareer = { ...rosterCareer, season, clubName, squad };
   if (worldRosterView(rosterCareer) || worldSeedOf(rosterCareer) !== undefined) {
     for (const exit of rosterExits) rosterCareer = recordActualRosterTransfer(rosterCareer, exit.player, career.clubName, null, exit.kind);
+    for (const [name, club] of emergencyFrom) {
+      const man = squad.find(p => p.name === name);
+      if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
+    }
   }
   rosterCareer = refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName));
 
