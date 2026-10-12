@@ -1,0 +1,2 @@
+#!serial
+simEras-inverse: node scripts/lib/cmWorldSeed1250.mjs --apply && node scripts/simEras.mjs; s=$?; git checkout -- src; exit $s
