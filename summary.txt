@@ -1,0 +1,5 @@
+vitest-fo exit=0 38s |    Duration  37.19s (transform 5.85s, setup 2.32s, collect 17.99s, tests 65.50s, environment 14.07s, prepare 3.41s)
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 36 controls is in the board exactly once.
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 106s | 
+simGmGameDay exit=0 108s | simGmGameDay: 462 checks, 0 failed
