@@ -1,0 +1,30 @@
+   NEGATIVE CONTROL ON: the book gives every goal of a side to its taker, section 2 must go red
+1) Fresh race: right names, right clubs, all zeros
+   38 tracked scorers across 19 rival clubs
+2) Race goals reconcile against the simulated table, and the golden boot board where the book decides
+   10 seasons, winners 25 to 73, mean 62.4
+  FAIL (2): the mean golden boot winner is 62.4 over 10 seasons, so the sharing leaks
+  FAIL (2): one winner reached 73, which no healthy season comes near
+2b) The old race where no book is kept (a late book, a handover, a thin league read it)
+   10 seasons on the old race, winners 27 to 37, mean 31.2
+3) The POTY formula favours nobody
+   leader: João Pedro (67 goals, score 69.8)
+4) Golden boot, POTY and the world award settle at season end
+   boot: Lamine Yamal (74), POTY: Lamine Yamal, world: Lamine Yamal (Barcelona)
+5) A 2010 save races 2010 names
+   38 tracked 2010 scorers, e.g. Jesús Navas (Sevilla)
+6) A race-less save mid season reconstructs sanely
+   rebuilt with 19 clubs already on the board
+7) A new season starts a new race
+   zeroed board, quiet watch, ready for round one
+8) The summary's golden boot is the Goals board's first where the book decides; the old race's where not
+  FAIL (8): Everton (with its book, settled by book): the summary's awards {"cov":100,"boot":["Erling Haaland","Manchester City",66,0],"ast":["Yankuba Minteh","Brighton",13,0],"glove":["Antonín Kinský","Tottenham",16,0],"xi":[["Antonín Kinský","Tottenham","GK",0],["Michael Keane","Everton","CB",2],["Malick Thiaw","Newcastle","CB",0],["Gabriel Gudmundsson","Leeds United","LB",0],["Nathan Collins","Brentford","CB",0],["Morgan Rogers","Chelsea","CAM",0],["Phil Foden","Manchester City","CAM",0],["Sean Longstaff","Leeds United","CM",0],["Dominik Szoboszlai","Liverpool","CAM",0],["Erling Haaland","Manchester City","ST",0],["João Pedro","Chelsea","ST",0]]} are not the first of each board {"cov":100,"boot":["Erling Haaland","Manchester City",66,0],"ast":["Yankuba Minteh","Brighton",13,0],"glove":["Antonín Kinský","Tottenham",16,0]}
+  FAIL (8): Everton (with its book, settled by book): the season's record keeps {"cov":100,"boot":["Erling Haaland","Manchester City",66,0],"ast":["Yankuba Minteh","Brighton",13,0],"glove":["Antonín Kinský","Tottenham",16,0],"xi":[["Antonín Kinský","Tottenham","GK",0],["Michael Keane","Everton","CB",2],["Malick Thiaw","Newcastle","CB",0],["Gabriel Gudmundsson","Leeds United","LB",0],["Nathan Collins","Brentford","CB",0],["Morgan Rogers","Chelsea","CAM",0],["Phil Foden","Manchester City","CAM",0],["Sean Longstaff","Leeds United","CM",0],["Dominik Szoboszlai","Liverpool","CAM",0],["Erling Haaland","Manchester City","ST",0],["João Pedro","Chelsea","ST",0]]}, not the summary's awards
+   Everton (with its book, settled by book): boot Erling Haaland (66), assists Yankuba Minteh (13), clean sheets Antonín Kinský (16), on record 100
+  FAIL (8): Real Madrid (with its book, settled by book): the summary's awards {"cov":100,"boot":["Julián Alvarez","Atlético Madrid",72,0],"ast":["Kang-in Lee","Atlético Madrid",14,0],"glove":["Thibaut Courtois","Real Madrid",20,2],"xi":[["Thibaut Courtois","Real Madrid","GK",2],["Carlos Romero","Villarreal","LB",0],["Cristian Romero","Atlético Madrid","CB",0],["Eric García","Barcelona","CB",0],["Dávid Hancko","Atlético Madrid","CB",0],["Kang-in Lee","Atlético Madrid","CAM",0],["Jude Bellingham","Real Madrid","CAM",2],["Fermín López","Barcelona","CAM",0],["Pape Gueye","Villarreal","CM",0],["Julián Alvarez","Atlético Madrid","ST",0],["Lamine Yamal","Barcelona","RW",0]]} are not the first of each board {"cov":100,"boot":["Julián Alvarez","Atlético Madrid",72,0],"ast":["Kang-in Lee","Atlético Madrid",14,0],"glove":["Thibaut Courtois","Real Madrid",20,2]}
+  FAIL (8): Real Madrid (with its book, settled by book): the season's record keeps {"cov":100,"boot":["Julián Alvarez","Atlético Madrid",72,0],"ast":["Kang-in Lee","Atlético Madrid",14,0],"glove":["Thibaut Courtois","Real Madrid",20,2],"xi":[["Thibaut Courtois","Real Madrid","GK",2],["Carlos Romero","Villarreal","LB",0],["Cristian Romero","Atlético Madrid","CB",0],["Eric García","Barcelona","CB",0],["Dávid Hancko","Atlético Madrid","CB",0],["Kang-in Lee","Atlético Madrid","CAM",0],["Jude Bellingham","Real Madrid","CAM",2],["Fermín López","Barcelona","CAM",0],["Pape Gueye","Villarreal","CM",0],["Julián Alvarez","Atlético Madrid","ST",0],["Lamine Yamal","Barcelona","RW",0]]}, not the summary's awards
+   Real Madrid (with its book, settled by book): boot Julián Alvarez (72), assists Kang-in Lee (14), clean sheets Thibaut Courtois (20), on record 100
+   Ajax (with its book, settled by thin): boot Jacob Trenskow (32), no awards from the book
+   Napoli (no book, settled by none): boot Lautaro Martínez (39), no awards from the book
+
+   CONTROL DID NOT FIRE: leak turned sections 2, 8 red, not section 2 alone
