@@ -1,0 +1,25 @@
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m src/data/pollFixtures.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+ [32m✓[39m src/components/home/PollOfTheDay.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 322[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m src/test/ownerMandateMotion.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+[90mstdout[2m | src/test/careerWallShotFriendly.test.ts[2m > [22m[2mcareer wall shot forgiveness[2m > [22m[2mscores more with modest aiming and timing errors than the previous ladder
+[22m[39mwall shot forgiveness: 12810/18000 scored, previous 12565/18000
+
+ [32m✓[39m src/test/careerWallShotFriendly.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m src/test/reservedNames.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/test/liveScoresTransport.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m src/lib/careerChanceWheel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/pages/NotFound.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m src/lib/gridRarity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m467 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (469)[39m
+[2m      Tests [22m [1m[32m7193 passed[39m[22m[2m | [22m[33m58 skipped[39m[90m (7251)[39m
+[2m   Start at [22m 01:04:18
+[2m   Duration [22m 982.92s[2m (transform 52.35s, setup 38.87s, collect 254.21s, tests 2180.64s, environment 276.40s, prepare 59.39s)[22m
+

@@ -1,0 +1,42 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 153s | 
+practice exit=0 44s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+practice-reset exit=0 13s | simUsCareerPractice control reset: all four named outcomes rejected the defect, all four quiet restores passed
+action exit=0 16s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+faFeedback exit=0 7s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-consumed exit=0 6s | AssertionError: expected <p role=\"status\" tabindex=\"-1\" …(2)></p> to be null\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.
+faFeedback-status exit=0 9s | Free-agency feedback status: 8 intended failures, 5 independent passes, no skipped cases.
+faFeedback-restored exit=0 6s | AssertionError: expected <p role=\"status\" tabindex=\"-1\" …(2)></p> to be null\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.
+saveRetry exit=0 260s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+faFeedback-replacement exit=0 7s | AssertionError: expected <p role=\"status\" tabindex=\"-1\" …(2)></p> to be null\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.
+faFeedback-finite exit=0 6s | AssertionError: expected 1550 to be less than or equal to 600\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.tsx:177:61\n    at fi
+faFeedback-reduced exit=0 7s | AssertionError: expected '@keyframes offerReply {\\n  from { box…' to match /@media\\s*\\(prefers-reduced-motion:\\s*…/\n    at /home/runner/work/ballpark-hero/ballpa
+extMotion exit=0 5s | simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.
+extMotion-unreply exit=0 4s | simExtensionResponseMotion unreply control: all three real-engine response checks rejected the removed binding; both opening-state checks stayed green.
+simNoRivalNames exit=0 32s | No rival product names found. 0 findings.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 44s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLegalPages exit=0 1s | simLegalPages: all green
+simHarnessAnchors exit=0 81s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsCareerDeckC exit=0 116s | simUsCareerDeckC: all checks passed
+simUsPostseason exit=0 34s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simCareerSeasonTruth exit=0 0s | simCareerSeasonTruth: all green
+simExtension exit=0 0s | simExtension: green. The last year of a deal is a decision in all four games now.
+simFreeAgency exit=0 4s | ALL FREE AGENCY CHECKS PASSED
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simCareerHub exit=0 0s | simCareerHub: green. Nine games on the same boxes now, and every award has a year on it.
+simHomeFront exit=0 2s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simUsCoachCareer exit=0 6s | PASS: ALL US COACHING CAREER CHECKS PASSED
+simMoneyAppFeedback exit=0 7s | MoneyApp feedback: CRLF copied controls bind, original bytes held, owned temporary files cleaned. Native geometry/motion acceptance remains separate.
+simCareerBadgeMotion exit=0 4s | simCareerBadgeMotion: six rendered evaluator, locked, earned, unlock, stable-node, previous-career and full-label checks passed.
+simCareerSeasonReview exit=0 21s | simCareerSeasonReview normal: intended assertions and independent retirement baseline passed.
+simUsSeasonCentre exit=0 199s | simUsSeasonCentre: 158 checks, 0 failed
+simCareerEntryGuide exit=0 15s | simCareerEntryGuide normal: intended guide outcomes and independent baseline passed.
+simCareerDecisionOutcome exit=0 17s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+simSaveKeeper exit=0 11s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simCareerParity exit=0 24s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simCareerKeepPlaying exit=0 198s | simCareerKeepPlaying: 1463 checks, 0 failures
+vitest-all exit=0 984s |    Duration  982.92s (transform 52.35s, setup 38.87s, collect 254.21s, tests 2180.64s, environment 276.40s, prepare 59.39s)
+pm exit=0 511s | Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.
