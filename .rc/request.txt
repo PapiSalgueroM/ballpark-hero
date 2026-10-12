@@ -1,0 +1,2 @@
+m4-head: node .rc/x/rvm4.mjs . 24
+m4-mut: R=$PWD; git worktree add -q --detach /tmp/rvm4 HEAD && ln -s "$R/node_modules" /tmp/rvm4/node_modules && node .rc/x/rvmut.mjs M4 /tmp/rvm4 && node .rc/x/rvm4.mjs /tmp/rvm4 24
