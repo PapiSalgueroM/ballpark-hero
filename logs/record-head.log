@@ -1,0 +1,8 @@
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../../../../tmp/head-rec.json (2296639 bytes)
+cmpRec nfl: EQUAL in every part (475 path steps committed, 475 fresh; 19 saves)
+cmpRec nba: EQUAL in every part (521 path steps committed, 521 fresh; 19 saves)
+cmpRec mlb: EQUAL in every part (455 path steps committed, 455 fresh; 19 saves)
+cmpRec nhl: EQUAL in every part (421 path steps committed, 421 fresh; 19 saves)
+cmpRec: EQUAL in all 4 sports. A fresh recording on this head is the committed recording.
+changed files: 0

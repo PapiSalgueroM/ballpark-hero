@@ -1,0 +1,3 @@
+   nhl save "extTalk" step 2 (after "close: Hub"): the screen reads "Gordie Blaze · DCarolina Hurricanes2028 · age 21OVR 73$0.9M x1🪑 Fourth line Play the 2028 seasonCareer so far: 0 Cups · 0 Norris Trophies ·", fixture "Gordie Blaze · DCarolina Hurricanes2028 · age 21OVR 73$0.9M x1🪑 Fourth line The f
+  CONTROL FIRED: [nfl, nba, mlb, nhl] red on "save "extTalk"", the rest green
+simUsBoardParity control talk: green. The control turned its own sports red for its own reason.

@@ -1,0 +1,2 @@
+playUsMarketTalk: 12 checks, 6 failed (control unspend)
+CONTROL unspend: FIRED. The spent check went red in all 6 journeys that pushed (the push control came back enabled) and nothing else did.

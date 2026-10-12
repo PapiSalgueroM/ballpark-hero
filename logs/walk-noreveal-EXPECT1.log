@@ -1,0 +1,2 @@
+playUsMarketTalk: 16 checks, 16 failed (control noreveal)
+CONTROL noreveal: FIRED. With nothing able to scroll an element into view the wheel was left outside the window in all 8 journeys (8 of them lost the pushed offer after Continue as well), and no other check went red.

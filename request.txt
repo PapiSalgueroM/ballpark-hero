@@ -1,0 +1,26 @@
+# Release AX fix pass, final proof part 2a (served, one at a time): the recording replayed and recorded afresh, its eleven controls, the walk of this pass and its controls, the weight, the scroll fences
+#!serve
+#!playwright
+#!serial
+parity: node scripts/simUsBoardParity.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-draw: US_BOARD_PARITY_CONTROL=draw node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-binding: US_BOARD_PARITY_CONTROL=binding node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-restore: US_BOARD_PARITY_CONTROL=restore node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-era: US_BOARD_PARITY_CONTROL=era node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-talk: US_BOARD_PARITY_CONTROL=talk node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-wheel: US_BOARD_PARITY_CONTROL=wheel node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-nosave: US_BOARD_PARITY_CONTROL=nosave node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-nophase: US_BOARD_PARITY_CONTROL=nophase node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+parity-noresult: US_BOARD_PARITY_CONTROL=noresult node scripts/simUsBoardParity.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+record-head: export TMPDIR=$(mktemp -d); node scripts/recordUsBoardFixture.mjs /tmp/head-rec.json > /tmp/record.log 2>&1; s=$?; tail -2 /tmp/record.log; node .rc/x/cmpRec.mjs scripts/data/usBoardFixture.json /tmp/head-rec.json; t=$?; echo "changed files: $(git status --short | wc -l)"; exit $(( s || t ))
+walk: node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | grep "FAIL\|playUsMarketTalk:\|aborted"; exit ${PIPESTATUS[0]}
+walk-droptalk-EXPECT1: US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | tail -2; exit ${PIPESTATUS[0]}
+walk-unspend-EXPECT1: US_MARKET_TALK_CONTROL=unspend node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | tail -2; exit ${PIPESTATUS[0]}
+walk-noreveal-EXPECT1: US_MARKET_TALK_CONTROL=noreveal node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | tail -2; exit ${PIPESTATUS[0]}
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep "FAIL\|nfl-my-career\|soccer-career\|club-manager\|manager-hot-seat\|sweepWeight:" | cut -c1-200; exit ${PIPESTATUS[0]}
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simRevealScroll: node scripts/simRevealScroll.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simMobileChrome: node scripts/simMobileChrome.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simNumberFormatting: node scripts/simNumberFormatting.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
