@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
