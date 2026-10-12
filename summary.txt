@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+secondTab-preguard-EXPECT1 exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract t
+secondTab-M4-EXPECT1 exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract t
+clean1 exit=0 1s | tree clean lines above: 0
+mutForget-build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-mutForget-EXPECT1 exit=1 67s | playUsMarketTalk: 34 checks, 6 failed
+mutM4-build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-mutM4-EXPECT1 exit=0 44s | playUsMarketTalk: 34 checks, 0 failed
+clean2 exit=0 0s | tree clean lines above: 0

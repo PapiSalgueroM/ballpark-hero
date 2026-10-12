@@ -1,0 +1,31 @@
+mutM4: applied (the extension push is not written to the save)
+[31m[1mTypeError[22m: toast.dismiss is not a function[39m
+[36m [2m❯[22m src/components/us-career/UsCareerBoard.tsx:[2m143:26[22m[39m
+    [90m141| [39m       player to Home and back, where nothing is pending and there is …
+    [90m142| [39m       button to use. */[39m
+    [90m143| [39m    [35mreturn[39m () [33m=>[39m { toast[33m.[39m[34mdismiss[39m(said)[33m;[39m }[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m144| [39m  }[33m,[39m [saveFailed])[33m;[39m
+    [90m145| [39m  [35mconst[39m [phase[33m,[39m setPhase] [33m=[39m useState[33m<[39m[33mPhase[39m[33m>[39m([32m'create'[39m)[33m;[39m
+[90m [2m❯[22m safelyCallDestroy node_modules/react-dom/cjs/react-dom.development.js:[2m22971:5[22m[39m
+[90m [2m❯[22m commitHookEffectListUnmount node_modules/react-dom/cjs/react-dom.development.js:[2m23139:11[22m[39m
+[90m [2m❯[22m commitPassiveUnmountInsideDeletedTreeOnFiber node_modules/react-dom/cjs/react-dom.development.js:[2m25140:11[22m[39m
+[90m [2m❯[22m commitPassiveUnmountEffectsInsideOfDeletedTree_begin node_modules/react-dom/cjs/react-dom.development.js:[2m25087:5[22m[39m
+[90m [2m❯[22m commitPassiveUnmountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:[2m24995:11[22m[39m
+[90m [2m❯[22m commitPassiveUnmountEffects node_modules/react-dom/cjs/react-dom.development.js:[2m24980:3[22m[39m
+[90m [2m❯[22m flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:[2m27077:3[22m[39m
+[90m [2m❯[22m flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:[2m27023:14[22m[39m
+[90m [2m❯[22m commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:[2m26974:5[22m[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯[22m[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m8 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 00:43:57
+[2m   Duration [22m 3.63s[2m (transform 1.52s, setup 52ms, collect 2.26s, tests 634ms, environment 290ms, prepare 130ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nfl extension%3A the second tab cannot push again and cannot sign past th
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nba extension%3A the second tab cannot push again and cannot sign past th
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > mlb extension%3A the second tab cannot push again and cannot sign past th
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nhl extension%3A the second tab cannot push again and cannot sign past th
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nfl%3A a tab whose own write was refused is not thrown back to the older
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nba%3A a tab whose own write was refused is not thrown back to the older
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > mlb%3A a tab whose own write was refused is not thrown back to the older
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nhl%3A a tab whose own write was refused is not thrown back to the older
