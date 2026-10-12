@@ -1,0 +1,42 @@
+DIFF 600008 age 23 ovr 57 Atletico Madrid t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 20 -> 4 | league to 25 30 -> 22 | ovr end 57 -> 58
+DIFF 600010 age 22 ovr 57 LAFC t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 25 -> 2 | league to 25 46 -> 38 | ovr end 57 -> 57
+DIFF 600025 age 20 ovr 58 Celtic t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 21 -> 4 | league to 25 74 -> 87 | ovr end 60 -> 58
+DIFF 600029 age 21 ovr 58 Shakhtar Donetsk t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 18 -> 3 | league to 25 40 -> 73 | ovr end 59 -> 59
+DIFF 600030 age 19 ovr 56 Racing Club t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 6 -> 3 | league to 25 80 -> 116 | ovr end 58 -> 58
+DIFF 600031 age 19 ovr 57 Club Brugge t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 22 -> 2 | league to 25 65 -> 106 | ovr end 61 -> 59
+DIFF 600045 age 21 ovr 58 Galatasaray t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 21 -> 3 | league to 25 77 -> 81 | ovr end 60 -> 61
+DIFF 600047 age 19 ovr 57 Shakhtar Donetsk t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 26 -> 3 | league to 25 81 -> 118 | ovr end 60 -> 60
+DIFF 600053 age 19 ovr 57 Leipzig t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 17 -> 0 | league to 25 72 -> 101 | ovr end 59 -> 59
+DIFF 600058 age 21 ovr 55 Sporting CP t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 6 -> 2 | league to 25 39 -> 53 | ovr end 56 -> 57
+DIFF 600066 age 19 ovr 56 Racing Club t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 6 -> 3 | league to 25 56 -> 100 | ovr end 57 -> 58
+DIFF 600072 age 23 ovr 59 Olympiacos t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 18 -> 2 | league to 25 24 -> 3 | ovr end 60 -> 58
+DIFF 600082 age 19 ovr 56 New York City FC t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 13 -> 3 | league to 25 77 -> 109 | ovr end 57 -> 57
+DIFF 600089 age 19 ovr 57 Leipzig t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 22 -> 3 | league to 25 78 -> 100 | ovr end 58 -> 58
+DIFF 600091 age 21 ovr 58 Roma t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 20 -> 2 | league to 25 41 -> 69 | ovr end 58 -> 62
+DIFF 600095 age 20 ovr 58 Zenit t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 23 -> 2 | league to 25 53 -> 88 | ovr end 58 -> 60
+DIFF 600102 age 20 ovr 55 Racing Club t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 11 -> 2 | league to 25 58 -> 89 | ovr end 56 -> 59
+DIFF 600135 age 20 ovr 57 Galatasaray t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 19 -> 2 | league to 25 63 -> 80 | ovr end 59 -> 60
+DIFF 600140 age 23 ovr 57 Palmeiras t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 18 -> 4 | league to 25 26 -> 28 | ovr end 57 -> 58
+DIFF 600149 age 19 ovr 57 Zenit t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 18 -> 1 | league to 25 117 -> 81 | ovr end 60 -> 58
+DIFF 600158 age 19 ovr 57 Palmeiras t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 26 -> 1 | league to 25 77 -> 133 | ovr end 58 -> 63
+DIFF 600171 age 23 ovr 59 Fenerbahce t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 18 -> 1 | league to 25 30 -> 23 | ovr end 59 -> 59
+DIFF 600177 age 20 ovr 58 Brighton t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 27 -> 1 | league to 25 71 -> 87 | ovr end 57 -> 59
+DIFF 600180 age 21 ovr 56 Olympiacos t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 15 -> 3 | league to 25 39 -> 68 | ovr end 58 -> 58
+DIFF 600185 age 23 ovr 58 Zenit t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 24 -> 3 | league to 25 34 -> 25 | ovr end 59 -> 59
+DIFF 600192 age 20 ovr 58 Racing Club t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 14 -> 1 | league to 25 72 -> 83 | ovr end 60 -> 58
+DIFF 600227 age 20 ovr 56 Shakhtar Donetsk t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 14 -> 3 | league to 25 53 -> 98 | ovr end 59 -> 59
+DIFF 600228 age 21 ovr 56 Racing Club t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 8 -> 2 | league to 25 45 -> 64 | ovr end 57 -> 57
+DIFF 600231 age 20 ovr 58 Brighton t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 24 -> 1 | league to 25 62 -> 85 | ovr end 58 -> 59
+DIFF 600244 age 21 ovr 55 LA Galaxy t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 5 -> 2 | league to 25 57 -> 67 | ovr end 58 -> 57
+DIFF 600252 age 20 ovr 56 Olympiacos t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 5 -> 2 | league to 25 101 -> 89 | ovr end 58 -> 59
+DIFF 600271 age 23 ovr 60 Napoli t2 attributed base club loan t3 20-30 head club loan t4 26-34 | loan season league 25 -> 25 | league to 25 37 -> 30 | ovr end 60 -> 60
+DIFF 600277 age 23 ovr 58 Celtic t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 27 -> 3 | league to 25 37 -> 28 | ovr end 60 -> 59
+DIFF 600281 age 23 ovr 59 Shakhtar Donetsk t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 23 -> 2 | league to 25 29 -> 23 | ovr end 59 -> 59
+DIFF 600283 age 19 ovr 57 Club Brugge t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 23 -> 1 | league to 25 62 -> 103 | ovr end 58 -> 58
+DIFF 600287 age 22 ovr 57 Dortmund t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 24 -> 3 | league to 25 44 -> 51 | ovr end 58 -> 58
+DIFF 600289 age 21 ovr 58 Roma t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 23 -> 2 | league to 25 54 -> 56 | ovr end 60 -> 59
+DIFF 600291 age 19 ovr 58 Feyenoord t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 22 -> 3 | league to 25 62 -> 124 | ovr end 59 -> 60
+DIFF 600300 age 19 ovr 56 Racing Club t2 attributed base club loan t3 8-18 head zero offer t-  | loan season league 12 -> 2 | league to 25 94 -> 110 | ovr end 60 -> 58
+DIFF 600304 age 21 ovr 57 Marseille t2 attributed base club loan t3 20-30 head zero offer t-  | loan season league 26 -> 2 | league to 25 56 -> 66 | ovr end 60 -> 58
+{"group":"t2","thresh":26,"careers":500,"tried":800,"differ":108,"unattributed":0,"loanSeasonLeague":{"base":17.71,"head":2.66},"leagueTo25":{"base":59.46,"head":77.91},"overallEnd":{"base":58.5,"head":58.5},"headZeroOfferAtDiff":107,"tally":{"base":{"loanVerdicts":119,"zeroOffer":0,"byParent":{"t2->3":119},"minUnder20":41},"head":{"loanVerdicts":108,"zeroOffer":107,"byParent":{"t2->none":107,"t2->4":1},"minUnder20":0}}}
+FLEETBITE done: group t2 thresh 26, 500 careers (800 tried), 108 differ, 0 unattributed; base loan verdicts 119 (41 to a club forecast under 20), head zero offer 107; loan season league games base 17.71 head 2.66

@@ -1,0 +1,42 @@
+DIFF 400264 age 19 ovr 66 Benfica t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 15 -> 27 | league to 25 66 -> 71 | ovr end 68 -> 68
+DIFF 400280 age 19 ovr 66 Juventus t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 9 -> 21 | league to 25 88 -> 61 | ovr end 68 -> 68
+DIFF 400294 age 19 ovr 66 Sao Paulo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 15 -> 27 | league to 25 77 -> 147 | ovr end 69 -> 68
+DIFF 400426 age 19 ovr 66 Porto t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 15 -> 27 | league to 25 56 -> 78 | ovr end 69 -> 68
+DIFF 400635 age 20 ovr 66 Boca Juniors t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 10 -> 22 | league to 25 117 -> 72 | ovr end 68 -> 68
+DIFF 401031 age 20 ovr 66 River Plate t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 15 -> 27 | league to 25 48 -> 113 | ovr end 68 -> 68
+DIFF 401194 age 19 ovr 66 Flamengo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 6 -> 18 | league to 25 64 -> 117 | ovr end 68 -> 68
+DIFF 401370 age 19 ovr 67 Ajax t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 7 -> 19 | league to 25 103 -> 74 | ovr end 69 -> 68
+DIFF 401481 age 19 ovr 66 Boca Juniors t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 8 -> 20 | league to 25 53 -> 125 | ovr end 68 -> 68
+DIFF 401713 age 19 ovr 66 Benfica t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 11 -> 23 | league to 25 123 -> 99 | ovr end 68 -> 68
+DIFF 402063 age 19 ovr 66 Ajax t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 4 -> 16 | league to 25 137 -> 58 | ovr end 68 -> 68
+DIFF 402220 age 20 ovr 66 Flamengo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 14 -> 26 | league to 25 96 -> 68 | ovr end 68 -> 70
+DIFF 402327 age 19 ovr 66 Boca Juniors t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 6 -> 18 | league to 25 108 -> 70 | ovr end 69 -> 68
+DIFF 402423 age 19 ovr 66 Ajax t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 5 -> 17 | league to 25 79 -> 120 | ovr end 69 -> 68
+DIFF 402481 age 19 ovr 66 Flamengo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 5 -> 17 | league to 25 76 -> 70 | ovr end 68 -> 69
+DIFF 402548 age 20 ovr 66 Juventus t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 8 -> 20 | league to 25 43 -> 61 | ovr end 71 -> 68
+DIFF 402633 age 21 ovr 66 River Plate t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 11 -> 26 | league to 25 71 -> 60 | ovr end 70 -> 69
+DIFF 402901 age 19 ovr 66 Benfica t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 13 -> 25 | league to 25 63 -> 113 | ovr end 70 -> 68
+DIFF 403007 age 19 ovr 66 Juventus t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 11 -> 23 | league to 25 58 -> 116 | ovr end 66 -> 67
+DIFF 403377 age 19 ovr 66 Ajax t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 15 -> 27 | league to 25 58 -> 86 | ovr end 69 -> 68
+DIFF 403480 age 20 ovr 66 Flamengo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 11 -> 23 | league to 25 120 -> 55 | ovr end 68 -> 68
+DIFF 403540 age 19 ovr 66 Porto t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 12 -> 24 | league to 25 69 -> 79 | ovr end 69 -> 68
+DIFF 403616 age 19 ovr 66 Chelsea t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 9 -> 21 | league to 25 105 -> 110 | ovr end 69 -> 68
+DIFF 404987 age 19 ovr 66 Juventus t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 6 -> 18 | league to 25 54 -> 73 | ovr end 68 -> 70
+DIFF 405272 age 19 ovr 66 Arsenal t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 10 -> 22 | league to 25 65 -> 107 | ovr end 68 -> 68
+DIFF 405344 age 20 ovr 66 Arsenal t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 12 -> 24 | league to 25 49 -> 64 | ovr end 69 -> 68
+DIFF 405414 age 19 ovr 66 Boca Juniors t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 14 -> 26 | league to 25 63 -> 85 | ovr end 68 -> 68
+DIFF 405441 age 21 ovr 66 Boca Juniors t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 7 -> 19 | league to 25 91 -> 44 | ovr end 68 -> 68
+DIFF 405457 age 19 ovr 66 Benfica t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 10 -> 22 | league to 25 121 -> 72 | ovr end 68 -> 68
+DIFF 405509 age 19 ovr 66 Inter Milan t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 6 -> 18 | league to 25 57 -> 98 | ovr end 67 -> 68
+DIFF 405766 age 19 ovr 66 Sao Paulo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 12 -> 24 | league to 25 89 -> 77 | ovr end 68 -> 68
+DIFF 406152 age 19 ovr 66 River Plate t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 9 -> 21 | league to 25 68 -> 60 | ovr end 68 -> 70
+DIFF 406800 age 19 ovr 66 River Plate t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 13 -> 25 | league to 25 77 -> 82 | ovr end 68 -> 68
+DIFF 407329 age 19 ovr 66 Benfica t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 9 -> 21 | league to 25 129 -> 84 | ovr end 69 -> 69
+DIFF 407535 age 19 ovr 66 Ajax t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 8 -> 20 | league to 25 71 -> 66 | ovr end 68 -> 68
+DIFF 407563 age 19 ovr 66 Porto t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 12 -> 24 | league to 25 65 -> 77 | ovr end 68 -> 68
+DIFF 407927 age 21 ovr 66 Man United t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 12 -> 24 | league to 25 39 -> 52 | ovr end 68 -> 67
+DIFF 408132 age 19 ovr 66 Boca Juniors t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 10 -> 22 | league to 25 154 -> 70 | ovr end 68 -> 70
+DIFF 408160 age 19 ovr 66 Sao Paulo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 5 -> 17 | league to 25 142 -> 54 | ovr end 68 -> 67
+DIFF 408259 age 19 ovr 66 Flamengo t1 attributed base club loan t2 8-18 head club loan t3 20-30 | loan season league 8 -> 20 | league to 25 78 -> 63 | ovr end 68 -> 68
+{"group":"t1","thresh":20,"careers":4000,"tried":8572,"differ":42,"unattributed":0,"loanSeasonLeague":{"base":10,"head":22.07},"leagueTo25":{"base":82,"head":82.19},"overallEnd":{"base":68.33,"head":68.24},"headZeroOfferAtDiff":0,"tally":{"base":{"loanVerdicts":760,"zeroOffer":0,"byParent":{"t1->2":760},"minUnder20":43},"head":{"loanVerdicts":758,"zeroOffer":0,"byParent":{"t1->2":716,"t1->3":42},"minUnder20":0}}}
+FLEETBITE done: group t1 thresh 20, 4000 careers (8572 tried), 42 differ, 0 unattributed; base loan verdicts 760 (43 to a club forecast under 20), head zero offer 0; loan season league games base 10 head 22.07

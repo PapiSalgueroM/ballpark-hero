@@ -1,0 +1,7933 @@
+{
+ "summary": {
+  "group": "t2",
+  "thresh": 26,
+  "careers": 500,
+  "tried": 800,
+  "differ": 108,
+  "unattributed": 0,
+  "loanSeasonLeague": {
+   "base": 17.71,
+   "head": 2.66
+  },
+  "leagueTo25": {
+   "base": 59.46,
+   "head": 77.91
+  },
+  "overallEnd": {
+   "base": 58.5,
+   "head": 58.5
+  },
+  "headZeroOfferAtDiff": 107,
+  "tally": {
+   "base": {
+    "loanVerdicts": 119,
+    "zeroOffer": 0,
+    "byParent": {
+     "t2->3": 119
+    },
+    "minUnder20": 41
+   },
+   "head": {
+    "loanVerdicts": 108,
+    "zeroOffer": 107,
+    "byParent": {
+     "t2->none": 107,
+     "t2->4": 1
+    },
+    "minUnder20": 0
+   }
+  }
+ },
+ "differing": [
+  {
+   "id": 600008,
+   "seed": 631257,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 60,
+    "age": 23,
+    "overall": 57,
+    "club": "Atletico Madrid",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Columbus Crew",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Atletico Madrid",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Columbus Crew",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 30,
+     "seasonsTo25": 2,
+     "overallEnd": 57,
+     "clubEnd": "Atletico Madrid",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Atletico Madrid",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 22,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Pohang Steelers",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600010,
+   "seed": 631259,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 53,
+    "age": 22,
+    "overall": 57,
+    "club": "LAFC",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "to": "Gladbach",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LAFC",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Gladbach",
+      "tier": 3,
+      "league": 25,
+      "onLoan": true
+     },
+     "leagueTo25": 46,
+     "seasonsTo25": 3,
+     "overallEnd": 57,
+     "clubEnd": "LAFC",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "LAFC",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 38,
+     "seasonsTo25": 3,
+     "overallEnd": 57,
+     "clubEnd": "Asante Kotoko",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600025,
+   "seed": 631274,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 29,
+    "age": 20,
+    "overall": 58,
+    "club": "Celtic",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "to": "Persepolis",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Celtic",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Persepolis",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 74,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Kocaelispor",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Celtic",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 87,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Ferencvaros",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600029,
+   "seed": 631278,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 41,
+    "age": 21,
+    "overall": 58,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "to": "PAOK",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "PAOK",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 40,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Caracas FC",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 73,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Central Coast Mariners",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600030,
+   "seed": 631279,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "age": 19,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Botafogo",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Botafogo",
+      "tier": 3,
+      "league": 6,
+      "onLoan": true
+     },
+     "leagueTo25": 80,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 116,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Crystal Palace",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600031,
+   "seed": 631280,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "age": 19,
+    "overall": 57,
+    "club": "Club Brugge",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Atalanta",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Club Brugge",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Atalanta",
+      "tier": 3,
+      "league": 22,
+      "onLoan": true
+     },
+     "leagueTo25": 65,
+     "seasonsTo25": 6,
+     "overallEnd": 61,
+     "clubEnd": "Sunderland",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Club Brugge",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 106,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "HJK Helsinki",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600045,
+   "seed": 631294,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 42,
+    "age": 21,
+    "overall": 58,
+    "club": "Galatasaray",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "to": "Red Star Belgrade",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Galatasaray",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Red Star Belgrade",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 77,
+     "seasonsTo25": 4,
+     "overallEnd": 60,
+     "clubEnd": "QPR",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Galatasaray",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 81,
+     "seasonsTo25": 4,
+     "overallEnd": 61,
+     "clubEnd": "Leverkusen",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600047,
+   "seed": 631296,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "age": 19,
+    "overall": 57,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Samsunspor",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Samsunspor",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 81,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Rennes",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 118,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Sheriff Tiraspol",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600053,
+   "seed": 631302,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 57,
+    "club": "Leipzig",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Basel",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Leipzig",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Basel",
+      "tier": 3,
+      "league": 17,
+      "onLoan": true
+     },
+     "leagueTo25": 72,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Leipzig",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Leipzig",
+      "tier": 2,
+      "league": 0,
+      "onLoan": false
+     },
+     "leagueTo25": 101,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Dundee United",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600058,
+   "seed": 631307,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 34,
+    "age": 21,
+    "overall": 55,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 55,
+     "age": 21,
+     "to": "Nice",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 55,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Nice",
+      "tier": 3,
+      "league": 6,
+      "onLoan": true
+     },
+     "leagueTo25": 39,
+     "seasonsTo25": 4,
+     "overallEnd": 56,
+     "clubEnd": "Sporting CP",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 53,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Genclerbirligi",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600066,
+   "seed": 631315,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Cruz Azul",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Cruz Azul",
+      "tier": 3,
+      "league": 6,
+      "onLoan": true
+     },
+     "leagueTo25": 56,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 100,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Ludogorets",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600072,
+   "seed": 631321,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 59,
+    "age": 23,
+    "overall": 59,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "to": "Brondby IF",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     10,
+     6
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Brondby IF",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 24,
+     "seasonsTo25": 2,
+     "overallEnd": 60,
+     "clubEnd": "Olympiacos",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 3,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Sassuolo",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600082,
+   "seed": 631331,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "New York City FC",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "PAOK",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "New York City FC",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "PAOK",
+      "tier": 3,
+      "league": 13,
+      "onLoan": true
+     },
+     "leagueTo25": 77,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Randers FC",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "New York City FC",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 109,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Saprissa",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600089,
+   "seed": 631338,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Leipzig",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Dinamo Zagreb",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Leipzig",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Dinamo Zagreb",
+      "tier": 3,
+      "league": 22,
+      "onLoan": true
+     },
+     "leagueTo25": 78,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Leipzig",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Leipzig",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 100,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Greuther Furth",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600091,
+   "seed": 631340,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 41,
+    "age": 21,
+    "overall": 58,
+    "club": "Roma",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "to": "Red Bull Salzburg",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Roma",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Red Bull Salzburg",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 41,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Hajduk Split",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Roma",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 69,
+     "seasonsTo25": 4,
+     "overallEnd": 62,
+     "clubEnd": "Maccabi Tel Aviv",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600095,
+   "seed": 631344,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 34,
+    "age": 20,
+    "overall": 58,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "to": "Mainz",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Mainz",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 53,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Zenit",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 88,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Young Africans",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600102,
+   "seed": 631351,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 24,
+    "age": 20,
+    "overall": 55,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 55,
+     "age": 20,
+     "to": "Nice",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 55,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Nice",
+      "tier": 3,
+      "league": 11,
+      "onLoan": true
+     },
+     "leagueTo25": 58,
+     "seasonsTo25": 5,
+     "overallEnd": 56,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 89,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Gor Mahia",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600135,
+   "seed": 631384,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "age": 20,
+    "overall": 57,
+    "club": "Galatasaray",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "to": "Sturm Graz",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Galatasaray",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Sturm Graz",
+      "tier": 3,
+      "league": 19,
+      "onLoan": true
+     },
+     "leagueTo25": 63,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Galatasaray",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Galatasaray",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 80,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Brest",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600140,
+   "seed": 631389,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 63,
+    "age": 23,
+    "overall": 57,
+    "club": "Palmeiras",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Wydad Casablanca",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Palmeiras",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Wydad Casablanca",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 26,
+     "seasonsTo25": 2,
+     "overallEnd": 57,
+     "clubEnd": "Palmeiras",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Palmeiras",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 28,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Dynamo Dresden",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600149,
+   "seed": 631398,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Villarreal",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Villarreal",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 117,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Osijek",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 81,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Twente",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600158,
+   "seed": 631407,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Palmeiras",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Villarreal",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Palmeiras",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Villarreal",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 77,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Zalgiris Vilnius",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Palmeiras",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 133,
+     "seasonsTo25": 6,
+     "overallEnd": 63,
+     "clubEnd": "Malaga",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600171,
+   "seed": 631420,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 61,
+    "age": 23,
+    "overall": 59,
+    "club": "Fenerbahce",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "to": "Freiburg",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Fenerbahce",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Freiburg",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 30,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Fenerbahce",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Fenerbahce",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 23,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "LDU Quito",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600177,
+   "seed": 631426,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "age": 20,
+    "overall": 58,
+    "club": "Brighton",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "to": "Hoffenheim",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Brighton",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Hoffenheim",
+      "tier": 3,
+      "league": 27,
+      "onLoan": true
+     },
+     "leagueTo25": 71,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Vaduz",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Brighton",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 87,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Hull City",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600180,
+   "seed": 631429,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 36,
+    "age": 21,
+    "overall": 56,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 21,
+     "to": "Al Ahli",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Al Ahli",
+      "tier": 3,
+      "league": 15,
+      "onLoan": true
+     },
+     "leagueTo25": 39,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Bahia",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 68,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Kortrijk",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600185,
+   "seed": 631434,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 60,
+    "age": 23,
+    "overall": 58,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 23,
+     "to": "Al Ahli",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Al Ahli",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 34,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Zenit",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 25,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Erzurumspor",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600192,
+   "seed": 631441,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "age": 20,
+    "overall": 58,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "to": "Wydad Casablanca",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Wydad Casablanca",
+      "tier": 3,
+      "league": 14,
+      "onLoan": true
+     },
+     "leagueTo25": 72,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Pyunik",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 83,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Bristol City",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600227,
+   "seed": 631476,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "age": 20,
+    "overall": 56,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Goztepe",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Goztepe",
+      "tier": 3,
+      "league": 14,
+      "onLoan": true
+     },
+     "leagueTo25": 53,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Shakhtar Donetsk",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 98,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Kaizer Chiefs",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600228,
+   "seed": 631477,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 39,
+    "age": 21,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 21,
+     "to": "Atalanta",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Atalanta",
+      "tier": 3,
+      "league": 8,
+      "onLoan": true
+     },
+     "leagueTo25": 45,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Tijuana",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 64,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Dynamo Dresden",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600231,
+   "seed": 631480,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 33,
+    "age": 20,
+    "overall": 58,
+    "club": "Brighton",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "to": "Real Sociedad",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Brighton",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Real Sociedad",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 62,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Elche",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Brighton",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 85,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Red Bull Bragantino",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600244,
+   "seed": 631493,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 35,
+    "age": 21,
+    "overall": 55,
+    "club": "LA Galaxy",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 55,
+     "age": 21,
+     "to": "FC Nordsjaelland",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 55,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LA Galaxy",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "FC Nordsjaelland",
+      "tier": 3,
+      "league": 5,
+      "onLoan": true
+     },
+     "leagueTo25": 57,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Ried",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "LA Galaxy",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 67,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Portsmouth",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600252,
+   "seed": 631501,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 33,
+    "age": 20,
+    "overall": 56,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "FC Copenhagen",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "FC Copenhagen",
+      "tier": 3,
+      "league": 5,
+      "onLoan": true
+     },
+     "leagueTo25": 101,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Atletico San Luis",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 89,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Al Kholood",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600271,
+   "seed": 631520,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 53,
+    "age": 23,
+    "overall": 60,
+    "club": "Napoli",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 60,
+     "age": 23,
+     "to": "Real Sociedad",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 60,
+     "age": 23,
+     "to": "St. Pauli",
+     "toTier": 4,
+     "band": {
+      "min": 26,
+      "max": 34
+     }
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     6
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Napoli",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Real Sociedad",
+      "tier": 3,
+      "league": 25,
+      "onLoan": true
+     },
+     "leagueTo25": 37,
+     "seasonsTo25": 2,
+     "overallEnd": 60,
+     "clubEnd": "Napoli",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "St. Pauli",
+      "tier": 4,
+      "league": 25,
+      "onLoan": true
+     },
+     "leagueTo25": 30,
+     "seasonsTo25": 2,
+     "overallEnd": 60,
+     "clubEnd": "Randers FC",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600277,
+   "seed": 631526,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 59,
+    "age": 23,
+    "overall": 58,
+    "club": "Celtic",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 23,
+     "to": "Al Qadsiah",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Celtic",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Al Qadsiah",
+      "tier": 3,
+      "league": 27,
+      "onLoan": true
+     },
+     "leagueTo25": 37,
+     "seasonsTo25": 2,
+     "overallEnd": 60,
+     "clubEnd": "Celtic",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Celtic",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 28,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Red Star FC",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600281,
+   "seed": 631530,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 63,
+    "age": 23,
+    "overall": 59,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "to": "Mainz",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Mainz",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 29,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Shakhtar Donetsk",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 23,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Hertha Berlin",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600283,
+   "seed": 631532,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 18,
+    "age": 19,
+    "overall": 57,
+    "club": "Club Brugge",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Wolves",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Club Brugge",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Wolves",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 62,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Club Brugge",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Club Brugge",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 103,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Coritiba",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600287,
+   "seed": 631536,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 50,
+    "age": 22,
+    "overall": 57,
+    "club": "Dortmund",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "to": "Atletico Nacional",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Dortmund",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Atletico Nacional",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 44,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Dortmund",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Dortmund",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 51,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Dundee",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600289,
+   "seed": 631538,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 41,
+    "age": 21,
+    "overall": 58,
+    "club": "Roma",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "to": "Anderlecht",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Roma",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Anderlecht",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 54,
+     "seasonsTo25": 4,
+     "overallEnd": 60,
+     "clubEnd": "Roma",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Roma",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 56,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Pohang Steelers",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600291,
+   "seed": 631540,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 23,
+    "age": 19,
+    "overall": 58,
+    "club": "Feyenoord",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 19,
+     "to": "Club America",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Feyenoord",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Club America",
+      "tier": 3,
+      "league": 22,
+      "onLoan": true
+     },
+     "leagueTo25": 62,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Feyenoord",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Feyenoord",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 124,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Frosinone",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600300,
+   "seed": 631549,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 23,
+    "age": 19,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Lille",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Lille",
+      "tier": 3,
+      "league": 12,
+      "onLoan": true
+     },
+     "leagueTo25": 94,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Hartberg",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 110,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Strasbourg",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600304,
+   "seed": 631553,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 42,
+    "age": 21,
+    "overall": 57,
+    "club": "Marseille",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "to": "Brondby IF",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Marseille",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Brondby IF",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 56,
+     "seasonsTo25": 4,
+     "overallEnd": 60,
+     "clubEnd": "Marseille",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Marseille",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 66,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Asante Kotoko",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600310,
+   "seed": 631559,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 49,
+    "age": 22,
+    "overall": 57,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "to": "Frankfurt",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Frankfurt",
+      "tier": 3,
+      "league": 17,
+      "onLoan": true
+     },
+     "leagueTo25": 39,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Sporting CP",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 44,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "LASK",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600316,
+   "seed": 631565,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Inter Miami",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Malmo FF",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Inter Miami",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Malmo FF",
+      "tier": 3,
+      "league": 27,
+      "onLoan": true
+     },
+     "leagueTo25": 79,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Inter Miami",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Inter Miami",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 98,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Torino",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600323,
+   "seed": 631572,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "age": 19,
+    "overall": 58,
+    "club": "Dortmund",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 19,
+     "to": "AZ Alkmaar",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Dortmund",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "AZ Alkmaar",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 101,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "FC Seoul",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Dortmund",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 112,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Sporting Gijón",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600328,
+   "seed": 631577,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 30,
+    "age": 20,
+    "overall": 56,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Anderlecht",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Anderlecht",
+      "tier": 3,
+      "league": 13,
+      "onLoan": true
+     },
+     "leagueTo25": 67,
+     "seasonsTo25": 5,
+     "overallEnd": 62,
+     "clubEnd": "Al Duhail",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 80,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Cruzeiro",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600336,
+   "seed": 631585,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 50,
+    "age": 22,
+    "overall": 59,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 22,
+     "to": "Zamalek",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Zamalek",
+      "tier": 3,
+      "league": 17,
+      "onLoan": true
+     },
+     "leagueTo25": 29,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 52,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Buriram United",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600352,
+   "seed": 631601,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "LA Galaxy",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Fulham",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LA Galaxy",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Fulham",
+      "tier": 3,
+      "league": 10,
+      "onLoan": true
+     },
+     "leagueTo25": 52,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "LA Galaxy",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "LA Galaxy",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 121,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Al Ain",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600372,
+   "seed": 631621,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Fulham",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Fulham",
+      "tier": 3,
+      "league": 5,
+      "onLoan": true
+     },
+     "leagueTo25": 57,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 111,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Saint George",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600378,
+   "seed": 631627,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 29,
+    "age": 20,
+    "overall": 57,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "to": "Dinamo Zagreb",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Dinamo Zagreb",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 62,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Olympiacos",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 91,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Nancy",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600379,
+   "seed": 631628,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "age": 21,
+    "overall": 58,
+    "club": "Napoli",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "to": "FC Nordsjaelland",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Napoli",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "FC Nordsjaelland",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 59,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Napoli",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Napoli",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 59,
+     "seasonsTo25": 4,
+     "overallEnd": 61,
+     "clubEnd": "Yokohama F. Marinos",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600383,
+   "seed": 631632,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "age": 19,
+    "overall": 57,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Dinamo Zagreb",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Dinamo Zagreb",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 71,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Zenit",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 106,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Saint-Étienne",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600385,
+   "seed": 631634,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 58,
+    "age": 23,
+    "overall": 58,
+    "club": "Celtic",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 23,
+     "to": "FC Copenhagen",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Celtic",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "FC Copenhagen",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 32,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Celtic",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Celtic",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 26,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Al Faisaly",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600386,
+   "seed": 631635,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "age": 19,
+    "overall": 56,
+    "club": "Sevilla",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Lille",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sevilla",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Lille",
+      "tier": 3,
+      "league": 6,
+      "onLoan": true
+     },
+     "leagueTo25": 63,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Sevilla",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Sevilla",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 114,
+     "seasonsTo25": 6,
+     "overallEnd": 56,
+     "clubEnd": "Violette AC",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600394,
+   "seed": 631643,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Marseille",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Persepolis",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Marseille",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Persepolis",
+      "tier": 3,
+      "league": 5,
+      "onLoan": true
+     },
+     "leagueTo25": 45,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Marseille",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Marseille",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 93,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Charlton Athletic",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600403,
+   "seed": 631652,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "age": 21,
+    "overall": 57,
+    "club": "Celtic",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "to": "Legia Warsaw",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Celtic",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Legia Warsaw",
+      "tier": 3,
+      "league": 27,
+      "onLoan": true
+     },
+     "leagueTo25": 52,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Slovan Bratislava",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Celtic",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 68,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "APOEL",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600406,
+   "seed": 631655,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "LA Galaxy",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Shanghai Port",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LA Galaxy",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Shanghai Port",
+      "tier": 3,
+      "league": 11,
+      "onLoan": true
+     },
+     "leagueTo25": 66,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Blackburn Rovers",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "LA Galaxy",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 120,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Braga",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600407,
+   "seed": 631656,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "age": 19,
+    "overall": 58,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 19,
+     "to": "Fiorentina",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Fiorentina",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 86,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Norwich City",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 100,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Al Fayha",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600418,
+   "seed": 631667,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "PAOK",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "PAOK",
+      "tier": 3,
+      "league": 12,
+      "onLoan": true
+     },
+     "leagueTo25": 78,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "New York Red Bulls",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 106,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Comunicaciones",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600419,
+   "seed": 631668,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 50,
+    "age": 22,
+    "overall": 57,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "to": "Lille",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Lille",
+      "tier": 3,
+      "league": 22,
+      "onLoan": true
+     },
+     "leagueTo25": 39,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "LDU Quito",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 0,
+      "onLoan": false
+     },
+     "leagueTo25": 42,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Rennes",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600421,
+   "seed": 631670,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 63,
+    "age": 23,
+    "overall": 59,
+    "club": "Rangers",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "to": "Hoffenheim",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Rangers",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Hoffenheim",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 31,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Rangers",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Rangers",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 20,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Montpellier",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600431,
+   "seed": 631680,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "age": 21,
+    "overall": 59,
+    "club": "Stuttgart",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 21,
+     "to": "FC Nordsjaelland",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Stuttgart",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "FC Nordsjaelland",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 52,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Stuttgart",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Stuttgart",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 73,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Saint George",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600440,
+   "seed": 631689,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 59,
+    "age": 23,
+    "overall": 56,
+    "club": "Sevilla",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 23,
+     "to": "Ulsan HD",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sevilla",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Ulsan HD",
+      "tier": 3,
+      "league": 11,
+      "onLoan": true
+     },
+     "leagueTo25": 37,
+     "seasonsTo25": 2,
+     "overallEnd": 57,
+     "clubEnd": "Kaizer Chiefs",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Sevilla",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 30,
+     "seasonsTo25": 2,
+     "overallEnd": 57,
+     "clubEnd": "Kaizer Chiefs",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600462,
+   "seed": 631711,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 42,
+    "age": 21,
+    "overall": 59,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 21,
+     "to": "Slavia Prague",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Slavia Prague",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 47,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 71,
+     "seasonsTo25": 4,
+     "overallEnd": 60,
+     "clubEnd": "Urawa Red Diamonds",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600472,
+   "seed": 631721,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 28,
+    "age": 20,
+    "overall": 57,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "to": "Fiorentina",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Fiorentina",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 61,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Al Khaleej",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 85,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Buriram United",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600478,
+   "seed": 631727,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Inter Miami",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Shanghai Port",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Inter Miami",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Shanghai Port",
+      "tier": 3,
+      "league": 13,
+      "onLoan": true
+     },
+     "leagueTo25": 75,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Hartberg",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Inter Miami",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 115,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "River Plate Asuncion",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600481,
+   "seed": 631730,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 50,
+    "age": 22,
+    "overall": 58,
+    "club": "Club Brugge",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 22,
+     "to": "Dinamo Zagreb",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Club Brugge",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Dinamo Zagreb",
+      "tier": 3,
+      "league": 22,
+      "onLoan": true
+     },
+     "leagueTo25": 36,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Malaga",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Club Brugge",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 34,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Darmstadt",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600486,
+   "seed": 631735,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 56,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Besiktas",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Besiktas",
+      "tier": 3,
+      "league": 7,
+      "onLoan": true
+     },
+     "leagueTo25": 86,
+     "seasonsTo25": 6,
+     "overallEnd": 61,
+     "clubEnd": "Atlante",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 105,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Colo-Colo",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600488,
+   "seed": 631737,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 53,
+    "age": 23,
+    "overall": 57,
+    "club": "Tigres UANL",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Ulsan HD",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Tigres UANL",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Ulsan HD",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 32,
+     "seasonsTo25": 2,
+     "overallEnd": 57,
+     "clubEnd": "Tigres UANL",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Tigres UANL",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 23,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Ascoli",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600490,
+   "seed": 631739,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "age": 20,
+    "overall": 56,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Panathinaikos",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Panathinaikos",
+      "tier": 3,
+      "league": 12,
+      "onLoan": true
+     },
+     "leagueTo25": 50,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Sporting CP",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 90,
+     "seasonsTo25": 5,
+     "overallEnd": 56,
+     "clubEnd": "Al Duhail",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600504,
+   "seed": 631753,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "age": 21,
+    "overall": 57,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "to": "AZ Alkmaar",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "AZ Alkmaar",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 60,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Olympiacos",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 74,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Partizan",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600506,
+   "seed": 631755,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 28,
+    "age": 20,
+    "overall": 56,
+    "club": "Monterrey",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Ulsan HD",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Monterrey",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Ulsan HD",
+      "tier": 3,
+      "league": 5,
+      "onLoan": true
+     },
+     "leagueTo25": 89,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Lyngby",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Monterrey",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 93,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Lyngby",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600523,
+   "seed": 631772,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "age": 20,
+    "overall": 58,
+    "club": "Roma",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "to": "Westerlo",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 58,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Roma",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Westerlo",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 58,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Roma",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Roma",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 85,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "APOEL",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600526,
+   "seed": 631775,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Frankfurt",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Frankfurt",
+      "tier": 3,
+      "league": 11,
+      "onLoan": true
+     },
+     "leagueTo25": 62,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Modena",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 111,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Vasco da Gama",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600529,
+   "seed": 631778,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 30,
+    "age": 20,
+    "overall": 56,
+    "club": "Rangers",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Persepolis",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Rangers",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Persepolis",
+      "tier": 3,
+      "league": 5,
+      "onLoan": true
+     },
+     "leagueTo25": 73,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Angers",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Rangers",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 92,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Partizan",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600532,
+   "seed": 631781,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 51,
+    "age": 22,
+    "overall": 59,
+    "club": "LAFC",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 22,
+     "to": "Kawasaki Frontale",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LAFC",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Kawasaki Frontale",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 39,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Istra 1961",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "LAFC",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 48,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Kaizer Chiefs",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600534,
+   "seed": 631783,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 29,
+    "age": 20,
+    "overall": 57,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "to": "Villarreal",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Villarreal",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 59,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 87,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Sparta Prague",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600539,
+   "seed": 631788,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "age": 20,
+    "overall": 57,
+    "club": "Dortmund",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "to": "Al Qadsiah",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Dortmund",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Al Qadsiah",
+      "tier": 3,
+      "league": 23,
+      "onLoan": true
+     },
+     "leagueTo25": 97,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Slaven Belupo",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Dortmund",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 96,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Alianza Lima",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600547,
+   "seed": 631796,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 52,
+    "age": 22,
+    "overall": 59,
+    "club": "Celtic",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 22,
+     "to": "Wolves",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 59,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Celtic",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Wolves",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 45,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Celtic",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Celtic",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 44,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Istra 1961",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600550,
+   "seed": 631799,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "age": 19,
+    "overall": 57,
+    "club": "New York City FC",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Legia Warsaw",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "New York City FC",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Legia Warsaw",
+      "tier": 3,
+      "league": 25,
+      "onLoan": true
+     },
+     "leagueTo25": 75,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Estoril",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "New York City FC",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 113,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Sheriff Tiraspol",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600551,
+   "seed": 631800,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Hamburg",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Hamburg",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 78,
+     "seasonsTo25": 6,
+     "overallEnd": 61,
+     "clubEnd": "Troyes",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 104,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Fluminense",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600557,
+   "seed": 631806,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Dortmund",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Hamburg",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Dortmund",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Hamburg",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 69,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Dortmund",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Dortmund",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 82,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "St. Gallen",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600558,
+   "seed": 631807,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Fulham",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Fulham",
+      "tier": 3,
+      "league": 9,
+      "onLoan": true
+     },
+     "leagueTo25": 56,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Olympiacos",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 110,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Sparta Prague",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600574,
+   "seed": 631823,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 34,
+    "age": 21,
+    "overall": 56,
+    "club": "Marseille",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 21,
+     "to": "Samsunspor",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Marseille",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Samsunspor",
+      "tier": 3,
+      "league": 6,
+      "onLoan": true
+     },
+     "leagueTo25": 35,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Marseille",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Marseille",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 64,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Dundee",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600580,
+   "seed": 631829,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 33,
+    "age": 20,
+    "overall": 56,
+    "club": "Sporting CP",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Slavia Prague",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sporting CP",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Slavia Prague",
+      "tier": 3,
+      "league": 7,
+      "onLoan": true
+     },
+     "leagueTo25": 45,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Johor Darul Tazim",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Sporting CP",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 102,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Rio Ave",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600585,
+   "seed": 631834,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 58,
+    "age": 23,
+    "overall": 57,
+    "club": "Fenerbahce",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Everton",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Fenerbahce",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Everton",
+      "tier": 3,
+      "league": 18,
+      "onLoan": true
+     },
+     "leagueTo25": 30,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Fenerbahce",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Fenerbahce",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 27,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Boulogne",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600586,
+   "seed": 631835,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "LA Galaxy",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Atalanta",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LA Galaxy",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Atalanta",
+      "tier": 3,
+      "league": 14,
+      "onLoan": true
+     },
+     "leagueTo25": 59,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "St. Pauli",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "LA Galaxy",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 110,
+     "seasonsTo25": 6,
+     "overallEnd": 61,
+     "clubEnd": "Raja Casablanca",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600587,
+   "seed": 631836,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 52,
+    "age": 23,
+    "overall": 57,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Malmo FF",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Malmo FF",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 36,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Shakhtar Donetsk",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 26,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Sporting Kansas City",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600594,
+   "seed": 631843,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 58,
+    "age": 23,
+    "overall": 57,
+    "club": "Olympiacos",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Fulham",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Olympiacos",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Fulham",
+      "tier": 3,
+      "league": 25,
+      "onLoan": true
+     },
+     "leagueTo25": 33,
+     "seasonsTo25": 2,
+     "overallEnd": 59,
+     "clubEnd": "Olympiacos",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Olympiacos",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 28,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Estrela Amadora",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600607,
+   "seed": 631856,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 56,
+    "club": "Club Brugge",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Besiktas",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Club Brugge",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Besiktas",
+      "tier": 3,
+      "league": 13,
+      "onLoan": true
+     },
+     "leagueTo25": 66,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Club Brugge",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Club Brugge",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 99,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Boulogne",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600615,
+   "seed": 631864,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 23,
+    "age": 19,
+    "overall": 56,
+    "club": "PSV",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Westerlo",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "PSV",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Westerlo",
+      "tier": 3,
+      "league": 7,
+      "onLoan": true
+     },
+     "leagueTo25": 108,
+     "seasonsTo25": 6,
+     "overallEnd": 61,
+     "clubEnd": "Vicenza",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "PSV",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 113,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Atletico Petroleos",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600627,
+   "seed": 631876,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "age": 19,
+    "overall": 57,
+    "club": "Brighton",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Frankfurt",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Brighton",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Frankfurt",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 78,
+     "seasonsTo25": 6,
+     "overallEnd": 57,
+     "clubEnd": "Le Mans",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Brighton",
+      "tier": 2,
+      "league": 1,
+      "onLoan": false
+     },
+     "leagueTo25": 112,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Eibar",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600635,
+   "seed": 631884,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 49,
+    "age": 22,
+    "overall": 57,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "to": "Al Sadd",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Al Sadd",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 47,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Kairat Almaty",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 54,
+     "seasonsTo25": 3,
+     "overallEnd": 58,
+     "clubEnd": "Cardiff City",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600638,
+   "seed": 631887,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 44,
+    "age": 21,
+    "overall": 57,
+    "club": "Athletic Bilbao",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "to": "Rizespor",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Athletic Bilbao",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Rizespor",
+      "tier": 3,
+      "league": 17,
+      "onLoan": true
+     },
+     "leagueTo25": 42,
+     "seasonsTo25": 4,
+     "overallEnd": 57,
+     "clubEnd": "Athletic Bilbao",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Athletic Bilbao",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 73,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Clermont",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600674,
+   "seed": 631923,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "age": 20,
+    "overall": 56,
+    "club": "Sevilla",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Besiktas",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Sevilla",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Besiktas",
+      "tier": 3,
+      "league": 15,
+      "onLoan": true
+     },
+     "leagueTo25": 52,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Osijek",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Sevilla",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 81,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Athletico Paranaense",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600678,
+   "seed": 631927,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "age": 20,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Al Nassr",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Al Nassr",
+      "tier": 3,
+      "league": 13,
+      "onLoan": true
+     },
+     "leagueTo25": 54,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 87,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "Alianza Lima",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600681,
+   "seed": 631930,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "age": 21,
+    "overall": 57,
+    "club": "Brighton",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "to": "Al Sadd",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Brighton",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Al Sadd",
+      "tier": 3,
+      "league": 21,
+      "onLoan": true
+     },
+     "leagueTo25": 46,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Brighton",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Brighton",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 61,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "Seattle Sounders",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600686,
+   "seed": 631935,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 61,
+    "age": 23,
+    "overall": 57,
+    "club": "Monterrey",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "to": "Besiktas",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Monterrey",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Besiktas",
+      "tier": 3,
+      "league": 26,
+      "onLoan": true
+     },
+     "leagueTo25": 35,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Monterrey",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Monterrey",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 29,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Dijon",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600696,
+   "seed": 631945,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 51,
+    "age": 22,
+    "overall": 57,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "to": "Red Star Belgrade",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 22,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    7,
+    7
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Red Star Belgrade",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 37,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Racing Club",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 23,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 48,
+     "seasonsTo25": 3,
+     "overallEnd": 59,
+     "clubEnd": "Gil Vicente",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600700,
+   "seed": 631949,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "age": 20,
+    "overall": 56,
+    "club": "Marseille",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Malmo FF",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Marseille",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Malmo FF",
+      "tier": 3,
+      "league": 8,
+      "onLoan": true
+     },
+     "leagueTo25": 77,
+     "seasonsTo25": 5,
+     "overallEnd": 57,
+     "clubEnd": "Varazdin",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Marseille",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 85,
+     "seasonsTo25": 5,
+     "overallEnd": 60,
+     "clubEnd": "Sheriff Tiraspol",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600712,
+   "seed": 631961,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "age": 20,
+    "overall": 56,
+    "club": "New York City FC",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Columbus Crew",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "New York City FC",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Columbus Crew",
+      "tier": 3,
+      "league": 15,
+      "onLoan": true
+     },
+     "leagueTo25": 67,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Altach",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "New York City FC",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 104,
+     "seasonsTo25": 5,
+     "overallEnd": 59,
+     "clubEnd": "La Louviere",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600721,
+   "seed": 631970,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 43,
+    "age": 21,
+    "overall": 57,
+    "club": "Napoli",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "to": "Trabzonspor",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 21,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Napoli",
+   "rows": [
+    6,
+    6
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Trabzonspor",
+      "tier": 3,
+      "league": 20,
+      "onLoan": true
+     },
+     "leagueTo25": 45,
+     "seasonsTo25": 4,
+     "overallEnd": 58,
+     "clubEnd": "San Jose Earthquakes",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 22,
+      "club": "Napoli",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 80,
+     "seasonsTo25": 4,
+     "overallEnd": 59,
+     "clubEnd": "Hanoi FC",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600730,
+   "seed": 631979,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "age": 19,
+    "overall": 57,
+    "club": "LAFC",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "AZ Alkmaar",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "LAFC",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "AZ Alkmaar",
+      "tier": 3,
+      "league": 25,
+      "onLoan": true
+     },
+     "leagueTo25": 71,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "LAFC",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "LAFC",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 104,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Deportivo",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600732,
+   "seed": 631981,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 56,
+    "club": "Racing Club",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "to": "Dinamo Zagreb",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Racing Club",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Dinamo Zagreb",
+      "tier": 3,
+      "league": 14,
+      "onLoan": true
+     },
+     "leagueTo25": 96,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Enyimba",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Racing Club",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 108,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Partizan",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600748,
+   "seed": 631997,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 51,
+    "age": 23,
+    "overall": 56,
+    "club": "Inter Miami",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 23,
+     "to": "Brondby IF",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 23,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Inter Miami",
+   "rows": [
+    8,
+    8
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Brondby IF",
+      "tier": 3,
+      "league": 15,
+      "onLoan": true
+     },
+     "leagueTo25": 27,
+     "seasonsTo25": 2,
+     "overallEnd": 58,
+     "clubEnd": "Inter Miami",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 24,
+      "club": "Inter Miami",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 22,
+     "seasonsTo25": 2,
+     "overallEnd": 56,
+     "clubEnd": "Al Ain",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600782,
+   "seed": 632031,
+   "o": 55,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "age": 20,
+    "overall": 57,
+    "club": "Athletic Bilbao",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "to": "Toronto FC",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Athletic Bilbao",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Toronto FC",
+      "tier": 3,
+      "league": 27,
+      "onLoan": true
+     },
+     "leagueTo25": 69,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Athletic Bilbao",
+     "tierEnd": 2
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Athletic Bilbao",
+      "tier": 2,
+      "league": 4,
+      "onLoan": false
+     },
+     "leagueTo25": 87,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Perth Glory",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600785,
+   "seed": 632034,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "age": 19,
+    "overall": 57,
+    "club": "Shakhtar Donetsk",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Atalanta",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     9,
+     5
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Shakhtar Donetsk",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Atalanta",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 100,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Fluminense",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 121,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Partizan",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600791,
+   "seed": 632040,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "age": 19,
+    "overall": 57,
+    "club": "Leipzig",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "NEOM SC",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Leipzig",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "NEOM SC",
+      "tier": 3,
+      "league": 22,
+      "onLoan": true
+     },
+     "leagueTo25": 109,
+     "seasonsTo25": 6,
+     "overallEnd": 60,
+     "clubEnd": "Coventry City",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Leipzig",
+      "tier": 2,
+      "league": 3,
+      "onLoan": false
+     },
+     "leagueTo25": 118,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Violette AC",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600795,
+   "seed": 632044,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "age": 19,
+    "overall": 57,
+    "club": "PSV",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "to": "Koln",
+     "toTier": 3,
+     "band": {
+      "min": 20,
+      "max": 30
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 57,
+     "age": 19,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "PSV",
+   "rows": [
+    4,
+    4
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 20,
+      "club": "Koln",
+      "tier": 3,
+      "league": 24,
+      "onLoan": true
+     },
+     "leagueTo25": 97,
+     "seasonsTo25": 6,
+     "overallEnd": 58,
+     "clubEnd": "Waterhouse FC",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 20,
+      "club": "PSV",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 115,
+     "seasonsTo25": 6,
+     "overallEnd": 59,
+     "clubEnd": "Al Ettifaq",
+     "tierEnd": 4
+    }
+   }
+  },
+  {
+   "id": 600797,
+   "seed": 632046,
+   "o": 56,
+   "equal": false,
+   "firstDiff": {
+    "step": 24,
+    "age": 20,
+    "overall": 56,
+    "club": "Zenit",
+    "tier": 2,
+    "base": {
+     "kind": "club loan",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "to": "Anderlecht",
+     "toTier": 3,
+     "band": {
+      "min": 8,
+      "max": 18
+     }
+    },
+    "head": {
+     "kind": "zero offer",
+     "parentTier": 2,
+     "ovr": 56,
+     "age": 20,
+     "offers": 0
+    },
+    "attributed": true,
+    "draws": [
+     8,
+     4
+    ]
+   },
+   "startTier": 2,
+   "startClub": "Zenit",
+   "rows": [
+    5,
+    5
+   ],
+   "outcome": {
+    "base": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Anderlecht",
+      "tier": 3,
+      "league": 6,
+      "onLoan": true
+     },
+     "leagueTo25": 104,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Genoa",
+     "tierEnd": 4
+    },
+    "head": {
+     "loanSeason": {
+      "age": 21,
+      "club": "Zenit",
+      "tier": 2,
+      "league": 2,
+      "onLoan": false
+     },
+     "leagueTo25": 73,
+     "seasonsTo25": 5,
+     "overallEnd": 58,
+     "clubEnd": "Valencia",
+     "tierEnd": 4
+    }
+   }
+  }
+ ]
+}

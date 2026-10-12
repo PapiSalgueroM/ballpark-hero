@@ -1,0 +1,3 @@
+bite2-ctl exit=0 107s | CONTROL FIRED bite2 26
+bite2-t1 exit=0 603s | FLEETBITE done: group t1 thresh 20, 4000 careers (8572 tried), 42 differ, 0 unattributed; base loan verdicts 760 (43 to a club forecast under 20), head zero offer 0; loan
+bite2-t2a exit=0 693s | FLEETBITE done: group t2 thresh 20, 5000 careers (7883 tried), 356 differ, 0 unattributed; base loan verdicts 1327 (380 to a club forecast under 20), head zero offer 0; l
