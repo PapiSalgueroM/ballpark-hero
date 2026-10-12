@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+gmpress: ENGINES=chromium node scripts/playGmPress.mjs
+mandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
+fohub: ENGINES=chromium node scripts/playFoHub.mjs
+revealscroll: ENGINES=chromium node scripts/simRevealScroll.mjs
+keeper: KEEPER_NO_BASE=1 ONLY=/front-office ENGINES=chromium node scripts/playSaveKeeper.mjs

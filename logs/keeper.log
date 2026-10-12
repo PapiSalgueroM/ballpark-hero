@@ -1,0 +1,30 @@
+playSaveKeeper: mode assert, parts fresh planted cross toggle K cost, 1 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+A clean visit and a leave, per route: does the game write its save with no press?
+  quiet   /front-office  keys left: cookie-consent, dukb-guest-handle
+
+Journey L, the fresh flow, on the branch: the 0 route(s) that write with no press
+
+Journey L, the planted flow, on the branch: real engine saves on 1 route(s)
+  SURVIVED  [branch] planted /front-office 390: A (83702 chars) is in front-office-save-v1.broken-2026-01-02T03-04-05, front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /front-office 1280: A (83702 chars) is in front-office-save-v1.broken-2026-01-02T03-04-05, front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (333 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 5
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 1280: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 5
+
+Journey T, the toggle, on the branch: 3 presses in a row with a real pointer on 1 route(s) at 390, the card's OK pressed after each
+  HELD        toggle /front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+
+The boot pass in Chromium at a 4x CPU throttle, the largest real save of all 21 games held (634005 chars in storage, 22 keys):
+  first pass 5.200 ms, then 1.647 ms a pass over 200. An empty store: first 0.000 ms, then 0.007 ms a pass.
+
+playSaveKeeper, branch: 4 walk(s) judged (0 fresh, 2 planted, 2 cross): 0 LOST the save that was put back, 0 partly, 4 survived; 0 not judged
+playSaveKeeper, the toggle: 1 of 1 route(s) held through 3 presses with a real pointer; the history told a replace from an assign on 1 of them
+playSaveKeeper, journey L's own presses (made in the page, see pressAndJudge): the button was under a pointer in 2 of 2 walk(s)
+playSaveKeeper: the planted flow judged 1 of 1 route(s)
+playSaveKeeper: journey K was NOT run (no build of origin/main was given).
+  FAIL  no route wrote a save with no press, so the fresh flow judged nothing
+playSaveKeeper: RED, 1 problem(s).

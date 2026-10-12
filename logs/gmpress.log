@@ -1,0 +1,78 @@
+1) A fresh hire faces the room
+  PASS  the introduction presser is on the hub
+  PASS  it is the introduction, by name
+  PASS  all three registers are on the card
+  PASS  the bold answer talks Super Bowl in the NFL room
+  PASS  the owner card shares the hub with the presser
+2) The measured answer moves trust by exactly its flat effect
+  PASS  an answered presser leaves the hub
+  PASS  trust reads 63 after the +3 measured answer (card says: 🏛️ OWNERSHIP)
+  PASS  the answer landed in the feed
+  PASS  a reload never resurrects an answered presser
+  PASS  the answered trust survived the reload
+3) A doomed season ends in the scrum, and the draft waits
+  PASS  the recap carries a presser
+  PASS  a missed title ask produces the scrum
+  PASS  the patience answer discloses its tilt
+  PASS  the draft button waits while the room does
+4) Patience answered: the tilt survives to the next mandate
+  PASS  the scrum ends when answered
+  PASS  the draft button returns
+  FAIL  the offseason set a new mandate
+  FAIL  the feed credits the press answer for the softer bar
+FEED|NFL|the draft finished: yes (1 more picks pressed after the walk's own)
+FEED|NFL|draft screen row|📥 Drafted Omar Bishop (WR), true rating 79 vs scouted 83.
+FEED|NFL|draft screen row|📋 The re-sign desk: 0 kept, 2 gone.
+FEED|NFL|draft screen row|📋 You left 2 deals open, so your staff settled them by its own rule.
+FEED|NFL|draft screen row|🏛️ The new mandate: Rebuild honestly: 6 wins keeps the project on schedule upstairs.
+FEED|NFL|hub row|📥 Drafted Omar Bishop (WR), true rating 79 vs scouted 83.
+FEED|NFL|hub row|📋 The re-sign desk: 0 kept, 2 gone.
+FEED|NFL|hub row|📋 You left 2 deals open, so your staff settled them by its own rule.
+FEED|NFL|hub row|🏛️ The new mandate: Rebuild honestly: 6 wins keeps the project on schedule upstairs.
+FEED|NFL|hub row|🎙️ Your ask for patience was heard. The bar sits softer.
+FEED|NFL|on the hub: the new mandate line IS visible; the patience line IS visible
+  PASS  no page errors on the NFL walk (clean)
+5) The NBA, NHL and MLB rooms exist and know their sport
+  PASS  /nba-front-office: the introduction presser is on the hub
+  PASS  /nba-front-office: the bold answer talks Finals
+  PASS  /nba-front-office: the answer ends the presser
+  PASS  /nhl-front-office: the introduction presser is on the hub
+  PASS  /nhl-front-office: the bold answer talks Stanley Cup
+  PASS  /nhl-front-office: the answer ends the presser
+  PASS  /mlb-front-office: the introduction presser is on the hub
+  PASS  /mlb-front-office: the bold answer talks World Series
+  PASS  /mlb-front-office: the answer ends the presser
+  PASS  no page errors on the tri-sport walk (clean)
+6) Printed, not checked: the feed rows after the draft on the NBA, NHL and MLB boards
+FEED|/nba-front-office|the draft finished: yes (2 more picks pressed after the walk's own)
+FEED|/nba-front-office|draft screen row|🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.
+FEED|/nba-front-office|draft screen row|📋 The re-sign desk: 0 kept, 4 gone.
+FEED|/nba-front-office|draft screen row|📋 You left 4 deals open, so your staff settled them by its own rule.
+FEED|/nba-front-office|hub row|🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.
+FEED|/nba-front-office|hub row|📋 The re-sign desk: 0 kept, 4 gone.
+FEED|/nba-front-office|hub row|📋 You left 4 deals open, so your staff settled them by its own rule.
+FEED|/nba-front-office|on the hub: the new mandate line IS visible; the patience line is NOT visible
+FEED|/nhl-front-office|the draft finished: yes (2 more picks pressed after the walk's own)
+FEED|/nhl-front-office|draft screen row|🏛️ The new mandate: Make the playoffs and win a series. This roster is built for it.
+FEED|/nhl-front-office|draft screen row|👋 Brent Burns retires.
+FEED|/nhl-front-office|draft screen row|👋 Mats Zuccarello retires.
+FEED|/nhl-front-office|draft screen row|👋 Corey Perry retires.
+FEED|/nhl-front-office|hub row|🏛️ The new mandate: Make the playoffs and win a series. This roster is built for it.
+FEED|/nhl-front-office|hub row|👋 Brent Burns retires.
+FEED|/nhl-front-office|hub row|👋 Mats Zuccarello retires.
+FEED|/nhl-front-office|hub row|👋 Corey Perry retires.
+FEED|/nhl-front-office|hub row|👋 Claude Giroux retires.
+FEED|/nhl-front-office|on the hub: the new mandate line IS visible; the patience line is NOT visible
+FEED|/mlb-front-office|the draft finished: yes (2 more picks pressed after the walk's own)
+FEED|/mlb-front-office|draft screen row|🏛️ The new mandate: Win the World Series. Anything less is a failed season upstairs.
+FEED|/mlb-front-office|draft screen row|👋 Merrill Kelly retires.
+FEED|/mlb-front-office|draft screen row|👋 Chris Sale retires.
+FEED|/mlb-front-office|draft screen row|👋 Aroldis Chapman retires.
+FEED|/mlb-front-office|hub row|🏛️ The new mandate: Win the World Series. Anything less is a failed season upstairs.
+FEED|/mlb-front-office|hub row|👋 Merrill Kelly retires.
+FEED|/mlb-front-office|hub row|👋 Chris Sale retires.
+FEED|/mlb-front-office|hub row|👋 Aroldis Chapman retires.
+FEED|/mlb-front-office|hub row|👋 Caleb Thielbar retires.
+FEED|/mlb-front-office|on the hub: the new mandate line IS visible; the patience line is NOT visible
+
+playGmPress: 2 failures
