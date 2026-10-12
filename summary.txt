@@ -1,0 +1,14 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 103s | playFrontOfficeGameDay: 220 checks, 0 failed
+walk-pacespoils exit=1 101s | control pacespoils: RED AT THE NAMED CHECK (point 9) and nowhere else
+walk-seedoff exit=1 103s | control seedoff: RED AT THE NAMED CHECK (point 10) and nowhere else
+walk-noreveal exit=1 101s | control noreveal: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-helpjump exit=1 102s | control helpjump: RED AT THE NAMED CHECK (point 6) and nowhere else
+walk-recordspoils exit=1 101s | control recordspoils: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-spoiler exit=1 102s | control spoiler: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-tall exit=1 102s | control tall: RED AT THE NAMED CHECK (point 8) and nowhere else
+seasonCentre exit=0 119s | playSeasonCentre: 41 checks, 0 failed
+seasonCentreMotion exit=0 135s | playSeasonCentreMotion: 80 checks, 0 failed
+usSeasonCentre exit=0 228s | playUsSeasonCentre: 217 checks, 0 failed
+weight-head exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+lazy-chunk exit=0 0s | dist/assets/FrontOffice-CBPNwKxu.js 31917
