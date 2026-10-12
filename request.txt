@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+focus-control: git show 942268ef:src/components/game/ReportQuestion.tsx > src/components/game/ReportQuestion.tsx && git show 942268ef:src/components/game/ReportSiteIssue.tsx > src/components/game/ReportSiteIssue.tsx && NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/reportDetails.test.tsx > /tmp/fc.log 2>&1; git checkout -- src; grep -E "FAIL .*gives focus back|Tests " /tmp/fc.log | tail -4; grep -Eq "Tests +2 failed" /tmp/fc.log && [ "$(grep -c 'FAIL .*gives focus back' /tmp/fc.log)" -ge 2 ] && echo "FOCUS CONTROL FIRED: exactly the 2 focus cases fail on the 942268ef components"
+simSoccerAgentReviewPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simSoccerAgentReview-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+playSoccerAgentReview: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs; s=$?; mkdir -p "$RC_OUT/ar"; cp soccer-agent-review-artifacts/native/390-*.png "$RC_OUT/ar/" 2>/dev/null; ls "$RC_OUT/ar" | wc -l; exit $s

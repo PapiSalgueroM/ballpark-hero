@@ -1,0 +1,5 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/reportDetails.test.tsx > game report > gives focus back to the Report a problem button when the form closes
+ FAIL  src/test/reportDetails.test.tsx > footer report > gives focus back to the Report a problem button when the form closes
+      Tests  2 failed | 16 passed (18)
+FOCUS CONTROL FIRED: exactly the 2 focus cases fail on the 942268ef components
