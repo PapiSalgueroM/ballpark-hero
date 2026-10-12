@@ -1,0 +1,3 @@
+digest exit=0 51s |    Duration  49.90s (transform 1.57s, setup 56ms, collect 2.06s, tests 46.38s, environment 400ms, prepare 507ms)
+attribI exit=0 62s | header aside: BYTE EQUAL (2296639 and 2296639 bytes)
+board exit=0 63s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.

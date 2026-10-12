@@ -1,0 +1,7 @@
+recording from 7e745e7c1b8589f868c4609530b8e247733cd7b2 (not main: src differs from 21941630ddffda173a1e6b45a3d5293c63d211e6)
+  nfl: 475 clicks on the path, 24 seasons, 19 fixed saves, 928 screen steps
+  nba: 521 clicks on the path, 24 seasons, 19 fixed saves, 932 screen steps
+  mlb: 455 clicks on the path, 24 seasons, 19 fixed saves, 886 screen steps
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../../../../tmp/scratch-board.json (2296639 bytes)
+header aside: BYTE EQUAL (2296639 and 2296639 bytes)
