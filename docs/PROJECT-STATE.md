@@ -1,4 +1,4 @@
-## Pending Transfer Path report correction, 2026-10-12
+## Transfer Path report correction ready for integration, 2026-10-12
 
 User report tpa-770 rejects Kylian Mbappé after Trent Alexander-Arnold.
 Isolated codex/transfer-path-verified-seasons from b6eb78e7 adds independently
@@ -6,7 +6,11 @@ verified Real Madrid 2025/26 membership without statistical rows or database
 changes. The actual graph, affected puzzle hints/minima, both data-loading
 paths, daily reload and historical exclusions are covered by the scoped
 regression. Baseline remote run 38280414905 reproduced four refusals.
-Final source, remote verification, integration and publication remain pending.
+PR242 is a draft on the isolated branch. Exact source 2dfee304 passed remote
+run 38285493476: types, complete app build with the Transfer Path snapshot,
+16 hook cases, 11 focused outcomes and their missing-membership control,
+all 23 requested harnesses (all 15 site fences included), and six browser
+journeys with 108 checks. Integration and publication remain pending.
 G keeps integration and publication ownership. See
 docs/audits/transfer-path-club-seasons-2026-10-12.md for the two sources and
 scope. Existing active-player eligibility and career statistics stay held.

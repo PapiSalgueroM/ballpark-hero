@@ -37,7 +37,7 @@ not rewritten by this patch.
 Red proof: remote run 38280414905, job 114916070114, commit 80792452.
 The actual hook refused all four reported cases (fetched/fallback and
 Everyday/Europe). Eleven existing or preserved-history cases passed.
-Final fix verification and publication are pending.
+Final scoped verification is recorded below; integration and publication are pending.
 
 First fix run 38281133521 on adeb5f2a passed 16 hook cases. Its browser
 setup ignored the package lock while installing Playwright and upgraded
@@ -61,3 +61,34 @@ The browser-classified simPrerenderBoot was not discovered without --browser.
 Neither its missing coverage nor the skipped report browser is credited.
 The next request fetches full Git history and explicitly includes browser
 harness discovery.
+
+Final accepted scoped source: 2dfee3048450e2dd61479473c7a1f48861b7512b.
+Remote run [38285493476](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/38285493476),
+job 114932739718, completed SUCCESS. All 521 installed locked dependency
+versions and both package-file hashes were held. The real app type gate,
+complete production app build, one-route snapshot (zero failures), 16 hook
+cases, 11 focused outcomes and the actual missing-membership control passed.
+All 23 requested harnesses passed, including all 15 generated-site fences and
+simPrerenderBoot. Live table sections were explicitly skipped with local-only
+flags; no production database proof or whole-suite claim is made.
+
+Actual browser report: six journeys, 108 checks, 48 fixture requests, 24
+external requests aborted, zero failures. Everyday and Europe at 320, 390
+and 1280 all painted Trent followed by Mbappé with the Real Madrid connector
+and saved the accepted action. Each received the unchanged 3,640 statistics
+rows. All six original outcome pictures were viewed. The displayed reported
+minimum remains three. Browser coverage is the acceptance journey, not a
+full reveal, moved-hint or browser-reload walk; daily reload is covered by the
+real-hook test. Refreshed direct-link metadata is independently asserted,
+while new shortened paths with middle players have bounded source review.
+
+Artifact 11763630478, 697,173 bytes, retained locally under ignored
+.tmp-fx/transfer-path-proof and on GitHub. Its ZIP SHA256 is
+8a55eeb158dee90124ebc6113a4486a99de4ba3791a844b9f250e88541d56311.
+The archive has 15 entries (12 original PNGs, report, installed versions and
+package hashes). Two independent source reviews found no blocking issue.
+
+[PR242](https://github.com/PapiSalgueroM/ballpark-hero/pull/242) remains a draft
+for G's integration/publication. It was forked from accepted b6eb78e7; later
+main changes require the lead's integration checks. No live acceptance is
+claimed. This final evidence addition changes documentation only.
