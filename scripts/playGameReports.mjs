@@ -12,7 +12,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const browser = await pw.chromium.launch();
 const rows = [];
 try {
-  for (const width of [320, 390, 1440]) {
+  for (const width of [320, 390, 1280, 1440]) {
     for (const game of ['perfect-season-nba', 'player-bingo']) {
       const context = await browser.newContext({ viewport: { width, height: 900 } });
       const reports = [];
@@ -93,5 +93,5 @@ try {
   fs.writeFileSync(path.join(OUT, CONTROL ? 'control.json' : 'outcomes.json'), JSON.stringify({ control: CONTROL, rows }, null, 2));
   await browser.close();
 }
-assert.equal(rows.length, 6, 'All route and viewport outcomes were recorded');
-console.log(CONTROL ? 'PASS below-guide control fired on all six actual pages' : 'PASS all six game report journeys');
+assert.equal(rows.length, 8, 'All route and viewport outcomes were recorded');
+console.log(CONTROL ? 'PASS below-guide control fired on all eight actual pages' : 'PASS all eight game report journeys');
