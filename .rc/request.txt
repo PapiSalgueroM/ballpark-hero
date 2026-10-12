@@ -1,0 +1,3 @@
+#!serial
+m-edges: bash .rc/x/mutrun.sh edges
+m-outfirst: bash .rc/x/mutrun.sh outfirst
