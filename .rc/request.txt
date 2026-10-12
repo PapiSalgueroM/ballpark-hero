@@ -1,0 +1,4 @@
+# Review (run lens) of Round 1311 at 9c262ba4: the reviewer walk again with JPEG pictures (the first run passed 25 MB)
+#!serve
+#!playwright
+mywalk: mkdir -p "$RC_OUT/mywalk" && RC_OUT="$RC_OUT/mywalk" node .rc/x/r1311run-walk.mjs
