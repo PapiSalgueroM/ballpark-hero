@@ -1,0 +1,4 @@
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/aw-c12 node scripts/simSoccerAwardGenerations.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-three: node_modules/.bin/vitest run src/test/soccerBallonPoolNameClash.test.tsx src/test/soccerBallonPoolReadAsAbsent.test.tsx src/test/soccerCareerAwardGenerations.test.tsx --testTimeout=300000 --hookTimeout=300000
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
