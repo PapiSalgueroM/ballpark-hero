@@ -1,0 +1,4 @@
+rivalProve3: RIVAL_PROVE=4425a941 RIVAL_MOVED=none RIVAL_CARDS=none node scripts/simUsRivalSense.mjs
+rivalProve2: R=$PWD; git worktree add -q /tmp/s2 4425a941 && ln -s $R/node_modules /tmp/s2/node_modules && cd /tmp/s2 && RIVAL_PROVE=e050db7a RIVAL_MOVED=none RIVAL_CARDS=none node scripts/simUsRivalSense.mjs
+cutdrawmlb: RIVAL_PROVE=4425a941 RIVAL_MOVED=none RIVAL_CARDS=none US_RIVAL_CONTROL=cutdrawmlb node scripts/simUsRivalSense.mjs
+cutdrawnhl: RIVAL_PROVE=4425a941 RIVAL_MOVED=none RIVAL_CARDS=none US_RIVAL_CONTROL=cutdrawnhl node scripts/simUsRivalSense.mjs
