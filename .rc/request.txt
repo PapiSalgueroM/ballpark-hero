@@ -1,0 +1,13 @@
+# Release AX closing check, part a (no build, one at a time): the type gate and the seven controls of findings 26 and 27 on the pushed head
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+extMotion: node scripts/simExtensionResponseMotion.mjs 2>&1 | cut -c1-400 | tail -8; exit ${PIPESTATUS[0]}
+extMotion-unreply: EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback: node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -12; exit ${PIPESTATUS[0]}
+faFeedback-consumed: FREE_AGENCY_FEEDBACK_CONTROL=consumed node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback-status: FREE_AGENCY_FEEDBACK_CONTROL=status node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback-restored: FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback-replacement: FREE_AGENCY_FEEDBACK_CONTROL=replacement node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback-finite: FREE_AGENCY_FEEDBACK_CONTROL=finite node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+faFeedback-reduced: FREE_AGENCY_FEEDBACK_CONTROL=reduced node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -14; exit ${PIPESTATUS[0]}
+clean: echo "changed files: $(git status --short | wc -l)"
