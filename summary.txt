@@ -1,0 +1,10 @@
+c-sitekindmlb exit=1 29s | simUsRivalSense: 31 checks, 1 failed (full size), red sections: M.U6
+c-siteslatemlb exit=1 32s | simUsRivalSense: 31 checks, 1 failed (full size), red sections: M.U6
+c-fullscoremlb exit=1 32s | simUsRivalSense: 31 checks, 2 failed (full size), red sections: M.U6, M.F2
+c-lastyearmlb exit=1 26s | simUsRivalSense: 31 checks, 1 failed (full size), red sections: M.F5
+c-verdictswap exit=1 30s | simUsRivalSense: 31 checks, 3 failed (full size), red sections: N.F2, N.F3, M.F2
+c-rostergate exit=1 35s | simUsRivalSense: 31 checks, 3 failed (full size), red sections: N.F5, M.F5
+c-owndealt exit=1 30s | simUsRivalSense: 31 checks, 2 failed (full size), red sections: N.F5, M.F5
+c-oldscalemlb exit=1 32s | simUsRivalSense: 31 checks, 2 failed (full size), red sections: M.U2, M.F2
+c-offshapemlb exit=1 28s | simUsRivalSense: 31 checks, 5 failed (full size), red sections: M.U2, M.U4, M.U6, M.F1, M.F2
+c-wrongposmlb exit=1 23s | simUsRivalSense: 31 checks, 5 failed (full size), red sections: M.U2, M.U4, M.U6, M.F1, M.F2
