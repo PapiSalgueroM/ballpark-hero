@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-libs: node_modules/.bin/vitest run src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/test/gmBracketLedger.test.ts src/lib/gmBracket.test.ts src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts src/test/usPostseasonFormat.test.ts src/test/usPlayoffs.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsPostseason: node scripts/simUsPostseason.mjs
+usp-gmclubs: US_POST_CONTROL=gmclubs node scripts/simUsPostseason.mjs
+usp-onesrc: US_POST_CONTROL=onesrc node scripts/simUsPostseason.mjs
+usp-sum: US_POST_CONTROL=sum node scripts/simUsPostseason.mjs
+usp-drop: US_POST_CONTROL=drop node scripts/simUsPostseason.mjs
+usp-clinch: US_POST_CONTROL=clinch node scripts/simUsPostseason.mjs
+usp-allhome: US_POST_CONTROL=allhome node scripts/simUsPostseason.mjs
+usp-open: US_POST_CONTROL=open node scripts/simUsPostseason.mjs
+usp-tries: US_POST_CONTROL=tries node scripts/simUsPostseason.mjs
+usp-thin: US_POST_CONTROL=thin node scripts/simUsPostseason.mjs
+usp-stream: US_POST_CONTROL=stream node scripts/simUsPostseason.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+ctl-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
