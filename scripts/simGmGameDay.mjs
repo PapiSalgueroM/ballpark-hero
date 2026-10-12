@@ -194,14 +194,17 @@ const LOG = 'src/lib/gmGameLog.ts';
 const BIND = 'src/lib/frontOfficeGameDay.ts';
 /* Round 1307: every word on the tile, decided in a lib; it rides with a card */
 const VIEW = 'src/lib/gmGameDayView.ts';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW];
+/* the shared tile and the NFL's bound card: one lazy chunk a week box asks for */
+const CARD = 'src/components/front-office-shared/GmGameDayCard.tsx';
+const NFL_CARD = 'src/components/front-office/NflGameDay.tsx';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD];
 /* the round whose header a new file opens with: section 5 proves the comment stripper took it out */
-const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307' };
+const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307' };
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
 /* what only a drawn card reads: the told path, the NFL's story law, its game day law and the words of the two "?" */
-const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW];
+const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW, CARD, NFL_CARD];
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
    as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
@@ -799,7 +802,7 @@ for (const set of SEEDSETS) {
      in the commit that first imports them. */
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
-    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts'].map(f => [f, '*']),
+    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
     [NFL_BOARD, new Set([noExt(BIND), noExt(LOG)])],
     /* its board tests read the log, the bind's words for a week and the quick path's final */
