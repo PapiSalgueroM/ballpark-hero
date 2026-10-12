@@ -1,0 +1,57 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [31m❯[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m24 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 888[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mdeals the same goals for the same key, every time, and another key deals others[32m 5[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mrolls every goal of one match on its own: two or three goals are one man's only as often as the weights say[32m 92[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mshares the open play goals by the weight, each man inside four binomial standard deviations[32m 28[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 496[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mgives a penalty and a direct free kick to the taker when the rule says so, and by the weight when not[32m 102[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mbreaks a level taker by the name as plain text, and never names a keeper[32m 0[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mgives the assist by the ASSIST weight over the other men: by line inside four standard deviations, and far from the goal weight's share[32m 36[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mdeals the assist of a goal a report already named on its own key, never to the scorer or a keeper[32m 92[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mkeeps the first law after every credit: rows + own goals + unnamed = goals dealt[32m 5[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mis the same book after a JSON round trip, after every kind of credit, and readBook accepts it[32m 2[2mms[22m[39m
+   [32m✓[39m the book[2m > [22msends a new scorer past the row cap to the unnamed count, and still gives a keeper his row[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mgives two men with one name two rows when their positions differ[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mreads a damaged book, or the book of another season, as no book[32m 1[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mnever throws in a match week on a club entry or a row that is not one, and leaves it as it found it[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22msalts by the order of the league, so two orders of the same clubs deal apart[32m 0[2mms[22m[39m
+   [32m✓[39m a late book[2m > [22mopens holding the first law: every goal from before it is counted unnamed for its club[32m 0[2mms[22m[39m
+   [32m✓[39m a late book[2m > [22mis the same book after a JSON round trip, and both readers accept it[32m 0[2mms[22m[39m
+   [32m✓[39m a late book[2m > [22mis refused whole by the careful reader when one of its three fields is not its shape[32m 1[2mms[22m[39m
+[31m   [31m×[31m partialEleven[2m > [22mis nothing for a roster that holds nobody, and never gives a full roster a shirt[39m[32m 6[2mms[22m[39m
+[31m     → expected 'Second Keeper' to be 'Keeper' // Object.is equality[39m
+   [32m✓[39m partialEleven[2m > [22mputs an empty shirt in every place the roster cannot fill, the heaviest lines first, at the club's strength[32m 1[2mms[22m[39m
+   [32m✓[39m partialEleven[2m > [22mlets the spare men cover the open places from the back, so the shirts stand up front[32m 0[2mms[22m[39m
+   [32m✓[39m partialEleven[2m > [22mtakes a name once, as a full eleven does, and leaves the roster as it found it[32m 0[2mms[22m[39m
+   [32m✓[39m partialEleven[2m > [22mnever gives an empty shirt a row: its goal is unnamed, and it gets no assist and no clean sheet[32m 4[2mms[22m[39m
+   [32m✓[39m partialEleven[2m > [22mdeals a named man the share his own place earns, inside four standard deviations, and no more[32m 13[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBook.test.ts[2m > [22mpartialEleven[2m > [22mis nothing for a roster that holds nobody, and never gives a full roster a shirt
+[31m[1mAssertionError[22m: expected 'Second Keeper' to be 'Keeper' // Object.is equality[39m
+
+Expected: [32m"Keeper"[39m
+Received: [31m"[7mSecond [27mKeeper"[39m
+
+[36m [2m❯[22m src/lib/clubManagerLeagueBook.test.ts:[2m383:29[22m[39m
+    [90m381| [39m    const bench: BookMan[] = [{ n: 'Spare Back', p: 'CB', r: 70 }, { n…
+    [90m382| [39m    [35mconst[39m full [33m=[39m [34mpartialEleven[39m([[33m...[39mbench[33m,[39m [33m...[39m[33mXI[39m][33m,[39m [34m80[39m[33m,[39m [33mLINE[39m)[33m;[39m
+    [90m383| [39m    [34mexpect[39m(full[33m?.[39mkeeper[33m?.[39mn)[33m.[39m[34mtoBe[39m([32m'Keeper'[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m384| [39m    [34mexpect[39m([34mshirtsOf[39m(full[33m?.[39moutfield [33m??[39m []))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m385| [39m    /* The ten a full eleven is picked as: by rating, four of the back…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m32 passed[39m[22m[90m (33)[39m
+[2m   Start at [22m 00:13:26
+[2m   Duration [22m 1.63s[2m (transform 132ms, setup 80ms, collect 183ms, tests 898ms, environment 551ms, prepare 254ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBook.test.ts,title=src/lib/clubManagerLeagueBook.test.ts > partialEleven > is nothing for a roster that holds nobody%2C and never gives a full roster a shirt,line=383,column=29::AssertionError: expected 'Second Keeper' to be 'Keeper' // Object.is equality%0A%0AExpected: "Keeper"%0AReceived: "Second Keeper"%0A%0A ❯ src/lib/clubManagerLeagueBook.test.ts:383:29%0A%0A

@@ -1,0 +1,12 @@
+v-none exit=0 2s |  Test Files  2 passed (2)       Tests  33 passed (33) VITEST with no mutation exit 0
+v-m5 exit=0 3s |  Test Files  2 passed (2)       Tests  33 passed (33) VITEST under m5 exit 0
+v-m6 exit=0 3s |  Test Files  2 passed (2)       Tests  33 passed (33) VITEST under m6 exit 0
+v-m6b exit=0 2s |  Test Files  2 passed (2)       Tests  33 passed (33) VITEST under m6b exit 0
+v-m7 exit=1 3s | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  Test Files  1 failed | 1 passed (2)       Tests  1 failed | 32 passed (33) VITEST under m7 exit 1
+v-m8 exit=1 2s | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  Test Files  1 failed | 1 passed (2)       Tests  1 failed | 32 passed (33) VITEST under m8 exit 1
+v-m10 exit=1 3s | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  Test Files  1 failed | 1 passed (2)       Tests  1 failed | 32 passed (33) VITEST under m10 exit 1
+v-m11 exit=0 3s |  Test Files  2 passed (2)       Tests  33 passed (33) VITEST under m11 exit 0
+v-m13 exit=1 3s | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  Test Files  1 failed | 1 passed (2)       Tests  1 failed | 32 passed (33) VITEST under m13 exit 1
+v-m16 exit=1 3s | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  Test Files  1 failed | 1 passed (2)       Tests  1 failed | 32 passed (33) VITEST under m16 exit 1
+v-m1 exit=0 3s |  Test Files  2 passed (2)       Tests  33 passed (33) VITEST under m1 exit 0
+v-m17 exit=1 3s | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯  Test Files  2 failed (2)       Tests  2 failed | 31 passed (33) VITEST under m17 exit 1
