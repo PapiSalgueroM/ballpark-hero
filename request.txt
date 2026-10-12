@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+shootoutfrom: US_LEDGER_CONTROL=shootoutfrom node scripts/simUsSeasonLedger.mjs
+plan: node scripts/simUsPlanSeason.mjs
