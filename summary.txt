@@ -1,0 +1,2 @@
+old-30 exit=0 26s | old: green, 135 checks on 27 leagues
+old-18 exit=0 26s | old: green, 135 checks on 27 leagues
