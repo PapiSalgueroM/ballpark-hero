@@ -2541,6 +2541,8 @@ function onStream(seed, fn) {
           if (r.kind === 'seasonOver') { ended = true; break; }
         }
         if (late) fail('oldsave', `${name}: ${late} of ${guard} entries ended on a late book or none: a whole book of the season in play was reopened`);
+        /* The last entry of a season leaves week at the calendar's length; seasonOver comes only from a call past it. */
+        if (s.week >= s.calendar.length) ended = true;
         /* Round 1311: a save that was in play when the book shipped (thin clubs unnamed for its first
            entries, yet whole by the rule) closes on the share it has on record, and the awards follow the
            floor by the harness's own reading of the rule: given at or over it, withheld under it. */
