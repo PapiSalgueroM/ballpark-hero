@@ -1,0 +1,5 @@
+#!serial
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-new: node scripts/controlFrontOfficeBoard.mjs noplayoffs && node scripts/controlFrontOfficeBoard.mjs abandonbracket && node scripts/controlFrontOfficeBoard.mjs rebuiltkeeps && node scripts/controlFrontOfficeBoard.mjs champopen
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all

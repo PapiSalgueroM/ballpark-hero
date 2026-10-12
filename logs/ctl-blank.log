@@ -1,0 +1,4 @@
+control blank (THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire): vitest exit 1; 1 red, 37 green of 38
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular seaso
+control blank: DID NOT FIRE. "his game of the week is in the save" stayed green
+controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
