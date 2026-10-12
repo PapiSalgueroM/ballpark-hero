@@ -1,0 +1,11 @@
+#!build
+#!playwright
+#!serial
+secondTab-preguard-EXPECT1: git show fbb472f1:src/components/us-career/UsCareerBoard.tsx > src/components/us-career/UsCareerBoard.tsx && node_modules/.bin/vitest run src/test/usCareerMarketSecondTab.test.tsx --testTimeout=120000 2>&1 | grep -v "^$" | cut -c1-260 | tail -40; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+secondTab-M4-EXPECT1: node .rc/x/mutM4.mjs && node_modules/.bin/vitest run src/test/usCareerMarketSecondTab.test.tsx --testTimeout=120000 2>&1 | grep -v "^$" | cut -c1-260 | tail -30; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+clean1: git status --short | head -5; echo "tree clean lines above: $(git status --short | wc -l)"
+mutForget-build: node .rc/x/mutForget.mjs && node_modules/.bin/vite build > /tmp/mut-build.log 2>&1; s=$?; tail -2 /tmp/mut-build.log; exit $s
+walk-mutForget-EXPECT1: node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | grep "FAIL\|playUsMarketTalk:"; exit ${PIPESTATUS[0]}
+mutM4-build: git checkout -- src && node .rc/x/mutM4.mjs && node_modules/.bin/vite build > /tmp/mut-build2.log 2>&1; s=$?; tail -2 /tmp/mut-build2.log; exit $s
+walk-mutM4-EXPECT1: node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-420 | grep "FAIL\|playUsMarketTalk:"; exit ${PIPESTATUS[0]}
+clean2: git checkout -- src && git status --short | head -5; echo "tree clean lines above: $(git status --short | wc -l)"
