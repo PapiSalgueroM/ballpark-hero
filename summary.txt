@@ -1,0 +1,6 @@
+ctl-bracketgrid exit=0 18s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+vitest-fo exit=0 27s |    Duration  26.54s (transform 4.87s, setup 1.47s, collect 14.03s, tests 45.79s, environment 9.25s, prepare 2.17s)
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 71s | 
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simGmGameDay exit=0 58s | simGmGameDay: 462 checks, 0 failed
