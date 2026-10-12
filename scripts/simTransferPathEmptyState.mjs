@@ -22,16 +22,19 @@
         chain or target text for the target by surname and for an accented
         chain name typed plain, the spelling text for ten real spellings of
         pool men, the pool text for a name nobody carries, and the report
-        context. Every case is required by name.
+        context. A one-link puzzle offers its target and forwards a real pick
+        to the board's move callback, while played names stay excluded. Every
+        case is required by name.
      2) THE BAKE, every name in src/data/careerPlayers.ts. Each is typed five
         ways a player would (punctuation dropped, words reversed, the last
         word, the first and last words, everything after the first word). The
         search is replayed as it matches (normalized name contains the
         normalized text), and wherever the list would come back empty the
         reason must not be "pool": that man IS in the pool. Then, for every
-        puzzle in the pull whose ends are both in the bake, the target typed by
-        his last word and without punctuation: where the list (ends left out)
-        is empty, the reason must be "chain".
+        non-direct base-graph puzzle in the pull whose ends are both in the bake,
+        the target typed by his last word and without punctuation: where the
+        list (ends left out) is empty, the reason must be "chain". Direct pairs
+        are counted separately and covered by the actual board tests.
 
    NEGATIVE CONTROLS (TPE_CONTROL), each refusing to run if its rewrite
    changed nothing:
@@ -39,6 +42,8 @@
                 must go red in section 1 and the targets in section 2.
      lowercase  the board's exclude set is lowercased, not normalized. The
                 accented chain name case must go red.
+     direct     the board always excludes the target again. Both direct-puzzle
+                option-count assertions must fail, with other cases passing.
      strict     the spelling text is never chosen. The ten spellings must go
                 red in section 1 and the bake in section 2.
      nofold     punctuation is not folded. 'etoo' must go red in section 1, and
@@ -72,8 +77,14 @@ const CONTROLS = {
   },
   lowercase: {
     file: BOARD,
-    swaps: [['new Set([...chain, puzzle.playerB].map(normalizeName))', 'new Set([...chain, puzzle.playerB].map(n => n.toLowerCase()))']],
+    swaps: [['new Set(excludedPlayers.map(normalizeName))', 'new Set(excludedPlayers.map(n => n.toLowerCase()))']],
     red: [/×.*accented chain name typed plain/],
+    bake: [],
+  },
+  direct: {
+    file: BOARD,
+    swaps: [['optimal === 1 ? chain : [...chain, puzzle.playerB]', '[...chain, puzzle.playerB]']],
+    red: [/×.*direct puzzle: offers the target in the actual autocomplete/, /×.*direct puzzle: selecting the target calls the board move callback/],
     bake: [],
   },
   strict: {
@@ -94,6 +105,7 @@ if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`TPE_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
+const SETUP_ERROR = /Failed to load|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|Failed to resolve import|ReferenceError|TypeError|Unhandled Errors|Unhandled Rejection|Uncaught Exception/;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -125,7 +137,12 @@ if (CONTROL) {
       console.error(`control cannot run: ${path.basename(file)} is not in the shape TPE_CONTROL=${CONTROL} rewrites (missing: ${anchor})`);
       process.exit(1);
     }
-    rewritten = rewritten.replace(anchor, swap);
+    const changed = rewritten.replace(anchor, swap);
+    if (changed === rewritten) {
+      console.error(`control cannot run: TPE_CONTROL=${CONTROL} did not change ${path.basename(file)}`);
+      process.exit(1);
+    }
+    rewritten = changed;
   }
   fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
   controlDir = fs.mkdtempSync(path.join(ROOT, 'dist', '.tpe-control-'));
@@ -161,7 +178,10 @@ try {
       console.error('vitest was not found from this tree upwards, so nothing could be checked');
       process.exit(1);
     }
-    const result = spawnSync(process.execPath, [runner, 'run', TEST, '--reporter=verbose'], {
+    const reportFile = CONTROL === 'direct' ? path.join(controlDir, 'vitest.json') : null;
+    const args = [runner, 'run', TEST, '--reporter=verbose'];
+    if (reportFile) args.push('--reporter=json', `--outputFile.json=${reportFile}`);
+    const result = spawnSync(process.execPath, args, {
       cwd: ROOT,
       encoding: 'utf8',
       env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
@@ -172,26 +192,47 @@ try {
       console.error('vitest did not report on the empty state test file, so nothing was checked');
       process.exit(1);
     }
-    if (/Failed to load|Cannot find module|SyntaxError|Failed to resolve import/.test(out)) {
-      console.error('the test file or a rewritten copy did not load');
-      console.error(out.split('\n').filter(l => /Failed|Cannot|SyntaxError/.test(l)).slice(0, 5).join('\n'));
+    if (SETUP_ERROR.test(out)) {
+      console.error('the test file or a rewritten copy had a load or setup error');
+      console.error(out.split('\n').filter(l => SETUP_ERROR.test(l)).slice(0, 5).join('\n'));
       process.exit(1);
     }
     const summary = out.match(/Tests\s+(.+)/);
     console.log(`   vitest exit ${result.status}, ${summary ? summary[1].trim() : 'no summary line'}`);
     if (CONTROL) {
       section1Red = CONTROLS[CONTROL].red.filter(re => re.test(out)).map(String);
-      out.split('\n').filter(l => /^\s*×/.test(l)).slice(0, 6).forEach(l => console.log(`   ${l.trim().slice(0, 200)}`));
+      const failedCases = out.split('\n').filter(l => /^\s*×/.test(l));
+      if (reportFile) {
+        if (!fs.existsSync(reportFile)) {
+          console.error('direct control wrote no test receipt, so no failure can earn credit');
+          process.exit(1);
+        }
+        const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
+        const cases = report.testResults.flatMap(f => f.assertionResults);
+        const failed = cases.filter(t => t.status === 'failed');
+        if (result.status === 0 || report.testResults.some(f => Boolean(f.message))
+          || cases.length !== 24 || failed.length !== 2 || cases.filter(t => t.status === 'passed').length !== 22
+          || failed.some(t => !CONTROLS.direct.red.some(re => re.test(`× ${t.title}`))
+            || !t.failureMessages.length || t.failureMessages.some(m => !/^AssertionError:.*length.*1.*0/s.test(m)))) {
+          console.error('direct control did not produce only the two zero-option assertion failures with all preservation cases passing');
+          process.exit(1);
+        }
+      }
+      failedCases.slice(0, 6).forEach(l => console.log(`   ${l.trim().slice(0, 200)}`));
     } else {
       /* every case by name, so a renamed or dropped case cannot pass quietly */
       const REQUIRED = [
         'keeps the default text for every caller',
         'shows emptyText when it is passed',
         'fires onNoResults once per settled empty search',
+        'does not fire when the search found someone',
         'does not fire on a failed search',
         'does not fire for a search that was overtaken',
         'names the target by surname',
         'accented chain name typed plain',
+        'direct puzzle: offers the target in the actual autocomplete',
+        'direct puzzle: selecting the target calls the board move callback',
+        'preservation: a played accented name stays excluded in a direct puzzle',
         'the target typed without his punctuation',
         ...['alexander arnold', 'ngolo kante', 'etoo', 'heung-min son', 'son heung min', 'vinicius jr', 'neymar jr', 'zaire emery', 'mo salah', 'leo messi']
           .map(s => `a pool man typed as ${s} gets the spelling text`),
@@ -218,6 +259,7 @@ try {
         `export { emptyListReason, foldName } from ${JSON.stringify(fwd(libPath))};`,
         `export { normalizeName } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'lib', 'playerSearch.ts')))};`,
         `export { careerPlayers } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'data', 'careerPlayers.ts')))};`,
+        `export { clubSeasonsOf, shareClub } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'lib', 'transferPathGraph.ts')))};`,
       ].join('\n'));
       await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: bundle, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [NO_DATABASE] });
       bake = checkBake(await import(pathToFileURL(bundle).href));
@@ -275,16 +317,18 @@ function checkBake(page) {
   if (told > 0) red.push('pool men');
   if (told > 0 && !CONTROL) fail(`${told} spellings of men in the pool are told they are not in it`);
 
-  /* The target by his last word and without punctuation, both ends left out
-     of the list as the board leaves them: where nobody else matches, the
-     text must be the chain or target one. */
+  /* Non-direct base-graph pairs leave both ends out of the list. Direct pairs
+     are omitted here because the board offers their target, which section 1
+     holds through the actual autocomplete. This bake uses career stats only. */
   const inBake = new Set(names);
+  const baseKeys = page.clubSeasonsOf(page.careerPlayers);
   const puzzles = fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'transferPathPull', 'puzzles.txt'), 'utf8')
     .split('\n').filter(Boolean).map(l => l.split('|'));
-  let targets = 0, targetEmpty = 0, notChain = 0;
+  let targets = 0, targetEmpty = 0, notChain = 0, directPairs = 0;
   const targetExamples = [];
   for (const [id, a, b] of puzzles) {
     if (!inBake.has(a) || !inBake.has(b)) continue;
+    if (page.shareClub(baseKeys, a, b) !== null) { directPairs += 1; continue; }
     targets += 1;
     const leftOut = new Set([a, b].map(n => page.normalizeName(n)));
     const w = wordsOf(b);
@@ -295,11 +339,11 @@ function checkBake(page) {
       if (why !== 'chain') { notChain += 1; if (targetExamples.length < 5) targetExamples.push(`${id} "${v}" for ${b}: ${why}`); }
     }
   }
-  console.log(`   ${targets} pull puzzles with both ends in the bake; the target typed comes back empty ${targetEmpty} times, ${notChain} of them without the chain or target text`);
+  console.log(`   ${targets} non-direct base-graph pull puzzles with both ends in the bake; ${directPairs} direct pairs omitted; the target typed comes back empty ${targetEmpty} times, ${notChain} of them without the chain or target text`);
   targetExamples.forEach(e => console.error(`     ${e}`));
   if (notChain > 0) red.push('targets');
   if (notChain > 0 && !CONTROL) fail(`${notChain} typed targets are not told they are the target`);
-  return { red, typed, empty, targets, targetEmpty };
+  return { red, typed, empty, targets, targetEmpty, directPairs };
 }
 
 if (CONTROL) {
@@ -322,7 +366,9 @@ if (CONTROL) {
    nobody for 253 of them (all spelling text, none "not in the pool"); 885
    pull puzzles with both ends in the bake, the target typed comes back empty
    1635 times, every one with the chain or target text. The checks themselves
-   are exact (zero tolerance); the floors sit well under the measurement. */
+   are exact (zero tolerance); the floors sit well under the measurement.
+   That measurement predates direct-pair omission; retain its floors until
+   the current non-direct-pair coverage is measured remotely. */
 if (bake.typed < 600) fail(`only ${bake.typed} spellings were typed, so the bake was not read`);
 if (bake.empty < 100) fail(`the search missed only ${bake.empty} spellings, so this no longer measures the defect it holds`);
 if (bake.targets < 800 || bake.targetEmpty < 800) fail(`only ${bake.targets} puzzles and ${bake.targetEmpty} empty targets were checked, so the pull was not read`);

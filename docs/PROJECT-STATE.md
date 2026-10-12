@@ -1,3 +1,23 @@
+## Transfer Path direct-win maintenance verified, 2026-10-12
+
+PR242 and PR243 stay frozen for H's integration. This chat's continued route
+review found that direct puzzles advertise one link but always hide the target
+from autocomplete. The hook already verifies and accepts a direct target.
+A separate branch from 48cb9d4b reproduced the defect remotely: two exact UI
+failures, 32 other cases green and nine actual target exclusions. The minimal
+Board correction now permits the target only when the active optimum is one,
+keeps played names and longer-puzzle targets excluded, and holds data, graph,
+scoring and save format. Frozen fc82e15e passed 34 tests, the type gate, build,
+23 scoped harnesses, five source controls and 207 browser checks. Nine daily
+wins restored exact saved bytes; three Unlimited wins preserved those bytes;
+five browser controls detected invalid metadata, omitted picks or deleted saves.
+All 521 locked versions held and all 26 original fixed PNGs were reviewed.
+The evidence is offline and scoped, with no newer-main or live-site claim.
+Draft PR244 is pushed and attached to this chat. H retains integration and
+publication. A native merge preview against 48cb9d4b reported no conflicts;
+it did not modify the checkout or qualify an integrated build. See
+docs/audits/transfer-path-direct-target-2026-10-12.md.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,

@@ -43,9 +43,14 @@ export function TransferPathBoard() {
   const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
   /* normalizeName, not toLowerCase: searchPlayers compares normalized names,
      so an accented chain name (Martin Ødegaard) was never left out before. */
+  // A direct puzzle has no middle player to pick, so offer its target.
+  const excludedPlayers = useMemo(
+    () => optimal === 1 ? chain : [...chain, puzzle.playerB],
+    [chain, puzzle.playerB, optimal],
+  );
   const excludeNames = useMemo(
-    () => new Set([...chain, puzzle.playerB].map(normalizeName)),
-    [chain, puzzle.playerB],
+    () => new Set(excludedPlayers.map(normalizeName)),
+    [excludedPlayers],
   );
   /* Why the list came back empty (src/lib/transferPathEmptyList.ts). "Not in
      the pool" only when no pool name is anywhere near the typed text: the
@@ -54,10 +59,10 @@ export function TransferPathBoard() {
      text, which claims nothing about the pool. */
   const foldedPool = useMemo(() => allNames.map(foldName), [allNames]);
   const emptyText = {
-    chain: "Already in your chain, or it's the target. Name one of his teammates.",
+    chain: optimal === 1 ? 'Already in your chain. Try another name.' : "Already in your chain, or it's the target. Name one of his teammates.",
     spelling: 'Nothing matches that exact spelling. Try just the start of his surname.',
     pool: `No player by that name in the Transfer Path pool yet. The pool holds ${allNames.length} players.`,
-  }[emptyListReason(input, [...chain, puzzle.playerB], foldedPool)];
+  }[emptyListReason(input, excludedPlayers, foldedPool)];
 
   /* Round 460: the refusal says which rule refused, not just that the link failed. */
   const refusalText = (name: string, reason: TransferPathRefusal | undefined) => {
@@ -125,6 +130,7 @@ export function TransferPathBoard() {
                 <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who were teammates, one link at a time.</p>
                 <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
                 <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
+                <p>⚡ If the optimal is 1, pick the target to finish in one step.</p>
                 <p>💡 Stuck? The hint follows your chain, so it always speaks from the last name you played, and giving up shows a full working path.</p>
                 <p>🔎 Still stuck? More help counts your options and never names who to play: how many pool players shared a season with the last name you played, at which clubs, and how many of them are on a shortest route.</p>
                 <p>🗂️ Only players in our Transfer Path pool can be named. If a name doesn't come up as you type, try the start of his surname or the name he plays under. If that finds nobody either, he's not in the pool yet.</p>
