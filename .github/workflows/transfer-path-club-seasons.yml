@@ -1,0 +1,82 @@
+name: Transfer Path verified club seasons
+
+on:
+  push:
+    branches: [codex/transfer-path-verified-seasons]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TRANSFER_PATH_LOCAL_ONLY: '1'
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CI: '1'
+      PLAY_SHOTS: transfer-path-club-seasons-artifacts
+      PRERENDER_ONLY: /transfer-path
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - run: npm ci
+      - name: Browser and logo dependencies
+        run: |
+          mkdir -p transfer-path-club-seasons-artifacts
+          sha256sum package.json package-lock.json > transfer-path-club-seasons-artifacts/package-hashes.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync('transfer-path-club-seasons-artifacts/installed.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/transfer-path-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum --check transfer-path-club-seasons-artifacts/package-hashes.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync('transfer-path-club-seasons-artifacts/installed.json'));
+          for (const p of installed) assert.equal(JSON.parse(fs.readFileSync(p.path + '/package.json')).version, p.version, p.path);
+          console.log(`Held all ${installed.length} locked installed dependency versions.`);
+          NODE
+      - name: Reported teammate link and existing hook behavior
+        run: node_modules/.bin/vitest run src/hooks/useTransferPathClubSeasons.test.ts src/hooks/useTransferPath.test.ts src/hooks/useTransferPathGuidance.test.ts --maxWorkers=1
+      - name: Application types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Production build
+        run: npm run build:seo
+      - name: Membership regression and its missing-record control
+        run: |
+          node scripts/simTransferPathClubSeasons.mjs
+          TRANSFER_PATH_CLUB_SEASONS_CONTROL=missing node scripts/simTransferPathClubSeasons.mjs
+      - name: Related game and generated-site fences
+        run: |
+          ONLY=simTransferPathRepeat,simTransferPathGuidance,simTransferPathSeasons,simTransferPathModes,simTransferPathHints,simTransferPathActiveIdentity,simTransferPathEmptyState,simCareerSeasonTruth,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser
+      - name: Mounted report at phone and desktop widths
+        run: node scripts/playTransferPathClubSeasons.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-path-club-seasons-${{ github.sha }}
+          path: transfer-path-club-seasons-artifacts/

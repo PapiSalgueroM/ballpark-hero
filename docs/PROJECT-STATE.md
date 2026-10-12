@@ -1,3 +1,20 @@
+## Transfer Path report correction ready for integration, 2026-10-12
+
+User report tpa-770 rejects Kylian Mbappé after Trent Alexander-Arnold.
+Isolated codex/transfer-path-verified-seasons from b6eb78e7 adds independently
+verified Real Madrid 2025/26 membership without statistical rows or database
+changes. The actual graph, affected puzzle hints/minima, both data-loading
+paths, daily reload and historical exclusions are covered by the scoped
+regression. Baseline remote run 38280414905 reproduced four refusals.
+PR242 is a draft on the isolated branch. Exact source 2dfee304 passed remote
+run 38285493476: types, complete app build with the Transfer Path snapshot,
+16 hook cases, 11 focused outcomes and their missing-membership control,
+all 23 requested harnesses (all 15 site fences included), and six browser
+journeys with 108 checks. Integration and publication remain pending.
+G keeps integration and publication ownership. See
+docs/audits/transfer-path-club-seasons-2026-10-12.md for the two sources and
+scope. Existing active-player eligibility and career statistics stay held.
+
 ## Release AX LIVE, 2026-10-12 05:00 EDT: Build Your XI confirms more picks from its own records, real Belgian opponent names in replays, a Press room and saved contract talks (three of the other lane's pull requests), and three rounds of this lane (past seasons of Club Manager stay in their season, football scores in the NFL front office, the league book made whole)
 
 Claude lane (session G). main a89ac1df, deployment 32e67725-fd19-4149-b70a-52d446af3396, entry index-BniRpUTm.js (was index-BMYYIgf0.js, Release AW,
