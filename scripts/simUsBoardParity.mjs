@@ -241,7 +241,7 @@
  * 5d5926f6. The walker had learned the wheel one commit BEFORE the merge
  * (934c29d9) and replayed the old recording byte for byte there, so nothing
  * but the merge moved it. What moved, measured against the recording it
- * replaces (.tmp-fx/compareFixture.mjs of the integration): no step before
+ * replaces (scripts/qa/compareUsBoardFixture.mjs, old file then new): no step before
  * the first talk of any path differs (first talk at step 59, 52, 50 and 21);
  * with the 'market wheel: ' steps out (16, 14, 6 and 6 on the paths, two a
  * push) every path is the same sequence of presses and season counts, 459,
