@@ -1,0 +1,120 @@
+FLEET|fifteen|desk off|3|week 9|3f55a545d695edf5ea6c4a51c67fd66f86f86379|draws 559
+FLEET|fifteen|desk off|3|week 10|bc2de4ca38043e0f6afd1753f95a4b9dcc5a0b73|draws 558
+FLEET|fifteen|desk off|3|week 11|4ff00909f9a06ca7ab396f16c24fa56e293adc83|draws 553
+FLEET|fifteen|desk off|3|week 12|41e39c296cdcc41b91a6e29a44f6a8f36c110e0d|draws 561
+FLEET|fifteen|desk off|3|week 13|a4e92cad4bdc294a3ebf43546d0d32d9a5c7941d|draws 553
+FLEET|fifteen|desk off|3|week 14|e0c538f70f84ca2ba666795e0397fa4cb8a5e476|draws 557
+FLEET|fifteen|desk off|3|week 15|d32e19c0145f945995fe04568101d9fd080525eb|draws 555
+FLEET|fifteen|desk off|3|week 16|f0568fe564bcaa6387b8a01613d436c5d3f890e0|draws 552
+FLEET|fifteen|desk off|3|week 17|3ea9415f1406a3d4984f745486997ad37425a4c7|draws 595
+END|fifteen|desk off|3|phase recap|log 17 game(s)|save 86864 bytes
+FLEET|fifteen|desk off|17|week 9|4c3bab2ced868617b08b1355611110693aa3f8d6|draws 551
+FLEET|fifteen|desk off|17|week 10|94e8c54e500101b517c1890477de40fa4060e1da|draws 569
+FLEET|fifteen|desk off|17|week 11|09754e18c239d2235dc37620175ed5a5fdd89449|draws 557
+FLEET|fifteen|desk off|17|week 12|1852b4ef2eaa6ef6ce55c1c1af306ca3a1c5daff|draws 562
+FLEET|fifteen|desk off|17|week 13|297e7f0a31054545d1223d6155edbe5a1dde9baa|draws 555
+FLEET|fifteen|desk off|17|week 14|2d6747ca135a189c80193d74f950fd8fdcfd8aa9|draws 558
+FLEET|fifteen|desk off|17|week 15|d504198ed8637242ae4cb429330f1d0a18195c95|draws 561
+FLEET|fifteen|desk off|17|week 16|9cd581f4075f71e4f46e00986a2a8b95abb28768|draws 556
+FLEET|fifteen|desk off|17|week 17|3779b8aafbefc9b27af1336d82f4281fb4e00cd6|draws 600
+END|fifteen|desk off|17|phase recap|log 17 game(s)|save 86975 bytes
+FLEET|fifteen|desk off|29|week 9|ab68922caaad974a244ecd2957997927ce3fba89|draws 555
+FLEET|fifteen|desk off|29|week 10|772bfe1ef7f397620a0ae75da586f8e19fbd01ed|draws 560
+FLEET|fifteen|desk off|29|week 11|fc52ad429707561ded3b0f19e95731f0b9a1e57d|draws 556
+FLEET|fifteen|desk off|29|week 12|efa27c1806402114577898c8f37c5ec309862f38|draws 567
+FLEET|fifteen|desk off|29|week 13|21f6d946af9ead39203a7b823a547113282bfc22|draws 558
+FLEET|fifteen|desk off|29|week 14|4939d90f4f4c2181b9b57dd99137487eed6ef838|draws 561
+FLEET|fifteen|desk off|29|week 15|57fb97f0c86ecae04b27aa15c62808d18218d78b|draws 566
+FLEET|fifteen|desk off|29|week 16|b72c18bb4ca0dffc6085c0d79a7b869b422e3de3|draws 569
+FLEET|fifteen|desk off|29|week 17|3fe832555a5a79a1e46f99e01ae5c9a2567fe94a|draws 595
+END|fifteen|desk off|29|phase recap|log 18 game(s)|save 87568 bytes
+FLEET|fifteen|desk on|3|week 9|9aeab7fd0fb5b86640dea6bfc5c543324523a852|draws 559
+FLEET|fifteen|desk on|3|week 10|ef1c383bb5c39b2901706a2b3dc0e136e630987e|draws 558
+FLEET|fifteen|desk on|3|week 11|a32c5a0b6d0ece0f5875ab66cf319db221e10bce|draws 553
+FLEET|fifteen|desk on|3|week 12|671df2b05a01c5ec1fb162e1fff4fcb90843699b|draws 561
+FLEET|fifteen|desk on|3|week 13|b80dc30b3bed70e443b9f8b9639712596cf30ba1|draws 553
+FLEET|fifteen|desk on|3|week 14|b25e8a672f6fbcf93d293a9221cb2c71dd05fb67|draws 557
+FLEET|fifteen|desk on|3|week 15|cee3197946cab22a98510a44c9999f0e8439b67b|draws 555
+FLEET|fifteen|desk on|3|week 16|a10fdb6e682a1a03ec5e0d9a95143e82325fb23c|draws 552
+FLEET|fifteen|desk on|3|week 17|7a39d1ab74373df232848e89d199d3bdde390efe|draws 595
+END|fifteen|desk on|3|phase recap|log 17 game(s)|save 103674 bytes
+FLEET|fifteen|desk on|17|week 9|70e5c7a86caf6c058a1964531a24828adc25a6e4|draws 551
+FLEET|fifteen|desk on|17|week 10|a1f92a294659f10ec2343f962dc2086686bbbc25|draws 570
+FLEET|fifteen|desk on|17|week 11|2d767a0149f81f10677e53d59089ec669892731b|draws 557
+FLEET|fifteen|desk on|17|week 12|6049acf6f53c1f70610cae5d34f0cc38007524c6|draws 562
+FLEET|fifteen|desk on|17|week 13|e3512d125dffa12a2730759958477c3aa9ca6486|draws 555
+FLEET|fifteen|desk on|17|week 14|30c6feb5df402a23c6bdabfb2daae488147cd8e9|draws 558
+FLEET|fifteen|desk on|17|week 15|26fa60b2c0104d95604cf0fb7960da46d25ca7d5|draws 562
+FLEET|fifteen|desk on|17|week 16|4ac3797236d72950dcb0b915cae1f5b7388b95eb|draws 556
+FLEET|fifteen|desk on|17|week 17|3e073b36f180cc10f1e4ad2bd2489d0d8f5403c3|draws 601
+END|fifteen|desk on|17|phase recap|log 17 game(s)|save 103882 bytes
+FLEET|fifteen|desk on|29|week 9|35d901a07539ff2a5bfbfb64fb7fccd1c7abe909|draws 555
+FLEET|fifteen|desk on|29|week 10|6a003e5f272cfde6a506535fb6c8b922a1c23b41|draws 560
+FLEET|fifteen|desk on|29|week 11|b627a1b4942041987e4005338d39382221a69c0e|draws 556
+FLEET|fifteen|desk on|29|week 12|566fec123bfa5d02904a6aea74250b758da33502|draws 567
+FLEET|fifteen|desk on|29|week 13|def49bbc368824d529ac0eedbe039d93b8b3d43a|draws 558
+FLEET|fifteen|desk on|29|week 14|5cd2af1c999911e05675ef12a0626e19c5d9a6a5|draws 561
+FLEET|fifteen|desk on|29|week 15|e548bea5a9d56fe76d42f37ddb63d41fd7853457|draws 566
+FLEET|fifteen|desk on|29|week 16|dc211631b0d6f6ebf15e39aaee5aebaee3b371e6|draws 569
+FLEET|fifteen|desk on|29|week 17|3055b6b438cbcc35ddddf10d25e5f6c04bd2d5b2|draws 595
+END|fifteen|desk on|29|phase recap|log 19 game(s)|save 104113 bytes
+FLEET|deep|desk off|3|week 9|6f550131c7d997a394091e4b95f5e6859e7df9a3|draws 1690
+FLEET|deep|desk off|3|week 10|e7372d909d89c890e8358dd9c7c04698b51e5e6f|draws 1682
+FLEET|deep|desk off|3|week 11|1bc60c1b7c7321910a687b02492febb521edd612|draws 1681
+FLEET|deep|desk off|3|week 12|3f91254bcaa31320960f0be169164083ff829ad8|draws 1692
+FLEET|deep|desk off|3|week 13|d012ca365202c7fc083062bc331db7f051b818e1|draws 1690
+FLEET|deep|desk off|3|week 14|125e098514ad77e9093d88797fed9e7676fc5ebd|draws 1699
+FLEET|deep|desk off|3|week 15|2cc5d245c1fd60478261c25aa5194d8bcc70fbbc|draws 1693
+FLEET|deep|desk off|3|week 16|79b7a4a48d83ed697764dce4a386384cb4a468bb|draws 1689
+FLEET|deep|desk off|3|week 17|405877f7d1fadf83afcbc21c3024b0b432d8e701|draws 1729
+END|deep|desk off|3|phase recap|log 18 game(s)|save 637255 bytes
+FLEET|deep|desk off|17|week 9|247e30520b8f4971ccc5b6d8208f942a97ce254d|draws 1675
+FLEET|deep|desk off|17|week 10|5ffe07de54d2737e5824948449c057169eeebfc4|draws 1693
+FLEET|deep|desk off|17|week 11|eb0972e55a7a98b57343704611b47597f4503546|draws 1692
+FLEET|deep|desk off|17|week 12|c328b1642885b262631ca663828d04f7f7d37812|draws 1689
+FLEET|deep|desk off|17|week 13|30afcb2bc878a3e07419a3dcb8f288dc9a2fc75e|draws 1676
+FLEET|deep|desk off|17|week 14|5f03c5c8690f7067467f31a7b66bf844d2fca593|draws 1698
+FLEET|deep|desk off|17|week 15|81bbbc1c176669c2e0225ff5740ecf8e5de196ff|draws 1694
+FLEET|deep|desk off|17|week 16|6cb67f7fd412a004a34086766e777c862a35dcc8|draws 1702
+FLEET|deep|desk off|17|week 17|6af7cd3b13c812482a7887068558ad16431e54a5|draws 1734
+END|deep|desk off|17|phase recap|log 18 game(s)|save 637260 bytes
+FLEET|deep|desk off|29|week 9|00ca84cf4520d6dca3fb1fe8fd75431f7e1316cb|draws 1692
+FLEET|deep|desk off|29|week 10|695cfb2779299b8b574419f89a46a71516533b6d|draws 1694
+FLEET|deep|desk off|29|week 11|2ad70bb940605e1726f1d7b221ad820b21a981fc|draws 1684
+FLEET|deep|desk off|29|week 12|2d61d98021f61c6c34707c9ff48b1561bc29fced|draws 1702
+FLEET|deep|desk off|29|week 13|7d8565c358ec3730c8b730e78f89daffc50a1926|draws 1693
+FLEET|deep|desk off|29|week 14|9b7dd78384fa39927f357c33042d39aa64a8dd86|draws 1698
+FLEET|deep|desk off|29|week 15|531d290e92b09a566e386b0f49a81d887975cdc6|draws 1700
+FLEET|deep|desk off|29|week 16|9fd2a5991bc5a9cd5001fd468e9b19eae7f9abe9|draws 1712
+FLEET|deep|desk off|29|week 17|4c1f01f945c878849493c81338e9aa785d0426ed|draws 1730
+END|deep|desk off|29|phase recap|log 17 game(s)|save 637094 bytes
+FLEET|deep|desk on|3|week 9|2bddc791ff4a9808fc7f34f8c2cd271a46792685|draws 1690
+FLEET|deep|desk on|3|week 10|a9f781fbb4ec3e0a8b599dfde0da710b03ce9544|draws 1682
+FLEET|deep|desk on|3|week 11|910f6d3510220c911644752335c76f2b34e87d93|draws 1681
+FLEET|deep|desk on|3|week 12|b3ecfe4e50d80a27fdb391f03035cac0fdb9ff59|draws 1692
+FLEET|deep|desk on|3|week 13|18c56f32d6dd77c0e7f64445e3e5caaf29c9812f|draws 1690
+FLEET|deep|desk on|3|week 14|1df0c079ae3676ce1f02f7d0642c2f219abe9faf|draws 1700
+FLEET|deep|desk on|3|week 15|fbc3d7674bfa12fb45b9233c05c4702595b5e594|draws 1693
+FLEET|deep|desk on|3|week 16|10760744bc8f14316cd568eb62d308c991337b48|draws 1689
+FLEET|deep|desk on|3|week 17|a62bd9eb3369f31a4bbde9858dde8e89c42465fb|draws 1729
+END|deep|desk on|3|phase recap|log 21 game(s)|save 657479 bytes
+FLEET|deep|desk on|17|week 9|f5daf22f78befb0c088ba948bd0e6fcbcf474294|draws 1675
+FLEET|deep|desk on|17|week 10|9d7aff2197cd39451763dbf1d8a80d9a50037101|draws 1693
+FLEET|deep|desk on|17|week 11|cc569fea3ac306a5a1f07708fbfea4984b20176a|draws 1692
+FLEET|deep|desk on|17|week 12|c87b65dae0a8dc2eb8baa753ae1bef1751d83a82|draws 1689
+FLEET|deep|desk on|17|week 13|fc8d96860e2d65043e3663dbffb7c253aaf8dce8|draws 1676
+FLEET|deep|desk on|17|week 14|31538b250607ae9de75ce301301d56477038a3ad|draws 1698
+FLEET|deep|desk on|17|week 15|802f30251cb992e6967ddc1cf2a185e3e9e73a70|draws 1694
+FLEET|deep|desk on|17|week 16|fdd69aa0929ea1e200526db5f5313df30cce0b20|draws 1702
+FLEET|deep|desk on|17|week 17|3e3d4b8678f0250d94505956a7f3f46d64bec970|draws 1734
+END|deep|desk on|17|phase recap|log 19 game(s)|save 657859 bytes
+FLEET|deep|desk on|29|week 9|108120894877948fdc8502f53edfa37ae9247666|draws 1693
+FLEET|deep|desk on|29|week 10|daa9273ab0ca78a9b709f53887dcdb73480d5d58|draws 1694
+FLEET|deep|desk on|29|week 11|9bac6636e253804e8c281ef1194e660b50740289|draws 1686
+FLEET|deep|desk on|29|week 12|20d4f59ad4757fbf2fba68ddcdff2934ea5db459|draws 1702
+FLEET|deep|desk on|29|week 13|f6e3acae80b4be6059e34812f721675453191b04|draws 1694
+FLEET|deep|desk on|29|week 14|fad5f374130c6a3231edefece39e0063bf53a93f|draws 1698
+FLEET|deep|desk on|29|week 15|a970975dc259afa9bb971f3acca1e029ba111b15|draws 1700
+FLEET|deep|desk on|29|week 16|f34f64409292b317ac364997d5d640403551dd38|draws 1712
+FLEET|deep|desk on|29|week 17|f351782a1dc2c160c0ad52f4f06d7580001a9f73|draws 1730
+END|deep|desk on|29|phase recap|log 17 game(s)|save 657595 bytes

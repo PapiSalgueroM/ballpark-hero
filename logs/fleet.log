@@ -1,0 +1,16 @@
+base board lines holding the tile: 0
+vitest base-play exit=0, 204 FLEET lines
+vitest base-load exit=0, 108 FLEET lines
+head board lines holding the tile: 2
+vitest head-play exit=0, 204 FLEET lines
+vitest head-watch exit=0, 204 FLEET lines
+vitest head-load exit=0, 108 FLEET lines
+EQUAL  Play alone, base against head (save and draw count, every press): 204 lines
+EQUAL  a base save of week 8 loaded and played on, base against head (save and draw count): 108 lines
+EQUAL  head: every week WATCHED against every week PLAYED (the save after each week): 204 lines
+watch lines: 192, held yes: 192, held NO: 0, saved SOMETHING: 0, face watch: 192
+late draws: base 0, head 0
+END|fifteen|desk off|3|phase recap|log 17 game(s)|save 86864 bytes
+END|fifteen|desk off|17|phase recap|log 17 game(s)|save 86975 bytes
+END|fifteen|desk off|29|phase recap|log 18 game(s)|save 87568 bytes
+FLEET DONE bad=0
