@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-titlespoil: FO_GAMEDAY_WALK_CONTROL=titlespoil ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-oldboard: git show e505ec9e:src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/FrontOfficeBoard.tsx && npm run build > /tmp/ob-build.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- src; exit $s
