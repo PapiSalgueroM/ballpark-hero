@@ -1,0 +1,588 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+        },
++       leagueBook: {
++         c: {
++           'Aston Villa': {
++             m: {
++               'Aaron Wan-Bissaka|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Ian Maatsen|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Matty Cash|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Pau Torres|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Zion Suzuki|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Coventry City': {
++             m: {
++               'Ephron Mason-Clark|LM': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Ethan Pinnock|CB': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Sidiki Chérif|ST': [
++                 2,
++                 0,
++                 0,
++                 0
++               ],
++               'Victor Torp|CM': [
++                 1,
++                 1,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Crystal Palace': {
++             m: {
++               'Chris Richards|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Dean Henderson|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Honest Ahanor|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Jaydee Canvot|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Tyrick Mitchell|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Hull City': {
++             m: {
++               'Brooke Norton-Cuffy|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Charlie Hughes|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Konstantinos Tzolakis|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Nobel Mendy|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Ryan Giles|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Ipswich Town': {
++             m: {
++               'Abdul Fatawu|RW': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Julio Enciso|CAM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Leeds United': {
++             m: {
++               'Gabriel Gudmundsson|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Jaka Bijol|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'James Trafford|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Joe Rodon|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Tarik Muharemović|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Manchester City': {
++             m: {
++               'Enzo Fernández|CM': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Erling Haaland|ST': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Rayan Cherki|CAM': [
++                 1,
++                 1,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Manchester United': {
++             m: {
++               'Leny Yoro|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Lisandro Martínez|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Matthijs de Ligt|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Patrick Dorgu|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Senne Lammens|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           'Nottingham Forest': {
++             m: {
++               'Dan Ndoye|RW': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'James McAtee|CAM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Liam Delap|ST': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Nicolás Domínguez|CM': [
++                 1,
++                 1,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Bournemouth: {
++             m: {
++               'Junior Kroupi|ST': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Justin Kluivert|CAM': [
++                 0,
++                 1,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Brighton: {
++             m: {
++               'Georginio Rutter|ST': [
++                 1,
++                 0,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Chelsea: {
++             m: {
++               'Emiliano Martínez|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Jorrel Hato|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Levi Colwill|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Maxence Lacroix|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Reece James|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Fulham: {
++             m: {
++               'Josh King|CAM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Kevin|LW': [
++                 0,
++                 1,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Liverpool: {
++             m: {
++               'Conor Bradley|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Florian Wirtz|CAM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Giorgi Mamardashvili|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Jeremie Frimpong|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Jérémy Jacquet|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Milos Kerkez|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Newcastle: {
++             m: {
++               'Anthony Elanga|RW': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Lewis Miley|CM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Sunderland: {
++             m: {
++               'Enzo Le Fée|CM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Habib Diarra|CM': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Noah Sadiki|CM': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Trai Hume|RB': [
++                 1,
++                 0,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
++           Tottenham: {
++             m: {
++               'Mohammed Kudus|RW': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Omar Marmoush|ST': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
++               'Pedro Porro|RB': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
++               'Sandro Tonali|CDM': [
++                 1,
++                 1,
++                 0,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           }
++         },
++         my: [
++           [
++             'p-jordan-pickford',
++             1
++           ],
++           [
++             'p-jarrad-branthwaite',
++             1
++           ],
++           [
++             'p-james-tarkowski',
++             1
++           ],
++           [
++             'p-michael-keane',
++             1
++           ],
++           [
++             'p-vitaliy-mykolenko',
++             1
++           ]
++         ],
++         s: 'premier|1j6k8o'
++       },
+        leagueClubs: [
+          'Arsenal',
+          'Everton',
+          'Brighton',
+          'Coventry City',
+...
+      },
++     leagueBook: {
++       c: {},
++       my: [],
++       s: 'premier|tyjhrt'
++     },
+      leagueClubs: [
+        'Brighton',
+        'Manchester United',
+        'Ipswich Town',
+        'Everton',
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+    },
++   leagueBook: {
++     c: {},
++     my: [],
++     s: 'premier|1j6k8o'
++   },
+    leagueClubs: [
+      'Arsenal',
+      'Everton',
+      'Brighton',
+      'Coventry City',
+...
+    promisedStarts: [],
++   realLeagueFixtures: 'premier-2026-27-v1',
+    resultLog: [],
+    retiredLastSummer: [],
+    retiredNames: [],
+    sacked: false,
+    saveVersion: 3,
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:475:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:483:24
