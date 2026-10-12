@@ -1,0 +1,11 @@
+# Round 1306 fix pass 2, step 1 (head 03f972d3): the video referee arm on five default seed sets, control novar, and the two book saves written by the base commit (twice, to see they are byte stable)
+d0: SEEDSET=0 node scripts/simCmLeagueBook.mjs
+d1: SEEDSET=1 node scripts/simCmLeagueBook.mjs
+d2: SEEDSET=2 node scripts/simCmLeagueBook.mjs
+d3: SEEDSET=3 node scripts/simCmLeagueBook.mjs
+d4: SEEDSET=4 node scripts/simCmLeagueBook.mjs
+c-novar: BOOK_CONTROL=novar node scripts/simCmLeagueBook.mjs
+write: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-w1 && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_WRITE_SAVES=$RC_OUT node scripts/simCmLeagueBook.mjs
+write-again: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-w2 && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_WRITE_SAVES=/tmp/book-saves-again node scripts/simCmLeagueBook.mjs
+write-main: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-w3 && git worktree add -q $B 4aa47b12 && BOOK_BASE=$B BOOK_WRITE_SAVES=/tmp/book-saves-main node scripts/simCmLeagueBook.mjs; echo "exit of the run on main's tree: $?"
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

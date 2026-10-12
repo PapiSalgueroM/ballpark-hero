@@ -1,0 +1,10 @@
+d2 exit=0 67s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (67s)
+d1 exit=0 68s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (68s)
+d0 exit=0 69s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (69s)
+c-novar exit=1 67s | simCmLeagueBook: CONTROL novar FIRED: section law went red (1 failures) and no other section did (66s)
+d3 exit=0 70s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (70s)
+d4 exit=0 68s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (68s)
+write exit=0 88s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (87s)
+write-main exit=0 88s | exit of the run on main's tree: 0
+write-again exit=0 93s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (92s)
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
