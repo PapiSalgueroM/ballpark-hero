@@ -1,0 +1,6 @@
+  PASS  turning it down closed the card
+  PASS  the season was actually played (0 then 1)
+  PASS  the deal is now up (0 years left), which is what sends you to the market
+  PASS  turning it down did not change the money
+
+playExtension: green. The last year of a deal is a real fork in all four games.

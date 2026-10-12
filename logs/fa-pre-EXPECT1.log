@@ -1,0 +1,9 @@
+Call log:
+  - waiting for locator('[data-fa-window]')
+
+    at /tmp/pre/scripts/playFreeAgency.mjs:93:27 {
+  log: [ "  - waiting for locator('[data-fa-window]')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

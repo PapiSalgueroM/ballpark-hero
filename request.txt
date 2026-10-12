@@ -1,0 +1,15 @@
+# Release AX fix pass: the two walks of the talk screens. On the head (edited), on the head before the fix pass (72f54789, the walks as they were) and on the base before the train's merges (c9a1f86a).
+#!serve
+#!playwright
+#!serial
+fa-head: node scripts/playFreeAgency.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+ext-head: node scripts/playExtension.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+pre-build: git worktree add -q /tmp/pre 72f54789 && ln -s "$PWD/node_modules" /tmp/pre/node_modules && (cd /tmp/pre && node_modules/.bin/vite build --outDir /tmp/pre-dist > /tmp/pre-build.log 2>&1; tail -1 /tmp/pre-build.log)
+fa-pre-EXPECT1: node scripts/lib/hostLikeServer.mjs /tmp/pre-dist 4600 > /dev/null 2>&1 & S=$!; sleep 2; BASE=http://127.0.0.1:4600 node /tmp/pre/scripts/playFreeAgency.mjs 2>&1 | cut -c1-260 | tail -9; s=${PIPESTATUS[0]}; kill $S; exit $s
+ext-pre-EXPECT1: node scripts/lib/hostLikeServer.mjs /tmp/pre-dist 4600 > /dev/null 2>&1 & S=$!; sleep 2; BASE=http://127.0.0.1:4600 node /tmp/pre/scripts/playExtension.mjs 2>&1 | cut -c1-260 | tail -9; s=${PIPESTATUS[0]}; kill $S; exit $s
+base-build: git worktree add -q /tmp/base c9a1f86a && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log)
+fa-base: node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4601 > /dev/null 2>&1 & S=$!; sleep 2; BASE=http://127.0.0.1:4601 node /tmp/base/scripts/playFreeAgency.mjs 2>&1 | cut -c1-260 | tail -6; s=${PIPESTATUS[0]}; kill $S; exit $s
+ext-base: node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4601 > /dev/null 2>&1 & S=$!; sleep 2; BASE=http://127.0.0.1:4601 node /tmp/base/scripts/playExtension.mjs 2>&1 | cut -c1-260 | tail -6; s=${PIPESTATUS[0]}; kill $S; exit $s
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+rivals: node scripts/simNoRivalNames.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}

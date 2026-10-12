@@ -1,0 +1,12 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fa-head exit=0 15s | ALL FREE AGENCY WALK CHECKS PASSED
+ext-head exit=0 42s | playExtension: green. The last year of a deal is a real fork in all four games.
+pre-build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fa-pre-EXPECT1 exit=1 38s | Node.js v24.21.0
+ext-pre-EXPECT1 exit=1 63s | Node.js v24.21.0
+base-build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fa-base exit=0 16s | ALL FREE AGENCY WALK CHECKS PASSED
+ext-base exit=0 43s | playExtension: green. The last year of a deal is a real fork in all four games.
+tsc exit=0 37s | 
+anchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rivals exit=0 9s | No rival product names found. 0 findings.

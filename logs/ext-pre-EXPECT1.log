@@ -1,0 +1,9 @@
+    at offerNow (/tmp/pre/scripts/playExtension.mjs:118:75)
+    at /tmp/pre/scripts/playExtension.mjs:124:29 {
+  log: [
+    "  - waiting for locator('[data-extension-talk] [data-ext-salary]').first()"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
