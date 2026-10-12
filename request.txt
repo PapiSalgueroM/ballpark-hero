@@ -1,0 +1,7 @@
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
