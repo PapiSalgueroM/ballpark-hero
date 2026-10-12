@@ -1,0 +1,1 @@
+rv-strength: node .rc/x/rvcmw-strength.mjs
