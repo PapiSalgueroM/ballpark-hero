@@ -1,0 +1,7 @@
+1) Take a job, then lose it
+  PASS  the career is running
+  PASS  the save was doctored to a board about to pull the trigger
+  FAIL  the board ran out of patience and the wilderness opened
+  PASS  no real page errors on the walk (clean)
+
+playWilderness: 1 failure

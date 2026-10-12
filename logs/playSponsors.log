@@ -1,0 +1,12 @@
+  PASS  the kitty rose by the fee (69m to 90.1m, fee 21.1m)
+4) The table is gone, the deal is on the wall
+  PASS  the offers are off the table once one is signed
+  PASS  the signed deal states its yearly money
+  PASS  the signed deal states its remaining term
+  PASS  the desk tracks what the deal has paid
+5) It survives a reload, because it is the club's deal
+  PASS  the deal is still there after a reload
+  PASS  and the offers did not come back
+  PASS  no real page errors on the walk (clean)
+
+playSponsors: green. The desk offers three real deals and pays for the one you take.

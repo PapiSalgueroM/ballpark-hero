@@ -1,0 +1,12 @@
+  PASS  Barcelona is not in the English league
+  PASS  the thin-squad marker shows
+  PASS  the United tile demands the title
+  PASS  no Top N phrasing on any part of the tile
+4) Into the 2010 dressing room
+  PASS  the career header says 2010-11
+  PASS  the Squad tab listed the squad
+  PASS  Wayne Rooney is in the 2010 United squad
+  PASS  no 2026 player leaked into 2010
+  PASS  no real page errors (clean)
+
+playEra2010: green. A person can walk into 2010 and find it real.

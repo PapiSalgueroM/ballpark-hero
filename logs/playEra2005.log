@@ -1,0 +1,12 @@
+  PASS  somebody's board names the UEFA Cup
+  PASS  no 2005 board says Europa League (that name arrived in 2009)
+  PASS  no 2005 board says Conference League
+4) Into the 2005 dressing room
+  PASS  the career header says 2005-06
+  PASS  the Squad tab listed the squad
+  PASS  Michael Owen is at 2005 Newcastle (the window correction, visible in the UI)
+  PASS  Alan Shearer is in the squad
+  PASS  no 2026 player leaked into 2005
+  PASS  no real page errors on the England walk (clean)
+
+playEra2005: green. The 2005-06 branch plays like a person would find it.

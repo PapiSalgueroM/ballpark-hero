@@ -1,0 +1,12 @@
+4) A fresh session is a fresh mark
+  PASS  reloading alone adds nothing (1 sent)
+  PASS  the new session's first tap marks again (2 sent)
+  PASS  no real page errors on the tycoon walk (clean)
+5) Creating a career is not playing one
+  PASS  no mark for entering the draft (0 sent)
+6) A played season marks unscored, the Round 159 rule
+  PASS  exactly one mark for one season (1 sent)
+  PASS  the mark is nfl-my-career, unscored, with a handle ({"game":"nfl-my-career","player_name":"TidySnapper-26"})
+  PASS  no real page errors on the career walk (clean)
+
+playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.

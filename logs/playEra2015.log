@@ -1,0 +1,12 @@
+  PASS  the thin-squad marker shows for Frosinone
+  PASS  the Juventus tile demands the title
+6) Into the 2015 Turin dressing room
+  PASS  the career header says 2015-16
+  PASS  the Squad tab listed the Juventus squad
+  PASS  Dybala arrived from Palermo, the window correction landed
+  PASS  Buffon is in goal
+  PASS  Pogba stayed for 2015-16, exactly as in real life
+  PASS  Vidal is gone to a league outside this world
+  PASS  no real page errors on the Italy walk (clean)
+
+playEra2015: green. The 2015-16 branch plays like a person would find it.

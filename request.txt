@@ -1,0 +1,23 @@
+# Release AX join, final proof J5 (a plain served build, one at a time): the codexwalks line the copied set lacks, Round 1304's eight walks, the two walks of the talk screens, the talk walk's two other controls, Round 1305's browser proof, the save size fence
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playNationalities: ENGINES=chromium node scripts/playNationalities.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playReleaseClause: ENGINES=chromium node scripts/playReleaseClause.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playSponsors: ENGINES=chromium node scripts/playSponsors.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playFreeAgency: node scripts/playFreeAgency.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playExtension: node scripts/playExtension.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playUsMarketTalk-unspend-EXPECT1: US_MARKET_TALK_CONTROL=unspend node scripts/playUsMarketTalk.mjs
+playUsMarketTalk-noreveal-EXPECT1: US_MARKET_TALK_CONTROL=noreveal node scripts/playUsMarketTalk.mjs
+playOwnerMandate: node scripts/playOwnerMandate.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playSessionMarks: node scripts/playSessionMarks.mjs 2>&1 | cut -c1-260 | tail -12; exit ${PIPESTATUS[0]}
+playGames-front-office: ONLY=/front-office node scripts/playGames.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+edge-sha: sha256sum supabase/functions/validate-player/index.ts

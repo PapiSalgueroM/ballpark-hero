@@ -1,0 +1,12 @@
+  PASS  signing put years on the deal (1 then 6)
+  PASS  the salary on the save is the number that was on the card ($65.5M vs $65.5M)
+  PASS  signing did not secretly play a season
+  PASS  the feed says the extension was signed
+  PASS  a signed extension is not offered again
+3) Turning it down plays the season out
+  PASS  turning it down closed the card
+  PASS  the season was actually played (0 then 1)
+  PASS  the deal is now up (0 years left), which is what sends you to the market
+  PASS  turning it down did not change the money
+
+playExtension: green. The last year of a deal is a real fork in all four games.
