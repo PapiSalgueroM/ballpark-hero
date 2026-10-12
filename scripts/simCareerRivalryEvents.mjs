@@ -1087,12 +1087,41 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
     223: [mlbFixture({ age: 34 }), rivalFixture({ age: 35 })],
   };
   beatWords('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
-  /* Round 1149: the All-Star beat, read off the player's own season (see ownRosterBeatCheck). */
-  ownRosterBeatCheck('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, 206, {
-    p: mlbFixture, r: rivalFixture, award: mlbRivalry.MLB_ROSTER_AWARD, rivalName: 'Rival MLB',
-    made: { says: /^The All-Star rosters are out and you are on one\./, told: /You made the All-Star roster\./ },
-    dropped: { says: /^The All-Star rosters are out and you are not on one, a year after you were\./, told: /You were left off the All-Star roster\./ },
-  });
+  /* Round 1313: the MLB rival plays the player's position on the player's own stat line now (mlbRivalSeason) and
+     the same All-Star pass judges his season, so beat 206 names both seasons on the three shared cards
+     (rosterBeat and ALL_STAR_ROSTER in careerFactBeats.ts), the NFL's shape of section 4: dealt only when at
+     least one of the two made it in the ONE season both were judged on, never on the ratings. The two cards of
+     Round 1149 stay as `own`, never dealt once the rival has been judged on the season at hand, only so a save
+     sitting on one of them still pays what it printed: each group is checked on its own. */
+  {
+    const AW = mlbRivalry.MLB_ROSTER_AWARD;
+    const season = (has, year = 2030) => ({ year, awards: has ? [AW] : [] });
+    const pair = (mine, his) => ({ p: mlbFixture({ seasons: [season(mine)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: his }) });
+    const facts = factBeatCheck('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, 206, {
+      never: [
+        { name: 'in a season neither of you made it (both rated 90)', p: mlbFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90, lastYear: 2030, lastAllStar: false }) },
+        { name: 'in a season neither made it, a year after you did (the dropped card of Round 1149 is not dealt once he is judged)', p: mlbFixture({ seasons: [season(true, 2029), season(false)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: false }) },
+        { name: 'on two different seasons (yours of 2031 without it, his of 2030 with it)', p: mlbFixture({ seasons: [season(false, 2030), season(false, 2031)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: true }) },
+        { name: 'on the two ratings (both at 90, nobody on a roster, a rival from before Round 1313)', p: mlbFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90 }) },
+        { name: 'on a save with no season played', p: mlbFixture({ ovr: 90, seasons: [] }), r: rivalFixture({ ovr: 90 }) },
+      ],
+      deal: [
+        { name: 'mine=true his=false', ...pair(true, false), says: /^The All-Star rosters are out\. You are on one and Rival MLB is not\.$/, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster and Rival MLB did not\./ },
+        { name: 'mine=false his=true', ...pair(false, true), says: /^The All-Star rosters are out\. Rival MLB is on one and you are not\.$/, reads: 'Morale -5', move: { morale: -5 }, told: /Rival MLB made the All-Star roster and you did not\./ },
+        { name: 'mine=true his=true', ...pair(true, true), says: /^The All-Star rosters are out, and you and Rival MLB are both on them\.$/, reads: 'Fanbase +3', move: { fanbase: 3 }, told: /You and Rival MLB both made the All-Star roster\./ },
+      ],
+    });
+    const silent = /Rival MLB (is|made|did|was)\b|over (you|Rival MLB)/;
+    const own = factBeatCheck('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, 206, {
+      deal: [
+        { name: 'an old save: you made it (left off the year before)', p: mlbFixture({ seasons: [season(false, 2029), season(true)] }), r: rivalFixture(), silent, says: /^The All-Star rosters are out and you are on one\./, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster\./ },
+        { name: 'an old save: you are off it a year after you were on it', p: mlbFixture({ seasons: [season(true, 2029), season(false)] }), r: rivalFixture(), silent, says: /^The All-Star rosters are out and you are not on one, a year after you were\./, reads: 'Morale -5', move: { morale: -5 }, told: /You were left off the All-Star roster\./ },
+      ],
+    });
+    console.log(`   the All-Star beat (206): ${facts} of 3 fact pairs dealt and applied at 4 rolls each, 5 fixtures it must stay shut on, never on a coin, never on the ratings; ${own} of 2 cards of the release before still pay what they printed`);
+    if (facts < 3) fail(`MLB beat 206: only ${facts} of 3 fact pairs were dealt`);
+    if (own < 2) fail(`MLB beat 206: only ${own} of 2 cards an older save can sit on are still honoured`);
+  }
   let reachable = 0, correct = 0;
   const total = mlbRivalry.MLB_RIVALRY_EVENTS.length;
   for (const def of mlbRivalry.MLB_RIVALRY_EVENTS) {

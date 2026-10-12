@@ -172,7 +172,8 @@
        purpose, so its byte equal half can no longer hold): never run SENSE_PROVE_1149 again. Round 1227's own
        proof is sections P1, P2 and L of scripts/simUsRivalSense.mjs.
    S   Round 1227: the NFL has left this section (its beat 206 names both seasons now; simUsRivalSense N.F5).
-       What follows holds MLB and the NHL until their rivals move onto the player's line too.
+       Round 1313: MLB has left it too (its beat 206 names both seasons now; simUsRivalSense M.F5). What
+       follows holds the NHL until its rival moves onto the player's line too.
        The roster beat of the other three careers (Round 1149). Each read a coin; each is read off the
        player's own record now (ownRosterBeat, in careerFactBeats.ts since Round 1313), because those rivals do not play
        their season on the player's line yet. Every card of the beat dealt in the sport's fleet (500 careers
@@ -245,8 +246,8 @@
                       NFL 206) dealt on the two ratings again
      droppedanyyear   its card for dropping off the roster dealt in    S red
                       any year without the award
-     lastyearmlb      the MLB tick rolling on the bare save, so the    S red
-                      beat reads the season before the one just played
+     (lastyearmlb moved to scripts/simUsRivalSense.mjs in Round 1313, where it turns M.F5 red: the MLB
+      beat left section S when its rival moved onto the player's line.)
      lastyearnhl      the same swap in the NHL tick                    S red
      (lastyearnfl moved to scripts/simUsRivalSense.mjs in Round 1227, where it turns N.F5 red: the NFL's
       beat left section S when its rival moved onto the player's line.)
@@ -410,7 +411,6 @@ const CONTROLS = {
   /* S: the card for dropping off the roster dealt in any year without the award, whatever the year before held. */
   droppedanyyear: { file: 'src/lib/careerFactBeats.ts', find: '      when: s => lastSeasonHolds(s, spec.award) === false && seasonBeforeHolds(s, spec.award),', put: '      when: s => lastSeasonHolds(s, spec.award) === false,', needs: 'S' },
   /* S: the MLB tick rolling on the bare save, so the beat reads the season BEFORE the one just played. */
-  lastyearmlb: { file: 'src/lib/mlbCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
   lastyearnhl: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
   /* S: one beat sold as a coin again (the NHL's head to head win promising "50/50 outcome" in place of what it does). */
   soldascoin: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '    consequence: "Fanbase +5, confidence boost",', put: '    consequence: "50/50 outcome",', needs: 'S' },
@@ -1222,8 +1222,8 @@ const LESSER_ONLY_FLOOR = 230;
    mean (see the header for the counts). A mean over the run and not a floor on every seed, because the NFL's
    first team All-Pro beat is dealt 5 to 10 times a seed and one of its cards once on the thinnest seed. */
 const S_BEAT = {
-  mlb: { id: 206, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 8.4, dropped: 7.8 } },
   nhl: { id: 306, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 12.4, dropped: 8.6 } },
+  /* Round 1313: MLB's row is gone the same way (simUsRivalSense M.F5 holds its three cards, M.O the old ones). */
   /* Round 1227: the NFL's row is gone. Its rival plays the player's own line now and its beat 206 names both
      seasons (rosterBeat), so it deals neither of these two cards any more: scripts/simUsRivalSense.mjs section
      N.F5 holds its three cards to the two seasons, and section N.O the two old cards on an older save. */

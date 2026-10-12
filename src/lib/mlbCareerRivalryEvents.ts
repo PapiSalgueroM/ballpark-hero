@@ -46,7 +46,7 @@ import type { CareerRival } from "./careerRival";
 import {
   rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
-import { withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER } from "./careerFactBeats";
+import { withSeasonPlayed, rosterBeat, ALL_STAR_ROSTER, ALL_STAR_OWN_ROSTER } from "./careerFactBeats";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
@@ -102,13 +102,18 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
   },
   /* Round 1149: no coin. The beat flipped one for which of you made the All-Star roster, in a game whose
      engine picks All-Stars for real (mlbAllStar in careerAwards.ts), so the card could say you made it in a
-     year your own season card said you did not. It is read off your own season now, the one just played. The
-     MLB rival's season is not on your stat line yet (only the NBA rival's is, since Round 1112), so nothing here
-     says whether HE made a roster: you made it, or you are off it a year after you were on it. The round that
-     moves the MLB rival onto the player's line can add the cards that name his roster, the way the NBA's 306
-     does. The two cards and their words are the shared ones (ownRosterBeat and ALL_STAR_OWN_ROSTER in
-     careerFactBeats.ts, where the rule is written): the NHL deals the same beat. */
-  ownRosterBeat<MlbCareerState, CareerRival>({ id: 206, award: MLB_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
+     year your own season card said you did not. Round 1313: the MLB rival plays your position on your own stat
+     line now (mlbRivalSeason in mlbMyCareer.ts) and the same All-Star pass that judges you judges his season,
+     so the beat names both seasons, on the three cards the NBA's 306 has had since Round 1112 and the NFL's 206
+     since Round 1227 (rosterBeat and ALL_STAR_ROSTER in careerFactBeats.ts): both of you, only you, only him,
+     dealt only when at least one of you made it in the season he was judged on. The All-Star rosters name
+     many men at every position, so there is no one place rule here. The two cards of Round 1149 stay as `own`,
+     never dealt again, only so a save sitting on one of them still pays what that card printed. */
+  rosterBeat<MlbSeasonLine, MlbCareerState, CareerRival>({
+    id: 206, ...ALL_STAR_ROSTER,
+    mine: last => (last.awards ?? []).includes(MLB_ROSTER_AWARD),
+    own: { award: MLB_ROSTER_AWARD, made: ALL_STAR_OWN_ROSTER.made, dropped: ALL_STAR_OWN_ROSTER.dropped },
+  }),
   {
     id: 207, emoji: "⭐", title: "Rival's Ring",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,

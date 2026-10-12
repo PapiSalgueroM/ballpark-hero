@@ -678,16 +678,13 @@ export function simMlbSeason(
   if (sn) notes.push(sn);
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
-  // Round 1226: that scale is the season on the engine's own length (`full`),
-  // which is the one his line is drawn on, whatever the year's length was.
-  // His PRINTED line is carried to the season the league really played, the
-  // way mine is, so the two lines on the card are the same season.
+  // Round 1313: on the same LINE as mine. His season is made by the functions
+  // that make mine (mlbRivalSeason), at his own position, carried to this
+  // season's slate, and the head to head reads the two SAVED lines, his and
+  // mine, through one function (mlbHeadToHeadScore). The awards and his
+  // All-Star pass still read the draw on the engine's own length (`full`).
   if (c.rival && !c.rival.retired) {
-    const myScore = (c.pos === 'SP' || c.pos === 'RP') ? Math.round((full.so ?? 0) * 0.12 + Math.max(0, (5.2 - (full.era ?? 5)) * 8)) : Math.round((full.hr ?? 0) * 1.6 + ((full.avg ?? 0.24) - 0.24) * 300);
-    const rivalNotes = slate === US_ENGINE_SEASON.mlb
-      ? judgeRivalSeason(c.rival, myScore, c.name, 'mlb', rng)
-      : judgeRivalSeason(c.rival, myScore, c.name, 'mlb', rng, undefined, n => toSlate('mlb', n, slate));
-    for (const n of rivalNotes) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL career roll their
