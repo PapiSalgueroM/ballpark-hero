@@ -1,0 +1,13 @@
+cm-390-rm: heads "CLUB MANAGER / Club Manager: Free Football Management Game / How to play Club Manager, a free online football management " text 36678 chars, scrollWidth 390, needle hits 0
+home-390-rm: heads "DoUKnowBall / Main event / Daily puzzles" text 22538 chars, scrollWidth 390, needle hits 0
+  390 reduce: page errors 0; requests naming the facts file 0
+cm-390-motion: heads "CLUB MANAGER / Club Manager: Free Football Management Game / How to play Club Manager, a free online football management " text 36678 chars, scrollWidth 390, needle hits 0
+home-390-motion: heads "DoUKnowBall / Main event / Daily puzzles" text 22538 chars, scrollWidth 390, needle hits 0
+  390 no-preference: page errors 0; requests naming the facts file 0
+cm-1280-rm: heads "CLUB MANAGER / Club Manager: Free Football Management Game / How to play Club Manager, a free online football management " text 36735 chars, scrollWidth 1280, needle hits 0
+home-1280-rm: heads "DoUKnowBall / Main event / Daily puzzles" text 22841 chars, scrollWidth 1280, needle hits 0
+  1280 reduce: page errors 0; requests naming the facts file 0
+cm-1280-motion: heads "CLUB MANAGER / Club Manager: Free Football Management Game / How to play Club Manager, a free online football management " text 36735 chars, scrollWidth 1280, needle hits 0
+home-1280-motion: heads "DoUKnowBall / Main event / Daily puzzles" text 22841 chars, scrollWidth 1280, needle hits 0
+  1280 no-preference: page errors 0; requests naming the facts file 0
+walk1310: clean, 8 views
