@@ -1,3 +1,11 @@
+## Soccer Career guide fixture derived remotely, 2026-10-12
+
+PR238 remains draft. The original 79f72f68 run passed app types, all 387 assertions across 13 files, full production SEO and all 15 rebuilt readers, but its guide check failed on the added instructions. No original failure is waived.
+
+Remote derivation29959059 run38204334342 completed successfully. The existing guide refresh generated the current Soccer Career record; all 130 other complete route records and the fixture description stayed the same. A repeated refresh was byte-identical. The healthy guide and all seven existing copied faults passed their expected checks. This successor copies the actual generated fixture and the reviewed helper that accepts exactly one original or refreshed training instruction. No frozen entry was hand-edited and all guard predicates and the 131-guide floor remain.
+
+Fresh exact-head app types, targeted units, full production SEO and every rebuilt reader remain required before integration. All application/compiler/build/browser execution stays remote. G owns integration and publication; these changes are not live.
+
 ## Soccer Career guide verification setup repair, 2026-10-12
 
 Draft PR238 at aaabb4c5 triggered exact push run38194820481. Its setup failed because an extra in-place npm install changed locked @adobe/css-tools from4.4.4 to4.5.0. The complete install log also reports17 additions,56 removals and172 changes; the installed-version guard stopped at the first changed row, so there is no complete named after-inventory. Types, outcomes, SEO build, readers and final cap were all skipped and remain unverified. The original failed9-body evidence is retained.
