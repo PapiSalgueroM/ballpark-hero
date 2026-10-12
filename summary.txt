@@ -1,0 +1,12 @@
+simEra2005 exit=0 29s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simEra2010 exit=0 30s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2015 exit=0 25s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simEra2020 exit=0 31s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simStatsCentre exit=0 5s | ALL STATS CENTRE CHECKS PASSED
+simClubManagerALeague exit=0 13s | simClubManagerALeague: all checks passed
+tsc exit=0 142s | 
+simHarnessAnchors exit=0 76s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+appeal-pin-stale-EXPECT-RED exit=1 15s | Node.js v24.21.0
+simCmLeagueRules exit=0 99s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+appeal-repinned exit=0 67s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+vitest-all exit=0 732s |    Duration  731.57s (transform 44.06s, setup 29.84s, collect 195.58s, tests 1604.65s, environment 216.53s, prepare 45.39s)

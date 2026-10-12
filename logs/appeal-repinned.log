@@ -1,0 +1,9 @@
+repin1081: moved the pin of src/lib/clubManager.ts from abd9e6690a77275900ffe23e9056b6396be92b63cd47791483e40bffd4724e5b to 72cfda640f9a615dde6d46b7fb2bab0e4cd0b63ffaca36560fbeb5941c50bc75
+Appeal characterization integrity passed: 24 complete actual pairs.
+Existing-card compatibility: 6 save/load and empty-slot round trips, every appeal option.
+Effective copied controls: mislink, effect, story, verdict; independent baseline passed in each.
+Historical baseline: 6 preserved differing pairs, separate from current product parity.
+Compatibility: 13 outcome groups, 16 effective mapped controls.
+Whole-source holds: 3408 exact files; 24 executed bundles retained.
+Product correctness: true; differing pairs: 0.
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
