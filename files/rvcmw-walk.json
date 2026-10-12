@@ -1,0 +1,14 @@
+{
+ "notes": [
+  "390-reduce-seeded: join took 258 ms; Everton's screen lists the man bought there (Lamine Yamal) true, the man sold (Hayden Hackney) false",
+  "390-reduce-old: join took 226 ms; Everton's screen lists the man bought there (Lamine Yamal) false, the man sold (Hayden Hackney) true",
+  "390-motion-seeded: join took 251 ms; Everton's screen lists the man bought there (Lamine Yamal) true, the man sold (Hayden Hackney) false",
+  "390-motion-old: join took 203 ms; Everton's screen lists the man bought there (Lamine Yamal) false, the man sold (Hayden Hackney) true",
+  "1280-seeded: join took 220 ms; Everton's screen lists the man bought there (Lamine Yamal) true, the man sold (Hayden Hackney) false",
+  "1280-old: join took 193 ms; Everton's screen lists the man bought there (Lamine Yamal) false, the man sold (Hayden Hackney) true",
+  "deep seeded (season 8): Quick Sim, 1 long tasks, 1431 ms blocked, longest 1431 ms (8 s window from the tap at 1791840289125)",
+  "deep stripped (season 8): Quick Sim, 1 long tasks, 156 ms blocked, longest 156 ms (8 s window from the tap at 1791840299625)",
+  "deep seeded-again (season 8): Quick Sim, 1 long tasks, 1418 ms blocked, longest 1418 ms (8 s window from the tap at 1791840309177)"
+ ],
+ "failures": []
+}

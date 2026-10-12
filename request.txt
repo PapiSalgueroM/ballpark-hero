@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+rv-walk: node .rc/x/rvcmw-walk.mjs
