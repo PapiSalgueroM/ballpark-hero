@@ -714,10 +714,12 @@ describe('NFL front office: Watch in the playoffs', () => {
     const start = JSON.stringify({ ...base, trust: 60, mandate: { tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season: base.league.season } });
     const done: boolean[] = ((globalThis as any).__foDone ??= []);
     const seen: string[] = [];
-    for (let k = 51; k < 91 && seen.length < 2; k += 1) {
+    /* streams far apart: the first draw of the press decides the final, and the first draws of small neighbouring
+       Lehmer seeds all lie near 0 (seeds 51 to 90 gave forty home wins on r1309-fx1) */
+    for (let k = 1; k <= 40 && seen.length < 2; k += 1) {
       cleanup();
       localStorage.setItem(SAVE_KEY, start);
-      counted(k);
+      counted(k * 104729);
       render(<Board />);
       await openBox();
       const before = { press: textOf('[data-gm-press]'), owner: textOf('[data-owner-mandate]') };
