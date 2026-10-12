@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+gmpress: ENGINES=chromium node scripts/playGmPress.mjs
+mandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
+sessionmarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+fohub: ENGINES=chromium node scripts/playFoHub.mjs
