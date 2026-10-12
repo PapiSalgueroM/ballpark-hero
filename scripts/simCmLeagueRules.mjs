@@ -415,6 +415,14 @@
       whole, every other view and pure held in all of them. Written with
       --part=modern,eras,pure --write on the tree itself, then run green
       whole on the same runner.
+      Round 1311's step 5 (2026-10-12) re-took them again for the team of
+      the season, which the same awards now carry (kept on the newest five
+      records). Attribution on a GitHub runner at 5090d373 (remote check
+      r1311-s5d). Leg A, a copy of the tree whose awards carry no team:
+      step 2's file as it stood, green whole. Leg B, the tree itself: the
+      same 33 saves moved, in summary and wholeNext (and s2_whole for the
+      six pyramid saves), 72 hashes, nothing else. Written the same way,
+      then green whole.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
