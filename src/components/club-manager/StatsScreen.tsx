@@ -4,6 +4,7 @@ import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ba
 import type { CareerState, CMPlayer, CompBucket, CompStatLine } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { LeagueLeadersCard, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
+import { leaders } from '@/lib/clubManagerLeagueBoards';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 interface StatsScreenProps {
@@ -67,6 +68,9 @@ function AwardRacesCard({ career }: { career: CareerState }) {
   /* Round 1311: the league book's door asked once for the three readers below. */
   const boards = useMemo(() => leagueBoardsOf(career), [career]);
   const byBook = useMemo(() => bookAwardsState(career, boards).by === 'book', [career, boards]);
+  /* The race's note points at the boards only when the card above draws them (review-read m4): with no
+     readable book, or nothing on any board yet, the card says so and holds no Top scorers board. */
+  const boardsShown = useMemo(() => boards !== null && (['goals', 'assists', 'sheets'] as const).some(k => leaders(boards.input, k, 1).length > 0), [boards]);
   const boot = useMemo(() => goldenBootTable(career, 8, boards), [career, boards]);
   const poty = useMemo(() => playerOfSeasonRace(career, 3, boards), [career, boards]);
   const watch = useMemo(() => ballonDorWatch(career, 4), [career]);
@@ -90,7 +94,7 @@ function AwardRacesCard({ career }: { career: CareerState }) {
       ) : (
         <div data-cm-boot-race>
           <div className="text-[9px] text-muted-foreground uppercase tracking-wider">👟 Golden boot race</div>
-          <p data-cm-boot-race-note className="text-[8px] text-muted-foreground mb-1">The award race this season follows two main scorers a club and all of yours. The Top scorers board above is the league book's own count.</p>
+          <p data-cm-boot-race-note className="text-[9px] text-muted-foreground mb-1">The award race this season follows two main scorers a club and all of yours.{boardsShown && ' The Top scorers board above is the league book\'s own count.'}</p>
           {boot.filter(e => e.goals > 0).map((e, i) => (
             <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
               <span className="w-4 text-muted-foreground font-bold shrink-0">{i + 1}</span>

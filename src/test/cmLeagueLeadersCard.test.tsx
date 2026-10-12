@@ -168,6 +168,23 @@ describe('the Stats screen with a board open', () => {
     noDash(view.container);
     vi.restoreAllMocks();
   });
+
+  /* Review-read m4: the race's note points at the Top scorers board only when the card above draws one. */
+  it('the golden boot race note names the Top scorers board only when the card shows the boards', () => {
+    const POINTER = 'The Top scorers board above';
+    const thin = render(<StatsScreen career={hertha()} />);
+    expect(thin.container.querySelector('[data-cm-leaders-tile="goals"]')).not.toBeNull();
+    expect(thin.container.querySelector('[data-cm-boot-race-note]')?.textContent).toContain(POINTER);
+    cleanup();
+    const s = everton();
+    delete s.leagueBook;
+    const none = render(<StatsScreen career={s} />);
+    expect(none.container.querySelector('[data-cm-leaders-empty="nobook"]')).not.toBeNull();
+    const note = none.container.querySelector('[data-cm-boot-race-note]');
+    expect(note).not.toBeNull();
+    expect(note?.textContent).not.toContain(POINTER);
+    noDash(none.container);
+  });
 });
 
 /* Round 1311 step 2: the season review. The result screen's frame is not what is tested here: it is drawn
