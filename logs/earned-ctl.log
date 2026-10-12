@@ -1,0 +1,5 @@
+   fired  exit 1  touchseason    simNbaEarnedDraft: CONTROL touchseason FIRED. Red in section 1 (41 failures).
+   fired  exit 1  fatclass       simNbaEarnedDraft: CONTROL fatclass FIRED. Red in section 6 (3 failures).
+   fired  exit 1  nocurve        simNbaEarnedDraft: CONTROL nocurve FIRED. Red in section 6 (22 failures).
+   fired  exit 1  flatclass      simNbaEarnedDraft: CONTROL flatclass FIRED. Red in section 6 (3 failures).
+simNbaEarnedDraft controls: all 4 fired, each in exactly its own sections.

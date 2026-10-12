@@ -1,0 +1,6 @@
+coinflip exit=0 red=9 FAIL [2] 
+shortscale exit=0 red=9 FAIL [2] 
+norfa exit=0 red=9 FAIL [2] 
+latetrade exit=0 red=9 FAIL [3] 
+noguard exit=0 red=1 FAIL [3] 
+droppick exit=0 red=9 FAIL [4] 

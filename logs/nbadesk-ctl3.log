@@ -1,0 +1,6 @@
+noinjhook exit=0 red=9 FAIL [5] 
+nomirror exit=0 red=9 FAIL [4] 
+nostepien exit=0 red=2 FAIL [4] 
+noruleblock exit=0 red=1 FAIL [3] 
+sheetrepick exit=0 red=9 FAIL [2] 
+dayonestature exit=0 red=9 FAIL [5] 

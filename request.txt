@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+nbadesk: node scripts/simNbaGmDesk.mjs
+nbadesk-ctl1: s=0; for m in coinflip shortscale norfa latetrade noguard droppick; do SIM_NBA_GM_DESK_CONTROL=$m node scripts/simNbaGmDesk.mjs > /tmp/d-$m.log 2>&1; e=$?; echo "$m exit=$e red=$(grep -c 'FAIL \[' /tmp/d-$m.log) $(grep -o 'FAIL \[[0-9]*\]' /tmp/d-$m.log | sort -u | tr '\n' ' ')"; [ $e -eq 0 ] && s=1; done; exit $s
+nbadesk-ctl2: s=0; for m in flatstaff flatgrowth nodefault pilefit noedgeround noedgepo; do SIM_NBA_GM_DESK_CONTROL=$m node scripts/simNbaGmDesk.mjs > /tmp/d-$m.log 2>&1; e=$?; echo "$m exit=$e red=$(grep -c 'FAIL \[' /tmp/d-$m.log) $(grep -o 'FAIL \[[0-9]*\]' /tmp/d-$m.log | sort -u | tr '\n' ' ')"; [ $e -eq 0 ] && s=1; done; exit $s
+nbadesk-ctl3: s=0; for m in noinjhook nomirror nostepien noruleblock sheetrepick dayonestature; do SIM_NBA_GM_DESK_CONTROL=$m node scripts/simNbaGmDesk.mjs > /tmp/d-$m.log 2>&1; e=$?; echo "$m exit=$e red=$(grep -c 'FAIL \[' /tmp/d-$m.log) $(grep -o 'FAIL \[[0-9]*\]' /tmp/d-$m.log | sort -u | tr '\n' ' ')"; [ $e -eq 0 ] && s=1; done; exit $s
+capital: node scripts/simNbaDraftCapital.mjs
+capital-ctl: s=0; for m in capital human eligibility rivalConsume budget pending zeroPending restoreBudget legacyReplay counter roundOne complete pool recovery density five prospect legacyQuota available missing zeroBudget; do NBA_DRAFT_CAPITAL_CONTROL=$m node scripts/simNbaDraftCapital.mjs > /tmp/c-$m.log 2>&1; e=$?; echo "$m exit=$e $(grep -o '"failedIndices":\[[0-9,]*\]' /tmp/c-$m.log)"; [ $e -ne 0 ] && s=1; done; exit $s
+draftorder: node scripts/simGmDraftOrder.mjs
+draftorder-ctl0: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=0/3 node scripts/simGmDraftOrder.mjs
+draftorder-ctl1: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=1/3 node scripts/simGmDraftOrder.mjs
+draftorder-ctl2: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=2/3 node scripts/simGmDraftOrder.mjs
+gmpicks: node scripts/simGmPicks.mjs
+draftnight: node scripts/simDraftNight.mjs
+engineids: node scripts/simEngineIds.mjs
+invented: node scripts/simInventedNames.mjs
+diffproof: git diff -U0 48cb9d4b -- src/lib/nbaFrontOffice.ts | grep -c '^-[^-]' | grep -qx 0 && ! git diff -U0 48cb9d4b -- src/lib/nbaFrontOffice.ts | grep -E '^\+.*p\.ovr = Math\.min\(p\.pot, p\.ovr \+ a \+ Math\.floor\(rng\(\) \* n\)\)' && git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts && git diff --stat 48cb9d4b -- src public index.html package.json package-lock.json vite.config.ts && echo diffproof-ok

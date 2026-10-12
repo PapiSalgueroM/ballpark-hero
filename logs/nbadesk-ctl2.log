@@ -1,0 +1,6 @@
+flatstaff exit=0 red=10 FAIL [5] FAIL [7] 
+flatgrowth exit=0 red=9 FAIL [5] 
+nodefault exit=0 red=16 FAIL [1] FAIL [5] 
+pilefit exit=0 red=3 FAIL [6] 
+noedgeround exit=0 red=9 FAIL [5] 
+noedgepo exit=0 red=9 FAIL [5] 

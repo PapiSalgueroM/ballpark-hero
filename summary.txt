@@ -1,0 +1,18 @@
+earned exit=0 2s | simNbaEarnedDraft: green.
+earned-ctl exit=0 9s | simNbaEarnedDraft controls: all 4 fired, each in exactly its own sections.
+nbadesk exit=0 30s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+tsc exit=0 71s | 
+nbadesk-ctl1 exit=1 171s | droppick exit=0 red=9 FAIL [4] 
+capital exit=0 1s | NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+nbadesk-ctl2 exit=1 166s | noedgepo exit=0 red=9 FAIL [5] 
+draftorder exit=0 8s | simGmDraftOrder: green. 603177 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+capital-ctl exit=0 37s | zeroBudget exit=0 "failedIndices":[19]
+nbadesk-ctl3 exit=1 170s | dayonestature exit=0 red=9 FAIL [5] 
+draftorder-ctl1 exit=0 107s | simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
+draftorder-ctl0 exit=0 121s | simGmDraftOrder controls (shard 0/3 of 40): all 14 fired, each in exactly its own sections.
+draftnight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+engineids exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+gmpicks exit=0 9s | simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones and the draws sit inside their bands, an old save ke
+diffproof exit=0 0s | diffproof-ok
+invented exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+draftorder-ctl2 exit=0 102s | simGmDraftOrder controls (shard 2/3 of 40): all 13 fired, each in exactly its own sections.
