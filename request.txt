@@ -1,0 +1,62 @@
+# AXG merge 2 proof, part b (head e00f621e): the type gate, the unit suite, the league book with every control that needs no base, the era fences with the controls that anchor in the engine, the anchors fence, the dailies
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simCmLeagueBook: mkdir -p /tmp/t-book && TMPDIR=/tmp/t-book node scripts/simCmLeagueBook.mjs
+book-full: mkdir -p /tmp/t-bookfull && TMPDIR=/tmp/t-bookfull BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+cb-mathrandom: mkdir -p /tmp/t-cb-mathrandom && TMPDIR=/tmp/t-cb-mathrandom BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+cb-dropmine: mkdir -p /tmp/t-cb-dropmine && TMPDIR=/tmp/t-cb-dropmine BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+cb-byeweek: mkdir -p /tmp/t-cb-byeweek && TMPDIR=/tmp/t-cb-byeweek BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+cb-cleanside: mkdir -p /tmp/t-cb-cleanside && TMPDIR=/tmp/t-cb-cleanside BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+cb-bought: mkdir -p /tmp/t-cb-bought && TMPDIR=/tmp/t-cb-bought BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+cb-wrongman: mkdir -p /tmp/t-cb-wrongman && TMPDIR=/tmp/t-cb-wrongman BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+cb-unnamed: mkdir -p /tmp/t-cb-unnamed && TMPDIR=/tmp/t-cb-unnamed BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+cb-offbyone: mkdir -p /tmp/t-cb-offbyone && TMPDIR=/tmp/t-cb-offbyone BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+cb-penassistmine: mkdir -p /tmp/t-cb-penassistmine && TMPDIR=/tmp/t-cb-penassistmine BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+cb-assistbench: mkdir -p /tmp/t-cb-assistbench && TMPDIR=/tmp/t-cb-assistbench BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+cb-twoman: mkdir -p /tmp/t-cb-twoman && TMPDIR=/tmp/t-cb-twoman BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+cb-flat: mkdir -p /tmp/t-cb-flat && TMPDIR=/tmp/t-cb-flat BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+cb-penassist: mkdir -p /tmp/t-cb-penassist && TMPDIR=/tmp/t-cb-penassist BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+cb-noog: mkdir -p /tmp/t-cb-noog && TMPDIR=/tmp/t-cb-noog BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+cb-keyindex: mkdir -p /tmp/t-cb-keyindex && TMPDIR=/tmp/t-cb-keyindex BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+cb-hurtentry: mkdir -p /tmp/t-cb-hurtentry && TMPDIR=/tmp/t-cb-hurtentry BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+cb-redeal: mkdir -p /tmp/t-cb-redeal && TMPDIR=/tmp/t-cb-redeal BOOK_CONTROL=redeal node scripts/simCmLeagueBook.mjs
+cb-seasonstamp: mkdir -p /tmp/t-cb-seasonstamp && TMPDIR=/tmp/t-cb-seasonstamp BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+cb-strip: mkdir -p /tmp/t-cb-strip && TMPDIR=/tmp/t-cb-strip BOOK_CONTROL=strip node scripts/simCmLeagueBook.mjs
+cb-stripdeadline: mkdir -p /tmp/t-cb-stripdeadline && TMPDIR=/tmp/t-cb-stripdeadline BOOK_CONTROL=stripdeadline node scripts/simCmLeagueBook.mjs
+cb-assistgoalweight: mkdir -p /tmp/t-cb-assistgoalweight && TMPDIR=/tmp/t-cb-assistgoalweight BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+cb-nofill: mkdir -p /tmp/t-cb-nofill && TMPDIR=/tmp/t-cb-nofill BOOK_CONTROL=nofill node scripts/simCmLeagueBook.mjs
+cb-shirtrow: mkdir -p /tmp/t-cb-shirtrow && TMPDIR=/tmp/t-cb-shirtrow BOOK_CONTROL=shirtrow node scripts/simCmLeagueBook.mjs
+cb-thinsheet: mkdir -p /tmp/t-cb-thinsheet && TMPDIR=/tmp/t-cb-thinsheet BOOK_CONTROL=thinsheet node scripts/simCmLeagueBook.mjs
+cb-noreopen: mkdir -p /tmp/t-cb-noreopen && TMPDIR=/tmp/t-cb-noreopen BOOK_CONTROL=noreopen node scripts/simCmLeagueBook.mjs
+cb-fitlive: mkdir -p /tmp/t-cb-fitlive && TMPDIR=/tmp/t-cb-fitlive BOOK_CONTROL=fitlive node scripts/simCmLeagueBook.mjs
+cb-latezero: mkdir -p /tmp/t-cb-latezero && TMPDIR=/tmp/t-cb-latezero BOOK_CONTROL=latezero node scripts/simCmLeagueBook.mjs
+cb-alwayslate: mkdir -p /tmp/t-cb-alwayslate && TMPDIR=/tmp/t-cb-alwayslate BOOK_CONTROL=alwayslate node scripts/simCmLeagueBook.mjs
+cb-hotseatbook1: mkdir -p /tmp/t-cb-hotseatbook1 && TMPDIR=/tmp/t-cb-hotseatbook1 BOOK_CONTROL=hotseatbook1 node scripts/simCmLeagueBook.mjs
+cb-hotseatbook2: mkdir -p /tmp/t-cb-hotseatbook2 && TMPDIR=/tmp/t-cb-hotseatbook2 BOOK_CONTROL=hotseatbook2 node scripts/simCmLeagueBook.mjs
+cb-hotseatbook3: mkdir -p /tmp/t-cb-hotseatbook3 && TMPDIR=/tmp/t-cb-hotseatbook3 BOOK_CONTROL=hotseatbook3 node scripts/simCmLeagueBook.mjs
+cb-readerdraw: mkdir -p /tmp/t-cb-readerdraw && TMPDIR=/tmp/t-cb-readerdraw BOOK_CONTROL=readerdraw node scripts/simCmLeagueBook.mjs
+cb-readerwrite: mkdir -p /tmp/t-cb-readerwrite && TMPDIR=/tmp/t-cb-readerwrite BOOK_CONTROL=readerwrite node scripts/simCmLeagueBook.mjs
+cb-thinbacks: mkdir -p /tmp/t-cb-thinbacks && TMPDIR=/tmp/t-cb-thinbacks BOOK_CONTROL=thinbacks node scripts/simCmLeagueBook.mjs
+cb-nobacks: mkdir -p /tmp/t-cb-nobacks && TMPDIR=/tmp/t-cb-nobacks BOOK_CONTROL=nobacks node scripts/simCmLeagueBook.mjs
+cb-allbacks: mkdir -p /tmp/t-cb-allbacks && TMPDIR=/tmp/t-cb-allbacks BOOK_CONTROL=allbacks node scripts/simCmLeagueBook.mjs
+cb-places433: mkdir -p /tmp/t-cb-places433 && TMPDIR=/tmp/t-cb-places433 BOOK_CONTROL=places433 node scripts/simCmLeagueBook.mjs
+cb-goallesswhole: mkdir -p /tmp/t-cb-goallesswhole && TMPDIR=/tmp/t-cb-goallesswhole BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+cb-stampv2: mkdir -p /tmp/t-cb-stampv2 && TMPDIR=/tmp/t-cb-stampv2 BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+cb-novar: mkdir -p /tmp/t-cb-novar && TMPDIR=/tmp/t-cb-novar BOOK_CONTROL=novar node scripts/simCmLeagueBook.mjs
+simEra2005: mkdir -p /tmp/t-simEra2005 && TMPDIR=/tmp/t-simEra2005 node scripts/simEra2005.mjs
+simEra2010: mkdir -p /tmp/t-simEra2010 && TMPDIR=/tmp/t-simEra2010 node scripts/simEra2010.mjs
+simEra2015: mkdir -p /tmp/t-simEra2015 && TMPDIR=/tmp/t-simEra2015 node scripts/simEra2015.mjs
+simEra2020: mkdir -p /tmp/t-simEra2020 && TMPDIR=/tmp/t-simEra2020 node scripts/simEra2020.mjs
+simStatsCentre: mkdir -p /tmp/t-simStatsCentre && TMPDIR=/tmp/t-simStatsCentre node scripts/simStatsCentre.mjs
+c20-eraorder: mkdir -p /tmp/t-c20-eraorder && TMPDIR=/tmp/t-c20-eraorder SIM_ERA2020_CONTROL=eraorder node scripts/simEra2020.mjs
+c20-shiporder: mkdir -p /tmp/t-c20-shiporder && TMPDIR=/tmp/t-c20-shiporder SIM_ERA2020_CONTROL=shiporder node scripts/simEra2020.mjs
+c20-modernnews: mkdir -p /tmp/t-c20-modernnews && TMPDIR=/tmp/t-c20-modernnews SIM_ERA2020_CONTROL=modernnews node scripts/simEra2020.mjs
+c20-modernwar: mkdir -p /tmp/t-c20-modernwar && TMPDIR=/tmp/t-c20-modernwar SIM_ERA2020_CONTROL=modernwar node scripts/simEra2020.mjs
+c20-modernjobs: mkdir -p /tmp/t-c20-modernjobs && TMPDIR=/tmp/t-c20-modernjobs SIM_ERA2020_CONTROL=modernjobs node scripts/simEra2020.mjs
+c20-takestale: mkdir -p /tmp/t-c20-takestale && TMPDIR=/tmp/t-c20-takestale SIM_ERA2020_CONTROL=takestale node scripts/simEra2020.mjs
+c20-firstsummer: mkdir -p /tmp/t-c20-firstsummer && TMPDIR=/tmp/t-c20-firstsummer SIM_ERA2020_CONTROL=firstsummer node scripts/simEra2020.mjs
+simManagerHotSeat: mkdir -p /tmp/t-simManagerHotSeat && TMPDIR=/tmp/t-simManagerHotSeat node scripts/simManagerHotSeat.mjs
+simDeadlineDay: mkdir -p /tmp/t-simDeadlineDay && TMPDIR=/tmp/t-simDeadlineDay node scripts/simDeadlineDay.mjs
+simDailyDeals: mkdir -p /tmp/t-simDailyDeals && TMPDIR=/tmp/t-simDailyDeals node scripts/simDailyDeals.mjs
+simClubManagerALeague: mkdir -p /tmp/t-simClubManagerALeague && TMPDIR=/tmp/t-simClubManagerALeague node scripts/simClubManagerALeague.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
