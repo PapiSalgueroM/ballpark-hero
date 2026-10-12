@@ -1,0 +1,3 @@
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveKeeper-partballon: SIM_SAVE_KEEPER_CONTROL=partballon node scripts/simSaveKeeper.mjs
+simSaveKeeper-partpress: SIM_SAVE_KEEPER_CONTROL=partpress node scripts/simSaveKeeper.mjs

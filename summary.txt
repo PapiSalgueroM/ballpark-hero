@@ -1,0 +1,3 @@
+simSaveKeeper-partpress exit=1 3s | simSaveKeeper control partpress: FIRED. Section 1 is red.
+simSaveKeeper-partballon exit=1 3s | simSaveKeeper control partballon: FIRED. Section 1 is red.
+simSaveKeeper exit=1 4s | simSaveKeeper: RED in section(s) 1.
