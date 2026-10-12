@@ -1,0 +1,1 @@
+simEras-base: git worktree add .tmp-base b6eb78e799b12c851e4e8e583e9e926aed117f1c && ln -s "$PWD/node_modules" .tmp-base/node_modules && cd .tmp-base && node scripts/simEras.mjs
