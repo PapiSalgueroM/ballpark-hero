@@ -20,10 +20,24 @@ const SLOT_INITIALIZER = '  const { h2h, ...rest } = s;';
 const SLOT_ADAPTER = '  const { h2h, ...rest } = expandPackedWorldRosterState(s);';
 const harnessSource = (ref, name) => execFileSync('git', ['show', `${ref}:scripts/${name}`],
   { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+/* Release AZ fix (reviewer 2's MAJOR 2, reviewer 4's minor 5): SaveSize section 5 made its namesake pair
+   deterministic again with ONE addition (its third season carries on as a save from before Round 1250). This
+   contract still holds the whole harness: that one block, a single comment and one statement, is cut and the
+   rest must be the historical source byte for byte, exactly as the Slots adapter below is. */
+const SAVESIZE_FIRST = '    /* Release AZ fix (reviewer 2, MAJOR 2): the pair is a fact of the projected world';
+const SAVESIZE_LAST = '    if (season === 3 && s) { s = JSON.parse(JSON.stringify(s)); delete s.worldSeed; delete s.worldRoster; for (const p of s.squad) { delete p.worldRosterKey; delete p.worldRosterSince; } }\n';
 function historicalHarnessContract(name, source) {
   const historical = harnessSource(BASE, name);
-  let restored = source, representationAdapter = false;
-  if (source !== historical) {
+  let restored = source, representationAdapter = false, sectionFiveHandover = false;
+  if (source !== historical && name === 'simClubManagerSaveSize.mjs') {
+    assert.equal(source.split(SAVESIZE_FIRST).length - 1, 1, 'One exact section 5 handover comment');
+    assert.equal(source.split(SAVESIZE_LAST).length - 1, 1, 'One exact section 5 handover statement');
+    const start = source.indexOf(SAVESIZE_FIRST), end = source.indexOf(SAVESIZE_LAST) + SAVESIZE_LAST.length;
+    const block = source.slice(start, end), comment = block.slice(0, block.length - SAVESIZE_LAST.length);
+    assert(start < end && comment.trimEnd().endsWith('*/') && comment.split('*/').length === 2 && block.split('\n').length <= 8, 'The section 5 addition is one comment and one statement');
+    restored = source.slice(0, start) + source.slice(end);
+    sectionFiveHandover = true;
+  } else if (source !== historical) {
     assert.equal(name, 'simClubManagerSlots.mjs', 'SaveSize remains the exact historical Git source');
     assert.equal(source.split(SLOT_IMPORT).length - 1, 1, 'One exact independent decoder import');
     assert.equal(source.split(SLOT_ADAPTER).length - 1, 1, 'One exact representation initializer');
@@ -32,12 +46,12 @@ function historicalHarnessContract(name, source) {
     representationAdapter = true;
   }
   assert.equal(restored, historical, 'Removing only the exact two additions restores the entire historical source');
-  return { representationAdapter, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
+  return { representationAdapter, sectionFiveHandover, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
 }
 const harnessBlobs = Object.fromEntries(['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs'].map(name => {
   const original = git(['rev-parse', `${BASE}:scripts/${name}`]), current = git(['rev-parse', `${HEAD}:scripts/${name}`]);
   const contract = historicalHarnessContract(name, harnessSource(HEAD, name));
-  if (name === 'simClubManagerSaveSize.mjs') assert.equal(current, original, 'Historical SaveSize Git blob stays unchanged');
+  if (name === 'simClubManagerSaveSize.mjs' && !contract.sectionFiveHandover) assert.equal(current, original, 'Historical SaveSize Git blob stays unchanged');
   return [name, { original, current, ...contract }];
 }));
 fs.mkdirSync(OUT, { recursive: true });
@@ -217,8 +231,8 @@ function digestExpansionControl(inputDirectory) {
   assert.match(inputSource.ref, /^[0-9a-f]{40}$/, 'The measured input binds an exact Git commit');
   assert.equal(git(['rev-parse', `${inputSource.ref}^{tree}`]), inputSource.tree, 'The measured input tree is exact');
   assert.equal(inputSource.harness.file, 'scripts/simClubManagerSlots.mjs');
-  assert.equal(git(['rev-parse', `${inputSource.ref}:scripts/simClubManagerSaveSize.mjs`]), harnessBlobs['simClubManagerSaveSize.mjs'].original,
-    'The measured input preserves the exact historical SaveSize Git blob');
+  assert.equal(historicalHarnessContract('simClubManagerSaveSize.mjs', harnessSource(inputSource.ref, 'simClubManagerSaveSize.mjs')).restoredHistoricalSha256,
+    sha(harnessSource(BASE, 'simClubManagerSaveSize.mjs')), 'The measured input preserves the exact historical SaveSize source apart from its one section 5 addition');
   const measuredHarness = harnessSource(inputSource.ref, 'simClubManagerSlots.mjs');
   const inputHarnessContract = historicalHarnessContract('simClubManagerSlots.mjs', measuredHarness);
   assert.equal(inputSource.harness.normalizedOriginalSha256, sha(measuredHarness), 'The measured harness matches its actual Git source');

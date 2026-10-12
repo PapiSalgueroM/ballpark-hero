@@ -614,6 +614,12 @@ let pairState = null;
      three years on carries two generated men under one name. */
   let s = startCareer('Real Madrid');
   for (let season = 1; season <= 3 && s; season++) {
+    /* Release AZ fix (reviewer 2, MAJOR 2): the pair is a fact of the projected world a career from before
+       Round 1250 plays, and a new career is seeded from its own drawn squad, so whether a seeded world three
+       years on still held it was a draw (red on half the seeds). The career plays its first two seasons as a
+       new career does (rmSeason3, which section 6 sweeps, is seeded), then carries on as a save from before
+       that release would, seed and ledger off, so the job it takes holds the pair on every seed. */
+    if (season === 3 && s) { s = JSON.parse(JSON.stringify(s)); delete s.worldSeed; delete s.worldRoster; for (const p of s.squad) { delete p.worldRosterKey; delete p.worldRosterSince; } }
     s = toSummer(s, season === 3 ? PAIR_CLUB : undefined);
     if (season === 2) rmSeason3 = s;
   }
