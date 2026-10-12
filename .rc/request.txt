@@ -1,0 +1,8 @@
+# Release AX, final proof, gate part H5 (the lines of Release AW's proof request rAW-F-H5, so each line compares with the base)
+#!serve
+#!playwright
+#!serial
+playHomeFold: node scripts/playHomeFold.mjs
+playSoftFourOhFour: node scripts/playSoftFourOhFour.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+sweepGames: SIZES=phone,desktop node scripts/sweepGames.mjs
