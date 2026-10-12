@@ -1,0 +1,3 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 143s | review walk: 64 checks, 4 failed
+simRevealScroll exit=0 212s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
