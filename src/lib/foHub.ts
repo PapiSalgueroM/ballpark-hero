@@ -277,6 +277,8 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     /* Round 722: a tax cheque in the post is the trade fact that matters most
        in a sport that has one. Over the cap alone is ordinary there. */
     const taxed = !!f.tax && f.tax.bill > 0;
+    /* Round 1309, the fix pass: past the last period (the NFL's playoffs) every trade is refused, so the box offers none */
+    const shut = f.period > f.periods;
     out.push({
       key: 'trade',
       icon: '🤝',
@@ -287,16 +289,20 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
           ? `${money(f.capRoom)} to shed`
           : f.tradeLine
             ? 'Deal done'
-            : `${f.roster.length} to offer`,
+            : shut
+              ? 'Shut for the playoffs'
+              : `${f.roster.length} to offer`,
       sub: taxed
         ? `${money(f.tax!.over)} over the tax line. Shed salary or pay it.`
         : over
           ? 'Move salary or the owner will'
           : f.tradeLine
             ? f.tradeLine
-            : chip
-              ? `Your biggest chip is ${chip.name}`
-              : 'Call a rival and see',
+            : shut
+              ? 'Deals open again once the season is over.'
+              : chip
+                ? `Your biggest chip is ${chip.name}`
+                : 'Call a rival and see',
       /* Over the line is the one trade state that is genuinely urgent. */
       accent: taxed || over,
     });

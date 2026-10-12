@@ -475,6 +475,9 @@ describe('NFL front office: Week 18 reads as the playoffs', () => {
     expect(text(), 'his last result, read from the log on a fresh mount').toContain(`Last out: ${won ? 'won' : 'lost'} ${us}-${them}`);
     expect(text()).toContain('The regular season is over.');
     expect(text()).not.toMatch(/\b0 weeks to play|\b0 to play/);
+    /* the fix pass: every trade is refused in the bracket, so the Trades box offers none */
+    expect(text(), 'the Trades box').toMatch(/Shut for the playoffs|to shed/);
+    expect(text(), 'the Trades box invites a deal').not.toMatch(/\d+ to offer|Your biggest chip is|Call a rival and see/);
   });
 
   it.each([[false], [true]])('a trade is refused in the bracket (GM desk on: %s), and nothing is traded', (desk) => {

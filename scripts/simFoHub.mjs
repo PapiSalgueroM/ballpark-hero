@@ -31,8 +31,10 @@
  *     play box keeps its title and reads Postseason with his last result,
  *     or that the regular season is over, and never "0 weeks to play";
  *     the standings box says the regular season is over and does not
- *     pulse. Control FO_HUB_CONTROL=nopost bundles a copy of foHub.ts
- *     with that branch taken out: section 8 must go red and nothing else.
+ *     pulse; and (the fix pass) the trades box offers no deal, since
+ *     every trade path refuses there. Control FO_HUB_CONTROL=nopost
+ *     bundles a copy of foHub.ts with that branch taken out: section 8
+ *     must go red and nothing else.
  *
  * Run: node scripts/simFoHub.mjs
  */
@@ -54,7 +56,7 @@ if (CONTROL && CONTROL !== 'nopost') { console.error(`simFoHub: unknown control 
 let HUB_FILE = `${ROOT.replaceAll('\\', '/')}/src/lib/foHub.ts`;
 if (CONTROL === 'nopost') {
   let src = fs.readFileSync(path.join(ROOT, 'src/lib/foHub.ts'), 'utf8').split('\r\n').join('\n');
-  const cuts = [["        : postseason ? REGULAR_SEASON_OVER /* Round 1309: never \"0 weeks to play\" */\n", ''], ['    const over = f.period > f.periods;', '    const over = false;'], ["from './frontOfficeCuts'", `from '${ROOT.replaceAll('\\', '/')}/src/lib/frontOfficeCuts.ts'`]];
+  const cuts = [["        : postseason ? REGULAR_SEASON_OVER /* Round 1309: never \"0 weeks to play\" */\n", ''], ['    const over = f.period > f.periods;', '    const over = false;'], ['    const shut = f.period > f.periods;', '    const shut = false;'],["from './frontOfficeCuts'", `from '${ROOT.replaceAll('\\', '/')}/src/lib/frontOfficeCuts.ts'`]];
   for (const [from, to] of cuts) { if (src.split(from).length !== 2) { console.error(`simFoHub: control nopost cannot run, its string is not in foHub.ts once: ${from.trim().slice(0, 60)}`); process.exit(2); } src = src.replace(from, () => to); }
   HUB_FILE = path.join(os.tmpdir(), 'foHub.nopost.ts').replaceAll('\\', '/');
   fs.writeFileSync(HUB_FILE, src);
@@ -368,8 +370,15 @@ let red8 = 0;
     ok(!/0 to play|0 weeks to play/.test(t.sub), `the standings box counts weeks that do not exist (${label})`);
   }
   ok(table.value === '#4 in the AFC', `the table's place is still shown: "${table.value}"`);
+  /* the fix pass: past the last period every trade path refuses (the NFL board's deadline block), so the trades box
+     offers no deal; a deal already done and a cap sheet over the line still say so */
+  const trade = byKey(post, 'trade');
+  ok(trade.value === 'Shut for the playoffs' && trade.sub === 'Deals open again once the season is over.', `the trades box past the last week offers a deal: "${trade.value}: ${trade.sub}"`);
+  ok(byKey(foHubTiles(baseFacts({ period: 18, nextOpponent: null, tradeLine: 'Got a deal done.' })), 'trade').value === 'Deal done', 'past the last week a deal done is no longer said');
+  ok(byKey(foHubTiles(baseFacts({ period: 18, nextOpponent: null, capRoom: -12 })), 'trade').value.includes('12'), 'past the last week a cap sheet over the line is no longer said');
   /* the last regular week is untouched */
   ok(byKey(foHubTiles(baseFacts({ period: 17, lastResult: null })), 'play').sub === '5-3 with 1 weeks to play', 'Week 17 lost its count');
+  ok(byKey(foHubTiles(baseFacts({ period: 17 })), 'trade').value === '20 to offer', 'the trades box shut in Week 17');
   red8 = failures - before;
 }
 
