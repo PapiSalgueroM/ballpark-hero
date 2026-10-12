@@ -1,0 +1,14 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+noShip: d="$(git diff --stat 48cb9d4b HEAD -- src public index.html package.json package-lock.json vite.config.ts tsconfig.app.json)"; echo "$d" | tail -3; test -z "$d" && echo "nothing shipped moved"
+simSafari: node scripts/simSafari.mjs
+sf-customprop: SIM_SAFARI_CONTROL=customprop node scripts/simSafari.mjs
+sf-lvhafter: SIM_SAFARI_CONTROL=lvhafter node scripts/simSafari.mjs
+m-css-customprop: node .rc/x/mut.mjs css-customprop && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-customprop-fixed: node .rc/x/mut.mjs css-customprop-fixed && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-lvh: node .rc/x/mut.mjs css-lvh && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-svh: node .rc/x/mut.mjs css-svh && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+simActivity: node scripts/simActivityNotCompletion.mjs
+act-twodotted: SIM_ACTIVITY_CONTROL=twodotted node scripts/simActivityNotCompletion.mjs
+m-act-second-dotted: node .rc/x/mut.mjs act-second-dotted && node scripts/simActivityNotCompletion.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | wc -l

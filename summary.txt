@@ -1,0 +1,13 @@
+tsc exit=0 63s | 
+noShip exit=0 0s | nothing shipped moved
+simSafari exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+sf-customprop exit=1 1s | simSafari: control customprop FIRED: section 4 failed on src/__control__/customprop.css (0 other failures in the run)
+sf-lvhafter exit=1 1s | simSafari: control lvhafter FIRED: section 4 failed on src/__control__/lvhafter.css (0 other failures in the run)
+m-css-customprop exit=1 1s | simSafari: 1 failure
+m-css-customprop-fixed exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+m-css-lvh exit=1 1s | simSafari: 1 failure
+m-css-svh exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+simActivity exit=0 4s | simActivityNotCompletion: all green
+act-twodotted exit=0 4s | control "twodotted": 1 failure(s) fired in section 2 as expected, the check works
+m-act-second-dotted exit=1 4s | simActivityNotCompletion: 1 failure(s)
+clean-after exit=0 0s | 0
