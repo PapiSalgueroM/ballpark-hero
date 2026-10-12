@@ -70,7 +70,14 @@ try {
     const original = target === component ? componentSource : cssSource;
     const changed = original.replace(anchor, replacement); assert.notEqual(changed, original, 'Control actually changes source');
     const componentCopy = path.join(folder, 'FreeAgencyPanel.tsx'), cssCopy = path.join(folder, 'FreeAgencyFeedback.module.css');
-    await writeFile(componentCopy, target === component ? changed : componentSource); owned.push(componentCopy);
+    /* Release AX fix pass: the copy lives in another folder. The CSS module is copied beside it on purpose (two
+       controls edit that copy), so its relative import stays; every OTHER sibling import of the panel is rewritten
+       to its alias path. PR217 gave the panel `./MarketChanceWheel` and `./MarketCompare`, the copy could not
+       resolve them, no test row loaded, and all thirteen controls aborted on the row count. */
+    const aliasSiblings = text => text.replace(/from '\.\/(?!FreeAgencyFeedback\.module\.css')([^']+)'/g, "from '@/components/us-career/$1'");
+    const componentText = aliasSiblings(target === component ? changed : componentSource);
+    assert.deepEqual(componentText.match(/from '\.\.?\/[^']*'/g), ["from './FreeAgencyFeedback.module.css'"], 'The copy keeps one relative import, the CSS module copied beside it');
+    await writeFile(componentCopy, componentText); owned.push(componentCopy);
     await writeFile(cssCopy, target === cssFile ? changed : cssSource); owned.push(cssCopy);
     env.FREE_AGENCY_FEEDBACK_CSS = cssCopy;
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/us-career/FreeAgencyPanel': componentCopy, '@/components/us-career/FreeAgencyFeedback.module.css': cssCopy });
