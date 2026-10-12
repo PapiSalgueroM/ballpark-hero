@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+gdwalk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+mut-revealkey: node .rc/x/r1309RunMut.mjs revealkey && npm run build > /tmp/rk-build.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs > $RC_OUT/m-revealkey.log 2>&1; s=$?; git checkout -- src; grep -E "FAIL|checks," $RC_OUT/m-revealkey.log | cut -c1-260 | head -12; exit $s
