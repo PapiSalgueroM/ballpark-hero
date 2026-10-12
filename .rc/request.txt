@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weigh: node .rc/x/weigh.mjs
