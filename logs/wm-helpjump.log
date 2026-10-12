@@ -1,0 +1,12 @@
+fxmut helpjump: APPLIED to src/components/front-office-shared/GmGameDayCard.tsx (1 edit(s))
+  PASS  [6] 320: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is 592 px high, 2 px narrower and 2 px shorter than the box's own frame; in the box's host: true; inside the tile: false)
+  FAIL  [6] 320: opening the "?" over a week box whose top was readable did not move the page (the box's top at 62 of 640, readable: true; scrollY 407 before and 422 with the sheet open)
+  PASS  [6] 320: the "?" closes, opens again and closes
+  PASS  [6] 390: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is 592 px high, 2 px narrower and 2 px shorter than the box's own frame; in the box's host: true; inside the tile: false)
+  FAIL  [6] 390: opening the "?" over a week box whose top was readable did not move the page (the box's top at 435 of 844, readable: true; scrollY 0 before and 184 with the sheet open)
+  PASS  [6] 390: the "?" closes, opens again and closes
+  PASS  [6] 1280: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is 472 px high, 2 px narrower and 2 px shorter than the box's own frame; in the box's host: true; inside the tile: false)
+  FAIL  [6] 1280: opening the "?" over a week box whose top was readable did not move the page (the box's top at 381 of 800, readable: true; scrollY 0 before and 54 with the sheet open)
+  PASS  [6] 1280: the "?" closes, opens again and closes
+playFrontOfficeGameDay: 220 checks, 3 failed
+MUTANT helpjump walk exit=1

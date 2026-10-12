@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+wm-pace: node .rc/x/fxmut.mjs pace && npm run build > /tmp/b1.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs 2>&1 | grep -E "FAIL|checks,|ABORTED|COULD NOT" | cut -c1-420 | head -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT pace walk exit=$s"; exit $s
+wm-seedoff: node .rc/x/fxmut.mjs seedoff && npm run build > /tmp/b2.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs 2>&1 | grep -E "FAIL|checks,|ABORTED|COULD NOT" | cut -c1-420 | head -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT seedoff walk exit=$s"; exit $s
+wm-revealkey: node .rc/x/fxmut.mjs revealkey && npm run build > /tmp/b3.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs 2>&1 | grep -E "FAIL|checks,|ABORTED|COULD NOT" | cut -c1-420 | head -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT revealkey walk exit=$s"; exit $s
+wm-helpjump: node .rc/x/fxmut.mjs helpjump && npm run build > /tmp/b4.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs 2>&1 | grep -E "FAIL|checks,|ABORTED|COULD NOT|\[6\]" | cut -c1-420 | head -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT helpjump walk exit=$s"; exit $s

@@ -1,0 +1,7 @@
+fxmut revealkey: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+  FAIL  [3] 320, 3-watch-1x: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at 1018 of 640, scrollY 0; out of view: true), and at full time the page brought it back: scrollY 0, its top at 1018 of 640, -378 px showing
+  FAIL  [3] 390, 3-watch-3x: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at 896 of 844, scrollY 0; out of view: true), and at full time the page brought it back: scrollY 0, its top at 916 of 844, -72 px showing
+  FAIL  [3] 1280, 3-watch-3x: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at 775 of 800, scrollY 0; out of view: true), and at full time the page brought it back: scrollY 0, its top at 775 of 800, 25 px showing
+  FAIL  [4] 1280, 4-results: the tile stayed in view and the same size: scrollY 0 to 1114, its top at -249 of 800, 103 px showing
+playFrontOfficeGameDay: 220 checks, 4 failed
+MUTANT revealkey walk exit=1
