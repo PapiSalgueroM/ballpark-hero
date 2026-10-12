@@ -1,0 +1,22 @@
+# Release AX join, final proof J4: the careers leg's lines for the gate lists (fix-AX.md section 5 item 4), each control its own line
+simSessionMarks: export TMPDIR=$(mktemp -d); node scripts/simSessionMarks.mjs
+simCareerHub: export TMPDIR=$(mktemp -d); node scripts/simCareerHub.mjs
+simHomeFront: export TMPDIR=$(mktemp -d); node scripts/simHomeFront.mjs
+simUsCoachCareer: export TMPDIR=$(mktemp -d); node scripts/simUsCoachCareer.mjs
+simExtensionResponseMotion: export TMPDIR=$(mktemp -d); node scripts/simExtensionResponseMotion.mjs
+simFreeAgencyFeedback: export TMPDIR=$(mktemp -d); node scripts/simFreeAgencyFeedback.mjs
+simMoneyAppFeedback: export TMPDIR=$(mktemp -d); node scripts/simMoneyAppFeedback.mjs
+simCareerBadgeMotion: export TMPDIR=$(mktemp -d); node scripts/simCareerBadgeMotion.mjs
+simCareerSeasonReview: export TMPDIR=$(mktemp -d); node scripts/simCareerSeasonReview.mjs
+simCareerEntryGuide: export TMPDIR=$(mktemp -d); node scripts/simCareerEntryGuide.mjs
+simCareerDecisionOutcome: export TMPDIR=$(mktemp -d); node scripts/simCareerDecisionOutcome.mjs
+ext-unreply-EXPECT1: export TMPDIR=$(mktemp -d); EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs
+fa-consumed-EXPECT1: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=consumed node scripts/simFreeAgencyFeedback.mjs
+fa-status-EXPECT1: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=status node scripts/simFreeAgencyFeedback.mjs
+fa-restored-EXPECT1: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs
+fa-replacement-EXPECT1: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=replacement node scripts/simFreeAgencyFeedback.mjs
+fa-finite-EXPECT1: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=finite node scripts/simFreeAgencyFeedback.mjs
+fa-reduced-EXPECT1: export TMPDIR=$(mktemp -d); FREE_AGENCY_FEEDBACK_CONTROL=reduced node scripts/simFreeAgencyFeedback.mjs
+parity-nosave-EXPECT1: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=nosave node scripts/simUsBoardParity.mjs
+parity-nophase-EXPECT1: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=nophase node scripts/simUsBoardParity.mjs
+parity-noresult-EXPECT1: export TMPDIR=$(mktemp -d); US_BOARD_PARITY_CONTROL=noresult node scripts/simUsBoardParity.mjs
