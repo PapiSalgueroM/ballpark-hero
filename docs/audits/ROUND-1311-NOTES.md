@@ -60,7 +60,12 @@ remote check; the result of a check is read with `git show origin/rc-results/<na
 ## Owed by hand (the lead)
 
 - The weight rows of scripts/sweepWeight.mjs (/club-manager, /manager-hot-seat, /deadline-day): measured and
-  reported in the closing report; this round edits no row.
+  reported in the closing report; this round edits no row. On the final head they read 590.7, 608.0 and 618.1
+  against 590, 607 and 617 (base 588.8, 606.1, 616.2: +1.9 each, all in the shared engine chunk), so
+  sweepWeight is red on those three rows until the lead sets them, once, on the tree that also holds Release AZ.
+- Whichever of this branch and Release AZ reaches main second retakes the Round 1081 pin and
+  scripts/data/cmLeagueRulesDigest.json, and runs simCmLeagueBook (full fleet, seed sets 0 to 4) and
+  simAwardRaces on the joined tree (the lead's decision 2).
 - The saved What's New page (public/whats-new/index.html) is redrawn at release.
 - OWED TO THE OTHER LANE: one sentence on the league leaders, the awards and the past winners for
   src/data/gameContent/clubManagement.ts; and whether its line 121 "wherever a scorer is listed" wants
@@ -73,6 +78,12 @@ remote check; the result of a check is read with `git show origin/rc-results/<na
 - Step 2 moves only the honours: the stream face leaves out the four moved fields of the summary and each
   record's awards and nothing else; section awards holds the WHOLE summary and record to the base commit on
   every season the book does not decide.
+- Old saves in play when the book shipped: oldsave (vi) carries both committed recordings (and, with
+  BOOK_BASE, three saves the base writes afresh) to the season's end, finishes it, and prints each one's
+  closing share and what it was given; awards only from a whole book at or over the floor (decision 3, the
+  critic's advice 21 (iii)). Measured (r1311-f8a): the Hertha BSC recording closes on record 41 in 100 and gets
+  no awards (the old race keeps the golden boot); the Everton recording closes on 100 and gets the awards and a
+  team; of the saves the base writes afresh, Hertha closes on 55 (none), Southampton on 92 (awards).
 
 
 ## The critic's corrections, how each was taken
