@@ -1,0 +1,6 @@
+simClubManagerMeters exit=0 26s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerMeters-decor exit=1 26s | simClubManagerMeters: 114 failure(s)
+simClubManagerMeters-promise exit=1 24s | simClubManagerMeters: 399 failure(s)
+simClubManagerMeters-deaf exit=1 25s | simClubManagerMeters: 4 failure(s)
+tsc exit=0 54s | 
+simClubManagerMeters-nogoals exit=1 17s | simClubManagerMeters: 85 failure(s)

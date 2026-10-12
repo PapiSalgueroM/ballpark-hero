@@ -1,0 +1,103 @@
+NEGATIVE CONTROL ON: the table card drops the goals pair, the pre-465 row; section 4 must go red
+1) The board meter is the sacking rule, after every entry of every career
+   1498 calendar entries across 52 seasons, 517 press answers, 24 sackings, every one exactly when the meter read zero
+   single week falls in board confidence: median 4.8, p99 11.7, largest 11.8 (the bottom band starts under 10)
+2) A broken promise, a press answer or a handshake can never leave the meter on zero with the manager in a job
+   8 mid season base(s) and 10 promise base(s) kept from managers still in a job, 1 keep point(s) skipped for a sacking
+   170 one match probes with a promise on record: the promise broke in 81, 33 of those landed on zero and every landing was a sacking
+   354 press answers from half a point (103 of them the board disliked) and 18 handshakes from three: none reached zero
+   144 finance desk switches from a last point or less (6 of them docked the board): none reached zero
+3) The fan meter moves with results the way a fan would
+   534 match weeks sampled: fan meter vs last ten PPG r = 0.888
+   mean fan move after a win +6.12 (287), after a draw -2.92 (119), after a defeat -10.14 (128)
+4) Every league table row prints goals for and against beside the difference they make
+  FAIL: La Liga mid-season: row 1 (Atlético Madrid) prints "+17" where the goals pair should be
+  FAIL: La Liga mid-season: row 2 (Real Madrid) prints "+15" where the goals pair should be
+  FAIL: La Liga mid-season: row 3 (Real Betis) prints "+11" where the goals pair should be
+  FAIL: La Liga mid-season: row 4 (Real Sociedad) prints "+7" where the goals pair should be
+  FAIL: La Liga mid-season: row 5 (Villarreal) prints "+9" where the goals pair should be
+  FAIL: La Liga mid-season: row 6 (Elche) prints "+2" where the goals pair should be
+  FAIL: La Liga mid-season: row 7 (Barcelona) prints "+9" where the goals pair should be
+  FAIL: La Liga mid-season: row 8 (Espanyol) prints "+5" where the goals pair should be
+  FAIL: La Liga mid-season: row 9 (Osasuna) prints "-2" where the goals pair should be
+  FAIL: La Liga mid-season: row 10 (Valencia) prints "+2" where the goals pair should be
+  FAIL: La Liga mid-season: row 11 (Alavés) prints "-1" where the goals pair should be
+  FAIL: La Liga mid-season: row 12 (Athletic Club) prints "-1" where the goals pair should be
+  FAIL: La Liga mid-season: row 13 (Sevilla) prints "-8" where the goals pair should be
+  FAIL: La Liga mid-season: row 14 (Celta Vigo) prints "-2" where the goals pair should be
+  FAIL: La Liga mid-season: row 15 (Racing Santander) prints "-7" where the goals pair should be
+  FAIL: La Liga mid-season: row 16 (Rayo Vallecano) prints "-7" where the goals pair should be
+  FAIL: La Liga mid-season: row 17 (Getafe) prints "-12" where the goals pair should be
+  FAIL: La Liga mid-season: row 18 (Levante) prints "-12" where the goals pair should be
+  FAIL: La Liga mid-season: row 19 (Deportivo La Coruña) prints "-11" where the goals pair should be
+  FAIL: La Liga mid-season: row 20 (Málaga) prints "-14" where the goals pair should be
+  FAIL: La Liga final: row 1 (Real Madrid) prints "+59" where the goals pair should be
+  FAIL: La Liga final: row 2 (Atlético Madrid) prints "+35" where the goals pair should be
+  FAIL: La Liga final: row 3 (Barcelona) prints "+36" where the goals pair should be
+  FAIL: La Liga final: row 4 (Villarreal) prints "+32" where the goals pair should be
+  FAIL: La Liga final: row 5 (Real Betis) prints "+24" where the goals pair should be
+  FAIL: La Liga final: row 6 (Espanyol) prints "+9" where the goals pair should be
+  FAIL: La Liga final: row 7 (Real Sociedad) prints "+15" where the goals pair should be
+  FAIL: La Liga final: row 8 (Athletic Club) prints "+11" where the goals pair should be
+  FAIL: La Liga final: row 9 (Valencia) prints "+9" where the goals pair should be
+  FAIL: La Liga final: row 10 (Celta Vigo) prints "+2" where the goals pair should be
+  FAIL: La Liga final: row 11 (Getafe) prints "-11" where the goals pair should be
+  FAIL: La Liga final: row 12 (Elche) prints "-7" where the goals pair should be
+  FAIL: La Liga final: row 13 (Racing Santander) prints "-13" where the goals pair should be
+  FAIL: La Liga final: row 14 (Rayo Vallecano) prints "-19" where the goals pair should be
+  FAIL: La Liga final: row 15 (Sevilla) prints "-14" where the goals pair should be
+  FAIL: La Liga final: row 16 (Osasuna) prints "-19" where the goals pair should be
+  FAIL: La Liga final: row 17 (Alavés) prints "-25" where the goals pair should be
+  FAIL: La Liga final: row 18 (Levante) prints "-30" where the goals pair should be
+  FAIL: La Liga final: row 19 (Deportivo La Coruña) prints "-36" where the goals pair should be
+  FAIL: La Liga final: row 20 (Málaga) prints "-58" where the goals pair should be
+  FAIL: Premier League (world): row 1 (Liverpool) prints "+21" where the goals pair should be
+  FAIL: Premier League (world): row 2 (Manchester United) prints "+15" where the goals pair should be
+  FAIL: Premier League (world): row 3 (Everton) prints "+12" where the goals pair should be
+  FAIL: Premier League (world): row 4 (Nottingham Forest) prints "+9" where the goals pair should be
+  FAIL: Premier League (world): row 5 (Manchester City) prints "+8" where the goals pair should be
+  FAIL: Premier League (world): row 6 (Arsenal) prints "+18" where the goals pair should be
+  FAIL: Premier League (world): row 7 (Bournemouth) prints "+13" where the goals pair should be
+  FAIL: Premier League (world): row 8 (Chelsea) prints "+8" where the goals pair should be
+  FAIL: Premier League (world): row 9 (Brighton) prints "-1" where the goals pair should be
+  FAIL: Premier League (world): row 10 (Tottenham) prints "+7" where the goals pair should be
+  FAIL: Premier League (world): row 11 (Sunderland) prints "-3" where the goals pair should be
+  FAIL: Premier League (world): row 12 (Fulham) prints "-8" where the goals pair should be
+  FAIL: Premier League (world): row 13 (Newcastle) prints "-9" where the goals pair should be
+  FAIL: Premier League (world): row 14 (Aston Villa) prints "-10" where the goals pair should be
+  FAIL: Premier League (world): row 15 (Coventry City) prints "-2" where the goals pair should be
+  FAIL: Premier League (world): row 16 (Brentford) prints "-13" where the goals pair should be
+  FAIL: Premier League (world): row 17 (Hull City) prints "-14" where the goals pair should be
+  FAIL: Premier League (world): row 18 (Leeds United) prints "-11" where the goals pair should be
+  FAIL: Premier League (world): row 19 (Crystal Palace) prints "-17" where the goals pair should be
+  FAIL: Premier League (world): row 20 (Ipswich Town) prints "-23" where the goals pair should be
+  FAIL: Premier League 2015-16: row 1 (Manchester United) prints "+27" where the goals pair should be
+  FAIL: Premier League 2015-16: row 2 (Southampton) prints "+7" where the goals pair should be
+  FAIL: Premier League 2015-16: row 3 (Chelsea) prints "+17" where the goals pair should be
+  FAIL: Premier League 2015-16: row 4 (Arsenal) prints "+7" where the goals pair should be
+  FAIL: Premier League 2015-16: row 5 (Stoke City) prints "+11" where the goals pair should be
+  FAIL: Premier League 2015-16: row 6 (Newcastle) prints "+7" where the goals pair should be
+  FAIL: Premier League 2015-16: row 7 (Everton) prints "+2" where the goals pair should be
+  FAIL: Premier League 2015-16: row 8 (Crystal Palace) prints "+9" where the goals pair should be
+  FAIL: Premier League 2015-16: row 9 (Tottenham) prints "+8" where the goals pair should be
+  FAIL: Premier League 2015-16: row 10 (Manchester City) prints "+6" where the goals pair should be
+  FAIL: Premier League 2015-16: row 11 (Swansea City) prints "+1" where the goals pair should be
+  FAIL: Premier League 2015-16: row 12 (Liverpool) prints "+1" where the goals pair should be
+  FAIL: Premier League 2015-16: row 13 (West Ham) prints "-1" where the goals pair should be
+  FAIL: Premier League 2015-16: row 14 (Aston Villa) prints "-3" where the goals pair should be
+  FAIL: Premier League 2015-16: row 15 (Sunderland) prints "-17" where the goals pair should be
+  FAIL: Premier League 2015-16: row 16 (Leicester City) prints "-12" where the goals pair should be
+  FAIL: Premier League 2015-16: row 17 (Watford) prints "-14" where the goals pair should be
+  FAIL: Premier League 2015-16: row 18 (West Brom) prints "-18" where the goals pair should be
+  FAIL: Premier League 2015-16: row 19 (Bournemouth) prints "-16" where the goals pair should be
+  FAIL: Premier League 2015-16: row 20 (Norwich City) prints "-22" where the goals pair should be
+  FAIL: UCL group: row 1 (Arsenal) prints "+5" where the goals pair should be
+  FAIL: UCL group: row 2 (RB Leipzig) prints "-1" where the goals pair should be
+  FAIL: UCL group: row 3 (Inter Milan) prints "-1" where the goals pair should be
+  FAIL: UCL group: row 4 (Real Madrid) prints "-3" where the goals pair should be
+   0 rows across 5 tables rendered through react-dom/server, every pair its row's own goals and every GD the pair's difference
+  FAIL: only 0 rows rendered
+5) The How to Play copy and the game content say what the meters do
+   15 claims read off the meters module and found in the copy
+
+simClubManagerMeters: 85 failure(s)
