@@ -127,7 +127,11 @@
  *            awards with the share on record, the same awards on the season's record; any other season has
  *            no awards and the old race's golden boot; (iii) with BOOK_BASE, on a season the book does not
  *            decide the WHOLE summary and record are the base commit's, on one it decides all of them but
- *            the four moved fields (goldenBoot, playerOfSeason, ballonDor, awards); and printed, a league:
+ *            the four moved fields (goldenBoot, playerOfSeason, ballonDor, awards); step 5: the team of the
+ *            season is a keeper, four defenders, four midfielders and two forwards by the harness's own
+ *            lines, nobody twice, every man on a row or in my squad; (ii) a seven season career holds the
+ *            winners on seven records and the team on the newest five only; (v) the back four's mean men of
+ *            one club under BACK_FOUR_LINE (on a fleet of at least BACK_FOUR_MIN_TEAMS); and printed, a league:
  *            the shares at the season's end, how many the book decided, how often one of mine won the boot.
  *            The stream face leaves those four fields and each record's awards out, and nothing else.
  *   facts    Round 1311, the fleet's top scorers beside the real leagues' (scripts/data/cmLeagueBookFacts.json,
@@ -235,6 +239,9 @@
  *   awardthin     the awards are read from a book under the floor     -> awards
  *   bookleak      every goal of a side to its taker                    -> facts (shapes and thin with it: the
  *                                                                        deal no longer follows the weight)
+ *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); run it on the
+ *                                                                        full fleet, the only one judged
+ *   nocap         the team of the season is never let go               -> awards (ii)
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
  * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
@@ -677,9 +684,14 @@ const sha = text => createHash('sha256').update(text).digest('hex').slice(0, 24)
    judged): a whole book (no r0) with at least this many in 100 rival goals on record (a named row or an own
    goal; the goals a late book was opened with left out). */
 const AWARD_FLOOR_RULED = 73;
-/* Round 1311 step 5: the back four's line, midway between the measured readings of the rule and of the
-   control teamsheets (BACK_FOUR_PENDING: set from the measurement). */
-const BACK_FOUR_LINE = 2.4;
+/* Round 1311 step 5: the back four's line, MEASURED (remote check r1311-s5m, head 5090d373, full fleets of
+   seed sets 0 to 4, 42 or 43 teams each): the rule reads 1.43 1.42 1.60 1.42 1.52 men of one club, the control
+   teamsheets (clean sheets plus goals plus assists) 2.93 2.74 2.88 2.77 2.83. The ranges are 1.14 apart, so the
+   line is bound, midway between 1.60 and 2.74. It is judged only on a fleet of at least BACK_FOUR_MIN_TEAMS
+   teams: the default fleet holds eight, where one team moves the mean by an eighth and a healthy run could
+   cross the line by chance; there it is printed. So the control teamsheets runs on the full fleet. */
+const BACK_FOUR_LINE = 2.17;
+const BACK_FOUR_MIN_TEAMS = 20;
 function shareByHand(s, book) {
   let on = 0;
   let u = 0;
@@ -2034,8 +2046,8 @@ function judgeAwards(mod, label, before, fin, season) {
     const xs = acc.backFours ?? [];
     tick('awards');
     if (xs.length < 4) fail('awards', `only ${xs.length} teams of the season to judge the back four on`);
-    else if (mean(xs) > BACK_FOUR_LINE) fail('awards', `the back four holds ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams, over the line of ${BACK_FOUR_LINE}`);
-    console.log(`awards  back four: ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams of the season (line ${BACK_FOUR_LINE}); ${acc.noTeam ?? 0} seasons the book decided had no team`);
+    else if (xs.length >= BACK_FOUR_MIN_TEAMS && mean(xs) > BACK_FOUR_LINE) fail('awards', `the back four holds ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams, over the line of ${BACK_FOUR_LINE}`);
+    console.log(`awards  back four: ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams of the season (line ${BACK_FOUR_LINE}, ${xs.length >= BACK_FOUR_MIN_TEAMS ? 'judged' : `printed only: under ${BACK_FOUR_MIN_TEAMS} teams`}); ${acc.noTeam ?? 0} seasons the book decided had no team`);
   }
   /* (ii) A SEVEN SEASON CAREER: the three winners on all seven records, the team on the newest five only, every
      record the same after a JSON round trip. One club of the fleet, on a fresh copy. */
