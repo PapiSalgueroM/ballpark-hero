@@ -175,7 +175,8 @@ function poolFindings(pool, year, nominees = []) {
   if (new Set(pool.entries.map(e => e.name)).size !== pool.entries.length) add('name-reserve', 'saved names unique');
   const active = pool.entries.filter(e => e.retiredYear === null);
   if (new Set(active.map(e => `${e.role}:${e.slot}`)).size !== active.length) add('identity', 'unique active slots');
-  for (const e of pool.entries) { const age = e.entryAge + year - e.firstYear; if ((age >= 37 && e.retiredYear !== e.firstYear + 37 - e.entryAge) || (age < 37 && e.retiredYear !== null)) add('retirement', `${e.id} exact age37 year`); }
+  /* Round 1318 (correction 12): a rival whose name was taken retires early, after his first year and before 37. */
+  for (const e of pool.entries) { const age = e.entryAge + year - e.firstYear, natural = e.firstYear + 37 - e.entryAge, early = e.retiredYear !== null && e.retiredYear > e.firstYear && e.retiredYear < natural && e.retiredYear <= year; if ((age >= 37 && e.retiredYear !== natural && !early) || (age < 37 && e.retiredYear !== null && !early)) add('retirement', `${e.id} exact age37 year`); }
   for (const n of nominees.filter(n => n.generatedId !== undefined)) { const e = pool.entries[n.generatedId]; if (!e || e.retiredYear !== null) add('replacement', `nominee ${n.generatedId} active`); if (e && n.generatedAge !== e.entryAge + year - e.firstYear) add('age', `nominee ${n.generatedId} derived age`); }
   return found;
 }
@@ -349,11 +350,11 @@ async function main() {
   assert(sourceFixture && legacyFixture && pendingFixture && legacyPendingFixture, 'finite genuine generated/legacy/pending witnesses required');
   report.fixtures = { legacy: put(legacyFixture), generated: put(sourceFixture), pending: put(pendingFixture), legacyPending: put(legacyPendingFixture) };
   const firstYear = sourceFixture.generatedBallonPool.year, firstEntry = sourceFixture.generatedBallonPool.entries[0];
-  const years = [...new Set([firstYear, firstYear + 1, firstYear + 3, firstEntry.firstYear + 36 - firstEntry.entryAge, firstEntry.firstYear + 37 - firstEntry.entryAge, firstYear + 25])].sort((a, b) => a - b);
+  const years = [...new Set([firstYear, firstYear + 1, firstYear + 3, firstEntry.firstYear + 36 - firstEntry.entryAge, firstEntry.firstYear + 37 - firstEntry.entryAge, firstYear + 25])].filter(year => year > firstYear).sort((a, b) => a - b);
   const inputs = years.flatMap(year => [false, true].map(filler => ({ id: `${year}-${filler ? 'filler' : 'primary'}`, input: sourceFixture, year, filler, seed: 7001 })));
-  const firstFiller = runBoundary(healthy, sourceFixture, firstYear, true, 7001, 'filler-entry'); assert.deepEqual(firstFiller.row.findings, []); report.boundaries.push(firstFiller.row);
+  const firstFiller = runBoundary(healthy, sourceFixture, firstYear + 1, true, 7001, 'filler-entry'); assert.deepEqual(firstFiller.row.findings, []); report.boundaries.push(firstFiller.row);
   const fillerFixture = copy(firstFiller.s); report.fixtures.filler = put(fillerFixture);
-  inputs.push(...[firstYear, firstYear + 1, firstYear + 25].map(year => ({ id: `saved-filler-${year}`, input: fillerFixture, year, filler: true, seed: 7001 })));
+  inputs.push(...[firstYear + 2, firstYear + 3, firstYear + 26].map(year => ({ id: `saved-filler-${year}`, input: fillerFixture, year, filler: true, seed: 7001 })));
   const healthyRows = inputs.map(p => runBoundary(healthy, p.input, p.year, p.filler, p.seed, p.id));
   for (const r of healthyRows) { assert.deepEqual(r.row.findings, [], `healthy ${r.row.id}`); report.boundaries.push(r.row); }
   for (const r of [firstFiller, ...healthyRows]) {
