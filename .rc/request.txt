@@ -1,0 +1,3 @@
+#!serial
+ctl-unguarded: node .rc/x/mutE2.mjs unguarded && node_modules/.bin/vitest run src/test/soccerBallonPoolReadAsAbsent.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+ctl-refusal: node .rc/x/mutE2.mjs refusal && node_modules/.bin/vitest run src/test/soccerBallonPoolReadAsAbsent.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
