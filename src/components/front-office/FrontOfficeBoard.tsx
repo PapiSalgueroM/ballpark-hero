@@ -74,7 +74,18 @@ import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/componen
    the save. Both are needed in the press's own tick, so they are static;
    the story of a game and its card are not imported here. */
 import { nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
-import { addToGmGameLog, readGmGameLog, type GmGameLog } from '@/lib/gmGameLog';
+import { addToGmGameLog, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, type GmGameLog } from '@/lib/gmGameLog';
+/* Round 1307: the Game Day tile of the week box. The card, the story of a
+   game, the match clock and the "?" are one chunk the week box asks for
+   when it opens; the press never waits on it. Made here, at module level:
+   a lazy part must be the same component on every render. */
+import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
+const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
+/* What the tile says under the fixture on the final week, when nothing has
+   been told yet (a save from before the log that sits on Week 17). The
+   tile's own line offers a watch and a result in the box, and the final
+   week has neither: no Watch button, and its press goes to the recap. */
+const FINAL_WEEK_NOTE = 'No Watch on this one. The final week runs straight into the playoffs.';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -154,8 +165,24 @@ export default function FrontOfficeBoard() {
   // Round 64: the owner's no scroll rule. You press Play Week at the top and
   // the scoreboard renders underneath it, often below the fold on a phone, so
   // the results pull themselves into view.
+  /* Round 1307: Watch. `held` is the league as it stood BEFORE a watched
+     press, and it is the whole of the watch state: never saved, so a reload
+     in the middle shows the result. While it holds, everything on the page
+     that would give the result away (the week, his record, the owner's
+     pace, the matchup, the Play label) is drawn from it and both buttons
+     are shut. It is let go at full time and at Results (the card says so),
+     when he leaves the week box, and when the press played nothing. */
+  const [held, setHeld] = useState<LeagueState | null>(null);
+  const hold = tab === 'week' && held && league && held !== league && league.season === held.season && league.week === held.week + 1 ? held : null;
+  useEffect(() => { if (held && (tab !== 'week' || !league || league === held)) setHeld(null); }, [held, tab, league]);
+  /* where the Game Day "?" is drawn: an empty element at the end of the week
+     box, so the sheet lies over the whole box and takes none of its spacing */
+  const [helpHost, setHelpHost] = useState<HTMLDivElement | null>(null);
+  /* The ref is on ONE wrapper that starts at the Game Day tile and holds the
+     league grid, so the thing pulled into view is his result and never the
+     grid alone; the key moves again at full time, so that is a reveal too. */
   const revealRef = useRevealScroll<HTMLDivElement>(
-    `${phase}:${league?.week ?? 0}:${weekResults.length}`,
+    `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}`,
   );
   const [tradePartner, setTradePartner] = useState<string>('');
   // Round 82: trade finder
@@ -1437,14 +1464,24 @@ export default function FrontOfficeBoard() {
     );
   };
 
+  /* Round 1307: what the page shows while a game is watched is the league
+     BEFORE the press (see `held`): the week, his record, the owner's pace,
+     the matchup and the Play label. Otherwise it is the league as it is. */
+  const seen = hold ?? league;
+  const seenMy = seen.teams[myTeam] ?? my;
+  const seenGame = hold ? hold.schedule[hold.week - 1]?.find(g => g.home === myTeam || g.away === myTeam) : myGameThisWeek;
+  /* his seed today as the engine itself would seed the conference (division winners first, then three wild cards) */
+  const seedsNow = conferenceSeeds(league.teams, conf);
+  const gameLogNow = gameLogLive.current;
+
   return (
     <div className="space-y-4">
       <CelebrationStyles />
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold" style={{ background: t.color, color: '#fff' }}>{label(myTeam)}</span>
-        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{league.season} · Week {league.week}/{REGULAR_WEEKS}</span>
-        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Record <b className="text-foreground">{my.wins}-{my.losses}</b></span>
+        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-week-chip>{seen.season} · Week {seen.week}/{REGULAR_WEEKS}</span>
+        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-record-chip>Record <b className="text-foreground">{seenMy.wins}-{seenMy.losses}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 5 ? 'text-destructive' : 'text-muted-foreground')}>
           Cap room <b>${room}M</b>
@@ -1456,8 +1493,8 @@ export default function FrontOfficeBoard() {
         <OwnerMandateCard
           mandate={mandate}
           trust={trust}
-          pace={league.week > 1 && league.week <= REGULAR_WEEKS
-            ? mandatePace(mandate, my.wins, (league.week - 1) / REGULAR_WEEKS, conferenceSeeds(league.teams, conferenceOf(myTeam)).includes(myTeam))
+          pace={seen.week > 1 && seen.week <= REGULAR_WEEKS
+            ? mandatePace(mandate, seenMy.wins, (seen.week - 1) / REGULAR_WEEKS, conferenceSeeds(seen.teams, conferenceOf(myTeam)).includes(myTeam))
             : null}
         />
       )}
@@ -1836,10 +1873,10 @@ export default function FrontOfficeBoard() {
       )}
 
       {tab === 'week' && (
-        <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center space-y-3">
-          {myGameThisWeek ? (
-            <p className="text-sm text-foreground">
-              Week {league.week}: <b>{label(myGameThisWeek.away)}</b> at <b>{label(myGameThisWeek.home)}</b>
+        <div className="relative rounded-2xl border border-gold/40 bg-card p-4 text-center space-y-3" data-week-box>
+          {seenGame ? (
+            <p className="text-sm text-foreground" data-week-matchup>
+              Week {seen.week}: <b>{label(seenGame.away)}</b> at <b>{label(seenGame.home)}</b>
             </p>
           ) : (
             <p className="text-sm text-muted-foreground">Bye week for you. The league plays on.</p>
@@ -1849,15 +1886,52 @@ export default function FrontOfficeBoard() {
               {overLimitLine(my.players.length, overLimit, 'before you play')}
             </p>
           )}
-          <button
-            onClick={playWeek}
-            disabled={overLimit > 0}
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
-          >
-            <ShieldHalf className="h-4 w-4" /> {league.week >= REGULAR_WEEKS ? 'Play the final week + playoffs' : `Play Week ${league.week}`}
-          </button>
-          {weekResults.length > 0 && (
-            <div ref={revealRef} className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
+          {/* Round 1307: Play plays the week exactly as it always did. Watch is
+              the same press, with his game then run on the clock in the tile
+              below; the final week has none, because its press goes to the
+              recap. Both are shut while a game is being watched. ONE LAYOUT A
+              WIDTH: stacked on a phone and side by side from sm up, never
+              "whichever fits". Left to wrap, "Week 1" shared a row at 390 and
+              "Week 2" did not, so the box grew a button row at the first
+              press of a season and the tile moved as its result arrived. */}
+          <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
+            <button
+              onClick={playWeek}
+              disabled={overLimit > 0 || !!hold}
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+            >
+              <ShieldHalf className="h-4 w-4" /> {seen.week >= REGULAR_WEEKS ? 'Play the final week + playoffs' : `Play Week ${seen.week}`}
+            </button>
+            {seen.week < REGULAR_WEEKS && seenGame && (
+              <button
+                onClick={() => { setHeld(league); playWeek(); }}
+                disabled={overLimit > 0 || !!hold}
+                data-watch-week
+                className="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"
+              >
+                Watch Week {seen.week}
+              </button>
+            )}
+          </div>
+          <div ref={revealRef} className="space-y-3">
+            {/* the board owns the tile's box: the same height while the card loads, on every face and after every press */}
+            <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box>
+              <NflGameDay
+                key={`${league.season}:${gameLogNow?.games.length ?? 0}`}
+                log={gameLogNow?.games ?? []}
+                my={myTeam}
+                name={nickname}
+                short={id => id}
+                next={hubFacts.nextOpponent}
+                nextNote={seen.week >= REGULAR_WEEKS ? FINAL_WEEK_NOTE : undefined}
+                mode={hold ? 'watch' : 'result'}
+                onWatched={() => setHeld(null)}
+                standing={{ table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
+                helpHost={helpHost}
+              />
+            </div>
+          {weekResults.length > 0 && !hold && (
+            <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
               {weekResults.map((g, i) => {
                 const involved = g.home === myTeam || g.away === myTeam;
                 return (
@@ -1870,6 +1944,8 @@ export default function FrontOfficeBoard() {
               })}
             </div>
           )}
+          </div>
+          <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
         </div>
       )}
 
