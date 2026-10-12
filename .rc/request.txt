@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+playReducedMotion: node scripts/playReducedMotion.mjs
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
+playSoccerCareerDiscipline: node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerLeagueWorld: node scripts/playSoccerCareerLeagueWorld.mjs
+playSoccerCareerOpponents: node scripts/playSoccerCareerOpponents.mjs
