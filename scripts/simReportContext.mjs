@@ -28,7 +28,16 @@
                                  section 2 must go red.
      SIM_REPORT_CONTROL=privacy  removes the automatic context disclosure;
                                  section 4 must go red.
+     SIM_REPORT_CONTROL=diagnostics  removes the diagnostics disclosure
+                                 (Release BA, critic's correction 15) from
+                                 both bullets in memory; section 4 must go red.
    Each asserts it changed something before running.
+
+   Release BA: section 4 also reads every key the helper sends (the reserved
+   keys and the diagnostics object, read from src/lib/reportContext.ts as
+   code) and needs the Reported issues bullet to name each one. A key with no
+   disclosure rule fails too, so a new diagnostics field cannot ship
+   undisclosed.
 
    Run: node scripts/simReportContext.mjs
 */
@@ -135,6 +144,18 @@ console.log('4) The privacy page says what the report flow already sends');
     if (changed === source) abort('control cannot run: removing the context disclosure changed nothing');
     source = changed;
   }
+  if (CONTROL === 'diagnostics') {
+    const cuts = [
+      /We record the report time in UTC\.[\s\S]*?These small diagnostics help us reproduce the issue\./,
+      /The relay also receives the time in UTC and the other report details and limited browser diagnostics described in Section 1\./,
+    ];
+    for (const cut of cuts) {
+      if (!cut.test(source)) abort('control cannot run: a diagnostics disclosure it is meant to remove is not there');
+      const changed = source.replace(cut, '');
+      if (changed === source) abort('control cannot run: removing a diagnostics disclosure changed nothing');
+      source = changed;
+    }
+  }
   const reported = source.match(/<li><strong>Reported issues:<\/strong>[\s\S]*?<\/li>/)?.[0] ?? '';
   const formSubmit = source.match(/<li><strong>FormSubmit:<\/strong>[\s\S]*?<\/li>/)?.[0] ?? '';
   for (const [label, text] of [['Reported issues', reported], ['FormSubmit', formSubmit]]) {
@@ -149,10 +170,37 @@ console.log('4) The privacy page says what the report flow already sends');
     fail('FormSubmit still claims only text and page are sent');
   }
   console.log('   category, typed text, page, Eastern date and limited game details disclosed on both lines');
+
+  // Release BA: every key the helper sends must be named in the Reported issues bullet. The keys
+  // are read from the helper's code (comments stripped, strings kept), so a new field needs a rule.
+  const helperCode = fs.readFileSync(path.join(ROOT, 'src/lib/reportContext.ts'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const reservedList = helperCode.match(/const RESERVED = new Set\(\[([^\]]*)\]\)/)?.[1] ?? '';
+  const reservedKeys = [...reservedList.matchAll(/'([^']+)'/g)].map(m => m[1]);
+  const availableBlock = helperCode.match(/const available = \{([\s\S]*?)\n\s*\};/)?.[1] ?? '';
+  const diagnosticKeys = [
+    ...[...availableBlock.matchAll(/^\s*(\w+)\s*[,:]/gm)].map(m => m[1]),
+    ...[...availableBlock.matchAll(/\{([^{}]*)\}/g)].flatMap(m => [...m[1].matchAll(/(\w+)\s*:/g)].map(k => k[1])),
+  ];
+  if (reservedKeys.length < 6) fail(`the helper's RESERVED keys could not be read (${reservedKeys.length})`);
+  if (diagnosticKeys.length < 8) fail(`the helper's diagnostics keys could not be read (${diagnosticKeys.length})`);
+  const DISCLOSE = {
+    path: /the page/i, date: /date in Eastern Time/i, submittedAt: /time in UTC/i,
+    source: /which Report button/i, contextTruncated: /shortened/i, diagnostics: /diagnostics/i,
+    build: /build filename/i, viewport: /viewport size/i, width: /viewport size/i, height: /viewport size/i,
+    pixelRatio: /pixel ratio/i, timezone: /timezone|time zone/i, browser: /user agent/i, language: /language/i,
+  };
+  for (const key of [...reservedKeys, ...diagnosticKeys]) {
+    const rule = DISCLOSE[key];
+    if (!rule) { fail(`the report sends "${key}" and this check has no disclosure rule for it`); continue; }
+    if (!rule.test(reported)) fail(`Reported issues does not disclose "${key}" (${rule})`);
+  }
+  if (!/diagnostics/i.test(formSubmit)) fail('FormSubmit does not point at the browser diagnostics');
+  console.log(`   keys checked against the Reported issues bullet: ${reservedKeys.length} context keys, ${diagnosticKeys.length} diagnostics keys (${diagnosticKeys.join(', ')})`);
 }
 
 if (CONTROL) {
-  const target = { nopath: 1, footle: 2, privacy: 4 }[CONTROL];
+  const target = { nopath: 1, footle: 2, privacy: 4, diagnostics: 4 }[CONTROL];
   if (!target) abort(`unknown control "${CONTROL}"`);
   const fired = bySection[target];
   if (fired > 0) { console.log(`\ncontrol "${CONTROL}": ${fired} failure(s) fired in section ${target} as expected, the check works`); process.exit(0); }
