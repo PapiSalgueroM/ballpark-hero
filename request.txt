@@ -1,0 +1,10 @@
+# Round 1311 fixer: playClubManager sacked before any signing in 4 of 6 runs on the head and 0 of 4 on main. Verbose runs on the head, then src put back to the reviewed head 9c262ba4 (before the fixes), rebuilt in place, three verbose runs on that
+#!serve
+#!playwright
+#!serial
+head-v1: VERBOSE=1 node scripts/playClubManager.mjs
+head-v2: VERBOSE=1 node scripts/playClubManager.mjs
+pre-build: git checkout 9c262ba4 -- src && node_modules/.bin/vite build > /dev/null 2>&1 && git diff --stat HEAD -- src | tail -1 && echo "built src of 9c262ba4 into dist"
+pre-v1: VERBOSE=1 node scripts/playClubManager.mjs
+pre-v2: VERBOSE=1 node scripts/playClubManager.mjs
+pre-v3: VERBOSE=1 node scripts/playClubManager.mjs

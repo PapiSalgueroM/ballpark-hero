@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+head-v1 exit=0 271s | Played Club Manager through its own screens. 0 findings.
+head-v2 exit=0 274s | Played Club Manager through its own screens. 0 findings.
+pre-build exit=0 31s | built src of 9c262ba4 into dist
+pre-v1 exit=0 286s | Played Club Manager through its own screens. 0 findings.
+pre-v2 exit=0 164s | Played Club Manager through its own screens. 0 findings.
+pre-v3 exit=1 114s | Played Club Manager through its own screens. 1 findings.
