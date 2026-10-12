@@ -23,7 +23,8 @@
  *   7. no en dash or em dash in either data file;
  *   8. it PRINTS, by league and season length, how many seasons are USED and their mean. It binds nothing on a mean.
  *
- * Controls, CM_FACTS_CONTROL=wiki | bannedhost | figure | onesource | disagree | receipt | srcname | dash | length.
+ * Controls, CM_FACTS_CONTROL=wiki | bannedhost | figure | onesource | disagree | receipt | srcname | dash | length
+ * | samehost (a USED figure's second publisher moved onto the first one's host: two publishers on one host are THIN).
  * Each changes the parsed copy in memory, proves it changed something, and must go red for its own reason: it ends
  * "FIRED" and exits 1. One that changes nothing or is not caught exits 3; an unknown control exits 2.
  */
@@ -51,6 +52,7 @@ const EXPECT = {
   disagree: /Premier League 2015-16 topScorerGoals is DISPUTED .*not named under owed/,
   receipt: /does not carry the sha256 of/, srcname: /names cmLeagueBookFacts/, dash: /holds a banned dash/,
   length: /says (34|38) matches a club and its format rows give/,
+  samehost: /Premier League 2015-16 topScorerGoals is THIN \([a-z0-9]+, [a-z0-9]+\)/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmLeagueBookFacts: unknown control ${CONTROL}`); process.exit(2); }
 
@@ -97,6 +99,16 @@ if (CONTROL === 'length') {
   const row = facts.rows.find(r => r.competition === 'Ligue 1' && r.length === 34 && typeof r.figures?.[CORE] === 'number')
     ?? facts.rows.find(r => typeof r.figures?.[CORE] === 'number' && (r.length === 38 || r.length === 34));
   if (row) { console.log(`simCmLeagueBookFacts control length: ${row.id} given ${row.length === 34 ? 38 : 34}`); row.length = row.length === 34 ? 38 : 34; changed = true; }
+}
+/* samehost: a USED figure's second row handed to a second declared publisher on the first row's host. Two publishers
+   on one host are one host's word: the figure must read THIN with both named, and check 3 must fire. */
+if (CONTROL === 'samehost') {
+  const rows = coreRow('Premier League', '2015-16');
+  const first = rows[0] ? facts.publishers?.[rows[0].publisher] : null;
+  if (rows.length >= 2 && first && first.host !== hostOf(rows[1].url)) {
+    facts.publishers.samehostcontrol = { name: "a second publisher planted on the first one's host", host: first.host, kind: "the samehost control's plant" };
+    rows[1].publisher = 'samehostcontrol'; rows[1].url = `https://${first.host}/samehost-control`; changed = true;
+  }
 }
 if (CONTROL && !changed) { console.log(`simCmLeagueBookFacts control ${CONTROL}: ABORTED, the control changed nothing.`); process.exit(3); }
 
