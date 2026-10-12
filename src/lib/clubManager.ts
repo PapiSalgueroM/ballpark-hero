@@ -7603,6 +7603,10 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
        transfer fee. */
     seasonSignings: [...career.seasonSignings, { dir: 'in', name: fa.name, fee: 0, bonus: fee }],
   };
+  /* Release AZ fix (reviewer 1, minor 6): the one ledger writer that does not pass recordActualRosterTransfer, so
+     ruling Y1's guard did not stand in front of it. Inert before this line too (it needs a readable ledger, which a
+     career with no seed never gets), now said where it is done. */
+  if (worldSeedOf(career) === undefined) return state;
   const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
     && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
   return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
