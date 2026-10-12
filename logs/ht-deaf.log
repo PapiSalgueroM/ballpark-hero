@@ -1,0 +1,19 @@
+NEGATIVE CONTROL ON (deaf): changes made at the break are recorded and never applied
+1) Stopping at halftime and changing nothing must not change the game
+   never sees halftime: 48.5 pts, 48.3 scored, 52.6 conceded
+   sees it, does nothing: 48.6 pts, 48.2 scored, 52.7 conceded
+   difference 0.12 points, 3 standard errors is 5.55
+   goals for gap 0.12 against 3se of 4.56, goals against gap 0.08 against 3se of 4.90
+2) A manager who works the break finishes ahead of one who does not
+   ignores the break: 47.3 pts, average finish 12.7
+   works the break:   48.1 pts, average finish 12.3
+   he made 27.1 subs and changed shape 16.4 times a season
+   gain 0.84 points, 2 standard errors is 0.91
+  FAIL: the gain of 0.84 points is inside the noise, so nobody would ever feel it
+3) The break cannot be abused
+   tried six substitutions, 3 went through (cap 3)
+   halftime 0-0, full time 1-0, week 0 -> 1
+4) A save from before this existed, and Round 93 fast forward
+   ten fixtures fast forwarded, 0 stopped at halftime
+
+simHalftime: control deaf FIRED: with the break deaf, the gain line failed and the subs and shape lines held

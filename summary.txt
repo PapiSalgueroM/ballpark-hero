@@ -1,0 +1,3 @@
+simHalftime-1 exit=0 869s | ALL HALFTIME CHECKS PASSED
+ht-deaf exit=1 879s | simHalftime: control deaf FIRED: with the break deaf, the gain line failed and the subs and shape lines held
+simHalftime-2 exit=0 904s | ALL HALFTIME CHECKS PASSED
