@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitestOldB: node_modules/.bin/vitest run src/test/usRivalOldSavesB.test.ts src/test/usRivalOldSaves.test.ts src/test/usRivalLine.test.ts --testTimeout=300000 --hookTimeout=120000
+rivalPlain: node scripts/simUsRivalSense.mjs
+c-owndead: US_RIVAL_CONTROL=owndead node scripts/simUsRivalSense.mjs
+c-retiredlinemlb: US_RIVAL_CONTROL=retiredlinemlb node scripts/simUsRivalSense.mjs
+c-retiredlinenhl: US_RIVAL_CONTROL=retiredlinenhl node scripts/simUsRivalSense.mjs
+c-oldtallymlb: US_RIVAL_CONTROL=oldtallymlb node scripts/simUsRivalSense.mjs
+c-oldtallynhl: US_RIVAL_CONTROL=oldtallynhl node scripts/simUsRivalSense.mjs
+trustCopy: node scripts/simTrustCopy.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalNames: node scripts/simNoRivalNames.mjs
