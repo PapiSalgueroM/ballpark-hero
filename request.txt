@@ -1,0 +1,34 @@
+l-nhltyped: US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+l-mlbavg: US_LEDGER_CONTROL=mlbavg node scripts/simUsSeasonLedger.mjs
+l-mlbtyped: US_LEDGER_CONTROL=mlbtyped node scripts/simUsSeasonLedger.mjs
+l-mlbrounds: US_LEDGER_CONTROL=mlbrounds node scripts/simUsSeasonLedger.mjs
+l-mlbladder: US_LEDGER_CONTROL=mlbladder node scripts/simUsSeasonLedger.mjs
+l-mlbfold: US_LEDGER_CONTROL=mlbfold node scripts/simUsSeasonLedger.mjs
+l-mlbpartial: US_LEDGER_CONTROL=mlbpartial node scripts/simUsSeasonLedger.mjs
+l-mlblostfinal: US_LEDGER_CONTROL=mlblostfinal node scripts/simUsSeasonLedger.mjs
+l-mlbbadge: US_LEDGER_CONTROL=mlbbadge node scripts/simUsSeasonLedger.mjs
+l-nhlbadge: US_LEDGER_CONTROL=nhlbadge node scripts/simUsSeasonLedger.mjs
+l-suspslate: US_LEDGER_CONTROL=suspslate node scripts/simUsSeasonLedger.mjs
+l-nhlawards: US_LEDGER_CONTROL=nhlawards node scripts/simUsSeasonLedger.mjs
+l-mlbawards: US_LEDGER_CONTROL=mlbawards node scripts/simUsSeasonLedger.mjs
+l-nhlgates: US_LEDGER_CONTROL=nhlgates node scripts/simUsSeasonLedger.mjs
+l-mlbgates: US_LEDGER_CONTROL=mlbgates node scripts/simUsSeasonLedger.mjs
+l-fullslatenhl: US_LEDGER_CONTROL=fullslatenhl node scripts/simUsSeasonLedger.mjs
+l-fullslatemlb: US_LEDGER_CONTROL=fullslatemlb node scripts/simUsSeasonLedger.mjs
+l-nhlcarry: US_LEDGER_CONTROL=nhlcarry node scripts/simUsSeasonLedger.mjs
+l-mlbcarry: US_LEDGER_CONTROL=mlbcarry node scripts/simUsSeasonLedger.mjs
+l-nhlcomeback: US_LEDGER_CONTROL=nhlcomeback node scripts/simUsSeasonLedger.mjs
+l-mlbcomeback: US_LEDGER_CONTROL=mlbcomeback node scripts/simUsSeasonLedger.mjs
+r-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+r-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+r-beatlie: RIVALRY_CONTROL=beatlie node scripts/simCareerRivalryEvents.mjs
+r-beatheat: RIVALRY_CONTROL=beatheat node scripts/simCareerRivalryEvents.mjs
+r-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+r-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+r-allstar221: RIVALRY_CONTROL=allstar221 node scripts/simCareerRivalryEvents.mjs
+r-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+r-homeimport: RIVALRY_CONTROL=homeimport node scripts/simCareerRivalryEvents.mjs
+r-homeback: RIVALRY_CONTROL=homeback node scripts/simCareerRivalryEvents.mjs
+u-lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+u-seam: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+u-lay: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
