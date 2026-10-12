@@ -1,0 +1,9 @@
+saveSize: node scripts/simClubManagerSaveSize.mjs
+saveSize-s1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-s2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+slots-s1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+slots-s2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+sizeProbe: node .rc/x/sizeProbe.mjs

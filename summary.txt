@@ -1,0 +1,9 @@
+saveSize exit=1 273s | simClubManagerSaveSize: 2 failures in sections 5, 6
+saveSize-s2 exit=1 285s | simClubManagerSaveSize: 2 failures in sections 5, 6
+saveSize-s1 exit=0 313s | simClubManagerSaveSize: all sections green
+slots exit=1 289s | simClubManagerSlots: RED, sections 2 (1 failures)
+slots-s1 exit=1 267s | simClubManagerSlots: RED, sections 2 (1 failures)
+saveSize-uncapped exit=1 319s | simClubManagerSaveSize: SAVE_SIZE_CONTROL=uncapped turned sections 1, 5, 6 red, but it should have hit only section 1
+slots-s2 exit=1 313s | simClubManagerSlots: RED, sections 2 (1 failures)
+slots-dupe exit=1 308s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+sizeProbe exit=0 503s | sizeProbe: done
