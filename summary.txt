@@ -1,0 +1,3 @@
+rival-rostergate exit=1 17s | simUsRivalSense: 14 checks, 2 failed (full size), red sections: N.F5
+rival-liftcard exit=1 447s | simUsRivalSense: 47 checks, 1 failed (full size), red sections: L
+rivalProve exit=0 450s | simUsRivalSense: 47 checks, 0 failed (full size)
