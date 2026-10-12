@@ -1,0 +1,22 @@
+keyorderMlb exit=1 6s | ::error file=/tmp/ko1/src/test/usRivalLine.test.ts,title=src/test/usRivalLine.test.ts > Round 1313%3A the MLB cut (mlbStatLineFor%2C mlbFullWorkload%2C mlbLineOnSlate) > 
+keyorderNhl exit=1 5s | ::error file=/tmp/ko2/src/test/usRivalLine.test.ts,title=src/test/usRivalLine.test.ts > Round 1313%3A the NHL cut (nhlStatLineFor%2C nhlFullWorkload%2C nhlLineOnSlate) > 
+vitest exit=0 12s |    Duration  11.67s (transform 3.36s, setup 539ms, collect 5.75s, tests 8.65s, environment 2.38s, prepare 859ms)
+rivalryEvents exit=0 9s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+tsc exit=0 90s | 
+board exit=0 71s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+lawCmp exit=0 28s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+digest exit=0 50s |    Duration  50.21s (transform 1.38s, setup 46ms, collect 1.74s, tests 47.58s, environment 297ms, prepare 220ms)
+senseC exit=0 141s | simNbaAwardsSense: 172 checks, 0 failed (full size), 140s
+seamCmp exit=0 31s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+nhlCareer exit=0 14s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+nflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+layCmp exit=0 33s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+usCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+mlbCareer exit=0 27s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+nbaCareer exit=0 26s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+rivalNames exit=0 19s | No rival product names found. 0 findings.
+conduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+invented exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.
+liveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+quotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
