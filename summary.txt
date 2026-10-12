@@ -1,0 +1,1 @@
+rv-unseeded exit=0 42s | rvcmw-unseeded: green, every step byte equal to the base (state, draws, saved bytes)
