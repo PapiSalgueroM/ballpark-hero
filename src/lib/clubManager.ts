@@ -80,6 +80,7 @@ import {
   ageDriftBand, declineScale, retireChance,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName, eraBakeRating, bakedValueForRating,
+  eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 /* Round 467: the facilities and the books. Both modules import from this
@@ -276,7 +277,7 @@ export function worldSeedOf(career: CareerState): number | undefined {
    once a club. The answer is kept per ledger object, world year, club, era and seed, unless a record the
    refresh copies from my own squad is due (the one branch that reads the squad), so it is the same answer the
    refresh always gave. */
-const REFRESH_MEMO = new WeakMap<object, { year: number; start: unknown; era: unknown; club: string; seed: number | undefined; out: unknown }>();
+const REFRESH_MEMO = new WeakMap<object, { year: number; start: unknown; era: unknown; club: string; seed: number | undefined; loaded: boolean; out: unknown }>();
 
 /** Refresh only recorded affected players with the existing aging rules and a private stream. */
 export function refreshWorldRoster(career: CareerState): CareerState {
@@ -286,12 +287,12 @@ export function refreshWorldRoster(career: CareerState): CareerState {
   if (!held.records.some(record => record.year < year && record.status !== 'retired')) return career;
   const raw = career.worldRoster as object, seed = worldSeedOf(career);
   const hit = REFRESH_MEMO.get(raw);
-  if (hit && hit.year === year && hit.start === career.startYear && hit.era === career.eraId && hit.club === career.clubName && hit.seed === seed) {
+  if (hit && hit.year === year && hit.start === career.startYear && hit.era === career.eraId && hit.club === career.clubName && hit.seed === seed && hit.loaded === eraRostersLoaded(career.eraId)) {
     return { ...career, worldRoster: hit.out as WorldRosterState };
   }
   const out = refreshWorldRosterOnce(career, held, year);
   if (!held.records.some(record => record.year < year && record.status !== 'retired' && record.owner === career.clubName)) {
-    REFRESH_MEMO.set(raw, { year, start: career.startYear, era: career.eraId, club: career.clubName, seed, out: out.worldRoster });
+    REFRESH_MEMO.set(raw, { year, start: career.startYear, era: career.eraId, club: career.clubName, seed, loaded: eraRostersLoaded(career.eraId), out: out.worldRoster });
   }
   return out;
 }
@@ -320,7 +321,21 @@ function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, yea
     }
     return { ...structuredClone(record), year: record.origin.birthYear + player.age, player, status, owner };
   });
-  return { ...career, worldRoster: compactWorldRoster({ ...held, records }) };
+  /* Release AZ fix (reviewer 2, MAJOR 1): the ledger never dropped a record, so a seeded career gained about
+     nine a season for ever (374 by season 40), and the save and the cost of every read grew with it. A released
+     or retired man's record does one thing: it takes him off the projected roster of the club he came from. Once
+     that club's projected roster (this world year, this seed) no longer lists him, by his key or by the name,
+     position and birth year worldRosterClub matches on, the record changes no roster, so it goes. Owned records
+     always stay: they put a man at a club. Never pruned while the era's squads are not loaded (nothing to read).
+     scripts/simCmLedgerBound.mjs holds the bound (CM_LEDGER_BOUND_CONTROL=noprune takes this out). */
+  const years = yearsOn(career), seed = worldSeedOf(career), era = career.eraId ?? 'now';
+  const listed = (record: WorldRosterState['records'][number]): boolean => projectedRoster(record.origin.club, years, era, seed)
+    .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && year - p.a === record.origin.birthYear);
+  const kept = eraRostersLoaded(career.eraId) ? records.filter(record => record.status === 'owned' || listed(record)) : records;
+  const ledger = compactWorldRoster({ ...held, records: kept });
+  /* A packed ledger pruned down to owned records only is stored plain, so it must not share the read's objects. */
+  return { ...career, worldRoster: ledger.packedRecords === undefined && held !== career.worldRoster
+    ? { ...ledger, records: kept.map(record => structuredClone(record)) } : ledger };
 }
 
 /** Ownership is applied to the same projected players used for rivals and the market. */
