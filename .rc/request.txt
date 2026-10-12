@@ -1,0 +1,5 @@
+#!build
+#!playwright
+walk-beforefix-EXPECT1: PORT=4611 node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-700 | tail -60; exit ${PIPESTATUS[0]}
+walk-droptalk-EXPECT1: PORT=4612 US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-500 | tail -14; exit ${PIPESTATUS[0]}
+walk-unspend-EXPECT1: PORT=4613 US_MARKET_TALK_CONTROL=unspend node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-500 | tail -16; exit ${PIPESTATUS[0]}
