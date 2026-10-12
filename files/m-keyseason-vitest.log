@@ -1,0 +1,777 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > REPRO: what a reload on the recap lets the player do today
+NFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NBA Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > MLB Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+MLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+stdout | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NHL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today
+NHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ ✓ src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx (25 tests) 3653ms
+   ✓ NFL Front Office, full rosters: the season closes once > plays the next season after the draft: the record refuses only the closed one  624ms
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx (13 tests) 5455ms
+   ✓ NFL front office, fifteen league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  1495ms
+   ✓ NFL front office, fifteen league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's  512ms
+   ✓ NFL front office, deep league, GM desk off: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  468ms
+   ✓ NFL front office, deep league, GM desk off: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's  470ms
+   ✓ NFL front office, deep league, GM desk on: one press of the final week > ordinary: the save at the recap, the draft and the next season's hub is the base's  530ms
+   ✓ NFL front office, deep league, GM desk on: one press of the final week > title: the save at the recap, the draft and the next season's hub is the base's  662ms
+ ✓ src/test/frontOfficeSaveRecovery.test.tsx (36 tests) 4661ms
+   ✓ NFL actual save recovery > restores current progress, contracts and counters without rewriting storage  594ms
+   ✓ NFL actual save recovery > loads supported older saves and advances the same league once  533ms
+   ✓ NFL actual save recovery > allows a fresh club to replace the unusable save without clearing another game  486ms
+   ✓ NHL actual save recovery > loads supported older saves and advances the same league once  424ms
+   ✓ NHL actual save recovery > allows a fresh club to replace the unusable save without clearing another game  457ms
+ ✓ src/lib/frontOfficeGameDay.test.ts (7 tests) 82ms
+ ✓ src/lib/gmGameLog.test.ts (13 tests) 13ms
+stdout | src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record
+FO_GAMEDAY adopted at week 9: the log reads 1-1, the league's record is 3-7
+
+ ❯ src/components/front-office/FrontOfficeGameDay.test.tsx (8 tests | 4 failed) 1101ms
+   × NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score 173ms
+     → expected [ …(16) ] to deeply equal [ …(16) ]
+   ✓ NFL front office: a press tells his game and keeps it > the next press appends in week order, and a remount keeps the log 150ms
+   ✓ NFL front office: a press tells his game and keeps it > a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record 67ms
+   ✓ NFL front office: a log that does not read whole is absent, and never refuses the save > a damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log  352ms
+   ✓ NFL front office: the log does not follow a GM into his next franchise > abandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club 223ms
+   × NFL front office: the one press finish > the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his 45ms
+     → expected [ …(16) ] to deeply equal [ …(16) ]
+   × NFL front office: the one press finish > the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his 45ms
+     → expected [ …(16) ] to deeply equal [ …(16) ]
+   × NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included 44ms
+     → expected [ …(16) ] to deeply equal [ …(16) ]
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it > his game of the week is in the save, and the grid shows that very score, a football score
+AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]
+
+- Expected
++ Received
+
+@@ -7,11 +7,11 @@
+        "home": "WAS",
+        "homeScore": 41,
+        "week": 6,
+        "winner": "WAS",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -20,11 +20,11 @@
+        "home": "PHI",
+        "homeScore": 41,
+        "week": 6,
+        "winner": "PHI",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -33,11 +33,11 @@
+        "home": "CHI",
+        "homeScore": 18,
+        "week": 6,
+        "winner": "DET",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -46,11 +46,11 @@
+        "home": "GB",
+        "homeScore": 18,
+        "week": 6,
+        "winner": "MIN",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -59,11 +59,11 @@
+        "home": "LV",
+        "homeScore": 17,
+        "week": 6,
+        "winner": "DEN",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -72,11 +72,11 @@
+        "home": "LAC",
+        "homeScore": 28,
+        "week": 6,
+        "winner": "KC",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -85,11 +85,11 @@
+        "home": "NE",
+        "homeScore": 40,
+        "week": 6,
+        "winner": "NE",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -98,11 +98,11 @@
+        "home": "MIA",
+        "homeScore": 18,
+        "week": 6,
+        "winner": "BUF",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -111,11 +111,11 @@
+        "home": "TB",
+        "homeScore": 36,
+        "week": 6,
+        "winner": "TB",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -124,11 +124,11 @@
+        "home": "CAR",
+        "homeScore": 21,
+        "week": 6,
+        "winner": "NO",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -137,11 +137,11 @@
+        "home": "LA",
+        "homeScore": 31,
+        "week": 6,
+        "winner": "LA",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -150,11 +150,11 @@
+        "home": "SEA",
+        "homeScore": 32,
+        "week": 6,
+        "winner": "SEA",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -163,11 +163,11 @@
+        "home": "CIN",
+        "homeScore": 30,
+        "week": 6,
+        "winner": "CLE",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -176,11 +176,11 @@
+        "home": "BAL",
+        "homeScore": 41,
+        "week": 6,
+        "winner": "BAL",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -189,11 +189,11 @@
+        "home": "HOU",
+        "homeScore": 22,
+        "week": 6,
+        "winner": "HOU",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -202,9 +202,9 @@
+        "home": "JAX",
+        "homeScore": 35,
+        "week": 6,
+        "winner": "JAX",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+  ]
+
+ ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:187:32
+    185|     expect(press.games).toHaveLength(16);
+    186|     expect(press.playoffs).toHaveLength(0);
+    187|     expect(handed(press.told)).toEqual(press.games.map(e => ({ g: e.g,…
+       |                                ^
+    188|     /* his entry is what the bind answered for his game, under the key…
+    189|        the two clubs and the ENGINE'S OWN score */
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his
+ FAIL  src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his
+AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]
+
+- Expected
++ Received
+
+@@ -7,11 +7,11 @@
+        "home": "NYG",
+        "homeScore": 28,
+        "week": 17,
+        "winner": "NO",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -20,11 +20,11 @@
+        "home": "CAR",
+        "homeScore": 26,
+        "week": 17,
+        "winner": "DAL",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -33,11 +33,11 @@
+        "home": "PHI",
+        "homeScore": 18,
+        "week": 17,
+        "winner": "TB",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -46,11 +46,11 @@
+        "home": "ATL",
+        "homeScore": 18,
+        "week": 17,
+        "winner": "WAS",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -59,11 +59,11 @@
+        "home": "SF",
+        "homeScore": 17,
+        "week": 17,
+        "winner": "BUF",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -72,11 +72,11 @@
+        "home": "MIA",
+        "homeScore": 28,
+        "week": 17,
+        "winner": "ARI",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -85,11 +85,11 @@
+        "home": "SEA",
+        "homeScore": 40,
+        "week": 17,
+        "winner": "SEA",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -98,11 +98,11 @@
+        "home": "NYJ",
+        "homeScore": 18,
+        "week": 17,
+        "winner": "LA",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -111,11 +111,11 @@
+        "home": "CLE",
+        "homeScore": 36,
+        "week": 17,
+        "winner": "CLE",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -124,11 +124,11 @@
+        "home": "LAC",
+        "homeScore": 21,
+        "week": 17,
+        "winner": "PIT",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -137,11 +137,11 @@
+        "home": "BAL",
+        "homeScore": 31,
+        "week": 17,
+        "winner": "BAL",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -150,11 +150,11 @@
+        "home": "DEN",
+        "homeScore": 32,
+        "week": 17,
+        "winner": "DEN",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -163,11 +163,11 @@
+        "home": "TEN",
+        "homeScore": 30,
+        "week": 17,
+        "winner": "MIN",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -176,11 +176,11 @@
+        "home": "GB",
+        "homeScore": 41,
+        "week": 17,
+        "winner": "GB",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -189,11 +189,11 @@
+        "home": "JAX",
+        "homeScore": 18,
+        "week": 17,
+        "winner": "CHI",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+    {
+      "edges": undefined,
+      "g": {
+@@ -202,9 +202,9 @@
+        "home": "DET",
+        "homeScore": 35,
+        "week": 17,
+        "winner": "DET",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w17",
+    },
+  ]
+
+ ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:355:30
+    353|     expect(press.games.filter(e => e.edges === undefined).length, `the…
+    354|     const toldWeek = press.told.slice(0, 16), toldBracket = press.told…
+    355|     expect(handed(toldWeek)).toEqual(press.games.map(e => ({ g: e.g, s…
+       |                              ^
+    356|     expect(handed(toldBracket)).toEqual(bracket.rounds.flatMap(r => r.…
+    357|     const log = logOf(s)!;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office: the one press finish > with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]
+
+- Expected
++ Received
+
+@@ -9,11 +9,11 @@
+        "home": "WAS",
+        "homeScore": 41,
+        "week": 6,
+        "winner": "WAS",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -24,11 +24,11 @@
+        "home": "PHI",
+        "homeScore": 41,
+        "week": 6,
+        "winner": "PHI",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -39,11 +39,11 @@
+        "home": "CHI",
+        "homeScore": 18,
+        "week": 6,
+        "winner": "DET",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -54,11 +54,11 @@
+        "home": "GB",
+        "homeScore": 18,
+        "week": 6,
+        "winner": "MIN",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -69,11 +69,11 @@
+        "home": "LV",
+        "homeScore": 17,
+        "week": 6,
+        "winner": "DEN",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -84,11 +84,11 @@
+        "home": "LAC",
+        "homeScore": 28,
+        "week": 6,
+        "winner": "KC",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -99,11 +99,11 @@
+        "home": "NE",
+        "homeScore": 40,
+        "week": 6,
+        "winner": "NE",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -114,11 +114,11 @@
+        "home": "MIA",
+        "homeScore": 18,
+        "week": 6,
+        "winner": "BUF",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -129,11 +129,11 @@
+        "home": "TB",
+        "homeScore": 36,
+        "week": 6,
+        "winner": "TB",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -144,11 +144,11 @@
+        "home": "CAR",
+        "homeScore": 21,
+        "week": 6,
+        "winner": "NO",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -159,11 +159,11 @@
+        "home": "LA",
+        "homeScore": 31,
+        "week": 6,
+        "winner": "LA",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -174,11 +174,11 @@
+        "home": "SEA",
+        "homeScore": 32,
+        "week": 6,
+        "winner": "SEA",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -189,11 +189,11 @@
+        "home": "CIN",
+        "homeScore": 30,
+        "week": 6,
+        "winner": "CLE",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -204,11 +204,11 @@
+        "home": "BAL",
+        "homeScore": 41,
+        "week": 6,
+        "winner": "BAL",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -219,11 +219,11 @@
+        "home": "HOU",
+        "homeScore": 22,
+        "week": 6,
+        "winner": "HOU",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+    {
+      "edges": {
+        "ARI": 1.0266666666666666,
+@@ -234,9 +234,9 @@
+        "home": "JAX",
+        "homeScore": 35,
+        "week": 6,
+        "winner": "JAX",
+      },
+-     "season": 2026,
++     "season": 2027,
+      "where": "w6",
+    },
+  ]
+
+ ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:402:32
+    400|     expect(press.games).toHaveLength(16);
+    401|     expect(press.games.filter(e => e.edges === undefined), 'the engine…
+    402|     expect(handed(press.told)).toEqual(press.games.map(e => ({ g: e.g,…
+       |                                ^
+    403|     const g = logOf(s)!.games[0];
+    404|     const edge = nflDeskEdges(gm, league, team)[team] ?? 0;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  4 failed | 98 passed (102)
+   Start at  00:59:13
+   Duration  9.12s (transform 2.62s, setup 345ms, collect 4.90s, tests 14.97s, environment 2.75s, prepare 741ms)
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeGameDay.test.tsx,title=src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office%3A a press tells his game and keeps it > his game of the week is in the save%2C and the grid shows that very score%2C a football score,line=187,column=32::AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -7,11 +7,11 @@%0A        "home": "WAS",%0A        "homeScore": 41,%0A        "week": 6,%0A        "winner": "WAS",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -20,11 +20,11 @@%0A        "home": "PHI",%0A        "homeScore": 41,%0A        "week": 6,%0A        "winner": "PHI",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -33,11 +33,11 @@%0A        "home": "CHI",%0A        "homeScore": 18,%0A        "week": 6,%0A        "winner": "DET",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -46,11 +46,11 @@%0A        "home": "GB",%0A        "homeScore": 18,%0A        "week": 6,%0A        "winner": "MIN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -59,11 +59,11 @@%0A        "home": "LV",%0A        "homeScore": 17,%0A        "week": 6,%0A        "winner": "DEN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -72,11 +72,11 @@%0A        "home": "LAC",%0A        "homeScore": 28,%0A        "week": 6,%0A        "winner": "KC",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -85,11 +85,11 @@%0A        "home": "NE",%0A        "homeScore": 40,%0A        "week": 6,%0A        "winner": "NE",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -98,11 +98,11 @@%0A        "home": "MIA",%0A        "homeScore": 18,%0A        "week": 6,%0A        "winner": "BUF",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -111,11 +111,11 @@%0A        "home": "TB",%0A        "homeScore": 36,%0A        "week": 6,%0A        "winner": "TB",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -124,11 +124,11 @@%0A        "home": "CAR",%0A        "homeScore": 21,%0A        "week": 6,%0A        "winner": "NO",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -137,11 +137,11 @@%0A        "home": "LA",%0A        "homeScore": 31,%0A        "week": 6,%0A        "winner": "LA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -150,11 +150,11 @@%0A        "home": "SEA",%0A        "homeScore": 32,%0A        "week": 6,%0A        "winner": "SEA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -163,11 +163,11 @@%0A        "home": "CIN",%0A        "homeScore": 30,%0A        "week": 6,%0A        "winner": "CLE",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -176,11 +176,11 @@%0A        "home": "BAL",%0A        "homeScore": 41,%0A        "week": 6,%0A        "winner": "BAL",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -189,11 +189,11 @@%0A        "home": "HOU",%0A        "homeScore": 22,%0A        "week": 6,%0A        "winner": "HOU",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -202,9 +202,9 @@%0A        "home": "JAX",%0A        "homeScore": 35,%0A        "week": 6,%0A        "winner": "JAX",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A  ]%0A%0A ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:187:32%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeGameDay.test.tsx,title=src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office%3A the one press finish > the told scores are the saved scores%2C with the GM desk off%3A the rounds of the recap hold what the bind answered for the games the engine played%2C and the log holds his,line=355,column=30::AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -7,11 +7,11 @@%0A        "home": "NYG",%0A        "homeScore": 28,%0A        "week": 17,%0A        "winner": "NO",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -20,11 +20,11 @@%0A        "home": "CAR",%0A        "homeScore": 26,%0A        "week": 17,%0A        "winner": "DAL",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -33,11 +33,11 @@%0A        "home": "PHI",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "TB",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -46,11 +46,11 @@%0A        "home": "ATL",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "WAS",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -59,11 +59,11 @@%0A        "home": "SF",%0A        "homeScore": 17,%0A        "week": 17,%0A        "winner": "BUF",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -72,11 +72,11 @@%0A        "home": "MIA",%0A        "homeScore": 28,%0A        "week": 17,%0A        "winner": "ARI",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -85,11 +85,11 @@%0A        "home": "SEA",%0A        "homeScore": 40,%0A        "week": 17,%0A        "winner": "SEA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -98,11 +98,11 @@%0A        "home": "NYJ",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "LA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -111,11 +111,11 @@%0A        "home": "CLE",%0A        "homeScore": 36,%0A        "week": 17,%0A        "winner": "CLE",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -124,11 +124,11 @@%0A        "home": "LAC",%0A        "homeScore": 21,%0A        "week": 17,%0A        "winner": "PIT",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -137,11 +137,11 @@%0A        "home": "BAL",%0A        "homeScore": 31,%0A        "week": 17,%0A        "winner": "BAL",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -150,11 +150,11 @@%0A        "home": "DEN",%0A        "homeScore": 32,%0A        "week": 17,%0A        "winner": "DEN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -163,11 +163,11 @@%0A        "home": "TEN",%0A        "homeScore": 30,%0A        "week": 17,%0A        "winner": "MIN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -176,11 +176,11 @@%0A        "home": "GB",%0A        "homeScore": 41,%0A        "week": 17,%0A        "winner": "GB",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -189,11 +189,11 @@%0A        "home": "JAX",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "CHI",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": undefined,%0A      "g": {%0A@@ -202,9 +202,9 @@%0A        "home": "DET",%0A        "homeScore": 35,%0A        "week": 17,%0A        "winner": "DET",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A  ]%0A%0A ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:355:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeGameDay.test.tsx,title=src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office%3A the one press finish > the told scores are the saved scores%2C with the GM desk on%3A the rounds of the recap hold what the bind answered for the games the engine played%2C and the log holds his,line=355,column=30::AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -9,11 +9,11 @@%0A        "home": "NYG",%0A        "homeScore": 28,%0A        "week": 17,%0A        "winner": "NO",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -24,11 +24,11 @@%0A        "home": "CAR",%0A        "homeScore": 26,%0A        "week": 17,%0A        "winner": "DAL",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -39,11 +39,11 @@%0A        "home": "PHI",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "TB",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -54,11 +54,11 @@%0A        "home": "ATL",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "WAS",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -69,11 +69,11 @@%0A        "home": "SF",%0A        "homeScore": 17,%0A        "week": 17,%0A        "winner": "BUF",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -84,11 +84,11 @@%0A        "home": "MIA",%0A        "homeScore": 28,%0A        "week": 17,%0A        "winner": "ARI",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -99,11 +99,11 @@%0A        "home": "SEA",%0A        "homeScore": 40,%0A        "week": 17,%0A        "winner": "SEA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -114,11 +114,11 @@%0A        "home": "NYJ",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "LA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -129,11 +129,11 @@%0A        "home": "CLE",%0A        "homeScore": 36,%0A        "week": 17,%0A        "winner": "CLE",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -144,11 +144,11 @@%0A        "home": "LAC",%0A        "homeScore": 21,%0A        "week": 17,%0A        "winner": "PIT",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -159,11 +159,11 @@%0A        "home": "BAL",%0A        "homeScore": 31,%0A        "week": 17,%0A        "winner": "BAL",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -174,11 +174,11 @@%0A        "home": "DEN",%0A        "homeScore": 32,%0A        "week": 17,%0A        "winner": "DEN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -189,11 +189,11 @@%0A        "home": "TEN",%0A        "homeScore": 30,%0A        "week": 17,%0A        "winner": "MIN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -204,11 +204,11 @@%0A        "home": "GB",%0A        "homeScore": 41,%0A        "week": 17,%0A        "winner": "GB",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -219,11 +219,11 @@%0A        "home": "JAX",%0A        "homeScore": 18,%0A        "week": 17,%0A        "winner": "CHI",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 2.36,%0A@@ -234,9 +234,9 @@%0A        "home": "DET",%0A        "homeScore": 35,%0A        "week": 17,%0A        "winner": "DET",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w17",%0A    },%0A  ]%0A%0A ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:355:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeGameDay.test.tsx,title=src/components/front-office/FrontOfficeGameDay.test.tsx > NFL front office%3A the one press finish > with the GM desk on%2C his game is told at the chance it was played at%2C the edge of his staff included,line=402,column=32::AssertionError: expected [ …(16) ] to deeply equal [ …(16) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -9,11 +9,11 @@%0A        "home": "WAS",%0A        "homeScore": 41,%0A        "week": 6,%0A        "winner": "WAS",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -24,11 +24,11 @@%0A        "home": "PHI",%0A        "homeScore": 41,%0A        "week": 6,%0A        "winner": "PHI",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -39,11 +39,11 @@%0A        "home": "CHI",%0A        "homeScore": 18,%0A        "week": 6,%0A        "winner": "DET",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -54,11 +54,11 @@%0A        "home": "GB",%0A        "homeScore": 18,%0A        "week": 6,%0A        "winner": "MIN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -69,11 +69,11 @@%0A        "home": "LV",%0A        "homeScore": 17,%0A        "week": 6,%0A        "winner": "DEN",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -84,11 +84,11 @@%0A        "home": "LAC",%0A        "homeScore": 28,%0A        "week": 6,%0A        "winner": "KC",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -99,11 +99,11 @@%0A        "home": "NE",%0A        "homeScore": 40,%0A        "week": 6,%0A        "winner": "NE",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -114,11 +114,11 @@%0A        "home": "MIA",%0A        "homeScore": 18,%0A        "week": 6,%0A        "winner": "BUF",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -129,11 +129,11 @@%0A        "home": "TB",%0A        "homeScore": 36,%0A        "week": 6,%0A        "winner": "TB",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -144,11 +144,11 @@%0A        "home": "CAR",%0A        "homeScore": 21,%0A        "week": 6,%0A        "winner": "NO",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -159,11 +159,11 @@%0A        "home": "LA",%0A        "homeScore": 31,%0A        "week": 6,%0A        "winner": "LA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -174,11 +174,11 @@%0A        "home": "SEA",%0A        "homeScore": 32,%0A        "week": 6,%0A        "winner": "SEA",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -189,11 +189,11 @@%0A        "home": "CIN",%0A        "homeScore": 30,%0A        "week": 6,%0A        "winner": "CLE",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -204,11 +204,11 @@%0A        "home": "BAL",%0A        "homeScore": 41,%0A        "week": 6,%0A        "winner": "BAL",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -219,11 +219,11 @@%0A        "home": "HOU",%0A        "homeScore": 22,%0A        "week": 6,%0A        "winner": "HOU",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A    {%0A      "edges": {%0A        "ARI": 1.0266666666666666,%0A@@ -234,9 +234,9 @@%0A        "home": "JAX",%0A        "homeScore": 35,%0A        "week": 6,%0A        "winner": "JAX",%0A      },%0A-     "season": 2026,%0A+     "season": 2027,%0A      "where": "w6",%0A    },%0A  ]%0A%0A ❯ src/components/front-office/FrontOfficeGameDay.test.tsx:402:32%0A%0A
