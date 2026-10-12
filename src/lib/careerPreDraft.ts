@@ -451,11 +451,18 @@ export function preDraftChoose(desc: PreDraftDescriptor, prev: PreDraftState, op
   return s;
 }
 
-/** The drill grade comes from one draw that ignores the approach, so the
- *  approach only decides how far the same grade moves the stock. */
-export function preDraftShowcaseGrade(s: PreDraftState, rng: () => number): 'A' | 'B' | 'C' | 'D' {
-  const roll = rng() + (s.rating - 70) * 0.02 - (100 - s.health) * 0.003;
+/** The drill grade: a number u from 0 to 1, cut by the rating and the health
+ *  into four grades. The scouts path hands it one draw that ignores the
+ *  approach (preDraftShowcaseGrade below); Round 1319 lets a showcase run by
+ *  hand hand it the drills' average instead. Same terms, same lines, so both
+ *  paths share one cut, and the approach only decides how far the same grade
+ *  moves the stock. */
+export function preDraftShowcaseGradeFrom(u: number, s: Pick<PreDraftState, 'rating' | 'health'>): 'A' | 'B' | 'C' | 'D' {
+  const roll = u + (s.rating - 70) * 0.02 - (100 - s.health) * 0.003;
   return roll > 0.8 ? 'A' : roll > 0.5 ? 'B' : roll > 0.2 ? 'C' : 'D';
+}
+export function preDraftShowcaseGrade(s: PreDraftState, rng: () => number): 'A' | 'B' | 'C' | 'D' {
+  return preDraftShowcaseGradeFrom(rng(), s);
 }
 
 export function preDraftShowcase(desc: PreDraftDescriptor, prev: PreDraftState, approach: PreDraftApproach['id']): PreDraftState {
