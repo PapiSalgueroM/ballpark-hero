@@ -96,7 +96,9 @@ export interface GmGameDayMount {
   short(id: string): string;
   /** His next game in the board's words; null: a bye, or the season is over. */
   next: { label: string; home: boolean } | null;
-  /** 'watch': the last game of `log` was just played and he asked to watch it. Nothing of its result is drawn until the clock is done, and `onWatched` then says so once. */
+  /** The line under that fixture when the tile's own ("Play it or watch it. Your result lands here.") would not be true of this press; absent: the tile's own. */
+  nextNote?: string;
+  /** 'watch': the last game of `log` was just played and he asked to watch it. A BOARD SETS IT ONLY FOR A PRESS THAT ADDED AN ENTRY TO `log`: the tile opens the last entry, so a watched press that logged nothing would run the game before it on the clock. Nothing of its result is drawn until the clock is done, and `onWatched` then says so once. */
   mode: 'result' | 'watch';
   onWatched(): void;
   /** Where he stands today in the engine's own seeding; null: nothing to say. */

@@ -50,7 +50,7 @@ const reducedMotion = () =>
 const SPEEDS: { speed: ClockSpeed; text: string }[] = [{ speed: 1, text: '1x' }, { speed: 3, text: '3x' }, { speed: 'results', text: 'Results' }];
 const ROUND_BUTTON = 'inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-xs font-bold text-foreground hover:bg-muted/40';
 
-export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, next, mode, onWatched, standing, helpHost }: GmGameDayProps) {
+export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, next, nextNote, mode, onWatched, standing, helpHost }: GmGameDayProps) {
   /* which game is open (null: the last one), whether he asked to watch an open game again, the clock's speed, the "?" */
   const [open, setOpen] = useState<number | null>(null);
   const [again, setAgain] = useState(false);
@@ -107,7 +107,7 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
             {helpButtonEl}
           </div>
           <p className="text-sm font-bold text-foreground" data-gameday-next>{next ? `Next up: ${fixtureLine(next)}.` : 'No game for you this week.'}</p>
-          <p className="text-xs text-muted-foreground">{next ? 'Play it or watch it. Your result lands here.' : 'Your next result lands here.'}</p>
+          <p className="text-xs text-muted-foreground" data-gameday-next-note>{next ? nextNote ?? 'Play it or watch it. Your result lands here.' : 'Your next result lands here.'}</p>
         </>
       )}
 

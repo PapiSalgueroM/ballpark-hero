@@ -81,6 +81,11 @@ import { addToGmGameLog, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, ty
    a lazy part must be the same component on every render. */
 import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
 const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
+/* What the tile says under the fixture on the final week, when nothing has
+   been told yet (a save from before the log that sits on Week 17). The
+   tile's own line offers a watch and a result in the box, and the final
+   week has neither: no Watch button, and its press goes to the recap. */
+const FINAL_WEEK_NOTE = 'No Watch on this one. The final week runs straight into the playoffs.';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -1914,6 +1919,7 @@ export default function FrontOfficeBoard() {
                 name={nickname}
                 short={id => id}
                 next={hubFacts.nextOpponent}
+                nextNote={seen.week >= REGULAR_WEEKS ? FINAL_WEEK_NOTE : undefined}
                 mode={hold ? 'watch' : 'result'}
                 onWatched={() => setHeld(null)}
                 standing={{ table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
