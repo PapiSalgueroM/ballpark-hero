@@ -1,0 +1,13 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+parity exit=0 45s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+walk exit=0 46s | playUsMarketTalk: 40 checks, 0 failed
+walk-unspend-EXPECT1 exit=1 7s | CONTROL unspend: FIRED. The spent check went red in all 6 journeys that pushed (the push control came back enabled) and nothing else did.
+walk-noreveal-EXPECT1 exit=1 24s | CONTROL noreveal: FIRED. With nothing able to scroll an element into view the wheel was left outside the window in all 8 journeys (8 of them lost the pushed offer after C
+walk-droptalk-EXPECT1 exit=1 33s | CONTROL droptalk: FIRED. The reload check went red in 2 sports and nothing else did.
+rs-nfl exit=0 103s | rsUs2 nfl: done, 26 lines
+rs-nba exit=0 116s | rsUs2 nba: done, 26 lines
+rs-mlb exit=0 103s | rsUs2 mlb: done, 26 lines
+rs-nhl exit=0 103s | rsUs2 nhl: done, 26 lines
+mutForget-build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-mutForget-EXPECT1 exit=1 68s | playUsMarketTalk: 40 checks, 6 failed
+clean exit=0 1s | changed files: 0
