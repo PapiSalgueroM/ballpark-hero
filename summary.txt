@@ -1,0 +1,2 @@
+m-edges exit=1 63s | MUT edges CAUGHT: vitest exit 0, simGmGameDay exit 1
+m-outfirst exit=1 62s | MUT outfirst CAUGHT: vitest exit 1, simGmGameDay exit 0

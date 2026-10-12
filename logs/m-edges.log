@@ -1,0 +1,15 @@
+MUT edges applied to src/lib/frontOfficePostseason.ts
+ src/lib/frontOfficePostseason.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL (section 11): set 0: with the desk on (his club +3), four presses and playBracketAll with nflPlayTie give the one press path's thirteen games, champion, next 64 draws, draw count and records (640 looked at): 50 broke it, the first: set 0 fifteen 5 DET +3 (weeks): Super Bowl|DEN|DET|DEN
+  FAIL (section 11): set 0: with the desk on, nflRoundsOf is runPlayoffs' rounds told with the edges, name for name and game for game (640 looked at): 50 broke it, the first: set 0 fifteen 5 DET +3 (weeks)
+  FAIL (section 13): set 0: with the desk on, the sink holds every game in play order as the one press path's log entry, keys included (640 looked at): 50 broke it, the first: set 0 fifteen 5 DET +3 (weeks): 13 entries; the first that differs: {"v":1,"key":"2026|Super Bowl|DEN|DET|33-19","where":"Super Bowl","home":"DEN","away":"DET","homeScore":27,"awayScore":7,"winner":"DEN"}
+  FAIL (section 13): set 0: with the desk on, his playoff entries on the bracket path deep equal the one press path's, keys included (320 looked at): 25 broke it, the first: set 0 fifteen 5 DET +3: the bracket path's log holds 20 games, the one press path's 20
+  FAIL (section 11): set 1: with the desk on (his club +3), four presses and playBracketAll with nflPlayTie give the one press path's thirteen games, champion, next 64 draws, draw count and records (640 looked at): 60 broke it, the first: set 1 fifteen 3 DEN +3 (weeks): AFC Divisional|DEN|IND|IND
+  FAIL (section 11): set 1: with the desk on, nflRoundsOf is runPlayoffs' rounds told with the edges, name for name and game for game (640 looked at): 60 broke it, the first: set 1 fifteen 3 DEN +3 (weeks)
+  FAIL (section 13): set 1: with the desk on, the sink holds every game in play order as the one press path's log entry, keys included (640 looked at): 60 broke it, the first: set 1 fifteen 3 DEN +3 (weeks): 13 entries; the first that differs: {"v":1,"key":"2026|AFC Divisional|DEN|IND|28-44","where":"AFC Divisional","home":"DEN","away":"IND","homeScore":10,"awayScore":28,"winner":"IND"}
+  FAIL (section 13): set 1: with the desk on, his playoff entries on the bracket path deep equal the one press path's, keys included (320 looked at): 30 broke it, the first: set 1 fifteen 3 DEN +3: the bracket path's log holds 18 games, the one press path's 19
+grep: write error: Broken pipe
+
+simGmGameDay: 451 checks, 20 failed
+MUT edges CAUGHT: vitest exit 0, simGmGameDay exit 1
