@@ -1,0 +1,9 @@
+#!serial
+u1wt: git worktree add --detach .wt/u1 8c98dae1 && ln -s "$PWD/node_modules" .wt/u1/node_modules && git -C .wt/u1 log --oneline -1
+u1tsc: cd .wt/u1 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+u1prove: cd .wt/u1 && RIVAL_PROVE=b6eb78e7 RIVAL_MOVED=none RIVAL_CARDS=none node scripts/simUsRivalSense.mjs
+u1move: cd .wt/u1 && RIVALRY_PROVE=b6eb78e7 node scripts/simCareerRivalryEvents.mjs
+u1movedrift: cd .wt/u1 && RIVALRY_PROVE=b6eb78e7 RIVALRY_CONTROL=movedrift node scripts/simCareerRivalryEvents.mjs
+u1homeback: cd .wt/u1 && RIVALRY_CONTROL=homeback node scripts/simCareerRivalryEvents.mjs
+u1ledger: cd .wt/u1 && node scripts/simUsSeasonLedger.mjs
+u1vitest: cd .wt/u1 && node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
