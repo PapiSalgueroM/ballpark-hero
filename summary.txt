@@ -1,0 +1,5 @@
+simFoHub exit=0 0s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 23 controls is in the board exactly once.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simGmGameDay exit=0 61s | simGmGameDay: 426 checks, 0 failed
+ctl-all exit=0 142s | controlFrontOfficeBoard: 22 of 22 control(s) fired, the board tests can fail for each named reason.

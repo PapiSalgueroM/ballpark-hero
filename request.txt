@@ -1,0 +1,5 @@
+simGmGameDay: node scripts/simGmGameDay.mjs
+simFoHub: node scripts/simFoHub.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all
