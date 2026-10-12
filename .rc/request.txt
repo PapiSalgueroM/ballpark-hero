@@ -1,0 +1,1 @@
+c-othersport: SENSE_PROVE_OTHERS=1 SIM_NBA_SENSE_CONTROL=othersport node scripts/simNbaAwardsSense.mjs
