@@ -367,6 +367,7 @@ export const partReads = {
     'internationalReturn.version': raw => parsed(raw, s => INTL.readInternationalReturn(s) !== null),
     'farewellSeason.version': raw => parsed(raw, s => FARE.readSoccerFarewell(s) !== null),
     'pressRoom.version': raw => parsed(raw, s => PRESS.pressRoomView(s).history.length > 0),
+    'generatedBallonPool.version': raw => parsed(raw, s => SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)),
   },
   '/front-office': { 'gameLog.v': raw => parsed(raw, s => logOf(s) !== null) },
   '/nfl-my-career': { 'prospect.v': prospectRead(NFL_CAREER_SPORT) },
@@ -442,6 +443,35 @@ export const partAbsent = {
       if (!now.eligible) return 'the room stays closed (' + now.reason + ')';
       const next = PRESS.answerSoccerPress(s, 'calm');
       if (next === s || !next.pressRoom || next.pressRoom.version !== 1 || PRESS.pressRoomView(next).history.length !== 1) return 'a new answer did not overwrite the unreadable part';
+      return null;
+    },
+    /* Round 1318: the Ballon d'Or pool of generated rivals (Rounds 1280 to 1282). With another number the save
+       still opens and the reader refuses the part; the next night, played by the passive player under one seed,
+       is the night of the same save with the part taken out (the whole state and the draws), and it leaves a
+       fresh pool of version 1 that reads. */
+    'generatedBallonPool.version': raw => {
+      const s = JSON.parse(raw);
+      if (!isSoccerCareerSave(s)) return 'the save no longer opens';
+      if (SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)) return 'the part is still read';
+      const night = start => {
+        const real = Math.random, draw = mulberry32(1318);
+        let draws = 0;
+        Math.random = () => { draws += 1; return draw(); };
+        try {
+          let c = start;
+          for (let g = 0; g < 400 && !c.retired; g += 1) {
+            c = careerStep(SOC, c, SOC.FALLBACK_CLUBS);
+            if (c.phase === 'ballon_dor' && c.pendingBallonDor) return { c, draws };
+          }
+          return null;
+        } finally { Math.random = real; }
+      };
+      const a = night(s), b = night(without(s, 'generatedBallonPool'));
+      if (!a || !b) return 'no next night was reached';
+      if (a.draws !== b.draws || !sameAnswer(without(a.c, 'generatedBallonPool'), without(b.c, 'generatedBallonPool'))
+        || !sameAnswer(a.c.generatedBallonPool, b.c.generatedBallonPool)) return 'the next night is not the night of the same save without the part';
+      const pool = a.c.generatedBallonPool;
+      if (!pool || pool.version !== 1 || !SOC.isGeneratedBallonPool(pool, a.c.seasons.at(-1).year)) return 'the next night did not write a fresh readable pool over the unreadable part';
       return null;
     },
   },

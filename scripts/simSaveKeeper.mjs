@@ -88,8 +88,9 @@
  *   partfarewell  the farewellSeason row is left out                   (1)
  *   partpress     the pressRoom row is left out                        (1)
  *   partgamelog   the NFL front office's gameLog row is left out       (1)
+ *   partballon    the generatedBallonPool row is left out              (1)
  * A control that fired exits 1 and its last line says FIRED. One that did not
- * fire, or could not run, exits 2 and says so. A green run exits 0. The eight
+ * fire, or could not run, exits 2 and says so. A green run exits 0. The nine
  * part controls must also fire on their OWN sentence (the failure that names
  * the part they left out as a version number with no row): the line before
  * FIRED prints it, and without it the control exits 2.
@@ -114,6 +115,16 @@
  * (src/test/soccerPressRoomReadAsAbsent.test.tsx holds the road and the
  * ruling). The veteran's hub of seed 2 answers the press once, so one save
  * holds four parts. Control partpress leaves the row out.
+ *
+ * ROUND 1318 (2026-10-12). The other lane's Ballon d'Or pool of generated
+ * rivals (Rounds 1280 to 1282) is a sixth part one level down,
+ * generatedBallonPool with version 1. As it came, a pool that failed its
+ * check refused the WHOLE save; the round made it read as absent (ruling C3):
+ * the save opens, isGeneratedBallonPool (src/lib/soccerCareerEngine.ts)
+ * refuses the part, and the next night is the night of the same save without
+ * it, draw for draw, after which a fresh pool is written. The veteran's hub of
+ * seed 2 holds one (careers from 2020 pass 2028, the first year a generated
+ * rival is drawn). Control partballon leaves the row out.
  * WHAT THIS TABLE CANNOT SEE: a part with no version number. The same release
  * saves contractTalk beside the career in the four US careers, with no number
  * on it, so no row here can hold it: restoreMarketTalk
@@ -162,7 +173,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -465,7 +476,7 @@ const V = K.SAVE_VERSIONS;
    So the day a later round moves one of these four numbers, the old part costs a player one receipt and
    nothing else, and that round migrates the part itself if it wants more. scripts/lib/realSaves.mjs holds the
    four on two played saves (a veteran's hub, a transfer window) and partAbsent there asks the game each
-   sentence above. pressRoom came with Release AX: its row is the last one below. */
+   sentence above. pressRoom came with Release AX and generatedBallonPool with Round 1318: theirs are the last rows below. */
 const PART_VERSIONS = {
   '/soccer-career': [
     { at: ['programme', 'version'], current: 1, other: 'refuses', reader: 'the season plan reader (stateOf, src/lib/soccerCareerProgramme.ts)' },
@@ -476,6 +487,9 @@ const PART_VERSIONS = {
     /* Release AX: the Press room. With another number nothing is read out of it, no played year settles on it,
        the room is offered as on a save with no part and the next answer writes a fresh part over it. */
     { at: ['pressRoom', 'version'], current: 1, other: 'absent', reader: 'the Press room reader (stateOf, read through pressRoomView, src/lib/soccerCareerPress.ts)' },
+    /* Round 1318: the Ballon d'Or pool of generated rivals. With another number the save still opens, the reader
+       refuses the part, the next night is the night of the same save without it and writes a fresh pool. */
+    { at: ['generatedBallonPool', 'version'], current: 1, other: 'absent', reader: 'isGeneratedBallonPool, read in calculateBallonDor (src/lib/soccerCareerEngine.ts)' },
   ],
   '/front-office': [{ at: ['gameLog', 'v'], current: 1, other: 'absent', reader: 'readGmGameLog (src/lib/gmGameLog.ts)' }],
   '/nfl-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
@@ -490,6 +504,7 @@ const PART_CONTROLS = {
   partreturn: ['/soccer-career', 'internationalReturn.version'], partfarewell: ['/soccer-career', 'farewellSeason.version'],
   partpress: ['/soccer-career', 'pressRoom.version'],
   partgamelog: ['/front-office', 'gameLog.v'],
+  partballon: ['/soccer-career', 'generatedBallonPool.version'],
 };
 if (PART_CONTROLS[CONTROL]) {
   const [route, where] = PART_CONTROLS[CONTROL];
@@ -870,7 +885,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };
