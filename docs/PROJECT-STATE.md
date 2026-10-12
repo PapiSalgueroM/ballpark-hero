@@ -1,3 +1,18 @@
+## Pending maintenance: retire the two shipped AX candidate workflow drivers
+
+G requested this cleanup after AX shipped PR231 and PR232 in full.
+Delete only xi-record-position-fit.yml and career-opponent-labels.yml.
+Their fixed proof bases and candidate-only diff guards are historical.
+Automatic candidate type/build/SEO/browser/control/gate/census/snapshot jobs
+and their artifact uploads are retired with these definitions.
+Neither definition has a workflow-inline mutation launcher or custom generator proof.
+Underlying scripts, tests, mutation controls and all other workflows stay unchanged.
+Frozen definitions and accepted artifacts remain replayable at main b6eb78e7.
+Reuse G's accepted AX05:02 live proof and qualified runner gates, without repeated runtime.
+Native scope/diff checks and independent driver review verify this maintenance.
+This note records a pending draft, not new main integration or live acceptance.
+G retains integration/publication and reconciles this note against current release state.
+
 ## Release AX LIVE, 2026-10-12 05:00 EDT: Build Your XI confirms more picks from its own records, real Belgian opponent names in replays, a Press room and saved contract talks (three of the other lane's pull requests), and three rounds of this lane (past seasons of Club Manager stay in their season, football scores in the NFL front office, the league book made whole)
 
 Claude lane (session G). main a89ac1df, deployment 32e67725-fd19-4149-b70a-52d446af3396, entry index-BniRpUTm.js (was index-BMYYIgf0.js, Release AW,
