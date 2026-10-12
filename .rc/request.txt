@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-main: git worktree add /tmp/wb 48cb9d4b >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && npm run build > /tmp/wb-build.log 2>&1 && echo "== simFlagshipWeight on main 48cb9d4b" && node scripts/simFlagshipWeight.mjs; (node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/wb-srv.log 2>&1 &); sleep 5; echo "== sweepWeight on main 48cb9d4b"; BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playSaveKeeper: git worktree add /tmp/kb fb8d6811 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/kb/node_modules && (cd /tmp/kb && npm run build > /tmp/kb-build.log 2>&1) && KEEPER_DIST=dist KEEPER_BASE_DIST=/tmp/kb/dist node scripts/playSaveKeeper.mjs
