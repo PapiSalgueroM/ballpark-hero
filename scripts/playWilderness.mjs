@@ -264,7 +264,11 @@ if (sacked) {
   const { s, names } = await screenOf();
   console.log(`  NOT sacked after 120 steps: matches played ${s?.played}, board confidence ${s?.conf}, season ${s?.season} week ${s?.week}, saved sacked flag ${s?.sacked}, presses that changed nothing in the last block ${blockNoop}`);
   console.log(`  visible buttons: ${names.map(n => n.replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 30).join(' | ')}`);
-  if (process.env.RC_OUT) await page.screenshot({ path: path.join(process.env.RC_OUT, 'wilderness-miss-390.png') }).catch(() => {});
+  /* The top of the screen the walk stood on: the loop's presses can leave it scrolled down into the guide. */
+  if (process.env.RC_OUT) {
+    await page.evaluate(() => window.scrollTo(0, 0)).catch(() => {});
+    await page.screenshot({ path: path.join(process.env.RC_OUT, 'wilderness-miss-390.png') }).catch(() => {});
+  }
 }
 /* Round 1314: guarded for nosack only (the board that never acts must turn this red). */
 say(sacked, 'the board ran out of patience and the wilderness opened', CONTROL === 'nosack');
