@@ -43,6 +43,10 @@ champ)`. No card, no tile, no new button: those are the next rounds.
   starts, when he abandons one, and in the summer, each before that handler's save.
 - THE READER IS ALL OR NOTHING AND NEVER REFUSES A SAVE: another season, another club's games, a damaged or
   repeated entry, an empty log, junk: read as absent, the save loads, the next press starts a fresh log.
+- WHAT A SAVE HOLDS UNDER THE KEY IS A LOG THE READER READ OR A PRESS BUILT, on every path. One load (an older
+  recap save with no postseason) opens the draft and hands the whole stored save to the writer as its patch; the
+  writer puts its own log after the patch and drops the key when it holds none, so a log that did not read never
+  goes back to storage as it was typed (the read lens's finding m7, fixed in the fix pass).
 - A save from before the round adopts the log at the week it is first played here. `gmLogRecord` is therefore the
   record OF THE LOG and no screen may print it as his season.
 - An older build loads a save that holds the key: src/lib/frontOfficeSave.ts names every key it checks and refuses
@@ -85,10 +89,10 @@ it has fired only when every test it names is red, every test it spares is green
 asks only that each string is still in the board exactly once (no test is run), `list` prints them, `all` runs
 every one, and `blank` (a comment reworded) is the file's own control and must say DID NOT FIRE. It is not named
 sim* because it writes under dist and spawns vitest once a control: run it on a GitHub runner, never beside a
-harness that walks dist. The fifteen:
+harness that walks dist. The sixteen:
 - the save field: `nolog` (the log left out of the save), `abandonkeeps` (cleared neither by Abandon nor by a new
   franchise), `summerkeeps` (the summer does not end it), `refusesave` and `trustlog` (a log that does not read is
-  made a refusal, or kept as it is);
+  made a refusal, or kept as it is), `rawback` (a log that did not read goes back to storage as it was typed);
 - what a player reads: `weekengine` (the grid shows the engine's own scores), `enginescores` (the recap save keeps
   them);
 - what the board hands the bind: `keyseason` (a week's games keyed to another season), `tellnoedges` and `noedges`

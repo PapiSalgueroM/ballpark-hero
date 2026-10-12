@@ -283,9 +283,14 @@ export default function FrontOfficeBoard() {
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { rounds: playoffRounds, champion, gradeLine } : null,
         ...(gmLive.current ? { gm: gmLive.current } : {}),
-        ...(gameLogLive.current ? { gameLog: gameLogLive.current } : {}),
         ...patch,
+        ...(gameLogLive.current ? { gameLog: gameLogLive.current } : {}),
       };
+      /* Round 1305: the log in a save is the one the reader read or a press
+         built, and nothing else. A load that opens the draft hands the whole
+         stored save in as its patch, so a log in it that did not read is
+         dropped here and never goes back to storage unread. */
+      if (!gameLogLive.current) delete base.gameLog;
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);

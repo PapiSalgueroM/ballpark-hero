@@ -287,6 +287,26 @@ describe('NFL front office: a log that does not read whole is absent, and never 
     play('Play Week 6');
     expect(wheres(read())).toEqual(['w5', 'w6']);
   });
+
+  it('an older recap save opens on the draft and its first save holds the log the reader read, or none: a log that does not read is never written back', () => {
+    /* A recap save from before the recap was saved has no postseason, so the load opens the draft and hands the
+       whole stored save in as that save's patch. Whatever sat under gameLog would ride back to storage as typed. */
+    const { league, team } = leagueAt(REGULAR_WEEKS);
+    const rival = Object.keys(league.teams).find(a => a !== team)!;
+    const entry = { v: 1, key: `${league.season}|w5|${team}|${rival}|20-17`, where: 'w5', home: team, away: rival, homeScore: 27, awayScore: 20, winner: team };
+    const older = (gameLog: unknown) => shape(league, team, { phase: 'recap', seasonsPlayed: 1, gameLog });
+    save(older({ v: 2, season: league.season, games: [entry] }));
+    render(<Board />);
+    expect(read().phase).toBe('draft');
+    expect('gameLog' in read(), 'a log of a version this build does not know is not written back').toBe(false);
+    /* and a log that reads goes back as the reader handed it over: the field nobody knows is gone */
+    cleanup();
+    localStorage.clear();
+    save(older({ v: 1, season: league.season, games: [{ ...entry, note: 'typed in' }] }));
+    render(<Board />);
+    expect(read().phase).toBe('draft');
+    expect(read().gameLog).toEqual({ v: 1, season: league.season, games: [entry] });
+  });
 });
 
 describe('NFL front office: the log does not follow a GM into his next franchise', () => {
