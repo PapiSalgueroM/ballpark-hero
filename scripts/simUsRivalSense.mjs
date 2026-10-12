@@ -73,9 +73,26 @@
        it could be read the verdict disagreed with the printed lines in 1.9 (QB), 2.3 (RB), 4.9 (WR), 8.7 (TE) and
        0.4 (LB) percent of judged years. Near ties 14.8, 9.3, 13.1, 10.3, 0.4, 0.0, 0.8, 13.5 percent. Careers whose
        rival retired behind me: 32.2, 0.0, 15.1, 4.3, 0.0, 0.0, 0.0, 0.2 percent.
-     MLB 41.55: SP 9.4, RP 8.3, C 26.5, 1B 60.6, 2B 29.0, 3B 56.7, SS 44.0, LF 53.8, CF 42.8, RF 56.5, DH 69.7; every
-       rival line off shape and unread (a pitcher's rival prints a batting line, a hitter's has no RBI).
-     NHL 58.03: C 64.3, LW 59.5, RW 64.2, D 39.4, G 62.7; every line off shape, a goalie's unread.
+     MLB and the NHL were measured again by Round 1313 on its own base (ecbdab63: the tree of b6eb78e7, with the
+     throwback arms y2004 and y2006 added to the fleet; runner r1313-s0a, 2026-10-12). They replace 980654fa's.
+     MLB 41.20 (by seed 40.5, 42.2, 40.4, 41.6, 41.3): SP 9.5, RP 8.3, C 25.4, 1B 61.7, 2B 29.0, 3B 56.0, SS 43.0,
+       LF 53.4, CF 42.2, RF 56.0, DH 68.9; as a healthy starter 14.0, 8.6, 39.4, 80.9, 41.9, 75.2, 58.4, 71.4, 59.0,
+       76.4, 85.5. Every rival line off shape and unread (a pitcher's rival prints a batting line, a hitter's has
+       no RBI). By job: starter 53.9, backup 21.9, hurt 21.3. By age: 33.6, 35.4, 38.5, 46.4, 54.9. By season
+       length: 162 games 41.1 (113,787 judged years), 161 games 39.4, 163 games 41.0, 60 games 50.8 (1,418), 58
+       games 61.9 (97). A reliever by his own job: closer 5.9, setup 7.9, sidearm 11.2. Near ties 2.7 (RP) to 12.1
+       (SS) percent. Careers whose rival retired behind me: SP 0.9, RP 0.1, C 9.1, 1B 67.9, 2B 14.7, 3B 56.9, SS
+       35.9, LF 54.0, CF 33.4, RF 58.7, DH 80.0. Cards over the run: the tally beats, losing 2,817 and winning
+       1,188; the own roster cards, Morale +5 197 and Morale -5 119. The error of the pooled share: 0.33 points.
+     NHL 58.03 (by seed 57.4, 57.4, 58.2, 59.3, 57.8): C 64.3, LW 59.5, RW 64.2, D 39.4, G 62.7; as a healthy starter
+       86.5, 85.6, 87.4, 55.1, 84.9 (the same to the tenth as 980654fa's). Every line off shape, a goalie's unread;
+       a skater's built in line can be read, and the verdict disagrees with the two printed lines in 0.1 (C, RW) to
+       1.1 (D) percent of judged years (my side is scored on the engine's own length). By job: starter 79.8,
+       backup 11.3, hurt 24.9. By age: 48.0, 63.7, 65.3, 68.9, 55.8. By season length: 84 games 57.5 (70,045), 82
+       games 57.0 (57,908), 68 to 71 games 64.9 to 70.2, 56 games 71.2 (3,750), 48 games 61.0 (3,750). Printed dead
+       heats: C 443, LW 435, RW 400, D 705 of about 27,800 judged years each. Careers whose rival retired behind
+       me: 72.1, 65.3, 73.3, 30.1, 70.8. Cards: the tally beats, losing 2,166 and winning 2,595; the own roster
+       cards, Morale +5 233 and Morale -5 174. The error of the pooled share: 0.29 points.
    After the NFL bind (96c3f64d, runner r1227-c1): 0 of 107,618 rival lines off shape, 0 unread, 0 judged years
      where the verdict disagrees. My share 38.94 (by seed 38.7, 40.0, 39.0, 38.1, 38.9): QB 42.9, RB 25.1, WR 35.6,
      TE 37.5, LB 34.3, CB 30.6, EDGE 38.0, K 63.7. The two arms came together (QB 43.6 modern, 42.1 in 2005

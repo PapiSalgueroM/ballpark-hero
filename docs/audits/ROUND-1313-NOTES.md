@@ -23,6 +23,15 @@ Runner results r1313-s0a, r1313-s0b and r1313-s0w, all on ecbdab63:
   824K), /nfl-my-career 483.3K (budget 485K). /nba-my-career, /mlb-my-career and /nhl-my-career have NO row in
   BUDGETS (none added).
 
+- The BEFORE table (scripts/simUsRivalSense.mjs at full size, five seeds of 1,500 careers a sport, runner
+  r1313-s0a rivalT, exit 0) is typed into that harness's header. My share of the head to head years: MLB 41.20
+  (SP 9.5, RP 8.3, C 25.4, 1B 61.7, 2B 29.0, 3B 56.0, SS 43.0, LF 53.4, CF 42.2, RF 56.0, DH 68.9), NHL 58.03
+  (C 64.3, LW 59.5, RW 64.2, D 39.4, G 62.7). Every MLB and NHL rival line off the player's shape.
+- P2 base against base (RIVAL_PROVE=b6eb78e7 on ecbdab63, runner r1313-s0a rivalP2base): 1,000 of 1,000 whole
+  saves byte equal in all four sports, cards answered 7,501 (NFL), 8,519 (MLB), 9,619 (NHL), 8,728 (NBA). Its
+  one red is by design: P1's "the tree before is not this tree" (0 src files differ between the two).
+- Section C of simNbaAwardsSense (SENSE_PROVE_OTHERS=1): exit 0, 172 checks (r1313-s0a senseC).
+
 ### Step 1, the move
 
 src/lib/careerFactBeats.ts (new) holds lines 82 to 326 of the base's careerRivalryEvents.ts character for
@@ -41,6 +50,16 @@ repointed, the new module in the bundle).
 Local light checks on this PC (not gates): MOVE (i) and (ii) ok against ecbdab63; movedrift, homeimport and
 homeback each turn their own check red; rosterlink turns 1c red; FIGHT_PROVE=ecbdab63 equal text (122,652
 characters; careerRivalryEvents.ts the only differing source file).
+
+Weight on a served build of a064a170 (runner r1313-s1w): the flagship's first download 2,710,355 bytes (2647
+KB), 3,029 bytes under the base's 2,713,384, all of it in careerRivalryChoices-*.js (9,017 to 5,988 bytes).
+Section 3b green there ("are both on them" and "It goes down as one more line in the argument" in no chunk of
+the first download, both in usCareerSeasonReview-*.js); the SAME harness on a build of ecbdab63
+(step0build3b) is red on 3b, 3 failures (the words in careerRivalryChoices-MJgJuT1K.js); control allchunks red
+(4 failures); control rosterlink red (1c, 1 failure). sweepWeight green: /soccer-career 822.9K to 822.1K
+(budget 824K), /nfl-my-career 483.3K to 483.2K (budget 485K), 47 files before and after (no extra request).
+The ceiling comment of simFlagshipWeight now says the split is done, with both measurements; CEILING_KB stays
+2700.
 
 ## Owed (not this round)
 

@@ -262,10 +262,17 @@ if (!existsSync(ASSETS)) {
        now carries the roster beat builder of a rival who plays your own stat
        line, and 56 in the entry for one more chunk name). 2700 leaves 100 KB
        of room and still sits far under 2600 + 444, so Club Manager coming
-       back still fails. Owed, and the cheaper fix every time: the fact beat
-       and roster beat builders of src/lib/careerRivalryEvents.ts (only the
-       four US careers call them) in a module of their own, and the on demand
-       loading above. */
+       back still fails.
+       Round 1313 (2026-10-12) did the split that was owed here: the fact beat
+       and roster beat builders that only the four US careers call left
+       src/lib/careerRivalryEvents.ts for src/lib/careerFactBeats.ts, which
+       the flagship never loads. Measured on runner builds, the flagship's
+       first download went from 2,713,384 bytes (ecbdab63, the commit before
+       the move, runner r1313-s0w) to 2,710,355 (a064a170, the move, runner
+       r1313-s1w): 3,029 bytes less, all of it in the rivalry chunk the page
+       shares with the US careers (careerRivalryChoices-*.js, 9,017 to 5,988
+       bytes). Section 3b holds the split on the built page. Still owed: the
+       on demand loading above. */
     const CEILING_KB = 2700;
     if (rawK > CEILING_KB) {
       fail(`/soccer-career now needs ${rawK.toFixed(0)} KB of JavaScript before it can render, over the ${CEILING_KB} KB ceiling. Check what got statically imported.`);
