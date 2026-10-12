@@ -1,0 +1,1 @@
+parity: node scripts/simUsBoardParity.mjs 2>&1 | grep -v "^$" | cut -c1-600 | tail -60; exit ${PIPESTATUS[0]}
