@@ -1,0 +1,7 @@
+# Round 1306 fix pass 2, head 0534ef89, on a plain served build: the weight rows of the final head, and the one walk of the other lane that was red on gate lane H4 (a 2000 ms wait), run again alone once, with that lane's font cache and offline transport as the gate's own line has them
+#!serve
+#!playwright
+#!serial
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playDraftDetectiveReports: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs
