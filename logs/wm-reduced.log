@@ -1,0 +1,4 @@
+mut reduced: APPLIED to src/components/front-office-shared/GmGameDayCard.tsx (1 edit(s))
+  FAIL  [5] 390, reduced motion: Watch shows the result at once (), with no clock at any of 8 readings
+playFrontOfficeGameDay: 170 checks, 1 failed
+MUTANT reduced walk exit=1

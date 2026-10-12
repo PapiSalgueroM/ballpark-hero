@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 82s | playFrontOfficeGameDay: 171 checks, 0 failed
+walk-recordspoils exit=1 82s | control recordspoils: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-spoiler exit=1 83s | control spoiler: RED AT THE NAMED CHECK (point 3) and nowhere else
+walk-tall exit=1 83s | control tall: RED AT THE NAMED CHECK (point 8) and nowhere else
+wm-revealkey exit=0 116s | MUTANT revealkey walk exit=0
+wm-pace exit=0 115s | MUTANT pace walk exit=0
+wm-seedoff exit=0 115s | MUTANT seedoff walk exit=0
+wm-reduced exit=1 116s | MUTANT reduced walk exit=1
