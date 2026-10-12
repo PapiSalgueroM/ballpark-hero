@@ -1,0 +1,2 @@
+#!serial
+pjloop: bash .rc/x/pjloop.sh
