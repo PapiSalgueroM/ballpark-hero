@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerMeters-decor: CM_METERS_CONTROL=decor node scripts/simClubManagerMeters.mjs
+simClubManagerMeters-promise: CM_METERS_CONTROL=promise node scripts/simClubManagerMeters.mjs
+simClubManagerMeters-deaf: CM_METERS_CONTROL=deaf node scripts/simClubManagerMeters.mjs
+simClubManagerMeters-nogoals: CM_METERS_CONTROL=nogoals node scripts/simClubManagerMeters.mjs
