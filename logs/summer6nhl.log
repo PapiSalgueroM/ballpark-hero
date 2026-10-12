@@ -1,0 +1,9 @@
+6) balance: on against off, careers a seed nhl 2000, 3 seeds
+   nhl: off peak 85.95, legacy median 361, Hall 27.7%; on peak 86.08, legacy median 367.5, Hall 28.1%
+      peak OVR: difference 0.13, interval [0.01, 0.25], tolerance 1.00 either way: inside
+      median legacy: difference 1.8%, interval [-0.3%, 3.8%], tolerance 7.5% either way: inside
+      Hall share: difference 0.40 pts, interval [-1.20 pts, 2.00 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference 2.7%, interval [-2.1%, 7.1%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 15.4% ever win one, Hall 28.1%
+   balance ran in 635.3 s
+simUsCareerSummer: green. Sections 6 held.
