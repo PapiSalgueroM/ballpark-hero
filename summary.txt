@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mandate exit=0 25s | ALL OWNER MANDATE WALK CHECKS PASSED
+sessionmarks exit=0 17s | playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.
+gmpress exit=1 85s | playGmPress: 2 failures
+walk exit=0 102s | playFrontOfficeGameDay: 220 checks, 0 failed
