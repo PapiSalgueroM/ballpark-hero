@@ -1,0 +1,4 @@
+plan exit=0 2s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+ledger exit=0 4s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+tsc exit=0 59s | 
+allcontrols exit=0 156s | allcontrols: 72 of 72 controls fired at their named checks, 0 did not
