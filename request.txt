@@ -1,0 +1,9 @@
+# Round 1306 fix pass, head 36933a25: the two re-records, their attribution legs reproduced on the fix pass's head, and each recording taken again
+#!serial
+rules-legA: node .rc/x/mutOld.mjs && git show c9a1f86a:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+rules-legB: git show c9a1f86a:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- src scripts; exit $s
+rules-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && sha256sum scripts/data/cmLeagueRulesDigest.json && git diff --exit-code --stat -- scripts/data/cmLeagueRulesDigest.json && echo "rules-write: the digest written from this head is byte equal to the committed one"
+rules-head: git checkout -- src scripts && node scripts/simCmLeagueRules.mjs
+pin-legA: git show 73330e9b:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 73330e9b:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src scripts; exit $s
+pin-legB: git show 73330e9b:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src scripts; exit $s
+pin-head: git checkout -- src scripts && sha256sum src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs
