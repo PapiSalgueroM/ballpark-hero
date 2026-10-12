@@ -44,7 +44,8 @@ What ships is src/ without its tests: src/test and every `*.test.*` or `*.spec.*
 2071 files under src, 519 left out, 409 under src/test and 110 elsewhere; on bcbc7f27 after Release AY: 2077,
 522, 409 and 113). A new section 0 fails if a kept file imports a left out one (static import, `export ... from`,
 `import()`, through the @/ alias or a relative path, comments stripped). Section 4 accepts a 100vh only when the
-same block sets the same property again in dvh, svh or lvh AFTER it, read with comments stripped.
+same block sets the same property again in dvh or svh AFTER it, read with comments stripped (until the fix review
+it also took lvh and missed a custom property: see "Fix review" at the end).
 
 Controls (SIM_SAFARI_CONTROL, each adds one file in memory; "FIRED" exits 1, "DID NOT FIRE" exits 2): lookbehind
 (section 2), testimport (section 0), barevh, vhafter and dvhcomment (section 4). Proof `r1314-s2` on bcbc7f27:
@@ -61,6 +62,12 @@ Controls (SIM_ACTIVITY_CONTROL; "fired in section N as expected" exits 0, anythi
 1), career (section 2, now judged on its exact sentences: the ping line and the completion line, never the anchor
 line), heavy (section 3), and new noping (the ping line alone) and twocalls (the anchor line alone). Proof
 `r1314-s2` on bcbc7f27: green exit 0 in 5 s (vitest 2 passed); all five controls exit 0 with their sentences.
+
+Sections 1 and 3 did not move (the brief's 3.3 proof, found missing by the read review and written here at the
+fix review): `logs/simActivityNotCompletion.log` of `r1314-s1a` (35f85630, step 1) and of `r1314-fn` (aa2740ce)
+differ only in the section 2 lines (step 1's two FAIL lines and its ping line, lines 4 to 6, against the one
+"advance calls: 1, ping 44 characters after the call" line) and the closing line. Every section 1 and section 3
+line is byte equal.
 
 ### 3.9 simGmXp (commit bcbc7f27)
 
@@ -156,6 +163,11 @@ through.
   simActivityNotCompletion once this round is on main (none touches the advance handler, so it should hold).
 - PR223 and PR227 (codex/manager-ucl-league-phase, codex/manager-ucl-finance) edit src/pages/ClubManager.tsx, the
   header and hub tiles playNationJob presses: their integrators rerun playNationJob.
+- simHalftime SECTION 1, by name: seeding fixed its sample too, and seed 4 of eleven read red there (a 3 SE tail).
+  So the first engine change that re-deals the stream (Release AZ) may turn SECTION 1 red as well as section 2's
+  gain. Either is a moved sample to be measured over several seeds, never waved through and never a wider bound.
+- PR223 and PR227 also rerun NATION_JOB_CONTROL=twotiles (fix review): it anchors on the Rival watch hub tile's
+  title literal in src/pages/ClubManager.tsx and refuses unless it matches exactly once in the build.
 - Release AZ's integrator: the seeded default rows of simHalftime, playWilderness and playClubManager are this
   round's builder's to re-measure if AZ lands on main first; otherwise AZ's integrator reruns the three with their
   seeds unset and reads them as gate lines (a red there is an engine change moving a seeded sample, to be
@@ -197,7 +209,9 @@ it started. The transfer business guard matched 2 time(s) in the built assets". 
 Deadline Day board its own `g.signings.length > 0 &&`, so the bare minified shape `\w+\.signings\.length>0&&`
 matched two chunks. Commit 48a3e61f anchors the guard on the one followed within 400 characters by the block's
 "Transfer business" heading (a literal minifying keeps; checked against a local September build: the
-season summary chunk alone, once). The control ALWAYS exits 1 and says green or RED in its last line.
+season summary chunk alone, once). Until the fix review the control ALWAYS exited 1 and said green or RED in its
+last line; since then a fire still exits 1 with "control: green", and a RED, a refusal or a crash exits 2 (see
+"Fix review" at the end).
 
 ### 3.4 simHalftime (commit 9e9480c3)
 
@@ -228,7 +242,7 @@ The stop rule (a ten seed mean under 1.5 at 1500) did not trigger: 2.43. The bar
 The bundle, entry and engine copy moved into a mkdtemp folder removed on exit: hygiene only (a runner gives each
 label its own temp folder; this cured no red).
 
-Found while measuring, not changed: seed 4 is red at every size in SECTION 1 ("goals scored moved by 4.4 just
+Found while measuring, not changed: seed 4 is red in SECTION 1, one sample read at all three sizes ("goals scored moved by 4.4 just
 from playing two halves", gap 4.37 against a 3 SE bar of 4.13, 60 seasons an arm). Section 1 runs first on the
 same stream at every size, so it is one sample, one seed in eleven read. Signs of the gap differ across seeds, so
 it reads as a three standard error tail rather than a shift; the default seed's section 1 reads gaps of 0.12. A
@@ -280,3 +294,43 @@ season to the same counts under the nobusiness control.
 - `r1314-fw2` on 9fcde443: playClubManager exit 0 (285 s, the default season's counts again, the review shot
   shows the board objectives and the transfer business block); playWilderness exit 0 (20 s); nosack exit 0 (98
   s, the miss shot now shows the hub it stood on, ba350898).
+
+## Fix review (2026-10-12, after the run and read reviews of head 2d0c3cbe)
+
+Two adversarial reviews (results-g/review-run-1314.md and review-read-1314.md) found two majors and eleven
+minors. What was done, each its own commit on the branch:
+
+- simSafari section 4 (run major 1, read minors 2 and 3), c99e1892. The round's left boundary on the 100vh
+  regex hid a custom property holding 100vh (`--cm-stage-height:100vh;height:var(--cm-stage-height)`), which
+  main's unanchored rule caught. The property is read with no left boundary again; ANY custom property set to
+  100vh counts as bare unless the same block sets it again in dvh or svh; and lvh is no longer a cure (100lvh
+  is the large viewport, the same size as 100vh: W3C css-values-4 and WebKit's Safari 15.4 post). The boundary
+  stays in the fallback search only, so a min-height line never stands in for height. New controls customprop
+  and lvhafter.
+- simActivityNotCompletion (run minor 2), 1e9c0fb8. The "more than one call" line counted only
+  `advanceProSeason(<bare name>,`; it counts every `advanceProSeason(` call in the comment stripped file now,
+  and the one call is the anchor. New control twodotted (a second call `advanceProSeason(s.career, clubs)`).
+- playClubManager (read major 1 and run minor 3), 9e315c5a. The two doctoring findings get controls:
+  CM_CONTROL=nodoctor reads the save and never writes the doctored value (exactly "the doctored board did not
+  land" must fire), CM_CONTROL=nosave looks under a key the game never writes (exactly "the save was not there
+  to doctor" must fire); both stop right after the check. The nobusiness route handler retries route.fetch
+  three times and aborts the chunk instead of throwing. Exit codes: a fire still exits 1 with "control:
+  green"; a RED, a refusal or a crash under any control exits 2; an unknown control refuses.
+- playNationJob (read major 1), c9697c2b. NATION_JOB_CONTROL=twotiles serves the Rival watch hub tile with the
+  title Manager (`title:"Rival watch"`, refused unless it matches exactly once in dist/assets), so the two
+  "exactly once" tile checks must fail and nothing before them; the walk stops after the second.
+- playWilderness (run minor 5, read minor 6), 0aef718d. The Round 251 and Round 672 comments on the loop are
+  back verbatim from main. Comments only.
+- simHalftime (run minor 4, read minors 4 and 5), 2ec87ac6, comments only: the measurement base is db2d5083 on
+  origin/main 21941630 (Release AY, which moves no Club Manager code), not 35f85630; the seed 4 section 1 red is
+  one sample read three times, not "red at every size"; and the deaf control proves a wholly deaf break only
+  (the run review's half deaf probe kept the sub off the pitch and read 2.97 against 0.92, did not fire; the
+  pitch is held by scripts/simLiveMatch.mjs, "onPitch was not updated").
+- This file (read minor 7): the simActivityNotCompletion section 1 and 3 byte equal proof (in 3.3 above), and
+  the owed list names simHalftime SECTION 1 and the twotiles rerun.
+
+NOT fixed here: run minor 6, a new Club Manager career opens its hub scrolled into the guide copy (on a 390
+phone the hub's heading sits 1608 px above the screen after "Skip: just manage"). It is on main, under src,
+and this round ships no byte to a player: a Club Manager or visual round owns it (the lead's call).
+
+Proof of the fix pass: (filled in below as the runners report)
