@@ -1,0 +1,12 @@
+PROBE P1 champion BAL his BAL trust 100 phase recap
+PROBE P1 before: press="" owner="🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a failed season upstairs."
+PROBE P1 during the clock: press="" owner="🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a failed season upstairs."
+PROBE P1 verdict on screen during the clock: false
+PROBE P2 seed 1 DEN vs LAC (AFC Wild Card): the tile reads "AFC Wild Card · vs LAC"
+PROBE P2 seed 1 LAC vs DEN (AFC Wild Card): the tile reads "AFC Wild Card · at DEN"
+PROBE P2 seed 2 KC vs LAC (AFC Wild Card): the tile reads "AFC Wild Card · vs LAC"
+PROBE P2 seed 2 JAX vs HOU (AFC Wild Card): the tile reads "AFC Wild Card · vs HOU"
+PROBE P2 seed 2 HOU vs JAX (AFC Wild Card): the tile reads "AFC Wild Card · at JAX"
+PROBE P2 seed 2 LAC vs KC (AFC Wild Card): the tile reads "AFC Wild Card · at KC"
+PROBE P2 looked 12, rivals met in the regular season 6, wrong game opened 0
+      Tests  2 passed (2)

@@ -1,0 +1,8 @@
+tsc exit=0 61s | 
+vitest-ps exit=0 10s |    Duration  9.56s (transform 1.25s, setup 54ms, collect 1.53s, tests 7.25s, environment 308ms, prepare 141ms)
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 41 controls is in the board exactly once.
+ctl-trust exit=0 12s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+ctl-press exit=0 12s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+ctl-done exit=0 13s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+probe exit=0 2s |       Tests  2 passed (2)
+readprobe exit=0 2s |       Tests  1 passed (1)

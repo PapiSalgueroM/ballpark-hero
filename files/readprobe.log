@@ -1,0 +1,17 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/r1309TitleWatchSpoil.test.tsx > review probe: the title game watched gives nothing away > no press card and no moved trust while the clock runs
+PROBE|press card while watching: ""
+PROBE|owner card before: "🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a " while watching: "🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a "
+
+ ✓ src/components/front-office/r1309TitleWatchSpoil.test.tsx > review probe: the title game watched gives nothing away > no press card and no moved trust while the clock runs 241ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  23:41:09
+   Duration  1.92s (transform 706ms, setup 51ms, collect 953ms, tests 242ms, environment 292ms, prepare 83ms)
+

@@ -1,0 +1,9 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-ps: node_modules/.bin/vitest run src/components/front-office/FrontOfficePostseason.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-trust: node scripts/controlFrontOfficeBoard.mjs trustspoils
+ctl-press: node scripts/controlFrontOfficeBoard.mjs pressspoils
+ctl-done: node scripts/controlFrontOfficeBoard.mjs donenow
+probe: cp .rc/x/r1309RunProbe.test.tsx src/test/ && NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/r1309RunProbe.test.tsx --reporter=verbose --testTimeout=600000 > $RC_OUT/probe.log 2>&1; s=$?; rm -f src/test/r1309RunProbe.test.tsx; grep -h -E "PROBE|Tests |AssertionError|Expected|Received|expected" $RC_OUT/probe.log | cut -c1-300 | head -60; exit $s
+readprobe: cp .rc/x/r1309TitleWatchSpoil.test.tsx src/components/front-office/ && NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/components/front-office/r1309TitleWatchSpoil.test.tsx --reporter=verbose --testTimeout=300000 > $RC_OUT/readprobe.log 2>&1; s=$?; rm -f src/components/front-office/r1309TitleWatchSpoil.test.tsx; grep -h -E "PROBE|Tests |AssertionError|Expected|Received|expected" $RC_OUT/readprobe.log | cut -c1-300 | head -40; exit $s
