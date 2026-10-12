@@ -1,0 +1,6 @@
+MUTATION APPLIED: both diagnostics disclosures removed from src/pages/PrivacyPolicy.tsx
+  FAIL: FormSubmit does not point at the browser diagnostics
+   keys checked against the Reported issues bullet: 6 context keys, 8 diagnostics keys (build, viewport, timezone, browser, language, width, height, pixelRatio)
+
+simReportContext: 13 failure(s)
+PRIVACY MUTATION CAUGHT: exit 1

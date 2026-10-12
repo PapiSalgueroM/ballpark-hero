@@ -1,0 +1,3 @@
+   keys checked against the Reported issues bullet: 6 context keys, 8 diagnostics keys (build, viewport, timezone, browser, language, width, height, pixelRatio)
+
+control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works

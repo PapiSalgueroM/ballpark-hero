@@ -1,0 +1,10 @@
+tsc exit=0 64s | 
+vitest-report exit=0 6s |    Duration  5.41s (transform 2.40s, setup 350ms, collect 5.70s, tests 4.83s, environment 2.23s, prepare 668ms)
+focus-control exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/reportDetails.test.tsx,title=src/test/reportDetails.test.tsx > footer report > gives focus back to the
+simReportContext exit=0 0s | simReportContext: all green
+simReportContext-diagnostics exit=0 1s | control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works
+simReportContext-privacy exit=0 0s | control "privacy": 3 failure(s) fired in section 4 as expected, the check works
+privacy-mut exit=0 1s | PRIVACY MUTATION CAUGHT: exit 1
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simErrorBoundary-rename exit=0 1s |    CONTROL FIRED: the rename mutation was caught
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
