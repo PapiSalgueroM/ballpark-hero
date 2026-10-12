@@ -46,9 +46,43 @@
  *    nobody, without the story law being asked (with no ceiling a saved
  *    250000 threw out of the NFL's law and a saved 1e21 never came back),
  *    and the NFL tells no final above its own top score.
- *  6 NOBODY MOUNTS IT YET. No file under src imports the new modules but the
- *    modules themselves and their tests. The round that binds a board turns
- *    this into "the cards are lazy".
+ *  6 THE MOUNT LIST (rewritten in Round 1305, when the first board came to
+ *    import a module). Every file under src that imports one of the modules
+ *    is on a list in this file, with the modules it may reach: the modules
+ *    and their tests, and the NFL board for the bind and the log and nothing
+ *    else. And no board imports the told path, a story law, a game day law
+ *    or the words of a "?" STATICALLY (read from the syntax tree): what only
+ *    a drawn card reads must not sit in a board's own chunk.
+ *
+ * ROUND 1305, THE PRESS (src/lib/frontOfficeGameDay.ts, the NFL board's bind
+ * to the quick path, and src/lib/gmGameLog.ts, the save field of the
+ * season's results). Each season of the fleet is played a third time the way
+ * the BOARD tells it: `nflTell` on every game right after the engine has
+ * played it, and on the thirteen playoff games after the one press
+ * postseason has come back, inside the seeded Math.random.
+ *  7 THE PRESS PATH DOES NOT MOVE. With the bind telling, the generator's
+ *    state and draw count after Week 17, the 272 winners, the 32 records and
+ *    the postseason's row (thirteen games, champion, next 64 draws, records
+ *    after) are the untold season's, which section 4 holds to the recorded
+ *    fixture. AND THE SCORES DO DIFFER: the share of games whose told score
+ *    is not the engine's own sits above a floor (see MEASURED), so a run
+ *    with the law switched off cannot read green.
+ *  8 THE BIND'S SCORES ARE THE LAW'S. Every game: the bind never refuses,
+ *    and it tells exactly the quick path's final for the chance the engine
+ *    played the game at (read by the fleet BEFORE the game), under the key
+ *    the board's recipe gives. The four statistics of section 3 for the
+ *    bind's scores sit inside section 3's bands against the same baseline.
+ *  9 THE LOG IS THE SEASON. For four GM clubs a season (the best and the
+ *    worst record and two keyed picks): after every week the log's record
+ *    is the club's by this harness's own count of the engine's winners, and
+ *    after Week 17 the league's; one entry a week in week order; the one
+ *    press finish adds exactly his playoff games; through JSON and the
+ *    reader it is the same log; it reads as absent for another season,
+ *    another club and a club that is no club; with any one field of the
+ *    first, a middle or the last entry damaged or missing it reads as
+ *    absent and nothing throws; and a log begun at week k (a save from
+ *    before the round) holds one entry a week from k on, and its record is
+ *    NOT the league's, which the run prints.
  *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
@@ -76,6 +110,14 @@
  *   ceiling     the library's ceiling typed as 100000                section 5 (both save guards, and the story)
  *   lawmax      the NFL's game day law claims a top score of 999     section 5 (no final above the sport's own)
  *   mounted     an import planted in memory in a route file          section 6
+ *   static      a static import of the told path planted in the NFL board   section 6 (no board imports a story statically)
+ *   bindstream  a Math.random() planted in nflTell                   section 7 (the draw count, the winners, the records)
+ *   bindold     nflTell hands back the engine's own score            section 8 (losers on 15 or fewer: none; the quick
+ *               path's final), and section 7's "the scores do differ"
+ *   bindchance  nflTell reads the chance with the two clubs swapped  section 8 (the quick path's final for the chance)
+ *   bindrefuse  nflTell refuses a game in five by its key            section 8 (the bind never refuses)
+ *   logdrop     addToGmGameLog drops every road win                  section 9 (the record a week, one entry a week)
+ *   logholes    readGmGameLog skips an entry it cannot read          section 9 (a damaged entry: the log is absent)
  * NOT HELD HERE: the save guard and the repair with every field damaged
  * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
  * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
@@ -111,6 +153,19 @@
  *   title games a set, 221 of 400 (a level one is 0.582 by the arithmetic).
  *   NOT printed beside them: the league's real figures. None was read on two
  *   sources in this round, so none is typed here.
+ * MEASURED FOR ROUND 1305 (2026-10-11, seed sets 0 to 4, 22,800 games a set
+ * told by the bind; runner result r1305-b1):
+ *   Section 7, the share of games whose told score is not the engine's own:
+ *   0.9975 to 0.9982 a set (41 to 57 games in 22,800 where the law's final
+ *   happened to be the engine's). One set's standard error is about 0.0003.
+ *   The floor is 0.99: 0.0075 under the lowest set, about 25 of those errors,
+ *   and under control bindold (the engine's score handed back) it reads 0.
+ *   Section 8: the bind refused 0 games in every set, and the check is that
+ *   count being zero (no band: section 1 already holds that the law never
+ *   refuses). Its four statistics are section 3's told ones to the digit,
+ *   because the bind's key and chance are the quick path's.
+ *   Section 9 has no band: every check is an equality over 320 club seasons
+ *   a set (four clubs in each of 80 seasons).
  *
  * Nothing here reads the network. The clock is read only to time the run
  * for its own log lines: no check and nothing that is played depends on it.
@@ -130,8 +185,17 @@ const BRACKET = 'src/lib/gmBracket.ts';
 const NFL_DAY = 'src/lib/gameLaws/nflGameDay.ts';
 const NFL_DATA = 'src/data/gmBrackets/nfl.ts';
 const NFL_HELP = 'src/data/gmBrackets/nflHelp.ts';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP];
+/* Round 1305: the save field of the season's results and the NFL board's bind to the quick path */
+const LOG = 'src/lib/gmGameLog.ts';
+const BIND = 'src/lib/frontOfficeGameDay.ts';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND];
+/* the round whose header a new file opens with: section 5 proves the comment stripper took it out */
+const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305' };
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
+const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
+const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
+/* what only a drawn card reads: the told path, the NFL's story law, its game day law and the words of the two "?" */
+const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP];
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
    as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
@@ -159,6 +223,13 @@ const CONTROLS = {
   lawmax: { section: 5, labels: ["tells no final above the sport's own top score"], patches: [{ file: NFL_DAY, from: 'maxScore: NFL_MAX_SCORE,', to: 'maxScore: 999,' }] },
   lowmax: { section: 1, labels: ["has a side above the sport's own top score"], elsewhere: ['every told final has a story'], patches: [{ file: NFL_DAY, from: 'export const NFL_MAX_SCORE = 7 * DRIVES + 3;', to: 'export const NFL_MAX_SCORE = 30;' }] },
   mounted: { section: 6, labels: ['no file under src imports'], patches: [], plant: { file: ROUTE_FILE, text: "\nimport { gameStory } from '@/lib/gmGameDay';\n" } },
+  static: { section: 6, labels: ['import no story law'], patches: [], plant: { file: NFL_BOARD, text: "\nimport { gameStory } from '@/lib/gmGameDay';\n" } },
+  bindstream: { section: 7, labels: ['with the bind takes no draw from Math.random', 'with the bind moves none of its 272 winners', 'with the bind moves none of its 32 records'], patches: [{ file: BIND, from: 'const key = nflGameKey(season, where, g);', to: 'const key = nflGameKey(season, where, g); Math.random();' }] },
+  bindold: { section: 8, labels: ['losers15 by the bind 0.0000', "tells the quick path's final for the chance"], elsewhere: ["do differ from the engine's"], patches: [{ file: BIND, from: 'game: { ...g, homeScore: told.homeScore, awayScore: told.awayScore }, last: makeGmLastGame(told, where), byLaw: true', to: 'game: g, last: makeGmLastGame(told, where), byLaw: true' }] },
+  bindrefuse: { section: 8, labels: ['the bind never refuses a game of the fleet'], patches: [{ file: BIND, from: 'if (told && toldWinner(told) !== g.winner) told = null;', to: 'if (told && (toldWinner(told) !== g.winner || key.length % 5 === 0)) told = null;' }] },
+  bindchance: { section: 8, labels: ["tells the quick path's final for the chance"], patches: [{ file: BIND, from: 'const home = teams[g.home], away = teams[g.away];', to: 'const home = teams[g.away], away = teams[g.home];' }] },
+  logdrop: { section: 9, labels: ["after every week the log's record is the club's", 'one entry a week, in week order'], patches: [{ file: LOG, from: 'return { v: 1, season, games: [...kept, ...games] };', to: 'return { v: 1, season, games: [...kept, ...games.filter(g => g.winner === g.home)] };' }] },
+  logholes: { section: 9, labels: ['with any one field of an entry damaged the log reads as absent'], patches: [{ file: LOG, from: 'if (!g || (g.home !== club && g.away !== club) || keys.has(g.key)) return null;', to: 'if (!g) continue; if ((g.home !== club && g.away !== club) || keys.has(g.key)) return null;' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown GM_GAMEDAY_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
 const PATCHES = CONTROL ? CONTROLS[CONTROL].patches : [];
@@ -190,13 +261,15 @@ try {
     "export { NFL_SCORING, NFL_CLOCK } from './src/data/usLeagueShape.ts';",
     "export { keyedRng } from './src/lib/keyedRng.ts';",
     "export { finalTie } from './src/lib/finalsBracket.ts';",
+    "export * as log from './src/lib/gmGameLog.ts';",
+    "export * as bind from './src/lib/frontOfficeGameDay.ts';",
   ], PATCHES, CONTROL || 'base'));
 } catch (e) {
   console.error(`simGmGameDay: the bundle refused${CONTROL ? ` (control ${CONTROL})` : ''}: ${e && e.message ? e.message.split('\n')[0] : e}`);
   process.exit(2);
 }
 if (fired.size !== PATCHES.length) { console.error(`control ${CONTROL}: ${fired.size} of ${PATCHES.length} patches reached their file, refusing to report`); process.exit(2); }
-const { engine: E, score: S, day: D, bracket: B, nflDay, nflData, NFL_SCORE_LAW: LAW, NFL_SCORING, NFL_CLOCK } = M;
+const { engine: E, score: S, day: D, bracket: B, nflDay, nflData, NFL_SCORE_LAW: LAW, NFL_SCORING, NFL_CLOCK, log: L, bind: N } = M;
 const GAME_DAY = nflDay.NFL_GAME_DAY;
 const FORMAT = nflData.NFL_BRACKET;
 console.log(`bundled in ${Date.now() - t0} ms; seed sets ${SEEDSETS.join(', ')}; ${FLEET.perKind} seasons a league kind a set${CONTROL ? `; CONTROL ${CONTROL}` : ''}`);
@@ -298,6 +371,10 @@ function storyProblems(story, quick, view) {
 /* ─── The bands of sections 1 and 3 (see MEASURED in the header) ─── */
 const SWAPPED_MOST = 0.002;
 const BANDS = { points: 0.25, losers15: 0.02, shutouts: 0.005, forty: 0.006 };
+/* Section 7: the least share of games whose told score is not the engine's own (see MEASURED, Round 1305) */
+const DIFFER_LEAST = 0.99;
+/* The fields of a log entry, each with a value that is not one (section 9 damages every one in turn) */
+const ENTRY_DAMAGE = { v: 2, key: '', where: '', home: 'NO SUCH CLUB', away: 'NO SUCH CLUB', homeScore: 1000, awayScore: -1 };
 
 /* What one seed set measured, kept for the closing table. */
 const measured = [];
@@ -353,6 +430,30 @@ for (const set of SEEDSETS) {
   const shapes = {};
   let afcTitles = 0;
   const lines = [];
+  /* Round 1305, sections 7 to 9: the season as the BOARD tells it, through the bind and into the log */
+  const s7 = { state: tally(), calls: tally(), winners: tally(), records: tally(), row: tally() };
+  const s8 = { refused: tally(), quick: tally() };
+  const s9 = { weekly: tally(), order: tally(), playoff: tally(), json: tally(), other: tally(), damage: tally(), late: tally() };
+  const bound = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0, differ: 0 };
+  let lateSeen = '';
+  const addScore = (o, home, away) => {
+    const lo = Math.min(home, away);
+    o.games += 1;
+    o.points += home + away;
+    if (lo <= 15) o.losers15 += 1;
+    if (lo === 0) o.shutouts += 1;
+    o.forty += (home >= 40 ? 1 : 0) + (away >= 40 ? 1 : 0);
+  };
+  /* One game told by the bind, right after the engine's game and inside the seeded Math.random. `pHome` is the chance
+     the engine played it at, read by the caller BEFORE the game where it can be. */
+  const seeBind = (id, g, t, pHome, key) => {
+    count(s8.refused, t.byLaw === true, () => `${id} ${key}`);
+    const want = S.quickGame(LAW, { key, home: g.home, away: g.away, decided: { homeWon: g.winner === g.home, pHome } });
+    count(s8.quick, want !== null && t.game.homeScore === want.homeScore && t.game.awayScore === want.awayScore && t.game.winner === g.winner && t.game.home === g.home && t.game.away === g.away && t.last !== null && t.last.key === key && t.last.homeScore === want.homeScore && t.last.awayScore === want.awayScore,
+      () => `${id} ${key}: the bind told ${t.game.homeScore}-${t.game.awayScore}, the quick path ${want ? `${want.homeScore}-${want.awayScore}` : 'nothing'}`);
+    addScore(bound, t.game.homeScore, t.game.awayScore);
+    if (t.game.homeScore !== g.homeScore || t.game.awayScore !== g.awayScore) bound.differ += 1;
+  };
   /* One game told the way a board will tell it (the quick path in the press, the story for the card), and every
      per game check of sections 1, 2, 3 and 5. Called INSIDE the seeded Math.random, right after the engine's game. */
   const tell = (id, key, g, pHome, view) => {
@@ -476,6 +577,95 @@ for (const set of SEEDSETS) {
         return machineRow(save, teamsB, Array.from({ length: NEXT_DRAWS }, () => Math.random()));
       });
       count(s5.bracket, same(rowB, rowA), id);
+
+      /* C (Round 1305): the same season the way the BOARD tells it. The bind is called on every game right after the
+         engine has played it, and on the thirteen playoff games after the one press postseason has come back, each
+         time inside the seeded Math.random (sections 7 and 8). What the bind hands back goes into the log (section 9). */
+      const winnersC = [];
+      const weeks = Array.from({ length: E.REGULAR_WEEKS }, () => []);
+      const C = playRegularSeason(M, set, kind, i, (g, pHome, week, lg) => {
+        winnersC.push(g.winner);
+        const t = N.nflTell(g, lg.teams, lg.season, N.nflWhere(week));
+        seeBind(id, g, t, pHome, `${lg.season}|w${week}|${g.home}|${g.away}|${g.homeScore}-${g.awayScore}`);
+        weeks[week - 1].push({ g, t });
+      });
+      count(s7.state, C.gen.state === regular.state, id);
+      count(s7.calls, C.calls === regular.calls, () => `${id}: ${C.calls} draws with the bind telling, ${regular.calls} without`);
+      count(s7.winners, winnersC.length === 272 && winnersC.join() === winnersA.join(), id);
+      count(s7.records, recordsOf(C.lg.teams) === regular.records, id);
+      const post = [];
+      const rowC = enginePostseason(M, C, (g, round) => {
+        const t = N.nflTell(g, C.lg.teams, C.lg.season, round);
+        seeBind(id, g, t, E.winProb(C.lg.teams[g.home], C.lg.teams[g.away]), `${C.lg.season}|${round}|${g.home}|${g.away}|${g.homeScore}-${g.awayScore}`);
+        post.push({ g, t, round });
+      });
+      count(s7.row, same(rowC, rowA) && post.length === 13, () => `${id}: ${rowC.games.find((g, k) => g !== rowA.games[k]) ?? `champion ${rowC.champion} against ${rowA.champion}, or the draws or records after`}`);
+
+      /* section 9: the log of four GM clubs, the best and the worst record of the season and two keyed picks */
+      const season = C.lg.season;
+      const table = Object.values(C.lg.teams).map(t => t.abbr).sort((a, b) => C.lg.teams[b].wins - C.lg.teams[a].wins || (a < b ? -1 : 1));
+      const pick = M.keyedRng(`log clubs|${id}`);
+      const four = [table[0], table[table.length - 1]];
+      while (four.length < 4) { const c = table[Math.floor(pick() * table.length)]; if (!four.includes(c)) four.push(c); }
+      for (const club of four) {
+        let log = null;
+        let won = 0;
+        let lost = 0;
+        let wrong = '';
+        for (let week = 1; week <= E.REGULAR_WEEKS; week += 1) {
+          const mine = weeks[week - 1].find(x => x.g.home === club || x.g.away === club);
+          log = L.addToGmGameLog(log, season, mine && mine.t.last ? [mine.t.last] : []);
+          /* the club's record by this harness's own count of the ENGINE's winners */
+          if (mine) { if (mine.g.winner === club) won += 1; else lost += 1; }
+          const r = L.gmLogRecord(log, club, N.nflIsRegular);
+          if (!wrong && (r.won !== won || r.lost !== lost || r.lostBeyond !== 0)) wrong = `after week ${week} the log reads ${r.won}-${r.lost}, the club is ${won}-${lost}`;
+        }
+        count(s9.weekly, !wrong && won === C.lg.teams[club].wins && lost === C.lg.teams[club].losses, () => `${id} ${club}: ${wrong || `the count ${won}-${lost} is not the league's ${C.lg.teams[club].wins}-${C.lg.teams[club].losses}`}`);
+        count(s9.order, log !== null && log.games.length === won + lost && won + lost === E.REGULAR_WEEKS && log.games.every((g, k) => g.where === `w${k + 1}`), () => `${id} ${club}: ${log ? log.games.map(g => g.where).join(',') : 'no log'}`);
+        /* the one press finish adds exactly his playoff games, in the order they were played, under their rounds' names */
+        const mineP = post.filter(x => x.g.home === club || x.g.away === club);
+        const full = L.addToGmGameLog(log, season, mineP.map(x => x.t.last));
+        const reg = L.gmLogRecord(full, club, N.nflIsRegular);
+        const all = L.gmLogRecord(full, club);
+        const wonP = mineP.filter(x => x.g.winner === club).length;
+        count(s9.playoff, full !== null && log !== null && full.games.length === log.games.length + mineP.length && reg.won === won && reg.lost === lost && all.won === won + wonP && all.lost === lost + mineP.length - wonP
+          && full.games.slice(log.games.length).every((g, k) => g.where === mineP[k].round) && same(L.lastGmGame(full), mineP.length ? mineP[mineP.length - 1].t.last : log.games[log.games.length - 1]),
+          () => `${id} ${club}: ${mineP.length} playoff games, the log grew by ${full && log ? full.games.length - log.games.length : 'nothing'}`);
+        if (!full || !log) continue; /* only a control gets here: the checks above are already red */
+        /* through JSON and the reader it is the same log; it is nobody else's and no other season's */
+        const text = JSON.stringify(full);
+        const back = L.readGmGameLog(JSON.parse(text), isClub, season, club);
+        count(s9.json, back !== null && same(back, full), () => `${id} ${club}`);
+        const stranger = table.find(c => full.games.some(g => g.home !== c && g.away !== c));
+        count(s9.other, L.readGmGameLog(JSON.parse(text), isClub, season + 1, club) === null && L.readGmGameLog(JSON.parse(text), isClub, season, stranger) === null && L.readGmGameLog(JSON.parse(text), isClub, season, 'constructor') === null, () => `${id} ${club}`);
+        if (club !== four[0]) continue;
+        /* every field of the first, a middle and the last entry, damaged and then missing: the log reads as absent, and nothing throws */
+        for (const at of [0, Math.floor(full.games.length / 2), full.games.length - 1]) {
+          for (const field of [...Object.keys(ENTRY_DAMAGE), 'winner']) {
+            for (const how of ['damaged', 'missing']) {
+              const hurt = JSON.parse(text);
+              const e = hurt.games[at];
+              if (how === 'missing') delete e[field];
+              else e[field] = field === 'winner' ? (e.winner === e.home ? e.away : e.home) : ENTRY_DAMAGE[field];
+              let read = 'threw';
+              try { read = L.readGmGameLog(hurt, isClub, season, club); } catch { /* counted as a failure below */ }
+              count(s9.damage, read === null, () => `${id} ${club}: entry ${at} with ${field} ${how} was read`);
+            }
+          }
+        }
+        /* a save from before this round adopts the log in the middle of a season: it starts at week k, and its record is
+           NOT the league's (no screen may print it as his season) */
+        const k = 2 + Math.floor(pick() * (E.REGULAR_WEEKS - 1));
+        let late = null;
+        for (let week = k; week <= E.REGULAR_WEEKS; week += 1) {
+          const mine = weeks[week - 1].find(x => x.g.home === club || x.g.away === club);
+          late = L.addToGmGameLog(late, season, mine && mine.t.last ? [mine.t.last] : []);
+        }
+        const lr = L.gmLogRecord(late, club, N.nflIsRegular);
+        count(s9.late, late !== null && late.games.length === E.REGULAR_WEEKS - k + 1 && late.games.every((g, j) => g.where === `w${k + j}`) && lr.won + lr.lost === late.games.length && lr.won + lr.lost < won + lost
+          && same(L.readGmGameLog(JSON.parse(JSON.stringify(late)), isClub, season, club), late), () => `${id} ${club}: begun at week ${k}`);
+        if (!lateSeen && late) lateSeen = `${id} ${club}: a log begun at week ${k} holds ${late.games.length} games and reads ${lr.won}-${lr.lost}, where the league's record is ${won}-${lost}`;
+      }
     }
   }
 
@@ -515,8 +705,31 @@ for (const set of SEEDSETS) {
   settle(5, `set ${set}: a postseason told inside the press is the engine's postseason, draw for draw`, s5.bracket);
   settle(5, `set ${set}: the same key tells the same final and the same story twice`, s5.twice);
   settle(5, `set ${set}: the saved last game, through JSON, tells the same story`, s5.reload);
+  /* Round 1305, sections 7 to 9 */
+  settle(7, `set ${set}: telling a season with the bind leaves the engine's generator where it was`, s7.state);
+  settle(7, `set ${set}: telling a season with the bind takes no draw from Math.random`, s7.calls);
+  settle(7, `set ${set}: telling a season with the bind moves none of its 272 winners`, s7.winners);
+  settle(7, `set ${set}: telling a season with the bind moves none of its 32 records`, s7.records);
+  settle(7, `set ${set}: the one press postseason, told by the bind after it, is the engine's thirteen games, champion, next ${NEXT_DRAWS} draws and records`, s7.row);
+  const differShare = bound.games ? bound.differ / bound.games : 0;
+  check(7, `set ${set}: the told scores do differ from the engine's own: the share ${differShare.toFixed(4)} is above ${DIFFER_LEAST}`, differShare > DIFFER_LEAST);
+  settle(8, `set ${set}: the bind never refuses a game of the fleet`, s8.refused);
+  settle(8, `set ${set}: the bind tells the quick path's final for the chance the engine played the game at, under the board's key`, s8.quick);
+  check(8, `set ${set}: every game of the fleet was told by the bind (${bound.games} of ${games})`, bound.games === games);
+  const Bn = stat(bound);
+  for (const k of Object.keys(BANDS)) check(8, `set ${set}: ${k} by the bind ${Bn[k].toFixed(4)} against the free law's ${F[k].toFixed(4)}, inside ${BANDS[k]}`, Math.abs(Bn[k] - F[k]) < BANDS[k]);
+  /* the same key and the same chance tell the same final, so the bind's four numbers are section 3's told ones exactly */
+  check(8, `set ${set}: the bind's four statistics are the quick path's own to the digit (points ${Bn.points.toFixed(4)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, forty ${Bn.forty.toFixed(4)})`, same(Bn, T));
+  settle(9, `set ${set}: after every week the log's record is the club's, and after Week 17 the league's`, s9.weekly);
+  settle(9, `set ${set}: the log holds one entry a week, in week order`, s9.order);
+  settle(9, `set ${set}: the one press finish adds exactly his playoff games, in order, and the regular season's record does not move`, s9.playoff);
+  settle(9, `set ${set}: the log through JSON and the reader is the same log`, s9.json);
+  settle(9, `set ${set}: the log reads as absent for another season, for another club and for a club that is no club`, s9.other);
+  settle(9, `set ${set}: with any one field of an entry damaged the log reads as absent, and nothing throws`, s9.damage);
+  settle(9, `set ${set}: a log begun at week k holds one entry a week from k on and none before, and its record is not the league's`, s9.late);
+  console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; points a team game ${Bn.points.toFixed(2)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, sides on 40 or more ${Bn.forty.toFixed(4)}; ${lateSeen}`);
   const afcShare = afcTitles / lines.length;
-  measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games });
+  measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games, differShare, refused: s8.refused.bad });
   console.log(`set ${set}: ${lines.length} seasons, ${told.games} games told in ${Date.now() - t1} ms; points a team game ${T.points.toFixed(2)} (free ${F.points.toFixed(2)}); losers on 15 or fewer ${T.losers15.toFixed(4)} (free ${F.losers15.toFixed(4)}); shutouts ${T.shutouts.toFixed(4)} (free ${F.shutouts.toFixed(4)}); sides on 40 or more ${T.forty.toFixed(4)} (free ${F.forty.toFixed(4)}); swapped ${swappedShare.toFixed(5)}; the AFC champion won ${afcTitles} of ${lines.length} title games`);
 }
 
@@ -542,7 +755,8 @@ for (const set of SEEDSETS) {
     const raw = readPatched(rel);
     const code = stripComments(raw);
     /* the stripper really stripped: the header's own words are gone, the code is still there */
-    check(5, `${rel}: comments are stripped before it is read`, raw.includes('Round 1224') && !code.includes('Round 1224') && code.includes('export '));
+    const mark = ROUND_OF[rel] ?? 'Round 1224';
+    check(5, `${rel}: comments are stripped before it is read`, raw.includes(mark) && !code.includes(mark) && code.includes('export '));
     for (const [name, re] of FORBIDDEN) { seen += 1; check(5, `${rel} holds no ${name}`, !re.test(code)); }
   }
   check(5, 'the source scan looked at every new file', seen === NEW_FILES.length * FORBIDDEN.length);
@@ -569,14 +783,26 @@ for (const set of SEEDSETS) {
   check(5, `the NFL tells a final of ${top} to 17 and tells no final above the sport's own top score`, D.gameStory(GAME_DAY, told(top), 'home') !== null && D.gameStory(GAME_DAY, told(top + 1), 'home') === null && D.gameStory(GAME_DAY, { ...told(17), awayScore: top + 1 }, 'away') === null);
 }
 
-/* ─── Section 6: nobody mounts it yet ─── */
+/* ─── Section 6: the mount list (rewritten in Round 1305, as the first board comes to import a module) ─── */
 {
   const ts = (await import('typescript')).default;
-  const TARGETS = new Set(NEW_FILES.map(f => f.replace(/\.tsx?$/, '')));
-  const ALLOWED = new Set([...NEW_FILES, 'src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts']);
+  const noExt = f => f.replace(/\.tsx?$/, '');
+  const TARGETS = new Set(NEW_FILES.map(noExt));
+  /* WHO MAY IMPORT WHICH OF THE MODULES. '*': any of them (the modules themselves and their tests). A set: those
+     targets and no other. A file that is not here may import none. A round that mounts a card adds its files here,
+     in the commit that first imports them. */
+  const MOUNT_ALLOW = new Map([
+    ...NEW_FILES.map(f => [f, '*']),
+    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts'].map(f => [f, '*']),
+    /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
+    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG)])],
+    /* its board tests read the log, the bind's words for a week and the quick path's final */
+    ['src/components/front-office/FrontOfficeGameDay.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(SCORE)])],
+    ['src/components/front-office/FrontOfficeOnePress.test.tsx', new Set([noExt(LOG)])],
+  ]);
   /* an import's path from the repo root: the alias, or a path from the importing file; a package is nobody's */
   const target = (from, spec) => {
-    const s = spec.replace(/\.tsx?$/, '');
+    const s = noExt(spec);
     if (s.startsWith('@/')) return `src/${s.slice(2)}`;
     return s.startsWith('.') ? path.posix.normalize(path.posix.join(path.posix.dirname(from), s)) : '';
   };
@@ -586,19 +812,43 @@ for (const set of SEEDSETS) {
     return list.flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`) : /\.tsx?$/.test(d.name) ? [`${dir}/${d.name}`] : []));
   };
   const files = walk('src');
-  if (!files.includes(ROUTE_FILE)) { console.error(`simGmGameDay: ${ROUTE_FILE} is gone, the mounted control has nowhere to plant: refusing to report`); process.exit(2); }
+  for (const must of [ROUTE_FILE, ...BOARDS]) if (!files.includes(must)) { console.error(`simGmGameDay: ${must} is gone, a control of section 6 has nowhere to plant: refusing to report`); process.exit(2); }
   const importers = [];
   let own = 0;
   for (const rel of files) {
     let text;
     try { text = readPatched(rel); } catch { continue; /* a file another harness wrote and took away while this one walked */ }
-    const specs = ts.preProcessFile(text, true, true).importedFiles.map(f => f.fileName);
-    if (!specs.some(spec => TARGETS.has(target(rel, spec)))) continue;
-    if (ALLOWED.has(rel)) own += 1; else importers.push(rel);
+    const hits = ts.preProcessFile(text, true, true).importedFiles.map(f => target(rel, f.fileName)).filter(t => TARGETS.has(t));
+    if (hits.length === 0) continue;
+    const may = MOUNT_ALLOW.get(rel);
+    if (may === undefined) { importers.push(rel); continue; }
+    const beyond = may === '*' ? [] : hits.filter(t => !may.has(t));
+    if (beyond.length > 0) importers.push(`${rel} (reaches ${beyond.join(', ')}, which its line of the mount list does not name)`); else own += 1;
   }
-  check(6, `no file under src imports the new modules but the modules and their tests (${files.length} files read)`, importers.length === 0, importers.slice(0, 5).join(', '));
+  check(6, `no file under src imports the new modules but the files on the mount list, each within its own line of it (${files.length} files read)`, importers.length === 0, importers.slice(0, 5).join(', '));
   /* the scan can see an import at all: the libraries import each other and the tests import them */
-  check(6, `the scan sees the modules' own imports (${own} of the ${ALLOWED.size} allowed files import one)`, own >= 6);
+  check(6, `the scan sees the modules' own imports (${own} of the ${MOUNT_ALLOW.size} files on the mount list import one)`, own >= 8);
+  /* the board really is bound: a mount list that allows an import nobody makes would be holding nothing */
+  const boardText = stripComments(readPatched(NFL_BOARD));
+  check(6, 'the NFL board imports the bind and the log, and calls nflTell on the week and on the one press postseason',
+    /from '@\/lib\/frontOfficeGameDay'/.test(boardText) && /from '@\/lib\/gmGameLog'/.test(boardText) && boardText.split('nflTell(').length - 1 === 2);
+  /* NO BOARD READS THE STORY IN ITS OWN CHUNK. A press needs the score law, the bind and the log in the same tick, so
+     those are static imports of a board. What only a drawn card reads (the told path, the story law, the game day law
+     and the words of the "?") must reach a board through a lazy part or not at all, or a route that is on its weight
+     budget pays for a card nobody has opened. Read from the syntax tree: an import DECLARATION that is not type only. */
+  const STORY = new Set(STORY_FILES.map(noExt));
+  let statics = 0;
+  const heavy = [];
+  for (const rel of BOARDS) {
+    const tree = ts.createSourceFile(rel, readPatched(rel), ts.ScriptTarget.Latest, false, ts.ScriptKind.TSX);
+    for (const st of tree.statements) {
+      if (!ts.isImportDeclaration(st) || st.importClause?.isTypeOnly) continue;
+      statics += 1;
+      const t = target(rel, st.moduleSpecifier.text);
+      if (STORY.has(t)) heavy.push(`${rel} imports ${t}`);
+    }
+  }
+  check(6, `the four boards import no story law, no game day law and no help words statically (${statics} static imports read)`, heavy.length === 0 && statics >= 40, heavy.join(', ') || `only ${statics} static imports were seen`);
 }
 
 /* ─── What was measured, for the header and the notes ─── */
@@ -608,6 +858,7 @@ if (measured.length > 0) {
   console.log(`MEASURED over seed sets ${measured.map(m => m.set).join(', ')} (${measured.reduce((a, m) => a + m.games, 0)} games):`);
   for (const k of Object.keys(BANDS)) console.log(`  ${k}: told ${span(m => m.T[k])}, free ${span(m => m.F[k])}, told less free ${span(m => m.T[k] - m.F[k])} (band ${BANDS[k]} either side)`);
   console.log(`  swapped share ${span(m => m.swappedShare)} (band: under ${SWAPPED_MOST})`);
+  console.log(`  the board's way (Round 1305): told scores that are not the engine's own ${span(m => m.differShare)} (floor: above ${DIFFER_LEAST}); games the bind refused ${measured.map(m => m.refused).join(', ')} a set (held at zero)`);
   const all = Array.from({ length: 10 }, (_, d) => measured.reduce((a, m) => ({ n: a.n + m.tries[d].n, tries: a.tries + m.tries[d].tries, swapped: a.swapped + m.tries[d].swapped }), { n: 0, tries: 0, swapped: 0 }));
   console.log(`  tries a game by decile of the home chance (games, mean tries, swapped): ${all.map((c, d) => `${d / 10}: ${c.n}, ${c.n ? (c.tries / c.n).toFixed(2) : 'none'}, ${c.swapped}`).join(' | ')}`);
   const shapeAll = {};

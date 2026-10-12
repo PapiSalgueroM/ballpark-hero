@@ -85,8 +85,17 @@ if (CONTROL === 'replay') {
     if (!src.includes(NEW_RESTORE) || !src.includes(GUARD)) abort(`control cannot run: ${file} is not in the shape this control rewrites (the four line restore and the champions guard must both be there)`);
     const regressed = src.replace(NEW_RESTORE, OLD_RESTORE).replace(GUARD, '');
     if (regressed === src || regressed.includes(GUARD) || !regressed.includes(OLD_RESTORE)) abort(`control cannot run: the rewrite of ${file} changed nothing`);
+    /* Round 1305: the copy runs from dist/.gm-control, so an import a board
+       makes relative to its own folder gets its full path in the copy. Three
+       boards had gained such imports (the NBA's rotation panel, the MLB and
+       NHL style modules, the NHL waiver receipt) and since then this control
+       could not load its copies: it said so and exited 1 on every run,
+       measured on origin/release-av-gate cbfa94fd before this line existed. */
+    const folder = path.posix.dirname(file).replace(/^src\//, '@/');
+    const loadable = regressed.replace(/from '\.\/([^']+)'/g, `from '${folder}/$1'`);
+    if (/from '\.\.?\//.test(loadable)) abort(`control cannot run: the copy of ${file} still holds an import relative to its own folder`);
     const copy = path.join(dir, `${path.basename(file, '.tsx')}.control.tsx`);
-    fs.writeFileSync(copy, regressed);
+    fs.writeFileSync(copy, loadable);
     env[key] = copy.replaceAll('\\', '/');
     console.log(`   NEGATIVE CONTROL ON: ${name} renders a copy that maps a recap save back to the hub and has no closed season guard`);
   }

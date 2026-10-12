@@ -31,10 +31,22 @@
  *   DRAFT_CONTROL=dropai    drops a rival pick, so section 2 catches a lost one.
  *   DRAFT_CONTROL=slowsteps makes the step gap huge, so section 4 catches a
  *                           reveal that has become a loading screen.
+ *   DRAFT_CONTROL=norivals  (Round 1305) a copy of the NBA board that hands the
+ *                           card an empty list. It has its OWN exit rule: 0 only
+ *                           when BOTH reds were seen, section 5's "does not hand
+ *                           the captured rivals" for the NBA on the copy's text,
+ *                           AND the behaviour test
+ *                           src/components/nba-front-office/NbaDraftNightRivals.test.tsx
+ *                           red by name on the copy with the file loaded. The
+ *                           name check of section 5 is the weak fence (it passes
+ *                           for a board that empties the list before handing it
+ *                           over); the test is the strong one, and under the
+ *                           two old controls' rule a test that can never fail
+ *                           would have passed this control.
  *
  * Run: node scripts/simDraftNight.mjs
  */
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -48,14 +60,14 @@ const BUNDLE = `${TMP}/draftNight.bundle.mjs`;
 const SRC = `${ROOT}/src/lib/draftNight.ts`;
 
 const CONTROL = process.env.DRAFT_CONTROL || '';
-const KNOWN = ['dropai', 'slowsteps'];
+const KNOWN = ['dropai', 'slowsteps', 'norivals'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`DRAFT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
 }
 
 let libPath = SRC;
-if (CONTROL) {
+if (CONTROL === 'dropai' || CONTROL === 'slowsteps') {
   let src = fs.readFileSync(SRC, 'utf8').replaceAll('\r\n', '\n');
   const swap = (from, to) => {
     if (!src.includes(from)) {
@@ -216,6 +228,42 @@ console.log('4) Picks land in order, and the whole run stays short enough not to
   console.log(`   40 rivals capped to ${flood.picks.length} steps at ${flood.totalMs}ms`);
 }
 
+/* ---------- DRAFT_CONTROL=norivals: the copy ---------- */
+/*
+ * The copy is the NBA board with the second argument of its one
+ * buildDraftNight call in draftPick made an empty list: a board that applies
+ * the rivals' picks and tells the card about none of them. The string it
+ * replaces must be in the board exactly once, or the control refuses to run
+ * (exit 2): a control that replaces a string the file does not hold changes
+ * nothing, and green would then mean "the control did not fire".
+ */
+const NBA_BOARD = 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx';
+const RIVALS_TEST = 'src/components/nba-front-office/NbaDraftNightRivals.test.tsx';
+let nbaCopy = null;
+let norivalsSourceRed = false;
+let norivalsTestRed = false;
+let norivalsTestWhy = 'the behaviour test was not run';
+if (CONTROL === 'norivals') {
+  const FROM = 'grade: gradeOf(pr) }, rivalPicks,';
+  const TO = 'grade: gradeOf(pr) }, [],';
+  const board = fs.readFileSync(path.join(ROOT, NBA_BOARD), 'utf8').split('\r\n').join('\n');
+  const hits = board.split(FROM).length - 1;
+  if (hits !== 1) {
+    console.error(`control cannot run: ${NBA_BOARD} holds the string DRAFT_CONTROL=norivals rewrites ${hits} times, and it must be there exactly once`);
+    console.error(`  looked for: ${FROM}`);
+    process.exit(2);
+  }
+  nbaCopy = board.replace(FROM, TO);
+  if (nbaCopy === board || nbaCopy.includes(FROM)) { console.error('control cannot run: the rewrite of the NBA board changed nothing'); process.exit(2); }
+  /* The copy is run from dist/.draft-control, so an import the board makes
+     relative to its own folder is given its full path in the copy (the same
+     rewrite the four NBA rotation harnesses make in theirs). On its first
+     run this control found the copy could not load for exactly that, and
+     said so instead of calling the load error a firing. */
+  nbaCopy = nbaCopy.replace(/from '\.\/([^']+)'/g, "from '@/components/nba-front-office/$1'");
+  if (/from '\.\.?\//.test(nbaCopy)) { console.error('control cannot run: the copy of the NBA board still holds an import relative to its own folder'); process.exit(2); }
+}
+
 /* ---------- 5. The boards really use it ---------- */
 console.log('5) All four front offices build a reveal and capture the rival picks');
 {
@@ -230,8 +278,9 @@ console.log('5) All four front offices build a reveal and capture the rival pick
     const p = path.join(ROOT, rel);
     if (!fs.existsSync(p)) { fail(`${label}: ${rel} is not there, so the wiring check cannot run`); continue; }
     /* Comments are stripped before matching, because prose about a check is the
-       one place the string a guard looks for is guaranteed to appear. */
-    const src = fs.readFileSync(p, 'utf8')
+       one place the string a guard looks for is guaranteed to appear.
+       Under DRAFT_CONTROL=norivals the NBA board is read from the copy. */
+    const src = (label === 'NBA' && nbaCopy !== null ? nbaCopy : fs.readFileSync(p, 'utf8'))
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/(^|[^:])\/\/.*$/gm, '$1');
     const hasBuild = /buildDraftNight\s*\(/.test(src);
@@ -253,6 +302,7 @@ console.log('5) All four front offices build a reveal and capture the rival pick
     if (!hasCard) fail(`${label} never renders DraftNightCard, so nothing shows the picks landing`);
     if (!capturesRivals) fail(`${label} never pushes a rival pick, so the reveal can only ever show your own selection and the rivals are still thrown away`);
     if (!passesRivals) fail(`${label} does not hand the captured rivals to buildDraftNight, so the picks it collected go nowhere`);
+    if (label === 'NBA' && nbaCopy !== null && hasBuild && hasCard && capturesRivals && !passesRivals) norivalsSourceRed = true;
     if (hasBuild && hasCard && capturesRivals && passesRivals) wired += 1;
   }
   console.log(`   ${wired} of ${BOARDS.length} boards capture the rival picks, hand them over and render the reveal`);
@@ -278,7 +328,59 @@ console.log('5) All four front offices build a reveal and capture the rival pick
   }
 }
 
-if (CONTROL) {
+/* ---------- DRAFT_CONTROL=norivals: the behaviour test on the copy ---------- */
+if (CONTROL === 'norivals') {
+  console.log('5b) NEGATIVE CONTROL norivals: the behaviour test, run on a copy of the NBA board that hands the card an empty list');
+  const testSrc = fs.readFileSync(path.join(ROOT, RIVALS_TEST), 'utf8');
+  /* The test's own name for the row this control must turn red, read from the
+     test file so the two cannot drift. */
+  const named = testSrc.match(/const RIVAL_ROWS_TEST = '([^']+)';/);
+  if (!named) { console.error(`control cannot run: ${RIVALS_TEST} no longer names its rival rows test as RIVAL_ROWS_TEST`); process.exit(2); }
+  const rowName = named[1];
+  const dir = path.join(ROOT, 'dist', '.draft-control');
+  fs.mkdirSync(dir, { recursive: true });
+  const copy = path.join(dir, 'NbaFrontOfficeBoard.control.tsx');
+  fs.writeFileSync(copy, nbaCopy);
+  let r;
+  try {
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', RIVALS_TEST, '--reporter=verbose'],
+      { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NBA: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+  const out = (r.stdout || '') + (r.stderr || '');
+  const lines = out.split('\n');
+  const reported = out.includes('NbaDraftNightRivals.test.tsx');
+  /* A copy that fails to load turns every row red too. That is a broken
+     control, not the check firing, so three things are asked: the file was
+     reported, no load error was printed, and at least one OTHER row of the
+     file passed on the copy, which only a board that rendered can do. */
+  const loadError = /Failed to (load|resolve)|SyntaxError|Cannot find module/.test(out);
+  const greenRows = lines.filter(l => l.includes('✓') && l.includes('NBA draft night, GM desk')).length;
+  const redRows = lines.filter(l => l.includes('×') && l.includes(rowName)).length;
+  const summary = out.match(/Tests\s+(.+)/);
+  console.log(`   vitest exit ${r.status}, ${summary ? summary[1].trim() : 'no summary line'}`);
+  console.log(`   on the copy: ${greenRows} row(s) of the file green, "${rowName}" red ${redRows} time(s) (the desk off and the desk on)`);
+  if (!reported) norivalsTestWhy = 'vitest did not report on the behaviour test at all:\n' + out.slice(-1200);
+  else if (loadError || greenRows === 0) norivalsTestWhy = 'the copy of the NBA board did not load or render, so any red is a load error and not the check:\n' + out.slice(-1200);
+  else if (redRows !== 2) norivalsTestWhy = `the rival rows test went red ${redRows} time(s) on the copy, expected 2 (the desk off and the desk on)`;
+  else norivalsTestRed = true;
+}
+
+if (CONTROL === 'norivals') {
+  /* Its own exit rule (see the header): both reds, or it did not fire. */
+  console.log(`\nNEGATIVE CONTROL norivals was on; ${failures} finding(s) in the sections above.`);
+  const missing = [];
+  if (!norivalsSourceRed) missing.push('section 5 did NOT say "NBA does not hand the captured rivals" on the copy');
+  if (!norivalsTestRed) missing.push(norivalsTestWhy);
+  if (missing.length === 0) {
+    console.log('control "norivals": both reds were seen (the source check for the NBA on the copy, and the behaviour test red by name with the copy loaded). The check works.');
+    process.exitCode = 0;
+  } else {
+    console.error(`control "norivals" did NOT fire. Missing: ${missing.join(' ; ')}`);
+    process.exitCode = 1;
+  }
+} else if (CONTROL) {
   console.log(`\nNEGATIVE CONTROL ${CONTROL} was on; ${failures} finding(s). A control run is expected to be red.`);
   process.exitCode = failures > 0 ? 0 : 1;
 } else if (failures) {

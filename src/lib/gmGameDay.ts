@@ -15,8 +15,8 @@
    PURE. A story is a function of the saved final and a stream keyed to it
    (`${key}|story|${home}-${away}`): watching it again and reloading in the
    middle give the same game, no engine generator and no Math.random moves,
-   and nothing but the final has to be saved. TEAM LEVEL ONLY: a line names a
-   club, never a man, and there is no speaker.
+   and nothing but a game's final has to be saved to tell it again. TEAM
+   LEVEL ONLY: a line names a club, never a man, and there is no speaker.
 
    FAILS CLOSED: a final with no winner, a final with a side above the
    sport's own `maxScore` or above GM_SCORE_CEILING (src/lib/gmGameScore.ts
@@ -26,10 +26,11 @@
    game, or a law that throws gives null, and a card then shows the final
    alone.
 
-   THE SAVE FIELD (`GmLastGame`, the GM club's last told game) is not here:
-   a press writes it and a save validator reads it, so it lives with the
-   quick path in src/lib/gmGameScore.ts and this file rides with a card
-   alone. `gameStory` takes what `readGmLastGame` hands back as it is. */
+   THE SAVED SHAPE of a told game (`GmLastGame`; since Round 1305 a board
+   saves a season of them under `gameLog`, src/lib/gmGameLog.ts) is not
+   here: a press writes it and a load reads it, so it lives with the quick
+   path in src/lib/gmGameScore.ts and this file rides with a card alone.
+   `gameStory` takes what `readGmLastGame` hands back as it is. */
 import { keyedRng } from './keyedRng';
 import { isGmScore, quickGame, type GameDayFixture, type ToldGame } from './gmGameScore';
 import type { DerivedGame, SeasonEvent } from './season/core';

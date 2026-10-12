@@ -94,12 +94,15 @@ export function toldWinner(g: ToldGame): string | null {
   return g.homeScore === g.awayScore ? null : g.homeScore > g.awayScore ? g.home : g.away;
 }
 
-/** THE SAVE FIELD: the one shape all four boards save for Game Day, the GM
- *  club's last told game. It is optional, absent on a bye and on every older
- *  save, and `readGmLastGame` answers null for anything that does not read
- *  as one (mark, never fill). It lives in this file and not beside the
- *  story because a press writes it and a save validator reads it, both in
- *  the board's own chunk, and a module is never split across chunks. */
+/** THE SAVED SHAPE OF ONE TOLD GAME, the one shape all four boards save for
+ *  Game Day. Since Round 1305 a board keeps a season of them, the GM club's
+ *  told games in order, under the key `gameLog` (src/lib/gmGameLog.ts): his
+ *  last told game is that log's last entry, and the key is absent on every
+ *  older save and wherever there is nothing to hold. `readGmLastGame`
+ *  answers null for anything that does not read as one (mark, never fill),
+ *  and the log's reader asks it about every entry. It lives in this file
+ *  and not beside the story because a press writes it and a load reads it,
+ *  both in the board's own chunk, and a module is never split across chunks. */
 export interface GmLastGame extends ToldGame { v: 1; where: string; winner: string }
 
 /** What a board saves after a press. `where` says when it was played, in the bind's own words ("w6", a round's name). */

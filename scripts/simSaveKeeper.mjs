@@ -87,8 +87,9 @@
  *   partreturn    the internationalReturn row is left out              (1)
  *   partfarewell  the farewellSeason row is left out                   (1)
  *   partpress     the pressRoom row is left out                        (1)
+ *   partgamelog   the NFL front office's gameLog row is left out       (1)
  * A control that fired exits 1 and its last line says FIRED. One that did not
- * fire, or could not run, exits 2 and says so. A green run exits 0. The seven
+ * fire, or could not run, exits 2 and says so. A green run exits 0. The eight
  * part controls must also fire on their OWN sentence (the failure that names
  * the part they left out as a version number with no row): the line before
  * FIRED prints it, and without it the control exits 2.
@@ -121,6 +122,26 @@
  * (scripts/simUsBoardParity.mjs). A part of a game that has a whole save row
  * (SAVE_VERSIONS) is not looked into either.
  *
+ * ROUND 1305. The NFL Front Office keeps his club's told games of the season
+ * in the save as gameLog, `{ v: 1, season, games }`: a version number one
+ * level down. Its row says `absent` (readGmGameLog answers null for another
+ * number, the save still opens, and the next press writes a fresh log of
+ * that week's game alone). Its fixture was a start state typed by hand, which
+ * can hold no log; the odd seeds are now a save after one played week, made
+ * by the calls the board's press makes. NOT HELD YET, and said so the round
+ * found it: the GM desk's own number, gm.v. Every new franchise of the four
+ * front offices saves `gm: { v, blocks }` since Round 1019 and all four
+ * fixtures are typed without it, so no row reads it. readGmDesk
+ * (src/lib/gmDesk.ts) answers another number with a FRESH desk (the blocks
+ * dropped, the desk still on), which is neither `refuses` nor `absent` as
+ * this table words them: it wants a ruling before it gets a row.
+ * RULED at the Release AX join (2026-10-12, the lead): that answer is
+ * ACCEPTED as read as absent. Another number at gm.v is not read, the save
+ * still opens, and the desk starts fresh. The row itself is still owed, and
+ * it is `absent` when it comes: it needs a played fixture with the desk on
+ * and its reader and judge in scripts/lib/realSaves.mjs (partReads,
+ * partAbsent), with the judge worded for a fresh desk.
+ *
  * MEASURED (first green run, 2026-10-10, GitHub runner, node 24): see the
  * summary block this harness prints; the numbers are copied into
  * docs/audits/ROUND-1219-NOTES.md.
@@ -141,7 +162,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -456,6 +477,7 @@ const PART_VERSIONS = {
        the room is offered as on a save with no part and the next answer writes a fresh part over it. */
     { at: ['pressRoom', 'version'], current: 1, other: 'absent', reader: 'the Press room reader (stateOf, read through pressRoomView, src/lib/soccerCareerPress.ts)' },
   ],
+  '/front-office': [{ at: ['gameLog', 'v'], current: 1, other: 'absent', reader: 'readGmGameLog (src/lib/gmGameLog.ts)' }],
   '/nfl-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
   '/nba-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
   '/mlb-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
@@ -467,6 +489,7 @@ const PART_CONTROLS = {
   partbrief: ['/soccer-career', 'transferBrief.version'], partagent: ['/soccer-career', 'agentReview.version'],
   partreturn: ['/soccer-career', 'internationalReturn.version'], partfarewell: ['/soccer-career', 'farewellSeason.version'],
   partpress: ['/soccer-career', 'pressRoom.version'],
+  partgamelog: ['/front-office', 'gameLog.v'],
 };
 if (PART_CONTROLS[CONTROL]) {
   const [route, where] = PART_CONTROLS[CONTROL];
@@ -847,7 +870,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };

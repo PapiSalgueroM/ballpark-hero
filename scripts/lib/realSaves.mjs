@@ -97,6 +97,8 @@ import * as NBAFO from './src/lib/nbaFrontOffice';
 import * as MLBFO from './src/lib/mlbFrontOffice';
 import * as NHLFO from './src/lib/nhlFrontOffice';
 import { isFrontOfficeSave } from './src/lib/frontOfficeSave';
+import * as GLOG from './src/lib/gmGameLog';
+import * as NFLGD from './src/lib/frontOfficeGameDay';
 import * as CFB from './src/lib/cfbDynasty';
 import * as CBB from './src/lib/cbbDynasty';
 import * as ARL from './src/lib/aussieRulesLeague';
@@ -263,6 +265,22 @@ const office = (league, myTeam) => JSON.stringify({
   league, myTeam, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0,
   mandate: null, trust: 50, fired: false, pressTilt: 0, seasonTradeLine: null, postseason: null,
 });
+/* Round 1305: an NFL Front Office save after one played week, made by the calls the board's press makes, in the
+   board's order: the injury pass, the computer clubs' moves, the week's games, each told by the football law, and
+   his own game into the season's log (gameLog, one level down, with a version number: PART_VERSIONS of
+   scripts/simSaveKeeper.mjs has its row). The GM desk is off, so the save holds no gm block. It throws when the
+   log did not take his game, so the fixture can never quietly lose its part. */
+const officePlayed = (league, myTeam, rng) => {
+  FO.injuryPass(league.teams, rng);
+  FO.aiWeeklyMoves(league, myTeam, rng);
+  const told = league.schedule[league.week - 1].map(g => NFLGD.nflTell(FO.simGame(g, league.teams, rng), league.teams, league.season, NFLGD.nflWhere(league.week)));
+  const mine = told.find(t => t.game.home === myTeam || t.game.away === myTeam);
+  const gameLog = GLOG.addToGmGameLog(null, league.season, mine && mine.last ? [mine.last] : []);
+  if (!gameLog || gameLog.games.length !== 1) throw new Error('NFL Front Office: the played week kept no game in the log, so the fixture holds no gameLog');
+  league.week += 1;
+  return JSON.stringify({ ...JSON.parse(office(league, myTeam)), gameLog });
+};
+const logOf = s => GLOG.readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam);
 
 /** One real save of every game for one seed. rebuildClubs comes from scripts/data/rebuildSquads.json. */
 export function makeSaves(seed, rebuildClubs) {
@@ -290,7 +308,10 @@ export function makeSaves(seed, rebuildClubs) {
   out['/rebuild'] = written('rebuild-table');
   const rng = mulberry32(seed + 21);
   const nfl = FO.initLeague(rng);
-  out['/front-office'] = office(nfl, Object.keys(nfl.teams)[seed % Object.keys(nfl.teams).length]);
+  /* Round 1305: the odd seeds hold a played week, and with it a gameLog; the even seeds stay the start state. The
+     played week draws from a stream of its own, so the leagues made below are the leagues they were. */
+  const nflTeam = Object.keys(nfl.teams)[seed % Object.keys(nfl.teams).length];
+  out['/front-office'] = seed % 2 === 1 ? officePlayed(nfl, nflTeam, mulberry32(seed + 1305)) : office(nfl, nflTeam);
   const nba = NBAFO.initNbaLeague(rng);
   out['/nba-front-office'] = office(nba, Object.keys(nba.teams)[seed % Object.keys(nba.teams).length]);
   const mlb = MLBFO.initMlbLeague(rng);
@@ -347,6 +368,7 @@ export const partReads = {
     'farewellSeason.version': raw => parsed(raw, s => FARE.readSoccerFarewell(s) !== null),
     'pressRoom.version': raw => parsed(raw, s => PRESS.pressRoomView(s).history.length > 0),
   },
+  '/front-office': { 'gameLog.v': raw => parsed(raw, s => logOf(s) !== null) },
   '/nfl-my-career': { 'prospect.v': prospectRead(NFL_CAREER_SPORT) },
   '/nba-my-career': { 'prospect.v': prospectRead(NBA_CAREER_SPORT) },
   '/mlb-my-career': { 'prospect.v': prospectRead(MLB_CAREER_SPORT) },
@@ -420,6 +442,26 @@ export const partAbsent = {
       if (!now.eligible) return 'the room stays closed (' + now.reason + ')';
       const next = PRESS.answerSoccerPress(s, 'calm');
       if (next === s || !next.pressRoom || next.pressRoom.version !== 1 || PRESS.pressRoomView(next).history.length !== 1) return 'a new answer did not overwrite the unreadable part';
+      return null;
+    },
+  },
+  /* Round 1305. The NFL board reads the season's log through readGmGameLog and treats null as no log at all: the
+     save still opens (a log never refuses a save), and the next press, handed no log, writes a fresh one that holds
+     that week's game alone. The press below is the board's own order of calls; the real board is held to the same
+     by src/components/front-office/FrontOfficeGameDay.test.tsx (its case "an unknown version"). */
+  '/front-office': {
+    'gameLog.v': raw => {
+      const s = JSON.parse(raw);
+      if (logOf(s) !== null) return 'the log is still read';
+      if (isFrontOfficeSave(s, 'NFL', FO.REGULAR_WEEKS) !== true) return 'the save is refused, and a log must never refuse a save';
+      const rng = mulberry32(1305);
+      const lg = JSON.parse(JSON.stringify(s.league));
+      FO.injuryPass(lg.teams, rng);
+      FO.aiWeeklyMoves(lg, s.myTeam, rng);
+      const told = lg.schedule[lg.week - 1].map(g => NFLGD.nflTell(FO.simGame(g, lg.teams, rng), lg.teams, lg.season, NFLGD.nflWhere(lg.week)));
+      const mine = told.find(t => t.game.home === s.myTeam || t.game.away === s.myTeam);
+      const next = GLOG.addToGmGameLog(logOf(s), lg.season, mine && mine.last ? [mine.last] : []);
+      if (!next || next.v !== 1 || next.games.length !== 1 || logOf({ ...s, league: lg, gameLog: JSON.parse(JSON.stringify(next)) }) === null) return 'the next press did not write a fresh log of one game over the unreadable one';
       return null;
     },
   },

@@ -593,11 +593,15 @@ export default function NbaFrontOfficeBoard() {
       nextClass = result.remaining; rivalPicks.push(...result.picks); batches--;
     } while (nextPicks === 0 && batches > 0);
     /* Round 1018: with the desk on, every grade on the card is your scout's
-       read, the rivals' picks too (names are unique in a league, Round 211). */
-    const scouted = new Map(draftClass.map(p => [p.name, p]));
-    const rivalCard = gm ? rivalPicks.map(x => { const p = scouted.get(x.playerName); return p ? { ...x, grade: gradeOf(p) } : x; }) : rivalPicks;
+       read, the rivals' picks too (names are unique in a league, Round 211).
+       Round 1305: the read is written onto the captured list itself, the NFL
+       board's shape, so the list the engine filled is the list the card gets. */
+    if (gm) {
+      const scouted = new Map(draftClass.map(p => [p.name, p]));
+      rivalPicks.splice(0, rivalPicks.length, ...rivalPicks.map(x => { const p = scouted.get(x.playerName); return p ? { ...x, grade: gradeOf(p) } : x; }));
+    }
     setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: gradeOf(pr) }, rivalCard,
+      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: gradeOf(pr) }, rivalPicks,
     ));
     setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftAiBatchesLeft(batches);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${gradeOf(pr)}.`, ...f].slice(0, 6));
