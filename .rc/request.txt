@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/lib/gmBracketView.test.ts src/components/front-office-shared/GmBracketCard.test.tsx src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/test/gmBracketLedger.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/lib/gmBracket.test.ts src/lib/gmGameLog.test.ts src/lib/frontOfficeGameDay.test.ts src/test/usPostseasonFormat.test.ts src/test/usPlayoffs.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+ctl-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simAccessibility: node scripts/simAccessibility.mjs
