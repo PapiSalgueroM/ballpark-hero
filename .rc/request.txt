@@ -1,0 +1,7 @@
+#!serial
+vitest-ps: node_modules/.bin/vitest run src/components/front-office/FrontOfficePostseason.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-trust: node scripts/controlFrontOfficeBoard.mjs trustspoils
+ctl-press: node scripts/controlFrontOfficeBoard.mjs pressspoils
+ctl-done: node scripts/controlFrontOfficeBoard.mjs donenow
+ctl-tiewhere: node scripts/controlFrontOfficeBoard.mjs tiewhere
