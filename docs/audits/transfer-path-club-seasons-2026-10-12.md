@@ -46,3 +46,9 @@ failed in unchanged cbbGrid.ts. No build, control, generated-site or browser
 credit is taken from that run. The repaired setup installs browser tools
 outside the app dependency tree and verifies every locked installed version
 and both package-file hashes before proceeding.
+
+The bugfix gate builds the complete app and regenerates only the Transfer Path
+snapshot. All 15 generated-site fences remain in the gate. The earlier
+49f2b7d1 full-snapshot request remains separate evidence, with no full-build
+acceptance credited while it is still running. No unrelated snapshot output
+is adopted into this branch.
