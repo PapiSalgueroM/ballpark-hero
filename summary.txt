@@ -1,0 +1,3 @@
+vitest-two exit=0 10s |    Duration  10.00s (transform 3.12s, setup 282ms, collect 6.79s, tests 5.80s, environment 1.16s, prepare 557ms)
+tsc exit=0 72s | 
+simSoccerAwardGenerations exit=1 977s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:516:52

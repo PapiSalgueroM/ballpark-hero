@@ -1,0 +1,12 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerBallonPoolReadAsAbsent.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 1650[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerAwardGenerations.test.tsx [2m([22m[2m31 tests[22m[2m)[22m[33m 4151[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career generated-candidate save boundaries[2m > [22mholds complete legacy pool and old pending ballot over actual page reload [33m 365[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m60 passed[39m[22m[90m (60)[39m
+[2m   Start at [22m 18:44:04
+[2m   Duration [22m 10.00s[2m (transform 3.12s, setup 282ms, collect 6.79s, tests 5.80s, environment 1.16s, prepare 557ms)[22m
+
