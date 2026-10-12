@@ -1,0 +1,23 @@
+simHalftime: node scripts/simHalftime.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+noShip: d=$(git diff --stat 48cb9d4b -- src public index.html package.json package-lock.json vite.config.ts tsconfig.app.json); if [ -z "$d" ]; then echo "nothing shipped moved"; else echo "$d"; exit 1; fi
+simSafari: node scripts/simSafari.mjs
+ss-lookbehind: SIM_SAFARI_CONTROL=lookbehind node scripts/simSafari.mjs
+ss-testimport: SIM_SAFARI_CONTROL=testimport node scripts/simSafari.mjs
+ss-barevh: SIM_SAFARI_CONTROL=barevh node scripts/simSafari.mjs
+ss-vhafter: SIM_SAFARI_CONTROL=vhafter node scripts/simSafari.mjs
+ss-dvhcomment: SIM_SAFARI_CONTROL=dvhcomment node scripts/simSafari.mjs
+ss-customprop: SIM_SAFARI_CONTROL=customprop node scripts/simSafari.mjs
+ss-lvhafter: SIM_SAFARI_CONTROL=lvhafter node scripts/simSafari.mjs
+ss-bogus: SIM_SAFARI_CONTROL=bogus node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+act-match: SIM_ACTIVITY_CONTROL=match node scripts/simActivityNotCompletion.mjs
+act-career: SIM_ACTIVITY_CONTROL=career node scripts/simActivityNotCompletion.mjs
+act-heavy: SIM_ACTIVITY_CONTROL=heavy node scripts/simActivityNotCompletion.mjs
+act-noping: SIM_ACTIVITY_CONTROL=noping node scripts/simActivityNotCompletion.mjs
+act-twocalls: SIM_ACTIVITY_CONTROL=twocalls node scripts/simActivityNotCompletion.mjs
+act-twodotted: SIM_ACTIVITY_CONTROL=twodotted node scripts/simActivityNotCompletion.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
