@@ -1,0 +1,4 @@
+vitest-three exit=0 12s |    Duration  10.27s (transform 3.43s, setup 409ms, collect 9.64s, tests 6.14s, environment 1.89s, prepare 855ms)
+tsc exit=0 91s | 
+simCareerAwardsNight exit=0 97s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSoccerAwardGenerations exit=1 993s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:516:52
