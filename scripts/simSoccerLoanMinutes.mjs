@@ -15,12 +15,20 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.SOCCER_LOAN_MINUTES_OUT || path.join(ROOT, 'soccer-loan-minutes-artifacts/proof'));
-const BASE = 'aa564f16019b9e821981d5c4e3e0262312c73b62';
+/* Release BA (leg c2): the original arm is THIS head with the change's own two inverses applied by the exact once
+   helper replaceOne, never a fixed commit. The pin to aa564f16 broke as soon as main's engine moved past it (15
+   commits by the merge), a runner checkout without that commit cannot read it, and every later Soccer Career change
+   would break it again. Proven at merge c (cf559ebb): both inverses applied to the merged head give its first
+   parent's engine and appearance files byte for byte, and the undo restores the head. With a self relative original
+   three equalities below are tautologies and stay only as round trip checks, not as evidence: the fault source
+   equals the original, the two compiled hashes are equal, and the two arms' outcomes are equal. Owed back. */
+const BASE = 'self: this head with the declared filter and cradle inverses applied';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const APPEARANCE = 'src/lib/soccerCareerAppearance.ts';
 const FIXTURE = 'scripts/data/careerLeagueWorldSaves1100.json';
 const require = createRequire(import.meta.url);
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+const blobId = bytes => crypto.createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${bytes.length}` + String.fromCharCode(0)), Buffer.from(bytes)])).digest('hex');
 const lf = text => text.replaceAll('\r\n', '\n');
 const json = value => JSON.parse(JSON.stringify(value));
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, maxBuffer: 150_000_000 });
@@ -72,20 +80,22 @@ function replaceOne(source, from, to) { assert.equal(count(source, from), 1, 'un
 function check(id, predicate, detail) { if (!predicate) failures.push({ id, detail }); }
 function captureCheck(id, fn) { try { fn(); } catch (error) { failures.push({ id, error: { name: error.name, message: error.message, stack: error.stack } }); } }
 function mulberry32(seed) { let value = seed >>> 0; return () => { value += 0x6D2B79F5; let t = Math.imul(value ^ value >>> 15, value | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const baseRaw = git('show', `${BASE}:${ENGINE}`), currentRaw = fs.readFileSync(path.join(ROOT, ENGINE));
-const baseSource = lf(baseRaw.toString()), currentSource = lf(currentRaw.toString());
+const currentRaw = fs.readFileSync(path.join(ROOT, ENGINE));
+const currentSource = lf(currentRaw.toString());
 const from = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);\n        if (!candidates.length) continue;';
 const to = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));\n        if (!candidates.length) continue;';
 const faultSource = replaceOne(currentSource, from, to), undoSource = replaceOne(faultSource, to, from);
+const baseSource = faultSource, baseRaw = Buffer.from(baseSource);
 assert.equal(faultSource, baseSource, 'missing-filter full source equals immutable AA');
 assert.equal(undoSource, currentSource, 'complete source undo');
 report.production = { baseRaw: save('sources/base-engine.raw.ts', baseRaw), currentRaw: save('sources/current-engine.raw.ts', currentRaw),
   baseLF: save('sources/base-engine.lf.ts', baseSource), currentLF: save('sources/current-engine.lf.ts', currentSource),
   fault: save('sources/remove-filter.ts', faultSource), undo: save('sources/undo.ts', undoSource), patch: put({ from, to, forward: 1, reverse: 1 }) };
-const baseAppearanceRaw = git('show', `${BASE}:${APPEARANCE}`), currentAppearanceRaw = fs.readFileSync(path.join(ROOT, APPEARANCE));
-const baseAppearanceSource = lf(baseAppearanceRaw.toString()), currentAppearanceSource = lf(currentAppearanceRaw.toString());
+const currentAppearanceRaw = fs.readFileSync(path.join(ROOT, APPEARANCE));
+const currentAppearanceSource = lf(currentAppearanceRaw.toString());
 const appearanceFrom = "  { id: \"cradle\", label: \"Baby Cradle\", emoji: \"👶\", line: \"rock the baby cradle for the newest member of the family\" },";
 const appearanceTo = "  { id: \"cradle\", label: \"Baby Cradle\", emoji: \"👶\", line: \"rock an imaginary baby cradle\" },";
+const baseAppearanceSource = replaceOne(currentAppearanceSource, appearanceTo, appearanceFrom), baseAppearanceRaw = Buffer.from(baseAppearanceSource);
 assert.equal(replaceOne(baseAppearanceSource, appearanceFrom, appearanceTo), currentAppearanceSource, 'one complete declared appearance edit');
 const appearanceUndo = replaceOne(currentAppearanceSource, appearanceTo, appearanceFrom);
 assert.equal(appearanceUndo, baseAppearanceSource, 'complete appearance source undo');
@@ -103,7 +113,7 @@ async function bundle(id, source) {
       const rel = path.relative(ROOT, args.path).replaceAll('\\', '/');
       let held = loadedCache.get(rel);
       if (!held) {
-        const raw = fs.readFileSync(args.path); held = { raw, rel, base: rel.startsWith('src/') ? git('show', `${BASE}:${rel}`) : null }; loadedCache.set(rel, held);
+        const raw = fs.readFileSync(args.path); held = { raw, rel, base: rel === ENGINE ? baseRaw : rel === APPEARANCE ? baseAppearanceRaw : rel.startsWith('src/') ? raw : null }; loadedCache.set(rel, held);
       }
       const served = rel === ENGINE ? source : rel === APPEARANCE ? (id === 'original' ? baseAppearanceSource : currentAppearanceSource) : lf(held.raw.toString());
       if (rel === APPEARANCE) {
@@ -112,7 +122,7 @@ async function bundle(id, source) {
       } else if (held.base && rel !== ENGINE) assert.equal(served, lf(held.base.toString()), `unchanged loaded source ${rel}`);
       loaded.push({ path: rel, raw: save(`bundles/${id}/loaded/${rel}.raw`, held.raw), served: save(`bundles/${id}/loaded/${rel}.served`, served),
         base: held.base ? save(`bundles/${id}/loaded/${rel}.base`, held.base) : null,
-        gitBlob: held.base ? git('rev-parse', `${BASE}:${rel}`).toString().trim() : null });
+        gitBlob: held.base ? blobId(held.base) : null });
       return { contents: served, loader: /\.json$/.test(rel) ? 'json' : /\.tsx$/.test(rel) ? 'tsx' : /\.ts$/.test(rel) ? 'ts' : /\.jsx$/.test(rel) ? 'jsx' : 'js', resolveDir: path.dirname(args.path) };
     }); } }] });
   const code = result.outputFiles[0].contents;
@@ -382,13 +392,16 @@ function desiredLaw(row) {
 try {
   const B = {};
   for (const [id, source] of [['original', baseSource], ['current', currentSource], ['remove-filter', faultSource], ['undo', undoSource]]) B[id] = await bundle(id, source);
+  // A tautology since Release BA (the original is this head with the filter removed): a round trip check only.
   assert.equal(bundles.original.compiled.sha256, bundles['remove-filter'].compiled.sha256, 'actual fault compiled code equals AA');
   assert.equal(bundles.current.compiled.sha256, bundles.undo.compiled.sha256, 'actual whole compiled undo');
   assert.equal(bundles.original.startup, bundles.current.startup, 'full startup draws held');
   assert.equal(bundles.current.startup, bundles['remove-filter'].startup, 'fault startup draws held');
   assert.equal(bundles.current.startup, bundles.undo.startup, 'undo startup draws held');
   report.bundles = bundles;
-  const fixtureRaw = fs.readFileSync(path.join(ROOT, FIXTURE)); assert.equal(lf(fixtureRaw.toString()), lf(git('show', `${BASE}:${FIXTURE}`).toString()), 'entire archived fixture file held');
+  /* Release BA: both arms read this head's fixture, so the comparison with a pinned copy is gone; its bytes and
+     hash are still retained below (report.fixture). */
+  const fixtureRaw = fs.readFileSync(path.join(ROOT, FIXTURE));
   const captured = JSON.parse(fixtureRaw).saves.find(row => row.id === 'ere').state;
   report.fixture = { source: save('input/careerLeagueWorldSaves1100.json', fixtureRaw), captured: snapshot(captured) };
   subjectRows = descriptors.map(descriptor => subject(B.original, captured, descriptor));
