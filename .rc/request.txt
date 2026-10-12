@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+roundname: US_LEDGER_CONTROL=roundname node scripts/simUsSeasonLedger.mjs
+onegroup: US_LEDGER_CONTROL=onegroup node scripts/simUsSeasonLedger.mjs
+readday: US_LEDGER_CONTROL=readday node scripts/simUsSeasonLedger.mjs
+keytwice: US_LEDGER_CONTROL=keytwice node scripts/simUsSeasonLedger.mjs
+nhlfrom: US_LEDGER_CONTROL=nhlfrom node scripts/simUsSeasonLedger.mjs
+nhlyear: US_LEDGER_CONTROL=nhlyear node scripts/simUsSeasonLedger.mjs
+plan: node scripts/simUsPlanSeason.mjs
