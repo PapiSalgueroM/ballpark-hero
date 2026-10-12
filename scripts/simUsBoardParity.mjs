@@ -294,6 +294,17 @@
  *                                    in a copy of the shared board: all four
  *                                    go red on the named save "extTalk", which
  *                                    no longer opens on its talk
+ *   US_BOARD_PARITY_CONTROL=nosave   the NBA's named save "wheel" and its
+ *                                    screens taken out of a copy: section A red
+ *                                    for the NBA alone, on the saved talks floor
+ *   US_BOARD_PARITY_CONTROL=nophase  the NBA path's free agency steps given the
+ *                                    phase season in a copy: red for the NBA
+ *                                    alone, on the talk phase floor
+ *   US_BOARD_PARITY_CONTROL=noresult the named save "wheel" that came up
+ *                                    withdrawn rewritten as held in a copy: the
+ *                                    floor "each way a push can end is on the
+ *                                    record" goes red, and nothing else
+ *   (the last three are the Release AX fix pass's; like wheel they run no replay)
  *
  * Nothing here reaches the network. Run: node scripts/simUsBoardParity.mjs
  */
@@ -414,6 +425,15 @@ function wholeProblems(fx) {
     const noMarket = MARKET_SAVES.filter(n => !s.saves[n] || !(s.screens[n]?.length > 0));
     if (noMarket.length) say(`no fixed save or no screens for the saved talks ${noMarket.join(', ')}`);
   }
+  /* Release AX fix pass (the recording reviewer's minor 5): each way a push can end is on the record at least
+     once, across the four named saves "wheel" (today: the NFL's came up withdrawn, the NBA's and the NHL's held,
+     MLB's raised). A later retake that lost one of the three would otherwise stay green. Asked only of a
+     fixture that holds all four sports, since the three results are spread over them. */
+  if (SPORTS.every(slug => fx.sports?.[slug])) {
+    const ends = new Set(SPORTS.map(slug => { try { return JSON.parse(fx.sports[slug].saves?.wheel ?? 'null')?.contractTalk?.wheel?.result; } catch { return undefined; } }));
+    const lost = ['raised', 'held', 'withdrawn'].filter(r => !ends.has(r));
+    if (lost.length) out.push({ slug: 'all', m: `all: no named save "wheel" holds a push that came up ${lost.join(', ')}` });
+  }
   return out;
 }
 
@@ -444,25 +464,45 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const same = (a, b) => [...a].sort().join(',') === [...b].sort().join(',');
 
-if (CONTROL === 'wheel') {
-  /* Release AX: section A's own floor, proven on a changed copy. No source is
-     touched and no replay runs. The healthy fixture must pass section A first,
-     and the copy must be red for the one sport, on the wheel floor alone. */
-  const VICTIM = 'mlb';
+/* Release AX: section A's own floors, each proven on a changed copy. No source is touched and no replay runs.
+   The healthy fixture must pass section A first, and the copy must be red for the one victim, on that floor
+   alone. wheel came with the retake; nosave, nophase and noresult are the fix pass's (the recording reviewer's
+   minor 5: two floors had no control, and one floor was missing). A damage that finds nothing to change answers
+   null and the control refuses to run, because a control that changed nothing proves nothing. */
+const FLOOR_CONTROLS = {
+  wheel: { victim: 'mlb', reason: 'holds no market wheel step',
+    damage(fx) { const steps = fx.sports?.mlb?.path.filter(st => st.a.startsWith(WHEEL_STEP)) ?? []; for (const st of steps) st.a = 'renamed ' + st.a; return steps.length ? `${steps.length} wheel steps of the mlb path renamed` : null; } },
+  nosave: { victim: 'nba', reason: 'no fixed save or no screens for the saved talks wheel',
+    damage(fx) { const s = fx.sports?.nba; if (!s?.saves?.wheel) return null; delete s.saves.wheel; delete s.screens.wheel; return 'the named save "wheel" of the nba and its screens taken out'; } },
+  nophase: { victim: 'nba', reason: 'no step of the recorded path is saved in the freeagency phase',
+    damage(fx) { const steps = fx.sports?.nba?.path.filter(st => st.p === 'freeagency') ?? []; for (const st of steps) st.p = 'season'; return steps.length ? `${steps.length} free agency steps of the nba path given the phase season` : null; } },
+  noresult: { victim: 'all', reason: 'holds a push that came up withdrawn',
+    damage(fx) {
+      let n = 0;
+      for (const slug of SPORTS) {
+        const raw = fx.sports?.[slug]?.saves?.wheel; if (!raw) continue;
+        const save = JSON.parse(raw);
+        if (save.contractTalk?.wheel?.result !== 'withdrawn') continue;
+        save.contractTalk.wheel.result = 'held'; fx.sports[slug].saves.wheel = JSON.stringify(save); n += 1;
+      }
+      return n ? `${n} named save "wheel" that came up withdrawn rewritten as held` : null;
+    } },
+};
+if (FLOOR_CONTROLS[CONTROL]) {
+  const c = FLOOR_CONTROLS[CONTROL];
   const healthy = wholeProblems(JSON.parse(read(FIXTURE)));
   const fx = JSON.parse(read(FIXTURE));
-  const steps = fx.sports?.[VICTIM]?.path.filter(st => st.a.startsWith(WHEEL_STEP)) ?? [];
-  if (!steps.length) { console.error(`control wheel: the ${VICTIM} path holds no wheel step to rename, so this control would change nothing and prove nothing`); process.exit(1); }
-  for (const st of steps) st.a = 'renamed ' + st.a;
+  const did = c.damage(fx);
+  if (!did) { console.error(`control ${CONTROL}: the fixture holds nothing for it to change, so this control would change nothing and prove nothing`); process.exit(1); }
   const found = wholeProblems(fx);
-  console.log(`control wheel: ${steps.length} wheel steps of the ${VICTIM} path renamed in a copy; section A says [${found.map(p => p.m).join(' | ')}]`);
-  if (healthy.length) fail(`control wheel: the fixture in the tree is not whole to begin with (${healthy[0].m})`);
-  else if (!found.length) fail('control wheel left section A green');
-  else if (!found.every(p => p.slug === VICTIM)) fail(`control wheel should turn ${VICTIM} alone red, and it turned [${[...new Set(found.map(p => p.slug))].join(', ')}]`);
-  else if (found.length !== 1 || !found[0].m.includes('holds no market wheel step')) fail(`control wheel went red, but not for its own reason alone ("${found.map(p => p.m).join(' | ')}")`);
-  else console.log(`  CONTROL FIRED: [${VICTIM}] red on "holds no market wheel step", the rest green`);
-  if (failures) { console.error('simUsBoardParity control wheel: failed'); process.exit(1); }
-  console.log('simUsBoardParity control wheel: green. The control turned its own sport red for its own reason.');
+  console.log(`control ${CONTROL}: ${did} in a copy; section A says [${found.map(p => p.m).join(' | ')}]`);
+  if (healthy.length) fail(`control ${CONTROL}: the fixture in the tree is not whole to begin with (${healthy[0].m})`);
+  else if (!found.length) fail(`control ${CONTROL} left section A green`);
+  else if (!found.every(p => p.slug === c.victim)) fail(`control ${CONTROL} should turn ${c.victim} alone red, and it turned [${[...new Set(found.map(p => p.slug))].join(', ')}]`);
+  else if (found.length !== 1 || !found[0].m.includes(c.reason)) fail(`control ${CONTROL} went red, but not for its own reason alone ("${found.map(p => p.m).join(' | ')}")`);
+  else console.log(`  CONTROL FIRED: [${c.victim}] red on "${c.reason}", the rest green`);
+  if (failures) { console.error(`simUsBoardParity control ${CONTROL}: failed`); process.exit(1); }
+  console.log(`simUsBoardParity control ${CONTROL}: green. The control turned its own sport red for its own reason.`);
   process.exit(0);
 }
 if (CONTROL) {
