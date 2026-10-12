@@ -162,3 +162,39 @@ through.
   measured, never re-seeded for green). The three Club Manager pins (simGmCalendar, simGmDealTableFixture,
   simGmStaff) are Round 1316's, after AZ.
 - Rounds 1308 and 1309 change how an NFL season ends; Round 1317 builds playGmPress and playFoHub on 1309's file.
+
+### 3.7 playClubManager (commits e07cd2df and 48a3e61f)
+
+The lead's ruling (the critic's answer 3, option (a) WITH the seed): the page plays on PLAY_CM_SEED (unset is the
+file name's seed 1542433760), printed first; before the first kick off the save's board confidence is doctored
+from 60 to 100 from robots.txt (the Round 196 rule), and the walk proves it landed off the manager slot screen,
+the only place the game draws the number ("Week 1 of N · Board 100/100"): a lost edit is a BROKEN finding. The
+SHALLOW lines are unchanged. The page's draw count is printed at the hub before the first kick off and at the
+end; the review is screenshot into $RC_OUT; the walk blocks the database host.
+
+Seed table on e07cd2df, requests `r1314-cm1` (sent 14:56 EDT, ran 19:02 to 19:35 UTC) and `r1314-cm2` (19:08 to
+19:36 UTC). Every run: Crystal Palace, "Board 100/100" read back, 4 page draws before the first kick off, exit 0,
+0 findings, 2 signings.
+
+| Seed | Ending | Full times | Windows | Shape changes | Draws at the end | Seconds |
+|---|---|---|---|---|---|---|
+| default 1542433760, run 1 | played the season out | 40 | 44 | 17 | 47491 | 280 |
+| default, run 2 | played the season out | 40 | 44 | 17 | 47491 | 281 |
+| default, CPU throttled at rate 4 | played the season out | 40 | 44 | 17 | 47491 | 319 |
+| 1 | played the season out | 39 | 43 | 7 | 46578 | 268 |
+| 2 | played the season out | 39 | 43 | 10 | 46487 | 270 |
+| 3 | played the season out | 42 | 46 | 14 | 47639 | 292 |
+| 4 | played the season out | 39 | 43 | 11 | 46764 | 270 |
+| 5 | played the season out | 40 | 44 | 18 | 47357 | 281 |
+| 6 | played the season out | 39 | 43 | 13 | 46635 | 274 |
+| 7 | played the season out | 40 | 44 | 17 | 46831 | 278 |
+| 8 | played the season out | 40 | 44 | 16 | 46512 | 278 |
+| 9 | played the season out | 41 | 45 | 17 | 47734 | 285 |
+| 10 | sacked after 27 full times (both signings already made) | 27 | 31 | 9 | 31880 | 190 |
+
+The control CM_CONTROL=nobusiness was STALE on main, found here: on e07cd2df it exited 1 in 2 s with "RED before
+it started. The transfer business guard matched 2 time(s) in the built assets". Round 721 (f4702db1) gave the
+Deadline Day board its own `g.signings.length > 0 &&`, so the bare minified shape `\w+\.signings\.length>0&&`
+matched two chunks. Commit 48a3e61f anchors the guard on the one followed within 400 characters by the block's
+"Transfer business" heading (a literal minifying keeps; checked against a local September build: the
+season summary chunk alone, once). The control ALWAYS exits 1 and says green or RED in its last line.
