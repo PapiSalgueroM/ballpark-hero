@@ -1,0 +1,11 @@
+MUT opponent applied to src/lib/gmBracketView.ts
+ src/lib/gmBracketView.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/lib/gmBracketView.test.ts[2m > [22mgmBracketPlace: the six kinds[2m > [22mnext: the round and the club he meets, named once the bracket names it
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmBracketCard.test.tsx[2m > [22mGmBracketCard[2m > [22ma week he looked back at gives way to the new week once the bracket moves on
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmBracketCard.test.tsx[2m > [22mGmBracketCard[2m > [22ma best of seven shows the wins of each side, so the other front offices mount it unchanged
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmBracketCard.test.tsx[2m > [22mGmBracketCard[2m > [22mthe play in and best of seven rounds of src/lib/gmBracket.test.ts: losing the first play in game is not going out
+simGmGameDay: 426 checks, 0 failed
+
+simGmGameDay: 426 checks, 0 failed
+MUT opponent CAUGHT: vitest exit 1, simGmGameDay exit 0

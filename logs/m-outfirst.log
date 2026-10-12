@@ -1,0 +1,7 @@
+MUT outfirst applied to src/lib/gmBracketView.ts
+ src/lib/gmBracketView.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+simGmGameDay: 426 checks, 0 failed
+
+simGmGameDay: 426 checks, 0 failed
+MUT outfirst NOT CAUGHT: vitest exit 0, simGmGameDay exit 0

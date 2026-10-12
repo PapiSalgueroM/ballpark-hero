@@ -1,0 +1,8 @@
+MUT seedlen applied to src/lib/frontOfficePostseason.ts
+ src/lib/frontOfficePostseason.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/lib/frontOfficePostseason.test.ts[2m > [22mNFL_POSTSEASON[2m > [22maccepts the engine's seeds and refuses a list the league could not have made
+simGmGameDay: 426 checks, 0 failed
+
+simGmGameDay: 426 checks, 0 failed
+MUT seedlen CAUGHT: vitest exit 1, simGmGameDay exit 0

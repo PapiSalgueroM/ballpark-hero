@@ -1,0 +1,13 @@
+MUT confs applied to src/lib/frontOfficePostseason.ts
+ src/lib/frontOfficePostseason.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/lib/frontOfficePostseason.test.ts[2m > [22mNFL_POSTSEASON[2m > [22maccepts the engine's seeds and refuses a list the league could not have made
+  FAIL (section 12): set 0: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line (52 looked at): 10 broke it, the first: set 0 fifteen 0 stop 0, seeds that mix the conferences: rebuilt null
+  FAIL (section 12): set 1: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line (52 looked at): 10 broke it, the first: set 1 fifteen 0 stop 0, seeds that mix the conferences: rebuilt null
+  FAIL (section 12): set 2: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line (52 looked at): 10 broke it, the first: set 2 fifteen 0 stop 0, seeds that mix the conferences: rebuilt null
+  FAIL (section 12): set 3: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line (52 looked at): 10 broke it, the first: set 3 fifteen 0 stop 0, seeds that mix the conferences: rebuilt null
+  FAIL (section 12): set 4: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line (52 looked at): 10 broke it, the first: set 4 fifteen 0 stop 0, seeds that mix the conferences: rebuilt null
+simGmGameDay: 426 checks, 5 failed
+
+simGmGameDay: 426 checks, 5 failed
+MUT confs CAUGHT: vitest exit 1, simGmGameDay exit 1

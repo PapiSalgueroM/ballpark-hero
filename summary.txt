@@ -1,0 +1,11 @@
+m-edges exit=0 35s | MUT edges NOT CAUGHT: vitest exit 0, simGmGameDay exit 0
+m-confs exit=1 34s | MUT confs CAUGHT: vitest exit 1, simGmGameDay exit 1
+m-version exit=1 34s | MUT version CAUGHT: vitest exit 1, simGmGameDay exit 1
+m-sidescore exit=1 34s | MUT sidescore CAUGHT: vitest exit 1, simGmGameDay exit 0
+m-outfirst exit=0 34s | MUT outfirst NOT CAUGHT: vitest exit 0, simGmGameDay exit 0
+m-opponent exit=1 33s | MUT opponent CAUGHT: vitest exit 1, simGmGameDay exit 0
+m-period exit=1 34s | MUT period CAUGHT: vitest exit 1, simGmGameDay exit 0
+m-wclabel exit=1 33s | MUT wclabel CAUGHT: vitest exit 1, simGmGameDay exit 0
+m-seedi exit=1 34s | MUT seedi CAUGHT: vitest exit 1, simGmGameDay exit 0
+m-tellfirst exit=0 33s | MUT tellfirst NOT CAUGHT: vitest exit 0, simGmGameDay exit 0
+m-seedlen exit=1 34s | MUT seedlen CAUGHT: vitest exit 1, simGmGameDay exit 0

@@ -1,0 +1,8 @@
+MUT period applied to src/lib/gmPostseason.ts
+ src/lib/gmPostseason.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/lib/gmPostseason.test.ts[2m > [22minGmPostseason[2m > [22mis the hub at the bracket period with no champion for the season, and nothing else
+simGmGameDay: 426 checks, 0 failed
+
+simGmGameDay: 426 checks, 0 failed
+MUT period CAUGHT: vitest exit 1, simGmGameDay exit 0

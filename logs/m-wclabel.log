@@ -1,0 +1,9 @@
+MUT wclabel applied to src/components/front-office/NflBracket.tsx
+ src/components/front-office/NflBracket.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmBracketCard.test.tsx[2m > [22mGmBracketCard[2m > [22mthe week chips list a week and play nothing
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmBracketCard.test.tsx[2m > [22mGmBracketCard[2m > [22mthe NFL counts its seeds from 1 in each conference and names its weeks from the ledger
+simGmGameDay: 426 checks, 0 failed
+
+simGmGameDay: 426 checks, 0 failed
+MUT wclabel CAUGHT: vitest exit 1, simGmGameDay exit 0

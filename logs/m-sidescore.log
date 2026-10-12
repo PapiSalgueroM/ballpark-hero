@@ -1,0 +1,8 @@
+MUT sidescore applied to src/lib/gmBracketView.ts
+ src/lib/gmBracketView.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/lib/gmBracketView.test.ts[2m > [22mthe rows and the weeks a card draws[2m > [22ma one game tie: both clubs, the final once played, the winner, his tie, a club that is out
+simGmGameDay: 426 checks, 0 failed
+
+simGmGameDay: 426 checks, 0 failed
+MUT sidescore CAUGHT: vitest exit 1, simGmGameDay exit 0
