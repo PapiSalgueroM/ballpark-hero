@@ -17,7 +17,7 @@ jobs:
       ENGINES: chromium
       TRANSFER_PATH_LOCAL_ONLY: '1'
       CAREER_SEASON_LOCAL_ONLY: '1'
-      TRANSFER_PATH_CONFIRM_RESET_PHASE: baseline
+      TRANSFER_PATH_CONFIRM_RESET_PHASE: fixed
       TRANSFER_PATH_CONFIRM_RESET_OUT: ${{ github.workspace }}/transfer-path-confirm-reset-artifacts
       PRERENDER_ONLY: /transfer-path
     steps:
