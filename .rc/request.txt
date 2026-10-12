@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-bracketjump: FO_GAMEDAY_WALK_CONTROL=bracketjump ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-playoffspoil: FO_GAMEDAY_WALK_CONTROL=playoffspoil ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-lostblock: FO_GAMEDAY_WALK_CONTROL=lostblock ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+gmpress: ENGINES=chromium node scripts/playGmPress.mjs
+mandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
+sessionmarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+fohub: ENGINES=chromium node scripts/playFoHub.mjs
+playgames: ONLY=/front-office ENGINES=chromium node scripts/playGames.mjs
+seasoncentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+seasonmotion: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+seasonmoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+revealscroll: ENGINES=chromium node scripts/simRevealScroll.mjs
+keeper: KEEPER_NO_BASE=1 ENGINES=chromium node scripts/playSaveKeeper.mjs
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight.log 2>&1; s=$?; grep -E "front-office|nfl-my-career|FAIL|sweepWeight" $RC_OUT/weight.log | cut -c1-200; f=$(ls dist/assets/NflBracket-*.js); echo "NflBracket chunk $(basename $f): $(wc -c < $f) bytes raw, $(gzip -c $f | wc -c) gzipped"; exit $s
