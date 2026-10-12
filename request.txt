@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivalPlain: node scripts/simUsRivalSense.mjs
+ledger: node scripts/simUsSeasonLedger.mjs
+ledgerFullslatemlb: US_LEDGER_CONTROL=fullslatemlb node scripts/simUsSeasonLedger.mjs
+ledgerFullslatenhl: US_LEDGER_CONTROL=fullslatenhl node scripts/simUsSeasonLedger.mjs
+ledgerMlbtyped: US_LEDGER_CONTROL=mlbtyped node scripts/simUsSeasonLedger.mjs
+ledgerNhltyped: US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+ledgerMlbcarry: US_LEDGER_CONTROL=mlbcarry node scripts/simUsSeasonLedger.mjs
+vitestRound: node_modules/.bin/vitest run src/test/usRivalOldSavesB.test.ts src/test/usRivalLine.test.ts src/test/usCareerTruthDigest.test.ts src/test/nbaOldSaveLines.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
