@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-pacespoils: FO_GAMEDAY_WALK_CONTROL=pacespoils ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-seedoff: FO_GAMEDAY_WALK_CONTROL=seedoff ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-noreveal: FO_GAMEDAY_WALK_CONTROL=noreveal ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-helpjump: FO_GAMEDAY_WALK_CONTROL=helpjump ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-recordspoils: FO_GAMEDAY_WALK_CONTROL=recordspoils ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-spoiler: FO_GAMEDAY_WALK_CONTROL=spoiler ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-tall: FO_GAMEDAY_WALK_CONTROL=tall ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
