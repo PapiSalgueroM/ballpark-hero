@@ -1,0 +1,11 @@
+vitestOldB exit=0 5s |    Duration  4.00s (transform 2.31s, setup 321ms, collect 5.32s, tests 635ms, environment 2.19s, prepare 875ms)
+rivalPlain exit=0 30s | simUsRivalSense: 39 checks, 0 failed (full size)
+c-owndead exit=1 31s | simUsRivalSense: 39 checks, 3 failed (full size), red sections: N.O, M.O, H.O
+c-retiredlinemlb exit=1 29s | simUsRivalSense: 39 checks, 1 failed (full size), red sections: M.O
+c-retiredlinenhl exit=1 28s | simUsRivalSense: 39 checks, 1 failed (full size), red sections: H.O
+tsc exit=0 88s | 
+trustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+c-oldtallymlb exit=1 31s | simUsRivalSense: 39 checks, 1 failed (full size), red sections: M.O
+c-oldtallynhl exit=1 32s | simUsRivalSense: 39 checks, 1 failed (full size), red sections: H.O
+rivalNames exit=0 17s | No rival product names found. 0 findings.
+anchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
