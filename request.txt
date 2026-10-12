@@ -1,0 +1,47 @@
+# Round 1311, head 182198b7: all 44 controls of simCmLeagueBook on seed set 0, and the floor table
+c-weight: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-cweight && git worktree add -q $B b6eb78e7 && BOOK_BASE=$B BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+c-mathrandom: TMPDIR=$(mktemp -d) BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+c-dropmine: TMPDIR=$(mktemp -d) BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-byeweek: TMPDIR=$(mktemp -d) BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+c-cleanside: TMPDIR=$(mktemp -d) BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+c-bought: TMPDIR=$(mktemp -d) BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+c-wrongman: TMPDIR=$(mktemp -d) BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+c-unnamed: TMPDIR=$(mktemp -d) BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+c-offbyone: TMPDIR=$(mktemp -d) BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+c-penassistmine: TMPDIR=$(mktemp -d) BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+c-assistbench: TMPDIR=$(mktemp -d) BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+c-twoman: TMPDIR=$(mktemp -d) BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-flat: TMPDIR=$(mktemp -d) BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+c-penassist: TMPDIR=$(mktemp -d) BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+c-noog: TMPDIR=$(mktemp -d) BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+c-keyindex: TMPDIR=$(mktemp -d) BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+c-hurtentry: TMPDIR=$(mktemp -d) BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+c-redeal: TMPDIR=$(mktemp -d) BOOK_CONTROL=redeal node scripts/simCmLeagueBook.mjs
+c-seasonstamp: TMPDIR=$(mktemp -d) BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-strip: TMPDIR=$(mktemp -d) BOOK_CONTROL=strip node scripts/simCmLeagueBook.mjs
+c-stripdeadline: TMPDIR=$(mktemp -d) BOOK_CONTROL=stripdeadline node scripts/simCmLeagueBook.mjs
+c-assistgoalweight: TMPDIR=$(mktemp -d) BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-nofill: TMPDIR=$(mktemp -d) BOOK_CONTROL=nofill node scripts/simCmLeagueBook.mjs
+c-shirtrow: TMPDIR=$(mktemp -d) BOOK_CONTROL=shirtrow node scripts/simCmLeagueBook.mjs
+c-thinsheet: TMPDIR=$(mktemp -d) BOOK_CONTROL=thinsheet node scripts/simCmLeagueBook.mjs
+c-noreopen: TMPDIR=$(mktemp -d) BOOK_CONTROL=noreopen node scripts/simCmLeagueBook.mjs
+c-fitlive: TMPDIR=$(mktemp -d) BOOK_CONTROL=fitlive node scripts/simCmLeagueBook.mjs
+c-latezero: TMPDIR=$(mktemp -d) BOOK_CONTROL=latezero node scripts/simCmLeagueBook.mjs
+c-alwayslate: TMPDIR=$(mktemp -d) BOOK_CONTROL=alwayslate node scripts/simCmLeagueBook.mjs
+c-hotseatbook1: TMPDIR=$(mktemp -d) BOOK_CONTROL=hotseatbook1 node scripts/simCmLeagueBook.mjs
+c-hotseatbook2: TMPDIR=$(mktemp -d) BOOK_CONTROL=hotseatbook2 node scripts/simCmLeagueBook.mjs
+c-hotseatbook3: TMPDIR=$(mktemp -d) BOOK_CONTROL=hotseatbook3 node scripts/simCmLeagueBook.mjs
+c-awardlate: TMPDIR=$(mktemp -d) BOOK_CONTROL=awardlate node scripts/simCmLeagueBook.mjs
+c-awardthin: TMPDIR=$(mktemp -d) BOOK_CONTROL=awardthin node scripts/simCmLeagueBook.mjs
+c-readerdraw: TMPDIR=$(mktemp -d) BOOK_CONTROL=readerdraw node scripts/simCmLeagueBook.mjs
+c-readerwrite: TMPDIR=$(mktemp -d) BOOK_CONTROL=readerwrite node scripts/simCmLeagueBook.mjs
+c-thinall: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-cthinall && git worktree add -q $B b6eb78e7 && BOOK_BASE=$B BOOK_CONTROL=thinall node scripts/simCmLeagueBook.mjs
+c-thinbacks: TMPDIR=$(mktemp -d) BOOK_CONTROL=thinbacks node scripts/simCmLeagueBook.mjs
+c-nobacks: TMPDIR=$(mktemp -d) BOOK_CONTROL=nobacks node scripts/simCmLeagueBook.mjs
+c-allbacks: TMPDIR=$(mktemp -d) BOOK_CONTROL=allbacks node scripts/simCmLeagueBook.mjs
+c-places433: TMPDIR=$(mktemp -d) BOOK_CONTROL=places433 node scripts/simCmLeagueBook.mjs
+c-goallesswhole: TMPDIR=$(mktemp -d) BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+c-stampv2: TMPDIR=$(mktemp -d) BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+c-novar: TMPDIR=$(mktemp -d) BOOK_CONTROL=novar node scripts/simCmLeagueBook.mjs
+floor-2: TMPDIR=$(mktemp -d) BOOK_MEASURE=floor MEASURE_SEEDS=2 node scripts/simCmLeagueBook.mjs
+floor-4: TMPDIR=$(mktemp -d) BOOK_MEASURE=floor MEASURE_SEEDS=4 node scripts/simCmLeagueBook.mjs

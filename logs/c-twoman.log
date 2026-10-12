@@ -1,0 +1,41 @@
+✘ [ERROR] control anchor occurs 2 times, not 1, in src/lib/clubManagerLeagueBook.ts:   const taker = rules.taker ? takerOf(outfield) : null; [plugin cm-book-control]
+
+    node_modules/esbuild/lib/main.js:1275:27:
+      1275 │         let result = await callback({
+           ╵                            ^
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmLeagueBook.mjs:420:39
+    at requestCallbacks.on-load (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1275:28)
+    at handleRequest (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:647:17)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:672:7)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:519:3)
+    at Readable.push (node:internal/streams/readable:399:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmLeagueBook.mjs:414:9)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at engine (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmLeagueBook.mjs:409:9)
+
+  The plugin "cm-book-control" was triggered by this import
+
+    ../../_temp/t-c-twoman/tmp.DEnboM54sB/cm-book-cdfZTy/candidate-entry.mjs:5:22:
+      5 │ ... book from "/home/runner/work/ballpark-hero/ballpark-hero/src/li...
+        ╵               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+simCmLeagueBook: cannot run: Build failed with 1 error:
+node_modules/esbuild/lib/main.js:1275:27: ERROR: [plugin: cm-book-control] control anchor occurs 2 times, not 1, in src/lib/clubManagerLeagueBook.ts:   const taker = rules.taker ? takerOf(outfield) : null;
