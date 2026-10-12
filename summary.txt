@@ -1,0 +1,9 @@
+k-simSaveKeeper exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+k-partgamelog exit=1 3s | simSaveKeeper control partgamelog: FIRED. Section 1 is red.
+k2-merge-aw-now exit=0 0s | merged head 51b6c4a31 Merge commit 'c9a1f86af6fa3611b35eb27fe0fbe44369752dd7' into HEAD; unmerged paths 0
+k2-simSaveKeeper exit=0 3s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+k2-partgamelog exit=1 3s | simSaveKeeper control partgamelog: FIRED. Section 1 is red.
+k2-tsc exit=0 59s | tsc exit 0
+k2-vitest exit=0 9s |  Test Files  8 passed (8)       Tests  144 passed (144) 
+k2-simGmGameDay exit=0 35s | simGmGameDay: 303 checks, 0 failed
+k2-simGmDeskHost exit=0 43s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
