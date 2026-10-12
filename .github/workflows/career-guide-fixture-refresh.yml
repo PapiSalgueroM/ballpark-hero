@@ -1,0 +1,132 @@
+name: Derive the reviewed Soccer Career guide record
+
+on:
+  push:
+    branches:
+      - codex/career-guide-fixture-refresh
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-guide-fixture-refresh-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  derive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain the exact source and install locked dependencies
+        id: prepare
+        run: |
+          set -euo pipefail
+          mkdir -p career-guide-refresh-artifacts
+          git rev-parse HEAD > career-guide-refresh-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > career-guide-refresh-artifacts/source-tree.txt
+          git archive --format=tar HEAD > career-guide-refresh-artifacts/source.tar
+          sha256sum package.json package-lock.json > career-guide-refresh-artifacts/packages-before.txt
+          cp scripts/data/guideHeadingsFrozen.json career-guide-refresh-artifacts/fixture-before.json
+          npm ci 2>&1 | tee career-guide-refresh-artifacts/install.log
+          node scripts/qa/soccerAgentReviewDependencies.mjs before 2>&1 | tee career-guide-refresh-artifacts/dependencies-before.log
+          cp soccer-agent-review-artifacts/dependencies-before.json career-guide-refresh-artifacts/dependencies-before.json
+      - name: Derive only the existing Soccer Career record
+        id: derive
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$PWD/career-guide-refresh-artifacts/refresh.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs --refresh /soccer-career > career-guide-refresh-artifacts/refresh.stdout.log 2> career-guide-refresh-artifacts/refresh.stderr.log
+          test ! -s career-guide-refresh-artifacts/refresh.transport.log
+          cp scripts/data/guideHeadingsFrozen.json career-guide-refresh-artifacts/fixture-after.json
+          python - <<'PY'
+          import hashlib, json, pathlib
+          folder = pathlib.Path('career-guide-refresh-artifacts')
+          before_bytes = (folder / 'fixture-before.json').read_bytes()
+          after_bytes = (folder / 'fixture-after.json').read_bytes()
+          before = json.loads(before_bytes)
+          after = json.loads(after_bytes)
+          target = '/soccer-career'
+          assert list(before) == list(after) == ['about', 'routes']
+          assert before['about'] == after['about']
+          assert list(before['routes']) == list(after['routes'])
+          rows = []
+          for route, record in before['routes'].items():
+              previous = json.dumps(record, ensure_ascii=False, separators=(',', ':')).encode()
+              current = json.dumps(after['routes'][route], ensure_ascii=False, separators=(',', ':')).encode()
+              held = previous == current
+              assert held == (route != target), route
+              rows.append({'route': route, 'held': held, 'beforeSha256': hashlib.sha256(previous).hexdigest(), 'afterSha256': hashlib.sha256(current).hexdigest()})
+          parts = ['howToPlay', 'rules', 'example', 'tips']
+          assert list(after['routes'][target]) == parts
+          assert all(isinstance(after['routes'][target][part], list) and after['routes'][target][part] for part in parts)
+          assert len(rows) == 131
+          result = {'head': (folder / 'source-head.txt').read_text().strip(), 'tree': (folder / 'source-tree.txt').read_text().strip(), 'target': target, 'routes': rows, 'before': {'bytes': len(before_bytes), 'sha256': hashlib.sha256(before_bytes).hexdigest()}, 'after': {'bytes': len(after_bytes), 'sha256': hashlib.sha256(after_bytes).hexdigest()}, 'counts': {part: len(after['routes'][target][part]) for part in parts}, 'otherRoutesHeld': 130, 'aboutHeld': True}
+          (folder / 'derivation.json').write_text(json.dumps(result, indent=2) + '\n')
+          print('PASS actual guide derivation: one existing route changed, all130 other records and the fixture description held.')
+          PY
+          SIM_OFFLINE_RECEIPT="$PWD/career-guide-refresh-artifacts/repeat.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs --refresh /soccer-career > career-guide-refresh-artifacts/repeat.stdout.log 2> career-guide-refresh-artifacts/repeat.stderr.log
+          test ! -s career-guide-refresh-artifacts/repeat.transport.log
+          cmp scripts/data/guideHeadingsFrozen.json career-guide-refresh-artifacts/fixture-after.json
+      - name: Run the unchanged outline checks and every existing copied control
+        if: ${{ !cancelled() && steps.derive.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          failed=0
+          printf 'control\texit\texpected\tverdict\n' > career-guide-refresh-artifacts/outcomes.tsv
+          for control in healthy skiplevel nokeyword lostline careerline traininglocation unconvert snapdrift; do
+            expected=1
+            selected="$control"
+            if test "$control" = healthy; then expected=0; selected=''; fi
+            set +e
+            GUIDE_HEADINGS_CONTROL="$selected" SIM_OFFLINE_RECEIPT="$PWD/career-guide-refresh-artifacts/$control.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs > "career-guide-refresh-artifacts/$control.stdout.log" 2> "career-guide-refresh-artifacts/$control.stderr.log"
+            actual=$?
+            set -e
+            verdict=PASS
+            if test "$actual" -ne "$expected" || test -s "career-guide-refresh-artifacts/$control.transport.log"; then verdict=FAIL; failed=1; fi
+            if test "$control" = healthy; then
+              if ! grep -F 'simGuideHeadings: green.' "career-guide-refresh-artifacts/$control.stdout.log" > /dev/null || ! grep -F '131 saved pages compared, 0 skipped' "career-guide-refresh-artifacts/$control.stdout.log" > /dev/null; then verdict=FAIL; failed=1; fi
+            else
+              if ! grep -F "simGuideHeadings control $control:" "career-guide-refresh-artifacts/$control.stdout.log" > /dev/null || ! grep -F 'the break was caught where it should be (exit 1)' "career-guide-refresh-artifacts/$control.stdout.log" > /dev/null; then verdict=FAIL; failed=1; fi
+            fi
+            printf '%s\t%s\t%s\t%s\n' "$control" "$actual" "$expected" "$verdict" >> career-guide-refresh-artifacts/outcomes.tsv
+          done
+          exit "$failed"
+      - name: Retain the exact generated correction and source holds
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git diff --binary HEAD -- scripts/data/guideHeadingsFrozen.json > career-guide-refresh-artifacts/generated.patch
+          sha256sum package.json package-lock.json > career-guide-refresh-artifacts/packages-after.txt
+          cmp career-guide-refresh-artifacts/packages-before.txt career-guide-refresh-artifacts/packages-after.txt
+          test "$(git rev-parse HEAD)" = "$(cat career-guide-refresh-artifacts/source-head.txt)"
+          test "$(git rev-parse 'HEAD^{tree}')" = "$(cat career-guide-refresh-artifacts/source-tree.txt)"
+          git diff --exit-code HEAD -- . ':!scripts/data/guideHeadingsFrozen.json' > career-guide-refresh-artifacts/source-held.log 2>&1
+          node scripts/qa/soccerAgentReviewDependencies.mjs before > career-guide-refresh-artifacts/dependencies-after.log 2>&1
+          cp soccer-agent-review-artifacts/dependencies-before.json career-guide-refresh-artifacts/dependencies-after.json
+          cmp career-guide-refresh-artifacts/dependencies-before.json career-guide-refresh-artifacts/dependencies-after.json
+          du -sb career-guide-refresh-artifacts > career-guide-refresh-artifacts/size.txt
+          bytes="$(du -sb career-guide-refresh-artifacts | cut -f1)"
+          test "$bytes" -lt 200000000
+      - name: Preserve complete or failed derivation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-guide-refresh-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 5
+          if-no-files-found: error
+          path: career-guide-refresh-artifacts/

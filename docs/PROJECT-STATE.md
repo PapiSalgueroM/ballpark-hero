@@ -1,3 +1,11 @@
+## Soccer Career guide record derivation, 2026-10-12
+
+The repaired guide verification at79f72f68 completed run38199566147 with successful actual app types, all13 existing test files, full production SEO and all15 rebuilt readers. The existing guide harness alone failed13 frozen-sentence checks because the new instructions had not been added to the derived record. These failures stay recorded and unwaived.
+
+The isolated codex/career-guide-fixture-refresh branch starts from exact79f72f68. Its remote-only workflow uses the existing --refresh /soccer-career command, retains the complete original and generated fixtures, holds all130 other route records and the fixture description, repeats the refresh byte-identically and runs the healthy guide harness plus all seven existing copied controls. A narrow helper adjustment accepts exactly one original or already-reviewed training-location instruction so a correctly refreshed fixture remains usable. The conversion floor and every other check stay held. No frozen sentence is edited by hand. Source, locked dependencies, packages and complete failed evidence are retained.
+
+This is a pending derivation, not adoption, a complete verification pass or live publication. After the exact generated record is independently reviewed, the final correction requires a fresh PR238 head with the complete type, outcome, SEO and reader gates. Session G retains integration, merge and publication. All application execution stays remote.
+
 ## Soccer Career guide verification setup repair, 2026-10-12
 
 Draft PR238 at aaabb4c5 triggered exact push run38194820481. Its setup failed because an extra in-place npm install changed locked @adobe/css-tools from4.4.4 to4.5.0. The complete install log also reports17 additions,56 removals and172 changes; the installed-version guard stopped at the first changed row, so there is no complete named after-inventory. Types, outcomes, SEO build, readers and final cap were all skipped and remain unverified. The original failed9-body evidence is retained.
