@@ -1,0 +1,3 @@
+board: node scripts/simUsBoardParity.mjs
+u1Board: git worktree add --detach .wt/u1 8c98dae1 && ln -s "$PWD/node_modules" .wt/u1/node_modules && cd .wt/u1 && node scripts/simUsBoardParity.mjs
+boardCtl: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
