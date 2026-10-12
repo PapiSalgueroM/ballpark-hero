@@ -36,9 +36,10 @@ const ROUND_BUTTON = 'inline-flex h-11 shrink-0 items-center justify-center roun
 
 export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, help, seedOf, weekLabel }: GmBracketCardProps) {
   const { weeks, open } = gmBracketWeeks(format, save);
-  /* the week he asked to see, kept only while the bracket stands where it stood when he asked (after a press the card
-     opens on the new week to play); viewing only */
-  const [asked, setAsked] = useState<{ week: number; open: number } | null>(null);
+  /* the week he asked to see, kept only while the card shows the same bracket standing where it stood when he asked
+     (after a press, or for another season's bracket or a rebuilt one, the card opens on the week to play); viewing only */
+  const bracket = `${save.season}|${save.seeds.join(',')}`;
+  const [asked, setAsked] = useState<{ week: number; open: number; bracket: string } | null>(null);
   const [helpOpen, setHelpOpen] = useState(false);
   const helpButton = useRef<HTMLButtonElement | null>(null);
   /* THE "?" MUST NOT MOVE THE PAGE FOR NOTHING (the Game Day tile's rule): when the top of the box the sheet lies
@@ -55,7 +56,7 @@ export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, he
     if (helpOpen && y !== null && window.scrollY !== y) window.scrollTo({ top: y, behavior: 'instant' as ScrollBehavior });
   }, [helpOpen]);
 
-  const week = asked && asked.open === open && weeks.includes(asked.week) ? asked.week : open;
+  const week = asked && asked.open === open && asked.bracket === bracket && weeks.includes(asked.week) ? asked.week : open;
   const place = gmBracketPlace(format, save, my, name);
   const rows = gmBracketRows(format, save, week, my);
   const sheet = helpOpen
@@ -70,7 +71,7 @@ export function GmBracketCard({ format, save, my, name, onOpenGame, helpHost, he
       </div>
       <div className="flex shrink-0 gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }} role="group" aria-label={GM_BRACKET_WORDS.weeks} data-bracket-weeks>
         {weeks.map(w => (
-          <button key={w} type="button" onClick={() => setAsked({ week: w, open })} aria-pressed={w === week}
+          <button key={w} type="button" onClick={() => setAsked({ week: w, open, bracket })} aria-pressed={w === week}
             className={`inline-flex h-11 shrink-0 items-center rounded-lg border px-3 text-xs font-bold ${w === week ? 'border-primary bg-primary/10 text-foreground' : 'border-border bg-card text-muted-foreground'}`}
             data-bracket-week={w}>{weekLabel(w)}</button>
         ))}

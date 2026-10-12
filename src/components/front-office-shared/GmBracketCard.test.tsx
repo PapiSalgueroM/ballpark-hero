@@ -119,6 +119,20 @@ describe('GmBracketCard', () => {
     expect(q('[data-bracket-place]')!.textContent).toBe('Next: the AFC Championship, against Club S2.');
   });
 
+  it('a week he looked back at is not carried onto another bracket whose week to play is the same', () => {
+    const week1 = playBracketWeek(NFL_BRACKET, open(), chalk());
+    const { rerender } = render(<NflBracket {...mount(week1, 'S1')} />);
+    fireEvent.click(q('[data-bracket-week="1"]')!);
+    expect(q('[data-bracket-week="1"]')!.getAttribute('aria-pressed')).toBe('true');
+    /* the next season's bracket, also at its Divisional, on the same mounted card: it opens on its own week to play */
+    rerender(<NflBracket {...mount(playBracketWeek(NFL_BRACKET, openBracket(NFL_BRACKET, 2027, SEEDS), chalk()), 'S1')} />);
+    expect(q('[data-bracket-week="2"]')!.getAttribute('aria-pressed')).toBe('true');
+    /* and a bracket of other seeds in the same season */
+    fireEvent.click(q('[data-bracket-week="1"]')!);
+    rerender(<NflBracket {...mount(playBracketWeek(NFL_BRACKET, openBracket(NFL_BRACKET, 2027, [...SEEDS].reverse()), chalk()), 'S1')} />);
+    expect(q('[data-bracket-week="2"]')!.getAttribute('aria-pressed')).toBe('true');
+  });
+
   it('the "?" opens, closes and opens again, over the host it is handed', () => {
     const host = document.createElement('div');
     document.body.appendChild(host);
