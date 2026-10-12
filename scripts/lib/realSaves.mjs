@@ -447,7 +447,8 @@ export const partAbsent = {
     },
     /* Round 1318: the Ballon d'Or pool of generated rivals (Rounds 1280 to 1282). With another number the save
        still opens and the reader refuses the part; the next night, played by the passive player under one seed,
-       is the night of the same save with the part taken out (the whole state and the draws), and it leaves a
+       is the night of the same save with the part taken out (the whole state and the draws; each night plays
+       from its own parse, since a step changes the state it is handed), and it leaves a
        fresh pool of version 1 that reads. */
     'generatedBallonPool.version': raw => {
       const s = JSON.parse(raw);
@@ -466,7 +467,7 @@ export const partAbsent = {
           return null;
         } finally { Math.random = real; }
       };
-      const a = night(s), b = night(without(s, 'generatedBallonPool'));
+      const a = night(JSON.parse(raw)), b = night(without(JSON.parse(raw), 'generatedBallonPool'));
       if (!a || !b) return 'no next night was reached';
       if (a.draws !== b.draws || !sameAnswer(without(a.c, 'generatedBallonPool'), without(b.c, 'generatedBallonPool'))
         || !sameAnswer(a.c.generatedBallonPool, b.c.generatedBallonPool)) return 'the next night is not the night of the same save without the part';
