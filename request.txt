@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+f-simWritesAreSent: node scripts/simWritesAreSent.mjs
+f-simResultMoment: node scripts/simResultMoment.mjs
