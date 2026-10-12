@@ -1,0 +1,3 @@
+vitest-fo exit=0 24s |    Duration  23.35s (transform 3.91s, setup 1.28s, collect 11.45s, tests 40.88s, environment 9.63s, prepare 2.17s)
+ctl-all exit=1 427s | controlFrontOfficeBoard: 34 of 35 control(s) fired. NOT FIRED: bracketgrid
+ctl-blank exit=1 12s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
