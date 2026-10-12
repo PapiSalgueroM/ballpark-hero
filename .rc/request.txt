@@ -1,0 +1,12 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+secondTab: node_modules/.bin/vitest run src/test/usCareerMarketSecondTab.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+units: node_modules/.bin/vitest run src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketUi.test.tsx src/lib/usCareerMarket.test.ts src/test/freeAgencyFeedback.test.tsx src/test/extensionResponseMotion.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/soccerPressRoomUi.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -14; exit ${PIPESTATUS[0]}
+parity: node scripts/simUsBoardParity.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+saveRetry: node scripts/simUsCareerSaveRetry.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+practice: node scripts/simUsCareerPractice.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+practice-reset: US_CAREER_PRACTICE_CONTROL=reset node scripts/simUsCareerPractice.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+action: node scripts/simUsCareerActionConfirm.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+walk: PORT=4611 node scripts/playUsMarketTalk.mjs 2>&1 | cut -c1-400 | tail -8; exit ${PIPESTATUS[0]}
+pm: set -o pipefail; mkdir -p career-press-market-artifacts && export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log | tail -6 && node scripts/qa/checkCareerPressMarket.mjs outcomes && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log | tail -8 && node scripts/qa/checkCareerPressMarket.mjs native
