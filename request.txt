@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 reviewer (run lens) request W on 2d0c3cbe: my own walk, the three walks and their controls, the doctoring check under a lost edit, fresh seeds
+walk: node .rc/x/walk1314.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+nj-nooffer: NATION_JOB_CONTROL=nooffer ENGINES=chromium node scripts/playNationJob.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+wild-nooffers: WILDERNESS_CONTROL=nooffers ENGINES=chromium node scripts/playWilderness.mjs
+wild-nosack: WILDERNESS_CONTROL=nosack ENGINES=chromium node scripts/playWilderness.mjs
+wild-s11: WILDERNESS_SEED=11 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s12: WILDERNESS_SEED=12 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s13: WILDERNESS_SEED=13 ENGINES=chromium node scripts/playWilderness.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+cm-nobusiness: CM_CONTROL=nobusiness ENGINES=chromium node scripts/playClubManager.mjs
+cm-doclost: node .rc/x/mkDocLost.mjs && PLAY_CM_SEED=1542433760 ENGINES=chromium node scripts/playClubManagerDocLost.mjs; s=$?; rm -f scripts/playClubManagerDocLost.mjs; exit $s
+cm-s11: PLAY_CM_SEED=11 ENGINES=chromium node scripts/playClubManager.mjs

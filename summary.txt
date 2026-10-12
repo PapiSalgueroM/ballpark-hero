@@ -1,0 +1,14 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 124s | walk1314: no findings
+playNationJob exit=0 16s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+nj-nooffer exit=0 11s | playNationJob control nooffer: all 2 guarded checks fired (mutations landed: {"nationOffer":2})
+playWilderness exit=0 21s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+wild-nooffers exit=0 24s | playWilderness control nooffers: all 1 guarded checks fired (mutations landed: {"offerList":1})
+wild-nosack exit=0 98s | playWilderness control nosack: all 1 guarded checks fired (mutations landed: {"sack":8})
+wild-s11 exit=0 16s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+wild-s12 exit=0 50s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+wild-s13 exit=0 21s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+playClubManager exit=0 286s | Played Club Manager through its own screens. 0 findings.
+cm-nobusiness exit=1 9s | Node.js v24.21.0
+cm-doclost exit=1 285s | Played Club Manager through its own screens. 1 findings.
+cm-s11 exit=0 248s | Played Club Manager through its own screens. 0 findings.

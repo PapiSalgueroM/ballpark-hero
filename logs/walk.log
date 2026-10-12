@@ -1,0 +1,54 @@
+== 390-reduce
+  390-reduce hub: viewport 390, page width 390, layout problems 0
+  tile: 🧢 MANAGER 🌐 Your country is calling England want you for the summer
+  offer: 🌐 YOUR COUNTRY IS CALLING England want you. England want you for the national team alongside the Manchester City job. Tournament summers only: club football stays exactly as it is. 🌐 Take the England job as well
+  390-reduce offer: viewport 390, page width 390, [data-nation-offer] found, layout problems 0
+  job: 🌐 ENGLAND MANAGER In charge since season 1. Your first tournament summer is still to come. Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around. Step do
+  390-reduce job: viewport 390, page width 390, [data-nation-job] found, layout problems 0
+  sacked after 4 steps
+  390-reduce sacked: viewport 390, page width 390, layout problems 0
+  390-reduce wilderness: viewport 390, page width 390, [data-wilderness] found, layout problems 0
+  1 offer(s) after 6 wait(s)
+  wilderness: 🧳 OUT OF WORK 6 weeks without a club. The phone has rung. Millwall EFL Championship They wanted someone who knows the country and the league. The brief: Stay up. That is the whole brief. Take the Millwall job ⏭️ Wait a week for the phone to ring Trophies and 
+  390-reduce wilderness offer: viewport 390, page width 390, [data-wilderness] found, layout problems 0
+== 390-motion
+  390-motion hub: viewport 390, page width 390, layout problems 0
+  tile: 🧢 MANAGER 🌐 Your country is calling England want you for the summer
+  offer: 🌐 YOUR COUNTRY IS CALLING England want you. England want you for the national team alongside the Manchester City job. Tournament summers only: club football stays exactly as it is. 🌐 Take the England job as well
+  390-motion offer: viewport 390, page width 390, [data-nation-offer] found, layout problems 0
+  job: 🌐 ENGLAND MANAGER In charge since season 1. Your first tournament summer is still to come. Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around. Step do
+  390-motion job: viewport 390, page width 390, [data-nation-job] found, layout problems 0
+  sacked after 2 steps
+  390-motion sacked: viewport 390, page width 390, layout problems 0
+  390-motion wilderness: viewport 390, page width 390, [data-wilderness] found, layout problems 0
+  1 offer(s) after 1 wait(s)
+  wilderness: 🧳 OUT OF WORK 1 week without a club. The phone has rung. Bolton Wanderers EFL Championship They wanted someone who knows the country and the league. The brief: Stay up. That is the whole brief. Take the Bolton Wanderers job ⏭️ Wait a week for the phone to rin
+  390-motion wilderness offer: viewport 390, page width 390, [data-wilderness] found, layout problems 0
+== 1280-reduce
+  1280-reduce hub: viewport 1280, page width 1280, layout problems 0
+  tile: 🧢 MANAGER 🌐 Your country is calling England want you for the summer
+  offer: 🌐 YOUR COUNTRY IS CALLING England want you. England want you for the national team alongside the Manchester City job. Tournament summers only: club football stays exactly as it is. 🌐 Take the England job as well
+  1280-reduce offer: viewport 1280, page width 1280, [data-nation-offer] found, layout problems 0
+  job: 🌐 ENGLAND MANAGER In charge since season 1. Your first tournament summer is still to come. Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around. Step do
+  1280-reduce job: viewport 1280, page width 1280, [data-nation-job] found, layout problems 0
+  sacked after 2 steps
+  1280-reduce sacked: viewport 1280, page width 1280, layout problems 0
+  1280-reduce wilderness: viewport 1280, page width 1280, [data-wilderness] found, layout problems 0
+  1 offer(s) after 1 wait(s)
+  wilderness: 🧳 OUT OF WORK 1 week without a club. The phone has rung. West Brom EFL Championship They wanted someone who knows the country and the league. The brief: Keep us in this division and we will talk again. Take the West Brom job ⏭️ Wait a week for the phone to ri
+  1280-reduce wilderness offer: viewport 1280, page width 1280, [data-wilderness] found, layout problems 0
+== 1280-motion
+  1280-motion hub: viewport 1280, page width 1280, layout problems 0
+  tile: 🧢 MANAGER 🌐 Your country is calling England want you for the summer
+  offer: 🌐 YOUR COUNTRY IS CALLING England want you. England want you for the national team alongside the Manchester City job. Tournament summers only: club football stays exactly as it is. 🌐 Take the England job as well
+  1280-motion offer: viewport 1280, page width 1280, [data-nation-offer] found, layout problems 0
+  job: 🌐 ENGLAND MANAGER In charge since season 1. Your first tournament summer is still to come. Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around. Step do
+  1280-motion job: viewport 1280, page width 1280, [data-nation-job] found, layout problems 0
+  sacked after 2 steps
+  1280-motion sacked: viewport 1280, page width 1280, layout problems 0
+  1280-motion wilderness: viewport 1280, page width 1280, [data-wilderness] found, layout problems 0
+  1 offer(s) after 1 wait(s)
+  wilderness: 🧳 OUT OF WORK 1 week without a club. The phone has rung. QPR EFL Championship They wanted someone who knows the country and the league. The brief: Keep us in this division and we will talk again. Take the QPR job ⏭️ Wait a week for the phone to ring Trophies 
+  1280-motion wilderness offer: viewport 1280, page width 1280, [data-wilderness] found, layout problems 0
+
+walk1314: no findings
