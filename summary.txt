@@ -1,0 +1,2 @@
+old-30 exit=1 26s | old: RED, 3 failures over 135 checks on 27 leagues
+old-18 exit=1 26s | old: RED, 3 failures over 135 checks on 27 leagues
