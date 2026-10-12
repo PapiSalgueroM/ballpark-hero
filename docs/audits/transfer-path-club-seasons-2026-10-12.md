@@ -92,3 +92,10 @@ package hashes). Two independent source reviews found no blocking issue.
 for G's integration/publication. It was forked from accepted b6eb78e7; later
 main changes require the lead's integration checks. No live acceptance is
 claimed. This final evidence addition changes documentation only.
+
+The separate 49f2b7d1 full-snapshot request (38282308974) later completed
+cancelled during the snapshot build. Types and hook checks had passed, but
+its build and downstream gates receive no acceptance credit. Its retained
+artifact 11763806237 is 5,645 bytes, ZIP digest
+014ab5ff377f8f2f4aed5f83b56c96112bc74720262d194245bea92c94ece908.
+That historical result does not replace the completed scoped success above.
