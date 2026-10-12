@@ -1,0 +1,27 @@
+# Round 1314 step 2 proofs on bcbc7f27: simSafari, simActivityNotCompletion, simGmXp, each with every control
+simSafari: node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+saf-lookbehind: SIM_SAFARI_CONTROL=lookbehind node scripts/simSafari.mjs
+saf-testimport: SIM_SAFARI_CONTROL=testimport node scripts/simSafari.mjs
+saf-barevh: SIM_SAFARI_CONTROL=barevh node scripts/simSafari.mjs
+saf-vhafter: SIM_SAFARI_CONTROL=vhafter node scripts/simSafari.mjs
+saf-dvhcomment: SIM_SAFARI_CONTROL=dvhcomment node scripts/simSafari.mjs
+act-match: SIM_ACTIVITY_CONTROL=match node scripts/simActivityNotCompletion.mjs
+act-career: SIM_ACTIVITY_CONTROL=career node scripts/simActivityNotCompletion.mjs
+act-heavy: SIM_ACTIVITY_CONTROL=heavy node scripts/simActivityNotCompletion.mjs
+act-noping: SIM_ACTIVITY_CONTROL=noping node scripts/simActivityNotCompletion.mjs
+act-twocalls: SIM_ACTIVITY_CONTROL=twocalls node scripts/simActivityNotCompletion.mjs
+xp-growthshape: GMXP_CONTROL=growthshape node scripts/simGmXp.mjs
+xp-curvestep: GMXP_CONTROL=curvestep node scripts/simGmXp.mjs
+xp-gmcap: GMXP_CONTROL=gmcap node scripts/simGmXp.mjs
+xp-nocap: GMXP_CONTROL=nocap node scripts/simGmXp.mjs
+xp-saturate: GMXP_CONTROL=saturate node scripts/simGmXp.mjs
+xp-notneutral: GMXP_CONTROL=notneutral node scripts/simGmXp.mjs
+xp-claim: GMXP_CONTROL=claim node scripts/simGmXp.mjs
+xp-fractional: GMXP_CONTROL=fractional node scripts/simGmXp.mjs
+xp-pastceiling: GMXP_CONTROL=pastceiling node scripts/simGmXp.mjs
+xp-cushiongain: GMXP_CONTROL=cushiongain node scripts/simGmXp.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
