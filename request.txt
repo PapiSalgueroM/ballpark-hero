@@ -1,0 +1,20 @@
+# Round 1311 step 4 (head 08aece03): ten fleets with BOOK_BASE 21941630 (origin/main, Release AY), the new and the reader controls, the facts fence
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+book-d0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d0 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=0 node scripts/simCmLeagueBook.mjs
+book-f0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f0 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-d1: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d1 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-f1: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f1 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-d2: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d2 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-f2: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f2 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-d3: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d3 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-f3: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f3 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-d4: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d4 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f4: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f4 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-bookleak: TMPDIR=$(mktemp -d) BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+c-awardlate: TMPDIR=$(mktemp -d) BOOK_CONTROL=awardlate node scripts/simCmLeagueBook.mjs
+c-awardthin: TMPDIR=$(mktemp -d) BOOK_CONTROL=awardthin node scripts/simCmLeagueBook.mjs
+c-readerdraw: TMPDIR=$(mktemp -d) BOOK_CONTROL=readerdraw node scripts/simCmLeagueBook.mjs
+c-readerwrite: TMPDIR=$(mktemp -d) BOOK_CONTROL=readerwrite node scripts/simCmLeagueBook.mjs
+simCmLeagueBookFacts: node scripts/simCmLeagueBookFacts.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
