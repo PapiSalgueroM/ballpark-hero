@@ -1,0 +1,4 @@
+bite-t2a: node .rc/x/fleetBite.mjs t2 5000 0
+bite-t2b: node .rc/x/fleetBite.mjs t2 5000 200000
+bite-t1: node .rc/x/fleetBite.mjs t1 4000 400000
+bite-ctl: BITE_THRESH=26 node .rc/x/fleetBite.mjs t2 500 600000 > "$RC_OUT/bite-ctl.txt" 2>&1; tail -1 "$RC_OUT/bite-ctl.txt" | cut -c1-400; grep -Eq "^FLEETBITE done: .* [1-9][0-9]* differ, 0 unattributed" "$RC_OUT/bite-ctl.txt" && echo "CONTROL FIRED bite 26"
