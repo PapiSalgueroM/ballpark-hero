@@ -1,0 +1,4 @@
+#!serial
+probeEdges-head: SEASONS=300 node .rc/x/probeEdges.mjs
+probeEdges-mutant: node .rc/x/mut.mjs edges && SEASONS=300 node .rc/x/probeEdges.mjs; s=$?; git checkout -- src; exit $s
+vitest-bind-mutant: node .rc/x/mut.mjs edges && node_modules/.bin/vitest run src/lib/frontOfficePostseason.test.ts --reporter=verbose 2>&1 | grep -E "desk|passed|failed" | tail -8; git checkout -- src; exit 0
