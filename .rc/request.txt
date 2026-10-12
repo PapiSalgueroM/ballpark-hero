@@ -1,0 +1,11 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-report: node_modules/.bin/vitest run src/test/reportDetails.test.tsx src/test/reportContext.test.ts src/test/gameReportPlacement.test.tsx src/test/soccerAgentReviewUi.test.tsx src/test/soccerAgentReviewPage.test.tsx --testTimeout=300000 --hookTimeout=120000
+focus-control: git show 942268ef:src/components/game/ReportQuestion.tsx > src/components/game/ReportQuestion.tsx && git show 942268ef:src/components/game/ReportSiteIssue.tsx > src/components/game/ReportSiteIssue.tsx && node_modules/.bin/vitest run src/test/reportDetails.test.tsx > /tmp/fc.log 2>&1; git checkout -- src; grep -E "gives focus back|Tests " /tmp/fc.log | tail -6; grep -q "Tests  2 failed" /tmp/fc.log && echo "FOCUS CONTROL FIRED: exactly 2 failed on the 942268ef components"
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simReportContext-diagnostics: SIM_REPORT_CONTROL=diagnostics NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -3; SIM_REPORT_CONTROL=diagnostics node scripts/simReportContext.mjs 2>&1 | grep -q 'control "diagnostics": [1-9][0-9]* failure(s) fired in section 4 as expected'
+simReportContext-privacy: SIM_REPORT_CONTROL=privacy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+privacy-mut: node .rc/x/ffMutPriv.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs > /tmp/pm.log 2>&1; s=$?; git checkout -- src scripts; tail -4 /tmp/pm.log; [ $s -eq 1 ] && grep -q "Reported issues does not disclose" /tmp/pm.log && echo "PRIVACY MUTATION CAUGHT: exit 1"
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simErrorBoundary-rename: BOUNDARY_CONTROL=rename node scripts/simErrorBoundary.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
