@@ -1,0 +1,8 @@
+book-plain exit=0 59s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (59s)
+book-d0 exit=0 77s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (75s)
+book-d1 exit=0 80s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (79s)
+book-d2 exit=0 78s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (77s)
+book-d3 exit=0 76s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (76s)
+book-d4 exit=0 80s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (79s)
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+book-f0 exit=0 142s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (142s)
