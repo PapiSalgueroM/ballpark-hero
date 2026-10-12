@@ -109,7 +109,8 @@ const browser = await chromium.launch();
   for (let w = 0; w < 18; w++) {
     const btn = page.locator('button:has-text("Play Week"), button:has-text("Play the final week")');
     if (await btn.count() === 0) break;
-    await btn.first().click();
+    /* Round 1309: on Week 17 "Play Week 17" (it opens the bracket) comes first and the one press button last */
+    await btn.last().click();
     await page.waitForTimeout(350);
   }
   const scrum = page.locator('[data-gm-press]');
