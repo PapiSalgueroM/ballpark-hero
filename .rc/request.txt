@@ -1,0 +1,5 @@
+# Round 1311 (head fb70e14d): the two controls whose red lists were derived again, the default fleet, the anchors
+c-dropmine: BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-twoman: BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+book-d0: node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
