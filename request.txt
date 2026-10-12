@@ -1,0 +1,16 @@
+# Round 1306 fix pass, head 3c12797b: the harness after the fix pass, both fleets with the base, the six new controls
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B c9a1f86a && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+book-full-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-full && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-default: node scripts/simCmLeagueBook.mjs
+c-thinbacks: BOOK_CONTROL=thinbacks node scripts/simCmLeagueBook.mjs
+c-nobacks: BOOK_CONTROL=nobacks node scripts/simCmLeagueBook.mjs
+c-allbacks: BOOK_CONTROL=allbacks node scripts/simCmLeagueBook.mjs
+c-allbacks-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-allbacks && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_CONTROL=allbacks node scripts/simCmLeagueBook.mjs
+c-places433: BOOK_CONTROL=places433 node scripts/simCmLeagueBook.mjs
+c-goallesswhole: BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+c-stampv2: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-stampv2 && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+c-cleanside: BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+c-bought: BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+c-alwayslate: BOOK_CONTROL=alwayslate node scripts/simCmLeagueBook.mjs
+c-thinsheet: BOOK_CONTROL=thinsheet node scripts/simCmLeagueBook.mjs
+c-nofill: BOOK_CONTROL=nofill node scripts/simCmLeagueBook.mjs
