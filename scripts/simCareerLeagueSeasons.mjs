@@ -115,6 +115,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { inverseCareerDevelopment } from './lib/careerDevelopmentAttribution1185.mjs';
+import { AWARD_GENERATIONS_FILE, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
 import { readLedgers, buildSeasons, render, identityKey as genIdentity, OUT as GEN_OUT } from './genCareerLeagueSeasons.mjs';
 import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
 
@@ -221,7 +222,7 @@ const sourceHashes = () => {
 const replayReceipt = { base: BASE,
   baseCommit: execFileSync('git', ['rev-parse', '--verify', `${BASE}^{commit}`], { cwd: ROOT, encoding: 'utf8' }).trim(),
   baseTree: execFileSync('git', ['rev-parse', '--verify', `${BASE}^{tree}`], { cwd: ROOT, encoding: 'utf8' }).trim(),
-  seed: SEED, control: CONTROL || null, cases: [], inverses: [], futureEdits: [], sourceBefore: sourceHashes() };
+  seed: SEED, control: CONTROL || null, cases: [], inverses: [], awardGenerations: [], futureEdits: [], sourceBefore: sourceHashes() };
 const retainReplay = (seed, arm, value) => {
   const file = `${seed}-${arm}.json`;
   if (replayOut) fs.writeFileSync(path.join(replayOut, file), value);
@@ -815,12 +816,27 @@ const r1185Out = with1041 => ({ name: with1041 ? 'r1185and1041out' : 'r1185out',
     return { contents: src, loader: 'ts' };
   });
 } });
+/* Round 1318: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose, and
+   from about 2037 a rival who turns 37 is replaced by a new face with his own position, club and goal range, so
+   the ballot, and what follows it, can move. A career that differs from the base is replayed on this tree with
+   exactly those rows taken out of the engine, in order (scripts/lib/careerAwardGenerations1318.mjs): equal then,
+   the move is the pool's and is counted; still different, it fails as before. The future control's edit rides
+   along, as in the arms above. Once the base holds the pool the two trees agree and the arm is not needed. */
+const r1318Out = { name: 'r1318out', setup(b) {
+  b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    let src = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'future') { src = controlEdit(src); controlFired = true; }
+    src = inverseAwardGenerations(AWARD_GENERATIONS_FILE, src, replayReceipt.awardGenerations);
+    return { contents: src, loader: 'ts' };
+  });
+} };
 const futurePlugins = CONTROL === 'future' ? [controlPlugin] : [];
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
-  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0;
-  let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null;
+  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0; let by1318 = 0;
+  let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null; let Mout1318 = null;
   /* Release AQ: the Soccer Career train (Rounds 1169 to 1178) moves a career
      in every era on purpose: bans are served, a deal after 30 follows form,
      a listed player's move completes itself, the award field turns over and
@@ -872,6 +888,7 @@ if (baseRoot) {
     };
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) { same += 1; receipt.acceptedArm = 'raw'; }
+    else if (await tryArm('1318', Mout1318 ??= await bundle(ROOT, 'tree1318out', [r1318Out]))) { same += 1; by1318 += 1; console.log(`  career ${seed}: moved by the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 (equal to the base with them taken out)`); }
     else if (await tryArm('1041', Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]))) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
     else if (await tryArm('1100', Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
     else if (await tryArm('1052', Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out, ...futurePlugins]))) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
@@ -894,7 +911,8 @@ if (baseRoot) {
   if (byBoth) console.log(`  ${byBoth} of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once`);
   if (byTrain) console.log(`  ${byTrain} of the identical careers are identical only with the Soccer Career train (Rounds 1169 to 1178) taken out (${trainOut.seen().join(', ')} rewritten in memory)`);
   if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Rounds 1185 and 1187's form adjustment and whole Youth Mentor catalog restored, plus any explicitly named earlier inverse arms`);
-  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1041, by1100, by1052, byBoth, byTrain, by1185 };
+  if (by1318) console.log(`  ${by1318} of them equal the base only with the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 taken out`);
+  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1318, by1041, by1100, by1052, byBoth, byTrain, by1185 };
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }
