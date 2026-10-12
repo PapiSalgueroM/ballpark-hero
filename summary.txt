@@ -1,0 +1,3 @@
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vet-control exit=0 814s | CONTROL FIRED: the head without PR235's filter turns neutral red against the original that carries it
+vet exit=0 818s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms

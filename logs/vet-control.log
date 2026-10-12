@@ -1,0 +1,22 @@
+inverse applied src/lib/soccerCareerEngine.ts: f7ca08464dec9e69 -> 0d9ab4a21241ca1d
+group raw-and-draws: 10752 of 10752 passed, 0 failed
+group young: 1536 of 1536 passed, 0 failed
+group signing: 5070 of 5070 passed, 0 failed
+group homecoming: 54 of 54 passed, 0 failed
+group terms: 3530 of 3530 passed, 0 failed
+group neutral: 33 of 801 passed, 768 failed
+  FAIL loan21/1/window: complete route result and exact two-step wage rounding | first difference at char 265: actual ... 5.9 across the season\",\"You are 14 rating points under what this squad expects\"],\"offers\":[{\"club\":{\"id\":\"fb-36\",\"name\":\"Celtic\",\"country\":\"Scotland\",\"tier\":
+  FAIL loan21/1/window/sign/0: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Celtic\",\"currentClubCountry\":\"Scotland\",\"currentClubTier\"
+  FAIL loan21/1/window/sign/1: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Toluca\",\"currentClubCountry\":\"Mexico\",\"currentClubTier\":3
+  FAIL loan21/2/window: complete route result and exact two-step wage rounding | first difference at char 262: actual ...ged 5.9 across the season\",\"You are 14 rating points under what this squad expects\"],\"offers\":[{\"club\":{\"id\":\"fb-40\",\"name\":\"Inter Miami\",\"country\":\"USA\",\"tier
+  FAIL loan21/2/window/sign/0: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Inter Miami\",\"currentClubCountry\":\"USA\",\"currentClubTier\"
+  FAIL loan21/2/window/sign/1: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Antwerp\",\"currentClubCountry\":\"Belgium\",\"currentClubTier\"
+  FAIL loan21/3/window: complete route result and exact two-step wage rounding | first difference at char 265: actual ... 5.9 across the season\",\"You are 14 rating points under what this squad expects\"],\"offers\":[{\"club\":{\"id\":\"fb-39\",\"name\":\"LA Galaxy\",\"country\":\"USA\",\"tier\":2,
+  FAIL loan21/3/window/sign/0: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"LA Galaxy\",\"currentClubCountry\":\"USA\",\"currentClubTier\":2
+  FAIL loan21/3/window/sign/1: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Basel\",\"currentClubCountry\":\"Switzerland\",\"currentClubTier
+  FAIL loan21/4/window: complete route result and exact two-step wage rounding | first difference at char 265: actual ... 5.9 across the season\",\"You are 14 rating points under what this squad expects\"],\"offers\":[{\"club\":{\"id\":\"fb-87\",\"name\":\"Monterrey\",\"country\":\"Mexico\",\"tier\"
+  FAIL loan21/4/window/sign/0: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Monterrey\",\"currentClubCountry\":\"Mexico\",\"currentClubTier\
+  FAIL loan21/4/window/sign/1: whole actual signing/review/reload result | first difference at char 1373: actual ...ity\":4},{\"label\":\"Quietly decline\",\"reply\":\"Pass on this one. Keep it quiet\",\"karma\":4}]}],\"currentClub\":\"Lille\",\"currentClubCountry\":\"France\",\"currentClubTier\":3,
+group boundaries: 57 of 57 passed, 0 failed
+harness exit 1
+CONTROL FIRED: the head without PR235's filter turns neutral red against the original that carries it
