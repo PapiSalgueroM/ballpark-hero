@@ -1,0 +1,1 @@
+rivalProve6: RIVAL_PROVE=3cf2dfa2 RIVAL_MOVED=none RIVAL_CARDS=none node scripts/simUsRivalSense.mjs

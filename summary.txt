@@ -1,0 +1,1 @@
+rivalProve6 exit=0 752s | simUsRivalSense: 76 checks, 0 failed (full size)
