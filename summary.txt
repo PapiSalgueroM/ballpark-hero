@@ -1,0 +1,6 @@
+mut-weekoff exit=1 24s |  FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round > after one, two or three rounds a press, "Sim the rest"
+mut-logall exit=1 24s |  FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round > after one, two or three rounds a press, "Sim the rest"
+mut-tiewhere exit=0 24s |       Tests  289 passed (289)
+mut-byelast exit=1 24s |       Tests  1 failed | 288 passed (289)
+mut-seedsstale exit=1 26s |  FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round > after one, two or three rounds a press, "Sim the rest"
+mut-tiewhere-probe exit=1 2s |       Tests  1 failed | 1 skipped (2)

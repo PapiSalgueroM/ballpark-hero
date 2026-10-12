@@ -1,0 +1,15 @@
+mutation weekoff: applied
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press > ordinary: "Play Week 17" then a press a round, and then "Sim the rest", leav
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave t
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press > fired: "Play Week 17" then a press a round, and then "Sim the rest", leave t
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press > ordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave th
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press > fired: "Play Week 17" then a press a round, and then "Sim the rest", leave th
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press > ordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave t
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave the 
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press > fired: "Play Week 17" then a press a round, and then "Sim the rest", leave the 
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press > ordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave th
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press > title: "Play Week 17" then a press a round, and then "Sim the rest", leave the o
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press > fired: "Play Week 17" then a press a round, and then "Sim the rest", leave the o
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round > after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws

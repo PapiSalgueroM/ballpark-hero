@@ -1,0 +1,59 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+PROBE P2 seed 1 DEN vs LAC (AFC Wild Card): the tile reads "Wk 1 · at LAC"
+
+stdout | src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+PROBE P2 seed 1 LAC vs DEN (AFC Wild Card): the tile reads "Wk 1 · vs DEN"
+
+stdout | src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+PROBE P2 seed 2 KC vs LAC (AFC Wild Card): the tile reads "Wk 5 · at LAC"
+
+stdout | src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+PROBE P2 seed 2 JAX vs HOU (AFC Wild Card): the tile reads "Wk 1 · vs HOU"
+
+stdout | src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+PROBE P2 seed 2 HOU vs JAX (AFC Wild Card): the tile reads "Wk 1 · at JAX"
+
+stdout | src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+PROBE P2 seed 2 LAC vs KC (AFC Wild Card): the tile reads "Wk 5 · vs KC"
+PROBE P2 looked 12, rivals met in the regular season 6, wrong game opened 6
+
+ ❯ src/test/r1309RunProbe.test.tsx (2 tests | 1 failed | 1 skipped) 506ms
+   ↓ P1: the title game watched gives nothing away > the press card and the owner card are as they were until full time
+   × P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season 505ms
+     → expected 6 to be +0 // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season
+AssertionError: expected 6 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 6
+
+ ❯ src/test/r1309RunProbe.test.tsx:149:19
+    147|     console.log(`PROBE P2 looked ${looked}, rivals met in the regular …
+    148|     expect(rival, 'cases where the two clubs met in the regular season…
+    149|     expect(wrong).toBe(0);
+       |                   ^
+    150|   });
+    151| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 skipped (2)
+   Start at  22:02:57
+   Duration  2.23s (transform 746ms, setup 52ms, collect 988ms, tests 506ms, environment 294ms, prepare 135ms)
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/r1309RunProbe.test.tsx,title=src/test/r1309RunProbe.test.tsx > P2%3A "Your game" opens that tie's game for every played tie of his%2C over seeds > across leagues where his first opponent is a club he met in the regular season,line=149,column=19::AssertionError: expected 6 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 6%0A%0A ❯ src/test/r1309RunProbe.test.tsx:149:19%0A%0A

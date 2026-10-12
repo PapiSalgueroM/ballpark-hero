@@ -1,0 +1,4 @@
+mutation byelast: applied
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs > a round he does not play (his bye) shows the bracket, and the log takes nothing
+      Tests  1 failed | 288 passed (289)

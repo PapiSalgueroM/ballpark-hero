@@ -1,0 +1,5 @@
+mutation tiewhere: applied
+PROBE P2 looked 12, rivals met in the regular season 6, wrong game opened 6
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    147|     console.log(`PROBE P2 looked ${looked}, rivals met in the regular …
+      Tests  1 failed | 1 skipped (2)
