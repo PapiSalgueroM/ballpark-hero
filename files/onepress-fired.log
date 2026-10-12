@@ -1,0 +1,29 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+stdout | src/components/front-office/FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's
+FO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ ✓ src/components/front-office/FrontOfficeOnePress.test.tsx (13 tests | 9 skipped) 5688ms
+   ✓ NFL front office, fifteen league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's  4582ms
+   ✓ NFL front office, fifteen league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's  338ms
+   ✓ NFL front office, deep league, GM desk off: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's  460ms
+   ✓ NFL front office, deep league, GM desk on: one press of the final week > fired: the save at the recap, the draft and the next season's hub is the base's  306ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed | 9 skipped (13)
+   Start at  00:33:09
+   Duration  7.64s (transform 3.34s, setup 92ms, collect 362ms, tests 5.69s, environment 588ms, prepare 365ms)
+

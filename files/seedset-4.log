@@ -1,0 +1,16 @@
+bundled in 143 ms; seed sets 4; 40 seasons a league kind a set
+set 4, the board's way: 22800 games told by the bind; told scores that are not the engine's 0.9975; refused 0; points a team game 22.63, losers on 15 or fewer 0.4317, shutouts 0.0150, sides on 40 or more 0.0510; set 4 fifteen 0 LA: a log begun at week 10 holds 8 games and reads 6-2, where the league's record is 14-3
+set 4: 80 seasons, 22800 games told in 13573 ms; points a team game 22.63 (free 22.73); losers on 15 or fewer 0.4317 (free 0.4244); shutouts 0.0150 (free 0.0139); sides on 40 or more 0.0510 (free 0.0520); swapped 0.00048; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 4 (22800 games):
+  points: told 22.6273 to 22.6273, free 22.7328 to 22.7328, told less free -0.1054 to -0.1054 (band 0.25 either side)
+  losers15: told 0.4317 to 0.4317, free 0.4244 to 0.4244, told less free 0.0072 to 0.0072 (band 0.02 either side)
+  shutouts: told 0.0150 to 0.0150, free 0.0139 to 0.0139, told less free 0.0011 to 0.0011 (band 0.005 either side)
+  forty: told 0.0510 to 0.0510, free 0.0520 to 0.0520, told less free -0.0010 to -0.0010 (band 0.006 either side)
+  swapped share 0.0005 to 0.0005 (band: under 0.002)
+  the board's way (Round 1305): told scores that are not the engine's own 0.9975 to 0.9975 (floor: above 0.99); games the bind refused 0 a set (held at zero)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 135, 1.93, 1 | 0.2: 1072, 1.96, 2 | 0.3: 2306, 2.00, 0 | 0.4: 3847, 1.99, 0 | 0.5: 4926, 2.00, 0 | 0.6: 5061, 2.00, 0 | 0.7: 3830, 2.05, 2 | 0.8: 1571, 2.17, 6 | 0.9: 52, 1.67, 0
+  shapes of 22800 stories: trade 0.301, wire 0.217, late 0.172, rout 0.167, comeback 0.142
+  the AFC champion's share of title games 0.5875 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+simGmGameDay: 99 checks, 0 failed
