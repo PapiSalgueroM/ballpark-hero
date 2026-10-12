@@ -1,0 +1,2 @@
+why-ligue1 exit=0 4s | why: done
+why-laliga exit=0 5s | why: done

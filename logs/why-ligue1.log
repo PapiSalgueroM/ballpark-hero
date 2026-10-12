@@ -1,0 +1,19 @@
+season 1 (1) yearsOn 0 era now league ligue1 clubs 17: no eleven 3; roster sizes 1 to 24; u total 19, rows total 732
+   sample: Troyes n5 0/1/1/3 xi:N u6 | Lille n17 1/6/3/7 xi:y u0 | Rennes n22 1/8/6/7 xi:y u0 | Lyon n21 2/5/8/6 xi:y u0 | Marseille n12 1/3/6/2 xi:y u0 | Lens n19 1/8/5/5 xi:y u0
+   no eleven: Troyes n5 0/1/1/3 | Le Mans n1 0/1/0/0 | Auxerre n14 0/4/5/5
+season 2 (2) yearsOn 1 era now league ligue1 clubs 17: no eleven 2; roster sizes 1 to 24; u total 10, rows total 766
+   sample: Nice n20 1/7/6/6 xi:y u0 | Rennes n22 1/8/6/7 xi:y u0 | Toulouse n14 1/5/5/3 xi:y u0 | Lorient n18 1/7/6/4 xi:y u0 | PSG n24 2/9/6/7 xi:y u0 | Clermont n1 0/0/0/1 xi:N u10
+   no eleven: Clermont n1 0/0/0/1 | Auxerre n14 0/4/5/5
+season 3 (3) yearsOn 2 era now league ligue1 clubs 17: no eleven 3; roster sizes 1 to 24; u total 22, rows total 731
+   sample: Lens n19 1/8/5/5 xi:y u0 | Lyon n21 2/5/8/6 xi:y u0 | Le Mans n1 0/1/0/0 xi:N u16 | Paris FC n14 2/5/2/5 xi:y u0 | Nantes n13 1/6/3/3 xi:y u0 | Monaco n23 2/8/7/6 xi:y u0
+   no eleven: Le Mans n1 0/1/0/0 | Saint-Étienne n9 1/3/2/3 | Auxerre n14 0/4/5/5
+season 4 (4) yearsOn 3 era now league ligue2 clubs 17: no eleven 17; roster sizes 0 to 8; u total 558, rows total 179
+   sample: Annecy n1 0/0/1/0 xi:N u32 | Dunkerque n1 0/0/1/0 xi:N u42 | Nancy n1 0/1/0/0 xi:N u50 | Guingamp n1 0/0/1/0 xi:N u31 | Troyes n5 0/1/1/3 xi:N u13 | Montpellier n6 0/3/2/1 xi:N u28
+   no eleven: Annecy n1 0/0/1/0 | Dunkerque n1 0/0/1/0 | Nancy n1 0/1/0/0 | Guingamp n1 0/0/1/0 | Troyes n5 0/1/1/3 | Montpellier n6 0/3/2/1
+season 5 (5) yearsOn 4 era now league ligue2 clubs 17: no eleven 16; roster sizes 0 to 14; u total 514, rows total 203
+   sample: Dunkerque n1 0/0/1/0 xi:N u33 | Guingamp n1 0/0/1/0 xi:N u38 | Boulogne n1 0/0/1/0 xi:N u38 | Dijon n0 0/0/0/0 xi:N u39 | Annecy n1 0/0/1/0 xi:N u24 | Grenoble n0 0/0/0/0 xi:N u40
+   no eleven: Dunkerque n1 0/0/1/0 | Guingamp n1 0/0/1/0 | Boulogne n1 0/0/1/0 | Dijon n0 0/0/0/0 | Annecy n1 0/0/1/0 | Grenoble n0 0/0/0/0
+season 6 (6) yearsOn 5 era now league ligue2 clubs 17: no eleven 17; roster sizes 0 to 9; u total 559, rows total 207
+   sample: Troyes n5 0/1/1/3 xi:N u13 | Clermont n1 0/0/0/1 xi:N u32 | Metz n6 1/1/2/2 xi:N u7 | Pau n0 0/0/0/0 xi:N u46 | Le Mans n1 0/1/0/0 xi:N u40 | Dijon n0 0/0/0/0 xi:N u33
+   no eleven: Troyes n5 0/1/1/3 | Clermont n1 0/0/0/1 | Metz n6 1/1/2/2 | Pau n0 0/0/0/0 | Le Mans n1 0/1/0/0 | Dijon n0 0/0/0/0
+why: done

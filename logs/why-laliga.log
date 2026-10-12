@@ -1,0 +1,19 @@
+season 1 (1) yearsOn 0 era now league laliga clubs 19: no eleven 3; roster sizes 5 to 30; u total 13, rows total 847
+   sample: Elche n16 2/4/4/6 xi:y u0 | Levante n14 2/4/4/4 xi:y u0 | Atlético Madrid n24 3/7/7/7 xi:y u0 | Deportivo La Coruña n13 2/3/4/4 xi:y u0 | Getafe n18 2/4/5/7 xi:y u0 | Real Betis n29 4/8/9/8 xi:y u0
+   no eleven: Málaga n5 0/2/1/2 | Espanyol n14 0/4/4/6 | Racing Santander n12 3/1/5/3
+season 2 (2) yearsOn 1 era now league laliga clubs 19: no eleven 5; roster sizes 5 to 30; u total 12, rows total 874
+   sample: Real Madrid n30 2/13/8/7 xi:y u0 | Real Betis n29 4/8/9/8 xi:y u0 | Real Sociedad n22 1/8/6/7 xi:y u0 | Getafe n18 2/4/5/7 xi:y u0 | Las Palmas n5 0/3/0/2 xi:N u4 | Deportivo La Coruña n13 2/3/4/4 xi:y u0
+   no eleven: Las Palmas n5 0/3/0/2 | Racing Santander n12 3/1/5/3 | Girona n10 1/1/2/6 | Mallorca n8 1/3/2/2 | Espanyol n14 0/4/4/6
+season 3 (3) yearsOn 2 era now league laliga clubs 19: no eleven 3; roster sizes 5 to 30; u total 11, rows total 868
+   sample: Real Betis n29 4/8/9/8 xi:y u0 | Villarreal n24 3/8/4/9 xi:y u0 | Málaga n5 0/2/1/2 xi:N u9 | Athletic Club n21 2/7/6/6 xi:y u0 | Elche n16 2/4/4/6 xi:y u0 | Real Sociedad n22 1/8/6/7 xi:y u0
+   no eleven: Málaga n5 0/2/1/2 | Girona n10 1/1/2/6 | Espanyol n14 0/4/4/6
+season 4 (4) yearsOn 3 era now league laliga clubs 19: no eleven 5; roster sizes 0 to 30; u total 30, rows total 877
+   sample: Girona n10 1/1/2/6 xi:N u0 | Getafe n18 2/4/5/7 xi:y u0 | Córdoba n0 0/0/0/0 xi:N u22 | Racing Santander n12 3/1/5/3 xi:N u1 | Villarreal n24 3/8/4/9 xi:y u0 | Mallorca n8 1/3/2/2 xi:N u7
+   no eleven: Girona n10 1/1/2/6 | Córdoba n0 0/0/0/0 | Racing Santander n12 3/1/5/3 | Mallorca n8 1/3/2/2 | Espanyol n14 0/4/4/6
+season 5 (5) yearsOn 4 era now league segunda clubs 19: no eleven 19; roster sizes 0 to 8; u total 619, rows total 271
+   sample: Ceuta n0 0/0/0/0 xi:N u48 | Sporting Gijón n4 1/1/1/1 xi:N u32 | Málaga n5 0/2/1/2 xi:N u20 | Córdoba n0 0/0/0/0 xi:N u44 | FC Andorra n0 0/0/0/0 xi:N u40 | Tenerife n0 0/0/0/0 xi:N u56
+   no eleven: Ceuta n0 0/0/0/0 | Sporting Gijón n4 1/1/1/1 | Málaga n5 0/2/1/2 | Córdoba n0 0/0/0/0 | FC Andorra n0 0/0/0/0 | Tenerife n0 0/0/0/0
+season 6 (6) yearsOn 5 era now league laliga clubs 19: no eleven 4; roster sizes 5 to 30; u total 14, rows total 925
+   sample: Osasuna n15 1/3/5/6 xi:y u0 | Racing Santander n12 3/1/5/3 xi:N u0 | Espanyol n14 0/4/4/6 xi:N u0 | Alavés n17 1/7/5/4 xi:y u0 | Villarreal n24 3/8/4/9 xi:y u0 | Celta Vigo n20 2/8/3/7 xi:y u0
+   no eleven: Racing Santander n12 3/1/5/3 | Espanyol n14 0/4/4/6 | Mallorca n8 1/3/2/2 | Almería n5 0/1/2/2
+why: done
