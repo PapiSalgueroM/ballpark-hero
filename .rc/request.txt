@@ -1,0 +1,4 @@
+# Round 1314 3.4b proof on HEAD: simHalftime seeded at 1200 twice (byte equal logs) and the deaf control
+simHalftime-1: node scripts/simHalftime.mjs
+simHalftime-2: node scripts/simHalftime.mjs
+ht-deaf: SIM_HALFTIME_CONTROL=deaf node scripts/simHalftime.mjs
