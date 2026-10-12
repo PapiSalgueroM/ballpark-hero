@@ -495,9 +495,10 @@ async function engine(label, root, patches = []) {
  *            read 129, because a defender of the side that did not score now breaks his club's bound too.
  *   thin (vii)   the module's partial eleven against the engine's eleven on 671 rosters and against the
  *            harness's own reading on 313 with no eleven (114 and 70 on the default fleet). Control places433:
- *            192 failures in thin. Two older controls read more for the new checks and still turn thin
+ *            192 failures in thin. Three older controls read more for the new checks and still turn thin
  *            red alone: thinsheet 87 where it read 17 (the single match against me), nofill 64 where it read
- *            1 (a partial eleven with no shirt is not the harness's reading).
+ *            1 (a partial eleven with no shirt is not the harness's reading), shirtrow 3,319 where it read
+ *            2,282 (a shirt's row gains a clean sheet nobody named may gain).
  *   oldsave      6,007 checks with BOOK_BASE (4,129 without): six saves with no book, five of them on a late
  *            book. Control goallesswhole: 3 failures, all three the goalless save's. (vi): three seasons in
  *            play written by the base commit with its book and carried on, two of them in a league with
@@ -505,6 +506,15 @@ async function engine(label, root, patches = []) {
  *            the three, so the transition is not tried) and thin (iv) with it.
  * After the pass the harness holds 41 controls. Wall time on a runner: full fleet with BOOK_BASE about 228
  * seconds, default fleet 63 (84 with BOOK_BASE).
+ * AND ON THE TREE THESE LINES WERE ADDED TO (remote check r1306-fx2, head 2d0aa866; the commit that adds
+ * them changes nothing but this comment): ALL 41 CONTROLS FIRED on seed set 0,
+ * each for its own section and no other but the ones its line names, and twelve more fleets were green
+ * (the default fleet on seed sets 1, 2, 3, 4 and 7 and on seed set 11 with three seasons, the full fleet on
+ * seed sets 1, 2, 3, 4 and 7, and seed set 0 again with the base). Over those fleets thin (vi) judged 8,640
+ * to 10,328 single matches a full fleet (2,090 to 2,507 clean sheets, 3,748 to 4,633 credits to named men of
+ * a back line) and 1,772 to 2,290 a default one (484 to 585, 840 to 1,037), with no club entry left out on
+ * any of them; thin (vii) held 666 to 696 rosters with an eleven and 280 to 322 without a full fleet, 113 to
+ * 128 and 56 to 71 a default one.
  * Every control of the harness FIRED for its own section and no other (or with the sections its line names) on
  * seed set 0, the 21 of Round 1229 among them, after step (b) (r1306-b1, r1306-c1) and the new ones after the
  * step that added them. Wall time on a runner: full fleet 100 to 170 seconds, default 42 to 60.
