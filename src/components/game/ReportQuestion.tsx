@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Flag, Loader2, CheckCircle } from 'lucide-react';
 import {
   Dialog,
@@ -22,6 +22,9 @@ const REPORT_REASONS = REPORT_KINDS_QUESTION;
 
 const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => {
   const [open, setOpen] = useState(false);
+  // Release BA: the form opens from a plain button, not a DialogTrigger, so
+  // Radix has no trigger to give focus back to on close. Hand it back here.
+  const trigger = useRef<HTMLButtonElement>(null);
   const [reason, setReason] = useState('');
   const [details, setDetails] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -68,6 +71,7 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
   return (
     <>
       <button
+        ref={trigger}
         onClick={() => setOpen(true)}
         /* Round 209: py-2, not py-1.5. The sweep measured 28px, two short of
            the 30 a thumb needs, on 63 pages. */
@@ -79,7 +83,10 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-sm">
+        <DialogContent
+          className="max-w-sm"
+          onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Flag className="w-4 h-4 text-destructive" />

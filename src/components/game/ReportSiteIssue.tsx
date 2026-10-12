@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Bug, Loader2, CheckCircle } from 'lucide-react';
 import { REPORT_KINDS_SITEWIDE } from '@/components/game/reportKinds';
 import {
@@ -32,6 +32,9 @@ const REPORT_KINDS = REPORT_KINDS_SITEWIDE;
 
 export function ReportSiteIssue() {
   const [open, setOpen] = useState(false);
+  // Release BA: a plain button opens the form, so Radix has no trigger to give
+  // focus back to on close. Hand it back here.
+  const trigger = useRef<HTMLButtonElement>(null);
   const [kind, setKind] = useState('');
   const [details, setDetails] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -75,6 +78,7 @@ export function ReportSiteIssue() {
   return (
     <>
       <button
+        ref={trigger}
         onClick={() => setOpen(true)}
         /* Round 209: padded so the footer report link is a real target. */
         className="inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground"
@@ -85,7 +89,10 @@ export function ReportSiteIssue() {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-sm">
+        <DialogContent
+          className="max-w-sm"
+          onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Bug className="w-4 h-4 text-destructive" />
