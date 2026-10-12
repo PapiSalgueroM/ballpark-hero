@@ -1,0 +1,3 @@
+saveSize-0 exit=0 51s | simClubManagerSaveSize: all sections green
+saveSize-uncapped exit=1 53s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+saveSize-3 exit=0 53s | simClubManagerSaveSize: all sections green

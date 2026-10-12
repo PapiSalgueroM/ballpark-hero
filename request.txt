@@ -1,0 +1,4 @@
+# REVIEW-run Round 1306, head b7943c61: the save size on two streams and its control (the harness is on no gate list)
+saveSize-0: node scripts/simClubManagerSaveSize.mjs
+saveSize-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
