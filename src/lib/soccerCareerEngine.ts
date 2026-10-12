@@ -7129,6 +7129,42 @@ const GEN_POSITIONS: Array<{ pos: string; goals: [number, number] }> = [
   { pos: "CAM", goals: [8, 22] }, { pos: "CM", goals: [4, 14] }, { pos: "CDM", goals: [2, 8] }, { pos: "CB", goals: [1, 5] },
 ];
 
+/* Round 1318: the one reader of the saved pool of generated rivals (Rounds
+   1280 to 1282). Ruling C3 of Release AW: a save part that cannot be verified
+   is read as absent. So this never refuses a save; calculateBallonDor reads the
+   part only through here and starts a fresh pool in place of one it refuses.
+   It checks what those rounds write: version 1, a year no later than lastYear,
+   contiguous ids, one live rival per role and slot, unique names, the goal
+   range of the rival's position, and a retirement in the year he turns 37. */
+export function isGeneratedBallonPool(v: unknown, lastYear: number): v is GeneratedBallonPool {
+  const record = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
+  const integer = (x: unknown): x is number => typeof x === "number" && Number.isSafeInteger(x);
+  const filled = (x: unknown): x is string => typeof x === "string" && x.trim().length > 0;
+  if (!record(v) || v.version !== 1 || !integer(v.year) || v.year < 0 || v.year > lastYear
+    || !integer(v.nextId) || !Array.isArray(v.entries) || v.entries.length === 0 || v.nextId !== v.entries.length) return false;
+  const poolYear = v.year, names = new Set<string>(), activeSlots = new Set<string>();
+  for (let index = 0; index < v.entries.length; index++) {
+    const entry: unknown = v.entries[index];
+    if (!record(entry)) return false;
+    const goals = GEN_POSITIONS.find(p => p.pos === entry.position)?.goals;
+    if (entry.id !== index || (entry.role !== "primary" && entry.role !== "filler")
+      || !integer(entry.slot) || entry.slot < 0 || entry.slot >= (entry.role === "primary" ? 15 : 20)
+      || !integer(entry.seed) || entry.seed < 0 || !integer(entry.firstYear) || entry.firstYear < 0 || entry.firstYear > poolYear
+      || !integer(entry.entryAge) || entry.entryAge < 19 || entry.entryAge > 28
+      || !filled(entry.name) || names.has(entry.name) || !filled(entry.nationality) || !filled(entry.club) || !goals
+      || !Array.isArray(entry.baseGoals) || entry.baseGoals.length !== 2
+      || entry.baseGoals[0] !== goals[0] || entry.baseGoals[1] !== goals[1]) return false;
+    names.add(entry.name);
+    if (entry.retiredYear === null) {
+      const slot = entry.role + ":" + entry.slot;
+      if (entry.entryAge + poolYear - entry.firstYear >= 37 || activeSlots.has(slot)) return false;
+      activeSlots.add(slot);
+    } else if (!integer(entry.retiredYear) || entry.retiredYear > poolYear
+      || entry.retiredYear !== entry.firstYear + 37 - entry.entryAge) return false;
+  }
+  return true;
+}
+
 function generateContender(usedNames: Set<string>, seed: number, startAge = rand(19, 28)): RealContender {
   const nat = GEN_NATIONALITIES[(seed * 7 + 3) % GEN_NATIONALITIES.length];
   /* Round 197: names come from the guarded pools now. The loop still walks
@@ -7266,7 +7302,8 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const usedNames = new Set<string>([state.playerName]);
   if (state.rival) usedNames.add(state.rival.name);
 
-  const previousPool = state.generatedBallonPool;
+  /* Round 1318: a pool the reader refuses is read as absent (ruling C3). */
+  const previousPool = isGeneratedBallonPool(state.generatedBallonPool, year - 1) ? state.generatedBallonPool : undefined;
   let generatedPool: GeneratedBallonPool | undefined;
   if (previousPool) {
     generatedPool = {

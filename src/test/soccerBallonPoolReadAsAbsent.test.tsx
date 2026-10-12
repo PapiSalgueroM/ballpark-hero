@@ -15,7 +15,7 @@ import * as E from '@/lib/soccerCareerEngine';
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { CORRUPTIONS, copy, corrupt, nextNight, poolNight, type Saved } from './helpers/ballonPoolDrive';
 
-const reader = (E as unknown as { isGeneratedBallonPool?: (v: unknown, lastYear: number) => boolean }).isGeneratedBallonPool;
+const reader = E.isGeneratedBallonPool;
 let night: Saved;
 const lastYear = (s: Saved) => s.seasons.at(-1).year as number;
 
@@ -31,9 +31,9 @@ describe('a saved Ballon d\'Or pool that cannot be verified is read as absent', 
 
   it('accepts the pool a natural career wrote, and the night after it keeps that pool\'s rivals', () => {
     expect(isSoccerCareerSave(night)).toBe(true);
-    expect(reader?.(night.generatedBallonPool, lastYear(night))).toBe(true);
+    expect(reader(night.generatedBallonPool, lastYear(night))).toBe(true);
     const kept = nextNight(night, 7).value;
-    expect(reader?.(kept.generatedBallonPool, lastYear(kept))).toBe(true);
+    expect(reader(kept.generatedBallonPool, lastYear(kept))).toBe(true);
     const before = night.generatedBallonPool.entries.map((e: Saved) => e.name);
     expect(kept.generatedBallonPool.entries.slice(0, before.length).map((e: Saved) => e.name)).toEqual(before);
   });
@@ -42,11 +42,11 @@ describe('a saved Ballon d\'Or pool that cannot be verified is read as absent', 
     const value = corrupt(night, id);
     expect(isSoccerCareerSave(value)).toBe(true);
     const loaded = E.repairCareer(copy(value) as E.CareerState) as Saved;
-    expect(reader?.(loaded.generatedBallonPool, lastYear(loaded))).toBe(false);
+    expect(reader(loaded.generatedBallonPool, lastYear(loaded))).toBe(false);
     const absent = copy(loaded); delete absent.generatedBallonPool;
     const broken = nextNight(loaded, 7), none = nextNight(absent, 7);
     expect(broken.draws).toBe(none.draws);
     expect(broken.value).toEqual(none.value);
-    expect(reader?.(broken.value.generatedBallonPool, lastYear(broken.value))).toBe(true);
+    expect(reader(broken.value.generatedBallonPool, lastYear(broken.value))).toBe(true);
   });
 });
