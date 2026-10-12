@@ -1,0 +1,12 @@
+1) the flagship carries no other game
+   167 modules, 3364 KB of source, 4 foreign engines checked, 0 present
+1b) the Season Centre and the training ground are not in the first download
+   14 paths that must stay lazy, 0 in the static closure
+2) the job market is loaded on demand, and something loads it
+   engine loads it dynamically, the page preloads it on both phases, the not-loaded state is honest
+3) the built weight of /soccer-career
+   85 lazy dependencies including the Club Manager chunk (42 are shared chunks the page already has, which is normal)
+   43 chunks, 2650 KB raw (ceiling 2700), 786 KB over the wire
+   raw bytes 2713384; the chunks: AppearanceBuilder-DP04slFV.js 46290, Celebration-B-_7eQ5E.js 1527, CelebrationStyles-Cb-UYsj3.js 2126, Confetti-CqouDBn3.js 904, FlagImg-BMU4ZhJ2.js 5846, GameHelp-Bp2GNOZV.js 1649, GameNavbar-DZcV0vXc.js 10360, GameSeoContent-BAb5mZtA.js 6832, HowToPlayPopover-XMGKWgi2.js 1367, PlayerAvatar-vLok5SJh.js 15162, ShareButtons-erQ61_3D.js 11646, SoccerCareer-CE34P8-Y.js 1392295, VictoryMoment-Dfbe9NRQ.js 3669, arcade-CUT7KVjC.js 489, arrow-left-DabxWBcu.js 333, badges-RaRcQFN-.js 5813, careerAwardsNight-BDQnO6dK.js 2575, careerRivalryChoices-MJgJuT1K.js 9017, chevron-down-x7BziCgI.js 291, chevron-up-C6GN8WZf.js 291, circle-help-6bbPxwWQ.js 407, clubRivalries-DuNC-DyB.js 36634, confederationGroups-8jgsrX6T.js 1449, copy-cQ2Hpcog.js 405, dialogA11y-BCgxbiii.js 150, formatNumber-CGuttX8h.js 152, freeKick-BSoL5hQo.js 1943, guideShape-Dkr4ZpEy.js 5398, index-DGA1amX1.js 794460, intlNames-DiJYNZJt.js 13296, keyedRng-BKZQ2UGv.js 254, managerOffers-Mi85K8qd.js 5870, medal-B6ma83c0.js 604, select-BUMe-b6V.js 21290, soccerBootIds-BWkyFIXk.js 293, soccerBoots-BK_dXNrV.js 2017, soccerCareerAppearance-BF4Z2JDW.js 6180, soccerInternational-FiWGI8ks.js 21073, star-BE2EDXGu.js 641, uclFormatHistory-DwuhruDw.js 12334, useCareerMoment-DhqYP-cE.js 267307, useGameCompletion-0CG0HrRQ.js 810, useRevealScroll-BZkT_wg-.js 1935
+
+simFlagshipWeight: green. The flagship carries its own game and nobody else's.

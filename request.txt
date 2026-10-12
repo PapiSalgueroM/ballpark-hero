@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+flagship: node scripts/simFlagshipWeight.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
