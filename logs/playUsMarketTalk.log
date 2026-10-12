@@ -1,0 +1,46 @@
+ok   past: nfl 390x844: the save is one main wrote in the last year of a deal (phase season, 1 year left, no talk) and the hub offers Week by week (1)
+     nfl 390x844: under the centre of Week by week, the page not moved: the button itself
+ok   past: nfl 390x844: Week by week opened the talk and played nothing (viewer 0, 5 seasons as before, saved phase extension, talk extension)
+ok   reload: nfl 390x844: a reload lands on the same talk (talk on screen true, the same offer 18.5 against 18.5, the same save bytes true)
+ok   sign: nfl 390x844: Sign put 5 years on the deal and took the talk off the save, and Week by week then played the season and opened the viewer (viewer true, seasons 5 then 6)
+ok   decline: nfl 390x844: Play opened the talk with nothing played (saved phase extension), and Decline played the year out (curtain true, seasons 5 then 6)
+ok   plan: nfl 390x844: a plan was prepared ({"workload":"push","tactics":"normal","expectation":"normal","partnership":"norm), Play opened the talk, and after a reload the talk is open again on the same offer with the plan still on the save (talk true, plan held true)
+ok   past: mlb 390x844: the save is one main wrote in the last year of a deal (phase season, 1 year left, no talk) and the hub offers Week by week (1)
+     mlb 390x844: under the centre of Week by week, the page not moved: the button itself
+ok   past: mlb 390x844: Week by week opened the talk and played nothing (viewer 0, 6 seasons as before, saved phase extension, talk extension)
+ok   reload: mlb 390x844: a reload lands on the same talk (talk on screen true, the same offer 13 against 13, the same save bytes true)
+ok   sign: mlb 390x844: Sign put 6 years on the deal and took the talk off the save, and Week by week then played the season and opened the viewer (viewer true, seasons 6 then 7)
+ok   decline: mlb 390x844: Play opened the talk with nothing played (saved phase extension), and Decline played the year out (curtain true, seasons 6 then 7)
+ok   plan: mlb 390x844: a plan was prepared ({"workload":"push","tactics":"normal","expectation":"normal","partnership":"norm), Play opened the talk, and after a reload the talk is open again on the same offer with the plan still on the save (talk true, plan held true)
+ok   spent-wheel: nfl 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nfl 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nfl 390x844 save extTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nfl 390x844 save extTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: mlb 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: mlb 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+     mlb 390x844 save extTalk: nothing can be pushed on this save (the push control is absent), so this journey is said and not counted
+ok   spent-wheel: nba 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nba 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nba 390x844 save extTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nba 390x844 save extTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nhl 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nhl 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+     nhl 390x844 save extTalk: nothing can be pushed on this save (the push control is absent), so this journey is said and not counted
+ok   view-wheel: nfl 390x844: offer 3 of 3 pushed with its button in the middle of the window (scrollY 722, the offers window 852 px tall); the wheel is 375 px tall, its top at 12 and its bottom at 387 of 844, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: nfl 390x844: after Continue the pushed offer's card is at 717 to 844 of 844 (100% in the window) and its receipt line at 799 to 831 (100% in the window) (scrollY now 338)
+ok   view-wheel: nfl 320x568: offer 3 of 3 pushed with its button in the middle of the window (scrollY 941, the offers window 933 px tall); the wheel is 429 px tall, its top at 12 and its bottom at 441 of 568, 100% of it in the window, its heading at 29 to 77 (scrollY now 315)
+ok   view-offer: nfl 320x568: after Continue the pushed offer's card is at 441 to 568 of 568 (100% in the window) and its receipt line at 523 to 555 (100% in the window) (scrollY now 679)
+ok   view-wheel: mlb 390x844: offer 3 of 3 pushed with its button in the middle of the window (scrollY 722, the offers window 852 px tall); the wheel is 375 px tall, its top at 12 and its bottom at 387 of 844, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: mlb 390x844: after Continue the pushed offer's card is at 665 to 844 of 844 (100% in the window) and its receipt line at 747 to 779 (100% in the window) (scrollY now 390)
+ok   view-wheel: mlb 320x568: offer 3 of 3 pushed with its button in the middle of the window (scrollY 925, the offers window 917 px tall); the wheel is 429 px tall, its top at 12 and its bottom at 441 of 568, 100% of it in the window, its heading at 29 to 77 (scrollY now 315)
+ok   view-offer: mlb 320x568: after Continue the pushed offer's card is at 373 to 568 of 568 (100% in the window) and its receipt line at 455 to 503 (100% in the window) (scrollY now 747)
+ok   view-wheel: nba 390x844: offer 4 of 4 pushed with its button in the middle of the window (scrollY 910, the offers window 1040 px tall); the wheel is 375 px tall, its top at 12 and its bottom at 387 of 844, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: nba 390x844: after Continue the pushed offer's card is at 717 to 844 of 844 (100% in the window) and its receipt line at 799 to 831 (100% in the window) (scrollY now 526)
+ok   view-wheel: nba 320x568: offer 4 of 4 pushed with its button in the middle of the window (scrollY 1113, the offers window 1105 px tall); the wheel is 405 px tall, its top at 12 and its bottom at 417 of 568, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: nba 320x568: after Continue the pushed offer's card is at 441 to 568 of 568 (100% in the window) and its receipt line at 523 to 555 (100% in the window) (scrollY now 850)
+ok   view-wheel: nhl 390x844: offer 3 of 3 pushed with its button in the middle of the window (scrollY 722, the offers window 852 px tall); the wheel is 375 px tall, its top at 12 and its bottom at 387 of 844, 100% of it in the window, its heading at 29 to 53 (scrollY now 315)
+ok   view-offer: nhl 390x844: after Continue the pushed offer's card is at 665 to 844 of 844 (100% in the window) and its receipt line at 747 to 779 (100% in the window) (scrollY now 390)
+ok   view-wheel: nhl 320x568: offer 3 of 3 pushed with its button in the middle of the window (scrollY 959, the offers window 917 px tall); the wheel is 429 px tall, its top at 12 and its bottom at 441 of 568, 100% of it in the window, its heading at 29 to 77 (scrollY now 349)
+ok   view-offer: nhl 320x568: after Continue the pushed offer's card is at 373 to 568 of 568 (100% in the window) and its receipt line at 455 to 503 (100% in the window) (scrollY now 781)
+     56 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 40 checks, 0 failed
