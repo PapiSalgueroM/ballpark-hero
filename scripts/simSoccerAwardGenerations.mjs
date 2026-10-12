@@ -59,8 +59,10 @@ const controls = [
   ['malformed-pool-accepted', ENGINE, '  if (!record(v) || v.version !== 1 || !integer(v.year) || v.year < 0 || v.year > lastYear', '  return true;\n  if (!record(v) || v.version !== 1 || !integer(v.year) || v.year < 0 || v.year > lastYear', ['invalid-save']],
 ];
 const heldPaths = [ENGINE, SAVE, 'src/lib/soccerAwardReveal.ts', 'src/pages/SoccerCareer.tsx', 'src/test/soccerCareerSaveRecovery.test.tsx', 'package.json', 'package-lock.json'];
-const rawBefore = new Map(heldPaths.map(p => [p, fs.readFileSync(path.join(ROOT, p))]));
-const healthyText = Object.fromEntries([ENGINE, SAVE].map(p => [p, lf(rawBefore.get(p).toString())]));
+/* Round 1318: the held files are read with line endings normalised (simHarnessAnchors: a multi line anchor searched in a raw
+   read matches nothing on a CRLF checkout); the held disk check compares the same normalised text. */
+const rawBefore = new Map(heldPaths.map(p => [p, lf(fs.readFileSync(path.join(ROOT, p), "utf8"))]));
+const healthyText = Object.fromEntries([ENGINE, SAVE].map(p => [p, rawBefore.get(p)]));
 function instrument(source, observed, modern) {
   const before = source, edits = [];
   const edit = (from, to) => { source = one(source, from, to); edits.push([from, to]); };
@@ -506,7 +508,7 @@ async function main() {
   const invalidObservation = pageObservations.find(r => r.invalid && r.rawAfter === r.rawAfterReload); assert(invalidObservation);
   observationControl('unreadable-pool-reload-rewritten', invalidObservation, v => { v.rawAfterReload = v.rawAfterReload.slice(1); }, (v, h) => { v.rawAfterReload = h.rawAfterReload; }, v => v.rawAfter === v.rawAfterReload ? [] : ['raw-storage-held'], ['raw-storage-held']);
   report.component = { observations: put(pageObservations), vitest: put(JSON.parse(fs.readFileSync(path.join(componentDir, 'vitest.json'), 'utf8'))), frameworkSetup: put(frameworkSetup), frameworkControl };
-  for (const [p, raw] of rawBefore) assert.deepEqual(fs.readFileSync(path.join(ROOT, p)), raw, `held disk ${p}`);
+  for (const [p, raw] of rawBefore) assert.equal(lf(fs.readFileSync(path.join(ROOT, p), "utf8")), raw, `held disk ${p}`);
   report.heldSources = [...rawBefore].map(([p, raw]) => ({ path: p, bytes: raw.length, sha256: sha(raw) }));
   report.limitations = ['Generated-only model, no real biography change.', 'Filler shortages/year gaps are declared complete saved-model boundaries.', 'Future career result/random neutrality is not claimed after candidate identities diverge.', 'Component presentation/network services are mocked, actual page loader/save effects run.', 'Existing39 recovery tests and old harness/floors remain unchanged.'];
   assert.equal(failures.length, 0, 'all retained natural/boundary checks healthy');
