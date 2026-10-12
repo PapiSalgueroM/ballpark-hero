@@ -1,0 +1,3 @@
+rivalT: node scripts/simUsRivalSense.mjs
+rivalP2base: RIVAL_PROVE=b6eb78e7 node scripts/simUsRivalSense.mjs
+senseC: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
