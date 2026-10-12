@@ -1,0 +1,4 @@
+Free-agency feedback replacement: one executable source binding changed in an isolated component/CSS copy.
+Free-agency feedback replacement: 1 intended failures, 12 independent passes, no skipped cases.
+FA_FEEDBACK_CONTROL: {"control":"replacement","failed":[{"title":"clears stale negotiation feedback when a new unpushed window replaces the market","messages":["AssertionError: expected <p role=\"status\" tabindex=\"-1\" …(2)></p> to be null\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.tsx:154:92\n    at file:///home/runner/work/ballpark-hero/ballpark-he
+Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or career persistence.

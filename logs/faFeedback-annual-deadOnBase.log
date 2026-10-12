@@ -1,0 +1,6 @@
+  expected: /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find an accessible element with the role/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,4 @@
+Free-agency feedback reduced: one executable source binding changed in an isolated component/CSS copy.
+Free-agency feedback reduced: 1 intended failures, 12 independent passes, no skipped cases.
+FA_FEEDBACK_CONTROL: {"control":"reduced","failed":[{"title":"bounds earned feedback to one short animation and declares static reduced motion","messages":["AssertionError: expected '@keyframes offerReply {\\n  from { box…' to match /@media\\s*\\(prefers-reduced-motion:\\s*…/\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.tsx:180:17\n    at file:///home/
+Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or career persistence.
