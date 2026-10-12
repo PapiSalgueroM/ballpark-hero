@@ -1,0 +1,13 @@
+Everton, 2400 seasons an arm, every break seen and nothing changed by the player.
+
+1) Does the other manager change anything
+   opposition stands still: leader at the break won 78.6%, lost 6.0%  (58874 matches)
+   opposition reacts:       leader at the break won 78.1%, lost 6.5%  (58582 matches)
+   goals in a season: 47.7 for and 53.3 against, becoming 48.0 and 54.2
+   goals in a season went 101.00 to 102.21, a rise of 1.21 with an error bar of 0.30
+   holding a lead got harder by 0.49 points of percentage, error bar 0.24 (reported, not asserted on: too small a signal to test)
+
+2) Does it wreck the league
+   points 48.5 against 47.8, a gap of 0.72 against a tolerance of 2, error bar 0.99
+
+ALL OPPOSITION CHECKS PASSED

@@ -1,0 +1,7 @@
+Calendar Current date:8/8 actual-screen cases passed, none skipped, with the real career/calendar engine.
+Calendar Current date: distant past/future months return to the actual simulated day and clear the inspected day.
+Calendar Current date: advanced career date/year stays authoritative; browsing remains where the user left it until asked.
+Calendar Current date: same-month returns and repeated clicks clear inspection without simulation, training, storage writes or career changes.
+Calendar Current date: enabled44px native button, key routing and exact element/focus persist through the return.
+Calendar Current date: original bounded month browsing, day inspection, explicit fast forward and training callbacks remain intact.
+Calendar Current date: normalized copied controls, original bytes held, owned temporary files cleaned. Native geometry/keyboard acceptance remains pending.

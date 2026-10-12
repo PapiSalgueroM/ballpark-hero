@@ -1,0 +1,43 @@
+1) Club Manager XP replays the fixture recorded before the lift
+  ok: 7796 lines over 7 sections match the recording from 64d5be42
+2) The GM curve is Club Manager's, at every level, and so is every spend
+  ok: 360 XP probes, the curve and level reads matching the recording from 64d5be42, and 8000 paired spends landing the same on both seats
+  FAIL: nbaFrontOffice.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)
+  FAIL: mlbFrontOffice.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)
+  FAIL: the front office numbers this harness reads came back thin: losses [-28,-16], gains [14,22,40], odds [0.45,0.5,0.55,0.6,0.7], 197 dead money figures, 136 asks, growth [{"league":"NFL","g":1},{"league":"NFL","g":2},{"league":"NHL","g":1},{"league":"NHL","g":2},{"league":"NHL","g":3}]
+   real inputs: 136 opening asks over five price lists, 197 dead money figures, growth draws NFL 1/2, NBA , MLB , NHL 1/2/3
+3) A GM who has spent nothing gets exactly the numbers the front office produced
+  ok: 266 readings at zero points hand back exactly what they were given; fresh and absent blocks are empty
+4) Every GM tree point moves the number it feeds, at every step from 1 to the cap
+   scouting (expected read error of a prospect, per scouting error the draft drew (a perfect read has nothing to fix)), mean over 8 real inputs: 2.5000 > 2.2750 > 2.0500 > 1.8250 > 1.6000 > 1.3750
+  ok: scouting: smallest step over every input and level 0.1500 (floor 0.07)
+   negotiation (opening ask once kept in tenths, as a share of the agent figure, on every ask clear of its floor), mean over 131 real inputs: 1.0000 > 0.9800 > 0.9600 > 0.9400 > 0.9200 > 0.9000
+  ok: negotiation: smallest step over every input and level 0.0200 (floor 0.01)
+   capCraft (dead money once kept in tenths, as a share of the cut engine figure), mean over 197 real inputs: 1.0000 > 0.9600 > 0.9200 > 0.8800 > 0.8400 > 0.8000
+  ok: capCraft: smallest step over every input and level 0.0400 (floor 0.02)
+   development (rating points a young player gains in a year once stored as a whole number, per engine growth draw, one point of room left), mean over 5 real inputs: 1.8000 < 1.9000 < 2.0000 < 2.1000 < 2.2000 < 2.3000
+  ok: development: smallest step over every input and level 0.1000 (floor 0.05)
+   trading (a rival premium over value, as a share of the firm and sour premiums), mean over 2 real inputs: 1.0000 > 0.9200 > 0.8400 > 0.7600 > 0.6800 > 0.6000
+  ok: trading: smallest step over every input and level 0.0800 (floor 0.04)
+   ownership (trust lost to a missed and a badly missed mandate), mean over 2 real inputs: 22.0000 > 20.5000 > 19.0000 > 17.5000 > 16.0000 > 14.0000
+  ok: ownership: smallest step over every input and level 1.0000 (floor 0.5)
+   media (odds each answer that gambles lands), mean over 5 real inputs: 0.5600 < 0.5900 < 0.6200 < 0.6500 < 0.6800 < 0.7100
+  ok: media: smallest step over every input and level 0.0300 (floor 0.015)
+   (an ends only check passes 7 of 7 trees)
+4b) Every effect hands back a number a board can store, and never crosses its line
+  ok: 1810050 readings: whole ratings, money in tenths, no ask under its floor, nobody past his ceiling, no trust gain touched
+5) Each tile's "at the cap" line matches what five points actually do
+  ok: scouting: "a little over half" and five points give 0.550
+  ok: negotiation: "about a tenth off" and five points give 0.900
+  ok: capCraft: "about a fifth less" and five points give 0.800
+  ok: development: "an even chance of one extra rating point" and five points give 0.500
+  ok: trading: "about 40 percent less" and five points give 0.600
+  ok: ownership: "about a third less" and five points give 0.636
+  ok: media: "15 points more often" and five points give 0.150
+6) Spending rules hold for a GM, and a mangled block resets alone
+  ok: cap 5 a tree, 35 points a board, 15 mangled blocks reset alone
+7) A GM earns at Club Manager's pace, and achievements outpay volume
+   good season: GM 540 XP, Club Manager 580; whole board 29508 XP = 54.6 GM seasons, 50.9 Club Manager seasons
+  ok: every source pays, a title beats a .700 season (170 to 70), pace ratio 1.07
+
+simGmXp: 3 failure(s)
