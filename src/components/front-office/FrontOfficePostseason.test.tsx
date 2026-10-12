@@ -55,15 +55,18 @@ afterEach(() => { cleanup(); Math.random = REAL_RANDOM; localStorage.clear(); })
 function seasonOver() {
   const rng = lehmer(7);
   const league: any = initLeague(rng);
-  for (let w = 1; w <= REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => simGame(g, league.teams, rng)); league.week += 1; }
+  /* simGame hands back the played game and leaves the schedule's row as it was (the board keeps no result there) */
+  const played: any[][] = [];
+  for (let w = 1; w <= REGULAR_WEEKS; w += 1) { played.push(league.schedule[w - 1].map((g: any) => simGame(g, league.teams, rng))); league.week += 1; }
   const seeds = NFL_POSTSEASON.seeds(league);
-  return { league, seeds, format: NFL_POSTSEASON.formatFor(league.season)!, team: seeds[1] };
+  return { league, played, seeds, format: NFL_POSTSEASON.formatFor(league.season)!, team: seeds[1] };
 }
 /** His regular season told the way the board tells a week (the key is the season, the week, the clubs and the engine's score). */
-function regularLog(league: any, team: string): GmGameLog {
+function regularLog(o: ReturnType<typeof seasonOver>): GmGameLog {
+  const { league, team } = o;
   let log: GmGameLog | null = null;
   for (let w = 1; w <= REGULAR_WEEKS; w += 1) {
-    const g = league.schedule[w - 1].find((x: any) => x.home === team || x.away === team);
+    const g = o.played[w - 1].find((x: any) => x.home === team || x.away === team);
     if (!g) continue;
     const t = nflTell(g, league.teams, league.season, nflWhere(w));
     log = addToGmGameLog(log, league.season, t.last ? [t.last] : []);
@@ -95,7 +98,7 @@ function signOne() {
 describe('NFL front office: a save in the playoffs', () => {
   it('loads with its bracket, draws nothing on the way, and every save after it holds the bracket', () => {
     const o = seasonOver();
-    const { block, log } = afterRound(o, regularLog(o.league, o.team));
+    const { block, log } = afterRound(o, regularLog(o));
     save(shape(o.league, o.team, { playoffs: block, gameLog: log }));
     const draws = counted(11);
     const first = render(<Board />);
@@ -114,8 +117,9 @@ describe('NFL front office: a save in the playoffs', () => {
 
   it('a bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular season and drops its playoff games', () => {
     const o = seasonOver();
-    const regular = regularLog(o.league, o.team);
+    const regular = regularLog(o);
     const { block, log } = afterRound(o, regular);
+    expect(regular.games, 'his seventeen regular season games').toHaveLength(17);
     expect(log.games.length, 'the case holds a playoff game of his').toBe(regular.games.length + 1);
     const doctored: GmBracketSave = JSON.parse(JSON.stringify(block));
     const g0 = doctored.played[0];
@@ -171,7 +175,7 @@ describe('NFL front office: a save in the playoffs', () => {
 describe('NFL front office: the bracket does not follow a GM into his next franchise', () => {
   it('abandon in the playoffs and start again: the new save holds no bracket, and Play Week 1 plays Week 1', async () => {
     const o = seasonOver();
-    const { block, log } = afterRound(o, regularLog(o.league, o.team));
+    const { block, log } = afterRound(o, regularLog(o));
     save(shape(o.league, o.team, { playoffs: block, gameLog: log }));
     const first = render(<Board />);
     fireEvent.click(screen.getByText('Abandon franchise and restart'));
