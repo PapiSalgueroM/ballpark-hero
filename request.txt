@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+simWritesAreSent: ENGINES=chromium node scripts/simWritesAreSent.mjs
+simResultMoment: ENGINES=chromium node scripts/simResultMoment.mjs
