@@ -269,6 +269,10 @@ async function walkBoards(name, save, size) {
     if (!want) return { context, page, errors, want };
     for (const kind of ['goals', 'assists', 'sheets']) {
       await page.evaluate(() => window.scrollTo(0, Math.min(120, document.documentElement.scrollHeight)));
+      /* Playwright scrolls a target into view before it clicks it, so the page is put where the tap will be
+         made FIRST and its place is read after that: "where it stood" is where it stood when tapped (on the
+         first run at 320 by 568 the click itself moved the page from 120 to 434, and Back rightly went to 434). */
+      await page.locator(`[data-cm-leaders-tile="${kind}"]`).scrollIntoViewIfNeeded();
       const before = await page.evaluate(() => scrollY);
       await page.locator(`[data-cm-leaders-tile="${kind}"]`).click();
       await page.locator(`[data-cm-board="${kind}"]`).waitFor();
