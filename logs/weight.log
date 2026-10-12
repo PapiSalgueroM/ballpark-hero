@@ -1,0 +1,16 @@
+stubLz: the lz-string import is replaced in the copy
+clubManager and lz-string chunks (head, base, stub):
+  /home/runner/work/ballpark-hero/ballpark-hero/dist clubManager-Bpoc7PNe.js raw 809742 gz 264150
+  /home/runner/work/ballpark-hero/ballpark-hero/dist clubManager-Bpoc7PNe.js raw 809742 gz 264150
+  /tmp/wbase/dist clubManager-D-vLrbID.js raw 790055 gz 257375
+  /tmp/wstub/dist clubManager-zrfwR8Bk.js raw 804964 gz 262863
+head sweep exit 1
+base sweep exit 0
+stub sweep exit 1
+rows: base 14, head 14, stub 14
+  /club-manager          base 588.8K  head 595.1K (+6.3)  stub 593.9K  lz-string +1.2K  budget 590K  OVER  files 39/39
+  /front-office          base 364.2K  head 364.2K (+0.0)  stub 364.3K  lz-string -0.1K  budget 366K  files 36/36
+  /soccer-grid           base 315.0K  head 315.0K (+0.0)  stub 315.1K  lz-string -0.1K  budget 315K  files 36/36
+  /manager-hot-seat      base 606.1K  head 612.4K (+6.3)  stub 611.2K  lz-string +1.2K  budget 607K  OVER  files 41/41
+  /deadline-day          base 616.2K  head 622.6K (+6.4)  stub 621.3K  lz-string +1.3K  budget 617K  OVER  files 45/45
+weightCompare: 5 rows moved or over budget
