@@ -310,7 +310,13 @@ function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, yea
       const random = keyedRng(`world-roster|${worldSeedOf(career) ?? 'legacy'}|${record.key}|${next}`);
       player = agePlayer(player, neutral, random);
       if (random() < retireChance(player.age, player.rating, player.position)) { status = 'retired'; owner = null; break; }
-      if (status === 'owned' && (player.contractYears ?? 1) <= 0) { status = 'released'; owner = null; }
+      /* Release AZ fix (reviewer 4, MAJOR 2): a man I sold kept the countdown of the deal he had with ME, and at
+         zero this line released him, so an 86 rated 25 year old sold in the last year of his deal was gone from
+         the buyer a season later and from the whole world after that, against the help's worked example and
+         What's New's "stay where they went". The club that holds him keeps him the way the projected world keeps
+         its own men until they retire: at zero it signs him again on the engine's renewal length (renewalTerms,
+         what a club would offer him). No random draw is taken. scripts/simCmLedgerBound.mjs holds it. */
+      if (status === 'owned' && (player.contractYears ?? 1) <= 0) player = { ...player, contractYears: renewalTerms(player).years };
     }
     return { ...structuredClone(record), year: record.origin.birthYear + player.age, player, status, owner };
   });
