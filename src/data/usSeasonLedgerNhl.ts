@@ -5,11 +5,19 @@
    It imports nothing. `year` is the year a season STARTS in (2012 is 2012-13).
 
    THE RULE is the MLB ledger's (src/data/usSeasonLedgerMlb.ts): every fact
-   was read on 2026-10-10 in two independent sources, neither a wiki; a fact
-   only one source gave is null and named in NHL_THIN; the receipts are in
-   scripts/data/usSeasonSources1211.json, keyed by the names in each `src`
-   list; scripts/simUsSeasonLedger.mjs holds this file to them and to the
-   game's own team lists.
+   was read in two independent sources, neither a wiki; a fact only one
+   source gave is null and named in NHL_THIN; scripts/simUsSeasonLedger.mjs
+   holds this file to the receipts and to the game's own team lists.
+
+   TWO READING DAYS. The facts of Round 1211 were read on 2026-10-10
+   (NHL_LEDGER_READ_ON) and their receipts are in
+   scripts/data/usSeasonSources1211.json. Round 1312 read the playoffs
+   season by season (NHL_ROUND_NAMES) on 2026-10-12
+   (NHL_LEDGER_READ_AGAIN_ON), and those receipts are in
+   scripts/data/usSeasonSources1312.json. A `src` key names one receipt in
+   one of the two files; a page read again on the later day is a new key.
+   Nothing in src reads Round 1312's blocks yet: Round 1315 (the skaters'
+   week by week) is their first reader.
 
    THE SOURCES, by the key used in `src`:
    nhl       The league's own standings feed for the last day of each regular
@@ -34,6 +42,8 @@
    Seattle and Utah. Today's list is the real league of 2025-26 and 2026-27. */
 
 export const NHL_LEDGER_READ_ON = '2026-10-10';
+/** Round 1312: the second reading day (the playoffs season by season). */
+export const NHL_LEDGER_READ_AGAIN_ON = '2026-10-12';
 /** The last FINISHED season both sources were read for (2025-26). */
 export const NHL_LENGTHS_VERIFIED_TO = 2025;
 
@@ -182,8 +192,9 @@ export const NHL_FORMULA_84 = {
    and Hockey Reference's page of the 2014 playoffs is the first to print a
    First Round and a Second Round (its 2007 page prints Conference
    Quarter-Finals and Conference Semi-Finals). THIS BLOCK SAYS NOTHING OF
-   2006-07 TO 2012-13: what those seven seasons' playoffs were has one
-   source and is in NHL_THIN.
+   2006-07 TO 2012-13: what those seven seasons' playoffs were is in
+   NHL_ROUND_NAMES below (Round 1312, read season by season). This block's
+   values are not changed by that round: the engine reads them.
 
    `modified` (start years): the two tournaments Sports Illustrated sets
    apart, and Hockey Reference shows both: the 2020 playoffs began with a
@@ -204,6 +215,50 @@ export const NHL_PLAYOFF_FORMAT = {
 /** For `from` and for `modified`, each on its own: the league's page speaks of today only. */
 export const NHL_PLAYOFF_FROM_SRC: readonly string[] = ['si-playoff-format', 'hr-playoffs'];
 export const NHL_PLAYOFF_MODIFIED_SRC: readonly string[] = ['si-playoff-format', 'hr-playoffs'];
+
+/* Round 1312: THE PLAYOFFS SEASON BY SEASON, in windows of start years, read
+   on 2026-10-12 on two sources for every season: the league's own records
+   site ("<season> Playoff Results": every series, its result and "Best-of-7")
+   and Hockey Reference (its summary page of each year's playoffs and the
+   matchup page of each Final). The two agree series for series in every
+   season read. Nothing in the engine reads this block: NHL_PLAYOFF_FORMAT
+   above stays what src/lib/usSeasonShape.ts plays.
+
+   `names` are the four rounds, first to last, in the league's spelling, used
+   only where two sources name every round alike in every season of the
+   window, hyphen and case aside (the league's "Conference Quarterfinals" is
+   Hockey Reference's "Conference Quarter-Finals"; Hockey Reference's summary
+   page calls the last round "Final" and its matchup page "Stanley Cup
+   Final"). `null` where they do not: the shape still stands. `series` is
+   [wins needed, most games] of each round. */
+export interface NhlRoundWindow {
+  /** First and last season of the window (start years); `to: null` runs on. */
+  from: number;
+  to: number | null;
+  /** Clubs in the four best of seven rounds. */
+  clubs: number;
+  /** The four rounds' names, first to last, or null where two sources do not name them alike. */
+  names: readonly string[] | null;
+  series: readonly (readonly [number, number])[];
+  /** Whether the season had conferences (the alignment's own divisions say so). */
+  conferences: boolean;
+  /** Receipts of the shape, season by season. */
+  src: readonly string[];
+  /** Receipts of the names. */
+  namesSrc: readonly string[];
+}
+
+const SEVEN: readonly (readonly [number, number])[] = [[4, 7], [4, 7], [4, 7], [4, 7]];
+const BY_SEASON = ['nhl-records-playoffs', 'hr-playoffs-1312'] as const;
+
+export const NHL_ROUND_NAMES: readonly NhlRoundWindow[] = [
+  {
+    from: 2006, to: 2012, clubs: 16,
+    names: ['Conference Quarterfinals', 'Conference Semifinals', 'Conference Finals', 'Stanley Cup Final'],
+    series: SEVEN, conferences: true,
+    src: BY_SEASON, namesSrc: [...BY_SEASON, 'hr-final-matchups'],
+  },
+];
 
 /* LEAGUE SCORING, goals per team game, by era id: 2006-07 for the throwback
    and 2025-26, the last finished season, for the present day era. There are
@@ -282,11 +337,6 @@ export const NHL_THIN: readonly { what: string; oneSource: string; tried: string
     what: 'How the 2020 and 2021 playoffs differed (the seasons that started in 2019 and 2020).',
     oneSource: 'Hockey Reference: the 2020 playoffs held 24 clubs, with a Qualifying Round of eight series won with three wins and a Round Robin before the First Round; the 2021 playoffs had Semi-Finals in place of Conference Finals. Sports Illustrated says only that they were "modified". More detail is in src/lib/nhlPlayoffFormatHistory.ts, from pages not read again today.',
     tried: 'The league\'s own "Playoff Format" page describes today only.',
-  },
-  {
-    what: 'The playoffs of 2006-07 to 2012-13: how many clubs, how many rounds, how long each series, and what the rounds were called.',
-    oneSource: 'Hockey Reference, the 2007 playoffs: sixteen clubs, fifteen series each won with four wins, under the names Conference Quarter-Finals, Conference Semi-Finals, Conference Finals and Final. One season of the seven was read. src/lib/nhlPlayoffFormatHistory.ts says best of seven in every round since 1986-87, from pages not read again today.',
-    tried: 'Sports Illustrated dates today\'s format from 2013-14 and the league\'s own page describes today only, so NHL_PLAYOFF_FORMAT starts in 2013.',
   },
   {
     what: 'That the Stanley Cup Final is the only round against the other conference.',

@@ -213,7 +213,7 @@ const OWN = {
   /* The rules after sixty minutes. */
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
-  thin: { mlb: 10, nhl: 9 },
+  thin: { mlb: 10, nhl: 8 },
   /* Round 1312: each receipts file and the day it was read on. */
   receiptDays: { 'scripts/data/usSeasonSources1211.json': '2026-10-10', 'scripts/data/usSeasonSources1312.json': '2026-10-12' },
   /* The first rounds whose length is thin (played, and only one source gave its length), by their
@@ -224,6 +224,12 @@ const OWN = {
   mlbPlayed: 'DET 2023|TEX 2024|DET 2025|DET 2026|TOR 2026|TEX 2026|HOU 2026',
   /* The NHL playoff block: its first season, the two modified tournaments, its round names. */
   nhlPlayoff: { from: 2013, modified: [2019, 2020], rounds: ['First Round', 'Second Round', 'Conference Finals', 'Stanley Cup Final'] },
+  /* Round 1312, NHL_ROUND_NAMES window by window: [from, to, its names joined by | or null, clubs, conferences,
+     and how the names are held: 'season' (two sources name every round alike in every season, N9) or 'format'
+     (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format)]. */
+  nhlRoundWindows: [
+    [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season'],
+  ],
 };
 
 /* EVERY NHL ALIGNMENT, typed here division by division: key: [from, to, { division: [conference, its clubs] }]. */
@@ -312,6 +318,10 @@ const CONTROLS = {
      file's day so that only the one key rule can see it. */
   keytwice: { expect: ['R6'], run() { const a = receiptFiles[0].sources['hr-playoffs']; const b = receiptFiles[1]; must(a && b && !b.sources['hr-playoffs'], 'the playoffs receipt in the first file alone'); b.sources['hr-playoffs'] = { ...clone(a), read: b.readOn }; } },
   /* Round 1312: a receipt of the second file dated the first file's day. */
+  /* Round 1312: one name of the 2006 window changed; the window still has four names. */
+  roundname: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.names && w.names[1] === 'Conference Semifinals', 'the Conference Semifinals of the 2006 window'); w.names[1] = 'Division Finals'; } },
+  /* Round 1312: the league's receipt taken from the 2006 window, shape and names: one source is left. */
+  onegroup: { expect: ['N10', 'N9', 'R2'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.src.includes('nhl-records-playoffs') && w.namesSrc.includes('nhl-records-playoffs'), 'the league\'s records receipt behind the 2006 window'); w.src = w.src.filter(k => k !== 'nhl-records-playoffs'); w.namesSrc = w.namesSrc.filter(k => k !== 'nhl-records-playoffs'); } },
   readday: { expect: ['R3'], run() { const b = receiptFiles[1]; const k = Object.keys(b.sources)[0]; must(k && b.sources[k].read === b.readOn && b.readOn !== receiptFiles[0].readOn, 'a receipt of the second file on its own day'); b.sources[k].read = receiptFiles[0].readOn; } },
 };
 for (const [name, k] of Object.entries(ENGINE_CONTROLS)) CONTROLS[name] = { expect: k.expect, run() {} };
@@ -598,6 +608,58 @@ const OWN_MLB_DIVISIONS = {
   const records = Object.entries(SRC['nhl-points']?.values?.records ?? {});
   check('N8', records.length >= 3 && nhl.NHL_OVERTIME_RULES.loserGetsAPoint === records.every(([, [w, , o, p]]) => o > 0 && p === 2 * w + o),
     `NHL_OVERTIME_RULES.loserGetsAPoint is ${nhl.NHL_OVERTIME_RULES.loserGetsAPoint}; the standings receipt holds ${records.map(([id, r]) => `${id} ${r.join('-')}`).join(', ') || 'no record'}`);
+
+  /* ===== Round 1312: the playoffs season by season (NHL_ROUND_NAMES). =====
+     N9  each window is this harness's own row (years, names, clubs, conferences), every round a best of
+         seven; where the names are held season by season, every round of every finished season of the
+         window is named alike by two groups of its name receipts (hyphen and case aside), and where the
+         league is one of them the ledger holds the league's own spelling.
+     N10 every finished season of a window, from the series its shape receipts print: two groups print it,
+         series for series alike; four rounds of 8, 4, 2 and 1 series; the window's clubs in the first;
+         every winner on the wins the window names and no series past its most games; the winners of
+         each round, and only they, in the next; every club in the alignment of that year; and the
+         window's `conferences` is what the alignment says. */
+  const norm = s => (typeof s === 'string' ? s.toLowerCase().replace(/-/g, '').replace(/\s+/g, ' ').trim() : null);
+  const wins = nhl.NHL_ROUND_NAMES ?? [];
+  check('N9', wins.length === OWN.nhlRoundWindows.length, `NHL_ROUND_NAMES holds ${wins.length} windows, this harness's own table ${OWN.nhlRoundWindows.length}`);
+  for (const [from, to, names, clubs, confs, how] of OWN.nhlRoundWindows) {
+    const w = wins.find(x => x.from === from);
+    const tag = `NHL_ROUND_NAMES ${from}`;
+    if (!w) { check('N9', false, `${tag}: no such window`); continue; }
+    const theirs = w.names === null ? null : w.names.join('|');
+    check('N9', w.to === to && theirs === names && w.clubs === clubs && w.conferences === confs, `${tag}: ${w.from} to ${w.to}, names ${theirs}, ${w.clubs} clubs, conferences ${w.conferences}; this harness's own table says ${from} to ${to}, ${names}, ${clubs}, ${confs}`);
+    check('N9', Array.isArray(w.series) && w.series.length === 4 && w.series.every(([n, m]) => n === 4 && m === 7) && (w.names === null || w.names.length === 4), `${tag}: not four best of sevens with four names`);
+    const last = Math.min(to ?? lastDone, lastDone);
+    const years = rangeOf(from, last);
+    if (how === 'season' && w.names) {
+      for (const y of years) w.names.forEach((name, i) => {
+        const agree = w.namesSrc.map(k => SRC[k]).filter(s => s && !s.thin && norm(s.values?.rounds?.[y]?.[i]) === norm(name));
+        check('N9', new Set(agree.map(s => s.group)).size >= 2, `${tag}, ${y}: round ${i + 1} "${name}" is named so by ${agree.length ? agree.map(s => s.group).join(', ') : 'no receipt'} alone`);
+        const league = agree.find(s => s.group === 'nhl');
+        if (league) check('N9', league.values.rounds[y][i] === name, `${tag}, ${y}: the ledger spells round ${i + 1} "${name}", the league "${league.values.rounds[y][i]}"`);
+      });
+    }
+    for (const y of years) {
+      const prints = w.src.map(k => SRC[k]).filter(s => s && !s.thin && Array.isArray(s.values?.series?.[y]));
+      check('N10', new Set(prints.map(s => s.group)).size >= 2, `${tag}, ${y}: the series are printed by ${prints.map(s => s.group).join(', ') || 'no receipt'} alone`);
+      if (!prints.length) continue;
+      const sorted = s => JSON.stringify(s.values.series[y].map(r => [...r].sort()));
+      check('N10', prints.every(s => sorted(s) === sorted(prints[0])), `${tag}, ${y}: the receipts print different series`);
+      const R = prints[0].values.series[y].map(r => r.map(x => { const [a, b, res] = x.split(' '); const [p, q] = res.split('-').map(Number); return { a, b, p, q }; }));
+      check('N10', R.length === 4 && R.map(r => r.length).join() === '8,4,2,1', `${tag}, ${y}: the rounds hold ${R.map(r => r.length).join(', ')} series`);
+      const first = new Set(R[0]?.flatMap(s => [s.a, s.b]) ?? []);
+      check('N10', first.size === w.clubs, `${tag}, ${y}: ${first.size} clubs in the first round, the window says ${w.clubs}`);
+      R.forEach((round, i) => round.forEach(s => check('N10', s.p === w.series[i][0] && s.q < s.p && s.p + s.q <= w.series[i][1], `${tag}, ${y}: ${s.a} over ${s.b} ${s.p}-${s.q} is not a series won with ${w.series[i][0]} of at most ${w.series[i][1]}`)));
+      for (let i = 1; i < R.length; i++) {
+        const here = R[i].flatMap(s => [s.a, s.b]).sort().join(' '); const won = R[i - 1].map(s => s.a).sort().join(' ');
+        check('N10', here === won, `${tag}, ${y}: round ${i + 1} holds ${here}, the winners of round ${i} are ${won}`);
+      }
+      const a = alignOf(y);
+      const confOf = id => a?.divisions.find(d => d.teams.includes(id));
+      check('N10', [...first].every(id => !!confOf(id)), `${tag}, ${y}: a club of the first round is not in the alignment of ${y}`);
+      check('N10', !!a && a.divisions.every(d => (d.conf !== null) === w.conferences), `${tag}, ${y}: the window says conferences ${w.conferences}, the alignment ${a?.key} says otherwise`);
+    }
+  }
 }
 
 /* ===== THE RECEIPTS ===== */
@@ -615,6 +677,14 @@ const OWN_MLB_DIVISIONS = {
   for (const s of nhl.NHL_NAME_SPANS) cited.push([`NHL span ${s.id}`, null, s.src]);
   cited.push(['NHL_FORMULA_84', null, nhl.NHL_FORMULA_84.src], ['NHL_PLAYOFF_FORMAT', null, nhl.NHL_PLAYOFF_FORMAT.src]);
   for (const [name, keys] of Object.entries(nhl)) if (name.endsWith('_SRC')) cited.push([name, null, keys]);
+  /* Round 1312: a window speaks of its finished seasons; names held season by season do too, and names
+     that are NHL_PLAYOFF_FORMAT's speak of today's format, as that block does. */
+  const nhlDone = nhl.NHL_LENGTHS_VERIFIED_TO;
+  for (const w of nhl.NHL_ROUND_NAMES ?? []) {
+    const span = [w.from, Math.min(w.to ?? nhlDone, nhlDone)];
+    const own = OWN.nhlRoundWindows.find(x => x[0] === w.from);
+    cited.push([`NHL_ROUND_NAMES ${w.from}`, span, w.src], [`NHL_ROUND_NAMES ${w.from}, names`, own && own[5] === 'format' ? null : span, w.namesSrc]);
+  }
 
   /* Which seasons a receipt speaks of: its season by season lines, or its `seasons` (an article about
      one schedule or one format). A receipt with neither speaks of no season in particular. */
@@ -1138,7 +1208,7 @@ const MLB_OWN = 162;
   else notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
   const npf = nhl.NHL_PLAYOFF_FORMAT;
-  notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; what the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} must source it first or draw none.`);
+  notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} are in NHL_ROUND_NAMES (Round 1312, read season by season on two sources: the same sixteen clubs and four best of sevens, under other round names), which no engine reads yet, and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} reads NHL_ROUND_NAMES or draws none.`);
   if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in ${yearsOf(null)}, one game in ${yearsOf('Wild Card Game')}, a series only in ${yearsOf('Wild Card Series')}; and the engine models no first round bye.`);
 
   /* The club outside the league. */
