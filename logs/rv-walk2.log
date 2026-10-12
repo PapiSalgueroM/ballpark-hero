@@ -1,0 +1,6 @@
+deep save: season 8, ledger packed
+390-cpu4-seeded (season 8, ledger packed): 3-4-3: shown after 1426 ms, 1 long tasks, 1348 ms blocked; 3-4-2-1: shown after 1327 ms, 1 long tasks, 1274 ms blocked
+390-cpu4-stripped (season 8, ledger packed): 3-4-3: shown after 157 ms, 1 long tasks, 87 ms blocked; 3-4-2-1: shown after 103 ms, 0 long tasks, 0 ms blocked
+1280-cpu1-seeded (season 8, ledger packed): 3-4-3: shown after 344 ms, 1 long tasks, 289 ms blocked; 3-4-2-1: shown after 305 ms, 1 long tasks, 281 ms blocked
+1280-cpu1-stripped (season 8, ledger packed): 3-4-3: shown after 48 ms, 0 long tasks, 0 ms blocked; 3-4-2-1: shown after 20 ms, 0 long tasks, 0 ms blocked
+rvcmw-walk2: measured
