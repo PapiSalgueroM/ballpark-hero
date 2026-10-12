@@ -1,0 +1,15 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/saveKeeper.test.ts (35 tests) 37ms
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ src/test/frontOfficeSaveRecovery.test.tsx (36 tests) 1908ms
+   ✓ NFL actual save recovery > allows a fresh club to replace the unusable save without clearing another game  479ms
+
+ Test Files  2 passed (2)
+      Tests  71 passed (71)
+   Start at  01:01:48
+   Duration  3.29s (transform 1.03s, setup 63ms, collect 1.00s, tests 1.94s, environment 415ms, prepare 205ms)
+

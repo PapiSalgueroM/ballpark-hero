@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+simSaveKeeper: node scripts/simSaveKeeper.mjs > $RC_OUT/simSaveKeeper.log 2>&1; s=$?; grep -E "front-office|gameLog" $RC_OUT/simSaveKeeper.log | cut -c1-360; tail -1 $RC_OUT/simSaveKeeper.log; exit $s
+sk-partgamelog: SIM_SAVE_KEEPER_CONTROL=partgamelog node scripts/simSaveKeeper.mjs > $RC_OUT/sk-partgamelog.log 2>&1; s=$?; tail -2 $RC_OUT/sk-partgamelog.log | cut -c1-330; exit $s
+simGmDeskHost: node scripts/simGmDeskHost.mjs > $RC_OUT/simGmDeskHost.log 2>&1; s=$?; tail -1 $RC_OUT/simGmDeskHost.log | cut -c1-200; exit $s
+vitest-keeper: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/saveKeeper.test.ts src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000 > $RC_OUT/vitest-keeper.log 2>&1; s=$?; grep -E "Test Files|Tests " $RC_OUT/vitest-keeper.log | tr "\n" " " | cut -c1-300; echo; exit $s
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs > $RC_OUT/playSaveKeeper.log 2>&1; s=$?; tail -2 $RC_OUT/playSaveKeeper.log | cut -c1-300; exit $s
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-head.log 2>&1; s=$?; grep -E "front-office|manager-hot-seat|nfl-my-career" $RC_OUT/weight-head.log | cut -c1-160 | head -8; grep -E "FAIL|sweepWeight" $RC_OUT/weight-head.log | cut -c1-200 | tail -4; exit $s
+playGames-fo: ONLY=/front-office ENGINES=chromium node scripts/playGames.mjs > $RC_OUT/playGames-fo.log 2>&1; s=$?; tail -2 $RC_OUT/playGames-fo.log | cut -c1-240; exit $s
+head: git rev-parse HEAD; git log --oneline -1 | cut -c1-120

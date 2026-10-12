@@ -1,0 +1,9 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSaveKeeper exit=0 2s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+sk-partgamelog exit=1 2s | simSaveKeeper control partgamelog: FIRED. Section 1 is red.
+simGmDeskHost exit=0 30s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+vitest-keeper exit=0 3s |  Test Files  2 passed (2)       Tests  71 passed (71) 
+playSaveKeeper exit=0 817s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+sweepWeight exit=1 27s | sweepWeight: 1 failure
+playGames-fo exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+head exit=0 0s | 490435b4b rc request r1305-fx2 for 038e8138de8ec9eb572933b303b763961f9fc027
