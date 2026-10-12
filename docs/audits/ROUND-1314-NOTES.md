@@ -273,3 +273,10 @@ season to the same counts under the nobusiness control.
 - `r1314-fw` on c22dd054: playNationJob exit 0 (18 s), nooffer exit 0; playWilderness exit 0 (20 s), nooffers
   and nosack exit 0; playClubManager exit 0 (284 s), nobusiness exit 1 with its last line green.
 - `r1314-ht2` on c1195372: simHalftime exit 0 (631 s), deaf exit 1, FIRED.
+- `r1314-rv` (probe, not committed: .rc/x/mkReviewProbe.mjs) on c1195372: the season review's rows tick in on
+  their own animations, the "Transfer business" heading with a 3.9 s delay, at opacity 1 by 5 s, with two IN rows
+  drawn. The walk's earlier shots caught them at opacity 0, so this is NOT a defect; the walk's shot now waits
+  for every tick-in animation to finish (9fcde443).
+- `r1314-fw2` on 9fcde443: playClubManager exit 0 (285 s, the default season's counts again, the review shot
+  shows the board objectives and the transfer business block); playWilderness exit 0 (20 s); nosack exit 0 (98
+  s, the miss shot now shows the hub it stood on, ba350898).
