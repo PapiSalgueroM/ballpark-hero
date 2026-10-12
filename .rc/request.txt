@@ -1,0 +1,40 @@
+# Round 1311 step 0: the base (origin/main b6eb78e7) of every harness of the brief's section 8, before any edit
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBook.mjs
+book-full: TMPDIR=$(mktemp -d) BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simAwardRaces: TMPDIR=$(mktemp -d) node scripts/simAwardRaces.mjs
+simStatsCentre: TMPDIR=$(mktemp -d) node scripts/simStatsCentre.mjs
+simCmOwnGoals: TMPDIR=$(mktemp -d) node scripts/simCmOwnGoals.mjs
+simLiveMatch: TMPDIR=$(mktemp -d) node scripts/simLiveMatch.mjs
+simCmLeagueRules: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+saveSize-0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSaveSize.mjs
+saveSize-1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: TMPDIR=$(mktemp -d) node scripts/simDailyDeals.mjs
+simManagerHotSeat: TMPDIR=$(mktemp -d) node scripts/simManagerHotSeat.mjs
+simDeadlineDay: TMPDIR=$(mktemp -d) node scripts/simDeadlineDay.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmVar: TMPDIR=$(mktemp -d) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmRealFixtures: TMPDIR=$(mktemp -d) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmShootoutOrder: TMPDIR=$(mktemp -d) node scripts/simCmShootoutOrder.mjs
+simCustomClubValues: TMPDIR=$(mktemp -d) node scripts/simCustomClubValues.mjs
+simAcademy: TMPDIR=$(mktemp -d) node scripts/simAcademy.mjs
+simClubManagerALeague: TMPDIR=$(mktemp -d) node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: TMPDIR=$(mktemp -d) node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: TMPDIR=$(mktemp -d) node scripts/simClubManagerMeters.mjs
+simClubManagerScore: TMPDIR=$(mktemp -d) node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: TMPDIR=$(mktemp -d) node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: TMPDIR=$(mktemp -d) node scripts/simCmVarLedger.mjs
+simEras: TMPDIR=$(mktemp -d) node scripts/simEras.mjs
+simPress: TMPDIR=$(mktemp -d) node scripts/simPress.mjs
+simRoles: TMPDIR=$(mktemp -d) node scripts/simRoles.mjs
+simWilderness: TMPDIR=$(mktemp -d) node scripts/simWilderness.mjs
