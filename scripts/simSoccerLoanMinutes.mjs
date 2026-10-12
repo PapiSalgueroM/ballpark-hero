@@ -82,7 +82,10 @@ function captureCheck(id, fn) { try { fn(); } catch (error) { failures.push({ id
 function mulberry32(seed) { let value = seed >>> 0; return () => { value += 0x6D2B79F5; let t = Math.imul(value ^ value >>> 15, value | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 /* Release BA: the engine is normalised on read, because the anchor below runs across lines and a raw read cannot
    match it on a CRLF checkout (simHarnessAnchors). The receipt named currentRaw therefore holds the LF text, which
-   is the file byte for byte on an LF checkout such as the runner's. */
+   is the file byte for byte on an LF checkout such as the runner's. The bundle plugin's module reads and the read of
+   this harness's own source are normalised the same way, for the same reason. The inventory's read of the binary
+   proof files cannot be (it would change their hashes), so it sits in a block of its own, where the anchor scan can
+   see its bytes reach only a length and a hash. */
 const currentSource = fs.readFileSync(path.join(ROOT, ENGINE), 'utf8').replaceAll('\r\n', '\n');
 const currentRaw = Buffer.from(currentSource);
 const from = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);\n        if (!candidates.length) continue;';
@@ -116,7 +119,7 @@ async function bundle(id, source) {
       const rel = path.relative(ROOT, args.path).replaceAll('\\', '/');
       let held = loadedCache.get(rel);
       if (!held) {
-        const raw = fs.readFileSync(args.path); held = { raw, rel, base: rel === ENGINE ? baseRaw : rel === APPEARANCE ? baseAppearanceRaw : rel.startsWith('src/') ? raw : null }; loadedCache.set(rel, held);
+        const raw = Buffer.from(lf(fs.readFileSync(args.path, 'utf8'))); held = { raw, rel, base: rel === ENGINE ? baseRaw : rel === APPEARANCE ? baseAppearanceRaw : rel.startsWith('src/') ? raw : null }; loadedCache.set(rel, held);
       }
       const served = rel === ENGINE ? source : rel === APPEARANCE ? (id === 'original' ? baseAppearanceSource : currentAppearanceSource) : lf(held.raw.toString());
       if (rel === APPEARANCE) {
@@ -298,7 +301,7 @@ const progressionComparisons = [];
 let progressionWitness = null;
 function progressionContext() {
   if (progressionSource) return progressionSource;
-  const raw = fs.readFileSync(fileURLToPath(import.meta.url)), text = lf(raw.toString()), lines = text.split('\n');
+  const text = lf(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8')), raw = Buffer.from(text), lines = text.split('\n');
   const site = (wholeLine, token) => { const matching = lines.flatMap((line, index) => line === wholeLine ? [index] : []); assert.equal(matching.length, 1, 'unique actual whole caller source line'); const index = lines[matching[0]].indexOf(token); assert.ok(index >= 0); return `${import.meta.url}:${matching[0] + 1}:${index + 1}`; };
   const replay = site('      const currentSeason = forwardSeason(B.current, clone(input), first.seed, currentFrames);', 'forwardSeason(');
   const recorded = site('    if (working.loan) { const season = forwardSeason(B, working, d.seed + 1000, frames); row.lifecycle = season.fact; working = season.state; }', 'forwardSeason(');
@@ -483,7 +486,7 @@ try {
 finally {
   report.comparisonTransport = { source: progressionSource, comparisons: put(progressionComparisons), scope: 'Only current recorded-versus-replayed progression callers may use the exact raw forwardSeason prefix and independently source-bound outer routes; all ordinary comparisons remain coordinates-only.' };
   report.bundles = bundles; save('objects.json', JSON.stringify(objects)); save('report.json', JSON.stringify(report));
-  function inventoryOf(dir = OUT) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => { const item = path.join(dir, entry.name); if (entry.isDirectory()) return inventoryOf(item); const bytes = fs.readFileSync(item); return [{ path: path.relative(OUT, item).replaceAll('\\', '/'), bytes: bytes.length, sha256: sha(bytes) }]; }); }
+  function inventoryOf(dir = OUT) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => { const item = path.join(dir, entry.name); if (entry.isDirectory()) return inventoryOf(item); const row = { path: path.relative(OUT, item).replaceAll('\\', '/') }; { const bytes = fs.readFileSync(item); row.bytes = bytes.length; row.sha256 = sha(bytes); } return [row]; }); }
   save('inventory.json', JSON.stringify({ scope: 'All final payload bodies except this inventory and the measured size receipt', files: inventoryOf().filter(row => !['inventory.json', 'size.json'].includes(row.path)) }));
   let retainedBytes = 0;
   try {
