@@ -1,0 +1,12 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCareerTrophyRuns exit=0 5s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simCareerStory exit=0 36s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+simCareerStory-poolcopy exit=0 40s | simCareerStory control poolcopy: fired, check parts failed as it must (failed: parts)
+simSoccerCareerDevelopment exit=0 5s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerStoryRole exit=0 48s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simCareerLeagueFinish exit=0 21s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simSoccerSeasonHistory exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simSoccerDerbyHistory exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simCareerSocialBrands exit=0 35s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerLeagueSeasons exit=0 28s | simCareerLeagueSeasons: all sections green
+simCareerAwardsNight exit=0 69s | simCareerAwardsNight: ALL 179 CHECKS PASSED
