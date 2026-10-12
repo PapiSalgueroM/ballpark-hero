@@ -1,0 +1,4 @@
+ledger: node scripts/simUsSeasonLedger.mjs
+allcontrols: bash .rc/x/allcontrols.sh
+plan: node scripts/simUsPlanSeason.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
