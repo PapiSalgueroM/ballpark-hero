@@ -9,6 +9,16 @@
  * and reconciles every number both ways, plus the team record derived from
  * the fixture log, the label fallback for old saves, and the summer reset.
  *
+ * Round 1304: one negative control, SIM_STATS_CENTRE_CONTROL=nosubs. The
+ * men who came on are not counted, which is how this harness read a match
+ * before Round 1146 (eleven appearances and no more): the appearance sums of
+ * sections 1 and 3 must then fail, so the rewritten sentence is proven to
+ * bite on the very thing it was rewritten for. It refuses with exit 2 when
+ * nobody came on, so a control that changed nothing never reads as one that
+ * fired. MEASURED on runners 2026-10-11: green from Round 164 until the
+ * merge of Round 1072 (ba13dc2e, the coach's changes in quick sim), red on
+ * six lines from there until Round 1146 (21fe2c06) rewrote the sums.
+ *
  * Run: node scripts/simStatsCentre.mjs
  */
 import { execSync } from 'node:child_process';
@@ -18,8 +28,11 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'scEntry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'sc.bundle.mjs');
+/* Round 1304: a name of its own for each run, so the harness and its control
+   can run side by side without reading each other's bundle. */
+const TAG = `${process.pid}-${Date.now()}`;
+const ENTRY = path.join(os.tmpdir(), `scEntry-${TAG}.mjs`);
+const BUNDLE = path.join(os.tmpdir(), `sc-${TAG}.bundle.mjs`);
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
@@ -29,6 +42,10 @@ export const cm = mod;
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
+fs.rmSync(ENTRY, { force: true });
+fs.rmSync(BUNDLE, { force: true });
+const CONTROL = process.env.SIM_STATS_CENTRE_CONTROL ?? '';
+if (CONTROL && CONTROL !== 'nosubs') { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   teamCompRecord, careerLeagueOf, compBucketOf,
@@ -43,8 +60,12 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    The books are right; the sum was. What a match is worth is its eleven starters plus every man its own report
    says came on, counted here off the report, bucket by bucket. */
 const cameOn = { league: 0, cup: 0, ucl: 0 };
+/* What the reports really said, whatever a control does to the count. */
+let reallyCameOn = 0;
 const countSubs = (r, into) => {
   if (r.kind !== 'match') return;
+  reallyCameOn += r.report.detail.subs.length;
+  if (CONTROL === 'nosubs') return;
   into[compBucketOf(r.report.competition)] += r.report.detail.subs.length;
 };
 function runSeason(s, into) {
@@ -66,6 +87,10 @@ const compSum = (p, field) => BUCKETS.reduce((n, b) => n + (p.comp?.[b]?.[field]
 console.log('1) Every split sums back to the season line');
 {
   const s = runSeason(startCareer('Real Madrid'), cameOn);
+  if (CONTROL === 'nosubs') {
+    if (!reallyCameOn) { console.error('CONTROL nosubs did not apply: nobody came on all season, so there was nothing to leave out'); process.exit(2); }
+    console.log(`   CONTROL nosubs applied: the ${reallyCameOn} men who came on are not counted, the reading before Round 1146`);
+  }
   let checked = 0;
   let worstDrift = 0;
   for (const p of s.squad) {

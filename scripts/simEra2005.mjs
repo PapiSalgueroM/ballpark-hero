@@ -66,9 +66,17 @@
  *      based rating until its first summer, exactly as it read them while
  *      they were foreign, plays its season out, and gets all five leagues in
  *      the summer, where they are rated from their real squads.
- * Seven negative controls, SIM_ERA2005_CONTROL=dupe|stale|twoleagues|euro|
- * thinswap|nocut|nonat, each of which must end the run red (see the block
- * where they are defined).
+ * Round 1304: the modern world this harness compares with is the JOINED one
+ * the game reads (src/data/clubManagerWorldRosters.ts: the value table's bake,
+ * the A-League Men of Round 1035 and the Russian Premier League of Round
+ * 1052), no longer the bake alone. Reading the bake alone called Rostov's
+ * Ronaldo, a real 2026 man of the Russian file, a 2005 man on the 2026 market
+ * (red from Round 1052's commit 5010ae3f; docs/audits/ROUND-1304-NOTES.md has
+ * the table). Section 2 lists him as the pair of two men he is.
+ *
+ * Nine negative controls, SIM_ERA2005_CONTROL=dupe|stale|twoleagues|euro|
+ * thinswap|nocut|nonat|leak|unlisted, each of which must end the run red (see
+ * the block where they are defined).
  *
  * Run: node scripts/simEra2005.mjs
  */
@@ -79,8 +87,11 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'era2005Entry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'era2005.bundle.mjs');
+/* Round 1304: a name of its own for each run, so the harness and one of its
+   controls can run side by side without reading each other's bundle. */
+const TAG = `${process.pid}-${Date.now()}`;
+const ENTRY = path.join(os.tmpdir(), `era2005Entry-${TAG}.mjs`);
+const BUNDLE = path.join(os.tmpdir(), `era2005-${TAG}.bundle.mjs`);
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
@@ -89,7 +100,7 @@ const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras
 const era2005 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2005.ts');
 const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
 const era2015 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2015.ts');
-const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
+const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerWorldRosters.ts');
 const nat = await import('${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts');
 export { engine, eras, era2005, era2010, era2015, modern, nat };
 `);
@@ -99,6 +110,8 @@ execSync(
 );
 
 const { engine: cm, eras: ER, era2005: E05, era2010: E10, era2015: E15, modern: MOD, nat: NAT } = await import(pathToFileURL(BUNDLE).href);
+fs.rmSync(ENTRY, { force: true });
+fs.rmSync(BUNDLE, { force: true });
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await ER.ensureAllEraRosters();
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
@@ -109,7 +122,9 @@ const {
 const { ERA2005_ROSTERS, ERA2005_META, ERA2005_PARTIAL } = E05;
 const { ERA2010_ROSTERS } = E10;
 const { ERA2015_ROSTERS } = E15;
-const { CM_ROSTERS } = MOD;
+/* Round 1304: the modern world is the joined one, the same object both
+   engine files read, so a league that joins the game joins this harness. */
+const { CM_WORLD_ROSTERS: CM_ROSTERS } = MOD;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -137,9 +152,15 @@ const REAL_RANDOM = Math.random;
                  two league world at the season's end must both fail.
      nonat       (review fix) Vieira's era2005 nationality line dropped and a
                  line for a man not in the world added, in memory: the
-                 nationality fence of section 5 must fail both ways. */
+                 nationality fence of section 5 must fail both ways.
+     leak        (Round 1304) the modern save is handed the 2005 market, as a
+                 market cache that forgot the era would hand it: section 2's
+                 "2005-only ... is on the 2026 market" must fail.
+     unlisted    (Round 1304) Ronaldo taken off the list of verified pairs of
+                 two men: section 2's namesake pass must fail on Rostov's
+                 Ronaldo, which proves the pass reads the generated leagues. */
 const CONTROL = process.env.SIM_ERA2005_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'twoleagues', 'euro', 'thinswap', 'nocut', 'nonat'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'twoleagues', 'euro', 'thinswap', 'nocut', 'nonat', 'leak', 'unlisted'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['Juventus'] ?? []).find(p => p.n === 'Patrick Vieira');
@@ -246,9 +267,24 @@ console.log('2) Four worlds, and none of them leak');
   else if (henry.age !== 27) fail(`market Henry is ${henry.age}, 2005 says 27`);
 
   Math.random = seeded(29);
-  const now = startCareer('Arsenal');
-  const nowNames = new Set(buildMarket(now).map(p => p.name));
+  let now = startCareer('Arsenal');
+  /* Round 1304: the modern names are the joined world's, the one the game
+     reads. The market comes out of the engine and this list out of the data
+     files, so the two can still disagree, which is the whole check. */
   const modernNames = new Set(Object.values(CM_ROSTERS).flat().map(p => p.n));
+  if (CONTROL === 'leak') {
+    const eraOnly = Object.values(ERA2005_ROSTERS).flat().filter(p => !modernNames.has(p.n)).length;
+    if (!eraOnly) controlRefuse('no 2005 man is missing from the modern world, so nobody could leak');
+    /* The era AND its year, or the save would read the 2005 world as it
+       stands twenty one seasons on, where every real man has retired. */
+    now = { ...now, eraId: 'era2005', startYear: ER.eraById('era2005').startYear };
+  }
+  const nowNames = new Set(buildMarket(now).map(p => p.name));
+  if (CONTROL === 'leak') {
+    const onIt = Object.values(ERA2005_ROSTERS).flat().filter(p => !modernNames.has(p.n) && nowNames.has(p.n)).length;
+    if (!onIt) controlRefuse('the market handed over holds no 2005-only man, so the control changed nothing');
+    console.log(`   CONTROL leak applied: the modern save reads the 2005 market at year zero, ${onIt} 2005-only men are on it`);
+  }
   let checked = 0, leaked = 0;
   for (const roster of Object.values(ERA2005_ROSTERS)) {
     for (const p of roster) {
@@ -302,14 +338,28 @@ console.log('2) Four worlds, and none of them leak');
      one) and Nancy's centre-back Andre Luiz (b. 1980: FBref has him at
      Nancy in 2005-06 too, the table's year 2006 row has him there at 25,
      and the 2010 world at 29). */
+  /* Round 1304: the Russian Premier League of Round 1052 brought Rostov's
+     Ronaldo into the 2026 world, and this pass had never read him because it
+     read the bake alone. Two men: Real Madrid's 2005 striker Ronaldo Luis
+     Nazario de Lima, 28 in the 2005 table, born in September 1976 (besoccer
+     prints "Born on 22 September 1976 in Rio de Janeiro" and Real Madrid
+     from 2002 to 2007, bdfutbol prints 22/09/1976, both read 2026-10-11;
+     other publishers print the 18th, the same year), and Rostov's right
+     winger Ronaldo, 25, born 2000-12-07 on three squad lists of the
+     committed ledger scripts/data/gatheredSquads/russia2026/research.json. */
   const pairs = [
     { label: '2005 vs 2026', other: null, lo: 19, hi: 23, minShared: 2, namesakes: new Set(['Pablo Ibáñez', 'Manu Sánchez', 'Pablo García',
-      'André Luiz', 'Serginho', 'Diego León', 'Juan', 'Gilberto', 'Emerson', 'Fred', 'Koke', 'Ederson', 'Lincoln']) },
+      'André Luiz', 'Serginho', 'Diego León', 'Juan', 'Gilberto', 'Emerson', 'Fred', 'Koke', 'Ederson', 'Lincoln', 'Ronaldo']) },
     { label: '2005 vs 2015', other: ERA2015_ROSTERS, lo: 8, hi: 12, minShared: 25, namesakes: new Set(['Fernando', 'Víctor Sánchez', 'Dani García',
       'Rafael', 'Koke', 'Rafinha']) },
     { label: '2005 vs 2010', other: ERA2010_ROSTERS, lo: 3, hi: 7, minShared: 60, namesakes: new Set(['Luis García', 'Andy Johnson',
       'Rafael', 'Henrique', 'André Luiz']) },
   ];
+  if (CONTROL === 'unlisted') {
+    if (!pairs[0].namesakes.has('Ronaldo')) controlRefuse('Ronaldo is not a listed pair against 2026');
+    pairs[0].namesakes.delete('Ronaldo');
+    console.log('   CONTROL unlisted applied: Ronaldo is no longer a listed pair of two men');
+  }
   const e05ByName = new Map();
   for (const roster of Object.values(ERA2005_ROSTERS)) for (const p of roster) e05ByName.set(p.n, p);
   for (const pair of pairs) {

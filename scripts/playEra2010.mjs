@@ -15,7 +15,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
-import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -59,13 +59,20 @@ await page.waitForTimeout(700);
 
 console.log('2) Nations shrink to the era');
 say(await page.locator('text=England').count() >= 1 && await page.locator('text=Spain').count() >= 1, 'England and Spain offered in 2010');
-say(await page.locator('text=Germany').count() === 0, 'Germany correctly absent from 2010');
+/* Round 1304: Round 901 made 2010-11 a full big five, so Germany is offered now (this line still said absent and
+   had been red since); a nation that had no league in this world (the Netherlands) still is not. The same shape
+   Round 899 gave playEra2015. */
+say(await page.locator('text=Italy').count() >= 1 && await page.locator('text=Germany').count() >= 1 && await page.locator('text=France').count() >= 1, 'Italy, Germany and France offered in 2010 (Round 901)');
+say(await page.locator('text=Netherlands').count() === 0, 'the Netherlands correctly absent from 2010');
 await page.locator('text=England').first().click();
 await page.waitForTimeout(700);
 
 console.log('3) The 2010 league and clubs');
-say(await page.locator('text=Premier League').count() >= 1, 'the 2010 Premier League is offered');
-await page.locator('text=Premier League').first().click();
+/* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+   Premier League, so 'text=Premier League' counted and pressed that sentence: the "offered" check passed on it and
+   the league step never moved on. */
+say(await page.locator('button:has-text("Premier League")').count() >= 1, 'the 2010 Premier League is offered');
+await page.locator('button:has-text("Premier League")').first().click();
 await page.waitForTimeout(700);
 say(await page.locator('button:has-text("Blackpool")').count() === 1, '2010 Blackpool is a pickable club');
 say(await page.locator('button:has-text("Barcelona")').count() === 0, 'Barcelona is not in the English league');
@@ -87,7 +94,13 @@ say(room.listed, 'the Squad tab listed the squad');
 say(/Wayne Rooney/.test(room.squad), ROONEY_CHECK);
 const body2 = await page.locator('body').textContent();
 const stillNamed = /Rooney/.test(body2 ?? '') ? ['Wayne Rooney'] : [];
-say(!/Bruno Fernandes/.test(body2 ?? ''), 'no 2026 player leaked into 2010');
+/* Round 1304: read off the game, not the whole body. The guide under the game names Bruno Fernandes as a 2020-21
+   Manchester United man since Round 971, and this line had been red on that sentence ever since. ERA_CONTROL=ghost
+   writes the name into the squad panel and this check, and only it, must go red. */
+const LEAK_CHECK = 'no 2026 player leaked into 2010';
+const planted = ERA_CONTROL === 'ghost' ? await plantGhost(page, 'Bruno Fernandes') : false;
+const leaked = await namedInGame(page, 'Bruno Fernandes');
+say(leaked.length === 0, LEAK_CHECK + (leaked.length ? ` (written in the game at ${leaked.slice(0, 3).join(' | ')})` : ''));
 
 const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
 say(pageErrors.length === 0, `no real page errors (${pageErrors.length ? pageErrors[0] : 'clean'})`);
@@ -95,6 +108,7 @@ say(pageErrors.length === 0, `no real page errors (${pageErrors.length ? pageErr
 await browser.close();
 console.log('');
 if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2010', failed, [ROONEY_CHECK], tally, stillNamed));
+if (ERA_CONTROL === 'ghost') process.exit(judgeGhostControl('playEra2010', failed, LEAK_CHECK, planted));
 if (failures > 0) {
   console.error(`playEra2010: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

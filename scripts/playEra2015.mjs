@@ -14,7 +14,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
-import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -38,6 +38,8 @@ const CLAIMS = {
   'Paul Pogba': 'Pogba stayed for 2015-16, exactly as in real life',
 };
 const DROP = Object.keys(CLAIMS);
+const LEAK_CHECK = 'no 2026 player leaked into 2015';
+let planted = false;
 const tally = { swaps: 0 };
 const stillNamed = new Set();
 if (ERA_CONTROL === 'drop') {
@@ -107,8 +109,11 @@ const browser = await chromium.launch();
   await page.waitForTimeout(700);
 
   console.log('3) The 2015 Premier League');
-  say(await page.locator('text=Premier League').count() >= 1, 'the 2015 Premier League is offered');
-  await page.locator('text=Premier League').first().click();
+  /* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+     Premier League, so 'text=Premier League' counted and pressed that sentence: the "offered" check passed on it and
+     the league step never moved on. */
+  say(await page.locator('button:has-text("Premier League")').count() >= 1, 'the 2015 Premier League is offered');
+  await page.locator('button:has-text("Premier League")').first().click();
   await page.waitForTimeout(700);
   say(await page.locator('button:has-text("Leicester City")').count() === 1, '2015 Leicester are a pickable club');
   say(await page.locator('button:has-text("Norwich City")').count() === 1, '2015 Norwich are a pickable club');
@@ -132,7 +137,12 @@ const browser = await chromium.launch();
   say(/Kasper Schmeichel/.test(room.squad), CLAIMS['Kasper Schmeichel']);
   const body2 = await page.locator('body').textContent();
   noteNamed(body2);
-  say(!/Haaland/.test(body2 ?? ''), 'no 2026 player leaked into 2015');
+  /* Round 1304: read off the game, not the whole body. The guide under the game names Haaland as a 2020-21
+     Dortmund man since Round 971, and this line had been red on that sentence ever since. ERA_CONTROL=ghost
+     writes the name into the squad panel and this check, and only it, must go red. */
+  if (ERA_CONTROL === 'ghost') planted = await plantGhost(page, 'Erling Haaland');
+  const leaked = await namedInGame(page, 'Haaland');
+  say(leaked.length === 0, LEAK_CHECK + (leaked.length ? ` (written in the game at ${leaked.slice(0, 3).join(' | ')})` : ''));
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the England walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
   await page.close();
@@ -190,6 +200,7 @@ const browser = await chromium.launch();
 await browser.close();
 console.log('');
 if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2015', failed, Object.values(CLAIMS), tally, [...stillNamed]));
+if (ERA_CONTROL === 'ghost') process.exit(judgeGhostControl('playEra2015', failed, LEAK_CHECK, planted));
 if (failures > 0) {
   console.error(`playEra2015: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

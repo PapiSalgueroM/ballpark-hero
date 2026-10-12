@@ -27,6 +27,31 @@
  *     is real and what is not, and the numbers it prints are measured off the
  *     projection rather than written by hand.
  *
+ * Round 1304: "the real data" is the JOINED modern world. Until this round
+ * sections 1, 4 and 6 compared with src/data/clubManagerRosters.ts, the value
+ * table's bake, and the game has read src/data/clubManagerWorldRosters.ts
+ * since Round 1035: the bake, less any man a newer squad list moved, plus
+ * the generated leagues (the A-League Men of Round 1035, the Russian Premier
+ * League of Round 1052). Read against the bake alone, three checks were red
+ * from Round 1035's commit b777801d, and every man they named was real:
+ * Southampton one row short (Ryan Fraser, moved to Macarthur FC by the
+ * A-League ledgers), and 189 men "not in the real data" who are the two
+ * generated leagues' own players. MEASURED on runners 2026-10-11
+ * (docs/audits/ROUND-1304-NOTES.md has the table): 454 clubs and 5,113 men
+ * at year zero, 0 differences from the joined world; the 189 were 168 men of
+ * the 2031 world (77 A-League, 91 Russia) and 21 of the 2036 one. Section 1
+ * now also proves the join's own accounting from the files, so a man the
+ * join drops, or a club no real source accounts for, is red here.
+ * Fix pass of the same round: and a man the join FAILS to move. The running
+ * reviewer kept Ryan Fraser at Southampton as well as at Macarthur FC and
+ * this harness passed, printing "less 0 moved by a newer squad list
+ * (nobody)"; only simClubManagerALeague, which is in no gate list, saw him
+ * twice. Section 1 now fails on any name that is at a club of the bake and
+ * at a club outside it at once (0 today; control twoclubs).
+ *
+ * Three negative controls, SIM_ERAS_CONTROL=dropman|unflag|twoclubs (see the
+ * block where they are defined). A control run plays no seasons.
+ *
  * Run: node scripts/simEras.mjs
  */
 import { execSync } from 'node:child_process';
@@ -36,8 +61,11 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'cmEraSimEntry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'cmEraSim.bundle.mjs');
+/* Round 1304: a name of its own for each run, so the harness and one of its
+   controls can run side by side without reading each other's bundle. */
+const TAG = `${process.pid}-${Date.now()}`;
+const ENTRY = path.join(os.tmpdir(), `cmEraSimEntry-${TAG}.mjs`);
+const BUNDLE = path.join(os.tmpdir(), `cmEraSim-${TAG}.bundle.mjs`);
 
 // Two-stage entry: ES module imports evaluate before the entry's own
 // statements, so the localStorage stub goes in a wrapper that dynamically
@@ -47,14 +75,22 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
 const rosters = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
-export { engine, eras, rosters };
+const world = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerWorldRosters.ts');
+export { engine, eras, rosters, world };
 `);
 execSync(
   `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { engine: cm, eras: E, rosters: DATA } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, eras: E, rosters: DATA, world: WORLD } = await import(pathToFileURL(BUNDLE).href);
+fs.rmSync(ENTRY, { force: true });
+fs.rmSync(BUNDLE, { force: true });
+/* Round 1304: REAL is the modern world the game reads (the joined one);
+   BAKED is the value table's bake, one of its sources, kept for the join's
+   accounting in section 1. */
+const BAKED = DATA.CM_ROSTERS;
+const REAL = WORLD.CM_WORLD_ROSTERS;
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await E.ensureAllEraRosters();
 const {
@@ -73,6 +109,66 @@ let failures = 0;
 const fail = msg => { failures += 1; console.error('  FAIL: ' + msg); };
 const mean = a => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
 const fx = (v, n = 2) => Number(v).toFixed(n);
+
+/* NEGATIVE CONTROLS (Round 1304). SIM_ERAS_CONTROL=<name> breaks one thing
+   IN MEMORY (nothing on disk is touched) and the run must then end red, exit
+   1. Each control first proves the thing it breaks is there and refuses with
+   exit 2 when it is not, so a control that changed nothing can never read as
+   one that fired. A control run plays no seasons (sections 2 to 5 and 8),
+   so it takes seconds, not the eight minutes of a full run.
+     dropman   one real man is missing from the year zero world this harness
+               is handed: section 1's "differ from the real data" and its
+               count against the real data must both fail.
+     unflag    one made up man of the 2031 world loses his MADE UP flag:
+               section 6's "not in the real data and are not flagged as made
+               up" must fail, on exactly one man.
+     twoclubs  (fix pass) the join fails to move one man: the first man a
+               newer squad list took out of a club of the bake is back at
+               that club as well, in the one world object the engine and
+               this harness both read, before anything reads it. Section
+               1's "at a club of the bake and at a club outside it at once"
+               must fail, and it is the only line of section 1 that can:
+               the world still matches itself and the count still adds up,
+               which is how the reviewer's mutation passed. */
+const CONTROL = process.env.SIM_ERAS_CONTROL ?? '';
+if (CONTROL && !['dropman', 'unflag', 'twoclubs'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
+const SKIPPED = '   (a control run plays no seasons: section skipped)';
+let controlSaid = false;
+if (CONTROL === 'twoclubs') {
+  const outsideClubs = Object.keys(REAL).filter(c => !(c in BAKED));
+  let hit = null;
+  for (const club of Object.keys(BAKED)) {
+    const here = new Set((REAL[club] ?? []).map(p => p.n));
+    const gone = BAKED[club].find(p => !here.has(p.n) && outsideClubs.some(c => REAL[c].some(q => q.n === p.n)));
+    if (gone) { hit = { club, n: gone.n, now: outsideClubs.find(c => REAL[c].some(q => q.n === gone.n)) }; break; }
+  }
+  if (!hit) controlRefuse('no man of the bake was moved to a club outside it, so there is nobody to keep twice');
+  REAL[hit.club] = BAKED[hit.club];
+  console.log(`   CONTROL twoclubs applied: ${hit.n} is at ${hit.club} again as well as at ${hit.now}, in the world the engine reads`);
+}
+const REAL_COUNT = Object.values(REAL).reduce((s, r) => s + r.length, 0);
+/** The projected world of a year, as the sections that judge it read it:
+ *  the engine's own, except for the one thing a control breaks. */
+const worldAt = y => {
+  const w = projectedWorld(y);
+  if (CONTROL === 'dropman' && y === 0) {
+    const club = Object.keys(w).find(c => w[c].length > 1);
+    if (!club) controlRefuse('no club at year zero holds two men');
+    if (!controlSaid) console.log(`   CONTROL dropman applied: ${w[club][0].n} is missing from ${club} at year zero`);
+    controlSaid = true;
+    return { ...w, [club]: w[club].slice(1) };
+  }
+  if (CONTROL === 'unflag' && y === 5) {
+    const club = Object.keys(w).find(c => w[c].some(p => p.g));
+    if (!club) controlRefuse('the 2031 world holds no made up player to take the flag from');
+    const i = w[club].findIndex(p => p.g);
+    if (!controlSaid) console.log(`   CONTROL unflag applied: ${w[club][i].n} of ${club}, made up, carries no flag in the 2031 world`);
+    controlSaid = true;
+    return { ...w, [club]: w[club].map((p, j) => (j === i ? { ...p, g: undefined } : p)) };
+  }
+  return w;
+};
 
 /* Paired seeds. Every arm of the balance test runs the same stream of random
    numbers, so a difference between the arms is the change and not the dice. */
@@ -115,25 +211,73 @@ console.log('1) Year zero is the identity');
   if (!String(CM_CLOCK_META.rosterAsOf).includes(String(CM_BASE_YEAR))) {
     fail(`the roster data says "${CM_CLOCK_META.rosterAsOf}" but the clock is set to ${CM_BASE_YEAR}`);
   }
-  const world0 = projectedWorld(0);
-  const clubs = Object.keys(DATA.CM_ROSTERS);
+  /* Round 1304: compared with REAL, the joined world the game reads, club by
+     club and row by row. A club of another length counts once and its rows
+     are not counted, so one missing man fails this line and the count
+     below, as it always did. */
+  const world0 = worldAt(0);
+  const clubs = Object.keys(REAL);
   let players = 0;
   let mismatch = 0;
   for (const club of clubs) {
-    const baked = DATA.CM_ROSTERS[club];
+    const real = REAL[club];
     const proj = world0[club];
-    if (!proj || proj.length !== baked.length) { mismatch += 1; continue; }
-    for (let i = 0; i < baked.length; i++) {
+    if (!proj || proj.length !== real.length) { mismatch += 1; continue; }
+    for (let i = 0; i < real.length; i++) {
       players += 1;
-      const b = baked[i];
+      const b = real[i];
       const p = proj[i];
       if (p.n !== b.n || p.p !== b.p || p.a !== b.a || p.r !== b.r || p.v !== b.v || p.g) mismatch += 1;
     }
   }
-  console.log(`   ${clubs.length} clubs, ${players} players compared field by field against the bake`);
+  const stray = Object.keys(world0).filter(c => !(c in REAL));
+  if (stray.length) fail(`year zero holds ${stray.length} clubs the real data does not: ${stray.slice(0, 4).join(', ')}`);
+  console.log(`   ${clubs.length} clubs, ${players} players compared field by field against the real data`);
   if (mismatch) fail(`${mismatch} projected players at year zero differ from the real data`);
-  if (players !== DATA.CM_ROSTER_META.players) {
-    fail(`projected ${players} players at year zero, the bake says ${DATA.CM_ROSTER_META.players}`);
+
+  /* THE JOIN'S OWN ACCOUNTING, read from the files and never off the join,
+     so "the real data" cannot quietly become whatever the join says it is.
+     Every club of the bake is in the world with its rows in the bake's
+     order, less only the men a newer squad list moved; a moved man is at
+     exactly one club the bake does not hold (moved, never deleted); and the
+     clubs the bake does not hold carry as many men as the generated leagues
+     say they ship (CM_GENERATED_LEAGUES, each file's own count). A league
+     that joins later is counted through that list with no edit here. */
+  const same = (a, b) => a.n === b.n && a.p === b.p && a.a === b.a && a.r === b.r && a.v === b.v;
+  const moved = [];
+  for (const club of Object.keys(BAKED)) {
+    const inWorld = REAL[club];
+    if (!inWorld) { fail(`${club} is in the bake and not in the world`); continue; }
+    const names = new Set(inWorld.map(p => p.n));
+    const kept = BAKED[club].filter(p => names.has(p.n));
+    for (const p of BAKED[club]) if (!names.has(p.n)) moved.push({ club, n: p.n });
+    if (kept.length !== inWorld.length || kept.some((p, i) => !same(p, inWorld[i]))) fail(`${club} in the world is not the bake's ${club} less the men who moved`);
+  }
+  const outside = Object.keys(REAL).filter(c => !(c in BAKED));
+  for (const m of moved) {
+    const at = outside.filter(c => REAL[c].some(p => p.n === m.n));
+    if (at.length !== 1) fail(`${m.n} left the bake's ${m.club} and is at ${at.length} clubs outside the bake; a man the join moves is at exactly one`);
+  }
+  /* Fix pass: and nobody is at a club of the bake AND at a club outside it.
+     A man the join failed to move passes every line above (he is not
+     "moved", his club is the bake's club whole, and one man too many is in
+     both sides of every count), so this is asked by name. Two different men
+     who share a name across the two halves would need a pin here, with two
+     sources, in the round that brings the second; there is none today. */
+  const outsideAt = new Map(outside.flatMap(c => REAL[c].map(p => [p.n, c])));
+  const twice = Object.keys(BAKED).flatMap(club => (REAL[club] ?? []).filter(p => outsideAt.has(p.n)).map(p => `${p.n} (${club} and ${outsideAt.get(p.n)})`));
+  if (twice.length) fail(`${twice.length} men are at a club of the bake and at a club outside it at once: ${twice.slice(0, 4).join('; ')}; a man a newer squad list holds is moved, never kept twice`);
+  const outsideMen = outside.reduce((s, c) => s + REAL[c].length, 0);
+  const leagues = WORLD.CM_GENERATED_LEAGUES;
+  const shipped = leagues.reduce((s, g) => s + g.players, 0);
+  if (outsideMen !== shipped) fail(`the ${outside.length} clubs the bake does not hold carry ${outsideMen} men, the generated leagues say they ship ${shipped}`);
+  const bakeCount = Object.values(BAKED).reduce((s, r) => s + r.length, 0);
+  if (bakeCount !== DATA.CM_ROSTER_META.players) fail(`the bake holds ${bakeCount} men and says ${DATA.CM_ROSTER_META.players}`);
+  const realPlayers = DATA.CM_ROSTER_META.players - moved.length + shipped;
+  console.log(`   the real data: the bake's ${DATA.CM_ROSTER_META.players}, less ${moved.length} moved by a newer squad list (${moved.map(m => `${m.n} from ${m.club}`).join(', ') || 'nobody'}), plus ${shipped} in ${leagues.length} generated leagues (${leagues.map(g => `${g.label} ${g.players}`).join(', ')}) = ${realPlayers}`);
+  if (REAL_COUNT !== realPlayers) fail(`the joined world holds ${REAL_COUNT} men, its sources add up to ${realPlayers}`);
+  if (players !== realPlayers) {
+    fail(`projected ${players} players at year zero, the real data says ${realPlayers}`);
   }
   if (Math.round(realNameShare(0) * 100) !== 100) fail('year zero is not 100 percent real players');
   // And the value curve this file duplicates has to be the engine's curve.
@@ -152,7 +296,7 @@ console.log('1) Year zero is the identity');
 /* ================================================================== */
 console.log('2) A thirty three year old declines, a twenty two year old does not');
 /* ================================================================== */
-{
+if (CONTROL) console.log(SKIPPED); else {
   // Contracts are pinned open so nothing but AGE can remove anybody. Without
   // this the measurement is really measuring the contract system, which is
   // exactly the trap the shipped engine hid behind: a veteran walked for free
@@ -243,7 +387,7 @@ console.log('2) A thirty three year old declines, a twenty two year old does not
 /* ================================================================== */
 console.log('3) A retired player never comes back');
 /* ================================================================== */
-{
+if (CONTROL) console.log(SKIPPED); else {
   clearSeed();
   let s = startCareer('Liverpool');
   let checked = 0;
@@ -274,7 +418,7 @@ console.log('3) A retired player never comes back');
 /* ================================================================== */
 console.log('4) Twenty seasons out, the league is still a league');
 /* ================================================================== */
-{
+if (CONTROL) console.log(SKIPPED); else {
   const RUNS = 10;
   const SEASONS = 20;
   const BIG = new Set([
@@ -336,11 +480,15 @@ console.log('4) Twenty seasons out, the league is still a league');
        a number pinned in a harness: every empty club must be one that baked
        empty AND is disclosed in CM_PARTIAL. Round 140 grew that set from 3
        to 10 when Portugal, Scotland and Turkey arrived. */
-    const bakedEmpty = Object.entries(DATA.CM_ROSTERS).filter(([, r]) => r.length === 0).map(([c]) => c);
-    const undisclosed = bakedEmpty.filter(c => !DATA.CM_PARTIAL.includes(c));
+    /* Round 1304: read off the joined world and its joined partial list (the
+       world, not the bake, is what a projection starts from). The bake is
+       712 men short of the world, so 98 percent of the bake let the world
+       lose about 800 men unnoticed; it is 98 percent of the world now. */
+    const bakedEmpty = Object.entries(REAL).filter(([, r]) => r.length === 0).map(([c]) => c);
+    const undisclosed = bakedEmpty.filter(c => !WORLD.CM_WORLD_PARTIAL.includes(c));
     if (undisclosed.length) fail(`empty clubs not disclosed in CM_PARTIAL: ${undisclosed.join(', ')}`);
     if (empty > bakedEmpty.length) fail(`${empty} clubs have no players at all at +${y} years, but only ${bakedEmpty.length} baked empty: somebody new ran dry`);
-    if (all.length < DATA.CM_ROSTER_META.players * 0.98) fail(`the world lost players by +${y} years (${all.length})`);
+    if (all.length < REAL_COUNT * 0.98) fail(`the world lost players by +${y} years (${all.length})`);
     if (mean(all.map(p => p.a)) > 27.5) fail(`the whole world averages ${fx(mean(all.map(p => p.a)), 1)} years old at +${y}`);
     /* The anchor is the measured year-zero mean club XI of the CURRENT
        world and moves when the world's composition does. 74.1 was the
@@ -359,7 +507,7 @@ console.log('4) Twenty seasons out, the league is still a league');
 /* ================================================================== */
 console.log('5) Balance did not move: ticking clock against a frozen one');
 /* ================================================================== */
-{
+if (CONTROL) console.log(SKIPPED); else {
   /* The do nothing arm pins the world year back to the roster year at every
      rollover, so yearsOn stays zero and every AI club, the whole transfer
      market and every opponent squad behave exactly as they did before this
@@ -475,9 +623,12 @@ console.log('6) Real names become made up ones gracefully, and it is labelled');
   // Every made up player is flagged, everywhere, forever.
   let gen = 0;
   let unflaggedReal = 0;
-  const realNames = new Set(Object.values(DATA.CM_ROSTERS).flat().map(p => p.n));
+  /* Round 1304: the real names are the joined world's. Read off the bake
+     alone, every surviving man of the generated leagues counted as "not in
+     the real data" (189 of them on 2026-10-11, all real). */
+  const realNames = new Set(Object.values(REAL).flat().map(p => p.n));
   for (const y of [5, 10, 20]) {
-    for (const p of Object.values(projectedWorld(y)).flat()) {
+    for (const p of Object.values(worldAt(y)).flat()) {
       if (p.g) {
         gen += 1;
         if (realNames.has(p.n)) fail(`a made up player is called ${p.n}, which is a real footballer's name`);
@@ -607,7 +758,7 @@ console.log('7) The era menu is exactly what the owner asked for and the data su
 /* ================================================================== */
 console.log('8) A save from before the clock existed still opens and still works');
 /* ================================================================== */
-{
+if (CONTROL) console.log(SKIPPED); else {
   clearSeed();
   const legacy = JSON.parse(JSON.stringify(startCareer('Arsenal')));
   // Strip everything this round added, exactly as a save committed before it

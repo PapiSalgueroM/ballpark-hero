@@ -58,28 +58,32 @@ export function allOfferClubs(): OfferClub[] {
 }
 
 /** The clubs currently without a manager, which is who can actually hire. */
-export function vacancies(rng: () => number = Math.random, exclude: string[] = []): OfferClub[] {
+export function vacancies(rng: () => number = Math.random, exclude: string[] = [], clubs: OfferClub[] = allOfferClubs()): OfferClub[] {
   const skip = new Set(exclude);
   // Roughly one club in six is between managers at any given point, which is
   // about right for a real season's worth of churn and keeps the market from
   // feeling like every job in the world is open at once.
-  return allOfferClubs().filter(c => !skip.has(c.name) && rng() < 0.17);
+  return clubs.filter(c => !skip.has(c.name) && rng() < 0.17);
 }
 
 /**
  * The offer feed against the real pyramid. `exclude` is normally the club
  * that just sacked you, because they are not about to hire you back.
+ * Round 1304: `clubs` is the world the calls come from. Left out it is
+ * today's pyramid, as it always was; a Club Manager career in a past season
+ * passes that season's clubs, so the same churn rule runs on either world.
  */
 export function realJobOffers(
   profile: ManagerProfile,
   rng: () => number = Math.random,
   exclude: string[] = [],
+  clubs: OfferClub[] = allOfferClubs(),
 ): JobOffer[] {
-  const open = vacancies(rng, exclude);
+  const open = vacancies(rng, exclude, clubs);
   // If the churn roll came up thin, fall back to the whole pyramid rather
   // than handing the player an empty screen for a reason that is not about
   // him. Being unwanted should be earned, not a dice roll on vacancies.
-  const pool = open.length >= 12 ? open : allOfferClubs().filter(c => !exclude.includes(c.name));
+  const pool = open.length >= 12 ? open : clubs.filter(c => !exclude.includes(c.name));
   return generateJobOffers(profile, pool, rng);
 }
 

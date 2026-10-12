@@ -67,7 +67,40 @@
  *   City 6,7,2,3,1,2 (3.50), Crotone 20 every seed (20.00). Every mean sits
  *   inside the family spread above, so the bands stand.
  *
- * Eight negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder,
+ * Round 1304: the modern world this harness compares with is the JOINED one
+ *   the game reads (src/data/clubManagerWorldRosters.ts: the value table's
+ *   bake, the A-League Men of Round 1035 and the Russian Premier League of
+ *   Round 1052), no longer the bake alone. Reading the bake alone called
+ *   eight real 2026 men of those two files, each six or seven years older
+ *   (Leckie, Sakai, Tisserand, Olaza, Cordoba, Djiku, Becao, Salcedo), 2020
+ *   men on the 2026 market (red from Round 1035's commit b777801d). The
+ *   namesake pass of section 2 is the check that judges them now. Section 8
+ *   was red from Round 1040's commit d557a8ae: Serie B, Ligue 2 and the
+ *   Segunda gave 24 clubs only the past knew a modern league, Cadiz among
+ *   them, so its floor and its one club pin were typed against a world that
+ *   had moved. MEASURED on runners 2026-10-11 (docs/audits/ROUND-1304-NOTES.md
+ *   has the table): era-only clubs 53 before Round 1040, 46 after Serie B,
+ *   37 after Ligue 2, 29 after the Segunda; of them in two or more eras 21,
+ *   18, 11 and 6. Section 8 now pins the shipped order of the eras itself
+ *   and the six clubs the fallback still serves in two or more eras.
+ *
+ *   9. THE NEWS AND THE BIDDING WARS (Round 1304, a real defect): in every
+ *      past season the club that buys in the news, and the rival of a
+ *      negotiation, is a club of that season's leagues. Before the round
+ *      both were drawn from today's leagues: 304 of 1809 deals and 106 of
+ *      136 rivals on these seeds (the numbers are at the section). The
+ *      fix pass reads the second summer's feed of every one of those saves
+ *      as well, so the rule is fenced past the first window.
+ *
+ *  10. THE OUT OF WORK MARKET (Round 1304 fix pass, the same defect in a
+ *      third place): in every past season a sacked manager is offered jobs
+ *      by clubs of that season only, on that season's card, taking one puts
+ *      him at that club, and the eight week floor opens a job at a small
+ *      club of that season. Before the fix 342 of 429 calls on these seeds
+ *      came from a club of today and 188 of 240 jobs taken moved him
+ *      nowhere (the numbers are at the section).
+ *
+ * Sixteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar|modernjobs|takestale|firstsummer,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -90,8 +123,9 @@ const e20 = await import('${R}/src/data/clubManagerEra2020.ts');
 const e15 = await import('${R}/src/data/clubManagerEra2015.ts');
 const e10 = await import('${R}/src/data/clubManagerEra2010.ts');
 const e05 = await import('${R}/src/data/clubManagerEra2005.ts');
-const modern = await import('${R}/src/data/clubManagerRosters.ts');
-export { engine, eras, e20, e15, e10, e05, modern };
+const modern = await import('${R}/src/data/clubManagerWorldRosters.ts');
+const baked = await import('${R}/src/data/clubManagerRosters.ts');
+export { engine, eras, e20, e15, e10, e05, modern, baked };
 `);
 /* esbuild through its JS API, resolved by walk-up, so the harness runs from
    the repo and from a worktree whose node_modules is the repo's. */
@@ -101,18 +135,57 @@ const { build } = await import('esbuild');
    ERA_LEAGUES in insertion order again, as it did before the closing check.
    The anchor must be in the source or the control refuses (exit 2). */
 const ERA_ORDER_ANCHOR = 'for (const eraId of ERA_FALLBACK_ORDER) {';
-const plugins = process.env.SIM_ERA2020_CONTROL === 'eraorder' ? [{
-  name: 'eraorder',
+/* Control shiporder (Round 1304, section 8) is the other one that edits the
+   engine as it is bundled: the fixed order is retyped oldest season first,
+   the tidy order somebody would reach for, instead of the order the eras
+   shipped in. The anchor is the whole line, so the control refuses the day
+   the constant changes for any reason. */
+const SHIP_ORDER_ANCHOR = "export const ERA_FALLBACK_ORDER: readonly string[] = ['era2010', 'era2015', 'era2005', 'era2020'];";
+const SHIP_ORDER_BROKEN = "export const ERA_FALLBACK_ORDER: readonly string[] = ['era2005', 'era2010', 'era2015', 'era2020'];";
+const engineEdit = (name, anchor, to, why) => ({
+  name,
   setup(b) {
     b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManager\.ts$/ }, a => {
       const src = fs.readFileSync(a.path, 'utf8');
-      if (!src.includes(ERA_ORDER_ANCHOR)) { console.error('CONTROL eraorder did not apply: leagueOf has no fixed era order to remove'); process.exit(2); }
-      return { contents: src.replace(ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {'), loader: 'ts' };
+      if (src.split(anchor).length !== 2) { console.error(`CONTROL ${name} did not apply: ${why}`); process.exit(2); }
+      console.log(`   CONTROL ${name} applied: the engine is edited as it is bundled, one line`);
+      return { contents: src.replace(anchor, to), loader: 'ts' };
     });
   },
-}] : [];
+});
+/* Controls modernnews and modernwar (Round 1304, section 9) put today's clubs
+   back where a past season's news and its bidding wars pick a club, one line
+   each: the engine as it was before the round. */
+const NEWS_ANCHOR = '  const allClubs = actingClubsByLeague(state).flat().filter(c => c.name !== droppedClub);';
+const NEWS_BROKEN = '  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id)).filter(c => c.name !== droppedClub);';
+const WAR_ANCHOR = '    const spenders = actingClubsByLeague(career).flatMap(cs => cs.slice(0, 5).map(c => c.name))';
+const WAR_BROKEN = '    const spenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 5).map(c => c.name))';
+/* Controls modernjobs and takestale (Round 1304 fix pass, section 10), one
+   line each: the out of work screen reads today's pyramid in every era
+   again (its offers, its floor and the offers it holds, the engine as it was
+   before the fix), and a job at a club the season does not hold can be
+   taken again. */
+const JOBS_ANCHOR = '  const eraPool = eraOfferClubs(career);';
+const JOBS_BROKEN = '  const eraPool = null as OfferClub[] | null;';
+const TAKE_ANCHOR = '  if (career.eraId && isHistoricEra(career.eraId) && !eraLeagueOf(club, career.eraId)) return null;';
+/* Control firstsummer (Round 1304 fix pass, section 9): the running
+   reviewer's mutation. A past season's world is that season's clubs for the
+   first window only; from the second summer on today's clubs act again. */
+const SUMMER_ANCHOR = '  if (eraId && isHistoricEra(eraId)) return (ERA_LEAGUES[eraId] ?? []).map(l => eraPlayableClubs(eraId, l.id));';
+const SUMMER_BROKEN = '  if (eraId && isHistoricEra(eraId) && state.season <= 1) return (ERA_LEAGUES[eraId] ?? []).map(l => eraPlayableClubs(eraId, l.id));';
+const ENGINE_CONTROLS = {
+  eraorder: [ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {', 'leagueOf has no fixed era order to remove'],
+  shiporder: [SHIP_ORDER_ANCHOR, SHIP_ORDER_BROKEN, 'the line that types the shipped order is not in the engine as this control knows it'],
+  modernnews: [NEWS_ANCHOR, NEWS_BROKEN, 'the news does not pick its buyer from this save\'s own world on the line this control knows'],
+  modernwar: [WAR_ANCHOR, WAR_BROKEN, 'the bidding war does not pick its rival from this save\'s own world on the line this control knows'],
+  modernjobs: [JOBS_ANCHOR, JOBS_BROKEN, 'the out of work screen does not read this save\'s own world on the line this control knows'],
+  takestale: [TAKE_ANCHOR, '', 'the out of work screen does not refuse a club the season does not hold on the line this control knows'],
+  firstsummer: [SUMMER_ANCHOR, SUMMER_BROKEN, 'the helper that names the clubs of this save\'s world does not branch on the era on the line this control knows'],
+};
+const engineControl = ENGINE_CONTROLS[process.env.SIM_ERA2020_CONTROL ?? ''];
+const plugins = engineControl ? [engineEdit(process.env.SIM_ERA2020_CONTROL, ...engineControl)] : [];
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', plugins });
-const { engine: cm, eras: ER, e20: E20, e15: E15, e10: E10, e05: E05, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, eras: ER, e20: E20, e15: E15, e10: E10, e05: E05, modern: MOD, baked: BAKED } = await import(pathToFileURL(BUNDLE).href);
 fs.rmSync(ENTRY, { force: true });
 fs.rmSync(BUNDLE, { force: true });
 await ER.ensureAllEraRosters();
@@ -121,9 +194,17 @@ const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,
   buildBoardObjectives, ERA_LEAGUES, ERA_UCL_FIELDS, eraPlayableClubs, worldSeasonLabel,
   eraUclHasR16, uclFirstKoRound, careerLeagueOf, leagueOf, eraLeagueOf,
+  startNegotiation, makeOffer,
+  enterWilderness, wildernessWeek, acceptWildernessJob, eraClubDefFor,
 } = cm;
+const REAL_RANDOM_1304 = Math.random;
 const { ERA2020_ROSTERS, ERA2020_META, ERA2020_PARTIAL } = E20;
-const { CM_ROSTERS } = MOD;
+/* Round 1304: the modern world is the joined one, the same object both
+   engine files read, so a league that joins the game joins this harness.
+   The bake alone is kept only to tell which clubs a generated league added
+   (control joinage). */
+const { CM_WORLD_ROSTERS: CM_ROSTERS } = MOD;
+const BAKED_CLUBS = new Set(Object.keys(BAKED.CM_ROSTERS));
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -158,9 +239,44 @@ const BAND_THIN = 14;
                   files about 150 men under the wrong league.
      eraorder     leagueOf's fixed era order is taken out as the engine is
                   bundled (see the plugin above the build), so section 8's
-                  reversal of ERA_LEAGUES moves the multi-era clubs. */
+                  reversal of ERA_LEAGUES moves the multi-era clubs.
+     leak         (Round 1304) the modern save is handed the 2020 market, as
+                  a market cache that forgot the era would hand it: section
+                  2's "2020-only ... is on the 2026 market" must fail.
+     joinage      (Round 1304) one man the 2020 world shares with a
+                  generated league (a club the bake does not hold) reads ten
+                  years older in memory: section 2's namesake pass must fail
+                  on him, which proves the pass reads the generated leagues.
+     shiporder    (Round 1304) the engine's fixed order of the eras is
+                  retyped oldest season first as it is bundled: section 8's
+                  pin on the shipped order and its club pins must fail,
+                  while the reversal test, which only asks that the order
+                  not hang on the object, still passes.
+     modernnews   (Round 1304) the news picks its buying club from today's
+                  leagues again, as the engine is bundled: section 9's
+                  "bought by a club that is not in that season's leagues"
+                  must fail in every era.
+     modernwar    (Round 1304) the rival of a negotiation is picked from
+                  today's leagues again, as the engine is bundled: section
+                  9's "rivals ... not in that season's leagues" must fail.
+     modernjobs   (Round 1304 fix pass) the out of work screen reads today's
+                  pyramid in every era again, as the engine is bundled:
+                  section 10's "job offers to a sacked manager come from a
+                  club that is not in that season's leagues" must fail in
+                  every era, with the card, the move and the floor after it,
+                  and the stale offer of an old save stays on the screen.
+     takestale    (Round 1304 fix pass) the line that refuses a job at a
+                  club the season does not hold is taken out as the engine
+                  is bundled: section 10's "was taken and the save reads"
+                  must fail in every era, and nothing else.
+     firstsummer  (Round 1304 fix pass) a past season's world is that
+                  season's clubs for the first window only, as the engine is
+                  bundled: section 9's "buyers in the second summer's feed
+                  are clubs that are not in that season's leagues" must fail
+                  in every era, and its first window and rival sentences
+                  must not. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder', 'modernnews', 'modernwar', 'modernjobs', 'takestale', 'firstsummer'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -242,8 +358,24 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
   else if (kane.age !== 26) fail(`market Kane is ${kane.age}, the 2020 bake says 26`);
 
   Math.random = seeded(37);
-  const nowNames = new Set(buildMarket(startCareer('Arsenal')).map(p => p.name));
+  let now = startCareer('Arsenal');
+  /* Round 1304: the modern names are the joined world's, the one the game
+     reads. The market comes out of the engine and this list out of the data
+     files, so the two can still disagree, which is the whole check. */
   const modernNames = new Set(Object.values(CM_ROSTERS).flat().map(p => p.n));
+  if (CONTROL === 'leak') {
+    const eraOnly = Object.values(ERA2020_ROSTERS).flat().filter(p => !modernNames.has(p.n)).length;
+    if (!eraOnly) controlRefuse('no 2020 man is missing from the modern world, so nobody could leak');
+    /* The era AND its year, or the save would read the 2020 world as it
+       stands six seasons on, where many real men have retired. */
+    now = { ...now, eraId: 'era2020', startYear: eraById('era2020').startYear };
+  }
+  const nowNames = new Set(buildMarket(now).map(p => p.name));
+  if (CONTROL === 'leak') {
+    const onIt = Object.values(ERA2020_ROSTERS).flat().filter(p => !modernNames.has(p.n) && nowNames.has(p.n)).length;
+    if (!onIt) controlRefuse('the market handed over holds no 2020-only man, so the control changed nothing');
+    console.log(`   CONTROL leak applied: the modern save reads the 2020 market at year zero, ${onIt} 2020-only men are on it`);
+  }
   let checked = 0, leaked = 0;
   for (const roster of Object.values(ERA2020_ROSTERS)) for (const p of roster) {
     if (modernNames.has(p.n)) continue;
@@ -323,8 +455,20 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
   };
   const byName = rosters => { const m = new Map(); for (const roster of Object.values(rosters)) for (const p of roster) m.set(p.n, p); return m; };
   const here = byName(ERA2020_ROSTERS);
+  const nowByName = byName(CM_ROSTERS);
+  if (CONTROL === 'joinage') {
+    let hit = null;
+    for (const [club, roster] of Object.entries(CM_ROSTERS)) {
+      if (BAKED_CLUBS.has(club)) continue;
+      hit = roster.find(p => here.has(p.n) && !PAIRS.now[p.n]) ?? null;
+      if (hit) break;
+    }
+    if (!hit) controlRefuse('the 2020 world shares no man with a generated league');
+    nowByName.set(hit.n, { ...hit, a: hit.a + 10 });
+    console.log(`   CONTROL joinage applied: ${hit.n}, a man of a generated league, reads ten years older`);
+  }
   const worlds = [
-    ['now', byName(CM_ROSTERS), 6, 400],
+    ['now', nowByName, 6, 400],
     ['era2015', byName(E15.ERA2015_ROSTERS), -5, 280],
     ['era2010', byName(E10.ERA2010_ROSTERS), -10, 40],
     ['era2005', byName(E05.ERA2005_ROSTERS), -15, 5],
@@ -631,10 +775,31 @@ console.log('8) Every past season\'s market files a man under the league his clu
      must move no club. MEASURED 2026-10-05: 17 era-only clubs sit in two or
      three eras; with the old insertion order fallback (control eraorder)
      the reversal moves all 17, Cadiz from laliga2005 to laliga2020. */
+  /* Round 1304: the world this was measured on moved. Round 1040 gave the
+     modern game Serie B, Ligue 2 and the Segunda, and a club a modern league
+     holds never reaches the fallback (REAL_LEAGUES wins, Round 146's rule),
+     so the clubs it serves fell from 53 to 29 and the ones in two or more
+     eras from 21 to 6 (measured on runners at each of Round 1040's three
+     commits, 2026-10-11). Cadiz is one that left: the 2026-27 data has them
+     in the Segunda, so an unscoped lookup reads segunda, by design. The
+     rule did not move, so it is held three ways that do not hang on which
+     clubs happen to be left: the shipped order itself is pinned, every
+     era-only club must read the first era of that order that holds it, and
+     the six clubs still served in two or more eras are pinned by name to
+     the league they have always read (control shiporder retypes the order
+     oldest first and must fail the first and the third). The floor is
+     today's six, the number measured (fix pass: it was typed 3, half of the
+     six, and the reading reviewer asked for the measured one). The round
+     that takes a pinned club into a modern league retypes the floor with
+     the pin. */
   const order = cm.ERA_FALLBACK_ORDER ?? [];
   const keys = Object.keys(ERA_LEAGUES);
   const missing = keys.filter(k => !order.includes(k));
   if (missing.length) fail(`leagueOf's fixed era order leaves out ${missing.join(', ')}; a new era goes at the end of ERA_FALLBACK_ORDER`);
+  const SHIPPED = ['era2010', 'era2015', 'era2005', 'era2020'];
+  if (order.slice(0, SHIPPED.length).join(',') !== SHIPPED.join(',')) fail(`leagueOf reads the eras as ${order.join(', ')}; they shipped as ${SHIPPED.join(', ')} and a new era goes at the END`);
+  const MULTI_FLOOR = 6;
+  const PINS = { 'Wigan Athletic': 'premier2010', 'Zaragoza': 'laliga2010', 'Chievo Verona': 'seriea2010', 'Bordeaux': 'ligue12010', 'Caen': 'ligue12010', 'Leicester City': 'premier2015' };
   const real = new Set(cm.REAL_LEAGUES.flatMap(l => l.clubs));
   const eraOnly = [...new Set(keys.flatMap(k => ERA_LEAGUES[k].flatMap(l => l.clubs)))].filter(c => !real.has(c));
   const multi = eraOnly.filter(c => keys.filter(k => ERA_LEAGUES[k].some(l => l.clubs.includes(c))).length > 1);
@@ -646,9 +811,224 @@ console.log('8) Every past season\'s market files a man under the league his clu
   for (const k of keys) delete ERA_LEAGUES[k];
   for (const [k, v] of saved) ERA_LEAGUES[k] = v;
   console.log(`   ${eraOnly.length} era-only clubs, ${multi.length} of them in more than one era; reversing ERA_LEAGUES moves ${moved.length}`);
-  if (multi.length < 10) fail(`only ${multi.length} era-only clubs sit in two eras; the order check has nothing to bite on`);
+  if (multi.length < MULTI_FLOOR) fail(`only ${multi.length} era-only clubs sit in two eras; the order check has nothing to bite on`);
   if (moved.length) fail(`leagueOf's era fallback hangs on the order of ERA_LEAGUES: ${moved.slice(0, 4).join('; ')}${moved.length > 4 ? ` and ${moved.length - 4} more` : ''}`);
-  if (leagueOf('Cádiz').id !== 'laliga2005') fail(`an unscoped leagueOf('Cádiz') reads ${leagueOf('Cádiz').id}; it has always read laliga2005`);
+  /* Every club the fallback serves reads the first era of the fixed order
+     that holds it: the rule itself, club by club, whichever clubs are left. */
+  const firstEraLeague = c => order.map(k => (ERA_LEAGUES[k] ?? []).find(l => l.clubs.includes(c))).find(Boolean);
+  const offOrder = eraOnly.filter(c => leagueOf(c).id !== firstEraLeague(c)?.id).map(c => `${c} reads ${leagueOf(c).id}, the order says ${firstEraLeague(c)?.id}`);
+  if (offOrder.length) fail(`${offOrder.length} era-only clubs do not read the first era of the fixed order that holds them: ${offOrder.slice(0, 4).join('; ')}`);
+  /* And the six by name. A pinned club that a modern league has since taken
+     comes off this list in the round that took it, like a namesake pair that
+     is no longer shared. */
+  let pinned = 0;
+  for (const [club, id] of Object.entries(PINS)) {
+    if (real.has(club)) { fail(`${club} plays in a modern league now (${leagueOf(club).id}); take it off section 8's pins in the round that put it there`); continue; }
+    if (!multi.includes(club)) { fail(`${club} is pinned as a club of two or more eras and sits in ${keys.filter(k => ERA_LEAGUES[k].some(l => l.clubs.includes(club))).length}`); continue; }
+    if (leagueOf(club).id !== id) fail(`an unscoped leagueOf('${club}') reads ${leagueOf(club).id}; it has always read ${id}`);
+    else pinned += 1;
+  }
+  console.log(`   the eras are read as ${order.join(', ')}; ${pinned} of ${Object.keys(PINS).length} pinned clubs read the league they always have`);
+}
+
+/* ---------- 9. The news and the bidding wars name clubs of that season ---------- */
+console.log('9) Every past season\'s news and bidding wars name clubs of that season');
+{
+  /* Round 1304, a real defect and not a stale check. Found on a picture of
+     the 2010-11 market: "Brentford sign Andres Iniesta from Barcelona for
+     56m" under Around the league. The men of a past season were always that
+     season's (section 2), but the club that BUYS in the news feed, and the
+     rival who "just entered the race" in a negotiation, were drawn from
+     today's leagues with today's budgets in every era, so a 2005-06 save
+     could print a club that was not founded yet, and a rival who closes the
+     deal goes into Latest Transfers as well. Round 146 already held the
+     rule for bids, approaches and job offers ("a 2010 manager cannot be
+     poached by a 2026 club"); these two places never got it.
+     What this reads: for every past season, the transfer log of freshly
+     started saves (every deal the opening window's news printed) and the
+     rival of seeded negotiations, each against the clubs of that season's
+     leagues. Nothing is played. Controls modernnews and modernwar put
+     today's clubs back as the engine is bundled, one line each, and the
+     matching sentence must fail.
+     MEASURED 2026-10-11 on the base engine (f65c6d60), these seeds: of the
+     deals in the news, 304 of 1809 were bought by a club not of that season
+     (2010-11: 106 of 469, 2015-16: 72 of 428, 2005-06: 99 of 472, 2020-21:
+     27 of 440; "Al-Hilal sign Lassana Diarra from Real Madrid", "Bournemouth
+     sign Ruud van Nistelrooy from Manchester United"), and so were 106 of
+     the 136 rivals (30 of 37, 26 of 33, 29 of 34, 21 of 32; "Chicago Fire
+     for Aimo Diana of Sampdoria"). The fixed engine's own counts are on the
+     line each era prints. The floors are about half of the fewest deals and
+     the fewest rivals these seeds gave an era on either engine. */
+  /* Round 1304 fix pass, the running reviewer's finding: the lines above
+     read freshly started saves only, so an engine that kept the rule for the
+     first window and dropped it from the second summer on passed them green
+     (his mutation: the helper's era branch holds only while state.season <=
+     1; a 2010-11 save's second summer then printed "Bournemouth sign
+     Leonardo Bonucci from Juventus", and only the whole state digest moved).
+     So every save of the news loop is also rolled into its second season,
+     the way a job taken from the out of work screen rolls a season that is
+     not finished, and every row of the Latest feed dated in that season is
+     read: the club it names as the buyer (the news deals, a sale of mine, a
+     free agent who joined me) must be a club of that season's leagues. A
+     man released on a free names no buyer and is not counted. Control
+     firstsummer is that mutation, one line as the engine is bundled, and
+     only the second summer's sentence may fail.
+     MEASURED 2026-10-11, these seeds, 2010-11, 2015-16, 2005-06, 2020-21:
+     the second summer's feed names 561, 554, 545 and 549 buyers and none is
+     a club of today; under control firstsummer 102 of 568, 74 of 571, 124
+     of 573 and 26 of 553 are. The floor is about half of the fewest. */
+  const NEWS_SEEDS = 100, WAR_SEEDS = 60, NEWS_FLOOR = 210, WAR_FLOOR = 16, LATER_FLOOR = 270;
+  const FREE = 'a free transfer';
+  for (const eraId of Object.keys(ERA_LEAGUES)) {
+    const leagues = ERA_LEAGUES[eraId];
+    const clubs = new Set(leagues.flatMap(l => l.clubs));
+    let deals = 0, later = 0;
+    const strangers = [], laterStrangers = [];
+    for (let i = 0; i < NEWS_SEEDS; i++) {
+      Math.random = seeded(9001 + i * 7919);
+      const lg = leagues[i % leagues.length];
+      const save = startCareer(lg.clubs[i % lg.clubs.length], eraId);
+      for (const t of save.transferLog ?? []) {
+        deals += 1;
+        if (!clubs.has(t.to)) strangers.push(`${t.to} sign ${t.name} from ${t.from}`);
+      }
+      const next = startNextSeason(save);
+      if (next.season !== save.season + 1) { fail(`${eraId}: the rollover of a new ${save.clubName} save reads season ${next.season}, not ${save.season + 1}`); continue; }
+      for (const t of next.transferLog ?? []) {
+        if (t.season !== next.season || t.to === FREE) continue;
+        later += 1;
+        if (!clubs.has(t.to)) laterStrangers.push(`${t.to} sign ${t.name} from ${t.from}`);
+      }
+    }
+    let wars = 0;
+    const rivals = [];
+    for (let i = 0; i < WAR_SEEDS; i++) {
+      Math.random = seeded(12007 + i * 7919);
+      const save = startCareer(leagues[i % leagues.length].clubs[0], eraId);
+      const target = buildMarket(save).find(m => m.price >= 2 && m.price * 1.2 <= save.budget);
+      if (!target) continue;
+      let talk = startNegotiation(save, target);
+      for (let r = 0; talk && talk.negotiation?.status === 'open' && talk.negotiation.phase === 'fee' && !talk.negotiation.rivalBidder && r < 8; r++) {
+        talk = makeOffer(talk, Math.round(talk.negotiation.theirAsk * 0.8 * 10) / 10);
+      }
+      const rival = talk?.negotiation?.rivalBidder;
+      if (!rival) continue;
+      wars += 1;
+      if (!clubs.has(rival)) rivals.push(`${rival} for ${target.name} of ${target.club}`);
+    }
+    console.log(`   ${eraId}: ${deals} deals in the news of ${NEWS_SEEDS} new saves, ${strangers.length} bought by a club not of that season; ${later} buyers in their second summer's feed, ${laterStrangers.length} not of that season; ${wars} rivals in ${WAR_SEEDS} negotiations, ${rivals.length} not of that season`);
+    if (deals < NEWS_FLOOR) fail(`${eraId}: only ${deals} deals in the news of ${NEWS_SEEDS} new saves (floor ${NEWS_FLOOR}); the buyer check has too little to read`);
+    if (later < LATER_FLOOR) fail(`${eraId}: only ${later} buyers in the second summer's feed of ${NEWS_SEEDS} saves (floor ${LATER_FLOOR}); the later window check has too little to read`);
+    if (laterStrangers.length) fail(`${eraId}: ${laterStrangers.length} of ${later} buyers in the second summer's feed are clubs that are not in that season's leagues, e.g. ${laterStrangers.slice(0, 3).join('; ')}`);
+    if (wars < WAR_FLOOR) fail(`${eraId}: only ${wars} rivals in ${WAR_SEEDS} negotiations (floor ${WAR_FLOOR}); the rival check has too little to read`);
+    if (strangers.length) fail(`${eraId}: ${strangers.length} of ${deals} deals in the news are bought by a club that is not in that season's leagues, e.g. ${strangers.slice(0, 3).join('; ')}`);
+    if (rivals.length) fail(`${eraId}: ${rivals.length} of ${wars} rivals in a negotiation are clubs that are not in that season's leagues, e.g. ${rivals.slice(0, 3).join('; ')}`);
+  }
+  Math.random = REAL_RANDOM_1304;
+}
+
+/* ---------- 10. A sacked manager's phone rings from clubs of that season ---------- */
+console.log('10) Every past season\'s out of work market offers jobs at clubs of that season');
+{
+  /* Round 1304 fix pass, the third place of section 9's defect, found by the
+     reviewer who read the code: the out of work screen (Round 201) drew its
+     job offers, and the floor that opens after eight silent weeks, from
+     today's 454 clubs in every era. So a manager sacked in 2010-11 was rung
+     by Hearts of today's Scottish Premiership and by today's Championship,
+     the card of a club that exists in both worlds printed today's league,
+     tier and budget, and pressing "Take the job" at a club that season does
+     not hold moved him nowhere: the rollover refuses a club outside the era
+     (Round 146's guard), so he was back at the club that sacked him, with
+     the sack wiped.
+     What this reads, for every past season: seeded careers marked sacked and
+     waited through twelve weeks, every offer against that season's leagues
+     and the era's own club def; the newest offer taken, which must put the
+     manager at that club; the eight week floor on its own (a generator that
+     returns one constant keeps the phone silent, so the floor is all that
+     can answer); and a save from before the fix that still holds an offer
+     from a club of today, which must not be takeable and must be gone after
+     the next week, while an offer from a club of that season stays.
+     MEASURED 2026-10-11 on the engine before the fix (94647e74), these
+     seeds, 2010-11, 2015-16, 2005-06, 2020-21: of 119, 98, 109 and 103
+     calls, 99, 75, 83 and 85 came from a club not of that season and every
+     one of the rest printed a card of today (20, 23, 26, 18); of 60 jobs
+     taken an era, 10, 15, 17 and 10 moved the manager ("Barcelona to
+     Millwall: the save reads Barcelona"); of 30 floors an era, 24, 24, 24
+     and 30 were not a club of that season. The fixed engine reads 133, 94,
+     107 and 110 calls and 60 jobs taken an era, and its own counts are on
+     the line each era prints. The floors are about half of the fewest calls
+     (94) and the fewest jobs taken (60) these seeds gave an era on either
+     engine. Controls modernjobs and takestale put the old engine back as it
+     is bundled, one line each. */
+  const WILD_SEEDS = 60, WILD_WEEKS = 12, CALL_FLOOR = 45, TAKE_FLOOR = 30, FLOOR_CLUBS = 6;
+  const SILENT = [0.36, 0.5, 0.65, 0.8, 0.99];
+  const today = cm.REAL_LEAGUES.flatMap(l => l.clubs);
+  for (const eraId of Object.keys(ERA_LEAGUES)) {
+    const leagues = ERA_LEAGUES[eraId];
+    const leagueOfClub = new Map(leagues.flatMap(l => l.clubs.map(c => [c, l])));
+    let calls = 0, taken = 0, floors = 0;
+    const strangers = [], cards = [], unmoved = [], badFloor = [];
+    for (let i = 0; i < WILD_SEEDS; i++) {
+      Math.random = seeded(15013 + i * 7919);
+      const lg = leagues[i % leagues.length];
+      const club = lg.clubs[(i * 3) % lg.clubs.length];
+      const sacked = { ...startCareer(club, eraId), sacked: true };
+      let out = enterWilderness(sacked);
+      const rng = seeded(16001 + i * 104729);
+      const heard = new Set();
+      for (let w = 0; w < WILD_WEEKS; w++) {
+        out = wildernessWeek(out, rng);
+        for (const o of out.wilderness.offers) {
+          if (heard.has(o.club)) continue;
+          heard.add(o.club);
+          calls += 1;
+          const real = leagueOfClub.get(o.club);
+          if (!real) { strangers.push(`${o.club} of today's ${o.league} rang the sacked manager of ${club}`); continue; }
+          const def = eraClubDefFor(o.club, eraId);
+          if (o.league !== real.name || o.tier !== def.tier || o.budget !== def.budget) cards.push(`${o.club} as ${o.league}, tier ${o.tier}, ${o.budget}m (that season: ${real.name}, tier ${def.tier}, ${def.budget}m)`);
+        }
+      }
+      const offer = out.wilderness.offers[out.wilderness.offers.length - 1];
+      if (offer) {
+        taken += 1;
+        const next = acceptWildernessJob(out, offer.club);
+        if (!next || next.clubName !== offer.club || next.wilderness || next.sacked) unmoved.push(`${club} to ${offer.club}: ${next ? `the save reads ${next.clubName}` : 'nothing happened'}`);
+      }
+      if (i < FLOOR_CLUBS) {
+        for (const v of SILENT) {
+          const silent = { ...sacked, wilderness: { weeksOut: 7, formerClub: club, offers: [], seen: [] } };
+          const got = wildernessWeek(silent, () => v).wilderness.offers;
+          if (got.length !== 1) { fail(`${eraId}: eight silent weeks at ${club} opened ${got.length} jobs, the floor opens exactly one`); continue; }
+          floors += 1;
+          if (!leagueOfClub.has(got[0].club)) badFloor.push(`${got[0].club} of today's ${got[0].league}`);
+          else if (eraClubDefFor(got[0].club, eraId).tier < 3) badFloor.push(`${got[0].club}, tier ${eraClubDefFor(got[0].club, eraId).tier} that season`);
+        }
+      }
+    }
+    console.log(`   ${eraId}: ${calls} calls in ${WILD_SEEDS} sackings, ${strangers.length} from a club not of that season, ${cards.length} with a card of another season; ${taken} jobs taken, ${unmoved.length} did not move the manager; ${floors} floors, ${badFloor.length} not a small club of that season`);
+    if (calls < CALL_FLOOR) fail(`${eraId}: only ${calls} calls in ${WILD_SEEDS} sackings (floor ${CALL_FLOOR}); the offer check has too little to read`);
+    if (taken < TAKE_FLOOR) fail(`${eraId}: only ${taken} jobs taken in ${WILD_SEEDS} sackings (floor ${TAKE_FLOOR}); the move check has too little to read`);
+    if (floors !== FLOOR_CLUBS * SILENT.length) fail(`${eraId}: ${floors} floors read, ${FLOOR_CLUBS * SILENT.length} were asked for`);
+    if (strangers.length) fail(`${eraId}: ${strangers.length} of ${calls} job offers to a sacked manager come from a club that is not in that season's leagues, e.g. ${strangers.slice(0, 3).join('; ')}`);
+    if (cards.length) fail(`${eraId}: ${cards.length} of ${calls} job offers print a league, tier or budget that is not that season's, e.g. ${cards.slice(0, 2).join('; ')}`);
+    if (unmoved.length) fail(`${eraId}: ${unmoved.length} of ${taken} jobs taken from the out of work screen did not put the manager at that club, e.g. ${unmoved.slice(0, 3).join('; ')}`);
+    if (badFloor.length) fail(`${eraId}: ${badFloor.length} of ${floors} jobs the eight week floor opens are not at a small club of that season, e.g. ${badFloor.slice(0, 3).join('; ')}`);
+    /* The save from before the fix. Its offers were drawn from today's
+       clubs; one from a club that season does not hold cannot be honoured. */
+    const stale = today.find(c => !leagueOfClub.has(c));
+    const kept = leagues[1].clubs[5];
+    const home = leagues[0].clubs[0];
+    if (!stale) { fail(`${eraId}: every club of today is in that season's leagues, there is no stale offer to test`); continue; }
+    const card = name => ({ club: name, country: '', tier: 3, league: 'a league', brief: 'Stay up.', reason: 'They need a manager.', budget: 10, keenness: 40 });
+    Math.random = seeded(4242);
+    const old = { ...startCareer(home, eraId), sacked: true, wilderness: { weeksOut: 2, formerClub: home, offers: [card(stale), card(kept)], seen: [stale, kept] } };
+    const took = acceptWildernessJob(old, stale);
+    if (took) fail(`${eraId}: an old save's offer from ${stale}, a club that season does not hold, was taken and the save reads ${took.clubName}`);
+    const after = wildernessWeek(old, seeded(77)).wilderness.offers.map(o => o.club);
+    if (after.includes(stale)) fail(`${eraId}: an old save's offer from ${stale} is still on the out of work screen a week later`);
+    if (!after.includes(kept)) fail(`${eraId}: an old save's offer from ${kept}, a club of that season, was dropped with the stale one`);
+  }
+  Math.random = REAL_RANDOM_1304;
 }
 
 console.log('');

@@ -41,8 +41,17 @@
  * (3), every league club against its bake key and the Marco Rossi split (5),
  * and widened the section 4 bands to measured headroom (see BAND).
  *
- * Five negative controls, SIM_ERA2010_CONTROL=dupe|stale|twoleagues|noh2h|
- * misskey, each described where it is defined; each must end the run red.
+ * Round 1304: the modern world this harness compares with is the JOINED one
+ * the game reads (src/data/clubManagerWorldRosters.ts: the value table's bake,
+ * the A-League Men of Round 1035 and the Russian Premier League of Round
+ * 1052), no longer the bake alone. Reading the bake alone called Zenit's
+ * Wendel, a real 2026 man of the Russian file, a 2010 man on the 2026 market
+ * (red from Round 1052's commit 5010ae3f; docs/audits/ROUND-1304-NOTES.md has
+ * the table). Section 2 lists him as the pair of two men he is.
+ *
+ * Seven negative controls, SIM_ERA2010_CONTROL=dupe|stale|twoleagues|noh2h|
+ * misskey|leak|unlisted, each described where it is defined; each must end
+ * the run red.
  *
  * Run: node scripts/simEra2010.mjs
  */
@@ -53,15 +62,18 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'era2010Entry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'era2010.bundle.mjs');
+/* Round 1304: a name of its own for each run, so the harness and one of its
+   controls can run side by side without reading each other's bundle. */
+const TAG = `${process.pid}-${Date.now()}`;
+const ENTRY = path.join(os.tmpdir(), `era2010Entry-${TAG}.mjs`);
+const BUNDLE = path.join(os.tmpdir(), `era2010-${TAG}.bundle.mjs`);
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
 const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
-const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
+const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerWorldRosters.ts');
 export { engine, eras, era2010, modern };
 `);
 execSync(
@@ -70,6 +82,8 @@ execSync(
 );
 
 const { engine: cm, eras: ER, era2010: E10, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+fs.rmSync(ENTRY, { force: true });
+fs.rmSync(BUNDLE, { force: true });
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await ER.ensureAllEraRosters();
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
@@ -78,7 +92,9 @@ const {
   buildBoardObjectives, ERA_LEAGUES, eraPlayableClubs, worldSeasonLabel,
 } = cm;
 const { ERA2010_ROSTERS, ERA2010_META, ERA2010_PARTIAL } = E10;
-const { CM_ROSTERS } = MOD;
+/* Round 1304: the modern world is the joined one, the same object both
+   engine files read, so a league that joins the game joins this harness. */
+const { CM_WORLD_ROSTERS: CM_ROSTERS } = MOD;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -99,7 +115,13 @@ const REAL_RANDOM = Math.random;
      noh2h       (review fix) the Serie A table sorted without its head to head
                  rule: section 3's tiebreak check must fail.
      misskey     (review fix) Saint-Etienne's bake key misspelled the way a
-                 careless edit would: section 5's membership check must fail. */
+                 careless edit would: section 5's membership check must fail.
+     leak        (Round 1304) the modern save is handed the 2010 market, as a
+                 market cache that forgot the era would hand it: section 2's
+                 "2010-only ... is on the 2026 market" must fail.
+     unlisted    (Round 1304) Wendel taken off the list of verified pairs of
+                 two men: section 2's namesake pass must fail on Zenit's
+                 Wendel, which proves the pass reads the generated leagues. */
 /* Section 4's bands for the new leagues, on six seed MEANS. The first cut
    set the giant band at 3.5 from one sample of six (AC Milan 2.33), and the
    review showed that was a coin toss: the six seed mean of a healthy Milan
@@ -122,7 +144,7 @@ const REAL_RANDOM = Math.random;
    keeps its 11 floor (19.33 at the first cut). */
 const BAND = { giant: 5, contender: 8, thin: 11 };
 const CONTROL = process.env.SIM_ERA2010_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'twoleagues', 'noh2h', 'misskey'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'twoleagues', 'noh2h', 'misskey', 'leak', 'unlisted'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['AC Milan'] ?? []).find(p => p.n === 'Zlatan Ibrahimović');
@@ -225,12 +247,27 @@ console.log('2) The two worlds cannot leak into each other');
   else if (iniesta.age !== 25) fail(`market Iniesta is ${iniesta.age}, 2010 says 25`);
 
   Math.random = seeded(29);
-  const now = startCareer('Arsenal');
-  const nowNames = new Set(buildMarket(now).map(p => p.name));
-  // 2010-only players must not exist in 2026. Take them from the bake itself
+  let now = startCareer('Arsenal');
+  // 2010-only players must not exist in 2026. Take them from the data itself
   // so the check survives data refreshes: every 2010 player NOT in the 2026
-  // bake must be absent from the 2026 market.
+  // world must be absent from the 2026 market.
+  /* Round 1304: "the 2026 world" is the joined world the game reads. The
+     market comes out of the engine and this list out of the data files, so
+     the two can still disagree, which is the whole check. */
   const modernNames = new Set(Object.values(CM_ROSTERS).flat().map(p => p.n));
+  if (CONTROL === 'leak') {
+    const eraOnly = Object.values(ERA2010_ROSTERS).flat().filter(p => !modernNames.has(p.n)).length;
+    if (!eraOnly) controlRefuse('no 2010 man is missing from the modern world, so nobody could leak');
+    /* The era AND its year, or the save would read the 2010 world as it
+       stands sixteen seasons on, where almost every real man has retired. */
+    now = { ...now, eraId: 'era2010', startYear: ER.eraById('era2010').startYear };
+  }
+  const nowNames = new Set(buildMarket(now).map(p => p.name));
+  if (CONTROL === 'leak') {
+    const onIt = Object.values(ERA2010_ROSTERS).flat().filter(p => !modernNames.has(p.n) && nowNames.has(p.n)).length;
+    if (!onIt) controlRefuse('the market handed over holds no 2010-only man, so the control changed nothing');
+    console.log(`   CONTROL leak applied: the modern save reads the 2010 market at year zero, ${onIt} 2010-only men are on it`);
+  }
   let checked = 0, leaked = 0;
   for (const roster of Object.values(ERA2010_ROSTERS)) {
     for (const p of roster) {
@@ -266,7 +303,21 @@ console.log('2) The two worlds cannot leak into each other');
      Sanchez, a midfielder of 23 in the 2010 table, and 2026 Pachuca's, a
      right-back born 13 Apr 2002 (kicker); 2010 Bremen's Wesley, a midfielder
      born 24 Jun 1987 (kicker), and 2026 Roma's, a right-back of 22. */
-  const NAMESAKES = new Set(['Aaron Ramsey', 'Juan Rodríguez', 'Javi López', 'Diego López', 'Pablo Ibáñez', 'Pedro', 'Ederson', 'André Luiz', 'Juan', 'Carlos Sánchez', 'Wesley']);
+  /* Round 1304: the Russian Premier League of Round 1052 brought Zenit's
+     Wendel into the 2026 world, and this pass had never read him because it
+     read the bake alone. Two men: 2010 Bordeaux's Wendel Geraldo Mauricio e
+     Silva, a left sided midfielder, 27 in the 2010 table, born 8 April 1982
+     (ESPN's player page prints 4/8/1982 and five seasons at Bordeaux;
+     besoccer prints "Born on 8 April 1982 in Mariana"; both read 2026-10-11),
+     and Zenit's Wendel, a central midfielder of 29, born 1997-08-28 on three
+     squad lists of the committed ledger
+     scripts/data/gatheredSquads/russia2026/research.json. */
+  const NAMESAKES = new Set(['Aaron Ramsey', 'Juan Rodríguez', 'Javi López', 'Diego López', 'Pablo Ibáñez', 'Pedro', 'Ederson', 'André Luiz', 'Juan', 'Carlos Sánchez', 'Wesley', 'Wendel']);
+  if (CONTROL === 'unlisted') {
+    if (!NAMESAKES.has('Wendel')) controlRefuse('Wendel is not a listed pair');
+    NAMESAKES.delete('Wendel');
+    console.log('   CONTROL unlisted applied: Wendel is no longer a listed pair of two men');
+  }
   const eraByName = new Map();
   for (const roster of Object.values(ERA2010_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();

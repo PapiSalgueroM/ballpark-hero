@@ -17,7 +17,7 @@
  * (scripts/lib/eraDressingRoom.mjs).
  */
 import pw from './lib/playwrightLoader.mjs';
-import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -39,6 +39,8 @@ const CLAIMS = {
   'Federico Chiesa': 'Chiesa arrived on loan from Fiorentina, the window correction landed',
 };
 const DROP = Object.keys(CLAIMS);
+const LEAK_CHECK = 'no 2026 player leaked into 2020';
+let planted = false;
 const tally = { swaps: 0 };
 const stillNamed = new Set();
 if (ERA_CONTROL === 'drop') {
@@ -67,7 +69,9 @@ async function pick(page, nation, league) {
   await page.waitForTimeout(700);
   await page.locator(`text=${nation}`).first().click();
   await page.waitForTimeout(700);
-  await page.locator(`text=${league}`).first().click();
+  /* Round 1304: the league TILE, not any text. Since Round 1052 the line under the page title names the Russian
+     Premier League, so 'text=Premier League' pressed that sentence and the league step never moved on. */
+  await page.locator(`button:has-text("${league}")`).first().click();
   await page.waitForTimeout(700);
 }
 async function room(page, club, label) {
@@ -144,7 +148,12 @@ const cleanErrors = errors => errors.filter(e => !/supabase|Failed to fetch|CORS
   say(/Timo Werner/.test(r.squad), CLAIMS['Timo Werner']);
   const body = await page.locator('body').textContent();
   noteNamed(body);
-  say(!/Lamine Yamal/.test(body ?? ''), 'no 2026 player leaked into 2020');
+  /* Round 1304: read off the game, not the whole body, as the three older walks now do (their probe names are in
+     the guide since Round 971; this one's is not yet, and the guide may name whom it likes). ERA_CONTROL=ghost
+     writes the name into the squad panel and this check, and only it, must go red. */
+  if (ERA_CONTROL === 'ghost') planted = await plantGhost(page, 'Lamine Yamal');
+  const leaked = await namedInGame(page, 'Lamine Yamal');
+  say(leaked.length === 0, LEAK_CHECK + (leaked.length ? ` (written in the game at ${leaked.slice(0, 3).join(' | ')})` : ''));
   const pe = cleanErrors(errors);
   say(pe.length === 0, `no real page errors on the England walk (${pe.length ? pe[0] : 'clean'})`);
   await page.close();
@@ -176,6 +185,7 @@ const cleanErrors = errors => errors.filter(e => !/supabase|Failed to fetch|CORS
 await browser.close();
 console.log('');
 if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2020', failed, Object.values(CLAIMS), tally, [...stillNamed]));
+if (ERA_CONTROL === 'ghost') process.exit(judgeGhostControl('playEra2020', failed, LEAK_CHECK, planted));
 if (failures > 0) {
   console.error(`playEra2020: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
