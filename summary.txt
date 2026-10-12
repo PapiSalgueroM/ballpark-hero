@@ -1,0 +1,3 @@
+rivalFull exit=0 17s | simUsRivalSense: 39 checks, 0 failed (full size)
+rivalFresh exit=0 18s | simUsRivalSense: 39 checks, 0 failed (full size)
+c-onlyhimshut exit=1 18s | simUsRivalSense: 39 checks, 1 failed (full size), red sections: N.F5
