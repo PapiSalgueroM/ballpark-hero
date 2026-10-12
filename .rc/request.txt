@@ -1,0 +1,6 @@
+storyHead: node scripts/simCareerStory.mjs
+storyMain: mkdir -p /tmp/bA && git archive 48cb9d4b | tar -x -C /tmp/bA && ln -s "$PWD/node_modules" /tmp/bA/node_modules && cd /tmp/bA && node scripts/simCareerStory.mjs
+moneyHead: node scripts/simMoney.mjs
+moneyMain: mkdir -p /tmp/bB && git archive 48cb9d4b | tar -x -C /tmp/bB && ln -s "$PWD/node_modules" /tmp/bB/node_modules && cd /tmp/bB && node scripts/simMoney.mjs
+phoneHead: node scripts/simPhone2.mjs
+phoneMain: mkdir -p /tmp/bC && git archive 48cb9d4b | tar -x -C /tmp/bC && ln -s "$PWD/node_modules" /tmp/bC/node_modules && cd /tmp/bC && node scripts/simPhone2.mjs
