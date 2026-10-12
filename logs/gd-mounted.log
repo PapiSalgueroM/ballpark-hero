@@ -1,0 +1,4 @@
+mounted exit=1 | control mounted: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("no file under src imports"); sections red: 6
+static exit=1 | control static: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("import no story law"); sections red: 6
+storyleak exit=1 | control storyleak: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("import no story law"); sections red: 6
+gdctl: 3 of 3 controls fired.

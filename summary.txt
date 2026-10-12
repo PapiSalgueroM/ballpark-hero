@@ -1,0 +1,9 @@
+vitest-fo exit=1 40s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficePostseason.test.tsx,title=src/components/front-office/FrontOfficePostsea
+simGmGameDay exit=0 110s | simGmGameDay: 462 checks, 0 failed
+tsc exit=0 113s | 
+simGmReload exit=0 21s | control "replay": 5 failure(s) fired as expected on all four boards, the check works
+simSessionMarks exit=0 1s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 36 controls is in the board exactly once.
+simNflGmDesk exit=0 34s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+gd-mounted exit=0 230s | gdctl: 3 of 3 controls fired.
