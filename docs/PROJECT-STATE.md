@@ -1,3 +1,80 @@
+## Release AX LIVE, 2026-10-12 05:00 EDT: Build Your XI confirms more picks from its own records, real Belgian opponent names in replays, a Press room and saved contract talks (three of the other lane's pull requests), and three rounds of this lane (past seasons of Club Manager stay in their season, football scores in the NFL front office, the league book made whole)
+
+Claude lane (session G). main a89ac1df, deployment 32e67725-fd19-4149-b70a-52d446af3396, entry index-BniRpUTm.js (was index-BMYYIgf0.js, Release AW,
+published 20:55 on 2026-10-11). The edge function validate-player was deployed first: version 13 at 02:53 EDT, one file, verify_jwt true as before; read back and hashed, sha256 dd0e02e9c9218f12455fe4efc685cb5a6b01fb6e119140e6717e2d9f37aa249d, byte equal to the release file (version 12 was main's file, 6d86c562...). A call for Messi at Barcelona on the right wing answers valid from the records; Neuer at Bayern as a striker answers valid false, unverified.
+Proof at 05:02: x-deployment-id carries 32e67725; /whats-new carries all six new entries ("scores that read like football", "a past season's transfer news stays in that season", "contract talks that stay put", "the Press room", "real club names in the 2025/26 Belgian replay", "more picks confirmed straight from our records"); /, /soccer-career, /club-manager, /front-office, /nfl-my-career, /nba-my-career and /build-your-xi answer 200; a browser read no console error on /front-office, /nfl-my-career and /build-your-xi. The host showed the pushed commit three and a half minutes after the push (04:50) and the deploy waited for it. Twelfth publish since 2026-10-08.
+
+What shipped:
+- The other lane's PR231 (Rounds 1274 to 1276). Build Your XI confirms far more picks from the game's own
+  records (1,707 model calls became 1,409 on its fleet: 304 newly verified from the records), so fewer picks
+  reach the AI allowance the owner reported. A pick the game cannot verify still says try again and burns no
+  guess.
+- PR232 (Rounds 1271 to 1273). Soccer Career: a 2025/26 replay in the Belgian top division names the league's
+  real sixteen clubs (membership only, on the league's own site and a results data set; four opponent slots
+  read "Opponent not recorded" because the game's season has more opponents than the league has clubs).
+- PR217 (Rounds 1230 to 1234). Soccer Career: a Press room (answer the press, make a promise, be held to it).
+  The four US My Careers: contract talks that are saved, a chance wheel for a push, an offer comparison; a talk
+  cannot be rerolled by a reload, Back or a second tab.
+- This lane's Round 1304. Club Manager: in a past season (2005, 2010, 2015, 2020) the news feed, Latest
+  Transfers and the rival bidder name only clubs of that season (304 of 1,809 deals and 106 of 136 rivals named
+  a club of today's game before), and a manager sacked in a past season is offered jobs by clubs of that
+  season. The six era fences are green and in the gate.
+- Round 1305. The NBA front office's draft night shows the picks the engine really made. The NFL front office
+  tells every score as a score football can produce and keeps the season's results in the save.
+- Round 1306. Club Manager's league book made whole (thin clubs dealt over the men they have, never an invented
+  name; the assist check; a late book for an old save). Nothing a player sees yet: the boards read it next.
+
+Found and fixed inside the pieces, by ten adversarial reviewers and five fix passes (reports in
+C:\Users\antho\dukb-handoff\2026-10-10\results-g\, names ending -AX.md, -1304.md, -1305.md, -1306.md, -AXG.md):
+1. NATURAL PLAY MADE A PRESS ROOM UNREADABLE: one corruption event rewrites a season after it settled a goals
+   promise, and as merged that player lost the room for the rest of the career. Ruling C3 applies: the room
+   reads as absent and is offered again (it comes back empty; 13 of 1,200 careers).
+2. A false statement about the real Belgian league in What's New (it played more league matches than the
+   game's 38, not fewer): reworded to a statement about the game.
+3. A spent push came back after a reload in one path, and a push could be taken once in every tab: the board
+   asks the save before a push, a sign or a decline, held by a walk with its control.
+4. After Push for more the wheel, and then the answer, could sit off the screen on a phone: both come into
+   view.
+5. PR217 moved code under the anchors of six harnesses and two unit files that its own workflow never ran
+   (seven negative controls had stopped firing): all follow the merged code, no assertion moved.
+6. Round 1304's walks found the two defects of past seasons above, which no harness guarded.
+7. Round 1305's review: a saved game log that did not read is never written back to storage.
+
+GATE ON GITHUB RUNNERS on 35717741 (the join 354b06d6 plus six budget rows), ten requests sent 02:16: lane A 81 of 81, lane B 94 of 94, lane C 69 of 69 (the whole vitest suite and the six era harnesses among them), the sweep and play lane 20 of 20, the browser lanes 25 of 26 and 32 of 32 (playSoccerCareer check 6 on a blocked runner, green live), the other lane's walks 20 of 20, the kits 27 of 27 (Release AW's five Soccer Career kits, Build Your XI's record positions, the Belgian labels pure and in a browser, the Press and market kit), the special lines green (playCmQuickSubs, playSaveKeeper against a build from before the keeper, the front office board controls, and both controls of simDailyDeals FIRED on their own dates), the live pass 17 of 17 (playSoccerCareer all checks, playGames on eight routes, and simValidatePlayerRecords green against the live table with the release's position table, its crossrow control on with one finding). No unexpected red. The committed head with the build output re-proven on a plain build, 20 of 20. Before the gate the join had run every name of the gate lists, the whole vitest suite (7,262 passed) and every harness, walk and control of the four pieces on the same tree (567 lines over 30 requests).
+Budgets moved, each with its measured cause in the row: /soccer-career 824K (the Press room on the playing screen), /nfl-my-career 485K (the saved contract talks, the wheel and the comparison in the board the four US careers share), /front-office 364K (Round 1305), /club-manager 590K, /manager-hot-seat 607K and /deadline-day 617K (Rounds 1304 and 1306 in the Club Manager engine). The flagship needs 2650 KB raw under its 2700 KB ceiling; the largest Club Manager save is 193,420 bytes under 203,000.
+Build output: the saved page of /whats-new with its ledger line and its sitemap date (four pages changed only their head tag order and stay as committed).
+
+Known and left for follow ups: scripts/playWilderness.mjs is a coin toss by its own header (red once in three runs on the join, green alone; in no gate list); scripts/simWritesAreSent.mjs cannot drive Guess the Nation to a finish on a runner (red on main the same way; green in the live pass); playFoHub counts five hub boxes and there are nine since the GM desks, and playGmPress step 4 is red on main; simGmCalendar, simGmDealTableFixture, simGmStaff, simGmXp, simActivityNotCompletion and simSafari are red on main and in no gate list; Round 1306's video referee arm reads two to ten reviews on a default fleet (a measured floor is owed); the weight rows of the Club Manager engine pages have under 1K of room again; penalties by review stay off; Round 1307 (the NFL front office's game day tile and Watch) is built on r1307-gm-tile-watch and waits for its adversarial review.
+
+### For Codex
+1. Release AX is on main at a89ac1df and live. Your PR231, PR232 and PR217 shipped whole: close the three; a
+   follow up goes on a new branch from main. The edge function validate-player is deployed from main's file.
+2. YOUR FILES THIS TRAIN EDITED (the full lists: results-g\finish-AX.md section 10 and fix-AX.md section 5):
+   eleven edits to eight files, among them the Press room's reader (ruling C3), nine pinned base constants in
+   five kits, three repairs of scripts/simSoccerOpponentLabels.mjs so it stands on a newer base, the anchors of
+   simUsCareerSaveRetry, simUsCareerPractice, simUsCareerActionConfirm, simFreeAgencyFeedback and
+   simExtensionResponseMotion, and the walks playFreeAgency and playExtension (red since the wheel, in no list).
+3. OWED TO YOUR FILES, none blocking: the Press room keeps nothing after the Golden Boot Arithmetic deal (a
+   promise settled on a season that a later event rewrites: your design to cure); the wheel's result line under
+   the fold at 320 by 568 when it opens low; the Press room opens on its rules every time; "2028" against
+   "2028/29"; "Recorded: 31" with no unit; type under 12px on the talk screens; the Belgian label keys on the
+   year and the club's name and never reads the league (no wrong label is reachable today); a receipt file in
+   the repo for the Belgian sources; the guides say nothing of the four new mechanics; your workflows
+   xi-record-position-fit.yml and career-opponent-labels.yml assert their old base and are red on main: retire
+   them as PR225 retired the others.
+4. RELEASE AY is next for your Club Manager leg (PR224, PR226), on main as it is now. The lead's rulings are in
+   C:\Users\antho\dukb-handoff\2026-10-10\briefs\lead-AY-rulings.md: a career that started before the release
+   never writes a ledger (old saves byte equal for life, deals included); an unreadable ledger is read as
+   absent and the next deal writes a fresh one; the dailies never hold a seed or a ledger. Round 1304 owns
+   scripts/simEras.mjs: ONE year zero oracle, and yours stays its own harness. Round 1306 changed what a thin
+   club's eleven is (partialEleven): whichever lands second takes the league rules digest again.
+5. THE US BOARD RECORDING WINDOW IS CLOSED: scripts/data/usBoardFixture.json was taken once at c4a91cdc. This
+   lane's next rounds that take it (NHL week by week, the MLB and NHL rival) are cut from main now.
+6. Still held, unchanged: PR223, PR227, PR229, PR233 (rule its career engine with the lead before READY),
+   PR234 (a part that cannot be verified is read as absent, never a refused save). Please close PR210, PR195,
+   PR194. This lane's Round 1307 (the NFL front office's game day tile and Watch) is building on the four front
+   office boards it claimed; its next round numbers are 1308 to 1349.
+
 ## Release AW LIVE, 2026-10-11 20:55 EDT: VAR in Club Manager (goals, in the competitions that really use it), and eight of the other lane's pull requests for Soccer Career (pay by age and form from 30, veteran contract talks, the agent review, the agent brief, a national team comeback, an announced farewell season)
 
 Claude lane (session G). main ee0ec4b8, deployment cd8577d0-5d1e-41f5-8423-908931ff559a, entry index-BMYYIgf0.js (was index-BXY5no68.js, Release AV,
