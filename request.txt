@@ -1,0 +1,11 @@
+# Round 1311 fixer: playClubManager's sack rate on origin/main 48cb9d4b, six more runs (src put back and rebuilt in place)
+#!serve
+#!playwright
+#!serial
+main-build: git checkout 48cb9d4b -- src && node_modules/.bin/vite build > /dev/null 2>&1 && echo "built src of 48cb9d4b into dist"
+main-5: node scripts/playClubManager.mjs
+main-6: node scripts/playClubManager.mjs
+main-7: node scripts/playClubManager.mjs
+main-8: node scripts/playClubManager.mjs
+main-9: node scripts/playClubManager.mjs
+main-10: node scripts/playClubManager.mjs
