@@ -1,0 +1,2 @@
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
