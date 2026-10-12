@@ -1,0 +1,66 @@
+{
+ "summary": {
+  "verdictCareers": 220,
+  "yesCareers": 400,
+  "yesTried": 559,
+  "careers": 620,
+  "equalToEnd": 620,
+  "differ": 0,
+  "differByPolicy": {
+   "verdict": 0,
+   "yes": 0
+  },
+  "unattributed": 0,
+  "offersAtFirstDiff": {
+   "base": 0,
+   "head": 0
+  },
+  "zeroOfferAtFirstDiff": {
+   "base": 0,
+   "head": 0
+  },
+  "nextSeasonLeagueApps": {
+   "base": [],
+   "head": []
+  },
+  "nextSeasonMean": {
+   "base": 0,
+   "head": 0
+  },
+  "nextSeasonOnLoan": {
+   "base": 0,
+   "head": 0
+  },
+  "tally": {
+   "base": {
+    "careers": 0,
+    "loanListedWindows": 0,
+    "loanListedZeroOffer": 0,
+    "loanListedOffers": 0,
+    "loanTiers": {},
+    "loansTaken": 71,
+    "clubLoanVerdicts": 71,
+    "clubLoanTiers": {
+     "2": 17,
+     "3": 54
+    },
+    "clubLoanMinUnder20": 0
+   },
+   "head": {
+    "careers": 0,
+    "loanListedWindows": 0,
+    "loanListedZeroOffer": 0,
+    "loanListedOffers": 0,
+    "loanTiers": {},
+    "loansTaken": 71,
+    "clubLoanVerdicts": 71,
+    "clubLoanTiers": {
+     "2": 17,
+     "3": 54
+    },
+    "clubLoanMinUnder20": 0
+   }
+  }
+ },
+ "differing": []
+}

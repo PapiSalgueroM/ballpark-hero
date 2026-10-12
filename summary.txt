@@ -1,0 +1,5 @@
+simHarnessAnchors exit=1 45s | simHarnessAnchors: 1 failure(s)
+simSoccerLoanMinutes exit=0 56s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+f1 exit=0 182s | F1 done: 620 careers, 0 differ, every one first at a loan listed window the filter bit (club loan verdicts reached: base 71, head 71; zero offer loan listings: base 0, he
+f1-bite exit=0 175s | CONTROL FIRED f1 bite
+simCreation-base35 exit=1 318s | 1 FAILURES

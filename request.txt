@@ -1,0 +1,5 @@
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs
+simCreation-base35: git worktree add -f /tmp/base35 35f85630 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base35/node_modules && cd /tmp/base35 && node scripts/simCreation.mjs
+f1: node .rc/x/fleetF1.mjs 220 400
+f1-bite: F1_CONTROL=bite node .rc/x/fleetF1.mjs 220 400 > "$RC_OUT/f1-bite.txt" 2>&1; tail -4 "$RC_OUT/f1-bite.txt" | cut -c1-400; grep -Eq "^F1 done: [0-9]+ careers, [1-9][0-9]* differ" "$RC_OUT/f1-bite.txt" && echo "CONTROL FIRED f1 bite"

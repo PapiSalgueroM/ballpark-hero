@@ -1,0 +1,5494 @@
+{
+ "summary": {
+  "verdictCareers": 220,
+  "yesCareers": 400,
+  "yesTried": 559,
+  "careers": 620,
+  "equalToEnd": 552,
+  "differ": 68,
+  "differByPolicy": {
+   "verdict": 6,
+   "yes": 62
+  },
+  "unattributed": 0,
+  "offersAtFirstDiff": {
+   "base": 68,
+   "head": 0
+  },
+  "zeroOfferAtFirstDiff": {
+   "base": 0,
+   "head": 68
+  },
+  "nextSeasonLeagueApps": {
+   "base": [
+    26,
+    18,
+    26,
+    31,
+    23,
+    30,
+    19,
+    23,
+    24,
+    23,
+    31,
+    22,
+    17,
+    20,
+    27,
+    17,
+    26,
+    26,
+    23,
+    18,
+    28,
+    23,
+    31,
+    23,
+    24,
+    23,
+    23,
+    23,
+    17,
+    23,
+    22,
+    32,
+    24,
+    24,
+    31,
+    29,
+    24,
+    28,
+    24,
+    31,
+    22,
+    17,
+    24,
+    28,
+    28,
+    30,
+    24,
+    21,
+    31,
+    24,
+    23,
+    27,
+    23,
+    22,
+    27,
+    23,
+    24,
+    25,
+    24,
+    21,
+    30,
+    18,
+    23,
+    23,
+    22,
+    24,
+    18,
+    28
+   ],
+   "head": [
+    4,
+    5,
+    4,
+    7,
+    5,
+    7,
+    3,
+    5,
+    6,
+    2,
+    5,
+    2,
+    4,
+    6,
+    3,
+    5,
+    5,
+    6,
+    3,
+    1,
+    6,
+    6,
+    5,
+    6,
+    5,
+    5,
+    3,
+    2,
+    5,
+    2,
+    2,
+    4,
+    5,
+    4,
+    6,
+    7,
+    3,
+    6,
+    2,
+    6,
+    1,
+    4,
+    7,
+    7,
+    6,
+    5,
+    6,
+    1,
+    5,
+    4,
+    6,
+    2,
+    2,
+    5,
+    5,
+    3,
+    7,
+    3,
+    7,
+    2,
+    5,
+    5,
+    5,
+    6,
+    6,
+    2,
+    4,
+    5
+   ]
+  },
+  "nextSeasonMean": {
+   "base": 24.28,
+   "head": 4.47
+  },
+  "nextSeasonOnLoan": {
+   "base": 68,
+   "head": 0
+  },
+  "tally": {
+   "base": {
+    "careers": 0,
+    "loanListedWindows": 0,
+    "loanListedZeroOffer": 0,
+    "loanListedOffers": 0,
+    "loanTiers": {},
+    "loansTaken": 71,
+    "clubLoanVerdicts": 71,
+    "clubLoanTiers": {
+     "2": 17,
+     "3": 54
+    },
+    "clubLoanMinUnder20": 0
+   },
+   "head": {
+    "careers": 0,
+    "loanListedWindows": 68,
+    "loanListedZeroOffer": 68,
+    "loanListedOffers": 0,
+    "loanTiers": {},
+    "loansTaken": 0,
+    "clubLoanVerdicts": 0,
+    "clubLoanTiers": {},
+    "clubLoanMinUnder20": 0
+   }
+  }
+ },
+ "differing": [
+  {
+   "id": 15,
+   "policy": "verdict",
+   "seed": 797034466,
+   "steps": 125,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 59,
+    "tier": 2,
+    "club": "New York City FC",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "AZ Alkmaar",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "AZ Alkmaar",
+     "tier": 3,
+     "leagueApps": 26,
+     "apps": 33,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "New York City FC",
+     "tier": 2,
+     "leagueApps": 4,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    }
+   }
+  },
+  {
+   "id": 28,
+   "policy": "verdict",
+   "seed": 797034479,
+   "steps": 184,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 76,
+    "tier": 1,
+    "club": "Man United",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "AC Milan",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "AC Milan",
+     "tier": 2,
+     "leagueApps": 18,
+     "apps": 16,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Man United",
+     "tier": 1,
+     "leagueApps": 5,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 21
+    },
+    "head": {
+     "age": 34,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 49,
+   "policy": "verdict",
+   "seed": 797034500,
+   "steps": 166,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 66,
+    "tier": 2,
+    "club": "Palmeiras",
+    "year": 2025,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Wydad Casablanca",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2026,
+     "age": 22,
+     "club": "Wydad Casablanca",
+     "tier": 3,
+     "leagueApps": 26,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2026,
+     "age": 22,
+     "club": "Palmeiras",
+     "tier": 2,
+     "leagueApps": 4,
+     "apps": 6,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 34,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 34,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 109,
+   "policy": "verdict",
+   "seed": 797034560,
+   "steps": 202,
+   "equal": false,
+   "firstDiff": {
+    "step": 30,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 67,
+    "tier": 2,
+    "club": "Corinthians",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Esperance",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Esperance",
+     "tier": 3,
+     "leagueApps": 31,
+     "apps": 36,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Corinthians",
+     "tier": 2,
+     "leagueApps": 7,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 21
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 22
+    }
+   }
+  },
+  {
+   "id": 111,
+   "policy": "verdict",
+   "seed": 797034562,
+   "steps": 131,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "Al Hilal",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Lille",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Lille",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Al Hilal",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 31,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    }
+   }
+  },
+  {
+   "id": 168,
+   "policy": "verdict",
+   "seed": 797034619,
+   "steps": 151,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 67,
+    "tier": 2,
+    "club": "Tottenham",
+    "year": 2025,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Columbus Crew",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2026,
+     "age": 22,
+     "club": "Columbus Crew",
+     "tier": 3,
+     "leagueApps": 30,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2026,
+     "age": 22,
+     "club": "Tottenham",
+     "tier": 2,
+     "leagueApps": 7,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 17
+    }
+   }
+  },
+  {
+   "id": 10006,
+   "policy": "yes",
+   "seed": 20983,
+   "steps": 149,
+   "equal": false,
+   "firstDiff": {
+    "step": 47,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 22,
+    "overall": 65,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2026,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Botafogo",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    7,
+    7
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2027,
+     "age": 23,
+     "club": "Botafogo",
+     "tier": 3,
+     "leagueApps": 19,
+     "apps": 23,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2027,
+     "age": 23,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 3,
+     "apps": 4,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    }
+   }
+  },
+  {
+   "id": 10009,
+   "policy": "yes",
+   "seed": 20986,
+   "steps": 119,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 67,
+    "tier": 2,
+    "club": "Athletic Bilbao",
+    "year": 2029,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Mechelen",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2030,
+     "age": 21,
+     "club": "Mechelen",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2030,
+     "age": 21,
+     "club": "Athletic Bilbao",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 31,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10010,
+   "policy": "yes",
+   "seed": 20987,
+   "steps": 165,
+   "equal": false,
+   "firstDiff": {
+    "step": 10,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 67,
+    "tier": 2,
+    "club": "Leipzig",
+    "year": 2022,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "Penarol",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2023,
+     "age": 19,
+     "club": "Penarol",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 20,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2023,
+     "age": 19,
+     "club": "Leipzig",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 31,
+     "retired": true,
+     "seasons": 15
+    }
+   }
+  },
+  {
+   "id": 10025,
+   "policy": "yes",
+   "seed": 21002,
+   "steps": 114,
+   "equal": false,
+   "firstDiff": {
+    "step": 43,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 22,
+    "overall": 63,
+    "tier": 2,
+    "club": "Girona",
+    "year": 2031,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Augsburg",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    7,
+    7
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2032,
+     "age": 23,
+     "club": "Augsburg",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2032,
+     "age": 23,
+     "club": "Girona",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10030,
+   "policy": "yes",
+   "seed": 21007,
+   "steps": 129,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Al Ahli",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Al Ahli",
+     "tier": 3,
+     "leagueApps": 31,
+     "apps": 34,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10035,
+   "policy": "yes",
+   "seed": 21012,
+   "steps": 159,
+   "equal": false,
+   "firstDiff": {
+    "step": 43,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 72,
+    "tier": 1,
+    "club": "Flamengo",
+    "year": 2030,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Dortmund",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Dortmund",
+     "tier": 2,
+     "leagueApps": 22,
+     "apps": 31,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Flamengo",
+     "tier": 1,
+     "leagueApps": 2,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    }
+   }
+  },
+  {
+   "id": 10037,
+   "policy": "yes",
+   "seed": 21014,
+   "steps": 207,
+   "equal": false,
+   "firstDiff": {
+    "step": 47,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 75,
+    "tier": 1,
+    "club": "Boca Juniors",
+    "year": 2030,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Athletic Bilbao",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Athletic Bilbao",
+     "tier": 2,
+     "leagueApps": 17,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Boca Juniors",
+     "tier": 1,
+     "leagueApps": 4,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10038,
+   "policy": "yes",
+   "seed": 21015,
+   "steps": 175,
+   "equal": false,
+   "firstDiff": {
+    "step": 24,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 75,
+    "tier": 1,
+    "club": "Benfica",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Inter Miami",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Inter Miami",
+     "tier": 2,
+     "leagueApps": 20,
+     "apps": 22,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Benfica",
+     "tier": 1,
+     "leagueApps": 6,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 34,
+     "retired": true,
+     "seasons": 18
+    }
+   }
+  },
+  {
+   "id": 10045,
+   "policy": "yes",
+   "seed": 21022,
+   "steps": 210,
+   "equal": false,
+   "firstDiff": {
+    "step": 42,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 64,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2030,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Kawasaki Frontale",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Kawasaki Frontale",
+     "tier": 3,
+     "leagueApps": 27,
+     "apps": 34,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 3,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 38,
+     "retired": true,
+     "seasons": 22
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10046,
+   "policy": "yes",
+   "seed": 21023,
+   "steps": 137,
+   "equal": false,
+   "firstDiff": {
+    "step": 51,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 22,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2026,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Leverkusen",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    7,
+    7
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2027,
+     "age": 23,
+     "club": "Leverkusen",
+     "tier": 3,
+     "leagueApps": 17,
+     "apps": 17,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2027,
+     "age": 23,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 31,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10050,
+   "policy": "yes",
+   "seed": 21027,
+   "steps": 129,
+   "equal": false,
+   "firstDiff": {
+    "step": 60,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 23,
+    "overall": 67,
+    "tier": 2,
+    "club": "Lyon",
+    "year": 2027,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Cercle Brugge",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    8,
+    8
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 24,
+     "club": "Cercle Brugge",
+     "tier": 3,
+     "leagueApps": 26,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 24,
+     "club": "Lyon",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10051,
+   "policy": "yes",
+   "seed": 21028,
+   "steps": 126,
+   "equal": false,
+   "firstDiff": {
+    "step": 41,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 67,
+    "tier": 2,
+    "club": "Corinthians",
+    "year": 2030,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Alanyaspor",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Alanyaspor",
+     "tier": 3,
+     "leagueApps": 26,
+     "apps": 29,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Corinthians",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10056,
+   "policy": "yes",
+   "seed": 21033,
+   "steps": 150,
+   "equal": false,
+   "firstDiff": {
+    "step": 35,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 71,
+    "tier": 1,
+    "club": "Man United",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Club Brugge",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Club Brugge",
+     "tier": 2,
+     "leagueApps": 23,
+     "apps": 36,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Man United",
+     "tier": 1,
+     "leagueApps": 3,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    }
+   }
+  },
+  {
+   "id": 10067,
+   "policy": "yes",
+   "seed": 21044,
+   "steps": 188,
+   "equal": false,
+   "firstDiff": {
+    "step": 34,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 64,
+    "tier": 2,
+    "club": "Palmeiras",
+    "year": 2029,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "West Ham",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2030,
+     "age": 21,
+     "club": "West Ham",
+     "tier": 3,
+     "leagueApps": 18,
+     "apps": 23,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2030,
+     "age": 21,
+     "club": "Palmeiras",
+     "tier": 2,
+     "leagueApps": 1,
+     "apps": 10,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10069,
+   "policy": "yes",
+   "seed": 21046,
+   "steps": 185,
+   "equal": false,
+   "firstDiff": {
+    "step": 40,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 67,
+    "tier": 2,
+    "club": "Stuttgart",
+    "year": 2030,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Al Ahli",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Al Ahli",
+     "tier": 3,
+     "leagueApps": 28,
+     "apps": 31,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Stuttgart",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10087,
+   "policy": "yes",
+   "seed": 21064,
+   "steps": 193,
+   "equal": false,
+   "firstDiff": {
+    "step": 66,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 23,
+    "overall": 67,
+    "tier": 2,
+    "club": "Napoli",
+    "year": 2032,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Al Qadsiah",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    8,
+    8
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2033,
+     "age": 24,
+     "club": "Al Qadsiah",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 29,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2033,
+     "age": 24,
+     "club": "Napoli",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 7,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10093,
+   "policy": "yes",
+   "seed": 21070,
+   "steps": 202,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2028,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Sint-Truiden",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Sint-Truiden",
+     "tier": 3,
+     "leagueApps": 31,
+     "apps": 36,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10099,
+   "policy": "yes",
+   "seed": 21076,
+   "steps": 204,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 75,
+    "tier": 1,
+    "club": "Sao Paulo",
+    "year": 2028,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Fenerbahce",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Fenerbahce",
+     "tier": 2,
+     "leagueApps": 23,
+     "apps": 32,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Sao Paulo",
+     "tier": 1,
+     "leagueApps": 6,
+     "apps": 10,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10110,
+   "policy": "yes",
+   "seed": 21087,
+   "steps": 159,
+   "equal": false,
+   "firstDiff": {
+    "step": 62,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 23,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2027,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Rapid Wien",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    8,
+    8
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 24,
+     "club": "Rapid Wien",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 32,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 24,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 34,
+     "retired": true,
+     "seasons": 18
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    }
+   }
+  },
+  {
+   "id": 10111,
+   "policy": "yes",
+   "seed": 21088,
+   "steps": 177,
+   "equal": false,
+   "firstDiff": {
+    "step": 30,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 67,
+    "tier": 2,
+    "club": "AC Milan",
+    "year": 2029,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Malmo FF",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2030,
+     "age": 21,
+     "club": "Malmo FF",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2030,
+     "age": 21,
+     "club": "AC Milan",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10130,
+   "policy": "yes",
+   "seed": 21107,
+   "steps": 124,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 62,
+    "tier": 2,
+    "club": "Marseille",
+    "year": 2023,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Jeonbuk Motors",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Jeonbuk Motors",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 27,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Marseille",
+     "tier": 2,
+     "leagueApps": 3,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10131,
+   "policy": "yes",
+   "seed": 21108,
+   "steps": 124,
+   "equal": false,
+   "firstDiff": {
+    "step": 43,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 22,
+    "overall": 63,
+    "tier": 2,
+    "club": "Palmeiras",
+    "year": 2031,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Brondby IF",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    7,
+    7
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2032,
+     "age": 23,
+     "club": "Brondby IF",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2032,
+     "age": 23,
+     "club": "Palmeiras",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10144,
+   "policy": "yes",
+   "seed": 21121,
+   "steps": 181,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 76,
+    "tier": 1,
+    "club": "Chelsea",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Dortmund",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Dortmund",
+     "tier": 2,
+     "leagueApps": 17,
+     "apps": 21,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Chelsea",
+     "tier": 1,
+     "leagueApps": 5,
+     "apps": 10,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    }
+   }
+  },
+  {
+   "id": 10157,
+   "policy": "yes",
+   "seed": 21134,
+   "steps": 143,
+   "equal": false,
+   "firstDiff": {
+    "step": 32,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 66,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2029,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Monaco",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2030,
+     "age": 21,
+     "club": "Monaco",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2030,
+     "age": 21,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 31,
+     "retired": true,
+     "seasons": 15
+    }
+   }
+  },
+  {
+   "id": 10165,
+   "policy": "yes",
+   "seed": 21142,
+   "steps": 195,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 74,
+    "tier": 1,
+    "club": "River Plate",
+    "year": 2028,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Tottenham",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Tottenham",
+     "tier": 2,
+     "leagueApps": 22,
+     "apps": 32,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "River Plate",
+     "tier": 1,
+     "leagueApps": 2,
+     "apps": 7,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10178,
+   "policy": "yes",
+   "seed": 21155,
+   "steps": 127,
+   "equal": false,
+   "firstDiff": {
+    "step": 9,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 67,
+    "tier": 2,
+    "club": "Lyon",
+    "year": 2022,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "Wolves",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2023,
+     "age": 19,
+     "club": "Wolves",
+     "tier": 3,
+     "leagueApps": 32,
+     "apps": 37,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2023,
+     "age": 19,
+     "club": "Lyon",
+     "tier": 2,
+     "leagueApps": 4,
+     "apps": 6,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10180,
+   "policy": "yes",
+   "seed": 21157,
+   "steps": 146,
+   "equal": false,
+   "firstDiff": {
+    "step": 10,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2022,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "Nice",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2023,
+     "age": 19,
+     "club": "Nice",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2023,
+     "age": 19,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    }
+   }
+  },
+  {
+   "id": 10220,
+   "policy": "yes",
+   "seed": 21197,
+   "steps": 204,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 68,
+    "tier": 2,
+    "club": "Stuttgart",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Fulham",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Fulham",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Stuttgart",
+     "tier": 2,
+     "leagueApps": 4,
+     "apps": 7,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 38,
+     "retired": true,
+     "seasons": 22
+    }
+   }
+  },
+  {
+   "id": 10240,
+   "policy": "yes",
+   "seed": 21217,
+   "steps": 199,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "Tottenham",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Cruz Azul",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Cruz Azul",
+     "tier": 3,
+     "leagueApps": 31,
+     "apps": 35,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Tottenham",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 14,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10281,
+   "policy": "yes",
+   "seed": 21258,
+   "steps": 127,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "Brighton",
+    "year": 2028,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Ulsan HD",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Ulsan HD",
+     "tier": 3,
+     "leagueApps": 29,
+     "apps": 33,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Brighton",
+     "tier": 2,
+     "leagueApps": 7,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10301,
+   "policy": "yes",
+   "seed": 21278,
+   "steps": 125,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 64,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2029,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Slavia Prague",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2030,
+     "age": 21,
+     "club": "Slavia Prague",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2030,
+     "age": 21,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 3,
+     "apps": 10,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10304,
+   "policy": "yes",
+   "seed": 21281,
+   "steps": 123,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 68,
+    "tier": 2,
+    "club": "Tottenham",
+    "year": 2023,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Ulsan HD",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Ulsan HD",
+     "tier": 3,
+     "leagueApps": 28,
+     "apps": 22,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Tottenham",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10318,
+   "policy": "yes",
+   "seed": 21295,
+   "steps": 212,
+   "equal": false,
+   "firstDiff": {
+    "step": 23,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 62,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Everton",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Everton",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 29,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10327,
+   "policy": "yes",
+   "seed": 21304,
+   "steps": 138,
+   "equal": false,
+   "firstDiff": {
+    "step": 8,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 67,
+    "tier": 2,
+    "club": "AC Milan",
+    "year": 2027,
+    "drawsThisStep": [
+     4,
+     0
+    ],
+    "offersBase": [
+     {
+      "club": "Al Nassr",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 19,
+     "club": "Al Nassr",
+     "tier": 3,
+     "leagueApps": 31,
+     "apps": 33,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 19,
+     "club": "AC Milan",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10333,
+   "policy": "yes",
+   "seed": 21310,
+   "steps": 152,
+   "equal": false,
+   "firstDiff": {
+    "step": 27,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 73,
+    "tier": 1,
+    "club": "River Plate",
+    "year": 2029,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Sevilla",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2030,
+     "age": 21,
+     "club": "Sevilla",
+     "tier": 2,
+     "leagueApps": 22,
+     "apps": 27,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2030,
+     "age": 21,
+     "club": "River Plate",
+     "tier": 1,
+     "leagueApps": 1,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10334,
+   "policy": "yes",
+   "seed": 21311,
+   "steps": 156,
+   "equal": false,
+   "firstDiff": {
+    "step": 31,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 75,
+    "tier": 1,
+    "club": "Porto",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Athletic Bilbao",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Athletic Bilbao",
+     "tier": 2,
+     "leagueApps": 17,
+     "apps": 20,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Porto",
+     "tier": 1,
+     "leagueApps": 4,
+     "apps": 10,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    }
+   }
+  },
+  {
+   "id": 10342,
+   "policy": "yes",
+   "seed": 21319,
+   "steps": 187,
+   "equal": false,
+   "firstDiff": {
+    "step": 51,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 22,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2026,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Jeonbuk Motors",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    7,
+    7
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2027,
+     "age": 23,
+     "club": "Jeonbuk Motors",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 31,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2027,
+     "age": 23,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 7,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10343,
+   "policy": "yes",
+   "seed": 21320,
+   "steps": 189,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "AC Milan",
+    "year": 2028,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Columbus Crew",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Columbus Crew",
+     "tier": 3,
+     "leagueApps": 28,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "AC Milan",
+     "tier": 2,
+     "leagueApps": 7,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10347,
+   "policy": "yes",
+   "seed": 21324,
+   "steps": 186,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 68,
+    "tier": 2,
+    "club": "Palmeiras",
+    "year": 2028,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Red Star Belgrade",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Red Star Belgrade",
+     "tier": 3,
+     "leagueApps": 28,
+     "apps": 35,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Palmeiras",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 13,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 38,
+     "retired": true,
+     "seasons": 22
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10365,
+   "policy": "yes",
+   "seed": 21342,
+   "steps": 201,
+   "equal": false,
+   "firstDiff": {
+    "step": 11,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 67,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2027,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "Rapid Wien",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 19,
+     "club": "Rapid Wien",
+     "tier": 3,
+     "leagueApps": 30,
+     "apps": 35,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 19,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10374,
+   "policy": "yes",
+   "seed": 21351,
+   "steps": 205,
+   "equal": false,
+   "firstDiff": {
+    "step": 13,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 75,
+    "tier": 1,
+    "club": "Benfica",
+    "year": 2022,
+    "drawsThisStep": [
+     7,
+     3
+    ],
+    "offersBase": [
+     {
+      "club": "Inter Miami",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2023,
+     "age": 19,
+     "club": "Inter Miami",
+     "tier": 2,
+     "leagueApps": 24,
+     "apps": 37,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2023,
+     "age": 19,
+     "club": "Benfica",
+     "tier": 1,
+     "leagueApps": 6,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 38,
+     "retired": true,
+     "seasons": 22
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10381,
+   "policy": "yes",
+   "seed": 21358,
+   "steps": 140,
+   "equal": false,
+   "firstDiff": {
+    "step": 60,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 23,
+    "overall": 66,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2032,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Real Sociedad",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    8,
+    8
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2033,
+     "age": 24,
+     "club": "Real Sociedad",
+     "tier": 3,
+     "leagueApps": 21,
+     "apps": 24,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2033,
+     "age": 24,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 1,
+     "apps": 6,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 31,
+     "retired": true,
+     "seasons": 15
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10410,
+   "policy": "yes",
+   "seed": 21387,
+   "steps": 142,
+   "equal": false,
+   "firstDiff": {
+    "step": 11,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 68,
+    "tier": 2,
+    "club": "Lyon",
+    "year": 2022,
+    "drawsThisStep": [
+     7,
+     3
+    ],
+    "offersBase": [
+     {
+      "club": "Monaco",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2023,
+     "age": 19,
+     "club": "Monaco",
+     "tier": 3,
+     "leagueApps": 31,
+     "apps": 31,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2023,
+     "age": 19,
+     "club": "Lyon",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10429,
+   "policy": "yes",
+   "seed": 21406,
+   "steps": 171,
+   "equal": false,
+   "firstDiff": {
+    "step": 44,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sevilla",
+    "year": 2030,
+    "drawsThisStep": [
+     10,
+     6
+    ],
+    "offersBase": [
+     {
+      "club": "Fulham",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Fulham",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 29,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Sevilla",
+     "tier": 2,
+     "leagueApps": 4,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 34,
+     "retired": true,
+     "seasons": 18
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10437,
+   "policy": "yes",
+   "seed": 21414,
+   "steps": 150,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 75,
+    "tier": 1,
+    "club": "Boca Juniors",
+    "year": 2028,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "LAFC",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "LAFC",
+     "tier": 2,
+     "leagueApps": 23,
+     "apps": 29,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Boca Juniors",
+     "tier": 1,
+     "leagueApps": 6,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    }
+   }
+  },
+  {
+   "id": 10444,
+   "policy": "yes",
+   "seed": 21421,
+   "steps": 189,
+   "equal": false,
+   "firstDiff": {
+    "step": 34,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 61,
+    "tier": 2,
+    "club": "Dortmund",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Aston Villa",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Aston Villa",
+     "tier": 3,
+     "leagueApps": 27,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Dortmund",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 38,
+     "retired": true,
+     "seasons": 22
+    }
+   }
+  },
+  {
+   "id": 10446,
+   "policy": "yes",
+   "seed": 21423,
+   "steps": 195,
+   "equal": false,
+   "firstDiff": {
+    "step": 22,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 63,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Frankfurt",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Frankfurt",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10459,
+   "policy": "yes",
+   "seed": 21436,
+   "steps": 188,
+   "equal": false,
+   "firstDiff": {
+    "step": 12,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 75,
+    "tier": 1,
+    "club": "Sao Paulo",
+    "year": 2027,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "Brighton",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 19,
+     "club": "Brighton",
+     "tier": 2,
+     "leagueApps": 22,
+     "apps": 36,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 19,
+     "club": "Sao Paulo",
+     "tier": 1,
+     "leagueApps": 5,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10468,
+   "policy": "yes",
+   "seed": 21445,
+   "steps": 197,
+   "equal": false,
+   "firstDiff": {
+    "step": 28,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 67,
+    "tier": 2,
+    "club": "Stuttgart",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Al Nassr",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Al Nassr",
+     "tier": 3,
+     "leagueApps": 27,
+     "apps": 32,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Stuttgart",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10470,
+   "policy": "yes",
+   "seed": 21447,
+   "steps": 187,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Slavia Prague",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Slavia Prague",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 3,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 38,
+     "retired": true,
+     "seasons": 22
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10473,
+   "policy": "yes",
+   "seed": 21450,
+   "steps": 208,
+   "equal": false,
+   "firstDiff": {
+    "step": 10,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 68,
+    "tier": 2,
+    "club": "Sevilla",
+    "year": 2027,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "Atletico Nacional",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 19,
+     "club": "Atletico Nacional",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 19,
+     "club": "Sevilla",
+     "tier": 2,
+     "leagueApps": 7,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    }
+   }
+  },
+  {
+   "id": 10489,
+   "policy": "yes",
+   "seed": 21466,
+   "steps": 194,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 64,
+    "tier": 2,
+    "club": "Sevilla",
+    "year": 2028,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Goztepe",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Goztepe",
+     "tier": 3,
+     "leagueApps": 25,
+     "apps": 32,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Sevilla",
+     "tier": 2,
+     "leagueApps": 3,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10499,
+   "policy": "yes",
+   "seed": 21476,
+   "steps": 170,
+   "equal": false,
+   "firstDiff": {
+    "step": 12,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 75,
+    "tier": 1,
+    "club": "Sao Paulo",
+    "year": 2027,
+    "drawsThisStep": [
+     7,
+     3
+    ],
+    "offersBase": [
+     {
+      "club": "Shakhtar Donetsk",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 19,
+     "club": "Shakhtar Donetsk",
+     "tier": 2,
+     "leagueApps": 24,
+     "apps": 22,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 19,
+     "club": "Sao Paulo",
+     "tier": 1,
+     "leagueApps": 7,
+     "apps": 14,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    }
+   }
+  },
+  {
+   "id": 10501,
+   "policy": "yes",
+   "seed": 21478,
+   "steps": 129,
+   "equal": false,
+   "firstDiff": {
+    "step": 39,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 71,
+    "tier": 1,
+    "club": "River Plate",
+    "year": 2030,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Newcastle",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Newcastle",
+     "tier": 2,
+     "leagueApps": 21,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "River Plate",
+     "tier": 1,
+     "leagueApps": 2,
+     "apps": 8,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10513,
+   "policy": "yes",
+   "seed": 21490,
+   "steps": 177,
+   "equal": false,
+   "firstDiff": {
+    "step": 19,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 67,
+    "tier": 2,
+    "club": "Atletico Madrid",
+    "year": 2028,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Basel",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Basel",
+     "tier": 3,
+     "leagueApps": 30,
+     "apps": 36,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Atletico Madrid",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 13,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 34,
+     "retired": true,
+     "seasons": 18
+    }
+   }
+  },
+  {
+   "id": 10518,
+   "policy": "yes",
+   "seed": 21495,
+   "steps": 184,
+   "equal": false,
+   "firstDiff": {
+    "step": 35,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 20,
+    "overall": 75,
+    "tier": 1,
+    "club": "Porto",
+    "year": 2024,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Napoli",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    5,
+    5
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2025,
+     "age": 21,
+     "club": "Napoli",
+     "tier": 2,
+     "leagueApps": 18,
+     "apps": 26,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2025,
+     "age": 21,
+     "club": "Porto",
+     "tier": 1,
+     "leagueApps": 5,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10533,
+   "policy": "yes",
+   "seed": 21510,
+   "steps": 136,
+   "equal": false,
+   "firstDiff": {
+    "step": 44,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 21,
+    "overall": 68,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2030,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Antwerp",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    6,
+    6
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2031,
+     "age": 22,
+     "club": "Antwerp",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 24,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2031,
+     "age": 22,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    }
+   }
+  },
+  {
+   "id": 10534,
+   "policy": "yes",
+   "seed": 21511,
+   "steps": 161,
+   "equal": false,
+   "firstDiff": {
+    "step": 21,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 68,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Botafogo",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Botafogo",
+     "tier": 3,
+     "leagueApps": 23,
+     "apps": 28,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 6,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 32,
+     "retired": true,
+     "seasons": 16
+    }
+   }
+  },
+  {
+   "id": 10542,
+   "policy": "yes",
+   "seed": 21519,
+   "steps": 166,
+   "equal": false,
+   "firstDiff": {
+    "step": 23,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 76,
+    "tier": 1,
+    "club": "Porto",
+    "year": 2023,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Celtic",
+      "tier": 2,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 1,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2024,
+     "age": 20,
+     "club": "Celtic",
+     "tier": 2,
+     "leagueApps": 22,
+     "apps": 33,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2024,
+     "age": 20,
+     "club": "Porto",
+     "tier": 1,
+     "leagueApps": 6,
+     "apps": 11,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 33,
+     "retired": true,
+     "seasons": 17
+    },
+    "head": {
+     "age": 34,
+     "retired": true,
+     "seasons": 18
+    }
+   }
+  },
+  {
+   "id": 10549,
+   "policy": "yes",
+   "seed": 21526,
+   "steps": 194,
+   "equal": false,
+   "firstDiff": {
+    "step": 20,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 19,
+    "overall": 62,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2028,
+    "drawsThisStep": [
+     9,
+     5
+    ],
+    "offersBase": [
+     {
+      "club": "Atalanta",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    4,
+    4
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2029,
+     "age": 20,
+     "club": "Atalanta",
+     "tier": 3,
+     "leagueApps": 24,
+     "apps": 30,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2029,
+     "age": 20,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 2,
+     "apps": 9,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 37,
+     "retired": true,
+     "seasons": 21
+    },
+    "head": {
+     "age": 36,
+     "retired": true,
+     "seasons": 20
+    }
+   }
+  },
+  {
+   "id": 10550,
+   "policy": "yes",
+   "seed": 21527,
+   "steps": 132,
+   "equal": false,
+   "firstDiff": {
+    "step": 54,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 22,
+    "overall": 65,
+    "tier": 2,
+    "club": "Sporting CP",
+    "year": 2026,
+    "drawsThisStep": [
+     8,
+     4
+    ],
+    "offersBase": [
+     {
+      "club": "Zamalek",
+      "tier": 3,
+      "loan": true,
+      "min": 20
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    7,
+    7
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2027,
+     "age": 23,
+     "club": "Zamalek",
+     "tier": 3,
+     "leagueApps": 18,
+     "apps": 21,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2027,
+     "age": 23,
+     "club": "Sporting CP",
+     "tier": 2,
+     "leagueApps": 4,
+     "apps": 5,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    },
+    "head": {
+     "age": 30,
+     "retired": true,
+     "seasons": 14
+    }
+   }
+  },
+  {
+   "id": 10557,
+   "policy": "yes",
+   "seed": 21534,
+   "steps": 181,
+   "equal": false,
+   "firstDiff": {
+    "step": 9,
+    "phaseBefore": "random_events",
+    "phaseAfter": [
+     "transfer_window",
+     "transfer_window"
+    ],
+    "age": 18,
+    "overall": 67,
+    "tier": 2,
+    "club": "Racing Club",
+    "year": 2027,
+    "drawsThisStep": [
+     6,
+     2
+    ],
+    "offersBase": [
+     {
+      "club": "FC Copenhagen",
+      "tier": 3,
+      "loan": true,
+      "min": 26
+     }
+    ],
+    "offersHead": [],
+    "filterBit": true,
+    "headAllAtLeast20": true,
+    "attributed": true,
+    "kinds": [
+     "club loan",
+     "zero offer"
+    ]
+   },
+   "startTier": 2,
+   "startAge": 17,
+   "rowsAtDiff": [
+    3,
+    3
+   ],
+   "nextSeason": {
+    "base": {
+     "year": 2028,
+     "age": 19,
+     "club": "FC Copenhagen",
+     "tier": 3,
+     "leagueApps": 28,
+     "apps": 31,
+     "onLoan": true
+    },
+    "head": {
+     "year": 2028,
+     "age": 19,
+     "club": "Racing Club",
+     "tier": 2,
+     "leagueApps": 5,
+     "apps": 12,
+     "onLoan": false
+    }
+   },
+   "end": {
+    "base": {
+     "age": 35,
+     "retired": true,
+     "seasons": 19
+    },
+    "head": {
+     "age": 34,
+     "retired": true,
+     "seasons": 18
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,5 @@
+DIFF yes 10550 step 54 age 22 ovr 65 tier 2 attributed offers ["3:20"] -> [] next league games 18 -> 4
+DIFF yes 10557 step 9 age 18 ovr 67 tier 2 attributed offers ["3:26"] -> [] next league games 28 -> 5
+{"verdictCareers":220,"yesCareers":400,"yesTried":559,"careers":620,"equalToEnd":552,"differ":68,"differByPolicy":{"verdict":6,"yes":62},"unattributed":0,"offersAtFirstDiff":{"base":68,"head":0},"zeroOfferAtFirstDiff":{"base":0,"head":68},"nextSeasonMean":{"base":24.28,"head":4.47},"nextSeasonOnLoan":{"base":68,"head":0}}
+F1 done: 620 careers, 68 differ, every one first at a loan listed window the filter bit (club loan verdicts reached: base 71, head 0; zero offer loan listings: base 0, head 68; base club loans to a club forecast under 20: 0)
+CONTROL FIRED f1 bite
