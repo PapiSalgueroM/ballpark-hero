@@ -398,6 +398,18 @@
       of the 16 entries. Written with --part=modern,eras,pure --write on
       the tree itself (16 lines changed and no other), then run green
       whole on the same runner.
+      Release AZ (2026-10-12) re-took it once more, for Round 1250 (the
+      other lane's PR224): every new career now carries a world seed, so
+      `start` and every whole state hash moves with nothing wrong (47
+      entries red after the merge, remote check az-e1b, among them the
+      board's objectives the summer after in four leagues, whose club
+      strengths a seeded world draws). Attribution on a GitHub runner at
+      5b0da7f1 (remote check az-digest, line attrib-inverse): with the
+      seed block of startCareer taken out by scripts/lib/cmWorldSeed1250.mjs
+      the harness is green whole against Release AX's file, so the seed
+      is the only cause. Written with --part=modern,eras,pure --write on
+      the tree itself (201 lines changed), then run green whole on the
+      same runner (line write-digest).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
