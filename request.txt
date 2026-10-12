@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p "$RUNNER_TEMP/font-cache" && FREE_KICK_FONT_CACHE="$RUNNER_TEMP/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+playCareerTransferBrief: FREE_KICK_FONT_CACHE="$RUNNER_TEMP/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTransferBrief.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+playSoccerAgentReview: FREE_KICK_FONT_CACHE="$RUNNER_TEMP/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs

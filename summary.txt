@@ -1,0 +1,6 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerTransferBrief exit=0 6s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+playCareerTransferBrief exit=0 174s | Transfer Brief native 1341 checks,27 journeys,3 copied observation controls,0 failures.
+simSoccerAgentReview exit=0 8s | PASS agent review product and proof source bytes held.
+playSoccerAgentReview exit=1 330s | Node.js v24.21.0
