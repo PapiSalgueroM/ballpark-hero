@@ -1,0 +1,6 @@
+8a4df2938 Round 1310: merge origin/main (48cb9d4b, Release AY live) before the final proof
+docs/audits/ROUND-1310-NOTES.md
+scripts/data/cmLeagueBookFacts.json
+scripts/data/cmLeagueBookFacts.receipt.json
+scripts/simCmLeagueBookFacts.mjs
+four files, as the brief asks
