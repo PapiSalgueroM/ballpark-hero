@@ -1,0 +1,7 @@
+# Round 1314 3.4a on db2d5083: simHalftime probe at 1200 an arm (only section 2 RUNS changed), seeds 1 2 3 4 5
+ht1200-s1: cp .rc/x/htProbe1200.mjs scripts/htProbe1200-s1.mjs && SIM_SEED=1 node --import ./scripts/lib/seedRandom.mjs scripts/htProbe1200-s1.mjs
+ht1200-s2: cp .rc/x/htProbe1200.mjs scripts/htProbe1200-s2.mjs && SIM_SEED=2 node --import ./scripts/lib/seedRandom.mjs scripts/htProbe1200-s2.mjs
+ht1200-s3: cp .rc/x/htProbe1200.mjs scripts/htProbe1200-s3.mjs && SIM_SEED=3 node --import ./scripts/lib/seedRandom.mjs scripts/htProbe1200-s3.mjs
+ht1200-s4: cp .rc/x/htProbe1200.mjs scripts/htProbe1200-s4.mjs && SIM_SEED=4 node --import ./scripts/lib/seedRandom.mjs scripts/htProbe1200-s4.mjs
+ht1200-s5: cp .rc/x/htProbe1200.mjs scripts/htProbe1200-s5.mjs && SIM_SEED=5 node --import ./scripts/lib/seedRandom.mjs scripts/htProbe1200-s5.mjs
+ht1200-def: cp .rc/x/htProbe1200.mjs scripts/htProbe1200-def.mjs && SIM_SEED=743293878 node --import ./scripts/lib/seedRandom.mjs scripts/htProbe1200-def.mjs
