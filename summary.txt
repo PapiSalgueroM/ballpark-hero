@@ -1,0 +1,5 @@
+vitest-world exit=0 27s |    Duration  26.36s (transform 3.03s, setup 268ms, collect 4.09s, tests 26.86s, environment 1.42s, prepare 323ms)
+tsc exit=0 98s | 
+simCmUnseededWorld-noinverse exit=1 52s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+simCmUnseededWorld exit=0 188s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+simCmUnseededWorld-guard exit=1 190s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
