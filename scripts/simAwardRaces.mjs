@@ -146,8 +146,16 @@ console.log('1) Fresh race: right names, right clubs, all zeros');
 
 /* ---------- 2. A season's race cannot outscore the table ---------- */
 const RACE_CLUBS = ['Everton', 'Real Madrid', 'Ajax', 'Arsenal', 'Chelsea', 'Liverpool', 'Barcelona', 'Napoli', 'Sevilla', 'Lyon'];
-/* Round 1311: the band of section 2, the board as the book reads it (BOOK_BAND_PENDING until measured). */
-const BOOK_BAND = { lo: 24, hi: 38 };
+/* Round 1311: the band of section 2, the board as the book reads it, MEASURED the way Round 567 prescribes
+   (thirty seasons, the mean, never the worst): AWARD_MEASURE=30 on a runner (remote check r1311-s2d, head
+   977c3eca) played the ten clubs three times on the book where it decides (27 seasons; the other 3 are
+   Ajax's, whose league sits under the floor and keeps the old race) and read
+     23 23 24 25 25 25 25 25 26 26 26 26 26 26 27 27 27 28 29 29 29 29 29 29 29 30 30 30 32 33
+     mean 27.27, standard deviation 2.50, so the standard error of a ten season mean is 0.79.
+   The band is three and a half of those either side of the mean, as Round 567 set the old one. The gate's
+   own ten seasons (the first ten of the thirty) read 26.6. The book's board sits lower than the old race's
+   (30.8 then, 31.2 on section 2b now): the old race gave each club's best man 42 in 100 of its goals. */
+const BOOK_BAND = { lo: 24.5, hi: 30.0 };
 /* The old race's band, Round 567's, kept for section 2b. */
 const RACE_BAND = { lo: 24, hi: 38 };
 const MEASURE = Number(process.env.AWARD_MEASURE || 0);

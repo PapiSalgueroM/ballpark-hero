@@ -150,6 +150,8 @@ describe('the league leaders card', () => {
 
 describe('the Stats screen with a board open', () => {
   it('draws the board alone and Back brings the tiles and the table back', () => {
+    /* jsdom has no scrolling: Back's scroll back is measured by scripts/playCmLeagueLeaders.mjs instead. */
+    const scrolled = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
     const s = everton();
     const view = render(<StatsScreen career={s} />);
     const q = (sel: string) => view.container.querySelector(sel);
@@ -162,13 +164,15 @@ describe('the Stats screen with a board open', () => {
     fireEvent.click(q('[data-cm-leaders-back]')!);
     expect(q('[data-cm-leaders-tile="goals"]')).not.toBeNull();
     expect(view.container.textContent).toContain('Every player');
+    expect(scrolled).toHaveBeenCalled();
     noDash(view.container);
+    vi.restoreAllMocks();
   });
 });
 
 /* Round 1311 step 2: the season review. The result screen's frame is not what is tested here: it is drawn
-   as its playNext block alone, which is where the honours live. */
-vi.mock('@/components/game/ResultScreen', () => ({ ResultScreen: ({ playNext }: { playNext?: ReactNode }) => <div>{playNext}</div> }));
+   as what it is handed (its children, where the honours live, and its playNext block) and nothing else. */
+vi.mock('@/components/game/ResultScreen', () => ({ ResultScreen: ({ children, playNext }: { children?: ReactNode; playNext?: ReactNode }) => <div>{children}{playNext}</div> }));
 
 function toSeasonEnd(s: CareerState, seed: number): CareerState {
   vi.spyOn(Math, 'random').mockImplementation(seeded(seed));
