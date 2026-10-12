@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+w2: node .rc/x/w2.mjs
