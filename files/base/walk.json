@@ -1,0 +1,76 @@
+{
+ "runs": {
+  "p390": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "SEA 21-36 ARI",
+     "logN": 0,
+     "last": null,
+     "scrollMoved": 524
+    }
+   ],
+   "lowest": 16,
+   "highest": 42,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52
+  },
+  "d1280": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "SF 38-23 ARI",
+     "logN": 0,
+     "last": null,
+     "scrollMoved": 0
+    }
+   ],
+   "lowest": 16,
+   "highest": 46,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52
+  },
+  "p390r": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "LA 29-20 ARI",
+     "logN": 0,
+     "last": null,
+     "scrollMoved": 602
+    }
+   ],
+   "lowest": 20,
+   "highest": 46,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52
+  },
+  "d1280r": {
+   "errors": [],
+   "weeks": [
+    {
+     "w": 1,
+     "rows": 16,
+     "mine": "LA 36-28 ARI",
+     "logN": 0,
+     "last": null,
+     "scrollMoved": 0
+    }
+   ],
+   "lowest": 16,
+   "highest": 40,
+   "team": "ARI",
+   "deskOn": true,
+   "rosterAtStart": 52
+  }
+ }
+}

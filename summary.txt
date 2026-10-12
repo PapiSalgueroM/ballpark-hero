@@ -1,0 +1,2 @@
+base-build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base-walk exit=0 33s | ok    d1280r: the next press button is inside the viewport after the press (y 430)

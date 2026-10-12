@@ -1,0 +1,63 @@
+
+===== run p390: 390x844, reduced motion off =====
+ok    p390: a new franchise is saved
+ok    p390: a new franchise holds no gameLog key
+note  p390: his club is ARI, desk on, roster 52, season 2026
+ok    p390: "Play Week 1" played Week 1 (the save is on week 2)
+ok    p390: the week's grid shows sixteen finals (saw 16)
+FAIL  p390: his row on the grid is the game the save's log holds (SEA 21, ARI 36; log none)
+ok    p390: no final on the grid is level
+FAIL  p390: the log is one game, w1, of this season
+FAIL  p390: the page did not jump on the press (scrollY 0 to 524)
+ok    p390: nothing overflows sideways on the week panel
+FAIL  p390: the next press button is inside the viewport after the press (y -40)
+FAIL  p390: the walk stopped: TypeError: Cannot read properties of undefined (reading 'home')
+ok    p390: no page error and no console error (clean)
+
+===== run d1280: 1280x900, reduced motion off =====
+ok    d1280: a new franchise is saved
+ok    d1280: a new franchise holds no gameLog key
+note  d1280: his club is ARI, desk on, roster 52, season 2026
+ok    d1280: "Play Week 1" played Week 1 (the save is on week 2)
+ok    d1280: the week's grid shows sixteen finals (saw 16)
+FAIL  d1280: his row on the grid is the game the save's log holds (SF 38, ARI 23; log none)
+ok    d1280: no final on the grid is level
+FAIL  d1280: the log is one game, w1, of this season
+ok    d1280: the page did not jump on the press (scrollY 0 to 0)
+ok    d1280: nothing overflows sideways on the week panel
+ok    d1280: the next press button is inside the viewport after the press (y 520)
+FAIL  d1280: the walk stopped: TypeError: Cannot read properties of undefined (reading 'home')
+ok    d1280: no page error and no console error (clean)
+
+===== run p390r: 390x844, reduced motion ON =====
+ok    p390r: a new franchise is saved
+ok    p390r: a new franchise holds no gameLog key
+note  p390r: his club is ARI, desk on, roster 52, season 2026
+ok    p390r: "Play Week 1" played Week 1 (the save is on week 2)
+ok    p390r: the week's grid shows sixteen finals (saw 16)
+FAIL  p390r: his row on the grid is the game the save's log holds (LA 29, ARI 20; log none)
+ok    p390r: no final on the grid is level
+FAIL  p390r: the log is one game, w1, of this season
+FAIL  p390r: the page did not jump on the press (scrollY 0 to 602)
+ok    p390r: nothing overflows sideways on the week panel
+FAIL  p390r: the next press button is inside the viewport after the press (y -40)
+FAIL  p390r: the walk stopped: TypeError: Cannot read properties of undefined (reading 'home')
+ok    p390r: no page error and no console error (clean)
+
+===== run d1280r: 1280x900, reduced motion ON =====
+ok    d1280r: a new franchise is saved
+ok    d1280r: a new franchise holds no gameLog key
+note  d1280r: his club is ARI, desk on, roster 52, season 2026
+ok    d1280r: "Play Week 1" played Week 1 (the save is on week 2)
+ok    d1280r: the week's grid shows sixteen finals (saw 16)
+FAIL  d1280r: his row on the grid is the game the save's log holds (LA 36, ARI 28; log none)
+ok    d1280r: no final on the grid is level
+FAIL  d1280r: the log is one game, w1, of this season
+ok    d1280r: the page did not jump on the press (scrollY 0 to 0)
+ok    d1280r: nothing overflows sideways on the week panel
+ok    d1280r: the next press button is inside the viewport after the press (y 430)
+FAIL  d1280r: the walk stopped: TypeError: Cannot read properties of undefined (reading 'home')
+ok    d1280r: no page error and no console error (clean)
+FAIL  the What's New page carries the entry
+
+r1305walk: 17 failure(s)
