@@ -489,9 +489,9 @@ if (process.env.FIGHT_PROVE) {
   fs.writeFileSync(path.join(TMP2, 'entry.ts'), fs.readFileSync(ENTRY, 'utf8'));
   const BUNDLE2 = path.join(TMP2, 'bundle.mjs');
   execSync(`"${findEsbuild()}" "${path.join(TMP2, 'entry.ts')}" --bundle --format=esm --platform=node --outfile="${BUNDLE2}"`, { stdio: 'pipe' });
-  const textOf = (file, dir) => fs.readFileSync(file, 'utf8').split(path.basename(dir)).join('<tree>');
+  const textOf = (file, dir) => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n').split(path.basename(dir)).join('<tree>');
   const a = textOf(BUNDLE, TMP); const b = textOf(BUNDLE2, TMP2);
-  const differing = [SRC, ENGINE, ...LIFE_FILES.map(n => path.join(TMP, `${n}.ts`))].filter(f => fs.readFileSync(f, 'utf8') !== fs.readFileSync(path.join(TMP2, path.basename(f)), 'utf8')).map(f => path.basename(f));
+  const differing = [SRC, ENGINE, ...LIFE_FILES.map(n => path.join(TMP, `${n}.ts`))].filter(f => fs.readFileSync(f, 'utf8').replaceAll('\r\n', '\n') !== fs.readFileSync(path.join(TMP2, path.basename(f)), 'utf8').replaceAll('\r\n', '\n')).map(f => path.basename(f));
   if (a === b) ok(`the fight bundle is the same text at ${at} and here (${a.length} characters; source files that differ between the two trees: ${differing.join(', ') || 'none'})`);
   else fail(`the fight bundle at ${at} differs from this tree's (${a.length} against ${b.length} characters; source files that differ: ${differing.join(', ') || 'none'}): hash seeded careers on both before calling the move clean`);
 }
