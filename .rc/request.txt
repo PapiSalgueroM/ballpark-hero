@@ -1,0 +1,5 @@
+# Review (run lens) of Round 1311 at 9c262ba4: the walk save the door read null in node, the share over eight seasons, and the attribution leg of the Round 1081 pin
+#!serial
+age: node .rc/x/r1311run-age.mjs
+appeal-head: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -5; exit ${PIPESTATUS[0]}
+appeal-attrib: git checkout 8676802b -- scripts/simClubManagerSlots.mjs && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- scripts; exit $s
