@@ -1,0 +1,2 @@
+base-saveSize exit=1 20s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+base-slots exit=0 26s | simClubManagerSlots: all sections green

@@ -1,0 +1,42 @@
+Preparing worktree (detached HEAD b6eb78e79)
+HEAD is now at b6eb78e79 Handoff of 2026-10-12 brought up to date: Release AX is live, Round 1307 is built and waits for its review
+1) Fifteen seasons at three clubs: under 203000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+   Real Madrid   seasons 15, day one 58688, season 1 166931, season 15 188714, slope after season 3 323 bytes a season
+                 sizes: 58688 166931 174780 181779 187493 180399 178690 187171 181961 187959 181271 189201 182385 188640 182430 188714
+   Everton       seasons 15, day one 54518, season 1 153879, season 15 192237, slope after season 3 987 bytes a season
+                 sizes: 54518 153879 162136 169298 178028 183225 189104 189966 191188 191594 191994 192243 192324 192521 192864 192237
+   Lincoln City  seasons 15, day one 53823, season 1 152857, season 15 192738, slope after season 3 941 bytes a season
+                 sizes: 53823 152857 164045 170434 177555 184817 189601 192017 191536 192149 191386 191461 193420 192550 193201 192738
+   board nudges over the whole run: 246
+2) An oversized pre 634 save shrinks on load, the trim is a fixed point, and the next season plays the same
+   season 2 save 162136 bytes, inflated to 465776, loaded back as 186436
+   ledgers after load: h2h 300, transferLog 80, inbox 8, aiHeadlines 8
+   a season from the trimmed save and from the oversized one, same seed: identical (table, results, squad, budget, board, trophies, career stats)
+3) saveCareer says whether it wrote: false when refused twice, lean and true when refused once, same bytes twice
+   the season 15 save: 192237 bytes, h2h 300 rows, at most 14 per opponent
+   store throws on every write: saveCareer returned false after 2 attempts (192237, 180318 bytes)
+   store throws once: saveCareer returned true, wrote 180318 bytes (11919 fewer), h2h 163 rows, at most 6 per opponent
+   working store: true then true, 192237 bytes then 192237, identical true, equal to the trimmed career true
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+   Test Files  1 failed (1)
+the test file (or the hook it imports) did not load:
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero/.tmp-base
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  18:21:20
+   Duration  421ms (transform 8ms, setup 0ms, collect 0ms, tests 0ms, environment 173ms, prepare 87ms)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/clubManagerSaveSize.test.tsx [ src/test/clubManagerSaveSize.test.tsx ]
+Error: Cannot find module '/home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts'
+Caused by: Error: Failed to load url /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts (resolved id: /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts). Does the file exist?
+ ❯ loadAndTransform ../node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
