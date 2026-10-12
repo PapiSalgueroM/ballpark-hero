@@ -27,14 +27,21 @@
 import type { Position } from '@/types/game';
 import { bookClubGoals, bookRows, mineSheets, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 
-/** Under this share of rival goals on record a board carries the honest line about thin data. */
+/** Under this share of rival goals on record a board carries the honest line about thin data.
+ *  NOT YET BOUND: nothing in src reads it, and the lead's ruling is owed before a screen does. Measured
+ *  over 47 leagues in Round 1306, seven sit within two points of 95 (94, 96, 96, 96, 97, 97, 97), which
+ *  by that round's own rule means the number is reported and not bound; the real gaps between the
+ *  leagues' shares are 81 to 87 and 87 to 91 (their middles 84 and 89). The unit test that holds the
+ *  number moves with the ruling. */
 export const BOOK_FULL_SHARE = 95;
 /** How many rows a board shows. */
 export const BOARD_ROWS = 10;
 
 /** One rival club as the save's table has it. `place` is its place in the table, 1 for the leader. */
 export interface BoardClub { club: string; gf: number; place: number; keeperOnRecord: boolean }
-/** One man of my squad: his own league line. */
+/** One man of my squad: his own league line. `rating` and `apps`, and `ratingOf` and `lineOf` of the
+ *  input below, are read by NO function of this module yet: they are what the team of the season of the
+ *  round that follows picks and splits on, carried now so the engine's door to this module is built once. */
 export interface BoardMine { id: string; name: string; pos: Position; rating: number; apps: number; goals: number; assists: number; gen?: boolean }
 
 export interface BoardInput {
