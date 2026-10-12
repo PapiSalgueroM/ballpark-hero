@@ -15,7 +15,7 @@
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, fireEvent, cleanup, within } from '@testing-library/react';
-import { GmBracketCard } from './GmBracketCard';
+import { GmBracketCard, scrollToShow } from './GmBracketCard';
 import NflBracket, { nflSeedOf, nflWeekLabel } from '@/components/front-office/NflBracket';
 import { openBracket, playBracketAll, playBracketGame, playBracketWeek, type BracketFormat, type GmBracketSave, type PlayTie } from '@/lib/gmBracket';
 import { gmBracketPlace } from '@/lib/gmBracketView';
@@ -119,6 +119,29 @@ describe('GmBracketCard', () => {
     expect(q('[data-bracket-place]')!.textContent).toBe('Next: the AFC Championship, against Club S2.');
   });
 
+  it('a week he looked back at is not carried onto another bracket whose week to play is the same', () => {
+    const week1 = playBracketWeek(NFL_BRACKET, open(), chalk());
+    const { rerender } = render(<NflBracket {...mount(week1, 'S1')} />);
+    fireEvent.click(q('[data-bracket-week="1"]')!);
+    expect(q('[data-bracket-week="1"]')!.getAttribute('aria-pressed')).toBe('true');
+    /* the next season's bracket, also at its Divisional, on the same mounted card: it opens on its own week to play */
+    rerender(<NflBracket {...mount(playBracketWeek(NFL_BRACKET, openBracket(NFL_BRACKET, 2027, SEEDS), chalk()), 'S1')} />);
+    expect(q('[data-bracket-week="2"]')!.getAttribute('aria-pressed')).toBe('true');
+    /* and a bracket of other seeds in the same season */
+    fireEvent.click(q('[data-bracket-week="1"]')!);
+    rerender(<NflBracket {...mount(playBracketWeek(NFL_BRACKET, openBracket(NFL_BRACKET, 2027, [...SEEDS].reverse()), chalk()), 'S1')} />);
+    expect(q('[data-bracket-week="2"]')!.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('his chip and his tie are brought into view by the card\'s own scrollers, moved as little as they can be', () => {
+    /* the arithmetic the card uses for its chip row and its tie list (jsdom lays nothing out; the browser walk measures it) */
+    expect(scrollToShow(0, 100, 20, 30)).toBe(0);
+    expect(scrollToShow(0, 100, 150, 30)).toBe(80);
+    expect(scrollToShow(120, 100, 40, 30)).toBe(40);
+    expect(scrollToShow(0, 100, 50, 140)).toBe(50);
+    expect(scrollToShow(60, 100, 100, 50)).toBe(60);
+  });
+
   it('the "?" opens, closes and opens again, over the host it is handed', () => {
     const host = document.createElement('div');
     document.body.appendChild(host);
@@ -193,6 +216,9 @@ describe('GmBracketCard', () => {
     expect(gmBracketPlace(PLAY_IN, s0, 'S1', name).kind).toBe('bye');
     expect(gmBracketPlace(PLAY_IN, week1, 'S8', name)).toEqual({ kind: 'next', line: 'Next: the Play in, against Club S9.', tie: 'PI-8' });
     expect(gmBracketPlace(PLAY_IN, week1, 'S10', name)).toEqual({ kind: 'out', line: 'Out in the Play in.', tie: 'PI-910' });
+    /* beaten twice in the play in (by 7, then by 9): the tie he went out in is the LAST he lost, not the first */
+    const twice = playBracketWeek(PLAY_IN, week1, (home, away, tie) => (tie.id === 'PI-8' ? { homeScore: 99, awayScore: 104, winner: away } : { homeScore: 110, awayScore: 101, winner: home }));
+    expect(gmBracketPlace(PLAY_IN, twice, 'S8', name)).toEqual({ kind: 'out', line: 'Out in the Play in.', tie: 'PI-8' });
     const week2 = playBracketWeek(PLAY_IN, week1, alternate);
     const three = [1, 2, 3].reduce(s => playBracketGame(PLAY_IN, s, 'R1-A', alternate), week2);
     const props = { format: PLAY_IN, save: three, my: 'S1', name, onOpenGame: () => undefined, helpHost: null, help: NFL_BRACKET_HELP, seedOf: (c: string) => Number(c.slice(1)), weekLabel: (w: number) => ['Play in', 'Play in', 'First round', 'Semifinals', 'Final'][w - 1] };

@@ -17,12 +17,14 @@ import { finalTie, finalsWeeks, resolveSlot } from './finalsBracket';
 /** Where his club stands, the one line the card prints above the ties, and the tie it is about (null: none). */
 export interface GmBracketPlace { kind: 'bye' | 'next' | 'through' | 'out' | 'champion' | 'missed'; line: string; tie: string | null }
 
-/** The six lines, as patterns over a round's name and a club's name. */
+/** The lines of the six kinds, as patterns over a round's name and a club's name. A club beaten in the title tie
+ *  is out too, and its line says so the way a fan would ("Lost the Super Bowl."). */
 export const GM_BRACKET_LINES = {
   bye: 'You have the bye.',
   next: (round: string, against: string | null): string => (against ? `Next: the ${round}, against ${against}.` : `Next: the ${round}.`),
   through: 'Through. The rest of this round is still to play.',
   out: (round: string): string => `Out in the ${round}.`,
+  lostFinal: (round: string): string => `Lost the ${round}.`,
   champion: 'Champions.',
   missed: 'No playoffs this year.',
 } as const;
@@ -43,7 +45,8 @@ export function gmBracketPlace(format: BracketFormat, save: GmBracketSave, club:
   if (bracketOut(format, save).has(club)) {
     /* the last tie he lost in the data's order: in a play in, losing the first game is not yet going out */
     const lost = [...format.ties].reverse().find(t => done[t.id]?.loser === club);
-    return { kind: 'out', line: GM_BRACKET_LINES.out(lost ? lost.round : 'playoffs'), tie: lost ? lost.id : null };
+    const line = !lost ? GM_BRACKET_LINES.out('playoffs') : lost.id === finalTie(format.ties)?.id ? GM_BRACKET_LINES.lostFinal(lost.round) : GM_BRACKET_LINES.out(lost.round);
+    return { kind: 'out', line, tie: lost ? lost.id : null };
   }
   const week = bracketWeek(format, save);
   /* played out with another champion: only a save the repair would rebuild gets here */
@@ -94,7 +97,8 @@ export function gmSideText(row: GmBracketRow, k: 0 | 1): string {
   return s.score === null ? '' : String(s.score);
 }
 
-/** The line under a series that is under way or over ("Game 3 of up to 7"), or null for a single game. */
+/** The line under a series: before its first game ("First to 4 wins."), under way ("3 played, first to 4 wins.") or
+ *  over ("Over in 7 games."), or null for a single game. */
 export function gmSeriesNote(format: BracketFormat, row: GmBracketRow, week: number): string | null {
   if (!row.series) return null;
   const need = Math.max(1, format.winsNeeded[week] ?? 1);

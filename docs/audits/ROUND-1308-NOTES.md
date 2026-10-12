@@ -80,6 +80,27 @@ New files only, plus two harnesses:
   No NflBracket chunk is made: no route imports it.
 - Merged origin/main at 21941630 (Release AY) as 5057f124; the merged tree's runs are in the closing report.
 
+## The fix pass after the adversarial review (2026-10-12)
+
+Two reviews (C:/Users/antho/dukb-handoff/2026-10-10/results-g/review-run-1308.md and review-read-1308.md) found
+one major and ten minors. The fixer's report is results-g/fix-1308.md. Each fix is its own commit:
+- babacc42, the major: sections 11 and 13 run again with the GM desk on. For each of section 9's four GM clubs a
+  season his club gets the desk's strongest edge (+3) and the postseason is played the one press way (runPlayoffs
+  and nflTell with the edges) and the bracket way (nflPlayTie with them) from the same generator. Control
+  `noedges` (the edges dropped from nflPlayTie's game). Measured per seed set 0 to 4: the edge moved the
+  postseason in 25, 30, 34, 26 and 38 of 320 club seasons (146 to 156 of them in the bracket); `noedges` breaks
+  exactly those.
+- 27e9718d: controls for the checks that had none: `inseason` (s12, outside the postseason the load is null),
+  `byeplays` (s13, no entry in a week he has the bye) and `deskless` (the count of club seasons the edge moved).
+- 8652ebc3: section 6 follows every chain of static imports under src from the four boards and from the press
+  half (gmPostseason, frontOfficePostseason): 108 files reached, no story file. Control `storyleak`.
+- 6c798103: simUsPostseason section G names a dangling tie id (it skipped it), control `dangling`.
+- 5020f5b0, ab1cccde, 36ec4b8d: gmSeriesNote's comment; a club beaten in the title tie reads "Lost the Super
+  Bowl."; the play in test holds the LAST tie a club beaten twice lost.
+- ad50f2fa, 26cb235f: the card keeps a tapped week only on the same bracket (season and seeds), and brings the
+  shown week's chip and his tie into its own scrollers' view on every face change (never the page). A walk of the
+  card at 320, 390 and 1280 (r1308-fixwalk) reads 0 problems on the head and 24 with the card of f2c48bb5.
+
 ## Not done here, and owed to Round 1309
 
 See the closing report (C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1308.md) for the props the board
