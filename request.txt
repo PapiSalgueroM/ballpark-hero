@@ -1,0 +1,1 @@
+simCmVar-all: CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
