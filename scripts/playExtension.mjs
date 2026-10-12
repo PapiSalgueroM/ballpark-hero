@@ -121,6 +121,14 @@ console.log('2) Pushing spends the one negotiation, and signing writes the deal'
 
   await card.locator('button:has-text("Ask for more")').click();
   await page.waitForTimeout(600);
+  /* Release AX (the other lane's Rounds 1230 to 1234, followed here by the fix pass): a push now opens the
+     chance wheel IN PLACE of the card until it has been seen, so the card and its offer are not in the document
+     at this point. This walk stopped here on a timeout from the merge on, and it is in no gate list, so nobody
+     saw it. It passes the wheel (Skip animation, then Continue to the offers) and reads the card that comes back. */
+  say(await page.locator('[data-market-wheel]').count() === 1, 'the push opens the chance wheel in place of the card');
+  await page.locator('[data-market-skip]').click();
+  await page.locator('[data-market-continue]').click();
+  await page.locator('[data-extension-talk] [data-ext-salary]').first().waitFor({ state: 'attached', timeout: 15000 });
   const pushedOffer = await offerNow();
   /* A 90 rated 25 year old has leverage, so they find money. The engine
      harness proves that at scale; here it only has to have MOVED and the

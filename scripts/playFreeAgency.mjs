@@ -89,6 +89,16 @@ async function reachFreeAgency(page, path, saveKey, eraTileText) {
   say(await pushes.count() >= 2, 'push buttons are on the live cards');
   await pushes.first().click();
   await page.waitForTimeout(500);
+  /* Release AX (the other lane's Rounds 1230 to 1234, followed here by the fix pass): a push now opens the
+     chance wheel IN PLACE of the offers window until it has been seen, so the window is not in the document at
+     this point. This walk stopped here on a timeout from the merge on, and it is in no gate list, so nobody saw
+     it. It passes the wheel the way a player in a hurry does (Skip animation, then Continue to the offers) and
+     reads the window that comes back, which holds the spent push and the talk line as before. */
+  const wheel = page.locator('[data-market-wheel]');
+  say(await wheel.count() === 1, 'the push opens the chance wheel in place of the offers');
+  await page.locator('[data-market-skip]').click();
+  await page.locator('[data-market-continue]').click();
+  await fa.waitFor({ state: 'visible', timeout: 15000 });
   say(await fa.locator('button:has-text("Talks done")').count() >= 1, 'the pushed offer spent its one negotiation');
   const talked = await fa.innerText();
   say(/came up|held firm|did not blink|pulled the offer/.test(talked), 'the talk line reports how it went');
