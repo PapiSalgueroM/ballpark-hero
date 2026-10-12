@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+simFoHub: node scripts/simFoHub.mjs
+simFoHub-nopost: FO_HUB_CONTROL=nopost node scripts/simFoHub.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+keeper-partplayoffs: SIM_SAVE_KEEPER_CONTROL=partplayoffs node scripts/simSaveKeeper.mjs
+keeper-partgamelog: SIM_SAVE_KEEPER_CONTROL=partgamelog node scripts/simSaveKeeper.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+nfldesk-boardedges: SIM_NFL_GM_DESK_CONTROL=boardedges node scripts/simNflGmDesk.mjs
+simGmReload: node scripts/simGmReload.mjs
+reload-replay: GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simFOSR: node scripts/simFrontOfficeSaveRecovery.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
