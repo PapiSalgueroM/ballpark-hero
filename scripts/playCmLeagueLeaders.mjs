@@ -6,8 +6,9 @@
  *   S1 an Everton career twenty entries into its season: a whole league (every club fields an eleven);
  *   S2 a Hertha BSC career twenty entries in: the 2. Bundesliga, where much of the league is not on record;
  *   S3 S1 with its book taken off (a save from before the book), then one league match played ON THE PAGE;
- *   S4 an Everton season played to its end and closed: the season review with the league's awards;
- *   S5 an Everton career in its seventh season: six past seasons of winners.
+ *   S4 an Arsenal season played to its end and closed: the season review with the league's awards;
+ *   S5 an Arsenal career in its seventh season: six past seasons of winners, the oldest without its team.
+ * (S4 and S5 take the first of six seeds on which the manager keeps his job.)
  * At 320 by 568, 390 by 844 and 1280 by 900, Chromium, the database host blocked and every other host too.
  *
  * What it holds, each read from what the page draws:
@@ -23,7 +24,9 @@
  *   4 THE LINES, word for word, each on the save that earns it and on no other: S1 no thin data line and no
  *     late line; S2 the thin data line with the share the reader gives; S3 the empty state before its match
  *     and, after it, "Counting from round N" with NO thin data line (a young book in a whole league is not
- *     thin, the critic's correction 2); S4 the review's two new award lines; S5 Past winners, newest first.
+ *     thin, the critic's correction 2); S4 the review's two new award lines and its team of the season tile
+ *     (eleven men, a back button); S5 Past winners, newest first, the fifth newest season with its team and
+ *     the sixth saying its team was let go.
  *   5 A MATCH WITH THE BOARDS OPEN IS THE MATCH WITHOUT THEM: two fresh contexts open S1 on one page seed
  *     (scripts/lib/pageSeed.mjs) and one clock; one opens all three boards and comes back, the other does
  *     not; both press Quick Sim once. The page has drawn the same count before the press, and the two saves
@@ -127,13 +130,21 @@ S.S1 = careerAt('Everton', 0x131101, 20);
 S.S2 = careerAt('Hertha BSC', 0x131102, 20);
 S.S3 = JSON.parse(JSON.stringify(S.S1));
 delete S.S3.leagueBook;
-S.S4 = onStream(0x131104, () => cm.finishSeason(toSeasonEnd(cm.startCareer('Everton'))).state);
-S.S5 = onStream(0x131105, () => {
-  let s = cm.startCareer('Everton');
-  for (let season = 0; season < 6; season += 1) s = cm.startNextSeason(cm.finishSeason(toSeasonEnd(s)).state);
-  for (let k = 0; k < 6; k += 1) s = cm.playNextEntry(s, { skipHalftime: true }).state;
+/* A club that is not sacked on the seed it is played on: the first seed of a few that keeps the job. */
+function kept(make, seed) {
+  for (let k = 0; k < 6; k += 1) {
+    const s = onStream(seed + k * 7919, make);
+    if (s && !s.sacked) return s;
+  }
+  return null;
+}
+S.S4 = kept(() => cm.finishSeason(toSeasonEnd(cm.startCareer('Arsenal'))).state, 0x131104);
+S.S5 = kept(() => {
+  let s = cm.startCareer('Arsenal');
+  for (let season = 0; season < 6 && !s.sacked; season += 1) s = cm.startNextSeason(cm.finishSeason(toSeasonEnd(s)).state);
+  for (let k = 0; k < 6 && !s.sacked; k += 1) s = cm.playNextEntry(s, { skipHalftime: true }).state;
   return s;
-});
+}, 0x131105);
 for (const [name, s] of Object.entries(S)) {
   if (!s || s.sacked) cannot(`${name} could not be built (sacked or empty)`);
   fs.writeFileSync(path.join(OUT, `save-${name}.json`), JSON.stringify(s));
@@ -361,6 +372,21 @@ for (const size of SIZES) {
       if (!aw.ast || !got.ast?.includes(`${aw.ast[0]}`) || !got.ast.includes(`(${aw.ast[1]}, ${aw.ast[2]})`)) fail('4', `${tag}: the review's most assists line reads ${JSON.stringify(got.ast)}, the save holds ${JSON.stringify(aw.ast)}`);
       if (!aw.glove || !got.glove?.includes(`${aw.glove[0]}`) || !got.glove.includes(`(${aw.glove[1]}, ${aw.glove[2]})`)) fail('4', `${tag}: the review's most clean sheets line reads ${JSON.stringify(got.glove)}, the save holds ${JSON.stringify(aw.glove)}`);
       if (got.withheld !== null) fail('4', `${tag}: a season the book decided says its awards were withheld`);
+      /* Step 5: the team of the season, one tile, opened in place and closed again. */
+      if (aw.xi) {
+        const tile = page.locator('[data-cm-team-tile]').first();
+        tick('4', 2);
+        await tile.click();
+        await page.locator('[data-cm-team-open]').waitFor();
+        await shot(page, `${tag}-team`);
+        const men = await page.locator('[data-cm-team-man]').count();
+        if (men !== 11) fail('4', `${tag}: the team of the season shows ${men} men`);
+        const back = await page.locator('[data-cm-team-back]').boundingBox();
+        tick('2');
+        if (!REPORT && (!back || back.width < 44 || back.height < 44)) fail('2', `${tag}: the team's back button is ${back ? `${back.width.toFixed(1)} by ${back.height.toFixed(1)}` : 'missing'}`);
+        await page.locator('[data-cm-team-back]').click();
+        if (!(await page.locator('[data-cm-team-tile]').count())) fail('4', `${tag}: Back from the team did not bring its tile back`);
+      }
     } catch (e) { fail('4', `${tag}: the walk could not go on: ${String(e?.message ?? e).split('\n')[0].slice(0, 200)}`); await shot(page, `${tag}-stuck`); }
     await context.close();
   }
@@ -381,6 +407,16 @@ for (const size of SIZES) {
       const second = await page.locator('[data-cm-past-season]').getAttribute('data-cm-past-season');
       if (Number(second) !== seasons[1]) fail('4', `${tag}: one step older shows season ${second}, not ${seasons[1]}`);
       for (const t of await targets(page)) { tick('2'); if (!REPORT && (t.w < 44 || t.h < 44 || (t.visible && !t.hit))) fail('2', `${tag}: on Past winners ${t.what} is ${t.w.toFixed(1)} by ${t.h.toFixed(1)}`); }
+      /* Step 5: the newest five seasons keep their team; the season before them says it was let go. */
+      if (seasons.length > 5) {
+        for (let k = 2; k < 5; k += 1) await page.locator('[data-cm-past-step="older"]').click();
+        tick('4', 2);
+        if (!(await page.locator('[data-cm-team]').count())) fail('4', `${tag}: the fifth newest season shows no team of the season`);
+        await page.locator('[data-cm-past-step="older"]').click();
+        await shot(page, `${tag}-past-sixth`);
+        const gone = await page.locator('[data-cm-team-gone]').textContent().catch(() => null);
+        if (gone !== 'The team of the season is kept for the last five seasons.') fail('4', `${tag}: the sixth newest season reads ${JSON.stringify(gone)} where its team was let go`);
+      }
       const sw = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       tick('2');
       if (!REPORT && sw > 0) fail('2', `${tag}: Past winners runs ${sw} px sideways`);

@@ -116,8 +116,8 @@
  *            under a name of my squad or, on Clean sheets, anybody but a keeper; (iii) the fleet once
  *            more with every reader called before every entry: the whole save but the book and the count
  *            of draws are the watched fleet's, and the save is the same text before and after the
- *            readers (leagueBoardsOf among them); (iv) the module's source and the league leaders card's
- *            (src/components/club-manager/LeagueLeadersCard.tsx), comments stripped, hold no Math.random,
+ *            readers (leagueBoardsOf among them); (iv) the module's source and the two cards'
+ *            (LeagueLeadersCard.tsx and SeasonHonoursCard.tsx), comments stripped, hold no Math.random,
  *            Date.now, new Date or localeCompare; and printed for the lead: the share and the keepers on record a
  *            league, each board's leader, and the three boards of three leagues after a full season
  *   awards   Round 1311, the season's honours, by the harness's own reading of the rule (a whole book with
@@ -283,6 +283,8 @@ const BOOK = 'src/lib/clubManagerLeagueBook.ts';
 const BOARDS = 'src/lib/clubManagerLeagueBoards.ts';
 /** Round 1311: the league leaders card, read by section boards (iv) only. */
 const LEADERS_CARD = 'src/components/club-manager/LeagueLeadersCard.tsx';
+/** Round 1311 step 5: the season's honours card, read by section boards (iv) beside it. */
+const HONOURS_CARD = 'src/components/club-manager/SeasonHonoursCard.tsx';
 const WEIGHT = 'src/lib/clubManagerGoalWeight.ts';
 const HOT = 'src/lib/managerHotSeat.ts';
 const DEADLINE = 'src/lib/deadlineDay.ts';
@@ -311,6 +313,9 @@ const HOT_CALL_BOOKED = who => `playNextEntry(${who}, { skipHalftime: true, noCo
 const SIDE_XI = '  const xi = pickOppSquad(roster)?.xi ?? null;';
 /* Round 1311: the line of the reader module that says whether the book decides the awards. */
 const DECIDES = '  return bookIsWhole(input.book) && bookShare(input.book, input.clubs).share >= AWARD_FLOOR;';
+/* Round 1311: the order the team of the season's back four is picked in, and the control's other reading. */
+const TEAM_DEF_ORDER = "  const defs = pick('DEF', TEAM_LINES.DEF, (a, b) => deeds(b) - deeds(a) || (clubSheets.get(b.club) ?? 0) - (clubSheets.get(a.club) ?? 0) || a.place - b.place || b.rating - a.rating || text(a.name, b.name) || text(a.club, b.club));";
+const TEAM_DEF_SHEETS = "  const defs = pick('DEF', TEAM_LINES.DEF, (a, b) => (b.sheets + deeds(b)) - (a.sheets + deeds(a)) || a.place - b.place || b.rating - a.rating || text(a.name, b.name) || text(a.club, b.club));";
 /* The line of the reader module that hands a board back (leaders). */
 const LEADERS_RETURN = '  return order.slice(0, Math.max(0, limit)).map(m => boardMan(m, kind));';
 /* The line of noteBookMine that credits a report's line and decides whether its assist is dealt. */
@@ -365,6 +370,8 @@ const CONTROLS = {
   bookleak: { patch: [{ file: BOOK, from: "      : kind !== 'open' && taker ? taker", to: '      : taker ? taker' }], red: 'facts', also: ['shapes', 'thin'] },
   awardlate: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookShare(input.book, input.clubs).share >= AWARD_FLOOR;' }], red: 'awards', also: ['oldsave'], mentions: ['a late book'] },
   awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', mentions: ['under the floor'] },
+  teamsheets: { patch: [{ file: BOARDS, from: TEAM_DEF_ORDER, to: TEAM_DEF_SHEETS }], red: 'awards', mentions: ['back four'] },
+  nocap: { patch: [{ file: ENGINE, from: '  state.history = keepTeams(state.history);', to: '' }], red: 'awards', mentions: ['team on'] },
   readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
   readerwrite: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  input.book.my.reverse();\n${LEADERS_RETURN}` }], red: 'boards' },
   thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
@@ -666,6 +673,9 @@ const sha = text => createHash('sha256').update(text).digest('hex').slice(0, 24)
    judged): a whole book (no r0) with at least this many in 100 rival goals on record (a named row or an own
    goal; the goals a late book was opened with left out). */
 const AWARD_FLOOR_RULED = 73;
+/* Round 1311 step 5: the back four's line, midway between the measured readings of the rule and of the
+   control teamsheets (BACK_FOUR_PENDING: set from the measurement). */
+const BACK_FOUR_LINE = 2.4;
 function shareByHand(s, book) {
   let on = 0;
   let u = 0;
@@ -1913,7 +1923,7 @@ function readEverything(mod, s) {
   }
   /* (iv) the reader draws nothing and reads no clock or locale: its source as the control layer hands it,
      comments stripped. */
-  for (const file of [BOARDS, LEADERS_CARD].filter(x => fs.existsSync(path.join(ROOT, x)))) {
+  for (const file of [BOARDS, LEADERS_CARD, HONOURS_CARD].filter(x => fs.existsSync(path.join(ROOT, x)))) {
     let text = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
     for (const p of (CONTROL ? CONTROLS[CONTROL].patch : []).filter(x => x.file === file)) text = text.split(p.from).join(p.to);
     const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -1964,6 +1974,25 @@ function judgeAwards(mod, label, before, fin, season) {
       const m = first(kind);
       if (m) want[key] = [m.name, m.club, m.n, (m.gen ? 1 : 0) + (m.mine ? 2 : 0)];
     }
+    /* Round 1311 step 5: the team of the season, by the module, held to its shape here. */
+    const xi = boards.teamOfSeason(lb.input);
+    if (xi) {
+      want.xi = xi;
+      tick('awards', 3);
+      const lines = xi.map(m => lineOf(m[2]));
+      const shape = ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'MID', 'ATT', 'ATT'];
+      if (JSON.stringify(lines) !== JSON.stringify(shape)) fail('awards', `${where}: the team of the season is not a keeper, four defenders, four midfielders and two forwards: ${lines.join(' ')}`);
+      if (new Set(xi.map(m => `${m[0]}|${m[1]}|${m[2]}`)).size !== 11) fail('awards', `${where}: a man is twice in the team of the season`);
+      const myNames = new Set(before.squad.map(p => p.name));
+      const rowKeys = new Set(mod.book.bookRows(book).map(r => `${r.name}|${r.club}|${r.pos}`));
+      const stray = xi.find(m => ((m[3] & 2) ? !myNames.has(m[0]) : !rowKeys.has(`${m[0]}|${m[1]}|${m[2]}`)));
+      if (stray) fail('awards', `${where}: ${stray[0]} (${stray[1]}) is in the team of the season with no row in the book and not in my squad`);
+      /* (v) the back four: how many of one club. */
+      const counts = new Map();
+      for (const m of xi.slice(1, 5)) counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
+      acc.backFours = acc.backFours ?? [];
+      acc.backFours.push(Math.max(...counts.values()));
+    } else acc.noTeam = (acc.noTeam ?? 0) + 1;
     if (JSON.stringify(summary.awards ?? null) !== JSON.stringify(want)) fail('awards', `${where}: the summary's awards ${JSON.stringify(summary.awards)} are not the first of each board with the share on record ${JSON.stringify(want)}`);
     if (JSON.stringify(record?.awards ?? null) !== JSON.stringify(want)) fail('awards', `${where}: the season's record keeps ${JSON.stringify(record?.awards)}, not the summary's awards`);
   } else {
@@ -1994,6 +2023,35 @@ function judgeAwards(mod, label, before, fin, season) {
   }
   tick('awards');
   if (!lateEnds) fail('awards', 'the late arm never ended a season on a late book: the rule for a late book was not tried');
+  /* (v) THE BACK FOUR (step 5): over every season the book decided, the mean number of men of one club in the
+     team's back four. Round 1229 read 1.7 under this rule and 2.9 to 3.2 under "clean sheets plus goals plus
+     assists" (the control teamsheets). BACK_FOUR_LINE is midway between the two measured ranges (header). */
+  {
+    const xs = acc.backFours ?? [];
+    tick('awards');
+    if (xs.length < 4) fail('awards', `only ${xs.length} teams of the season to judge the back four on`);
+    else if (mean(xs) > BACK_FOUR_LINE) fail('awards', `the back four holds ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams, over the line of ${BACK_FOUR_LINE}`);
+    console.log(`awards  back four: ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams of the season (line ${BACK_FOUR_LINE}); ${acc.noTeam ?? 0} seasons the book decided had no team`);
+  }
+  /* (ii) A SEVEN SEASON CAREER: the three winners on all seven records, the team on the newest five only, every
+     record the same after a JSON round trip. One club of the fleet, on a fresh copy. */
+  {
+    const seven = await candidate.again();
+    const f = fleet[0];
+    let records = null;
+    playCareer(seven, f.club, f.era, (f.seed ^ 0x7777) >>> 0, { finished(before, fin, season) { if (season === 6) records = fin.state.history; } }, 7);
+    tick('awards', 3);
+    if (!records) fail('awards', `${f.club}: the seven season career did not reach its seventh season's end`);
+    else {
+      const withAwards = records.filter(h => h.awards).sort((a, b) => b.season - a.season);
+      const teams = withAwards.filter(h => h.awards.xi).map(h => h.season);
+      const newest = withAwards.slice(0, 5).map(h => h.season);
+      if (withAwards.length < 7) fail('awards', `${f.club}: ${withAwards.length} of 7 records hold awards`);
+      if (teams.some(s => !newest.includes(s))) fail('awards', `${f.club}: a team on season ${teams.find(s => !newest.includes(s))}, older than the newest five records with awards`);
+      if (JSON.stringify(JSON.parse(JSON.stringify(records))) !== JSON.stringify(records)) fail('awards', `${f.club}: the records do not survive a JSON round trip`);
+      console.log(`awards  seven seasons of ${f.club}: awards on ${withAwards.length} records, a team on ${teams.length} (seasons ${teams.join(', ')})`);
+    }
+  }
   /* (iii) WHAT WAS NOT MEANT TO CHANGE (needs BOOK_BASE): on a season the book does not decide, the WHOLE
      summary and record are the base commit's; on one it decides, all of them but the four moved fields. */
   let same = 0;

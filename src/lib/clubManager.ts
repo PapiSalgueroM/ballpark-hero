@@ -54,7 +54,7 @@ import {
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
-import { bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
+import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -451,6 +451,19 @@ export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
     lineOf: groupOf,
   };
   return { input, share: bookShare(book, clubs).share, from: book.r0 ?? null, keepers: keepersOnRecord(clubs) };
+}
+
+/** Round 1311: the team of the season is kept on the newest TEAMS_KEPT records that hold awards and let go
+ *  from every older one (the three winners stay on every record). A record with no team is left as it is,
+ *  so a history that never held a team comes back the very same objects. */
+export function keepTeams(history: SeasonRecord[]): SeasonRecord[] {
+  const keep = new Set(history.filter(h => h.awards).map(h => h.season).sort((a, b) => b - a).slice(0, TEAMS_KEPT));
+  return history.map(h => {
+    if (!h.awards?.xi || keep.has(h.season)) return h;
+    const { xi, ...rest } = h.awards;
+    void xi;
+    return { ...h, awards: rest };
+  });
 }
 
 /** Round 1311: who settles this season's golden boot and awards. 'book' on a season the league book
@@ -19483,6 +19496,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     ...state.history.filter(h => h.season !== state.season),
     { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}) },
   ];
+  state.history = keepTeams(state.history);
   state.pendingSummary = summary;
   return { state, summary };
 }

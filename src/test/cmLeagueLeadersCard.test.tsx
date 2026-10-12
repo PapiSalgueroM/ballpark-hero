@@ -16,7 +16,7 @@ import path from 'node:path';
 import { EXAMPLE_ELEVEN, LeagueLeadersCard, ordinal, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
-import { finishSeason, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
+import { finishSeason, keepTeams, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
 import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, seasonAwards, type BoardKind } from '@/lib/clubManagerLeagueBoards';
 import { dealShares } from '@/lib/clubManagerLeagueBook';
 
@@ -200,6 +200,16 @@ describe('the season review', () => {
     expect(a.container.querySelector('[data-cm-award="glove"]')?.textContent).toContain(`${glove.name} (${glove.club}, ${glove.n})`);
     expect(a.container.textContent).toContain(`Golden boot: ${summary.goldenBoot!.name}`);
     expect(a.container.querySelector('[data-cm-award-withheld]')).toBeNull();
+    /* Step 5: one tile for the team of the season, opened in place and closed again. */
+    const xi = summary.awards!.xi!;
+    expect(xi).toHaveLength(11);
+    const mineIn = xi.filter(m => (m[3] & 2) !== 0).length;
+    const tile = a.container.querySelector('[data-cm-team-tile]')!;
+    expect(tile.textContent).toContain(mineIn ? `${mineIn} of yours made it` : 'None of yours this time');
+    fireEvent.click(tile);
+    expect([...a.container.querySelectorAll('[data-cm-team-man]')].map(el => el.querySelector('span')?.textContent)).toEqual(xi.map(m => m[0]));
+    fireEvent.click(a.container.querySelector('[data-cm-team-back]')!);
+    expect(a.container.querySelector('[data-cm-team-tile]')).not.toBeNull();
     noDash(a.container);
     cleanup();
     /* A summary from before the awards: no awards field, and it prints what it always did. */
@@ -259,5 +269,30 @@ describe('past winners', () => {
     const s = everton();
     s.history = s.history.map(h => { const { awards, ...rest } = h; void awards; return rest; });
     expect(draw(s).q('[data-cm-leaders-tile="past"]')).toBeNull();
+  });
+});
+
+/* Round 1311 step 5: the team is kept on the newest five records with awards and let go from every older one. */
+describe('the team of the season on the records', () => {
+  it('keeps the team on the newest five records and the winners on all of them', () => {
+    const s = everton();
+    const aw = seasonAwards(leagueBoardsOf(s)!.input)!;
+    expect(aw.xi).toHaveLength(11);
+    const rec = s.history[0] ?? { season: 0, club: s.clubName, position: 1, points: 0, trophies: [] };
+    const seven = [1, 2, 3, 4, 5, 6, 7].map(season => ({ ...rec, season, awards: aw }));
+    const kept = keepTeams(seven);
+    expect(kept.filter(h => h.awards?.xi).map(h => h.season)).toEqual([3, 4, 5, 6, 7]);
+    expect(kept.every(h => h.awards?.boot)).toBe(true);
+    /* A history with no team comes back the very same objects. */
+    const plain = seven.map(h => ({ ...h, awards: { cov: aw.cov, boot: aw.boot } }));
+    expect(keepTeams(plain).every((h, i) => h === plain[i])).toBe(true);
+    /* Past winners: the newest shows its team, the sixth newest says it was let go. */
+    s.history = kept;
+    const p = draw(s, 'past');
+    expect(p.q('[data-cm-team]')).not.toBeNull();
+    for (let k = 0; k < 5; k += 1) fireEvent.click(p.q('[data-cm-past-step="older"]')!);
+    expect(p.q('[data-cm-past-season]')?.getAttribute('data-cm-past-season')).toBe('2');
+    expect(p.q('[data-cm-team-gone]')?.textContent).toBe('The team of the season is kept for the last five seasons.');
+    noDash(p.container);
   });
 });

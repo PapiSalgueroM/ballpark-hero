@@ -15,9 +15,10 @@ import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { careerLeagueOf, leagueBoardsOf, leagueBookRules } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, type AwardMan, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
+import { AWARD_FLOOR, BOOK_FULL_SHARE, TEAMS_KEPT, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { SeasonHonoursCard } from '@/components/club-manager/SeasonHonoursCard';
 
 /** A board of the card: one of the three, or the past winners. */
 export type LeadersBoard = BoardKind | 'past';
@@ -79,7 +80,7 @@ function LeadersRules() {
       <p data-cm-leaders-example>Worked example: a side with a striker on {ratings('striker')[0]}, a winger on {ratings('winger')[0]}, a number ten on {ratings('number ten')[0]}, central midfielders on {mids.join(' and ')}, a holder on {ratings('holder')[0]} and a back four on {Math.min(...backs)} to {Math.max(...backs)}. Of every 100 goals it scores, {parts.join(', ')}, and the back four {ex.backFour} between them. About {ex.ownGoals} are own goals.</p>
       <p>Your own players are counted off their own league lines. A man you sign in mid season starts from nought here, and what he scored for his old club stays in that club's total.</p>
       <p>The Clean sheets board is the keepers': one for every league match his side keeps everybody out.</p>
-      <p data-cm-leaders-awards>When the season ends, the first man on each board wins it: the golden boot, the most assists and the most clean sheets, all in your season review. That takes a book of the whole season with at least {AWARD_FLOOR} in 100 of the other clubs' goals on record. Short of that the golden boot goes to the older scorers' race and the other two wait for next season.</p>
+      <p data-cm-leaders-awards>When the season ends, the first man on each board wins it: the golden boot, the most assists and the most clean sheets, all in your season review, with a team of the season: a 4-4-2 picked on goals plus assists (clean sheets for the keeper), so a holder or a centre back gets in on what he scored and set up. Your own players count the same way. That takes a book of the whole season with at least {AWARD_FLOOR} in 100 of the other clubs' goals on record. Short of that the golden boot goes to the older scorers' race and the other two wait for next season.</p>
       <p>Where the data on a squad is thin, the goals of the places it does not cover count for the club and no name. A save that had no book when its season began starts one at its next league match, and the boards count from that round for everybody.</p>
     </div>
   );
@@ -88,16 +89,6 @@ function LeadersRules() {
 const nameClass = (m: BoardMan) => cn('font-bold', m.mine ? 'text-primary' : 'text-foreground');
 
 const stepButton = 'inline-flex items-center justify-center gap-1 min-h-[44px] min-w-[44px] px-3 rounded-lg border border-border text-xs disabled:opacity-40';
-
-/** One winner of a past season: name (mine marked, made up tagged), club and number. */
-function Winner({ label, icon, m }: { label: string; icon: string; m: AwardMan }) {
-  return (
-    <p data-cm-past-winner className="text-xs text-foreground">
-      <span className="mr-1">{icon}</span>{label}: <span className={cn('font-bold', (m[3] & 2) !== 0 ? 'text-primary' : 'text-foreground')}>{m[0]}</span>
-      {(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} <span className="text-muted-foreground">({m[1]}, {m[2]})</span>
-    </p>
-  );
-}
 
 /** Round 1311: the past winners, one season at a time, newest first, read from the save's own records. */
 function PastWinners({ career, onBack }: { career: CareerState; onBack: () => void }) {
@@ -118,9 +109,7 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
         : (
           <div data-cm-past-season={rec.season} className="space-y-1">
             <div className="text-xs text-muted-foreground">Season {rec.season} · {rec.club}</div>
-            {aw.boot && <Winner label="Top scorer" icon="⚽" m={aw.boot} />}
-            {aw.ast && <Winner label="Most assists" icon="🅰️" m={aw.ast} />}
-            {aw.glove && <Winner label="Most clean sheets" icon="🧤" m={aw.glove} />}
+            <SeasonHonoursCard awards={aw} recent={i < TEAMS_KEPT} />
             {aw.cov < BOOK_FULL_SHARE && <p className="text-[9px] text-yellow-500/80">The data covered only part of that league: {aw.cov} in 100 of the other clubs' goals had a name on them.</p>}
           </div>
         )}
@@ -182,7 +171,7 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
     <button type="button" data-cm-leaders-tile="past" onClick={() => onBoard('past')}
       className="min-h-[44px] w-full rounded-xl border border-border bg-background/40 px-2.5 py-2 text-left hover:border-primary">
       <div className="text-[9px] text-muted-foreground uppercase tracking-wider">🏅 Past winners</div>
-      <div className="text-xs text-muted-foreground">Every season's top scorer, most assists and most clean sheets</div>
+      <div className="text-xs text-muted-foreground">Every season's winners and its team of the season</div>
     </button>
   );
   /* A. No book this season (or one the next match week will replace). */

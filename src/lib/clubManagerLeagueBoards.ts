@@ -170,9 +170,58 @@ export function bestOfMine(input: BoardInput, kind: BoardKind): { place: number;
  *  tuple of fixed length, no holes, so it survives the JSON clone every entry point makes. */
 export type AwardMan = [name: string, club: string, n: number, flags: number];
 
+/** One man of a team of the season: name, club, position, flags (1 made up, 2 one of mine). */
+export type TeamMan = [name: string, club: string, pos: Position, flags: number];
+
 /** A season's awards from the book. `cov` is the share on record when the season closed. A board with
- *  nobody on it gives no winner (the field is left out). */
-export interface SeasonAwards { cov: number; boot?: AwardMan; ast?: AwardMan; glove?: AwardMan }
+ *  nobody on it gives no winner (the field is left out). `xi` is the team of the season, kept on the
+ *  newest TEAMS_KEPT records only. */
+export interface SeasonAwards { cov: number; boot?: AwardMan; ast?: AwardMan; glove?: AwardMan; xi?: TeamMan[] }
+
+/** The team of the season's lines, a 4-4-2: the shape every full eleven of the league is picked in. */
+export const TEAM_LINES = { DEF: 4, MID: 4, ATT: 2 } as const;
+/** How many seasons keep their team on the record: the three winners are kept for every season. */
+export const TEAMS_KEPT = 5;
+
+/**
+ * Round 1311, the team of the season (the lead's ruling, a 4-4-2 by the engine's own lines). The pool is the
+ * boards' own: every rival row (minus my squad's names) and every man of mine with a league appearance.
+ *  1 the keeper: a keeper with the most clean sheets; level men split by the club higher in the table, the
+ *    higher rating, the name. No keeper with a clean sheet: no team.
+ *  2 four defenders: most goals plus assists; level men split by their club's clean sheets (the sum on its
+ *    keepers' rows, or the largest on a defender's row when it has no keeper's row), then the club higher
+ *    in the table, the rating, the name.
+ *  3 four midfielders and 4 two forwards: most goals plus assists; level men split by the rating, the club
+ *    higher in the table, the name.
+ * A man is picked once. A line that cannot be filled means no team that season: never padded.
+ */
+export function teamOfSeason(input: BoardInput): TeamMan[] | null {
+  const men = ranked(input);
+  const myIds = new Map(input.mine.map(p => [p.name, p]));
+  const pool = men.filter(m => !m.mine || (myIds.get(m.name)?.apps ?? 0) > 0)
+    .map(m => ({ ...m, line: input.lineOf(m.pos), rating: m.mine ? (myIds.get(m.name)?.rating ?? 0) : input.ratingOf(m.club, m.name, m.pos) }));
+  const clubSheets = new Map<string, number>();
+  for (const club of new Set(pool.map(m => m.club))) {
+    const of = pool.filter(m => m.club === club);
+    const keepers = of.filter(m => m.pos === 'GK');
+    clubSheets.set(club, keepers.length ? keepers.reduce((n, m) => n + m.sheets, 0) : Math.max(0, ...of.filter(m => m.line === 'DEF').map(m => m.sheets)));
+  }
+  const flags = (m: Ranked) => (m.gen ? 1 : 0) + (m.mine ? 2 : 0);
+  const deeds = (m: Ranked) => m.goals + m.assists;
+  const keeper = pool.filter(m => m.pos === 'GK' && m.sheets > 0)
+    .sort((a, b) => b.sheets - a.sheets || a.place - b.place || b.rating - a.rating || text(a.name, b.name) || text(a.club, b.club))[0];
+  if (!keeper) return null;
+  const pick = (line: 'DEF' | 'MID' | 'ATT', n: number, order: (a: typeof pool[number], b: typeof pool[number]) => number) => {
+    const got = pool.filter(m => m.line === line && m.pos !== 'GK').sort(order).slice(0, n);
+    return got.length === n ? got : null;
+  };
+  const defs = pick('DEF', TEAM_LINES.DEF, (a, b) => deeds(b) - deeds(a) || (clubSheets.get(b.club) ?? 0) - (clubSheets.get(a.club) ?? 0) || a.place - b.place || b.rating - a.rating || text(a.name, b.name) || text(a.club, b.club));
+  const byDeeds = (a: typeof pool[number], b: typeof pool[number]) => deeds(b) - deeds(a) || b.rating - a.rating || a.place - b.place || text(a.name, b.name) || text(a.club, b.club);
+  const mids = pick('MID', TEAM_LINES.MID, byDeeds);
+  const atts = pick('ATT', TEAM_LINES.ATT, byDeeds);
+  if (!defs || !mids || !atts) return null;
+  return [keeper, ...defs, ...mids, ...atts].map((m): TeamMan => [m.name, m.club, m.pos, flags(m)]);
+}
 
 /** Do the awards come from the book? Only off a WHOLE book with at least AWARD_FLOOR in 100 on record. */
 export function bookDecides(input: BoardInput): boolean {
@@ -192,5 +241,7 @@ export function seasonAwards(input: BoardInput): SeasonAwards | null {
   if (boot) out.boot = awardMan(boot);
   if (ast) out.ast = awardMan(ast);
   if (glove) out.glove = awardMan(glove);
+  const xi = teamOfSeason(input);
+  if (xi) out.xi = xi;
   return out;
 }
