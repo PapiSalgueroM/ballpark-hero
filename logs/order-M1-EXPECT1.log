@@ -1,0 +1,26 @@
+mut M1: applied to src/lib/soccerCareerEngine.ts
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+[90mstdout[2m | src/test/soccerPressSettlementOrder.test.ts[2m > [22m[2mthe Press room settles in its ruled place[2m > [22m[2ma played season settles the promise BEFORE the money: its popularity swing is in the year's sponsorship income
+[22m[39mpress order: 47 of 47 starting popularities settled met or missed (0 met); the year's sponsorship income differs from the save with no part at 0 of them: 
+[90mstdout[2m | src/test/soccerPressSettlementOrder.test.ts[2m > [22m[2mthe Press room settles in its ruled place[2m > [22m[2ma year lost to a severe injury closes a pending promise with no verdict, on the injury row itself
+[22m[39mpress order: 7 severe injury rows arrived with a promise pending in 13 careers: seed 201, 2022 at West Ham: excused; seed 205, 2022 at Jeonbuk Motors: excused; seed 206, 2014 at Aston Villa: excused; seed 210, 2013 at Fulham: excused; seed 210, 2021 at Fulham: excused; seed 213, 2021 at Tottenham: excused; seed 213, 2025 at Tottenham: excused
+ [31m❯[39m src/test/soccerPressSettlementOrder.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1123[2mms[22m[39m
+[31m   [31m×[31m the Press room settles in its ruled place[2m > [22ma played season settles the promise BEFORE the money: its popularity swing is in the year's sponsorship income[39m[32m 175[2mms[22m[39m
+[31m     → expected 0 to be greater than or equal to 2[39m
+   [33m[2m✓[22m[39m the Press room settles in its ruled place[2m > [22ma year lost to a severe injury closes a pending promise with no verdict, on the injury row itself [33m 948[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerPressSettlementOrder.test.ts[2m > [22mthe Press room settles in its ruled place[2m > [22ma played season settles the promise BEFORE the money: its popularity swing is in the year's sponsorship income
+[31m[1mAssertionError[22m: expected 0 to be greater than or equal to 2[39m
+[36m [2m❯[22m src/test/soccerPressSettlementOrder.test.ts:[2m98:26[22m[39m
+    [90m 96| [39m    [34mexpect[39m(rows[33m.[39mlength)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m24[39m)[33m;[39m
+    [90m 97| [39m    /* the swing reached the money somewhere, and wherever it did it w…
+    [90m 98| [39m    [34mexpect[39m(moved[33m.[39mlength)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m2[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m 99| [39m    for (const r of moved) expect(Math.sign(r.with - r.without), `popu…
+    [90m100| [39m  })[33m;[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 00:48:05
+[2m   Duration [22m 2.41s[2m (transform 684ms, setup 28ms, collect 837ms, tests 1.12s, environment 163ms, prepare 39ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressSettlementOrder.test.ts,title=src/test/soccerPressSettlementOrder.test.ts > the Press room settles in its ruled place > a played season settles the promise BEFORE the money%3A its popularity swing is in the year's sponsorship income,line=98,column=26::AssertionError: expected 0 to be greater than or equal to 2%0A ❯ src/test/soccerPressSettlementOrder.test.ts:98:26%0A%0A

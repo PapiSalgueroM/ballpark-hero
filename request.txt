@@ -1,0 +1,7 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+order: node_modules/.bin/vitest run src/test/soccerPressSettlementOrder.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -v "^$" | cut -c1-900 | tail -30; exit ${PIPESTATUS[0]}
+order-M1-EXPECT1: node .rc/x/mut.mjs M1 && node_modules/.bin/vitest run src/test/soccerPressSettlementOrder.test.ts --testTimeout=300000 2>&1 | grep -v "^$" | cut -c1-500 | tail -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+order-M2-EXPECT1: node .rc/x/mut.mjs M2 && node_modules/.bin/vitest run src/test/soccerPressSettlementOrder.test.ts --testTimeout=300000 2>&1 | grep -v "^$" | cut -c1-500 | tail -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+pressUnits: node_modules/.bin/vitest run src/lib/soccerCareerPress.test.ts src/test/soccerPressRoomUi.test.tsx src/test/soccerPressRoomReadAsAbsent.test.tsx src/test/soccerSavePartsReadAsAbsent.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+clean: git status --short | head -5; echo "changed files: $(git status --short | wc -l)"

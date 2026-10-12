@@ -1,0 +1,6 @@
+tsc exit=0 37s | 
+order exit=0 2s |    Duration  1.89s (transform 720ms, setup 30ms, collect 911ms, tests 526ms, environment 172ms, prepare 79ms)
+order-M1-EXPECT1 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressSettlementOrder.test.ts,title=src/test/soccerPressSettlementOrder.test.ts > the Press room 
+order-M2-EXPECT1 exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressSettlementOrder.test.ts,title=src/test/soccerPressSettlementOrder.test.ts > the Press room 
+pressUnits exit=0 5s |    Duration  4.97s (transform 753ms, setup 160ms, collect 2.64s, tests 4.20s, environment 909ms, prepare 298ms)
+clean exit=0 0s | changed files: 0

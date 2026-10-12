@@ -1,0 +1,31 @@
+mut M2: applied to src/lib/soccerCareerEngine.ts
+[31m   [31m×[31m the Press room settles in its ruled place[2m > [22ma year lost to a severe injury closes a pending promise with no verdict, on the injury row itself[39m[33m 364[2mms[22m[39m
+[31m     → expected [ …(7) ] to deeply equal [][39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerPressSettlementOrder.test.ts[2m > [22mthe Press room settles in its ruled place[2m > [22ma year lost to a severe injury closes a pending promise with no verdict, on the injury row itself
+[31m[1mAssertionError[22m: expected [ …(7) ] to deeply equal [][39m
+[32m- Expected[39m
+[31m+ Received[39m
+[32m- [][39m
+[31m+ [[39m
+[31m+   "seed 201, 2019 at West Ham: STILL PENDING",[39m
+[31m+   "seed 201, 2029 at West Ham: STILL PENDING",[39m
+[31m+   "seed 202, 2021 at Man City: STILL PENDING",[39m
+[31m+   "seed 203, 2018 at Everton: STILL PENDING",[39m
+[31m+   "seed 203, 2019 at Everton: STILL PENDING",[39m
+[31m+   "seed 204, 2016 at Aston Villa: STILL PENDING",[39m
+[31m+   "seed 204, 2020 at Aston Villa: STILL PENDING",[39m
+[31m+ ][39m
+[36m [2m❯[22m src/test/soccerPressSettlementOrder.test.ts:[2m123:19[22m[39m
+    [90m121| [39m    }
+    [90m122| [39m    console.log(`press order: ${held.length} severe injury rows arrive…
+    [90m123| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m124| [39m    [34mexpect[39m(held[33m.[39mlength)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m3[39m)[33m;[39m
+    [90m125| [39m  })[33m;[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 00:48:09
+[2m   Duration [22m 1.87s[2m (transform 707ms, setup 28ms, collect 893ms, tests 536ms, environment 162ms, prepare 73ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressSettlementOrder.test.ts,title=src/test/soccerPressSettlementOrder.test.ts > the Press room settles in its ruled place > a year lost to a severe injury closes a pending promise with no verdict%2C on the injury row itself,line=123,column=19::AssertionError: expected [ …(7) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "seed 201, 2019 at West Ham: STILL PENDING",%0A+   "seed 201, 2029 at West 
