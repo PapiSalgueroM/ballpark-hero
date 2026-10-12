@@ -1,0 +1,8 @@
+# Round 1311 fixer, served again: playClubManager alone twice (its one finding on r1311-fx-final-b was SHALLOW: sacked after 15 full times with 0 signings), and playSaveKeeper on the branch arm
+#!serve
+#!playwright
+#!serial
+playClubManager: node scripts/playClubManager.mjs
+playClubManager-again: node scripts/playClubManager.mjs
+playSaveKeeper: KEEPER_NO_BASE=1 node scripts/playSaveKeeper.mjs
+playClubManagerSaveLeave: node scripts/playClubManagerSaveLeave.mjs
