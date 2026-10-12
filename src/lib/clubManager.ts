@@ -267,6 +267,12 @@ export function mySquadNames(state: CareerState): Set<string> {
   return new Set(state.squad.map(p => p.name));
 }
 
+/* Release AZ fix (reviewer 1, minor 1): structuredClone needs Safari 15.4, Chrome 98 and Firefox 94, and vite builds
+   for older browsers than that with no polyfill, so on those the first deal of a seeded career threw. Everything
+   copied here is plain save data, so the house copy is equal (it drops only keys whose value is undefined, which
+   the save drops anyway). */
+const plainCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+
 /** The held seed is optional, so an old save keeps the original projected world. */
 export function worldSeedOf(career: CareerState): number | undefined {
   const seed = career.worldSeed;
@@ -303,8 +309,8 @@ function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, yea
     if (record.year === year || record.status === 'retired') return record;
     const actual = career.squad.find(p => p.worldRosterKey === record.key && !p.onLoan
       && p.name === record.origin.name && year - p.age === record.origin.birthYear);
-    if (record.owner === career.clubName && actual) return { ...structuredClone(record), year, player: structuredClone(actual) };
-    let player = structuredClone(record.player);
+    if (record.owner === career.clubName && actual) return { ...plainCopy(record), year, player: plainCopy(actual) };
+    let player = plainCopy(record.player);
     let status: WorldRosterState['records'][number]['status'] = record.status;
     let owner = record.owner;
     for (let next = record.year + 1; next <= year; next++) {
@@ -319,7 +325,7 @@ function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, yea
          what a club would offer him). No random draw is taken. scripts/simCmLedgerBound.mjs holds it. */
       if (status === 'owned' && (player.contractYears ?? 1) <= 0) player = { ...player, contractYears: renewalTerms(player).years };
     }
-    return { ...structuredClone(record), year: record.origin.birthYear + player.age, player, status, owner };
+    return { ...plainCopy(record), year: record.origin.birthYear + player.age, player, status, owner };
   });
   /* Release AZ fix (reviewer 2, MAJOR 1): the ledger never dropped a record, so a seeded career gained about
      nine a season for ever (374 by season 40), and the save and the cost of every read grew with it. A released
@@ -335,7 +341,7 @@ function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, yea
   const ledger = compactWorldRoster({ ...held, records: kept });
   /* A packed ledger pruned down to owned records only is stored plain, so it must not share the read's objects. */
   return { ...career, worldRoster: ledger.packedRecords === undefined && held !== career.worldRoster
-    ? { ...ledger, records: kept.map(record => structuredClone(record)) } : ledger };
+    ? { ...ledger, records: kept.map(record => plainCopy(record)) } : ledger };
 }
 
 /** Ownership is applied to the same projected players used for rivals and the market. */
@@ -17935,7 +17941,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
     state.startYear = world.rosterCareer.startYear;
-    if (world.rosterCareer.worldRoster !== undefined) state.worldRoster = structuredClone(world.rosterCareer.worldRoster);
+    if (world.rosterCareer.worldRoster !== undefined) state.worldRoster = plainCopy(world.rosterCareer.worldRoster);
     if (world.rosterCareer.worldSeed !== undefined) state.worldSeed = world.rosterCareer.worldSeed;
   }
   /* Round 964: the edited world rides on the save the way a promoted one
@@ -20301,7 +20307,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     leagueOverrides: pr.overrides ?? undefined,
   };
   delete state.realLeagueFixtures;
-  if (worldRosterView(rosterCareer)) state.worldRoster = structuredClone(rosterCareer.worldRoster);
+  if (worldRosterView(rosterCareer)) state.worldRoster = plainCopy(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make
      the outcome explicit: staying keeps the re-measured spec, moving drops
      the club you built. */

@@ -45,6 +45,11 @@ const positions = new Set(['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'C
 const text = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
 const count = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
+/* Release AZ fix (reviewer 1, minor 1): structuredClone needs Safari 15.4, Chrome 98 and Firefox 94, and vite builds
+   for older browsers than that with no polyfill, so on those the first deal of a seeded career threw. Everything
+   copied here is plain save data, so the house copy is equal (it drops only keys whose value is undefined, which
+   the save drops anyway). */
+const plainCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 function yearOf(career: CareerState): number | null {
   const start = career.startYear === undefined ? 2026 : career.startYear;
   if (!count(start) || !count(career.season) || career.season < 1) return null;
@@ -132,7 +137,7 @@ export function readWorldRoster(career: CareerState): WorldRosterState | null {
         cached = { packed: raw.packedRecords, format: raw.packedFormat === 'rows-v1' ? 'rows-v1' : undefined, records: values };
         packedRecordCache.set(raw, cached);
       }
-      records = structuredClone(cached.records);
+      records = plainCopy(cached.records);
     } catch { return null; }
   }
   const keys = new Set<string>();
@@ -252,13 +257,13 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
   if (!key) return career;
   const origin = previous?.origin ?? { club: transfer.from!, name: transfer.player.name, position,
     birthYear: year - transfer.player.age, since: transfer.since ?? null };
-  const record: WorldRosterRecord = { key, origin: structuredClone(origin), owner, status, year,
-    player: { ...structuredClone(transfer.player), worldRosterKey: key } };
-  const records = (held?.records ?? []).filter(item => item.key !== key).map(item => structuredClone(item));
+  const record: WorldRosterRecord = { key, origin: plainCopy(origin), owner, status, year,
+    player: { ...plainCopy(transfer.player), worldRosterKey: key } };
+  const records = (held?.records ?? []).filter(item => item.key !== key).map(item => plainCopy(item));
   records.push(record);
   const squad = owner === career.clubName
     ? career.squad.map(player => player.id === transfer.player.id && samePlayer(player, origin, year)
-      ? { ...structuredClone(player), worldRosterKey: key } : player)
+      ? { ...plainCopy(player), worldRosterKey: key } : player)
     : career.squad;
   return { ...career, squad, worldRoster: compactWorldRoster({ version: 1, eraId: career.eraId ?? 'now', records }) };
 }
@@ -275,14 +280,14 @@ export function snapshotWorldRosterClub(career: CareerState, club: string, playe
       && samePlayer(player, record.origin, year) && (player.worldRosterKey ? player.worldRosterKey === record.key : player.id === record.player.id));
     if (!matches.length) continue;
     if (matches.length !== 1 || updates.has(matches[0].key)) return career;
-    updates.set(matches[0].key, { ...structuredClone(player), worldRosterKey: matches[0].key });
+    updates.set(matches[0].key, { ...plainCopy(player), worldRosterKey: matches[0].key });
   }
   if (![...updates].some(([key, player]) => {
     const old = held.records.find(record => record.key === key)!;
     return old.year !== year || !samePayload(old.player, player);
   })) return career;
   return { ...career, worldRoster: compactWorldRoster({ ...held, records: held.records.map(record => updates.has(record.key)
-    ? { ...structuredClone(record), year, player: updates.get(record.key)! } : structuredClone(record)) }) };
+    ? { ...plainCopy(record), year, player: updates.get(record.key)! } : plainCopy(record)) }) };
 }
 
 /** Older records retain ownership, but their old payloads are not presented as current-year players. */
@@ -305,11 +310,11 @@ export function worldRosterClub(career: CareerState, club: string, fallback: rea
       && (player.worldRosterKey === item.key || (item.origin.club === club && player.position === item.origin.position && samePlayer(player, item.origin, year))));
     if (!record) return player;
     changed = true;
-    return structuredClone(record.player);
+    return plainCopy(record.player);
   });
   for (const record of records) {
     if (record.year === year && record.status === 'owned' && record.owner === club && !out.some(player => player.worldRosterKey === record.key)) {
-      out.push(structuredClone(record.player)); changed = true;
+      out.push(plainCopy(record.player)); changed = true;
     }
   }
   return changed ? out : fallback;

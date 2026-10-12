@@ -34,7 +34,7 @@ const CONTROL = process.env.CM_LEDGER_CONTROL || '';
 const cannot = why => { console.log(`simCmLedgerJourney: cannot run: ${why}`); process.exit(2); };
 if (CONTROL && CONTROL !== 'futureyear') cannot(`unknown control ${CONTROL}`);
 const LEDGER = 'src/lib/clubManagerWorldRoster.ts';
-const RECORD = '  const record: WorldRosterRecord = { key, origin: structuredClone(origin), owner, status, year,\n';
+const RECORD = '  const record: WorldRosterRecord = { key, origin: plainCopy(origin), owner, status, year,\n';
 const lf = s => s.split('\r\n').join('\n');
 
 let edited = false;

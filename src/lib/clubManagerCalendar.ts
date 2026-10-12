@@ -967,7 +967,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
-    ...(departed.worldRoster === undefined ? {} : { worldRoster: structuredClone(departed.worldRoster) }),
+    ...(departed.worldRoster === undefined ? {} : { worldRoster: JSON.parse(JSON.stringify(departed.worldRoster)) }),
     ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
