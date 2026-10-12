@@ -1,7 +1,11 @@
 /* Rounds 1172, 1280 and 1318 attribution. Restore exactly the changed new-ballot and
    newspaper decisions in a copied bundle for the older full-save fixture.
-   The unpatched bundle still runs every current award and speech invariant. */
-export const awardsNight1172Attribution = [
+   The unpatched bundle still runs every current award and speech invariant.
+   Round 1318: the rows that undo the generated rivals' pool (Round 1318's own
+   steps first, then the nine of Rounds 1280 to 1282) are their own list, so
+   scripts/simSoccerAwardGenerations.mjs can build its original arm from this
+   head with exactly these; the 1172 list still starts with all of them. */
+export const awardGenerationsInverse = [
   // Round 1318 inverse first (correction 12): a saved rival whose name is taken this year is replaced at once.
   {
     "from": "    let entry = pool.entries.find(row => row.role === role && row.slot === slot && row.retiredYear === null);\n    /* Round 1318: a saved rival whose name is already taken this year (the\n       career's own rival, say) would be skipped below every year until he\n       retired, shifting every later draw. He leaves at once instead, and his\n       slot gets a new face from the age already drawn: no extra draw. */\n    if (entry && usedNames.has(entry.name)) { entry.retiredYear = year; entry = undefined; }\n",
@@ -75,6 +79,9 @@ export const awardsNight1172Attribution = [
     "to": "export interface BallonDorNominee extends AwardsCandidate {\n  nationality: string;\n  club: string;\n  position: string;\n  goals: number;\n  trophies: string[];\n}",
     "file": "src/lib/soccerCareerEngine.ts"
   },
+];
+export const awardsNight1172Attribution = [
+  ...awardGenerationsInverse,
   { file: 'src/lib/soccerCareerEngine.ts', from: `  const generation = Math.min(5, Math.max(0, year - 2027));
   const eraStars = getEraStars(year);
   const eraCount = Math.ceil(eraStars.length * (5 - generation) / 5);

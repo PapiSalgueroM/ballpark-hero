@@ -10,10 +10,11 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import * as esbuild from 'esbuild';
 import { createAwardProofStorage } from './lib/awardProofStorage.mjs';
+import { awardGenerationsInverse } from './lib/careerAwardsNight1172.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.SOCCER_AWARD_GENERATIONS_OUT || path.join(ROOT, 'career-award-generations-artifacts/proof'));
-const BASE = 'aa564f16019b9e821981d5c4e3e0262312c73b62';
+const BASE = 'this head with the exact inverse of the pool lifecycle (Round 1318)';
 const ENGINE = 'src/lib/soccerCareerEngine.ts', SAVE = 'src/lib/soccerCareerSave.ts';
 const sha = x => crypto.createHash('sha256').update(x).digest('hex');
 const lf = s => s.replace(/\r\n/g, '\n');
@@ -276,14 +277,24 @@ function expectedControlGroups(id, healthy) {
 }
 async function main() {
   report.head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(); report.tree = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { cwd: ROOT, encoding: 'utf8' }).trim();
-  assert.equal(execFileSync('git', ['rev-parse', `${BASE}:${ENGINE}`], { cwd: ROOT, encoding: 'utf8' }).trim(), '1269513a237ce97cca7d65bf6b43f56c86facd88');
-  assert.equal(execFileSync('git', ['rev-parse', `${BASE}:${SAVE}`], { cwd: ROOT, encoding: 'utf8' }).trim(), 'ceeba9c3dc6c6558f9a4d11c0ec28c3beea4c465');
-  const baseRoot = path.join(ROOT, '.tmp-fx', `award-generations-base-${process.pid}`); fs.mkdirSync(baseRoot, { recursive: true });
-  const archive = execFileSync('git', ['archive', '--format=tar', BASE], { cwd: ROOT, maxBuffer: 150_000_000 });
-  const packedArchive = zlib.gzipSync(archive, { level: 9 }); fs.writeFileSync(path.join(OUT, 'original-source.tar.gz'), packedArchive);
-  execFileSync('tar', ['-xzf', path.join(OUT, 'original-source.tar.gz'), '-C', baseRoot]);
-  report.original = { archiveSha256: sha(archive), bytes: archive.length, packedSha256: sha(packedArchive), packedBytes: packedArchive.length, archivePath: 'original-source.tar.gz', codec: 'complete gzip TAR, no omitted members', tree: execFileSync('git', ['rev-parse', `${BASE}^{tree}`], { cwd: ROOT, encoding: 'utf8' }).trim(), inventory: putBytes(execFileSync('git', ['ls-tree', '-r', '-z', BASE], { cwd: ROOT }), 'git-inventory') };
-  const originalPlain = await bundle('original-plain', baseRoot, {}, false, false), originalObserved = await bundle('original-observed', baseRoot, {}, true, false);
+  /* Round 1318 (decision 6 of its brief): the original arm stands on THIS head, never on a fixed commit, so the next
+     engine change by anyone does not turn this red and a shallow checkout can run it. It is this head's engine with
+     the exact inverse of the pool lifecycle applied (awardGenerationsInverse in scripts/lib/careerAwardsNight1172.mjs:
+     Round 1318's own steps first, then the nine rows of Rounds 1280 to 1282), each row found once and undone whole.
+     When Round 1318 joined PR234 this text was its merge's first parent's engine byte for byte (35f85630, sha256
+     0d9ab4a2...30ea, recorded in the round's report). The save module needs no inverse: Round 1318 put it back to
+     that parent's text (ruling C3 moved the pool's check into the engine's reader). */
+  const inverseRows = awardGenerationsInverse.filter(r => r.file === ENGINE);
+  assert.equal(inverseRows.length, awardGenerationsInverse.length, 'every inverse row is an engine row');
+  let originalEngine = healthyText[ENGINE];
+  for (const r of inverseRows) originalEngine = one(originalEngine, r.from, r.to);
+  let redone = originalEngine;
+  for (const r of inverseRows.toReversed()) redone = one(redone, r.to, r.from);
+  assert.equal(redone, healthyText[ENGINE], 'the inverse undone row by row gives back this head byte for byte');
+  assert(!/generatedBallonPool|generatedContender|GeneratedBallon|isGeneratedBallonPool/.test(originalEngine), 'the original arm holds no trace of the pool lifecycle');
+  const originalText = { [ENGINE]: originalEngine, [SAVE]: healthyText[SAVE] };
+  report.original = { kind: 'this head with the exact inverse of the pool lifecycle', rows: inverseRows.length, engineSha256: sha(originalEngine), saveSha256: sha(healthyText[SAVE]), headEngineSha256: sha(healthyText[ENGINE]), source: put(originalEngine) };
+  const originalPlain = await bundle('original-plain', ROOT, originalText, false, false), originalObserved = await bundle('original-observed', ROOT, originalText, true, false);
   const currentPlain = await bundle('current-plain', ROOT, healthyText, false, true), healthy = await bundle('current-observed', ROOT, healthyText, true, true);
   report.population = descriptors; report.policy = 'Actual constructors at overall70/potential88; best initial offer, no optional training/social post, first actual event/dilemma/rehab choice, stay at club and decline suggestions until actual retirement. No phase fabrication.';
   const natural = new Map(); let sourceFixture, legacyFixture, pendingFixture, legacyPendingFixture;
