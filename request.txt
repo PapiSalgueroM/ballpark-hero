@@ -1,0 +1,2 @@
+#!serial
+simCmVar-all-inverse: node scripts/lib/cmWorldSeed1250.mjs --apply && CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src; exit $s
