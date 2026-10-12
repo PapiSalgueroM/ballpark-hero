@@ -53,7 +53,7 @@ import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
-import { compactWorldRoster, readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub } from '@/lib/clubManagerWorldRoster';
+import { compactWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -272,12 +272,31 @@ export function worldSeedOf(career: CareerState): number | undefined {
   return Number.isInteger(seed) && seed! >= 0 && seed! <= 0xffffffff ? seed : undefined;
 }
 
+/* Release AZ fix (reviewer 1, MAJOR 1): a ledger a year behind was aged and packed again on EVERY roster read,
+   once a club. The answer is kept per ledger object, world year, club, era and seed, unless a record the
+   refresh copies from my own squad is due (the one branch that reads the squad), so it is the same answer the
+   refresh always gave. */
+const REFRESH_MEMO = new WeakMap<object, { year: number; start: unknown; era: unknown; club: string; seed: number | undefined; out: unknown }>();
+
 /** Refresh only recorded affected players with the existing aging rules and a private stream. */
 export function refreshWorldRoster(career: CareerState): CareerState {
-  const held = readWorldRoster(career);
+  const held = worldRosterView(career);
   if (!held) return career;
   const year = worldYear(career);
   if (!held.records.some(record => record.year < year && record.status !== 'retired')) return career;
+  const raw = career.worldRoster as object, seed = worldSeedOf(career);
+  const hit = REFRESH_MEMO.get(raw);
+  if (hit && hit.year === year && hit.start === career.startYear && hit.era === career.eraId && hit.club === career.clubName && hit.seed === seed) {
+    return { ...career, worldRoster: hit.out as WorldRosterState };
+  }
+  const out = refreshWorldRosterOnce(career, held, year);
+  if (!held.records.some(record => record.year < year && record.status !== 'retired' && record.owner === career.clubName)) {
+    REFRESH_MEMO.set(raw, { year, start: career.startYear, era: career.eraId, club: career.clubName, seed, out: out.worldRoster });
+  }
+  return out;
+}
+
+function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, year: number): CareerState {
   const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
   const records = held.records.map(record => {
     if (record.year === year || record.status === 'retired') return record;
@@ -302,7 +321,7 @@ export function refreshWorldRoster(career: CareerState): CareerState {
 export function worldRosterFor(career: CareerState, club: string, onYears = yearsOn(career)): ProjectedPlayer[] {
   const fallback = projectedRoster(club, onYears, career.eraId ?? 'now', worldSeedOf(career));
   const current = refreshWorldRoster(career);
-  if (!readWorldRoster(current)) return fallback;
+  if (!worldRosterView(current)) return fallback;
   const base = fallback.map(bakedToCMPlayer);
   const roster = worldRosterClub(current, club, base);
   if (roster === base) return fallback;
@@ -326,15 +345,23 @@ function rosterXIAvg(roster: readonly ProjectedPlayer[]): number | null {
 }
 
 export function worldRosterXIAvg(career: CareerState, club: string): number | null {
-  return readWorldRoster(career) || worldSeedOf(career) !== undefined
+  return worldRosterView(career) || worldSeedOf(career) !== undefined
     ? rosterXIAvg(worldRosterFor(career, club)) : projectedXIAvg(club, yearsOn(career), career.eraId);
 }
+
+/* Release AZ fix (reviewer 1, MAJOR 1): buildMarket runs on every change of the save, and with a ledger this
+   walked every club of the world each time. The list is kept per ledger object and world year, so a tap that
+   changes no deal reads it back; it is shared like marketBase's, and buildMarket only ever filters it. */
+const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; out: MarketPlayer[] }>();
 
 function worldMarket(career: CareerState): MarketPlayer[] {
   const fallback = marketBase(yearsOn(career), career.eraId, worldSeedOf(career));
   const current = refreshWorldRoster(career);
-  const held = readWorldRoster(current);
+  const held = worldRosterView(current);
   if (!held) return fallback;
+  const raw = current.worldRoster as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
+  const hit = WORLD_MARKET_MEMO.get(raw);
+  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed) return hit.out;
   const clubs = new Set(fallback.map(p => p.club));
   for (const record of held.records) if (record.owner) clubs.add(record.owner);
   const out: MarketPlayer[] = [];
@@ -343,7 +370,9 @@ function worldMarket(career: CareerState): MarketPlayer[] {
       price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined,
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
   }
-  return out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+  out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, out });
+  return out;
 }
 
 /** Only a projected source or an already certified ownership record supplies deal provenance. */
@@ -353,7 +382,7 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
      turns on the same branches the seed does, so this is the one place both are kept off together.
      scripts/simCmUnseededWorld.mjs holds it (CM_UNSEEDED_CONTROL=guard takes this line out). */
   if (worldSeedOf(state) === undefined) return state;
-  const held = readWorldRoster(state);
+  const held = worldRosterView(state);
   const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
   const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
     .filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
@@ -7542,7 +7571,7 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
        transfer fee. */
     seasonSignings: [...career.seasonSignings, { dir: 'in', name: fa.name, fee: 0, bonus: fee }],
   };
-  const released = readWorldRoster(career)?.records.filter(record => record.status === 'released'
+  const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
     && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
   return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
     kind: 'permanent', key: released[0].key }) : state;
@@ -11118,7 +11147,7 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
   // and 89.5 in season thirteen while my own squad was ageing underneath me.
   // At yearsOn 0 the projection is the bake, so season one has not moved.
   const baseFor = (name: string): number =>
-    (career && (readWorldRoster(career) || worldSeedOf(career) !== undefined)
+    (career && (worldRosterView(career) || worldSeedOf(career) !== undefined)
       ? rosterXIAvg(worldRosterFor(career, name, yearsOnNow)) : projectedXIAvg(name, yearsOnNow, eraId))
       ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
@@ -17877,7 +17906,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
-  if (world?.rosterCareer && (readWorldRoster(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
+  if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
     state.startYear = world.rosterCareer.startYear;
     if (world.rosterCareer.worldRoster !== undefined) state.worldRoster = structuredClone(world.rosterCareer.worldRoster);
@@ -19573,7 +19602,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     value = value * Math.pow(1.2, drift) * (age >= 31 ? 0.85 : 1);
     value = Math.max(0.2, Math.round(value * 10) / 10);
   }
-  const ceiling = readWorldRoster(career) || worldSeedOf(career) !== undefined ? Math.max(95, Math.min(99, p.rating)) : 95;
+  const ceiling = worldRosterView(career) || worldSeedOf(career) !== undefined ? Math.max(95, Math.min(99, p.rating)) : 95;
   const rating = clamp(p.rating + drift, 40, ceiling);
   return {
     ...p,
@@ -20036,7 +20065,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
 
   rosterCareer = { ...rosterCareer, season, clubName, squad };
-  if (readWorldRoster(rosterCareer) || worldSeedOf(rosterCareer) !== undefined) {
+  if (worldRosterView(rosterCareer) || worldSeedOf(rosterCareer) !== undefined) {
     for (const exit of rosterExits) rosterCareer = recordActualRosterTransfer(rosterCareer, exit.player, career.clubName, null, exit.kind);
   }
   rosterCareer = refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName));
@@ -20246,7 +20275,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     leagueOverrides: pr.overrides ?? undefined,
   };
   delete state.realLeagueFixtures;
-  if (readWorldRoster(rosterCareer)) state.worldRoster = structuredClone(rosterCareer.worldRoster);
+  if (worldRosterView(rosterCareer)) state.worldRoster = structuredClone(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make
      the outcome explicit: staying keeps the re-measured spec, moving drops
      the club you built. */

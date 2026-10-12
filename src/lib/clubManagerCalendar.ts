@@ -35,7 +35,7 @@ import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekRepo
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
-import { readWorldRoster, snapshotWorldRosterClub } from '@/lib/clubManagerWorldRoster';
+import { snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
 
 /* ================================================================== */
 /* Dates                                                              */
@@ -896,7 +896,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
       yearsOn,
       uclField: career.uclField ?? null,
       keepLeagueOverrides: true,
-      ...(readWorldRoster(departed) || worldSeedOf(departed) !== undefined
+      ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
         ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),
     });
   } catch {

@@ -155,6 +155,47 @@ export function readWorldRoster(career: CareerState): WorldRosterState | null {
   return normalized as unknown as WorldRosterState;
 }
 
+/* Release AZ fix (reviewer 1, MAJOR 1): every save change on a seeded career rebuilt the market, which read
+   this ledger about three times for each club of the world, and every read of a packed ledger cloned and
+   re-checked every record. Deep in a career a formation tap froze a phone for over a second. readWorldRoster
+   above keeps its contract (a fresh, isolated copy on every call, which PR224's own cases hold). The engine's
+   read only paths share ONE verified read per ledger object and world year instead, through worldRosterView,
+   which nothing may mutate. scripts/simCmLedgerBound.mjs times it against the same save with no ledger. */
+interface ViewHit {
+  year: number | null; start: unknown; eraId: unknown; version: unknown; rawEra: unknown; records: unknown;
+  packed: unknown; format: unknown; view: WorldRosterState | null;
+}
+const viewCache = new WeakMap<object, ViewHit>();
+
+/** The verified ledger for read only engine paths, shared between calls: never mutate what it returns. */
+export function worldRosterView(career: CareerState): WorldRosterState | null {
+  const raw: unknown = (career as WorldRosterCareer).worldRoster;
+  if (!object(raw)) return null;
+  const year = yearOf(career);
+  const hit = viewCache.get(raw);
+  if (hit && hit.year === year && hit.start === career.startYear && hit.eraId === career.eraId && hit.version === raw.version
+    && hit.rawEra === raw.eraId && hit.records === raw.records && hit.packed === raw.packedRecords && hit.format === raw.packedFormat) return hit.view;
+  const view = readWorldRoster(career);
+  viewCache.set(raw, { year, start: career.startYear, eraId: career.eraId, version: raw.version, rawEra: raw.eraId,
+    records: raw.records, packed: raw.packedRecords, format: raw.packedFormat, view });
+  return view;
+}
+
+/** Which clubs a verified ledger can change at all: its origin clubs, its owners and every key it holds. */
+const touchCache = new WeakMap<WorldRosterState, { clubs: Set<string>; keys: Set<string> }>();
+function touchOf(held: WorldRosterState): { clubs: Set<string>; keys: Set<string> } {
+  let touch = touchCache.get(held);
+  if (!touch) {
+    touch = { clubs: new Set(), keys: new Set() };
+    for (const record of held.records) {
+      touch.clubs.add(record.origin.club); touch.keys.add(record.key);
+      if (record.owner !== null) touch.clubs.add(record.owner);
+    }
+    touchCache.set(held, touch);
+  }
+  return touch;
+}
+
 /** Keep owned-only saves literal; compress complete records once an inactive identity exists. */
 export function compactWorldRoster(state: WorldRosterState): WorldRosterState {
   if (!state.records.some(record => record.status !== 'owned')) return state;
@@ -168,7 +209,7 @@ export function worldRosterKey(career: CareerState, originClub: string, player: 
   if (year === null || !text(originClub) || !validPlayer(player) || year < player.age || (since !== undefined && (!count(since) || since > year - (career.startYear ?? 2026)))) return null;
   const carried = (player as WorldRosterPlayer).worldRosterKey;
   if (carried) {
-    const record = readWorldRoster(career)?.records.find(item => item.key === carried);
+    const record = worldRosterView(career)?.records.find(item => item.key === carried);
     if (record) return samePlayer(player, record.origin, year) ? record.key : null;
     const fresh = keyOf(career.eraId ?? 'now', { club: originClub, name: player.name, position: player.position,
       birthYear: year - player.age, since: since ?? null });
@@ -182,7 +223,7 @@ export function worldRosterKey(career: CareerState, originClub: string, player: 
 /** This records a real completed transaction; it does not charge money or decide a deal. */
 export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRosterTransfer): WorldRosterCareer {
   const year = yearOf(career);
-  const held = readWorldRoster(career);
+  const held = worldRosterView(career);
   /* Release AZ, the lead's ruling Y2 (ruling C3 of Release AW): a ledger the reader cannot verify reads as
      absent, and the next honest write overwrites it with a fresh one. Until this release an unreadable ledger
      was returned unchanged here for every later deal, so the feature stayed off for the rest of that save while
@@ -224,7 +265,7 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
 
 /** Update established permanent identities from the actual departing squad, without backfilling unknown origins. */
 export function snapshotWorldRosterClub(career: CareerState, club: string, players: readonly WorldRosterPlayer[] = career.squad): WorldRosterCareer {
-  const held = readWorldRoster(career);
+  const held = worldRosterView(career);
   const year = yearOf(career);
   if (!held || year === null || !text(club)) return career;
   const updates = new Map<string, WorldRosterPlayer>();
@@ -246,10 +287,14 @@ export function snapshotWorldRosterClub(career: CareerState, club: string, playe
 
 /** Older records retain ownership, but their old payloads are not presented as current-year players. */
 export function worldRosterClub(career: CareerState, club: string, fallback: readonly WorldRosterPlayer[], year = yearOf(career)): readonly WorldRosterPlayer[] {
-  const held = readWorldRoster(career);
+  const held = worldRosterView(career);
   if (!held || year === null || year !== yearOf(career) || !text(club)) return fallback;
   const records = held.records;
   if (!records.length) return fallback;
+  /* A club the ledger names nowhere, holding no man by a key the ledger holds, comes back unchanged: the
+     loops below would match nothing there, so skipping them changes no answer (Release AZ fix, MAJOR 1). */
+  const touch = touchOf(held);
+  if (!touch.clubs.has(club) && !fallback.some(player => player.worldRosterKey !== undefined && touch.keys.has(player.worldRosterKey))) return fallback;
   let changed = false;
   const out = fallback.filter(player => {
     const record = records.find(item => player.worldRosterKey === item.key || (item.origin.club === club && player.position === item.origin.position && samePlayer(player, item.origin, year)));
@@ -271,5 +316,5 @@ export function worldRosterClub(career: CareerState, club: string, fallback: rea
 }
 
 export function worldRosterOwner(career: CareerState, key: string): string | null | undefined {
-  return readWorldRoster(career)?.records.find(record => record.key === key)?.owner;
+  return worldRosterView(career)?.records.find(record => record.key === key)?.owner;
 }
