@@ -1,0 +1,4 @@
+#!serial
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
