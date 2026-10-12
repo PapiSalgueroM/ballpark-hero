@@ -236,7 +236,40 @@ section 1 red after an engine change is therefore possible about as often as a 3
 hundred by the normal reading, one in eleven by this small sample): the lead may want section 1 measured the same
 way in a later round.
 
-Control SIM_HALFTIME_CONTROL=deaf (a subject control, advice 15 (i)): the engine copy's two lines that apply a
-break's change (`live.onPitch[idx] = change.inId;`, and the pair setting `live.mentality` and `state.mentality`)
-are removed, each asserted present exactly once or the run refuses. Proof: request `r1314-ht` on 9e9480c3
-(PENDING at the time of this push).
+Proof of the main line: `r1314-ht` on 9e9480c3, simHalftime-1 and -2 exit 0 (869 and 904 s) with byte equal logs
+(md5 d110045c), gain 3.02 against 0.92, the number the 1200 probe read for the default seed; `r1314-ht2` on
+c1195372 read the same log again (631 s, md5 d110045c).
+
+Control SIM_HALFTIME_CONTROL=deaf (a subject control, advice 15 (i); "control deaf FIRED" exits 1, "DID NOT FIRE
+as designed" exits 2). In the engine copy's changeLive a change made at the break is accepted and forgotten: the
+pitch change, the sub's match record, and the shape change with its record are removed (the cap still counts,
+so section 3's rules hold), each block asserted present exactly once or the run refuses. A first version that
+left the sub's record in fired on `r1314-ht` with a gain of 0.84 against 0.91: too thin, because the record
+carries part of the break's worth. The full version (c1195372) on `r1314-ht2`: exit 1, gain 0.10 against 0.93,
+"control deaf FIRED: with the break deaf, the gain line failed and the subs and shape lines held" (29.2 subs and
+16.5 shape changes a season, section 3 "3 went through (cap 3)").
+
+## Reproducibility of the seeded walks (critic's correction 8)
+
+The default seeds were run (i) in requests at least an hour apart and (ii) once under CPU throttling at rate 4
+(CDP `Emulation.setCPUThrottlingRate`, through a probe copy written by .rc/x/mkThrottle.mjs, not committed, with
+the walk's own seed passed explicitly because the copy's file name differs):
+
+| Walk, default seed | `r1314-wild1` / `r1314-cm1` (19:02 to 19:35 UTC) | throttled (`r1314-wild1` / `r1314-cm2`) | `r1314-fw` (20:00 to 20:13 UTC) |
+|---|---|---|---|
+| playWilderness 2899200577 | sacked at step 6, 3 matches, 4042 draws, a club after 3 waits (three runs) | the same | the same |
+| playClubManager 1542433760 | season played out, 40 full times, 44 windows, 2 signings, 47491 draws (two runs) | the same | the same |
+
+Same ending, matches, windows, signings and draw counts in all of them: neither walk is timing bound on its
+default seed, so no wait had to be added. `r1314-cmctl` (19:42 UTC, head 48a3e61f) also played the default
+season to the same counts under the nobusiness control.
+
+## Final proof on the branch
+
+- `r1314-fn` on aa2740ce (origin/main 48cb9d4b merged): simSafari, simActivityNotCompletion, simGmXp,
+  simHarnessAnchors, simNoRivalNames (0 findings), simNoInventedQuotes, simStorageWrites ("all green (owed:
+  12)"), the live test grep (none of the thirteen files matches `integrations/supabase/client|createClient\(`)
+  and the no-ship diff: all exit 0.
+- `r1314-fw` on c22dd054: playNationJob exit 0 (18 s), nooffer exit 0; playWilderness exit 0 (20 s), nooffers
+  and nosack exit 0; playClubManager exit 0 (284 s), nobusiness exit 1 with its last line green.
+- `r1314-ht2` on c1195372: simHalftime exit 0 (631 s), deaf exit 1, FIRED.
