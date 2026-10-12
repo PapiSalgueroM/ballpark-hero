@@ -23,6 +23,8 @@
  *             NHL the club made no offer there, so nothing can be pushed and the journey is said, not counted):
  *             push once, Skip animation, Continue, RELOAD. The push control is then exactly what it was before the
  *             reload and is not enabled, a press on it opens no wheel, and the save bytes did not move.
+ *             spent-wheel, on the way: a reload AT the wheel, before it is spun or skipped, lands on the wheel
+ *             again on the same save bytes, because the push is written the moment it is made.
  *   view      THE WHEEL AND THE ANSWER COME INTO VIEW BY THEMSELVES (the screens reviewer's major 1: a push on a
  *             lower offer swapped the 850 to 1,100 px offers window for a 375 to 430 px wheel, and the wheel was
  *             left wholly above a phone's window in every sport). On the fixed save "fa" at 390 by 844 and at 320
@@ -254,6 +256,15 @@ try {
     await press(page, push);
     await page.locator(WHEEL).waitFor({ state: 'visible', timeout: 15000 });
     const result = (await parsed(page, key))?.contractTalk?.wheel?.result ?? 'no wheel on the save';
+    /* a reload AT the wheel, before it is spun or skipped: the push was written the moment it was made, so the
+       wheel is there again on the same bytes. (A build that wrote the push only at Continue passes every check
+       below and fails this one: measured, the engine reviewer's mutation M4.) */
+    const atWheel = await saved(page, key);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    const wheelBack = await page.locator(WHEEL).waitFor({ state: 'visible', timeout: 15000 }).then(() => true, () => false);
+    const wheelBytes = (await saved(page, key)) === atWheel;
+    check('spent-wheel', wheelBack && wheelBytes, `${tag}: a reload at the wheel, before it is spun or skipped, lands on the wheel again (${wheelBack}) on the same save bytes (${wheelBytes})`);
+    if (!wheelBack) { await ctx.close(); continue; }
     await press(page, '[data-market-skip]');
     await press(page, '[data-market-continue]');
     await page.locator(WHEEL).waitFor({ state: 'detached', timeout: 15000 });
