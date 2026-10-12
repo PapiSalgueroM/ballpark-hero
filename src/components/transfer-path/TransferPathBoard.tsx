@@ -256,14 +256,12 @@ export function TransferPathBoard() {
                 No connecting path exists in the current player pool. That one's on us; it's been flagged.
               </p>
             )}
-            {mode === 'unlimited' && (
-              <button
-                onClick={() => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); setLastNoMatch(null); }}
-                className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
-              >
-                Next Puzzle
-              </button>
-            )}
+            <button
+              onClick={() => { if (mode === 'daily') switchToUnlimited(); else nextPuzzle(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); setLastNoMatch(null); }}
+              className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
+            >
+              {mode === 'daily' ? 'Play Unlimited' : 'Next Puzzle'}
+            </button>
           </div>
         )}
 

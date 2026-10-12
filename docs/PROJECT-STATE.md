@@ -1,3 +1,25 @@
+## Transfer Path surrender practice maintenance verified, 2026-10-12
+
+Continued route review confirmed that giving up the daily leaves no Unlimited
+entry unless a special rule was blocked. Reopening restores that dead end.
+A separate isolated branch from accepted 48cb9d4b adds the existing practice
+action below the daily reveal, preserving Unlimited Next Puzzle, graph, data,
+scoring and daily saves. Remote baseline 5ddeb073 reproduced exactly three
+missing-button failures, 36 preservation passes and nine real surrendered
+daily dead ends (90 checks). The minimal Board edit now selects Play Unlimited
+for a daily surrender and retains Next Puzzle in practice, with the same
+fresh-board reset. Frozen ffcf1579 passed all 39 tests, app types/build, 24 scoped
+harnesses including all 15 built-output readers, both source controls and 288
+browser checks. Nine practice wins preserved the daily loss bytes; 18 reloads
+restored them; three Unlimited Next Puzzle flows preserved their existing reset.
+All 44 original fixed PNGs were reviewed and all 521 locked versions held.
+PR242, PR243 and PR244 stay frozen; H retains integration and publication.
+Draft PR245 is pushed and attached to this chat. A native merge preview against
+48cb9d4b reported no conflict, without changing the checkout or testing a merge.
+The evidence is offline and scoped. H retains merging and publishing; no live,
+newer-main, full-suite or integrated-build qualification is granted. See
+docs/audits/transfer-path-surrender-practice-2026-10-12.md.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
