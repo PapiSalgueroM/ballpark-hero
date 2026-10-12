@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk-revealdown: node .rc/x/mut-revealdown.mjs && npm run build > /tmp/rd-build.log 2>&1 && FO_GAMEDAY_WALK_CONTROL=revealdown ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- src; exit $s
+walk-oldchip: git show 426ecd89:src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/FrontOfficeBoard.tsx && npm run build > /tmp/oc-build.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- src; exit $s
