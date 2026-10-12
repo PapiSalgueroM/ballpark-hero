@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-playoffspoil exit=3 226s | control playoffspoil: DID NOT FIRE as named (point 14 wanted; red points: 14, 12)
+walk exit=1 227s | playFrontOfficeGameDay: 367 checks, 2 failed
+walk-bracketjump exit=3 228s | control bracketjump: DID NOT FIRE as named (point 14 wanted; red points: 14, 12)
+mandate exit=0 24s | ALL OWNER MANDATE WALK CHECKS PASSED
+gmpress exit=1 83s | playGmPress: 2 failures
+walk-lostblock exit=3 222s | control lostblock: DID NOT FIRE as named (point 15 wanted; red points: 15, 12)
