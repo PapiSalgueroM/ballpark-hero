@@ -1,0 +1,4 @@
+#!serial
+print-base: git worktree add .tmp-base b6eb78e799b12c851e4e8e583e9e926aed117f1c && node scripts/simDailyDeals.mjs --root .tmp-base --print && cp "$RC_OUT/daily-deals.json" "$RC_OUT/base.json"
+print-tree: node scripts/simDailyDeals.mjs --print && cp "$RC_OUT/daily-deals.json" "$RC_OUT/tree.json"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
