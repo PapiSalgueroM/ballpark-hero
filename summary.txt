@@ -1,0 +1,13 @@
+vitest-new exit=0 5s |    Duration  4.52s (transform 876ms, setup 617ms, collect 1.65s, tests 958ms, environment 4.64s, prepare 1.49s)
+vitest-fo exit=0 33s |    Duration  32.50s (transform 8.21s, setup 2.33s, collect 20.57s, tests 44.37s, environment 16.62s, prepare 3.76s)
+simGmGameDay exit=0 77s | simGmGameDay: 426 checks, 0 failed
+ctl-mounted exit=1 58s | simGmGameDay: 426 checks, 1 failed (control mounted)
+tsc exit=0 113s | 
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-static exit=1 65s | simGmGameDay: 426 checks, 2 failed (control static)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simAccessibility exit=0 0s | simAccessibility: all green
+simNoInventedQuotes exit=0 24s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 125s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
