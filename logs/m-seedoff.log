@@ -1,0 +1,9 @@
+fxmut seedoff: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+[31m     → after Week 12, the engine seeds him 1: expected 'AFC: 0th seed of 7 as it stands.' to be 'AFC: 1st seed of 7 as it stands.' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeTile.test.tsx[2m > [22mNFL front office: the Game Day tile[2m > [22mHIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved league
+[31m[1mAssertionError[22m: after Week 12, the engine seeds him 1: expected 'AFC: 0th seed of 7 as it stands.' to be 'AFC: 1st seed of 7 as it stands.' // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTile.test.tsx,title=src/components/front-office/FrontOfficeTile.test.tsx > NFL front office%3A the Game Day tile > HIS SEED IS COUNTED FROM 1%3A on a club that holds a seed the standing line is the engi
+MUTANT seedoff vitest exit=1

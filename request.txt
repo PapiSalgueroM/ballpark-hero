@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+m-pace: node .rc/x/fxmut.mjs pace && node_modules/.bin/vitest run src/components/front-office/FrontOfficeTile.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "FAIL|Test Files|Tests |AssertionError|expected" | cut -c1-300 | head -40; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT pace vitest exit=$s"; exit $s
+m-seedoff: node .rc/x/fxmut.mjs seedoff && node_modules/.bin/vitest run src/components/front-office/FrontOfficeTile.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "FAIL|Test Files|Tests |AssertionError|expected" | cut -c1-300 | head -40; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT seedoff vitest exit=$s"; exit $s
+wm-pace: node .rc/x/fxmut.mjs pace && npm run build > /tmp/b1.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs 2>&1 | grep -E "FAIL|checks,|ABORTED|COULD NOT" | cut -c1-420 | head -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT pace walk exit=$s"; exit $s
+wm-seedoff: node .rc/x/fxmut.mjs seedoff && npm run build > /tmp/b2.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs 2>&1 | grep -E "FAIL|checks,|ABORTED|COULD NOT" | cut -c1-420 | head -30; s=${PIPESTATUS[0]}; git checkout -- src scripts; echo "MUTANT seedoff walk exit=$s"; exit $s

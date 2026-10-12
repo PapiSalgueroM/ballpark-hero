@@ -1,0 +1,9 @@
+fxmut pace: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (2 edit(s))
+[31m     → week 6: the owner card while the game is watched: expected '🏛️ OwnershipTrust 60Rebuild honestly…' to be '🏛️ OwnershipTrust 60Rebuild honestly…' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeTile.test.tsx[2m > [22mNFL front office: the Game Day tile[2m > [22mNO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league's
+[31m[1mAssertionError[22m: week 6: the owner card while the game is watched: expected '🏛️ OwnershipTrust 60Rebuild honestly…' to be '🏛️ OwnershipTrust 60Rebuild honestly…' // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTile.test.tsx,title=src/components/front-office/FrontOfficeTile.test.tsx > NFL front office%3A the Game Day tile > NO SPOILER ON THE OWNER CARD%3A while he watches%2C its pace line is the one of before 
+MUTANT pace vitest exit=1

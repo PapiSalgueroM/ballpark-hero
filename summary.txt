@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+m-pace exit=1 4s | MUTANT pace vitest exit=1
+m-seedoff exit=1 4s | MUTANT seedoff vitest exit=1
+wm-pace exit=1 132s | MUTANT pace walk exit=1
+wm-seedoff exit=1 132s | MUTANT seedoff walk exit=1

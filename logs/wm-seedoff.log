@@ -1,0 +1,8 @@
+fxmut seedoff: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+  FAIL  [4] 320, 4-results: where he stands is the engine's own seeding of the saved league ("NFC: 5th seed of 7 as it stands."; the save seeds him 6)
+  FAIL  [4] 390, 4-results: where he stands is the engine's own seeding of the saved league ("NFC: 5th seed of 7 as it stands."; the save seeds him 6)
+  FAIL  [4] 1280, 4-results: where he stands is the engine's own seeding of the saved league ("NFC: 5th seed of 7 as it stands."; the save seeds him 6)
+  FAIL  [9] 390, 9-pace-2: where he stands is the engine's own seeding of the saved league ("NFC: 6th seed of 7 as it stands."; the save seeds him 7)
+  FAIL  [10] 390: on the club that topped the AFC (BUF) the standing line is his seed in the saved league, counted from 1, after each of 3 presses, 3 of them with a seed (AFC: 0th seed of 7 as it stands. / AFC: 4th seed of 7 as it stands. / AFC: 0th seed of 7 as it stands.): press 1: the tile says "AFC: 0th seed of 7 as it stands." and the saved league seeds him 1 ("AFC: 1st seed of 7 as it stands."); press 2: the ti
+playFrontOfficeGameDay: 220 checks, 5 failed
+MUTANT seedoff walk exit=1
