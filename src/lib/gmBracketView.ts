@@ -94,7 +94,8 @@ export function gmSideText(row: GmBracketRow, k: 0 | 1): string {
   return s.score === null ? '' : String(s.score);
 }
 
-/** The line under a series that is under way or over ("Game 3 of up to 7"), or null for a single game. */
+/** The line under a series: before its first game ("First to 4 wins."), under way ("3 played, first to 4 wins.") or
+ *  over ("Over in 7 games."), or null for a single game. */
 export function gmSeriesNote(format: BracketFormat, row: GmBracketRow, week: number): string | null {
   if (!row.series) return null;
   const need = Math.max(1, format.winsNeeded[week] ?? 1);
