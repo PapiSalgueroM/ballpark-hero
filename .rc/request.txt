@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+nbawalk: node .rc/x/r1305nbawalk.mjs > $RC_OUT/nbawalk.log 2>&1; s=$?; echo "ok lines $(grep -c "^ok" $RC_OUT/nbawalk.log)"; grep "^FAIL" $RC_OUT/nbawalk.log | cut -c1-260 | head -12; tail -1 $RC_OUT/nbawalk.log; exit $s
