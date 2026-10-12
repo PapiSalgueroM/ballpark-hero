@@ -8,7 +8,7 @@
   "limits": [
     "No copy of a page was kept, so there is no snapshot hash. A reader who doubts a figure opens the url and finds the literal.",
     "The page reader quotes at most about 125 characters a line, so a long sentence is quoted in part; the part kept holds the figure.",
-    "myKhel's Premier League list carries no date; the league's own list (premierleague.com/en/news/1206108) is dated 19 May 2024 and has since been brought up to 2024/25. Both were read on 2026-10-12.",
+    "myKhel's Premier League list carries no date; the league's own list (premierleague.com/en/news/1206108) is dated 19 May 2024 and has since been brought up to 2024/25. Both were read on 2026-10-12. myKhel's page is an outlet's list page, the kind the rules take only as a second publisher; RSSSF's English top scorers, an independent archive, opened later the same day and agrees on all ten, and is named under notUsed with the reason it was not swapped in.",
     "The matches a club played come from format rows only: for the Premier League the league's own guide (20 clubs since 1995/96, 38 matches a club) and RSSSF's final table of each season, whose last line is position 20 with 38 played. 2019-20 stands on two final tables of that season (RSSSF and ESPN), each with 38 played.",
     "The Bundesliga: the league's own history of its top scorers (bundesliga.com news 19353, dated 27.05.2025) and RSSSF's list of German top scorers agree on all ten seasons. Its matches come from the league's own FAQ (18 teams since 1965/66 but for 1991/92; the page prints no day, only that the league enters its 64th season in 2026/27, so its published field is the year) and RSSSF's final table of each season, and 2019-20 from RSSSF and ESPN, each with 34 played.",
     "RSSSF serves its pages in a Latin-1 encoding and the page reader showed each umlaut as a replacement mark (M?nchen); the literals here restore the letter (München, Köln, Nürnberg, Fürth, Füllkrug, Suárez, Mbappé, Málaga, Atlético, Alavés). Nothing else in a literal was changed. The league's line for 2022/23 ends in a stray hyphen on the page and keeps it.",
@@ -18,5 +18,5 @@
     "Keepers, printed only: the Premier League's ten on the league's own Golden Glove list (premierleague.com/en/news/1206130, dated 20 May 2024 and since brought up to date) and GiveMeSport's list (2024-08-01, to 2023/24), with Goal's report of 2025-05-25 for 2024-25 (13 apiece, Raya and Sels). They agree on all ten. The other four leagues have no keeper reading on file: none of them gives an award for clean sheets, and each is named under owed with what was looked for."
   ],
   "checkedBy": "scripts/simCmLeagueBookFacts.mjs",
-  "sha256": "66ec2de12da2fab5f721e4de34bb1ed84fe36d2846c8dc5bd59f79395d4cfee8"
+  "sha256": "c56b3a5d4b3c024960839091c9772adb2b7f5de0e105480a177a2bcb2ff6f0ff"
 }
