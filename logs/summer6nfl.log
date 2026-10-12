@@ -1,0 +1,9 @@
+6) balance: on against off, careers a seed nfl 12000, 3 seeds
+   nfl: off peak 82.01, legacy median 285, Hall 15.4%; on peak 82.10, legacy median 292, Hall 15.4%
+      peak OVR: difference 0.09, interval [0.04, 0.13], tolerance 1.00 either way: inside
+      median legacy: difference 2.5%, interval [0.0%, 5.3%], tolerance 7.5% either way: inside
+      Hall share: difference 0.09 pts, interval [-0.44 pts, 0.62 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference -4.1%, interval [-7.5%, -1.2%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 4.9% ever win one, Hall 15.4%
+   balance ran in 2971.4 s
+simUsCareerSummer: green. Sections 6 held.
