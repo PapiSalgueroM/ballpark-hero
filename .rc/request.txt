@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-recordspoils: FO_GAMEDAY_WALK_CONTROL=recordspoils RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-spoiler: FO_GAMEDAY_WALK_CONTROL=spoiler RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-tall: FO_GAMEDAY_WALK_CONTROL=tall RC_OUT= ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-fo: NO_COLOR=1 node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx src/lib/gmGameDayView.test.ts src/lib/gmGameLog.test.ts src/lib/gmGameDay.test.ts src/lib/frontOfficeGameDay.test.ts --testTimeout=600000 --hookTimeout=120000
+controls-all: node scripts/controlFrontOfficeBoard.mjs all
+controls-blank: node scripts/controlFrontOfficeBoard.mjs blank
+simGmGameDay: node scripts/simGmGameDay.mjs
+lazy-chunk: for f in dist/assets/NflGameDay-*.js dist/assets/MatchClock-*.js dist/assets/SeasonCentreHelp-*.js dist/assets/FrontOffice-*.js; do echo "$f $(gzip -c $f | wc -c)"; done
+weight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-head.log 2>&1; s=$?; grep -E "front-office|FAIL|sweepWeight" $RC_OUT/weight-head.log | cut -c1-160; exit $s
+playOwnerMandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
+playSessionMarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+playGames-front-office: ENGINES=chromium ONLY=/front-office node scripts/playGames.mjs
+playGmPress: ENGINES=chromium node scripts/playGmPress.mjs
