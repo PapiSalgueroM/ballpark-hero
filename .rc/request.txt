@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+weight: bash .rc/x/weightAB.sh
+units: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --reporter=json --outputFile=/tmp/units.json > /dev/null 2>&1; node .rc/x/unitsCount.mjs /tmp/units.json
+presscov: git diff --stat 6a09d71633be3f297494ca6e927cd4ef65f18805 HEAD -- src package.json package-lock.json scripts/lib | tail -1; git diff --quiet 6a09d71633be3f297494ca6e927cd4ef65f18805 HEAD -- src package.json package-lock.json scripts/lib; s=$?; echo "manager-press-coverage.yml first gate (git diff --exit-code against PR224 head) exits $s"; exit $s
+diag1311: bash .rc/x/diag1311.sh
+simNoRivalNames: node scripts/simNoRivalNames.mjs > /tmp/nr.log 2>&1; s=$?; tail -5 /tmp/nr.log; exit $s
+simInventedNames: node scripts/simInventedNames.mjs
