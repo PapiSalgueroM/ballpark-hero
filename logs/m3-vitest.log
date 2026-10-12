@@ -1,0 +1,56 @@
+mutation keeperfew: APPLIED in src/lib/clubManagerLeagueBoards.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 21[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22morders Top scorers by goals, then assists, then the name as plain text, then the club[32m 3[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mdrops a rival row under the name of a man now in my squad: he counts for me, off my own line[32m 1[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22morders Assists by assists, then goals, then name, then club[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mkeeps the Clean sheets board for keepers, mine among them, the club higher in the table first when level[32m 1[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mcuts a board at its limit and says where my best man stands on the whole order[32m 1[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mcounts everybody from the round a late book opened at: my man off his line minus what he held then, never under nought[32m 1[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22msays whether the book adds up to the table, club by club[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22msays how much of the rivals' goals is on record, an own goal counted as on record[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mnever changes what it is handed[32m 1[2mms[22m[39m
+   [32m✓[39m the ruled numbers[2m > [22mdraws the honest line under 95 in 100 on record and reads awards from a book at 73 or more[32m 0[2mms[22m[39m
+[31m   [31m×[31m the team of the season[2m > [22mpicks a keeper, four defenders, four midfielders and two forwards by the rule, ties and all[39m[32m 9[2mms[22m[39m
+[31m     → expected [ 'S Keeper Two', 'S Back One', …(9) ] to deeply equal [ 'N Keeper', 'S Back One', …(9) ][39m
+   [32m✓[39m the team of the season[2m > [22mnames no team when a line cannot be filled, and never pads one[32m 0[2mms[22m[39m
+   [32m✓[39m the team of the season[2m > [22mcarries the team in the season's awards, and the awards survive a JSON round trip[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBoards.test.ts[2m > [22mthe team of the season[2m > [22mpicks a keeper, four defenders, four midfielders and two forwards by the rule, ties and all
+[31m[1mAssertionError[22m: expected [ 'S Keeper Two', 'S Back One', …(9) ] to deeply equal [ 'N Keeper', 'S Back One', …(9) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,7 +1,7 @@[39m
+[2m  [[22m
+[32m-   "N Keeper",[39m
+[31m+   "S Keeper Two",[39m
+[2m    "S Back One",[22m
+[2m    "N Back Two",[22m
+[2m    "N Back One",[22m
+[2m    "S Back Two",[22m
+[2m    "S Mid One",[22m
+
+[36m [2m❯[22m src/lib/clubManagerLeagueBoards.test.ts:[2m185:31[22m[39m
+    [90m183| [39m  it('picks a keeper, four defenders, four midfielders and two forward…
+    [90m184| [39m    [35mconst[39m xi [33m=[39m [34mteamOfSeason[39m([34mteamInput[39m())[33m![39m[33m;[39m
+    [90m185| [39m    [34mexpect[39m(xi[33m.[39m[34mmap[39m(m [33m=>[39m m[[34m0[39m]))[33m.[39m[34mtoEqual[39m([
+    [90m   | [39m                              [31m^[39m
+    [90m186| [39m      [90m/* the keeper: 14 apiece, North is higher in the table */[39m
+    [90m187| [39m      [32m'N Keeper'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 21:00:57
+[2m   Duration [22m 835ms[2m (transform 91ms, setup 53ms, collect 93ms, tests 21ms, environment 300ms, prepare 120ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBoards.test.ts,title=src/lib/clubManagerLeagueBoards.test.ts > the team of the season > picks a keeper%2C four defenders%2C four midfielders and two forwards by the rule%2C ties and all,line=185,column=31::AssertionError: expected [ 'S Keeper Two', 'S Back One', …(9) ] to deeply equal [ 'N Keeper', 'S Back One', …(9) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,7 +1,7 @@%0A  [%0A-   "N Keeper",%0A+   "S Keeper Two",%0A    "S Back One",%0A    "N Back Two",%0A    "N Back One",%0A    "S Back Two",%0A    "S Mid One",%0A%0A ❯ src/lib/clubManagerLeagueBoards.test.ts:185:31%0A%0A

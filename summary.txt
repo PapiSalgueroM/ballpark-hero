@@ -1,0 +1,12 @@
+m1-book exit=0 52s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (52s)
+m1-full exit=0 127s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (127s)
+m1-vitest exit=0 4s |    Duration  3.76s (transform 1.36s, setup 114ms, collect 1.90s, tests 1.17s, environment 691ms, prepare 348ms)
+m1-award exit=0 15s | ALL AWARD RACE CHECKS PASSED
+m2-book exit=1 54s | simCmLeagueBook: 1 FAILURE(S) (54s)
+m2-vitest exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the team of the season on t
+m3-book exit=0 53s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (53s)
+m3-vitest exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBoards.test.ts,title=src/lib/clubManagerLeagueBoards.test.ts > the team of the season 
+m4-book exit=1 53s | simCmLeagueBook: 10 FAILURE(S) (53s)
+m5-vitest exit=0 4s |    Duration  3.56s (transform 1.28s, setup 51ms, collect 1.70s, tests 1.09s, environment 297ms, prepare 67ms)
+m6-vitest exit=0 4s |    Duration  3.55s (transform 1.27s, setup 52ms, collect 1.69s, tests 1.12s, environment 296ms, prepare 131ms)
+m7-vitest exit=0 4s |    Duration  3.54s (transform 1.26s, setup 51ms, collect 1.68s, tests 1.11s, environment 296ms, prepare 147ms)

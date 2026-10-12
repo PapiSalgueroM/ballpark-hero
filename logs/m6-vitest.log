@@ -1,0 +1,13 @@
+mutation thinfloor: APPLIED in src/components/club-manager/LeagueLeadersCard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1122[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 519[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 315[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 21:01:57
+[2m   Duration [22m 3.55s[2m (transform 1.27s, setup 52ms, collect 1.69s, tests 1.12s, environment 296ms, prepare 131ms)[22m
+
