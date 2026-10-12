@@ -46,7 +46,10 @@
  * he watches (roundspoils), a playoff press never held (holdround), the
  * recap drawn under the title game's clock (recapnow), the league grid in
  * the bracket (bracketgrid) and "Your game" opening his last game instead of
- * that tie's (tiegame).
+ * that tie's (tiegame). Its fix pass added the three things the season close
+ * sets at the title game's press, each read after the press while he
+ * watches it: the owner's trust (trustspoils), the press room
+ * (pressspoils) and the finish (donenow).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -110,6 +113,8 @@ const T = {
   psWatchRound: [PS, 'WATCH YOUR GAME is the same press'],
   psWatch17: [PS, '"Watch Week 17" is "Play Week 17" on the clock'],
   psTitleWatch: [PS, 'the title game watched: the recap waits for full time'],
+  /* the fix pass */
+  psTitleRoom: [PS, 'the title game watched, won and lost'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -165,6 +170,10 @@ const CONTROLS = {
   recapnow: ['the recap is drawn while he watches the title game', [["if (phase === 'recap' && !hold) {", "if (phase === 'recap') {"]], [T.psTitleWatch], [T.psWatchRound]],
   bracketgrid: ['the league grid is drawn in the bracket', [['(!bracketRow) && (', '(']], [T.psWatch17], [T.psFaces]],
   tiegame: ['"Your game" opens his last game and not the game of that tie', [['const gameLogNow = logOpen ?? gameLogLive.current;', 'const gameLogNow = gameLogLive.current;']], [T.psFaces], [T.psBye, T.psWatchRound]],
+  /* Round 1309, the fix pass: the three things the season close sets at the title game's press, each read after the press while he watches */
+  trustspoils: ["the owner card shows the trust the title game's press graded while he watches it", [['const seenTrust = roomHeld ? roomHeld.trust : trust;', 'const seenTrust = trust;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  pressspoils: ["the press card shows the room the title game's press called while he watches it", [['const seenPresser = roomHeld ? roomHeld.presser : presser;', 'const seenPresser = presser;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 

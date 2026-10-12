@@ -18,8 +18,9 @@
  * Negative controls: scripts/controlFrontOfficeBoard.mjs (noplayoffs,
  * abandonbracket, rebuiltkeeps, champopen, bracketnoedges, restround,
  * weekeighteen, playofftrades, roundspoils, holdround, recapnow,
- * bracketgrid, tiegame), which point this file at a copy of the board
- * through FO_BOARD_NFL.
+ * bracketgrid, tiegame, and from the fix pass trustspoils, pressspoils
+ * and donenow), which point this file at a copy of the board through
+ * FO_BOARD_NFL.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
@@ -33,7 +34,8 @@ import { nflIsRegular, nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
 import { NFL_POSTSEASON, nflPlayTie } from '@/lib/frontOfficePostseason';
 import { BRACKET_REBUILT_LINES, bracketPairings, bracketWeek, openBracket, playBracketWeek, type GmBracketSave } from '@/lib/gmBracket';
 
-vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
+/* the finish the board reports on every render (the fix pass's title watch test reads it) */
+vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: (_slug: string, done: boolean) => { ((globalThis as any).__foDone ??= []).push(done); } }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: null }) }));
@@ -668,5 +670,42 @@ describe('NFL front office: Watch in the playoffs', () => {
     expect(textOf('[data-week-chip]')).toContain('Playoffs');
     fireEvent.click(q('[data-gameday-speed="Results"]')!);
     await waitFor(() => expect(q('[data-verdict-reveal]')).not.toBeNull());
+  });
+
+  /* The fix pass (the review's major): the press closes the season, which grades the trust, calls the press room and
+     records the finish. A title mandate and trust 60 make a title (the podium) and a loss (the scrum) both move them. */
+  it('the title game watched, won and lost: the press card, the owner card and the finish are as they were until full time', async () => {
+    motion();
+    titleGameSave();
+    const base = read();
+    const start = JSON.stringify({ ...base, trust: 60, mandate: { tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season: base.league.season } });
+    const done: boolean[] = ((globalThis as any).__foDone ??= []);
+    const seen: string[] = [];
+    for (let k = 51; k < 91 && seen.length < 2; k += 1) {
+      cleanup();
+      localStorage.setItem(SAVE_KEY, start);
+      counted(k);
+      render(<Board />);
+      await openBox();
+      const before = { press: textOf('[data-gm-press]'), owner: textOf('[data-owner-mandate]') };
+      expect(before.owner).toContain('Trust 60');
+      done.length = 0;
+      fireEvent.click(btn('[data-watch-round]'));
+      const clocked = await waitFor(() => expect(q('[data-match-clock]')).not.toBeNull()).then(() => true, () => false);
+      const s = read();
+      const how = s.postseason?.champion === s.myTeam ? 'won' : 'lost';
+      if (!clocked || seen.includes(how)) continue;
+      seen.push(how);
+      /* the save is the closed season, so what the screen shows is held and not merely unchanged */
+      expect([s.phase, s.trust === 60], `${how}: the press closed the season and graded the trust`).toEqual(['recap', false]);
+      expect(textOf('[data-gm-press]'), `${how}: the press card while he watches`).toBe(before.press);
+      expect(textOf('[data-owner-mandate]'), `${how}: the owner card while he watches`).toBe(before.owner);
+      expect(done.includes(true), `${how}: no finish is recorded while he watches`).toBe(false);
+      fireEvent.click(q('[data-gameday-speed="Results"]')!);
+      await waitFor(() => expect(q('[data-verdict-reveal]')).not.toBeNull());
+      expect(textOf('[data-gm-press]'), `${how}: full time calls the room`).toMatch(how === 'won' ? /The podium/ : /The accountability scrum/);
+      expect(done.at(-1), `${how}: full time records a title, and only a title`).toBe(how === 'won');
+    }
+    expect(seen.sort(), 'a title game won and one lost, each with a clock, in forty streams').toEqual(['lost', 'won']);
   });
 });

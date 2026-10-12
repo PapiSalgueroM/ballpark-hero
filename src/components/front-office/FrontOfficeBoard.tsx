@@ -267,6 +267,12 @@ export default function FrontOfficeBoard() {
      one, the bracket when it logged none: his bye, or he is out); "Your
      game" on the bracket and the back chip under the box move it. */
   const [heldBracket, setHeldBracket] = useState<GmBracketSave | null>(null);
+  /* Round 1309, the fix pass. The title game's press closes the season at once (closeSeason: the graded trust, the
+     press room, the finish), so while he WATCHES a playoff press the owner card's trust, the press card and the
+     finish are the ones from before it, taken with `held` (never saved), and the press card's answers wait for full
+     time. Tied to the league it was taken with, so the watch of another press never reads it. */
+  const [heldRoom, setHeldRoom] = useState<{ from: LeagueState; trust: number; presser: GmPresser | null; won: boolean } | null>(null);
+  const roomHeld = hold && heldRoom && heldRoom.from === hold ? heldRoom : null;
   const [boxGame, setBoxGame] = useState<string | null>(null);
   /* THE REVEAL (Round 1307, and Round 1309's ruling from its review). The key
      moves at a press, at full time and when a playoff round is played, and
@@ -290,7 +296,7 @@ export default function FrontOfficeBoard() {
     wideAtLoad ? { block: 'end' } : undefined,
   );
 
-  useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
+  useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow, titles * 100 + seasonsPlayed * 5);
 
   /* Round 180: rank my roster against the league and let ownership set the ask.
      Round 192: the press tilt can move it one tier either way. */
@@ -1622,6 +1628,9 @@ export default function FrontOfficeBoard() {
   const seen = hold ?? league;
   const seenMy = seen.teams[myTeam] ?? my;
   const seenGame = hold ? hold.schedule[hold.week - 1]?.find(g => g.home === myTeam || g.away === myTeam) : myGameThisWeek;
+  /* Round 1309, the fix pass: the owner's trust and the press room as they stood before a watched playoff press (see `heldRoom`) */
+  const seenTrust = roomHeld ? roomHeld.trust : trust;
+  const seenPresser = roomHeld ? roomHeld.presser : presser;
   /* his seed today as the engine itself would seed the conference (division winners first, then three wild cards) */
   const seedsNow = conferenceSeeds(league.teams, conf);
   /* Round 1309: the playoffs on the week box. The bracket as it is SEEN (while
@@ -1659,7 +1668,7 @@ export default function FrontOfficeBoard() {
      runs it on the clock) and the bracket when it logged none (his bye, or he is out) */
   const pressPlayoffs = (asked: 'bracket' | 'round' | 'rest', watch: boolean) => {
     const before = gameLogLive.current?.games.length ?? 0;
-    if (watch) { setHeld(league); setHeldBracket(playoffs); }
+    if (watch) { setHeld(league); setHeldBracket(playoffs); setHeldRoom({ from: league, trust, presser, won: wonTitleNow }); }
     ask.current = asked;
     playWeek();
     setBoxGame((gameLogLive.current?.games.length ?? 0) > before ? 'last' : null);
@@ -1683,7 +1692,7 @@ export default function FrontOfficeBoard() {
       {mandate && (
         <OwnerMandateCard
           mandate={mandate}
-          trust={trust}
+          trust={seenTrust}
           pace={seen.week > 1 && seen.week <= REGULAR_WEEKS
             ? mandatePace(mandate, seenMy.wins, (seen.week - 1) / REGULAR_WEEKS, conferenceSeeds(seen.teams, conferenceOf(myTeam)).includes(myTeam))
             : null}
@@ -1691,7 +1700,7 @@ export default function FrontOfficeBoard() {
       )}
 
       {/* Round 192: the introduction presser waits on the hub until answered. */}
-      {presser && <GmPressCard presser={presser} onAnswer={answerPress} />}
+      {seenPresser && <GmPressCard presser={seenPresser} onAnswer={answerPress} shut={!!roomHeld} />}
 
       {/* Round 204: boxes, not pills. Each one already tells you the thing
           you used to have to tap to find out. */}
