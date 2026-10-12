@@ -268,33 +268,6 @@ function factBeatCheck(label, defs, id, { never = [], deal }) {
   return dealt;
 }
 
-/* ─── Round 1149: the roster beat of a sport that knows only the player's own season ───
-   The MLB, NHL and NFL rivals do not play their season on the player's stat line yet (only the NBA rival
-   does), so their roster beat (ownRosterBeat in careerRivalryEvents.ts) is dealt on the player's own record
-   alone: the award word the engine wrote on his last season, and on the one before it. This builds that
-   beat's fixtures the same way for each of them and hands them to factBeatCheck. Two cards: he made it, and
-   he is off it a year after he was on it. Never dealt on a save with no season, in a first season without
-   it, in a year he is not on it and was not the year before either, or two years after he was last on it.
-   The two ratings decide nothing (the cards are dealt at 60 and stay shut at 90). `silent` is what no card
-   may claim: that the rival is or is not on a roster, or that one of you made it over the other. */
-function ownRosterBeatCheck(label, defs, id, { p, r, award, rivalName, made, dropped }) {
-  const season = (has, year = 2030) => ({ year, awards: has ? [award] : [] });
-  const silent = new RegExp(`${rivalName} (is|made|did|was)\\b|over (you|${rivalName})`);
-  const never = [
-    { name: 'on a save with no season played (both rated 90)', p: p({ ovr: 90, seasons: [] }), r: r({ ovr: 90 }) },
-    { name: 'in a first season without it (both rated 90)', p: p({ ovr: 90, seasons: [season(false)] }), r: r({ ovr: 90 }) },
-    { name: 'in a year you are not on it and were not the year before (both rated 90)', p: p({ ovr: 90, seasons: [season(false, 2029), season(false)] }), r: r({ ovr: 90 }) },
-    { name: 'two years after you were last on it (both rated 90)', p: p({ ovr: 90, seasons: [season(true, 2028), season(false, 2029), season(false)] }), r: r({ ovr: 90 }) },
-  ];
-  const deal = [
-    { name: 'you made it (both rated 60, left off the year before)', p: p({ ovr: 60, seasons: [season(false, 2029), season(true)] }), r: r({ ovr: 60 }), silent, reads: 'Morale +5', move: { morale: 5 }, ...made },
-    { name: 'you are off it a year after you were on it (both rated 60)', p: p({ ovr: 60, seasons: [season(true, 2029), season(false)] }), r: r({ ovr: 60 }), silent, reads: 'Morale -5', move: { morale: -5 }, ...dropped },
-  ];
-  const dealt = factBeatCheck(label, defs, id, { never, deal });
-  console.log(`   the roster beat (${id}, read off your own seasons' "${award}"): ${dealt} of ${deal.length} cards dealt and applied at 4 rolls each, ${never.length} fixtures it must stay shut on, never on a coin, never on the ratings, never a word on the rival's roster, and a card from the old coin resolves with no effect`);
-  if (dealt < deal.length) fail(`${label} beat ${id}: only ${dealt} of ${deal.length} cards were dealt`);
-}
-
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'careerrivalry-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
 
@@ -806,7 +779,7 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     else if (def.when({ ...p, team: r.team }, r)) fail(`beat ${id} (${def.title}) fires while the rival is your teammate`);
   }
   beatWords('NFL', nflRivalry.NFL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
-  /* Round 1149: the All-Pro beat, read off the player's own record (see ownRosterBeatCheck). The engine picks
+  /* Round 1149: the All-Pro beat, read off the player's own record (the own cards, Round 1313 retired their check). The engine picks
      no Pro Bowl, so the beat no longer speaks of a ballot: its fact is the first team All-Pro on the season. */
   /* Round 1227: the NFL rival plays the player's position on the player's own stat line now, and the same
      All-Pro pass judges his season, so the beat names both seasons on the three cards the NBA's 306 has
@@ -1373,12 +1346,38 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
     323: [nhlFixture({ cups: 1 }), rivalFixture({ rings: 1 })],
   };
   beatWords('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
-  /* Round 1149: the All-Star beat, read off the player's own season (see ownRosterBeatCheck). */
-  ownRosterBeatCheck('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, 306, {
-    p: nhlFixture, r: rivalFixture, award: nhlRivalry.NHL_ROSTER_AWARD, rivalName: 'Rival NHL',
-    made: { says: /^The All-Star rosters are out and you are on one\./, told: /You made the All-Star roster\./ },
-    dropped: { says: /^The All-Star rosters are out and you are not on one, a year after you were\./, told: /You were left off the All-Star roster\./ },
-  });
+  /* Round 1313: the NHL rival plays the player's position on the player's own line now (nhlRivalSeason), so beat
+     306 names both seasons on the three shared cards, checked the way MLB's 206 is in section 6: the fact group,
+     then the two own cards an older save can sit on. */
+  {
+    const AW = nhlRivalry.NHL_ROSTER_AWARD;
+    const season = (has, year = 2030) => ({ year, awards: has ? [AW] : [] });
+    const pair = (mine, his) => ({ p: nhlFixture({ seasons: [season(mine)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: his }) });
+    const facts = factBeatCheck('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, 306, {
+      never: [
+        { name: 'in a season neither of you made it (both rated 90)', p: nhlFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90, lastYear: 2030, lastAllStar: false }) },
+        { name: 'in a season neither made it, a year after you did (the dropped card of Round 1149 is not dealt once he is judged)', p: nhlFixture({ seasons: [season(true, 2029), season(false)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: false }) },
+        { name: 'on two different seasons (yours of 2031 without it, his of 2030 with it)', p: nhlFixture({ seasons: [season(false, 2030), season(false, 2031)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: true }) },
+        { name: 'on the two ratings (both at 90, nobody on a roster, a rival from before Round 1313)', p: nhlFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90 }) },
+        { name: 'on a save with no season played', p: nhlFixture({ ovr: 90, seasons: [] }), r: rivalFixture({ ovr: 90 }) },
+      ],
+      deal: [
+        { name: 'mine=true his=false', ...pair(true, false), says: /^The All-Star rosters are out\. You are on one and Rival NHL is not\.$/, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster and Rival NHL did not\./ },
+        { name: 'mine=false his=true', ...pair(false, true), says: /^The All-Star rosters are out\. Rival NHL is on one and you are not\.$/, reads: 'Morale -5', move: { morale: -5 }, told: /Rival NHL made the All-Star roster and you did not\./ },
+        { name: 'mine=true his=true', ...pair(true, true), says: /^The All-Star rosters are out, and you and Rival NHL are both on them\.$/, reads: 'Fanbase +3', move: { fanbase: 3 }, told: /You and Rival NHL both made the All-Star roster\./ },
+      ],
+    });
+    const silent = /Rival NHL (is|made|did|was)\b|over (you|Rival NHL)/;
+    const own = factBeatCheck('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, 306, {
+      deal: [
+        { name: 'an old save: you made it (left off the year before)', p: nhlFixture({ seasons: [season(false, 2029), season(true)] }), r: rivalFixture(), silent, says: /^The All-Star rosters are out and you are on one\./, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster\./ },
+        { name: 'an old save: you are off it a year after you were on it', p: nhlFixture({ seasons: [season(true, 2029), season(false)] }), r: rivalFixture(), silent, says: /^The All-Star rosters are out and you are not on one, a year after you were\./, reads: 'Morale -5', move: { morale: -5 }, told: /You were left off the All-Star roster\./ },
+      ],
+    });
+    console.log(`   the All-Star beat (306): ${facts} of 3 fact pairs dealt and applied at 4 rolls each, 5 fixtures it must stay shut on, never on a coin, never on the ratings; ${own} of 2 cards of the release before still pay what they printed`);
+    if (facts < 3) fail(`NHL beat 306: only ${facts} of 3 fact pairs were dealt`);
+    if (own < 2) fail(`NHL beat 306: only ${own} of 2 cards an older save can sit on are still honoured`);
+  }
   let reachable = 0, correct = 0;
   const total = nhlRivalry.NHL_RIVALRY_EVENTS.length;
   for (const def of nhlRivalry.NHL_RIVALRY_EVENTS) {

@@ -116,11 +116,11 @@ const ENGINE_CONTROLS = {
   /* One award gate of games read off the saved line: nobody plays 78 games of 48, or 130 of 60. */
   nhlgates: { expect: ['E8a'], from: 'fullGames >= 78 && c.health >= 80', to: 'line.games >= 78 && c.health >= 80' },
   mlbgates: { expect: ['E8a'], from: 'c.pos !== "DH" && fullGames >= 130', to: 'c.pos !== "DH" && line.games >= 130' },
-  /* The head to head scored off the saved line against the rival's full season: the review's major. */
-  nhlhead: { expect: ['E8a'], from: '((full.svpct ?? 0.9) - 0.9) * 900)) : full.points ?? 0;', to: '((full.svpct ?? 0.9) - 0.9) * 900)) : line.points ?? 0;' },
-  /* Round 1313: mlbhead is retired with the inline score it was anchored on (the MLB head to head reads the two
-     saved lines now). Its successor: the player's side scored on the season on the engine's own length while
-     the rival's is his printed season, red wherever the year is of another length (every cell of E8). */
+  /* Round 1313: mlbhead and nhlhead are retired with the inline scores they were anchored on (the head to
+     head reads the two saved lines now). Their successors: the player's side scored on the season on the
+     engine's own length while the rival's is his printed season, red wherever the year is of another length
+     (every cell of E8). */
+  fullslatenhl: { expect: ['E8a'], from: 'nhlHeadToHeadScore(c.pos, line), c.name, "nhl"', to: 'nhlHeadToHeadScore(c.pos, full), c.name, "nhl"' },
   fullslatemlb: { expect: ['E8a'], from: 'mlbHeadToHeadScore(c.pos, line), c.name, "mlb"', to: 'mlbHeadToHeadScore(c.pos, full), c.name, "mlb"' },
   /* One count left on the full season in the saved line. */
   nhlcarry: { expect: ['E8b'], from: 'line.goals = cut(full.goals);', to: 'line.goals = full.goals;' },
@@ -914,25 +914,24 @@ const MLB_OWN = 162;
 
 /* ===== Round 1226 (the fix pass), E8: a short season is the full season, carried. =====
    Both engines draw every season on their own length and judge the awards
-   and the rival on that draw; the saved line is that draw carried to the
+   on that draw (and, before Round 1313, the rival); the saved line is that draw carried to the
    season the club really played. So, for ONE saved state and ONE stream:
    E8a  the awards of a season of another length are the awards of the same
         season played on the engine's own length, award for award. Exact:
         nothing here is a rate, so there is no band.
-        THE HEAD TO HEAD, since Round 1313, for a sport whose rival plays on
-        the player's own line (`onLine`: MLB from that round's step 5a, the
-        NHL from 5b): the verdict reads the two SAVED lines, so it is no
-        longer the full season's. On arm a alone (arm b is another year, and
-        the year keys the rival's stream, so it is another rival season): the
-        tally the season wrote is what the two printed lines score when read
-        back off their text, no line unread. The call site's facts (the
-        slate, his position, the bullpen job) are held in ONE place,
-        scripts/simUsRivalSense.mjs sections M.U6 and H.U6, on the real season
-        sims in these same cells and in 1990. Control fullslatemlb (and
-        fullslatenhl from 5b): the player's side scored on the engine's own
-        length. Until a sport is on the line, the old reading stands for it:
-        the same score for him and the same tally as the same season played
-        in full, his printed counts his full counts carried.
+        THE HEAD TO HEAD, since Round 1313: both rivals play on the player's
+        own line (MLB from that round's step 5a, the NHL from 5b), so the
+        verdict reads the two SAVED lines and is no longer the full season's.
+        On arm a alone (arm b is another year, and the year keys the rival's
+        stream, so it is another rival season): the tally the season wrote is
+        what the two printed lines score when read back off their text, no
+        line unread. The call site's facts (the slate, his position, the
+        bullpen job) are held in ONE place, scripts/simUsRivalSense.mjs
+        sections M.U6 and H.U6, on the real season sims in these same cells
+        and in 1990. Controls fullslatemlb and fullslatenhl: the player's side
+        scored on the engine's own length (red in every cell). Before Round
+        1313 this half held the head to head to the full season's (the same
+        score for him, the same tally), with controls mlbhead and nhlhead.
    E8b  every count on the saved line is the full season's count carried to
         the length his position worked through, the points are the goals plus
         the assists, the rates did not move, and a first choice starter never
@@ -955,9 +954,12 @@ const MLB_OWN = 162;
    nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915,
    nhlcarry 4,401 counts, mlbcarry 2,000, nhlcomeback 381 comebacks off a
    whole 48 game season, mlbcomeback 2,979 off a whole 60 game one.
-   Controls: nhlawards, mlbawards, nhlgates, mlbgates, nhlhead, fullslatemlb
-   (E8a; mlbhead retired in Round 1313 with the inline score it changed),
-   nhlcarry, mlbcarry (E8b), nhlcomeback, mlbcomeback (E8c). */
+   Controls: nhlawards, mlbawards, nhlgates, mlbgates, fullslatemlb,
+   fullslatenhl (E8a; mlbhead and nhlhead retired in Round 1313 with the
+   inline scores they changed), nhlcarry, mlbcarry (E8b), nhlcomeback,
+   mlbcomeback (E8c). The year counts above were measured on arm b before
+   Round 1313; since then they are counted on arm a (printed by
+   US_LEDGER_MEASURE=1), against the same floors. */
 {
   const S = game.shape; const FULL_YEAR = 1990;
   /* Round 1313: a printed season line read back off its text, by position (the printers' shapes, typed here). */
@@ -974,18 +976,18 @@ const MLB_OWN = 162;
     return (m = /^(\d+) G, (\d+) A, (\d+) P$/.exec(text)) ? { goals: num(m[1]), assists: num(m[2]), points: num(m[3]) } : null;
   };
   const SPORTS = [
-    { key: 'nhl', E: game.nhlEngine, own: ENGINE_OWN, onLine: false, desc: game.NHL_CAREER_SPORT, h2h: 'nhlHeadToHeadScore', readBack: readNhl, start: 'startNhlCareer', sim: 'simNhlSeason', progress: 'nhlProgress', assign: 'nhlAssignRole', arch: game.nhlEngine.NHL_ARCHETYPES,
+    { key: 'nhl', E: game.nhlEngine, own: ENGINE_OWN, desc: game.NHL_CAREER_SPORT, h2h: 'nhlHeadToHeadScore', readBack: readNhl, start: 'startNhlCareer', sim: 'simNhlSeason', progress: 'nhlProgress', assign: 'nhlAssignRole', arch: game.nhlEngine.NHL_ARCHETYPES,
       positions: ['C', 'LW', 'RW', 'D', 'G'], canWin: pos => pos !== 'G', era: y => (y < 2026 ? 'y2006' : undefined), work: (pos, slate) => (pos === 'G' ? Math.min(slate, ENGINE_OWN) : slate),
       counts: ['games', 'wins', 'goals', 'assists'], rates: ['svpct'], cells: [[2012, 'BOS'], [2019, 'CAR'], [2020, 'BOS'], [2026, 'BOS']],
-      rivalCounts: text => (text.match(/^(\d+)G (\d+)A \d+P$/) ?? []).slice(1, 3).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2012, lost: 35, lostYears: 0, lostWon: 0 } },
-    { key: 'mlb', E: game.mlbEngine, own: MLB_OWN, onLine: true, desc: game.MLB_CAREER_SPORT, h2h: 'mlbHeadToHeadScore', readBack: readMlb, start: 'startMlbCareer', sim: 'simMlbSeason', progress: 'mlbProgress', assign: 'mlbAssignRole', arch: game.mlbEngine.MLB_ARCHETYPES,
+      floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2012, lost: 35, lostYears: 0, lostWon: 0 } },
+    { key: 'mlb', E: game.mlbEngine, own: MLB_OWN, desc: game.MLB_CAREER_SPORT, h2h: 'mlbHeadToHeadScore', readBack: readMlb, start: 'startMlbCareer', sim: 'simMlbSeason', progress: 'mlbProgress', assign: 'mlbAssignRole', arch: game.mlbEngine.MLB_ARCHETYPES,
       positions: ['CF', 'SS', '1B', 'C', 'SP', 'RP'], canWin: pos => pos !== 'SP' && pos !== 'RP', era: y => (y < 2026 ? 'y2004' : undefined), work: (pos, slate) => (pos === 'SP' || pos === 'RP' ? Math.min(slate, MLB_OWN) : slate),
       counts: ['games', 'wins', 'lossesP', 'so', 'saves', 'holds', 'hr', 'rbi', 'sb', 'doubles'], rates: ['avg', 'obp', 'era'], cells: [[2005, 'CIN'], [2020, 'BOS'], [2020, 'DET'], [2026, 'NYY']],
-      rivalCounts: text => (text.match(/, (\d+) HR$/) ?? []).slice(1, 2).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2020, lost: 70, lostYears: 50, lostWon: 30 } },
+      floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2020, lost: 70, lostYears: 50, lostWon: 30 } },
   ];
   for (const sp of SPORTS) {
     const carry = (n, to) => (to === sp.own ? n : Math.round(n * to / sp.own));
-    let seasons = 0; let awardsFull = 0; let awardBad = 0; let headBad = 0; let carryBad = 0; let rateBad = 0; let rivalBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = ''; let verdictBad = 0; let unread = 0; let firstVerdict = ''; const byCell = {};
+    let seasons = 0; let awardsFull = 0; let awardBad = 0; let carryBad = 0; let rateBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = ''; let verdictBad = 0; let unread = 0; let firstVerdict = ''; const byCell = {};
     for (const [year, team] of sp.cells) {
       const slate = S.seasonLength(sp.key, year, team);
       check('E8a', slate !== sp.own, `the ${sp.key.toUpperCase()} ${year} season of ${team} is the engine's own ${sp.own} games, so it compares nothing`);
@@ -1004,7 +1006,7 @@ const MLB_OWN = 162;
         const b = JSON.parse(snap); b.year = FULL_YEAR; const B = sp.E[sp.sim](b, 82, mulberry(seed)).line;
         seasons++; awardsFull += B.awards.length;
         if (JSON.stringify(A.awards) !== JSON.stringify(B.awards)) { awardBad++; if (!first) first = `${year} ${team} ${pos}: [${A.awards.join(', ')}] against [${B.awards.join(', ')}] in full`; }
-        if (before && !before.retired && sp.onLine) {
+        if (before && !before.retired) {
           /* Round 1313: the head to head reads the two SAVED lines. On arm a alone (arm b is another year, and
              the year is in the rival's stream key, so it is another rival season): the tally the season wrote is
              what the two printed lines score when read back off their text, and no line is unread. */
@@ -1015,11 +1017,6 @@ const MLB_OWN = 162;
             verdictBad++; byCell[`${year} ${team}`] = (byCell[`${year} ${team}`] ?? 0) + 1;
             if (!firstVerdict) firstVerdict = `${year} ${team} ${pos}: mine "${sp.desc.statLine(A, pos)}", his "${a.rival.lastLine}", the save gave the year to ${a.rival.myYears > before.myYears ? 'me' : 'him'}`;
           }
-        } else if (before && !before.retired) {
-          if (b.rival.myYears > before.myYears) mine++; else his++;
-          if (a.rival.myYears !== b.rival.myYears || a.rival.hisYears !== b.rival.hisYears || a.rival.lastScore !== b.rival.lastScore) headBad++;
-          const shown = sp.rivalCounts(a.rival.lastLine); const full = sp.rivalCounts(b.rival.lastLine);
-          if (!full.length || shown.length !== full.length || shown.some((n, k) => n !== carry(full[k], slate))) rivalBad++;
         }
         const w = sp.work(pos, slate);
         for (const k of sp.counts) if (B[k] !== undefined && A[k] !== carry(B[k], w)) carryBad++;
@@ -1030,13 +1027,11 @@ const MLB_OWN = 162;
       }
     }
     const U = sp.key.toUpperCase();
-    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8 ${sp.key}: ${seasons} paired seasons, ${awardsFull} awards in the full ones, the year mine ${mine} and his ${his}${sp.onLine ? ` (on arm a, the saved lines)` : ''}`);
-    if (sp.onLine) check('E8a', verdictBad === 0 && unread === 0, `the ${U} head to head the season wrote is what the two saved lines score when read back off their printed text: ${verdictBad} of ${mine + his} judged seasons disagree (by cell: ${Object.entries(byCell).map(([k, n]) => `${k} ${n}`).join(', ') || 'none'}), ${unread} unread${firstVerdict ? ` (the first: ${firstVerdict})` : ''}`);
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8 ${sp.key}: ${seasons} paired seasons, ${awardsFull} awards in the full ones, the year mine ${mine} and his ${his} (on arm a, the saved lines)`);
+    check('E8a', verdictBad === 0 && unread === 0, `the ${U} head to head the season wrote is what the two saved lines score when read back off their printed text: ${verdictBad} of ${mine + his} judged seasons disagree (by cell: ${Object.entries(byCell).map(([k, n]) => `${k} ${n}`).join(', ') || 'none'}), ${unread} unread${firstVerdict ? ` (the first: ${firstVerdict})` : ''}`);
     check('E8a', awardsFull >= sp.floors.awards && mine >= sp.floors.mine && his >= sp.floors.his, `the ${U} fleet is too thin to compare: ${awardsFull} awards, ${mine} years won and ${his} lost against the rival over ${seasons} seasons (floors ${sp.floors.awards}, ${sp.floors.mine}, ${sp.floors.his})`);
     check('E8a', awardBad === 0, `${awardBad} of ${seasons} ${U} seasons of another length hold other awards than the same season played in full (the first: ${first})`);
-    check('E8a', headBad === 0, `${headBad} of ${seasons} ${U} seasons of another length score the head to head with the rival differently from the same season played in full`);
     check('E8b', carryBad === 0 && rateBad === 0, `${carryBad} counts on a saved ${U} line are not the full season's count carried to the season's length, and ${rateBad} rates moved`);
-    check('E8a', rivalBad === 0, `${rivalBad} printed ${U} rival lines are not his full season's counts carried to the season's length`);
     check('E8b', recordBad === 0, `${recordBad} first choice ${U} starters have more wins than starts`);
 
     /* E8c: the season after a short one. */
