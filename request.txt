@@ -1,0 +1,12 @@
+# Round 1311 (head 07781235): the league leaders walk, its measuring pass and its six controls on a served build
+#!serve
+#!playwright
+#!serial
+walk: mkdir -p "$RC_OUT/walk" && RC_OUT="$RC_OUT/walk" node scripts/playCmLeagueLeaders.mjs
+walk-report: RC_OUT=$(mktemp -d) LEADERS_REPORT=1 node scripts/playCmLeagueLeaders.mjs
+c-swap: RC_OUT=$(mktemp -d) LEADERS_CONTROL=swap node scripts/playCmLeagueLeaders.mjs
+c-wide: RC_OUT=$(mktemp -d) LEADERS_CONTROL=wide node scripts/playCmLeagueLeaders.mjs
+c-stack: RC_OUT=$(mktemp -d) LEADERS_CONTROL=stack node scripts/playCmLeagueLeaders.mjs
+c-thin: RC_OUT=$(mktemp -d) LEADERS_CONTROL=thin node scripts/playCmLeagueLeaders.mjs
+c-younglate: RC_OUT=$(mktemp -d) LEADERS_CONTROL=younglate node scripts/playCmLeagueLeaders.mjs
+c-write: RC_OUT=$(mktemp -d) LEADERS_CONTROL=write node scripts/playCmLeagueLeaders.mjs

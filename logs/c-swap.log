@@ -1,0 +1,27 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners; CONTROL swap
+playCmLeagueLeaders: page seed 2362537418
+  FAIL 1: S1-320: the goals board on the page is not the reader's (first row {"name":"Erling Haaland","club":"Manchester City","n":"15","mine":false,"gen":false} against {"name":"Erling Haaland","club":"Manchester City","n":"14","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-320: the assists board on the page is not the reader's (first row {"name":"Gonzalo García","club":"Fulham","n":"6","mine":false,"gen":false} against {"name":"Gonzalo García","club":"Fulham","n":"5","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-320: the sheets board on the page is not the reader's (first row {"name":"Senne Lammens","club":"Manchester United","n":"9","mine":false,"gen":false} against {"name":"Senne Lammens","club":"Manchester United","n":"8","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-320: the goals board on the page is not the reader's (first row {"name":"Fraser Hornby","club":"Wolfsburg","n":"14","mine":false,"gen":false} against {"name":"Fraser Hornby","club":"Wolfsburg","n":"13","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-320: the assists board on the page is not the reader's (first row {"name":"Jan Schöppner","club":"Heidenheim","n":"7","mine":false,"gen":false} against {"name":"Jan Schöppner","club":"Heidenheim","n":"6","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-320: the sheets board on the page is not the reader's (first row {"name":"Timon Wellenreuther","club":"Wolfsburg","n":"8","mine":false,"gen":false} against {"name":"Timon Wellenreuther","club":"Wolfsburg","n":"7","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-390: the goals board on the page is not the reader's (first row {"name":"Erling Haaland","club":"Manchester City","n":"15","mine":false,"gen":false} against {"name":"Erling Haaland","club":"Manchester City","n":"14","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-390: the assists board on the page is not the reader's (first row {"name":"Gonzalo García","club":"Fulham","n":"6","mine":false,"gen":false} against {"name":"Gonzalo García","club":"Fulham","n":"5","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-390: the sheets board on the page is not the reader's (first row {"name":"Senne Lammens","club":"Manchester United","n":"9","mine":false,"gen":false} against {"name":"Senne Lammens","club":"Manchester United","n":"8","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-390: the goals board on the page is not the reader's (first row {"name":"Fraser Hornby","club":"Wolfsburg","n":"14","mine":false,"gen":false} against {"name":"Fraser Hornby","club":"Wolfsburg","n":"13","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-390: the assists board on the page is not the reader's (first row {"name":"Jan Schöppner","club":"Heidenheim","n":"7","mine":false,"gen":false} against {"name":"Jan Schöppner","club":"Heidenheim","n":"6","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-390: the sheets board on the page is not the reader's (first row {"name":"Timon Wellenreuther","club":"Wolfsburg","n":"8","mine":false,"gen":false} against {"name":"Timon Wellenreuther","club":"Wolfsburg","n":"7","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-1280: the goals board on the page is not the reader's (first row {"name":"Erling Haaland","club":"Manchester City","n":"15","mine":false,"gen":false} against {"name":"Erling Haaland","club":"Manchester City","n":"14","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-1280: the assists board on the page is not the reader's (first row {"name":"Gonzalo García","club":"Fulham","n":"6","mine":false,"gen":false} against {"name":"Gonzalo García","club":"Fulham","n":"5","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S1-1280: the sheets board on the page is not the reader's (first row {"name":"Senne Lammens","club":"Manchester United","n":"9","mine":false,"gen":false} against {"name":"Senne Lammens","club":"Manchester United","n":"8","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-1280: the goals board on the page is not the reader's (first row {"name":"Fraser Hornby","club":"Wolfsburg","n":"14","mine":false,"gen":false} against {"name":"Fraser Hornby","club":"Wolfsburg","n":"13","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-1280: the assists board on the page is not the reader's (first row {"name":"Jan Schöppner","club":"Heidenheim","n":"7","mine":false,"gen":false} against {"name":"Jan Schöppner","club":"Heidenheim","n":"6","mine":false,"gen":false}, 10 rows against 10)
+  FAIL 1: S2-1280: the sheets board on the page is not the reader's (first row {"name":"Timon Wellenreuther","club":"Wolfsburg","n":"8","mine":false,"gen":false} against {"name":"Timon Wellenreuther","club":"Wolfsburg","n":"7","mine":false,"gen":false}, 10 rows against 10)
+5       the page drew 7 and 7 times before the match; the two saves are equal (121105 characters)
+RED   1 the page is the reader: 18 checks, 18 failed
+green 2 the fit: 141 checks
+green 3 nothing stacks or jumps: 57 checks
+green 4 the lines: 48 checks
+green 5 a match with the boards open: 2 checks
+playCmLeagueLeaders: CONTROL swap FIRED: section 1 went red (18 failures) and no other did

@@ -1,0 +1,15 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners; CONTROL thin
+playCmLeagueLeaders: page seed 2362537418
+  FAIL 4: S1-320: the thin data line reads "The data covers only part of this league.", the save earns null
+  FAIL 4: S3-320: a young late book in a whole league draws the thin data line: "The data covers only part of this league."
+  FAIL 4: S1-390: the thin data line reads "The data covers only part of this league.", the save earns null
+  FAIL 4: S3-390: a young late book in a whole league draws the thin data line: "The data covers only part of this league."
+  FAIL 4: S1-1280: the thin data line reads "The data covers only part of this league.", the save earns null
+  FAIL 4: S3-1280: a young late book in a whole league draws the thin data line: "The data covers only part of this league."
+5       the page drew 7 and 7 times before the match; the two saves are equal (121105 characters)
+green 1 the page is the reader: 18 checks
+green 2 the fit: 141 checks
+green 3 nothing stacks or jumps: 57 checks
+RED   4 the lines: 48 checks, 6 failed
+green 5 a match with the boards open: 2 checks
+playCmLeagueLeaders: CONTROL thin FIRED: section 4 went red (6 failures) and no other did

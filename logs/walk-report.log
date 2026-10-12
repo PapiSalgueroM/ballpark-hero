@@ -1,0 +1,51 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners
+playCmLeagueLeaders: page seed 2362537418
+  report S1-320 help 44.0 x 44.0 hit true
+  report S1-320 goals 262.0 x 47.5 hit true
+  report S1-320 assists 262.0 x 47.5 hit true
+  report S1-320 sheets 262.0 x 47.5 hit true
+  report S1-320 goals: card 548 tall in 568, page 320 wide in 320
+  report S1-320 assists: card 571 tall in 568, page 320 wide in 320
+  report S1-320 sheets: card 548 tall in 568, page 320 wide in 320
+  report S2-320 help 44.0 x 44.0 hit true
+  report S2-320 goals 262.0 x 47.5 hit true
+  report S2-320 assists 262.0 x 47.5 hit true
+  report S2-320 sheets 262.0 x 47.5 hit true
+  report S2-320 goals: card 597 tall in 568, page 320 wide in 320
+  report S2-320 assists: card 597 tall in 568, page 320 wide in 320
+  report S2-320 sheets: card 620 tall in 568, page 320 wide in 320
+  report S1-390 help 44.0 x 44.0 hit true
+  report S1-390 goals 332.0 x 47.5 hit true
+  report S1-390 assists 332.0 x 47.5 hit true
+  report S1-390 sheets 332.0 x 47.5 hit true
+  report S1-390 goals: card 548 tall in 844, page 390 wide in 390
+  report S1-390 assists: card 571 tall in 844, page 390 wide in 390
+  report S1-390 sheets: card 548 tall in 844, page 390 wide in 390
+  report S2-390 help 44.0 x 44.0 hit true
+  report S2-390 goals 332.0 x 47.5 hit true
+  report S2-390 assists 332.0 x 47.5 hit true
+  report S2-390 sheets 332.0 x 47.5 hit true
+  report S2-390 goals: card 583 tall in 844, page 390 wide in 390
+  report S2-390 assists: card 583 tall in 844, page 390 wide in 390
+  report S2-390 sheets: card 606 tall in 844, page 390 wide in 390
+  report S1-1280 help 44.0 x 44.0 hit true
+  report S1-1280 goals 275.3 x 47.5 hit true
+  report S1-1280 assists 275.3 x 47.5 hit true
+  report S1-1280 sheets 275.3 x 47.5 hit true
+  report S1-1280 goals: card 548 tall in 900, page 1280 wide in 1280
+  report S1-1280 assists: card 571 tall in 900, page 1280 wide in 1280
+  report S1-1280 sheets: card 548 tall in 900, page 1280 wide in 1280
+  report S2-1280 help 44.0 x 44.0 hit true
+  report S2-1280 goals 275.3 x 47.5 hit true
+  report S2-1280 assists 275.3 x 47.5 hit true
+  report S2-1280 sheets 275.3 x 47.5 hit true
+  report S2-1280 goals: card 570 tall in 900, page 1280 wide in 1280
+  report S2-1280 assists: card 570 tall in 900, page 1280 wide in 1280
+  report S2-1280 sheets: card 593 tall in 900, page 1280 wide in 1280
+5       the page drew 7 and 7 times before the match; the two saves are equal (121105 characters)
+green 1 the page is the reader: 18 checks
+green 2 the fit: 105 checks
+green 3 nothing stacks or jumps: 57 checks
+green 4 the lines: 48 checks
+green 5 a match with the boards open: 2 checks
+playCmLeagueLeaders: green, 5 sections at 320, 390 and 1280
