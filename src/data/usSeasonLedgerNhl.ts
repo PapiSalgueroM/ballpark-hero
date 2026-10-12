@@ -254,6 +254,8 @@ export interface NhlRoundWindow {
   conferences: boolean;
   /** True: only the last round was played across conferences, read twice season by season; false: not so; null: not read twice. */
   finalOnlyAcross: boolean | null;
+  /** A stage played before the four rounds, which this ledger does not lay out. */
+  before?: string;
   /** Receipts of the shape, season by season. */
   src: readonly string[];
   /** Receipts of the names. */
@@ -274,6 +276,32 @@ export const NHL_ROUND_NAMES: readonly NhlRoundWindow[] = [
     from: 2013, to: 2018, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
     series: SEVEN, conferences: true, finalOnlyAcross: true,
     src: BY_SEASON, namesSrc: NHL_PLAYOFF_FORMAT.src,
+  },
+  /* 2019-20: 24 clubs. A Qualifying Round of eight best of five series and a
+     round robin of each conference's top four came first; then the four
+     rounds of best of seven, each conference's clubs among themselves to the
+     Final. NBC Sports (24 August 2020) and CBS Sports (4 June 2020) name the
+     four rounds as today's format does; the league's records site and Hockey
+     Reference print every series. */
+  {
+    from: 2019, to: 2019, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    before: 'A qualifying stage came first: 24 clubs, a Qualifying Round of eight best of five series and a round robin of the top four of each conference. This ledger does not lay it out.',
+    src: [...BY_SEASON, 'nbc-2020-format', 'cbs-2020-format'],
+    namesSrc: ['nbc-2020-format', 'cbs-2020-format', ...BY_SEASON, 'hr-final-matchups'],
+  },
+  /* 2020-21: 56 games inside four divisions and no conferences. The top four
+     of each division; the first two rounds inside the division; the last
+     four seeded again by points. The league ("Key questions, answers on
+     2020-21 NHL season" and its records site), NBC Sports (22 December 2020
+     and 13 June 2021) and Hockey Reference. No round was between the
+     conferences, for there were none: `finalOnlyAcross` is false. */
+  {
+    from: 2020, to: 2020, clubs: 16,
+    names: ['First Round', 'Second Round', 'Stanley Cup Semifinals', 'Stanley Cup Final'],
+    series: SEVEN, conferences: false, finalOnlyAcross: false,
+    src: [...BY_SEASON, 'nbc-2021-season', 'nhl-2021-keyq'],
+    namesSrc: [...BY_SEASON, 'hr-final-matchups', 'nhl-2021-keyq', 'nbc-2021-season', 'nbc-2021-semis'],
   },
   {
     from: 2021, to: null, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
@@ -354,11 +382,6 @@ export const NHL_THIN: readonly { what: string; oneSource: string; tried: string
     what: 'How many skaters a side played overtime before 2015-16.',
     oneSource: 'NBC Chicago: four a side.',
     tried: 'Sports Illustrated gives 2015 for three a side and does not say what came before.',
-  },
-  {
-    what: 'How the 2020 and 2021 playoffs differed (the seasons that started in 2019 and 2020).',
-    oneSource: 'Hockey Reference: the 2020 playoffs held 24 clubs, with a Qualifying Round of eight series won with three wins and a Round Robin before the First Round; the 2021 playoffs had Semi-Finals in place of Conference Finals. Sports Illustrated says only that they were "modified". More detail is in src/lib/nhlPlayoffFormatHistory.ts, from pages not read again today.',
-    tried: 'The league\'s own "Playoff Format" page describes today only.',
   },
   {
     what: 'The playoffs of 2026-27, the first 84 game season.',

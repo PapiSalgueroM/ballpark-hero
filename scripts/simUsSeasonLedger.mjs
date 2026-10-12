@@ -213,7 +213,7 @@ const OWN = {
   /* The rules after sixty minutes. */
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
-  thin: { mlb: 10, nhl: 8 },
+  thin: { mlb: 10, nhl: 7 },
   /* Round 1312: each receipts file and the day it was read on. */
   receiptDays: { 'scripts/data/usSeasonSources1211.json': '2026-10-10', 'scripts/data/usSeasonSources1312.json': '2026-10-12' },
   /* The first rounds whose length is thin (played, and only one source gave its length), by their
@@ -226,11 +226,14 @@ const OWN = {
   nhlPlayoff: { from: 2013, modified: [2019, 2020], rounds: ['First Round', 'Second Round', 'Conference Finals', 'Stanley Cup Final'] },
   /* Round 1312, NHL_ROUND_NAMES window by window: [from, to, its names joined by | or null, clubs, conferences,
      and how the names are held: 'season' (two sources name every round alike in every season, N9) or 'format'
-     (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format), and finalOnlyAcross]. */
+     (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format), finalOnlyAcross, and
+     whether a stage came before the four rounds]. */
   nhlRoundWindows: [
-    [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season', true],
-    [2013, 2018, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true],
-    [2021, null, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true],
+    [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season', true, false],
+    [2013, 2018, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true, false],
+    [2019, 2019, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'season', true, true],
+    [2020, 2020, 'First Round|Second Round|Stanley Cup Semifinals|Stanley Cup Final', 16, false, 'season', false, false],
+    [2021, null, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true, false],
   ],
 };
 
@@ -323,6 +326,13 @@ const CONTROLS = {
   /* Round 1312: one name of the 2006 window changed; the window still has four names. */
   roundname: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.names && w.names[1] === 'Conference Semifinals', 'the Conference Semifinals of the 2006 window'); w.names[1] = 'Division Finals'; } },
   /* Round 1312: the league's receipt taken from the 2006 window, shape and names: one source is left. */
+  /* Round 1312: the 2020 window (no conferences) said to have kept its rounds inside a conference to the Final. */
+  finalacross: { expect: ['N10'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2020); must(w && w.finalOnlyAcross === false && w.conferences === false, 'the 2020 window with no conferences'); w.finalOnlyAcross = true; } },
+  /* Round 1312: NBC's page of the 2021 semifinals taken from the 2020 window's names: the league alone
+     names the round "Stanley Cup Semifinals" (the typed table still agrees, so only the season check sees it). */
+  semisone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2020); must(w && w.namesSrc.includes('nbc-2021-semis'), 'NBC\'s semifinal page behind the 2020 window'); w.namesSrc = w.namesSrc.filter(k => k !== 'nbc-2021-semis'); } },
+  /* Round 1312: the qualifying stage of 2019-20 forgotten. */
+  beforegone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2019); must(w && typeof w.before === 'string', 'the stage before the 2019 window'); delete w.before; } },
   /* Round 1312: the 2006 window said NOT to keep its first three rounds inside a conference. */
   acrossflag: { expect: ['N10'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.finalOnlyAcross === true, 'the 2006 window\'s finalOnlyAcross'); w.finalOnlyAcross = false; } },
   /* Round 1312: one series of 2022-23 moved across the conferences in BOTH receipts (Vegas meeting Florida
@@ -636,7 +646,10 @@ const OWN_MLB_DIVISIONS = {
   const norm = s => (typeof s === 'string' ? s.toLowerCase().replace(/-/g, '').replace(/\s+/g, ' ').trim() : null);
   const wins = nhl.NHL_ROUND_NAMES ?? [];
   check('N9', wins.length === OWN.nhlRoundWindows.length, `NHL_ROUND_NAMES holds ${wins.length} windows, this harness's own table ${OWN.nhlRoundWindows.length}`);
-  for (const [from, to, names, clubs, confs, how, across] of OWN.nhlRoundWindows) {
+  /* The windows run from the ledger's first season on, in order, with no gap and no overlap. */
+  check('N9', wins.length > 0 && wins[0].from === OWN.nhlYears[0] && wins[wins.length - 1].to === null && wins.every((w, i) => i === 0 || w.from === wins[i - 1].to + 1),
+    `the NHL_ROUND_NAMES windows leave a gap or overlap: ${wins.map(w => `${w.from} to ${w.to}`).join(', ')}`);
+  for (const [from, to, names, clubs, confs, how, across, before] of OWN.nhlRoundWindows) {
     const w = wins.find(x => x.from === from);
     const tag = `NHL_ROUND_NAMES ${from}`;
     if (!w) { check('N9', false, `${tag}: no such window`); continue; }
@@ -649,9 +662,19 @@ const OWN_MLB_DIVISIONS = {
       for (const y of years) w.names.forEach((name, i) => {
         const agree = w.namesSrc.map(k => SRC[k]).filter(s => s && !s.thin && norm(s.values?.rounds?.[y]?.[i]) === norm(name));
         check('N9', new Set(agree.map(s => s.group)).size >= 2, `${tag}, ${y}: round ${i + 1} "${name}" is named so by ${agree.length ? agree.map(s => s.group).join(', ') : 'no receipt'} alone`);
+        /* The league's spelling (its hyphens; capitals aside, for a name in running text). */
         const league = agree.find(s => s.group === 'nhl');
-        if (league) check('N9', league.values.rounds[y][i] === name, `${tag}, ${y}: the ledger spells round ${i + 1} "${name}", the league "${league.values.rounds[y][i]}"`);
+        if (league) check('N9', league.values.rounds[y][i].toLowerCase() === name.toLowerCase(), `${tag}, ${y}: the ledger spells round ${i + 1} "${name}", the league "${league.values.rounds[y][i]}"`);
       });
+    }
+    /* A stage before the four rounds: said in words exactly where this harness's own table says so, and
+       printed by two groups of the window's receipts in every such season; and no receipt of a window
+       without one prints one. */
+    check('N9', (typeof w.before === 'string' && w.before.length > 20) === before, `${tag}: the stage before the four rounds is ${w.before ? `said ("${w.before}")` : 'not said'}, this harness's own table says ${before ? 'one came first' : 'none came first'}`);
+    for (const y of years) {
+      const firsts = w.src.map(k => SRC[k]).filter(s => s && !s.thin && Array.isArray(s.values?.before?.[y]) && s.values.before[y].length > 0);
+      if (before) check('N9', new Set(firsts.map(s => s.group)).size >= 2, `${tag}, ${y}: the stage before is printed by ${firsts.map(s => s.group).join(', ') || 'no receipt'} alone`);
+      else check('N9', firsts.length === 0, `${tag}, ${y}: ${firsts.map(s => s.group).join(', ')} print a stage before the four rounds, the window says none`);
     }
     /* What the series say of the window, season by season: true while every season keeps the first three
        rounds inside a conference and the last across; false on a season without conferences or a crossing. */

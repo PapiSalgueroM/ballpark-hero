@@ -60,3 +60,37 @@ NHL_FORMULA_84 is, and one new NHL_THIN row says so (NHL_THIN stays at 8: one ro
 Checks: N10 now also holds `finalOnlyAcross` to this harness's own table and to what the series say. Controls:
 acrossflag (the 2006 window said not to keep its rounds inside a conference: N10) and acrossdata (one first
 round series of 2022-23 moved across the conferences in both receipts, so they still agree: N10).
+
+## Step 4 (A3 and A4): the tournaments of 2019-20 and 2020-21
+
+A3, 2019-20. The league's records site prints a Western and an Eastern Conference Round Robin and the Stanley
+Cup Qualifiers (eight series, "Best-of-5") before 1st Round, 2nd Round, Conference Finals and Stanley Cup Final,
+every one "Best-of-7". Hockey Reference prints a Qualifying Round of eight series, each won with three wins,
+before First Round, Second Round, Conference Finals and Final, and heads the Final's matchup page "2020 NHL
+Stanley Cup Final". NBC Sports (James O'Brien, 24 August 2020) and CBS Sports (Shanna McCarriston, 4 June
+2020) describe a 24 team playoff with a round robin and a best of five qualifying round, then four best of
+seven rounds they call first round, second round, conference finals and Stanley Cup Final. Every round's name
+is given by two groups or more, and the first three rounds were played inside each conference (the series
+place every club). Written: the 2019 window, names NHL_PLAYOFF_FORMAT's by reference, with the words that a
+qualifying stage came first and this ledger does not lay it out.
+
+A4, 2020-21. The league ("Key questions, answers on 2020-21 NHL season", Tom Gulitti, 23 December 2020): 56
+games, four new divisions and only games inside the division, the top four of each division, the first two
+rounds inside the division (first against fourth, second against third "in the first round"), the four clubs
+of the "Semifinal Round" seeded by points, the traditional four round best of seven format. NBC Sports (22
+December 2020) agrees and names the second round and the 2021 Stanley Cup Final. The league's records site
+prints 1st Round, 2nd Round, Stanley Cup Semifinals and Stanley Cup Final, every one "Best-of-7"; NBC Sports
+(Sean Leahy, 13 June 2021) titles its preview "PHT's 2021 NHL Stanley Cup Semifinals predictions"; Hockey
+Reference prints First Round, Second Round, Semi-Finals and Final. So: First Round (Hockey Reference and the
+league's article), Second Round (Hockey Reference and NBC), Stanley Cup Semifinals (the league and NBC; Hockey
+Reference's "Semi-Finals" alone is not the same name), Stanley Cup Final (the league, Hockey Reference's matchup
+page and NBC). Written: the 2020 window, conferences false and finalOnlyAcross false (there were none).
+
+A3 and A4 close the thin row "How the 2020 and 2021 playoffs differed" (NHL_THIN 8 to 7). The windows now run
+from 2006 with no gap (N9). Every quotation of the article receipts was matched to the page text it came from by
+a script (25 of 25 on the runner's files; the three pages read in the browser pane checked in the pane).
+
+Checks: N9 also holds the stage before the four rounds (said exactly where the harness's own table says, and
+printed by two groups; no receipt of another window prints one) and the windows' coverage. Controls:
+finalacross (the 2020 window said to keep its rounds inside a conference: N10), beforegone (the 2019 stage
+forgotten: N9), semisone (NBC's semifinal page taken from the 2020 names: the league alone names that round, N9).

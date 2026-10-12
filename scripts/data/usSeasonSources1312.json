@@ -456,6 +456,107 @@
       "read": "2026-10-12",
       "says": ["16 teams will qualify for the Stanley Cup Playoffs.", "The format is a set bracket that is largely division-based with wild cards.", "Each of the four rounds is a best-of-7; the first team to win four games advances to the next round.", "First-round winners within each bracket play one another to determine the four participants in the Conference Finals.", "In the Conference Finals and Stanley Cup Final, home-ice advantage goes to the team that had the better regular-season record"],
       "note": "The page of the 1211 receipt nhl-playoff-format, read again on 2026-10-12, during the 2026-27 season, as the third reading the brief asks for when both schedule articles are silent. It describes the format in force and names no season."
+    },
+    "nbc-2020-format": {
+      "sport": "nhl",
+      "group": "nbc",
+      "publisher": "NBC Sports (James O'Brien)",
+      "title": "How 2020 NHL playoffs will work: Format, seeding, locations, more for Stanley Cup playoffs",
+      "published": "2020-08-24",
+      "url": "https://www.nbcsports.com/nhl/news/how-2020-nhl-playoffs-will-work-stanley-cup",
+      "read": "2026-10-12",
+      "years": {
+        "2019": "The 2020 playoffs: a 24 team playoff; a round robin of the top four of each conference for First Round seeding and a Qualifying Round of best of five series for the other eight; then First Round, Second Round, Conference Finals and Stanley Cup Final, each best of seven."
+      },
+      "values": {
+        "rounds": {
+          "2019": ["First Round", "Second Round", "Conference Finals", "Stanley Cup Final"]
+        },
+        "before": {
+          "2019": ["Round Robin", "Qualifying Round"]
+        }
+      },
+      "says": ["How the 24-team playoff format works", "Round Robin: The top 4 teams play for First Round seeding (regular-season overtime rules in effect)", "Qualifying Round: The remaining 8 teams play best-of-5 series to advance to the First Round (playoff overtime rules in effect)", "First Round and Second Round: Format (seeding vs. bracket) and series lengths will be best-of-seven.", "Conference Finals and Stanley Cup Final: Best-of-7 series will take place at Rogers Place in Edmonton."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12. Each quotation is a line of the page, its bullet left off."
+    },
+    "cbs-2020-format": {
+      "sport": "nhl",
+      "group": "cbs",
+      "publisher": "CBS Sports (Shanna McCarriston)",
+      "title": "NHL announces format for Stanley Cup playoffs for when 2020 season resumes",
+      "published": "2020-06-04",
+      "url": "https://www.cbssports.com/nhl/news/nhl-announces-format-for-stanley-cup-playoffs-for-when-2020-season-resumes/",
+      "read": "2026-10-12",
+      "years": {
+        "2019": "The 2019-20 playoff format: a 24 team, conference based plan; a play-in qualifying round of best of five; then four playoff rounds (first round, second round, conference finals and Stanley Cup Final), each best of seven, the teams seeded again after each round."
+      },
+      "values": {
+        "rounds": {
+          "2019": ["first round", "second round", "conference finals", "Stanley Cup Final"]
+        },
+        "before": {
+          "2019": ["qualifying round"]
+        }
+      },
+      "says": ["Both sides came to the agreement that all four playoff rounds (first round, second round, conference finals and Stanley Cup Final) will be best-of-seven and the play-in, qualifying round will be best-of-five.", "After each round, the teams will be re-seeded and will not be bracketed.", "The playoff format involves a 24-team, conference-based plan."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12. Its names are in lower case; a name counts when two sources agree on it, hyphen and case aside."
+    },
+    "nbc-2021-season": {
+      "sport": "nhl",
+      "group": "nbc",
+      "publisher": "NBC Sports (James O'Brien)",
+      "title": "What we know about 2020-21 NHL season: Key dates, playoff format, more",
+      "published": "2020-12-22",
+      "url": "https://www.nbcsports.com/nhl/news/what-we-know-about-2020-21-nhl-season-key-dates-playoff-format-more",
+      "read": "2026-10-12",
+      "years": {
+        "2020": "The 2020-21 season: 56 games, four realigned divisions, play only inside the division; the top four of each division make the 16 playoff clubs; first against fourth and second against third in each division; the winners meet in the second round; then the last four are seeded again; the Stanley Cup Final."
+      },
+      "values": {
+        "rounds": {
+          "2020": [null, "second round", null, "Stanley Cup Final"]
+        }
+      },
+      "says": ["we know how the NHL plans to run its 56-game, 2020-21 season.", "Instead, it’s quite simple: the top four teams from each of the four divisions will make up the 16 playoff squads.", "From there, the top seed in each division faces the fourth seed, while the second faces the third. The winners face off in the second round. After the divisional bracketing is taken care of, the four remaining playoff teams will be re-seeded.", "This could create some fascinating, one-of-a-kind matchups for the 2021 Stanley Cup Final."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12. It names the second round and the Final, not the first round or the round of the last four."
+    },
+    "nhl-2021-keyq": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com (Tom Gulitti)",
+      "title": "Key questions, answers on 2020-21 NHL season",
+      "published": "2020-12-23",
+      "url": "https://www.nhl.com/news/key-questions-answers-2020-21-nhl-season-319847468",
+      "read": "2026-10-12",
+      "years": {
+        "2020": "The 2020-21 season: a 56 game regular season; four new divisions and only games inside the division; the top four of each division qualify; the first two rounds inside the division, first against fourth and second against third in the first round; the four clubs of the Semifinal Round seeded by points; the traditional four round, best of seven format."
+      },
+      "values": {
+        "rounds": {
+          "2020": ["first round", null, "Semifinal Round", null]
+        }
+      },
+      "says": ["The NHL and NHL Players' Association announced Sunday an agreement to play a 56-game regular season beginning Jan. 13, 2021.", "The playoffs, featuring the traditional four-round, best-of-7 format, are tentatively scheduled to begin May 11 and end no later than July 9", "For the 2020-21 season, the teams will be realigned into four new divisions, and play will be limited to intradivisional games because of travel restrictions in the United States and Canada.", "The top four teams in each division will qualify for the playoffs. The first two rounds of the playoffs will be intradivisional, with the first-place team facing the fourth-place team and the second-place team playing the third-place team in the first round.", "The four teams that advance to the Semifinal Round will be seeded by their point total in the regular season"],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12 (a digest of it was all the scout had). The league's own site: group nhl, one source with the records site."
+    },
+    "nbc-2021-semis": {
+      "sport": "nhl",
+      "group": "nbc",
+      "publisher": "NBC Sports (Sean Leahy)",
+      "title": "PHT’s 2021 NHL Stanley Cup Semifinals predictions",
+      "published": "2021-06-13",
+      "url": "https://www.nbcsports.com/nhl/news/phts-2021-nhl-stanley-cup-semifinals-predictions",
+      "read": "2026-10-12",
+      "years": {
+        "2020": "The round of the last four of the 2021 playoffs, under the name Stanley Cup Semifinals: Montreal against Vegas and the Islanders against Tampa Bay, after two rounds and a re-seeding."
+      },
+      "values": {
+        "rounds": {
+          "2020": [null, null, "Stanley Cup Semifinals", null]
+        }
+      },
+      "says": ["PHT’s 2021 NHL Stanley Cup Semifinals predictions", "Two rounds down, two more to go on the road to the 2021 Stanley Cup.", "a first-time playoff meeting between Montreal and Vegas thanks to this unique playoff and the semifinal re-seeding."],
+      "note": "Read on 2026-10-12 in the desktop app's own browser pane; the address found by a search, the page itself read. NBC Sports and NBC Chicago are one group."
     }
   }
 }
