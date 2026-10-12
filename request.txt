@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+rwalk: node .rc/x/r1309RunWalk.mjs
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-titlespoil: FO_GAMEDAY_WALK_CONTROL=titlespoil ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
