@@ -1,0 +1,2 @@
+rivalProve4: RIVAL_PROVE=bdf47e2e RIVAL_MOVED=none RIVAL_CARDS=none node scripts/simUsRivalSense.mjs
+recordOldB: RIVAL_PROVE=b6eb78e7 RIVAL_OLD_SAVES_OUT=$RC_OUT/usRivalOldSavesB.json node scripts/simUsRivalSense.mjs --record-old-saves-b
