@@ -1,3 +1,14 @@
+## Pending Transfer Path surrender practice maintenance, 2026-10-12
+
+Continued route review confirmed that giving up the daily leaves no Unlimited
+entry unless a special rule was blocked. Reopening restores that dead end.
+A separate isolated branch from accepted 48cb9d4b will add the existing practice
+action below the daily reveal, preserving Unlimited Next Puzzle, graph, data,
+scoring and daily saves. Remote baseline proof precedes the Board edit.
+PR242, PR243 and PR244 stay frozen; H retains integration and publication.
+No runtime or live qualification yet. See
+docs/audits/transfer-path-surrender-practice-2026-10-12.md.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
