@@ -1,0 +1,6 @@
+storyHead exit=1 32s | simCareerStory: RED, parts
+storyMain exit=0 39s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+phoneHead exit=1 193s | 1 FAILURES
+moneyHead exit=1 261s | 1 FAILURES
+moneyMain exit=1 248s | 1 FAILURES
+phoneMain exit=1 130s | 1 FAILURES

@@ -1,0 +1,45 @@
+1) Catalogue: 5 tradable things, 110 things to buy
+   17 items now change something every season you own them
+   sponsorship items stack to 1.12x before the 1.35x cap
+2) 2000 markets, 20 seasons each, nobody trading
+   a mattress after 20 seasons: 100. Savings at 2.5% a season: 164
+   📗 Steady Ladder Fund   p10  271  median  280  p90  288   typical low 103  typical high  280   cheapest against its own level 92%
+   🧱 Old Town Bricks      p10  187  median  206  p90  228   typical low  99  typical high  211   cheapest against its own level 83%
+   👟 Cleatworks           p10  148  median  176  p90  209   typical low  92  typical high  189   cheapest against its own level 75%
+   📺 Matchday Screens     p10  119  median  151  p90  197   typical low  83  typical high  178   cheapest against its own level 68%
+   ⚡ SparkCoin            p10   49  median   98  p90  212   typical low  34  typical high  203   cheapest against its own level 30%
+3) 260 careers per strategy, same seeds, only the money decisions differ
+   mattress  median wealth     8.2m   mean     9.6m   worst tenth    3.2m   best tenth    17.0m
+   savings   median wealth     9.2m   mean    10.8m   worst tenth    3.4m   best tenth    21.2m
+   hold      median wealth    10.4m   mean    12.4m   worst tenth    3.7m   best tenth    25.2m
+   timer     median wealth    11.3m   mean    15.5m   worst tenth    4.5m   best tenth    31.8m
+   chaser    median wealth     6.9m   mean     8.3m   worst tenth    2.6m   best tenth    15.5m
+   savings over a mattress  +1.25m  (12.8 sigma, ahead in 250 of 260 careers)
+   the fund over savings    +1.63m  (16.6 sigma, ahead in 257 of 260 careers)
+   timing over holding      +3.08m  (8.8 sigma, ahead in 204 of 260 careers)
+   holding over chasing     +4.12m  (14.9 sigma, ahead in 244 of 260 careers)
+   best money player finishes 1.62x the wealth of the one who never invested
+   careers that ended under 1m: 0 timing, 0 chasing, of 260 each
+4) Spending it against hoarding it, same seeds
+   spends    peak 80.97  apps 595  morale 20.2  popularity 56.8  legacy credit 37.2  wealth 2.8m
+   hoards    peak 80.84  apps 584  morale 2.8  popularity 39.9  legacy credit 0.0  wealth 9.5m
+   the spender bought 11.9 things over a career
+   peak overall +0.13 (3.6 sigma), appearances +11 (10.7 sigma)
+   morale +17.4 (12.0 sigma), popularity +16.8 (17.6 sigma), legacy credit +37.2 (18.8 sigma)
+5) The card school on the bus
+   22050 sittings, 9266 of them won: 42.0% (the written figure is 42%)
+   average career result on the bus: -92k, worst -540k, best 730k
+   careers where the school closed itself for good: 83 of 900
+   the biggest stake anybody can ever put in is 50k, and it closes at 500k down
+6) The game inside the game
+   180 questions across 60 careers, every one of them answerable from the save
+   a perfect round is worth 20k and two points of morale, once a season
+7) Transaction history and save size over a full career
+   whole save: median 59.0 KB, biggest 84.3 KB
+   the money system's share: mean 1.21 KB, biggest 1.24 KB
+   transactions kept at the end of a career: 12 at most, cap 12
+  FAIL: biggest save is 84.3 KB
+8) Pre Round 134 saves open cold and then play
+   30 stripped saves opened cold on every money screen, loaded, and then traded
+
+1 FAILURES
