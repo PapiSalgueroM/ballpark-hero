@@ -1,0 +1,10 @@
+     nfl 390x844: under the centre of Week by week, the page not moved: the button itself
+ok   past: nfl 390x844: Week by week opened the talk and played nothing (viewer 0, 5 seasons as before, saved phase extension, talk extension)
+FAIL reload: nfl 390x844: a reload lands on the same talk (talk on screen false, the same offer none against 18.5, the same save bytes false)
+ok   past: mlb 390x844: the save is one main wrote in the last year of a deal (phase season, 1 year left, no talk) and the hub offers Week by week (1)
+     mlb 390x844: under the centre of Week by week, the page not moved: the button itself
+ok   past: mlb 390x844: Week by week opened the talk and played nothing (viewer 0, 6 seasons as before, saved phase extension, talk extension)
+FAIL reload: mlb 390x844: a reload lands on the same talk (talk on screen false, the same offer none against 13, the same save bytes false)
+     6 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 6 checks, 2 failed (control droptalk)
+CONTROL droptalk: FIRED. The reload check went red in 2 sports and nothing else did.

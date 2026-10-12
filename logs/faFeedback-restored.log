@@ -1,0 +1,4 @@
+Free-agency feedback restored: one executable source binding changed in an isolated component/CSS copy.
+Free-agency feedback restored: 1 intended failures, 12 independent passes, no skipped cases.
+FA_FEEDBACK_CONTROL: {"control":"restored","failed":[{"title":"keeps restored and passive resolved offers quiet without an owned push","messages":["AssertionError: expected <p role=\"status\" tabindex=\"-1\" …(2)></p> to be null\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAg
+Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or career persistence.

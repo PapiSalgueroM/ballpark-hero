@@ -1,0 +1,14 @@
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1211[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1566[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 556[2mms[22m[39m
+ [32m✓[39m src/test/usCareerHallBoard.test.tsx [2m([22m[2m95 tests[22m[2m)[22m[33m 13356[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 6036[2mms[22m[39m
+   [33m[2m✓[22m[39m nba: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1023[2mms[22m[39m
+   [33m[2m✓[22m[39m mlb: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1530[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1018[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m257 passed[39m[22m[90m (257)[39m
+[2m   Start at [22m 00:36:37
+[2m   Duration [22m 17.66s[2m (transform 3.42s, setup 512ms, collect 8.21s, tests 25.43s, environment 2.63s, prepare 544ms)[22m
+
