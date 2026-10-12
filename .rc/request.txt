@@ -1,0 +1,10 @@
+extMotion: node scripts/simExtensionResponseMotion.mjs 2>&1 | tail -5; exit ${PIPESTATUS[0]}
+extMotion-unreply: EXTENSION_RESPONSE_MOTION_CONTROL=unreply node scripts/simExtensionResponseMotion.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+faFeedback: node scripts/simFreeAgencyFeedback.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-consumed: FREE_AGENCY_FEEDBACK_CONTROL=consumed node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-status: FREE_AGENCY_FEEDBACK_CONTROL=status node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-restored: FREE_AGENCY_FEEDBACK_CONTROL=restored node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-replacement: FREE_AGENCY_FEEDBACK_CONTROL=replacement node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-finite: FREE_AGENCY_FEEDBACK_CONTROL=finite node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-reduced: FREE_AGENCY_FEEDBACK_CONTROL=reduced node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
+faFeedback-annual-deadOnBase: FREE_AGENCY_FEEDBACK_CONTROL=annual node scripts/simFreeAgencyFeedback.mjs 2>&1 | cut -c1-400 | tail -6; exit ${PIPESTATUS[0]}
