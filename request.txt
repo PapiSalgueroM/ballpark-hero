@@ -1,0 +1,27 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simEras: node scripts/simEras.mjs
+simEra2020: node scripts/simEra2020.mjs
+c20-modernjobs: SIM_ERA2020_CONTROL=modernjobs node scripts/simEra2020.mjs
+c20-takestale: SIM_ERA2020_CONTROL=takestale node scripts/simEra2020.mjs
+c20-firstsummer: SIM_ERA2020_CONTROL=firstsummer node scripts/simEra2020.mjs
+failfirst: bash .rc/x/at.sh ee8ac52d simEra2020
+probeModern: node .rc/x/probeModern.mjs 4
+probeModern-era: PROBE_ERA=era2010 node .rc/x/probeModern.mjs 4
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simWilderness: node scripts/simWilderness.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simManagerOffers: node scripts/simManagerOffers.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+cEras-twoclubs: SIM_ERAS_CONTROL=twoclubs node scripts/simEras.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-jobs: node_modules/.bin/vitest run src/test/clubManagerJobHunt.test.ts src/test/managerMatchPlans.test.tsx src/test/cmValueCurve.test.ts src/test/managerWorldBrowser.test.tsx --testTimeout=300000 --hookTimeout=120000
