@@ -19,10 +19,17 @@
  *   - reduced motion: Watch shows the result at once;
  *   - the final week has no Watch (its press goes to the recap);
  *   - a save from before the log shows the next game until its first
- *     press, and its chips then start at that week.
+ *     press, and its chips then start at that week;
+ *   - THE OWNER CARD IS ONE OF THE READERS: its pace line prints his wins,
+ *     so read from the league after the press it is the result. Held on a
+ *     save whose mandate is a number of wins, over six watched weeks;
+ *   - HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing
+ *     line is the engine's own seeding of the saved league, the sentence
+ *     written out here and not taken from the lib that prints it.
  *
  * Negative controls: scripts/controlFrontOfficeBoard.mjs names this file's
- * controls (recordspoils, gridspoils, watchsaves) beside the press's own.
+ * controls (recordspoils, gridspoils, holdkept, tilenolog, pacespoils,
+ * seedoff) beside the press's own.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
@@ -31,6 +38,7 @@ import { initLeague, simGame, conferenceOf, conferenceSeeds, REGULAR_WEEKS } fro
 import { readGmGameLog, type GmGameLog } from '@/lib/gmGameLog';
 import { gameDayView, standingLine } from '@/lib/gmGameDayView';
 import { NFL_GAME_DAY } from '@/lib/gameLaws/nflGameDay';
+import { mandatePace } from '@/lib/foOwnerMandate';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -232,6 +240,62 @@ describe('NFL front office: the Game Day tile', () => {
     expect(screen.getByText('Play the final week + playoffs')).toBeTruthy();
     expect(q('[data-watch-week]')).toBeNull();
     expect(screen.queryByText(/^Watch Week/)).toBeNull();
+    /* and the tile does not offer what the week box does not: no "watch it", no result promised in the box */
+    expect(q('[data-gameday]')!.getAttribute('data-gameday-face')).toBe('next');
+    expect(text('[data-gameday-next-note]')).toBe('No Watch on this one. The final week runs straight into the playoffs.');
+    expect(text('[data-week-box]')).not.toMatch(/watch it|lands here/i);
+  });
+
+  it('NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league\'s', async () => {
+    const { league, team } = leagueAt(6);
+    /* a mandate that is a number of wins, so the pace line prints his wins (the other kinds only say in or out) */
+    const mandate = { tier: 'rebuild', text: 'Rebuild honestly: 6 wins keeps the project on schedule upstairs.', winFloor: 6, reqLevel: 0, season: league.season };
+    save({ ...shape(league, team), mandate });
+    render(<Board />);
+    await openWeek();
+    const PACE = /\d+ wins (keeps the mandate on pace|is behind the 6-win ask)\./;
+    const paceOf = (s: any) => mandatePace(mandate as any, s.league.teams[team].wins, (s.league.week - 1) / REGULAR_WEEKS, false).line;
+    let moved = 0;
+    for (let week = 6; week < 12; week += 1) {
+      const before = text('[data-owner-mandate]');
+      expect(before, `week ${week}: the owner card shows a pace line before the press`).toMatch(PACE);
+      expect(before).toContain(paceOf(read()));
+      fireEvent.click(button(`Watch Week ${week}`));
+      const s = read();
+      expect(s.league.week).toBe(week + 1);
+      await waitFor(() => expect(q('[data-gameday]')!.getAttribute('data-gameday-face')).toBe('watch'));
+      expect(text('[data-owner-mandate]'), `week ${week}: the owner card while the game is watched`).toBe(before);
+      fireEvent.click(q('[data-gameday-speed="Results"]')!);
+      await waitFor(() => expect(q('[data-gameday]')!.getAttribute('data-gameday-face')).toBe('result'));
+      const after = text('[data-owner-mandate]');
+      expect(after, `week ${week}: the owner card at full time`).toContain(paceOf(s));
+      if (after !== before) moved += 1;
+    }
+    /* not a comparison of a line with itself: at full time it moved, so held back it was the result */
+    expect(moved, 'weeks of six whose pace line moved at full time').toBeGreaterThan(0);
+  });
+
+  it('HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine\'s own seeding of the saved league', async () => {
+    const { league } = leagueAt(12);
+    /* the club that tops the AFC on the morning of Week 12 */
+    const team = conferenceSeeds(league.teams, 'AFC')[0];
+    save(shape(league, team));
+    render(<Board />);
+    await openWeek();
+    const NTH = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
+    const seen: string[] = [];
+    for (let week = 12; week < 15; week += 1) {
+      fireEvent.click(button(`Play Week ${week}`));
+      const s = read();
+      const seeds = conferenceSeeds(s.league.teams, 'AFC');
+      expect(seeds).toHaveLength(7);
+      const k = seeds.indexOf(team);
+      await waitFor(() => expect(text('[data-gameday-where]')).toMatch(new RegExp(`^Wk ${week} `)));
+      expect(text('[data-gameday-standing]'), `after Week ${week}, the engine seeds him ${k + 1}`).toBe(k >= 0 ? `AFC: ${NTH[k]} seed of 7 as it stands.` : 'AFC: outside the 7 seeds as it stands.');
+      if (k >= 0) seen.push(NTH[k]);
+    }
+    /* the case this test exists for was looked at: a seed, and so a number counted from 1 */
+    expect(seen.length, `presses of three after which he held a seed (${seen.join(', ')})`).toBeGreaterThan(0);
   });
 
   it('a save from before the log shows the next game, and after its first press the chips start at that week', async () => {

@@ -29,7 +29,9 @@
  * Day tile and Watch), and four controls of it: the hold not read while a
  * game is watched, the league grid drawn during a watch, the hold kept when
  * he leaves the week box, and the tile handed no log. Every control now runs
- * all three files.
+ * all three files. Its fix pass added two more, for two readers the review
+ * found nothing held: the owner card's pace read after the press during a
+ * watch (pacespoils) and the seed handed over as an index (seedoff).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -68,6 +70,8 @@ const T = {
   watch: [TL, 'WATCH IS THE SAME PRESS'],
   leave: [TL, 'leaving the week box in the middle of a watch'],
   adopt: [TL, 'a save from before the log shows the next game'],
+  pace: [TL, 'NO SPOILER ON THE OWNER CARD'],
+  seed: [TL, 'HIS SEED IS COUNTED FROM 1'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -100,6 +104,13 @@ const CONTROLS = {
   gridspoils: ['the league grid is drawn while a game is watched', [['{weekResults.length > 0 && !hold && (', '{weekResults.length > 0 && (']], [T.watch], [T.tile, T.week]],
   holdkept: ['the hold is not let go when he leaves the week box', [["if (held && (tab !== 'week' || !league || league === held)) setHeld(null);", 'if (held && (!league || league === held)) setHeld(null);']], [T.leave], [T.tile, T.watch]],
   tilenolog: ['the tile is handed no log', [['log={gameLogNow?.games ?? []}', 'log={[]}']], [T.tile, T.adopt], [T.week]],
+  /* Round 1307, the fix pass: two ruled readers that nothing held (the review's mutants `pace` and `seedoff`, each green on every test and on the walk before these) */
+  pacespoils: ["the owner card's pace reads the league AFTER the press while a game is watched (the line the board had before Watch)",
+    [['pace={seen.week > 1 && seen.week <= REGULAR_WEEKS', 'pace={league.week > 1 && league.week <= REGULAR_WEEKS'],
+      ['mandatePace(mandate, seenMy.wins, (seen.week - 1) / REGULAR_WEEKS, conferenceSeeds(seen.teams, conferenceOf(myTeam))', 'mandatePace(mandate, my.wins, (league.week - 1) / REGULAR_WEEKS, conferenceSeeds(league.teams, conferenceOf(myTeam))']],
+    [T.pace], [T.watch, T.tile, T.seed]],
+  seedoff: ['the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)',
+    [['seedsNow.indexOf(myTeam) + 1 : null', 'seedsNow.indexOf(myTeam) : null']], [T.seed], [T.watch, T.pace, T.week]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
