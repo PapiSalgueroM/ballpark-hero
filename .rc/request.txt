@@ -1,0 +1,3 @@
+# Round 1311 (head 10b3e6c5): simBracketMoment with Chromium (its section 3 could not load a browser in the plain sweep r1311-f3)
+#!playwright
+simBracketMoment: node scripts/simBracketMoment.mjs
