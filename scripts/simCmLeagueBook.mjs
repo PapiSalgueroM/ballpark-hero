@@ -136,7 +136,7 @@
  *            The stream face leaves those four fields and each record's awards out, and nothing else.
  *   facts    Round 1311, the fleet's top scorers beside the real leagues' (scripts/data/cmLeagueBookFacts.json,
  *            USED figures only, read by the harness's own reading of that file's rule): printed by season
- *            length, and one band bound on 38 match seasons (see the section; it cannot tell the taker rule
+ *            length, and one band bound on 38 match seasons, judged on the full fleet only (see the section; it cannot tell the taker rule
  *            on from off)
  * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
  * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
@@ -240,7 +240,8 @@
  *                                                                        save that closes under the floor is
  *                                                                        then given awards)
  *   bookleak      every goal of a side to its taker                    -> facts (shapes and thin with it: the
- *                                                                        deal no longer follows the weight)
+ *                                                                        deal no longer follows the weight); run
+ *                                                                        it on the full fleet, the only one judged
  *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); run it on the
  *                                                                        full fleet, the only one judged
  *   nocap         the team of the season is never let go               -> awards (ii)
@@ -2122,7 +2123,16 @@ function judgeAwards(mod, label, before, fin, season) {
  * seasons). THIS BAND CANNOT TELL THE TAKER RULE ON FROM OFF: Round 1229 measured the taker off at 23.5 to
  * 24.8, astride the lower edge. It catches a leak (control bookleak: every goal of a side to its taker) and
  * nothing finer; do not cite it for the taker.
+ * WHERE IT IS JUDGED (the fixer of review-read-1311 m1): only on a fleet of at least FACTS_MIN_SEASONS 38 match
+ * seasons, the way the back four's line is. Measured on remote check r1311-f1a (head 8676802b): the five
+ * default fleets hold 4 or 5 such seasons, with the error estimated from those same seasons, and sat 4.2 3.9
+ * 3.8 5.0 5.8 standard errors over the low edge and 3.8 8.6 4.9 3.2 1.8 under the high one (seed sets 0 to 4),
+ * so seed set 4 was a coin toss away from red; the five full fleets hold 24 25 25 26 23 and sat 5.7 6.1 5.6
+ * 6.2 5.9 over the low edge and 6.4 6.8 7.0 6.0 5.1 under the high one. On a default fleet the band is
+ * printed; a full fleet that plays fewer than FACTS_MIN_SEASONS is red. So the control bookleak runs on the
+ * full fleet.
  */
+const FACTS_MIN_SEASONS = 20;
 function realTopScorers() {
   const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/cmLeagueBookFacts.json'), 'utf8'));
   const host = url => new URL(url).host.toLowerCase().replace(/^www\./, '');
@@ -2186,8 +2196,10 @@ function realTopScorers() {
     const lo = Math.min(...means) - 3 * se;
     const hi = Math.max(...means) + 3 * se;
     const m = mean(fleet38);
-    console.log(`facts   the band on 38 match seasons: ${fmt(lo, 2)} to ${fmt(hi, 2)} (real league means ${fmt(Math.min(...means))} to ${fmt(Math.max(...means))}, widened by three standard errors of ${fmt(se, 2)}); the fleet ${fmt(m, 2)} over ${fleet38.length} seasons, ${fmt((m - lo) / se, 1)} standard errors over the low edge and ${fmt((hi - m) / se, 1)} under the high one`);
-    if (m < lo || m > hi) fail('facts', `the fleet's mean top scorer over its 38 match seasons is ${fmt(m, 2)}, outside the band ${fmt(lo, 2)} to ${fmt(hi, 2)} the real leagues give`);
+    const judged = fleet38.length >= FACTS_MIN_SEASONS;
+    console.log(`facts   the band on 38 match seasons: ${fmt(lo, 2)} to ${fmt(hi, 2)} (real league means ${fmt(Math.min(...means))} to ${fmt(Math.max(...means))}, widened by three standard errors of ${fmt(se, 2)}); the fleet ${fmt(m, 2)} over ${fleet38.length} seasons, ${fmt((m - lo) / se, 1)} standard errors over the low edge and ${fmt((hi - m) / se, 1)} under the high one${judged ? '' : `, printed and not judged (under ${FACTS_MIN_SEASONS} seasons; the full fleet judges it)`}`);
+    if (FULL && !judged) fail('facts', `the full fleet played only ${fleet38.length} seasons of 38 matches, under the ${FACTS_MIN_SEASONS} the band is judged on`);
+    if (judged && (m < lo || m > hi)) fail('facts', `the fleet's mean top scorer over its 38 match seasons is ${fmt(m, 2)}, outside the band ${fmt(lo, 2)} to ${fmt(hi, 2)} the real leagues give`);
   }
 }
 
