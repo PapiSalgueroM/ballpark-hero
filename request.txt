@@ -1,0 +1,16 @@
+rivalFull: node scripts/simUsRivalSense.mjs
+rivalFresh: RIVAL_SEEDS=6,7,8,9,10 node scripts/simUsRivalSense.mjs
+c-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+c-oldscalemlb: US_RIVAL_CONTROL=oldscalemlb node scripts/simUsRivalSense.mjs
+c-oldscalenhl: US_RIVAL_CONTROL=oldscalenhl node scripts/simUsRivalSense.mjs
+c-onlyhimshut: US_RIVAL_CONTROL=onlyhimshut node scripts/simUsRivalSense.mjs
+c-workloadmlb: US_RIVAL_CONTROL=workloadmlb node scripts/simUsRivalSense.mjs
+c-workloadnhl: US_RIVAL_CONTROL=workloadnhl node scripts/simUsRivalSense.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usRivalOldSavesB.test.ts src/test/usRivalOldSaves.test.ts src/test/usRivalLine.test.ts src/test/usSeasonSlate.test.ts src/test/usSeasonMlb.test.ts src/test/usSeason.test.ts src/test/nbaOldSaveLines.test.ts --testTimeout=300000 --hookTimeout=120000
+board: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
+senseC: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+ledger: node scripts/simUsSeasonLedger.mjs
+anchors: node scripts/simHarnessAnchors.mjs

@@ -1,0 +1,16 @@
+c-verdictswap exit=1 33s | simUsRivalSense: 43 checks, 6 failed (full size), red sections: N.F2, N.F3, M.F2, M.F3, H.F2, H.F3
+rivalFull exit=0 40s | simUsRivalSense: 43 checks, 0 failed (full size)
+rivalFresh exit=1 43s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: H.F3
+c-oldscalemlb exit=1 38s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: M.U2, M.F2, M.F3
+c-oldscalenhl exit=1 37s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U2, H.F2, H.F3
+c-onlyhimshut exit=1 38s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: N.F5, M.F5, H.F5
+c-workloadmlb exit=1 37s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: M.U2, M.U6
+c-workloadnhl exit=1 43s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U2, H.U6, H.F3
+vitest exit=0 15s |    Duration  13.87s (transform 3.77s, setup 767ms, collect 7.06s, tests 12.99s, environment 4.30s, prepare 1.25s)
+tsc exit=0 95s | 
+digest exit=0 58s |    Duration  56.85s (transform 1.51s, setup 91ms, collect 1.93s, tests 53.85s, environment 405ms, prepare 155ms)
+rivalryEvents exit=0 8s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+ledger exit=0 6s | simUsSeasonLedger: green. 3041 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+board exit=0 77s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+senseC exit=0 114s | simNbaAwardsSense: 167 checks, 0 failed (full size), 113s
