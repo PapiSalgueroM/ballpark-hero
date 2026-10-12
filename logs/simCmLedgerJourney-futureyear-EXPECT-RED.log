@@ -1,0 +1,20 @@
+  now: Bournemouth, Burnley, AC Horsens (the last has the era's thinnest roster, 0 projected men)
+  era2020: Liverpool, Real Sociedad, Crotone (the last has the era's thinnest roster, 3 projected men)
+  era2015: Bournemouth, Deportivo La Coruña, GFC Ajaccio (the last has the era's thinnest roster, 2 projected men)
+  era2010: Birmingham City, Deportivo La Coruña, Cesena (the last has the era's thinnest roster, 3 projected men)
+  era2005: Birmingham City, Cádiz, Nancy (the last has the era's thinnest roster, 3 projected men)
+journeys: 0 played to the end of season two, 4s
+  moves made: 
+  ledgers held at a step: 45, read: 0; the largest held 0 records; records at the end by status: 
+  FAIL Bournemouth (now, seed 2020865) after buy: the save holds a ledger its reader refuses
+  FAIL Bournemouth (now, seed 2020866) after buy: the save holds a ledger its reader refuses
+  FAIL Bournemouth (now, seed 2020867) after buy: the save holds a ledger its reader refuses
+  FAIL Burnley (now, seed 2020865) after buy: the save holds a ledger its reader refuses
+  FAIL Burnley (now, seed 2020866) after buy: the save holds a ledger its reader refuses
+  FAIL Burnley (now, seed 2020867) after buy: the save holds a ledger its reader refuses
+  FAIL AC Horsens (now, seed 2020865) after buy: the save holds a ledger its reader refuses
+  FAIL AC Horsens (now, seed 2020866) after buy: the save holds a ledger its reader refuses
+  FAIL AC Horsens (now, seed 2020867) after buy: the save holds a ledger its reader refuses
+  FAIL Liverpool (era2020, seed 2020865) after buy: the save holds a ledger its reader refuses
+  ... and 35 more
+simCmLedgerJourney: CONTROL futureyear FIRED: 45 journeys hold a ledger their reader refuses

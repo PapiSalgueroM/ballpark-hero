@@ -1,0 +1,43 @@
+PASS [healthy] inactive
+PASS [healthy] constructors
+PASS [healthy] identity
+FAIL [healthy] buy-job: Actual buy preserves every original field except the declared ownership metadata
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 5,
+...
+        name: 'William Saliba',
+-       onLoan: undefined,
+        position: 'CB',
+        rating: 90,
+        seasonAssists: 0,
+        seasonGoals: 0,
+        suspendedMatches: 0,
+...
+            name: 'William Saliba',
+-           onLoan: undefined,
+            position: 'CB',
+            rating: 90,
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+1 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:475:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:483:24
