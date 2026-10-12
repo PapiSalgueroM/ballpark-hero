@@ -1,0 +1,3 @@
+probePlace-small exit=0 1s | probePlace: 20 seasons, 260 playoff games one at a time, 8960 place lines checked, 0 differ from the oracle; 0 rows differ
+probePlace exit=0 2s | probePlace: 200 seasons, 2600 playoff games one at a time, 89600 place lines checked, 0 differ from the oracle; 0 rows differ
+probePlace-fixed exit=1 2s | probePlace (control fixed): 200 seasons, 2600 playoff games one at a time, 89600 place lines checked, 2532 differ from the oracle; 1864 rows differ

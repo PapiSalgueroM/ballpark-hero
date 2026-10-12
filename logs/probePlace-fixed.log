@@ -1,0 +1,8 @@
+weeks named Wild Card, Divisional, Conference Championship, Super Bowl
+  DIFF season 0 step 6 DAL: card "Next: the NFC Divisional, against Lions.", oracle "Next: the NFC Divisional, against Commanders."
+  DIFF season 0 step 6 DEN: card "Next: the AFC Divisional, against Jaguars.", oracle "Next: the AFC Divisional, against Patriots."
+  DIFF season 0 step 6 DET: card "Next: the NFC Divisional, against Cowboys.", oracle "Next: the NFC Divisional, against Rams."
+  DIFF season 0 step 6 JAX: card "Next: the AFC Divisional, against Broncos.", oracle "Next: the AFC Divisional, against Chiefs."
+  DIFF season 0 step 6 KC: card "Next: the AFC Divisional, against Patriots.", oracle "Next: the AFC Divisional, against Jaguars."
+  DIFF season 0 step 6 LA: card "Next: the NFC Divisional, against Commanders.", oracle "Next: the NFC Divisional, against Lions."
+probePlace (control fixed): 200 seasons, 2600 playoff games one at a time, 89600 place lines checked, 2532 differ from the oracle; 1864 rows differ
