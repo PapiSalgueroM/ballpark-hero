@@ -24,7 +24,8 @@
  *   8. it PRINTS, by league and season length, how many seasons are USED and their mean. It binds nothing on a mean.
  *
  * Controls, CM_FACTS_CONTROL=wiki | bannedhost | figure | onesource | disagree | receipt | srcname | dash | length
- * | samehost (a USED figure's second publisher moved onto the first one's host: two publishers on one host are THIN).
+ * | samehost (a USED figure's second publisher moved onto the first one's host: two publishers on one host are THIN)
+ * | pausedrow (the Premier League's second 2019-20 table taken out: its length must read THIN, no span row speaks for it).
  * Each changes the parsed copy in memory, proves it changed something, and must go red for its own reason: it ends
  * "FIRED" and exits 1. One that changes nothing or is not caught exits 3; an unknown control exits 2.
  */
@@ -53,6 +54,7 @@ const EXPECT = {
   receipt: /does not carry the sha256 of/, srcname: /names cmLeagueBookFacts/, dash: /holds a banned dash/,
   length: /says (34|38) matches a club and its format rows give/,
   samehost: /Premier League 2015-16 topScorerGoals is THIN \([a-z0-9]+, [a-z0-9]+\)/,
+  pausedrow: /Premier League 2019-20 topScorerGoals is USED but its length is THIN/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmLeagueBookFacts: unknown control ${CONTROL}`); process.exit(2); }
 
@@ -109,6 +111,12 @@ if (CONTROL === 'samehost') {
     facts.publishers.samehostcontrol = { name: "a second publisher planted on the first one's host", host: first.host, kind: "the samehost control's plant" };
     rows[1].publisher = 'samehostcontrol'; rows[1].url = `https://${first.host}/samehost-control`; changed = true;
   }
+}
+/* pausedrow: every Premier League 2019-20 season table but the first taken out. The paused season stands on its own
+   rows only, so its length must read THIN although the league's span row covers the decade. */
+if (CONTROL === 'pausedrow') {
+  const tables = facts.rows.filter(r => r.competition === 'Premier League' && r.season === PAUSED && (Number.isInteger(r.figures?.clubs) || Number.isInteger(r.figures?.matchesPerClub)));
+  if (tables.length >= 2) { facts.rows = facts.rows.filter(r => !tables.slice(1).includes(r)); changed = true; }
 }
 if (CONTROL && !changed) { console.log(`simCmLeagueBookFacts control ${CONTROL}: ABORTED, the control changed nothing.`); process.exit(3); }
 
