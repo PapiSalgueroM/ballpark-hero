@@ -44,6 +44,7 @@
  * Exit: 0 green, 1 red or a control that FIRED, 2 could not run, 3 a control that did not fire.
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
@@ -74,8 +75,11 @@ const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
 /* ---------- the engine, and the saves ---------- */
 const memory = new Map();
 globalThis.localStorage = { getItem: k => memory.get(k) ?? null, setItem: (k, v) => memory.set(k, String(v)), removeItem: k => memory.delete(k) };
-const ENTRY = path.join(OUT, 'leaders-entry.mjs');
-const BUNDLE = path.join(OUT, 'leaders-engine.mjs');
+/* The bundle goes to a temp folder of its own, never into OUT (OUT comes back with the pictures). */
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-leaders-'));
+process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* nothing to undo */ } });
+const ENTRY = path.join(TMP, 'leaders-entry.mjs');
+const BUNDLE = path.join(TMP, 'leaders-engine.mjs');
 const P = f => JSON.stringify(path.join(ROOT, f).replaceAll('\\', '/'));
 fs.writeFileSync(ENTRY, `export * as cm from ${P('src/lib/clubManager.ts')};\nexport * as boards from ${P('src/lib/clubManagerLeagueBoards.ts')};\n`);
 try {
