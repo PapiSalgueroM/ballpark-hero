@@ -1,0 +1,2 @@
+rv-ddfresh exit=0 3s | rvSaves ddfresh: green in 2 s
+rv-fuzz exit=1 4s | rvSaves fuzz: RED, 2 failures (first: fuzz char 91 changed: the damaged string read as ANOTHER ledger (5 records): 0: base ..."seasonGoals":0,"seasonAssists":0,"value":16
