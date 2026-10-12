@@ -1,0 +1,6 @@
+ctl-outofturn exit=1 68s | simGmGameDay: 451 checks, 5 failed (control outofturn)
+ctl-strict exit=1 69s | simGmGameDay: 451 checks, 20 failed (control strict)
+ctl-enginedrift exit=1 71s | simGmGameDay: 451 checks, 10 failed (control enginedrift)
+ctl-stream exit=1 63s | simGmGameDay: 451 checks, 106 failed (control stream)
+ctl-validator exit=1 69s | simGmGameDay: 451 checks, 20 failed (control validator)
+ctl-pairing exit=1 71s | simGmGameDay: 451 checks, 70 failed (control pairing)

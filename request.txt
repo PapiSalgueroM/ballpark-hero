@@ -1,0 +1,6 @@
+ctl-strict: GM_GAMEDAY_CONTROL=strict node scripts/simGmGameDay.mjs
+ctl-outofturn: GM_GAMEDAY_CONTROL=outofturn node scripts/simGmGameDay.mjs
+ctl-enginedrift: GM_GAMEDAY_CONTROL=enginedrift node scripts/simGmGameDay.mjs
+ctl-pairing: GM_GAMEDAY_CONTROL=pairing node scripts/simGmGameDay.mjs
+ctl-validator: GM_GAMEDAY_CONTROL=validator node scripts/simGmGameDay.mjs
+ctl-stream: GM_GAMEDAY_CONTROL=stream node scripts/simGmGameDay.mjs
