@@ -17,12 +17,14 @@ import { finalTie, finalsWeeks, resolveSlot } from './finalsBracket';
 /** Where his club stands, the one line the card prints above the ties, and the tie it is about (null: none). */
 export interface GmBracketPlace { kind: 'bye' | 'next' | 'through' | 'out' | 'champion' | 'missed'; line: string; tie: string | null }
 
-/** The six lines, as patterns over a round's name and a club's name. */
+/** The lines of the six kinds, as patterns over a round's name and a club's name. A club beaten in the title tie
+ *  is out too, and its line says so the way a fan would ("Lost the Super Bowl."). */
 export const GM_BRACKET_LINES = {
   bye: 'You have the bye.',
   next: (round: string, against: string | null): string => (against ? `Next: the ${round}, against ${against}.` : `Next: the ${round}.`),
   through: 'Through. The rest of this round is still to play.',
   out: (round: string): string => `Out in the ${round}.`,
+  lostFinal: (round: string): string => `Lost the ${round}.`,
   champion: 'Champions.',
   missed: 'No playoffs this year.',
 } as const;
@@ -43,7 +45,8 @@ export function gmBracketPlace(format: BracketFormat, save: GmBracketSave, club:
   if (bracketOut(format, save).has(club)) {
     /* the last tie he lost in the data's order: in a play in, losing the first game is not yet going out */
     const lost = [...format.ties].reverse().find(t => done[t.id]?.loser === club);
-    return { kind: 'out', line: GM_BRACKET_LINES.out(lost ? lost.round : 'playoffs'), tie: lost ? lost.id : null };
+    const line = !lost ? GM_BRACKET_LINES.out('playoffs') : lost.id === finalTie(format.ties)?.id ? GM_BRACKET_LINES.lostFinal(lost.round) : GM_BRACKET_LINES.out(lost.round);
+    return { kind: 'out', line, tie: lost ? lost.id : null };
   }
   const week = bracketWeek(format, save);
   /* played out with another champion: only a save the repair would rebuild gets here */

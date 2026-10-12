@@ -65,8 +65,13 @@ describe('gmBracketPlace: the six kinds', () => {
     const week1 = playBracketWeek(NFL_BRACKET, open(), chalk(['NFC-WC-2']));
     expect(place(week1, 'S7')).toEqual({ kind: 'out', line: 'Out in the AFC Wild Card.', tie: 'AFC-WC-1' });
     expect(place(week1, 'S10')).toEqual({ kind: 'out', line: 'Out in the NFC Wild Card.', tie: 'NFC-WC-2' });
+    /* beaten in the title tie: out too, said the way a fan says it */
     const done = playBracketAll(NFL_BRACKET, open(), chalk());
-    expect(place(done, 'S8')).toEqual({ kind: 'out', line: 'Out in the Super Bowl.', tie: 'SB' });
+    expect(place(done, 'S8')).toEqual({ kind: 'out', line: 'Lost the Super Bowl.', tie: 'SB' });
+    expect(place(playBracketAll(NFL_BRACKET, open(), chalk(['SB'])), 'S1')).toEqual({ kind: 'out', line: 'Lost the Super Bowl.', tie: 'SB' });
+    /* beaten before it: the round's own name (chalk: 3 loses to 2 in the Divisional, 2 to 1 in the Championship) */
+    expect(place(done, 'S3')).toEqual({ kind: 'out', line: 'Out in the AFC Divisional.', tie: 'AFC-DIV-2' });
+    expect(place(done, 'S2')).toEqual({ kind: 'out', line: 'Out in the AFC Championship.', tie: 'AFC-CC' });
   });
 
   it('champions: the title tie is won', () => {
@@ -83,7 +88,7 @@ describe('gmBracketPlace: the six kinds', () => {
       expect(NOT_PLAIN.test(p.line)).toBe(false);
     }
     expect([...kinds].sort()).toEqual(['bye', 'champion', 'missed', 'next', 'out', 'through']);
-    for (const l of [GM_BRACKET_LINES.bye, GM_BRACKET_LINES.through, GM_BRACKET_LINES.champion, GM_BRACKET_LINES.missed, GM_BRACKET_LINES.out('X'), GM_BRACKET_LINES.next('X', 'Y')]) expect(NOT_PLAIN.test(l)).toBe(false);
+    for (const l of [GM_BRACKET_LINES.bye, GM_BRACKET_LINES.through, GM_BRACKET_LINES.champion, GM_BRACKET_LINES.missed, GM_BRACKET_LINES.out('X'), GM_BRACKET_LINES.lostFinal('X'), GM_BRACKET_LINES.next('X', 'Y')]) expect(NOT_PLAIN.test(l)).toBe(false);
   });
 });
 
