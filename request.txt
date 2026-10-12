@@ -1,0 +1,4 @@
+#!serial
+ctl-trust: node scripts/controlFrontOfficeBoard.mjs trustspoils
+ctl-press: node scripts/controlFrontOfficeBoard.mjs pressspoils
+ctl-done: node scripts/controlFrontOfficeBoard.mjs donenow
