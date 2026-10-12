@@ -361,15 +361,24 @@ function printedScore(M, sport, pos, parts) {
 /* ------------------------------------------------------------------ */
 const FLEET = {
   nfl: { desc: M => M.NFL_CAREER_SPORT, pos: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'] },
-  mlb: { desc: M => M.MLB_CAREER_SPORT, pos: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], eras: ['now'] },
-  nhl: { desc: M => M.NHL_CAREER_SPORT, pos: ['C', 'LW', 'RW', 'D', 'G'], eras: ['now'] },
+  /* Round 1313: baseball and hockey gained their throwback arm (every second lap a 2004 or a 2006-07 career),
+     so the 60 game year of 2020 and the 48 and 56 game hockey years are played by the fleet as well. */
+  mlb: { desc: M => M.MLB_CAREER_SPORT, pos: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], eras: ['now', 'y2004'] },
+  nhl: { desc: M => M.NHL_CAREER_SPORT, pos: ['C', 'LW', 'RW', 'D', 'G'], eras: ['now', 'y2006'] },
   nba: { desc: M => M.NBA_CAREER_SPORT, pos: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now'] },
 };
 /* The roster beat of a bound sport: its id and the award word the engine writes on the player's own season. */
 const ROSTER = { nfl: { id: 206, award: 'All-Pro' } };
+/* Round 1313, printed only: the engine's own season length (a season line carries `slate` only when its year is
+   of another length), the two beats a sport deals off the tally (losing it, winning it: mlbCareerRivalryEvents.ts
+   and nhlCareerRivalryEvents.ts, `r.hisYears >= 3 && r.hisYears > r.myYears` and its mirror) and the roster beat
+   of a sport not yet bound (its cards are counted by what they promise). */
+const ENGINE_LEN = { mlb: 162, nhl: 82 };
+const TALLY_BEATS = { mlb: { 211: 'losing', 212: 'winning' }, nhl: { 311: 'losing', 312: 'winning' } };
+const ROSTER_ID = { nfl: 206, mlb: 206, nhl: 306 };
 const AGE_BANDS = [[0, 24, '24 and under'], [25, 27, '25 to 27'], [28, 30, '28 to 30'], [31, 33, '31 to 33'], [34, 99, '34 and over']];
 const bandOf = age => AGE_BANDS.find(([lo, hi]) => age >= lo && age <= hi)[2];
-const cell = () => ({ judged: 0, mine: 0, near: 0, off: 0, unread: 0, disagree: 0, careers: 0, retired: 0, badge: 0, honMine: 0, honHis: 0, honBoth: 0 });
+const cell = () => ({ judged: 0, mine: 0, near: 0, heat: 0, read: 0, off: 0, unread: 0, disagree: 0, careers: 0, retired: 0, badge: 0, honMine: 0, honHis: 0, honBoth: 0 });
 const tally = () => ({ judged: 0, mine: 0 });
 const bump = (o, k, mine) => { const t = (o[k] ??= tally()); t.judged += 1; if (mine) t.mine += 1; };
 const sha = () => crypto.createHash('sha256');
@@ -385,6 +394,10 @@ function playFleet(M, sport, seed, per) {
   const keep = Math.random; Math.random = rnd;
   const h = { player: sha(), dealt: sha(), notes: sha(), rival: sha(), beats: sha(), allNotes: sha() };
   const by = {}; const job = {}; const age = {}; const arm = {}; const jobPos = {};
+  /* Round 1313, printed only: by the season's length (all positions, and by position), by kind pairing (a
+     hockey skater's kind against the kind rivalKindOf would hash for his rival; a reliever's own bullpen job),
+     and every card dealt off the tally or by the roster beat, by what it is. */
+  const len = {}; const lenPos = {}; const kind = {}; const dealtBy = {};
   const firstOff = []; const firstDisagree = [];
   /* One pair a career (the years he took, the years judged): the years of one career share a rating, so the
      error of a share is worked out over careers, never over years (clusterError below). */
@@ -414,6 +427,8 @@ function playFleet(M, sport, seed, per) {
             mine: (played?.line?.awards ?? []).includes(ROSTER[sport].award), his: r?.lastAllStar === true, sameYear: r?.lastYear === played?.line?.year });
         }
         h.beats.update(JSON.stringify(beat ? [beat.id, beat.emoji, beat.title, beat.description, beat.consequence] : 0));
+        if (beat && TALLY_BEATS[sport]?.[beat.id]) dealtBy[`tally ${TALLY_BEATS[sport][beat.id]}`] = (dealtBy[`tally ${TALLY_BEATS[sport][beat.id]}`] ?? 0) + 1;
+        if (beat && ROSTER_ID[sport] === beat.id) dealtBy[`roster ${beat.consequence}`] = (dealtBy[`roster ${beat.consequence}`] ?? 0) + 1;
         if (r) h.rival.update(JSON.stringify([r.lastLine, r.lastScore, r.myYears, r.hisYears, r.rings, r.ovr, r.age, r.retired, r.lastYear ?? null, r.lastAllStar ?? null]));
         const notes = played?.notes ?? [];
         h.allNotes.update(JSON.stringify(notes));
@@ -429,6 +444,9 @@ function playFleet(M, sport, seed, per) {
           }
           if (notes.some(n => n.startsWith('\u{1FA9E}') && n.includes('Nothing in it again'))) m.near += 1;
           bump(job, jobNow, mine); bump(age, bandOf(ageNow), mine); bump(arm, `${pos} ${era}`, mine); bump(jobPos, `${pos} ${jobNow}`, mine);
+          if (ENGINE_LEN[sport]) { const games = played.line.slate ?? ENGINE_LEN[sport]; bump(len, String(games), mine); bump(lenPos, `${pos} ${games === ENGINE_LEN[sport] ? 'own' : 'other'}`, mine); }
+          if (sport === 'nhl' && pos !== 'G') bump(kind, `${pos} ${c.archetype.id} v ${M.rival.rivalKindOf('nhl-rival-kind', r, S.create.archetypes[pos]).id}`, mine);
+          if (sport === 'mlb' && pos === 'RP') bump(kind, `RP ${c.archetype.id}`, mine);
           const hisText = r.lastLine; const myText = S.statLine(played.line, pos);
           if (!inShape(sport, pos, hisText)) { m.off += 1; if (firstOff.length < 3) firstOff.push(`${pos}: "${hisText}"`); }
           /* A printed line that carries a number below zero, on either side (nflStatLineFor floors every count
@@ -436,6 +454,7 @@ function playFleet(M, sport, seed, per) {
           if (/(^|[ ,])-\d/.test(hisText)) { below.his += 1; if (below.first.length < 3) below.first.push(`his, ${pos}: "${hisText}"`); }
           if (/(^|[ ,])-\d/.test(myText)) { below.mine += 1; if (below.first.length < 3) below.first.push(`mine, ${pos}: "${myText}"`); }
           const his = readBack(sport, pos, hisText); const me = readBack(sport, pos, myText);
+          if (his && me) { m.read += 1; if (printedScore(M, sport, pos, me) === printedScore(M, sport, pos, his)) m.heat += 1; }
           if (!his || !me) m.unread += 1;
           else if ((printedScore(M, sport, pos, me) > printedScore(M, sport, pos, his)) !== mine) {
             m.disagree += 1;
@@ -453,7 +472,7 @@ function playFleet(M, sport, seed, per) {
       if (c.rival?.retired) { m.retired += 1; if (c.rival.myYears > c.rival.hisYears) m.badge += 1; }
     }
   } finally { Math.random = keep; }
-  return { hash: Object.fromEntries(Object.entries(h).map(([k, v]) => [k, v.digest('hex')])), by, job, age, arm, jobPos, firstOff, firstDisagree, pairs, roster, below };
+  return { hash: Object.fromEntries(Object.entries(h).map(([k, v]) => [k, v.digest('hex')])), by, job, age, arm, jobPos, len, lenPos, kind, dealtBy, firstOff, firstDisagree, pairs, roster, below };
 }
 /** The standard error, in percent, of a share pooled over careers (a ratio estimator's error by career). */
 function clusterError(pairs) {
@@ -465,13 +484,15 @@ function clusterError(pairs) {
 
 /** Add one seed's table into a running one. */
 function addInto(total, one) {
-  for (const group of ['by', 'job', 'age', 'arm', 'jobPos']) {
+  for (const group of ['by', 'job', 'age', 'arm', 'jobPos', 'len', 'lenPos', 'kind']) {
     total[group] ??= {};
     for (const [k, v] of Object.entries(one[group])) {
       const t = (total[group][k] ??= {});
       for (const [f, n] of Object.entries(v)) t[f] = (t[f] ?? 0) + n;
     }
   }
+  total.dealtBy ??= {};
+  for (const [k, n] of Object.entries(one.dealtBy)) total.dealtBy[k] = (total.dealtBy[k] ?? 0) + n;
   return total;
 }
 
@@ -491,6 +512,15 @@ function printTable(label, sport, total, perSeed) {
   }
   console.log(`     by job: ${['starter', 'backup', 'hurt'].map(j => `${j} ${f1(shareOf(total.job[j]))}% of ${total.job[j]?.judged ?? 0}`).join(', ')}`);
   console.log(`     by age: ${AGE_BANDS.map(([, , n]) => `${n} ${f1(shareOf(total.age[n]))}% of ${total.age[n]?.judged ?? 0}`).join(', ')}`);
+  /* Round 1313, printed only. */
+  if (ENGINE_LEN[sport]) {
+    console.log(`     by season length: ${Object.keys(total.len ?? {}).sort((a, b) => Number(b) - Number(a)).map(k => `${k} games ${f1(shareOf(total.len[k]))}% of ${total.len[k].judged}`).join(', ')}`);
+    console.log(`     by position, the engine's own length against another: ${FLEET[sport].pos.map(p => `${p} ${f1(shareOf(total.lenPos?.[`${p} own`]))} of ${total.lenPos?.[`${p} own`]?.judged ?? 0} / ${f1(shareOf(total.lenPos?.[`${p} other`]))} of ${total.lenPos?.[`${p} other`]?.judged ?? 0}`).join('; ')}`);
+  }
+  const kinds = Object.keys(total.kind ?? {}).sort();
+  if (kinds.length) console.log(`     by kind pairing: ${kinds.map(k => `${k} ${f1(shareOf(total.kind[k]))}% of ${total.kind[k].judged}`).join('; ')}`);
+  console.log(`     printed dead heats (both lines read, the two printed scores equal): ${FLEET[sport].pos.map(p => { const m = total.by[p]; return m ? `${p} ${m.heat} of ${m.read}` : `${p} -`; }).join(', ')}`);
+  console.log(`     cards dealt over the run: ${Object.entries(total.dealtBy ?? {}).sort().map(([k, n]) => `${k} ${n}`).join(', ') || 'none counted'}`);
 }
 /** Play every seed of one sport on bundle M. */
 function runSport(M, sport) {

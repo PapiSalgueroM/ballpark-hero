@@ -251,6 +251,9 @@ if (!existsSync(ASSETS)) {
       fail(`/soccer-career now needs ${rawK.toFixed(0)} KB of JavaScript before it can render, over the ${CEILING_KB} KB ceiling. Check what got statically imported.`);
     }
     console.log(`   ${seen.size} chunks, ${rawK.toFixed(0)} KB raw (ceiling ${CEILING_KB}), ${gzK.toFixed(0)} KB over the wire`);
+    /* Round 1313, printed and never judged (build output is not byte stable): the exact raw bytes and every
+       chunk of the closure with its own, so a move between chunks can be read off two builds. */
+    console.log(`   raw bytes ${raw}; the chunks: ${[...seen].sort().map(f => `${f} ${readFileSync(path.join(ASSETS, f)).length}`).join(', ')}`);
   }
 }
 
