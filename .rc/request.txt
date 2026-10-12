@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weight: bash .rc/x/weightAB.sh
