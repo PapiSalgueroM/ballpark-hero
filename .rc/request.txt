@@ -1,0 +1,14 @@
+lawPrint: US_SEASON_DIGEST=print US_SEASON_DIGEST_COMMIT=31648047d3192a48f2e11f4aff936cab8aeda9f2 US_SEASON_DIGEST_OUT=$RC_OUT/law.json node scripts/simUsSeasonCentre.mjs && node .rc/x/cmpReceipt6.mjs scripts/data/usSeasonLawDigest.json $RC_OUT/law.json
+seamPrint: US_SEASON_DIGEST=print US_SEASON_DIGEST_RECEIPT=seam US_SEASON_DIGEST_COMMIT=31648047d3192a48f2e11f4aff936cab8aeda9f2 US_SEASON_DIGEST_OUT=$RC_OUT/seam.json node scripts/simUsSeasonCentre.mjs && node .rc/x/cmpReceipt6.mjs scripts/data/usSeasonSeamDigest.json $RC_OUT/seam.json
+layPrint: US_SEASON_DIGEST=print US_SEASON_DIGEST_RECEIPT=lay US_SEASON_DIGEST_COMMIT=31648047d3192a48f2e11f4aff936cab8aeda9f2 US_SEASON_DIGEST_OUT=$RC_OUT/lay.json node scripts/simUsSeasonCentre.mjs && node .rc/x/cmpReceipt6.mjs scripts/data/usSeasonLayDigest.json $RC_OUT/lay.json
+lawCmp: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+rc-homeback: RIVALRY_CONTROL=homeback node scripts/simCareerRivalryEvents.mjs
+rc-homeimport: RIVALRY_CONTROL=homeimport node scripts/simCareerRivalryEvents.mjs
+rc-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+board: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
+senseC: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+ledger: node scripts/simUsSeasonLedger.mjs
+anchors: node scripts/simHarnessAnchors.mjs
