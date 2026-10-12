@@ -1,0 +1,165 @@
+noguard: the Y1 guard is out of src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m92 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m91 skipped[39m[2m)[22m[32m 54[2mms[22m[39m
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mkeeps the exact absent-overlay fallback, input and random stream unchanged
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22muses a stable game-age anchor rather than current age or signing ID
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mpreserves the complete actual buy result, original buyer and seller exclusion across serialization
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mrecords an actual accepted sale at its actual buyer without replaying the payment
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mtracks an exercised permanent loan option only after the actual loan flags clear
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves temporary 'loan' outside permanent ownership
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves temporary 'loan-return' outside permanent ownership
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mrefreshes only established permanent players from the actual departing squad
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mrefreshes the same carried identity after aging without substituting stale player stats
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mkeeps 'release' distinct from a permanent buyer
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mkeeps 'retire' distinct from a permanent buyer
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mkeeps carried identity through retraining and actual yearly aging
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mexcludes stale original ownership without appending old payloads in a later season
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mre-signs only a certified released player from no club while preserving the original identity
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mholds repeated completed transfers and an unchanged departing snapshot
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mcarries the original source key across a second permanent owner and changed signing ID
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mdoes not remove a distinct same-name player with a different game-age anchor
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mrejects duplicate keys rather than merging or discarding full player records
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mholds an ambiguous duplicate actual squad identity without partial snapshot updates
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mholds unknown carried keys and transactions from a foreign owner
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'wrong era' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'future payload' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'age mismatch' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'wrong key' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'blank owner' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'retired owner' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'loan payload' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'malformed loan flag' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'invalid rating' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'invalid value' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'invalid potential' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mleaves 'future debut' optional records inactive without changing saved bytes
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mdoes not repair malformed optional containers
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mdoes not repair malformed optional containers
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mdoes not repair malformed optional containers
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mdoes not repair malformed optional containers
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mcertifies a fresh projected source key before the first ownership record, including retraining
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mdoes not use the capped transfer feed as evidence of ownership
+   [2m[90m↓[39m[22m save-scoped world roster ownership[2m > [22mkeeps full input and returned player payloads independent with zero helper draws
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mkeeps the fresh world seed and complete constructor draw vector stable across other careers and clocks
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mrecords a first purchase from the actual seeded future market
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mpreserves an already higher seeded rating without raising the inherited growth ceiling
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mkeeps the permanent buyer and seller consistent after actual summer moves and aging
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mreturns a temporary loan to its parent, then records an actually exercised permanent option
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mrecords an actual sale and lets the actual buyer sell the same identity back on new terms
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22mrecords a real release and preserves the existing manager re-signing restriction after a job change
+[31m   [31m×[31m actual world roster continuity through manager callbacks[2m > [22mnever writes a ledger for a career with no world seed, through every deal the recorder sees[39m[32m 53[2mms[22m[39m
+[31m     → expected { version: 1, eraId: 'now', …(1) } to be undefined[39m
+   [2m[90m↓[39m[22m actual world roster continuity through manager callbacks[2m > [22muses no global read draws and keeps the entire stale input unchanged during year refresh
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mkeeps a complete owned-only ledger literal with its exact input bytes and no draws
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mround-trips every complete 'release' record without dropping player fields
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mround-trips every complete 'retire' record without dropping player fields
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mretains complete mixed owned and inactive payloads, Unicode and saved field order
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mreads old plain inactive records without rewriting or mutating their representation
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mkeeps packed bytes stable across reload and read-result mutation with zero global draws
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mre-packs an actual departing owned snapshot without changing the inactive player
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mre-signs a released identity loaded from packed bytes with complete new terms
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mkeeps a packed retired identity terminal across later years and attempted re-signing
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mpreserves the entire released private aging result against the old plain representation
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'empty' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'nonstring' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'invalid stream' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'decoded null' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'decoded object' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'empty decoded array' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'duplicate identity' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'invalid full player' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'owned-only packed' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'dual plain and packed' packed data while holding the entire save and fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdecodes once per exact packed object and string while retaining complete reads and zero draws
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22misolates every returned player, origin and array from cached data including the first read
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22minvalidates cached decoding when the same raw object carries a different valid packed string
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mrejects a mutated malformed packed string and restores the original cached value without altering raw bytes
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mrechecks every raw envelope after warming the packed cache
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mrechecks current year and era against every cached complete record
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mnever treats a cached decoded array as evidence of valid players, unique keys or inactive status
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mreads the complete legacy no-format UTF16 ledger and upgrades only on an explicit compact write
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mround-trips all unknown JSON fields, nested arrays, special keys and original field order
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mincludes the exact format in cache identity and holds the full raw save during format mutations
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mrejects a format marker on a literal ledger without changing its full values or fallback
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'unknown schema table' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'nonstrings in schema' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'duplicate schema keys' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'duplicate schema signatures' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'unknown schema index' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'fractional schema index' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'missing row value' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'extra row value' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'untagged array' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'literal object as encoded value' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'scalar records root' rows-v1 data with complete input and fallback held
+   [2m[90m↓[39m[22m lossless inactive world roster storage[2m > [22mdeactivates 'empty records root' rows-v1 data with complete input and fallback held
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldRoster.test.ts[2m > [22mactual world roster continuity through manager callbacks[2m > [22mnever writes a ledger for a career with no world seed, through every deal the recorder sees
+[31m[1mAssertionError[22m: expected { version: 1, eraId: 'now', …(1) } to be undefined[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+{
+  "eraId": "now",
+  "records": [
+    {
+      "key": "[\"now\",\"Arsenal\",\"Bukayo Saka\",\"RW\",2002,0]",
+      "origin": {
+        "birthYear": 2002,
+        "club": "Arsenal",
+        "name": "Bukayo Saka",
+        "position": "RW",
+        "since": 0,
+      },
+      "owner": "Everton",
+      "player": {
+        "age": 24,
+        "contractYears": 4,
+        "fitness": 90,
+        "id": "sign-bukayo-saka-s1",
+        "injuryWeeks": 0,
+        "isYouth": false,
+        "morale": 78,
+        "name": "Bukayo Saka",
+        "onLoan": undefined,
+        "position": "RW",
+        "rating": 91,
+        "seasonAssists": 0,
+        "seasonGoals": 0,
+        "suspendedMatches": 0,
+        "value": 97.5,
+        "wage": 97,
+        "worldRosterKey": "[\"now\",\"Arsenal\",\"Bukayo Saka\",\"RW\",2002,0]",
+      },
+      "status": "owned",
+      "year": 2026,
+    },
+  ],
+  "version": 1,
+}
+
+[36m [2m❯[22m src/lib/clubManagerWorldRoster.test.ts:[2m513:32[22m[39m
+    [90m511| [39m    const offer = market.find(p => p.club === 'Arsenal' && p.age < 29 …
+    [90m512| [39m    [35mconst[39m signed [33m=[39m [34mbuyPlayer[39m(c[33m,[39m offer)[33m![39m[33m;[39m [34mexpect[39m(signed)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m513| [39m    [34mexpect[39m(signed[33m.[39mworldRoster)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m514| [39m    [35mconst[39m p [33m=[39m signed[33m.[39msquad[33m.[39m[34mfind[39m(x [33m=>[39m x[33m.[39mname [33m===[39m offer[33m.[39mname)[33m![39m[33m;[39m
+    [90m515| [39m    [34mexpect[39m(p[33m.[39mworldRosterKey)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m91 skipped[39m[90m (92)[39m
+[2m   Start at [22m 17:41:10
+[2m   Duration [22m 2.18s[2m (transform 1.25s, setup 40ms, collect 1.49s, tests 54ms, environment 240ms, prepare 65ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > actual world roster continuity through manager callbacks > never writes a ledger for a career with no world seed%2C through every deal the recorder sees,line=513,column=32::AssertionError: expected { version: 1, eraId: 'now', …(1) } to be undefined%0A%0A- Expected: %0Aundefined%0A%0A+ Received: %0A{%0A  "eraId": "now",%0A  "records": [%0A    {%0A      "key": "[\"now\",\"Arsenal\",\"Bukayo Saka\",\"RW\",2002,0]",%0A      "origin": {%0A        "birthYear": 2002,%0A        "club": "Arsenal",%0A        "name": "Bukayo Saka",%0A        "position": "RW",%0A        "since": 0,%0A      },%0A      "owner": "Everton",%0A      "player": {%0A        "age": 24,%0A        "contractYears": 4,%0A        "fitness": 90,%0A        "id": "sign-bukayo-saka-s1",%0A        "injuryWeeks": 0,%0A        "isYouth": false,%0A        "morale": 78,%0A        "name": "Bukayo Saka",%0A        "onLoan": undefined,%0A        "position": "RW",%0A        "rating": 91,%0A        "seasonAssists": 0,%0A        "seasonGoals": 0,%0A        "suspendedMatches": 0,%0A        "value": 97.5,%0A        "wage": 97,%0A        "worldRosterKey": "[\"now\",\"Arsenal\",\"Bukayo Saka\",\"RW\",2002,0]",%0A      },%0A      "status": "owned",%0A      "year": 2026,%0A    },%0A  ],%0A  "version": 1,%0A}%0A%0A ❯ src/lib/clubManagerWorldRoster.test.ts:513:32%0A%0A
