@@ -398,6 +398,23 @@
       of the 16 entries. Written with --part=modern,eras,pure --write on
       the tree itself (16 lines changed and no other), then run green
       whole on the same runner.
+      Round 1311 (2026-10-12) re-took modern and eras for the season's
+      honours and nothing else: on a season the league book decides (a
+      whole book with at least 73 in 100 rival goals on record) the
+      summary's golden boot, player of the season and world award read
+      the book's Goals board, and the summary and the season's record
+      gain the league's awards. Attribution on a GitHub runner at
+      977c3eca (remote check r1311-s2d), two legs. Leg A, a copy of the
+      tree in which the book never decides (bookDecides answers false,
+      the rule before the round): the file as it stood, green whole, so
+      the awards are the whole cause and no result, table or draw moved.
+      Leg B, the tree itself: 33 saves moved, 13 of 27 modern (summary
+      and wholeNext, and s2_whole for six pyramid saves) and 20 of 20
+      era (summary and wholeNext), 72 hashes; the 14 modern saves that
+      held are the leagues whose book stays under the floor, and start,
+      whole, every other view and pure held in all of them. Written with
+      --part=modern,eras,pure --write on the tree itself, then run green
+      whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
