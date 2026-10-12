@@ -1,0 +1,6 @@
+vitest-ballon exit=0 9s |    Duration  8.69s (transform 3.12s, setup 360ms, collect 9.30s, tests 5.09s, environment 2.75s, prepare 812ms)
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+tsc exit=0 74s | 
+simSoccerAwardGenerations exit=0 853s | PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery

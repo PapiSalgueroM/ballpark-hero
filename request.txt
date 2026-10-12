@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/sag-fix2 node scripts/simSoccerAwardGenerations.mjs
+vitest-ballon: node_modules/.bin/vitest run src/test/soccerAwardGeneration.test.ts src/test/soccerBallonPoolNameClash.test.tsx src/test/soccerBallonPoolReadAsAbsent.test.tsx src/test/soccerBallonPoolRetirement.test.tsx src/test/soccerCareerAwardGenerations.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
