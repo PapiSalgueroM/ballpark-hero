@@ -78,6 +78,106 @@ Proof of step 1 (src at a064a170; the later commits of the step touch no src):
   base's print), committed as 38dda01a (law), 1c16e220 (seam), 8c98dae1 (lay). On 8c98dae1 (r1313-s1z) the three
   compares are exit 0 (11 digests, 0 moved) and the controls lawdrift, seam and lay are red at their named check.
 
+## Unit two: steps 2 to 7 (the MLB and NHL rival on the player's own line)
+
+### Steps 2 to 4 (nothing moves)
+
+- Step 2, 4425a941 (the MLB cut: mlbStatLineFor, mlbFullWorkload, mlbLineOnSlate) and step 3, bdf47e2e (the NHL
+  cut: nhlStatLineFor, nhlFullWorkload, nhlLineOnSlate): r1313-s23a, simUsRivalSense under RIVAL_PROVE against
+  each step's parent with RIVAL_MOVED=none RIVAL_CARDS=none exit 0; cutdrawmlb and cutdrawnhl FIRED; r1313-s23b
+  and r1313-s23c green (tsc, the board replay and the digest with no retake, mlbcarry and nhlcarry still red at
+  E8b). The key order test of src/test/usRivalLine.test.ts was shown failing once on two swapped keys (1 failed
+  of 14, each sport).
+- Step 4, 0c2f1d7b (the two hooks, mlbRivalSeason and nhlRivalSeason, total, called by nothing): r1313-s4a
+  rivalProve4 exit 0 (59 checks); r1313-s4b the 19 controls of M.U1 to U5, U7 and H.U1 to U5, U7 FIRED;
+  r1313-s4c green. src/test/fixtures/usRivalOldSavesB.json recorded from b6eb78e7 by the base code (r1313-s4a
+  recordOldB), committed as 8fde50f0 after the merge of origin/main (Release AY) 5232debf.
+
+### Step 5a and 5b, the switches
+
+- 5a, ee33f3a6 (MLB): r1313-s5aa rivalProve5a (RIVAL_PROVE=8fde50f0 RIVAL_MOVED=mlb RIVAL_CARDS=mlb) exit 0, 64
+  checks: P1 byte equal in the NFL, the NBA and the NHL; in MLB the player's lines, counters, beat seasons and
+  every note that is not the rival's own byte equal, the rival's trail moved; P2 1,000 of 1,000 whole saves byte
+  equal in the three other sports, and in MLB 107 of 107 careers that part (of the first 300 stepped) hold every
+  season line to the parting season (first keys off the rival: lastRivalryEventId 105, fanbase 80,
+  rivalryIntensity 63, morale 62, netWorth 12). r1313-s5ab: siteslatemlb, sitekindmlb, fullscoremlb,
+  lastyearmlb, verdictswap, rostergate, owndealt, oldscalemlb, offshapemlb, wrongposmlb FIRED. r1313-s5ac: tsc 0,
+  vitest 0, senseC 0, simCareerRivalryEvents 0 (owndealt206, coin306, oldcard, deaf FIRED), simUsSeasonLedger 0
+  (fullslatemlb, mlbgates, nhlgates, nhlhead, mlbawards FIRED at E8a, mlbcarry at E8b), the four career sims 0,
+  the fences 0, simHarnessAnchors 0, lawCmp 0; the board replay red in MLB alone (64 steps) and the digest red on
+  mlb keys alone, both by design.
+- 5b, b6a861b6 (the NHL): r1313-s5ba rivalProve5b (RIVAL_PROVE=ee33f3a6 RIVAL_MOVED=nhl RIVAL_CARDS=nhl) exit 0,
+  70 checks: B saw 138,942 old lines off shape on the tree before; P2 1,000 of 1,000 byte equal in the NFL, MLB
+  and the NBA, and in the NHL 91 of 91 parting careers hold their lines (first keys: lastRivalryEventId 91, morale
+  59, rivalryIntensity 58, fanbase 57, netWorth 9). r1313-s5bb: siteslatenhl, lastyearnhl, soldascoin,
+  oldscalenhl, offshapenhl, wrongposnhl, verdictswap, rostergate, owndealt, workloadnhl FIRED. r1313-s5bc: tsc 0,
+  vitest 0, senseC 0 (167 checks), rivalryEvents 0 with its four controls FIRED, ledger 0 (fullslatenhl,
+  fullslatemlb, nhlgates, mlbgates, nhlawards at E8a, nhlcarry at E8b FIRED), the four career sims, simUsCareerWeight,
+  the fences, simLiveScores, anchors, and the three receipt compares 0 (0 moved); the board replay red in MLB and
+  the NHL alone (128 steps, "passed [nfl, nba]") and the digest on mlb and nhl keys alone, by design.
+
+### Step 5c, the recordings, the old saves test and What's New
+
+- 560a3f85: src/test/usRivalOldSavesB.test.ts; M.O and H.O in simUsRivalSense (controls owndead, retiredlinemlb,
+  retiredlinenhl, oldtallymlb, oldtallynhl); the --rival mode of scripts/qa/compareUsBoardFixture.mjs (its default
+  mode prints byte for byte what main's prints on the AX pair 934c29d9 to c4a91cdc: 37 lines, ATTRIBUTION HOLDS;
+  the rival mode on that pair STOPs on phase and contractTalk, as it must); the comments of the brief's 3.4; the
+  What's New entry. r1313-s5c2: tsc 0, vitest 31 passed, rivalPlain 0, the five O controls FIRED, simTrustCopy 0.
+- a8a25af7, the board recording, recorded on r1313-s5c1 from 560a3f85 (blob d4d53cc0, 2,298,730 bytes).
+  Attribution (i) r1313-s5pre on 8fde50f0: the recorder gave the committed recording back byte for byte, the
+  header aside; (ii) red in MLB alone after 5a, MLB and the NHL alone after 5b; (iii) --rival mlb,nhl: RIVAL
+  ATTRIBUTION HOLDS. The NFL and NBA sections byte equal; the first saved career that differs is the first season
+  played (step 10 in MLB, 12 in the NHL), in c.rival alone; no click path parts; clicks 455 and 421, seasons 24,
+  screen steps 886 and 900, rival beats 10 and 12, rival choices 4 and 4, all as before; 18 of 19 fixed saves a
+  sport moved, 19 of 19 screen walks. The replay of the new recording is green with section A whole (the same
+  wheel, talk and free agency counts as before).
+- a4a45ced, the truth digest, recorded on r1313-s5c1 (blob ad42ca26) with DIGEST_ALLOW='mlb|*,nhl|*': 32 of 58
+  keys moved (all 22 mlb and 10 nhl keys, 256 of 464 careers), 0 outside; DIGEST_ALLOW='mlb|*' refused with 80
+  careers outside, every one under an nhl key; the plain run on the new fixture green.
+
+### Steps 5d and 5e, the fence and the walk
+
+- 84dbe448 prints every F3 cell, the F5 floor counts and the measuring swap; db953596 types them from r1313-s5d1
+  rivalFull (the table is in the header of scripts/simUsRivalSense.mjs). Fresh seeds 6 to 10: MLB 12 of 12 cells
+  inside their band, NHL 5 of 6 (LW 40.86 against 39.09 within 1.66): the recipe stands, nothing retyped.
+  r1313-s5d2: rivalFull 0 (43 checks), rivalFresh red on H.F3 (LW) by design, verdictswap, oldscalemlb,
+  oldscalenhl, onlyhimshut, workloadmlb and workloadnhl FIRED, tsc 0, vitest 124 passed, the digest, the board
+  replay, rivalryEvents, ledger, anchors and senseC 0.
+- 3cf2dfa2: scripts/playUsRivalLines.mjs walks three sports from one table (see its header).
+
+### Step 6, the dead code
+
+- 31648047: simRivalSeason's two built in branches, the cut, RivalLineCut, BuiltInRivalSport and the overloads
+  of judgeRivalSeason are gone (a play is required); ownRosterBeat is deleted (ownRosterCards stays). Its proof
+  and the three receipts follow below.
+
+### What's New, sentence by sentence (advice 14)
+
+- "drafted at your position, but his season line never was": draftRival(pos, ...) at mlbMyCareer.ts line 382
+  (and the NHL's sibling); the base's built in lines in careerRival.ts simRivalSeason (deleted at step 6).
+- "A starting pitcher's rival printed a batting average and home runs, a goalie's rival printed goals and
+  assists": the base's built in lines (`${avg}, ${hr} HR` and `${g}G ${a}A ${g + a}P`), every MLB and NHL line
+  off the player's shape on the base (r1313-s0a).
+- "made by the same thing that makes yours, at his position, over as many games as your season really had, and
+  printed the way yours is": mlbRivalSeason (mlbMyCareer.ts line 819: mlbStatLineFor, mlbFullWorkload,
+  mlbLineOnSlate(full, mlbWorkSlate(pos, mine.slate)) at line 829, mlbStatLine) and nhlRivalSeason (nhlMyCareer.ts
+  line 712, the line carried at line 722); held by M.U2, H.U2, M.U6, H.U6 and M.F1, H.F1.
+- The parts that count: mlbHeadToHeadScore (line 804) and nhlHeadToHeadScore (line 698) score
+  mlbLineAsPrinted and nhlLineAsPrinted (usCareerStatLine.ts lines 117 to 127: a starter's wins, ERA and
+  strikeouts, no losses; a reliever's saves, holds, ERA and strikeouts; a hitter's average, home runs and RBI, no
+  steals; a skater's points; a goalie's wins and save percentage) by careerAwards.ts lines 111 to 123.
+- "A reliever's rival has your job in the bullpen": `kind = pos === 'RP' ? mine.kind` (line 823) with
+  `kind: c.archetype.id` at the call site (line 690); held by M.U4 and M.U6 (sitekindmlb).
+- "In a short season the head to head now reads the two short lines you see": the call sites score the saved
+  `line` (mlbMyCareer.ts line 690, nhlMyCareer.ts line 614) and the hook carries his line to the same slate;
+  E8a of simUsSeasonLedger reads both saved lines (fullslatemlb, fullslatenhl).
+- "The All-Star card knows both seasons now": beat 206 (mlbCareerRivalryEvents.ts line 113) and 306
+  (nhlCareerRivalryEvents.ts line 105) on rosterBeat with ALL_STAR_ROSTER; held by M.F5 and H.F5.
+- "On a save you already have, the head to head record stays as it is, his old line stays on show until his next
+  season": no save field and no migration; judgeRivalSeason writes lastLine only when he is judged and adds one
+  year to one side; SocialPanel.tsx line 88 prints rival.lastLine. Held by src/test/usRivalOldSavesB.test.ts and
+  M.O, H.O.
+
 ## Owed (not this round)
 
 - The "?" on the rival card for MLB and the NHL, with the rule sentences, the dead heat sentence of advice 13
