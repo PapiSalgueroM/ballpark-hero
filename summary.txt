@@ -1,0 +1,4 @@
+rivalProve2 exit=0 758s | simUsRivalSense: 47 checks, 0 failed (full size)
+cutdrawmlb exit=1 835s | simUsRivalSense: 47 checks, 7 failed (full size), red sections: P1, P2
+rivalProve3 exit=0 839s | simUsRivalSense: 47 checks, 0 failed (full size)
+cutdrawnhl exit=1 614s | simUsRivalSense: 47 checks, 7 failed (full size), red sections: P1, P2
