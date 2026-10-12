@@ -452,7 +452,7 @@ export const partAbsent = {
     'generatedBallonPool.version': raw => {
       const s = JSON.parse(raw);
       if (!isSoccerCareerSave(s)) return 'the save no longer opens';
-      if (SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)) return 'the part is still read';
+      if (SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)) return 'the pool is still read';
       const night = start => {
         const real = Math.random, draw = mulberry32(1318);
         let draws = 0;
