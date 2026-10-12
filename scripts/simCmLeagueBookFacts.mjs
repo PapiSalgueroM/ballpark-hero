@@ -61,7 +61,7 @@ const hostOf = url => new URL(url).host.toLowerCase().replace(/^www\./, '');
 const isWiki = url => /wikipedia|wikimedia|fandom/.test(hostOf(url)) || /^wiki\./.test(hostOf(url));
 const isBanned = url => /(^|\.)(transfermarkt|futbin)\./.test(hostOf(url));
 const SEASON_TOKEN = /\b\d{4}[/-]\d{2}(?:\d{2})?\b/g;
-const STOP_WORDS = /stopp|abandon|curtail|arr[eê]t|suspen|interromp|halted|ended early|termin|annul/i;
+const STOP_WORDS = /stopp|abandon|curtail|arr[eê]t|interromp|halted|ended early|cancel/i;
 /* A season is written 2015-16; a span 1995-96 to 2025-26. Anything else is null. */
 const seasonsOf = s => {
   const one = /^(\d{4})-(\d{2})$/, span = /^(\d{4})-(\d{2}) to (\d{4})-(\d{2})$/;
