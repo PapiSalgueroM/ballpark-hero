@@ -1,0 +1,5 @@
+vite_react_shadcn_ts@0.0.0 /home/runner/work/ballpark-hero/ballpark-hero
+├── @testing-library/dom@10.4.2
+└─┬ @testing-library/react@16.3.2
+  └── @testing-library/dom@10.4.2 deduped
+
