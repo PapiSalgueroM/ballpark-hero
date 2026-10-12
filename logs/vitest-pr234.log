@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerAwardGenerations.test.tsx [2m([22m[2m31 tests[22m[2m | [22m[33m31 skipped[39m[2m)[22m[32m 108[2mms[22m[39m
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mholds complete legacy pool and old pending ballot over actual page reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mholds complete generated pool and old pending ballot over actual page reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mholds complete pending pool and old pending ballot over actual page reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mholds complete legacyPending pool and old pending ballot over actual page reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present null pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present unknown-version pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present missing-entries pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present empty-entries pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present fraction-year pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present future-year pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present string-year pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present wrong-next-id pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present noncontiguous-id pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present invalid-role pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present negative-slot pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present over-slot pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present fraction-seed pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present future-first-year pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present young-entry-age pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present old-entry-age pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present empty-name pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present empty-nationality pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present empty-club pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present invalid-position pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present wrong-tuple pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present huge-tuple pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present string-tuple pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present short-tuple pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present wrong-retirement-year pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present duplicate-name pool and preserves whole raw storage over actual reload
+   [2m[90m↓[39m[22m Soccer Career generated-candidate save boundaries[2m > [22mrejects present duplicate-active-slot pool and preserves whole raw storage over actual reload
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerAwardGenerations.test.tsx[2m [ src/test/soccerCareerAwardGenerations.test.tsx ][22m
+[31m[1mError[22m: Genuine generated and legacy boundary fixtures missing[39m
+[36m [2m❯[22m deriveFixtures src/test/soccerCareerAwardGenerations.test.tsx:[2m125:80[22m[39m
+    [90m123| [39m  }[33m;[39m
+    [90m124| [39m  [35mconst[39m pending [33m=[39m [34mearly[39m([34m2025[39m)[33m,[39m legacyPending [33m=[39m [34mearly[39m([34m2010[39m)[33m;[39m
+    [90m125| [39m  if (!pending.generatedBallonPool || legacyPending.generatedBallonPoo…
+    [90m   | [39m                                                                               [31m^[39m
+    [90m126| [39m  [35mreturn[39m { legacy[33m,[39m generated[33m:[39m [34mcopy[39m(pending)[33m,[39m pending[33m,[39m legacyPending }[33m;[39m
+    [90m127| [39m[33m}[39m
+[90m [2m❯[22m src/test/soccerCareerAwardGenerations.test.tsx:[2m153:65[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [33m31 skipped[39m[90m (31)[39m
+[2m   Start at [22m 18:30:13
+[2m   Duration [22m 4.17s[2m (transform 2.35s, setup 62ms, collect 3.20s, tests 108ms, environment 322ms, prepare 126ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerAwardGenerations.test.tsx,title=src/test/soccerCareerAwardGenerations.test.tsx,line=125,column=80::Error: Genuine generated and legacy boundary fixtures missing%0A ❯ deriveFixtures src/test/soccerCareerAwardGenerations.test.tsx:125:80%0A ❯ src/test/soccerCareerAwardGenerations.test.tsx:153:65%0A%0A

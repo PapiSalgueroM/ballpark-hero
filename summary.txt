@@ -1,0 +1,4 @@
+vitest-e2 exit=0 5s |    Duration  3.78s (transform 1.53s, setup 58ms, collect 2.01s, tests 735ms, environment 402ms, prepare 170ms)
+vitest-pr234 exit=0 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerAwardGenerations.test.tsx,title=src/test/soccerCareerAwardGenerations.test.tsx,line=125,co
+tsc exit=0 57s | 
+simCareerAwardsNight exit=0 65s | simCareerAwardsNight: ALL 179 CHECKS PASSED
