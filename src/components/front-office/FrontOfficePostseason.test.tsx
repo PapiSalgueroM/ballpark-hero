@@ -19,8 +19,8 @@
  * abandonbracket, rebuiltkeeps, champopen, bracketnoedges, restround,
  * weekeighteen, playofftrades, roundspoils, holdround, recapnow,
  * bracketgrid, tiegame, and from the fix pass trustspoils, pressspoils,
- * donenow and tiewhere), which point this file at a copy of the board
- * through FO_BOARD_NFL.
+ * donenow, tiewhere and hurtweeks), which point this file at a copy of
+ * the board through FO_BOARD_NFL.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
@@ -425,6 +425,29 @@ describe('NFL front office: Week 18 reads as the playoffs', () => {
     expect(text()).not.toMatch(/\(out \d+w\)/);
   });
 
+  /* The fix pass (the review's minor): the feed said "out 1 week" and then opened a bracket where nobody heals */
+  it('a man of his hurt on "Play Week 17" is out for the playoffs in the feed, never out a count of weeks', () => {
+    motion();
+    const rng = lehmer(7);
+    const league: any = initLeague(rng);
+    for (let w = 1; w < REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => simGame(g, league.teams, rng)); league.week += 1; }
+    const start = JSON.stringify(shape(league, Object.keys(league.teams)[0]));
+    const hurtLines = () => [...document.querySelectorAll('p')].map(p => p.textContent ?? '').filter(t => t.startsWith('🚑'));
+    let lines: string[] = [];
+    for (let k = 1; k <= 30 && lines.length === 0; k += 1) {
+      cleanup();
+      localStorage.setItem(SAVE_KEY, start);
+      counted(k * 104729);
+      render(<Board />);
+      fireEvent.click(screen.getByText('This week'));
+      fireEvent.click(document.querySelector('[data-press="week"]') as HTMLElement);
+      expect(read().league.week, 'the press opened the bracket').toBe(REGULAR_WEEKS + 1);
+      lines = hurtLines();
+    }
+    expect(lines.length, 'a man of his hurt in Week 17, in thirty streams').toBeGreaterThan(0);
+    for (const l of lines) expect(l, 'his injury line').toMatch(/ is out for the playoffs\.$/);
+  });
+
   it('over the roster limit, the men must go before the next round, not before Week 18', () => {
     const o = seasonOver();
     const rng = lehmer(7);
@@ -765,5 +788,6 @@ describe('NFL front office: Watch in the playoffs', () => {
     fireEvent.click(btn('[data-watch-round]'));
     await waitFor(() => expect(q('[data-verdict-reveal]')).not.toBeNull());
     expect(q('[data-match-clock]'), 'no clock on the title game').toBeNull();
+    motion();
   });
 });

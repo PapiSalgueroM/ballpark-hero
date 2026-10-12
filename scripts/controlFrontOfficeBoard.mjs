@@ -52,7 +52,8 @@
  * (pressspoils) and the finish (donenow); and "Your game" opening the
  * first game between the two clubs whatever its round (tiewhere), which
  * every test was green under until a tie between clubs that met in the
- * regular season was played.
+ * regular season was played; and the feed counting the weeks of a man
+ * hurt on "Play Week 17", though nobody heals in the bracket (hurtweeks).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -119,6 +120,7 @@ const T = {
   /* the fix pass */
   psTitleRoom: [PS, 'the title game watched, won and lost'],
   psTieRival: [PS, '"Your game" on a tie against a club he met in the regular season'],
+  psHurtFeed: [PS, 'a man of his hurt on "Play Week 17" is out for the playoffs in the feed'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -178,6 +180,7 @@ const CONTROLS = {
   trustspoils: ["the owner card shows the trust the title game's press graded while he watches it", [['const seenTrust = roomHeld ? roomHeld.trust : trust;', 'const seenTrust = trust;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   pressspoils: ["the press card shows the room the title game's press called while he watches it", [['const seenPresser = roomHeld ? roomHeld.presser : presser;', 'const seenPresser = presser;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   tiewhere: ['"Your game" opens the first game between the two clubs, whatever its round (the review\'s mutant)', [['games.findIndex(g => g.where === tie.round && (g.home === p.home', 'games.findIndex(g => (g.home === p.home']], [T.psTieRival], [T.psFaces, T.psBye]],
+  hurtweeks: ['a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket', [["const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';", 'const outForPlayoffs = false;']], [T.psHurtFeed], [T.psChipPress, T.psKeep]],
   donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };

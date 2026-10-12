@@ -663,8 +663,11 @@ export default function FrontOfficeBoard() {
     }
     if (nextGm !== gm) setGm(nextGm);
     const feed: string[] = [...deskLines];
+    /* Round 1309, the fix pass: "Play Week 17" opens a bracket where nobody heals, so a man hurt this week is out
+       for the playoffs whatever his count of weeks (the roster says the same); the old button's line is as it was */
+    const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';
     for (const inj of injuries.filter(i => i.team === myTeam)) {
-      feed.push(`🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
+      feed.push(outForPlayoffs ? `🚑 ${inj.player} is out for the playoffs.` : `🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
     }
     feed.push(...aiLog.slice(0, 2).map(l => `📰 ${l}`));
     setWeekResults(told.map(t => t.game));
