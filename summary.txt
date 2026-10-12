@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSaveKeeper exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+playSaveKeeper exit=0 846s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+sweepWeight exit=1 26s | sweepWeight: 1 failure
+walk exit=1 97s | r1305walk: 4 failure(s)
+playOwnerMandate exit=0 24s | ALL OWNER MANDATE WALK CHECKS PASSED
+playSessionMarks exit=0 17s | playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.
+playGames-front-office exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+head exit=0 0s | b4b2356803df4431751a6bcdaf44e52c7409dab0

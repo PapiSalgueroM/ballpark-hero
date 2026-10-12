@@ -1,0 +1,6 @@
+ok lines 79
+FAIL  p390: the page did not jump on the press (scrollY 0 to 618)
+FAIL  p390: the next press button is inside the viewport after the press (y -40)
+FAIL  p390r: the page did not jump on the press (scrollY 0 to 544)
+FAIL  p390r: the next press button is inside the viewport after the press (y -40)
+r1305walk: 4 failure(s)

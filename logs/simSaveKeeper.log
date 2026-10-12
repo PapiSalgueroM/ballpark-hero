@@ -1,0 +1,7 @@
+         /front-office            84202 to   84993 chars, median   84796, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /nba-front-office        51778 to   52129 chars, median   51896, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /mlb-front-office       122520 to  123431 chars, median  123421, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /nhl-front-office        66701 to   67225 chars, median   67084, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         largest real save: /mlb-front-office at 123431 chars
+   ok    /front-office: 2 of 4 real saves hold 1 at gameLog.v, a PART of the save; readGmGameLog (src/lib/gmGameLog.ts) reads the part as absent with another number there (asked: one down refused, one up refused; then the game behaves as with no part and a new write overwrites it), and the keeper makes no copy before a step of it
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
