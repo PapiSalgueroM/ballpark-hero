@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+acrossflag: US_LEDGER_CONTROL=acrossflag node scripts/simUsSeasonLedger.mjs
+acrossdata: US_LEDGER_CONTROL=acrossdata node scripts/simUsSeasonLedger.mjs
+onegroup: US_LEDGER_CONTROL=onegroup node scripts/simUsSeasonLedger.mjs
+nhlfrom: US_LEDGER_CONTROL=nhlfrom node scripts/simUsSeasonLedger.mjs
+plan: node scripts/simUsPlanSeason.mjs

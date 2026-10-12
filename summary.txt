@@ -1,0 +1,7 @@
+ledger exit=0 3s | simUsSeasonLedger: green. 4032 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+acrossflag exit=1 3s | simUsSeasonLedger: CONTROL acrossflag FIRED, red at exactly N10
+onegroup exit=1 3s | simUsSeasonLedger: CONTROL onegroup FIRED, red at exactly N10 and N9 and R2
+acrossdata exit=1 3s | simUsSeasonLedger: CONTROL acrossdata FIRED, red at exactly N10
+plan exit=0 2s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+nhlfrom exit=1 3s | simUsSeasonLedger: CONTROL nhlfrom FIRED, red at exactly N6
+tsc exit=0 42s | 
