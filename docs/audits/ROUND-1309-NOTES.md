@@ -107,3 +107,32 @@ save the base writes), r1309-weight.
 Once GMs sit in a bracket, a build from before this round refuses their saves (the old validator says no to a hub
 save at Week 18 and the old board shows "Delete unusable save"), proven on r1309-old. A rollback locks those saves
 out until the round is put back.
+
+## The fix pass (after the adversarial review, review-run-1309.md and review-read-1309.md)
+
+- THE MAJOR: watching the title game gave the result away. Its press closes the season at once (closeSeason: the
+  graded trust, the press room, the finish), and the hub page drawn while he watches showed the press card ("The
+  podium" or "The accountability scrum", answers live) and the owner card's new trust, and recorded the finish.
+  Now `heldRoom` ({ from, trust, presser, won }) is taken beside `held` on a playoff Watch and read only while the
+  hold is that league: the owner card gets the trust from before the press, the press card the room from before it
+  with its answers shut (GmPressCard's optional `shut`), and useGameCompletion the finish from before it, so the
+  finish is recorded at full time. Board test over a title won and a title lost (a title mandate, trust 60),
+  controls trustspoils, pressspoils, donenow; walk point 18 (fixture D, the title game watched) and its control
+  titlespoil. The board of e505ec9e built and walked goes red at point 18 alone.
+- RULE FOR THE NEXT BINDS: anything the season close sets on the page (trust, the press room, the finish, and
+  whatever a later round adds there) is a reader held at a watch (Round 1307's rule 8). A board whose title game
+  can be watched holds it the same way.
+- "Your game" on a tie against a club he met in the regular season: a board test (leagues of seeds 1 to 24) and
+  control tiewhere, the review's mutant that every test was green under.
+- Reduced motion on a playoff watch: a board test (his result at once, no clock; the title game's recap at once).
+- "Play Week 17" says a man hurt that week is "out for the playoffs" in the feed (the bracket heals nobody); the
+  old button's line is as it was. Board test and control hurtweeks.
+- The hub's Trades box past the last period reads "Shut for the playoffs" (src/lib/foHub.ts, inside the one branch
+  past the last period; a deal done and a cap sheet over the line still come first). simFoHub section 8 and its
+  control nopost.
+- In the bracket the reveal's edge from sm up is the bottom of the row under the box, so the back chip is on the
+  screen with the buttons and the box after a press (1280 by 800: buttons from 324, box 392 to 744, chip 756 to 800;
+  1280 by 900: chip 842 to 886). Walk point 12 asserts the chip from sm up.
+- Not changed, for the lead: Watch Week 17 at 390 by 844 leaves the next press above the screen (ruling 2b's
+  ground); a short landscape screen puts the box's top under the sticky header (the hook's ground); the playoff mount
+  wiring is the NFL board's alone; /front-office weighs 369.3K against its 366K row.
