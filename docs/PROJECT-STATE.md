@@ -4,7 +4,11 @@ Continued route review confirmed that giving up the daily leaves no Unlimited
 entry unless a special rule was blocked. Reopening restores that dead end.
 A separate isolated branch from accepted 48cb9d4b will add the existing practice
 action below the daily reveal, preserving Unlimited Next Puzzle, graph, data,
-scoring and daily saves. Remote baseline proof precedes the Board edit.
+scoring and daily saves. Remote baseline 5ddeb073 reproduced exactly three
+missing-button failures, 36 preservation passes and nine real surrendered
+daily dead ends (90 checks). The minimal Board edit now selects Play Unlimited
+for a daily surrender and retains Next Puzzle in practice, with the same
+fresh-board reset. Its fixed verification is pending.
 PR242, PR243 and PR244 stay frozen; H retains integration and publication.
 No runtime or live qualification yet. See
 docs/audits/transfer-path-surrender-practice-2026-10-12.md.

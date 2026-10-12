@@ -38,3 +38,21 @@ is retained remotely and locally: 6,485 bytes, five entries, ZIP SHA256
 2d57f2a9f1bdbbcefecbcd6e40b2fd2bbdf4f0107d7a01ac6a46bb447bb802da.
 The complete LF-normalized log is retained under .tmp-fx/surrender-fdbb9ec0,
 SHA256 d12bd2c2622259741063a91e746bad0ece64fc96c8b09971f99d0879fba080ef.
+
+Corrected baseline 5ddeb0738f1128c47a1888ae40496c743e41d7d6 reproduced the
+defect in run 38304166826, job 114994036911. Exactly three owned unit cases
+failed on one expected practice button versus zero, with all 36 other cases
+passing. Nine natural browser surrenders passed 90 reproduction checks and
+each exposed no practice or next-puzzle entry. Their real daily logs contain
+one give action and a lost status. The intentional browser exit one and strict
+baseline wrappers passed, with zero setup/app/owned asset failures. Types,
+build, all 521 installed versions and source/package checks passed. Fixed-phase
+fences were deliberately skipped and earn no credit; baseline does not claim
+a runtime reload or a corrected outcome.
+
+Baseline artifact 11771364791 is fully retained locally and remotely:
+602,484 bytes, 19 entries including nine original PNGs, ZIP SHA256
+f1112101206b4b5eccd8708f0c04da9758c8242a5a746b478e1864a85b99102c.
+Its report records 54 fixture reads, 90 blocked external requests and held
+source. Only after this observed red proof was the Board edited. The methods
+and assertions are held; fresh fixed-source verification remains pending.
