@@ -1,0 +1,11 @@
+shoot-head exit=0 33s | simCmShootoutOrder: all sections passed
+eraucl-head exit=0 37s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+eraucl-oldname exit=0 37s | simClubManagerEraUcl control: green. The oldname regression was reported (18 findings in section 7).
+eraucl-poolnames exit=0 31s | simClubManagerEraUcl control: green. The poolnames regression was reported (55 findings in section 7).
+rules-head exit=0 157s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+meters-promise exit=1 41s | simClubManagerMeters: 399 failure(s)
+var-head exit=1 185s | Node.js v24.21.0
+meters-desk exit=1 39s | simClubManagerMeters: 72 failure(s)
+shoot-unsetpath exit=1 29s | simCmShootoutOrder: 3 FAILURE(S)
+meters-decor exit=1 38s | simClubManagerMeters: 114 failure(s)
+appeal-head exit=0 38s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.

@@ -1,0 +1,2013 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Loaded historic squads retain the entire prior default match\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'halftime',\n" +
++       '    live: {\n' +
++       '      added: {\n' +
++       '        h1: 4\n' +
++       '...\n' +
++       '          minute: 41,\n' +
++       "+         name: 'Karim Valdes'\n" +
++       "-         name: 'Bruno Faye'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      h1OppCards: [],\n' +
++       '      h1Play: [\n' +
++       '        {\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Ferran Ohlsson'\n" +
++       "-         who: 'Ari Esposito'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          flank: 'right',\n" +
++       "          kind: 'corner',\n" +
++       '          minute: 5,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Keanu Costache'\n" +
++       "-         who: 'Ferran Ohlsson'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 8,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Baptiste Amaral'\n" +
++       "-         who: 'Ignacio Jansen'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 10,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Lars Medina'\n" +
++       "-         who: 'Joris Cordero'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 13,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Cesar Gerber'\n" +
++       "-         who: 'Caio Ruiz'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 28,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Keanu Costache'\n" +
++       "-         who: 'Ferran Ohlsson'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          flank: 'right',\n" +
++       "          kind: 'corner',\n" +
++       '          minute: 29,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Asier Hartmann'\n" +
++       "-         who: 'Arne Wagner'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'shot',\n" +
++       '          minute: 30,\n' +
++       '          on: true,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Asier Hartmann',\n" +
++       "-         who: 'Juan Ferrari',\n" +
++       '          xg: 0.09\n' +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 31,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Keanu Costache'\n" +
++       "-         who: 'Ferran Ohlsson'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 38,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Ari Esposito'\n" +
++       "-         who: 'Axel Caldeira'\n" +
++       '        },\n' +
++       '        {\n' +
++       '          goal: true,\n' +
++       "          kind: 'shot',\n" +
++       '          minute: 41,\n' +
++       '          on: true,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Karim Valdes',\n" +
++       "-         who: 'Bruno Faye',\n" +
++       '          xg: 0.26\n' +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'shot',\n" +
++       '          minute: 41,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Baptiste Amaral',\n" +
++       "-         who: 'Anders Castillo',\n" +
++       '          xg: 0.09\n' +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 45,\n' +
++       '          plus: 2,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Ari Esposito'\n" +
++       "-         who: 'Axel Caldeira'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      h1Segs: [\n' +
++       '        {\n' +
++       '          from: 0,\n' +
++       '...\n' +
++       '          g: true,\n' +
++       "+         n: 'Jarne Ferrari',\n" +
++       "-         n: 'Arda Varela',\n" +
++       "          p: 'GK',\n" +
++       '+         r: 60\n' +
++       '-         r: 68\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Lautaro Lorenzi',\n" +
++       "+         p: 'CB',\n" +
++       '+         r: 64\n' +
++       "-         n: 'Andre Laakso',\n" +
++       "-         p: 'RB',\n" +
++       '-         r: 68\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Nabil Ramires',\n" +
++       "-         n: 'Noel Wagner',\n" +
++       "          p: 'CM',\n" +
++       '+         r: 73\n' +
++       '-         r: 75\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Joris Cordero',\n" +
++       "-         n: 'Hugo Aguirre',\n" +
++       "          p: 'CM',\n" +
++       '+         r: 72\n' +
++       '-         r: 71\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Axel Laakso',\n" +
++       "-         n: 'Axel Haas',\n" +
++       "          p: 'ST',\n" +
++       '+         r: 68\n' +
++       '-         r: 65\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Bruno Faye',\n" +
++       "+         p: 'CF',\n" +
++       '+         r: 68\n' +
++       "-         n: 'Javier Herrera',\n" +
++       "-         p: 'RW',\n" +
++       '-         r: 65\n' +
++       '        }\n' +
++       '      ],\n' +
++       '      oppFormationIndex: 1,\n' +
++       '      oppGoals: 1,\n' +
++       '      oppSubs: [],\n' +
++       '...\n' +
++       '          g: true,\n' +
++       "+         n: 'Simao Hartmann',\n" +
++       "-         n: 'Valentin Andrade',\n" +
++       "          p: 'GK',\n" +
++       '+         r: 78\n' +
++       '-         r: 74\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Ari Esposito',\n" +
++       "-         n: 'Axel Caldeira',\n" +
++       "          p: 'CB',\n" +
++       '+         r: 79\n' +
++       '-         r: 80\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Ferran Ohlsson',\n" +
++       "+         p: 'RB',\n" +
++       '+         r: 72\n' +
++       "-         n: 'Ari Esposito',\n" +
++       "-         p: 'CB',\n" +
++       '-         r: 80\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Cesar Gerber',\n" +
++       "-         n: 'Caio Ruiz',\n" +
++       "          p: 'LB',\n" +
++       '+         r: 70\n' +
++       '-         r: 78\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Keanu Costache',\n" +
++       "-         n: 'Ferran Ohlsson',\n" +
++       "          p: 'RB',\n" +
++       '+         r: 64\n' +
++       '-         r: 70\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Baptiste Amaral',\n" +
++       "+         p: 'LM',\n" +
++       "-         n: 'Anders Castillo',\n" +
++       "-         p: 'CAM',\n" +
++       '          r: 82\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "          n: 'Ignacio Jansen',\n" +
++       "          p: 'CAM',\n" +
++       '+         r: 78\n' +
++       '-         r: 80\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Lars Medina',\n" +
++       "+         p: 'CAM',\n" +
++       "-         n: 'Joris Cordero',\n" +
++       "-         p: 'CM',\n" +
++       '          r: 77\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Gustav Rosales',\n" +
++       "+         p: 'CM',\n" +
++       '+         r: 75\n' +
++       "-         n: 'Arne Wagner',\n" +
++       "-         p: 'LM',\n" +
++       '-         r: 76\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Asier Hartmann',\n" +
++       "-         n: 'Juan Ferrari',\n" +
++       "          p: 'ST',\n" +
++       '+         r: 69\n' +
++       '-         r: 68\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Karim Valdes',\n" +
++       "+         p: 'RW',\n" +
++       '+         r: 68\n' +
++       "-         n: 'Bruno Faye',\n" +
++       "-         p: 'CF',\n" +
++       '-         r: 67\n' +
++       '        }\n' +
++       '      ],\n' +
++       "      opponent: 'Newcastle',\n" +
++       '      possH1: 52,\n' +
++       '      possNoise: [\n' +
++       '...\n' +
++       '            minute: 41,\n' +
++       "+           name: 'Karim Valdes'\n" +
++       "-           name: 'Bruno Faye'\n" +
++       '          }\n' +
++       '        ],\n' +
++       '        h1OppCards: [],\n' +
++       '        h1Play: [\n' +
++       '          {\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Ferran Ohlsson'\n" +
++       "-           who: 'Ari Esposito'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            flank: 'right',\n" +
++       "            kind: 'corner',\n" +
++       '            minute: 5,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Keanu Costache'\n" +
++       "-           who: 'Ferran Ohlsson'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 8,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Baptiste Amaral'\n" +
++       "-           who: 'Ignacio Jansen'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 10,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Lars Medina'\n" +
++       "-           who: 'Joris Cordero'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 13,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Cesar Gerber'\n" +
++       "-           who: 'Caio Ruiz'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 28,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Keanu Costache'\n" +
++       "-           who: 'Ferran Ohlsson'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            flank: 'right',\n" +
++       "            kind: 'corner',\n" +
++       '            minute: 29,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Asier Hartmann'\n" +
++       "-           who: 'Arne Wagner'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 30,\n' +
++       '            on: true,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Asier Hartmann',\n" +
++       "-           who: 'Juan Ferrari',\n" +
++       '            xg: 0.09\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 31,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Keanu Costache'\n" +
++       "-           who: 'Ferran Ohlsson'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 38,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Ari Esposito'\n" +
++       "-           who: 'Axel Caldeira'\n" +
++       '          },\n' +
++       '          {\n' +
++       '            goal: true,\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 41,\n' +
++       '            on: true,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Karim Valdes',\n" +
++       "-           who: 'Bruno Faye',\n" +
++       '            xg: 0.26\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 41,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Baptiste Amaral',\n" +
++       "-           who: 'Anders Castillo',\n" +
++       '            xg: 0.09\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 45,\n' +
++       '            plus: 2,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Ari Esposito'\n" +
++       "-           who: 'Axel Caldeira'\n" +
++       '          }\n' +
++       '        ],\n' +
++       '        h1Segs: [\n' +
++       '          {\n' +
++       '            from: 0,\n' +
++       '...\n' +
++       '            g: true,\n' +
++       "+           n: 'Jarne Ferrari',\n" +
++       "-           n: 'Arda Varela',\n" +
++       "            p: 'GK',\n" +
++       '+           r: 60\n' +
++       '-           r: 68\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Lautaro Lorenzi',\n" +
++       "+           p: 'CB',\n" +
++       '+           r: 64\n' +
++       "-           n: 'Andre Laakso',\n" +
++       "-           p: 'RB',\n" +
++       '-           r: 68\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Nabil Ramires',\n" +
++       "-           n: 'Noel Wagner',\n" +
++       "            p: 'CM',\n" +
++       '+           r: 73\n' +
++       '-           r: 75\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Joris Cordero',\n" +
++       "-           n: 'Hugo Aguirre',\n" +
++       "            p: 'CM',\n" +
++       '+           r: 72\n' +
++       '-           r: 71\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Axel Laakso',\n" +
++       "-           n: 'Axel Haas',\n" +
++       "            p: 'ST',\n" +
++       '+           r: 68\n' +
++       '-           r: 65\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Bruno Faye',\n" +
++       "+           p: 'CF',\n" +
++       '+           r: 68\n' +
++       "-           n: 'Javier Herrera',\n" +
++       "-           p: 'RW',\n" +
++       '-           r: 65\n' +
++       '          }\n' +
++       '        ],\n' +
++       '        oppFormationIndex: 1,\n' +
++       '        oppGoals: 1,\n' +
++       '        oppSubs: [],\n' +
++       '...\n' +
++       '            g: true,\n' +
++       "+           n: 'Simao Hartmann',\n" +
++       "-           n: 'Valentin Andrade',\n" +
++       "            p: 'GK',\n" +
++       '+           r: 78\n' +
++       '-           r: 74\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Ari Esposito',\n" +
++       "-           n: 'Axel Caldeira',\n" +
++       "            p: 'CB',\n" +
++       '+           r: 79\n' +
++       '-           r: 80\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Ferran Ohlsson',\n" +
++       "+           p: 'RB',\n" +
++       '+           r: 72\n' +
++       "-           n: 'Ari Esposito',\n" +
++       "-           p: 'CB',\n" +
++       '-           r: 80\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Cesar Gerber',\n" +
++       "-           n: 'Caio Ruiz',\n" +
++       "            p: 'LB',\n" +
++       '+           r: 70\n' +
++       '-           r: 78\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Keanu Costache',\n" +
++       "-           n: 'Ferran Ohlsson',\n" +
++       "            p: 'RB',\n" +
++       '+  '... 1147 more characters,
++     stack: 'AssertionError [ERR_ASSERTION]: Loaded historic squads retain the entire prior default match\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'halftime',\n" +
++       '    live: {\n' +
++       '      added: {\n' +
++       '        h1: 4\n' +
++       '...\n' +
++       '          minute: 41,\n' +
++       "+         name: 'Karim Valdes'\n" +
++       "-         name: 'Bruno Faye'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      h1OppCards: [],\n' +
++       '      h1Play: [\n' +
++       '        {\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Ferran Ohlsson'\n" +
++       "-         who: 'Ari Esposito'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          flank: 'right',\n" +
++       "          kind: 'corner',\n" +
++       '          minute: 5,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Keanu Costache'\n" +
++       "-         who: 'Ferran Ohlsson'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 8,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Baptiste Amaral'\n" +
++       "-         who: 'Ignacio Jansen'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 10,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Lars Medina'\n" +
++       "-         who: 'Joris Cordero'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 13,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Cesar Gerber'\n" +
++       "-         who: 'Caio Ruiz'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 28,\n' +
++       "          side: 'me',\n" +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Keanu Costache'\n" +
++       "-         who: 'Ferran Ohlsson'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          flank: 'right',\n" +
++       "          kind: 'corner',\n" +
++       '          minute: 29,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Asier Hartmann'\n" +
++       "-         who: 'Arne Wagner'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'shot',\n" +
++       '          minute: 30,\n' +
++       '          on: true,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Asier Hartmann',\n" +
++       "-         who: 'Juan Ferrari',\n" +
++       '          xg: 0.09\n' +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 31,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Keanu Costache'\n" +
++       "-         who: 'Ferran Ohlsson'\n" +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 38,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Ari Esposito'\n" +
++       "-         who: 'Axel Caldeira'\n" +
++       '        },\n' +
++       '        {\n' +
++       '          goal: true,\n' +
++       "          kind: 'shot',\n" +
++       '          minute: 41,\n' +
++       '          on: true,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Karim Valdes',\n" +
++       "-         who: 'Bruno Faye',\n" +
++       '          xg: 0.26\n' +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'shot',\n" +
++       '          minute: 41,\n' +
++       '...\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Baptiste Amaral',\n" +
++       "-         who: 'Anders Castillo',\n" +
++       '          xg: 0.09\n' +
++       '        },\n' +
++       '        {\n' +
++       "          kind: 'throwin',\n" +
++       '          minute: 45,\n' +
++       '          plus: 2,\n' +
++       "          side: 'opp',\n" +
++       "+         who: 'Ari Esposito'\n" +
++       "-         who: 'Axel Caldeira'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      h1Segs: [\n' +
++       '        {\n' +
++       '          from: 0,\n' +
++       '...\n' +
++       '          g: true,\n' +
++       "+         n: 'Jarne Ferrari',\n" +
++       "-         n: 'Arda Varela',\n" +
++       "          p: 'GK',\n" +
++       '+         r: 60\n' +
++       '-         r: 68\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Lautaro Lorenzi',\n" +
++       "+         p: 'CB',\n" +
++       '+         r: 64\n' +
++       "-         n: 'Andre Laakso',\n" +
++       "-         p: 'RB',\n" +
++       '-         r: 68\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Nabil Ramires',\n" +
++       "-         n: 'Noel Wagner',\n" +
++       "          p: 'CM',\n" +
++       '+         r: 73\n' +
++       '-         r: 75\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Joris Cordero',\n" +
++       "-         n: 'Hugo Aguirre',\n" +
++       "          p: 'CM',\n" +
++       '+         r: 72\n' +
++       '-         r: 71\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Axel Laakso',\n" +
++       "-         n: 'Axel Haas',\n" +
++       "          p: 'ST',\n" +
++       '+         r: 68\n' +
++       '-         r: 65\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Bruno Faye',\n" +
++       "+         p: 'CF',\n" +
++       '+         r: 68\n' +
++       "-         n: 'Javier Herrera',\n" +
++       "-         p: 'RW',\n" +
++       '-         r: 65\n' +
++       '        }\n' +
++       '      ],\n' +
++       '      oppFormationIndex: 1,\n' +
++       '      oppGoals: 1,\n' +
++       '      oppSubs: [],\n' +
++       '...\n' +
++       '          g: true,\n' +
++       "+         n: 'Simao Hartmann',\n" +
++       "-         n: 'Valentin Andrade',\n" +
++       "          p: 'GK',\n" +
++       '+         r: 78\n' +
++       '-         r: 74\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Ari Esposito',\n" +
++       "-         n: 'Axel Caldeira',\n" +
++       "          p: 'CB',\n" +
++       '+         r: 79\n' +
++       '-         r: 80\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Ferran Ohlsson',\n" +
++       "+         p: 'RB',\n" +
++       '+         r: 72\n' +
++       "-         n: 'Ari Esposito',\n" +
++       "-         p: 'CB',\n" +
++       '-         r: 80\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Cesar Gerber',\n" +
++       "-         n: 'Caio Ruiz',\n" +
++       "          p: 'LB',\n" +
++       '+         r: 70\n' +
++       '-         r: 78\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Keanu Costache',\n" +
++       "-         n: 'Ferran Ohlsson',\n" +
++       "          p: 'RB',\n" +
++       '+         r: 64\n' +
++       '-         r: 70\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Baptiste Amaral',\n" +
++       "+         p: 'LM',\n" +
++       "-         n: 'Anders Castillo',\n" +
++       "-         p: 'CAM',\n" +
++       '          r: 82\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "          n: 'Ignacio Jansen',\n" +
++       "          p: 'CAM',\n" +
++       '+         r: 78\n' +
++       '-         r: 80\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Lars Medina',\n" +
++       "+         p: 'CAM',\n" +
++       "-         n: 'Joris Cordero',\n" +
++       "-         p: 'CM',\n" +
++       '          r: 77\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Gustav Rosales',\n" +
++       "+         p: 'CM',\n" +
++       '+         r: 75\n' +
++       "-         n: 'Arne Wagner',\n" +
++       "-         p: 'LM',\n" +
++       '-         r: 76\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Asier Hartmann',\n" +
++       "-         n: 'Juan Ferrari',\n" +
++       "          p: 'ST',\n" +
++       '+         r: 69\n' +
++       '-         r: 68\n' +
++       '        },\n' +
++       '        {\n' +
++       '          g: true,\n' +
++       "+         n: 'Karim Valdes',\n" +
++       "+         p: 'RW',\n" +
++       '+         r: 68\n' +
++       "-         n: 'Bruno Faye',\n" +
++       "-         p: 'CF',\n" +
++       '-         r: 67\n' +
++       '        }\n' +
++       '      ],\n' +
++       "      opponent: 'Newcastle',\n" +
++       '      possH1: 52,\n' +
++       '      possNoise: [\n' +
++       '...\n' +
++       '            minute: 41,\n' +
++       "+           name: 'Karim Valdes'\n" +
++       "-           name: 'Bruno Faye'\n" +
++       '          }\n' +
++       '        ],\n' +
++       '        h1OppCards: [],\n' +
++       '        h1Play: [\n' +
++       '          {\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Ferran Ohlsson'\n" +
++       "-           who: 'Ari Esposito'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            flank: 'right',\n" +
++       "            kind: 'corner',\n" +
++       '            minute: 5,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Keanu Costache'\n" +
++       "-           who: 'Ferran Ohlsson'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 8,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Baptiste Amaral'\n" +
++       "-           who: 'Ignacio Jansen'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 10,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Lars Medina'\n" +
++       "-           who: 'Joris Cordero'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 13,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Cesar Gerber'\n" +
++       "-           who: 'Caio Ruiz'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 28,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Keanu Costache'\n" +
++       "-           who: 'Ferran Ohlsson'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            flank: 'right',\n" +
++       "            kind: 'corner',\n" +
++       '            minute: 29,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Asier Hartmann'\n" +
++       "-           who: 'Arne Wagner'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 30,\n' +
++       '            on: true,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Asier Hartmann',\n" +
++       "-           who: 'Juan Ferrari',\n" +
++       '            xg: 0.09\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 31,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Keanu Costache'\n" +
++       "-           who: 'Ferran Ohlsson'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 38,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Ari Esposito'\n" +
++       "-           who: 'Axel Caldeira'\n" +
++       '          },\n' +
++       '          {\n' +
++       '            goal: true,\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 41,\n' +
++       '            on: true,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Karim Valdes',\n" +
++       "-           who: 'Bruno Faye',\n" +
++       '            xg: 0.26\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 41,\n' +
++       '...\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Baptiste Amaral',\n" +
++       "-           who: 'Anders Castillo',\n" +
++       '            xg: 0.09\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 45,\n' +
++       '            plus: 2,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Ari Esposito'\n" +
++       "-           who: 'Axel Caldeira'\n" +
++       '          }\n' +
++       '        ],\n' +
++       '        h1Segs: [\n' +
++       '          {\n' +
++       '            from: 0,\n' +
++       '...\n' +
++       '            g: true,\n' +
++       "+           n: 'Jarne Ferrari',\n" +
++       "-           n: 'Arda Varela',\n" +
++       "            p: 'GK',\n" +
++       '+           r: 60\n' +
++       '-           r: 68\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Lautaro Lorenzi',\n" +
++       "+           p: 'CB',\n" +
++       '+           r: 64\n' +
++       "-           n: 'Andre Laakso',\n" +
++       "-           p: 'RB',\n" +
++       '-           r: 68\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Nabil Ramires',\n" +
++       "-           n: 'Noel Wagner',\n" +
++       "            p: 'CM',\n" +
++       '+           r: 73\n' +
++       '-           r: 75\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Joris Cordero',\n" +
++       "-           n: 'Hugo Aguirre',\n" +
++       "            p: 'CM',\n" +
++       '+           r: 72\n' +
++       '-           r: 71\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Axel Laakso',\n" +
++       "-           n: 'Axel Haas',\n" +
++       "            p: 'ST',\n" +
++       '+           r: 68\n' +
++       '-           r: 65\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Bruno Faye',\n" +
++       "+           p: 'CF',\n" +
++       '+           r: 68\n' +
++       "-           n: 'Javier Herrera',\n" +
++       "-           p: 'RW',\n" +
++       '-           r: 65\n' +
++       '          }\n' +
++       '        ],\n' +
++       '        oppFormationIndex: 1,\n' +
++       '        oppGoals: 1,\n' +
++       '        oppSubs: [],\n' +
++       '...\n' +
++       '            g: true,\n' +
++       "+           n: 'Simao Hartmann',\n" +
++       "-           n: 'Valentin Andrade',\n" +
++       "            p: 'GK',\n" +
++       '+           r: 78\n' +
++       '-           r: 74\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Ari Esposito',\n" +
++       "-           n: 'Axel Caldeira',\n" +
++       "            p: 'CB',\n" +
++       '+           r: 79\n' +
++       '-           r: 80\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Ferran Ohlsson',\n" +
++       "+           p: 'RB',\n" +
++       '+           r: 72\n' +
++       "-           n: 'Ari Esposito',\n" +
++       "-           p: 'CB',\n" +
++       '-           r: 80\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Cesar Gerber',\n" +
++       "-           n: 'Caio Ruiz',\n" +
++       "            p: 'LB',\n" +
++       '+           r: 70\n' +
++       '-           r: 78\n' +
++       '          },\n' +
++       '          {\n' +
++       '            g: true,\n' +
++       "+           n: 'Keanu Costache',\n" +
++       "-           n: 'Ferran Oh"... 1563 more characters,
++     status: 'failed',
++     title: 'preserves the full prior default match and old live or historical kickoff behavior'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:723:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:739:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'preserves the full prior default match and old live or historical kickoff behavior',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Loaded historic squads retain the entire prior default match\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'halftime',\n" +
+        '    live: {\n' +
+        '      added: {\n' +
+        '        h1: 4\n' +
+        '...\n' +
+        '          minute: 41,\n' +
+        "+         name: 'Karim Valdes'\n" +
+        "-         name: 'Bruno Faye'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      h1OppCards: [],\n' +
+        '      h1Play: [\n' +
+        '        {\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Ferran Ohlsson'\n" +
+        "-         who: 'Ari Esposito'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          flank: 'right',\n" +
+        "          kind: 'corner',\n" +
+        '          minute: 5,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Keanu Costache'\n" +
+        "-         who: 'Ferran Ohlsson'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 8,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Baptiste Amaral'\n" +
+        "-         who: 'Ignacio Jansen'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 10,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Lars Medina'\n" +
+        "-         who: 'Joris Cordero'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 13,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Cesar Gerber'\n" +
+        "-         who: 'Caio Ruiz'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 28,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Keanu Costache'\n" +
+        "-         who: 'Ferran Ohlsson'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          flank: 'right',\n" +
+        "          kind: 'corner',\n" +
+        '          minute: 29,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Asier Hartmann'\n" +
+        "-         who: 'Arne Wagner'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'shot',\n" +
+        '          minute: 30,\n' +
+        '          on: true,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Asier Hartmann',\n" +
+        "-         who: 'Juan Ferrari',\n" +
+        '          xg: 0.09\n' +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 31,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Keanu Costache'\n" +
+        "-         who: 'Ferran Ohlsson'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 38,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Ari Esposito'\n" +
+        "-         who: 'Axel Caldeira'\n" +
+        '        },\n' +
+        '        {\n' +
+        '          goal: true,\n' +
+        "          kind: 'shot',\n" +
+        '          minute: 41,\n' +
+        '          on: true,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Karim Valdes',\n" +
+        "-         who: 'Bruno Faye',\n" +
+        '          xg: 0.26\n' +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'shot',\n" +
+        '          minute: 41,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Baptiste Amaral',\n" +
+        "-         who: 'Anders Castillo',\n" +
+        '          xg: 0.09\n' +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 45,\n' +
+        '          plus: 2,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Ari Esposito'\n" +
+        "-         who: 'Axel Caldeira'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      h1Segs: [\n' +
+        '        {\n' +
+        '          from: 0,\n' +
+        '...\n' +
+        '          g: true,\n' +
+        "+         n: 'Jarne Ferrari',\n" +
+        "-         n: 'Arda Varela',\n" +
+        "          p: 'GK',\n" +
+        '+         r: 60\n' +
+        '-         r: 68\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Lautaro Lorenzi',\n" +
+        "+         p: 'CB',\n" +
+        '+         r: 64\n' +
+        "-         n: 'Andre Laakso',\n" +
+        "-         p: 'RB',\n" +
+        '-         r: 68\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Nabil Ramires',\n" +
+        "-         n: 'Noel Wagner',\n" +
+        "          p: 'CM',\n" +
+        '+         r: 73\n' +
+        '-         r: 75\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Joris Cordero',\n" +
+        "-         n: 'Hugo Aguirre',\n" +
+        "          p: 'CM',\n" +
+        '+         r: 72\n' +
+        '-         r: 71\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Axel Laakso',\n" +
+        "-         n: 'Axel Haas',\n" +
+        "          p: 'ST',\n" +
+        '+         r: 68\n' +
+        '-         r: 65\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Bruno Faye',\n" +
+        "+         p: 'CF',\n" +
+        '+         r: 68\n' +
+        "-         n: 'Javier Herrera',\n" +
+        "-         p: 'RW',\n" +
+        '-         r: 65\n' +
+        '        }\n' +
+        '      ],\n' +
+        '      oppFormationIndex: 1,\n' +
+        '      oppGoals: 1,\n' +
+        '      oppSubs: [],\n' +
+        '...\n' +
+        '          g: true,\n' +
+        "+         n: 'Simao Hartmann',\n" +
+        "-         n: 'Valentin Andrade',\n" +
+        "          p: 'GK',\n" +
+        '+         r: 78\n' +
+        '-         r: 74\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Ari Esposito',\n" +
+        "-         n: 'Axel Caldeira',\n" +
+        "          p: 'CB',\n" +
+        '+         r: 79\n' +
+        '-         r: 80\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Ferran Ohlsson',\n" +
+        "+         p: 'RB',\n" +
+        '+         r: 72\n' +
+        "-         n: 'Ari Esposito',\n" +
+        "-         p: 'CB',\n" +
+        '-         r: 80\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Cesar Gerber',\n" +
+        "-         n: 'Caio Ruiz',\n" +
+        "          p: 'LB',\n" +
+        '+         r: 70\n' +
+        '-         r: 78\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Keanu Costache',\n" +
+        "-         n: 'Ferran Ohlsson',\n" +
+        "          p: 'RB',\n" +
+        '+         r: 64\n' +
+        '-         r: 70\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Baptiste Amaral',\n" +
+        "+         p: 'LM',\n" +
+        "-         n: 'Anders Castillo',\n" +
+        "-         p: 'CAM',\n" +
+        '          r: 82\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "          n: 'Ignacio Jansen',\n" +
+        "          p: 'CAM',\n" +
+        '+         r: 78\n' +
+        '-         r: 80\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Lars Medina',\n" +
+        "+         p: 'CAM',\n" +
+        "-         n: 'Joris Cordero',\n" +
+        "-         p: 'CM',\n" +
+        '          r: 77\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Gustav Rosales',\n" +
+        "+         p: 'CM',\n" +
+        '+         r: 75\n' +
+        "-         n: 'Arne Wagner',\n" +
+        "-         p: 'LM',\n" +
+        '-         r: 76\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Asier Hartmann',\n" +
+        "-         n: 'Juan Ferrari',\n" +
+        "          p: 'ST',\n" +
+        '+         r: 69\n' +
+        '-         r: 68\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Karim Valdes',\n" +
+        "+         p: 'RW',\n" +
+        '+         r: 68\n' +
+        "-         n: 'Bruno Faye',\n" +
+        "-         p: 'CF',\n" +
+        '-         r: 67\n' +
+        '        }\n' +
+        '      ],\n' +
+        "      opponent: 'Newcastle',\n" +
+        '      possH1: 52,\n' +
+        '      possNoise: [\n' +
+        '...\n' +
+        '            minute: 41,\n' +
+        "+           name: 'Karim Valdes'\n" +
+        "-           name: 'Bruno Faye'\n" +
+        '          }\n' +
+        '        ],\n' +
+        '        h1OppCards: [],\n' +
+        '        h1Play: [\n' +
+        '          {\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Ferran Ohlsson'\n" +
+        "-           who: 'Ari Esposito'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            flank: 'right',\n" +
+        "            kind: 'corner',\n" +
+        '            minute: 5,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Keanu Costache'\n" +
+        "-           who: 'Ferran Ohlsson'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 8,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Baptiste Amaral'\n" +
+        "-           who: 'Ignacio Jansen'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 10,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Lars Medina'\n" +
+        "-           who: 'Joris Cordero'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 13,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Cesar Gerber'\n" +
+        "-           who: 'Caio Ruiz'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 28,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Keanu Costache'\n" +
+        "-           who: 'Ferran Ohlsson'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            flank: 'right',\n" +
+        "            kind: 'corner',\n" +
+        '            minute: 29,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Asier Hartmann'\n" +
+        "-           who: 'Arne Wagner'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 30,\n' +
+        '            on: true,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Asier Hartmann',\n" +
+        "-           who: 'Juan Ferrari',\n" +
+        '            xg: 0.09\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 31,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Keanu Costache'\n" +
+        "-           who: 'Ferran Ohlsson'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 38,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Ari Esposito'\n" +
+        "-           who: 'Axel Caldeira'\n" +
+        '          },\n' +
+        '          {\n' +
+        '            goal: true,\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 41,\n' +
+        '            on: true,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Karim Valdes',\n" +
+        "-           who: 'Bruno Faye',\n" +
+        '            xg: 0.26\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 41,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Baptiste Amaral',\n" +
+        "-           who: 'Anders Castillo',\n" +
+        '            xg: 0.09\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 45,\n' +
+        '            plus: 2,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Ari Esposito'\n" +
+        "-           who: 'Axel Caldeira'\n" +
+        '          }\n' +
+        '        ],\n' +
+        '        h1Segs: [\n' +
+        '          {\n' +
+        '            from: 0,\n' +
+        '...\n' +
+        '            g: true,\n' +
+        "+           n: 'Jarne Ferrari',\n" +
+        "-           n: 'Arda Varela',\n" +
+        "            p: 'GK',\n" +
+        '+           r: 60\n' +
+        '-           r: 68\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Lautaro Lorenzi',\n" +
+        "+           p: 'CB',\n" +
+        '+           r: 64\n' +
+        "-           n: 'Andre Laakso',\n" +
+        "-           p: 'RB',\n" +
+        '-           r: 68\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Nabil Ramires',\n" +
+        "-           n: 'Noel Wagner',\n" +
+        "            p: 'CM',\n" +
+        '+           r: 73\n' +
+        '-           r: 75\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Joris Cordero',\n" +
+        "-           n: 'Hugo Aguirre',\n" +
+        "            p: 'CM',\n" +
+        '+           r: 72\n' +
+        '-           r: 71\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Axel Laakso',\n" +
+        "-           n: 'Axel Haas',\n" +
+        "            p: 'ST',\n" +
+        '+           r: 68\n' +
+        '-           r: 65\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Bruno Faye',\n" +
+        "+           p: 'CF',\n" +
+        '+           r: 68\n' +
+        "-           n: 'Javier Herrera',\n" +
+        "-           p: 'RW',\n" +
+        '-           r: 65\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        oppFormationIndex: 1,\n' +
+        '        oppGoals: 1,\n' +
+        '        oppSubs: [],\n' +
+        '...\n' +
+        '            g: true,\n' +
+        "+           n: 'Simao Hartmann',\n" +
+        "-           n: 'Valentin Andrade',\n" +
+        "            p: 'GK',\n" +
+        '+           r: 78\n' +
+        '-           r: 74\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Ari Esposito',\n" +
+        "-           n: 'Axel Caldeira',\n" +
+        "            p: 'CB',\n" +
+        '+           r: 79\n' +
+        '-           r: 80\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Ferran Ohlsson',\n" +
+        "+           p: 'RB',\n" +
+        '+           r: 72\n' +
+        "-           n: 'Ari Esposito',\n" +
+        "-           p: 'CB',\n" +
+        '-           r: 80\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Cesar Gerber',\n" +
+        "-           n: 'Caio Ruiz',\n" +
+        "            p: 'LB',\n" +
+        '+           r: 70\n' +
+        '-           r: 78\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Keanu Costache',\n" +
+        "-           n: 'Ferran Ohlsson',\n" +
+        "            p: 'RB',\n" +
+        '+  '... 1147 more characters,
+      stack: 'AssertionError [ERR_ASSERTION]: Loaded historic squads retain the entire prior default match\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'halftime',\n" +
+        '    live: {\n' +
+        '      added: {\n' +
+        '        h1: 4\n' +
+        '...\n' +
+        '          minute: 41,\n' +
+        "+         name: 'Karim Valdes'\n" +
+        "-         name: 'Bruno Faye'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      h1OppCards: [],\n' +
+        '      h1Play: [\n' +
+        '        {\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Ferran Ohlsson'\n" +
+        "-         who: 'Ari Esposito'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          flank: 'right',\n" +
+        "          kind: 'corner',\n" +
+        '          minute: 5,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Keanu Costache'\n" +
+        "-         who: 'Ferran Ohlsson'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 8,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Baptiste Amaral'\n" +
+        "-         who: 'Ignacio Jansen'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 10,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Lars Medina'\n" +
+        "-         who: 'Joris Cordero'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 13,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Cesar Gerber'\n" +
+        "-         who: 'Caio Ruiz'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 28,\n' +
+        "          side: 'me',\n" +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Keanu Costache'\n" +
+        "-         who: 'Ferran Ohlsson'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          flank: 'right',\n" +
+        "          kind: 'corner',\n" +
+        '          minute: 29,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Asier Hartmann'\n" +
+        "-         who: 'Arne Wagner'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'shot',\n" +
+        '          minute: 30,\n' +
+        '          on: true,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Asier Hartmann',\n" +
+        "-         who: 'Juan Ferrari',\n" +
+        '          xg: 0.09\n' +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 31,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Keanu Costache'\n" +
+        "-         who: 'Ferran Ohlsson'\n" +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 38,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Ari Esposito'\n" +
+        "-         who: 'Axel Caldeira'\n" +
+        '        },\n' +
+        '        {\n' +
+        '          goal: true,\n' +
+        "          kind: 'shot',\n" +
+        '          minute: 41,\n' +
+        '          on: true,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Karim Valdes',\n" +
+        "-         who: 'Bruno Faye',\n" +
+        '          xg: 0.26\n' +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'shot',\n" +
+        '          minute: 41,\n' +
+        '...\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Baptiste Amaral',\n" +
+        "-         who: 'Anders Castillo',\n" +
+        '          xg: 0.09\n' +
+        '        },\n' +
+        '        {\n' +
+        "          kind: 'throwin',\n" +
+        '          minute: 45,\n' +
+        '          plus: 2,\n' +
+        "          side: 'opp',\n" +
+        "+         who: 'Ari Esposito'\n" +
+        "-         who: 'Axel Caldeira'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      h1Segs: [\n' +
+        '        {\n' +
+        '          from: 0,\n' +
+        '...\n' +
+        '          g: true,\n' +
+        "+         n: 'Jarne Ferrari',\n" +
+        "-         n: 'Arda Varela',\n" +
+        "          p: 'GK',\n" +
+        '+         r: 60\n' +
+        '-         r: 68\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Lautaro Lorenzi',\n" +
+        "+         p: 'CB',\n" +
+        '+         r: 64\n' +
+        "-         n: 'Andre Laakso',\n" +
+        "-         p: 'RB',\n" +
+        '-         r: 68\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Nabil Ramires',\n" +
+        "-         n: 'Noel Wagner',\n" +
+        "          p: 'CM',\n" +
+        '+         r: 73\n' +
+        '-         r: 75\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Joris Cordero',\n" +
+        "-         n: 'Hugo Aguirre',\n" +
+        "          p: 'CM',\n" +
+        '+         r: 72\n' +
+        '-         r: 71\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Axel Laakso',\n" +
+        "-         n: 'Axel Haas',\n" +
+        "          p: 'ST',\n" +
+        '+         r: 68\n' +
+        '-         r: 65\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Bruno Faye',\n" +
+        "+         p: 'CF',\n" +
+        '+         r: 68\n' +
+        "-         n: 'Javier Herrera',\n" +
+        "-         p: 'RW',\n" +
+        '-         r: 65\n' +
+        '        }\n' +
+        '      ],\n' +
+        '      oppFormationIndex: 1,\n' +
+        '      oppGoals: 1,\n' +
+        '      oppSubs: [],\n' +
+        '...\n' +
+        '          g: true,\n' +
+        "+         n: 'Simao Hartmann',\n" +
+        "-         n: 'Valentin Andrade',\n" +
+        "          p: 'GK',\n" +
+        '+         r: 78\n' +
+        '-         r: 74\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Ari Esposito',\n" +
+        "-         n: 'Axel Caldeira',\n" +
+        "          p: 'CB',\n" +
+        '+         r: 79\n' +
+        '-         r: 80\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Ferran Ohlsson',\n" +
+        "+         p: 'RB',\n" +
+        '+         r: 72\n' +
+        "-         n: 'Ari Esposito',\n" +
+        "-         p: 'CB',\n" +
+        '-         r: 80\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Cesar Gerber',\n" +
+        "-         n: 'Caio Ruiz',\n" +
+        "          p: 'LB',\n" +
+        '+         r: 70\n' +
+        '-         r: 78\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Keanu Costache',\n" +
+        "-         n: 'Ferran Ohlsson',\n" +
+        "          p: 'RB',\n" +
+        '+         r: 64\n' +
+        '-         r: 70\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Baptiste Amaral',\n" +
+        "+         p: 'LM',\n" +
+        "-         n: 'Anders Castillo',\n" +
+        "-         p: 'CAM',\n" +
+        '          r: 82\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "          n: 'Ignacio Jansen',\n" +
+        "          p: 'CAM',\n" +
+        '+         r: 78\n' +
+        '-         r: 80\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Lars Medina',\n" +
+        "+         p: 'CAM',\n" +
+        "-         n: 'Joris Cordero',\n" +
+        "-         p: 'CM',\n" +
+        '          r: 77\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Gustav Rosales',\n" +
+        "+         p: 'CM',\n" +
+        '+         r: 75\n' +
+        "-         n: 'Arne Wagner',\n" +
+        "-         p: 'LM',\n" +
+        '-         r: 76\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Asier Hartmann',\n" +
+        "-         n: 'Juan Ferrari',\n" +
+        "          p: 'ST',\n" +
+        '+         r: 69\n' +
+        '-         r: 68\n' +
+        '        },\n' +
+        '        {\n' +
+        '          g: true,\n' +
+        "+         n: 'Karim Valdes',\n" +
+        "+         p: 'RW',\n" +
+        '+         r: 68\n' +
+        "-         n: 'Bruno Faye',\n" +
+        "-         p: 'CF',\n" +
+        '-         r: 67\n' +
+        '        }\n' +
+        '      ],\n' +
+        "      opponent: 'Newcastle',\n" +
+        '      possH1: 52,\n' +
+        '      possNoise: [\n' +
+        '...\n' +
+        '            minute: 41,\n' +
+        "+           name: 'Karim Valdes'\n" +
+        "-           name: 'Bruno Faye'\n" +
+        '          }\n' +
+        '        ],\n' +
+        '        h1OppCards: [],\n' +
+        '        h1Play: [\n' +
+        '          {\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Ferran Ohlsson'\n" +
+        "-           who: 'Ari Esposito'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            flank: 'right',\n" +
+        "            kind: 'corner',\n" +
+        '            minute: 5,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Keanu Costache'\n" +
+        "-           who: 'Ferran Ohlsson'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 8,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Baptiste Amaral'\n" +
+        "-           who: 'Ignacio Jansen'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 10,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Lars Medina'\n" +
+        "-           who: 'Joris Cordero'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 13,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Cesar Gerber'\n" +
+        "-           who: 'Caio Ruiz'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 28,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Keanu Costache'\n" +
+        "-           who: 'Ferran Ohlsson'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            flank: 'right',\n" +
+        "            kind: 'corner',\n" +
+        '            minute: 29,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Asier Hartmann'\n" +
+        "-           who: 'Arne Wagner'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 30,\n' +
+        '            on: true,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Asier Hartmann',\n" +
+        "-           who: 'Juan Ferrari',\n" +
+        '            xg: 0.09\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 31,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Keanu Costache'\n" +
+        "-           who: 'Ferran Ohlsson'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 38,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Ari Esposito'\n" +
+        "-           who: 'Axel Caldeira'\n" +
+        '          },\n' +
+        '          {\n' +
+        '            goal: true,\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 41,\n' +
+        '            on: true,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Karim Valdes',\n" +
+        "-           who: 'Bruno Faye',\n" +
+        '            xg: 0.26\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 41,\n' +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Baptiste Amaral',\n" +
+        "-           who: 'Anders Castillo',\n" +
+        '            xg: 0.09\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 45,\n' +
+        '            plus: 2,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Ari Esposito'\n" +
+        "-           who: 'Axel Caldeira'\n" +
+        '          }\n' +
+        '        ],\n' +
+        '        h1Segs: [\n' +
+        '          {\n' +
+        '            from: 0,\n' +
+        '...\n' +
+        '            g: true,\n' +
+        "+           n: 'Jarne Ferrari',\n" +
+        "-           n: 'Arda Varela',\n" +
+        "            p: 'GK',\n" +
+        '+           r: 60\n' +
+        '-           r: 68\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Lautaro Lorenzi',\n" +
+        "+           p: 'CB',\n" +
+        '+           r: 64\n' +
+        "-           n: 'Andre Laakso',\n" +
+        "-           p: 'RB',\n" +
+        '-           r: 68\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Nabil Ramires',\n" +
+        "-           n: 'Noel Wagner',\n" +
+        "            p: 'CM',\n" +
+        '+           r: 73\n' +
+        '-           r: 75\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Joris Cordero',\n" +
+        "-           n: 'Hugo Aguirre',\n" +
+        "            p: 'CM',\n" +
+        '+           r: 72\n' +
+        '-           r: 71\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Axel Laakso',\n" +
+        "-           n: 'Axel Haas',\n" +
+        "            p: 'ST',\n" +
+        '+           r: 68\n' +
+        '-           r: 65\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Bruno Faye',\n" +
+        "+           p: 'CF',\n" +
+        '+           r: 68\n' +
+        "-           n: 'Javier Herrera',\n" +
+        "-           p: 'RW',\n" +
+        '-           r: 65\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        oppFormationIndex: 1,\n' +
+        '        oppGoals: 1,\n' +
+        '        oppSubs: [],\n' +
+        '...\n' +
+        '            g: true,\n' +
+        "+           n: 'Simao Hartmann',\n" +
+        "-           n: 'Valentin Andrade',\n" +
+        "            p: 'GK',\n" +
+        '+           r: 78\n' +
+        '-           r: 74\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Ari Esposito',\n" +
+        "-           n: 'Axel Caldeira',\n" +
+        "            p: 'CB',\n" +
+        '+           r: 79\n' +
+        '-           r: 80\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Ferran Ohlsson',\n" +
+        "+           p: 'RB',\n" +
+        '+           r: 72\n' +
+        "-           n: 'Ari Esposito',\n" +
+        "-           p: 'CB',\n" +
+        '-           r: 80\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Cesar Gerber',\n" +
+        "-           n: 'Caio Ruiz',\n" +
+        "            p: 'LB',\n" +
+        '+           r: 70\n' +
+        '-           r: 78\n' +
+        '          },\n' +
+        '          {\n' +
+        '            g: true,\n' +
+        "+           n: 'Keanu Costache',\n" +
+        "-           n: 'Ferran Oh"... 1563 more characters
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,11 @@
+rules-head: node scripts/simCmLeagueRules.mjs
+shoot-head: node scripts/simCmShootoutOrder.mjs
+var-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+eraucl-head: node scripts/simClubManagerEraUcl.mjs
+eraucl-oldname: CM_UCL_CONTROL=oldname node scripts/simClubManagerEraUcl.mjs
+eraucl-poolnames: CM_UCL_CONTROL=poolnames node scripts/simClubManagerEraUcl.mjs
+meters-promise: CM_METERS_CONTROL=promise node scripts/simClubManagerMeters.mjs
+meters-desk: CM_METERS_CONTROL=desk node scripts/simClubManagerMeters.mjs
+meters-decor: CM_METERS_CONTROL=decor node scripts/simClubManagerMeters.mjs
+shoot-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+appeal-head: node scripts/simManagerAppealIsolation.mjs
