@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-unspend-EXPECT1 exit=1 8s | CONTROL unspend: FIRED. The spent check went red in all 6 journeys that pushed (the push control came back enabled) and nothing else did.
+walk-droptalk-EXPECT1 exit=1 34s | CONTROL droptalk: FIRED. The reload check went red in 2 sports and nothing else did.
+walk-beforefix-EXPECT1 exit=1 41s | playUsMarketTalk: 34 checks, 16 failed

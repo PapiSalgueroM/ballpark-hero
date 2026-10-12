@@ -1,0 +1,11 @@
+FAIL spent: nfl 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is enabled after a reload; A SECOND PUSH WAS TAKEN: a wheel opened again and the save now holds held; the save bytes MOVED
+FAIL spent: nfl 390x844 save extTalk: the one push came up held; the push control was disabled after the wheel and is enabled after a reload; A SECOND PUSH WAS TAKEN: a wheel opened again and the save now holds held; the save bytes MOVED
+FAIL spent: mlb 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is enabled after a reload; A SECOND PUSH WAS TAKEN: a wheel opened again and the save now holds held; the save bytes MOVED
+     mlb 390x844 save extTalk: nothing can be pushed on this save (the push control is absent), so this journey is said and not counted
+FAIL spent: nba 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is enabled after a reload; A SECOND PUSH WAS TAKEN: a wheel opened again and the save now holds held; the save bytes MOVED
+FAIL spent: nba 390x844 save extTalk: the one push came up held; the push control was disabled after the wheel and is enabled after a reload; A SECOND PUSH WAS TAKEN: a wheel opened again and the save now holds held; the save bytes MOVED
+FAIL spent: nhl 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is enabled after a reload; A SECOND PUSH WAS TAKEN: a wheel opened again and the save now holds held; the save bytes MOVED
+     nhl 390x844 save extTalk: nothing can be pushed on this save (the push control is absent), so this journey is said and not counted
+     14 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 6 checks, 6 failed (control unspend)
+CONTROL unspend: FIRED. The spent check went red in all 6 journeys that pushed (the push control came back enabled) and nothing else did.
