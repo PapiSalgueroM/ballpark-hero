@@ -39,6 +39,10 @@
      SIM_ACTIVITY_CONTROL=twocalls (Round 1314) adds a second advance call in
                                   memory; section 2 must fail on the "called
                                   more than once" line alone.
+     SIM_ACTIVITY_CONTROL=twodotted (fix review of Round 1314) the same, with
+                                  the second call written
+                                  advanceProSeason(s.career, clubs); section 2
+                                  must fail on that line alone.
    Each control refuses to run if what it rewrites is not there to rewrite,
    and is judged on its own section only; career, noping and twocalls are
    judged on their exact sentences too (career: the ping line and the
@@ -135,7 +139,7 @@ console.log('2) Soccer Career, as code: the season advance pings activity and th
      stepWithMomentsBanked(c => advanceProSeason(c, clubs)), which renamed
      the first argument and left this section red on a rule that still held
      (the ping sat nine lines below it in the same handler). Now the one
-     call advanceProSeason(<name>, ...) in the comment stripped file is the
+     call advanceProSeason(...) in the comment stripped file is the
      anchor; none fails, and more than one fails too, because a second
      advance is a new site this check has to be told about. */
   if (CONTROL === 'noping') {
@@ -144,13 +148,22 @@ console.log('2) Soccer Career, as code: the season advance pings activity and th
     code = gone;
     console.log("   NEGATIVE CONTROL ON: the season ping removed in memory");
   }
-  if (CONTROL === 'twocalls') {
-    if (!/advanceProSeason\(\s*\w+\s*,/.test(code)) abort('control cannot run: SoccerCareer.tsx has no advance call to duplicate');
-    code += '\nfunction controlSecondAdvance(c, clubs) { return advanceProSeason(c, clubs); }\n';
-    console.log('   NEGATIVE CONTROL ON: a second advance call added in memory');
+  /* Fix review of Round 1314: every call is counted, whatever its first
+     argument is. The first cut counted only advanceProSeason(<bare name>,
+     so a second advance written as advanceProSeason(s.career, clubs) in a
+     handler that never pings passed as "1 call". The import list has no
+     parenthesis after the name, so it is not counted. */
+  const CALL = /\badvanceProSeason\s*\(/g;
+  if (CONTROL === 'twocalls' || CONTROL === 'twodotted') {
+    if (!CALL.test(code)) abort('control cannot run: SoccerCareer.tsx has no advance call to duplicate');
+    CALL.lastIndex = 0;
+    code += CONTROL === 'twocalls'
+      ? '\nfunction controlSecondAdvance(c, clubs) { return advanceProSeason(c, clubs); }\n'
+      : '\nfunction controlSecondAdvance(s, clubs) { return advanceProSeason(s.career, clubs); }\n';
+    console.log(`   NEGATIVE CONTROL ON: a second advance call (${CONTROL === 'twocalls' ? 'a bare name' : 'a dotted first argument'}) added in memory`);
   }
-  const calls = [...code.matchAll(/advanceProSeason\(\s*\w+\s*,/g)];
-  if (calls.length === 0) fail('the season advance (a call advanceProSeason(<career>, ...)) is not in the file, the check needs re-anchoring', 'anchor');
+  const calls = [...code.matchAll(CALL)];
+  if (calls.length === 0) fail('the season advance (a call advanceProSeason(...)) is not in the file, the check needs re-anchoring', 'anchor');
   if (calls.length > 1) fail(`the season advance is called ${calls.length} times; a second call is a new site this check must be told about`, 'anchor');
   const advance = calls.length > 0 ? calls[0].index : -1;
   const window_ = advance < 0 ? '' : code.slice(advance, advance + 600);
@@ -186,14 +199,14 @@ console.log('3) The ping is light, as code: recordActivity reaches neither the s
 
 const total = failures[1] + failures[2] + failures[3];
 if (CONTROL) {
-  const own = { match: 1, career: 2, heavy: 3, noping: 2, twocalls: 2 }[CONTROL];
-  if (!own) abort(`unknown control "${CONTROL}" (match, career, heavy, noping, twocalls)`);
+  const own = { match: 1, career: 2, heavy: 3, noping: 2, twocalls: 2, twodotted: 2 }[CONTROL];
+  if (!own) abort(`unknown control "${CONTROL}" (match, career, heavy, noping, twocalls, twodotted)`);
   /* Round 1314: the section 2 controls are judged on their own SENTENCES,
      not just on their section going red: career must fire the ping and
      the completion lines and not the anchor line (before this round the
      stale anchor made it fire for the wrong reason), noping the ping line
      alone, twocalls the anchor line alone. */
-  const SENTENCES = { career: ['ping', 'completion'], noping: ['ping'], twocalls: ['anchor'] }[CONTROL];
+  const SENTENCES = { career: ['ping', 'completion'], noping: ['ping'], twocalls: ['anchor'], twodotted: ['anchor'] }[CONTROL];
   if (SENTENCES) {
     const got = [...firedKeys[own]].sort();
     const want = [...SENTENCES].sort();
