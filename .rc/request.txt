@@ -1,0 +1,11 @@
+# Round 1314 step 1, request A: the owed fences on origin/main 35f85630, node harnesses, each read to its closing line
+simEras: node scripts/simEras.mjs
+simHalftime-1: node scripts/simHalftime.mjs
+simHalftime-2: node scripts/simHalftime.mjs
+simHalftime-3: node scripts/simHalftime.mjs
+simSafari: node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+simGmCalendar: node scripts/simGmCalendar.mjs
+simGmDealTableFixture: node scripts/simGmDealTableFixture.mjs
+simGmStaff: node scripts/simGmStaff.mjs
