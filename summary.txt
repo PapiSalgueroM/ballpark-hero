@@ -1,0 +1,4 @@
+awards exit=0 9s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+careerParity exit=0 15s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+careerRealism exit=0 7s | ALL CAREER REALISM CHECKS PASSED
+careerHall exit=0 1113s | simCareerHall: all four sports green

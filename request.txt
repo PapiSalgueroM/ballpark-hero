@@ -1,0 +1,4 @@
+careerHall: node scripts/simCareerHall.mjs
+careerParity: node scripts/simCareerParity.mjs
+awards: node scripts/simAwards.mjs
+careerRealism: node scripts/simCareerRealism.mjs
