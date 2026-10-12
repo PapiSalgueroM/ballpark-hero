@@ -68,11 +68,14 @@
  *            replaces it. (iv) over the whole fleet no career that started its season with a book ends
  *            an entry on a late one. Added by the fix pass of Round 1306: a sixth save in (i), the parked
  *            one with a goalless first round written into its table, which must get a LATE book (the
- *            repair asks whether a league match was played, not whether a goal was scored); and (vi), with
- *            BOOK_BASE, the transition a live save makes: three seasons in play written by the base commit
- *            WITH its book are carried on by the candidate to the season's end, the book taken as it is
- *            (it reads, fits and is whole), the law after every entry, never reopened late, and the rows
- *            of clubs with no eleven growing where the base commit named nobody
+ *            repair asks whether a league match was played, not whether a goal was scored); and (vi),
+ *            the transition a live save makes: seasons in play written by the base commit WITH its book
+ *            are carried on by the candidate to the season's end, the book taken as it is (it reads, fits
+ *            and is whole), the law after every entry, never reopened late, and the rows of clubs with no
+ *            eleven growing where the base commit named nobody. ON EVERY RUN from two committed recordings
+ *            (scripts/data/cmBookSaveHerthaFixture.json and cmBookSaveEvertonFixture.json, the saves the
+ *            engine of Release AW wrote, each held by its sha256), and with BOOK_BASE from three more the
+ *            base tree writes in the run
  *   doors    the takeover from the picker at its three entries and the job joined today in season one
  *            and in season three: a whole book at the handover and the law after every entry to the end
  *   dailies  Manager Hot Seat (six dates, two of them across the transfer window, played to a verdict,
@@ -197,8 +200,8 @@
  *   goallesswhole the repair opens a whole book when no GOAL has been scored (the wording the builder
  *                 left for "no league match played")                 -> oldsave (i), the goalless save
  *   stampv2       the stamp gains a mark, so every book an earlier build wrote is another season's
- *                 (needs BOOK_BASE)                                  -> oldsave (vi) (thin (iv) goes with
- *                 it: the stamp is in every deal key, so the same roll names another man)
+ *                                                                    -> oldsave (vi) (with BOOK_BASE thin
+ *                 (iv) goes with it: the stamp is in every deal key, so the same roll names another man)
  * The second fix pass of Round 1306 added one:
  *   novar         the match is never told which reviews to play, so the arm with the video referee on
  *                 sees none                                          -> law, the floor of that arm
@@ -328,7 +331,7 @@ const CONTROLS = {
   allbacks: { patch: [{ file: ENGINE, from: XI_SHEET, to: "  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), xi.filter(p => p.p !== 'GK'));" }], red: 'law', also: ['thin'], mentions: ['neither a keeper nor of the back line'] },
   places433: { patch: [{ file: BOOK, from: 'const PLACES = { DEF: 4, MID: 4, ATT: 2 } as const;', to: 'const PLACES = { DEF: 4, MID: 3, ATT: 3 } as const;' }], red: 'thin', mentions: ['is not that eleven'] },
   goallesswhole: { patch: [{ file: ENGINE, from: '  if (state.table.every(r => r.w + r.d + r.l === 0)) {', to: '  if (state.table.every(r => r.gf === 0)) {' }], red: 'oldsave', mentions: ['goalless'] },
-  stampv2: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${leagueId}|${bookSalt(state.leagueClubs)}|v2`;' }], red: 'oldsave', needs: 'base', also: ['thin'], mentions: ['written by the base commit'] },
+  stampv2: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${leagueId}|${bookSalt(state.leagueClubs)}|v2`;' }], red: 'oldsave', also: ['thin'], mentions: ['written by the base commit'] },
   novar: { patch: [{ file: ENGINE, from: '  const varKinds = cmVarKindsAsked(varReviews);', to: '  const varKinds = cmVarKindsAsked(varReviews).slice(0, 0);' }], red: 'law', mentions: ['under the floor of'] },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
@@ -357,11 +360,14 @@ const VAR_ARM_SEEDS = 3;
 const VAR_REVIEW_FLOOR = 11;
 /* THE SAVE MOST PLAYERS HOLD ON THE DAY A RELEASE SHIPS, oldsave (vi): a season in play with the book the
    commit before the round wrote. [club, entries played, the seed of the stream it was written on, the
-   committed recording]. Hertha BSC's league has seventeen rival clubs with no named eleven, Everton's none.
-   BOOK_WRITE_SAVES=<folder> with BOOK_BASE writes the two recordings afresh and judges nothing. */
+   committed recording, its sha256]. Hertha BSC's league has seventeen rival clubs with no named eleven,
+   Everton's none. HOW THE RECORDINGS WERE TAKEN, and how one is taken again: a run with BOOK_BASE at a
+   worktree of the commit before the round (c9a1f86a, whose engine files are those of Release AW as it
+   went live) and BOOK_WRITE_SAVES=<folder> writes the two saves there as it carries them on, and prints
+   each one's bytes and sha256; the files are committed as written and the sha256 is typed here. */
 const BOOK_SAVES = [
-  ['Hertha BSC', 12, 0x7030, 'scripts/data/cmBookSaveHerthaFixture.json'],
-  ['Everton', 12, 0x7032, 'scripts/data/cmBookSaveEvertonFixture.json'],
+  ['Hertha BSC', 12, 0x7030, 'scripts/data/cmBookSaveHerthaFixture.json', '380727ea490315f80f478959722633fbec23bd33e03d42e785d55a561d4b393e'],
+  ['Everton', 12, 0x7032, 'scripts/data/cmBookSaveEvertonFixture.json', '110d237ec964ec69176c09351ed56e093a86bf42e7eadd107ff46ab29e6c9fb8'],
 ];
 
 /* Each run its own temp folder: two bundling harnesses at once must never share one. */
@@ -2050,7 +2056,8 @@ function onStream(seed, fn) {
     if (!book || boards.bookIsWhole(book) || book.r0 !== want.next?.round) fail('oldsave', `the stale book was not replaced by a late book at the next entry (${book ? `r0 ${book.r0}, the next league round was ${want.next?.round}` : 'no readable book'})`);
     else if (!boards.bookFits(book, clubsOf(after))) fail('oldsave', 'the stale book: the late book that replaced it does not add up to the table');
   }
-  /* (vi) THE SAVE MOST PLAYERS HOLD ON THE DAY A RELEASE SHIPS (the fix pass of Round 1306; needs BOOK_BASE):
+  /* (vi) THE SAVE MOST PLAYERS HOLD ON THE DAY A RELEASE SHIPS (the fix pass of Round 1306; since the second
+     fix pass from two committed recordings on every run, and from the base tree as well with BOOK_BASE):
      a season in play WITH the book the base commit wrote. The candidate takes that book as it is (it reads,
      it fits, it is whole), plays the season out on it with the law after every entry, and never reopens
      it late. Where the base commit named nobody at a club with no eleven and the candidate does, the goals
@@ -2101,14 +2108,36 @@ function onStream(seed, fn) {
         }
       });
   };
+  /* THE COMMITTED RECORDINGS FIRST, ON EVERY RUN (the second fix pass of Round 1306). The gate's own line
+     sets no BOOK_BASE, so until then the transition a live save makes was a builder's proof and nothing
+     the gate held. The two saves of BOOK_SAVES are what the commit before the round wrote (the engine
+     Release AW shipped), kept as files; a file that is not the recording named there stops the run. */
+  const committed = new Map();
+  for (const [club, entries, seed, file, want] of BOOK_SAVES) {
+    const at = path.join(ROOT, file);
+    if (!fs.existsSync(at)) cannot(`${file} is missing: it is a save oldsave (vi) carries on (BOOK_WRITE_SAVES with BOOK_BASE writes it)`);
+    const raw = fs.readFileSync(at, 'utf8');
+    const got = createHash('sha256').update(raw).digest('hex');
+    if (got !== want) cannot(`${file} is not the recording this harness names (its sha256 is ${got}, the harness names ${want}): a recording is taken again by its own rule, never edited`);
+    if (JSON.parse(raw).leagueBook === undefined) cannot(`${file} holds no league book, so it is not a save to carry on`);
+    committed.set(file, raw);
+    await carryOn(`${club}, ${entries} entries in with its book, written by the base commit and committed as ${path.basename(file)}`, raw, seed);
+  }
+  const carriedCommitted = carried;
+  tick('oldsave');
+  if (!carriedThin) fail('oldsave', `of ${carried} committed saves written by the base commit and carried on, none held a club with no eleven: the transition a live save makes was not tried`);
+  const sameAsCommitted = [];
   if (base) {
-    /* BOOK_WRITE_SAVES=<folder>: the saves of BOOK_SAVES are written there as this run carries them on. */
+    /* And written afresh by the tree BOOK_BASE names, the round's own proof. BOOK_WRITE_SAVES=<folder>: the
+       saves of BOOK_SAVES are written there as this run carries them on (how the recordings are taken). */
+    const thinBefore = carriedThin;
     const writeTo = process.env.BOOK_WRITE_SAVES ? path.resolve(process.env.BOOK_WRITE_SAVES) : null;
     if (writeTo) fs.mkdirSync(writeTo, { recursive: true });
     for (const [club, entries, seed, file] of [BOOK_SAVES[0], ['Southampton', 21, 0x7031, null], BOOK_SAVES[1]]) {
       const name = `${club}, ${entries} entries in with its book, written by the base commit`;
       const raw = await bookSaveBy(base, club, entries, seed);
       if (JSON.parse(raw).leagueBook === undefined) cannot(`${name}: the tree BOOK_BASE names keeps no league book, so there is no such save to carry on`);
+      if (file) sameAsCommitted.push(`${club} ${raw === committed.get(file) ? 'yes' : 'no'}`);
       if (writeTo && file) {
         fs.writeFileSync(path.join(writeTo, path.basename(file)), raw);
         console.log(`        wrote ${path.basename(file)}: ${club}, ${entries} entries in, ${Buffer.byteLength(raw)} bytes, sha256 ${createHash('sha256').update(raw).digest('hex')}`);
@@ -2116,15 +2145,16 @@ function onStream(seed, fn) {
       await carryOn(name, raw, seed);
     }
     tick('oldsave');
-    if (!carriedThin) fail('oldsave', `of ${carried} saves written by the base commit and carried on, none held a club with no eleven: the transition a live save makes was not tried`);
+    if (carriedThin === thinBefore) fail('oldsave', `of ${carried - carriedCommitted} saves written by the base commit in this run and carried on, none held a club with no eleven: the transition a live save makes was not tried`);
   }
   /* (iv) NOBODY'S BOOK IS REOPENED IN A HEALTHY FLEET: over every career that started with a book. */
   tick('oldsave');
   if (acc.lateEntries) fail('oldsave', `${acc.lateEntries} entries of the fleet ended on a late book: a career that started its season with a book had it reopened (${acc.lateFirst})`);
   console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')} (${lateSaves} of them on a late book, one of those with a goalless first round in its table; one parked at the first week on a whole one), the season after each, six unreadable books replaced and the match week's own guard with the repair off, the stale book, and no book of the fleet reopened`);
+  console.log(`        (vi) ${carriedCommitted} committed saves of seasons in play, written by the base commit WITH its book, carried on by the candidate to the season's end${base ? `, and ${carried - carriedCommitted} more written in this run by the tree BOOK_BASE names` : ''} (${carriedThin} of the ${carried} in a league with clubs that have no eleven): the book taken as it is, never reopened`);
   console.log(base
-    ? `        (vi) ${carried} seasons in play written by the base commit WITH its book and carried on by the candidate to the season's end (${carriedThin} of them in a league with clubs that have no eleven): the book taken as it is, never reopened`
-    : '        oldsave (vi) NOT RUN: set BOOK_BASE to a worktree of the base commit');
+    ? `        (vi) the tree BOOK_BASE names writes the committed saves byte for byte: ${sameAsCommitted.join(', ')}`
+    : '        oldsave (vi) from a base tree NOT RUN (the committed saves were): set BOOK_BASE to a worktree of the base commit');
 }
 
 /* ---------- section doors: the two ways into a season that is already running ---------- */
