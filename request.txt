@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+finalacross: US_LEDGER_CONTROL=finalacross node scripts/simUsSeasonLedger.mjs
+beforegone: US_LEDGER_CONTROL=beforegone node scripts/simUsSeasonLedger.mjs
+semisone: US_LEDGER_CONTROL=semisone node scripts/simUsSeasonLedger.mjs
+plan: node scripts/simUsPlanSeason.mjs
