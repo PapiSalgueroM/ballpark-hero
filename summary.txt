@@ -1,0 +1,9 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSeasonCentreTable exit=0 9s | simSeasonCentreTable: 7 checks, 0 failed
+simSeasonCentreAgreement exit=0 14s | simSeasonCentreAgreement: 24 checks, 0 failed
+simSeasonCentreNeutral exit=0 16s | simSeasonCentreNeutral: 37 checks, 0 failed
+simSeasonMoments exit=0 13s | simSeasonMoments: 54 checks, 0 failed
+simSeasonCentreMotion exit=0 10s | simSeasonCentreMotion: 17 checks, 0 failed
+simSoccerSeasonCompetitions exit=0 1s | simSoccerSeasonCompetitions: saved names, exact outcomes, no historical leakage and independent engine snapshots passed
+simSoccerLeagueWorldLookup exit=0 10s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+simSoccerOwnGoals exit=0 48s | simSoccerOwnGoals: 4880511 checks, 0 failed

@@ -1,0 +1,9 @@
+#!build
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simSoccerLeagueWorldLookup: node scripts/simSoccerLeagueWorldLookup.mjs
+simSoccerSeasonCompetitions: node scripts/simSoccerSeasonCompetitions.mjs
