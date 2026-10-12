@@ -1,0 +1,169 @@
+CONTROL refusal: src/lib/soccerCareerSave.ts changed
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerBallonPoolReadAsAbsent.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[31m27 failed[39m[2m)[22m[32m 131[2mms[22m[39m
+   [32m✓[39m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mdeclares the other lane's 27 cases[32m 1[2mms[22m[39m
+   [32m✓[39m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22maccepts the pool a natural career wrote, and the night after it keeps that pool's rivals[32m 19[2mms[22m[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a null pool as absent[39m[32m 8[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a unknown-version pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a missing-entries pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-entries pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a fraction-year pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a future-year pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a string-year pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-next-id pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a noncontiguous-id pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a invalid-role pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a negative-slot pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a over-slot pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a fraction-seed pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a future-first-year pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a young-entry-age pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a old-entry-age pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-name pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-nationality pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-club pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a invalid-position pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-tuple pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a huge-tuple pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a string-tuple pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a short-tuple pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-retirement-year pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a duplicate-name pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m a saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a duplicate-active-slot pool as absent[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 27 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a null pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a unknown-version pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a missing-entries pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-entries pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a fraction-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a future-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a string-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-next-id pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a noncontiguous-id pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a invalid-role pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a negative-slot pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a over-slot pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a fraction-seed pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a future-first-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a young-entry-age pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a old-entry-age pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-name pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-nationality pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a empty-club pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a invalid-position pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-tuple pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a huge-tuple pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a string-tuple pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a short-tuple pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a wrong-retirement-year pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a duplicate-name pool as absent
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolReadAsAbsent.test.tsx[2m > [22ma saved Ballon d'Or pool that cannot be verified is read as absent[2m > [22mreads a duplicate-active-slot pool as absent
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerBallonPoolReadAsAbsent.test.tsx:[2m43:39[22m[39m
+    [90m 41| [39m  for (const id of CORRUPTIONS) it(`reads a ${id} pool as absent`, () …
+    [90m 42| [39m    [35mconst[39m value [33m=[39m [34mcorrupt[39m(night[33m,[39m id)[33m;[39m
+    [90m 43| [39m    [34mexpect[39m([34misSoccerCareerSave[39m(value))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m 44| [39m    const loaded = E.repairCareer(copy(value) as E.CareerState) as Sav…
+    [90m 45| [39m    expect(reader(loaded.generatedBallonPool, lastYear(loaded))).toBe(…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/27]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m27 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 18:30:42
+[2m   Duration [22m 2.19s[2m (transform 1.06s, setup 52ms, collect 1.32s, tests 131ms, environment 296ms, prepare 116ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a null pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a unknown-version pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a missing-entries pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a empty-entries pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a fraction-year pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a future-year pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a string-year pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a wrong-next-id pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a noncontiguous-id pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a invalid-role pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a negative-slot pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a over-slot pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a fraction-seed pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a future-first-year pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a young-entry-age pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a old-entry-age pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a empty-name pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a empty-nationality pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a empty-club pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a invalid-position pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a wrong-tuple pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a huge-tuple pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a string-tuple pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a short-tuple pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a wrong-retirement-year pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a duplicate-name pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved Ballon d'Or pool that cannot be verified is read as absent > reads a duplicate-active-slot pool as absent,line=43,column=39::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/soccerBallonPoolReadAsAbsent.test.tsx:43:39%0A%0A

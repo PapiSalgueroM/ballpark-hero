@@ -1,0 +1,2 @@
+ctl-unguarded exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved B
+ctl-refusal exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolReadAsAbsent.test.tsx,title=src/test/soccerBallonPoolReadAsAbsent.test.tsx > a saved B
