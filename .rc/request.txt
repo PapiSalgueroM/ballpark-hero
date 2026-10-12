@@ -1,0 +1,7 @@
+# Release AX, final proof, gate part H1c (the lines of Release AW's proof request rAW-F-H1c, so each line compares with the base)
+#!serve
+#!playwright
+#!serial
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playGames-mlb-my-career: ONLY=/mlb-my-career node scripts/playGames.mjs
+playGames-nhl-my-career: ONLY=/nhl-my-career node scripts/playGames.mjs
