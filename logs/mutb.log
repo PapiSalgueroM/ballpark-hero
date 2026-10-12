@@ -1,0 +1,9 @@
+MUTANT stale: SURVIVES (every line green) | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1
+MUTANT keeperowed: SURVIVES (every line green) | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1
+MUTANT boundary: SURVIVES (every line green) | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1
+PROBE staleOwed: real fence exit 1 | FAIL Premier League 2015-16 topScorerGoals is USED and owed still names it (stale) || under mutant stale: exit 0 | simCmLeagueBookFacts: all 5896 checks passed.
+PROBE keeperOwedGone: real fence exit 1 | FAIL Bundesliga 2015-16 keeperCleanSheets is NONE and not named under owed || under mutant keeperowed: exit 0 | simCmLeagueBookFacts: all 5892 checks passed.
+PROBE digitInside: real fence exit 1 | FAIL plsite-pl-2015-16: topScorerGoals 2 is not printed in its literals || under mutant boundary: exit 0 | simCmLeagueBookFacts: all 5894 checks passed.
+PROBE noChange: real fence exit 0 | simCmLeagueBookFacts: all 5894 checks passed.
+== restored: real fence exit 0 | simCmLeagueBookFacts: all 5894 checks passed.
+mut1310b: probe complete

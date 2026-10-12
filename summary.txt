@@ -1,0 +1,2 @@
+mutb exit=0 7s | mut1310b: probe complete
+facts-after exit=0 0s | simCmLeagueBookFacts: all 5894 checks passed.

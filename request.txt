@@ -1,0 +1,3 @@
+#!serial
+mutb: node .rc/x/mut1310b.mjs; s=$?; git checkout -- scripts; rm -f scripts/.mut-fence.mjs; git status --short scripts | head -5; exit $s
+facts-after: node scripts/simCmLeagueBookFacts.mjs
