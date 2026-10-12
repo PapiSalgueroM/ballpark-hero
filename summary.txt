@@ -1,0 +1,9 @@
+simReportContext exit=0 0s | simReportContext: all green
+simReportContext-footle exit=0 0s | control "footle": 3 failure(s) fired in section 2 as expected, the check works
+simReportContext-nopath exit=0 0s | control "nopath": 1 failure(s) fired in section 1 as expected, the check works
+simReportContext-privacy exit=0 0s | control "privacy": 2 failure(s) fired in section 4 as expected, the check works
+simPlayerBingoHonours exit=1 0s | Node.js v24.21.0
+simReportRelay exit=0 1s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+vitest-239 exit=1 13s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/statDetectiveScope.test.tsx,title=src/test/statDetectiveScope.test.tsx > Stat Detective recorded profi
+tsc exit=0 70s | 

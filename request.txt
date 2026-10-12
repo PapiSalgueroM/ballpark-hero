@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-239: node_modules/.bin/vitest run src/test/gameReportPlacement.test.tsx src/test/perfectSeasonReport.test.tsx src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoTransport.test.ts src/test/reportContext.test.ts src/test/reportDetails.test.tsx src/test/champOrNotReveal.test.tsx src/test/statDetectiveMotion.test.tsx src/test/statDetectiveScope.test.tsx src/test/statDetectiveSpans.test.tsx --testTimeout=300000 --hookTimeout=120000
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simReportContext-footle: SIM_REPORT_CONTROL=footle NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simReportContext-nopath: SIM_REPORT_CONTROL=nopath NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simReportContext-privacy: SIM_REPORT_CONTROL=privacy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simPlayerBingoHonours: PLAYER_BINGO_HONOURS_OUT="$RUNNER_TEMP/ba-bingo" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoHonours.mjs
+simReportRelay: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
