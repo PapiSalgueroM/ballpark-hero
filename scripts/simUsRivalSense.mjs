@@ -72,7 +72,17 @@
         U5  the All-Star table names more than one man at every position (oneslotmlb, oneslotnhl).
         U7  no count below zero and no printed number below zero over forms 40 to 99, the workloads a season
             hands the line function and three streams (nofloormlb, nofloornhl).
-        U6 (the call site, on the real season sims) lands with the switch, step 5.
+        U6  the call site, on the real simMlbSeason and simNhlSeason in E8's forced cells and in 1990: the whole
+            rival on the save comes back byte for byte from the TRUE facts (siteslatemlb, siteslatenhl,
+            sitekindmlb). It also prints the measuring swap of open question 1 (never judged).
+   M.F, H.F  (Round 1313, from the switch) the fleet, as N.F for the NFL: F1 every rival line in the player's own
+        shape (offshape, wrongpos); F2 both lines read back off their printed text and scored by the season score
+        TYPED here (verdictswap, oldscale, fullscoremlb); F3 the race, every cell (the sport pooled and each
+        position) held at its own typed mean within its own width of three errors over careers, RIVAL_1313
+        (verdictswap, oldscalemlb, oldscalenhl); F5 every All-Star card dealt says what the two seasons support,
+        no own card and no coin dealt (rostergate, owndealt, lastyearmlb, lastyearnhl, soldascoin), and the
+        floors F5_FLOOR_1313 (onlyhimshut); O the committed saves of usRivalOldSavesB.json (owndead,
+        retiredlinemlb, retiredlinenhl, oldtallymlb, oldtallynhl).
    --record-old-saves-b  (Round 1313, with RIVAL_PROVE=<the round's base>) writes src/test/fixtures/
         usRivalOldSavesB.json from MLB and NHL saves built by that commit's code.
    P1   Under RIVAL_PROVE=<commit>, with RIVAL_MOVED and RIVAL_CARDS naming the sports the step moved: the same
@@ -121,7 +131,30 @@
      NOTHING WAS TUNED: a running back's 25 percent and no badge at all, and a kicker's 64 percent, are what one
      line for both men leaves once the bench years only the player has and the one aging curve every rival shares
      are in (a back falls off at 28, a kicker at 39, a rival at 31). Those are the lead's levers, for all four
-     sports at once. */
+     sports at once.
+   After the MLB and NHL bind (Round 1313, 84dbe448, runner r1313-s5d1, 2026-10-12): 0 rival lines off shape, 0
+     unread, 0 judged years where the verdict disagrees, in both sports.
+     MLB 42.73 (by seed 41.9, 43.9, 42.3, 42.8, 42.8): SP 36.5, RP 61.0, C 34.1, 1B 42.8, 2B 38.5, 3B 41.5, SS 42.1,
+       LF 42.7, CF 40.9, RF 42.4, DH 47.5; as a healthy starter 67.3, 66.1, 60.8, 66.5, 63.3, 66.2, 65.1, 65.6,
+       65.8, 68.3, 69.3. The arms came together (SP 35.4 now, 37.6 in 2004 careers). By job: starter 65.9, backup
+       6.8, hurt 11.5. By age: 30.5, 38.2, 42.8, 51.6, 54.6. By season length: 162 games 42.7, 161 games 39.4, 163
+       games 41.9, 60 games 54.1 (1,418), 58 games 61.9 (97). A reliever by his own job: closer 61.8, setup 55.9,
+       sidearm 65.3. Near ties 11.1 (RF) to 17.6 (RP) percent; printed dead heats SP 53 and RP 13 of about 10,900,
+       a hitter 0 to 4. Careers whose rival retired behind me: SP 28.3, RP 69.2, C 21.3, 1B 37.1, 2B 30.6, 3B
+       36.2, SS 36.6, LF 36.3, CF 35.9, RF 38.7, DH 45.6. Cards: the tally beats, losing 2,875 and winning 1,172;
+       the roster beat, both 16, only you 180, only him 121. The error of the pooled share: 0.28 points.
+     NHL 43.45 (by seed 43.3, 42.7, 43.0, 44.6, 43.7): C 42.3, LW 39.1, RW 41.5, D 44.4, G 49.9; as a healthy
+       starter 58.2, 57.3, 57.9, 60.4, 64.4. By job: starter 59.7, backup 9.4, hurt 13.5. By age: 37.5, 45.2, 44.0,
+       50.6, 46.8. By season length: 84 games 43.3, 82 games 42.6, 68 to 71 games 46.5 to 50.4, 56 games 55.0
+       (3,750), 48 games 44.3 (3,750). A shutdown defenseman against each kind of rival 33.1 to 42.8 (the other
+       kinds 35.5 to 56.1): a race, not a formality. Printed dead heats (now "69 P" against "69 P", the rival's
+       year as it always was): C 503, LW 506, RW 514, D 679, G 179 of about 27,800 judged years each. Careers
+       whose rival retired behind me: 35.5, 28.1, 33.7, 38.5, 49.1. Cards: the tally beats, losing 3,169 and
+       winning 1,506; the roster beat, both 21, only you 211, only him 130. The error of the pooled share: 0.26.
+     The measuring swap of open question 1 (the U6 cells, the same season on both arms): the verdict of the two
+     printed lines parts from the same two lines read at a full season's pace in 35 of 1,200 MLB seasons of another
+     length (SP 2, RP 0, C 7, a hitter 1 to 6 of about 110 each) and 3 of 1,200 NHL ones (a goalie's 3 of 240; a
+     skater's points scale both sides alike, so never). NOTHING WAS TUNED here either. */
 
 import { build } from 'esbuild';
 import { execSync } from 'node:child_process';
@@ -159,7 +192,7 @@ const CONTROLS = {
   tickdraws: { file: 'src/lib/mlbCareerRivalryEvents.ts', prove: true, needs: 'P1,P2',
     find: '  const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', put: '  rng(); const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);' },
   /* N.F2: the one comparison turned round (the tally and the note go to the wrong man). */
-  verdictswap: { file: 'src/lib/careerRival.ts', needs: 'N.F2,M.F2,H.F2', find: '  return myScore > hisScore;', put: '  return myScore < hisScore;' },
+  verdictswap: { file: 'src/lib/careerRival.ts', needs: 'N.F2,M.F2,H.F2,M.F3,H.F3', find: '  return myScore > hisScore;', put: '  return myScore < hisScore;' },
   /* N.U2, N.F2: the rival's score put back on the formula the built in line used (yards over 60, scores doubled). */
   oldscalenfl: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U2,N.F2', find: '      score: nflHeadToHeadScore(pos, season),',
     put: '      score: ((season.passYds ?? 0) + (season.rushYds ?? 0) + (season.recYds ?? 0) + (season.tackles ?? 0) * 9 + (season.fgMade ?? 0) * 30) / 60 + ((season.passTd ?? 0) + (season.rushTd ?? 0) + (season.recTd ?? 0) + (season.sacks ?? 0) + (season.picks ?? 0)) * 2,' },
@@ -224,9 +257,9 @@ const CONTROLS = {
   drawsnhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U1', find: "    const keyed = rivalSeasonStream('nhl-rival', r, year, rng, rivalSeasonDraws('nhl', r.pos));",
     put: "    const keyed = rivalSeasonStream('nhl-rival', r, year, rng, rivalSeasonDraws('nhl', r.pos) + 1);" },
   /* The rival's score put back on the built in line's formula. */
-  oldscalemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2,M.F2', find: '    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };',
+  oldscalemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2,M.F2,M.F3', find: '    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };',
     put: '    return { line: mlbStatLine(season, pos), score: Math.round((season.hr ?? 0) * 1.6 + ((season.avg ?? 0.24) - 0.24) * 300), year, allStar };' },
-  oldscalenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U2,H.F2', find: '    return { line: nhlStatLine(season, pos), score: nhlHeadToHeadScore(pos, season), year, allStar };',
+  oldscalenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U2,H.F2,H.F3', find: '    return { line: nhlStatLine(season, pos), score: nhlHeadToHeadScore(pos, season), year, allStar };',
     put: '    return { line: nhlStatLine(season, pos), score: (season.goals ?? 0) + (season.assists ?? 0), year, allStar };' },
   /* The hook prints with a template of its own (the built in shapes). */
   offshapemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2,M.F1', find: '    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };',
@@ -681,10 +714,20 @@ const HELD_TOL = { nfl: 0.81 };
    standard errors, the error worked out over careers by clusterError. Typed once from one run, never widened. The
    fresh seeds 6 to 10 test the width recipe, not the cell: each fresh mean is read against the typed band, at
    most one cell of a sport outside and the recipe stands; more than one and every width of that sport is retyped
-   from the ten seeds' measured spread, with the date. Never drop a cell, never widen one. null: not typed yet. */
-const RIVAL_1313 = { mlb: null, nhl: null };
-/* M.F5, H.F5 floors (5d): six tenths of the five seed totals of the same run, rounded down. null: not typed yet. */
-const F5_FLOOR_1313 = { mlb: null, nhl: null };
+   from the ten seeds' measured spread, with the date. Never drop a cell, never widen one.
+   Typed 2026-10-12 from runner result r1313-s5d1 (rivalFull, on 84dbe448), each cell [mean, width]. The fresh
+   seeds 6 to 10 of the same request (rivalFresh), read against these bands: MLB 12 of 12 cells inside (the
+   widest gap SP, 35.04 against 36.49 within 2.70); NHL 5 of 6 inside, LW outside by 0.11 (40.86 against 39.09
+   within 1.66). At most one cell a sport outside, so the recipe stands and nothing was retyped. */
+const RIVAL_1313 = {
+  mlb: { date: '2026-10-12', all: [42.73, 0.85], SP: [36.49, 2.70], RP: [60.95, 1.93], C: [34.06, 2.63], '1B': [42.76, 2.81], '2B': [38.46, 2.82],
+    '3B': [41.47, 2.76], SS: [42.08, 2.73], LF: [42.67, 2.75], CF: [40.95, 2.76], RF: [42.42, 2.86], DH: [47.52, 2.80] },
+  nhl: { date: '2026-10-12', all: [43.45, 0.77], C: [42.34, 1.78], LW: [39.09, 1.66], RW: [41.49, 1.66], D: [44.38, 1.76], G: [49.94, 1.68] },
+};
+/* M.F5, H.F5 floors (5d): six tenths of the five seed totals of the same run (r1313-s5d1 rivalFull), rounded down;
+   "both" floored because it was dealt ten times or more in both sports. MLB only you 180, only him 121, both 16;
+   NHL 211, 130 and 21. The fresh seeds dealt MLB 167, 113, 13 and NHL 201, 168, 17: all above. */
+const F5_FLOOR_1313 = { mlb: { onlyYou: 108, onlyHim: 72, both: 9 }, nhl: { onlyYou: 126, onlyHim: 78, both: 12 } };
 /* FOR THE BUILDER OF A LATER ROUND (Round B first): on an unchanged tree the run is deterministic and N.F3 is
    exact. The day a round legitimately moves one NFL draw, the typed mean above and the new run are TWO samples:
    their difference has an error of 0.27 times root two, 0.38 points, so 0.81 is about 2.1 of those and roughly
