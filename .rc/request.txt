@@ -1,0 +1,13 @@
+# Round 1314 3.4a on db2d5083: simHalftime at 800 an arm, ten seeds plus the default seed twice (seedRandom preloaded)
+ht800-s1: SIM_SEED=1 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s2: SIM_SEED=2 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s3: SIM_SEED=3 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s4: SIM_SEED=4 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s5: SIM_SEED=5 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s6: SIM_SEED=6 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s7: SIM_SEED=7 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s8: SIM_SEED=8 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s9: SIM_SEED=9 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-s10: SIM_SEED=10 node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-def1: node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
+ht800-def2: node --import ./scripts/lib/seedRandom.mjs scripts/simHalftime.mjs
