@@ -1,0 +1,3 @@
+#!serial
+base-saveSize: git worktree add .tmp-base b6eb78e799b12c851e4e8e583e9e926aed117f1c && node .tmp-base/scripts/simClubManagerSaveSize.mjs
+base-slots: node .tmp-base/scripts/simClubManagerSlots.mjs
