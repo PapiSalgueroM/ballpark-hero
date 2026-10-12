@@ -1,0 +1,6 @@
+MUTATION M4 APPLIED: swapped argument: a new face is named against this year only, not the whole pool (src/lib/soccerCareerEngine.ts; anchor rows rewritten 1, harness anchors rewritten 0)
+48 fixed original/current complete career descriptors retained
+131 complete lifecycle/control boundary outputs retained
+9 effective compiled source controls and3 copied observation controls restored
+PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
+MUTATION M4 SURVIVED simSoccerAwardGenerations(exit 0)

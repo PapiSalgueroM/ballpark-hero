@@ -1,0 +1,6 @@
+MUTATION M1 APPLIED: off by one: the strict read reads the pool against this year (src/lib/soccerCareerEngine.ts; anchor rows rewritten 1, harness anchors rewritten 0)
+48 fixed original/current complete career descriptors retained
+131 complete lifecycle/control boundary outputs retained
+9 effective compiled source controls and3 copied observation controls restored
+PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
+MUTATION M1 SURVIVED simSoccerAwardGenerations(exit 0)

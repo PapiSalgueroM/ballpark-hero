@@ -1,0 +1,6 @@
+M0: bash .rc/x/rvmrun.sh M0 sag
+M1: bash .rc/x/rvmrun.sh M1 sag
+M2: bash .rc/x/rvmrun.sh M2 sag
+M3: bash .rc/x/rvmrun.sh M3 sag
+M4: bash .rc/x/rvmrun.sh M4 sag
+M5: bash .rc/x/rvmrun.sh M5 sag

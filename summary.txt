@@ -1,0 +1,6 @@
+M2 exit=0 1067s | MUTATION M2 CAUGHT by simSoccerAwardGenerations(exit 1)
+M1 exit=3 1105s | MUTATION M1 SURVIVED simSoccerAwardGenerations(exit 0)
+M0 exit=0 1116s | BASELINE M0 simSoccerAwardGenerations exit 0
+M3 exit=0 1078s | MUTATION M3 CAUGHT by simSoccerAwardGenerations(exit 1)
+M5 exit=0 1082s | MUTATION M5 CAUGHT by simSoccerAwardGenerations(exit 1)
+M4 exit=3 1109s | MUTATION M4 SURVIVED simSoccerAwardGenerations(exit 0)

@@ -1,0 +1,20 @@
+MUTATION M3 APPLIED: dropped update: the carried pool keeps its old year (src/lib/soccerCareerEngine.ts; anchor rows rewritten 1, harness anchors rewritten 0)
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     detail: 'append-only ids/year',
++     group: 'identity'
++   },
++   {
++     detail: 'complete calculated state valid and its pool readable',
++     group: 'valid-save'
++   }
++ ]
+- []
+
+    at main (file:///tmp/rvw-M3/scripts/simSoccerAwardGenerations.mjs:357:110)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///tmp/rvw-M3/scripts/simSoccerAwardGenerations.mjs:530:52
+MUTATION M3 CAUGHT by simSoccerAwardGenerations(exit 1)
