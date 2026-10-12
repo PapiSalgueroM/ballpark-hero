@@ -80,8 +80,11 @@ function replaceOne(source, from, to) { assert.equal(count(source, from), 1, 'un
 function check(id, predicate, detail) { if (!predicate) failures.push({ id, detail }); }
 function captureCheck(id, fn) { try { fn(); } catch (error) { failures.push({ id, error: { name: error.name, message: error.message, stack: error.stack } }); } }
 function mulberry32(seed) { let value = seed >>> 0; return () => { value += 0x6D2B79F5; let t = Math.imul(value ^ value >>> 15, value | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const currentRaw = fs.readFileSync(path.join(ROOT, ENGINE));
-const currentSource = lf(currentRaw.toString());
+/* Release BA: the engine is normalised on read, because the anchor below runs across lines and a raw read cannot
+   match it on a CRLF checkout (simHarnessAnchors). The receipt named currentRaw therefore holds the LF text, which
+   is the file byte for byte on an LF checkout such as the runner's. */
+const currentSource = fs.readFileSync(path.join(ROOT, ENGINE), 'utf8').replaceAll('\r\n', '\n');
+const currentRaw = Buffer.from(currentSource);
 const from = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);\n        if (!candidates.length) continue;';
 const to = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));\n        if (!candidates.length) continue;';
 const faultSource = replaceOne(currentSource, from, to), undoSource = replaceOne(faultSource, to, from);
