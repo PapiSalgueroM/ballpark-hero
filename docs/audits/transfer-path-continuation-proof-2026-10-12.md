@@ -113,3 +113,9 @@ are retained locally with LF normalization: failed log SHA256
 317734e6fc06fa7b49e64bd4430af57c325015cd64e659a5465e545e8712ace3,
 successful log SHA256
 6629fd14688463759cfe8fde92cc62a0c2f47f0040c3df50908593057e68c7d9.
+
+The proof follow-up is pushed as draft PR243. Main advanced to 48cb9d4b
+during execution. A native merge-tree preview identifies only
+docs/PROJECT-STATE.md as a conflict, because both lanes prepend their latest
+state there. G retains its resolution, integration and publication. No newer
+main app source or package changes were adopted into this frozen proof.

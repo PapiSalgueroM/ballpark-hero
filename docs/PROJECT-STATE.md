@@ -1,6 +1,7 @@
 ## Transfer Path continuation proof passed, 2026-10-12
 
 PR242 is pushed and scoped-verified, awaiting G's integration/publication.
+The dedicated proof follow-up is pushed as draft PR243.
 A separate maintenance branch from 116568ac tests frozen candidate 2dfee304
 without editing app/data or the ready branch. It closes verification gaps for
 all 885 retained endpoint pairs and 20 committed fallback puzzles, shortened
@@ -10,7 +11,9 @@ faults, app types/build, eight natural browser journeys (228 checks), three
 detector controls (40 checks), and frozen source/521 dependency holds. Five
 retained rule entries shorten; the reported minimum stays three. Artifact
 11766095155 is retained. No current-main or live credit. See
-docs/audits/transfer-path-continuation-proof-2026-10-12.md.
+docs/audits/transfer-path-continuation-proof-2026-10-12.md. Main advanced to
+48cb9d4b during proof; only this file conflicts. G retains that documentation
+resolution alongside integration and publication.
 
 ## Release AX LIVE, 2026-10-12 05:00 EDT: Build Your XI confirms more picks from its own records, real Belgian opponent names in replays, a Press room and saved contract talks (three of the other lane's pull requests), and three rounds of this lane (past seasons of Club Manager stay in their season, football scores in the NFL front office, the league book made whole)
 
