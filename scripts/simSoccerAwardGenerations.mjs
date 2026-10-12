@@ -93,7 +93,7 @@ async function bundle(id, cwd, replacements, observed, modern) {
   const engine = replacements[ENGINE] ?? lf(fs.readFileSync(path.join(cwd, ENGINE), 'utf8')), packet = instrument(engine, observed, modern), loaded = [];
   const entry = 'import * as E from "./src/lib/soccerCareerEngine.ts"; import * as S from "./src/lib/soccerCareerSave.ts"; import * as R from "./src/lib/soccerAwardReveal.ts"; export { E, S, R };';
   const build = await esbuild.build({ absWorkingDir: cwd, stdin: { contents: entry, resolveDir: cwd, sourcefile: 'award-generation-entry.ts', loader: 'ts' }, bundle: true, platform: 'node', format: 'cjs', write: false, metafile: true, outfile: path.join(dir, 'compiled.cjs'), alias: { '@': path.join(cwd, 'src') }, define: { 'import.meta.env': JSON.stringify({ DEV: false, PROD: true, MODE: 'test' }) }, plugins: [{ name: 'retained-inputs', setup(b) { b.onLoad({ filter: /\.[cm]?[jt]sx?$/ }, args => {
-    const raw = fs.readFileSync(args.path), relative = path.relative(cwd, args.path).replaceAll(path.sep, '/');
+    const raw = Buffer.from(lf(fs.readFileSync(args.path, "utf8"))), relative = path.relative(cwd, args.path).replaceAll(path.sep, '/');
     const text = relative === ENGINE ? packet.source : replacements[relative] ?? lf(raw.toString());
     loaded.push({ path: relative, resolvedPath: args.path, raw: putBytes(raw, 'source'), served: put(text), rawSha256: sha(raw), servedSha256: sha(text), bytes: raw.length });
     return { contents: text, loader: args.path.endsWith('.tsx') ? 'tsx' : args.path.endsWith('.ts') ? 'ts' : 'js', resolveDir: path.dirname(args.path) };
@@ -103,7 +103,7 @@ async function bundle(id, cwd, replacements, observed, modern) {
     if (input === '<define:import.meta.env>') return { input, configured: true, source: put(JSON.stringify({ DEV: false, PROD: true, MODE: 'test' })) };
     const resolvedPath = path.resolve(cwd, input); assert(fs.existsSync(resolvedPath), `complete loaded file ${input}`);
     let record = loaded.find(r => path.resolve(r.resolvedPath) === resolvedPath);
-    if (!record) { const raw = fs.readFileSync(resolvedPath); record = { path: path.relative(cwd, resolvedPath), resolvedPath, raw: putBytes(raw, 'source'), served: put(raw.toString()), rawSha256: sha(raw), servedSha256: sha(raw), bytes: raw.length, unmodifiedNonScriptInput: true }; loaded.push(record); }
+    if (!record) { const raw = Buffer.from(lf(fs.readFileSync(resolvedPath, "utf8"))); record = { path: path.relative(cwd, resolvedPath), resolvedPath, raw: putBytes(raw, 'source'), served: put(raw.toString()), rawSha256: sha(raw), servedSha256: sha(raw), bytes: raw.length, unmodifiedNonScriptInput: true }; loaded.push(record); }
     return { input, record };
   });
   const code = build.outputFiles[0].contents; fs.writeFileSync(path.join(dir, 'compiled.cjs'), code);
