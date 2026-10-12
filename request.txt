@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts/font-cache && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+simDailyDeals-bind-EXPECT-RED: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline-EXPECT-RED: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q --detach /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+controlFrontOfficeBoard: node scripts/controlFrontOfficeBoard.mjs check && node scripts/controlFrontOfficeBoard.mjs all && { node scripts/controlFrontOfficeBoard.mjs blank; b=$?; echo "blank exit $b (1 means the control fired)"; test $b -eq 1; }

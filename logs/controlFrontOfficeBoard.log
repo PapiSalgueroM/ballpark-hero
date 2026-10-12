@@ -1,0 +1,157 @@
+controlFrontOfficeBoard: check passed. Every string of all 23 controls is in the board exactly once.
+control nolog (the log is not saved): vitest exit 1; 27 red, 4 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it the next press appends in week order, and a remount keeps the log
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it a save from before the round adopts the log at the week it is first played here: it starts at we
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise abandon in the middle of a season and start again: the new save holds no log, a
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile the week box holds a tile: the next game before a press, his saved final after it, and again after a remount
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a reload in the middle of a watch shows the result, never a clock, and plays nothing twice
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile reduced motion: Watch shows the result at once, with no clock
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a save from before the log shows the next game, and after its first press the chips start at that week
+control abandonkeeps (the log is cleared neither by Abandon nor by a new franchise (each alone is masked by the other: two keys, one lock)): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise abandon in the middle of a season and start again: the new save holds no log, a
+control summerkeeps (the summer does not end the log): vitest exit 1; 8 red, 23 green of 31
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+control refusesave (a log that does not read refuses the save): vitest exit 1; 2 red, 29 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+control trustlog (a log that does not read is kept as it is): vitest exit 1; 2 red, 29 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+control rawback (a log that did not read goes back to storage as it was typed): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+control weekengine (the week's grid shows the engine's own scores): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+control enginescores (the one press postseason keeps the engine's own scores in the save): vitest exit 1; 6 red, 25 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+control keyseason (the week's games are keyed to another season): vitest exit 1; 4 red, 27 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+control tellnoedges (the week's games are told without the edges they were played with): vitest exit 1; 2 red, 29 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+control noedges (the staff's edge is dropped from the week's games and still told): vitest exit 1; 2 red, 29 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+control playoffnoedges (the thirteen playoff games are told without the edges the bracket was played with): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+control playoffkey (a playoff game is keyed to the week and not to its round): vitest exit 1; 6 red, 25 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+control noseason (the lifted close forgets to count the season): vitest exit 1; 14 red, 17 green of 31
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+control closetwice (the season is closed twice): vitest exit 1; 12 red, 19 green of 31
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+control titles (a title counts double): vitest exit 1; 4 red, 27 green of 31
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+control recordspoils (while a game is watched the page shows the league AFTER the press (the hold is not read)): vitest exit 1; 2 red, 29 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+control gridspoils (the league grid is drawn while a game is watched): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+control holdkept (the hold is not let go when he leaves the week box): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+control tilenolog (the tile is handed no log): vitest exit 1; 8 red, 23 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile the week box holds a tile: the next game before a press, his saved final after it, and again after a remount
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a reload in the middle of a watch shows the result, never a clock, and plays nothing twice
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile reduced motion: Watch shows the result at once, with no clock
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a save from before the log shows the next game, and after its first press the chips start at that week
+control pacespoils (the owner card's pace reads the league AFTER the press while a game is watched (the line the board had before Watch)): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+control seedoff (the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved
+control nolog: FIRED. Every test it names is red and every test it spares is green.
+control abandonkeeps: FIRED. Every test it names is red and every test it spares is green.
+control summerkeeps: FIRED. Every test it names is red and every test it spares is green.
+control refusesave: FIRED. Every test it names is red and every test it spares is green.
+control trustlog: FIRED. Every test it names is red and every test it spares is green.
+control rawback: FIRED. Every test it names is red and every test it spares is green.
+control weekengine: FIRED. Every test it names is red and every test it spares is green.
+control enginescores: FIRED. Every test it names is red and every test it spares is green.
+control keyseason: FIRED. Every test it names is red and every test it spares is green.
+control tellnoedges: FIRED. Every test it names is red and every test it spares is green.
+control noedges: FIRED. Every test it names is red and every test it spares is green.
+control playoffnoedges: FIRED. Every test it names is red and every test it spares is green.
+control playoffkey: FIRED. Every test it names is red and every test it spares is green.
+control noseason: FIRED. Every test it names is red and every test it spares is green.
+control closetwice: FIRED. Every test it names is red and every test it spares is green.
+control titles: FIRED. Every test it names is red and every test it spares is green.
+control recordspoils: FIRED. Every test it names is red and every test it spares is green.
+control gridspoils: FIRED. Every test it names is red and every test it spares is green.
+control holdkept: FIRED. Every test it names is red and every test it spares is green.
+control tilenolog: FIRED. Every test it names is red and every test it spares is green.
+control pacespoils: FIRED. Every test it names is red and every test it spares is green.
+control seedoff: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 22 of 22 control(s) fired, the board tests can fail for each named reason.
+control blank (THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire): vitest exit 0; 0 red, 31 green of 31
+control blank: DID NOT FIRE. "his game of the week is in the save" stayed green
+controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
+blank exit 1 (1 means the control fired)
