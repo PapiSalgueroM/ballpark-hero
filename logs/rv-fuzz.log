@@ -1,0 +1,6 @@
+fuzz: ledger 5 records, packed 563 units 1605 UTF-8 bytes (code units 32 to 32672); save 56012 units 57178 bytes
+FAIL fuzz char 91 changed: the damaged string read as ANOTHER ledger (5 records)
+FAIL fuzz char 443 changed: the damaged string read as ANOTHER ledger (5 records)
+keeper: copy aside true (byte equal), staged true, journal {"v":1,"path":"/club-manager","backupKey":"dukb-club-manager-save.broken-2026-10-10T12-00-00","at":1791633600000,"len":56012,"sum":759814541}, applied {"path":"/club-manager","ok":true,"kept":true}, key now byte equal to the seeded save, ledger reads as itself
+coverage: {"fuzz read as absent":78,"fuzz next buy wrote a fresh ledger (1)":78,"fuzz read as another ledger":2,"fuzz read as itself":2}
+rvSaves fuzz: RED, 2 failures (first: fuzz char 91 changed: the damaged string read as ANOTHER ledger (5 records))

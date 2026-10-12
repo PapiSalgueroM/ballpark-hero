@@ -1,0 +1,5 @@
+rv-dd: RV_PART=dd node .rc/x/rvSaves.mjs
+rv-hot: RV_PART=hot node .rc/x/rvSaves.mjs
+rv-deep: RV_PART=deep node .rc/x/rvSaves.mjs
+rv-fuzz: RV_PART=fuzz node .rc/x/rvSaves.mjs
+rv-long: RV_PART=long RV_SEASONS=40 node .rc/x/rvSaves.mjs

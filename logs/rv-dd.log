@@ -1,0 +1,17 @@
+RED  deadline 2026-10-10 (Rangers): 13 actions, signed 2, sold 0, grade F, 14 cuts replayed, record 865 units: the full replay is not the day as played on the base
+FAIL deadline 2026-10-10: the full replay is not the day as played on the base
+RED  deadline 2026-10-11 (Borussia Dortmund): 13 actions, signed 2, sold 0, grade D, 14 cuts replayed, record 885 units: the full replay is not the day as played on the base
+FAIL deadline 2026-10-11: the full replay is not the day as played on the base
+RED  deadline 2026-10-12 (Atalanta): 13 actions, signed 2, sold 0, grade F, 14 cuts replayed, record 870 units: the full replay is not the day as played on the base
+FAIL deadline 2026-10-12: the full replay is not the day as played on the base
+ok   deadline 2026-10-18 (Nottingham Forest): 13 actions, signed 2, sold 0, grade D, 14 cuts replayed, record 884 units
+RED  deadline 2026-11-01 (Manchester United): 13 actions, signed 2, sold 0, grade F, 14 cuts replayed, record 889 units: the full replay is not the day as played on the base
+FAIL deadline 2026-11-01: the full replay is not the day as played on the base
+ok   deadline 2026-11-09 (Sunderland): 13 actions, signed 2, sold 0, grade C, 14 cuts replayed, record 910 units
+RED  deadline 2027-01-31 (Deportivo La Coruña): 14 actions, signed 2, sold 0, grade F, 15 cuts replayed, record 854 units: the full replay is not the day as played on the base
+FAIL deadline 2027-01-31: the full replay is not the day as played on the base
+ok   deadline free Arsenal 19088743 (Arsenal): 13 actions, signed 2, sold 0, grade D, 14 cuts replayed, record 898 units
+ok   deadline free Nottingham Forest 2309737967 (Nottingham Forest): 13 actions, signed 2, sold 0, grade D, 14 cuts replayed, record 884 units
+ok   deadline free Fulham 38177486 (Fulham): 13 actions, signed 2, sold 0, grade F, 14 cuts replayed, record 876 units
+coverage: {"deadline days equal":5,"deadline days with a signing":5}
+rvSaves dd: RED, 5 failures (first: deadline 2026-10-10: the full replay is not the day as played on the base)

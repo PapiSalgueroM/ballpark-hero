@@ -1,0 +1,5 @@
+rv-dd exit=1 16s | rvSaves dd: RED, 5 failures (first: deadline 2026-10-10: the full replay is not the day as played on the base)
+rv-hot exit=0 23s | rvSaves hot: green in 21 s
+rv-fuzz exit=1 7s | rvSaves fuzz: RED, 2 failures (first: fuzz char 91 changed: the damaged string read as ANOTHER ledger (5 records))
+rv-deep exit=0 53s | rvSaves deep: green in 52 s
+rv-long exit=0 1207s | rvSaves long: green in 1206 s

@@ -1,0 +1,16 @@
+ok   hot 2026-10-10 (Athletic Club, carry on saved): run 104188 units, handover 100011 units
+ok   hot 2026-10-10 handed over (Athletic Club), a season on: 64 steps
+ok   hot 2026-10-12 (Westerlo, carry on saved): run 96981 units, handover 93788 units
+ok   hot 2026-10-12 handed over (Westerlo), a season on: 62 steps
+ok   hot 2026-10-27 (Nottingham Forest, carry on saved): run 103601 units, handover 100212 units
+ok   hot 2026-10-27 handed over (Nottingham Forest), a season on: 64 steps
+ok   hot 2026-11-14 (Sunderland, carry on refused): run 107008 units, handover 102975 units
+ok   hot 2026-11-14 handed over (Sunderland), a season on: 65 steps
+ok   hot 2027-01-19 (Fulham, carry on saved): run 113608 units, handover 108858 units
+ok   hot 2027-01-19 handed over (Fulham), a season on: 61 steps
+ok   hot 2027-01-30 (Everton, carry on saved): run 101193 units, handover 97735 units
+ok   hot 2027-01-30 handed over (Everton), a season on: 65 steps
+ok   hot 2027-03-02 (Santos, carry on saved): run 106071 units, handover 102802 units
+ok   hot 2027-03-02 handed over (Santos), a season on: 63 steps
+coverage: {"hot carry on saved":6,"hot january reached":7,"hot january buy":7,"hot january sale":7,"hot january release":5,"hot january free agent":7,"hot summer buy":7,"hot summer sale":7,"hot summer release":6,"hot summer free agent":7,"hot summer loan option":7,"hot summer loan":7,"hot carry on refused":1}
+rvSaves hot: green in 21 s
