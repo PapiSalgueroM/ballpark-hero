@@ -1,0 +1,16 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 27s | sweepWeight: 1 failure
+playGames-club-manager exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-manager-hot-seat exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-deadline-day exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playClubManager exit=1 85s | Played Club Manager through its own screens. 1 findings.
+playLeagueTableFit exit=0 3s | playLeagueTableFit: green. 5208 name cells fit at all four widths using the actual component.
+playCmDataOnDemand exit=0 27s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+playSeasonCentreMotion exit=0 128s | playSeasonCentreMotion: 80 checks, 0 failed
+playLiveMatchFit exit=0 138s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playStorageBlocked exit=0 266s | playStorageBlocked: 826 checks, 0 failed
+playClubManagerSaveLeave exit=0 20s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManagerSlots exit=0 9s | playClubManagerSlots: green
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures-forwalk exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures exit=0 18s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
