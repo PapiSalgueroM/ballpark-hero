@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "ledgerKey": "cm-league-book-facts-v1",
+  "dataFile": "scripts/data/cmLeagueBookFacts.json",
+  "readOn": "2026-10-12",
+  "readBy": "the builder of Round 1310, desktop Claude lane (session H's workflow)",
+  "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page; no figure comes from a search summary. Every literal is a line that reader quoted; a table row is written as its cells in order with single spaces between them (runs of spaces in a fixed width table collapsed to one). A page's en dash or em dash is written as a hyphen, since the repo bans both. A figure is the number printed in its literal. USED, THIN and DISPUTED are not written in the data: scripts/simCmLeagueBookFacts.mjs works them out from the rows on every run.",
+  "limits": [
+    "No copy of a page was kept, so there is no snapshot hash. A reader who doubts a figure opens the url and finds the literal.",
+    "The page reader quotes at most about 125 characters a line, so a long sentence is quoted in part; the part kept holds the figure.",
+    "myKhel's Premier League list carries no date; the league's own list (premierleague.com/en/news/1206108) is dated 19 May 2024 and has since been brought up to 2024/25. Both were read on 2026-10-12.",
+    "The matches a club played come from format rows only: for the Premier League the league's own guide (20 clubs since 1995/96, 38 matches a club) and RSSSF's final table of each season, whose last line is position 20 with 38 played. 2019-20 stands on two final tables of that season (RSSSF and ESPN), each with 38 played."
+  ],
+  "checkedBy": "scripts/simCmLeagueBookFacts.mjs",
+  "sha256": "3e0c30e3e0799eaafdc222081b80c1baa1784c76811e56bfaadf0e0eb44cdd16"
+}
