@@ -59,8 +59,12 @@
  * with the very scores the saved rounds hold; it rides unchanged into the
  * draft; and the summer ends it (the next season's hub holds no key).
  *
- * Negative control: FO_BOARD_NFL points the file at a copy of the board, the
- * way scripts/simGmReload.mjs does for the season close test.
+ * Negative controls: scripts/controlFrontOfficeBoard.mjs, in the repo. It
+ * points this file at a copy of the board with one mutation through
+ * FO_BOARD_NFL, the way scripts/simGmReload.mjs does for the season close
+ * test, and reads which cases went red by name: the summer not ending the
+ * log, the close not counting the season or run twice, a title counted
+ * double (the title cases red and the ordinary ones green).
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';

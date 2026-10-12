@@ -19,14 +19,25 @@
  *     save;
  *   - a save from before the round adopts the log at the week it is first
  *     played here, so the log starts at week k and is not his record.
+ *   - WHAT THE BOARD HANDS THE BIND is held one for one on both paths, with
+ *     the GM desk off and on: every game the engine played goes to the bind
+ *     once, under this season and its own week or round, with the edges it
+ *     was played with, and what the bind answers is what the grid prints
+ *     and what the save keeps. The season and the place are half of a
+ *     game's key, so a board that drifted on either would tell the same
+ *     game another score than the round that plays the bracket by hand.
  * No card and no tile yet: nothing on screen reads the log in this round.
  *
- * Negative controls (run on a GitHub runner, named in
- * docs/audits/ROUND-1305-NOTES.md): FO_BOARD_NFL points this file at a copy
- * of the board with one mutation, the way scripts/simGmReload.mjs does for
- * the season close test: the log dropped from persist, the two clears
- * dropped from Abandon and from a new franchise, and the engine's own
- * rounds kept in the recap save. Each must turn its named test red.
+ * Negative controls: scripts/controlFrontOfficeBoard.mjs, in the repo. It
+ * points this file at a copy of the board with ONE mutation through
+ * FO_BOARD_NFL (the way scripts/simGmReload.mjs does for the season close
+ * test) and reads which tests went red by name. `list` names all of them:
+ * the log dropped from persist, the clears dropped from Abandon and from a
+ * new franchise, a log that does not read kept or made a refusal, the
+ * engine's own scores on the grid or in the recap save, a game keyed to
+ * another season or told without its edges on either path. Run it on a
+ * GitHub runner after any edit of the board's press: `all` must end on
+ * "fired" for every control and `blank` must say DID NOT FIRE.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
@@ -34,11 +45,52 @@ import type { ComponentType } from 'react';
 import { initLeague, simGame, winProb, REGULAR_WEEKS, DEEP_ROSTER_MAX } from '@/lib/frontOffice';
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
 import { gmLogRecord, readGmGameLog, type GmGameLog } from '@/lib/gmGameLog';
-import { nflIsRegular } from '@/lib/frontOfficeGameDay';
+import { nflGameKey, nflIsRegular } from '@/lib/frontOfficeGameDay';
 import { quickGame } from '@/lib/gmGameScore';
 import { NFL_SCORE_LAW } from '@/lib/gameLaws/nflScore';
 import { nflDeskEdges, openNflDesk } from '@/lib/nflGmDesk';
 
+/* WHAT THE BOARD HANDS THE BIND, written down at the two seams a press has.
+   The engine side: every game as simGame left it with the edges it was
+   handed, and the bracket as runPlayoffs left it with its edges. The bind
+   side: what nflTell was handed (the game, the season, where, the edges)
+   and what it answered. Both run untouched, the wrappers only write down,
+   so a test can hold the hand over one for one: the season and the place a
+   key is made of, and the edges a game is told with, are the board's half
+   of the recipe and no harness reads the board for them. */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const seen = vi.hoisted(() => ({
+  games: [] as { g: any; edges: any }[],
+  playoffs: [] as { rounds: { name: string; games: any[] }[]; edges: any }[],
+  told: [] as { g: any; season: number; where: string; edges: any; out: { game: any; last: any; byLaw: boolean } }[],
+}));
+vi.mock('@/lib/frontOffice', async importOriginal => {
+  const real = await importOriginal<typeof import('@/lib/frontOffice')>();
+  return {
+    ...real,
+    simGame: (...a: Parameters<typeof real.simGame>) => {
+      const g = real.simGame(...a);
+      seen.games.push({ g: { ...g }, edges: a[3] ? { ...a[3] } : a[3] });
+      return g;
+    },
+    runPlayoffs: (...a: Parameters<typeof real.runPlayoffs>) => {
+      const out = real.runPlayoffs(...a);
+      seen.playoffs.push({ rounds: JSON.parse(JSON.stringify(out.rounds)), edges: a[2] ? { ...a[2] } : a[2] });
+      return out;
+    },
+  };
+});
+vi.mock('@/lib/frontOfficeGameDay', async importOriginal => {
+  const real = await importOriginal<typeof import('@/lib/frontOfficeGameDay')>();
+  return {
+    ...real,
+    nflTell: (...a: Parameters<typeof real.nflTell>) => {
+      const out = real.nflTell(...a);
+      seen.told.push({ g: { ...a[0] }, season: a[2], where: a[3], edges: a[4] ? { ...a[4] } : a[4], out });
+      return out;
+    },
+  };
+});
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
@@ -81,6 +133,20 @@ const grid = () => [...document.querySelectorAll('div.grid.max-h-56 > div')].map
   const spans = [...row.querySelectorAll('span')].map(s => (s.textContent ?? '').trim());
   return { home: spans[0], away: spans[2] };
 });
+/** A game as the grid prints it. */
+const rowOf = (g: any) => ({ home: `${g.home} ${g.homeScore}`, away: `${g.awayScore} ${g.away}` });
+/** One press, and what the engine and the bind did in it (the recorders are emptied first). */
+const pressed = (text: string) => {
+  seen.games.length = 0; seen.playoffs.length = 0; seen.told.length = 0;
+  play(text);
+  return { games: [...seen.games], playoffs: [...seen.playoffs], told: [...seen.told] };
+};
+type Told = ReturnType<typeof pressed>['told'];
+/** What nflTell was handed, in the shape the engine side is written down in. */
+const handed = (told: Told) => told.map(t => ({ g: t.g, season: t.season, where: t.where, edges: t.edges }));
+/** How many of these games the law told another score than the engine's own. */
+const movedBy = (told: Told) => told.filter(t => t.out.game.homeScore !== t.g.homeScore || t.out.game.awayScore !== t.g.awayScore).length;
+const isHis = (team: string) => (t: Told[number]) => t.g.home === team || t.g.away === team;
 
 let restoreRandom: (() => void) | null = null;
 beforeEach(() => {
@@ -98,7 +164,7 @@ describe('NFL front office: a press tells his game and keeps it', () => {
     render(<Board />);
     expect('gameLog' in read()).toBe(false);
     openWeek();
-    play('Play Week 6');
+    const press = pressed('Play Week 6');
     const s = read();
     expect(s.league.week).toBe(7);
     const log = logOf(s)!;
@@ -114,16 +180,29 @@ describe('NFL front office: a press tells his game and keeps it', () => {
     const after = s.league.teams[team];
     expect(after.wins + after.losses).toBe(before.w + before.l + 1);
     expect(after.wins - before.w).toBe(g.winner === team ? 1 : 0);
-    /* the grid */
+    /* THE HAND OVER: the bind was handed the sixteen games the engine played, each once and in order, under
+       this season and this week, with the edges the engine itself was handed (none: the desk is off) */
+    expect(press.games).toHaveLength(16);
+    expect(press.playoffs).toHaveLength(0);
+    expect(handed(press.told)).toEqual(press.games.map(e => ({ g: e.g, season: league.season, where: 'w6', edges: e.edges })));
+    /* his entry is what the bind answered for his game, under the key the recipe gives: the season, where,
+       the two clubs and the ENGINE'S OWN score */
+    const mine = press.told.filter(isHis(team));
+    expect(mine).toHaveLength(1);
+    expect(g).toEqual(mine[0].out.last);
+    expect(g.key).toBe(nflGameKey(league.season, 'w6', mine[0].g));
+    expect(g.key.startsWith(`${s.league.season}|${g.where}|${g.home}|${g.away}|`)).toBe(true);
+    /* the grid: the sixteen told games in the engine's order, and nothing else */
     const rows = grid();
-    expect(rows).toHaveLength(16);
-    expect(rows).toContainEqual({ home: `${g.home} ${g.homeScore}`, away: `${g.awayScore} ${g.away}` });
+    expect(rows).toEqual(press.told.map(t => rowOf(t.out.game)));
+    expect(rows).toContainEqual(rowOf(g));
     const finals = rows.map(r => [Number(r.home.split(' ').pop()), Number(r.away.split(' ')[0])]);
     for (const [h, a] of finals) expect(h).not.toBe(a);
-    /* the engine's own score put every loser on 16 to 30. A week of sixteen football finals has a loser under that. */
-    const lowest = Math.min(...finals.map(([h, a]) => Math.min(h, a)));
-    console.log(`FO_GAMEDAY week 6: his game ${g.home} ${g.homeScore}, ${g.away} ${g.awayScore}; the lowest loser of the sixteen is on ${lowest}`);
-    expect(lowest).toBeLessThan(16);
+    /* and the telling did something: the equality above would hold for a grid of the engine's own scores if
+       the law had moved none of them, so the count it moved is printed and must not be zero */
+    const moved = movedBy(press.told);
+    console.log(`FO_GAMEDAY week 6: his game ${g.home} ${g.homeScore}, ${g.away} ${g.awayScore} (the engine's own ${mine[0].g.homeScore}-${mine[0].g.awayScore}); the law told ${moved} of the sixteen another score than the engine's`);
+    expect(moved).toBeGreaterThan(0);
   });
 
   it('the next press appends in week order, and a remount keeps the log', () => {
@@ -253,14 +332,28 @@ describe('NFL front office: the log does not follow a GM into his next franchise
 });
 
 describe('NFL front office: the one press finish', () => {
-  it('the told scores are the saved scores: the rounds of the recap hold what the log holds, and they are football scores', () => {
+  it.each([['off', false], ['on', true]] as const)('the told scores are the saved scores, with the GM desk %s: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his', (word, desk) => {
     const { league, team } = leagueAt(REGULAR_WEEKS, true);
-    save(shape(league, team));
+    save(shape(league, team, desk ? { gm: openNflDesk(league, team) } : {}));
     render(<Board />);
     openWeek();
-    play('Play the final week + playoffs');
+    const press = pressed('Play the final week + playoffs');
     const s = read();
     expect(s.seasonsPlayed).toBe(1);
+    /* THE HAND OVER, on both halves of the press. Week 17: the sixteen games the engine played, under this
+       season and "w17", with the edges each was played with. The bracket: its thirteen games in the engine's
+       own order, each under the name of its round, with the edges runPlayoffs was handed. With the desk on
+       those edges are his staff's and with it off there are none: a telling that dropped them, or keyed a
+       game to another season or another round, is not the game that was played. */
+    expect(press.games).toHaveLength(16);
+    expect(press.playoffs).toHaveLength(1);
+    const bracket = press.playoffs[0];
+    /* the check has teeth only if the engine really was handed edges with the desk on, and none with it off */
+    expect(bracket.edges === undefined, `the bracket's edges, the desk ${word}`).toBe(!desk);
+    expect(press.games.filter(e => e.edges === undefined).length, `the week's edges, the desk ${word}`).toBe(desk ? 0 : 16);
+    const toldWeek = press.told.slice(0, 16), toldBracket = press.told.slice(16);
+    expect(handed(toldWeek)).toEqual(press.games.map(e => ({ g: e.g, season: league.season, where: `w${REGULAR_WEEKS}`, edges: e.edges })));
+    expect(handed(toldBracket)).toEqual(bracket.rounds.flatMap(r => r.games.map(g => ({ g, season: league.season, where: r.name, edges: bracket.edges }))));
     const log = logOf(s)!;
     expect(log, 'the log reads on the recap save').not.toBeNull();
     const rounds: { name: string; games: any[] }[] = s.postseason.rounds;
@@ -279,11 +372,20 @@ describe('NFL front office: the one press finish', () => {
     });
     /* the regular season record in the save did not take the playoff games */
     expect(s.league.teams[team].wins + s.league.teams[team].losses).toBe(REGULAR_WEEKS);
-    /* the engine put every loser on 16 to 30: thirteen football finals have a loser under that */
-    const lowest = Math.min(...all.map(x => Math.min(x.g.homeScore, x.g.awayScore)));
-    console.log(`FO_GAMEDAY one press: the lowest loser of the thirteen saved playoff finals is on ${lowest}`);
-    expect(lowest).toBeLessThan(16);
+    /* THE SAVED ROUNDS ARE WHAT THE BIND ANSWERED, game for game in the engine's order, and the log's entries
+       are the bind's own for his games (Week 17 first), each under the key the recipe gives */
+    let at = 0;
+    expect(rounds).toEqual(bracket.rounds.map(r => ({ name: r.name, games: r.games.map(() => toldBracket[at++].out.game) })));
+    const mine = press.told.filter(isHis(team));
+    expect(log.games).toEqual(mine.map(t => t.out.last));
+    for (const [k, t] of mine.entries()) expect(log.games[k].key).toBe(nflGameKey(league.season, t.where, t.g));
+    for (const e of log.games) expect(e.key.startsWith(`${s.league.season}|${e.where}|${e.home}|${e.away}|`)).toBe(true);
     for (const x of all) expect(x.g.homeScore > x.g.awayScore).toBe(x.g.winner === x.g.home);
+    /* and the telling did something: the saved rounds would equal the engine's own if the law had moved no
+       score, so the count it moved is printed and must not be zero */
+    const moved = movedBy(toldBracket);
+    console.log(`FO_GAMEDAY one press, the desk ${word}: the law told ${moved} of the thirteen playoff games another score than the engine's`);
+    expect(moved).toBeGreaterThan(0);
   });
 
   it('with the GM desk on, his game is told at the chance it was played at, the edge of his staff included', () => {
@@ -292,8 +394,12 @@ describe('NFL front office: the one press finish', () => {
     save(shape(league, team, { gm }));
     render(<Board />);
     openWeek();
-    play('Play Week 6');
+    const press = pressed('Play Week 6');
     const s = read();
+    /* the hand over with the desk on: every game of the week was told with the very edges it was played with */
+    expect(press.games).toHaveLength(16);
+    expect(press.games.filter(e => e.edges === undefined), 'the engine was handed the desk\'s edges').toHaveLength(0);
+    expect(handed(press.told)).toEqual(press.games.map(e => ({ g: e.g, season: league.season, where: 'w6', edges: e.edges })));
     const g = logOf(s)!.games[0];
     const edge = nflDeskEdges(gm, league, team)[team] ?? 0;
     const teams = s.league.teams;
