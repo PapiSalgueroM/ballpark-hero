@@ -1,0 +1,106 @@
+{
+ "A": {
+  "careers": 8,
+  "loaded": 8,
+  "refused": 0,
+  "firstNightExact": 0,
+  "firstNightChecked": 0,
+  "equalToEnd": 0,
+  "diffAfterReplacement": 0,
+  "unexplained": [
+   {
+    "i": 1,
+    "start": 2016,
+    "k": 0,
+    "year": 2030,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 1258,
+    "db": 1249
+   },
+   {
+    "i": 1,
+    "start": 2024,
+    "k": 2,
+    "year": 2031,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 959,
+    "db": 947
+   },
+   {
+    "i": 2,
+    "start": 2016,
+    "k": 0,
+    "year": 2031,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 223,
+    "db": 211
+   },
+   {
+    "i": 2,
+    "start": 2024,
+    "k": 0,
+    "year": 2031,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 158,
+    "db": 146
+   },
+   {
+    "i": 3,
+    "start": 2016,
+    "k": 0,
+    "year": 2032,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 1380,
+    "db": 1365
+   },
+   {
+    "i": 3,
+    "start": 2024,
+    "k": 0,
+    "year": 2032,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 618,
+    "db": 603
+   },
+   {
+    "i": 4,
+    "start": 2016,
+    "k": 0,
+    "year": 2033,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 1017,
+    "db": 1002
+   },
+   {
+    "i": 4,
+    "start": 2024,
+    "k": 0,
+    "year": 2033,
+    "phase": "newspaper",
+    "replaced": false,
+    "dh": 203,
+    "db": 188
+   }
+  ],
+  "drawMismatch": 0,
+  "ballots": 0
+ },
+ "B": {
+  "careers": 2,
+  "accepted": 2,
+  "kept": 2,
+  "bad": []
+ },
+ "C": {
+  "cases": 10,
+  "ok": 10,
+  "bad": []
+ }
+}

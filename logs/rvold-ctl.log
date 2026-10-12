@@ -1,0 +1,3 @@
+MUTATION X1 APPLIED: probe control: one extra draw per generated call (src/lib/soccerCareerEngine.ts; anchor rows rewritten 0, harness anchors rewritten 0)
+RVOLD RED: A 8/8 main saves loaded, first night exact 0/0, ballots 0, draw mismatches 0, equal to the end 0, after a replacement 0, unexplained 8; B 2/2 PR234 pools read, 2 kept; C 10/10 hostile pools read as absent
+probe exit=1

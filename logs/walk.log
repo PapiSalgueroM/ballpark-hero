@@ -1,0 +1,71 @@
+fixture: Walk Fixture age 22, last season 2030, pool entries 9
+pool-390-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-390-rm: 1 dialog(s) open at start, pressing Escape
+ok   pool-390-rm: the career opens, no broken save card
+ok   pool-390-rm night 2031: the card lists the 10 saved names in order
+ok   pool-390-rm night 2031: no sideways scroll
+FAIL pool-390-rm: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL pool-390-rm: reached two Ballon d'Or nights (2031)
+ok   pool-390-rm: no page errors 
+pool-390-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-390-full: 1 dialog(s) open at start, pressing Escape
+ok   pool-390-full: the career opens, no broken save card
+ok   pool-390-full night 2031: the card lists the 10 saved names in order
+ok   pool-390-full night 2031: no sideways scroll
+FAIL pool-390-full: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆1Taça de Portugal | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL pool-390-full: reached two Ballon d'Or nights (2031)
+ok   pool-390-full: no page errors 
+pool-1280-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-1280-rm: 1 dialog(s) open at start, pressing Escape
+ok   pool-1280-rm: the career opens, no broken save card
+ok   pool-1280-rm night 2031: the card lists the 10 saved names in order
+ok   pool-1280-rm night 2031: no sideways scroll
+FAIL pool-1280-rm: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL pool-1280-rm: reached two Ballon d'Or nights (2031)
+ok   pool-1280-rm: no page errors 
+pool-1280-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+pool-1280-full: 1 dialog(s) open at start, pressing Escape
+ok   pool-1280-full: the career opens, no broken save card
+ok   pool-1280-full night 2031: the card lists the 10 saved names in order
+ok   pool-1280-full night 2031: no sideways scroll
+FAIL pool-1280-full: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL pool-1280-full: reached two Ballon d'Or nights (2031)
+ok   pool-1280-full: no page errors 
+old-390-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+old-390-rm: 1 dialog(s) open at start, pressing Escape
+ok   old-390-rm: the career opens, no broken save card
+ok   old-390-rm night 2031: the card lists the 10 saved names in order
+ok   old-390-rm night 2031: no sideways scroll
+FAIL old-390-rm: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL old-390-rm: reached two Ballon d'Or nights (2031)
+ok   old-390-rm: no page errors 
+old-1280-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+old-1280-full: 1 dialog(s) open at start, pressing Escape
+ok   old-1280-full: the career opens, no broken save card
+ok   old-1280-full night 2031: the card lists the 10 saved names in order
+ok   old-1280-full night 2031: no sideways scroll
+FAIL old-1280-full: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆1Taça de Portugal | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL old-1280-full: reached two Ballon d'Or nights (2031)
+ok   old-1280-full: no page errors 
+bad-390-full start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+bad-390-full: 1 dialog(s) open at start, pressing Escape
+ok   bad-390-full: the career opens, no broken save card
+ok   bad-390-full night 2031: the card lists the 10 saved names in order
+ok   bad-390-full night 2031: no sideways scroll
+FAIL bad-390-full: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL bad-390-full: reached two Ballon d'Or nights (2031)
+ok   bad-390-full: no page errors 
+bad-1280-rm start: phase playing; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 👥 SquadYour teammatesTh | 🎯 Season targetChoose a | 🏃 Preseason planBalance | 📖 Record bookYour best  | Your next seasonRoles, c | 🎙️ Press roomAnswer for | Review your agent | Open your phoneBank, mar | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆0Cups | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Next Season | Retire
+bad-1280-rm: 1 dialog(s) open at start, pressing Escape
+ok   bad-1280-rm: the career opens, no broken save card
+ok   bad-1280-rm night 2031: the card lists the 10 saved names in order
+ok   bad-1280-rm night 2031: no sideways scroll
+FAIL bad-1280-rm: stuck in phase social_media_action; buttons: Back | Sign up to track your st | 🏋️TrainingDrill ready | 📱Phone3 unread | 🚪 Retire | 🔄 New Career | 🏋️Post training videoSh | 🎬Go viral with celebrat | 🔥Post controversial opi | ❤️Announce charity workH | 📸Post about personal li | 😈Troll your rival on so | 🧘Stay off social mediaF | Full attributes183 cm ·  | 🔥 Derby history | 🏆0Leagues | 🏆1Taça de Portugal | ⭐0UCL | 🌍0World Cup | 🌐0Continental | 🏅0Ballon d'Or | 🗂️Tournaments3 played o | 🏆World Cup 2030England  | Retire from Internationa | 📈 Ratings | 📖 Career Story | 📺 Season replays | Cookie choices | Light mode | Sound: off
+FAIL bad-1280-rm: reached two Ballon d'Or nights (2031)
+ok   bad-1280-rm: no page errors 
+ok   info only
+NIGHTS {"pool-390-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-pool-390-rm-1.png"}],"pool-390-full":[{"year":2031,"gen":5,"pool":12,"shot":"night-pool-390-full-1.png"}],"pool-1280-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-pool-1280-rm-1.png"}],"pool-1280-full":[{"year":2031,"gen":4,"pool":12,"shot":"night-pool-1280-full-1.png"}],"old-390-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-old-390-rm-1.png"}],"old-1280-full":[{"year":2031,"gen":5,"pool":12,"shot":"night-old-1280-full-1.png"}],"bad-390-full":[{"year":2031,"gen":5,"pool":12,"shot":"night-bad-390-full-1.png"}],"bad-1280-rm":[{"year":2031,"gen":5,"pool":12,"shot":"night-bad-1280-rm-1.png"}]}
+SAME NAMES old vs bad (both start a fresh pool): false; pool rm vs full: false
+ok   whats-new 390: entry shown
+ok   whats-new 1280: entry shown
+rvwalk: 51 checks, 16 failed
