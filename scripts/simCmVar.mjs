@@ -216,17 +216,29 @@ async function main() {
   process.on('unhandledRejection', capture); process.on('uncaughtExceptionMonitor', capture);
   try {
     const require = createRequire(import.meta.url);
-    async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates])) {
+    async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates]), siblings = {}) {
       const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), ratesLeaf = path.join(folder, `${name}-rates.ts`), output = path.join(folder, `${name}.cjs`);
       await writeFile(ratesLeaf, ratesSource);
       await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGameAsk, cmVarGoalLift, CM_VAR_KINDS } from '@/lib/clubManagerVar';\nexport { CM_VAR_REAL, CM_VAR_HOLDS, CM_VAR_ACCEPTED } from '@/data/clubManagerVarRates';\n`);
       await writeFile(leaf, varSource);
-      await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, '@': path.join(root, 'src') } });
+      const siblingAlias = {};
+      for (const [spec, text] of Object.entries(siblings)) {
+        siblingAlias[spec] = path.join(folder, `${name}-${spec.split('/').pop()}.ts`);
+        await writeFile(siblingAlias[spec], text);
+      }
+      await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, ...siblingAlias, '@': path.join(root, 'src') } });
       return () => { delete require.cache[require.resolve(output)]; return require(output); };
     }
     const git = spawnSync('git', ['show', `${BASE}:${engine}`], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024, windowsHide: true });
     assert.equal(git.status, 0, 'The prior accepted engine is available for a whole-save comparison');
-    const oldFactory = await bundle(git.stdout, sources[helper], 'prior');
+    /* Release AZ: the engine imports the calendar and the calendar imports the engine back. Since Round 1250
+       (PR224) today's calendar asks the engine for refreshWorldRoster and worldSeedOf, which the prior engine
+       never had, so linking the prior engine with today's calendar stopped building. The prior engine takes the
+       calendar of its own commit instead; between BASE and Release AX that file only gained the review opt in
+       of simToWeek, which the engine's own import (lateSummerWindowWeeks) does not touch. */
+    const gitCalendar = spawnSync('git', ['show', `${BASE}:src/lib/clubManagerCalendar.ts`], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024, windowsHide: true });
+    assert.equal(gitCalendar.status, 0, 'The prior accepted calendar is available beside the prior engine');
+    const oldFactory = await bundle(git.stdout, sources[helper], 'prior', undefined, { '@/lib/clubManagerCalendar': gitCalendar.stdout });
     const originalFactory = await bundle(sources[engine], sources[helper], 'original');
     const changed = { ...sources };
     if (control) {
