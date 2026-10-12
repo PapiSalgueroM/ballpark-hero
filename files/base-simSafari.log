@@ -1,0 +1,12 @@
+1) No date string is handed back to the parser
+   2077 shipped files scanned, 0 date round trips
+2) No lookbehind in shipped code
+  FAIL: src/hooks/useTransferPathGuidance.test.ts: regex lookbehind, a parse error in Safari before 16.4
+3) No very new JavaScript the phone in his pocket may not have
+4) No raw 100vh, because mobile Safari measures it wrong
+  FAIL: src/components/club-manager/LiveSimMotion.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+5) The viewport tag lets a phone zoom, and nothing blocks touch
+6) The gap this file cannot close is written down
+
+simSafari: 2 failures
+exit=1

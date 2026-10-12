@@ -1,0 +1,29 @@
+# Round 1314 reviewer (run lens) request A on 2d0c3cbe: the node harnesses, every control, the fences, the type gate, a base compare
+simHalftime: node scripts/simHalftime.mjs
+ht-deaf: SIM_HALFTIME_CONTROL=deaf node scripts/simHalftime.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+noShip: d="$(git diff --stat 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src public index.html package.json package-lock.json vite.config.ts tsconfig.app.json)"; echo "[$d]"; test -z "$d" && echo "nothing shipped moved"
+simSafari: node scripts/simSafari.mjs
+saf-lookbehind: SIM_SAFARI_CONTROL=lookbehind node scripts/simSafari.mjs
+saf-testimport: SIM_SAFARI_CONTROL=testimport node scripts/simSafari.mjs
+saf-barevh: SIM_SAFARI_CONTROL=barevh node scripts/simSafari.mjs
+saf-vhafter: SIM_SAFARI_CONTROL=vhafter node scripts/simSafari.mjs
+saf-dvhcomment: SIM_SAFARI_CONTROL=dvhcomment node scripts/simSafari.mjs
+saf-bogus: SIM_SAFARI_CONTROL=bogus node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+act-match: SIM_ACTIVITY_CONTROL=match node scripts/simActivityNotCompletion.mjs
+act-career: SIM_ACTIVITY_CONTROL=career node scripts/simActivityNotCompletion.mjs
+act-heavy: SIM_ACTIVITY_CONTROL=heavy node scripts/simActivityNotCompletion.mjs
+act-noping: SIM_ACTIVITY_CONTROL=noping node scripts/simActivityNotCompletion.mjs
+act-twocalls: SIM_ACTIVITY_CONTROL=twocalls node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+xp-growthshape: GMXP_CONTROL=growthshape node scripts/simGmXp.mjs
+xp-curvestep: GMXP_CONTROL=curvestep node scripts/simGmXp.mjs
+xp-cushiongain: GMXP_CONTROL=cushiongain node scripts/simGmXp.mjs
+xp-pastceiling: GMXP_CONTROL=pastceiling node scripts/simGmXp.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+baseCmp: bash .rc/x/baseCmp.sh
+ht-halfdeaf: node .rc/x/mkHalfDeaf.mjs && SIM_SEED=743293878 SIM_HALFTIME_CONTROL=deaf node scripts/htHalfDeaf.mjs

@@ -1,0 +1,54 @@
+base 48cb9d4bb, head 9bb5ddbd2
+=================== simSafari: base exit=1, head exit=0; diff base to head:
+0a1,2
+> 0) The scan covers what ships: no shipped file imports a test file
+>    2077 files under src, 522 test files left out (409 under src/test, 113 *.test.* or *.spec.* elsewhere), 1555 scanned, 6200 local imports read
+2c4
+<    2077 shipped files scanned, 0 date round trips
+---
+>    1555 shipped files scanned, 0 date round trips
+4d5
+<   FAIL: src/hooks/useTransferPathGuidance.test.ts: regex lookbehind, a parse error in Safari before 16.4
+7d7
+<   FAIL: src/components/club-manager/LiveSimMotion.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+11,12c11,12
+< simSafari: 2 failures
+< exit=1
+---
+> simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+> exit=0
+=================== simActivityNotCompletion: base exit=1, head exit=0; diff base to head:
+4,6c4
+<   FAIL: the season advance (advanceProSeason(career, clubs)) is not in the file, the check needs re-anchoring
+<   FAIL: the season advance no longer pings recordActivity('/soccer-career') within 600 characters
+<    advance ping present: false, own completions: 0
+---
+>    advance calls: 1, ping 44 characters after the call (window 600), advance ping present: true, own completions: 0
+10,11c8,9
+< simActivityNotCompletion: 2 failure(s)
+< exit=1
+---
+> simActivityNotCompletion: all green
+> exit=0
+=================== simGmXp: base exit=1, head exit=0; diff base to head:
+5,8c5
+<   FAIL: nbaFrontOffice.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)
+<   FAIL: mlbFrontOffice.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)
+<   FAIL: the front office numbers this harness reads came back thin: losses [-28,-16], gains [14,22,40], odds [0.45,0.5,0.55,0.6,0.7], 197 dead money figures, 136 asks, growth [{"league":"NFL","g":1},{"league":"NFL","g"
+<    real inputs: 136 opening asks over five price lists, 197 dead money figures, growth draws NFL 1/2, NBA , MLB , NHL 1/2/3
+---
+>    real inputs: 136 opening asks over five price lists, 197 dead money figures, growth draws NFL 1/2, NBA 1/2/3, MLB 1/2/3, NHL 1/2/3
+18c15
+<    development (rating points a young player gains in a year once stored as a whole number, per engine growth draw, one point of room left), mean over 5 real inputs: 1.8000 < 1.9000 < 2.0000 < 2.1000 < 2.2000 < 2.3000
+---
+>    development (rating points a young player gains in a year once stored as a whole number, per engine growth draw, one point of room left), mean over 11 real inputs: 1.9091 < 2.0091 < 2.1091 < 2.2091 < 2.3091 < 2.4091
+28c25
+<   ok: 1810050 readings: whole ratings, money in tenths, no ask under its floor, nobody past his ceiling, no trust gain touched
+---
+>   ok: 1930080 readings: whole ratings, money in tenths, no ask under its floor, nobody past his ceiling, no trust gain touched
+43,44c40,41
+< simGmXp: 3 failure(s)
+< exit=1
+---
+> simGmXp: all checks passed
+> exit=0
