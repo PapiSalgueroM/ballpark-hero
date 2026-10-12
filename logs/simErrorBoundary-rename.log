@@ -1,0 +1,4 @@
+   no hooks, no imports, no fetch, no storage, no clock in the class body (storage and the clock only through src/lib/brokenSaveRecovery.ts, never-throw pinned in its vitest)
+
+   CONTROL FIRED: the rename mutation was caught
+CONTROL FIRED rename

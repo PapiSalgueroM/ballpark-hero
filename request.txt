@@ -1,0 +1,33 @@
+#!build
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simStatDetectiveMotion: node scripts/simStatDetectiveMotion.mjs
+simSoccerCareerAmbitions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simReportContext-footle: SIM_REPORT_CONTROL=footle NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -2 | tee /dev/stderr | grep -q 'control "footle": [1-9][0-9]* failure(s) fired in section 2 as expected' && echo "CONTROL FIRED footle"
+simReportContext-nopath: SIM_REPORT_CONTROL=nopath NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -2 | tee /dev/stderr | grep -q 'control "nopath": [1-9][0-9]* failure(s) fired in section 1 as expected' && echo "CONTROL FIRED nopath"
+simReportContext-privacy: SIM_REPORT_CONTROL=privacy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs 2>&1 | tail -2 | tee /dev/stderr | grep -q 'control "privacy": [1-9][0-9]* failure(s) fired in section 4 as expected' && echo "CONTROL FIRED privacy"
+simReportRelay-off: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs
+simErrorBoundary-rename: BOUNDARY_CONTROL=rename node scripts/simErrorBoundary.mjs > "$RC_OUT/eb-rename.txt" 2>&1; tail -3 "$RC_OUT/eb-rename.txt"; grep -q "does not point at the Send us feedback button" "$RC_OUT/eb-rename.txt" && grep -q "CONTROL FIRED: the rename mutation was caught" "$RC_OUT/eb-rename.txt" && echo "CONTROL FIRED rename"
+simLineupRecordPositions: LINEUP_RECORD_POSITIONS_OUT="$RUNNER_TEMP/ba-lineup" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLineupRecordPositions.mjs
