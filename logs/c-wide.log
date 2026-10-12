@@ -1,0 +1,21 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners; CONTROL wide
+playCmLeagueLeaders: page seed 2362537418
+  FAIL 2: S1-320: the goals board runs sideways (509 wide in 320)
+  FAIL 2: S1-320: the assists board runs sideways (509 wide in 320)
+  FAIL 2: S1-320: the sheets board runs sideways (509 wide in 320)
+  FAIL 2: S2-320: the goals board runs sideways (509 wide in 320)
+  FAIL 2: S2-320: the assists board runs sideways (509 wide in 320)
+  FAIL 2: S2-320: the sheets board runs sideways (509 wide in 320)
+  FAIL 2: S1-390: the goals board runs sideways (509 wide in 390)
+  FAIL 2: S1-390: the assists board runs sideways (509 wide in 390)
+  FAIL 2: S1-390: the sheets board runs sideways (509 wide in 390)
+  FAIL 2: S2-390: the goals board runs sideways (509 wide in 390)
+  FAIL 2: S2-390: the assists board runs sideways (509 wide in 390)
+  FAIL 2: S2-390: the sheets board runs sideways (509 wide in 390)
+5       the page drew 7 and 7 times before the match; the two saves are equal (121105 characters)
+green 1 the page is the reader: 18 checks
+RED   2 the fit: 141 checks, 12 failed
+green 3 nothing stacks or jumps: 57 checks
+green 4 the lines: 48 checks
+green 5 a match with the boards open: 2 checks
+playCmLeagueLeaders: CONTROL wide FIRED: section 2 went red (12 failures) and no other did

@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 30s | sweepWeight: 3 failures
+mywalk exit=0 100s | walk: green (pictures in RC_OUT for looking)
+leaders exit=0 107s | playCmLeagueLeaders: green, 5 sections at 320, 390 and 1280
+c-swap exit=1 105s | playCmLeagueLeaders: CONTROL swap FIRED: section 1 went red (18 failures) and no other did
+c-wide exit=1 105s | playCmLeagueLeaders: CONTROL wide FIRED: section 2 went red (12 failures) and no other did
+c-stack exit=1 104s | playCmLeagueLeaders: CONTROL stack FIRED: section 3 went red (21 failures) and no other did
+c-thin exit=1 104s | playCmLeagueLeaders: CONTROL thin FIRED: section 4 went red (6 failures) and no other did
+c-younglate exit=1 103s | playCmLeagueLeaders: CONTROL younglate FIRED: section 4 went red (3 failures) and no other did
+c-write exit=1 102s | playCmLeagueLeaders: CONTROL write FIRED: section 5 went red (1 failures) and no other did

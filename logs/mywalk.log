@@ -1,0 +1,67 @@
+save mid: Bournemouth season 1 week 28; share none from - by none; summary awards -; records with awards 0, with a team 0
+save champ: Bristol City season 1 week 29; share 92 from - by book; summary awards -; records with awards 0, with a team 0
+save thin: Rangers season 1 week 34; share 44 from - by thin; summary awards -; records with awards 0, with a team 0
+save review: Brighton season 1 week 54; share 100 from - by book; summary awards true; records with awards 1, with a team 1
+save thinreview: Aberdeen season 1 week 38; share 51 from - by thin; summary awards false; records with awards 0, with a team 0
+save past: Barcelona season 8 week 5; share 32 from - by thin; summary awards -; records with awards 6, with a team 5
+mid 390-rm: thin line []; late []; sideways 0
+mid 390-rm: tiles ["⚽ Top scorersLiam DelapNottingham Forest14","🅰️ AssistsMorgan RogersChelsea10","🧤 Clean sheetsEmiliano MartínezChelsea8"]
+mid 390-rm: keepers line []
+mid 390-rm: race lines ["👟 The golden boot this season is the Top scorers board above."]
+champ 390-rm: thin line ["The data covers only part of this league: 92 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+champ 390-rm: tiles ["⚽ Top scorersTaty CastellanosWest Ham16","🅰️ AssistsTyrese CampbellSheffield United6","🧤 Clean sheetsMads HermansenWest Ham13"]
+champ 390-rm: keepers line ["Keepers of 19 of the 23 other clubs are on record."]
+champ 390-rm: race lines ["👟 The golden boot this season is the Top scorers board above."]
+thin 390-rm: thin line ["The data covers only part of this league: 44 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+thin 390-rm: tiles ["⚽ Top scorersBenjamin NygrenCeltic17","🅰️ AssistsOliver SørensenCeltic6","🧤 Clean sheetsIvor PandurRangers12"]
+thin 390-rm: keepers line ["Keepers of 2 of the 11 other clubs are on record."]
+thin 390-rm: race lines []
+review 390-rm: award lines and opacity ["ast:1","glove:1"]; withheld []; sideways 0
+thinreview 390-rm: award lines and opacity ["line:1"]; withheld ["Only 51 in 100 of this league's goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time."]; sideways 0
+past 390-rm: count ["6 of 6"]; gone ["The team of the season is kept for the last five seasons."]; sideways 0
+mid 390-mo: thin line []; late []; sideways 0
+mid 390-mo: tiles ["⚽ Top scorersLiam DelapNottingham Forest14","🅰️ AssistsMorgan RogersChelsea10","🧤 Clean sheetsEmiliano MartínezChelsea8"]
+mid 390-mo: keepers line []
+mid 390-mo: race lines ["👟 The golden boot this season is the Top scorers board above."]
+champ 390-mo: thin line ["The data covers only part of this league: 92 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+champ 390-mo: tiles ["⚽ Top scorersTaty CastellanosWest Ham16","🅰️ AssistsTyrese CampbellSheffield United6","🧤 Clean sheetsMads HermansenWest Ham13"]
+champ 390-mo: keepers line ["Keepers of 19 of the 23 other clubs are on record."]
+champ 390-mo: race lines ["👟 The golden boot this season is the Top scorers board above."]
+thin 390-mo: thin line ["The data covers only part of this league: 44 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+thin 390-mo: tiles ["⚽ Top scorersBenjamin NygrenCeltic17","🅰️ AssistsOliver SørensenCeltic6","🧤 Clean sheetsIvor PandurRangers12"]
+thin 390-mo: keepers line ["Keepers of 2 of the 11 other clubs are on record."]
+thin 390-mo: race lines []
+review 390-mo: award lines and opacity ["ast:1","glove:1"]; withheld []; sideways 0
+thinreview 390-mo: award lines and opacity ["line:1"]; withheld ["Only 51 in 100 of this league's goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time."]; sideways 0
+past 390-mo: count ["6 of 6"]; gone ["The team of the season is kept for the last five seasons."]; sideways 0
+mid 1280-rm: thin line []; late []; sideways 0
+mid 1280-rm: tiles ["⚽ Top scorersLiam DelapNottingham Forest14","🅰️ AssistsMorgan RogersChelsea10","🧤 Clean sheetsEmiliano MartínezChelsea8"]
+mid 1280-rm: keepers line []
+mid 1280-rm: race lines ["👟 The golden boot this season is the Top scorers board above."]
+champ 1280-rm: thin line ["The data covers only part of this league: 92 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+champ 1280-rm: tiles ["⚽ Top scorersTaty CastellanosWest Ham16","🅰️ AssistsTyrese CampbellSheffield United6","🧤 Clean sheetsMads HermansenWest Ham13"]
+champ 1280-rm: keepers line ["Keepers of 19 of the 23 other clubs are on record."]
+champ 1280-rm: race lines ["👟 The golden boot this season is the Top scorers board above."]
+thin 1280-rm: thin line ["The data covers only part of this league: 44 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+thin 1280-rm: tiles ["⚽ Top scorersBenjamin NygrenCeltic17","🅰️ AssistsOliver SørensenCeltic6","🧤 Clean sheetsIvor PandurRangers12"]
+thin 1280-rm: keepers line ["Keepers of 2 of the 11 other clubs are on record."]
+thin 1280-rm: race lines []
+review 1280-rm: award lines and opacity ["ast:1","glove:1"]; withheld []; sideways 0
+thinreview 1280-rm: award lines and opacity ["line:1"]; withheld ["Only 51 in 100 of this league's goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time."]; sideways 0
+past 1280-rm: count ["6 of 6"]; gone ["The team of the season is kept for the last five seasons."]; sideways 0
+mid 1280-mo: thin line []; late []; sideways 0
+mid 1280-mo: tiles ["⚽ Top scorersLiam DelapNottingham Forest14","🅰️ AssistsMorgan RogersChelsea10","🧤 Clean sheetsEmiliano MartínezChelsea8"]
+mid 1280-mo: keepers line []
+mid 1280-mo: race lines ["👟 The golden boot this season is the Top scorers board above."]
+champ 1280-mo: thin line ["The data covers only part of this league: 92 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+champ 1280-mo: tiles ["⚽ Top scorersTaty CastellanosWest Ham16","🅰️ AssistsTyrese CampbellSheffield United6","🧤 Clean sheetsMads HermansenWest Ham13"]
+champ 1280-mo: keepers line ["Keepers of 19 of the 23 other clubs are on record."]
+champ 1280-mo: race lines ["👟 The golden boot this season is the Top scorers board above."]
+thin 1280-mo: thin line ["The data covers only part of this league: 44 in 100 of the other clubs' goals have a name on them. The rest count for the club and nobody else."]; late []; sideways 0
+thin 1280-mo: tiles ["⚽ Top scorersBenjamin NygrenCeltic17","🅰️ AssistsOliver SørensenCeltic6","🧤 Clean sheetsIvor PandurRangers12"]
+thin 1280-mo: keepers line ["Keepers of 2 of the 11 other clubs are on record."]
+thin 1280-mo: race lines []
+review 1280-mo: award lines and opacity ["ast:1","glove:1"]; withheld []; sideways 0
+thinreview 1280-mo: award lines and opacity ["line:1"]; withheld ["Only 51 in 100 of this league's goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time."]; sideways 0
+past 1280-mo: count ["6 of 6"]; gone ["The team of the season is kept for the last five seasons."]; sideways 0
+walk: green (pictures in RC_OUT for looking)
