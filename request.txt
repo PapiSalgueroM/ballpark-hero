@@ -1,0 +1,3 @@
+# Round 1314 3.4b: the fuller deaf control on HEAD, and the main line once more
+ht-deaf: SIM_HALFTIME_CONTROL=deaf node scripts/simHalftime.mjs
+simHalftime: node scripts/simHalftime.mjs
