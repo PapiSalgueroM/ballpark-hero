@@ -1,0 +1,16 @@
+# Round 1311 step 5 (head 5090d373, local): the league rules digest by its attribution legs, the save size on six streams, the gates
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+rules-legA: rm -rf /tmp/attrA && git worktree add -q /tmp/attrA HEAD && ln -s "$PWD/node_modules" /tmp/attrA/node_modules && node .rc/x/attrA5.mjs /tmp/attrA && TMPDIR=$(mktemp -d) CM_RULES_ROOT=/tmp/attrA node scripts/simCmLeagueRules.mjs
+rules-legB: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+rules-write: TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && mkdir -p "$RC_OUT" && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && TMPDIR=$(mktemp -d) node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+saveSize-0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSaveSize.mjs
+saveSize-1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: TMPDIR=$(mktemp -d) SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+book-d0-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d0 && git worktree add -q $B 21941630 && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
