@@ -1,0 +1,18 @@
+
+ RUN  v3.2.7 /tmp/base
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1309Write.test.tsx > writes the saves of this tree's board (the base)
+R1309 wrote "mid season, after Week 9": phase hub, week 10, bracket false, 83479 bytes
+R1309 wrote "the morning of Week 17, after Week 16": phase hub, week 17, bracket false, 83608 bytes
+R1309 wrote "the recap, through the old button": phase recap, week 17, bracket false, 85539 bytes
+
+ ✓ src/test/r1309Write.test.tsx (1 test) 253ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  20:53:37
+   Duration  1.93s (transform 650ms, setup 51ms, collect 919ms, tests 253ms, environment 294ms, prepare 159ms)
+

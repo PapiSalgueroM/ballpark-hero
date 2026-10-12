@@ -1,0 +1,25 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > mid season, after Week 9
+R1309 head plays on "mid season, after Week 9" with "Play Week 10": week 10 to 11, phase hub, bracket false
+
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the saves are the other build's 1ms
+stdout | src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the morning of Week 17, after Week 16
+R1309 head plays on "the morning of Week 17, after Week 16" with "Play Week 17": week 17 to 18, phase hub, bracket true
+
+stdout | src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the recap, through the old button
+R1309 head opens "the recap, through the old button" on its recap screen
+
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > mid season, after Week 9 133ms
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the morning of Week 17, after Week 16 58ms
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the recap, through the old button 20ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  20:53:42
+   Duration  1.88s (transform 650ms, setup 51ms, collect 940ms, tests 214ms, environment 291ms, prepare 145ms)
+

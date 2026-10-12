@@ -1,0 +1,17 @@
+R1309 wrote "mid season, after Week 9": phase hub, week 10, bracket false, 83479 bytes
+R1309 wrote "the morning of Week 17, after Week 16": phase hub, week 17, bracket false, 83608 bytes
+R1309 wrote "the recap, through the old button": phase recap, week 17, bracket false, 85539 bytes
+ ✓ src/test/r1309Write.test.tsx (1 test) 253ms
+      Tests  1 passed (1)
+R1309 base plays on "mid season, after Week 9" with "Play Week 10": week 10 to 11, phase hub, bracket false
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the saves are the other build's 1ms
+R1309 base plays on "the morning of Week 17, after Week 16" with "Play the final week + playoffs": week 17 to 17, phase recap, bracket false
+R1309 base opens "the recap, through the old button" on its recap screen
+R1309 base refuses "in the bracket, after one round": validator false, delete button true
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > mid season, after Week 9 136ms
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the morning of Week 17, after Week 16 66ms
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the recap, through the old button 18ms
+R1309 base opens "the recap, through the bracket" on its recap screen
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > in the bracket, after one round 17ms
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the recap, through the bracket 16ms
+      Tests  6 passed (6)

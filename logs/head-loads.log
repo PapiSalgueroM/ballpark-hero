@@ -1,0 +1,8 @@
+R1309 head plays on "mid season, after Week 9" with "Play Week 10": week 10 to 11, phase hub, bracket false
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the saves are the other build's 1ms
+R1309 head plays on "the morning of Week 17, after Week 16" with "Play Week 17": week 17 to 18, phase hub, bracket true
+R1309 head opens "the recap, through the old button" on its recap screen
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > mid season, after Week 9 133ms
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the morning of Week 17, after Week 16 58ms
+ ✓ src/test/r1309Load.test.tsx > the round's head loads the saves the other build wrote > the recap, through the old button 20ms
+      Tests  4 passed (4)

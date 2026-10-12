@@ -1,0 +1,33 @@
+
+ RUN  v3.2.7 /tmp/base
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > mid season, after Week 9
+R1309 base plays on "mid season, after Week 9" with "Play Week 10": week 10 to 11, phase hub, bracket false
+
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the saves are the other build's 1ms
+stdout | src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the morning of Week 17, after Week 16
+R1309 base plays on "the morning of Week 17, after Week 16" with "Play the final week + playoffs": week 17 to 17, phase recap, bracket false
+
+stdout | src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the recap, through the old button
+R1309 base opens "the recap, through the old button" on its recap screen
+
+stdout | src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > in the bracket, after one round
+R1309 base refuses "in the bracket, after one round": validator false, delete button true
+
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > mid season, after Week 9 136ms
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the morning of Week 17, after Week 16 66ms
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the recap, through the old button 18ms
+stdout | src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the recap, through the bracket
+R1309 base opens "the recap, through the bracket" on its recap screen
+
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > in the bracket, after one round 17ms
+ ✓ src/test/r1309Load.test.tsx > the base (bb051ee0) loads the saves the other build wrote > the recap, through the bracket 16ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  20:53:39
+   Duration  1.90s (transform 626ms, setup 50ms, collect 899ms, tests 256ms, environment 295ms, prepare 147ms)
+

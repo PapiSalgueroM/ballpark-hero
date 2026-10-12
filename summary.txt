@@ -1,0 +1,3 @@
+head-writes exit=0 2s |       Tests  1 passed (1)
+base exit=0 5s |       Tests  6 passed (6)
+head-loads exit=0 2s |       Tests  4 passed (4)
