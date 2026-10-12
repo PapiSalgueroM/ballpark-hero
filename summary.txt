@@ -1,0 +1,2 @@
+saveSize-inverse exit=0 36s | simClubManagerSaveSize: all sections green
+slots-inverse exit=0 40s | simClubManagerSlots: all sections green
