@@ -162,7 +162,9 @@
  *                 it is, and the week throws on it                   -> oldsave
  *   seasonstamp   the season's number is put back into the stamp     -> doors (and oldsave (vi) with it
  *                 since the second fix pass of Round 1306: a stamp with the season's number in it makes
- *                 each of the two committed recordings another season's book, so the reader refuses both)
+ *                 each of the two committed recordings another season's book, so the reader refuses both;
+ *                 with BOOK_BASE thin (iv) goes with it as well, as it does for stampv2: the stamp is in
+ *                 every deal key)
  *   strip         the Hot Seat's strip of the book is taken out      -> dailies
  *   stripdeadline Deadline Day's strip is taken out                  -> dailies
  *   assistgoalweight the assist is shared out by the GOAL table (the mutation a reviewer of Round 1229
@@ -311,7 +313,7 @@ const CONTROLS = {
   keyindex: { patch: [{ file: BOOK, from: '    const rng = keyedRng(`${key}|${i}`);', to: '    const rng = keyedRng(key);' }], red: 'shapes' },
   hurtentry: { patch: [{ file: BOOK, from: '  return isRecord(have) && isRecord(have.m) ? (have as unknown as BookClub) : null;', to: '  return have as unknown as BookClub;' }], red: 'oldsave' },
   redeal: { patch: [{ file: ENGINE, from: '    ensureRoles(parsed);', to: '    ensureRoles(parsed);\n    if (!parsed.leagueBook) openLeagueBook(parsed);' }], red: 'oldsave' },
-  seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors', also: ['oldsave'], mentions: ['has no readable book'] },
+  seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors', also: ['oldsave', 'thin'], mentions: ['has no readable book'] },
   strip: { patch: [{ file: HOT, from: '  delete s.leagueBook;', to: '' }], red: 'dailies' },
   stripdeadline: { patch: [{ file: DEADLINE, from: '    delete state0.leagueBook;', to: '' }], red: 'dailies' },
   assistgoalweight: { patch: [{ file: BOOK, from: 'm => assistWeight(m.p, m.r), pick);', to: 'm => goalWeight(m.p, m.r), pick);' }], red: 'shapes' },
