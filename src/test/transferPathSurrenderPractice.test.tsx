@@ -70,14 +70,14 @@ afterEach(() => cleanup());
 async function openSearchAndHelp() {
   fireEvent.change(screen.getByRole('combobox'), { target: { value: 'zzzz' } });
   await waitFor(() => expect(report().lastNoMatch).toBe('zzzz'));
-  fireEvent.click(screen.getByRole('button', { name: 'Show hint', exact: true }));
-  fireEvent.click(screen.getByRole('button', { name: 'More help', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Show hint' }));
+  fireEvent.click(screen.getByRole('button', { name: 'More help' }));
   expect(screen.getByText('Fixture help line.')).toBeTruthy();
 }
 function surrender() {
-  fireEvent.click(screen.getByRole('button', { name: 'Give up and see a path', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Give up and see a path' }));
   expect(calls.giveUp).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole('button', { name: 'Yes, reveal it', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Yes, reveal it' }));
   expect(calls.giveUp).toHaveBeenCalledTimes(1);
   expect(screen.getByText("Here's a path that works")).toBeTruthy();
   expect(screen.queryByRole('combobox')).toBeNull();
@@ -85,13 +85,13 @@ function surrender() {
 function expectFreshBoard() {
   expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('');
   expect(screen.queryByText("Here's a path that works")).toBeNull();
-  expect(screen.getByRole('button', { name: 'Show hint', exact: true })).toBeTruthy();
+  expect(screen.getByRole('button', { name: 'Show hint' })).toBeTruthy();
   expect(screen.queryByText('Fixture help line.')).toBeNull();
-  expect(screen.queryByRole('button', { name: 'More help', exact: true })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'More help' })).toBeNull();
   expect(report().lastNoMatch).toBeNull();
   expect(report().chain).toEqual(['Fixture Start']);
-  fireEvent.click(screen.getByRole('button', { name: 'Show hint', exact: true }));
-  expect(screen.getByRole('button', { name: 'More help', exact: true })).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Show hint' }));
+  expect(screen.getByRole('button', { name: 'More help' })).toBeTruthy();
   expect(screen.queryByText('Fixture help line.')).toBeNull();
 }
 
@@ -101,8 +101,8 @@ describe('Transfer Path surrender continuation', () => {
     render(<TransferPathBoard />);
     await openSearchAndHelp();
     surrender();
-    expect(screen.queryAllByRole('button', { name: 'Play Unlimited', exact: true })).toHaveLength(1);
-    fireEvent.click(screen.getByRole('button', { name: 'Play Unlimited', exact: true }));
+    expect(screen.queryAllByRole('button', { name: 'Play Unlimited' })).toHaveLength(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Play Unlimited' }));
     expect(calls.switchToUnlimited).toHaveBeenCalledTimes(1);
     expect(calls.nextPuzzle).not.toHaveBeenCalled();
     expect(report().rule).toBe(rule);
@@ -113,9 +113,9 @@ describe('Transfer Path surrender continuation', () => {
   it('preservation: Keep playing cancels surrender without changing the board', async () => {
     render(<TransferPathBoard />);
     await openSearchAndHelp();
-    fireEvent.click(screen.getByRole('button', { name: 'Give up and see a path', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Give up and see a path' }));
     expect(screen.getByText('Give up and see the answer?')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Keep playing', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Keep playing' }));
     expect(calls.giveUp).not.toHaveBeenCalled();
     expect(calls.switchToUnlimited).not.toHaveBeenCalled();
     expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('zzzz');
@@ -127,9 +127,9 @@ describe('Transfer Path surrender continuation', () => {
   it('preservation: a building daily has guess controls and no practice exit', () => {
     render(<TransferPathBoard />);
     expect(screen.getByRole('combobox')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Give up and see a path', exact: true })).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Play Unlimited', exact: true })).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Next Puzzle', exact: true })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Give up and see a path' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Play Unlimited' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Next Puzzle' })).toBeNull();
   });
 
   it('preservation: an unlimited surrender advances with Next Puzzle and clears board state', async () => {
@@ -137,8 +137,8 @@ describe('Transfer Path surrender continuation', () => {
     render(<TransferPathBoard />);
     await openSearchAndHelp();
     surrender();
-    expect(screen.queryByRole('button', { name: 'Play Unlimited', exact: true })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Next Puzzle', exact: true }));
+    expect(screen.queryByRole('button', { name: 'Play Unlimited' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Next Puzzle' }));
     expect(calls.nextPuzzle).toHaveBeenCalledTimes(1);
     expect(calls.switchToUnlimited).not.toHaveBeenCalled();
     expect(screen.getByText(/Unlimited #2/)).toBeTruthy();
@@ -152,7 +152,7 @@ describe('Transfer Path surrender continuation', () => {
     expect(screen.getByText("Here's a path that works")).toBeTruthy();
     expect(screen.getByText('Fixture Middle')).toBeTruthy();
     expect(screen.queryByRole('combobox')).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Give up and see a path', exact: true })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Give up and see a path' })).toBeNull();
     expect(calls.giveUp).not.toHaveBeenCalled();
   });
 
@@ -161,7 +161,7 @@ describe('Transfer Path surrender continuation', () => {
     render(<TransferPathBoard />);
     expect(screen.getByText(/Loading Transfer Path/)).toBeTruthy();
     expect(screen.queryByRole('combobox')).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Play Unlimited', exact: true })).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Next Puzzle', exact: true })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Play Unlimited' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Next Puzzle' })).toBeNull();
   });
 });

@@ -27,3 +27,14 @@ derived independently from that graph. Unit hook stubs prove Board wiring only,
 not real teammate facts. All external transport is blocked or fulfilled from
 fixtures. No production DB operation, release output adoption or live-site claim.
 No runtime qualification yet.
+
+First baseline fdbb9ec04138404b7d22c0cfb4073930faa47f87 stopped at the app type
+gate in run 38302981032, job 114990153796. Twenty Testing Library role queries
+used the unsupported Playwright exact option. The correction removes only those
+options; string names and all assertions stay held. No unit, build or browser
+step ran, so this attempt earns no defect reproduction or product credit.
+All 521 installed versions and source/package holds passed. Artifact 11771732719
+is retained remotely and locally: 6,485 bytes, five entries, ZIP SHA256
+2d57f2a9f1bdbbcefecbcd6e40b2fd2bbdf4f0107d7a01ac6a46bb447bb802da.
+The complete LF-normalized log is retained under .tmp-fx/surrender-fdbb9ec0,
+SHA256 d12bd2c2622259741063a91e746bad0ece64fc96c8b09971f99d0879fba080ef.
