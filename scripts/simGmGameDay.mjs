@@ -804,7 +804,10 @@ for (const set of SEEDSETS) {
     ...NEW_FILES.map(f => [f, '*']),
     ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
-    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG)])],
+    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD)])],
+    /* Round 1307, the tile: the board reaches the bound card (through a lazy import: the check below) and nothing
+       else of the card's files; its tile test reads the log, the bind's words and the view lib's own answers */
+    ['src/components/front-office/FrontOfficeTile.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(VIEW), noExt(NFL_DAY), noExt(SCORE)])],
     /* its board tests read the log, the bind's words for a week and the quick path's final */
     ['src/components/front-office/FrontOfficeGameDay.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(SCORE)])],
     ['src/components/front-office/FrontOfficeOnePress.test.tsx', new Set([noExt(LOG)])],
@@ -858,6 +861,10 @@ for (const set of SEEDSETS) {
     }
   }
   check(6, `the four boards import no story law, no game day law and no help words statically (${statics} static imports read)`, heavy.length === 0 && statics >= 40, heavy.join(', ') || `only ${statics} static imports were seen`);
+  /* Round 1307: the tile is mounted, and through a lazy import made once at module level (a mount list that allowed a
+     card nobody mounts would be holding nothing, and a lazy part made inside a render remounts on every save) */
+  const lazyCard = boardText.split(`lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'))`).length - 1;
+  check(6, 'the NFL board mounts the bound Game Day card through one lazy import, made before the component', lazyCard === 1 && boardText.indexOf('lazyPart<GmGameDayMount>') < boardText.indexOf('export default function FrontOfficeBoard') && /<NflGameDay\b/.test(boardText));
 }
 
 /* ─── What was measured, for the header and the notes ─── */
