@@ -1,4 +1,4 @@
-/* Manager persistence and private trajectories: complete retained outcomes against actual09df.
+/* Manager persistence and private trajectories: complete retained outcomes against the original engine (b6eb78e7, the kit's BASE since Release AZ).
    Run remotely with MANAGER_WORLD_CONTINUITY_CONTROL=all for thirteen effective copied faults.
    This does not change historical fixtures or certify unrelated historical source fences. */
 import assert from 'node:assert/strict';
@@ -490,7 +490,7 @@ try {
   fs.writeFileSync(path.join(OUT, 'controls.json'), JSON.stringify({ head: HEAD, tree: TREE, base: BASE, baseTree: BASE_TREE,
     controls: results.map(r => ({ control: r.control, status: r.status, failedGroups: r.failures.map(f => f.id), counts: r.counts, sourceHeld: r.sourceHeld })), sourceBefore: before, sourceAfter: after }, null, 2));
   console.log(`Manager world continuity: ${results.length} arms, eleven complete groups per arm`);
-  console.log('Independent actual09df inactive saves and full draw vectors held in every arm');
+  console.log('Independent original engine (b6eb78e7) inactive saves and full draw vectors held in every arm');
   console.log('Completed transactions, original source identity and actual callback receipts retained');
   console.log('Private world variation is measured, no historical fixture was re-recorded');
 } catch (error) { console.error(error.stack); process.exitCode = 1; }
