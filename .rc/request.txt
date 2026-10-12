@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-bracketjump: FO_GAMEDAY_WALK_CONTROL=bracketjump ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-playoffspoil: FO_GAMEDAY_WALK_CONTROL=playoffspoil ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-lostblock: FO_GAMEDAY_WALK_CONTROL=lostblock ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+gmpress: ENGINES=chromium node scripts/playGmPress.mjs
+mandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
