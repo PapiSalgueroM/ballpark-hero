@@ -1,0 +1,10 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 81s | playFrontOfficeGameDay: 168 checks, 4 failed
+walk-recordspoils exit=3 80s | control recordspoils: DID NOT FIRE as named (point 3 wanted; red points: 6, 7, 3)
+walk-spoiler exit=3 80s | control spoiler: DID NOT FIRE as named (point 3 wanted; red points: 6, 7, 3)
+walk-tall exit=3 80s | control tall: DID NOT FIRE as named (point 8 wanted; red points: 6, 7, 8)
+vitest-card exit=0 3s |    Duration  2.54s (transform 881ms, setup 121ms, collect 1.43s, tests 855ms, environment 677ms, prepare 271ms)
+tsc exit=0 61s | 
+weight-head exit=1 27s | sweepWeight: 3 failures
+chunks-head exit=0 4s | ROUTE /nfl-my-career: 483.4K gz over 47 files
+weight-base exit=1 65s | sweepWeight: 3 failures

@@ -1,0 +1,14 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/components/front-office-shared/GmGameDayCard.test.tsx (10 tests) 191ms
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ src/components/front-office/FrontOfficeTile.test.tsx (7 tests) 664ms
+
+ Test Files  2 passed (2)
+      Tests  17 passed (17)
+   Start at  05:55:57
+   Duration  2.54s (transform 881ms, setup 121ms, collect 1.43s, tests 855ms, environment 677ms, prepare 271ms)
+

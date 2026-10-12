@@ -1,0 +1,6 @@
+  FAIL: /soccer-career: 823K of gzipped JavaScript against a budget of 821K
+  FAIL: /nfl-my-career: 483K of gzipped JavaScript against a budget of 480K
+  FAIL: /front-office: 364K of gzipped JavaScript against a budget of 362K
+   /nfl-my-career      483K gz over  47 files (budget 480K, 483.4K to the tenth)
+   /front-office       364K gz over  36 files (budget 362K, 364.1K to the tenth)
+sweepWeight: 3 failures
