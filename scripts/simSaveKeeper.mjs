@@ -432,9 +432,11 @@ const V = K.SAVE_VERSIONS;
      transferBrief        no brief is held; a new brief can be filed in the same window.
      agentReview          the once a season review is offered again (one more use that season).
      internationalReturn  the once a season comeback is judged as if it had not been used.
-     farewellSeason       no plan is held. The commitment is the save's own isFinalSeason flag, which the
-                          announcement sets with the plan: with it set the card is not offered again and the
-                          engine ends nothing by the flag alone; with it off the card is offered again.
+     farewellSeason       no plan is held and the card is judged as on the same save without the part, so it
+                          is offered again and a new announcement overwrites the old plan. The save's own
+                          isFinalSeason flag, which the announcement sets with the plan, is not read for this:
+                          the engine ends nothing by the flag alone, so a card kept closed for it (the closing
+                          pass's first reading of ruling C3) left a banner and no way to the farewell it names.
    So the day a later round moves one of these four numbers, the old part costs a player one receipt and
    nothing else, and that round migrates the part itself if it wants more. scripts/lib/realSaves.mjs holds the
    four on two played saves (a veteran's hub, a transfer window) and partAbsent there asks the game each

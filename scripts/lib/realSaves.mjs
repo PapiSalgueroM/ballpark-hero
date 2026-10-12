@@ -409,20 +409,20 @@ export const partAbsent = {
       if (next === again || !INTL.readInternationalReturn(next)) return 'a new comeback did not overwrite the unreadable receipt';
       return null;
     },
-    /* The farewell's commitment is the save's own isFinalSeason flag: with it set the card is not offered
-       again, with it off the card is offered like to any eligible player and a new announcement overwrites. */
+    /* The farewell is judged as on the same save without the part, whatever the save's isFinalSeason flag
+       says (the engine never ended a career by that flag, so it is no commitment to keep a card closed for):
+       the card is offered again on this save, which still holds the flag the announcement set, and a new
+       announcement overwrites the unreadable plan. */
     'farewellSeason.version': raw => {
       const s = JSON.parse(raw);
       if (FARE.readSoccerFarewell(s) !== null) return 'the plan is still read';
       if (FARE.farewellSeasonComplete(s)) return 'an unreadable plan still completes a farewell season';
       if (s.isFinalSeason !== true) return 'the fixture did not keep the flag the announcement set';
       const now = FARE.farewellEligibility(s);
-      if (now.eligible || now.reason !== 'Your final season is already announced.') return 'with the flag set the card is offered again, or closed for another reason (' + now.reason + ')';
-      const off = { ...s, isFinalSeason: false };
-      const open = FARE.farewellEligibility(off);
-      if (!open.eligible) return 'with the flag off the card stays closed (' + open.reason + ')';
-      const next = FARE.announceSoccerFarewell(off);
-      if (next === off || !FARE.readSoccerFarewell(next) || next.isFinalSeason !== true) return 'a new announcement did not overwrite the unreadable plan';
+      if (!sameAnswer(now, FARE.farewellEligibility(without(s, 'farewellSeason')))) return 'the farewell is not judged as on the same save without the part (' + now.reason + ')';
+      if (!now.eligible) return 'the card stays closed on a save that holds nothing but the flag of its unreadable plan (' + now.reason + ')';
+      const next = FARE.announceSoccerFarewell(s);
+      if (next === s || !FARE.readSoccerFarewell(next) || next.isFinalSeason !== true) return 'a new announcement did not overwrite the unreadable plan';
       return null;
     },
   },
