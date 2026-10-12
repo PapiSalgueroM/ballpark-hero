@@ -1,0 +1,40 @@
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/vitest-all.log 2>&1; s=$?; grep -E "Test Files|Tests  |FAIL" $RC_OUT/vitest-all.log | head -20; exit $s
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+simFoHub: node scripts/simFoHub.mjs
+simFoHub-nopost: FO_HUB_CONTROL=nopost node scripts/simFoHub.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simGmReload: node scripts/simGmReload.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
