@@ -400,8 +400,12 @@ export function leagueBookOf(state: CareerState): LeagueBook | null {
   return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
 }
 
-/** The eleven the book deals a rival's goals over this week: the one the Match Centre and the viewer
- *  already show, minus any man now in my squad. Null for a club that cannot field a named eleven. */
+/** The eleven a rival that can field one is dealt over this week: the one the Match Centre and the viewer
+ *  already show, minus any man now in my squad. Null for a club that cannot field a named eleven (the
+ *  book deals that club over its partial eleven, thinBookEleven below). Since Round 1306 nothing in src
+ *  calls this: noteBookSide asks for the roster once and takes the eleven from it with the same two
+ *  calls. It stays exported as the door scripts/simCmLeagueBook.mjs watches the book through, and that
+ *  harness holds it against the partial eleven of the same roster at every season's end. */
 export function leagueBookEleven(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): OppXiLine[] | null {
   return pickOppSquad(oppRosterFor(state, club, mine))?.xi ?? null;
 }
