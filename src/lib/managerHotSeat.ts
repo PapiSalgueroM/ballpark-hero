@@ -493,6 +493,13 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      scripts/simCmLeagueBook.mjs (section dailies) holds this: its controls put this line out, and take
      the option off each of the three calls in turn. */
   delete s.leagueBook;
+  /* Release AZ, the lead's ruling Y3: and no world seed. Since Round 1250 startCareer gives every new career
+     one, and a seed left on the day would make the career handed to Club Manager (handoverState) a seeded
+     world, the same seed for everyone who took that day. It comes off whether or not a date moves, so a hot
+     seat day is an unseeded world like any save from before the release, and with no seed the engine never
+     writes it a ledger (recordActualRosterTransfer). scripts/simDailyDeals.mjs holds this: its seed control
+     puts this line back out. */
+  delete s.worldSeed;
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;
