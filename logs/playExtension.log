@@ -1,0 +1,6 @@
+    "  - waiting for locator('[data-extension-talk] [data-ext-salary]').first()"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

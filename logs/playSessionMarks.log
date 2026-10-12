@@ -1,0 +1,4 @@
+  PASS  the mark is nfl-my-career, unscored, with a handle ({"game":"nfl-my-career","player_name":"RapidAnchor-58"})
+  PASS  no real page errors on the career walk (clean)
+
+playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.

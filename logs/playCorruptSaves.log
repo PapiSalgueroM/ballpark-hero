@@ -1,0 +1,4 @@
+  note  /hall-of-champions wrongtype not judged offline: the championship archive comes from the database before the museum save is read
+
+46 broken saves over 21 long games: 21 reached the error page and needed the button, 23 were coped with by the game, 0 drew the broken save without throwing, 2 could not be judged offline, 0 trapped
+playCorruptSaves: green. No broken save traps a long game.

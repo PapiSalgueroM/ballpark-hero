@@ -1,0 +1,6 @@
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playFreeAgency.mjs:93:27 {
+  log: [ "  - waiting for locator('[data-fa-window]')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

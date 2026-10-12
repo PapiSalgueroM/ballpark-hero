@@ -1,0 +1,22 @@
+# Release AX fix pass, final proof part 2b (served, one at a time): every browser walk that drives a screen this pass touched (the four US careers, the Soccer Press room page, What's New)
+#!serve
+#!playwright
+#!serial
+playFreeAgency: node scripts/playFreeAgency.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+playExtension: node scripts/playExtension.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playSeasonReveal: node scripts/playSeasonReveal.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playCareerHub: node scripts/playCareerHub.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playCareerPress: node scripts/playCareerPress.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playCorruptSaves: node scripts/playCorruptSaves.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+playDepthChart: node scripts/playDepthChart.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+playSessionMarks: node scripts/playSessionMarks.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+playUsRivalLines: node scripts/playUsRivalLines.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playDraftNight: node scripts/playDraftNight.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playNbaNumbers: node scripts/playNbaNumbers.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playNflTruth: node scripts/playNflTruth.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playCareerHallLine: node scripts/playCareerHallLine.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playReducedMotion: node scripts/playReducedMotion.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playStorageBlocked: node scripts/playStorageBlocked.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+playTranslatedPage: node scripts/playTranslatedPage.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
