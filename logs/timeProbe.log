@@ -1,0 +1,7 @@
+head: 300 buy and release pairs, ledger 304 records, save 178508 code units
+head: buildMarket 3913.0 ms; matchday 227.9 ms
+head stale a year: buildMarket 5221.6 ms; matchday 21322.9 ms
+head same save, no ledger: buildMarket 2.2 ms; matchday 12.7 ms
+b6eb78e7: 300 buy and release pairs, ledger none, save 163686 code units
+b6eb78e7: buildMarket 1.7 ms; matchday 12.3 ms
+timeProbe: done
