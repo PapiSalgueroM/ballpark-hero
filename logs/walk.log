@@ -1,0 +1,558 @@
+  ok   a 2004 era closer driven to 2020 with a live rival was found (ATL, rival Rhys Okafor)
+  ok   mlbRP-390-motion: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-390-motion: back at the hub before the season
+  ok   mlbRP-390-motion: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-390-motion: the Rival screen shows the old tally 1-5
+  ok   mlbRP-390-motion: the season card came up
+  note mlbRP-390-motion: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbRP-390-motion: his line is a RP's own shape ("4 saves, 32 holds, 4.13 ERA, 87 K")
+  ok   mlbRP-390-motion: my line on the card is in that shape ("0 saves, 9 holds, 3.84 ERA, 29 K")
+  ok   mlbRP-390-motion: the note's line is the saved line ("4 saves, 32 holds, 4.13 ERA, 87 K")
+  ok   mlbRP-390-motion: the tally moved by one year (1-5 to 1-6)
+  ok   mlbRP-390-motion: the year went to him and the two printed lines say him (17.15 against 62.95)
+  ok   mlbRP-390-motion: the note says him and the save says him ("🪞 Silas Fitzgerald went 4 saves, 32 holds, 4.13 ERA, 87 K and had the better year of the two of you. Head to head 1-6.")
+  ok   mlbRP-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbRP-390-motion: the note is 12px or more (14px)
+  ok   mlbRP-390-motion: nothing scrolls sideways on the season card (0)
+  ok   mlbRP-390-motion: back at the hub after the season
+  ok   mlbRP-390-motion: the Rival screen shows the new line ("4 saves, 32 holds, 4.13 ERA, 87 K")
+  ok   mlbRP-390-motion: the Rival screen shows the tally 1-6
+  ok   mlbRP-390-motion: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   mlbRP-390-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbRP-390-motion: no page errors (clean)
+  ok   mlbRP-390-motion: the database host was never reached
+  ok   mlbRP-390-reduced: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-390-reduced: back at the hub before the season
+  ok   mlbRP-390-reduced: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-390-reduced: the Rival screen shows the old tally 1-5
+  ok   mlbRP-390-reduced: the season card came up
+  note mlbRP-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbRP-390-reduced: his line is a RP's own shape ("2 saves, 25 holds, 4.25 ERA, 62 K")
+  ok   mlbRP-390-reduced: my line on the card is in that shape ("5 saves, 35 holds, 3.20 ERA, 95 K")
+  ok   mlbRP-390-reduced: the note's line is the saved line ("2 saves, 25 holds, 4.25 ERA, 62 K")
+  ok   mlbRP-390-reduced: the tally moved by one year (1-5 to 2-5)
+  ok   mlbRP-390-reduced: the year went to me and the two printed lines say me (80.15 against 46.00)
+  ok   mlbRP-390-reduced: the note says me and the save says me ("🪞 Silas Fitzgerald went 2 saves, 25 holds, 4.25 ERA, 62 K. You had the better year. Head to head 2-5.")
+  ok   mlbRP-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbRP-390-reduced: the note is 12px or more (14px)
+  ok   mlbRP-390-reduced: nothing scrolls sideways on the season card (0)
+  ok   mlbRP-390-reduced: back at the hub after the season
+  ok   mlbRP-390-reduced: the Rival screen shows the new line ("2 saves, 25 holds, 4.25 ERA, 62 K")
+  ok   mlbRP-390-reduced: the Rival screen shows the tally 2-5
+  ok   mlbRP-390-reduced: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   mlbRP-390-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbRP-390-reduced: no page errors (clean)
+  ok   mlbRP-390-reduced: the database host was never reached
+  ok   mlbRP-1280-motion: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-1280-motion: back at the hub before the season
+  ok   mlbRP-1280-motion: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-1280-motion: the Rival screen shows the old tally 1-5
+  ok   mlbRP-1280-motion: the season card came up
+  note mlbRP-1280-motion: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbRP-1280-motion: his line is a RP's own shape ("5 saves, 26 holds, 3.80 ERA, 81 K")
+  ok   mlbRP-1280-motion: my line on the card is in that shape ("3 saves, 36 holds, 3.02 ERA, 95 K")
+  ok   mlbRP-1280-motion: the note's line is the saved line ("5 saves, 26 holds, 3.80 ERA, 81 K")
+  ok   mlbRP-1280-motion: the tally moved by one year (1-5 to 2-5)
+  ok   mlbRP-1280-motion: the year went to me and the two printed lines say me (82.93 against 56.35)
+  ok   mlbRP-1280-motion: the note says me and the save says me ("🪞 Silas Fitzgerald went 5 saves, 26 holds, 3.80 ERA, 81 K. You had the better year. Head to head 2-5.")
+  ok   mlbRP-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbRP-1280-motion: the note is 12px or more (14px)
+  ok   mlbRP-1280-motion: nothing scrolls sideways on the season card (0)
+  ok   mlbRP-1280-motion: back at the hub after the season
+  ok   mlbRP-1280-motion: the Rival screen shows the new line ("5 saves, 26 holds, 3.80 ERA, 81 K")
+  ok   mlbRP-1280-motion: the Rival screen shows the tally 2-5
+  ok   mlbRP-1280-motion: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   mlbRP-1280-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbRP-1280-motion: no page errors (clean)
+  ok   mlbRP-1280-motion: the database host was never reached
+  ok   mlbRP-1280-reduced: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-1280-reduced: back at the hub before the season
+  ok   mlbRP-1280-reduced: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-1280-reduced: the Rival screen shows the old tally 1-5
+  ok   mlbRP-1280-reduced: the season card came up
+  note mlbRP-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbRP-1280-reduced: his line is a RP's own shape ("6 saves, 24 holds, 4.74 ERA, 67 K")
+  ok   mlbRP-1280-reduced: my line on the card is in that shape ("2 saves, 36 holds, 3.03 ERA, 104 K")
+  ok   mlbRP-1280-reduced: the note's line is the saved line ("6 saves, 24 holds, 4.74 ERA, 67 K")
+  ok   mlbRP-1280-reduced: the tally moved by one year (1-5 to 2-5)
+  ok   mlbRP-1280-reduced: the year went to me and the two printed lines say me (83.42 against 52.15)
+  ok   mlbRP-1280-reduced: the note says me and the save says me ("🪞 Silas Fitzgerald went 6 saves, 24 holds, 4.74 ERA, 67 K. You had the better year. Head to head 2-5.")
+  ok   mlbRP-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbRP-1280-reduced: the note is 12px or more (14px)
+  ok   mlbRP-1280-reduced: nothing scrolls sideways on the season card (0)
+  ok   mlbRP-1280-reduced: back at the hub after the season
+  ok   mlbRP-1280-reduced: the Rival screen shows the new line ("6 saves, 24 holds, 4.74 ERA, 67 K")
+  ok   mlbRP-1280-reduced: the Rival screen shows the tally 2-5
+  ok   mlbRP-1280-reduced: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   mlbRP-1280-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbRP-1280-reduced: no page errors (clean)
+  ok   mlbRP-1280-reduced: the database host was never reached
+  ok   mlbSP-390-motion: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-390-motion: back at the hub before the season
+  ok   mlbSP-390-motion: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-390-motion: the Rival screen shows the old tally 0-6
+  ok   mlbSP-390-motion: the season card came up
+  note mlbSP-390-motion: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbSP-390-motion: his line is a SP's own shape ("14-7, 4.67 ERA, 179 K")
+  ok   mlbSP-390-motion: my line on the card is in that shape ("19-3, 3.28 ERA, 229 K")
+  ok   mlbSP-390-motion: the note's line is the saved line ("14-7, 4.67 ERA, 179 K")
+  ok   mlbSP-390-motion: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-390-motion: the year went to me and the two printed lines say me (99.04 against 66.60)
+  ok   mlbSP-390-motion: the note says me and the save says me ("🪞 Jonah Vasquez went 14-7, 4.67 ERA, 179 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbSP-390-motion: the note is 12px or more (14px)
+  ok   mlbSP-390-motion: nothing scrolls sideways on the season card (0)
+  ok   mlbSP-390-motion: back at the hub after the season
+  ok   mlbSP-390-motion: the Rival screen shows the new line ("14-7, 4.67 ERA, 179 K")
+  ok   mlbSP-390-motion: the Rival screen shows the tally 1-6
+  ok   mlbSP-390-motion: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   mlbSP-390-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbSP-390-motion: no page errors (clean)
+  ok   mlbSP-390-motion: the database host was never reached
+  ok   mlbSP-390-reduced: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-390-reduced: back at the hub before the season
+  ok   mlbSP-390-reduced: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-390-reduced: the Rival screen shows the old tally 0-6
+  ok   mlbSP-390-reduced: the season card came up
+  note mlbSP-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbSP-390-reduced: his line is a SP's own shape ("13-7, 4.58 ERA, 185 K")
+  ok   mlbSP-390-reduced: my line on the card is in that shape ("15-6, 4.44 ERA, 193 K")
+  ok   mlbSP-390-reduced: the note's line is the saved line ("13-7, 4.58 ERA, 185 K")
+  ok   mlbSP-390-reduced: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-390-reduced: the year went to me and the two printed lines say me (71.60 against 65.60)
+  ok   mlbSP-390-reduced: the note says me and the save says me ("🪞 Jonah Vasquez went 13-7, 4.58 ERA, 185 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbSP-390-reduced: the note is 12px or more (14px)
+  ok   mlbSP-390-reduced: nothing scrolls sideways on the season card (0)
+  ok   mlbSP-390-reduced: back at the hub after the season
+  ok   mlbSP-390-reduced: the Rival screen shows the new line ("13-7, 4.58 ERA, 185 K")
+  ok   mlbSP-390-reduced: the Rival screen shows the tally 1-6
+  ok   mlbSP-390-reduced: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   mlbSP-390-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbSP-390-reduced: no page errors (clean)
+  ok   mlbSP-390-reduced: the database host was never reached
+  ok   mlbSP-1280-motion: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-1280-motion: back at the hub before the season
+  ok   mlbSP-1280-motion: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-1280-motion: the Rival screen shows the old tally 0-6
+  ok   mlbSP-1280-motion: the season card came up
+  note mlbSP-1280-motion: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbSP-1280-motion: his line is a SP's own shape ("14-8, 4.89 ERA, 173 K")
+  ok   mlbSP-1280-motion: my line on the card is in that shape ("15-8, 4.25 ERA, 187 K")
+  ok   mlbSP-1280-motion: the note's line is the saved line ("14-8, 4.89 ERA, 173 K")
+  ok   mlbSP-1280-motion: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-1280-motion: the year went to me and the two printed lines say me (70.40 against 65.40)
+  ok   mlbSP-1280-motion: the note says me and the save says me ("🪞 Jonah Vasquez went 14-8, 4.89 ERA, 173 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbSP-1280-motion: the note is 12px or more (14px)
+  ok   mlbSP-1280-motion: nothing scrolls sideways on the season card (0)
+  ok   mlbSP-1280-motion: back at the hub after the season
+  ok   mlbSP-1280-motion: the Rival screen shows the new line ("14-8, 4.89 ERA, 173 K")
+  ok   mlbSP-1280-motion: the Rival screen shows the tally 1-6
+  ok   mlbSP-1280-motion: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   mlbSP-1280-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbSP-1280-motion: no page errors (clean)
+  ok   mlbSP-1280-motion: the database host was never reached
+  ok   mlbSP-1280-reduced: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-1280-reduced: back at the hub before the season
+  ok   mlbSP-1280-reduced: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-1280-reduced: the Rival screen shows the old tally 0-6
+  ok   mlbSP-1280-reduced: the season card came up
+  note mlbSP-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbSP-1280-reduced: his line is a SP's own shape ("10-8, 5.39 ERA, 138 K")
+  ok   mlbSP-1280-reduced: my line on the card is in that shape ("14-8, 4.81 ERA, 199 K")
+  ok   mlbSP-1280-reduced: the note's line is the saved line ("10-8, 5.39 ERA, 138 K")
+  ok   mlbSP-1280-reduced: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-1280-reduced: the year went to me and the two printed lines say me (70.60 against 49.60)
+  ok   mlbSP-1280-reduced: the note says me and the save says me ("🪞 Jonah Vasquez went 10-8, 5.39 ERA, 138 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbSP-1280-reduced: the note is 12px or more (14px)
+  ok   mlbSP-1280-reduced: nothing scrolls sideways on the season card (0)
+  ok   mlbSP-1280-reduced: back at the hub after the season
+  ok   mlbSP-1280-reduced: the Rival screen shows the new line ("10-8, 5.39 ERA, 138 K")
+  ok   mlbSP-1280-reduced: the Rival screen shows the tally 1-6
+  ok   mlbSP-1280-reduced: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   mlbSP-1280-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbSP-1280-reduced: no page errors (clean)
+  ok   mlbSP-1280-reduced: the database host was never reached
+  ok   mlbDropped-390-motion: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-390-motion: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-390-motion: the card's button is above the fold (bottom 575 of 844)
+  ok   mlbDropped-390-motion: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-390-motion: back at the hub before the season
+  ok   mlbDropped-390-motion: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-390-motion: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-390-motion: the season card came up
+  note mlbDropped-390-motion: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbDropped-390-motion: his line is a RP's own shape ("38 saves, 1 hold, 3.74 ERA, 75 K")
+  ok   mlbDropped-390-motion: my line on the card is in that shape ("48 saves, 1 hold, 3.87 ERA, 99 K")
+  ok   mlbDropped-390-motion: the note's line is the saved line ("38 saves, 1 hold, 3.74 ERA, 75 K")
+  ok   mlbDropped-390-motion: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-390-motion: the year went to me and the two printed lines say me (97.85 against 76.85)
+  ok   mlbDropped-390-motion: the note says me and the save says me ("🪞 Tyrell Bergeron went 38 saves, 1 hold, 3.74 ERA, 75 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbDropped-390-motion: the note is 12px or more (14px)
+  ok   mlbDropped-390-motion: nothing scrolls sideways on the season card (0)
+  ok   mlbDropped-390-motion: back at the hub after the season
+  ok   mlbDropped-390-motion: the Rival screen shows the new line ("38 saves, 1 hold, 3.74 ERA, 75 K")
+  ok   mlbDropped-390-motion: the Rival screen shows the tally 2-7
+  ok   mlbDropped-390-motion: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   mlbDropped-390-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbDropped-390-motion: no page errors (clean)
+  ok   mlbDropped-390-motion: the database host was never reached
+  ok   mlbDropped-390-reduced: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-390-reduced: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-390-reduced: the card's button is above the fold (bottom 575 of 844)
+  ok   mlbDropped-390-reduced: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-390-reduced: back at the hub before the season
+  ok   mlbDropped-390-reduced: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-390-reduced: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-390-reduced: the season card came up
+  note mlbDropped-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbDropped-390-reduced: his line is a RP's own shape ("31 saves, 2 holds, 4.01 ERA, 67 K")
+  ok   mlbDropped-390-reduced: my line on the card is in that shape ("51 saves, 3 holds, 3.75 ERA, 96 K")
+  ok   mlbDropped-390-reduced: the note's line is the saved line ("31 saves, 2 holds, 4.01 ERA, 67 K")
+  ok   mlbDropped-390-reduced: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-390-reduced: the year went to me and the two printed lines say me (103.80 against 65.45)
+  ok   mlbDropped-390-reduced: the note says me and the save says me ("🪞 Tyrell Bergeron went 31 saves, 2 holds, 4.01 ERA, 67 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbDropped-390-reduced: the note is 12px or more (14px)
+  ok   mlbDropped-390-reduced: nothing scrolls sideways on the season card (0)
+  ok   mlbDropped-390-reduced: back at the hub after the season
+  ok   mlbDropped-390-reduced: the Rival screen shows the new line ("31 saves, 2 holds, 4.01 ERA, 67 K")
+  ok   mlbDropped-390-reduced: the Rival screen shows the tally 2-7
+  ok   mlbDropped-390-reduced: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   mlbDropped-390-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbDropped-390-reduced: no page errors (clean)
+  ok   mlbDropped-390-reduced: the database host was never reached
+  ok   mlbDropped-1280-motion: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-1280-motion: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-1280-motion: the card's button is above the fold (bottom 517 of 900)
+  ok   mlbDropped-1280-motion: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-1280-motion: back at the hub before the season
+  ok   mlbDropped-1280-motion: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-1280-motion: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-1280-motion: the season card came up
+  note mlbDropped-1280-motion: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbDropped-1280-motion: his line is a RP's own shape ("38 saves, 1 hold, 4.34 ERA, 74 K")
+  ok   mlbDropped-1280-motion: my line on the card is in that shape ("41 saves, 3 holds, 3.31 ERA, 86 K")
+  ok   mlbDropped-1280-motion: the note's line is the saved line ("38 saves, 1 hold, 4.34 ERA, 74 K")
+  ok   mlbDropped-1280-motion: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-1280-motion: the year went to me and the two printed lines say me (93.84 against 76.60)
+  ok   mlbDropped-1280-motion: the note says me and the save says me ("🪞 Tyrell Bergeron went 38 saves, 1 hold, 4.34 ERA, 74 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbDropped-1280-motion: the note is 12px or more (14px)
+  ok   mlbDropped-1280-motion: nothing scrolls sideways on the season card (0)
+  ok   mlbDropped-1280-motion: back at the hub after the season
+  ok   mlbDropped-1280-motion: the Rival screen shows the new line ("38 saves, 1 hold, 4.34 ERA, 74 K")
+  ok   mlbDropped-1280-motion: the Rival screen shows the tally 2-7
+  ok   mlbDropped-1280-motion: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   mlbDropped-1280-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbDropped-1280-motion: no page errors (clean)
+  ok   mlbDropped-1280-motion: the database host was never reached
+  ok   mlbDropped-1280-reduced: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-1280-reduced: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-1280-reduced: the card's button is above the fold (bottom 517 of 900)
+  ok   mlbDropped-1280-reduced: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-1280-reduced: back at the hub before the season
+  ok   mlbDropped-1280-reduced: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-1280-reduced: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-1280-reduced: the season card came up
+  note mlbDropped-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbDropped-1280-reduced: his line is a RP's own shape ("36 saves, 3 holds, 4.02 ERA, 80 K")
+  ok   mlbDropped-1280-reduced: my line on the card is in that shape ("43 saves, 2 holds, 3.44 ERA, 87 K")
+  ok   mlbDropped-1280-reduced: the note's line is the saved line ("36 saves, 3 holds, 4.02 ERA, 80 K")
+  ok   mlbDropped-1280-reduced: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-1280-reduced: the year went to me and the two printed lines say me (92.61 against 77.30)
+  ok   mlbDropped-1280-reduced: the note says me and the save says me ("🪞 Tyrell Bergeron went 36 saves, 3 holds, 4.02 ERA, 80 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbDropped-1280-reduced: the note is 12px or more (14px)
+  ok   mlbDropped-1280-reduced: nothing scrolls sideways on the season card (0)
+  ok   mlbDropped-1280-reduced: back at the hub after the season
+  ok   mlbDropped-1280-reduced: the Rival screen shows the new line ("36 saves, 3 holds, 4.02 ERA, 80 K")
+  ok   mlbDropped-1280-reduced: the Rival screen shows the tally 2-7
+  ok   mlbDropped-1280-reduced: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   mlbDropped-1280-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   mlbDropped-1280-reduced: no page errors (clean)
+  ok   mlbDropped-1280-reduced: the database host was never reached
+  ok   nhlG-390-motion: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-390-motion: back at the hub before the season
+  ok   nhlG-390-motion: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-390-motion: the Rival screen shows the old tally 6-0
+  ok   nhlG-390-motion: the season card came up
+  note nhlG-390-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlG-390-motion: his line is a G's own shape ("30 W, .923 SV%")
+  ok   nhlG-390-motion: my line on the card is in that shape ("35 W, .925 SV%")
+  ok   nhlG-390-motion: the note's line is the saved line ("30 W, .923 SV%")
+  ok   nhlG-390-motion: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-390-motion: the year went to me and the two printed lines say me (123.00 against 109.20)
+  ok   nhlG-390-motion: the note says me and the save says me ("🪞 Rhys Bergeron went 30 W, .923 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-390-motion: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlG-390-motion: the note is 12px or more (12px)
+  ok   nhlG-390-motion: nothing scrolls sideways on the season card (0)
+  ok   nhlG-390-motion: back at the hub after the season
+  ok   nhlG-390-motion: the Rival screen shows the new line ("30 W, .923 SV%")
+  ok   nhlG-390-motion: the Rival screen shows the tally 7-0
+  ok   nhlG-390-motion: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   nhlG-390-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlG-390-motion: no page errors (clean)
+  ok   nhlG-390-motion: the database host was never reached
+  ok   nhlG-390-reduced: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-390-reduced: back at the hub before the season
+  ok   nhlG-390-reduced: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-390-reduced: the Rival screen shows the old tally 6-0
+  ok   nhlG-390-reduced: the season card came up
+  note nhlG-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   nhlG-390-reduced: his line is a G's own shape ("36 W, .929 SV%")
+  ok   nhlG-390-reduced: my line on the card is in that shape ("22 W, .931 SV%")
+  ok   nhlG-390-reduced: the note's line is the saved line ("36 W, .929 SV%")
+  ok   nhlG-390-reduced: the tally moved by one year (6-0 to 6-1)
+  ok   nhlG-390-reduced: the year went to him and the two printed lines say him (114.00 against 134.40)
+  ok   nhlG-390-reduced: the note says him and the save says him ("🪞 Rhys Bergeron went 36 W, .929 SV% and had the better year of the two of you. Head to head 6-1.")
+  ok   nhlG-390-reduced: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlG-390-reduced: the note is 12px or more (12px)
+  ok   nhlG-390-reduced: nothing scrolls sideways on the season card (0)
+  ok   nhlG-390-reduced: back at the hub after the season
+  ok   nhlG-390-reduced: the Rival screen shows the new line ("36 W, .929 SV%")
+  ok   nhlG-390-reduced: the Rival screen shows the tally 6-1
+  ok   nhlG-390-reduced: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   nhlG-390-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlG-390-reduced: no page errors (clean)
+  ok   nhlG-390-reduced: the database host was never reached
+  ok   nhlG-1280-motion: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-1280-motion: back at the hub before the season
+  ok   nhlG-1280-motion: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-1280-motion: the Rival screen shows the old tally 6-0
+  ok   nhlG-1280-motion: the season card came up
+  note nhlG-1280-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlG-1280-motion: his line is a G's own shape ("27 W, .915 SV%")
+  ok   nhlG-1280-motion: my line on the card is in that shape ("37 W, .934 SV%")
+  ok   nhlG-1280-motion: the note's line is the saved line ("27 W, .915 SV%")
+  ok   nhlG-1280-motion: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-1280-motion: the year went to me and the two printed lines say me (148.20 against 84.60)
+  ok   nhlG-1280-motion: the note says me and the save says me ("🪞 Rhys Bergeron went 27 W, .915 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-1280-motion: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlG-1280-motion: the note is 12px or more (12px)
+  ok   nhlG-1280-motion: nothing scrolls sideways on the season card (0)
+  ok   nhlG-1280-motion: back at the hub after the season
+  ok   nhlG-1280-motion: the Rival screen shows the new line ("27 W, .915 SV%")
+  ok   nhlG-1280-motion: the Rival screen shows the tally 7-0
+  ok   nhlG-1280-motion: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   nhlG-1280-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlG-1280-motion: no page errors (clean)
+  ok   nhlG-1280-motion: the database host was never reached
+  ok   nhlG-1280-reduced: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-1280-reduced: back at the hub before the season
+  ok   nhlG-1280-reduced: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-1280-reduced: the Rival screen shows the old tally 6-0
+  ok   nhlG-1280-reduced: the season card came up
+  note nhlG-1280-reduced: scrollY on the season card 34 then 34 after 2.6 s
+  ok   nhlG-1280-reduced: his line is a G's own shape ("33 W, .921 SV%")
+  ok   nhlG-1280-reduced: my line on the card is in that shape ("34 W, .931 SV%")
+  ok   nhlG-1280-reduced: the note's line is the saved line ("33 W, .921 SV%")
+  ok   nhlG-1280-reduced: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-1280-reduced: the year went to me and the two printed lines say me (135.60 against 109.80)
+  ok   nhlG-1280-reduced: the note says me and the save says me ("🪞 Rhys Bergeron went 33 W, .921 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-1280-reduced: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlG-1280-reduced: the note is 12px or more (12px)
+  ok   nhlG-1280-reduced: nothing scrolls sideways on the season card (0)
+  ok   nhlG-1280-reduced: back at the hub after the season
+  ok   nhlG-1280-reduced: the Rival screen shows the new line ("33 W, .921 SV%")
+  ok   nhlG-1280-reduced: the Rival screen shows the tally 7-0
+  ok   nhlG-1280-reduced: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   nhlG-1280-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlG-1280-reduced: no page errors (clean)
+  ok   nhlG-1280-reduced: the database host was never reached
+  ok   nhlMade-390-motion: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-390-motion: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-390-motion: the card's button is above the fold (bottom 556 of 844)
+  ok   nhlMade-390-motion: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-390-motion: back at the hub before the season
+  ok   nhlMade-390-motion: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-390-motion: the Rival screen shows the old tally 10-2
+  ok   nhlMade-390-motion: the season card came up
+  note nhlMade-390-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlMade-390-motion: his line is a C's own shape ("38 G, 46 A, 84 P")
+  ok   nhlMade-390-motion: my line on the card is in that shape ("51 G, 50 A, 101 P")
+  ok   nhlMade-390-motion: the note's line is the saved line ("38 G, 46 A, 84 P")
+  ok   nhlMade-390-motion: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-390-motion: the year went to me and the two printed lines say me (101.00 against 84.00)
+  ok   nhlMade-390-motion: the note says me and the save says me ("🪞 Reese Brennan went 38 G, 46 A, 84 P. You had the better year. Head to head 11-2.")
+  ok   nhlMade-390-motion: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlMade-390-motion: the note is 12px or more (12px)
+  ok   nhlMade-390-motion: nothing scrolls sideways on the season card (0)
+  ok   nhlMade-390-motion: back at the hub after the season
+  ok   nhlMade-390-motion: the Rival screen shows the new line ("38 G, 46 A, 84 P")
+  ok   nhlMade-390-motion: the Rival screen shows the tally 11-2
+  ok   nhlMade-390-motion: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   nhlMade-390-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlMade-390-motion: no page errors (clean)
+  ok   nhlMade-390-motion: the database host was never reached
+  ok   nhlMade-390-reduced: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-390-reduced: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-390-reduced: the card's button is above the fold (bottom 556 of 844)
+  ok   nhlMade-390-reduced: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-390-reduced: back at the hub before the season
+  ok   nhlMade-390-reduced: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-390-reduced: the Rival screen shows the old tally 10-2
+  ok   nhlMade-390-reduced: the season card came up
+  note nhlMade-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   nhlMade-390-reduced: his line is a C's own shape ("40 G, 54 A, 94 P")
+  ok   nhlMade-390-reduced: my line on the card is in that shape ("54 G, 45 A, 99 P")
+  ok   nhlMade-390-reduced: the note's line is the saved line ("40 G, 54 A, 94 P")
+  ok   nhlMade-390-reduced: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-390-reduced: the year went to me and the two printed lines say me (99.00 against 94.00)
+  ok   nhlMade-390-reduced: the note says tie and the save says me ("🪞 Reese Brennan went 40 G, 54 A, 94 P. Nothing in it again. You lead the head to head 11-2.")
+  ok   nhlMade-390-reduced: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlMade-390-reduced: the note is 12px or more (12px)
+  ok   nhlMade-390-reduced: nothing scrolls sideways on the season card (0)
+  ok   nhlMade-390-reduced: back at the hub after the season
+  ok   nhlMade-390-reduced: the Rival screen shows the new line ("40 G, 54 A, 94 P")
+  ok   nhlMade-390-reduced: the Rival screen shows the tally 11-2
+  ok   nhlMade-390-reduced: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   nhlMade-390-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlMade-390-reduced: no page errors (clean)
+  ok   nhlMade-390-reduced: the database host was never reached
+  ok   nhlMade-1280-motion: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-1280-motion: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-1280-motion: the card's button is above the fold (bottom 517 of 900)
+  ok   nhlMade-1280-motion: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-1280-motion: back at the hub before the season
+  ok   nhlMade-1280-motion: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-1280-motion: the Rival screen shows the old tally 10-2
+  ok   nhlMade-1280-motion: the season card came up
+  note nhlMade-1280-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlMade-1280-motion: his line is a C's own shape ("40 G, 47 A, 87 P")
+  ok   nhlMade-1280-motion: my line on the card is in that shape ("45 G, 38 A, 83 P")
+  ok   nhlMade-1280-motion: the note's line is the saved line ("40 G, 47 A, 87 P")
+  ok   nhlMade-1280-motion: the tally moved by one year (10-2 to 10-3)
+  ok   nhlMade-1280-motion: the year went to him and the two printed lines say him (83.00 against 87.00)
+  ok   nhlMade-1280-motion: the note says tie and the save says him ("🪞 Reese Brennan went 40 G, 47 A, 87 P. Nothing in it again. You lead the head to head 10-3.")
+  ok   nhlMade-1280-motion: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlMade-1280-motion: the note is 12px or more (12px)
+  ok   nhlMade-1280-motion: nothing scrolls sideways on the season card (0)
+  ok   nhlMade-1280-motion: back at the hub after the season
+  ok   nhlMade-1280-motion: the Rival screen shows the new line ("40 G, 47 A, 87 P")
+  ok   nhlMade-1280-motion: the Rival screen shows the tally 10-3
+  ok   nhlMade-1280-motion: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   nhlMade-1280-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlMade-1280-motion: no page errors (clean)
+  ok   nhlMade-1280-motion: the database host was never reached
+  ok   nhlMade-1280-reduced: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-1280-reduced: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-1280-reduced: the card's button is above the fold (bottom 517 of 900)
+  ok   nhlMade-1280-reduced: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-1280-reduced: back at the hub before the season
+  ok   nhlMade-1280-reduced: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-1280-reduced: the Rival screen shows the old tally 10-2
+  ok   nhlMade-1280-reduced: the season card came up
+  note nhlMade-1280-reduced: scrollY on the season card 34 then 34 after 2.6 s
+  ok   nhlMade-1280-reduced: his line is a C's own shape ("32 G, 39 A, 71 P")
+  ok   nhlMade-1280-reduced: my line on the card is in that shape ("65 G, 60 A, 125 P")
+  ok   nhlMade-1280-reduced: the note's line is the saved line ("32 G, 39 A, 71 P")
+  ok   nhlMade-1280-reduced: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-1280-reduced: the year went to me and the two printed lines say me (125.00 against 71.00)
+  ok   nhlMade-1280-reduced: the note says me and the save says me ("🪞 Reese Brennan went 32 G, 39 A, 71 P. You had the better year. Head to head 11-2.")
+  ok   nhlMade-1280-reduced: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlMade-1280-reduced: the note is 12px or more (12px)
+  ok   nhlMade-1280-reduced: nothing scrolls sideways on the season card (0)
+  ok   nhlMade-1280-reduced: back at the hub after the season
+  ok   nhlMade-1280-reduced: the Rival screen shows the new line ("32 G, 39 A, 71 P")
+  ok   nhlMade-1280-reduced: the Rival screen shows the tally 11-2
+  ok   nhlMade-1280-reduced: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   nhlMade-1280-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   nhlMade-1280-reduced: no page errors (clean)
+  ok   nhlMade-1280-reduced: the database host was never reached
+  ok   shortRP2020-390-motion: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-390-motion: back at the hub before the season
+  ok   shortRP2020-390-motion: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-390-motion: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-390-motion: the season card came up
+  note shortRP2020-390-motion: scrollY on the season card 550 then 185 after 2.6 s
+  ok   shortRP2020-390-motion: the season saved is the short 2020 one (2020, 23 games)
+  ok   shortRP2020-390-motion: his line is a RP's own shape ("13 saves, 1 hold, 4.23 ERA, 27 K")
+  ok   shortRP2020-390-motion: my line on the card is in that shape ("14 saves, 0 holds, 4.33 ERA, 27 K")
+  ok   shortRP2020-390-motion: the note's line is the saved line ("13 saves, 1 hold, 4.23 ERA, 27 K")
+  ok   shortRP2020-390-motion: the tally moved by one year (11-5 to 12-5)
+  ok   shortRP2020-390-motion: the year went to me and the two printed lines say me (27.75 against 27.35)
+  ok   shortRP2020-390-motion: the note says tie and the save says me ("🪞 Rhys Okafor went 13 saves, 1 hold, 4.23 ERA, 27 K. Nothing in it again. You lead the head to head 12-5.")
+  ok   shortRP2020-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   shortRP2020-390-motion: the note is 12px or more (14px)
+  ok   shortRP2020-390-motion: nothing scrolls sideways on the season card (0)
+  ok   shortRP2020-390-motion: back at the hub after the season
+  ok   shortRP2020-390-motion: the Rival screen shows the new line ("13 saves, 1 hold, 4.23 ERA, 27 K")
+  ok   shortRP2020-390-motion: the Rival screen shows the tally 12-5
+  ok   shortRP2020-390-motion: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   shortRP2020-390-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   shortRP2020-390-motion: no page errors (clean)
+  ok   shortRP2020-390-motion: the database host was never reached
+  ok   shortRP2020-390-reduced: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-390-reduced: back at the hub before the season
+  ok   shortRP2020-390-reduced: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-390-reduced: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-390-reduced: the season card came up
+  note shortRP2020-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   shortRP2020-390-reduced: the season saved is the short 2020 one (2020, 25 games)
+  ok   shortRP2020-390-reduced: his line is a RP's own shape ("7 saves, 1 hold, 5.62 ERA, 15 K")
+  ok   shortRP2020-390-reduced: my line on the card is in that shape ("15 saves, 0 holds, 3.65 ERA, 33 K")
+  ok   shortRP2020-390-reduced: the note's line is the saved line ("7 saves, 1 hold, 5.62 ERA, 15 K")
+  ok   shortRP2020-390-reduced: the tally moved by one year (11-5 to 12-5)
+  ok   shortRP2020-390-reduced: the year went to me and the two printed lines say me (30.75 against 15.35)
+  ok   shortRP2020-390-reduced: the note says me and the save says me ("🪞 Rhys Okafor went 7 saves, 1 hold, 5.62 ERA, 15 K. You had the better year. Head to head 12-5.")
+  ok   shortRP2020-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   shortRP2020-390-reduced: the note is 12px or more (14px)
+  ok   shortRP2020-390-reduced: nothing scrolls sideways on the season card (0)
+  ok   shortRP2020-390-reduced: back at the hub after the season
+  ok   shortRP2020-390-reduced: the Rival screen shows the new line ("7 saves, 1 hold, 5.62 ERA, 15 K")
+  ok   shortRP2020-390-reduced: the Rival screen shows the tally 12-5
+  ok   shortRP2020-390-reduced: "Last season he went" ends inside its card at 12px or more (29 to 361 in 16 to 374, 12px)
+  ok   shortRP2020-390-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   shortRP2020-390-reduced: no page errors (clean)
+  ok   shortRP2020-390-reduced: the database host was never reached
+  ok   shortRP2020-1280-motion: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-1280-motion: back at the hub before the season
+  ok   shortRP2020-1280-motion: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-1280-motion: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-1280-motion: the season card came up
+  note shortRP2020-1280-motion: scrollY on the season card 416 then 165 after 2.6 s
+  ok   shortRP2020-1280-motion: the season saved is the short 2020 one (2020, 25 games)
+  ok   shortRP2020-1280-motion: his line is a RP's own shape ("13 saves, 1 hold, 4.51 ERA, 25 K")
+  ok   shortRP2020-1280-motion: my line on the card is in that shape ("17 saves, 1 hold, 3.42 ERA, 32 K")
+  ok   shortRP2020-1280-motion: the note's line is the saved line ("13 saves, 1 hold, 4.51 ERA, 25 K")
+  ok   shortRP2020-1280-motion: the tally moved by one year (11-5 to 12-5)
+  ok   shortRP2020-1280-motion: the year went to me and the two printed lines say me (39.28 against 26.85)
+  ok   shortRP2020-1280-motion: the note says me and the save says me ("🪞 Rhys Okafor went 13 saves, 1 hold, 4.51 ERA, 25 K. You had the better year. Head to head 12-5.")
+  ok   shortRP2020-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   shortRP2020-1280-motion: the note is 12px or more (14px)
+  ok   shortRP2020-1280-motion: nothing scrolls sideways on the season card (0)
+  ok   shortRP2020-1280-motion: back at the hub after the season
+  ok   shortRP2020-1280-motion: the Rival screen shows the new line ("13 saves, 1 hold, 4.51 ERA, 25 K")
+  ok   shortRP2020-1280-motion: the Rival screen shows the tally 12-5
+  ok   shortRP2020-1280-motion: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   shortRP2020-1280-motion: nothing scrolls sideways on the Rival screen (0)
+  ok   shortRP2020-1280-motion: no page errors (clean)
+  ok   shortRP2020-1280-motion: the database host was never reached
+  ok   shortRP2020-1280-reduced: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-1280-reduced: back at the hub before the season
+  ok   shortRP2020-1280-reduced: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-1280-reduced: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-1280-reduced: the season card came up
+  note shortRP2020-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   shortRP2020-1280-reduced: the season saved is the short 2020 one (2020, 12 games)
+  ok   shortRP2020-1280-reduced: his line is a RP's own shape ("7 saves, 0 holds, 5.01 ERA, 21 K")
+  ok   shortRP2020-1280-reduced: my line on the card is in that shape ("6 saves, 1 hold, 3.84 ERA, 14 K")
+  ok   shortRP2020-1280-reduced: the note's line is the saved line ("7 saves, 0 holds, 5.01 ERA, 21 K")
+  ok   shortRP2020-1280-reduced: the tally moved by one year (11-5 to 11-6)
+  ok   shortRP2020-1280-reduced: the year went to him and the two printed lines say him (13.60 against 15.75)
+  ok   shortRP2020-1280-reduced: the note says him and the save says him ("🪞 Rhys Okafor went 7 saves, 0 holds, 5.01 ERA, 21 K and had the better year of the two of you. Head to head 11-6.")
+  ok   shortRP2020-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   shortRP2020-1280-reduced: the note is 12px or more (14px)
+  ok   shortRP2020-1280-reduced: nothing scrolls sideways on the season card (0)
+  ok   shortRP2020-1280-reduced: back at the hub after the season
+  ok   shortRP2020-1280-reduced: the Rival screen shows the new line ("7 saves, 0 holds, 5.01 ERA, 21 K")
+  ok   shortRP2020-1280-reduced: the Rival screen shows the tally 11-6
+  ok   shortRP2020-1280-reduced: "Last season he went" ends inside its card at 12px or more (333 to 947 in 320 to 960, 12px)
+  ok   shortRP2020-1280-reduced: nothing scrolls sideways on the Rival screen (0)
+  ok   shortRP2020-1280-reduced: no page errors (clean)
+  ok   shortRP2020-1280-reduced: the database host was never reached
+rw1313: 533 checks, 0 failed
