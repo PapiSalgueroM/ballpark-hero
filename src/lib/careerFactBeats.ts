@@ -117,15 +117,16 @@ function seasonBeforeHolds(p: { seasons: { awards?: string[] }[] }, award: strin
   return !!before && (before.awards ?? []).includes(award);
 }
 
-/** What a sport hands ownRosterBeat for one card: its words and the line the tap logs. */
+/** What a sport hands the two own cards for one card: its words and the line the tap logs. */
 export interface OwnRosterWords<R> { description: (r: R) => string; line: string }
 
-/** What ownRosterBeat reads of a sport: the award word its engine writes on a season that made the roster, and
- *  the words of the two cards. */
+/** What the two own cards read of a sport: the award word its engine writes on a season that made the roster,
+ *  and the words of the two cards. */
 export interface OwnRosterSpec<R> { award: string; made: OwnRosterWords<R>; dropped: OwnRosterWords<R> }
 
-/** The two cards above (Round 1227 cut them out of ownRosterBeat unchanged, so rosterBeat below can keep them
- *  for a card dealt before a sport's rival moved onto the player's line). */
+/** The two own cards (Round 1227 cut them out of ownRosterBeat unchanged, so rosterBeat below can keep them
+ *  for a card dealt before a sport's rival moved onto the player's line; Round 1313 deleted ownRosterBeat,
+ *  which no sport deals any more, and kept these two). */
 function ownRosterCards<P extends { seasons: { awards?: string[] }[]; morale: number }, R>(spec: OwnRosterSpec<R>): FactCard<P, R>[] {
   return [
     {
@@ -143,12 +144,6 @@ function ownRosterCards<P extends { seasons: { awards?: string[] }[]; morale: nu
       line: () => spec.dropped.line,
     },
   ];
-}
-
-export function ownRosterBeat<P extends { seasons: { awards?: string[] }[]; morale: number }, R>(
-  spec: { id: number; emoji: string; title: string } & OwnRosterSpec<R>,
-): RivalryEventDef<P, R> {
-  return factBeat<P, R>({ id: spec.id, emoji: spec.emoji, title: spec.title, cards: ownRosterCards<P, R>(spec) });
 }
 
 /** The All-Star words MLB and the NHL share: both leagues call it the All-Star roster. */
@@ -173,7 +168,7 @@ export const ALL_STAR_OWN_ROSTER = {
    sport binds to it in the round that moves its rival onto the player's own
    stat line, because only then is there a roster pick behind HIS season.
 
-   `own` keeps the two cards of ownRosterBeat for ONE purpose: a save sitting
+   `own` keeps the two own cards (ownRosterCards) for ONE purpose: a save sitting
    on a card that the release before dealt ("Morale +5" for making the roster,
    "Morale -5" for dropping off it) still pays what that card printed. Each is
    supported only while rosterFacts is null, which is never once the sport's

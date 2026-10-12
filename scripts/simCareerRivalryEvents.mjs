@@ -439,7 +439,9 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
        with the roster beat builders of Round 1227, into careerFactBeats.ts, which only the four US rivalry
        files import (so Soccer Career, which shares careerRivalryEvents.ts, no longer downloads them). */
     { home: 'src/lib/careerFactBeats.ts', what: 'the fact beat builder', re: /export function factBeat\b/ },
-    { home: 'src/lib/careerFactBeats.ts', what: 'the own season roster beat', re: /export function ownRosterBeat\b/ },
+    /* Round 1313, step 6: ownRosterBeat is deleted (no sport deals it); its two cards stay, for a save sitting on
+       one a release before dealt. */
+    { home: 'src/lib/careerFactBeats.ts', what: 'the two own roster cards an older save may sit on', re: /function ownRosterCards\b/ },
     { home: 'src/lib/careerFactBeats.ts', what: 'the season view a tick rolls on', re: /seasons: \[\.\.\.c\.seasons, season\]/ },
     { home: 'src/lib/careerFactBeats.ts', what: 'the roster beat on both seasons', re: /export function rosterBeat\b/ },
     { home: 'src/lib/careerFactBeats.ts', what: 'the two roster facts of a season', re: /export function rosterFacts\b/ },
