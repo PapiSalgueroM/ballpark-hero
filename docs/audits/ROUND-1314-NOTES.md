@@ -135,3 +135,30 @@ clubManager-D-vLrbID.js 2`); exit 0, 98 s, "all 1 guarded checks fired (mutation
 loads of two sites; its diagnostic printed block 1 (20 matches, confidence 0), block 2 (39 matches,
 confidence 2.9), then NOT sacked after 120 steps with 58 matches played, season 2 week 25, and no press that
 changed nothing. So a 120 step miss on main would now say which it was.
+
+### 3.8 simEras: GREEN, a row only
+
+Read once on main in step 1 (`r1314-s1a`, 35f85630): exit 0 in 559 s, "ALL ERA AND AGEING CHECKS PASSED". The two
+thin margins Round 1304 reported, read on this run: section 5's champion points gap 2.9 against its 4 (frozen
+clock 81.4, ticking clock 84.3), and section 4's world club XI mean 70.1 at year zero and 70.6 to 70.8 after,
+against the anchor 71.6 with a band of 2.5. Not edited here: Release AZ's merge took main's simEras.mjs byte for
+byte and PR224's 44 line edit is owed back, so the margins round comes after that owed edit lands. Tell AZ's
+integrator that a lane C red on the champion points gap is this known thin margin, to be measured, not waved
+through.
+
+## Owed to others (for the lead to pass on; never done here)
+
+- Round 1311's integrator reruns playClubManager AND CM_CONTROL=nobusiness (1311 edits
+  ClubManagerSeasonSummary.tsx, whose `signings.length>0&&` guard the control rewrites and refuses unless it
+  matches exactly once). A SHALLOW red after a sack on an unseeded tree is the known item 3.7 fixes.
+- PR238 (codex/career-guide-clarity), PR241 (codex/career-potential-progress) and
+  codex/career-guide-fixture-refresh all edit src/pages/SoccerCareer.tsx: their integrators rerun
+  simActivityNotCompletion once this round is on main (none touches the advance handler, so it should hold).
+- PR223 and PR227 (codex/manager-ucl-league-phase, codex/manager-ucl-finance) edit src/pages/ClubManager.tsx, the
+  header and hub tiles playNationJob presses: their integrators rerun playNationJob.
+- Release AZ's integrator: the seeded default rows of simHalftime, playWilderness and playClubManager are this
+  round's builder's to re-measure if AZ lands on main first; otherwise AZ's integrator reruns the three with their
+  seeds unset and reads them as gate lines (a red there is an engine change moving a seeded sample, to be
+  measured, never re-seeded for green). The three Club Manager pins (simGmCalendar, simGmDealTableFixture,
+  simGmStaff) are Round 1316's, after AZ.
+- Rounds 1308 and 1309 change how an NFL season ends; Round 1317 builds playGmPress and playFoHub on 1309's file.
