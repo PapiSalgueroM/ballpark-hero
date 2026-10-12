@@ -124,7 +124,7 @@ for (const row of facts.rows) {
   ok(Array.isArray(row.literal) && row.literal.length > 0 && row.literal.every(l => typeof l === 'string' && l.length > 0), `${row.id}: no literal`);
   ok(row.figures && Object.keys(row.figures).length > 0, `${row.id}: no figures`);
   if (seasons && seasons.length > 1 && row.published) ok(Number(seasons.at(-1).slice(0, 4)) <= Number(String(row.published).slice(0, 4)), `${row.id}: a span that runs past the year its page was published (${row.published})`);
-  if (seasons && seasons.length > 1) ok(/^\d{4}-\d{2}-\d{2}$/.test(row.published ?? ''), `${row.id}: a span row needs the date its page was published`);
+  if (seasons && seasons.length > 1) ok(/^\d{4}(-\d{2}-\d{2})?$/.test(row.published ?? ''), `${row.id}: a span row needs the date (or, when the page prints no day, the year) its page was published`);
   const printed = (row.literal ?? []).join(' | ').replace(SEASON_TOKEN, ' ');
   for (const [name, value] of Object.entries(row.figures ?? {})) {
     ok(Object.hasOwn(quantities, name), `${row.id}: figure ${name} is not a declared quantity`);
