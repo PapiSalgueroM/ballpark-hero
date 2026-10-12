@@ -1,0 +1,12 @@
+tsc exit=0 91s | 
+simCareerAwardsNight exit=0 101s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSoccerAwardReveal exit=0 33s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSaveKeeper-partballon exit=0 5s | partballon FIRED on its own sentence (exit 1), as it must
+simHarnessAnchors exit=1 53s | simHarnessAnchors: 1 failure(s)
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 35s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simInventedNames exit=0 12s | simInventedNames: green. Every invented man on this site is invented all the way down.
+vitest-all exit=1 604s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s
+simSoccerAwardGenerations exit=0 956s | ORIGINAL {"kind":"this head with the exact inverse of the pool lifecycle","rows":14,"engineSha256":"0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea","sav

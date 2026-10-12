@@ -1,0 +1,5 @@
+   ok    reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left
+
+simSaveKeeper control partballon: its own sentence: /soccer-career: its real save holds a version number (generatedBallonPool.version=1) and neither SAVE_VERSIONS nor PART_VERSIONS has a row for it
+simSaveKeeper control partballon: FIRED. Section 1 is red.
+partballon FIRED on its own sentence (exit 1), as it must
