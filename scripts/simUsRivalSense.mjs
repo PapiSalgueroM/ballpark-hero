@@ -198,7 +198,7 @@ const CONTROLS = {
     put: '    ? ownRosterCards<P, R>(spec.own)' },
   /* N.O: the two own cards taken out (a save sitting on a card the release before dealt, "Morale +5", is paid
      nothing). */
-  owndead: { file: 'src/lib/careerFactBeats.ts', needs: 'N.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
+  owndead: { file: 'src/lib/careerFactBeats.ts', needs: 'N.O,M.O,H.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     put: '    ? ownRosterCards<P, R>(spec.own).slice(0, 0)' },
   /* N.F5: the NFL tick rolls on the bare save, so the beat reads the season BEFORE the one just played (the two
      seasons are then two different years, the fact cards shut, and an own card is dealt). */
@@ -272,6 +272,17 @@ const CONTROLS = {
   soldascoin: { file: 'src/lib/nhlCareerRivalryEvents.ts', needs: 'H.F5', find: '    consequence: "Fanbase +5, confidence boost",', put: '    consequence: "50/50 outcome",' },
   /* H.U6: the call site hands the hook the engine's own length whatever the year's slate. */
   siteslatenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U6', find: 'nhlRivalSeason(c.year, { pos: c.pos, slate })', put: 'nhlRivalSeason(c.year, { pos: c.pos, slate: US_ENGINE_SEASON.nhl })' },
+  /* M.O, H.O (correction 8c): a rival who retired on an old save comes back and is judged again (his old line and
+     his tally move). The season sims guard the call, so the control lifts the guard there. */
+  retiredlinemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.O', find: '  if (c.rival && !c.rival.retired) {', put: '  if (c.rival) { c.rival.retired = false;' },
+  retiredlinenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.O', find: '  if (c.rival && !c.rival.retired) {', put: '  if (c.rival) { c.rival.retired = false;' },
+  /* M.O and H.O: an old save's head to head tally reset when its rival first plays on the player's line. */
+  oldtallymlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.O',
+    find: "    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);",
+    put: "    if (c.rival.lastYear === undefined) { c.rival.myYears = 0; c.rival.hisYears = 0; } for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);" },
+  oldtallynhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.O',
+    find: "    for (const n of judgeRivalSeason(c.rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);",
+    put: "    if (c.rival.lastYear === undefined) { c.rival.myYears = 0; c.rival.hisYears = 0; } for (const n of judgeRivalSeason(c.rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);" },
   /* P1: the lifted stream keyed one character off the NBA's own key of Round 1112 (the NBA rival's whole trail
      moves, and nothing of the player's does). */
   liftkey: { file: 'src/lib/careerRival.ts', prove: true, needs: 'P1',
@@ -1137,6 +1148,32 @@ for (const sport of ['mlb', 'nhl'].filter(s => BOUND.includes(s))) {
   const count = k => cards.map(list => list.filter(x => kindOf(x) === k).length);
   const coins = NOW[sport].seeds.flatMap(s => s.coins); const dealt = NOW[sport].seeds.reduce((a, s) => a + s.beatsDealt, 0);
   console.log(`     the All-Star in judged seasons, by position (mine, his, both, percent): ${FLEET[sport].pos.map(p => { const m = NOW[sport].total.by[p]; return `${p} ${f2(pc(m.honMine, m.judged))} ${f2(pc(m.honHis, m.judged))} ${f2(pc(m.honBoth, m.judged))}`; }).join('; ')}`);
+  /* O (Round 1313, 5c): the committed saves built by the code before the round (src/test/fixtures/
+     usRivalOldSavesB.json, recorded by --record-old-saves-b). A card the release before dealt pays what it printed;
+     an old shape last line stays until his next season and is his position's own after it, the tally kept; a
+     rival who retired before keeps his old line and his tally for good. Controls owndead (the own cards taken
+     out), retiredlinemlb and retiredlinenhl (a retired rival judged again) and oldtallymlb, oldtallynhl (an old
+     save's tally reset). */
+  {
+    const oldB = JSON.parse(readFileSync(path.join(ROOT, 'src/test/fixtures/usRivalOldSavesB.json'), 'utf8'));
+    const D = FLEET[sport].desc(E); const clone = x => JSON.parse(JSON.stringify(x)); const cap = v => Math.max(0, Math.min(100, v));
+    const withRng = (seed, f) => { const keep = Math.random; Math.random = mulberry32(seed); try { return f(Math.random); } finally { Math.random = keep; } };
+    const play = (c0, seed) => withRng(seed, rnd => { const c1 = clone(c0); D.campBattle(c1, 80, rnd); D.simSeason(c1, 80, rnd); return c1; });
+    const badO = [];
+    for (const [key, move] of [[`${sport}Made`, 5], [`${sport}Dropped`, -5]]) {
+      const a = oldB.saves[key]; const out = withRng(5, () => D.dismissRivalryEvent(clone(a)));
+      const told = move > 0 ? 'You made the All-Star roster.' : 'You were left off the All-Star roster.';
+      if (out.state.morale !== cap(a.morale + move) || !out.lines.some(l => l.includes(told)) || out.state.pendingRivalryEvent) badO.push(`${key}: the "${a.pendingRivalryEvent?.consequence}" card paid ${out.state.morale - a.morale} and logged "${out.lines.join(' | ')}"`);
+    }
+    for (const key of Object.keys(oldB.saves).filter(k => k.startsWith(sport) && !/Made|Dropped|Retired/.test(k))) {
+      const c0 = oldB.saves[key]; const c1 = play(c0, 77); const r0 = c0.rival; const r1 = c1.rival; const season = c1.seasons[c1.seasons.length - 1];
+      if (inShape(sport, c0.pos, r0.lastLine)) badO.push(`${key}: the committed save's last line "${r0.lastLine}" is already the new shape, so it proves nothing`);
+      if (!inShape(sport, c1.pos, r1.lastLine) || r1.lastYear !== season.year || r1.myYears + r1.hisYears !== r0.myYears + r0.hisYears + 1 || r1.myYears < r0.myYears || r1.hisYears < r0.hisYears) badO.push(`${key}: after one season his line reads "${r1.lastLine}" (year ${r1.lastYear}), tally ${r0.myYears}-${r0.hisYears} to ${r1.myYears}-${r1.hisYears}`);
+    }
+    { const key = `${sport}Retired`; const c0 = oldB.saves[key]; const c1 = play(c0, 78);
+      if (!c0.rival.retired || c1.rival.lastLine !== c0.rival.lastLine || c1.rival.myYears !== c0.rival.myYears || c1.rival.hisYears !== c0.rival.hisYears) badO.push(`${key}: the retired rival now reads "${c1.rival.lastLine}" ${c1.rival.myYears}-${c1.rival.hisYears}, was "${c0.rival.lastLine}" ${c0.rival.myYears}-${c0.rival.hisYears}`); }
+    check(`${S}.O`, badO.length === 0, `saves built by ${String(oldB.recordedFrom).slice(0, 8)}: the two own cards pay what they printed, the old shape lines become the position's own after one season with the tally kept, and a retired rival keeps his old line and tally${badO.length ? `: ${badO.join(' | ')}` : ''}`);
+  }
   check(`${S}.F5`, cards.flat().length > 0 && wrong.length === 0 && dealt > 0 && coins.length === 0, `every All-Star card dealt says and promises what the two seasons support: ${wrong.length} of ${cards.flat().length} wrong (a seed: both ${count('both').join(', ')}; only you ${count('onlyYou').join(', ')}; only him ${count('onlyHim').join(', ')}); ${coins.length} of ${dealt} beats dealt promise a "50/50 outcome"${wrong.length ? `; the first, a ${wrong[0].pos} in ${wrong[0].year}: "${wrong[0].says}" promising "${wrong[0].does}" with mine ${wrong[0].mine}, his ${wrong[0].his}` : ''}${coins.length ? `; coin: ${coins.slice(0, 3).join(' | ')}` : ''}`);
 }
 

@@ -449,11 +449,14 @@ export function simNhlSeason(
      club in 2019-20. `work` is the part of it his position works through.
 
      THE SEASON IS DRAWN ON THE ENGINE'S OWN LENGTH, exactly as it always was
-     (`fullGames`, `full`), and that draw is what the awards and the rival are
-     judged on, so a short season hands out what the same season played in
-     full would have. `cut` then carries each count to the season his club
-     really played, and that is the line that is saved and shown. In a season
-     of the engine's own length `cut` changes nothing and the two are one. */
+     (`fullGames`, `full`), and that draw is what the awards are judged on, so
+     a short season hands out what the same season played in full would have.
+     `cut` then carries each count to the season his club really played, and
+     that is the line that is saved and shown. In a season of the engine's own
+     length `cut` changes nothing and the two are one. Since Round 1313 the
+     head to head is NOT read off the draw: it reads the two saved lines, his
+     and the rival's, both on this season's length (the rival's All-Star pass
+     still reads his line on the engine's own length, as the awards do). */
   const slate = seasonLength('nhl', c.year, c.team);
   const work = nhlWorkSlate(c.pos, slate);
   const cut = (n: number) => toSlate('nhl', n, work);
