@@ -332,6 +332,17 @@ minors. What was done, each its own commit on the branch:
 NOT fixed here: run minor 6, a new Club Manager career opens its hub scrolled into the guide copy (on a 390
 phone the hub's heading sits 1608 px above the screen after "Skip: just manage"). It is on main, under src,
 and this round ships no byte to a player: a Club Manager or visual round owns it (the lead's call).
+The closing check (fix2) read the cause in src, which this branch has not moved (`git diff origin/main --
+src/pages/ClubManager.tsx src/hooks/useRevealScroll.ts` is empty). The page's revealRef (ClubManager.tsx line
+152, keyed on `${g.phase}:${g.career?.week ?? 0}`) gets a new key when the phase leaves clubSelect for the hub,
+but the hub branch (`return shell(` at line 935, its root `<div>` at line 936) puts that ref on no element, so
+useRevealScroll.ts line 198 (`if (!el || typeof window === 'undefined') return;`) returns and nothing moves the
+page. The hub's panelRef (line 223) sits on the drill in panels only and skips its first run. So the hub is
+drawn at the scroll position the dugout picker left. The owning round chooses the cure (revealRef on the hub's
+root, which would then also act on every week change and must be measured, or one scroll to the top when a
+career starts) and proves it with a walk that reaches "Skip: just manage" by the mouse wheel, as the run
+review's scrollProbe does, at 390 and 1280. The closing check measured it again on this branch's head:
+results-g/fix2-1314.md, request r1314-fx2-w.
 
 Proof of the fix pass, all on head 2ec87ac6 (the notes commits after it change this file only):
 
