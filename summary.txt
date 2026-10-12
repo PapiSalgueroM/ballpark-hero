@@ -1,0 +1,8 @@
+a-main-nhltyped exit=1 3s | simUsSeasonLedger: CONTROL nhltyped FIRED, red at exactly E2 and E8a and E8b and E8c
+a-main-mlbtyped exit=1 3s | simUsSeasonLedger: CONTROL mlbtyped FIRED, red at exactly E6 and E8a and E8b and E8c
+a-1313-nhltyped exit=3 4s | simUsSeasonLedger: CONTROL nhltyped MISFIRED, red at E2 E8b E8c where E2 and E8a and E8b and E8c was expected
+a-1313-mlbtyped exit=3 3s | simUsSeasonLedger: CONTROL mlbtyped MISFIRED, red at E6 E8b E8c where E6 and E8a and E8b and E8c was expected
+a-1313-ledger exit=0 3s | simUsSeasonLedger: green. 3041 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+a-1313-560-nhltyped exit=3 3s | simUsSeasonLedger: CONTROL nhltyped MISFIRED, red at E2 E8b E8c where E2 and E8a and E8b and E8c was expected
+a-merged-nhltyped exit=3 4s | simUsSeasonLedger: CONTROL nhltyped MISFIRED, red at E2 E8b E8c where E2 and E8a and E8b and E8c was expected
+a-merged-mlbtyped exit=3 3s | simUsSeasonLedger: CONTROL mlbtyped MISFIRED, red at E6 E8b E8c where E6 and E8a and E8b and E8c was expected
