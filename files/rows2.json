@@ -1,0 +1,614 @@
+[
+ {
+  "id": "w2-soccer-grid-320",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    87,
+    268,
+    146,
+    32
+   ],
+   "vh": 568,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-soccer-grid-320-dialog.png",
+   "w2-soccer-grid-320-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 87,
+    "bottom": 482,
+    "left": 0,
+    "right": 320
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "soccer-grid",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/soccer-grid",
+    "len": 417
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    152,
+    504,
+    136,
+    32
+   ],
+   "vh": 568,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-soccer-grid-390",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    122,
+    406,
+    146,
+    32
+   ],
+   "vh": 844,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-soccer-grid-390-dialog.png",
+   "w2-soccer-grid-390-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 235,
+    "bottom": 610,
+    "left": 3,
+    "right": 387
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "soccer-grid",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/soccer-grid",
+    "len": 417
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    227,
+    780,
+    136,
+    32
+   ],
+   "vh": 844,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-soccer-grid-1280",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    567,
+    434,
+    146,
+    32
+   ],
+   "vh": 900,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-soccer-grid-1280-dialog.png",
+   "w2-soccer-grid-1280-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 263,
+    "bottom": 638,
+    "left": 448,
+    "right": 832
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nLIVE\nNo games on th",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "soccer-grid",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/soccer-grid",
+    "len": 418
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    572,
+    836,
+    136,
+    32
+   ],
+   "vh": 900,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-player-bingo-320",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    87,
+    268,
+    146,
+    32
+   ],
+   "vh": 568,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-player-bingo-320-dialog.png",
+   "w2-player-bingo-320-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 87,
+    "bottom": 482,
+    "left": 0,
+    "right": 320
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "player-bingo",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/player-bingo",
+    "len": 569
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    152,
+    504,
+    136,
+    32
+   ],
+   "vh": 568,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-player-bingo-390",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    122,
+    406,
+    146,
+    32
+   ],
+   "vh": 844,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-player-bingo-390-dialog.png",
+   "w2-player-bingo-390-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 235,
+    "bottom": 610,
+    "left": 3,
+    "right": 387
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "player-bingo",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/player-bingo",
+    "len": 569
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    227,
+    780,
+    136,
+    32
+   ],
+   "vh": 844,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-player-bingo-1280",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    567,
+    434,
+    146,
+    32
+   ],
+   "vh": 900,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-player-bingo-1280-dialog.png",
+   "w2-player-bingo-1280-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 263,
+    "bottom": 638,
+    "left": 448,
+    "right": 832
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nLIVE\nNo games on th",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "player-bingo",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/player-bingo",
+    "len": 570
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    572,
+    836,
+    136,
+    32
+   ],
+   "vh": 900,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-front-office-320",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    87,
+    268,
+    146,
+    32
+   ],
+   "vh": 568,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-front-office-320-dialog.png",
+   "w2-front-office-320-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 87,
+    "bottom": 482,
+    "left": 0,
+    "right": 320
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "front-office",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/front-office",
+    "len": 398
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    152,
+    504,
+    136,
+    32
+   ],
+   "vh": 568,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-front-office-390",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    122,
+    406,
+    146,
+    32
+   ],
+   "vh": 844,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-front-office-390-dialog.png",
+   "w2-front-office-390-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 235,
+    "bottom": 610,
+    "left": 3,
+    "right": 387
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "front-office",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/front-office",
+    "len": 398
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    227,
+    780,
+    136,
+    32
+   ],
+   "vh": 844,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ },
+ {
+  "id": "w2-front-office-1280",
+  "errors": [],
+  "gameBlock": {
+   "rect": [
+    567,
+    434,
+    146,
+    32
+   ],
+   "vh": 900,
+   "top": "BUTTON.inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text- | Report a problem",
+   "same": true,
+   "bodyPE": "auto"
+  },
+  "shots": [
+   "w2-front-office-1280-dialog.png",
+   "w2-front-office-1280-failed.png"
+  ],
+  "dialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 263,
+    "bottom": 638,
+    "left": 448,
+    "right": 832
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nLIVE\nNo games on th",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": true,
+   "payload": {
+    "game_type": "front-office",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "game-report-button",
+    "path": "/front-office",
+    "len": 399
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  },
+  "footBlock": {
+   "rect": [
+    572,
+    836,
+    136,
+    32
+   ],
+   "vh": 900,
+   "top": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]: | ",
+   "same": false,
+   "bodyPE": "none"
+  },
+  "footerDialog": {
+   "fatal": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ hasText: /^Report a problem$/ }).nth(1)\n    - locator resolved to <button title=\"Report a problem or wrong info\" class=\"inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div data-state=\"open\" aria-hidden=\"true\" data-aria-hidden=\"true\" class=\"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0\"></div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    58 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <di"
+  }
+ }
+]

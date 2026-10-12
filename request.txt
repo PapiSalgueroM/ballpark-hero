@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk2: R="$PWD"; git worktree add /tmp/basemain 48cb9d4b > /dev/null 2>&1 && cd /tmp/basemain && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build > /tmp/basemain-build.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/basemain-server.log 2>&1 & } && sleep 5 && cd "$R" && BASE2=http://localhost:4174 node .rc/x/walkReports2.mjs
