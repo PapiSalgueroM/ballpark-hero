@@ -1,3 +1,84 @@
+## Release AW LIVE, 2026-10-11 20:55 EDT: VAR in Club Manager (goals, in the competitions that really use it), and eight of the other lane's pull requests for Soccer Career (pay by age and form from 30, veteran contract talks, the agent review, the agent brief, a national team comeback, an announced farewell season)
+
+Claude lane (session G). main ee0ec4b8, deployment cd8577d0-5d1e-41f5-8423-908931ff559a, entry index-BMYYIgf0.js (was index-BXY5no68.js, Release AV,
+published 16:02 on 2026-10-11). Proof at 20:56: x-deployment-id carries cd8577d0; /whats-new carries "VAR for goals", "tell your agent what you want", "announce your last season", "come back to your national team", "review your agent once a season" and "your pay follows your age and your form"; /, /soccer-career, /club-manager, /manager-hot-seat, /deadline-day and /nfl-my-career answer 200; a browser read no console error on /club-manager, /soccer-career and /manager-hot-seat. The host took four minutes to show the pushed commit (get_project still read the record commit at 20:52), so the deploy waited for it. Eleventh publish since 2026-10-08.
+
+What shipped:
+- This lane's Round 1303. Club Manager: a goal can be ruled out after a review. Goals only (nobody gets a
+  penalty from a review yet), only in the 28 competitions whose use of VAR is confirmed on two publishers, for a
+  save that starts in 2026/27, from its next kickoff; about one goal ruled out every 13 matches, derived from the
+  lowest of three publishers' counts. The dailies never ask for reviews. And for every era: the last kick of a
+  half gets its scorer card before the whistle.
+- The other lane's PR230 and PR228 (Rounds 1262 to 1267): from 30 a transfer offer and a contract talk pay by age
+  and recent form (a move can pay less). PR221 (1244 to 1246): review and switch your agent. PR218 (1235 to
+  1237): give your agent a destination brief. PR220 (1241 to 1243): come back to the national team on purpose.
+  PR219 (1238 to 1240): announce one final season and play it. PR222, reduced to its InternationalPanel change:
+  full names in the tournament history. PR225: seven shipped candidate workflows retired.
+- THE LEAD'S RULING C3, in the code: an agentReview, internationalReturn or farewellSeason part that cannot be
+  verified is read as absent (it used to close its card for the rest of the career), and the save keeper holds
+  the four new parts on played saves with a control each.
+
+Found and fixed inside the train, by three adversarial reviewers, three fix passes and four closing checks
+(reports in C:\Users\antho\dukb-handoff\2026-10-10\results-g\, names ending -AW.md and -1303.md):
+1. Two banners for one farewell season, and a contract talk that printed "Wage €280997/wk": one banner, and the
+   money line is grouped.
+2. The other lane's own rule that a broken appearance promise always grants a transfer request did not hold on
+   the agent brief's path: held now by a test that was committed red first.
+3. The farewell plan's dead end: an unreadable plan with the old final season flag set left a banner, no card
+   and a career that never ended. An unreadable plan is now judged exactly as the save with no plan.
+4. Eight harnesses that replay whole careers against older engines got a fifth inverse (the veteran pay rule),
+   proven to undo that rule and nothing else; one lane A harness and two controls broken by position follow
+   the merged text.
+5. Two of the other lane's walks were red about every second run (a dialog closed with Escape inside 40 ms of
+   opening; a history row read the old one line shape): the walks follow the screen, ten of ten since.
+6. This lane's Season Centre motion walk assumed every pair of tables changes the order; it holds a same order
+   pair to its own rule now, with a control.
+
+GATE ON GITHUB RUNNERS on c0379846 (the closed integration head c9a1f86a plus five budget rows), nine lanes plus the live pass, all sent 18:38: lane A 81 of 81, lane B 70 of 70, lane C 62 of 62 (the whole vitest suite among them), the sweep and play lane 19 of 19, the browser lanes 19 of 20 and 26 of 26 (playSoccerCareer check 6 on a blocked runner, green live), the other lane's walks 20 of 20 with playCmVar ("every review a player can meet was shown whole, at its minute, over nothing else"), the five Soccer Career kits 20 of 20 (the comeback's native walk 854 checks over 12 journeys, the farewell's 1,343 over 18, the brief's 1,341 over 27), the special lines green (playCmQuickSubs, playSaveKeeper against a build from before the keeper, and both controls of simDailyDeals FIRED on their own dates), the live pass 14 of 14 (playSoccerCareer all checks, playGames on seven routes against real data). No unexpected red. The committed head with the build output re-proven on a plain build, 20 of 20. Before the gate the closing pass had run the gate's own lists (28 requests) and the whole vitest suite (6,980 passed) on the integration head.
+Budgets moved, each with its measured cause in the row: /soccer-career 821K (the four new cards on the playing
+screen, 10.7K; loading them on demand was weighed and refused: a card that pops in after paint breaks the no
+jump rule), /club-manager 589K, /manager-hot-seat 606K, /deadline-day 616K (Round 1303), /nfl-my-career 480K
+(green by rounding only for two releases). The flagship needs 2639 KB raw under its 2700 KB ceiling.
+Build output: the saved page of /whats-new and its ledger line (four pages changed only their head tag order and stay as committed).
+
+Known and left for follow ups: penalties by review stay off (the engine is outside the ledger's penalty band
+with reviews on, and the screen needs a twin of the stoppage); a career on a damaged save can show the old FINAL
+SEASON banner beside the card that offers a farewell (the flag never ended a career; nothing clears it); the
+agent review compares without the dream club chance; "your agent" is said to a player who has none; the One
+last season? card is the first thing on the playing screen from 30 and the three cards add 284 px on a phone;
+simEra2005, 2010, 2015, 2020, simEras, simGmCalendar, simGmDealTableFixture, simGmStaff and simSafari are red on
+main the same way (in no gate list; Round 1304 has the era fences); VAR's guide sentence is owed.
+
+### For Codex
+1. Release AW is on main at ee0ec4b8 and live. Your PR225, PR230, PR228, PR221, PR220, PR219, PR218 shipped whole
+   and PR222 as its InternationalPanel change: close the eight; a follow up goes on a new branch from main.
+2. YOUR FILES THIS TRAIN EDITED (full lists: results-g\fix1-AW.md section 8, fix-AW.md section 7, fix2-AW.md):
+   src/pages/SoccerCareer.tsx (one condition on the old FINAL SEASON banner; the contract talk's line through
+   localizeMoneyGrouped), scripts/simSoccerVeteranTalks.mjs line 233, InternationalReturnCard.tsx (a flag after
+   the nationality; one sentence), FarewellSeasonCard.tsx (one sentence), SoccerOfferReview.tsx (two help
+   paragraphs), the three eligibility functions and readers of soccerAgentReview.ts, soccerInternationalReturn.ts
+   and soccerCareerFarewell.ts (ruling C3) with their unit cases, playSoccerFarewell.mjs and
+   playSoccerInternationalReturn.mjs (the walks follow the screen), nine pinned base constants in your kits.
+   Your receipts docs/ROUND1241-1243.md, docs/ROUND1244-1246.md and docs/ROUND1238-1240.md state the old fail
+   closed wording and an old sha256 of the farewell library: reword or refresh them.
+3. OWED TO YOUR FILES: scripts/playSoccerAgentReview.mjs is red on 3 of 12 journeys (the cousin journeys leave
+   an unseen chance wheel receipt and the walk, written before the wheel, cannot find its next button): the
+   recipe is results-g\fix2-AW.md section 5.1. scripts/playSoccerResultsLayout.mjs cannot complete on a merged
+   head (its dock control has no original). The minors of the three reviews: "Announced 2031" against
+   "2031/32"; "your agent" for a player with none; "UAE" against "United Arab Emirates" in the brief's home
+   priority; the agent review's comparison; the card's place from 30; a tournament row of 50 px with 11px text.
+   The guides say nothing of the five new mechanics or of VAR.
+4. ROUND 1304 OF THIS LANE IS CLOSED (branch r1304-cm-eras-fences, b3241abe) and rides the next release: the six
+   era fences are green and gated. All thirteen red assertions were stale (the harnesses read the bake as the
+   modern world; the game reads the joined world since Round 1035), and the walks found two real defects, both
+   fixed in src/lib/clubManager.ts: in every past season the news feed, Latest Transfers and the rival bidder
+   named clubs of today's game, and a manager sacked in a past season was offered jobs by today's clubs. Your
+   PR224 edits scripts/simEras.mjs: at its merge there is ONE year zero oracle, Round 1304's, and yours stays
+   its own harness.
+5. Everything in Release AV's record (items 3 to 10) still stands: the ruling on save parts, Release AX (PR231,
+   PR232, PR217, integrating), Release AY (PR224, PR226, after Round 1304), what is held and why, three pull
+   requests to close, this lane's claims.
+
 ## Release AV LIVE, 2026-10-11 16:02 EDT: nine rounds of this lane (MLB My Career week by week, the MLB and NHL seasons as long as the real ones, an NFL rival who plays your position, the league book kept in Club Manager, five libraries for the GM games and the Champions League)
 
 Claude lane (session G). main cbfa94fd, deployment dca21992-c335-4124-850a-e4ca1bd51fe7, entry index-BXY5no68.js (was index-CSV31ZtP.js, Release AU,
