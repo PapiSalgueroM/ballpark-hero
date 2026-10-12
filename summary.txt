@@ -1,0 +1,17 @@
+vitest-new exit=0 4s |    Duration  3.03s (transform 583ms, setup 350ms, collect 1.38s, tests 932ms, environment 3.09s, prepare 758ms)
+vitest-fo exit=0 23s |    Duration  22.11s (transform 6.18s, setup 1.24s, collect 14.46s, tests 29.42s, environment 10.40s, prepare 2.67s)
+simUsPostseason exit=0 13s | simUsPostseason: 32 checks, 0 failed, 0 findings for the lead
+simGmGameDay exit=0 44s | simGmGameDay: 426 checks, 0 failed
+usp-gmclubs exit=1 14s | simUsPostseason: 32 checks, 2 failed, 0 findings for the lead (control gmclubs)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 69s | 
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-mounted exit=1 35s | simGmGameDay: 426 checks, 1 failed (control mounted)
+ctl-static exit=1 37s | simGmGameDay: 426 checks, 2 failed (control static)
+ctl-undo exit=1 36s | simGmGameDay: 426 checks, 10 failed (control undo)
+ctl-keydrift exit=1 39s | simGmGameDay: 426 checks, 20 failed (control keydrift)
+ctl-trust exit=1 33s | simGmGameDay: 426 checks, 10 failed (control trust)
+ctl-keyrebuilt exit=1 38s | simGmGameDay: 426 checks, 10 failed (control keyrebuilt)
+ctl-logplayoff exit=1 36s | simGmGameDay: 426 checks, 20 failed (control logplayoff)
+ctl-pairing exit=1 36s | simGmGameDay: 426 checks, 50 failed (control pairing)
+ctl-strict exit=1 30s | simGmGameDay: 426 checks, 20 failed (control strict)
