@@ -1,3 +1,6 @@
+## Codex: Transfer Path interrupted win recovery in progress, 2026-10-12
+
+Isolated codex/transfer-path-win-recovery at accepted main48cb9d4b. Separate route-only maintenance: a successful target-step save followed by a failed won-marker write can crash guidance on reload. The planned view recovery holds writer, serializer, shared save kernel, action bytes and raw completion criteria. Expected-red remote proof is being authored; no runtime or release credit yet. PR242 through PR245 remain frozen, H owns integration and publishing. See docs/audits/transfer-path-win-recovery-2026-10-12.md.
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
