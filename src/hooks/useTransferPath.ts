@@ -177,8 +177,12 @@ export function useTransferPath(): TransferPathState {
     [dailySteps],
   );
   const dailyGaveUp = useMemo(() => dailyActions.some(a => a.t === 'give'), [dailyActions]);
+  // The target step can survive a failed later won-marker write. Recover the
+  // result view while keeping completion recording on the raw daily status.
+  const recoveredDailyWin = rawDailyStatus === 'playing' && !dailyGaveUp && dailySteps.length > 0 &&
+    dailySteps[dailySteps.length - 1].player === dailyPuzzle?.playerB;
   const dailyStatus: 'building' | 'won' | 'gaveup' =
-    rawDailyStatus === 'won' ? 'won' : dailyGaveUp ? 'gaveup' : 'building';
+    rawDailyStatus === 'won' || recoveredDailyWin ? 'won' : dailyGaveUp ? 'gaveup' : 'building';
   const dailyScore = useMemo(() => {
     if (dailyStatus !== 'won') return 0;
     const steps = dailyChain.length - 1;
@@ -401,8 +405,8 @@ export function useTransferPath(): TransferPathState {
   /* Round 643 review: the daily status alone, with the daily's own score,
      whatever mode is on screen (the Missing XI shape), so no mode change can
      ever flip the recorder over a daily already recorded. */
-  const isComplete = dailyStatus === 'won' || dailyStatus === 'gaveup';
-  useGameCompletion('transfer-path', isComplete, dailyStatus === 'won' ? dailyScore : 0, dailyStatus === 'won' ? 1 : 0);
+  const isComplete = rawDailyStatus === 'won' || dailyGaveUp;
+  useGameCompletion('transfer-path', isComplete, rawDailyStatus === 'won' ? dailyScore : 0, rawDailyStatus === 'won' ? 1 : 0);
 
   // ── giveUp + reveal ────────────────────────────────────────────────────────
   const giveUp = useCallback(() => {
