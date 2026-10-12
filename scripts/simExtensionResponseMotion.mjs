@@ -26,7 +26,15 @@ try {
     await mkdir(base, { recursive: true });
     folder = await mkdtemp(path.join(base, 'extension-motion-'));
     copy = path.join(folder, 'ExtensionCard.tsx');
-    await writeFile(copy, changed.replace(cssImport, "'@/components/us-career/ExtensionMotion.module.css'"));
+    /* Release AX fix pass: the copy lives in another folder, so EVERY sibling import of the card must be
+       rewritten to its alias path, not only the CSS module. PR217 gave the card `./MarketChanceWheel`, the copy
+       could not resolve it, and this control aborted on a failed import while it looked like a fired control
+       (both exit 1). Rewriting them all means the next sibling import cannot do this again, and the two asserts
+       below refuse to run a copy that still holds one. */
+    const aliased = changed.replace(/from '\.\/([^']+)'/g, "from '@/components/us-career/$1'");
+    assert.ok(aliased.includes("from '@/components/us-career/ExtensionMotion.module.css'"), 'The copy imports the CSS module by its alias');
+    assert.doesNotMatch(aliased, /from '\.\.?\//, 'The copy holds no relative import');
+    await writeFile(copy, aliased);
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/us-career/ExtensionCard': copy });
   }
   const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/extensionResponseMotion.test.tsx', '--reporter=verbose'], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
@@ -37,6 +45,7 @@ try {
   assert.match(output, /extensionResponseMotion\.test\.tsx/, 'The actual extension card tests must run');
   if (control) {
     assert.notEqual(run.status, 0, diagnostic);
+    assert.doesNotMatch(output, /Failed to (?:resolve import|load)|Cannot find module/, 'The copy must load: a control that cannot import its component proves nothing');
     assert.match(output, /3 failed.*2 passed/, diagnostic);
     assert.match(output, /reveals the exact 'improved' engine reply without replacing remaining controls/, diagnostic);
     assert.match(output, /reveals the exact 'held' engine reply without replacing remaining controls/, diagnostic);
