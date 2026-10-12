@@ -1,0 +1,2 @@
+#!playwright
+base-writes: R=$PWD; git worktree add -q /tmp/base 21941630 && cd /tmp/base && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build > /tmp/vb.log 2>&1; echo "base build exit $?"; node scripts/simWritesAreSent.mjs
