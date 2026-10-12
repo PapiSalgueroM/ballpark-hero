@@ -1,0 +1,56 @@
+sale A: Jarrad Branthwaite (CB, age 23, 86, contractYears 2) to Liverpool
+sale C: Christian Nørgaard (CDM, age 31, 73, contractYears 1) to Liverpool
+  season 1 summer A Jarrad Branthwaite: record owned Liverpool contractYears 2; Liverpool lists him age 23 rating 86 made up tag false
+  season 1 summer C Christian Nørgaard: record owned Liverpool contractYears 1; Liverpool lists him age 31 rating 73 made up tag false
+  season 2 summer A Jarrad Branthwaite: record owned Liverpool contractYears 1; Liverpool lists him age 24 rating 86 made up tag false
+  season 2 summer C Christian Nørgaard: record owned Liverpool contractYears 2; Liverpool lists him age 32 rating 72 made up tag false
+academy player: Jude Baptiste (RWB, 15, 55) generated=false academyGrad=true
+  season 3 summer A Jarrad Branthwaite: record owned Liverpool contractYears 4; Liverpool lists him age 25 rating 86 made up tag false
+  season 3 summer C Christian Nørgaard: record retired null contractYears 1; Liverpool lists him NO
+  season 3 summer B Jude Baptiste: record owned Liverpool contractYears 3; Liverpool lists him age 16 rating 58 made up tag true
+save at season 3, club Everton, sacked false, yearsOn 2, ledger 10 records
+old copy: Liverpool lists Jarrad Branthwaite no, Christian Nørgaard no, Jude Baptiste no; Best XI seeded 90.3 old 89.5
+  season 4 summer A Jarrad Branthwaite: record owned Liverpool contractYears 3; Liverpool lists him age 26 rating 86 made up tag false
+  season 4 summer C Christian Nørgaard: record retired null contractYears 1; Liverpool lists him NO
+  season 4 summer B Jude Baptiste: record owned Liverpool contractYears 2; Liverpool lists him age 17 rating 59 made up tag true
+  season 5 summer A Jarrad Branthwaite: record owned Liverpool contractYears 2; Liverpool lists him age 27 rating 86 made up tag false
+  season 5 summer C Christian Nørgaard: record none; Liverpool lists him NO
+  season 5 summer B Jude Baptiste: record owned Liverpool contractYears 1; Liverpool lists him age 18 rating 61 made up tag true
+  season 6 summer A Jarrad Branthwaite: record owned Liverpool contractYears 1; Liverpool lists him age 28 rating 86 made up tag false
+  season 6 summer C Christian Nørgaard: record none; Liverpool lists him NO
+  season 6 summer B Jude Baptiste: record owned Liverpool contractYears 4; Liverpool lists him age 19 rating 64 made up tag true
+  season 7 summer A Jarrad Branthwaite: record owned Liverpool contractYears 2; Liverpool lists him age 29 rating 86 made up tag false
+  season 7 summer C Christian Nørgaard: record none; Liverpool lists him NO
+  season 7 summer B Jude Baptiste: record owned Liverpool contractYears 3; Liverpool lists him age 20 rating 65 made up tag true
+mkSaveCD: done (buyer Liverpool, sold A Jarrad Branthwaite, C Christian Nørgaard, B Jude Baptiste)
+320 seeded: season 3 seed true ledger true; hub 526 ms; open 99 ms; Liverpool Best XI 90 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   seeded 320 sold man Jarrad Branthwaite: listed "CB Jarrad Branthwaite 25y £36.8m 86" made up tag false
+   seeded 320 sold man Christian Nørgaard: not listed
+   seeded 320 sold man Jude Baptiste: listed "RWB Jude Baptiste MADE UP 16y £0k 58" made up tag true
+320 old: season 3 seed false ledger false; hub 464 ms; open 98 ms; Liverpool Best XI 90 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   old 320 sold man Jarrad Branthwaite: not listed
+   old 320 sold man Christian Nørgaard: not listed
+   old 320 sold man Jude Baptiste: not listed
+390 seeded: season 3 seed true ledger true; hub 447 ms; open 97 ms; Liverpool Best XI 90 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   seeded 390 sold man Jarrad Branthwaite: listed "CB Jarrad Branthwaite 25y £36.8m 86" made up tag false
+   seeded 390 sold man Christian Nørgaard: not listed
+   seeded 390 sold man Jude Baptiste: listed "RWB Jude Baptiste MADE UP 16y £0k 58" made up tag true
+   caption: 2028-29 squad. Real players from August 2026 aged forward, with anyone who retired replaced by players this game made up, marked above.
+390 old: season 3 seed false ledger false; hub 427 ms; open 104 ms; Liverpool Best XI 90 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   old 390 sold man Jarrad Branthwaite: not listed
+   old 390 sold man Christian Nørgaard: not listed
+   old 390 sold man Jude Baptiste: not listed
+   caption: 2028-29 squad. Real players from August 2026 aged forward, with anyone who retired replaced by players this game made up, marked above.
+1280 seeded: season 3 seed true ledger true; hub 450 ms; open 81 ms; Liverpool Best XI 90 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   seeded 1280 sold man Jarrad Branthwaite: listed "CB Jarrad Branthwaite 25y £36.8m 86" made up tag false
+   seeded 1280 sold man Christian Nørgaard: not listed
+   seeded 1280 sold man Jude Baptiste: listed "RWB Jude Baptiste MADE UP 16y £0k 58" made up tag true
+1280 old: season 3 seed false ledger false; hub 457 ms; open 82 ms; Liverpool Best XI 90 (18px); overlap 0; wide false; jumped false; clipped []; errors 0
+   old 1280 sold man Jarrad Branthwaite: not listed
+   old 1280 sold man Christian Nørgaard: not listed
+   old 1280 sold man Jude Baptiste: not listed
+whats-new 390: "Club Manager: the world remembers your deals. In a career you start from today, the players you buy, sell or release, and the ones who retire, stay where they went when you change jobs, and from your second season the rest of the world develops with some variety. A career already in progress, or a Hot Seat job carried on into Club Manager, plays on exactly as it was."
+help 390: 340 by 300; font 14px; wide false; errors 0
+whats-new 1280: "Club Manager: the world remembers your deals. In a career you start from today, the players you buy, sell or release, and the ones who retire, stay where they went when you change jobs, and from your second season the rest of the world develops with some variety. A career already in progress, or a Hot Seat job carried on into Club Manager, plays on exactly as it was."
+help 1280: 398 by 260; font 14px; wide false; errors 0
+walkCD: done
