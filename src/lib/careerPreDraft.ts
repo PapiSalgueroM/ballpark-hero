@@ -84,6 +84,17 @@ export interface PreDraftPostDraft {
   title: string;
 }
 
+/** Round 1319: one showcase drill a player can run himself, as one of the
+ *  shared training drills (the burst tap or the cone run). The name is a
+ *  plain name for what the game's drill is ("Burst test", "Agility run",
+ *  "Hit your spots"), which claims no real test, or a real test's name only
+ *  where the audit backs it twice for that era (the NHL's today: audit row
+ *  65 of docs/audits/US-PRE-DRAFT-RULES-2026-10.md). */
+export interface PreDraftStation {
+  name: string;
+  kind: 'burst' | 'cones';
+}
+
 export interface PreDraftDescriptor {
   sport: PreDraftSport;
   eraId: string;
@@ -110,6 +121,11 @@ export interface PreDraftDescriptor {
    *  where a sport's game rule drafts a position late (the NFL's kickers). A
    *  rank past the last pick is undrafted, as always. Nothing else sets it. */
   pickOffset?: (pos: string | undefined) => number;
+  /** Round 1319: the stations a player of this position can run himself at
+   *  the showcase, in order. Read through preDraftStations, which turns
+   *  anything but one or two good stations into none. `drills` is the
+   *  scouts path's list and is never read here. */
+  stations?: (pos: string | undefined) => PreDraftStation[];
   postDraft: PreDraftPostDraft | null;
   undraftedLine: string;
 }
@@ -529,6 +545,20 @@ export function preDraftRunDraft(desc: PreDraftDescriptor, prev: PreDraftState):
   };
   s.phase = 'done';
   return s;
+}
+
+/* ─── The combine you run (Round 1319) ────────────────────────────────── */
+
+/** The stations this player can run himself: the descriptor's list, kept
+ *  only when it is one or two stations of the burst or the cone kind with
+ *  distinct names that are not empty. Anything else is none, and a showcase
+ *  with no stations offers only the scouts' three buttons. */
+export function preDraftStations(desc: PreDraftDescriptor, s: Pick<PreDraftState, 'pos'>): PreDraftStation[] {
+  const list = desc.stations?.(s.pos);
+  if (!Array.isArray(list) || list.length < 1 || list.length > 2) return [];
+  const good = list.every(st => !!st && (st.kind === 'burst' || st.kind === 'cones') && typeof st.name === 'string' && st.name.trim() !== '');
+  if (!good || new Set(list.map(st => st.name)).size !== list.length) return [];
+  return list.map(st => ({ name: st.name, kind: st.kind }));
 }
 
 /* ─── The save block ──────────────────────────────────────────────────── */

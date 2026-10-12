@@ -20,6 +20,8 @@ import { nflPreDraftDescriptor } from '@/lib/nflCareerPreDraft';
 import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
 import { mlbPreDraftDescriptor, MLB_MINOR_LEVELS } from '@/lib/mlbCareerPreDraft';
 import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
+/* Round 1319: the combine you run, part A (the engine). Additions only. */
+import { preDraftShowcaseGrade, preDraftShowcaseGradeFrom, preDraftStations, type PreDraftStation } from '@/lib/careerPreDraft';
 
 const ALL: PreDraftDescriptor[] = [
   nflPreDraftDescriptor('now'), nflPreDraftDescriptor('y2005'),
@@ -331,5 +333,62 @@ describe('the cards on screen', () => {
     expect(text).toContain('Undrafted');
     expect(text).toContain(d.undraftedLine);
     expect(text).toContain(d.teamLabel(none.draft!.team));
+  });
+});
+
+/* ─── Round 1319: the combine you run, part A (the engine) ─── */
+
+describe('the showcase grade, lifted', () => {
+  it('the scouts path hands the lifted cut its one draw, float for float', () => {
+    const base = preDraftStart(nflPreDraftDescriptor('now'), { seed: 'lift', routeId: 'power', rating: 70, pot: 80 });
+    for (let rating = 50; rating <= 90; rating += 1) for (let health = 0; health <= 100; health += 5) for (let k = 0; k <= 200; k += 1) {
+      const u = k / 200 - 0.0005 * (k % 3);
+      const s = { ...base, rating, health };
+      expect(preDraftShowcaseGrade(s, () => u)).toBe(preDraftShowcaseGradeFrom(u, s));
+    }
+  });
+});
+
+describe('the stations a player can run himself', () => {
+  const PLAIN = ['Burst test', 'Agility run', 'Hit your spots'];
+  const POSITIONS: Record<string, (string | undefined)[]> = {
+    nfl: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K', undefined],
+    nba: ['PG', 'SG', 'SF', 'PF', 'C', undefined],
+    mlb: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH', undefined],
+    nhl: ['C', 'LW', 'RW', 'D', 'G', undefined],
+  };
+  const expected = (d: PreDraftDescriptor, pos: string | undefined): PreDraftStation[] => {
+    if (d.sport === 'nhl') return d.eraId === 'now'
+      ? [{ name: 'Bike test', kind: 'burst' }, { name: 'Pro agility', kind: 'cones' }]
+      : [{ name: 'Burst test', kind: 'burst' }];
+    if (d.sport === 'mlb' && (pos === 'SP' || pos === 'RP')) return [{ name: 'Hit your spots', kind: 'cones' }];
+    return [{ name: 'Burst test', kind: 'burst' }, { name: 'Agility run', kind: 'cones' }];
+  };
+  it('one or two a position, in order, burst and cones only, every name plain or the NHL pair the audit backs', () => {
+    for (const d of ALL) for (const pos of POSITIONS[d.sport]) {
+      const got = preDraftStations(d, { pos });
+      expect(got).toEqual(expected(d, pos));
+      expect(got.length === 1 || got.length === 2).toBe(true);
+      for (const st of got) {
+        expect(['burst', 'cones']).toContain(st.kind);
+        const nhlPair = d.sport === 'nhl' && d.eraId === 'now' && ['Bike test', 'Pro agility'].includes(st.name);
+        expect(PLAIN.includes(st.name) || nhlPair).toBe(true);
+        if (d.sport === 'nhl') expect(st.name).not.toMatch(/ice|skat/i);
+      }
+    }
+  });
+  it('a pitcher and the 2006 NHL run one station', () => {
+    for (const d of ALL.filter(x => x.sport === 'mlb')) for (const pos of ['SP', 'RP']) expect(preDraftStations(d, { pos })).toHaveLength(1);
+    expect(preDraftStations(nhlPreDraftDescriptor('y2006'), { pos: 'C' })).toEqual([{ name: 'Burst test', kind: 'burst' }]);
+  });
+  it('anything but one or two good stations is none', () => {
+    const d = nflPreDraftDescriptor('now');
+    const bad: unknown[] = [
+      [], [{ name: 'A', kind: 'burst' }, { name: 'B', kind: 'cones' }, { name: 'C', kind: 'burst' }],
+      [{ name: 'A', kind: 'burst' }, { name: 'A', kind: 'cones' }], [{ name: ' ', kind: 'burst' }],
+      [{ name: 'A', kind: 'gate' }], [null], 'Burst test', undefined,
+    ];
+    for (const list of bad) expect(preDraftStations({ ...d, stations: () => list as PreDraftStation[] }, { pos: 'QB' })).toEqual([]);
+    expect(preDraftStations({ ...d, stations: undefined }, { pos: 'QB' })).toEqual([]);
   });
 });
