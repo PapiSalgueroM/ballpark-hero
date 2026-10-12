@@ -1,0 +1,2 @@
+simGmGameDay: 303 checks, 31 failed (control random)
+control random: RED AT THE NAMED CHECK (section 5); its named checks red: 2 of 2 ("holds no Math.random", "takes no draw from Math.random"); sections red: 5, 8
