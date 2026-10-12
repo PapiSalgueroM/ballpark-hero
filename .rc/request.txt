@@ -1,0 +1,12 @@
+# Round 1311 step 5 (head 5090d373, local): the back four of the team of the season, healthy and under teamsheets, full fleets of five seed sets
+f0: SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+ts-f0: SEEDSET=0 BOOK_FLEET=full BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+f1: SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+ts-f1: SEEDSET=1 BOOK_FLEET=full BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+f2: SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+ts-f2: SEEDSET=2 BOOK_FLEET=full BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+f3: SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+ts-f3: SEEDSET=3 BOOK_FLEET=full BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+f4: SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+ts-f4: SEEDSET=4 BOOK_FLEET=full BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+c-nocap: BOOK_CONTROL=nocap node scripts/simCmLeagueBook.mjs
