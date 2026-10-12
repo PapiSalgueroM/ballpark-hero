@@ -1,0 +1,3 @@
+rivalProve: RIVAL_PROVE=ecbdab63 RIVAL_MOVED=none RIVAL_CARDS=none node scripts/simUsRivalSense.mjs
+rival-liftcard: RIVAL_PROVE=ecbdab63 RIVAL_MOVED=none RIVAL_CARDS=none US_RIVAL_CONTROL=liftcard node scripts/simUsRivalSense.mjs
+rival-rostergate: US_RIVAL_CONTROL=rostergate node scripts/simUsRivalSense.mjs
