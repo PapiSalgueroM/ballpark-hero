@@ -65,7 +65,9 @@ remote check; the result of a check is read with `git show origin/rc-results/<na
   sweepWeight is red on those three rows until the lead sets them, once, on the tree that also holds Release AZ.
 - Whichever of this branch and Release AZ reaches main second retakes the Round 1081 pin and
   scripts/data/cmLeagueRulesDigest.json, and runs simCmLeagueBook (full fleet, seed sets 0 to 4) and
-  simAwardRaces on the joined tree (the lead's decision 2).
+  simAwardRaces on the joined tree (the lead's decision 2). The same tree also wants
+  scripts/simClubManagerSlots.mjs with SLOTS_CONTROL=dupe: this round moved its BUDGET (8ae54839) and Release
+  AZ edits that file's digest too (it reads the packed world roster), so the joined total is unmeasured.
 - The saved What's New page (public/whats-new/index.html) is redrawn at release.
 - OWED TO THE OTHER LANE: one sentence on the league leaders, the awards and the past winners for
   src/data/gameContent/clubManagement.ts; and whether its line 121 "wherever a scorer is listed" wants
@@ -113,3 +115,22 @@ remote check; the result of a check is read with `git show origin/rc-results/<na
   21 (i) the golden boot race's lines are headed; (ii) two wordings of the empty state; (iii) a mid season
   book that is whole but was thin gives awards only over the floor (its cov is kept); (iv) at 320 a row may
   cut the club and never the name or the number, measured on the rectangles in the walk.
+
+## The review fixes (review-run-1311 and review-read-1311)
+
+- Round F's reviewed tip (r1310-cm-league-facts 302b4969) is merged in, so the facts file carries Strasbourg's
+  27 played in Ligue 1 2019-20, Sky Sport Italia's cards as the page prints them and the laliga.com citation by
+  host, and its fence carries Round F's later controls. The USED figures did not change.
+- The Round 1081 pin takes scripts/simClubManagerSlots.mjs again (attribution on remote check r1311-fx-pin).
+- Unit and render lines now hold the floor's edge (73 decides, 72 does not, a late book never does), the honest
+  line in a league between 73 and 94 on the card and the review, and the review's late book wording.
+- Copy: the review's withheld line counts "the other clubs' goals"; the card's "?", the Past winners tile and
+  the help say a season the book cannot settle has no most assists, most clean sheets or team, that a thin
+  league can go every year without them, that own goals and a thin squad's empty places count for nobody, and
+  that the team is kept for five seasons; the race note points at the Top scorers board only when it is drawn,
+  in 9 px; Past winners names each season's league; the review's club lines read "Your top scorer" and "Your
+  most assists", and its golden boot and player of the season lines wrap as text.
+- simCmLeagueBook judges the 38 match facts band only on a fleet of 20 such seasons or more (the full fleet);
+  control bookleak runs on the full fleet.
+- Not changed: dealShares stays in the book module (control twoman patches a line of it, and the weight rows
+  are the lead's); What's New keeps the brief's own text (decision 7).
