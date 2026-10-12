@@ -1,0 +1,14 @@
+probe-head exit=0 1s |    Duration  720ms (transform 111ms, setup 41ms, collect 125ms, tests 10ms, environment 237ms, prepare 118ms)
+probe-base exit=0 1s |    Duration  661ms (transform 109ms, setup 38ms, collect 116ms, tests 10ms, environment 219ms, prepare 100ms)
+privacy-mut exit=0 0s | simReportContext: all green
+simReportContext exit=0 0s | simReportContext: all green
+simReportContext-privacy exit=0 0s | control "privacy": 2 failure(s) fired in section 4 as expected, the check works
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simInventedNames exit=0 5s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 15s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simPlayerBingoHonours exit=0 4s | simPlayerBingoHonours PASS
+simLegalPages exit=0 1s | simLegalPages: all green
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simErrorBoundary-rename exit=0 1s |    CONTROL FIRED: the rename mutation was caught
+vitest-area exit=0 3s |    Duration  2.32s (transform 493ms, setup 212ms, collect 1.22s, tests 1.98s, environment 1.59s, prepare 435ms)

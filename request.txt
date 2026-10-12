@@ -1,0 +1,15 @@
+#!serial
+probe-head: head -n 243 src/test/playerBingoHonours.test.ts > src/test/ffProbe.test.ts && cat .rc/x/ffProbeTail.ts >> src/test/ffProbe.test.ts && node_modules/.bin/vitest run src/test/ffProbe.test.ts --testTimeout=300000; s=$?; rm -f src/test/ffProbe.test.ts; exit $s
+probe-base: head -n 243 src/test/playerBingoHonours.test.ts > src/test/ffProbe.test.ts && cat .rc/x/ffProbeTail.ts >> src/test/ffProbe.test.ts && git show 48cb9d4b:src/lib/playerBingo.ts > src/lib/playerBingo.ts && node_modules/.bin/vitest run src/test/ffProbe.test.ts --testTimeout=300000; s=$?; rm -f src/test/ffProbe.test.ts; git checkout -- src; exit $s
+privacy-mut: node .rc/x/ffMutPriv.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs; s=$?; git checkout -- src scripts; exit $s
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simReportContext-privacy: SIM_REPORT_CONTROL=privacy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simErrorBoundary-rename: BOUNDARY_CONTROL=rename node scripts/simErrorBoundary.mjs
+vitest-area: node_modules/.bin/vitest run src/test/reportContext.test.ts src/test/reportDetails.test.tsx src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/gameReportPlacement.test.tsx --testTimeout=300000 --hookTimeout=120000

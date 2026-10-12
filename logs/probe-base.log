@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/ffProbe.test.ts[2m > [22m[2mREVIEW PROBE: a summer 2026 PSG arrival and the 2026 title pair[2m > [22m[2mreports whether the Champions League winner tile accepts the arrival
+[22m[39mPROBE ferran clubYears=[{"key":"paris saint-germain","year":2026},{"key":"fc barcelona","year":2025},{"key":"fc barcelona","year":2024},{"key":"fc barcelona","year":2023},{"key":"fc barcelona","year":2022},{"key":"manchester city","year":2021}]
+PROBE ferran uclAccepted=false withoutThe2026Row=false
+
+ [32m✓[39m src/test/ffProbe.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 22:48:26
+[2m   Duration [22m 661ms[2m (transform 109ms, setup 38ms, collect 116ms, tests 10ms, environment 219ms, prepare 100ms)[22m
+

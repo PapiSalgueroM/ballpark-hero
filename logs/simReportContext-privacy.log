@@ -1,0 +1,14 @@
+1) Both report forms use the bounded shared context on both delivery paths
+   src/components/game/ReportQuestion.tsx: shared context, 2 delivery paths
+   src/components/game/ReportSiteIssue.tsx: shared context, 2 delivery paths
+2) Footle reports its mode and the tier that mode used
+   mode and tier present, the unlimited selector gone
+3) Inventory: what the other pages send (printed, not failed)
+   75 report buttons across 170 pages; 26 pass no context, 0 pass an empty one: AlphabetSprint.tsx, CbbGrid.tsx, ClueAuction.tsx, DealOrNoDeal.tsx, GauntletDraft.tsx, HigherLowerTransfers.tsx, HockeyGrid.tsx, ListQuiz.tsx, MissingXi.tsx, MlbGauntletDraft.tsx, MlbGrid.tsx, NbaGauntletDraft.tsx, NbaGrid.tsx, NbaStatLine.tsx, NflGauntletDraft.tsx, NhlGauntletDraft.tsx, PackBattle.tsx, PerfectSeasonMlb.tsx, PerfectSeasonNfl.tsx, PerfectSeasonNhl.tsx, PuckDetective.tsx, SearchAndDiscard.tsx, SportsBingo.tsx, SportsMillionaire.tsx, WhoAmI.tsx, WorldXi.tsx
+   every one of them now carries the route and the date through the component
+4) The privacy page says what the report flow already sends
+  FAIL: Reported issues does not disclose the Eastern date
+  FAIL: Reported issues does not disclose the limited game context
+   category, typed text, page, Eastern date and limited game details disclosed on both lines
+
+control "privacy": 2 failure(s) fired in section 4 as expected, the check works
