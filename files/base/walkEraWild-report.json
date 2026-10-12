@@ -1,0 +1,51 @@
+[
+  {
+    "label": "2010-11 Blackpool at 390 (reduced motion)",
+    "waits": 20,
+    "offers": [
+      {
+        "club": "Blackburn Rovers",
+        "league": "EFL Championship",
+        "text": "Blackburn RoversEFL ChampionshipThey wanted someone who knows the country and the league.The brief: Survive, and cut the wage bill while you do it.Take the Blackburn Rovers job"
+      }
+    ],
+    "took": "Blackburn Rovers",
+    "now": "Blackburn Rovers"
+  },
+  {
+    "label": "2005-06 Juventus at 1280",
+    "waits": 7,
+    "offers": [
+      {
+        "club": "Bristol City",
+        "league": "EFL Championship",
+        "text": "Bristol CityEFL ChampionshipThey wanted someone who knows the country and the league.The brief: Survive, and cut the wage bill while you do it.Take the Bristol City job"
+      },
+      {
+        "club": "Portsmouth",
+        "league": "EFL Championship",
+        "text": "PortsmouthEFL ChampionshipThey wanted someone who knows the country and the league.The brief: Stay up. That is the whole brief.Take the Portsmouth job"
+      },
+      {
+        "club": "Lincoln City",
+        "league": "EFL Championship",
+        "text": "Lincoln CityEFL ChampionshipThey wanted someone who knows the country and the league.The brief: Stay up. That is the whole brief.Take the Lincoln City job"
+      }
+    ],
+    "took": "Lincoln City",
+    "now": "Juventus"
+  },
+  {
+    "label": "2020-21 Sevilla at 390",
+    "waits": 20,
+    "offers": [
+      {
+        "club": "Sheffield United",
+        "league": "EFL Championship",
+        "text": "Sheffield UnitedEFL ChampionshipThey need a manager, you need a job, and neither of you is in a position to be fussy.The brief: Steady the ship and keep us up. Nobody here expects miracles.Take the Sheffield United job"
+      }
+    ],
+    "took": "Sheffield United",
+    "now": "Sheffield United"
+  }
+]

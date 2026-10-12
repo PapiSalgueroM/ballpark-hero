@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walkEraWild: node .rc/x/walkEraWild.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+walkEraWild-base: bash .rc/x/walkBase.sh 94647e74

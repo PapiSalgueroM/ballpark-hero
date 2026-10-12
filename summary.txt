@@ -1,0 +1,4 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkEraWild exit=0 81s | walkEraWild: green. A manager sacked in a past season is rung by that season, and the job he takes is the job he gets.
+playWilderness exit=0 17s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+walkEraWild-base exit=1 191s | walkEraWild on the base build 94647e7418: exit=1

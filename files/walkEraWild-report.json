@@ -1,0 +1,72 @@
+[
+  {
+    "label": "2010-11 Blackpool at 390 (reduced motion)",
+    "waits": 20,
+    "offers": [
+      {
+        "club": "West Brom",
+        "league": "Premier League",
+        "text": "West BromPremier LeagueThey wanted someone who knows the country and the league.The brief: Stay up. That is the whole brief.Take the West Brom job"
+      }
+    ],
+    "took": "West Brom",
+    "now": "West Brom",
+    "oldSave": {
+      "stale": "Bournemouth",
+      "kept": "Almería",
+      "afterAWeek": [
+        "Almería"
+      ]
+    }
+  },
+  {
+    "label": "2005-06 Juventus at 1280",
+    "waits": 11,
+    "offers": [
+      {
+        "club": "Racing Santander",
+        "league": "La Liga",
+        "text": "Racing SantanderLa LigaNobody else was interested at the money they are offering.The brief: Keep us in this division and we will talk again.Take the Racing Santander job"
+      },
+      {
+        "club": "Troyes",
+        "league": "Ligue 1",
+        "text": "TroyesLigue 1Nobody else was interested at the money they are offering.The brief: Stay up. That is the whole brief.Take the Troyes job"
+      },
+      {
+        "club": "AC Ajaccio",
+        "league": "Ligue 1",
+        "text": "AC AjaccioLigue 1Nobody else was interested at the money they are offering.The brief: Stay up. That is the whole brief.Take the AC Ajaccio job"
+      }
+    ],
+    "took": "AC Ajaccio",
+    "now": "AC Ajaccio",
+    "oldSave": {
+      "stale": "Bournemouth",
+      "kept": "Alavés",
+      "afterAWeek": [
+        "Alavés"
+      ]
+    }
+  },
+  {
+    "label": "2020-21 Sevilla at 390",
+    "waits": 20,
+    "offers": [
+      {
+        "club": "Crotone",
+        "league": "Serie A",
+        "text": "CrotoneSerie ANobody else was interested at the money they are offering.The brief: Survive, and cut the wage bill while you do it.Take the Crotone job"
+      }
+    ],
+    "took": "Crotone",
+    "now": "Crotone",
+    "oldSave": {
+      "stale": "Bournemouth",
+      "kept": "Atlético Madrid",
+      "afterAWeek": [
+        "Atlético Madrid"
+      ]
+    }
+  }
+]
