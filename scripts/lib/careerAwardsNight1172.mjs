@@ -2,6 +2,22 @@
    newspaper decisions in a copied bundle for the older full-save fixture.
    The unpatched bundle still runs every current award and speech invariant. */
 export const awardsNight1172Attribution = [
+  // Round 1318 inverse first (correction 12): a saved rival whose name is taken this year is replaced at once.
+  {
+    "from": "    let entry = pool.entries.find(row => row.role === role && row.slot === slot && row.retiredYear === null);\n    /* Round 1318: a saved rival whose name is already taken this year (the\n       career's own rival, say) would be skipped below every year until he\n       retired, shifting every later draw. He leaves at once instead, and his\n       slot gets a new face from the age already drawn: no extra draw. */\n    if (entry && usedNames.has(entry.name)) { entry.retiredYear = year; entry = undefined; }\n",
+    "to": "    let entry = pool.entries.find(row => row.role === role && row.slot === slot && row.retiredYear === null);\n",
+    "file": "src/lib/soccerCareerEngine.ts"
+  },
+  {
+    "from": "    } else if (!integer(entry.retiredYear) || entry.retiredYear > poolYear || entry.retiredYear <= entry.firstYear\n      || entry.retiredYear > entry.firstYear + 37 - entry.entryAge) return false;",
+    "to": "    } else if (!integer(entry.retiredYear) || entry.retiredYear > poolYear\n      || entry.retiredYear !== entry.firstYear + 37 - entry.entryAge) return false;",
+    "file": "src/lib/soccerCareerEngine.ts"
+  },
+  {
+    "from": "   range of the rival's position, and a retirement in the year he turns 37,\n   or earlier (but after his first year) when his name was taken. */",
+    "to": "   range of the rival's position, and a retirement in the year he turns 37. */",
+    "file": "src/lib/soccerCareerEngine.ts"
+  },
   // Round 1318 inverse first (ruling C3): the pool reader and the one guarded read of the saved pool.
   {
     "from": "/* Round 1318: the one reader of the saved pool of generated rivals (Rounds\n   1280 to 1282). Ruling C3 of Release AW: a save part that cannot be verified\n   is read as absent. So this never refuses a save; calculateBallonDor reads the\n   part only through here and starts a fresh pool in place of one it refuses.\n   It checks what those rounds write: version 1, a year no later than lastYear,\n   contiguous ids, one live rival per role and slot, unique names, the goal\n   range of the rival's position, and a retirement in the year he turns 37. */\nexport function isGeneratedBallonPool(v: unknown, lastYear: number): v is GeneratedBallonPool {\n  const record = (x: unknown): x is Record<string, unknown> => typeof x === \"object\" && x !== null && !Array.isArray(x);\n  const integer = (x: unknown): x is number => typeof x === \"number\" && Number.isSafeInteger(x);\n  const filled = (x: unknown): x is string => typeof x === \"string\" && x.trim().length > 0;\n  if (!record(v) || v.version !== 1 || !integer(v.year) || v.year < 0 || v.year > lastYear\n    || !integer(v.nextId) || !Array.isArray(v.entries) || v.entries.length === 0 || v.nextId !== v.entries.length) return false;\n  const poolYear = v.year, names = new Set<string>(), activeSlots = new Set<string>();\n  for (let index = 0; index < v.entries.length; index++) {\n    const entry: unknown = v.entries[index];\n    if (!record(entry)) return false;\n    const goals = GEN_POSITIONS.find(p => p.pos === entry.position)?.goals;\n    if (entry.id !== index || (entry.role !== \"primary\" && entry.role !== \"filler\")\n      || !integer(entry.slot) || entry.slot < 0 || entry.slot >= (entry.role === \"primary\" ? 15 : 20)\n      || !integer(entry.seed) || entry.seed < 0 || !integer(entry.firstYear) || entry.firstYear < 0 || entry.firstYear > poolYear\n      || !integer(entry.entryAge) || entry.entryAge < 19 || entry.entryAge > 28\n      || !filled(entry.name) || names.has(entry.name) || !filled(entry.nationality) || !filled(entry.club) || !goals\n      || !Array.isArray(entry.baseGoals) || entry.baseGoals.length !== 2\n      || entry.baseGoals[0] !== goals[0] || entry.baseGoals[1] !== goals[1]) return false;\n    names.add(entry.name);\n    if (entry.retiredYear === null) {\n      const slot = entry.role + \":\" + entry.slot;\n      if (entry.entryAge + poolYear - entry.firstYear >= 37 || activeSlots.has(slot)) return false;\n      activeSlots.add(slot);\n    } else if (!integer(entry.retiredYear) || entry.retiredYear > poolYear\n      || entry.retiredYear !== entry.firstYear + 37 - entry.entryAge) return false;\n  }\n  return true;\n}\n\nfunction generateContender(usedNames",

@@ -7135,7 +7135,8 @@ const GEN_POSITIONS: Array<{ pos: string; goals: [number, number] }> = [
    part only through here and starts a fresh pool in place of one it refuses.
    It checks what those rounds write: version 1, a year no later than lastYear,
    contiguous ids, one live rival per role and slot, unique names, the goal
-   range of the rival's position, and a retirement in the year he turns 37. */
+   range of the rival's position, and a retirement in the year he turns 37,
+   or earlier (but after his first year) when his name was taken. */
 export function isGeneratedBallonPool(v: unknown, lastYear: number): v is GeneratedBallonPool {
   const record = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
   const integer = (x: unknown): x is number => typeof x === "number" && Number.isSafeInteger(x);
@@ -7159,8 +7160,8 @@ export function isGeneratedBallonPool(v: unknown, lastYear: number): v is Genera
       const slot = entry.role + ":" + entry.slot;
       if (entry.entryAge + poolYear - entry.firstYear >= 37 || activeSlots.has(slot)) return false;
       activeSlots.add(slot);
-    } else if (!integer(entry.retiredYear) || entry.retiredYear > poolYear
-      || entry.retiredYear !== entry.firstYear + 37 - entry.entryAge) return false;
+    } else if (!integer(entry.retiredYear) || entry.retiredYear > poolYear || entry.retiredYear <= entry.firstYear
+      || entry.retiredYear > entry.firstYear + 37 - entry.entryAge) return false;
   }
   return true;
 }
@@ -7321,6 +7322,11 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     generatedPool ??= { version: 1, year, nextId: 0, entries: [] };
     const pool = generatedPool;
     let entry = pool.entries.find(row => row.role === role && row.slot === slot && row.retiredYear === null);
+    /* Round 1318: a saved rival whose name is already taken this year (the
+       career's own rival, say) would be skipped below every year until he
+       retired, shifting every later draw. He leaves at once instead, and his
+       slot gets a new face from the age already drawn: no extra draw. */
+    if (entry && usedNames.has(entry.name)) { entry.retiredYear = year; entry = undefined; }
     if (!entry) {
       const seed = pool.entries.some(row => row.role === role && row.slot === slot) ? 9900 + pool.nextId : initialSeed;
       const reserved = new Set([...usedNames, ...pool.entries.map(row => row.name)]);
