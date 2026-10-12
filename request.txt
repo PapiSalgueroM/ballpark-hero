@@ -1,0 +1,17 @@
+# Release AX, final proof, part Z on the final head: the fences that read the whole tree (two unit files and the walk changed after the other parts were sent), simPrerenderBoot with Chromium, and the saved talk walk with its control
+#!serve
+#!playwright
+#!serial
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+playUsMarketTalk: node scripts/playUsMarketTalk.mjs
+playUsMarketTalk-droptalk-EXPECT1: US_MARKET_TALK_CONTROL=droptalk node scripts/playUsMarketTalk.mjs

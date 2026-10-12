@@ -1,0 +1,14 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simLegalPages exit=0 0s | simLegalPages: all green
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 121s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simInventedNames exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simNationalityFlags exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
+simPrerenderBoot exit=0 14s | simPrerenderBoot: green. The snapshots read like documents and still turn into the app.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+playUsMarketTalk exit=0 46s | playUsMarketTalk: 40 checks, 0 failed
+playUsMarketTalk-droptalk-EXPECT1 exit=1 33s | CONTROL droptalk: FIRED. The reload check went red in 2 sports and nothing else did.
