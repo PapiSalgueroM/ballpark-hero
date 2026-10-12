@@ -94,3 +94,20 @@ Checks: N9 also holds the stage before the four rounds (said exactly where the h
 printed by two groups; no receipt of another window prints one) and the windows' coverage. Controls:
 finalacross (the 2020 window said to keep its rounds inside a conference: N10), beforegone (the 2019 stage
 forgotten: N9), semisone (NBC's semifinal page taken from the 2020 names: the league alone names that round, N9).
+
+## Step 5 (A5): the shootout era
+
+The league's own site (Nicholas J. Cotsonika, "NHL general managers discuss, endorse OT format at meetings", 18
+March 2024, drawn on the runner) dates the shootout to 2005-06. ESPN ("What are NHL overtime rules?", ESPN
+staff, 29 January 2024, read in the browser pane) says the league allowed games to end in a draw until 2005,
+when the regular season shootout ended the tied game, and that a shootout goes on until one side scores and
+the other does not. Sports Illustrated's sentence of the 1211 receipt si-overtime agrees. Written:
+NHL_SHOOTOUT_FROM = 2005 (a start year) with NHL_SHOOTOUT_FROM_SRC (the league and ESPN). The thin row "The
+first season of the shootout" is closed (NHL_THIN 7 to 6). Round 1315's held file reads it (correction 13 c).
+
+Not written, though read: the same league article gives four skaters a side in overtime from 1999-2000, which
+with NBC Chicago (nbc-overtime) would be two sources for NHL_OVERTIME_RULES.skatersBefore2015. The brief keeps
+that row (T2) out of this round because nothing prints it; it is left null and thin for a later round.
+
+Check N11: the year is the harness's own; it is no later than the ledger's first season and every era of the
+game; the overtime receipts count shootouts in that first season. Control shootoutfrom (2006: N11).

@@ -557,6 +557,28 @@
       },
       "says": ["PHT’s 2021 NHL Stanley Cup Semifinals predictions", "Two rounds down, two more to go on the road to the 2021 Stanley Cup.", "a first-time playoff meeting between Montreal and Vegas thanks to this unique playoff and the semifinal re-seeding."],
       "note": "Read on 2026-10-12 in the desktop app's own browser pane; the address found by a search, the page itself read. NBC Sports and NBC Chicago are one group."
+    },
+    "nhl-gm-overtime": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com (Nicholas J. Cotsonika)",
+      "title": "NHL general managers discuss, endorse OT format at meetings",
+      "published": "2024-03-18",
+      "url": "https://www.nhl.com/news/nhl-general-managers-discuss-overtime-format",
+      "read": "2026-10-12",
+      "says": ["It introduced five-minute, 5-on-5 sudden-death OT for the 1983-84 regular season, but eventually the feeling was that too many games were still ending in ties.", "The League went to 4-on-4 OT in 1999-2000 and began awarding a point to teams that lost in OT.", "The shootout was introduced in 2005-06 as part of a comprehensive package of rule changes coming out of the 2004-05 lockout, but eventually the feeling was that too many games were ending in shootouts.", "And so, the NHL went to 3-on-3 OT in 2015-16."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12 (a digest of it was all the scout had). It also gives four skaters a side from 1999-2000, which is not this round's to write (row T2 of the brief)."
+    },
+    "espn-overtime": {
+      "sport": "nhl",
+      "group": "espn",
+      "publisher": "ESPN (ESPN staff)",
+      "title": "What are NHL overtime rules?",
+      "published": "2024-01-29",
+      "url": "https://www.espn.com/nhl/story/_/id/39345002/what-nhl-rules",
+      "read": "2026-10-12",
+      "says": ["Even with overtime in place, the league allowed games to end in a draw until 2005, when the introduction of the shootout in the regular season eliminated the possibility for a game to end in a tie.", "Ties used to be a regular occurrence in hockey until 2005, when the NHL introduced the shootout following the end of overtime.", "If neither team scores in the sudden-death overtime period, the game goes to a shootout.", "This continues until one team scores and the other does not.", "The extra point for an overtime/shootout loss was introduced in 1999, six years before the elimination of the tie."],
+      "note": "Read on 2026-10-12 in the desktop app's own browser pane (the runner was answered with an empty page); every quotation checked against the page's text in the pane."
     }
   }
 }

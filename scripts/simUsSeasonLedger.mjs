@@ -213,7 +213,7 @@ const OWN = {
   /* The rules after sixty minutes. */
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
-  thin: { mlb: 10, nhl: 7 },
+  thin: { mlb: 10, nhl: 6 },
   /* Round 1312: each receipts file and the day it was read on. */
   receiptDays: { 'scripts/data/usSeasonSources1211.json': '2026-10-10', 'scripts/data/usSeasonSources1312.json': '2026-10-12' },
   /* The first rounds whose length is thin (played, and only one source gave its length), by their
@@ -228,6 +228,8 @@ const OWN = {
      and how the names are held: 'season' (two sources name every round alike in every season, N9) or 'format'
      (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format), finalOnlyAcross, and
      whether a stage came before the four rounds]. */
+  /* Round 1312: the first season (a start year) of the regular season shootout. */
+  nhlShootoutFrom: 2005,
   nhlRoundWindows: [
     [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season', true, false],
     [2013, 2018, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true, false],
@@ -331,6 +333,8 @@ const CONTROLS = {
   /* Round 1312: NBC's page of the 2021 semifinals taken from the 2020 window's names: the league alone
      names the round "Stanley Cup Semifinals" (the typed table still agrees, so only the season check sees it). */
   semisone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2020); must(w && w.namesSrc.includes('nbc-2021-semis'), 'NBC\'s semifinal page behind the 2020 window'); w.namesSrc = w.namesSrc.filter(k => k !== 'nbc-2021-semis'); } },
+  /* Round 1312: the shootout era moved a season later; it still begins before every era of the game. */
+  shootoutfrom: { expect: ['N11'], run() { must(nhl.NHL_SHOOTOUT_FROM === 2005, 'the shootout from 2005'); nhl.NHL_SHOOTOUT_FROM = 2006; } },
   /* Round 1312: the qualifying stage of 2019-20 forgotten. */
   beforegone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2019); must(w && typeof w.before === 'string', 'the stage before the 2019 window'); delete w.before; } },
   /* Round 1312: the 2006 window said NOT to keep its first three rounds inside a conference. */
@@ -705,6 +709,13 @@ const OWN_MLB_DIVISIONS = {
     }
     if (w.finalOnlyAcross !== null) check('N10', w.finalOnlyAcross === seen, `${tag}: finalOnlyAcross is ${w.finalOnlyAcross}, the series of its seasons say ${seen}`);
   }
+
+  /* N11 (Round 1312): the shootout era is this harness's own year, it began before every season the ledger
+     and the game's eras hold, and the overtime receipts count shootouts in the first season of the ledger. */
+  const so = nhl.NHL_SHOOTOUT_FROM;
+  check('N11', so === OWN.nhlShootoutFrom, `NHL_SHOOTOUT_FROM is ${so}, this harness's own table says ${OWN.nhlShootoutFrom}`);
+  check('N11', typeof so === 'number' && so <= rows[0].year && game.NHL_ERAS.every(e => e.startYear >= so), `NHL_SHOOTOUT_FROM ${so} is after a season the ledger or the game holds (${rows[0].year}; eras from ${game.NHL_ERAS.map(e => e.startYear).join(', ')})`);
+  check('N11', (nhl.NHL_OVERTIME.y2006?.shootouts ?? 0) > 0 && (SRC['hr-shootout']?.values?.shootoutWins?.[rows[0].year] ?? 0) > 0, `no shootout is counted in ${rows[0].year}, the first season of the ledger`);
 }
 
 /* ===== THE RECEIPTS ===== */

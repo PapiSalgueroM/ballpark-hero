@@ -362,6 +362,18 @@ export const NHL_OVERTIME_RULES: {
 export const NHL_OVERTIME_RULES_SRC: readonly string[] = ['si-overtime', 'nbc-overtime'];
 export const NHL_OVERTIME_POINT_SRC: readonly string[] = ['si-overtime', 'nhl-points'];
 
+/* Round 1312: THE SHOOTOUT ERA. From 2005-06 (a start year, like every year
+   here) a regular season game still level after overtime goes to a
+   shootout, which goes on until one side leads, so no regular season game
+   ends level. The league's own site ("NHL general managers discuss, endorse
+   OT format at meetings", 18 March 2024) dates the shootout's arrival to
+   2005-06, and ESPN ("What are NHL overtime rules?", 29 January 2024) says
+   the shootout came in 2005 and ended the tied game in the regular season;
+   their words are in the receipts. Sports Illustrated (si-overtime) agrees
+   and is not needed. Every season this ledger holds starts after it. */
+export const NHL_SHOOTOUT_FROM = 2005;
+export const NHL_SHOOTOUT_FROM_SRC: readonly string[] = ['nhl-gm-overtime', 'espn-overtime'];
+
 /** The game clock: three periods of 20 minutes (the same two articles). */
 export const NHL_CLOCK = { periods: 3, minutes: 20 } as const;
 export const NHL_CLOCK_SRC: readonly string[] = ['si-overtime', 'nbc-overtime'];
@@ -392,11 +404,6 @@ export const NHL_THIN: readonly { what: string; oneSource: string; tried: string
     what: 'Why 2012-13 had 48 games, why 2019-20 stopped and why 2020-21 had 56.',
     oneSource: 'None read today: the rows give the lengths the standings show and no cause.',
     tried: 'Not gathered: the held line needs the length, not the reason.',
-  },
-  {
-    what: 'The first season of the shootout.',
-    oneSource: 'Sports Illustrated: "After 2005, the league introduced the shootout".',
-    tried: 'Not needed: both sources count shootouts in 2006-07, the first season this ledger holds.',
   },
   {
     what: 'One goal of the 2006-07 New York Islanders.',
