@@ -26,6 +26,12 @@
  * the built chunks or the run refuses to start. The tile and offer checks
  * must fail and nothing else; the verdict exits 0 on "all N guarded checks
  * fired" and 1 otherwise (scripts/lib/servedCodeControl.mjs).
+ * Control (fix review of Round 1314): NATION_JOB_CONTROL=twotiles serves the
+ * Rival watch hub tile with the title Manager (its title literal, matched
+ * exactly once in the built chunks or refused), so two tiles carry the title.
+ * The two "exactly once" tile checks must fail and nothing before them; the
+ * walk stops after the second, because the tile locator then holds two
+ * buttons. Same verdict and exit codes as nooffer.
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
  */
@@ -39,24 +45,34 @@ const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 const CONTROL = process.env.NATION_JOB_CONTROL || '';
-if (CONTROL && CONTROL !== 'nooffer') {
-  console.error(`NATION_JOB_CONTROL=${CONTROL} is not a control this harness knows (nooffer)`);
+/* The offer's return, as the minified chunk writes it: {nation:t,blurb:`${t} want you ...`.
+   Property names and string literals survive minifying; nationOfferFor's name does not. */
+const OFFER = /\{nation:[\w$]+,blurb:`\$\{[\w$]+\} want you for the national team alongside the /g;
+/* Fix review of Round 1314: the control of the two "exactly once" tile checks. The Rival watch
+   hub tile, always on the hub, is served with the title Manager, so a second tile carries the
+   title the walk looks for (the failure Round 928's "Managers" switcher caused through a
+   substring). The title is a string literal, which minifying keeps. */
+const RIVAL_TILE = /title:"Rival watch"/g;
+const MUTATIONS = {
+  nooffer: { label: 'nationOffer', find: OFFER, replace: 'null&&$&', what: "the offer's return" },
+  twotiles: { label: 'secondManagerTile', find: RIVAL_TILE, replace: 'title:"Manager"', what: 'the Rival watch tile title' },
+};
+if (CONTROL && !MUTATIONS[CONTROL]) {
+  console.error(`NATION_JOB_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(MUTATIONS).join(', ')})`);
   process.exit(1);
 }
 const { say, verdict } = controlledChecks(CONTROL);
 const proof = {};
-/* The offer's return, as the minified chunk writes it: {nation:t,blurb:`${t} want you ...`.
-   Property names and string literals survive minifying; nationOfferFor's name does not. */
-const OFFER = /\{nation:[\w$]+,blurb:`\$\{[\w$]+\} want you for the national team alongside the /g;
 if (CONTROL) {
+  const m = MUTATIONS[CONTROL];
   const dir = path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), 'dist', 'assets');
   const hits = fs.readdirSync(dir).filter(f => f.endsWith('.js'))
-    .map(f => ({ f, n: (fs.readFileSync(path.join(dir, f), 'utf8').match(OFFER) || []).length }))
+    .map(f => ({ f, n: (fs.readFileSync(path.join(dir, f), 'utf8').match(m.find) || []).length }))
     .filter(h => h.n > 0);
   const total = hits.reduce((n, h) => n + h.n, 0);
-  console.log(`  control  the offer's return matched ${total} time(s) in the built chunks (${hits.map(h => h.f).join(', ') || 'none'})`);
+  console.log(`  control  ${m.what} matched ${total} time(s) in the built chunks (${hits.map(h => h.f).join(', ') || 'none'})`);
   if (total !== 1) {
-    console.error(`playNationJob control ${CONTROL}: refused, the offer anchor must match exactly once in dist/assets and matched ${total} time(s)`);
+    console.error(`playNationJob control ${CONTROL}: refused, the anchor must match exactly once in dist/assets and matched ${total} time(s)`);
     process.exit(1);
   }
 }
@@ -66,7 +82,8 @@ const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
 /* Round 1314: no walk reaches the live database. */
 await ctx.route(/supabase\.co/, r => r.abort());
 if (CONTROL) {
-  await installServedCodeControl(ctx, [{ label: 'nationOffer', find: OFFER, replace: 'null&&$&' }], proof);
+  const m = MUTATIONS[CONTROL];
+  await installServedCodeControl(ctx, [{ label: m.label, find: m.find, replace: m.replace }], proof);
 }
 /* Round 1314: the hub tile whose TITLE reads exactly Manager. A hub tile's
    accessible name is its whole text (icon, title, value, sub line), and a case
@@ -95,7 +112,7 @@ if (await essential.count()) { await essential.click(); await page.waitForTimeou
 await page.locator('text=Take the job').click();
 await page.getByRole('button', { name: 'Skip: just manage', exact: true }).click();
 await managerTile(page).first().waitFor({ state: 'visible' });
-say(await managerTile(page).count() === 1, 'exactly one hub tile is titled Manager');
+say(await managerTile(page).count() === 1, 'exactly one hub tile is titled Manager', CONTROL === 'twotiles');
 say(await page.locator('button:has-text("Manager")').count() > 0, 'the career is running');
 
 /* A record a federation would call about, written the way a long career
@@ -125,12 +142,20 @@ if (await resume.count()) { await resume.first().click(); await page.waitForTime
 
 console.log('2) The country calls on the Manager tile');
 const tile = managerTile(page);
-say(await tile.count() === 1, 'the manager tile is on the hub, exactly once');
+say(await tile.count() === 1, 'the manager tile is on the hub, exactly once', CONTROL === 'twotiles');
+if (CONTROL === 'twotiles') {
+  /* Two tiles answer to the locator now, so the walk stops here: the two count checks above are the
+     ones this control is aimed at, and everything before them must have stayed green. */
+  const controlErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
+  say(controlErrors.length === 0, `no real page errors on the walk (${controlErrors.length ? controlErrors[0] : 'clean'})`);
+  await browser.close();
+  process.exit(verdict('playNationJob', proof, { minGuarded: 2 }));
+}
 const tileText = await tile.innerText();
 say(/country is calling/i.test(tileText), `the tile says the country is calling (${tileText.replace(/\n/g, ' ').slice(0, 60)})`, true);
 await tile.click();
 const offer = page.locator('[data-nation-offer]');
-if (CONTROL) {
+if (CONTROL === 'nooffer') {
   /* Under the control there is no offer to wait for: wait on the manager panel
      itself (a Skip career's "Name your manager" button), then judge the card. */
   await page.locator('[data-name-manager]').first().waitFor({ state: 'visible' });
