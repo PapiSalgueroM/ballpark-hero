@@ -1,0 +1,3 @@
+print-base exit=0 2s | {"scripted":{"2026-10-10":{"digest":"32aae44ce6352f1d6b15","grade":"2d6cd0e428ddc1f0a056","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":5.1},{"t":"terms","i":0,"wa
+print-tree exit=0 2s | {"scripted":{"2026-10-10":{"digest":"32aae44ce6352f1d6b15","grade":"2d6cd0e428ddc1f0a056","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":5.1},{"t":"terms","i":0,"wa
+tsc exit=0 37s | 
