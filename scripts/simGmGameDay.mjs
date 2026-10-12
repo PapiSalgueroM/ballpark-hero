@@ -973,7 +973,7 @@ for (const set of SEEDSETS) {
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
     ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx',
-      'src/lib/gmPostseason.test.ts', 'src/lib/frontOfficePostseason.test.ts'].map(f => [f, '*']),
+      'src/lib/gmPostseason.test.ts', 'src/lib/frontOfficePostseason.test.ts', 'src/test/gmBracketLedger.test.ts'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
     [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD)])],
     /* Round 1307, the tile: the board reaches the bound card (through a lazy import: the check below) and nothing
