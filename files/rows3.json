@@ -1,0 +1,122 @@
+[
+ {
+  "id": "w3-front-office-320",
+  "shots": [
+   "w3-front-office-320-footer-dialog.png",
+   "w3-front-office-320-footer-failed.png"
+  ],
+  "footerDialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 87,
+    "bottom": 482,
+    "left": 0,
+    "right": 320
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": false,
+   "payload": {
+    "game_type": "site",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "footer-report-button",
+    "path": "/front-office",
+    "len": 400
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  }
+ },
+ {
+  "id": "w3-front-office-390",
+  "shots": [
+   "w3-front-office-390-footer-dialog.png",
+   "w3-front-office-390-footer-failed.png"
+  ],
+  "footerDialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 235,
+    "bottom": 610,
+    "left": 3,
+    "right": 387
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nDOUKNOWBALL\nBack\nTr",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": false,
+   "payload": {
+    "game_type": "site",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "footer-report-button",
+    "path": "/front-office",
+    "len": 400
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  }
+ },
+ {
+  "id": "w3-front-office-1280",
+  "shots": [
+   "w3-front-office-1280-footer-dialog.png",
+   "w3-front-office-1280-footer-failed.png"
+  ],
+  "footerDialog": {
+   "disabledEmpty": true,
+   "disabledChipOnly": true,
+   "disabledSpaces": true,
+   "enabledWithText": true,
+   "dialogRect": {
+    "top": 263,
+    "bottom": 638,
+    "left": 448,
+    "right": 832
+   },
+   "fits": true,
+   "small": [],
+   "focusReturned": false,
+   "activeAfterEscape": "Skip to main content\nLIVE\nNo games on th",
+   "keptAfterEscape": true,
+   "errorShown": true,
+   "errorText": "Something went wrong. Try again.",
+   "keptAfterFail": true,
+   "sendEnabledAfterFail": true,
+   "failRelay": 1,
+   "failInserts": 1,
+   "success": false,
+   "payload": {
+    "game_type": "site",
+    "description": "Bug: Review walk: I pressed Draft and the board froze, I exp",
+    "source": "footer-report-button",
+    "path": "/front-office",
+    "len": 401
+   },
+   "closedAfterSuccess": true,
+   "clearedAfterSuccess": true
+  }
+ }
+]
