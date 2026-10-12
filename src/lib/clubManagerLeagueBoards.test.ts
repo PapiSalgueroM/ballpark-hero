@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { creditMine, openBook, openLateBook, readBook, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 import {
-  BOARD_ROWS, bestOfMine, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
+  AWARD_FLOOR, BOARD_ROWS, BOOK_FULL_SHARE, bestOfMine, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
   type BoardClub, type BoardInput, type BoardMine,
 } from '@/lib/clubManagerLeagueBoards';
 
@@ -16,8 +16,8 @@ import {
  *  - when a save with no book is given a whole book and when a late one (section oldsave (i), the
  *    goalless save; control goallesswhole). The reviewer's third mutation (a whole book whenever no goal
  *    has been scored) left both green as well.
- * And the share under which a board carries the honest line is not pinned here: the number is not ruled
- * yet (see the note above BOARD_ROWS in the module). */
+ * Round 1311: the two numbers the lead ruled (the honest line at 95, the floor for awards at 73) are
+ * pinned at the bottom of this file. */
 const STAMP = 'league|test';
 const LINE: BookLineOf = pos => (pos === 'GK' ? 'GK' : ['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(pos) ? 'DEF' : ['CDM', 'CM', 'CAM', 'LM', 'RM'].includes(pos) ? 'MID' : 'ATT');
 
@@ -143,5 +143,14 @@ describe('the boards', () => {
     bookShare(b, CLUBS);
     keepersOnRecord(CLUBS);
     expect(JSON.stringify({ b, CLUBS, MINE })).toBe(before);
+  });
+});
+
+/* Round 1311: the lead's two rulings, held here so a change to either is a change somebody meant. */
+describe('the ruled numbers', () => {
+  it('draws the honest line under 95 in 100 on record and reads awards from a book at 73 or more', () => {
+    expect(BOOK_FULL_SHARE).toBe(95);
+    expect(AWARD_FLOOR).toBe(73);
+    expect(AWARD_FLOOR).toBeLessThan(BOOK_FULL_SHARE);
   });
 });

@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ballonDorWatch } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, CompBucket, CompStatLine } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { LeagueLeadersCard, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 interface StatsScreenProps {
   career: CareerState;
@@ -78,7 +80,9 @@ function AwardRacesCard({ career }: { career: CareerState }) {
     <div className="bg-card border border-border rounded-2xl p-3 space-y-2">
       <div className="text-[10px] text-muted-foreground uppercase tracking-wider">🏅 Award races</div>
       <div>
-        <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">👟 Golden boot</div>
+        <div className="text-[9px] text-muted-foreground uppercase tracking-wider">👟 Golden boot race</div>
+        {/* Round 1311: on one screen with the league leaders, so it says what it is. */}
+        <p data-cm-boot-race-note className="text-[8px] text-muted-foreground mb-1">The award race this season follows two main scorers a club and all of yours. The Top scorers board above is the league book's own count.</p>
         {boot.filter(e => e.goals > 0).map((e, i) => (
           <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
             <span className="w-4 text-muted-foreground font-bold shrink-0">{i + 1}</span>
@@ -131,6 +135,20 @@ function AwardRacesCard({ career }: { career: CareerState }) {
 export function StatsScreen({ career }: StatsScreenProps) {
   const [view, setView] = useState<View>('all');
   const [sortKey, setSortKey] = useState<SortKey>('goals');
+  /* Round 1311: one league leaders board open at a time, drawn alone. Opening one remembers where the
+     page stood; Back puts it there again, so the tiles are where they were and the page never jumps. */
+  const [board, setBoard] = useState<LeadersBoard | null>(null);
+  const backTo = useRef<number | null>(null);
+  const boardRef = useRevealScroll<HTMLDivElement>(`board:${board ?? ''}`, { skipFirst: true });
+  const onBoard = (next: LeadersBoard | null) => {
+    if (next !== null && board === null && typeof window !== 'undefined') backTo.current = window.scrollY;
+    setBoard(next);
+  };
+  useLayoutEffect(() => {
+    if (board !== null || backTo.current === null || typeof window === 'undefined') return;
+    window.scrollTo(0, backTo.current);
+    backTo.current = null;
+  }, [board]);
 
   const cupName = careerLeagueOf(career).cupName;
   const team = useMemo(() => teamCompRecord(career, cupName), [career, cupName]);
@@ -170,6 +188,15 @@ export function StatsScreen({ career }: StatsScreenProps) {
     </button>
   );
 
+  /* Round 1311: a board open is the whole screen under the hub's back button: nothing stacks under it. */
+  if (board !== null) {
+    return (
+      <div ref={boardRef} data-cm-stats-board>
+        <LeagueLeadersCard career={career} board={board} onBoard={onBoard} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-2">
       {/* Competition filter */}
@@ -190,6 +217,9 @@ export function StatsScreen({ career }: StatsScreenProps) {
           </button>
         ))}
       </div>
+
+      {/* Round 1311: the league leaders, above the award races, on the views a league board belongs to. */}
+      {(view === 'all' || view === 'league') && <LeagueLeadersCard career={career} board={null} onBoard={onBoard} />}
 
       {/* Round 165: the award races, on the All comps view where they live. */}
       {view === 'all' && <AwardRacesCard career={career} />}

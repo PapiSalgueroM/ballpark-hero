@@ -1,4 +1,5 @@
-/* Round 1306: the league book is read (the pure reader; nothing on a screen calls it yet).
+/* Round 1306: the league book is read (the pure reader). Round 1311: the engine's door (leagueBoardsOf in
+ * clubManager.ts) builds its input and the Stats screen's league leaders card asks it.
  *
  * WHAT THIS IS. The league book (src/lib/clubManagerLeagueBook.ts) holds every rival goal of a league
  * season against a named man, with assists and clean sheets. This module turns one save's book into the
@@ -27,14 +28,22 @@
 import type { Position } from '@/types/game';
 import { bookClubGoals, bookRows, mineSheets, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 
-/* THE SHARE UNDER WHICH A BOARD CARRIES THE HONEST LINE ABOUT THIN DATA IS NOT IN THIS MODULE YET, on
- * purpose: the lead's ruling on the number is owed, and a constant nobody ruled on must not sit here
- * for the next round to read. The brief put 95 in 100 on record, to be confirmed from the table of every
- * league. Measured over 47 leagues in Round 1306, seven sit within two points of 95 (94, 96, 96, 96, 97,
- * 97, 97), which by that round's own rule means the number is reported and not bound; the real gaps
- * between the leagues' shares are 81 to 87 and 87 to 91 (their middles 84 and 89). The round that draws
- * the line adds the constant here with the number the lead ruled, and a unit line that holds it.
- * bookShare below already gives the share a line would print. */
+/**
+ * Round 1311, the lead's ruling: under this share on record (bookShare, in a hundred) the boards carry one
+ * honest line that says the save's own number. 95 and not a number in a gap of the league table (Round
+ * 1306 measured seven of 47 leagues within two points of it) because the line is not a gate: it prints a
+ * true number every season, so a league on 94 one season and 96 the next is told the truth both times.
+ */
+export const BOOK_FULL_SHARE = 95;
+/**
+ * Round 1311, the lead's ruling: the awards are read from the book only off a WHOLE book with at least
+ * this share on record. Under it (or on a late book, or with no book) the golden boot, the player of the
+ * season and the world award stay on the old scorer race for that season, and the new awards are withheld.
+ * 73 is the middle of the one gap in the league table (69 to 78 on two careers a league, 68 to 77 on four
+ * and six seeds, Round 1306): in the 14 leagues under it one of my men led the Goals board in 7 of 28
+ * careers against 2 of 28 on the old race, in the 33 above it 3 of 66 against 2 of 66.
+ */
+export const AWARD_FLOOR = 73;
 /** How many rows a board shows. */
 export const BOARD_ROWS = 10;
 

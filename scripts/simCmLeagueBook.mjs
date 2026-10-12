@@ -106,16 +106,19 @@
  *            the same ten, no shirt), and of every roster that does not it is the harness's own reading,
  *            man for man and shirt for shirt in order. And (iii) now fails when there is no variance to
  *            judge a share on, instead of passing unasked
- *   boards   Round 1306, the pure reader (src/lib/clubManagerLeagueBoards.ts; nothing in src calls it
- *            yet, the harness builds its input from the save): (i) at every season's end of the fleet
+ *   boards   Round 1306, the pure reader (src/lib/clubManagerLeagueBoards.ts; the harness builds its
+ *            input from the save) and, since Round 1311, the engine's own door to it (leagueBoardsOf): its
+ *            input is the harness's, field for field, its share, round and keepers are the reader's, and it
+ *            is null exactly where the book is unreadable or does not add up. (i) at every season's end of the fleet
  *            the book fits the table and is whole; (ii) each of the three boards, its top ten and its
  *            whole order, is the harness's own reading of the rule typed here once more, my best man is
  *            where that order puts him, and no board holds a man on nought, a man twice, a rival row
  *            under a name of my squad or, on Clean sheets, anybody but a keeper; (iii) the fleet once
  *            more with every reader called before every entry: the whole save but the book and the count
  *            of draws are the watched fleet's, and the save is the same text before and after the
- *            readers; (iv) the module's source, comments stripped, holds no Math.random, Date.now, new
- *            Date or localeCompare; and printed for the lead: the share and the keepers on record a
+ *            readers (leagueBoardsOf among them); (iv) the module's source and the league leaders card's
+ *            (src/components/club-manager/LeagueLeadersCard.tsx), comments stripped, hold no Math.random,
+ *            Date.now, new Date or localeCompare; and printed for the lead: the share and the keepers on record a
  *            league, each board's leader, and the three boards of three leagues after a full season
  * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
  * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
@@ -253,6 +256,8 @@ const cannot = why => { console.error(`simCmLeagueBook: cannot run: ${why}`); pr
 const ENGINE = 'src/lib/clubManager.ts';
 const BOOK = 'src/lib/clubManagerLeagueBook.ts';
 const BOARDS = 'src/lib/clubManagerLeagueBoards.ts';
+/** Round 1311: the league leaders card, read by section boards (iv) only. */
+const LEADERS_CARD = 'src/components/club-manager/LeagueLeadersCard.tsx';
 const WEIGHT = 'src/lib/clubManagerGoalWeight.ts';
 const HOT = 'src/lib/managerHotSeat.ts';
 const DEADLINE = 'src/lib/deadlineDay.ts';
@@ -1701,9 +1706,11 @@ function boardsByHand(s, input) {
 /** Every reader of the module, called once on one save. */
 function readEverything(mod, s) {
   const input = boardInputOf(mod, s);
-  if (!input) return null;
+  /* Round 1311: the engine's one door, asked on the same save. */
+  const door = mod.cm.leagueBoardsOf ? mod.cm.leagueBoardsOf(s) : undefined;
+  if (!input) return door ? { doorWithoutBook: true } : null;
   const { boards } = mod;
-  const out = { fits: boards.bookFits(input.book, input.clubs), whole: boards.bookIsWhole(input.book), share: boards.bookShare(input.book, input.clubs), keepers: boards.keepersOnRecord(input.clubs), input };
+  const out = { fits: boards.bookFits(input.book, input.clubs), whole: boards.bookIsWhole(input.book), share: boards.bookShare(input.book, input.clubs), keepers: boards.keepersOnRecord(input.clubs), input, door };
   for (const kind of BOARD_KINDS) { out[kind] = boards.leaders(input, kind); out[`${kind}Mine`] = boards.bestOfMine(input, kind); }
   return out;
 }
@@ -1716,6 +1723,20 @@ function readEverything(mod, s) {
     const got = readEverything(candidate, s);
     tick('boards');
     if (!got) { fail('boards', `${where}: no readable book to build the boards from`); continue; }
+    if (got.doorWithoutBook) { fail('boards', `${where}: leagueBoardsOf answered on a save the careful reader refuses`); continue; }
+    /* Round 1311: the engine's door is the harness's input, field for field, and says what the reader says. */
+    tick('boards', 5);
+    if (got.door === undefined) fail('boards', `${where}: the engine has no leagueBoardsOf`);
+    else if ((got.door === null) !== !got.fits) fail('boards', `${where}: leagueBoardsOf is ${got.door === null ? 'null' : 'not null'} on a book that ${got.fits ? 'fits' : 'does not fit'}`);
+    else if (got.door) {
+      const plain = x => JSON.stringify({ book: x.book, clubs: x.clubs, mine: x.mine, myClub: x.myClub, myPlace: x.myPlace });
+      if (plain(got.door.input) !== plain(got.input)) fail('boards', `${where}: leagueBoardsOf hands the reader another input than the save's`);
+      if (got.door.share !== got.share.share || got.door.from !== (got.input.book.r0 ?? null) || JSON.stringify(got.door.keepers) !== JSON.stringify(got.keepers)) fail('boards', `${where}: leagueBoardsOf says share ${got.door.share}, from ${got.door.from}, keepers ${JSON.stringify(got.door.keepers)}; the reader says ${got.share.share}, ${got.input.book.r0 ?? null}, ${JSON.stringify(got.keepers)}`);
+      const lines = s.squad.length ? candidate.book.bookRows(got.input.book) : [];
+      const offRating = lines.find(r => got.door.input.ratingOf(r.club, r.name, r.pos) !== got.input.ratingOf(r.club, r.name, r.pos));
+      if (offRating) fail('boards', `${where}: leagueBoardsOf rates ${offRating.name} (${offRating.club}) otherwise than his roster does`);
+      if (got.door.input.lineOf !== candidate.cm.groupOf) fail('boards', `${where}: leagueBoardsOf does not hand in the engine's own grouping`);
+    }
     /* (i) every career of the fleet started its season with a book: at the season's end it is WHOLE AND FITS. */
     tick('boards');
     if (!got.fits || !got.whole) fail('boards', `${where}: the book ${got.fits ? 'fits the table' : 'does not add up to the table'} and is ${got.whole ? 'whole' : 'a late book'}`);
@@ -1765,13 +1786,13 @@ function readEverything(mod, s) {
   }
   /* (iv) the reader draws nothing and reads no clock or locale: its source as the control layer hands it,
      comments stripped. */
-  {
-    let text = fs.readFileSync(path.join(ROOT, BOARDS), 'utf8').replace(/\r\n/g, '\n');
-    for (const p of (CONTROL ? CONTROLS[CONTROL].patch : []).filter(x => x.file === BOARDS)) text = text.split(p.from).join(p.to);
+  for (const file of [BOARDS, LEADERS_CARD].filter(x => fs.existsSync(path.join(ROOT, x)))) {
+    let text = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
+    for (const p of (CONTROL ? CONTROLS[CONTROL].patch : []).filter(x => x.file === file)) text = text.split(p.from).join(p.to);
     const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
     for (const banned of ['Math.random', 'Date.now', 'new Date', 'localeCompare']) {
       tick('boards');
-      if (code.includes(banned)) fail('boards', `${BOARDS} holds ${banned}: the reader draws nothing, reads no clock and compares names as plain text`);
+      if (code.includes(banned)) fail('boards', `${file} holds ${banned}: the reader and the card draw nothing, read no clock and compare names as plain text`);
     }
   }
   /* (vi) printed for the lead, never gated. */

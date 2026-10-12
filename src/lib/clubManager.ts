@@ -53,6 +53,8 @@ import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
+/* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
+import { bookShare, keepersOnRecord, type BoardClub, type BoardInput } from '@/lib/clubManagerLeagueBoards';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -398,6 +400,63 @@ function ensureLeagueBook(state: CareerState): void {
  *  walk, for a reader; the match week asks liveBook instead (a stamp check). */
 export function leagueBookOf(state: CareerState): LeagueBook | null {
   return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
+}
+
+/** What the league leaders card and the awards read: the reader's input, how much of the league is on
+ *  record, the round a late book counts from (null for a whole book) and the keepers on record. */
+export interface LeagueBoards {
+  input: BoardInput;
+  share: number;
+  from: number | null;
+  keepers: { have: number; of: number };
+}
+
+/**
+ * Round 1311. THE ONE DOOR every screen (and, from the awards on, every award) reads the league book
+ * through. It builds the reader's input (src/lib/clubManagerLeagueBoards.ts) from the active save: the
+ * book through the careful reader, the rival clubs with their goals for, their place in the table and
+ * whether their roster holds a keeper, my squad's league lines, a rival's rating off his roster, and the
+ * engine's own grouping of positions. Each rival's roster is asked for ONCE. Null when there is no book,
+ * when the careful reader refuses it, or when it does not add up to the table (the next match week
+ * replaces such a book: ensureLeagueBook). A read: it draws nothing and changes nothing in the save.
+ */
+export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
+  if (!state.leagueClubs?.length) return null;
+  const book = leagueBookOf(state);
+  if (!book) return null;
+  const table = sortedLeagueTable(state).map(r => r.club);
+  const place = (club: string): number => { const i = table.indexOf(club); return i < 0 ? table.length + 1 : i + 1; };
+  const mine = mySquadNames(state);
+  const rosters = new Map<string, ProjectedPlayer[]>();
+  const rosterOf = (club: string): ProjectedPlayer[] => {
+    let have = rosters.get(club);
+    if (!have) { have = oppRosterFor(state, club, mine); rosters.set(club, have); }
+    return have;
+  };
+  const goalsFor = new Map(state.table.map(r => [r.club, r.gf]));
+  const clubs: BoardClub[] = state.leagueClubs.filter(c => c !== state.clubName).map(club => ({
+    club, gf: goalsFor.get(club) ?? 0, place: place(club), keeperOnRecord: rosterOf(club).some(p => p.p === 'GK'),
+  }));
+  if (!bookFits(book, clubs)) return null;
+  const input: BoardInput = {
+    book,
+    clubs,
+    mine: state.squad.map(p => ({
+      id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
+      goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
+    })),
+    myClub: state.clubName,
+    myPlace: place(state.clubName),
+    ratingOf: (club, name, pos) => rosterOf(club).find(p => p.n === name && p.p === pos)?.r ?? 0,
+    lineOf: groupOf,
+  };
+  return { input, share: bookShare(book, clubs).share, from: book.r0 ?? null, keepers: keepersOnRecord(clubs) };
+}
+
+/** Round 1311: the rule a rival's goals are dealt by, for the league leaders card's worked example (the
+ *  card computes it from this object with dealShares, never from typed numbers). */
+export function leagueBookRules(): BookRules {
+  return bookRules();
 }
 
 /** The eleven a rival that can field one is dealt over this week: the one the Match Centre and the viewer
