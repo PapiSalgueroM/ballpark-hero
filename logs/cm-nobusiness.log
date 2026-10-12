@@ -1,0 +1,16 @@
+playClubManager: seed 1542433760 (the walk's own, from its file name). Replay with PLAY_CM_SEED=1542433760
+  control  the transfer business guard confirmed once in the served /assets/ClubManagerSeasonSummary-CbI8QhZX.js
+1) Taking a job
+   in the job at Crystal Palace: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Seaso
+   board confidence doctored from 60 to 100: the slot screen reads "Board 100/100"
+   back on the hub; the page has drawn 4 times since this load, before the first kick off
+2) Playing a season through the interface
+  BROKEN   2 player(s) were signed this season and the review shows no transfer business block
+  BROKEN   the transfer business block rendered no IN or OUT rows despite a signing
+   the page had drawn 47491 times since its last load when the walk ended (4 at the hub before the first kick off)
+   38 half times, 40 full times, 38 subs, 17 shape changes, 44 windows, 2 signings, 76 skips through the live viewer
+   ending: played the season out
+
+Played Club Manager through its own screens. 2 findings.
+   control: 1 served asset(s) rewritten, 2 signing(s), 2 of 2 target checks fired, 0 other finding(s)
+playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager's business goes red. Exiting non zero, because a run with findings fails.

@@ -1,0 +1,17 @@
+playWilderness: seed 2899200577 (the walk's own, from its file name). Replay with WILDERNESS_SEED=2899200577
+1) Take a job, then lose it
+  PASS  the career is running
+  PASS  the save was doctored to a board about to pull the trigger
+  first kick off at step 0: the page had drawn 4 times
+  sacked at step 6: matches played 3, season 1 week 3, the page had drawn 4042 times since its last load
+  PASS  the board ran out of patience and the wilderness opened
+2) The wilderness has a way onward
+  PASS  the screen says he is out of work
+  PASS  there is a way to wait for the phone
+  PASS  starting over is still offered, it is just no longer the only door
+3) Waiting brings jobs in
+  no club called in 14 waits
+  CAUGHT  a club called after waiting (0 on the table)
+  PASS  no real page errors on the walk (clean)
+
+playWilderness control nooffers: all 1 guarded checks fired (mutations landed: {"offerList":1})

@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 final walk proof on c22dd054, sent an hour after r1314-wild1 and r1314-cm1: the default seeds again, every walk and control
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+nj-nooffer: NATION_JOB_CONTROL=nooffer ENGINES=chromium node scripts/playNationJob.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+wild-nooffers: WILDERNESS_CONTROL=nooffers ENGINES=chromium node scripts/playWilderness.mjs
+wild-nosack: WILDERNESS_CONTROL=nosack ENGINES=chromium node scripts/playWilderness.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+cm-nobusiness: CM_CONTROL=nobusiness ENGINES=chromium node scripts/playClubManager.mjs
