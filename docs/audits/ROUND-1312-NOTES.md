@@ -157,3 +157,13 @@ no such release was found on an open page today, and a contributor's post is no 
 2010-11 NHL schedule" read in a browser and a second source for 2009-10. Both stay in NHL_THIN as the row "The
 schedule formula of the 82 game seasons (any of them)". Nothing reads them, and no career season is named
 before 2026 (the throwback plays unnamed opponents), so leaving them costs no view anything.
+
+## The final proof's catch: two old controls misfired
+
+The first run of every control on the merged head (r1312-final-a) found 70 of 72 firing at their named checks.
+The old controls nhlyear (a season row dropped) and nhlalign (Vegas taken out of the Pacific of 2017) also
+turned the new checks red: N12 read the ledger's season rows for its years and games, and N10 placed clubs by
+the ledger's alignments. Both now read only what is independent of the ledger: N12 takes its years from this
+harness's own table and its games from Round 1211's league table receipt; N10 places clubs by OWN_NHL_ALIGN,
+the harness's own alignment table, which N3 already holds the ledger's alignments to. The old controls fire at
+exactly N1 and N3 again, and no new control lost its target.

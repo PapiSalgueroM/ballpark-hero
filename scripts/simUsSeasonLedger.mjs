@@ -647,8 +647,8 @@ const OWN_MLB_DIVISIONS = {
      N10 every finished season of a window, from the series its shape receipts print: two groups print it,
          series for series alike; four rounds of 8, 4, 2 and 1 series; the window's clubs in the first;
          every winner on the wins the window names and no series past its most games; the winners of
-         each round, and only they, in the next; every club in the alignment of that year; and the
-         window's `conferences` is what the alignment says. And `finalOnlyAcross`, this harness's own
+         each round, and only they, in the next; every club in this harness's own alignment of that year
+         (OWN_NHL_ALIGN, never the ledger's); and the window's `conferences` is what that alignment says. And `finalOnlyAcross`, this harness's own
          flag for the window, is what the series say: true when, in every season, the first three rounds
          pair two clubs of one conference and the last the two conferences; false when a season has no
          conferences or a round before the last crossed; null only where it was not read. */
@@ -704,10 +704,13 @@ const OWN_MLB_DIVISIONS = {
         const here = R[i].flatMap(s => [s.a, s.b]).sort().join(' '); const won = R[i - 1].map(s => s.a).sort().join(' ');
         check('N10', here === won, `${tag}, ${y}: round ${i + 1} holds ${here}, the winners of round ${i} are ${won}`);
       }
-      const a = alignOf(y);
-      const confOf = id => a?.divisions.find(d => d.teams.includes(id));
-      check('N10', [...first].every(id => !!confOf(id)), `${tag}, ${y}: a club of the first round is not in the alignment of ${y}`);
-      check('N10', !!a && a.divisions.every(d => (d.conf !== null) === w.conferences), `${tag}, ${y}: the window says conferences ${w.conferences}, the alignment ${a?.key} says otherwise`);
+      /* Clubs are placed by this harness's OWN alignment table (OWN_NHL_ALIGN), never the ledger's: N3 holds
+         the ledger's alignments to it, so a control that moves a ledger club stays red at N3 alone. */
+      const own = Object.values(OWN_NHL_ALIGN).find(([f, t]) => y >= f && (t === null || y <= t));
+      const divs = own ? Object.values(own[2]).map(([conf, teams]) => ({ conf, teams: teams.split(' ') })) : [];
+      const confOf = id => divs.find(d => d.teams.includes(id));
+      check('N10', [...first].every(id => !!confOf(id)), `${tag}, ${y}: a club of the first round is not in this harness's own alignment of ${y}`);
+      check('N10', divs.length > 0 && divs.every(d => (d.conf !== null) === w.conferences), `${tag}, ${y}: the window says conferences ${w.conferences}, this harness's own alignment of ${y} says otherwise`);
       const inside = s => { const p = confOf(s.a)?.conf; const q = confOf(s.b)?.conf; return p != null && p === q; };
       const across = s => { const p = confOf(s.a)?.conf; const q = confOf(s.b)?.conf; return p != null && q != null && p !== q; };
       if (!(R.length === 4 && R.slice(0, 3).every(r => r.every(inside)) && R[3].every(across))) seen = false;
@@ -723,17 +726,19 @@ const OWN_MLB_DIVISIONS = {
   check('N11', (nhl.NHL_OVERTIME.y2006?.shootouts ?? 0) > 0 && (SRC['hr-shootout']?.values?.shootoutWins?.[rows[0].year] ?? 0) > 0, `no shootout is counted in ${rows[0].year}, the first season of the ledger`);
 
   /* N12 (Round 1312, Part B3): past sixty minutes season by season. Every finished season once, as this
-     harness's own table has it; its games the season row's own; its numbers both receipts' sums (the
-     league feed's overtime losses and shootout wins, Hockey Reference's), every shootout with one winner
-     and one loser; no more shootouts than games past sixty; and NHL_OVERTIME's two seasons the same. */
+     harness's own table has it (the ledger's first season to the one before its last); its games the
+     league's games of Round 1211's league table receipt and half the feed's team games; its numbers both
+     receipts' sums (the league feed's overtime losses and shootout wins, Hockey Reference's), every
+     shootout with one winner and one loser; no more shootouts than games past sixty. It reads no ledger
+     row, so a control that drops a season row stays red at N1 alone. */
   const obs = nhl.NHL_OVERTIME_BY_SEASON ?? {};
   const ownOt = Object.fromEntries(OWN.nhlOvertimeBySeason.split(' ').map(x => { const [y, v] = x.split(':'); const [p, s] = v.split('/').map(Number); return [y, [p, s]]; }));
-  const done = rows.filter(r => r.finished).map(r => String(r.year));
-  check('N12', sameSet(Object.keys(obs), done) && sameSet(Object.keys(ownOt), done), `NHL_OVERTIME_BY_SEASON holds ${Object.keys(obs).join(' ')}, the finished seasons are ${done.join(' ')}`);
+  const done = rangeOf(OWN.nhlYears[0], OWN.nhlYears[1] - 1).map(String);
+  check('N12', sameSet(Object.keys(obs), done) && sameSet(Object.keys(ownOt), done), `NHL_OVERTIME_BY_SEASON holds ${Object.keys(obs).join(' ')}, this harness's own table ${Object.keys(ownOt).join(' ')}, the finished seasons are ${done.join(' ')}`);
   const feedOt = SRC['nhl-feed-1312']?.values; const hrOt = SRC['hr-standings-1312']?.values;
   for (const [y, o] of Object.entries(obs)) {
-    const row = rows.find(r => String(r.year) === y);
-    check('N12', !!row && o.games === row.leagueGames && feedOt?.teamGames?.[y] === 2 * o.games, `${y}: past sixty over ${o.games} games, the season row says ${row?.leagueGames} and the feed ${feedOt?.teamGames?.[y]} team games`);
+    const league = SRC['hr-league']?.values?.leagueGames?.[y];
+    check('N12', o.games === league && feedOt?.teamGames?.[y] === 2 * o.games, `${y}: past sixty over ${o.games} games, the league table receipt says ${league} and the feed ${feedOt?.teamGames?.[y]} team games`);
     check('N12', JSON.stringify([o.pastSixty, o.shootouts]) === JSON.stringify(ownOt[y]), `${y}: ${o.pastSixty} past sixty and ${o.shootouts} shootouts, this harness's own table says ${ownOt[y]?.join(' and ')}`);
     check('N12', o.pastSixty === feedOt?.overtimeLosses?.[y] && o.pastSixty === hrOt?.overtimeLosses?.[y], `${y}: ${o.pastSixty} past sixty, the receipts say ${feedOt?.overtimeLosses?.[y]} and ${hrOt?.overtimeLosses?.[y]}`);
     check('N12', o.shootouts === feedOt?.shootoutWins?.[y] && o.shootouts === hrOt?.shootoutWins?.[y] && o.shootouts === feedOt?.shootoutLosses?.[y] && o.shootouts === hrOt?.shootoutLosses?.[y], `${y}: ${o.shootouts} shootouts, the receipts' wins and losses say otherwise`);
