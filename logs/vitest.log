@@ -1,0 +1,68 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 998[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 516[2mms[22m[39m
+[90mstderr[2m | src/test/cmLeagueLeadersCard.test.tsx[2m > [22m[2mthe Stats screen with a board open[2m > [22m[2mdraws the board alone and Back brings the tiles and the table back
+[22m[39mError: Not implemented: window.scrollTo
+    at module.exports (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at scrollTo (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/Window.js:870:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/StatsScreen.tsx:158:12
+    at commitHookEffectListMount (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitLayoutEffectOnFiber (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23312:15)
+    at commitLayoutMountEffects_complete (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+    at commitLayoutEffects_begin (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+    at commitLayoutEffects (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+    at commitRootImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+    at commitRoot (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26721:5) [90mundefined[39m
+
+ [31m❯[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 963[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mA: says when there is no book, in the two wordings[32m 27[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mC: three tiles, each the first of its board, a whole league with no thin line[32m 27[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mD: a board is the reader top ten, my men marked, made up men tagged, my best named when out of it[32m 36[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22ma thin league carries the honest line with the save's own number[32m 11[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22ma late book in a whole league counts from its round and draws no thin line[32m 39[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mthe ? holds the rules and a worked example computed from the book's own rule[32m 11[2mms[22m[39m
+   [32m✓[39m the Stats screen with a board open[2m > [22mdraws the board alone and Back brings the tiles and the table back[32m 58[2mms[22m[39m
+[31m   [31m×[31m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did[39m[33m 460[2mms[22m[39m
+[31m     → the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[31m   [31m×[31m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why[39m[32m 293[2mms[22m[39m
+[31m     → the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmLeagueLeadersCard.test.tsx[2m > [22mthe season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did
+[31m[1mAssertionError[22m: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[36m [2m❯[22m src/test/cmLeagueLeadersCard.test.tsx:[2m195:77[22m[39m
+    [90m193| [39m    [35mconst[39m ast [33m=[39m [34mleaders[39m(lb[33m.[39minput[33m,[39m [32m'assists'[39m[33m,[39m [34m1[39m)[[34m0[39m][33m;[39m
+    [90m194| [39m    [35mconst[39m glove [33m=[39m [34mleaders[39m(lb[33m.[39minput[33m,[39m [32m'sheets'[39m[33m,[39m [34m1[39m)[[34m0[39m][33m;[39m
+    [90m195| [39m    expect(a.container.querySelector('[data-cm-award="ast"]')?.textCon…
+    [90m   | [39m                                                                            [31m^[39m
+    [90m196| [39m    expect(a.container.querySelector('[data-cm-award="glove"]')?.textC…
+    [90m197| [39m    expect(a.container.textContent).toContain(`Golden boot: ${summary.…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmLeagueLeadersCard.test.tsx[2m > [22mthe season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why
+[31m[1mAssertionError[22m: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[36m [2m❯[22m src/test/cmLeagueLeadersCard.test.tsx:[2m219:80[22m[39m
+    [90m217| [39m    const c = render(<ClubManagerSeasonSummary sm={summary} c={state} …
+    [90m218| [39m    [34mexpect[39m(c[33m.[39mcontainer[33m.[39m[34mquerySelector[39m([32m'[data-cm-award]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m219| [39m    expect(c.container.querySelector('[data-cm-award-withheld]')?.text…
+    [90m   | [39m                                                                               [31m^[39m
+    [90m220| [39m    [34mnoDash[39m(c[33m.[39mcontainer)[33m;[39m
+    [90m221| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (44)[39m
+[2m   Start at [22m 18:13:40
+[2m   Duration [22m 3.37s[2m (transform 1.30s, setup 163ms, collect 1.88s, tests 1.97s, environment 1.04s, prepare 402ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the season review > names the league's most assists and most clean sheets from the book%2C and an older summary prints as it did,line=195,column=77::AssertionError: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string%0A ❯ src/test/cmLeagueLeadersCard.test.tsx:195:77%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the season review > withholds the new awards in a league whose data is too thin%2C and says why,line=219,column=80::AssertionError: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string%0A ❯ src/test/cmLeagueLeadersCard.test.tsx:219:80%0A%0A
