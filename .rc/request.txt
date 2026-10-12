@@ -1,0 +1,3 @@
+npmls: npm ls @testing-library/dom @testing-library/react
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx --testTimeout=300000
