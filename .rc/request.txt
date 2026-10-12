@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 3.7 on 48a3e61f: the nobusiness control on the seeded default, after its anchor fix
+cm-nobusiness: CM_CONTROL=nobusiness ENGINES=chromium node scripts/playClubManager.mjs
