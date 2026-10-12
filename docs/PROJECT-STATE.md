@@ -1,3 +1,7 @@
+## Codex: Transfer Path confirmation reset in progress, 2026-10-12
+
+Isolated codex/transfer-path-confirm-reset from accepted main 48cb9d4b. Native source reviews found that pending Give up survives an actual Unlimited rule reset and can surrender the replacement puzzle without a fresh request. Proposed minimal correction keys only the route's GiveUpButton to actual round identity, preserving its shared component, hook, graph/data/statistics, scoring and saved-action formats. Actual baseline/fixed/control/play/reload proof is being authored for remote Actions only; no app fix or runtime credit yet. PR242-247, protected root source/index/seven stashes and other owner leases stay held. H owns integration and publishing. See docs/audits/transfer-path-confirm-reset-2026-10-12.md.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
