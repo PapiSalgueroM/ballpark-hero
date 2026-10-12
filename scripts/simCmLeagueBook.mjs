@@ -160,7 +160,9 @@
  *   redeal        loadCareer opens a book for a save that has none   -> oldsave
  *   hurtentry     a club entry with no rows map (a save edited by hand) is handed to the match week as
  *                 it is, and the week throws on it                   -> oldsave
- *   seasonstamp   the season's number is put back into the stamp     -> doors
+ *   seasonstamp   the season's number is put back into the stamp     -> doors (and oldsave (vi) with it
+ *                 since the second fix pass of Round 1306: a stamp with the season's number in it makes
+ *                 each of the two committed recordings another season's book, so the reader refuses both)
  *   strip         the Hot Seat's strip of the book is taken out      -> dailies
  *   stripdeadline Deadline Day's strip is taken out                  -> dailies
  *   assistgoalweight the assist is shared out by the GOAL table (the mutation a reviewer of Round 1229
@@ -309,7 +311,7 @@ const CONTROLS = {
   keyindex: { patch: [{ file: BOOK, from: '    const rng = keyedRng(`${key}|${i}`);', to: '    const rng = keyedRng(key);' }], red: 'shapes' },
   hurtentry: { patch: [{ file: BOOK, from: '  return isRecord(have) && isRecord(have.m) ? (have as unknown as BookClub) : null;', to: '  return have as unknown as BookClub;' }], red: 'oldsave' },
   redeal: { patch: [{ file: ENGINE, from: '    ensureRoles(parsed);', to: '    ensureRoles(parsed);\n    if (!parsed.leagueBook) openLeagueBook(parsed);' }], red: 'oldsave' },
-  seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors' },
+  seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors', also: ['oldsave'], mentions: ['has no readable book'] },
   strip: { patch: [{ file: HOT, from: '  delete s.leagueBook;', to: '' }], red: 'dailies' },
   stripdeadline: { patch: [{ file: DEADLINE, from: '    delete state0.leagueBook;', to: '' }], red: 'dailies' },
   assistgoalweight: { patch: [{ file: BOOK, from: 'm => assistWeight(m.p, m.r), pick);', to: 'm => goalWeight(m.p, m.r), pick);' }], red: 'shapes' },
@@ -506,9 +508,9 @@ async function engine(label, root, patches = []) {
  *            228 league matches of mine on the five full fleets and 3 10 5 5 2 in 84 on the five default
  *            ones (remote check r1306-f1, head ecb69867), and the same 19 and 3 on the base before any edit
  *            of this round (r1306-a). So the move is the base's, not this round's. The floor of that arm
- *            is still "not zero" (the tick under accVar below): the gate's own seed set reads 3, and
- *            another seed set could read none. OWED to the lead or to Round 1303's owner: more careers on
- *            that arm or a floor from measured headroom. Not changed here.
+ *            was "not zero" when this was written: the gate's own seed set read 3, and another seed set
+ *            could have read none. The second fix pass changed it (its block is further down): the arm is
+ *            the same six seasons on both fleets and holds a floor from measured headroom.
  *
  * THE FIX PASS OF ROUND 1306, MEASURED on a GitHub runner, 2026-10-12, seed set 0 (remote check r1306-fx1,
  * head 3c12797b, BOOK_BASE at c9a1f86a; the other seed sets are named in results-g/fix-1306.md). Every check
@@ -561,6 +563,26 @@ async function engine(label, root, patches = []) {
  * they were written. Three had their own section red and one more: mathrandom (oldsave and dailies), dropmine
  * (shapes) and byeweek (names). Their lists were derived again, the reasons are on their lines above, and the
  * result names of the run that fired them again are in docs/audits/ROUND-1306-NOTES.md.
+ *
+ * THE SECOND FIX PASS OF ROUND 1306, MEASURED on GitHub runners, 2026-10-12 (remote checks r1306-f2a, head
+ * 03f972d3, and r1306-f2b, head 9126a480; BOOK_BASE at c9a1f86a).
+ *   law, the video referee arm   Everton and Arsenal, three seeds each, on BOTH fleets: 267 to 279 entries,
+ *            228 league matches of mine, 19 33 35 39 34 reviews on the default fleet of seed sets 0 to 4 (the
+ *            same five the full fleet read in r1306-f1, the six seasons being the same), no report whose
+ *            lines did not add up. VAR_REVIEW_FLOOR 11 is six tenths of the lowest. Control novar: 1 failure
+ *            in law, 0 reviews in 228 matches. Before the pass the default fleet's arm was Everton and
+ *            Southampton, 84 matches, 3 10 5 5 2 reviews against a floor of "not zero".
+ *   oldsave (vi) two committed recordings (BOOK_SAVES: Hertha BSC, 97,447 bytes, and Everton, 106,156 bytes,
+ *            twelve entries in, written by c9a1f86a with its book) carried on to the season's end on EVERY
+ *            run: 5,147 checks in oldsave without BOOK_BASE (4,129 before the pass), 7,025 with it, when the
+ *            base tree writes the three saves afresh as well and its two are byte equal to the recordings
+ *            ("Hertha BSC yes, Everton yes"). The same two files came back from three runs (two worktrees of
+ *            c9a1f86a and one of main at 4aa47b12). Control stampv2 no longer needs BOOK_BASE: 3 failures in
+ *            oldsave without it (the reader refuses both recordings, so the transition is not tried), 7 with
+ *            it and thin (iv) beside. Control seasonstamp turns oldsave red with doors for the same reason,
+ *            and its line says so since this pass (it read "did not fire" on r1306-f2b before that).
+ * After the pass the harness holds 42 controls. Wall time on a runner: default fleet 52 to 56 seconds (72
+ * with BOOK_BASE), full fleet 127 to 138 (178 with BOOK_BASE).
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
