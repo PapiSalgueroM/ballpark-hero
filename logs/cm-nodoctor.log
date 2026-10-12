@@ -1,0 +1,10 @@
+playClubManager: seed 1542433760 (the walk's own, from its file name). Replay with PLAY_CM_SEED=1542433760
+1) Taking a job
+   in the job at Crystal Palace: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Seaso
+  control  nodoctor: the save is read but the doctored value is never written
+   board confidence doctored from 60 to 100: the slot screen reads "Board 60/100"
+  BROKEN   the doctored board did not land: the slot screen reads "Board 60/100", not Board 100/100
+   back on the hub; the page has drawn 4 times since this load, before the first kick off
+
+   control: 1 of 1 target finding fired, 0 other finding(s)
+playClubManager control: green. With the doctored value never written, exactly the one doctoring check fired ("the doctored board did not land: the slot screen reads "Board 60/100", not Board 100/100"). Exiting non zero, because a run with findings fails.

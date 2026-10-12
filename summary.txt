@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playNationJob exit=0 16s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+nj-twotiles exit=0 10s | playNationJob control twotiles: all 2 guarded checks fired (mutations landed: {"secondManagerTile":2})
+cm-nodoctor exit=1 7s | playClubManager control: green. With the doctored value never written, exactly the one doctoring check fired ("the doctored board did not land: the slot screen reads "Boa
+cm-nosave exit=1 7s | playClubManager control: green. With the save looked for under a key the game never writes, exactly the one doctoring check fired ("the save was not there to doctor, so t
+playClubManager exit=0 284s | Played Club Manager through its own screens. 0 findings.
