@@ -1,0 +1,33 @@
+1) A fresh 2005 save is the real 2005 squad, untouched
+   26 in squad, 0 mismatches, 0 generated
+   Juventus: 22 in squad, 22 bake rows, 0 mismatches
+   Bayern Munich: 21 in squad, 21 bake rows, 0 mismatches
+   Lyon: 21 in squad, 21 bake rows, 0 mismatches
+2) Four worlds, and none of them leak
+   1712 era-exclusive names checked against the 2026 market, 0 leaks
+   2005 vs 2026: 15 shared names, 13 allowlisted, 0 unexplained
+   2005 vs 2015: 139 shared names, 6 allowlisted, 0 unexplained
+   2005 vs 2010: 629 shared names, 5 allowlisted, 0 unexplained
+3) Boards talk 2005: the UEFA Cup is the UEFA Cup
+   CONTROL twoleagues applied: section 3 sees only the first two leagues
+  FAIL: era2005 has 2 leagues
+  FAIL: era2005 leagues read premier2005,laliga2005
+  FAIL: era2005 league sizes read 20,20
+   40 club demands checked, 5 boards name the UEFA Cup
+  FAIL: 40 board demands, the era holds 98 clubs
+  FAIL: 2005 Juventus is not told to win the league
+  FAIL: 2005 Bayern Munich is not told to win the league
+  FAIL: 2005 Lyon is not told to win the league
+   European places pinned for 3 new rules rows
+4) Full seasons play out plausibly in all five leagues
+   skipped: a control run plays no seasons
+5) The bake file tells the truth about itself
+   meta says 1727 players / 98 clubs; file holds 1727 / 98
+   nationalities: 1727 era2005 lines for 1727 men
+   big five accounting: Serie A, Bundesliga, Ligue 1 294,332,341, 0 names at two clubs
+6) Ronaldinho and Henry above the modern best; teenage Messi honest
+   2005 Ronaldinho 96, 2005 Henry 96, 17yo Messi 73, modern best 94
+7) A two league save from before Round 902 plays on and grows in the summer
+   skipped: a control run plays no seasons
+
+simEra2005: 7 failures
