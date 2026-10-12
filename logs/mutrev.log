@@ -1,0 +1,30 @@
+== PART 1: code mutants (main run plus the nine controls; SURVIVES means main exit 0 and every control FIRED)
+MUTANT hostclause: KILLED | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=3 pausedrow=1 staleowed=1 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+   samehost: simCmLeagueBookFacts control samehost: DID NOT FIRE, 0 other failure(s). 
+MUTANT pubclause: SURVIVES (every line green) | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=1 staleowed=1 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+MUTANT bothclauses: KILLED | main=0 wiki=1 bannedhost=1 figure=1 onesource=3 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=3 pausedrow=3 staleowed=1 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+   onesource: simCmLeagueBookFacts control onesource: DID NOT FIRE, 0 other failure(s). 
+   samehost: simCmLeagueBookFacts control samehost: DID NOT FIRE, 0 other failure(s). 
+   pausedrow: simCmLeagueBookFacts control pausedrow: DID NOT FIRE, 0 other failure(s). 
+MUTANT seasonstrip: KILLED | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=1 staleowed=1 keeperowed=1 seasontoken=3 boundary=1 wikimirror=1 badurl=1
+   seasontoken: simCmLeagueBookFacts control seasontoken: DID NOT FIRE, 0 other failure(s). 
+MUTANT pausedskip: KILLED | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=3 staleowed=1 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+   pausedrow: simCmLeagueBookFacts control pausedrow: DID NOT FIRE, 0 other failure(s). 
+MUTANT boundary: KILLED | main=0 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=1 staleowed=1 keeperowed=1 seasontoken=1 boundary=3 wikimirror=1 badurl=1
+   boundary: simCmLeagueBookFacts control boundary: DID NOT FIRE, 0 other failure(s). 
+MUTANT stale: KILLED | main=1 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=1 staleowed=3 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+   main: simCmLeagueBookFacts: 49 of 5894 checks FAILED. FAIL Premier League 2015-16 topScorerGoals is USED (premierleague, mykhel), length USED (premierleague, rsssf), and the cell is not named under owed
+   staleowed: simCmLeagueBookFacts control staleowed: DID NOT FIRE, 48 other failure(s). FAIL Premier League 2016-17 topScorerGoals is USED (premierleague, mykhel), length USED (premierleague, rsssf), and the cell is not named under owed
+MUTANT matchrule: KILLED | main=1 wiki=1 bannedhost=1 figure=1 onesource=1 disagree=1 receipt=1 srcname=1 dash=1 length=1 samehost=1 pausedrow=1 staleowed=1 keeperowed=1 seasontoken=1 boundary=1 wikimirror=1 badurl=1
+   main: simCmLeagueBookFacts: 9 of 5894 checks FAILED. FAIL Bundesliga 2015-16 topScorerGoals is USED but its length is DISPUTED (bundesliga, rsssf), length DISPUTED (bundesliga, rsssf), and the cell is not named under owed
+== PART 2: data probes (the data file rewritten through JSON.stringify(.., 2); round trip identical to disk: false)
+PROBE samehost: real fence exit 1 | FAIL Premier League 2015-16 topScorerGoals is THIN (premierleague, plmirror), length USED (premierleague, rsssf), and the cell is not named under owed || under mutant hostclause: exit 0 | simCmLeagueBookFacts: all 5896 checks passed.
+PROBE colswapOne: real fence exit 1 | FAIL La Liga 2022-23 topScorerGoals is DISPUTED (rsssf, espn), length USED (rsssf, espn), and the cell is not named under owed
+   La Liga: top scorer 38 matches: 8 USED, mean 32.1. Keeper clean sheets: 0 USED, mean -.
+PROBE colswapBoth: real fence exit 0 | simCmLeagueBookFacts: all 5894 checks passed.
+   La Liga: top scorer 38 matches: 9 USED, mean 32.3. Keeper clean sheets: 0 USED, mean -.
+PROBE staleOwed: real fence exit 1 | FAIL Premier League 2015-16 topScorerGoals is USED and owed still names it (stale) || under mutant stale: exit 1 | FAIL Premier League 2016-17 topScorerGoals is USED (premierleague, mykhel), length USED (premierleague, rsssf), and the cell is not named under owed
+PROBE pausedRowGone: real fence exit 1 | FAIL Premier League 2019-20 topScorerGoals is USED but its length is THIN (premierleague, mykhel), length THIN (rsssf), and the cell is not named under owed || under mutant pausedskip: exit 0 | simCmLeagueBookFacts: all 5880 checks passed.
+PROBE seasonFigure: real fence exit 1 | FAIL plsite-pl-2015-16: topScorerGoals 16 is not printed in its literals || under mutant seasonstrip: exit 0 | simCmLeagueBookFacts: all 5894 checks passed.
+== restored: real fence exit 0 | simCmLeagueBookFacts: all 5894 checks passed.
+mut1310: probe complete

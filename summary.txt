@@ -1,0 +1,14 @@
+head exit=0 0s | 302b4969f0166bd74c589b0ed56924f167be3940
+tsc exit=0 49s | 
+facts exit=0 0s | simCmLeagueBookFacts: all 5894 checks passed.
+c-keeperowed exit=1 0s | simCmLeagueBookFacts control keeperowed: FIRED (Bundesliga 2015-16 keeperCleanSheets is NONE and not named under owed)
+c-staleowed exit=1 0s | simCmLeagueBookFacts control staleowed: FIRED (Premier League 2015-16 topScorerGoals is USED and owed still names it (stale))
+c-onesource exit=1 0s | simCmLeagueBookFacts control onesource: FIRED (Premier League 2015-16 topScorerGoals is THIN (premierleague), length USED (premierleague, rsssf), and the cell is not name
+c-disagree exit=1 0s | simCmLeagueBookFacts control disagree: FIRED (Premier League 2015-16 topScorerGoals is DISPUTED (premierleague, mykhel), length USED (premierleague, rsssf), and the cell 
+c-receipt exit=1 0s | simCmLeagueBookFacts control receipt: FIRED (scripts/data/cmLeagueBookFacts.receipt.json does not carry the sha256 of scripts/data/cmLeagueBookFacts.json with CRLF turned
+mutrev exit=0 21s | mut1310: probe complete
+runall exit=0 0s | All 1 harnesses green.
+sha exit=0 0s | 3f96b196ac107c9c41ffd8b28f3859400573e11b1304464c29fb2debe2bae52e  -
+difffiles exit=0 0s | four files
+slug exit=0 0s | slug lines in the round diff: 0
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
