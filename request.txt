@@ -1,0 +1,3 @@
+#!serial
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all > $RC_OUT/ctl-all.log 2>&1; s=$?; grep -E "^control |controlFrontOfficeBoard:" $RC_OUT/ctl-all.log | cut -c1-200 | tail -60; exit $s
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank

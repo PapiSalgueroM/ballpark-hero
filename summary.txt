@@ -1,0 +1,2 @@
+ctl-all exit=0 501s | controlFrontOfficeBoard: 40 of 40 control(s) fired, the board tests can fail for each named reason.
+ctl-blank exit=1 8s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
