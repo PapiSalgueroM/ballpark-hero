@@ -40,3 +40,23 @@ Checks: N9 (the window against the harness's own table; every round of every sea
 groups; the league's spelling held) and N10 (the series of every season: two groups, alike, 8 4 2 1, sixteen
 clubs, four wins, the winners go on, every club in that year's alignment, the window's conferences flag).
 Controls: roundname (N9), onegroup (N9, N10 and R2), readday (R3, now that the file holds a receipt).
+
+## Step 3 (A2 and A6): the Final, the only round across; the playoffs of 2026-27
+
+A2. The same two sources print every series of every season 2006-07 to 2025-26. Placed by the ledger's own
+alignment of each year (NHL_ALIGNMENTS, two sourced by Round 1211), the first three rounds of every season
+pair two clubs of one conference and the last round pairs the two conferences' champions, in every season but
+2020-21 (no conferences; step 4). Written: `finalOnlyAcross` on every window, true for the windows of 2006 to
+2012, 2013 to 2018 and from 2021 (the present day career's carried format stands on 2021-22 to 2025-26, read
+season by season). The windows of 2013 to 2018 and from 2021 hold NHL_PLAYOFF_FORMAT's own names by reference.
+The thin row "That the Stanley Cup Final is the only round against the other conference" is closed.
+
+A6. The two schedule articles behind nhl-84 and espn-84 were read again on 2026-10-12 (new keys nhl-84-again and
+espn-84-again): neither says anything of the playoffs. The league's own "Playoff Format" page, read the same
+day (nhl-playoff-format-again), still describes sixteen clubs and four best of sevens and names no season. So
+the format did not change in any source read, the window from 2021 is carried into 2026 (`to: null`) as
+NHL_FORMULA_84 is, and one new NHL_THIN row says so (NHL_THIN stays at 8: one row closed, one added).
+
+Checks: N10 now also holds `finalOnlyAcross` to this harness's own table and to what the series say. Controls:
+acrossflag (the 2006 window said not to keep its rounds inside a conference: N10) and acrossdata (one first
+round series of 2022-23 moved across the conferences in both receipts, so they still agree: N10).

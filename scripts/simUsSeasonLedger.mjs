@@ -226,9 +226,11 @@ const OWN = {
   nhlPlayoff: { from: 2013, modified: [2019, 2020], rounds: ['First Round', 'Second Round', 'Conference Finals', 'Stanley Cup Final'] },
   /* Round 1312, NHL_ROUND_NAMES window by window: [from, to, its names joined by | or null, clubs, conferences,
      and how the names are held: 'season' (two sources name every round alike in every season, N9) or 'format'
-     (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format)]. */
+     (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format), and finalOnlyAcross]. */
   nhlRoundWindows: [
-    [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season'],
+    [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season', true],
+    [2013, 2018, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true],
+    [2021, null, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true],
   ],
 };
 
@@ -321,6 +323,15 @@ const CONTROLS = {
   /* Round 1312: one name of the 2006 window changed; the window still has four names. */
   roundname: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.names && w.names[1] === 'Conference Semifinals', 'the Conference Semifinals of the 2006 window'); w.names[1] = 'Division Finals'; } },
   /* Round 1312: the league's receipt taken from the 2006 window, shape and names: one source is left. */
+  /* Round 1312: the 2006 window said NOT to keep its first three rounds inside a conference. */
+  acrossflag: { expect: ['N10'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.finalOnlyAcross === true, 'the 2006 window\'s finalOnlyAcross'); w.finalOnlyAcross = false; } },
+  /* Round 1312: one series of 2022-23 moved across the conferences in BOTH receipts (Vegas meeting Florida
+     in the first round): the receipts still agree, and only the conferences can see it. */
+  acrossdata: { expect: ['N10'], run() {
+    const both = ['nhl-records-playoffs', 'hr-playoffs-1312'].map(k => SRC[k]?.values?.series?.[2022]);
+    must(both.every(s => s && s[0].some(x => x.startsWith('VGK WPG')) && s[0].some(x => x.startsWith('FLA BOS'))), 'Vegas over Winnipeg and Florida over Boston in the 2022 first round of both receipts');
+    for (const s of both) for (const r of s) r.forEach((x, i) => { r[i] = x.replace(/^VGK WPG/, 'VGK BOS').replace(/^FLA BOS/, 'FLA WPG'); });
+  } },
   onegroup: { expect: ['N10', 'N9', 'R2'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.src.includes('nhl-records-playoffs') && w.namesSrc.includes('nhl-records-playoffs'), 'the league\'s records receipt behind the 2006 window'); w.src = w.src.filter(k => k !== 'nhl-records-playoffs'); w.namesSrc = w.namesSrc.filter(k => k !== 'nhl-records-playoffs'); } },
   readday: { expect: ['R3'], run() { const b = receiptFiles[1]; const k = Object.keys(b.sources)[0]; must(k && b.sources[k].read === b.readOn && b.readOn !== receiptFiles[0].readOn, 'a receipt of the second file on its own day'); b.sources[k].read = receiptFiles[0].readOn; } },
 };
@@ -618,11 +629,14 @@ const OWN_MLB_DIVISIONS = {
          series for series alike; four rounds of 8, 4, 2 and 1 series; the window's clubs in the first;
          every winner on the wins the window names and no series past its most games; the winners of
          each round, and only they, in the next; every club in the alignment of that year; and the
-         window's `conferences` is what the alignment says. */
+         window's `conferences` is what the alignment says. And `finalOnlyAcross`, this harness's own
+         flag for the window, is what the series say: true when, in every season, the first three rounds
+         pair two clubs of one conference and the last the two conferences; false when a season has no
+         conferences or a round before the last crossed; null only where it was not read. */
   const norm = s => (typeof s === 'string' ? s.toLowerCase().replace(/-/g, '').replace(/\s+/g, ' ').trim() : null);
   const wins = nhl.NHL_ROUND_NAMES ?? [];
   check('N9', wins.length === OWN.nhlRoundWindows.length, `NHL_ROUND_NAMES holds ${wins.length} windows, this harness's own table ${OWN.nhlRoundWindows.length}`);
-  for (const [from, to, names, clubs, confs, how] of OWN.nhlRoundWindows) {
+  for (const [from, to, names, clubs, confs, how, across] of OWN.nhlRoundWindows) {
     const w = wins.find(x => x.from === from);
     const tag = `NHL_ROUND_NAMES ${from}`;
     if (!w) { check('N9', false, `${tag}: no such window`); continue; }
@@ -639,10 +653,14 @@ const OWN_MLB_DIVISIONS = {
         if (league) check('N9', league.values.rounds[y][i] === name, `${tag}, ${y}: the ledger spells round ${i + 1} "${name}", the league "${league.values.rounds[y][i]}"`);
       });
     }
+    /* What the series say of the window, season by season: true while every season keeps the first three
+       rounds inside a conference and the last across; false on a season without conferences or a crossing. */
+    let seen = true;
+    check('N10', w.finalOnlyAcross === across, `${tag}: finalOnlyAcross is ${w.finalOnlyAcross}, this harness's own table says ${across}`);
     for (const y of years) {
       const prints = w.src.map(k => SRC[k]).filter(s => s && !s.thin && Array.isArray(s.values?.series?.[y]));
       check('N10', new Set(prints.map(s => s.group)).size >= 2, `${tag}, ${y}: the series are printed by ${prints.map(s => s.group).join(', ') || 'no receipt'} alone`);
-      if (!prints.length) continue;
+      if (!prints.length) { seen = false; continue; }
       const sorted = s => JSON.stringify(s.values.series[y].map(r => [...r].sort()));
       check('N10', prints.every(s => sorted(s) === sorted(prints[0])), `${tag}, ${y}: the receipts print different series`);
       const R = prints[0].values.series[y].map(r => r.map(x => { const [a, b, res] = x.split(' '); const [p, q] = res.split('-').map(Number); return { a, b, p, q }; }));
@@ -658,7 +676,11 @@ const OWN_MLB_DIVISIONS = {
       const confOf = id => a?.divisions.find(d => d.teams.includes(id));
       check('N10', [...first].every(id => !!confOf(id)), `${tag}, ${y}: a club of the first round is not in the alignment of ${y}`);
       check('N10', !!a && a.divisions.every(d => (d.conf !== null) === w.conferences), `${tag}, ${y}: the window says conferences ${w.conferences}, the alignment ${a?.key} says otherwise`);
+      const inside = s => { const p = confOf(s.a)?.conf; const q = confOf(s.b)?.conf; return p != null && p === q; };
+      const across = s => { const p = confOf(s.a)?.conf; const q = confOf(s.b)?.conf; return p != null && q != null && p !== q; };
+      if (!(R.length === 4 && R.slice(0, 3).every(r => r.every(inside)) && R[3].every(across))) seen = false;
     }
+    if (w.finalOnlyAcross !== null) check('N10', w.finalOnlyAcross === seen, `${tag}: finalOnlyAcross is ${w.finalOnlyAcross}, the series of its seasons say ${seen}`);
   }
 }
 

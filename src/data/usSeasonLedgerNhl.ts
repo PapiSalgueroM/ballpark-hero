@@ -202,8 +202,8 @@ export const NHL_FORMULA_84 = {
    playoffs had Semi-Finals where the other three pages read (2007, 2014
    and 2020) have Conference Finals.
 
-   That the conference champions meet in the Final is one source's sentence
-   and is in NHL_THIN, not here. */
+   That the conference champions meet in the Final is NHL_ROUND_NAMES's
+   `finalOnlyAcross` (Round 1312, read season by season), not here. */
 export const NHL_PLAYOFF_FORMAT = {
   from: 2013,
   clubs: 16,
@@ -230,7 +230,17 @@ export const NHL_PLAYOFF_MODIFIED_SRC: readonly string[] = ['si-playoff-format',
    Hockey Reference's "Conference Quarter-Finals"; Hockey Reference's summary
    page calls the last round "Final" and its matchup page "Stanley Cup
    Final"). `null` where they do not: the shape still stands. `series` is
-   [wins needed, most games] of each round. */
+   [wins needed, most games] of each round. The windows of 2013-14 to 2018-19
+   and from 2021-22 hold NHL_PLAYOFF_FORMAT's own names, by reference.
+
+   `finalOnlyAcross`: in every season of the window the first three rounds
+   were played between two clubs of one conference and the last round
+   between the two conferences' champions, as both sources print every
+   series and the alignment of that year places the clubs.
+
+   THE 2026-27 PLAYOFFS are the last window carried on (`to: null`), as
+   NHL_FORMULA_84 is: no source read says the first 84 game season changed
+   the playoffs (NHL_THIN). */
 export interface NhlRoundWindow {
   /** First and last season of the window (start years); `to: null` runs on. */
   from: number;
@@ -242,6 +252,8 @@ export interface NhlRoundWindow {
   series: readonly (readonly [number, number])[];
   /** Whether the season had conferences (the alignment's own divisions say so). */
   conferences: boolean;
+  /** True: only the last round was played across conferences, read twice season by season; false: not so; null: not read twice. */
+  finalOnlyAcross: boolean | null;
   /** Receipts of the shape, season by season. */
   src: readonly string[];
   /** Receipts of the names. */
@@ -255,8 +267,18 @@ export const NHL_ROUND_NAMES: readonly NhlRoundWindow[] = [
   {
     from: 2006, to: 2012, clubs: 16,
     names: ['Conference Quarterfinals', 'Conference Semifinals', 'Conference Finals', 'Stanley Cup Final'],
-    series: SEVEN, conferences: true,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
     src: BY_SEASON, namesSrc: [...BY_SEASON, 'hr-final-matchups'],
+  },
+  {
+    from: 2013, to: 2018, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    src: BY_SEASON, namesSrc: NHL_PLAYOFF_FORMAT.src,
+  },
+  {
+    from: 2021, to: null, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    src: BY_SEASON, namesSrc: NHL_PLAYOFF_FORMAT.src,
   },
 ];
 
@@ -339,9 +361,9 @@ export const NHL_THIN: readonly { what: string; oneSource: string; tried: string
     tried: 'The league\'s own "Playoff Format" page describes today only.',
   },
   {
-    what: 'That the Stanley Cup Final is the only round against the other conference.',
-    oneSource: 'Sports Illustrated: "The conference champions meet in the Stanley Cup Final." Hockey Reference agrees for the one season read for it: on its 2014 page the Final is played by the winners of the two Conference Finals. It was not read season by season.',
-    tried: 'The league\'s own "Playoff Format" page does not say who meets in the Final.',
+    what: 'The playoffs of 2026-27, the first 84 game season.',
+    oneSource: 'The league\'s own "Playoff Format" page, read on 2026-10-12 during that season, still describes sixteen clubs and four rounds of best of seven; it names no season. The league\'s "10 things to know about 2026-27 NHL regular season" and ESPN\'s report of the 84 game schedule, both read again that day, say nothing of the playoffs. NHL_ROUND_NAMES carries its window from 2021 on into 2026, as NHL_FORMULA_84 is carried.',
+    tried: 'No source says the format changed or stayed for 2026-27; nothing more can be read until those playoffs are played.',
   },
   {
     what: 'Why 2012-13 had 48 games, why 2019-20 stopped and why 2020-21 had 56.',

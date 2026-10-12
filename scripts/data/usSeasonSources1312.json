@@ -422,6 +422,40 @@
         }
       },
       "note": "Reached from the \"View Matchup\" link of the last round on each summary page, drawn in Chromium on a GitHub runner on 2026-10-12. `rounds` holds only the last round's name; the others are null here."
+    },
+    "nhl-84-again": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com (NHL Public Relations)",
+      "title": "10 things to know about 2026-27 NHL regular season",
+      "published": "2026-07-16",
+      "url": "https://www.nhl.com/news/nhl-stats-pack-2026-27-regular-season-schedule",
+      "read": "2026-10-12",
+      "seasons": [2026],
+      "says": ["84-game campaign per team begins Sept. 29 with nationally televised tripleheader on ESPN", "Below are 10 things to know about the 2026-27 regular-season schedule.", "The Golden Knights hit the ice for the first time since Game 6 of the 2026 Stanley Cup Final"],
+      "note": "The page of the 1211 receipt nhl-84, read again on 2026-10-12 (a new key, as a page read again on a later day is). Drawn in Chromium on a GitHub runner. The page was searched for playoff, postseason, format and best-of: it says nothing of the playoff format."
+    },
+    "espn-84-again": {
+      "sport": "nhl",
+      "group": "espn",
+      "publisher": "ESPN (Greg Wyshynski)",
+      "title": "NHL releases expanded 84-game schedule for 2026-27 season",
+      "published": "2026-07-16",
+      "url": "https://www.espn.com/nhl/story/_/id/49376073/nhl-releases-expanded-84-game-schedule-2026-27-season",
+      "read": "2026-10-12",
+      "seasons": [2026],
+      "says": ["the league expands its campaign from 82 to 84 games this season.", "Under the league's new collective bargaining agreement with the players, which begins its four-year term Sept. 16, the schedule was increased to 84 games.", "followed by the Chicago Blackhawks traveling to face the Stanley Cup Final runner-up Vegas Golden Knights"],
+      "note": "The page of the 1211 receipt espn-84, read again on 2026-10-12 in the desktop app's own browser pane (the runner was answered with an empty page). The whole report was read: it says nothing of the playoff format."
+    },
+    "nhl-playoff-format-again": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com",
+      "title": "Playoff Format",
+      "url": "https://www.nhl.com/info/standings-info/playoff-format",
+      "read": "2026-10-12",
+      "says": ["16 teams will qualify for the Stanley Cup Playoffs.", "The format is a set bracket that is largely division-based with wild cards.", "Each of the four rounds is a best-of-7; the first team to win four games advances to the next round.", "First-round winners within each bracket play one another to determine the four participants in the Conference Finals.", "In the Conference Finals and Stanley Cup Final, home-ice advantage goes to the team that had the better regular-season record"],
+      "note": "The page of the 1211 receipt nhl-playoff-format, read again on 2026-10-12, during the 2026-27 season, as the third reading the brief asks for when both schedule articles are silent. It describes the format in force and names no season."
     }
   }
 }
