@@ -1,0 +1,5 @@
+ledger-list exit=0 0s | mlbyear mlbsum mlbid mlbspan mlbclub mlbspanyear mlbrivalswap mlbfirstround mlbown mlbdiv mlbformula mlbhome firstnull otherseason host nhlfrom nhlpoint mlbrival mlbplayo
+plan exit=0 3s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+ledger exit=0 5s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+vitest exit=0 41s |    Duration  40.57s (transform 2.18s, setup 125ms, collect 3.58s, tests 37.32s, environment 1.02s, prepare 547ms)
+parity exit=0 48s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
