@@ -1,0 +1,8 @@
+# Release AX, final proof, gate part G2: two walks of the browser list that Release AW's proof files did not carry, and the weight harnesses
+#!serve
+#!playwright
+#!serial
+playCareerHallLine: node scripts/playCareerHallLine.mjs
+playUsRivalLines: node scripts/playUsRivalLines.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
