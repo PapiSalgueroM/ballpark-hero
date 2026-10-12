@@ -1,0 +1,11 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+assets1082 exit=0 7s | Prepared 92 actual font and flag dependencies for 84 career-club countries.
+simSoccerOpponentLabels-forwalk exit=0 17s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+simSoccerOpponentLabels-browser exit=0 8s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+playCareerTransferBrief exit=1 0s | Node.js v24.21.0
+playSoccerAgentReview exit=1 0s | Node.js v24.21.0
+playSoccerOfferReview1082 exit=0 65s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+playSoccerCareerFamily exit=0 17s | playSoccerCareerFamily: 72 checks, 0 failed
+playSoccerCareerContracts exit=0 22s | playSoccerCareerContracts: 201 checks, 0 failed
+playSoccerCareer exit=1 478s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
