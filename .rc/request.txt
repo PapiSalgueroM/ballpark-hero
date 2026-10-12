@@ -1,0 +1,14 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmGameDay-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs
+simGmGameDay-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+ctl-recordspoils: node scripts/controlFrontOfficeBoard.mjs recordspoils
+ctl-gridspoils: node scripts/controlFrontOfficeBoard.mjs gridspoils
+ctl-holdkept: node scripts/controlFrontOfficeBoard.mjs holdkept
+ctl-tilenolog: node scripts/controlFrontOfficeBoard.mjs tilenolog
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
