@@ -1,0 +1,7 @@
+#!serial
+inv-simCareerLeagueFinish: node .rc/x/invEngine.mjs && node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout -- src; exit $s
+inv-simCareerLeagueSeasons: node .rc/x/invEngine.mjs && node scripts/simCareerLeagueSeasons.mjs; s=$?; git checkout -- src; exit $s
+inv-simCareerSocialBrands: node .rc/x/invEngine.mjs && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout -- src; exit $s
+inv-simCareerStoryRole: node .rc/x/invEngine.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs; s=$?; git checkout -- src; exit $s
+inv-simCareerTrophyRuns: node .rc/x/invEngine.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs; s=$?; git checkout -- src; exit $s
+inv-simSoccerCareerDevelopment: node .rc/x/invEngine.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs; s=$?; git checkout -- src; exit $s
