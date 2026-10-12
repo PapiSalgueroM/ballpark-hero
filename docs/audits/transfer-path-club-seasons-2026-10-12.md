@@ -38,3 +38,11 @@ Red proof: remote run 38280414905, job 114916070114, commit 80792452.
 The actual hook refused all four reported cases (fetched/fallback and
 Everyday/Europe). Eleven existing or preserved-history cases passed.
 Final fix verification and publication are pending.
+
+First fix run 38281133521 on adeb5f2a passed 16 hook cases. Its browser
+setup ignored the package lock while installing Playwright and upgraded
+application dependencies (including SWC and esbuild), then the app type gate
+failed in unchanged cbbGrid.ts. No build, control, generated-site or browser
+credit is taken from that run. The repaired setup installs browser tools
+outside the app dependency tree and verifies every locked installed version
+and both package-file hashes before proceeding.

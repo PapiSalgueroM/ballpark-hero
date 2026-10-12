@@ -31,9 +31,33 @@ jobs:
       - run: npm ci
       - name: Browser and logo dependencies
         run: |
-          npm install --no-save --package-lock=false playwright
-          npx playwright install --with-deps chromium
+          mkdir -p transfer-path-club-seasons-artifacts
+          sha256sum package.json package-lock.json > transfer-path-club-seasons-artifacts/package-hashes.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync('transfer-path-club-seasons-artifacts/installed.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/transfer-path-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright/cli.js" install --with-deps chromium
           python -m pip install fonttools pillow
+          sha256sum --check transfer-path-club-seasons-artifacts/package-hashes.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync('transfer-path-club-seasons-artifacts/installed.json'));
+          for (const p of installed) assert.equal(JSON.parse(fs.readFileSync(p.path + '/package.json')).version, p.version, p.path);
+          console.log(`Held all ${installed.length} locked installed dependency versions.`);
+          NODE
       - name: Reported teammate link and existing hook behavior
         run: node_modules/.bin/vitest run src/hooks/useTransferPathClubSeasons.test.ts src/hooks/useTransferPath.test.ts src/hooks/useTransferPathGuidance.test.ts --maxWorkers=1
       - name: Application types
