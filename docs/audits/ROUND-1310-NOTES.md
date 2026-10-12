@@ -56,7 +56,8 @@ mixed). On opened pages the 38 match real range is 26.9 (Premier League) to 31.1
   squawka.com and fbref.com answer 403. Owed to the match engine round of the critic's answer 7.
 - Ligue 1 2019-20 is quoted from its second table line and the note only: the first and last lines put a
   club name ending in FC beside its games played, which `scripts/simNoRivalNames.mjs` reads as a product
-  title (runner result r1310-e caught it).
+  title (runner result r1310-e caught it). The same fence caught a sponsor's product name in the title of a
+  laliga.com article quoted under owed (r1310-g); it is now described, not quoted.
 
 ## For Round 1311 (the band)
 
