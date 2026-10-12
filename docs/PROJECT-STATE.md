@@ -1,3 +1,9 @@
+## Soccer Career guide and No Agent wording follow-up, 2026-10-12
+
+Branch codex/career-guide-clarity starts from exact main4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5. The existing shared guide now explains veteran contract pay and money talks, representation review, transfer priorities, international comeback and an announced farewell season. Its pay example explicitly uses No Agent. The brief, review, offer and result labels describe the actual option without assuming a named agent, and the existing What's New button reference follows the new label. Three existing test selectors follow the renamed button, and one existing expected-text literal follows the explicit No Agent pay example. Their assertion methods, numerical cases and fixtures are held.
+
+Source-only copy changes. No game policy, wage/fee/term calculation, eligibility, RNG, callbacks or save fields change. Remote app types, 13 existing option/contract test files, a full production SEO build, all 15 rebuilt readers and the existing guide harness are pending. The exact branch workflow keeps source, package, generated output and full reader streams/exits, including failed evidence. This is not runtime or live acceptance. Main integration and publication remain with session G. The earlier release record below is preserved in full as publisher data.
+
 ## Release AW LIVE, 2026-10-11 20:55 EDT: VAR in Club Manager (goals, in the competitions that really use it), and eight of the other lane's pull requests for Soccer Career (pay by age and form from 30, veteran contract talks, the agent review, the agent brief, a national team comeback, an announced farewell season)
 
 Claude lane (session G). main ee0ec4b8, deployment cd8577d0-5d1e-41f5-8423-908931ff559a, entry index-BMYYIgf0.js (was index-BXY5no68.js, Release AV,

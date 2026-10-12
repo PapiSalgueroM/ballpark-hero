@@ -25,7 +25,7 @@ function mount(initial: CareerState) {
   return { ...view, patches };
 }
 async function open() {
-  const trigger = screen.getByRole('button', { name: 'Brief your agent' });
+  const trigger = screen.getByRole('button', { name: 'Set transfer priority' });
   trigger.focus(); fireEvent.click(trigger);
   await screen.findByRole('dialog', { name: 'Your transfer brief' });
   return trigger;
@@ -119,7 +119,7 @@ describe('Transfer brief UI', () => {
     if (kind === 'retired') c.retired = true;
     if (kind === 'result') { c = setTransferBrief(c, 'minutes'); const old = Math.random; Math.random = () => 0.1; try { c = requestTransferDecision(c, FALLBACK_CLUBS); } finally { Math.random = old; } }
     const raw = JSON.stringify(c), random = vi.spyOn(Math, 'random'), view = mount(c);
-    expect(screen.queryByRole('button', { name: 'Brief your agent' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Set transfer priority' })).toBeNull();
     expect(localStorage.getItem(KEY)).toBe(raw); expect(view.patches).not.toHaveBeenCalled(); expect(random).not.toHaveBeenCalled();
   });
 });

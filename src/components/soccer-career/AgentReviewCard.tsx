@@ -39,11 +39,11 @@ export function AgentReviewCard({ career, onChange }: { career: CareerState; onC
     <p className="font-bold">Your representation</p>
     <p className="mt-1 text-xs text-muted-foreground">{current.emoji} {current.name}{saved ? '. Your representation choice is saved for this season.' : '. Compare terms before your next deal.'}</p>
     <Dialog open={open} onOpenChange={changeOpen}>
-      <DialogTrigger asChild><Button ref={trigger} data-agent-review-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">{saved ? 'Agent review help' : 'Review your agent'}</Button></DialogTrigger>
+      <DialogTrigger asChild><Button ref={trigger} data-agent-review-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">{saved ? 'Agent review help' : 'Review representation'}</Button></DialogTrigger>
       <DialogContent data-agent-review-dialog className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 overflow-hidden rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:opacity-100"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
-        <DialogTitle ref={heading} data-agent-review-title tabIndex={-1} className="shrink-0 pr-12 text-base">{saved ? 'Your agent choice' : 'Review your representation'}</DialogTitle>
+        <DialogTitle ref={heading} data-agent-review-title tabIndex={-1} className="shrink-0 pr-12 text-base">{saved ? 'Your representation choice' : 'Review your representation'}</DialogTitle>
         <DialogDescription className="shrink-0">Current: {current.name}. Your current deal stays the same.</DialogDescription>
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {screen === 'help' ? <div data-agent-review-help className="space-y-3">
