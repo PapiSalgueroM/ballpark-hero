@@ -1,0 +1,3 @@
+seamPrint exit=0 15s | simUsSeasonCentre digest print: 10 digests over 73 bundled files, written to /home/runner/work/_temp/rc-out/files/seam.json
+lawPrint exit=0 16s | simUsSeasonCentre digest print: 10 digests over 73 bundled files, written to /home/runner/work/_temp/rc-out/files/law.json
+layPrint exit=0 16s | simUsSeasonCentre digest print: 10 digests over 73 bundled files, written to /home/runner/work/_temp/rc-out/files/lay.json
