@@ -1,0 +1,5 @@
+m-reduced exit=1 4s | MUTANT reduced vitest exit=1
+m-running exit=1 4s | MUTANT running vitest exit=1
+m-chips exit=1 4s | MUTANT chips vitest exit=1
+m-periods exit=0 4s | MUTANT periods vitest exit=0
+m-clean exit=0 3s | CLEAN TREE vitest exit=0

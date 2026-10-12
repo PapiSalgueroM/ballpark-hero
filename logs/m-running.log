@@ -1,0 +1,42 @@
+mut running: APPLIED to src/lib/gmGameDayView.ts (1 edit(s))
+FO_GAMEDAY one press, the desk off: the law told 13 of the thirteen playoff games another score than the engine's
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mthe told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his
+[22m[39mFO_GAMEDAY one press: his club ARI played 3 playoff games; the log holds w17, NFC Divisional, NFC Championship, Super Bowl
+FO_GAMEDAY one press, the desk on: the law told 13 of the thirteen playoff games another score than the engine's
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mwith the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+[22m[39mFO_GAMEDAY desk on: the edge of his staff is 1.0266666666666666; told with it 37-6, without it 37-6; the log holds 37-6
+
+ [32m✓[39m src/components/front-office/FrontOfficeGameDay.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1891[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: a log that does not read whole is absent, and never refuses the save[2m > [22ma damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log [33m 530[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the log does not follow a GM into his next franchise[2m > [22mabandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club [33m 641[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDayView.test.ts[2m > [22mgameDayView[2m > [22mevery sentence is the law's own for the story the told path tells
+[31m[1mAssertionError[22m: expected '14-10' to be '10-14' // Object.is equality[39m
+
+Expected: [32m"1[7m0[27m-1[7m4[27m"[39m
+Received: [31m"1[7m4[27m-1[7m0[27m"[39m
+
+[36m [2m❯[22m forEach src/lib/gmGameDayView.test.ts:[2m84:37[22m[39m
+    [90m 82| [39m        [35mlet[39m us [33m=[39m [34m0[39m[33m,[39m them [33m=[39m [34m0[39m[33m;[39m
+    [90m 83| [39m        for (const x of story.game.events) if (x.min <= e.min) { if (x…
+    [90m 84| [39m        [34mexpect[39m(v[33m.[39mdeciding[i][33m.[39mafter)[33m.[39m[34mtoBe[39m([32m`[39m[36m${[39mus[36m}[39m[32m-[39m[36m${[39mthem[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m 85| [39m      })[33m;[39m
+    [90m 86| [39m      [90m/* the go ahead that stood left the winner in front */[39m
+[90m [2m❯[22m src/lib/gmGameDayView.test.ts:[2m77:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m33 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 09:25:08
+[2m   Duration [22m 3.77s[2m (transform 1.44s, setup 231ms, collect 2.52s, tests 3.47s, environment 1.52s, prepare 307ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDayView.test.ts,title=src/lib/gmGameDayView.test.ts > gameDayView > every sentence is the law's own for the story the told path tells,line=84,column=37::AssertionError: expected '14-10' to be '10-14' // Object.is equality%0A%0AExpected: "10-14"%0AReceived: "14-10"%0A%0A ❯ forEach src/lib/gmGameDayView.test.ts:84:37%0A ❯ src/lib/gmGameDayView.test.ts:77:15%0A%0A
+MUTANT running vitest exit=1
