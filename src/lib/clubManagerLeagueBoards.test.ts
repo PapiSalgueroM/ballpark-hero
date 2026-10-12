@@ -11,9 +11,11 @@ import {
  * books. Two rules of the round live in the engine's binding (src/lib/clubManager.ts), where no unit file
  * of the round reaches, and are held by scripts/simCmLeagueBook.mjs on its default fleet instead:
  *  - who of a club's outfield is given its clean sheet (section thin (vi) and section law; controls
- *    thinbacks, nobacks and allbacks). A reviewer's three mutations of that rule left both unit files green.
+ *    thinbacks, nobacks and allbacks). Two mutations a reviewer made of that rule (a thin club's sheet
+ *    handed to its midfield, and to every outfield man) left both unit files green.
  *  - when a save with no book is given a whole book and when a late one (section oldsave (i), the
- *    goalless save; control goallesswhole).
+ *    goalless save; control goallesswhole). The reviewer's third mutation (a whole book whenever no goal
+ *    has been scored) left both green as well.
  * And the share under which a board carries the honest line is not pinned here: the number is not ruled
  * yet (see the note above BOARD_ROWS in the module). */
 const STAMP = 'league|test';
