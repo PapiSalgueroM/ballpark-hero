@@ -1,0 +1,5 @@
+mutation label applied to src/components/game/ReportSiteIssue.tsx: e4d42de426f451aa -> 16d8f169422590bb
+  FAIL: the screen does not point at the Send us feedback button, the footer's own label
+1 failure(s)
+harness exit 1
+CONTROL FIRED: a footer button renamed in the FILE turns section 3 red

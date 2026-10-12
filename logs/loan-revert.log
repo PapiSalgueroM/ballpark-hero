@@ -1,0 +1,4 @@
+mutation loanrevert applied to src/lib/soccerCareerEngine.ts: f7ca08464dec9e69 -> 0d9ab4a21241ca1d
+AssertionError [ERR_ASSERTION]: unique source operand
+harness exit 1
+FAILS CLOSED: a product without PR235's filter stops the harness at its anchor

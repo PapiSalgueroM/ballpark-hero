@@ -1,0 +1,12 @@
+mutation loanfallback applied to src/lib/soccerCareerEngine.ts: f7ca08464dec9e69 -> beaa63e3c50edfa5
+Loan minutes: 128 actual returns; 4608 complete action frames
+Loan minutes: 160 exact missing-filter findings; 99289117 retained bytes
+{"name":"AssertionError","message":"all complete loan-minute checks and precise controls\n\n16 !== 0\n","stack":"AssertionError [ERR_ASSERTION]: all complete loan-minute checks and precise controls\n\n16 !== 0\n\n    at file:///tmp/lf/scripts/simSoccerLoanMinutes.mjs:483:10\n    at process.processTi
+status fail; error all complete loan-minute checks and precise controls
+
+16 !== 0
+
+failures 16: {"law":16}
+law groups on the current arm: {"eligible-offers":16,"automatic-minutes":16,"empty-market":16}; first ids core-Real-Madrid-49-1/law, core-Real-Madrid-49-2/law, core-Real-Madrid-49-3/law, core-Real-Madrid-49-4/law
+harness exit 1
+CONTROL FIRED: a fallback loan that ignores the forecast turns the current arm's law red

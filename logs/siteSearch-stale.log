@@ -1,0 +1,5 @@
+7) the generated keyword index
+   10974 bytes covering 133/133 games, against 873676 bytes of guides
+  FAIL: the guides have changed since the keyword index was built (index 3a5134afea4398ea, guides now 550812f0723870d5). Rerun: node scripts/genSearchKeywords.mjs
+harness exit 1
+CONTROL FIRED: section 7 catches a guide edited after the index was built

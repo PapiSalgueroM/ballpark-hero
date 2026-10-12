@@ -1,0 +1,4 @@
+mutation labelboth applied to src/components/game/ReportSiteIssue.tsx: e4d42de426f451aa -> 16d8f169422590bb
+mutation labelboth applied to src/components/RouteErrorBoundary.tsx: 2596c95a1dc03119 -> fe0878976ff78650
+   home link, save reassurance and the pointer at the footer's "Send us feedback" button all present
+harness exit 0 (footer and crash screen renamed together: must be 0)

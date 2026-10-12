@@ -1,0 +1,6 @@
+kw-fresh exit=0 1s | INDEX FRESH: a regeneration on this head is byte equal to the committed index
+siteSearch-stale exit=0 2s | CONTROL FIRED: section 7 catches a guide edited after the index was built
+errb-filelabel exit=0 1s | CONTROL FIRED: a footer button renamed in the FILE turns section 3 red
+errb-bothlabel exit=0 1s | harness exit 0 (footer and crash screen renamed together: must be 0)
+loan-fallback exit=0 54s | CONTROL FIRED: a fallback loan that ignores the forecast turns the current arm's law red
+loan-revert exit=0 1s | FAILS CLOSED: a product without PR235's filter stops the harness at its anchor
