@@ -1,0 +1,3 @@
+npmci-lock: npm ci --dry-run >/dev/null && node -e "const l=require(\"./package-lock.json\");const z=l.packages[\"node_modules/lz-string\"];const t=l.packages[\"node_modules/@testing-library/dom\"];console.log(\"lz-string\",z.version,\"dev\",!!z.dev,\"peer\",!!z.peer,\"| testing-library/dom\",t.version,\"dev\",!!t.dev);process.exit(z.dev||z.peer||!l.packages[\"\"].dependencies[\"lz-string\"]?1:0)"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
