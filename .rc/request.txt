@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 3.7 on e07cd2df, part 2: playClubManager seeds 6 to 10 and the default seed under CPU throttling rate 4
+cm-s6: PLAY_CM_SEED=6 ENGINES=chromium node scripts/playClubManager.mjs
+cm-s7: PLAY_CM_SEED=7 ENGINES=chromium node scripts/playClubManager.mjs
+cm-s8: PLAY_CM_SEED=8 ENGINES=chromium node scripts/playClubManager.mjs
+cm-s9: PLAY_CM_SEED=9 ENGINES=chromium node scripts/playClubManager.mjs
+cm-s10: PLAY_CM_SEED=10 ENGINES=chromium node scripts/playClubManager.mjs
+cm-def-throttled: node .rc/x/mkThrottle.mjs playClubManager && PLAY_CM_SEED=1542433760 ENGINES=chromium node scripts/playClubManagerThrottled.mjs
