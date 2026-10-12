@@ -1,0 +1,4 @@
+control pacespoils (the owner card's pace reads the league AFTER the press while a game is watched (the line the board had before Watch)): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+control pacespoils: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.

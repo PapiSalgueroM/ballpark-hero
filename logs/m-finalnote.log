@@ -1,0 +1,32 @@
+fxmut finalnote: APPLIED to src/components/front-office/FrontOfficeBoard.tsx (1 edit(s))
+   [32m✓[39m NFL front office: the Game Day tile[2m > [22mNO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league's[32m 166[2mms[22m[39m
+   [32m✓[39m NFL front office: the Game Day tile[2m > [22mHIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved league[32m 73[2mms[22m[39m
+   [32m✓[39m NFL front office: the Game Day tile[2m > [22ma save from before the log shows the next game, and after its first press the chips start at that week[32m 52[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeTile.test.tsx[2m > [22mNFL front office: the Game Day tile[2m > [22mthe final week has no Watch: its press goes to the recap
+[31m[1mAssertionError[22m: expected 'Play it or watch it. Your result land…' to be 'No Watch on this one. The final week …' // Object.is equality[39m
+
+Expected: [32m"[7mNo Watch on this one. The final week runs straight into the playoffs[27m."[39m
+Received: [31m"[7mPlay it or watch it. Your result lands here[27m."[39m
+
+[36m [2m❯[22m src/components/front-office/FrontOfficeTile.test.tsx:[2m245:46[22m[39m
+    [90m243| [39m    /* and the tile does not offer what the week box does not: no "wat…
+    [90m244| [39m    expect(q('[data-gameday]')!.getAttribute('data-gameday-face')).toB…
+    [90m245| [39m    expect(text('[data-gameday-next-note]')).toBe('No Watch on this on…
+    [90m   | [39m                                             [31m^[39m
+    [90m246| [39m    expect(text('[data-week-box]')).not.toMatch(/watch it|lands here/i…
+    [90m247| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 15:25:51
+[2m   Duration [22m 2.66s[2m (transform 711ms, setup 50ms, collect 980ms, tests 932ms, environment 294ms, prepare 149ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTile.test.tsx,title=src/components/front-office/FrontOfficeTile.test.tsx > NFL front office%3A the Game Day tile > the final week has no Watch%3A its press goes to the recap,line=245,column=46::AssertionError: expected 'Play it or watch it. Your result land…' to be 'No Watch on this one. The final week …' // Object.is equality%0A%0AExpected: "No Watch on this one. The final week runs straight into the playoffs."%0AReceived: "Play it or watch it. Your result lands here."%0A%0A ❯ src/components/front-office/FrontOfficeTile.test.tsx:245:46%0A%0A
+MUTANT finalnote vitest exit=1

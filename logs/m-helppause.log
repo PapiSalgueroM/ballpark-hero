@@ -1,0 +1,32 @@
+fxmut helppause: APPLIED to src/components/front-office-shared/GmGameDayCard.tsx (1 edit(s))
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22mGmGameDayCard[2m > [22mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[31m[1mAssertionError[22m: the clock while the "?" is open: expected 6 to be -2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- -2[39m
+[31m+ 6[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmGameDayCard.test.tsx:[2m151:57[22m[39m
+    [90m149| [39m    [35mawait[39m [34mwait[39m([34m700[39m)[33m;[39m
+    [90m150| [39m    expect(q('[data-match-clock]'), 'the game is still on the clock be…
+    [90m151| [39m    [34mexpect[39m([34mminute[39m()[33m,[39m [32m'the clock while the "?" is open'[39m)[33m.[39m[34mtoBe[39m(at)[33m;[39m
+    [90m   | [39m                                                        [31m^[39m
+    [90m152| [39m    [34mexpect[39m(watched)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m153| [39m    fireEvent.click(within(q('[data-season-help]') as HTMLElement).get…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 15:25:48
+[2m   Duration [22m 2.34s[2m (transform 117ms, setup 54ms, collect 226ms, tests 1.36s, environment 292ms, prepare 69ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx,title=src/components/front-office-shared/GmGameDayCard.test.tsx > GmGameDayCard > the "?" opened in the middle of a watch stops the clock%2C and closing it lets the game run on,line=151,column=57::AssertionError: the clock while the "?" is open: expected 6 to be -2 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- -2%0A+ 6%0A%0A ❯ src/components/front-office-shared/GmGameDayCard.test.tsx:151:57%0A%0A
+MUTANT helppause vitest exit=1

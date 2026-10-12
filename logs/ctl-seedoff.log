@@ -1,0 +1,4 @@
+control seedoff (the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)): vitest exit 1; 1 red, 30 green of 31
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved
+control seedoff: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
