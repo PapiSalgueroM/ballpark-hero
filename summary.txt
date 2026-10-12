@@ -1,0 +1,7 @@
+vitest-three exit=0 9s |    Duration  8.36s (transform 3.51s, setup 265ms, collect 8.57s, tests 4.84s, environment 1.55s, prepare 500ms)
+simSoccerAwardReveal exit=0 24s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught
+tsc exit=0 73s | 
+simSaveKeeper exit=1 4s | simSaveKeeper: RED in section(s) 1.
+simSaveKeeper-partballon exit=1 4s | simSaveKeeper control partballon: FIRED. Section 1 is red.
+simCareerAwardsNight exit=0 72s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSoccerAwardGenerations exit=0 851s | ORIGINAL {"kind":"this head with the exact inverse of the pool lifecycle","rows":14,"engineSha256":"0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea","sav
