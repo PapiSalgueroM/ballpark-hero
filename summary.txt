@@ -1,0 +1,3 @@
+appeal-head exit=1 6s | Node.js v24.21.0
+appeal-attrib exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+slots-hash exit=0 0s | fc0214ae9511c16188af0f437bd4cc7d0c0092a3b4cf9cebc2f8fb42a82a4231  scripts/simClubManagerDecisions.mjs
