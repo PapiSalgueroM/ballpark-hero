@@ -421,6 +421,11 @@ async function main() {
         const historical = withCmVarSeed(4107, () => historicalPlain.startCareer('Everton', 'era2010'));
         // Override only this simulation's clock so the historic-era guard is tested independently of the year guard.
         historical.startYear = 2026;
+        /* Release AZ fix (reviewer 3, MAJOR 1): since Round 1250 a new career carries a world seed, so this
+           career, moved sixteen seasons on, played a seeded world the prior engine has never heard of. The case
+           is about a loaded old squad on both engines, so the seed comes off the way fresh() takes off the real
+           fixture key (the house precedent); with scripts/lib/cmWorldSeed1250.mjs applied it is green as before. */
+        delete historical.worldSeed;
         const plainHistoric = withCmVarSeed(7113, () => historicalPlain.playNextEntry(historical));
         const enabledHistoric = withCmVarSeed(7113, () => historicalCandidate.playNextEntry(historical, { varReviews: true }));
         const priorHistoric = withCmVarSeed(7113, () => historicalPrior.playNextEntry(historical));
