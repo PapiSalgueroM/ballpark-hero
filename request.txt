@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+walk-head: node .rc/x/walk.mjs
+walk-before: git show f2c48bb5:src/components/front-office-shared/GmBracketCard.tsx > src/components/front-office-shared/GmBracketCard.tsx && RC_OUT="$RC_OUT/before" node .rc/x/walk.mjs; s=$?; git checkout -- src; exit $s

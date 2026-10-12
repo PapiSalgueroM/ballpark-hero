@@ -1,0 +1,2141 @@
+{
+ "errors": [],
+ "results": [
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the AFC Wild Card, against Bills.",
+   "box": 400,
+   "scroller": [
+    236,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "bye",
+   "place": "You have the bye.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the NFC Wild Card, against Eagles.",
+   "box": 400,
+   "scroller": [
+    236,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 5,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "missed",
+   "place": "No playoffs this year.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "through",
+   "place": "Through. The rest of this round is still to play.",
+   "box": 400,
+   "scroller": [
+    236,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "out",
+   "place": "Out in the AFC Wild Card.",
+   "box": 400,
+   "scroller": [
+    256,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the AFC Divisional, against Bills.",
+   "box": 400,
+   "scroller": [
+    236,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the Super Bowl, against Buccaneers.",
+   "box": 400,
+   "scroller": [
+    236,
+    236
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers26 | 5Eagles24"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "reduce",
+   "face": "controls",
+   "opens": 1,
+   "opened": [
+    "SB"
+   ],
+   "sheet1": {
+    "top": 0,
+    "h": 400,
+    "boxH": 400,
+    "inHost": true,
+    "text": "The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"
+   },
+   "closed": {
+    "dialog": false,
+    "focus": true
+   },
+   "again": true,
+   "scrollMoved": false,
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the AFC Wild Card, against Bills.",
+   "box": 400,
+   "scroller": [
+    236,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "bye",
+   "place": "You have the bye.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the NFC Wild Card, against Eagles.",
+   "box": 400,
+   "scroller": [
+    236,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 5,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "missed",
+   "place": "No playoffs this year.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "through",
+   "place": "Through. The rest of this round is still to play.",
+   "box": 400,
+   "scroller": [
+    236,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "out",
+   "place": "Out in the AFC Wild Card.",
+   "box": 400,
+   "scroller": [
+    256,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the AFC Divisional, against Bills.",
+   "box": 400,
+   "scroller": [
+    236,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the Super Bowl, against Buccaneers.",
+   "box": 400,
+   "scroller": [
+    236,
+    236
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers26 | 5Eagles24"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 320,
+   "rm": "no-preference",
+   "face": "controls",
+   "opens": 1,
+   "opened": [
+    "SB"
+   ],
+   "sheet1": {
+    "top": 0,
+    "h": 400,
+    "boxH": 400,
+    "inHost": true,
+    "text": "The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"
+   },
+   "closed": {
+    "dialog": false,
+    "focus": true
+   },
+   "again": true,
+   "scrollMoved": false,
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the AFC Wild Card, against Bills.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "bye",
+   "place": "You have the bye.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the NFC Wild Card, against Eagles.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 5,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "missed",
+   "place": "No playoffs this year.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "through",
+   "place": "Through. The rest of this round is still to play.",
+   "box": 400,
+   "scroller": [
+    236,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "out",
+   "place": "Out in the AFC Wild Card.",
+   "box": 400,
+   "scroller": [
+    256,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the AFC Divisional, against Bills.",
+   "box": 400,
+   "scroller": [
+    256,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the Super Bowl, against Buccaneers.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers26 | 5Eagles24"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "reduce",
+   "face": "controls",
+   "opens": 1,
+   "opened": [
+    "SB"
+   ],
+   "sheet1": {
+    "top": 0,
+    "h": 400,
+    "boxH": 400,
+    "inHost": true,
+    "text": "The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"
+   },
+   "closed": {
+    "dialog": false,
+    "focus": true
+   },
+   "again": true,
+   "scrollMoved": false,
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the AFC Wild Card, against Bills.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "bye",
+   "place": "You have the bye.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the NFC Wild Card, against Eagles.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 5,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "missed",
+   "place": "No playoffs this year.",
+   "box": 400,
+   "scroller": [
+    256,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "through",
+   "place": "Through. The rest of this round is still to play.",
+   "box": 400,
+   "scroller": [
+    236,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "out",
+   "place": "Out in the AFC Wild Card.",
+   "box": 400,
+   "scroller": [
+    256,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the AFC Divisional, against Bills.",
+   "box": 400,
+   "scroller": [
+    256,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the Super Bowl, against Buccaneers.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 3,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers26 | 5Eagles24"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 400,
+   "scroller": [
+    256,
+    256
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": false,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 390,
+   "rm": "no-preference",
+   "face": "controls",
+   "opens": 1,
+   "opened": [
+    "SB"
+   ],
+   "sheet1": {
+    "top": 0,
+    "h": 400,
+    "boxH": 400,
+    "inHost": true,
+    "text": "The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"
+   },
+   "closed": {
+    "dialog": false,
+    "focus": true
+   },
+   "again": true,
+   "scrollMoved": false,
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the AFC Wild Card, against Bills.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "bye",
+   "place": "You have the bye.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the NFC Wild Card, against Eagles.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 5,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "missed",
+   "place": "No playoffs this year.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "through",
+   "place": "Through. The rest of this round is still to play.",
+   "box": 352,
+   "scroller": [
+    208,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "out",
+   "place": "Out in the AFC Wild Card.",
+   "box": 352,
+   "scroller": [
+    208,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 2,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the AFC Divisional, against Bills.",
+   "box": 352,
+   "scroller": [
+    208,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "next",
+   "place": "Next: the Super Bowl, against Buccaneers.",
+   "box": 352,
+   "scroller": [
+    208,
+    208
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "5Bills | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 352,
+   "scroller": [
+    208,
+    208
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 352,
+   "scroller": [
+    208,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers26 | 5Eagles24"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 352,
+   "scroller": [
+    208,
+    208
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "reduce",
+   "face": "controls",
+   "opens": 1,
+   "opened": [
+    "SB"
+   ],
+   "sheet1": {
+    "top": 0,
+    "h": 352,
+    "boxH": 352,
+    "inHost": true,
+    "text": "The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"
+   },
+   "closed": {
+    "dialog": false,
+    "focus": true
+   },
+   "again": true,
+   "scrollMoved": false,
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the AFC Wild Card, against Bills.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "bye",
+   "place": "You have the bye.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the NFC Wild Card, against Eagles.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 5,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "missed",
+   "place": "No playoffs this year.",
+   "box": 352,
+   "scroller": [
+    208,
+    426
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos | 7Bengals",
+    "3Ravens | 6Chiefs",
+    "4Jaguars | 5Bills",
+    "2Packers | 7Lions",
+    "3Rams | 649ers",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "through",
+   "place": "Through. The rest of this round is still to play.",
+   "box": 352,
+   "scroller": [
+    208,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers | 5Eagles"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "out",
+   "place": "Out in the AFC Wild Card.",
+   "box": 352,
+   "scroller": [
+    208,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 2,
+   "mineInView": null,
+   "mineIndex": null,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the AFC Divisional, against Bills.",
+   "box": 352,
+   "scroller": [
+    208,
+    282
+   ],
+   "rows": 4,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional*",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "1Patriots | 5Bills",
+    "2Broncos | 3Ravens",
+    "1Cowboys | 649ers",
+    "2Packers | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "next",
+   "place": "Next: the Super Bowl, against Buccaneers.",
+   "box": 352,
+   "scroller": [
+    208,
+    208
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "5Bills | 4Buccaneers"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 352,
+   "scroller": [
+    208,
+    208
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 352,
+   "scroller": [
+    208,
+    454
+   ],
+   "rows": 6,
+   "rowsInView": 2,
+   "mineInView": true,
+   "mineIndex": 2,
+   "chips": [
+    "Wild Card*",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "2Broncos19 | 7Bengals17",
+    "3Ravens23 | 6Chiefs14",
+    "4Jaguars31 | 5Bills38",
+    "2Packers38 | 7Lions13",
+    "3Rams24 | 649ers31",
+    "4Buccaneers26 | 5Eagles24"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "champion",
+   "place": "Champions.",
+   "box": 352,
+   "scroller": [
+    208,
+    208
+   ],
+   "rows": 1,
+   "rowsInView": 1,
+   "mineInView": true,
+   "mineIndex": 0,
+   "chips": [
+    "Wild Card",
+    "Divisional",
+    "Conference Championship",
+    "Super Bowl*"
+   ],
+   "chipsFit": true,
+   "lines": [
+    "5Bills23 | 4Buccaneers9"
+   ],
+   "truncated": [],
+   "problems": []
+  },
+  {
+   "w": 1280,
+   "rm": "no-preference",
+   "face": "controls",
+   "opens": 1,
+   "opened": [
+    "SB"
+   ],
+   "sheet1": {
+    "top": 0,
+    "h": 352,
+    "boxH": 352,
+    "inHost": true,
+    "text": "The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"
+   },
+   "closed": {
+    "dialog": false,
+    "focus": true
+   },
+   "again": true,
+   "scrollMoved": false,
+   "problems": []
+  }
+ ]
+}

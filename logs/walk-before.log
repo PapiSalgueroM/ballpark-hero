@@ -1,0 +1,87 @@
+bundled 348K, css 258K
+season 2026; seeds NE Patriots, DEN Broncos, BAL Ravens, JAX Jaguars, BUF Bills, KC Chiefs, CIN Bengals, DAL Cowboys, GB Packers, LA Rams, TB Buccaneers, PHI Eagles, SF 49ers, DET Lions; told 13
+320 reduce next: "Next: the AFC Wild Card, against Bills." box 400 list 236/426 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 reduce bye: "You have the bye." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 reduce next: "Next: the NFC Wild Card, against Eagles." box 400 list 236/426 rows 3/6 mine 5 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 6 of 6) is outside the list's view
+320 reduce missed: "No playoffs this year." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 reduce through: "Through. The rest of this round is still to play." box 400 list 236/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+320 reduce out: "Out in the AFC Wild Card." box 400 list 256/282 rows 3/4 mine null chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+320 reduce next: "Next: the AFC Divisional, against Bills." box 400 list 236/282 rows 3/4 mine 0 chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+320 reduce next: "Next: the Super Bowl, against Buccaneers." box 400 list 236/236 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+320 reduce champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+320 reduce champion: "Champions." box 400 list 256/454 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 reduce champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0
+320 reduce controls: Your game buttons 1, opened ["SB"], sheet {"top":0,"h":400,"boxH":400,"inHost":true,"text":"The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"}, closed {"dialog":false,"focus":true}, reopened true, page moved false
+320 no-preference next: "Next: the AFC Wild Card, against Bills." box 400 list 236/426 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 no-preference bye: "You have the bye." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 no-preference next: "Next: the NFC Wild Card, against Eagles." box 400 list 236/426 rows 3/6 mine 5 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 6 of 6) is outside the list's view
+320 no-preference missed: "No playoffs this year." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 no-preference through: "Through. The rest of this round is still to play." box 400 list 236/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+320 no-preference out: "Out in the AFC Wild Card." box 400 list 256/282 rows 3/4 mine null chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+320 no-preference next: "Next: the AFC Divisional, against Bills." box 400 list 236/282 rows 3/4 mine 0 chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+320 no-preference next: "Next: the Super Bowl, against Buccaneers." box 400 list 236/236 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+320 no-preference champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+320 no-preference champion: "Champions." box 400 list 256/454 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+320 no-preference champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0
+320 no-preference controls: Your game buttons 1, opened ["SB"], sheet {"top":0,"h":400,"boxH":400,"inHost":true,"text":"The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"}, closed {"dialog":false,"focus":true}, reopened true, page moved false
+390 reduce next: "Next: the AFC Wild Card, against Bills." box 400 list 256/426 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 reduce bye: "You have the bye." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 reduce next: "Next: the NFC Wild Card, against Eagles." box 400 list 256/426 rows 3/6 mine 5 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 6 of 6) is outside the list's view
+390 reduce missed: "No playoffs this year." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 reduce through: "Through. The rest of this round is still to play." box 400 list 236/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+390 reduce out: "Out in the AFC Wild Card." box 400 list 256/282 rows 3/4 mine null chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+390 reduce next: "Next: the AFC Divisional, against Bills." box 400 list 256/282 rows 3/4 mine 0 chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+390 reduce next: "Next: the Super Bowl, against Buccaneers." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+390 reduce champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+390 reduce champion: "Champions." box 400 list 256/454 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 reduce champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0
+390 reduce controls: Your game buttons 1, opened ["SB"], sheet {"top":0,"h":400,"boxH":400,"inHost":true,"text":"The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"}, closed {"dialog":false,"focus":true}, reopened true, page moved false
+390 no-preference next: "Next: the AFC Wild Card, against Bills." box 400 list 256/426 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 no-preference bye: "You have the bye." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 no-preference next: "Next: the NFC Wild Card, against Eagles." box 400 list 256/426 rows 3/6 mine 5 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 6 of 6) is outside the list's view
+390 no-preference missed: "No playoffs this year." box 400 list 256/426 rows 3/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 no-preference through: "Through. The rest of this round is still to play." box 400 list 236/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+390 no-preference out: "Out in the AFC Wild Card." box 400 list 256/282 rows 3/4 mine null chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+390 no-preference next: "Next: the AFC Divisional, against Bills." box 400 list 256/282 rows 3/4 mine 0 chips Wild Card,Divisional*,Conference Championship,Super Bowl (scroll) cut 0
+390 no-preference next: "Next: the Super Bowl, against Buccaneers." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+390 no-preference champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0 PROBLEMS the shown week's chip (Super Bowl) is outside the chip row's view
+390 no-preference champion: "Champions." box 400 list 256/454 rows 3/6 mine 2 chips Wild Card*,Divisional,Conference Championship,Super Bowl (scroll) cut 0
+390 no-preference champion: "Champions." box 400 list 256/256 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* (scroll) cut 0
+390 no-preference controls: Your game buttons 1, opened ["SB"], sheet {"top":0,"h":400,"boxH":400,"inHost":true,"text":"The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"}, closed {"dialog":false,"focus":true}, reopened true, page moved false
+1280 reduce next: "Next: the AFC Wild Card, against Bills." box 352 list 208/426 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+1280 reduce bye: "You have the bye." box 352 list 208/426 rows 2/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0
+1280 reduce next: "Next: the NFC Wild Card, against Eagles." box 352 list 208/426 rows 2/6 mine 5 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 6 of 6) is outside the list's view
+1280 reduce missed: "No playoffs this year." box 352 list 208/426 rows 2/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0
+1280 reduce through: "Through. The rest of this round is still to play." box 352 list 208/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+1280 reduce out: "Out in the AFC Wild Card." box 352 list 208/282 rows 2/4 mine null chips Wild Card,Divisional*,Conference Championship,Super Bowl cut 0
+1280 reduce next: "Next: the AFC Divisional, against Bills." box 352 list 208/282 rows 2/4 mine 0 chips Wild Card,Divisional*,Conference Championship,Super Bowl cut 0
+1280 reduce next: "Next: the Super Bowl, against Buccaneers." box 352 list 208/208 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* cut 0
+1280 reduce champion: "Champions." box 352 list 208/208 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* cut 0
+1280 reduce champion: "Champions." box 352 list 208/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+1280 reduce champion: "Champions." box 352 list 208/208 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* cut 0
+1280 reduce controls: Your game buttons 1, opened ["SB"], sheet {"top":0,"h":352,"boxH":352,"inHost":true,"text":"The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"}, closed {"dialog":false,"focus":true}, reopened true, page moved false
+1280 no-preference next: "Next: the AFC Wild Card, against Bills." box 352 list 208/426 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+1280 no-preference bye: "You have the bye." box 352 list 208/426 rows 2/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0
+1280 no-preference next: "Next: the NFC Wild Card, against Eagles." box 352 list 208/426 rows 2/6 mine 5 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 6 of 6) is outside the list's view
+1280 no-preference missed: "No playoffs this year." box 352 list 208/426 rows 2/6 mine null chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0
+1280 no-preference through: "Through. The rest of this round is still to play." box 352 list 208/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+1280 no-preference out: "Out in the AFC Wild Card." box 352 list 208/282 rows 2/4 mine null chips Wild Card,Divisional*,Conference Championship,Super Bowl cut 0
+1280 no-preference next: "Next: the AFC Divisional, against Bills." box 352 list 208/282 rows 2/4 mine 0 chips Wild Card,Divisional*,Conference Championship,Super Bowl cut 0
+1280 no-preference next: "Next: the Super Bowl, against Buccaneers." box 352 list 208/208 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* cut 0
+1280 no-preference champion: "Champions." box 352 list 208/208 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* cut 0
+1280 no-preference champion: "Champions." box 352 list 208/454 rows 2/6 mine 2 HIDDEN chips Wild Card*,Divisional,Conference Championship,Super Bowl cut 0 PROBLEMS his tie (row 3 of 6) is outside the list's view
+1280 no-preference champion: "Champions." box 352 list 208/208 rows 1/1 mine 0 chips Wild Card,Divisional,Conference Championship,Super Bowl* cut 0
+1280 no-preference controls: Your game buttons 1, opened ["SB"], sheet {"top":0,"h":352,"boxH":352,"inHost":true,"text":"The playoffsReal, the format as it stood in 2025 (in use since the 2020 season):"}, closed {"dialog":false,"focus":true}, reopened true, page moved false
+390 lines next: 2Broncos | 7Bengals ;; 3Ravens | 6Chiefs ;; 4Jaguars | 5Bills ;; 2Packers | 7Lions ;; 3Rams | 649ers ;; 4Buccaneers | 5Eagles
+390 lines bye: 2Broncos | 7Bengals ;; 3Ravens | 6Chiefs ;; 4Jaguars | 5Bills ;; 2Packers | 7Lions ;; 3Rams | 649ers ;; 4Buccaneers | 5Eagles
+390 lines next: 2Broncos | 7Bengals ;; 3Ravens | 6Chiefs ;; 4Jaguars | 5Bills ;; 2Packers | 7Lions ;; 3Rams | 649ers ;; 4Buccaneers | 5Eagles
+390 lines missed: 2Broncos | 7Bengals ;; 3Ravens | 6Chiefs ;; 4Jaguars | 5Bills ;; 2Packers | 7Lions ;; 3Rams | 649ers ;; 4Buccaneers | 5Eagles
+390 lines through: 2Broncos19 | 7Bengals17 ;; 3Ravens23 | 6Chiefs14 ;; 4Jaguars31 | 5Bills38 ;; 2Packers38 | 7Lions13 ;; 3Rams24 | 649ers31 ;; 4Buccaneers | 5Eagles
+390 lines out: 1Patriots | 5Bills ;; 2Broncos | 3Ravens ;; 1Cowboys | 649ers ;; 2Packers | 4Buccaneers
+390 lines next: 1Patriots | 5Bills ;; 2Broncos | 3Ravens ;; 1Cowboys | 649ers ;; 2Packers | 4Buccaneers
+390 lines next: 5Bills | 4Buccaneers
+390 lines champion: 5Bills23 | 4Buccaneers9
+390 lines champion: 2Broncos19 | 7Bengals17 ;; 3Ravens23 | 6Chiefs14 ;; 4Jaguars31 | 5Bills38 ;; 2Packers38 | 7Lions13 ;; 3Rams24 | 649ers31 ;; 4Buccaneers26 | 5Eagles24
+390 lines champion: 5Bills23 | 4Buccaneers9
+errors: none
+walk: 72 measures over 6 contexts, 24 problems, 0 page errors
