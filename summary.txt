@@ -1,0 +1,6 @@
+vitest-pr234 exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerAwardGenerations.test.tsx,title=src/test/soccerCareerAwardGenerations.test.tsx,line=125,co
+tsc exit=0 73s | 
+simCareerAwardsNight exit=0 78s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSaveKeeper exit=1 5s | simSaveKeeper: RED in section(s) 1.
+simSoccerAwardReveal exit=1 18s | Node.js v24.21.0
+simSoccerAwardGenerations exit=0 858s | PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
