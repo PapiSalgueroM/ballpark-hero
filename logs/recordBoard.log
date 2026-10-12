@@ -1,0 +1,12 @@
+recording from 560a3f856d2bb3b7b710593f6e230bd64b11b30b (not main: src differs from 21941630ddffda173a1e6b45a3d5293c63d211e6)
+  nfl: 475 clicks on the path, 24 seasons, 19 fixed saves, 928 screen steps
+  nba: 521 clicks on the path, 24 seasons, 19 fixed saves, 932 screen steps
+  mlb: 455 clicks on the path, 24 seasons, 19 fixed saves, 886 screen steps
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../new-board.json (2298730 bytes)
+{
+ "header": {"what":"Round 900: the four US career boards, every click and every save. First recorded before they became one board; re-recorded on purpose since (Round 988, the career content packs), so recordedFrom names the tree and scripts/simUsBoardParity.mjs says what moved","recordedFrom":"560a3f856d2bb3b7b710593f6e230bd64b11b30b (not main: src differs from 21941630ddffda173a1e6b45a3d5293c63d211e6)","clock":"2026-10-02T12:00:00Z","rerecord":"node scripts/recordUsBoardFixture.mjs"},
+ "sports": {
+  "nfl": {
+   "coverage": {"seasons":24,"event":20,"extension":11,"freeagency":13,"rivalryBeat":10,"rivalryChoice":5,"retireCancel":1,"retireConfirm":1,"restartCancel":2,"restartConfirm":2,"ret
+-rw-r--r-- 1 runner runner 2298730 Oct 12 19:34 /tmp/new-board.json

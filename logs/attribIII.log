@@ -1,0 +1,15 @@
+== nfl
+   byte equal, section for section
+== nba
+   byte equal, section for section
+== mlb (named: its rival moves)
+   path: first differing step 10 ("hub: Play the 2026 season", 1 seasons; s, m, d differ)
+   the first step whose saved career differs: 10 (after "hub: Play the 2026 season"), fields [c.rival]
+   the click path does not part
+   counts old -> new: clicks 455 -> 455, seasons 24 -> 24, screenSteps 886 -> 886, rivalBeats 10 -> 10, rivalChoices 4 -> 4; fixed saves moved 18 of 19 [mid, ext, fa, retired, coach, beat, choice, suspended, dirty, noRole, negNet, noCoachKey, coachPhaseNoCoach, retiredNoCoachKey, extTalk, faTalk, wheel, extCut]; screen walks moved 19 of 19
+== nhl (named: its rival moves)
+   path: first differing step 12 ("hub: Play the 2026 season", 1 seasons; s, m, d differ)
+   the first step whose saved career differs: 12 (after "hub: Play the 2026 season"), fields [c.rival]
+   the click path does not part
+   counts old -> new: clicks 421 -> 421, seasons 24 -> 24, screenSteps 900 -> 900, rivalBeats 12 -> 12, rivalChoices 4 -> 4; fixed saves moved 18 of 19 [mid, ext, fa, retired, coach, beat, choice, suspended, dirty, noRole, negNet, noCoachKey, coachPhaseNoCoach, retiredNoCoachKey, extTalk, faTalk, wheel, extCut]; screen walks moved 19 of 19
+RIVAL ATTRIBUTION HOLDS: the sports not named are byte equal, and in mlb and nhl the first saved career that differs differs only under c.rival or the pending rivalry card

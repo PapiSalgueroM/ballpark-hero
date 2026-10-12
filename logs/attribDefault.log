@@ -1,0 +1,1527 @@
+== nfl
+   STOP nfl path: aligned length 459 against 475
+   nfl path: 475 -> 475 steps, 16 wheel steps, first talk at 59, prefix equal, aligned identical 86, differing 389 (inside a talk 0, talk on the save 0, save only 0, markup outside a talk 0), wheel steps move [contractTalk], phase pairs []
+   coverage equal: extension 11, freeagency 13, seasons 24
+   saves: 19 -> 19, new []
+   screens: 19 of 19 old walks byte identical; moved: none
+== nba
+   STOP nba path: aligned length 507 against 521
+   nba path: 521 -> 521 steps, 14 wheel steps, first talk at 52, prefix equal, aligned identical 138, differing 383 (inside a talk 0, talk on the save 0, save only 0, markup outside a talk 0), wheel steps move [contractTalk], phase pairs []
+   coverage equal: extension 9, freeagency 10, seasons 24
+   saves: 19 -> 19, new []
+   screens: 19 of 19 old walks byte identical; moved: none
+== mlb
+   STOP mlb path: step 10 BEFORE the first talk differs (old "hub: Play the 2026 season", new "hub: Play the 2026 season")
+   STOP mlb path: aligned step 10 (after "hub: Play the 2026 season") has another save hash with no talk held
+   STOP mlb path: aligned step 11 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 12 (after "event: Play both ends, all eighteen inningsRespect, real cost") has another save hash with no talk held
+   STOP mlb path: aligned step 13 (after "hub: 📜Career Log1 season.237, 6 HR, 44 RBI") has another save hash with no talk held
+   STOP mlb path: aligned step 14 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 15 (after "hub: Play the 2027 season") has another save hash with no talk held
+   STOP mlb path: aligned step 16 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 17 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 18 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb path: aligned step 19 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb path: aligned step 20 (after "box: 🧺Clubhouse manager🎓 Draft day, 2026Welcome. I need a cap s") has another save hash with no talk held
+   STOP mlb path: aligned step 21 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP mlb path: aligned step 22 (after "box: 🎁Team marketing🍂 September, 2026Your bobblehead night is n") has another save hash with no talk held
+   STOP mlb path: aligned step 23 (after "box: Ask for a redo") has another save hash with no talk held
+   STOP mlb path: aligned step 24 (after "box: 🧺Clubhouse manager🎓 Draft day, 2026Welcome. I need a cap s") has another save hash with no talk held
+   STOP mlb path: aligned step 25 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 26 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb path: aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 28 (after "hub: Play the 2028 season") has another save hash with no talk held
+   STOP mlb path: aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 30 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb path: aligned step 31 (after "hub: 📰News2 headlines🎙️ It backfired. The clip runs all week fo") has another save hash with no talk held
+   STOP mlb path: aligned step 32 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb path: aligned step 33 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb path: aligned step 34 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb path: aligned step 35 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb path: aligned step 36 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 37 (after "hub: Play the 2029 season") has another save hash with no talk held
+   STOP mlb path: aligned step 38 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 39 (after "event: Own every bit of it yourselfCosts you, buys respect") has another save hash with no talk held
+   STOP mlb path: aligned step 40 (after "hub: 📰News2 headlines🎙️ Costs you, buys respect.") has another save hash with no talk held
+   STOP mlb path: aligned step 41 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP mlb path: aligned step 42 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 43 (after "REMOUNT") has another save hash with no talk held
+   STOP mlb path: aligned step 44 (after "hub: Play the 2030 season") has another save hash with no talk held
+   STOP mlb path: aligned step 45 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 46 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 47 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb path: aligned step 48 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb path: aligned step 49 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 51 (after "extension: Play the year out") has another save hash with no talk held
+   STOP mlb path: aligned step 52 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 53 (after "rival choice: 😈 Answer it on the fieldThe feud heats up, otherwise Morale") has another save hash with no talk held
+   STOP mlb path: aligned step 54 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 55 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb path: aligned step 57 (after "free agency: Sign") has another save hash with no talk held
+   STOP mlb path: aligned step 58 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb path: aligned step 59 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 60 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 61 (after "event: Never, it is bush leagueOld school clean") has another save hash with no talk held
+   STOP mlb path: aligned step 62 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb path: aligned step 63 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 64 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 65 (after "event: Fly the family to every road city you canMoney out, life kep") has another save hash with no talk held
+   STOP mlb path: aligned step 66 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb path: aligned step 67 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 68 (after "rival choice: 🤝 Co-host and split the billFanbase +10, Net worth -$1M, Ka") has another save hash with no talk held
+   STOP mlb path: aligned step 69 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 70 (after "event: Go play the whole winterReps over rest") has another save hash with no talk held
+   STOP mlb path: aligned step 71 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb path: aligned step 72 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 73 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb path: aligned step 74 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 75 (after "event: Say out loud that it is a jokeFanbase up, office annoyed") has another save hash with no talk held
+   STOP mlb path: aligned step 77 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP mlb path: aligned step 78 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb path: aligned step 79 (after "event: Say out loud that it is a jokeFanbase up, office annoyed") has another save hash with no talk held
+   STOP mlb path: aligned step 80 (after "hub: 📰News3 headlinesYou listed your numbers next to the guy who") has another save hash with no talk held
+   STOP mlb path: aligned step 81 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb path: aligned step 82 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb path: aligned step 83 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb path: aligned step 84 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP mlb path: aligned step 85 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP mlb path: aligned step 86 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb path: aligned step 87 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned step 88 (after "hub: 📜Career Log11 seasons.279, 23 HR, 73 RBI") has another save hash with no talk held
+   STOP mlb path: aligned step 89 (after "box: Hub") has another save hash with no talk held
+   STOP mlb path: aligned length 449 against 455
+   STOP mlb path: aligned step 10 (after "hub: Play the 2026 season"): field c.rival differs
+   mlb path: 455 -> 455 steps, 6 wheel steps, first talk at 50, prefix DIFFERS, aligned identical 10, differing 445 (inside a talk 5, talk on the save 5, save only 58, markup outside a talk 24), wheel steps move [contractTalk], phase pairs [event>event season>season extension>extension freeagency>freeagency]
+   path markup outside a talk: 10:"hub: Play the 2026 season" p event>event t same words | 15:"hub: Play the 2027 season" p event>event t words differ | 28:"hub: Play the 2028 season" p event>event t words differ | 29:"curtain: Continue" p event>event t same words | 31:"hub: 📰News2 headlines🎙️ It backfired. The clip runs all week fo" p season>season t same words | 32:"box: 🪞 Rival" p season>season t same words
+   coverage equal: extension 5, freeagency 7, seasons 24
+   saves: 19 -> 19, new []
+   save "mid" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "mid" differs in a career field
+   save "ext" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "ext" differs in a career field
+   save "fa" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "fa" differs in a career field
+   save "retired" differs in [c] c fields [rival]: phase retired -> retired
+   STOP mlb: fixed save "retired" differs in a career field
+   save "coach" differs in [c] c fields [rival]: phase coach -> coach
+   STOP mlb: fixed save "coach" differs in a career field
+   save "beat" differs in [c] c fields [rival]: phase event -> event
+   STOP mlb: fixed save "beat" differs in a career field
+   save "choice" differs in [c] c fields [rival]: phase event -> event
+   STOP mlb: fixed save "choice" differs in a career field
+   save "suspended" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "suspended" differs in a career field
+   save "dirty" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "dirty" differs in a career field
+   save "noRole" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "noRole" differs in a career field
+   save "negNet" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "negNet" differs in a career field
+   save "noCoachKey" differs in [c] c fields [rival]: phase season -> season
+   STOP mlb: fixed save "noCoachKey" differs in a career field
+   save "coachPhaseNoCoach" differs in [c] c fields [rival]: phase coach -> coach
+   STOP mlb: fixed save "coachPhaseNoCoach" differs in a career field
+   save "retiredNoCoachKey" differs in [c] c fields [rival]: phase retired -> retired
+   STOP mlb: fixed save "retiredNoCoachKey" differs in a career field
+   save "extTalk" differs in [c] c fields [rival]: phase extension -> extension
+   STOP mlb: fixed save "extTalk" differs in a career field
+   save "faTalk" differs in [c] c fields [rival]: phase freeagency -> freeagency
+   STOP mlb: fixed save "faTalk" differs in a career field
+   save "wheel" differs in [c] c fields [rival]: phase freeagency -> freeagency
+   STOP mlb: fixed save "wheel" differs in a career field
+   save "extCut" differs in [c] c fields [rival]: phase extension -> extension
+   STOP mlb: fixed save "extCut" differs in a career field
+   STOP mlb save "rookie": step 24 BEFORE the first talk differs (old "hub: Play the 2026 season", new "hub: Play the 2026 season")
+   STOP mlb save "rookie": aligned step 24 (after "hub: Play the 2026 season") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 25 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 26 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 27 (after "event: Buy the whole roster the same socksMoney out, room in") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 28 (after "REMOUNT") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 29 (after "hub: 📊My PlayerOVR 70CF, age 22, 0 rings") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 30 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 31 (after "hub: Play the 2027 season") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 32 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 33 (after "rival choice: 🕊️ Play peacemaker on cameraFanbase +5, Karma +5, the feud ") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 34 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 35 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 36 (after "hub: 📜Career Log2 seasons.235, 10 HR, 56 RBI") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 37 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 38 (after "hub: Play the 2028 season") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 39 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 40 (after "rival choice: 💸 Send a check, skip itNet worth -$1M, Karma +3") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 41 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 42 (after "event: Refuse to touch the thingFocus, no fun") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 43 (after "hub: Play the 2029 season") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 44 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 45 (after "event: Never acknowledge it existsPeace and focus") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 46 (after "hub: 📰News2 headlinesPhone in the bag, apps off the home screen,") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 47 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 48 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 49 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 50 (after "hub: Play the 2030 season") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 51 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 52 (after "event: Say nothing at all, everMystery, slow burn") has another save hash with no talk held
+   STOP mlb save "rookie": aligned step 24 (after "hub: Play the 2026 season"): field c.rival differs
+   STOP mlb save "mid": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "mid": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 26 (after "hub: 📱Inbox2 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 27 (after "box: 🧺Clubhouse manager🎓 Draft day, 2026Welcome. I need a cap s") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 28 (after "box: Pick a new one") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 29 (after "box: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 30 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 31 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 32 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 33 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 34 (after "event: Sprint it and take the beltGlory or a hamstring") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 35 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 36 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 37 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 38 (after "event: Write the 1.5M checkSwing for the fence") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 39 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 40 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 41 (after "rival choice: 😉 Show up and talk trash all dayFanbase +12, the feud heats") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 42 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 43 (after "event: Do it, slogan and allMoney, mild mockery") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 44 (after "hub: 📊My PlayerOVR 80CF, age 30, 0 rings") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 45 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 46 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 47 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 48 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 49 (after "event: Sign the ugly ones, auction them offCharity out of chaos") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 51 (after "extension: Sign it: 2 more years at $15.1M") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 52 (after "hub: Play the 2036 season") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 53 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 54 (after "event: Ride it until the streak diesPeak baseball behavior") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 55 (after "hub: Play the 2037 season") has another save hash with no talk held
+   STOP mlb save "mid": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "ext": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "ext": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, final year of the deal") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 27 (after "extension: Sign it: 4 more years at $12M") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 28 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 30 (after "rival choice: 🤝 Do it togetherFanbase +6, the feud cools") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 31 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 32 (after "event: Own every bit of it yourselfCosts you, buys respect") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 33 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 34 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 35 (after "event: Write a rotation everyone hates equallyFair, unpopular") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 36 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 37 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 38 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 39 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 40 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 41 (after "event: Ask for audited statementsHe vanishes") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 42 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 43 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 44 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "ext": aligned step 45 (after "event: Say no and help a different wayMoney kept, awkward") has another save hash with no talk held
+   STOP mlb save "ext": aligned length 56 against 58
+   STOP mlb save "ext": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "fa": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "fa": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, final year of the deal") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "fa": aligned step 26 (after "REMOUNT") has another save hash with no talk held
+   STOP mlb save "fa": aligned length 56 against 58
+   STOP mlb save "fa": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "retired": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "retired": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 1 (after "retired: Go after a coaching job") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 2 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 3 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 4 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 5 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 6 (after "coach: Atlanta BravesT4 Staff jobHitting CoachDo the work nobody se") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 7 (after "coach: 🪑The JobHitting Coach · Fresh start") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 8 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 9 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 10 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 11 (after "coach: Coach the 2043 season") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 12 (after "coach: 🗞️The Market8 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 13 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 14 (after "coach: 🪑The JobHitting Coach · Safe") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 15 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 16 (after "coach: 🪑The JobHitting Coach · Safe") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 17 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 18 (after "coach: 🪑The JobHitting Coach · Safe") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 19 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 20 (after "coach: 📜Coaching Log1 season · 86-76") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 21 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 22 (after "coach: Coach the 2044 season") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 23 (after "coach: Sacramento AthleticsT4 Staff jobThird Base CoachRun your sid") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 24 (after "coach: Where You Stand47 · can reach T4 Staff job") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 25 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 26 (after "coach: Where You Stand47 · can reach T4 Staff job") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 27 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 28 (after "coach: 🪑The JobThird Base Coach · Fresh start") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 30 (after "coach: 📜Coaching Log2 seasons · 173-151") has another save hash with no talk held
+   STOP mlb save "retired": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "coach": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "coach": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 1 (after "coach: Back to the playing career") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 2 (after "retired: Back to the sideline") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 3 (after "coach: 🗞️The Market15 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 4 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 5 (after "coach: Sit out the 2055 season") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 6 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 7 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 8 (after "coach: Where You Stand0 · can reach Nothing") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 9 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 10 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 11 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 12 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 13 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 14 (after "coach: Sit out the 2056 season") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 15 (after "coach: 📜Coaching Log4 seasons · 346-302") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 16 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 17 (after "coach: 📜Coaching Log4 seasons · 346-302") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 18 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 19 (after "coach: Sit out the 2057 season") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 20 (after "coach: 📜Coaching Log4 seasons · 346-302") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 21 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 22 (after "coach: 🗞️The Market12 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 23 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 24 (after "coach: Where You Stand0 · can reach Nothing") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 25 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 26 (after "coach: 🗞️The Market12 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 27 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 28 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 30 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP mlb save "coach": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "beat": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "beat": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 1 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 2 (after "hub: Play the 2028 season") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 3 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 4 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 5 (after "event: Own every bit of it yourselfCosts you, buys respect") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 6 (after "hub: 📜Career Log3 seasons.265, 18 HR, 79 RBI") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 7 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 8 (after "hub: Play the 2029 season") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 9 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 10 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 11 (after "event: Let the fans vote on itChaos, engagement") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 12 (after "hub: Play the 2030 season") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 13 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 14 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 15 (after "event: Play all three daysCameras and consequences") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 17 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 18 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 19 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 20 (after "event: Own it on camera before batting practiceHonest, wins them ba") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 21 (after "hub: 📜Career Log6 seasons.262, 17 HR, 68 RBI") has another save hash with no talk held
+   STOP mlb save "beat": aligned step 22 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "beat": aligned length 31 against 33
+   STOP mlb save "beat": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "choice": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "choice": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 1 (after "rival choice: 🎞️ Say nothing, watch the tapeMorale +6, the feud heats up") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 2 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 4 (after "free agency: Sign") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 5 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 6 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 7 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 8 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 9 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 10 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 11 (after "rival choice: 💸 Send a check, skip itNet worth -$1M, Karma +3") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 12 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 13 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 14 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 15 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 16 (after "rival choice: 🎬 Do it, but only your highlightsMorale +2, Fanbase +4, the") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 17 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 18 (after "event: Call a players only meetingLeadership gamble") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 19 (after "hub: 📜Career Log9 seasons.276, 21 HR, 73 RBI") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 20 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 21 (after "hub: 📰News3 headlinesForty minutes, no coaches, some very direct") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 22 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 23 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 24 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 25 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 26 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 27 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 28 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 29 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 30 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "choice": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "suspended": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "suspended": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 26 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 28 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 30 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 31 (after "event: Own every bit of it yourselfCosts you, buys respect") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 32 (after "hub: 💰The Bank$19M$18M a year, 3 years left") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 33 (after "box: Save half") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 34 (after "box: 📈 Market") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 35 (after "box: 🧱Old Town Bricks127about what it usually goes for+1.8%") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 36 (after "box: 📈 Market") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 37 (after "box: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 38 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 39 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 40 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 41 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 42 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 43 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 44 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 45 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 46 (after "event: Say out loud that it is a jokeFanbase up, office annoyed") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 47 (after "hub: 🏆Trophy Case1 honour1 in other awards, no ring yet") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 48 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 50 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 51 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 52 (after "event: Get right in the middle of itRoom love, suspension") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 54 (after "free agency: Sign") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 55 (after "hub: 🏆Trophy Case1 honour1 in other awards, no ring yet") has another save hash with no talk held
+   STOP mlb save "suspended": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "dirty": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "dirty": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 26 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 28 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 29 (after "event: Promise a paradeThey will replay this forever") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 30 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 31 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 32 (after "rival choice: 🤝 Co-host and split the billFanbase +10, Net worth -$1M, Ka") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 33 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 34 (after "event: Own it on camera before batting practiceHonest, wins them ba") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 35 (after "hub: 💰The Bank$18M$18M a year, 3 years left") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 36 (after "box: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 37 (after "box: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 38 (after "box: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 39 (after "box: $0.6M") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 40 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 41 (after "hub: 💰The Bank$17M$18M a year, 3 years left") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 42 (after "box: 📈 Market") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 43 (after "box: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 44 (after "box: Save it all") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 45 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 46 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 47 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 48 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 49 (after "event: Warn the clubhouseSave everyone") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 50 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 51 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 52 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 53 (after "event: Bank the time, be completely present at homePresent at home") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 55 (after "extension: Sign it: 3 more years at $13.4M") has another save hash with no talk held
+   STOP mlb save "dirty": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "noRole": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "noRole": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 26 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 28 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 29 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 30 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 31 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 32 (after "rival choice: 💸 Send a check, skip itNet worth -$1M, Karma +3") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 33 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 34 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 35 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 36 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 37 (after "rival choice: 🔥 Use it as fuelMorale +6, the feud heats up") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 38 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 39 (after "event: Mail him a framed lineup cardPetty legend") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 40 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 41 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 42 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 43 (after "event: Turn it down entirelyFanbase +8") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 45 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 46 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 47 (after "event: Call their captain, settle it afterAdults in a hallway") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 48 (after "hub: 📜Career Log11 seasons.281, 25 HR, 95 RBI") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 49 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 51 (after "free agency: Sign") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 52 (after "hub: 📰News3 headlines✍️ Signed with Cincinnati Reds: 20.4M x2. N") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 53 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 54 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 55 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "noRole": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "negNet": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "negNet": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 3 (after "open: 💰The Bank$2.2M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 26 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 28 (after "hub: 💰The Bank$2.2M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 29 (after "box: Save half") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 30 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 31 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 32 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 33 (after "rival choice: 🙅 Skip itMorale +1") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 34 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 35 (after "event: Play only what the veterans wantSafe, no credit") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 36 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 37 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 38 (after "event: Go play the whole winterReps over rest") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 39 (after "hub: 💰The Bank$18M$18M a year, 3 years left") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 40 (after "box: Save 25%") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 41 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 42 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 43 (after "box: 🎁Team marketing🍂 September, 2026Your bobblehead night is n") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 44 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 45 (after "box: 🧺Clubhouse manager🎓 Draft day, 2026Welcome. I need a cap s") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 46 (after "box: Pick a new one") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 47 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 48 (after "hub: 📊My PlayerOVR 81CF, age 29, 0 rings") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 49 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 50 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 51 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 52 (after "rival choice: 🤝 Co-host and split the billFanbase +10, Net worth -$1M, Ka") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 53 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 54 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 55 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "negNet": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "noCoachKey": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "noCoachKey": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 1 (after "open: 📊My PlayerOVR 78CF, age 27, 0 rings") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 3 (after "open: 💰The Bank$2.8M$18M a year, 5 years left") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 12 (after "open: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 16 (after "open: 📰News6 headlinesAce Diamond hits .272 with 19 home runs and") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 22 (after "press: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 26 (after "hub: 📜Career Log6 seasons.272, 19 HR, 71 RBI") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 28 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 30 (after "rival choice: 🙅 Skip itMorale +1") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 31 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 32 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 33 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 34 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 35 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 36 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 37 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 38 (after "rival choice: 💸 Send a check, skip itNet worth -$1M, Karma +3") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 39 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 40 (after "event: Use all four days off completelyHealth, no noise") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 41 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 42 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 43 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 44 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 45 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 46 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 47 (after "hub: 📜Career Log10 seasons.269, 16 HR, 44 RBI") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 48 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 49 (after "hub: 📜Career Log10 seasons.269, 16 HR, 44 RBI") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 50 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 51 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 52 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 53 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 54 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 55 (after "hub: 📊My PlayerOVR 81The fans down at 19") has another save hash with no talk held
+   STOP mlb save "noCoachKey": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "coachPhaseNoCoach": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "coachPhaseNoCoach": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 1 (after "retired: Go after a coaching job") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 2 (after "coach: Milwaukee BrewersT4 Staff jobPitching CoachDo the work nobod") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 3 (after "coach: 🪑The JobPitching Coach · Fresh start") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 4 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 5 (after "coach: 🗞️The Market9 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 6 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 7 (after "coach: 🗞️The Market9 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 8 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 9 (after "coach: 🗞️The Market9 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 10 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 11 (after "coach: 🗞️The Market9 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 12 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 13 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 14 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 15 (after "coach: 🪑The JobPitching Coach · Fresh start") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 16 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 17 (after "coach: 🪑The JobPitching Coach · Fresh start") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 18 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 19 (after "coach: 🗞️The Market9 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 20 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 21 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 22 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 23 (after "coach: Coach the 2043 season") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 24 (after "coach: 🪑The JobPitching Coach · Warm") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 25 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 26 (after "coach: Where You Stand46 · can reach T4 Staff job") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 27 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 28 (after "coach: 🪑The JobPitching Coach · Warm") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 30 (after "coach: 📜Coaching Log1 season · 78-84") has another save hash with no talk held
+   STOP mlb save "coachPhaseNoCoach": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "retiredNoCoachKey": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP mlb save "retiredNoCoachKey": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 1 (after "retired: Go after a coaching job") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 2 (after "coach: Sit out the 2043 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 3 (after "coach: Where You Stand40 · can reach T4 Staff job") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 4 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 5 (after "coach: Sit out the 2044 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 6 (after "coach: Sit out the 2045 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 7 (after "coach: Where You Stand9 · can reach T4 Staff job") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 8 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 9 (after "coach: Sit out the 2046 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 10 (after "coach: Sit out the 2047 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 11 (after "coach: 🗞️The Market14 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 12 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 13 (after "coach: Sit out the 2048 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 14 (after "coach: Sit out the 2049 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 15 (after "coach: Sit out the 2050 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 16 (after "coach: Sit out the 2051 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 17 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 18 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 19 (after "coach: Sit out the 2052 season") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 20 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 21 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 22 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 23 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 24 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 25 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 26 (after "coach: Where You Stand0 · can reach Nothing") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 27 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 28 (after "coach: 🗞️The Market14 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 30 (after "coach: 🗞️The Market14 jobs open · 0 for you") has another save hash with no talk held
+   STOP mlb save "retiredNoCoachKey": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "extTalk": aligned step 26 (after "extension: Play the year out") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 28 (after "rival choice: 🎞️ Say nothing, watch the tapeMorale +6, the feud heats up") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 29 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 30 (after "event: Say the right, empty thingsNobody remembers it tomorrow") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 31 (after "hub: 💰The Bank$2.8M$0.8M a year, final year of the deal") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 32 (after "box: 🏦 Account") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 33 (after "box: 📈 Market") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 34 (after "box: ⚡SparkCoin53way under what it usually goes for-16.7%") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 35 (after "box: 25%") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 36 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 37 (after "hub: 📰News4 headlines⚡ Put $680k into SparkCoin at 53.") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 38 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 39 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 40 (after "box: 📸 SocialGram") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned step 41 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "extTalk": aligned length 56 against 58
+   STOP mlb save "extTalk": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "faTalk": aligned step 7 (after "free agency: Sign") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 8 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 9 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 10 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 11 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 12 (after "event: Buy the house she picked, no argumentsMoney out, morale way ") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 13 (after "hub: 📊My PlayerOVR 79CF, age 28, 0 rings") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 14 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 15 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 16 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 17 (after "rival choice: 🤝 Co-host and split the billFanbase +10, Net worth -$1M, Ka") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 18 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 19 (after "event: Hire a private chef insteadBuy the outcome") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 20 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 21 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 22 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 23 (after "event: Warn the clubhouseSave everyone") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 25 (after "extension: Sign it: 3 more years at $18.2M") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 26 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 28 (after "event: Apologize behind a closed doorQuiet repair") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 29 (after "hub: 📜Career Log10 seasons.275, 21 HR, 73 RBI") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 30 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 31 (after "hub: Play the 2036 season") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 32 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 33 (after "event: Tell your agent to get you thereMove toward them") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 34 (after "hub: Play the 2037 season") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 35 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 36 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "faTalk": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "wheel": aligned length 37 against 41
+   STOP mlb save "wheel": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP mlb save "extCut": aligned step 23 (after "press: Settle, keep it friendly") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 24 (after "press: 🎣Teammate⭐ All-Star break, 2026Three days off. My lake hous") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 27 (after "extension: Play the year out") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 28 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 29 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 30 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 32 (after "free agency: Sign") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 33 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 34 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 35 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 36 (after "event: Apologize like a professionalPeace, small dip") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 37 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 38 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 39 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 40 (after "event: Call a players only meetingLeadership gamble") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 41 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 42 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 43 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 44 (after "curtain: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 45 (after "rival beat: Continue") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 46 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 47 (after "hub: 📜Career Log9 seasons.265, 17 HR, 65 RBI") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 48 (after "box: Hub") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 49 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 50 (after "box: 💼Agent⚖️ Arbitration winter, 2028We're arbitration eligible") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 51 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 52 (after "box: 📋GM✍️ Free agency, 2031We want you back. We know the market") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 53 (after "box: You get the last call") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 54 (after "box: 📋GM✍️ Free agency, 2031We want you back. We know the market") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 55 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP mlb save "extCut": aligned step 0 (after "MOUNT"): field c.rival differs
+   screens: 0 of 19 old walks byte identical; moved: rookie: 54->54, 0 wheel, aligned identical 24, in talk 1, talk held 1, markup outside 10 || mid: 56->56, 0 wheel, aligned identical 0, in talk 1, talk held 1, markup outside 8 || ext: 58->58, 2 wheel, aligned identical 0, in talk 3, talk held 3, markup outside 6 || fa: 58->58, 2 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 1 || retired: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || coach: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || beat: 33->33, 2 wheel, aligned identical 0, in talk 3, talk held 3, markup outside 4 || choice: 31->31, 0 wheel, aligned identical 0, in talk 1, talk held 1, markup outside 8 || suspended: 56->56, 0 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 6 || dirty: 56->56, 0 wheel, aligned identical 0, in talk 1, talk held 1, markup outside 5 || noRole: 56->56, 0 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 10 || negNet: 56->56, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 5 || noCoachKey: 56->56, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 6 || coachPhaseNoCoach: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || retiredNoCoachKey: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || extTalk: 58->58, 2 wheel, aligned identical 0, in talk 28, talk held 28, markup outside 2 || faTalk: 37->37, 0 wheel, aligned identical 0, in talk 8, talk held 8, markup outside 7 || wheel: 41->41, 4 wheel, aligned identical 0, in talk 7, talk held 7, markup outside 0 || extCut: 56->56, 0 wheel, aligned identical 0, in talk 25, talk held 25, markup outside 4
+== nhl
+   STOP nhl path: step 12 BEFORE the first talk differs (old "hub: Play the 2026 season", new "hub: Play the 2026 season")
+   STOP nhl path: aligned step 12 (after "hub: Play the 2026 season") has another save hash with no talk held
+   STOP nhl path: aligned step 13 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl path: aligned step 14 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl path: aligned step 15 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl path: aligned step 16 (after "hub: Play the 2027 season") has another save hash with no talk held
+   STOP nhl path: aligned step 17 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl path: aligned step 18 (after "rival choice: 🎞️ Say nothing, watch the tapeMorale +6, the feud heats up") has another save hash with no talk held
+   STOP nhl path: aligned step 19 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl path: aligned step 20 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl path: aligned step 22 (after "extension: Play the year out") has another save hash with no talk held
+   STOP nhl path: aligned step 23 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl path: aligned step 24 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl path: aligned step 25 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP nhl path: aligned length 415 against 421
+   STOP nhl path: aligned step 12 (after "hub: Play the 2026 season"): field c.rival differs
+   nhl path: 421 -> 421 steps, 6 wheel steps, first talk at 21, prefix DIFFERS, aligned identical 12, differing 409 (inside a talk 3, talk on the save 3, save only 13, markup outside a talk 3), wheel steps move [contractTalk], phase pairs [event>event extension>extension season>season freeagency>freeagency]
+   path markup outside a talk: 12:"hub: Play the 2026 season" p event>event t same words | 16:"hub: Play the 2027 season" p event>event t same words | 22:"extension: Play the year out" p event>event t same words
+   coverage equal: extension 7, freeagency 4, seasons 24
+   saves: 19 -> 19, new []
+   save "mid" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "mid" differs in a career field
+   save "ext" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "ext" differs in a career field
+   save "fa" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "fa" differs in a career field
+   save "retired" differs in [c] c fields [rival]: phase retired -> retired
+   STOP nhl: fixed save "retired" differs in a career field
+   save "coach" differs in [c] c fields [rival]: phase coach -> coach
+   STOP nhl: fixed save "coach" differs in a career field
+   save "beat" differs in [c] c fields [rival]: phase event -> event
+   STOP nhl: fixed save "beat" differs in a career field
+   save "choice" differs in [c] c fields [rival]: phase event -> event
+   STOP nhl: fixed save "choice" differs in a career field
+   save "suspended" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "suspended" differs in a career field
+   save "dirty" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "dirty" differs in a career field
+   save "noRole" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "noRole" differs in a career field
+   save "negNet" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "negNet" differs in a career field
+   save "noCoachKey" differs in [c] c fields [rival]: phase season -> season
+   STOP nhl: fixed save "noCoachKey" differs in a career field
+   save "coachPhaseNoCoach" differs in [c] c fields [rival]: phase coach -> coach
+   STOP nhl: fixed save "coachPhaseNoCoach" differs in a career field
+   save "retiredNoCoachKey" differs in [c] c fields [rival]: phase retired -> retired
+   STOP nhl: fixed save "retiredNoCoachKey" differs in a career field
+   save "extTalk" differs in [c] c fields [rival]: phase extension -> extension
+   STOP nhl: fixed save "extTalk" differs in a career field
+   save "faTalk" differs in [c] c fields [rival]: phase freeagency -> freeagency
+   STOP nhl: fixed save "faTalk" differs in a career field
+   save "wheel" differs in [c] c fields [rival]: phase freeagency -> freeagency
+   STOP nhl: fixed save "wheel" differs in a career field
+   save "extCut" differs in [c] c fields [rival]: phase extension -> extension
+   STOP nhl: fixed save "extCut" differs in a career field
+   STOP nhl save "rookie": step 37 BEFORE the first talk differs (old "hub: Play the 2026 season", new "hub: Play the 2026 season")
+   STOP nhl save "rookie": aligned step 37 (after "hub: Play the 2026 season") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 38 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 39 (after "rival choice: 🤝 Co-host and split the billFanbase +10, Net worth -$1M, Ka") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 40 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 41 (after "event: Let the agent make noiseSqueaky wheel") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 42 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 43 (after "box: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 44 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 45 (after "box: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 46 (after "box: Skip them") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 47 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 48 (after "hub: Play the 2027 season") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 49 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 50 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 51 (after "event: Complain to the teamKill the joy") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 52 (after "hub: 📊My PlayerOVR 75The fans down at 32") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 53 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "rookie": aligned step 37 (after "hub: Play the 2026 season"): field c.rival differs
+   STOP nhl save "mid": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "mid": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, 3 years left") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 26 (after "hub: 📱Inbox2 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 27 (after "box: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 28 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 29 (after "box: 🌍National junior coach🌍 World Juniors, 2026We want you for") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 30 (after "box: Ask, I want to go") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 31 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 32 (after "hub: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 33 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 34 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 35 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 36 (after "event: Give him the marketing, keep the agentSplit the book") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 37 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 38 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 39 (after "event: Just hire the chef full timeSomeone else cooks") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 40 (after "hub: 📊My PlayerOVR 79D, age 26, 0 Cups") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 41 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 42 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 43 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 44 (after "REMOUNT") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 46 (after "extension: Sign it: 4 more years at $5.9M") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 47 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 48 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 49 (after "rival choice: 🎬 Do it, but only your highlightsMorale +2, Fanbase +4, the") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 50 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 51 (after "event: Take it and run it your wayCould go either way: rating up, f") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 52 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 53 (after "box: 🧺Equipment manager⏰ Trade deadline, 2031You left your road ") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 54 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 55 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "mid": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "ext": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "ext": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, final year of the deal") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "ext": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "ext": aligned length 56 against 60
+   STOP nhl save "ext": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "fa": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "fa": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, final year of the deal") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "fa": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "fa": aligned length 56 against 58
+   STOP nhl save "fa": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "retired": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "retired": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 1 (after "retired: Go after a coaching job") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 2 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 3 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 4 (after "coach: 🗞️The Market12 jobs open · 1 for you1") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 5 (after "coach: Take the Carolina Hurricanes job") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 6 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 7 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 8 (after "coach: 🗞️The Market12 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 9 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 10 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 11 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 12 (after "coach: 🗞️The Market12 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 13 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 14 (after "coach: 🪑The JobGoaltending Coach · Fresh start") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 15 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 16 (after "coach: 🪑The JobGoaltending Coach · Fresh start") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 17 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 18 (after "coach: 🪑The JobGoaltending Coach · Fresh start") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 19 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 20 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 21 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 22 (after "coach: 🪑The JobGoaltending Coach · Fresh start") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 23 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 24 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 25 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 26 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 27 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 28 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 30 (after "coach: 🪑The JobGoaltending Coach · Fresh start") has another save hash with no talk held
+   STOP nhl save "retired": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "coach": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "coach": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 1 (after "coach: Back to the playing career") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 2 (after "retired: Back to the sideline") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 3 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 4 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 5 (after "coach: 🗞️The Market8 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 6 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 7 (after "coach: 🗞️The Market8 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 8 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 9 (after "coach: 🗞️The Market8 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 10 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 11 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 12 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 13 (after "coach: Sit out the 2059 season") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 14 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 15 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 16 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 17 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 18 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 19 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 20 (after "coach: Where You Stand0 · can reach Nothing") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 21 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 22 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 23 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 24 (after "coach: Where You Stand0 · can reach Nothing") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 25 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 26 (after "coach: Where You Stand0 · can reach Nothing") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 27 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 28 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 30 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coach": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "beat": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "beat": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 1 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 2 (after "hub: Play the 2027 season") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 3 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 4 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 5 (after "event: Sign with the big brandTake the money") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 7 (after "extension: Play the year out") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 8 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 9 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "beat": aligned step 10 (after "event: Bleach the patchy one blondLean all the way in") has another save hash with no talk held
+   STOP nhl save "beat": aligned length 31 against 33
+   STOP nhl save "beat": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "choice": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "choice": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 1 (after "rival choice: 🕊️ Shrug it off on cameraFanbase +5, Karma +5, the feud coo") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 2 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 4 (after "extension: Play the year out") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 5 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 6 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 7 (after "hub: 📊My PlayerOVR 74The fans down at 33") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 8 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 10 (after "free agency: Sign") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 11 (after "hub: 💰The Bank$1.7M$4.4M a year, 5 years left") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 12 (after "box: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 13 (after "box: Save half") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 14 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 15 (after "hub: Play the 2029 season") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 16 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 17 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 18 (after "hub: Play the 2030 season") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 19 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 20 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 21 (after "event: Say the right, empty thingsNobody remembers it tomorrow") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 22 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 23 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 24 (after "event: Run for judge yourselfSeize the gavel") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 25 (after "hub: 📜Career Log6 seasons9 G, 27 A, 36 P") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 26 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 27 (after "hub: 📊My PlayerOVR 79The fans down at 34") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 28 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 29 (after "hub: 📊My PlayerOVR 79The fans down at 34") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 30 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "choice": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "suspended": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "suspended": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, 3 years left") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 26 (after "hub: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 28 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 30 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 31 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 32 (after "event: Let a teammate break one on purposeBreak the spell") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 33 (after "hub: 📰News2 headlinesHe touched your stick to the floor in warmu") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 34 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 35 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "suspended": aligned step 36 (after "REMOUNT") has another save hash with no talk held
+   STOP nhl save "suspended": aligned length 56 against 60
+   STOP nhl save "suspended": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "dirty": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "dirty": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, 3 years left") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 26 (after "hub: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 28 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 30 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 31 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 32 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 33 (after "box: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 34 (after "box: ← Back to inbox") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 35 (after "box: 🧒Fan DM⭐ All-Star break, 2031youre my favorite player ever.") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 36 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 37 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 38 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 39 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 41 (after "extension: Sign it: 4 more years at $6.2M") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 42 (after "hub: 💰The Bank$11M$6.2M a year, 5 years left") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 43 (after "box: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 44 (after "box: Save half") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 45 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 46 (after "hub: Play the 2033 season") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 47 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 48 (after "rival choice: 🎬 Do it, but only your highlightsMorale +2, Fanbase +4, the") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 49 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 50 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 51 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 52 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 53 (after "rival choice: 📰 Complain to the pressMorale +2, Karma -6, otherwise Fanba") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 54 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 55 (after "event: Move off the post, keep the peaceKeep the peace") has another save hash with no talk held
+   STOP nhl save "dirty": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "noRole": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "noRole": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, 3 years left") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 26 (after "hub: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 28 (after "hub: 📰News1 headline📱 Replied to Skills coach: Sign up. Karma u") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 29 (after "box: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 30 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 31 (after "box: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 32 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 33 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 34 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 35 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 36 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 37 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 38 (after "event: Pitch nothing but 40 mph meatballsCrowd pleaser") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 39 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 40 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 41 (after "event: Skate away and let the crew workBe a pro") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 42 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 43 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 45 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 46 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 47 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 48 (after "event: Charter the whole family to youPrivate jet bill") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 50 (after "free agency: Sign") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 51 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 52 (after "box: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 53 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 54 (after "REMOUNT") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 55 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP nhl save "noRole": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "negNet": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "negNet": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 3 (after "open: 💰The Bank$5.8M$5.1M a year, 3 years left") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 26 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 28 (after "event: Get a teammate to handle itOutsource it") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 29 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 30 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 31 (after "event: Full protocol, no shortcutsDo it right") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 32 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 33 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 34 (after "hub: 📜Career Log7 seasons18 G, 46 A, 64 P") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 35 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 37 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 38 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 39 (after "rival choice: 🤝 Do it togetherFanbase +6, the feud cools") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 40 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 41 (after "event: Skate to the bench and waitMorale up, fans up") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 42 (after "hub: 📜Career Log8 seasons16 G, 47 A, 63 P") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 43 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 44 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 45 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 46 (after "hub: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 47 (after "box: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 48 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 50 (after "free agency: Sign") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 51 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 52 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 53 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 54 (after "REMOUNT on the event card") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 55 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "negNet": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "noCoachKey": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "noCoachKey": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 1 (after "open: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 2 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 3 (after "open: 💰The Bank$6.3M$5.1M a year, 3 years left") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 4 (after "press: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 5 (after "press: 📈 Market") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 6 (after "press: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 7 (after "press: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 8 (after "press: 🏡 Home") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 9 (after "press: 🏎️ Rides") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 10 (after "press: 📈 Invest") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 11 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 12 (after "open: 📜Career Log5 seasons11 G, 37 A, 48 P") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 13 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 14 (after "open: 🏆Trophy CaseEmptyNothing in it. Go and win something") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 15 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 16 (after "open: 📰News9 headlinesGordie Blaze puts up 37 assists from the bl") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 17 (after "press: 📰 Paper") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 18 (after "press: 📸 SocialGram") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 19 (after "press: 🪞 Rival") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 20 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 21 (after "open: 📱Inbox3 unreadSomebody is waiting on a reply") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 22 (after "press: 🏋️Skills coach🌴 Offseason, 2026Optional 6am skates all sum") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 26 (after "hub: 📊My PlayerOVR 77D, age 24, 0 Cups") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 27 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 28 (after "hub: Play the 2031 season") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 29 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 30 (after "event: Do the full four hoursSign everything") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 31 (after "hub: Play the 2032 season") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 32 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 33 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 34 (after "event: Sign the licensing dealRoyalty checks") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 35 (after "hub: 💰The Bank$11M$5.1M a year, final year of the deal") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 36 (after "box: 🛒 Shop") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 37 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 39 (after "extension: Turn it down and play the year out") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 40 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 41 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 42 (after "event: Take the side deal1.5M a year dirty, heat +16") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 43 (after "hub: Play the 2034 season") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 44 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 45 (after "rival choice: 🙅 Skip itMorale +1") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 46 (after "rival outcome: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 47 (after "event: Buy out the bar for the fans after a winReconnect with the c") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 48 (after "hub: 📜Career Log9 seasons14 G, 44 A, 58 P") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 49 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 50 (after "hub: Play the 2035 season") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 51 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 52 (after "event: Fly Gary to every road gameBring Gary") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 53 (after "REMOUNT") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 54 (after "hub: Play the 2036 season") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 55 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "noCoachKey": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "coachPhaseNoCoach": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "coachPhaseNoCoach": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 1 (after "retired: Go after a coaching job") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 2 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 3 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 4 (after "coach: Winnipeg JetsT4 Staff jobAssistant CoachRun your side of the") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 5 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 6 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 7 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 8 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 9 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 10 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 11 (after "coach: Coach the 2043 season") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 12 (after "coach: 🗞️The Market11 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 13 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 14 (after "coach: 📜Coaching Log1 season · 38-31-13") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 15 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 16 (after "coach: 🪑The JobAssistant Coach · Safe") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 17 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 18 (after "coach: 🪑The JobAssistant Coach · Safe") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 19 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 20 (after "coach: Coach the 2044 season") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 21 (after "coach: Where You Stand52 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 22 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 23 (after "coach: 🪑The JobAssistant Coach · Safe") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 24 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 25 (after "coach: Where You Stand52 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 26 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 27 (after "coach: Coach the 2045 season") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 28 (after "coach: Where You Stand55 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 30 (after "coach: 📜Coaching Log3 seasons · 128-85-33") has another save hash with no talk held
+   STOP nhl save "coachPhaseNoCoach": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "retiredNoCoachKey": step 0 BEFORE the first talk differs (old "MOUNT", new "MOUNT")
+   STOP nhl save "retiredNoCoachKey": aligned step 0 (after "MOUNT") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 1 (after "retired: Go after a coaching job") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 2 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 3 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 4 (after "coach: Edmonton OilersT4 Staff jobAssistant CoachFix one thing that") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 5 (after "coach: 📜Coaching Log0 seasons · 0-0") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 6 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 7 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 8 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 9 (after "coach: 🪑The JobAssistant Coach · Fresh start") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 10 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 11 (after "coach: 🗞️The Market10 jobs open · 0 for you") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 12 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 13 (after "coach: Where You Stand57 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 14 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 15 (after "coach: Coach the 2043 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 16 (after "coach: 📜Coaching Log1 season · 45-29-8") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 17 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 18 (after "coach: Coach the 2044 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 19 (after "coach: Coach the 2045 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 20 (after "coach: 🪑The JobAssistant Coach · Safe") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 21 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 22 (after "coach: Where You Stand55 · can reach T4 Staff job") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 23 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 24 (after "coach: Coach the 2046 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 25 (after "coach: Sit out the 2047 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 26 (after "coach: Sit out the 2048 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 27 (after "coach: Sit out the 2049 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 28 (after "coach: 📪Out Of WorkNobody has hired you") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 29 (after "coach: ‹ Back") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 30 (after "coach: Sit out the 2050 season") has another save hash with no talk held
+   STOP nhl save "retiredNoCoachKey": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "extTalk": aligned step 26 (after "extension: Play the year out") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 27 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 28 (after "event: Point at the roster around youThe room decides if you are ri") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 29 (after "hub: 📊My PlayerOVR 75The fans down at 20") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 30 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 31 (after "hub: 💰The Bank$1.7M$0.9M a year, final year of the deal") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 32 (after "box: Save 25%") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 33 (after "box: Take it all out") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned step 34 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "extTalk": aligned length 56 against 58
+   STOP nhl save "extTalk": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "faTalk": aligned length 37 against 43
+   STOP nhl save "faTalk": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "wheel": aligned length 37 against 39
+   STOP nhl save "wheel": aligned step 0 (after "MOUNT"): field c.rival differs
+   STOP nhl save "extCut": aligned step 23 (after "press: Sign up") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 24 (after "press: 📝Scout🎓 Draft day, 2026Watched you play in a rink so cold ") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 25 (after "close: Hub") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 26 (after "hub: 💰The Bank$1.3M$0.9M a year, final year of the deal") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 27 (after "box: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 28 (after "box: 🃏 Cards") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 29 (after "box: 🏦 Account") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 30 (after "box: Save 25%") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 31 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 32 (after "hub: 💰The Bank$1.3M$0.9M a year, final year of the deal") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 33 (after "box: Save 25%") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 34 (after "box: Take out half") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 35 (after "box: 📈 Market") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 36 (after "box: 👟Cleatworks117about what it usually goes for+0.6%") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 37 (after "box: Hub") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 39 (after "extension: Play the year out") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 40 (after "curtain: Continue") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 41 (after "rival beat: Continue") has another save hash with no talk held
+   STOP nhl save "extCut": aligned step 42 (after "event: Take away lanes instead of divingHealth up") has another save hash with no talk held
+   STOP nhl save "extCut": aligned length 56 against 60
+   STOP nhl save "extCut": aligned step 0 (after "MOUNT"): field c.rival differs
+   screens: 0 of 19 old walks byte identical; moved: rookie: 54->54, 0 wheel, aligned identical 37, in talk 0, talk held 0, markup outside 2 || mid: 56->56, 0 wheel, aligned identical 0, in talk 1, talk held 1, markup outside 6 || ext: 60->60, 4 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 1 || fa: 58->58, 2 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 1 || retired: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || coach: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || beat: 33->33, 2 wheel, aligned identical 0, in talk 3, talk held 3, markup outside 2 || choice: 31->31, 0 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 4 || suspended: 60->60, 4 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 5 || dirty: 56->56, 0 wheel, aligned identical 0, in talk 1, talk held 1, markup outside 6 || noRole: 56->56, 0 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 9 || negNet: 56->56, 0 wheel, aligned identical 0, in talk 2, talk held 2, markup outside 7 || noCoachKey: 56->56, 0 wheel, aligned identical 0, in talk 1, talk held 1, markup outside 10 || coachPhaseNoCoach: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || retiredNoCoachKey: 31->31, 0 wheel, aligned identical 0, in talk 0, talk held 0, markup outside 0 || extTalk: 58->58, 2 wheel, aligned identical 0, in talk 28, talk held 28, markup outside 1 || faTalk: 43->43, 6 wheel, aligned identical 0, in talk 8, talk held 8, markup outside 0 || wheel: 39->39, 2 wheel, aligned identical 0, in talk 7, talk held 7, markup outside 0 || extCut: 60->60, 4 wheel, aligned identical 0, in talk 26, talk held 26, markup outside 1
+ATTRIBUTION: 1468 STOP(S)

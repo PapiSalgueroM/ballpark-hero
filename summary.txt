@@ -1,0 +1,8 @@
+recordBoard exit=0 45s | -rw-r--r-- 1 runner runner 2298730 Oct 12 19:34 /tmp/new-board.json
+attribIII exit=0 0s | RIVAL ATTRIBUTION HOLDS: the sports not named are byte equal, and in mlb and nhl the first saved career that differs differs only under c.rival or the pending rivalry car
+attribDefault exit=0 0s | ATTRIBUTION: 1468 STOP(S)
+boardHead exit=1 45s | simUsBoardParity: 3 failures
+boardNew exit=0 45s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+digestMlbOnly exit=1 35s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+digestRecord exit=0 35s |    Duration  34.55s (transform 993ms, setup 44ms, collect 1.24s, tests 32.66s, environment 257ms, prepare 119ms)
+digestPlainNew exit=0 35s |    Duration  34.26s (transform 975ms, setup 44ms, collect 1.24s, tests 32.36s, environment 257ms, prepare 117ms)
