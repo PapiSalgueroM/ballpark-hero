@@ -1,0 +1,10 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pd-b exit=0 2s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-a exit=0 2s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-c exit=0 2s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 2s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 1s | simCareerPreDraft [seed set e]: ALL GREEN
+vitest exit=0 11s |    Duration  11.00s (transform 2.67s, setup 101ms, collect 4.86s, tests 9.37s, environment 656ms, prepare 279ms)
+weight4 exit=0 8s | WEIGHT4 done
+tsc exit=0 53s | 
+pjloop exit=0 82s | PJLOOP prospect=0 predraft=0 total 82s
