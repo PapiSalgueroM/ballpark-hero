@@ -1,0 +1,4 @@
+#!build
+#!playwright
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
