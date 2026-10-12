@@ -11,15 +11,16 @@
  * back where they were.
  */
 import { useMemo, useState } from 'react';
-import { ChevronLeft, HelpCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { careerLeagueOf, leagueBoardsOf, leagueBookRules } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
+import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, type AwardMan, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
-export type LeadersBoard = BoardKind;
+/** A board of the card: one of the three, or the past winners. */
+export type LeadersBoard = BoardKind | 'past';
 
 const KINDS: { kind: BoardKind; label: string; icon: string }[] = [
   { kind: 'goals', label: 'Top scorers', icon: '⚽' },
@@ -86,6 +87,58 @@ function LeadersRules() {
 
 const nameClass = (m: BoardMan) => cn('font-bold', m.mine ? 'text-primary' : 'text-foreground');
 
+const stepButton = 'inline-flex items-center justify-center gap-1 min-h-[44px] min-w-[44px] px-3 rounded-lg border border-border text-xs disabled:opacity-40';
+
+/** One winner of a past season: name (mine marked, made up tagged), club and number. */
+function Winner({ label, icon, m }: { label: string; icon: string; m: AwardMan }) {
+  return (
+    <p data-cm-past-winner className="text-xs text-foreground">
+      <span className="mr-1">{icon}</span>{label}: <span className={cn('font-bold', (m[3] & 2) !== 0 ? 'text-primary' : 'text-foreground')}>{m[0]}</span>
+      {(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} <span className="text-muted-foreground">({m[1]}, {m[2]})</span>
+    </p>
+  );
+}
+
+/** Round 1311: the past winners, one season at a time, newest first, read from the save's own records. */
+function PastWinners({ career, onBack }: { career: CareerState; onBack: () => void }) {
+  const seasons = useMemo(() => career.history.filter(h => h.awards).sort((a, b) => b.season - a.season), [career.history]);
+  const [at, setAt] = useState(0);
+  const i = Math.min(at, Math.max(0, seasons.length - 1));
+  const rec = seasons[i];
+  const aw = rec?.awards;
+  return (
+    <div data-cm-leaders data-cm-board="past" className="bg-card border border-border rounded-2xl p-3 space-y-2">
+      <button type="button" onClick={onBack} data-cm-leaders-back
+        className="inline-flex items-center gap-1 min-h-[44px] min-w-[44px] pr-2 text-xs text-muted-foreground hover:text-foreground">
+        <ChevronLeft className="w-3.5 h-3.5" /> Stats
+      </button>
+      <div className="text-sm font-bold text-foreground">🏅 Past winners</div>
+      {!rec || !aw
+        ? <p className="text-xs text-muted-foreground">No season has finished with the league's awards yet.</p>
+        : (
+          <div data-cm-past-season={rec.season} className="space-y-1">
+            <div className="text-xs text-muted-foreground">Season {rec.season} · {rec.club}</div>
+            {aw.boot && <Winner label="Top scorer" icon="⚽" m={aw.boot} />}
+            {aw.ast && <Winner label="Most assists" icon="🅰️" m={aw.ast} />}
+            {aw.glove && <Winner label="Most clean sheets" icon="🧤" m={aw.glove} />}
+            {aw.cov < BOOK_FULL_SHARE && <p className="text-[9px] text-yellow-500/80">The data covered only part of that league: {aw.cov} in 100 of the other clubs' goals had a name on them.</p>}
+          </div>
+        )}
+      {seasons.length > 1 && (
+        <div className="flex items-center justify-between gap-2">
+          <button type="button" data-cm-past-step="newer" disabled={i === 0} onClick={() => setAt(i - 1)} className={stepButton}>
+            <ChevronLeft className="w-3.5 h-3.5" /> Newer
+          </button>
+          <span data-cm-past-count className="text-[10px] text-muted-foreground">{i + 1} of {seasons.length}</span>
+          <button type="button" data-cm-past-step="older" disabled={i === seasons.length - 1} onClick={() => setAt(i + 1)} className={stepButton}>
+            Older <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface CardProps {
   career: CareerState;
   board: LeadersBoard | null;
@@ -122,6 +175,16 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
       <ChevronLeft className="w-3.5 h-3.5" /> Stats
     </button>
   );
+  /* E. The past winners, whatever this season's book holds. */
+  if (board === 'past') return <PastWinners career={career} onBack={() => onBoard(null)} />;
+  const hasPast = career.history.some(h => h.awards);
+  const pastTile = hasPast && (
+    <button type="button" data-cm-leaders-tile="past" onClick={() => onBoard('past')}
+      className="min-h-[44px] w-full rounded-xl border border-border bg-background/40 px-2.5 py-2 text-left hover:border-primary">
+      <div className="text-[9px] text-muted-foreground uppercase tracking-wider">🏅 Past winners</div>
+      <div className="text-xs text-muted-foreground">Every season's top scorer, most assists and most clean sheets</div>
+    </button>
+  );
   /* A. No book this season (or one the next match week will replace). */
   if (!lb || !tops) {
     return (
@@ -132,6 +195,7 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
         <p className="text-xs text-muted-foreground">{leagueLeft
           ? 'No league book for this season yet. It starts with your next league match and counts from there.'
           : 'No league book for this season, and no league match is left. A new book opens next season.'}</p>
+        {pastTile}
       </div>
     );
   }
@@ -144,6 +208,7 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
         {help && <LeadersRules />}
         <p className="text-xs text-muted-foreground">The boards fill up with the first league goals.</p>
         {lines}
+        {pastTile}
       </div>
     );
   }
@@ -216,6 +281,7 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
             </button>
           );
         })}
+        {pastTile}
       </div>
       {lines}
     </div>

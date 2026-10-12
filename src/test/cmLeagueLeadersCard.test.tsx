@@ -17,7 +17,7 @@ import { EXAMPLE_ELEVEN, LeagueLeadersCard, ordinal, type LeadersBoard } from '@
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
 import { finishSeason, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
-import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, type BoardKind } from '@/lib/clubManagerLeagueBoards';
+import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, seasonAwards, type BoardKind } from '@/lib/clubManagerLeagueBoards';
 import { dealShares } from '@/lib/clubManagerLeagueBook';
 
 afterEach(cleanup);
@@ -222,5 +222,42 @@ describe('the season review', () => {
     expect(c.container.querySelector('[data-cm-award]')).toBeNull();
     expect(c.container.querySelector('[data-cm-award-withheld]')?.textContent).toContain(`Only ${lb.share} in 100 of this league's goals had a name on them`);
     noDash(c.container);
+  });
+});
+
+/* Round 1311 step 3: Past winners, one season at a time, newest first, from the save's own records. */
+describe('past winners', () => {
+  it('opens on the newest season, steps older and back, and says when a season was thin', () => {
+    const s = everton();
+    const aw = seasonAwards(leagueBoardsOf(s)!.input)!;
+    const rec = s.history[0] ?? { season: 0, club: s.clubName, position: 1, points: 0, trophies: [] };
+    s.history = [
+      { ...rec, season: 1, awards: { ...aw, cov: 80 } },
+      { ...rec, season: 2, awards: aw },
+    ];
+    const tiles = draw(s);
+    expect(tiles.q('[data-cm-leaders-tile="past"]')).not.toBeNull();
+    fireEvent.click(tiles.q('[data-cm-leaders-tile="past"]')!);
+    expect(tiles.onBoard).toHaveBeenLastCalledWith('past');
+    cleanup();
+    const p = draw(s, 'past');
+    expect(p.q('[data-cm-past-season]')?.getAttribute('data-cm-past-season')).toBe('2');
+    expect(p.q('[data-cm-past-count]')?.textContent).toBe('1 of 2');
+    expect((p.q('[data-cm-past-step="newer"]') as HTMLButtonElement).disabled).toBe(true);
+    expect(p.container.textContent).toContain(`${aw.boot![0]}`);
+    expect(p.container.textContent).not.toContain('The data covered only part of that league');
+    fireEvent.click(p.q('[data-cm-past-step="older"]')!);
+    expect(p.q('[data-cm-past-season]')?.getAttribute('data-cm-past-season')).toBe('1');
+    expect(p.container.textContent).toContain('The data covered only part of that league: 80 in 100');
+    expect((p.q('[data-cm-past-step="older"]') as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(p.q('[data-cm-leaders-back]')!);
+    expect(p.onBoard).toHaveBeenLastCalledWith(null);
+    noDash(p.container);
+  });
+
+  it('offers no Past winners tile before any season has closed with awards', () => {
+    const s = everton();
+    s.history = s.history.map(h => { const { awards, ...rest } = h; void awards; return rest; });
+    expect(draw(s).q('[data-cm-leaders-tile="past"]')).toBeNull();
   });
 });
