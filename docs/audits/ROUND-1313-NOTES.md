@@ -182,3 +182,23 @@ Proof of step 1 (src at a064a170; the later commits of the step touch no src):
 
 - The "?" on the rival card for MLB and the NHL, with the rule sentences, the dead heat sentence of advice 13
   and the worked examples 76.8, 80.85 and 97.2: the first round after this one, all four sports at once.
+  The words, ready for that round (true of careerAwards.ts lines 111 to 123 and usCareerStatLine.ts lines 117
+  to 127 on this branch):
+  - MLB: "Your rival plays your position, and who had the better year is read off the two lines on the card. A
+    starter scores his strikeouts over 5, his wins times 2.2, and 22 for every run his ERA is under 3.80 (his
+    losses are on the line but do not count). A reliever scores saves times 1.5, holds times 1.1, strikeouts
+    over 4, and 26 for every run his ERA is under 3.60. A hitter scores home runs times 1.6, RBI over 3, and
+    320 for every point his average is over .240 (steals are not on the line, so they do not count)."
+  - NHL: "Your rival plays your position, and who had the better year is read off the two lines on the card. A
+    skater is read on his points. A goalie scores his wins times 1.8, and 2,400 for every point his save
+    percentage is over .900."
+  - The dead heat (advice 13): "If the two lines come out exactly level, the year goes to him." Whether a level
+    year should go to nobody, or to goals in hockey, is the lead's (the rule is shared by all four sports).
+  - Worked examples: a starter at 14-9, 3.41 ERA, 187 K scores 37.4 + 30.8 + 8.6 = 76.8; a hitter at .281, 24
+    HR, 88 RBI scores 38.4 + 29.33 + 13.12 = 80.85; a goalie at 34 W, .915 SV% scores 61.2 + 36.0 = 97.2.
+- The lead's rulings this round leaves open: open question 1's fallback (score both printed lines with their
+  counts read back at full pace), with the measuring swap's numbers in the header of scripts/simUsRivalSense.mjs;
+  whether a defenseman's kind should follow the player (Q2; the kind pairing table is printed); the dead heat.
+- Later rounds named by the brief: the engine comment at nhlMyCareer.ts (the "Twelve players make it a year"
+  lines) and a second source that is not a wiki for the 44 of the hockey table (Q6); the rival's aging by
+  position (Q7; this round's by age and by job tables are its baseline); beats 204, 304 and MLB 219 (Q8).
