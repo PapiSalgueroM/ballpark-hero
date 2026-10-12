@@ -1,0 +1,8 @@
+   Start at  02:14:40
+   Duration  1.46s (transform 272ms, setup 47ms, collect 435ms, tests 341ms, environment 277ms, prepare 125ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.

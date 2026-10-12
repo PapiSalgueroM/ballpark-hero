@@ -1,0 +1,4 @@
+Free-agency feedback status: one executable source binding changed in an isolated component/CSS copy.
+Free-agency feedback status: 8 intended failures, 5 independent passes, no skipped cases.
+FA_FEEDBACK_CONTROL: {"control":"status","failed":[{"title":"announces only the raised offer with exact earned annual term and total differences","messages":["TestingLibraryElementError: Unable to find an accessible element with the role \"status\"\n\nHere are the accessible roles:\n\n  paragraph:\n\n  Name \"\":\n  \u001b[36m<p\u001b[39m\n    \u001b[33mclass\u001b[39m=\u001b[32m\"min-w-0 truncate
+Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or career persistence.

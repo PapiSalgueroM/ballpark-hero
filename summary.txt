@@ -1,0 +1,11 @@
+tsc exit=0 60s | 
+extMotion exit=0 2s | simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.
+extMotion-unreply exit=0 2s | simExtensionResponseMotion unreply control: all three real-engine response checks rejected the removed binding; both opening-state checks stayed green.
+faFeedback exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-consumed exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-status exit=0 3s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-restored exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-replacement exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-finite exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+faFeedback-reduced exit=0 2s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+clean exit=0 0s | changed files: 0

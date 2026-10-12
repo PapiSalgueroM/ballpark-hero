@@ -1,0 +1,4 @@
+Free-agency feedback finite: one executable source binding changed in an isolated component/CSS copy.
+Free-agency feedback finite: 1 intended failures, 12 independent passes, no skipped cases.
+FA_FEEDBACK_CONTROL: {"control":"finite","failed":[{"title":"bounds earned feedback to one short animation and declares static reduced motion","messages":["AssertionError: expected 1550 to be less than or equal to 600\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/freeAgencyFeedback.test.tsx:177:61\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/ru
+Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or career persistence.
