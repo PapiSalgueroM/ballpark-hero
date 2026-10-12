@@ -1,0 +1,13 @@
+ok   spent-wheel: nfl 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nfl 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nfl 390x844 save extTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nfl 390x844 save extTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: mlb 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: mlb 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nba 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nba 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nba 390x844 save extTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nba 390x844 save extTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+ok   spent-wheel: nhl 390x844 save faTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (true) on the same save bytes (true)
+ok   spent: nhl 390x844 save faTalk: the one push came up held; the push control was disabled after the wheel and is disabled after a reload; a press on it opened no wheel; the save bytes did not move
+playUsMarketTalk: 40 checks, 0 failed

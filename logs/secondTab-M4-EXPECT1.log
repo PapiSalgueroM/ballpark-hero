@@ -1,0 +1,20 @@
+mutM4: applied (the extension push is not written to the save)
+   ✓ a saved contract talk in two tabs > nfl free agency: the second tab cannot push again, and takes the saved wheel 86ms
+   ✓ a saved contract talk in two tabs > nba free agency: the second tab cannot push again, and takes the saved wheel 32ms
+   ✓ a saved contract talk in two tabs > mlb free agency: the second tab cannot push again, and takes the saved wheel 34ms
+   ✓ a saved contract talk in two tabs > nhl free agency: the second tab cannot push again, and takes the saved wheel 39ms
+   × a saved contract talk in two tabs > nfl extension: the second tab cannot push again and cannot sign past the saved wheel 22ms
+   × a saved contract talk in two tabs > nba extension: the second tab cannot push again and cannot sign past the saved wheel 16ms
+   × a saved contract talk in two tabs > mlb extension: the second tab cannot push again and cannot sign past the saved wheel 17ms
+   × a saved contract talk in two tabs > nhl extension: the second tab cannot push again and cannot sign past the saved wheel 14ms
+   ✓ a saved contract talk in two tabs > nfl: a tab whose own write was refused is not thrown back to the older saved talk 25ms
+   ✓ a saved contract talk in two tabs > nba: a tab whose own write was refused is not thrown back to the older saved talk 29ms
+   ✓ a saved contract talk in two tabs > mlb: a tab whose own write was refused is not thrown back to the older saved talk 20ms
+   ✓ a saved contract talk in two tabs > nhl: a tab whose own write was refused is not thrown back to the older saved talk 17ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected false to be true // Object.is equality
+      Tests  4 failed | 8 passed (12)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nfl extension%3A the second tab cannot push again and
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nba extension%3A the second tab cannot push again and
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > mlb extension%3A the second tab cannot push again and
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nhl extension%3A the second tab cannot push again and

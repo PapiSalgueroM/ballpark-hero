@@ -1,0 +1,3 @@
+FAIL spent-wheel: nfl 390x844 save extTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (false) on the same save bytes (true)
+FAIL spent-wheel: nba 390x844 save extTalk: a reload at the wheel, before it is spun or skipped, lands on the wheel again (false) on the same save bytes (true)
+playUsMarketTalk: 38 checks, 2 failed

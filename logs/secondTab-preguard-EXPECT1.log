@@ -1,0 +1,27 @@
+   × a saved contract talk in two tabs > nfl free agency: the second tab cannot push again, and takes the saved wheel 85ms
+   × a saved contract talk in two tabs > nba free agency: the second tab cannot push again, and takes the saved wheel 30ms
+   × a saved contract talk in two tabs > mlb free agency: the second tab cannot push again, and takes the saved wheel 29ms
+   × a saved contract talk in two tabs > nhl free agency: the second tab cannot push again, and takes the saved wheel 28ms
+   × a saved contract talk in two tabs > nfl extension: the second tab cannot push again and cannot sign past the saved wheel 42ms
+   × a saved contract talk in two tabs > nba extension: the second tab cannot push again and cannot sign past the saved wheel 24ms
+   × a saved contract talk in two tabs > mlb extension: the second tab cannot push again and cannot sign past the saved wheel 24ms
+   × a saved contract talk in two tabs > nhl extension: the second tab cannot push again and cannot sign past the saved wheel 21ms
+   ✓ a saved contract talk in two tabs > nfl: a tab whose own write was refused is not thrown back to the older saved talk 24ms
+   ✓ a saved contract talk in two tabs > nba: a tab whose own write was refused is not thrown back to the older saved talk 33ms
+   ✓ a saved contract talk in two tabs > mlb: a tab whose own write was refused is not thrown back to the older saved talk 19ms
+   ✓ a saved contract talk in two tabs > nhl: a tab whose own write was refused is not thrown back to the older saved talk 19ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 3 to be +0 // Object.is equality
+AssertionError: expected '{"c":{"name":"Two Tabs","pos":"QB","a…' to be '{"c":{"name":"Two Tabs","pos":"QB","a…' // Object.is equality
+AssertionError: expected '{"c":{"name":"Two Tabs","pos":"PG","a…' to be '{"c":{"name":"Two Tabs","pos":"PG","a…' // Object.is equality
+AssertionError: expected '{"c":{"name":"Two Tabs","pos":"CF","a…' to be '{"c":{"name":"Two Tabs","pos":"CF","a…' // Object.is equality
+AssertionError: expected '{"c":{"name":"Two Tabs","pos":"C","ar…' to be '{"c":{"name":"Two Tabs","pos":"C","ar…' // Object.is equality
+      Tests  8 failed | 4 passed (12)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nfl free agency%3A the second tab cannot push again%2
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nba free agency%3A the second tab cannot push again%2
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > mlb free agency%3A the second tab cannot push again%2
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nhl free agency%3A the second tab cannot push again%2
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nfl extension%3A the second tab cannot push again and
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nba extension%3A the second tab cannot push again and
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > mlb extension%3A the second tab cannot push again and
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerMarketSecondTab.test.tsx,title=src/test/usCareerMarketSecondTab.test.tsx > a saved contract talk in two tabs > nhl extension%3A the second tab cannot push again and
