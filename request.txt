@@ -1,0 +1,14 @@
+#!serial
+# Round 1314 reviewer (run lens) request M on 2d0c3cbe: plausible mutations of what the rewritten checks guard, each restored in its own line
+m-css-bare: node .rc/x/mut.mjs css-bare && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-order: node .rc/x/mut.mjs css-order && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-customprop: node .rc/x/mut.mjs css-customprop && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-imp-alias: node .rc/x/mut.mjs imp-alias && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-imp-rel-export: node .rc/x/mut.mjs imp-rel-export && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-imp-dynamic: node .rc/x/mut.mjs imp-dynamic && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-lb-shipped: node .rc/x/mut.mjs lb-shipped && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-act-second-dotted: node .rc/x/mut.mjs act-second-dotted && node scripts/simActivityNotCompletion.mjs; s=$?; git checkout -- src scripts; exit $s
+m-act-second-plain: node .rc/x/mut.mjs act-second-plain && node scripts/simActivityNotCompletion.mjs; s=$?; git checkout -- src scripts; exit $s
+m-act-ping-moved: node .rc/x/mut.mjs act-ping-moved && node scripts/simActivityNotCompletion.mjs; s=$?; git checkout -- src scripts; exit $s
+m-xp-defaultarm: node .rc/x/mut.mjs xp-defaultarm && node scripts/simGmXp.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | head -20; echo "status lines: $(git status --short | grep -v '^?? .rc' | wc -l)"

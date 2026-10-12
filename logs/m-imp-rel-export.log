@@ -1,0 +1,13 @@
+mutation imp-rel-export: appended to src/lib/utils.ts
+0) The scan covers what ships: no shipped file imports a test file
+  FAIL: src/lib/utils.ts: imports '../test/arcadePointerFixture', a test file, so the test file ships too
+   2077 files under src, 522 test files left out (409 under src/test, 113 *.test.* or *.spec.* elsewhere), 1555 scanned, 6201 local imports read
+1) No date string is handed back to the parser
+   1555 shipped files scanned, 0 date round trips
+2) No lookbehind in shipped code
+3) No very new JavaScript the phone in his pocket may not have
+4) No raw 100vh, because mobile Safari measures it wrong
+5) The viewport tag lets a phone zoom, and nothing blocks touch
+6) The gap this file cannot close is written down
+
+simSafari: 1 failure

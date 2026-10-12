@@ -1,0 +1,12 @@
+m-css-bare exit=1 1s | simSafari: 1 failure
+m-css-order exit=1 0s | simSafari: 1 failure
+m-css-customprop exit=0 0s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+m-imp-alias exit=1 0s | simSafari: 1 failure
+m-imp-rel-export exit=1 0s | simSafari: 1 failure
+m-imp-dynamic exit=1 0s | simSafari: 1 failure
+m-lb-shipped exit=1 0s | simSafari: 1 failure
+m-act-second-dotted exit=0 3s | simActivityNotCompletion: all green
+m-act-second-plain exit=1 3s | simActivityNotCompletion: 1 failure(s)
+m-act-ping-moved exit=1 3s | simActivityNotCompletion: 1 failure(s)
+m-xp-defaultarm exit=1 0s | simGmXp: 2 failure(s)
+clean-after exit=0 0s | status lines: 0
