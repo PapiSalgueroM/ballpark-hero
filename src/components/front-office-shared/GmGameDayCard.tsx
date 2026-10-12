@@ -102,7 +102,9 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
             <span className="min-w-0 text-xs font-bold text-muted-foreground" data-gameday-where>{where}</span>
             {helpButtonEl}
           </div>
-          <MatchClock key={last!.key} game={view.game} clock={gameDayClock(law)} usName={name(view.us)} themName={name(view.them)}
+          {/* the score bug gets the short names (two long ones do not fit a phone's bug); the feed keeps the full ones */}
+          <MatchClock key={last!.key} game={view.game} clock={gameDayClock(law, n => (n === name(view.us) ? short(view.us) : n === name(view.them) ? short(view.them) : n))}
+            usName={name(view.us)} themName={name(view.them)}
             speed={speed} paused={false} reduced={false} onFullTime={fullTime} />
           <div className="flex shrink-0 gap-1.5" role="group" aria-label="Clock speed">
             {SPEEDS.map(s => (
