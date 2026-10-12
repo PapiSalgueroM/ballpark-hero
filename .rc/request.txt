@@ -1,0 +1,7 @@
+#!serial
+m-css-customprop: node .rc/x/mut.mjs css-customprop && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-customprop-fixed: node .rc/x/mut.mjs css-customprop-fixed && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-lvh: node .rc/x/mut.mjs css-lvh && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-css-svh: node .rc/x/mut.mjs css-svh && node scripts/simSafari.mjs; s=$?; git checkout -- src scripts; exit $s
+m-act-second-dotted: node .rc/x/mut.mjs act-second-dotted && node scripts/simActivityNotCompletion.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | wc -l
