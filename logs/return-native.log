@@ -1,0 +1,14 @@
+PASS 320-selected 73 checks
+PASS 320-not-selected 67 checks
+PASS 320-ban 75 checks
+PASS 320-tournament 73 checks
+PASS 390-selected 68 checks
+PASS 390-not-selected 67 checks
+PASS 390-ban 75 checks
+PASS 390-tournament 73 checks
+PASS 1280-selected 68 checks
+PASS 1280-not-selected 67 checks
+PASS 1280-ban 75 checks
+PASS 1280-tournament 73 checks
+Soccer international return native 854 checks,12 journeys,3 copied observation controls,0 failures.
+PASS international return native: {"mode":"native","checks":854,"journeys":12,"wholePairs":102,"postStartupExactVectors":90,"rawReloads":48,"unfilteredStartupObservations":48,"layouts":174,"restorations":39,"shots":30,"observationControls":3,"legacyControls":15,"scope":"Only new comeback and cookie controls assert44px. Legacy controls retain measured dimensions without a44px claim. Startup is unfiltered and retained separately from exact action vectors."}
