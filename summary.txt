@@ -1,0 +1,1 @@
+simEras-base exit=0 759s | ALL ERA AND AGEING CHECKS PASSED
