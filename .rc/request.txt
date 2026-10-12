@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 3.6 on 2e288252: playWilderness seeded, default three times, seeds 1 to 10, both controls, one throttled default; plus the playGmPress step 1 probe
+gmPressProbe: cp .rc/x/gmPressProbe.mjs scripts/gmPressProbe.mjs && ENGINES=chromium node scripts/gmPressProbe.mjs
+wild-def-1: ENGINES=chromium node scripts/playWilderness.mjs
+wild-def-2: ENGINES=chromium node scripts/playWilderness.mjs
+wild-def-3: ENGINES=chromium node scripts/playWilderness.mjs
+wild-s1: WILDERNESS_SEED=1 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s2: WILDERNESS_SEED=2 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s3: WILDERNESS_SEED=3 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s4: WILDERNESS_SEED=4 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s5: WILDERNESS_SEED=5 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s6: WILDERNESS_SEED=6 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s7: WILDERNESS_SEED=7 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s8: WILDERNESS_SEED=8 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s9: WILDERNESS_SEED=9 ENGINES=chromium node scripts/playWilderness.mjs
+wild-s10: WILDERNESS_SEED=10 ENGINES=chromium node scripts/playWilderness.mjs
+wild-nooffers: WILDERNESS_CONTROL=nooffers ENGINES=chromium node scripts/playWilderness.mjs
+wild-nosack: WILDERNESS_CONTROL=nosack ENGINES=chromium node scripts/playWilderness.mjs
+wild-def-throttled: node .rc/x/mkThrottle.mjs playWilderness && WILDERNESS_SEED=2899200577 ENGINES=chromium node scripts/playWildernessThrottled.mjs
