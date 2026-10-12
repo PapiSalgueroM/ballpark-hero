@@ -1,0 +1,6 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+probe-head: head -n 243 src/test/playerBingoHonours.test.ts > src/test/ffProbe.test.ts && cat .rc/x/ffProbeTail.ts >> src/test/ffProbe.test.ts && node_modules/.bin/vitest run src/test/ffProbe.test.ts --testTimeout=300000 > /tmp/ph.log 2>&1; s=$?; rm -f src/test/ffProbe.test.ts; tail -12 /tmp/ph.log; grep -o 'PROBE ferran uclAccepted=[a-z]* withoutThe2026Row=[a-z]*' /tmp/ph.log; exit $s
+probe-prefix: git show 942268ef:src/lib/playerBingo.ts > src/lib/playerBingo.ts && head -n 243 src/test/playerBingoHonours.test.ts > src/test/ffProbe.test.ts && cat .rc/x/ffProbeTail.ts >> src/test/ffProbe.test.ts && node_modules/.bin/vitest run src/test/ffProbe.test.ts --testTimeout=300000 > /tmp/pp.log 2>&1; s=$?; rm -f src/test/ffProbe.test.ts; git checkout -- src; git status --short src | head -3; tail -12 /tmp/pp.log; grep -o 'PROBE ferran uclAccepted=[a-z]* withoutThe2026Row=[a-z]*' /tmp/pp.log; exit $s
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+vitest-bingo: node_modules/.bin/vitest run src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoTransport.test.ts src/test/playerBingoLineFeedback.test.tsx --testTimeout=300000 --hookTimeout=120000
