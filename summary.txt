@@ -1,0 +1,2 @@
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+simCmVar exit=1 125s | Node.js v24.21.0
