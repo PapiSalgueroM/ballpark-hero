@@ -1,0 +1,2 @@
+simGmXp exit=1 first=  FAIL: nbaFrontOffice.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)
+simGmCalendar exit=1 first=  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\

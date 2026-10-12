@@ -1,0 +1,7 @@
+simBooks exit=0 | simBooks: green. Every number these games show agrees with every other number they show.
+simFrontOfficeCuts exit=0 | simFrontOfficeCuts: 1187 checks passed over 4 sims and 4 seeded leagues each. A cut costs dead money, the man waits a season by any door, the hub and 
+simFrontOfficeSchedule exit=0 | simFrontOfficeSchedule: GREEN, NBA, MLB and NHL seasons booked and played exactly over 20 seeds
+simGmBooks exit=0 | simGmBooks: ALL GREEN
+simGmContracts exit=0 | simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+simGmDesk exit=0 | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens o
+simGmDeskHost exit=0 | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)

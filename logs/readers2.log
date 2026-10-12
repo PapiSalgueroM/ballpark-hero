@@ -1,0 +1,8 @@
+simGmFarm exit=0 | simGmFarm: 49 checks, 0 failures, 25.6 s
+simHomeFront exit=0 | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simLeagueCaps exit=0 | simLeagueCaps: green. Four caps, two sources each, read on one day, and every screen says which day.
+simNbaLuxuryTax exit=0 | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season t
+simNbaOpeningRatings exit=0 | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historical player ability, native UI, 
+simNbaRatingEvidence exit=0 | NBA rating evidence: CRLF-safe executable bindings, original raw-byte holds and owned-copy cleanup verified. No native or live claims.
+simNbaRotation exit=0 | NBA rotation: executable CRLF controls bind, raw bytes held and owned copies cleaned. Engine simulations do not prove native UI, storage recovery or r
+simNbaRotationReset exit=0 | NBA rotation reset: normalized control binding, raw source holds and owned cleanup verified. Component fixtures do not prove native play, live data or

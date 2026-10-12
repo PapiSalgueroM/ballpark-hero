@@ -1,0 +1,8 @@
+simNbaRotationUi exit=0 | NBA rotation UI: exact opener focus uses preventScroll, controls retain native semantics and 44px sizing, earned motion is finite with static reduced 
+simNbaSeasonStats exit=0 | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the award
+simNbaTipOffForecast exit=0 | NBA tip-off forecast: CRLF-safe executable controls, raw-byte holds, bounded owned-copy cleanup and zero outside transport verified.
+simOwnerMandate exit=0 | ALL OWNER MANDATE CHECKS PASSED
+simTradeFinder exit=0 | ALL TRADE FINDER CHECKS PASSED
+simTradeTalks exit=0 | simTradeTalks: green. The other GM negotiates like a person, and the deal that closes is the deal that was agreed.
+simGmGameDay exit=0 | simGmGameDay: 326 checks, 0 failed
+simSaveKeeper exit=0 | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.

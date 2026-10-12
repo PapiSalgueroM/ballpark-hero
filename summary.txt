@@ -1,0 +1,6 @@
+vitest exit=0 24s |    Duration  22.51s (transform 4.38s, setup 1.53s, collect 13.77s, tests 29.86s, environment 11.39s, prepare 2.74s)
+readers2 exit=0 58s | simNbaRotationReset exit=0 | NBA rotation reset: normalized control binding, raw source holds and owned cleanup verified. Component fixtures do not prove native play, liv
+knownred-head exit=0 1s | simGmCalendar exit=1 first=  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDa
+knownred-base exit=0 2s | simGmCalendar exit=1 first=  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDa
+readers1 exit=0 81s | simGmDeskHost exit=0 | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+readers3 exit=0 60s | simSaveKeeper exit=0 | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
