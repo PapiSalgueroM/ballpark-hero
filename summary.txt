@@ -1,0 +1,7 @@
+simDailyDeals-seeddeadline exit=1 4s | simDailyDeals: CONTROL seeddeadline FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDailyDeals-seed exit=1 4s | simDailyDeals: CONTROL seed FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+simDailyDeals-bind exit=1 4s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline exit=1 4s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+verify-scripted-base exit=0 4s | simDailyDeals: the recorded scripted days ARE the days of the source at /home/runner/work/ballpark-hero/ballpark-hero/.tmp-base
+simCmLeagueBook exit=0 61s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (61s)

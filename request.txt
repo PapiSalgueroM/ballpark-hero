@@ -1,0 +1,7 @@
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-seed: DAILY_DEALS_CONTROL=seed node scripts/simDailyDeals.mjs
+simDailyDeals-seeddeadline: DAILY_DEALS_CONTROL=seeddeadline node scripts/simDailyDeals.mjs
+simDailyDeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+verify-scripted-base: git worktree add .tmp-base b6eb78e799b12c851e4e8e583e9e926aed117f1c && node scripts/simDailyDeals.mjs --root .tmp-base --print --verify-scripted
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
