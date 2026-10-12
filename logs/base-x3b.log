@@ -1,0 +1,14 @@
+BASE BUILD at 94647e741 Round 1304: the notes carry the defect's test, fix, what moved and the proof that nothing else did
+== base 94647e7418 run 1 exit=0
+   38 half times, 40 full times, 38 subs, 16 shape changes, 44 windows, 2 signings, 76 skips through the live viewer
+   ending: played the season out
+Played Club Manager through its own screens. 0 findings.
+== base 94647e7418 run 2 exit=0
+   32 half times, 34 full times, 32 subs, 17 shape changes, 38 windows, 2 signings, 64 skips through the live viewer
+   ending: was sacked, which is a real ending
+Played Club Manager through its own screens. 0 findings.
+== base 94647e7418 run 3 exit=0
+   37 half times, 39 full times, 37 subs, 14 shape changes, 43 windows, 2 signings, 74 skips through the live viewer
+   ending: played the season out
+Played Club Manager through its own screens. 0 findings.
+DONE base 94647e7418 x3
