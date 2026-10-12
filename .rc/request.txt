@@ -1,0 +1,12 @@
+#!serial
+simSoccerSeasonHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simSoccerSeasonCompetitions: node scripts/simSoccerSeasonCompetitions.mjs
+simSoccerLeagueWorldLookup: node scripts/simSoccerLeagueWorldLookup.mjs
+simSoccerCareerOpponents: node scripts/simSoccerCareerOpponents.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+inv-simSoccerSeasonHistory: node .rc/x/invEngine.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs; s=$?; git checkout -- src; exit $s
+inv-simSoccerDerbyHistory: node .rc/x/invEngine.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs; s=$?; git checkout -- src; exit $s
