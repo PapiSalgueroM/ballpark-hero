@@ -153,4 +153,42 @@ describe('GmBracketCard', () => {
     expect(a.querySelector('[data-bracket-series]')!.textContent).toBe('5 played, first to 4 wins.');
     expect(q('[data-bracket-place]')!.textContent).toBe('Next: the Semifinals, against Club S4.');
   });
+
+  it('the play in and best of seven rounds of src/lib/gmBracket.test.ts: losing the first play in game is not going out', () => {
+    /* PLAY_IN as src/lib/gmBracket.test.ts writes it (a test file exports nothing, so it is typed again here) */
+    const PLAY_IN: BracketFormat = {
+      id: 'test-play-in',
+      qualifiers: 10,
+      ties: [
+        { id: 'PI-78', week: 1, round: 'Play in', home: { seed: 7 }, away: { seed: 8 } },
+        { id: 'PI-910', week: 1, round: 'Play in', home: { seed: 9 }, away: { seed: 10 } },
+        { id: 'PI-8', week: 2, round: 'Play in', home: { loserOf: 'PI-78' }, away: { winnerOf: 'PI-910' } },
+        { id: 'R1-A', week: 3, round: 'First round', home: { seed: 1 }, away: { winnerOf: 'PI-8' } },
+        { id: 'R1-B', week: 3, round: 'First round', home: { seed: 4 }, away: { seed: 5 } },
+        { id: 'R1-C', week: 3, round: 'First round', home: { seed: 3 }, away: { seed: 6 } },
+        { id: 'R1-D', week: 3, round: 'First round', home: { seed: 2 }, away: { winnerOf: 'PI-78' } },
+        { id: 'SF-A', week: 4, round: 'Semifinals', home: { winnerOf: 'R1-A' }, away: { winnerOf: 'R1-B' } },
+        { id: 'SF-B', week: 4, round: 'Semifinals', home: { winnerOf: 'R1-D' }, away: { winnerOf: 'R1-C' } },
+        { id: 'F', week: 5, round: 'Final', home: { winnerOf: 'SF-A' }, away: { winnerOf: 'SF-B' } },
+      ],
+      winsNeeded: { 3: 4, 4: 4, 5: 4 },
+    };
+    const alternate: PlayTie = (home, away, _tie, gameNo) => (gameNo % 2 ? { homeScore: 110, awayScore: 101, winner: home } : { homeScore: 99, awayScore: 104, winner: away });
+    const ten = SEEDS.slice(0, 10);
+    const s0 = openBracket(PLAY_IN, 2026, ten);
+    const week1 = playBracketWeek(PLAY_IN, s0, alternate);
+    expect(gmBracketPlace(PLAY_IN, s0, 'S1', name).kind).toBe('bye');
+    expect(gmBracketPlace(PLAY_IN, week1, 'S8', name)).toEqual({ kind: 'next', line: 'Next: the Play in, against Club S9.', tie: 'PI-8' });
+    expect(gmBracketPlace(PLAY_IN, week1, 'S10', name)).toEqual({ kind: 'out', line: 'Out in the Play in.', tie: 'PI-910' });
+    const week2 = playBracketWeek(PLAY_IN, week1, alternate);
+    const three = [1, 2, 3].reduce(s => playBracketGame(PLAY_IN, s, 'R1-A', alternate), week2);
+    const props = { format: PLAY_IN, save: three, my: 'S1', name, onOpenGame: () => undefined, helpHost: null, help: NFL_BRACKET_HELP, seedOf: (c: string) => Number(c.slice(1)), weekLabel: (w: number) => ['Play in', 'Play in', 'First round', 'Semifinals', 'Final'][w - 1] };
+    render(<GmBracketCard {...props} />);
+    expect(qa('[data-bracket-week]').length).toBe(5);
+    const a = q('[data-bracket-tie="R1-A"]') as HTMLElement;
+    expect(Array.from(a.querySelectorAll('[data-bracket-score]')).map(s => s.textContent)).toEqual(['2', '1']);
+    expect(Array.from(a.querySelectorAll('[data-bracket-side]')).map(s => s.textContent)).toEqual(['1Club S12', '8Club S81']);
+    expect(a.querySelector('[data-bracket-series]')!.textContent).toBe('3 played, first to 4 wins.');
+    expect(q('[data-bracket-scroll]')).not.toBeNull();
+  });
 });
