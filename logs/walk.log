@@ -1,0 +1,558 @@
+  ok   a 2004 era closer driven to 2020 with a live rival was found (ATL, rival Rhys Okafor)
+  ok   mlbRP-390-motion: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-390-motion: back at the hub before the season
+  ok   mlbRP-390-motion: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-390-motion: the Rival screen shows the old tally 1-5
+  ok   mlbRP-390-motion: the season card came up
+  note mlbRP-390-motion: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbRP-390-motion: his line is a RP's own shape ("5 saves, 26 holds, 4.19 ERA, 83 K")
+  ok   mlbRP-390-motion: my line on the card is in that shape ("3 saves, 29 holds, 3.10 ERA, 92 K")
+  ok   mlbRP-390-motion: the note's line is the saved line ("5 saves, 26 holds, 4.19 ERA, 83 K")
+  ok   mlbRP-390-motion: the tally moved by one year (1-5 to 2-5)
+  ok   mlbRP-390-motion: the year went to me and the two printed lines say me (72.40 against 56.85)
+  ok   mlbRP-390-motion: the note says me and the save says me ("🪞 Silas Fitzgerald went 5 saves, 26 holds, 4.19 ERA, 83 K. You had the better year. Head to head 2-5.")
+  ok   mlbRP-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbRP-390-motion: the note is 12px or more (14px)
+  ok   mlbRP-390-motion: nothing scrolls sideways on the season card (0)
+  FAIL mlbRP-390-motion: back at the hub after the season
+  FAIL mlbRP-390-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbRP-390-motion: no page errors (clean)
+  ok   mlbRP-390-motion: the database host was never reached
+  ok   mlbRP-390-reduced: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-390-reduced: back at the hub before the season
+  ok   mlbRP-390-reduced: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-390-reduced: the Rival screen shows the old tally 1-5
+  ok   mlbRP-390-reduced: the season card came up
+  note mlbRP-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbRP-390-reduced: his line is a RP's own shape ("3 saves, 31 holds, 3.89 ERA, 80 K")
+  ok   mlbRP-390-reduced: my line on the card is in that shape ("4 saves, 30 holds, 3.62 ERA, 98 K")
+  ok   mlbRP-390-reduced: the note's line is the saved line ("3 saves, 31 holds, 3.89 ERA, 80 K")
+  ok   mlbRP-390-reduced: the tally moved by one year (1-5 to 2-5)
+  ok   mlbRP-390-reduced: the year went to me and the two printed lines say me (63.50 against 58.60)
+  ok   mlbRP-390-reduced: the note says me and the save says me ("🪞 Silas Fitzgerald went 3 saves, 31 holds, 3.89 ERA, 80 K. You had the better year. Head to head 2-5.")
+  ok   mlbRP-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbRP-390-reduced: the note is 12px or more (14px)
+  ok   mlbRP-390-reduced: nothing scrolls sideways on the season card (0)
+  FAIL mlbRP-390-reduced: back at the hub after the season
+  FAIL mlbRP-390-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbRP-390-reduced: no page errors (clean)
+  ok   mlbRP-390-reduced: the database host was never reached
+  ok   mlbRP-1280-motion: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-1280-motion: back at the hub before the season
+  ok   mlbRP-1280-motion: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-1280-motion: the Rival screen shows the old tally 1-5
+  ok   mlbRP-1280-motion: the season card came up
+  note mlbRP-1280-motion: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbRP-1280-motion: his line is a RP's own shape ("5 saves, 27 holds, 4.41 ERA, 72 K")
+  ok   mlbRP-1280-motion: my line on the card is in that shape ("2 saves, 27 holds, 4.44 ERA, 86 K")
+  ok   mlbRP-1280-motion: the note's line is the saved line ("5 saves, 27 holds, 4.41 ERA, 72 K")
+  ok   mlbRP-1280-motion: the tally moved by one year (1-5 to 1-6)
+  ok   mlbRP-1280-motion: the year went to him and the two printed lines say him (54.20 against 55.20)
+  ok   mlbRP-1280-motion: the note says tie and the save says him ("🪞 Silas Fitzgerald went 5 saves, 27 holds, 4.41 ERA, 72 K. Nothing in it again. He leads the head to head 6-1.")
+  ok   mlbRP-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbRP-1280-motion: the note is 12px or more (14px)
+  ok   mlbRP-1280-motion: nothing scrolls sideways on the season card (0)
+  FAIL mlbRP-1280-motion: back at the hub after the season
+  FAIL mlbRP-1280-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbRP-1280-motion: no page errors (clean)
+  ok   mlbRP-1280-motion: the database host was never reached
+  ok   mlbRP-1280-reduced: the save loaded (RP 2032, rival line "0.269, 17 HR", 1-5)
+  ok   mlbRP-1280-reduced: back at the hub before the season
+  ok   mlbRP-1280-reduced: the Rival screen shows his old line before a season ("0.269, 17 HR")
+  ok   mlbRP-1280-reduced: the Rival screen shows the old tally 1-5
+  ok   mlbRP-1280-reduced: the season card came up
+  note mlbRP-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbRP-1280-reduced: his line is a RP's own shape ("2 saves, 27 holds, 3.87 ERA, 77 K")
+  ok   mlbRP-1280-reduced: my line on the card is in that shape ("6 saves, 29 holds, 3.39 ERA, 86 K")
+  ok   mlbRP-1280-reduced: the note's line is the saved line ("2 saves, 27 holds, 3.87 ERA, 77 K")
+  ok   mlbRP-1280-reduced: the tally moved by one year (1-5 to 2-5)
+  ok   mlbRP-1280-reduced: the year went to me and the two printed lines say me (67.86 against 51.95)
+  ok   mlbRP-1280-reduced: the note says me and the save says me ("🪞 Silas Fitzgerald went 2 saves, 27 holds, 3.87 ERA, 77 K. You had the better year. Head to head 2-5.")
+  ok   mlbRP-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbRP-1280-reduced: the note is 12px or more (14px)
+  ok   mlbRP-1280-reduced: nothing scrolls sideways on the season card (0)
+  FAIL mlbRP-1280-reduced: back at the hub after the season
+  FAIL mlbRP-1280-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbRP-1280-reduced: no page errors (clean)
+  ok   mlbRP-1280-reduced: the database host was never reached
+  ok   mlbSP-390-motion: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-390-motion: back at the hub before the season
+  ok   mlbSP-390-motion: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-390-motion: the Rival screen shows the old tally 0-6
+  ok   mlbSP-390-motion: the season card came up
+  note mlbSP-390-motion: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbSP-390-motion: his line is a SP's own shape ("12-9, 4.97 ERA, 168 K")
+  ok   mlbSP-390-motion: my line on the card is in that shape ("13-8, 4.42 ERA, 176 K")
+  ok   mlbSP-390-motion: the note's line is the saved line ("12-9, 4.97 ERA, 168 K")
+  ok   mlbSP-390-motion: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-390-motion: the year went to me and the two printed lines say me (63.80 against 60.00)
+  ok   mlbSP-390-motion: the note says me and the save says me ("🪞 Jonah Vasquez went 12-9, 4.97 ERA, 168 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbSP-390-motion: the note is 12px or more (14px)
+  ok   mlbSP-390-motion: nothing scrolls sideways on the season card (0)
+  FAIL mlbSP-390-motion: back at the hub after the season
+  FAIL mlbSP-390-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbSP-390-motion: no page errors (clean)
+  ok   mlbSP-390-motion: the database host was never reached
+  ok   mlbSP-390-reduced: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-390-reduced: back at the hub before the season
+  ok   mlbSP-390-reduced: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-390-reduced: the Rival screen shows the old tally 0-6
+  ok   mlbSP-390-reduced: the season card came up
+  note mlbSP-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbSP-390-reduced: his line is a SP's own shape ("14-7, 4.17 ERA, 179 K")
+  ok   mlbSP-390-reduced: my line on the card is in that shape ("16-7, 4.10 ERA, 191 K")
+  ok   mlbSP-390-reduced: the note's line is the saved line ("14-7, 4.17 ERA, 179 K")
+  ok   mlbSP-390-reduced: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-390-reduced: the year went to me and the two printed lines say me (73.40 against 66.60)
+  ok   mlbSP-390-reduced: the note says me and the save says me ("🪞 Jonah Vasquez went 14-7, 4.17 ERA, 179 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbSP-390-reduced: the note is 12px or more (14px)
+  ok   mlbSP-390-reduced: nothing scrolls sideways on the season card (0)
+  FAIL mlbSP-390-reduced: back at the hub after the season
+  FAIL mlbSP-390-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbSP-390-reduced: no page errors (clean)
+  ok   mlbSP-390-reduced: the database host was never reached
+  ok   mlbSP-1280-motion: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-1280-motion: back at the hub before the season
+  ok   mlbSP-1280-motion: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-1280-motion: the Rival screen shows the old tally 0-6
+  ok   mlbSP-1280-motion: the season card came up
+  note mlbSP-1280-motion: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbSP-1280-motion: his line is a SP's own shape ("14-7, 4.80 ERA, 177 K")
+  ok   mlbSP-1280-motion: my line on the card is in that shape ("16-6, 5.01 ERA, 177 K")
+  ok   mlbSP-1280-motion: the note's line is the saved line ("14-7, 4.80 ERA, 177 K")
+  ok   mlbSP-1280-motion: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-1280-motion: the year went to me and the two printed lines say me (70.60 against 66.20)
+  ok   mlbSP-1280-motion: the note says me and the save says me ("🪞 Jonah Vasquez went 14-7, 4.80 ERA, 177 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbSP-1280-motion: the note is 12px or more (14px)
+  ok   mlbSP-1280-motion: nothing scrolls sideways on the season card (0)
+  FAIL mlbSP-1280-motion: back at the hub after the season
+  FAIL mlbSP-1280-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbSP-1280-motion: no page errors (clean)
+  ok   mlbSP-1280-motion: the database host was never reached
+  ok   mlbSP-1280-reduced: the save loaded (SP 2032, rival line "0.274, 18 HR", 0-6)
+  ok   mlbSP-1280-reduced: back at the hub before the season
+  ok   mlbSP-1280-reduced: the Rival screen shows his old line before a season ("0.274, 18 HR")
+  ok   mlbSP-1280-reduced: the Rival screen shows the old tally 0-6
+  ok   mlbSP-1280-reduced: the season card came up
+  note mlbSP-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbSP-1280-reduced: his line is a SP's own shape ("14-8, 5.18 ERA, 159 K")
+  ok   mlbSP-1280-reduced: my line on the card is in that shape ("15-8, 4.60 ERA, 209 K")
+  ok   mlbSP-1280-reduced: the note's line is the saved line ("14-8, 5.18 ERA, 159 K")
+  ok   mlbSP-1280-reduced: the tally moved by one year (0-6 to 1-6)
+  ok   mlbSP-1280-reduced: the year went to me and the two printed lines say me (74.80 against 62.60)
+  ok   mlbSP-1280-reduced: the note says me and the save says me ("🪞 Jonah Vasquez went 14-8, 5.18 ERA, 159 K. You had the better year. Head to head 1-6.")
+  ok   mlbSP-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbSP-1280-reduced: the note is 12px or more (14px)
+  ok   mlbSP-1280-reduced: nothing scrolls sideways on the season card (0)
+  FAIL mlbSP-1280-reduced: back at the hub after the season
+  FAIL mlbSP-1280-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbSP-1280-reduced: no page errors (clean)
+  ok   mlbSP-1280-reduced: the database host was never reached
+  ok   mlbDropped-390-motion: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-390-motion: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-390-motion: the card's button is above the fold (bottom 575 of 844)
+  ok   mlbDropped-390-motion: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-390-motion: back at the hub before the season
+  ok   mlbDropped-390-motion: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-390-motion: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-390-motion: the season card came up
+  note mlbDropped-390-motion: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbDropped-390-motion: his line is a RP's own shape ("39 saves, 2 holds, 3.73 ERA, 86 K")
+  ok   mlbDropped-390-motion: my line on the card is in that shape ("47 saves, 3 holds, 3.34 ERA, 97 K")
+  ok   mlbDropped-390-motion: the note's line is the saved line ("39 saves, 2 holds, 3.73 ERA, 86 K")
+  ok   mlbDropped-390-motion: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-390-motion: the year went to me and the two printed lines say me (104.81 against 82.20)
+  ok   mlbDropped-390-motion: the note says me and the save says me ("🪞 Tyrell Bergeron went 39 saves, 2 holds, 3.73 ERA, 86 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbDropped-390-motion: the note is 12px or more (14px)
+  ok   mlbDropped-390-motion: nothing scrolls sideways on the season card (0)
+  FAIL mlbDropped-390-motion: back at the hub after the season
+  FAIL mlbDropped-390-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbDropped-390-motion: no page errors (clean)
+  ok   mlbDropped-390-motion: the database host was never reached
+  ok   mlbDropped-390-reduced: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-390-reduced: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-390-reduced: the card's button is above the fold (bottom 575 of 844)
+  ok   mlbDropped-390-reduced: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-390-reduced: back at the hub before the season
+  ok   mlbDropped-390-reduced: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-390-reduced: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-390-reduced: the season card came up
+  note mlbDropped-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   mlbDropped-390-reduced: his line is a RP's own shape ("36 saves, 2 holds, 4.53 ERA, 67 K")
+  ok   mlbDropped-390-reduced: my line on the card is in that shape ("34 saves, 2 holds, 4.03 ERA, 81 K")
+  ok   mlbDropped-390-reduced: the note's line is the saved line ("36 saves, 2 holds, 4.53 ERA, 67 K")
+  ok   mlbDropped-390-reduced: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-390-reduced: the year went to me and the two printed lines say me (73.45 against 72.95)
+  ok   mlbDropped-390-reduced: the note says tie and the save says me ("🪞 Tyrell Bergeron went 36 saves, 2 holds, 4.53 ERA, 67 K. Nothing in it again. He leads the head to head 7-2.")
+  ok   mlbDropped-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   mlbDropped-390-reduced: the note is 12px or more (14px)
+  ok   mlbDropped-390-reduced: nothing scrolls sideways on the season card (0)
+  FAIL mlbDropped-390-reduced: back at the hub after the season
+  FAIL mlbDropped-390-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbDropped-390-reduced: no page errors (clean)
+  ok   mlbDropped-390-reduced: the database host was never reached
+  ok   mlbDropped-1280-motion: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-1280-motion: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-1280-motion: the card's button is above the fold (bottom 517 of 900)
+  ok   mlbDropped-1280-motion: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-1280-motion: back at the hub before the season
+  ok   mlbDropped-1280-motion: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-1280-motion: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-1280-motion: the season card came up
+  note mlbDropped-1280-motion: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbDropped-1280-motion: his line is a RP's own shape ("29 saves, 1 hold, 3.95 ERA, 68 K")
+  ok   mlbDropped-1280-motion: my line on the card is in that shape ("42 saves, 2 holds, 3.26 ERA, 83 K")
+  ok   mlbDropped-1280-motion: the note's line is the saved line ("29 saves, 1 hold, 3.95 ERA, 68 K")
+  ok   mlbDropped-1280-motion: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-1280-motion: the year went to me and the two printed lines say me (94.79 against 61.60)
+  ok   mlbDropped-1280-motion: the note says me and the save says me ("🪞 Tyrell Bergeron went 29 saves, 1 hold, 3.95 ERA, 68 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbDropped-1280-motion: the note is 12px or more (14px)
+  ok   mlbDropped-1280-motion: nothing scrolls sideways on the season card (0)
+  FAIL mlbDropped-1280-motion: back at the hub after the season
+  FAIL mlbDropped-1280-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbDropped-1280-motion: no page errors (clean)
+  ok   mlbDropped-1280-motion: the database host was never reached
+  ok   mlbDropped-1280-reduced: the save loaded (RP 2034, rival line "0.251, 12 HR", 1-7)
+  ok   mlbDropped-1280-reduced: the pending card 206 shows its promise "Morale -5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument betwee")
+  ok   mlbDropped-1280-reduced: the card's button is above the fold (bottom 517 of 900)
+  ok   mlbDropped-1280-reduced: the tap moved morale by what the chip printed (100 to 95, want 95)
+  ok   mlbDropped-1280-reduced: back at the hub before the season
+  ok   mlbDropped-1280-reduced: the Rival screen shows his old line before a season ("0.251, 12 HR")
+  ok   mlbDropped-1280-reduced: the Rival screen shows the old tally 1-7
+  ok   mlbDropped-1280-reduced: the season card came up
+  note mlbDropped-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   mlbDropped-1280-reduced: his line is a RP's own shape ("30 saves, 3 holds, 4.26 ERA, 72 K")
+  ok   mlbDropped-1280-reduced: my line on the card is in that shape ("37 saves, 3 holds, 3.96 ERA, 84 K")
+  ok   mlbDropped-1280-reduced: the note's line is the saved line ("30 saves, 3 holds, 4.26 ERA, 72 K")
+  ok   mlbDropped-1280-reduced: the tally moved by one year (1-7 to 2-7)
+  ok   mlbDropped-1280-reduced: the year went to me and the two printed lines say me (79.80 against 66.30)
+  ok   mlbDropped-1280-reduced: the note says me and the save says me ("🪞 Tyrell Bergeron went 30 saves, 3 holds, 4.26 ERA, 72 K. You had the better year. Head to head 2-7.")
+  ok   mlbDropped-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   mlbDropped-1280-reduced: the note is 12px or more (14px)
+  ok   mlbDropped-1280-reduced: nothing scrolls sideways on the season card (0)
+  FAIL mlbDropped-1280-reduced: back at the hub after the season
+  FAIL mlbDropped-1280-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   mlbDropped-1280-reduced: no page errors (clean)
+  ok   mlbDropped-1280-reduced: the database host was never reached
+  ok   nhlG-390-motion: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-390-motion: back at the hub before the season
+  ok   nhlG-390-motion: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-390-motion: the Rival screen shows the old tally 6-0
+  ok   nhlG-390-motion: the season card came up
+  note nhlG-390-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlG-390-motion: his line is a G's own shape ("30 W, .918 SV%")
+  ok   nhlG-390-motion: my line on the card is in that shape ("37 W, .933 SV%")
+  ok   nhlG-390-motion: the note's line is the saved line ("30 W, .918 SV%")
+  ok   nhlG-390-motion: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-390-motion: the year went to me and the two printed lines say me (145.80 against 97.20)
+  ok   nhlG-390-motion: the note says me and the save says me ("🪞 Rhys Bergeron went 30 W, .918 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-390-motion: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlG-390-motion: the note is 12px or more (12px)
+  ok   nhlG-390-motion: nothing scrolls sideways on the season card (0)
+  FAIL nhlG-390-motion: back at the hub after the season
+  FAIL nhlG-390-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlG-390-motion: no page errors (clean)
+  ok   nhlG-390-motion: the database host was never reached
+  ok   nhlG-390-reduced: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-390-reduced: back at the hub before the season
+  ok   nhlG-390-reduced: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-390-reduced: the Rival screen shows the old tally 6-0
+  ok   nhlG-390-reduced: the season card came up
+  note nhlG-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   nhlG-390-reduced: his line is a G's own shape ("32 W, .919 SV%")
+  ok   nhlG-390-reduced: my line on the card is in that shape ("34 W, .927 SV%")
+  ok   nhlG-390-reduced: the note's line is the saved line ("32 W, .919 SV%")
+  ok   nhlG-390-reduced: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-390-reduced: the year went to me and the two printed lines say me (126.00 against 103.20)
+  ok   nhlG-390-reduced: the note says me and the save says me ("🪞 Rhys Bergeron went 32 W, .919 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-390-reduced: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlG-390-reduced: the note is 12px or more (12px)
+  ok   nhlG-390-reduced: nothing scrolls sideways on the season card (0)
+  FAIL nhlG-390-reduced: back at the hub after the season
+  FAIL nhlG-390-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlG-390-reduced: no page errors (clean)
+  ok   nhlG-390-reduced: the database host was never reached
+  ok   nhlG-1280-motion: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-1280-motion: back at the hub before the season
+  ok   nhlG-1280-motion: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-1280-motion: the Rival screen shows the old tally 6-0
+  ok   nhlG-1280-motion: the season card came up
+  note nhlG-1280-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlG-1280-motion: his line is a G's own shape ("30 W, .920 SV%")
+  ok   nhlG-1280-motion: my line on the card is in that shape ("37 W, .934 SV%")
+  ok   nhlG-1280-motion: the note's line is the saved line ("30 W, .920 SV%")
+  ok   nhlG-1280-motion: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-1280-motion: the year went to me and the two printed lines say me (148.20 against 102.00)
+  ok   nhlG-1280-motion: the note says me and the save says me ("🪞 Rhys Bergeron went 30 W, .920 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-1280-motion: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlG-1280-motion: the note is 12px or more (12px)
+  ok   nhlG-1280-motion: nothing scrolls sideways on the season card (0)
+  FAIL nhlG-1280-motion: back at the hub after the season
+  FAIL nhlG-1280-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlG-1280-motion: no page errors (clean)
+  ok   nhlG-1280-motion: the database host was never reached
+  ok   nhlG-1280-reduced: the save loaded (G 2032, rival line "26G 34A 60P", 6-0)
+  ok   nhlG-1280-reduced: back at the hub before the season
+  ok   nhlG-1280-reduced: the Rival screen shows his old line before a season ("26G 34A 60P")
+  ok   nhlG-1280-reduced: the Rival screen shows the old tally 6-0
+  ok   nhlG-1280-reduced: the season card came up
+  note nhlG-1280-reduced: scrollY on the season card 34 then 34 after 2.6 s
+  ok   nhlG-1280-reduced: his line is a G's own shape ("29 W, .917 SV%")
+  ok   nhlG-1280-reduced: my line on the card is in that shape ("31 W, .928 SV%")
+  ok   nhlG-1280-reduced: the note's line is the saved line ("29 W, .917 SV%")
+  ok   nhlG-1280-reduced: the tally moved by one year (6-0 to 7-0)
+  ok   nhlG-1280-reduced: the year went to me and the two printed lines say me (123.00 against 93.00)
+  ok   nhlG-1280-reduced: the note says me and the save says me ("🪞 Rhys Bergeron went 29 W, .917 SV%. You had the better year. Head to head 7-0.")
+  ok   nhlG-1280-reduced: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlG-1280-reduced: the note is 12px or more (12px)
+  ok   nhlG-1280-reduced: nothing scrolls sideways on the season card (0)
+  FAIL nhlG-1280-reduced: back at the hub after the season
+  FAIL nhlG-1280-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlG-1280-reduced: no page errors (clean)
+  ok   nhlG-1280-reduced: the database host was never reached
+  ok   nhlMade-390-motion: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-390-motion: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-390-motion: the card's button is above the fold (bottom 556 of 844)
+  ok   nhlMade-390-motion: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-390-motion: back at the hub before the season
+  ok   nhlMade-390-motion: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-390-motion: the Rival screen shows the old tally 10-2
+  ok   nhlMade-390-motion: the season card came up
+  note nhlMade-390-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlMade-390-motion: his line is a C's own shape ("42 G, 52 A, 94 P")
+  ok   nhlMade-390-motion: my line on the card is in that shape ("54 G, 51 A, 105 P")
+  ok   nhlMade-390-motion: the note's line is the saved line ("42 G, 52 A, 94 P")
+  ok   nhlMade-390-motion: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-390-motion: the year went to me and the two printed lines say me (105.00 against 94.00)
+  ok   nhlMade-390-motion: the note says me and the save says me ("🪞 Reese Brennan went 42 G, 52 A, 94 P. You had the better year. Head to head 11-2.")
+  ok   nhlMade-390-motion: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlMade-390-motion: the note is 12px or more (12px)
+  ok   nhlMade-390-motion: nothing scrolls sideways on the season card (0)
+  FAIL nhlMade-390-motion: back at the hub after the season
+  FAIL nhlMade-390-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlMade-390-motion: no page errors (clean)
+  ok   nhlMade-390-motion: the database host was never reached
+  ok   nhlMade-390-reduced: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-390-reduced: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-390-reduced: the card's button is above the fold (bottom 556 of 844)
+  ok   nhlMade-390-reduced: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-390-reduced: back at the hub before the season
+  ok   nhlMade-390-reduced: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-390-reduced: the Rival screen shows the old tally 10-2
+  ok   nhlMade-390-reduced: the season card came up
+  note nhlMade-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   nhlMade-390-reduced: his line is a C's own shape ("42 G, 54 A, 96 P")
+  ok   nhlMade-390-reduced: my line on the card is in that shape ("56 G, 45 A, 101 P")
+  ok   nhlMade-390-reduced: the note's line is the saved line ("42 G, 54 A, 96 P")
+  ok   nhlMade-390-reduced: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-390-reduced: the year went to me and the two printed lines say me (101.00 against 96.00)
+  ok   nhlMade-390-reduced: the note says tie and the save says me ("🪞 Reese Brennan went 42 G, 54 A, 96 P. Nothing in it again. You lead the head to head 11-2.")
+  ok   nhlMade-390-reduced: the note ends inside the season card, not cut (33 to 357 in 33 to 357)
+  ok   nhlMade-390-reduced: the note is 12px or more (12px)
+  ok   nhlMade-390-reduced: nothing scrolls sideways on the season card (0)
+  FAIL nhlMade-390-reduced: back at the hub after the season
+  FAIL nhlMade-390-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlMade-390-reduced: no page errors (clean)
+  ok   nhlMade-390-reduced: the database host was never reached
+  ok   nhlMade-1280-motion: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-1280-motion: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-1280-motion: the card's button is above the fold (bottom 517 of 900)
+  ok   nhlMade-1280-motion: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-1280-motion: back at the hub before the season
+  ok   nhlMade-1280-motion: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-1280-motion: the Rival screen shows the old tally 10-2
+  ok   nhlMade-1280-motion: the season card came up
+  note nhlMade-1280-motion: scrollY on the season card 0 then 0 after 2.6 s
+  ok   nhlMade-1280-motion: his line is a C's own shape ("38 G, 49 A, 87 P")
+  ok   nhlMade-1280-motion: my line on the card is in that shape ("62 G, 54 A, 116 P")
+  ok   nhlMade-1280-motion: the note's line is the saved line ("38 G, 49 A, 87 P")
+  ok   nhlMade-1280-motion: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-1280-motion: the year went to me and the two printed lines say me (116.00 against 87.00)
+  ok   nhlMade-1280-motion: the note says me and the save says me ("🪞 Reese Brennan went 38 G, 49 A, 87 P. You had the better year. Head to head 11-2.")
+  ok   nhlMade-1280-motion: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlMade-1280-motion: the note is 12px or more (12px)
+  ok   nhlMade-1280-motion: nothing scrolls sideways on the season card (0)
+  FAIL nhlMade-1280-motion: back at the hub after the season
+  FAIL nhlMade-1280-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlMade-1280-motion: no page errors (clean)
+  ok   nhlMade-1280-motion: the database host was never reached
+  ok   nhlMade-1280-reduced: the save loaded (C 2038, rival line "29G 34A 63P", 10-2)
+  ok   nhlMade-1280-reduced: the pending card 306 shows its promise "Morale +5" ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Reese Brennan. Mo")
+  ok   nhlMade-1280-reduced: the card's button is above the fold (bottom 517 of 900)
+  ok   nhlMade-1280-reduced: the tap moved morale by what the chip printed (96 to 100, want 100)
+  ok   nhlMade-1280-reduced: back at the hub before the season
+  ok   nhlMade-1280-reduced: the Rival screen shows his old line before a season ("29G 34A 63P")
+  ok   nhlMade-1280-reduced: the Rival screen shows the old tally 10-2
+  ok   nhlMade-1280-reduced: the season card came up
+  note nhlMade-1280-reduced: scrollY on the season card 34 then 34 after 2.6 s
+  ok   nhlMade-1280-reduced: his line is a C's own shape ("39 G, 46 A, 85 P")
+  ok   nhlMade-1280-reduced: my line on the card is in that shape ("59 G, 50 A, 109 P")
+  ok   nhlMade-1280-reduced: the note's line is the saved line ("39 G, 46 A, 85 P")
+  ok   nhlMade-1280-reduced: the tally moved by one year (10-2 to 11-2)
+  ok   nhlMade-1280-reduced: the year went to me and the two printed lines say me (109.00 against 85.00)
+  ok   nhlMade-1280-reduced: the note says me and the save says me ("🪞 Reese Brennan went 39 G, 46 A, 85 P. You had the better year. Head to head 11-2.")
+  ok   nhlMade-1280-reduced: the note ends inside the season card, not cut (337 to 943 in 337 to 943)
+  ok   nhlMade-1280-reduced: the note is 12px or more (12px)
+  ok   nhlMade-1280-reduced: nothing scrolls sideways on the season card (0)
+  FAIL nhlMade-1280-reduced: back at the hub after the season
+  FAIL nhlMade-1280-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   nhlMade-1280-reduced: no page errors (clean)
+  ok   nhlMade-1280-reduced: the database host was never reached
+  ok   shortRP2020-390-motion: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-390-motion: back at the hub before the season
+  ok   shortRP2020-390-motion: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-390-motion: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-390-motion: the season card came up
+  note shortRP2020-390-motion: scrollY on the season card 550 then 185 after 2.6 s
+  ok   shortRP2020-390-motion: the season saved is the short 2020 one (2020, 26 games)
+  ok   shortRP2020-390-motion: his line is a RP's own shape ("9 saves, 1 hold, 5.20 ERA, 20 K")
+  ok   shortRP2020-390-motion: my line on the card is in that shape ("11 saves, 0 holds, 4.18 ERA, 24 K")
+  ok   shortRP2020-390-motion: the note's line is the saved line ("9 saves, 1 hold, 5.20 ERA, 20 K")
+  ok   shortRP2020-390-motion: the tally moved by one year (11-5 to 12-5)
+  ok   shortRP2020-390-motion: the year went to me and the two printed lines say me (22.50 against 19.60)
+  ok   shortRP2020-390-motion: the note says me and the save says me ("🪞 Rhys Okafor went 9 saves, 1 hold, 5.20 ERA, 20 K. You had the better year. Head to head 12-5.")
+  ok   shortRP2020-390-motion: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   shortRP2020-390-motion: the note is 12px or more (14px)
+  ok   shortRP2020-390-motion: nothing scrolls sideways on the season card (0)
+  FAIL shortRP2020-390-motion: back at the hub after the season
+  FAIL shortRP2020-390-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   shortRP2020-390-motion: no page errors (clean)
+  ok   shortRP2020-390-motion: the database host was never reached
+  ok   shortRP2020-390-reduced: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-390-reduced: back at the hub before the season
+  ok   shortRP2020-390-reduced: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-390-reduced: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-390-reduced: the season card came up
+  note shortRP2020-390-reduced: scrollY on the season card 185 then 185 after 2.6 s
+  ok   shortRP2020-390-reduced: the season saved is the short 2020 one (2020, 26 games)
+  ok   shortRP2020-390-reduced: his line is a RP's own shape ("9 saves, 0 holds, 5.34 ERA, 20 K")
+  ok   shortRP2020-390-reduced: my line on the card is in that shape ("14 saves, 0 holds, 4.08 ERA, 27 K")
+  ok   shortRP2020-390-reduced: the note's line is the saved line ("9 saves, 0 holds, 5.34 ERA, 20 K")
+  ok   shortRP2020-390-reduced: the tally moved by one year (11-5 to 12-5)
+  ok   shortRP2020-390-reduced: the year went to me and the two printed lines say me (27.75 against 18.50)
+  ok   shortRP2020-390-reduced: the note says me and the save says me ("🪞 Rhys Okafor went 9 saves, 0 holds, 5.34 ERA, 20 K. You had the better year. Head to head 12-5.")
+  ok   shortRP2020-390-reduced: the note ends inside the season card, not cut (52 to 358 in 32 to 358)
+  ok   shortRP2020-390-reduced: the note is 12px or more (14px)
+  ok   shortRP2020-390-reduced: nothing scrolls sideways on the season card (0)
+  FAIL shortRP2020-390-reduced: back at the hub after the season
+  FAIL shortRP2020-390-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   shortRP2020-390-reduced: no page errors (clean)
+  ok   shortRP2020-390-reduced: the database host was never reached
+  ok   shortRP2020-1280-motion: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-1280-motion: back at the hub before the season
+  ok   shortRP2020-1280-motion: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-1280-motion: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-1280-motion: the season card came up
+  note shortRP2020-1280-motion: scrollY on the season card 416 then 165 after 2.6 s
+  ok   shortRP2020-1280-motion: the season saved is the short 2020 one (2020, 10 games)
+  ok   shortRP2020-1280-motion: his line is a RP's own shape ("11 saves, 1 hold, 4.48 ERA, 24 K")
+  ok   shortRP2020-1280-motion: my line on the card is in that shape ("6 saves, 1 hold, 4.59 ERA, 14 K")
+  ok   shortRP2020-1280-motion: the note's line is the saved line ("11 saves, 1 hold, 4.48 ERA, 24 K")
+  ok   shortRP2020-1280-motion: the tally moved by one year (11-5 to 11-6)
+  ok   shortRP2020-1280-motion: the year went to him and the two printed lines say him (13.60 against 23.60)
+  ok   shortRP2020-1280-motion: the note says him and the save says him ("🪞 Rhys Okafor went 11 saves, 1 hold, 4.48 ERA, 24 K and had the better year of the two of you. Head to head 11-6.")
+  ok   shortRP2020-1280-motion: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   shortRP2020-1280-motion: the note is 12px or more (14px)
+  ok   shortRP2020-1280-motion: nothing scrolls sideways on the season card (0)
+  FAIL shortRP2020-1280-motion: back at the hub after the season
+  FAIL shortRP2020-1280-motion: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   shortRP2020-1280-motion: no page errors (clean)
+  ok   shortRP2020-1280-motion: the database host was never reached
+  ok   shortRP2020-1280-reduced: the save loaded (RP 2020, rival line "35 saves, 2 holds, 4.64 ERA, 66 K", 11-5)
+  ok   shortRP2020-1280-reduced: back at the hub before the season
+  ok   shortRP2020-1280-reduced: the Rival screen shows his old line before a season ("35 saves, 2 holds, 4.64 ERA, 66 K")
+  ok   shortRP2020-1280-reduced: the Rival screen shows the old tally 11-5
+  ok   shortRP2020-1280-reduced: the season card came up
+  note shortRP2020-1280-reduced: scrollY on the season card 58 then 58 after 2.6 s
+  ok   shortRP2020-1280-reduced: the season saved is the short 2020 one (2020, 11 games)
+  ok   shortRP2020-1280-reduced: his line is a RP's own shape ("9 saves, 1 hold, 4.82 ERA, 20 K")
+  ok   shortRP2020-1280-reduced: my line on the card is in that shape ("6 saves, 1 hold, 3.64 ERA, 15 K")
+  ok   shortRP2020-1280-reduced: the note's line is the saved line ("9 saves, 1 hold, 4.82 ERA, 20 K")
+  ok   shortRP2020-1280-reduced: the tally moved by one year (11-5 to 11-6)
+  ok   shortRP2020-1280-reduced: the year went to him and the two printed lines say him (13.85 against 19.60)
+  ok   shortRP2020-1280-reduced: the note says him and the save says him ("🪞 Rhys Okafor went 9 saves, 1 hold, 4.82 ERA, 20 K and had the better year of the two of you. Head to head 11-6.")
+  ok   shortRP2020-1280-reduced: the note ends inside the season card, not cut (356 to 944 in 336 to 944)
+  ok   shortRP2020-1280-reduced: the note is 12px or more (14px)
+  ok   shortRP2020-1280-reduced: nothing scrolls sideways on the season card (0)
+  FAIL shortRP2020-1280-reduced: back at the hub after the season
+  FAIL shortRP2020-1280-reduced: the walk threw (TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button').filter({ hasText: /^\s*\S+ Rival\s*$/ }).first()
+)
+  ok   shortRP2020-1280-reduced: no page errors (clean)
+  ok   shortRP2020-1280-reduced: the database host was never reached
+rw1313: 461 checks, 48 failed
