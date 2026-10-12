@@ -71,6 +71,15 @@ New files only, plus two harnesses:
   280 passed; simGmGameDay 426 checks, 0 failed; mounted and static fired; simHarnessAnchors, simNoRivalNames,
   simInventedNames, simNoInventedQuotes, simNumberFormatting, simStorageWrites and simAccessibility exit 0.
 
+- r1308-f-gates (882ece5f): tsc exit 0; the five new test files 41 passed; the front office folders and the
+  library and ledger files 24 files, 282 passed; simGmGameDay 426 checks, 0 failed, and ALL 31 of its controls
+  fired; simUsPostseason 32 checks, 0 failed, 0 findings, and ALL 10 of its controls fired; the seven source
+  harnesses exit 0.
+- r1308-f-weight (882ece5f against 082b956a, one runner, one command at a time): /front-office 364.2K over 36 files
+  and /nfl-my-career 483.4K over 47 files on both trees, and the per chunk gzipped bytes of both routes identical.
+  No NflBracket chunk is made: no route imports it.
+- Merged origin/main at 21941630 (Release AY) as 5057f124; the merged tree's runs are in the closing report.
+
 ## Not done here, and owed to Round 1309
 
 See the closing report (C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1308.md) for the props the board
