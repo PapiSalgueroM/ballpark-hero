@@ -1,0 +1,9 @@
+#!serial
+a-main-nhltyped: git checkout -q 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 && git log -1 --format=%h && US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+a-main-mlbtyped: git checkout -q 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 && git log -1 --format=%h && US_LEDGER_CONTROL=mlbtyped node scripts/simUsSeasonLedger.mjs
+a-1313-nhltyped: git fetch -q origin r1313-us-rival-b && git checkout -q FETCH_HEAD && git log -1 --format=%h && US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+a-1313-mlbtyped: git checkout -q FETCH_HEAD && git log -1 --format=%h && US_LEDGER_CONTROL=mlbtyped node scripts/simUsSeasonLedger.mjs
+a-1313-ledger: git checkout -q FETCH_HEAD && git log -1 --format=%h && node scripts/simUsSeasonLedger.mjs
+a-1313-560-nhltyped: git checkout -q 560a3f85 && git log -1 --format=%h && US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+a-merged-nhltyped: git checkout -q 52c9ba4b67013c93204b09f92fade1559ac653ec && git -c user.email=r@x -c user.name=r merge --no-commit --no-ff FETCH_HEAD >/dev/null && echo "merged $(git rev-parse --short MERGE_HEAD)" && US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+a-merged-mlbtyped: echo "merged $(git rev-parse --short MERGE_HEAD)" && US_LEDGER_CONTROL=mlbtyped node scripts/simUsSeasonLedger.mjs
