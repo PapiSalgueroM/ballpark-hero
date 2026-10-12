@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+simSaveKeeper: node scripts/simSaveKeeper.mjs > $RC_OUT/simSaveKeeper.log 2>&1; s=$?; grep -E "front-office|gameLog" $RC_OUT/simSaveKeeper.log | cut -c1-360; tail -1 $RC_OUT/simSaveKeeper.log; exit $s
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs > $RC_OUT/playSaveKeeper.log 2>&1; s=$?; tail -2 $RC_OUT/playSaveKeeper.log | cut -c1-300; exit $s
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight-head.log 2>&1; s=$?; grep -E "front-office|manager-hot-seat|nfl-my-career" $RC_OUT/weight-head.log | cut -c1-160 | head -8; grep -E "FAIL|sweepWeight" $RC_OUT/weight-head.log | cut -c1-200 | tail -4; exit $s
+walk: node .rc/x/r1305walk.mjs > $RC_OUT/walk.log 2>&1; s=$?; echo "ok lines $(grep -c "^ok" $RC_OUT/walk.log)"; grep "^FAIL" $RC_OUT/walk.log | cut -c1-260 | head -12; tail -1 $RC_OUT/walk.log; exit $s
+playOwnerMandate: ENGINES=chromium node scripts/playOwnerMandate.mjs > $RC_OUT/playOwnerMandate.log 2>&1; s=$?; grep -c FAIL $RC_OUT/playOwnerMandate.log; tail -1 $RC_OUT/playOwnerMandate.log | cut -c1-200; exit $s
+playSessionMarks: ENGINES=chromium node scripts/playSessionMarks.mjs > $RC_OUT/playSessionMarks.log 2>&1; s=$?; grep -c FAIL $RC_OUT/playSessionMarks.log; tail -1 $RC_OUT/playSessionMarks.log | cut -c1-200; exit $s
+playGames-front-office: ENGINES=chromium ONLY=/front-office node scripts/playGames.mjs > $RC_OUT/playGames-fo.log 2>&1; s=$?; tail -1 $RC_OUT/playGames-fo.log | cut -c1-200; exit $s
+head: git rev-parse HEAD
