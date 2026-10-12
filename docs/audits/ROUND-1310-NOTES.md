@@ -56,7 +56,10 @@ mixed). On opened pages the 38 match real range is 26.9 (Premier League) to 31.1
   under owed with what would settle it.
 - Keepers outside England: THIN, no reading on file. None of the four gives an award for clean sheets, so
   no list by season exists the way the Golden Glove's does; laliga.com's keepers page prints no clean sheets,
-  squawka.com and fbref.com answer 403. Owed to the match engine round of the critic's answer 7.
+  squawka.com and fbref.com answer 403. Serie A's, the Bundesliga's and Ligue 1's were looked for in a bounded
+  look by the closing fixer (a search and one or two of the league's own pages each, named under owed): one
+  season's article, a career list and a record list, never a list by season. Owed to the match engine round
+  of the critic's answer 7.
 - Ligue 1 2019-20 is quoted from its second table line and the note only: the first and last lines put a
   club name ending in FC beside its games played, which `scripts/simNoRivalNames.mjs` reads as a product
   title (runner result r1310-e caught it). The same fence caught a sponsor's product name in the title of a
@@ -84,6 +87,17 @@ Residual, by design: a cell's two rows given the same wrong number that both the
 column read as goals on both pages) stays USED. One page's column error is caught (DISPUTED); both at once
 needs two readers to make the same mistake on two pages that print the columns in a different order. Do not
 read "two publishers agree" as "the column is right".
+
+## Closing check (2026-10-12)
+
+- The keepers of Serie A, the Bundesliga and Ligue 1 were looked for (see above); still THIN, still owed.
+- Ligue 1 2019-20's matches stay prose and quoted lines, not a figure: the file's figures have no field for a
+  season where clubs played different numbers (two on 27, eighteen on 28), a single matchesPerClub would be
+  false for two clubs, and a curtailed season binds nothing.
+- Left for the lead: `scripts/simNoRivalNames.mjs` does not read the sponsor's name when it is a hyphenated
+  slug in a url. That predates this round and sits outside its four files; the round's own files no longer
+  carry it, but other data files under scripts do. And the ruling that La Liga enters Round 1311's band on
+  nine seasons, 2021-22 DISPUTED (the next section).
 
 ## For Round 1311 (the band)
 
