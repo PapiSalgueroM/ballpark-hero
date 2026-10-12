@@ -44,7 +44,7 @@ const About = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">What we care about</h2>
           <p>
-            Getting the data right comes first. Trivia uses real sporting records, and a grid answer has to match the player's actual career. If something looks wrong, every page has a Report a bug button in the footer so you can send us the page and the detail that needs checking.
+            Getting the data right comes first. Trivia uses real sporting records, and a grid answer has to match the player's actual career. If something looks wrong, every page has a Report a problem button in the footer so you can send us the page and the detail that needs checking.
           </p>
           <p className="mt-2">
             Second, games have to be worth coming back to. That is why the dailies have streaks and share cards, the grids score you on how rare your answers are, and the sims have real depth: contracts, trades, injuries, playoff runs, whole careers. No two-second gimmicks.
@@ -81,7 +81,7 @@ const About = () => {
             Hey, thanks for checking out my site. DoUKnowBall is my first ever coding project,
             an independent site I build in my free time. I'm constantly working on it, fact
             checking everything and adding new games, so if something looks off, tell me with
-            the Report a bug button at the bottom of any page and I'll get on it. Have a
+            the Report a problem button at the bottom of any page and I'll get on it. Have a
             blessed day.
           </p>
         </div>
