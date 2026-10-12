@@ -1,0 +1,30 @@
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- 4 files: exit 0
+7) the table: the old arm on the fleet (FLEET=full only)
+   the six user clubs by opening strength: BOS strong 85.62, CLE strong 85.34, POR middle 83.26, CHI middle 83.05, MIL weak 79.49, BKN weak 78.23
+   set 2 (seeds 11 to 20), run 2: 60 careers in 55.5 s
+   set 6 (seeds 51 to 60), run 2: 60 careers in 56.0 s
+   set 10 (seeds 91 to 100), run 2: 60 careers in 56.5 s
+   shard 1/4: 180 careers in 168.0 s; Math.random called 0 times while the fleet played
+   old run 2 set 2: S1 83.13 / 82.20, S2 106.3, S3 86.3 (n 80), S4 78.9 (n 180), S6 dead 0.1 payers 2.33, signed a night 12.0
+      S5 by finish band, worst first: 1-5: #1.0 86.0 (n 23), 6-10: #1.0 85.3 (n 7), 11-15: #1.0 85.9 (n 14), 16-20: #1.0 85.9 (n 15), 21-25: #1.0 86.2 (n 20), 26-30: #1.0 86.0 (n 521)
+      by tier: strong playoffs 100.0 titles 71.0 wins 64.8; middle playoffs 94.5 titles 62.0 wins 61.5; weak playoffs 84.5 titles 55.5 wins 58.6
+   old run 2 set 6: S1 83.12 / 82.14, S2 105.7, S3 78.8 (n 80), S4 75.0 (n 180), S6 dead 0.1 payers 2.19, signed a night 12.0
+      S5 by finish band, worst first: 1-5: #1.0 85.9 (n 23), 6-10: #1.0 86.1 (n 14), 11-15: #1.0 86.0 (n 11), 16-20: #1.0 85.7 (n 15), 21-25: #1.0 85.8 (n 13), 26-30: #1.0 86.0 (n 524)
+      by tier: strong playoffs 99.5 titles 68.5 wins 64.6; middle playoffs 93.5 titles 69.0 wins 61.4; weak playoffs 81.5 titles 58.5 wins 58.5
+   old run 2 set 10: S1 83.15 / 82.16, S2 106.0, S3 78.8 (n 80), S4 80.0 (n 180), S6 dead 0.1 payers 2.27, signed a night 12.0
+      S5 by finish band, worst first: 1-5: #1.0 85.7 (n 25), 6-10: #1.0 85.8 (n 11), 11-15: #1.0 84.7 (n 10), 16-20: #1.0 86.3 (n 15), 21-25: #1.0 85.8 (n 18), 26-30: #1.0 85.8 (n 521)
+      by tier: strong playoffs 100.0 titles 72.5 wins 64.5; middle playoffs 93.5 titles 64.0 wins 62.0; weak playoffs 81.5 titles 64.0 wins 58.9
+   over 3 sets, S1 mean strength at season 5 tip off: mean 83.14, per set sd 0.01
+   over 3 sets, S1 mean strength at season 10 tip off: mean 82.17, per set sd 0.03
+   over 3 sets, S2 men rated 85 or more at season 10 tip off: mean 106.0, per set sd 0.3
+   over 3 sets, S3 weak starts' playoff seasons, seasons 2 to 5, per season (n 80 a set): mean 81.3, per set sd 4.3
+   over 3 sets, S4 strong starts' titles, seasons 2 to 10, per season (n 180 a set): mean 78.0, per set sd 2.6
+   over 3 sets, S6 CPU dead money a season, seasons 2 to 10: mean 0.1, per set sd 0.0
+   over 3 sets, S6 tax payers a season, seasons 2 to 10: mean 2.26, per set sd 0.07
+   the fleet by decision 2's rule: S3 needs 12 sets, S4 needs 12, so 12 sets of ten (never fewer than 12)
+   section 1: green
+   section 7: green
+   2 sections ran (1, 7), 2285 checks
+simNbaEarnedDraft: green.

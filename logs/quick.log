@@ -1,0 +1,6 @@
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- 4 files: exit 0
+   section 1: green
+   1 sections ran (1), 121 checks
+simNbaEarnedDraft: green.
