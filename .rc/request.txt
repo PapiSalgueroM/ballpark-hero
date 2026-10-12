@@ -1,0 +1,44 @@
+# Release AX join, final proof J2: Round 1306 (the league book on the gate's own line, the full fleet, the two unit files, every control that needs no base commit; weight and thinall need BOOK_BASE and are not run)
+simCmLeagueBook: export TMPDIR=$(mktemp -d); node scripts/simCmLeagueBook.mjs
+book-full: export TMPDIR=$(mktemp -d); BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+vitest-book: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+cb-mathrandom-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+cb-dropmine-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+cb-byeweek-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+cb-cleanside-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+cb-bought-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+cb-wrongman-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+cb-unnamed-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+cb-offbyone-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+cb-penassistmine-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+cb-assistbench-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+cb-twoman-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+cb-flat-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+cb-penassist-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+cb-noog-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+cb-keyindex-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+cb-hurtentry-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+cb-redeal-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=redeal node scripts/simCmLeagueBook.mjs
+cb-seasonstamp-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+cb-strip-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=strip node scripts/simCmLeagueBook.mjs
+cb-stripdeadline-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=stripdeadline node scripts/simCmLeagueBook.mjs
+cb-assistgoalweight-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+cb-nofill-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=nofill node scripts/simCmLeagueBook.mjs
+cb-shirtrow-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=shirtrow node scripts/simCmLeagueBook.mjs
+cb-thinsheet-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=thinsheet node scripts/simCmLeagueBook.mjs
+cb-noreopen-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=noreopen node scripts/simCmLeagueBook.mjs
+cb-fitlive-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=fitlive node scripts/simCmLeagueBook.mjs
+cb-latezero-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=latezero node scripts/simCmLeagueBook.mjs
+cb-alwayslate-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=alwayslate node scripts/simCmLeagueBook.mjs
+cb-hotseatbook1-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=hotseatbook1 node scripts/simCmLeagueBook.mjs
+cb-hotseatbook2-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=hotseatbook2 node scripts/simCmLeagueBook.mjs
+cb-hotseatbook3-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=hotseatbook3 node scripts/simCmLeagueBook.mjs
+cb-readerdraw-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=readerdraw node scripts/simCmLeagueBook.mjs
+cb-readerwrite-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=readerwrite node scripts/simCmLeagueBook.mjs
+cb-thinbacks-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=thinbacks node scripts/simCmLeagueBook.mjs
+cb-nobacks-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=nobacks node scripts/simCmLeagueBook.mjs
+cb-allbacks-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=allbacks node scripts/simCmLeagueBook.mjs
+cb-places433-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=places433 node scripts/simCmLeagueBook.mjs
+cb-goallesswhole-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+cb-stampv2-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+cb-novar-EXPECT1: export TMPDIR=$(mktemp -d); BOOK_CONTROL=novar node scripts/simCmLeagueBook.mjs
