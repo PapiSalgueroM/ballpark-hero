@@ -1,0 +1,25 @@
+mkThrottle: scripts/playWildernessThrottled.mjs written, throttle after line 92
+playWilderness: seed 2899200577. Replay with WILDERNESS_SEED=2899200577
+THROTTLED: every page of this run at CPU rate 4
+1) Take a job, then lose it
+  PASS  the career is running
+  PASS  the save was doctored to a board about to pull the trigger
+  first kick off at step 0: the page had drawn 4 times
+  sacked at step 6: matches played 3, season 1 week 3, the page had drawn 4042 times since its last load
+  PASS  the board ran out of patience and the wilderness opened
+2) The wilderness has a way onward
+  PASS  the screen says he is out of work
+  PASS  there is a way to wait for the phone
+  PASS  starting over is still offered, it is just no longer the only door
+3) Waiting brings jobs in
+  a club called after 3 wait(s)
+  PASS  a club called after waiting (1 on the table)
+  PASS  the offer states what the board will expect
+  PASS  the club that sacked him did not call back (West Brom)
+4) Taking the job puts him back to work
+  PASS  the sacked screen is gone
+  PASS  the hub is showing the new club (West Brom)
+  PASS  the wilderness closed behind him
+  PASS  no real page errors on the walk (clean)
+
+playWilderness: green. Getting sacked is a chapter now, not the last page.

@@ -1,0 +1,21 @@
+scrum on the recap: 1
+A) on the draft screen before any press: You hold 3 picks
+   press 1 (the walk's) hit "Tag": You hold 3 picks
+   press 2 (the walk's) hit "Bo Kingsley RB · age 21 90": You hold 2 picks
+   press 3 (the walk's) hit "Nash Bishop DB · age 22 88": You hold 1 pick
+B) after the walk's three presses: You hold 1 pick
+   visible buttons: Back | Track stats | Nash Ellingsworth LB · age 22 80 | Rashad Wexford DB · age 22 80 | Roman Thackery DB · age 21 80 | Hollis Thackery TE · age 21 79 | Trey Whitfield LB · age 22 78 | Quincy Yarborough DL · age 22 77 | Kai Rourke DL · age 21 75 | Keegan Whitfield DB · age 21 75 | Kai Draycott OL · age 23 74 | Ezra Whitfield DB · age 21 74 | Trey Aldridge DL · age 23 73 | Elijah Valentine QB · age 23 72 | Marcus Rourke LB · age 22 70 | Nash Maddox DL · age 22 70 | Bo Vandermeer OL · age 22 70 | Rashad Eastmond LB · age 21 70 | Jaxon Delacroix QB · age 23 69 | Deion Crowder LB · age 21 68 | Cookie choices | Light mode | Sound: off | Report a bug | Essential only
+   visible feed rows: [["📥 Drafted Nash Bishop (DB), true rating 86 vs scouted 88.","📥 Drafted Bo Kingsley (RB), true rating 87 vs scouted 90.","🏷️ Isaac Seumalo is tagged: $6.1M for one year, fully guaranteed.","🎙️ The ask softens. Upstairs hates hearing it."]]
+   body holds "The new mandate:" false, "Your ask for patience was heard" false
+C) after drafting on (1 held at B): That is your draft done.
+   visible feed rows on the draft screen: [["📥 Drafted Nash Ellingsworth (LB), true rating 77 vs scouted 80.","📋 The re-sign desk: 0 kept, 2 gone.","📋 You left 2 deals open, so your staff settled them by its own rule.","🏛️ The new mandate: Rebuild honestly: 6 wins keeps the project on schedule upstairs."]]
+   continue buttons: 1
+D) after Continue: "You hold" on screen false, hub tiles 1
+   visible feed rows on the hub (5 rows):
+     0: 📥 Drafted Nash Ellingsworth (LB), true rating 77 vs scouted 80.
+     1: 📋 The re-sign desk: 0 kept, 2 gone.
+     2: 📋 You left 2 deals open, so your staff settled them by its own rule.
+     3: 🏛️ The new mandate: Rebuild honestly: 6 wins keeps the project on schedule upstairs.
+     4: 🎙️ Your ask for patience was heard. The bar sits softer.
+   body holds "The new mandate:" true, "Your ask for patience was heard" true
+gmPressProbe: done
