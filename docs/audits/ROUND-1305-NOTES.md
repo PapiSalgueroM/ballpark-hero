@@ -65,17 +65,47 @@ champ)`. No card, no tile, no new button: those are the next rounds.
   base-simGmReload-replay). Fixed in its own commit: the copy gets those imports by their full path.
 - The four NBA rotation harnesses of the other lane hold `from './NbaRotationPanel'` in the NBA board as an anchor,
   so that import was left as it is and the new control rewrites it in its copy, as they do.
-- Blind spots, printed and not chased: the one press digests do not see the staff's edge of a fresh desk (dropping
-  it from the week's games leaves all thirteen rows green), and the board test with the desk on tells the same
-  final with and without the edge (1.03 strength points). The bind's unit test holds the edge to the chance.
+- A blind spot the adversarial review measured, closed in the fix pass. The staff's edge of a fresh desk is 1.03
+  strength points and tells the same final with and without it, so no check on a SCORE could see the board drop
+  the edges, and no check read the season or the place the board keys a game to (two mutations of the board left
+  every test and all 303 checks of the harness green: runner result r1305-run-m, labels m-keyseason and
+  m-playoffnoedges). src/components/front-office/FrontOfficeGameDay.test.tsx now writes down what the engine
+  played and what the bind was handed and holds the two equal one for one (the game, the season, the week or the
+  round, the edges), on the week path and the one press path, with the desk off and on. The one press digests
+  still do not see the edge of a fresh desk; that file is not where it is held.
 - Abandon and a new franchise each clear the log; either clear alone hides the other (two keys, one lock). The
   control that fires removes both.
+
+## The board tests' negative controls
+
+scripts/controlFrontOfficeBoard.mjs, in the repo since the fix pass (before it the maker lived in a handoff folder
+on one PC). One control writes a copy of the NFL board with ONE mutation under dist/.fo-board-control, points
+FrontOfficeGameDay.test.tsx and FrontOfficeOnePress.test.tsx at it through FO_BOARD_NFL, and reads vitest's report:
+it has fired only when every test it names is red, every test it spares is green and both files loaded. `check`
+asks only that each string is still in the board exactly once (no test is run), `list` prints them, `all` runs
+every one, and `blank` (a comment reworded) is the file's own control and must say DID NOT FIRE. It is not named
+sim* because it writes under dist and spawns vitest once a control: run it on a GitHub runner, never beside a
+harness that walks dist. The fifteen:
+- the save field: `nolog` (the log left out of the save), `abandonkeeps` (cleared neither by Abandon nor by a new
+  franchise), `summerkeeps` (the summer does not end it), `refusesave` and `trustlog` (a log that does not read is
+  made a refusal, or kept as it is);
+- what a player reads: `weekengine` (the grid shows the engine's own scores), `enginescores` (the recap save keeps
+  them);
+- what the board hands the bind: `keyseason` (a week's games keyed to another season), `tellnoedges` and `noedges`
+  (the week told without, or played without, the staff's edges), `playoffnoedges` (the bracket told without them),
+  `playoffkey` (a playoff game keyed to the week and not to its round);
+- the lifted close: `noseason`, `closetwice`, `titles`.
+
+Round P has no browser walk in the repo: its fence is the behaviour test on the real board with its control.
+scripts/playDraftNight.mjs is the draft night of the four US My Careers (Round 1220) and reaches no front office.
 
 ## Owed, not in this round
 
 - The save keeper's row for `gameLog.v` and a played fixture: scripts/simSaveKeeper.mjs and
-  scripts/lib/realSaves.mjs are rewritten by Release AW, so that step is built on a tree that holds AW (see the
-  closing report for where it stands).
+  scripts/lib/realSaves.mjs are rewritten by Release AW, so that step is built on a tree that holds AW: the branch
+  `r1305-keeper` (this branch merged with origin/release-aw-int, plus the row, the played fixture and the control
+  `partgamelog`). It is the branch to ship in a release that carries AW; on `r1305-gm-press` alone the keeper is
+  green only because its /front-office fixture is a start state with no log.
 - The tile, Watch, the bracket you play, week 18's readers: the next rounds of the critic's split (R2, R3, R4).
 - The same behaviour test over all four boards' draft nights (Round 1222's binds), after which section 5's two name
   checks of scripts/simDraftNight.mjs can go.
