@@ -183,6 +183,8 @@
  *               (still told with them)                                section 13); the desk off checks stay green
  *   deskless    runPlayoffs plays its games without the desk's edges  section 11 (the count of club seasons the
  *               (the engine forgets the desk in the playoffs)         edge moved: none)
+ *   storyleak   an import of the bracket's view lib planted in memory section 6 (the boards' static chain: the press
+ *               in frontOfficePostseason.ts                           half reaches a story file; the mount list allows it)
  *   inseason    loadGmPostseason loses its "not in the postseason"    section 12 (outside the postseason the load
  *               line                                                  is null); a sound block stays green
  *   byeplays    the NFL data's first Wild Card tie made seed 1        section 13 (no entry in a week he has the
@@ -329,6 +331,7 @@ const CONTROLS = {
   keyrebuilt: { section: 13, labels: ["deep equal the one press path's", 'the sink holds every game'], clean: ['his playoff record in the log'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: 'if (t.last) told.push({ ...t.last, key: `${season}|${tie.round}|${t.game.home}|${t.game.away}|${t.game.homeScore}-${t.game.awayScore}` });' }] },
   logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
   /* Round 1308's review: a control for each check that had none (s12.outside, s13.when and the desk's count) */
+  storyleak: { section: 6, labels: ['import no story law'], patches: [], plant: { file: NFL_POST, text: "\nimport { gmBracketPlace } from '@/lib/gmBracketView';\n" } },
   inseason: { section: 12, labels: ['outside the postseason the load is null'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'if (!inPostseason) return null;', to: '' }] },
   byeplays: { section: 13, labels: ['no log entry in a week he has the bye'], patches: [{ file: NFL_DATA, from: 'home: { seed: top + 1 }, away: { seed: top + 6 }', to: 'home: { seed: top }, away: { seed: top + 6 }' }] },
   deskless: { section: 11, labels: ['so the desk on checks hold something'], patches: [{ file: 'src/lib/frontOffice.ts', from: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges));", to: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng));" }] },
@@ -1152,20 +1155,44 @@ for (const set of SEEDSETS) {
   /* NO BOARD READS THE STORY IN ITS OWN CHUNK. A press needs the score law, the bind and the log in the same tick, so
      those are static imports of a board. What only a drawn card reads (the told path, the story law, the game day law
      and the words of the "?") must reach a board through a lazy part or not at all, or a route that is on its weight
-     budget pays for a card nobody has opened. Read from the syntax tree: an import DECLARATION that is not type only. */
+     budget pays for a card nobody has opened. Read from the syntax tree: an import or export DECLARATION that is not
+     type only. SINCE ROUND 1308'S REVIEW THE CHECK FOLLOWS THOSE IMPORTS through every file under src (a module is
+     never split across chunks, so a story file reached through any chain of static imports is in the chunk), from the
+     four boards and from the press half a board will hold statically from Round 1309 (gmPostseason.ts and
+     frontOfficePostseason.ts). Measured on 2026-10-12: 108 files reached, none of them a story file. */
   const STORY = new Set(STORY_FILES.map(noExt));
+  const PRESS_HALF = [POST, NFL_POST];
+  const fileSet = new Set(files);
+  const srcOf = t => ['.ts', '.tsx', '/index.ts', '/index.tsx'].map(e => t + e).find(f => fileSet.has(f)) ?? null;
+  /* every static import or export declaration of a file, as a path from the repo root ('' for a package) */
+  const staticTargets = rel => {
+    const tree = ts.createSourceFile(rel, readPatched(rel), ts.ScriptTarget.Latest, false, rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+    const out = [];
+    for (const st of tree.statements) {
+      if (ts.isImportDeclaration(st) && !st.importClause?.isTypeOnly) out.push(target(rel, st.moduleSpecifier.text));
+      else if (ts.isExportDeclaration(st) && st.moduleSpecifier && !st.isTypeOnly) out.push(target(rel, st.moduleSpecifier.text));
+    }
+    return out;
+  };
   let statics = 0;
   const heavy = [];
-  for (const rel of BOARDS) {
-    const tree = ts.createSourceFile(rel, readPatched(rel), ts.ScriptTarget.Latest, false, ts.ScriptKind.TSX);
-    for (const st of tree.statements) {
-      if (!ts.isImportDeclaration(st) || st.importClause?.isTypeOnly) continue;
-      statics += 1;
-      const t = target(rel, st.moduleSpecifier.text);
-      if (STORY.has(t)) heavy.push(`${rel} imports ${t}`);
+  const via = new Map([...BOARDS, ...PRESS_HALF].map(f => [noExt(f), null]));
+  const chain = t => { const out = [t]; for (let c = via.get(t); c; c = via.get(c)) out.push(c); return out.reverse().join(' -> '); };
+  const queue = [...BOARDS, ...PRESS_HALF];
+  while (queue.length > 0) {
+    const rel = queue.shift();
+    const list = staticTargets(rel);
+    if (BOARDS.includes(rel)) statics += list.length;
+    for (const t of list) {
+      if (!t || via.has(t)) continue;
+      via.set(t, noExt(rel));
+      if (STORY.has(t)) { heavy.push(chain(t)); continue; }
+      const f = srcOf(t);
+      if (f) queue.push(f);
     }
   }
-  check(6, `the four boards import no story law, no game day law and no help words statically (${statics} static imports read)`, heavy.length === 0 && statics >= 40, heavy.join(', ') || `only ${statics} static imports were seen`);
+  check(6, `the four boards import no story law, no game day law and no help words statically, directly or through any chain of static imports under src, and nor does the press half a board will hold (gmPostseason, frontOfficePostseason) (${statics} static imports of the boards read, ${via.size} files reached)`,
+    heavy.length === 0 && statics >= 40 && via.size >= 60, heavy.join(', ') || `only ${statics} static imports and ${via.size} files were seen`);
   /* Round 1307: the tile is mounted, and through a lazy import made once at module level (a mount list that allowed a
      card nobody mounts would be holding nothing, and a lazy part made inside a render remounts on every save) */
   const lazyCard = boardText.split(`lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'))`).length - 1;
