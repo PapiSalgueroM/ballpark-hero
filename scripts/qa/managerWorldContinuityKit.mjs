@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-export const BASE = '09df145abfb241679022b41903d2f19bc254ebf9';
+export const BASE = 'b6eb78e799b12c851e4e8e583e9e926aed117f1c';
 export const sha = value => createHash('sha256').update(value).digest('hex');
 export const lf = value => value.replaceAll('\r\n', '\n');
 export const clone = value => structuredClone(value);
