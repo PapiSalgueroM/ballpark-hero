@@ -1,0 +1,8 @@
+careerInbox exit=0 3s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+careerHub exit=0 0s | simCareerHub: green. Nine games on the same boxes now, and every award has a year on it.
+usCareerDefects exit=0 13s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+sportEras exit=0 0s | ALL SPORT ERA CHECKS PASSED
+dailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+trustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+usCareerDeckC exit=0 40s | simUsCareerDeckC: all checks passed
+careerInboxBeats exit=0 50s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
