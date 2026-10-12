@@ -1,0 +1,8 @@
+lawCmp exit=0 16s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+layCmp exit=0 16s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+seamCmp exit=0 18s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+layCtl exit=1 13s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)
+seamCtl exit=1 18s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control seam)
+lawdrift exit=1 18s | simUsSeasonCentre digest compare: 11 digests, 5 moved (control lawdrift)
+fightProve exit=0 7s | simFightCareer: all sections passed
+anchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
