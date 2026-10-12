@@ -151,6 +151,28 @@ Proof of step 1 (src at a064a170; the later commits of the step touch no src):
   of judgeRivalSeason are gone (a play is required); ownRosterBeat is deleted (ownRosterCards stays). Its proof
   and the three receipts follow below.
 
+### Step 6 and step 7, proven
+
+- Step 6: r1313-s6b rivalProve6 (RIVAL_PROVE=3cf2dfa2 RIVAL_MOVED=none RIVAL_CARDS=none) exit 0, 76 checks, P2
+  1,000 of 1,000 byte equal in all four sports. r1313-s6a: the three receipts printed on 31648047, 0 of 42 values
+  moved in each, only careerFactBeats.ts, careerRival.ts and nflCareerRivalryEvents.ts differ among their
+  bundled files; committed as fd16c83d (law), c6a9b785 (seam), 52fce2c6 (lay). The 5c and 5d src edits were
+  proven moving nothing too: r1313-s5d3 rivalProve5c (RIVAL_PROVE=b6a861b6, none) exit 0, 76 checks.
+- Step 7 on cd86810f (origin/main merged, docs only): r1313-s7a all exit 0 (tsc; the whole vitest suite, 477
+  files and 7,308 tests passed; simUsRivalSense; senseC; rivalryEvents; the board replay; the digest; the
+  ledger; the four career sims; simUsCareerWeight; simUsSeasonCentre 158 checks; the three compares, 0 moved;
+  simFightCareer). r1313-s7c: the 46 non prove controls of simUsRivalSense FIRED. r1313-s7d: the rivalry and
+  receipt controls FIRED, and the ledger's mlbtyped and nhltyped MISFIRED (E8a no longer red under a typed
+  length), fixed in 00e42677 and proven on r1313-s7g (21 of 21 FIRED exactly, 3043 checks, anchors 0).
+  r1313-s7e and r1313-s7h: the simNbaAwardsSense controls FIRED (othersport under SENSE_PROVE_OTHERS=1;
+  tickdraws needs SENSE_PROVE_1149, stale by design, not run). r1313-s7f, a served build: simFlagshipWeight 0
+  (2,710,409 bytes raw, careerRivalryChoices 5,988), rosterlink and allchunks FIRED, sweepWeight 0
+  (/soccer-career 822.1K of 824K, /nfl-my-career 483.2K of 485K), playUsMarketTalk, playUsSeasonCentre,
+  playNbaNumbers, playCareerHallLine and playGames on the five routes all 0.
+- The walk, r1313-s5e3 on e4a99fbf: NFL 821 checks, MLB 862, NHL 598, all passed; rivalflip and oldline FIRED
+  in MLB and the NHL. Its first runs (r1313-s5e1, r1313-s5e2) found the walk itself lost on the retirement talk
+  and on the free agency window's Compare view, fixed in b8750b57 and e4a99fbf (no src edit).
+
 ### What's New, sentence by sentence (advice 14)
 
 - "drafted at your position, but his season line never was": draftRival(pos, ...) at mlbMyCareer.ts line 382
