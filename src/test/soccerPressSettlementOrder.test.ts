@@ -12,6 +12,15 @@
  * 2. THE SEVERE INJURY ROW. A year lost to a severe injury closes a pending promise with no verdict. Its removal
  *    was noticed only by an anchor (a position in the source), by no test of what the game does. A fleet plays
  *    careers that promise every year and holds every severe injury row that arrives with a promise pending.
+ *
+ * MEASURED on a GitHub runner (remote check rAX-fix-f, 2026-10-11; both tests are seeded, so every run is this run):
+ *   1. 47 of 47 starting popularities settled the promise, all of them missed; the year's sponsorship income
+ *      differs from the save with no part at 10 of them (popularity 38 to 44: 0.78 becomes 0.4; 60 to 64: 1.65
+ *      becomes 0.78; 80 to 84: 2.9 becomes 1.65), every one downward. The floors are 24 settled and 2 that differ.
+ *      With the press call moved below the money (the reviewer's mutation M1) the count that differ is 0: red.
+ *   2. 6 severe injury rows arrived with a promise pending in the first 4 careers (the fleet stops at 6), all six
+ *      closed as excused on the injury row. The floor is 3. With the settlement of that row removed (mutation
+ *      M2) every one of them is still pending: red.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
