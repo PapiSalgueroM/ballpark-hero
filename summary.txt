@@ -1,0 +1,4 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playNationJob-1 exit=0 15s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+playNationJob-2 exit=0 15s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+nj-nooffer exit=0 10s | playNationJob control nooffer: all 2 guarded checks fired (mutations landed: {"nationOffer":2})

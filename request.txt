@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Round 1314 step 3 proof on 0cc1de05: playNationJob twice on a served build, and its control
+playNationJob-1: ENGINES=chromium node scripts/playNationJob.mjs
+playNationJob-2: ENGINES=chromium node scripts/playNationJob.mjs
+nj-nooffer: NATION_JOB_CONTROL=nooffer ENGINES=chromium node scripts/playNationJob.mjs
