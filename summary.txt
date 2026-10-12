@@ -1,0 +1,8 @@
+book-plain exit=1 48s | simCmLeagueBook: 2 FAILURE(S) (48s)
+book-d1 exit=1 62s | simCmLeagueBook: 5 FAILURE(S) (61s)
+book-d0 exit=1 62s | simCmLeagueBook: 5 FAILURE(S) (61s)
+book-d2 exit=1 61s | simCmLeagueBook: 5 FAILURE(S) (60s)
+book-d3 exit=1 63s | simCmLeagueBook: 5 FAILURE(S) (63s)
+book-d4 exit=1 63s | simCmLeagueBook: 5 FAILURE(S) (63s)
+simHarnessAnchors exit=0 26s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+book-f0 exit=1 111s | simCmLeagueBook: 5 FAILURE(S) (111s)

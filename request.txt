@@ -1,0 +1,9 @@
+# Round 1311 (head 992e1961): simCmLeagueBook with the carried saves judged, as the gate runs it and with BOOK_BASE on every seed set, the anchors
+book-plain: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBook.mjs
+book-d0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d0 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=0 node scripts/simCmLeagueBook.mjs
+book-d1: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d1 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-d2: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d2 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-d3: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d3 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-d4: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-d4 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f0 && git worktree add -q $B 21941630 && BOOK_BASE=$B SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: TMPDIR=$(mktemp -d) node scripts/simHarnessAnchors.mjs
