@@ -1,0 +1,12 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":16,"free agent":12,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2150; largest 60 records
+TIME Real Madrid now seed 101 season 1: 0 records; buildMarket 4 ms (stripped 4); matchday 20 ms (stripped 15)
+TIME Real Madrid now seed 101 season 5: 23 records; buildMarket 358 ms (stripped 2); matchday 40 ms (stripped 11)
+TIME Real Madrid now seed 101 season 10: 55 records; buildMarket 837 ms (stripped 2); matchday 58 ms (stripped 11)
+TIME Real Madrid now seed 202 season 1: 0 records; buildMarket 3 ms (stripped 2); matchday 24 ms (stripped 13)
+TIME Real Madrid now seed 202 season 5: 24 records; buildMarket 682 ms (stripped 2); matchday 64 ms (stripped 17)
+TIME Real Madrid now seed 202 season 10: 54 records; buildMarket 1437 ms (stripped 3); matchday 98 ms (stripped 20)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced

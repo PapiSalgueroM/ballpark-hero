@@ -1,0 +1,12 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":19,"free agent":12,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2072; largest 63 records
+TIME Everton now seed 101 season 1: 0 records; buildMarket 8 ms (stripped 4); matchday 35 ms (stripped 22)
+TIME Everton now seed 101 season 5: 21 records; buildMarket 527 ms (stripped 3); matchday 60 ms (stripped 20)
+TIME Everton now seed 101 season 10: 55 records; buildMarket 1000 ms (stripped 4); matchday 116 ms (stripped 20)
+TIME Everton now seed 202 season 1: 0 records; buildMarket 3 ms (stripped 2); matchday 22 ms (stripped 18)
+TIME Everton now seed 202 season 5: 21 records; buildMarket 336 ms (stripped 3); matchday 65 ms (stripped 19)
+TIME Everton now seed 202 season 10: 57 records; buildMarket 1553 ms (stripped 3); matchday 132 ms (stripped 19)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced

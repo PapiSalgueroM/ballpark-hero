@@ -1,0 +1,12 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":20,"free agent":12,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2030; largest 71 records
+TIME Real Betis era2020 seed 101 season 1: 0 records; buildMarket 1 ms (stripped 1); matchday 17 ms (stripped 16)
+TIME Real Betis era2020 seed 101 season 5: 28 records; buildMarket 193 ms (stripped 1); matchday 57 ms (stripped 13)
+TIME Real Betis era2020 seed 101 season 10: 59 records; buildMarket 390 ms (stripped 1); matchday 111 ms (stripped 14)
+TIME Real Betis era2020 seed 202 season 1: 0 records; buildMarket 3 ms (stripped 1); matchday 33 ms (stripped 13)
+TIME Real Betis era2020 seed 202 season 5: 28 records; buildMarket 190 ms (stripped 1); matchday 56 ms (stripped 12)
+TIME Real Betis era2020 seed 202 season 10: 59 records; buildMarket 215 ms (stripped 1); matchday 58 ms (stripped 8)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced
