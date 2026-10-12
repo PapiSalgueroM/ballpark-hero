@@ -1,0 +1,751 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [31m❯[39m src/components/front-office/FrontOfficePostseason.test.tsx [2m([22m[2m35 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 10299[2mms[22m[39m
+   [32m✓[39m NFL front office: a save in the playoffs[2m > [22mloads with its bracket, draws nothing on the way, and every save after it holds the bracket[32m 249[2mms[22m[39m
+   [32m✓[39m NFL front office: a save in the playoffs[2m > [22ma bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular season and drops its playoff games[32m 47[2mms[22m[39m
+   [32m✓[39m NFL front office: a save in the playoffs[2m > [22ma hub save past the last week with no bracket on it opens on the save error screen, and nothing is written[32m 27[2mms[22m[39m
+   [32m✓[39m NFL front office: a save in the playoffs[2m > [22ma hub save past the last week with a bracket, but its season already has a champion opens on the save error screen, and nothing is written[32m 17[2mms[22m[39m
+   [32m✓[39m NFL front office: a save in the playoffs[2m > [22ma hub save past the last week with a bracket of a season no bracket can be made for opens on the save error screen, and nothing is written[32m 25[2mms[22m[39m
+   [32m✓[39m NFL front office: a save in the playoffs[2m > [22ma bracket on a save outside the playoffs is not read, and the next save drops it[32m 72[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the bracket does not follow a GM into his next franchise[2m > [22mabandon in the playoffs and start again: the new save holds no bracket, and Play Week 1 plays Week 1 [33m 327[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 456[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 519[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 509[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 377[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 486[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 415[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 580[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 669[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 538[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 737[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 821[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 685[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: Sim the rest from any round[2m > [22mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws [33m 499[2mms[22m[39m
+   [32m✓[39m NFL front office: a club over the roster limit cannot press a round[2m > [22mthe round and the rest are shut, and a press on them plays nothing[32m 221[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22mthe chip, the week box line and its buttons: no Week 18 of 17, no bye line, no old button[32m 35[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22m"Play Week 17" turns the chip to Playoffs and takes the old button away[32m 62[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22ma club with no game this round says so, never that it has a bye week[32m 30[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22ma hurt man is out for the playoffs, on the roster and on the depth chart, never out a count of weeks[32m 45[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22mover the roster limit, the men must go before the next round, not before Week 18[32m 57[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22mthe hub: the play box reads Postseason with his last playoff result, the table says the regular season is over, and no box counts weeks left[32m 20[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22ma trade is refused in the bracket (GM desk on: false), and nothing is traded[32m 52[2mms[22m[39m
+   [32m✓[39m NFL front office: Week 18 reads as the playoffs[2m > [22ma trade is refused in the bracket (GM desk on: true), and nothing is traded[32m 56[2mms[22m[39m
+   [32m✓[39m NFL front office: one box, two faces in the playoffs[2m > [22ma round he plays opens his game on the box with the back chip; the chip shows the bracket, and "Your game" opens that game[32m 106[2mms[22m[39m
+   [32m✓[39m NFL front office: one box, two faces in the playoffs[2m > [22ma round he does not play (his bye) shows the bracket, and the log takes nothing[32m 51[2mms[22m[39m
+   [32m✓[39m NFL front office: Watch in the playoffs[2m > [22mWATCH YOUR GAME is the same press and gives nothing away: the page is the round before it until full time[32m 93[2mms[22m[39m
+   [32m✓[39m NFL front office: Watch in the playoffs[2m > [22m"Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket behind the chip, and no league grid[32m 83[2mms[22m[39m
+   [32m✓[39m NFL front office: Watch in the playoffs[2m > [22mthe title game watched: the recap waits for full time, and then it comes[32m 67[2mms[22m[39m
+[31m   [31m×[31m NFL front office: Watch in the playoffs[2m > [22mthe title game watched, won and lost: the press card, the owner card and the finish are as they were until full time[39m[33m 1264[2mms[22m[39m
+[31m     → a title game won and one lost, each with a clock, in forty streams: expected [ 'won' ] to deeply equal [ 'lost', 'won' ][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22mNFL front office: Watch in the playoffs[2m > [22mthe title game watched, won and lost: the press card, the owner card and the finish are as they were until full time
+[31m[1mAssertionError[22m: a title game won and one lost, each with a clock, in forty streams: expected [ 'won' ] to deeply equal [ 'lost', 'won' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "lost",[39m
+[2m    "won",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office/FrontOfficePostseason.test.tsx:[2m709:95[22m[39m
+    [90m707| [39m      expect(done.at(-1), `${how}: full time records a title, and only…
+    [90m708| [39m    }
+    [90m709| [39m    expect(seen.sort(), 'a title game won and one lost, each with a cl…
+    [90m   | [39m                                                                                              [31m^[39m
+    [90m710| [39m  })[33m;[39m
+    [90m711| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 22:50:23
+[2m   Duration [22m 13.38s[2m (transform 1.62s, setup 74ms, collect 2.00s, tests 10.30s, environment 434ms, prepare 249ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficePostseason.test.tsx,title=src/components/front-office/FrontOfficePostseason.test.tsx > NFL front office%3A Watch in the playoffs > the title game watched%2C won and lost%3A the press card%2C the owner card and the finish are as they were until full time,line=709,column=95::AssertionError: a title game won and one lost, each with a clock, in forty streams: expected [ 'won' ] to deeply equal [ 'lost', 'won' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "lost",%0A    "won",%0A  ]%0A%0A ❯ src/components/front-office/FrontOfficePostseason.test.tsx:709:95%0A%0A
