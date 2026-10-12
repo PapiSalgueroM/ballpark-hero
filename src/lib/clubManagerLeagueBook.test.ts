@@ -6,6 +6,11 @@ import {
   type BookLineOf, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 
+/* WHAT THIS FILE DOES NOT HOLD: who of a club's outfield the ENGINE hands to creditCleanSheet, and when the
+   engine gives a save with no book a whole book or a late one. Both live in src/lib/clubManager.ts and
+   are held by scripts/simCmLeagueBook.mjs on its default fleet (the note at the top of
+   clubManagerLeagueBoards.test.ts names the sections and controls). Do not cite this file for either. */
+
 /* Round 1229. A made up eleven in the shape the engine names a rival in: a keeper, four at the back,
    four in midfield, two up front. Roles and ratings only, nobody real. */
 const XI: BookMan[] = [
