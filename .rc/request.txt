@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1310.mjs
+distgrep: n=$(grep -rlE "cmLeagueBookFacts|rsssftops|espnstats-ll|plsite-pl-" dist | wc -l); echo "dist files naming the facts: $n"; test "$n" = 0
