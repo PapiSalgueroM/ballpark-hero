@@ -13,7 +13,9 @@ wins restored exact saved bytes; three Unlimited wins preserved those bytes;
 five browser controls detected invalid metadata, omitted picks or deleted saves.
 All 521 locked versions held and all 26 original fixed PNGs were reviewed.
 The evidence is offline and scoped, with no newer-main or live-site claim.
-The draft PR remains for H to integrate and publish. See
+Draft PR244 is pushed and attached to this chat. H retains integration and
+publication. A native merge preview against 48cb9d4b reported no conflicts;
+it did not modify the checkout or qualify an integrated build. See
 docs/audits/transfer-path-direct-target-2026-10-12.md.
 
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)

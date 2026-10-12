@@ -99,3 +99,8 @@ Local evidence lives under this worktree's ignored .tmp-fx/direct-fixed-fc82e15e
 and .tmp-fx/direct-baseline-501640a7 directories. Later documentation-only
 commits do not extend runtime qualification beyond frozen fc82e15e. No backend,
 live-site, newer-main, full-suite or integration claim is made.
+
+Draft PR244: https://github.com/PapiSalgueroM/ballpark-hero/pull/244, attached
+to this chat. Native merge preview against accepted main 48cb9d4b exited zero
+without conflicts. This is a Git-only preview; no merge or integrated runtime
+was performed. H retains integration and publication.
