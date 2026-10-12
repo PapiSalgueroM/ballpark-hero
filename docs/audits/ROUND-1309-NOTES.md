@@ -88,3 +88,22 @@ load half of the postseason and the board's own lines) and the shared finalsBrac
 for on the route; every other difference is a few bytes of hash noise. /nfl-my-career is 483.4K on both. The bracket
 card, its help words and the ledger's week names are one lazy chunk, NflBracket (9,836 bytes raw), asked for only
 when the week box opens in the playoffs.
+
+## Proof (GitHub runners; the closing report has every line)
+
+On 90b64d7c: r1309-fin2-g (tsc 0, the front office vitest 0, simGmGameDay 462/0, the board controls' strings once,
+simHarnessAnchors 0), r1309-fin2-w (the walk 367 checks 0 failed; bracketjump and playoffspoil red at point 14 alone,
+lostblock at 15 alone), r1309-fin2-rd (revealdown red at 12 alone), r1309-fin2-pw (simResultMoment 0). On 78a19441
+(less one className): r1309-fin-a (tsc 0, the whole vitest suite 0 with 7,370 tests, simGmGameDay's 37 controls all
+fired, the harness list 0, the keeper's nine part controls fired, 20 of the 24 rule fences green and the other four
+the live database or a missing dist), r1309-fin-c (all 35 board controls fired, blank did not), r1309-fin-w (the
+other walks: the base's two playGmPress failures and 26 playFoHub failures unchanged, the Season Center's three
+walks green, playGames 0 findings, simRevealScroll green). On a2440ca5: r1309-old (the base bb051ee0 plays every
+save this round writes outside the bracket and refuses the one in it with its delete button; this round plays every
+save the base writes), r1309-weight.
+
+## Rollback note
+
+Once GMs sit in a bracket, a build from before this round refuses their saves (the old validator says no to a hub
+save at Week 18 and the old board shows "Delete unusable save"), proven on r1309-old. A rollback locks those saves
+out until the round is put back.
