@@ -106,6 +106,19 @@ describe('GmBracketCard', () => {
     expect(qa('[data-bracket-tie]').map(t => t.textContent).join(' ')).toContain('To be decided');
   });
 
+  it('a week he looked back at gives way to the new week once the bracket moves on', () => {
+    const week1 = playBracketWeek(NFL_BRACKET, open(), chalk());
+    const { rerender } = render(<NflBracket {...mount(week1, 'S1')} />);
+    fireEvent.click(q('[data-bracket-week="1"]')!);
+    expect(q('[data-bracket-week="1"]')!.getAttribute('aria-pressed')).toBe('true');
+    /* the same save drawn again keeps his choice; the next round played opens the week after it */
+    rerender(<NflBracket {...mount(JSON.parse(JSON.stringify(week1)), 'S1')} />);
+    expect(q('[data-bracket-week="1"]')!.getAttribute('aria-pressed')).toBe('true');
+    rerender(<NflBracket {...mount(playBracketWeek(NFL_BRACKET, week1, chalk()), 'S1')} />);
+    expect(q('[data-bracket-week="3"]')!.getAttribute('aria-pressed')).toBe('true');
+    expect(q('[data-bracket-place]')!.textContent).toBe('Next: the AFC Championship, against Club S2.');
+  });
+
   it('the "?" opens, closes and opens again, over the host it is handed', () => {
     const host = document.createElement('div');
     document.body.appendChild(host);
