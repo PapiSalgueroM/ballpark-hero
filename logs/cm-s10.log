@@ -1,0 +1,11 @@
+playClubManager: seed 10. Replay with PLAY_CM_SEED=10
+1) Taking a job
+   in the job at Crystal Palace: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Seaso
+   board confidence doctored from 60 to 100: the slot screen reads "Board 100/100"
+   back on the hub; the page has drawn 4 times since this load, before the first kick off
+2) Playing a season through the interface
+   the page had drawn 31880 times since its last load when the walk ended (4 at the hub before the first kick off)
+   25 half times, 27 full times, 25 subs, 9 shape changes, 31 windows, 2 signings, 50 skips through the live viewer
+   ending: was sacked, which is a real ending
+
+Played Club Manager through its own screens. 0 findings.
