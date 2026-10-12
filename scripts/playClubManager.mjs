@@ -67,12 +67,31 @@
  * squad. CM_CONTROL=nobusiness cuts the transfer business block out of the
  * served review (no rebuild, nothing left in the tree) and exactly the two
  * checks that read that block have to fire.
+ *
+ * ROUND 1314: A COIN TOSS NO MORE. 22 runs at Round 1304 were sacked in 10 and
+ * red in 5, every red a SHALLOW line after a sack that came before the first
+ * signing, and the sackings bunched by the hour, which a page seed alone
+ * cannot cure. So two things, both before the first kick off: the page plays
+ * on a seeded stream (PLAY_CM_SEED, scripts/lib/pageSeed.mjs, printed first),
+ * and the board's confidence is doctored to the top of its range once, from
+ * robots.txt, and PROVEN landed off the manager slot screen's "Board N/100"
+ * line (a lost edit is a BROKEN finding). The sack is playWilderness's to
+ * cover. The SHALLOW lines are unchanged: they are the coverage claim. The
+ * walk also blocks the database host.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { pageSeedOf, seedPages, pageDraws } from './lib/pageSeed.mjs';
 const { chromium } = pw;
+
+/* Round 1314: the page plays on a seeded stream (scripts/lib/pageSeed.mjs). PLAY_CM_SEED is the one
+   knob: unset, the walk's own seed from its file name; a whole number; or "fresh". Printed first. */
+let SEED = 0;
+try { SEED = pageSeedOf(import.meta.url, process.env.PLAY_CM_SEED); }
+catch (e) { console.error(`PLAY_CM_SEED: ${e.message}`); process.exit(2); }
+console.log(`playClubManager: seed ${SEED}${process.env.PLAY_CM_SEED === undefined ? ' (the walk\'s own, from its file name)' : ''}. Replay with PLAY_CM_SEED=${SEED}`);
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 /* Round 472: a match is two skips longer than it was, because Play Match and
@@ -101,6 +120,9 @@ const browser = await chromium.launch({
 /* Round 330: WIDTH=390 or 320 plays the season at a real phone width for the
    mobile depth walk; 430 stays the default baseline. */
 const ctx = await browser.newContext({ viewport: { width: Number(process.env.WIDTH || 430), height: Number(process.env.HEIGHT || 900) }, ignoreHTTPSErrors: true });
+/* Round 1314: no walk reaches the live database, and every page draws from the walk's seed. */
+await ctx.route(/supabase\.co/, r => r.abort());
+await seedPages(ctx, SEED);
 
 /* Round 672: CM_CONTROL=nobusiness, the negative control for the season
    review checks, now that the walk really signs somebody. The served season
@@ -312,6 +334,42 @@ if (!/Season 1/i.test(t)) {
   if (!myClub) note('BROKEN ', 'could not read which club I am managing off the hub');
 }
 
+/* ---------- Round 1314: a board that gives the walk its season ----------
+   22 runs at Round 1304 (results-g/fix-1304.md) were sacked in 10 and red in 5, every red the same
+   SHALLOW line after a sack that came before the walk's first signing: the walk plays badly on
+   purpose, and a board that loses patience in the autumn left the market and the review unreached.
+   The sack is playWilderness's to cover. So, once, before the first kick off, the save's board
+   confidence goes to the top of its range, edited from a page where the app does not run (the Round
+   196 rule), and the walk PROVES it landed: the manager slot screen draws "Board N/100" off the save,
+   and it must read the doctored value before the career is resumed. A lost edit is a BROKEN finding. */
+const DOCTORED = 100;
+let kickoffDraws = null;
+if (myClub) {
+  await page.goto(BASE + '/robots.txt', { waitUntil: 'domcontentloaded', timeout: 20000 });
+  const was = await page.evaluate(v => {
+    const raw = localStorage.getItem('dukb-club-manager-save');
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    const before = c.boardConfidence;
+    c.boardConfidence = v;
+    localStorage.setItem('dukb-club-manager-save', JSON.stringify(c));
+    return before;
+  }, DOCTORED).catch(() => null);
+  await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 20000 });
+  const resumeBtn = page.getByRole('button', { name: /^Resume Career$/ }).first();
+  await resumeBtn.waitFor({ timeout: 15000 }).catch(() => {});
+  /* The active slot is the one that draws the Board line. */
+  const slotText = ((await page.locator('[data-testid^="cm-slot-"]').filter({ hasText: /Board \d+\/100/ }).first().innerText({ timeout: 5000 }).catch(() => '')) || '').replace(/\s+/g, ' ');
+  const board = slotText.match(/Board (\d+)\/100/);
+  console.log(`   board confidence doctored from ${was} to ${DOCTORED}: the slot screen reads "${board ? board[0] : 'no Board line'}"`);
+  if (was === null) note('BROKEN ', 'the save was not there to doctor, so the board is the engine\'s own and the run may be sacked early');
+  else if (!board || Number(board[1]) !== DOCTORED) note('BROKEN ', `the doctored board did not land: the slot screen reads "${board ? board[0] : slotText.slice(0, 80)}", not Board ${DOCTORED}/100`);
+  await resumeBtn.click({ timeout: 5000 }).catch(() => {});
+  await page.getByText(/Season 1/i).first().waitFor({ timeout: 15000 }).catch(() => {});
+  kickoffDraws = await pageDraws(page);
+  console.log(`   back on the hub; the page has drawn ${kickoffDraws} times since this load, before the first kick off`);
+}
+
 /* ---------- play a season ---------- */
 console.log('2) Playing a season through the interface');
 let halftimes = 0, fullTimes = 0, subsMade = 0, shapeChanges = 0, windows = 0, seasonEnd = false, sacked = false;
@@ -461,6 +519,8 @@ for (let step = 0; step < MAX_STEPS; step++) {
        the heading and leaving. */
     const rv = t;
     reviewSeen = true;
+    /* Round 1314: the review as the walk saw it, at its own viewport, for whoever reads the run. */
+    if (process.env.RC_OUT) await page.screenshot({ path: path.join(process.env.RC_OUT, `cm-season-review-${SEED}.png`), fullPage: true }).catch(() => {});
     /* A render throw unmounts the root, so the tell is an empty page rather
        than an error message. Round 544 put a boundary in, so the other tell is
        the boundary's own copy. */
@@ -644,6 +704,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
 }
 
 const ending = seasonEnd ? 'played the season out' : sacked ? 'was sacked, which is a real ending' : 'ran out of steps';
+console.log(`   the page had drawn ${await pageDraws(page)} times since its last load when the walk ended (${kickoffDraws} at the hub before the first kick off)`);
 console.log(`   ${halftimes} half times, ${fullTimes} full times, ${subsMade} subs, ${shapeChanges} shape changes, ${windows} windows, ${signingsMade} signings, ${liveSkips} skips through the live viewer`);
 console.log(`   ending: ${ending}`);
 if (!seasonEnd && !sacked && fullTimes < 5) note('SHALLOW', `only reached ${fullTimes} matches, so most of the season was never exercised`);
