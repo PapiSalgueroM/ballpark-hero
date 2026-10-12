@@ -1,0 +1,2 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkClubDetail exit=0 16s | walkClubDetail: green. Best XI on a seeded save and an old one at 320, 390 and 1280: a whole number, 12px or more, inside its cell, no overlap, no sideways scroll.

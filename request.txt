@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkClubDetail: node .rc/x/walkClubDetail.mjs
