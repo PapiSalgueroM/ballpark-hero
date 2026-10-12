@@ -138,13 +138,15 @@
    46,753 and 46,123). Taken out of the rest, the rest is main's to the byte
    (r1318-read-attrib: 44,048, 45,853, 46,753, 46,123, mean 45,694), so the
    rest keeps its band and its numbers, and the pool gets its own.
-   The rest moved by 4,181, 4,382, 4,418 and 4,282 bytes a career, a seed
-   (the pool and its key). The band has the shape the other parts have,
-   about a quarter under the lowest seed and a quarter over the highest:
-   3,100 to 5,500 bytes a career. Mean only.
+   MEASURED on a CI runner (remote check r1318-fix-a, head 9e4052ca), pool
+   bytes a career, every career here holding one: 4,158, 4,360, 4,395 and
+   4,259 on the four default seeds, 4,293 over the run; the rest 44,048,
+   45,853, 46,753 and 46,123, main's to the byte. The band has the shape the
+   other parts have, about a quarter under the lowest seed and a quarter over
+   the highest: 3,100 to 5,500 bytes a career. Mean only.
    CONTROL =poolcopy writes a second copy of the pool's entries into the
-   pool at every generated call (it draws nothing): the pool mean about
-   doubles, and it must fail check 5 and nothing else.
+   pool at every generated call (it draws nothing): the pool mean goes to
+   8,547 (r1318-fix-a), and it fails check 5 and nothing else.
 
    Run: node scripts/simCareerStory.mjs [careersPerSeed]
    Reads no network: fetch is replaced with a thrower before the engine loads. */
