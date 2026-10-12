@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-c12: node_modules/.bin/vitest run src/test/soccerBallonPoolNameClash.test.tsx --testTimeout=300000 --hookTimeout=300000
