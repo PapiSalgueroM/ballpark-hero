@@ -87,6 +87,12 @@
  *    absent and nothing throws; and a log begun at week k (a save from
  *    before the round) holds one entry a week from k on, and its record is
  *    NOT the league's, which the run prints.
+ * 10 EVERY GAME OF THE LOG TELLS (Round 1307, when the tile and the clock
+ *    came to read the log). Section 9's logs, read back through JSON and
+ *    the reader, playoff games and all: every entry gives a story from the
+ *    home side and from the away side, and each is added up by section 2's
+ *    own checker, which calls neither the story's own sums nor the law.
+ *    Control: offbyone, which must turn this red beside section 2.
  *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
@@ -215,7 +221,7 @@ const CONTROLS = {
   refuse: { section: 1, labels: ['never refuses a game of the fleet'], elsewhere: ['every game of the fleet was told and measured'], patches: [{ file: SCORE, from: "typeof f.away !== 'string' || f.home === f.away) return null;", to: "typeof f.away !== 'string' || f.home === f.away || f.key.length % 5 === 0) return null;" }] },
   twopaths: { section: 1, labels: ["tells the quick path's final"], patches: [{ file: DAY, from: 'const told = quickGame(score, f);', to: 'const told = quickGame(score, { ...f, key: f.key + "|again" });' }] },
   tries: { section: 1, labels: ['the swapped share'], patches: [{ file: SCORE, from: 'export const SCORE_TRIES = 24;', to: 'export const SCORE_TRIES = 2;' }] },
-  offbyone: { section: 2, labels: ['adds up by the independent checker'], patches: [{ file: DAY, from: 'events.push({ ...e, side });', to: 'events.push({ ...e, side, pts: e.kind === "fg" ? 4 : e.pts });' }] },
+  offbyone: { section: 2, labels: ['adds up by the independent checker'], elsewhere: ['every game of the log tells a story that the same checker adds up'], patches: [{ file: DAY, from: 'events.push({ ...e, side });', to: 'events.push({ ...e, side, pts: e.kind === "fg" ? 4 : e.pts });' }] },
   olddraw: { section: 3, labels: ['losers15 told 0.0000'], patches: [{ file: SCORE, from: 'const s = law.score(d.pHome, keyedRng(`${key}|score|${t}`), d);', to: 'const r = keyedRng(`${key}|score|${t}`); const base = 16 + Math.floor(r() * 15); const margin = 1 + Math.floor(r() * 17); const s = d.homeWon ? [base + margin, base] : [base, base + margin];' }] },
   pairing: { section: 4, labels: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [
     { file: NFL_DATA, from: 'home: { seed: top }, away: { rankedWinnerOf: wc, rank: 2 }', to: 'home: { seed: top }, away: { rankedWinnerOf: wc, rank: 0 }' },
@@ -443,6 +449,8 @@ for (const set of SEEDSETS) {
   const s7 = { state: tally(), calls: tally(), winners: tally(), records: tally(), row: tally() };
   const s8 = { refused: tally(), quick: tally() };
   const s9 = { weekly: tally(), order: tally(), playoff: tally(), json: tally(), other: tally(), damage: tally(), late: tally() };
+  /* Round 1307, section 10: the stories of the games a log holds */
+  const s10 = { story: tally(), adds: tally() };
   const bound = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0, differ: 0 };
   let lateSeen = '';
   const addScore = (o, home, away) => {
@@ -645,6 +653,16 @@ for (const set of SEEDSETS) {
         const text = JSON.stringify(full);
         const back = L.readGmGameLog(JSON.parse(text), isClub, season, club);
         count(s9.json, back !== null && same(back, full), () => `${id} ${club}`);
+        /* section 10: every game of the log tells. The entries as a board reads them back (through JSON and the
+           reader), each from both sides, by section 2's own checker: the tile and the clock tell a game from the
+           log and from nothing else. */
+        for (const g of (back ?? full).games) {
+          for (const side of ['home', 'away']) {
+            const st = D.gameStory(GAME_DAY, g, side);
+            count(s10.story, st !== null, () => `${id} ${club} ${g.where} (${side}): no story for ${g.homeScore}-${g.awayScore}`);
+            if (st) { const probs = storyProblems(st, g, side); count(s10.adds, probs.length === 0, () => `${id} ${club} ${g.where} (${side}, ${g.homeScore}-${g.awayScore}): ${probs[0]}`); }
+          }
+        }
         const stranger = table.find(c => full.games.some(g => g.home !== c && g.away !== c));
         count(s9.other, L.readGmGameLog(JSON.parse(text), isClub, season + 1, club) === null && L.readGmGameLog(JSON.parse(text), isClub, season, stranger) === null && L.readGmGameLog(JSON.parse(text), isClub, season, 'constructor') === null, () => `${id} ${club}`);
         if (club !== four[0]) continue;
@@ -736,6 +754,8 @@ for (const set of SEEDSETS) {
   settle(9, `set ${set}: the log reads as absent for another season, for another club and for a club that is no club`, s9.other);
   settle(9, `set ${set}: with any one field of an entry damaged the log reads as absent, and nothing throws`, s9.damage);
   settle(9, `set ${set}: a log begun at week k holds one entry a week from k on and none before, and its record is not the league's`, s9.late);
+  settle(10, `set ${set}: every game of the log tells a story, from both sides`, s10.story);
+  settle(10, `set ${set}: every game of the log tells a story that the same checker adds up, from both sides`, s10.adds);
   console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; points a team game ${Bn.points.toFixed(2)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, sides on 40 or more ${Bn.forty.toFixed(4)}; ${lateSeen}`);
   const afcShare = afcTitles / lines.length;
   measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games, differShare, refused: s8.refused.bad });
