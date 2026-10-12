@@ -16,7 +16,7 @@ import path from 'node:path';
 import { EXAMPLE_ELEVEN, LeagueLeadersCard, ordinal, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
-import { finishSeason, keepTeams, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
+import { bookAwardsState, finishSeason, keepTeams, leagueBoardsOf, leagueBookRules, playNextEntry, type CareerState } from '@/lib/clubManager';
 import { AWARD_FLOOR, BOOK_FULL_SHARE, bestOfMine, leaders, seasonAwards, type BoardKind } from '@/lib/clubManagerLeagueBoards';
 import { dealShares } from '@/lib/clubManagerLeagueBook';
 
@@ -231,6 +231,54 @@ describe('the season review', () => {
     const c = render(<ClubManagerSeasonSummary sm={summary} c={state} g={{ nextSeason: vi.fn(), startNew: vi.fn() }} />);
     expect(c.container.querySelector('[data-cm-award]')).toBeNull();
     expect(c.container.querySelector('[data-cm-award-withheld]')?.textContent).toContain(`Only ${lb.share} in 100 of this league's goals had a name on them`);
+    /* On such a season the summary is the base's to the byte (decision 3, held by scripts/simCmLeagueBook.mjs
+     * section stream), so a pending summary the base wrote in a thin league gains exactly this line, on purpose:
+     * the base settled that boot on the scorers' race too. */
+    noDash(c.container);
+  });
+
+  /* Review r1311-run-m, mutations thinfloor and sumthinfloor: the honest line's 95 was held only as a
+   * constant, since the other saves here sit at 100 or under 73. Here a league between the two: the book
+   * decides, and the card and the review both still print the number. The save's own book is thinned by
+   * moving part of each rival row's goals to the club's unnamed count, so every club still adds up. */
+  it('a league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review', () => {
+    const s = everton();
+    for (const entry of Object.values(s.leagueBook!.c)) {
+      for (const row of Object.values(entry.m)) { const k = Math.floor(row[0] * 0.4); row[0] -= k; entry.u += k; }
+    }
+    const end = toSeasonEnd(s, 13113);
+    const lb = leagueBoardsOf(end)!;
+    const { state, summary } = finishSeason(end);
+    vi.restoreAllMocks();
+    expect(lb.share).toBeGreaterThanOrEqual(AWARD_FLOOR);
+    expect(lb.share).toBeLessThan(BOOK_FULL_SHARE);
+    expect(bookAwardsState(end, lb).by).toBe('book');
+    expect(summary.awards?.cov).toBe(lb.share);
+    const c = draw(end);
+    expect(c.q('[data-cm-leaders-thin]')?.textContent).toContain(`${lb.share} in 100 of the other clubs' goals have a name on them`);
+    cleanup();
+    const r = render(<ClubManagerSeasonSummary sm={summary} c={state} g={{ nextSeason: vi.fn(), startNew: vi.fn() }} />);
+    expect(r.container.querySelector('[data-cm-award-thin]')?.textContent).toContain(`${lb.share} in 100 of the other clubs' goals had a name on them`);
+    expect(r.container.querySelector('[data-cm-award-withheld]')).toBeNull();
+    noDash(r.container);
+  });
+
+  /* Review r1311-run-m, mutation nolatestate: a late book's share leaves out the goals it was opened with,
+   * so it sits near 100, and the review must say the book started late, never "only N in 100". */
+  it('a season on a late book says the book covered only part of it, not that its data was thin', () => {
+    const s = everton();
+    delete s.leagueBook;
+    const end = toSeasonEnd(s, 13114);
+    const lb = leagueBoardsOf(end)!;
+    const { state, summary } = finishSeason(end);
+    vi.restoreAllMocks();
+    expect(lb.from).not.toBeNull();
+    expect(bookAwardsState(state).by).toBe('late');
+    expect('awards' in summary).toBe(false);
+    const c = render(<ClubManagerSeasonSummary sm={summary} c={state} g={{ nextSeason: vi.fn(), startNew: vi.fn() }} />);
+    const line = c.container.querySelector('[data-cm-award-withheld]')?.textContent ?? '';
+    expect(line).toContain('The league book only covered part of this season');
+    expect(line).not.toContain('in 100');
     noDash(c.container);
   });
 });
