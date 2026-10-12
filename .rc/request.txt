@@ -1,0 +1,16 @@
+# Round 1306 second closing check, head ebde6a32: the type gate, the two unit files, the harness on the gate's own line and with the base, the controls of fix pass 2, the reviewer's mutations m5 m6 m6b again, the pin, the anchors
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default: node scripts/simCmLeagueBook.mjs
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B c9a1f86a && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+c-novar: BOOK_CONTROL=novar node scripts/simCmLeagueBook.mjs
+c-stampv2: BOOK_CONTROL=stampv2 node scripts/simCmLeagueBook.mjs
+c-seasonstamp: BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-seasonstamp-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-seasonstamp && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-goallesswhole: BOOK_CONTROL=goallesswhole node scripts/simCmLeagueBook.mjs
+m5: bash .rc/x/mutrun2.sh m5 c9a1f86a all
+m6: bash .rc/x/mutrun2.sh m6 c9a1f86a all
+m6b: bash .rc/x/mutrun2.sh m6b c9a1f86a all
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
