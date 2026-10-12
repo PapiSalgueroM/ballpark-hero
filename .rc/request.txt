@@ -1,0 +1,6 @@
+#!serial
+vitest-head: node_modules/.bin/vitest run src/lib/clubManagerLeagueBoards.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+m1-floorgt: node .rc/x/r1311run-mut.mjs floorgt && node_modules/.bin/vitest run src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000; s=$?; git checkout -- src; exit $s
+m5-nolatestate: node .rc/x/r1311run-mut.mjs nolatestate && node_modules/.bin/vitest run src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m6-thinfloor: node .rc/x/r1311run-mut.mjs thinfloor && node_modules/.bin/vitest run src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m7-sumthinfloor: node .rc/x/r1311run-mut.mjs sumthinfloor && node_modules/.bin/vitest run src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
