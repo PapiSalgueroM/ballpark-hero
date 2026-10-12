@@ -1,0 +1,9 @@
+p0 exit=0 28s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+m1 exit=0 3s | changed files: 0
+p1 exit=0 29s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+m2 exit=0 3s | changed files: 0
+p2 exit=0 29s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+m3 exit=0 43s | changed files: 0
+p3 exit=0 33s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+c1 exit=0 0s | simUsBoardParity control noresult: green. The control turned its own sport red for its own reason.
+p4 exit=0 29s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
