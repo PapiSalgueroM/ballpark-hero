@@ -1,0 +1,2 @@
+rv-ddfresh: RV_PART=ddfresh node .rc/x/rvSaves.mjs
+rv-fuzz: RV_PART=fuzz node .rc/x/rvSaves.mjs
