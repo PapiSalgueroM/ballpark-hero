@@ -1,0 +1,7 @@
+#!build
+#!playwright
+simResultMoment: node scripts/simResultMoment.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simDrillMotion: node scripts/simDrillMotion.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
