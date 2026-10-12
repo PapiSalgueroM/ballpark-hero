@@ -9,12 +9,12 @@ import { createHash } from 'node:crypto';
 
 // Diagnostic copies keep every historical case, assertion, seed and budget.
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const BASE = '09df145abfb241679022b41903d2f19bc254ebf9';
+const BASE = 'b6eb78e799b12c851e4e8e583e9e926aed117f1c';
 const OUT = path.resolve(process.env.MANAGER_SIZE_DIAGNOSTICS || path.join(ROOT, 'manager-world-size-diagnostics'));
 const sha = value => createHash('sha256').update(value).digest('hex');
 const git = args => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).trim();
 const HEAD = git(['rev-parse', 'HEAD']), TREE = git(['rev-parse', 'HEAD^{tree}']), BASE_TREE = git(['rev-parse', `${BASE}^{tree}`]);
-assert.equal(BASE_TREE, '3d527d2a120e909132bbbde53148d140b6a014e1');
+assert.equal(BASE_TREE, 'df728482ceb7551f0b33c89f85f0c3f1a0d88c07');
 const SLOT_IMPORT = "import { expandPackedWorldRosterState } from './qa/managerWorldRosterDigest.cjs';\n";
 const SLOT_INITIALIZER = '  const { h2h, ...rest } = s;';
 const SLOT_ADAPTER = '  const { h2h, ...rest } = expandPackedWorldRosterState(s);';
