@@ -1,0 +1,6 @@
+tsc exit=0 50s | 
+vitest-round exit=0 7s |    Duration  6.75s (transform 2.10s, setup 204ms, collect 5.77s, tests 7.71s, environment 1.62s, prepare 476ms)
+M5-retire exit=1 2s | restored: 0 files left changed
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simStorageWrites exit=0 1s | simStorageWrites: all green (owed: 12)

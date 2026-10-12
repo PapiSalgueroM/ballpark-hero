@@ -1,0 +1,61 @@
+MUTATION M5 APPLIED: stale constant, consistent: rivals retire at 38 (copy and reader agree) (src/lib/soccerCareerEngine.ts; anchor rows rewritten 3, harness anchors rewritten 1)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerBallonPoolRetirement.test.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 109[2mms[22m[39m
+[31m   [31m×[31m a made up rival retires in the year he turns 37[2m > [22mthe rival who turns 37 retires and gets a new face, the one who turns 36 stays[39m[32m 22[2mms[22m[39m
+[31m     → expected null to be 2031 // Object.is equality[39m
+[31m   [31m×[31m a made up rival retires in the year he turns 37[2m > [22mthe reader refuses a live rival of 37 and a retirement written past the year he turned 37[39m[32m 2[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolRetirement.test.tsx[2m > [22ma made up rival retires in the year he turns 37[2m > [22mthe rival who turns 37 retires and gets a new face, the one who turns 36 stays
+[31m[1mAssertionError[22m: expected null to be 2031 // Object.is equality[39m
+
+[32m- Expected:[39m 
+2031
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/soccerBallonPoolRetirement.test.tsx:[2m37:46[22m[39m
+    [90m 35| [39m    const after = nextNight(s, 11).value, year = lastYear(after), next…
+    [90m 36| [39m    [34mexpect[39m(year)[33m.[39m[34mtoBe[39m(pool[33m.[39myear [33m+[39m [34m1[39m)[33m;[39m
+    [90m 37| [39m    [34mexpect[39m(next[33m.[39mentries[old[33m.[39mid][33m.[39mretiredYear)[33m.[39m[34mtoBe[39m(year)[33m;[39m
+    [90m   | [39m                                             [31m^[39m
+    [90m 38| [39m    [34mexpect[39m(next[33m.[39mentries[younger[33m.[39mid][33m.[39mretiredYear)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 39| [39m    expect(next.entries[younger.id].entryAge + year - next.entries[you…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerBallonPoolRetirement.test.tsx[2m > [22ma made up rival retires in the year he turns 37[2m > [22mthe reader refuses a live rival of 37 and a retirement written past the year he turned 37
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/soccerBallonPoolRetirement.test.tsx:[2m53:56[22m[39m
+    [90m 51| [39m    // 37 this year (entry age 28, made 9 years ago): he cannot still …
+    [90m 52| [39m    entry[33m.[39mentryAge [33m=[39m [34m28[39m[33m;[39m entry[33m.[39mfirstYear [33m=[39m pool[33m.[39myear [33m-[39m [34m9[39m[33m;[39m
+    [90m 53| [39m    [34mexpect[39m([33mE[39m[33m.[39m[34misGeneratedBallonPool[39m(pool[33m,[39m [34mlastYear[39m(s)))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 54| [39m    entry[33m.[39mretiredYear [33m=[39m pool[33m.[39myear[33m;[39m
+    [90m 55| [39m    [34mexpect[39m([33mE[39m[33m.[39m[34misGeneratedBallonPool[39m(pool[33m,[39m [34mlastYear[39m(s)))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m   Start at [22m 21:58:56
+[2m   Duration [22m 1.75s[2m (transform 922ms, setup 33ms, collect 1.13s, tests 109ms, environment 205ms, prepare 62ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolRetirement.test.tsx,title=src/test/soccerBallonPoolRetirement.test.tsx > a made up rival retires in the year he turns 37 > the rival who turns 37 retires and gets a new face%2C the one who turns 36 stays,line=37,column=46::AssertionError: expected null to be 2031 // Object.is equality%0A%0A- Expected: %0A2031%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/soccerBallonPoolRetirement.test.tsx:37:46%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerBallonPoolRetirement.test.tsx,title=src/test/soccerBallonPoolRetirement.test.tsx > a made up rival retires in the year he turns 37 > the reader refuses a live rival of 37 and a retirement written past the year he turned 37,line=53,column=56::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/soccerBallonPoolRetirement.test.tsx:53:56%0A%0A
+restored: 0 files left changed

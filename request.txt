@@ -1,0 +1,7 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/soccerBallonPoolRetirement.test.tsx src/test/soccerBallonPoolReadAsAbsent.test.tsx src/test/soccerBallonPoolNameClash.test.tsx src/test/soccerCareerAwardGenerations.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+M5-retire: node .rc/x/rvmut.mjs M5 . && node_modules/.bin/vitest run src/test/soccerBallonPoolRetirement.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "restored: $(git status --short -- src scripts | wc -l) files left changed"; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
