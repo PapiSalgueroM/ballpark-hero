@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simVictoryMoment exit=0 27s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+simResultPillComparison exit=0 21s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, no
+simDrillMotion exit=0 31s | simDrillMotion: PASS. Evidence: /home/runner/work/_temp/t-simDrillMotion/dukb-drill-motion-qoIkQq
+simWritesAreSent exit=1 15s | simWritesAreSent: 2 failures
