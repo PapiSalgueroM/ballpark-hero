@@ -1,3 +1,6 @@
+## Codex: Transfer Path local search in progress, 2026-10-12
+
+Isolated codex/transfer-path-local-search from accepted main 48cb9d4b. The known loaded player pool is absent from autocomplete's existing local fallback, so both remote name-search legs can fail while the graph is ready and block legal play. Remote expected-red proof is being authored before a one-prop Board correction. Hook/shared search, graph/data/statistics, scoring and save formats stay held. PR242 through PR246 remain frozen. H owns integration and publishing. See docs/audits/transfer-path-local-search-2026-10-12.md.
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,

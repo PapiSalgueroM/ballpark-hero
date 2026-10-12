@@ -1,0 +1,156 @@
+name: Transfer Path local player search
+
+on:
+  push:
+    branches: [codex/transfer-path-local-search]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TRANSFER_PATH_LOCAL_ONLY: '1'
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      TRANSFER_PATH_LOCAL_SEARCH_PHASE: baseline
+      TRANSFER_PATH_LOCAL_SEARCH_OUT: ${{ github.workspace }}/transfer-path-local-search-artifacts
+      PRERENDER_ONLY: /transfer-path
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Bind source and install locked dependencies
+        run: |
+          mkdir -p "$TRANSFER_PATH_LOCAL_SEARCH_OUT"
+          git rev-parse HEAD > "$TRANSFER_PATH_LOCAL_SEARCH_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$TRANSFER_PATH_LOCAL_SEARCH_OUT/source-before.txt"
+          test ! -s "$TRANSFER_PATH_LOCAL_SEARCH_OUT/source-before.txt"
+          if test "$TRANSFER_PATH_LOCAL_SEARCH_PHASE" = baseline; then
+            git diff --exit-code 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src/hooks/useTransferPath.ts src/components/transfer-path/TransferPathBoard.tsx src/hooks/useDailyPuzzle.ts src/hooks/useGameCompletion.ts src/lib/dailySaveShapes.ts src/data/careerPlayers.ts src/data/transferPathPuzzles.ts
+          fi
+          sha256sum package.json package-lock.json > "$TRANSFER_PATH_LOCAL_SEARCH_OUT/package-hashes.txt"
+          sha256sum src/components/transfer-path/TransferPathBoard.tsx src/hooks/useTransferPath.ts src/components/game/PlayerAutocomplete.tsx src/lib/playerSearch.ts src/hooks/useDailyPuzzle.ts src/hooks/useGameCompletion.ts src/lib/dailySaveShapes.ts src/data/careerPlayers.ts src/data/transferPathPuzzles.ts scripts/playTransferPathLocalSearch.mjs src/test/transferPathLocalSearch.test.tsx scripts/simTransferPathLocalSearch.mjs > "$TRANSFER_PATH_LOCAL_SEARCH_OUT/source-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, e]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, e.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync(process.env.TRANSFER_PATH_LOCAL_SEARCH_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+          npm install --prefix "$RUNNER_TEMP/transfer-path-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/transfer-path-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum --check "$TRANSFER_PATH_LOCAL_SEARCH_OUT/package-hashes.txt"
+      - name: Application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Actual local search and preservation tests
+        run: |
+          set +e
+          node_modules/.bin/vitest run src/test/transferPathLocalSearch.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/hooks/useTransferPath.test.ts src/hooks/useTransferPathGuidance.test.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json="$TRANSFER_PATH_LOCAL_SEARCH_OUT/unit.json" 2>&1 | tee "$TRANSFER_PATH_LOCAL_SEARCH_OUT/unit-output.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          TEST_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync(process.env.TRANSFER_PATH_LOCAL_SEARCH_OUT + '/unit.json'));
+          const cases = report.testResults.flatMap(f => f.assertionResults);
+          const output = fs.readFileSync(process.env.TRANSFER_PATH_LOCAL_SEARCH_OUT + '/unit-output.log', 'utf8');
+          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|SyntaxError/i.test(output), 'Setup or unhandled errors are not baseline evidence');
+          assert(report.testResults.length === 4 && report.testResults.every(f => !f.message && f.assertionResults.length > 0), 'Every actual file must load and report cases');
+          const expected = ['local search: offers a canonical graph name after a fulfilled search error', 'local search: offers a canonical graph name after a rejected search', 'local search: offers a canonical graph name after settled empty results'];
+          const owned = cases.filter(c => expected.includes(c.title));
+          assert.deepEqual(owned.map(c => c.title).sort(), expected.sort(), 'All three exact local search checks must run');
+          assert.equal(cases.length, 40, 'Nine local search cases and 31 held route cases must run');
+          assert.equal(report.numPendingTests, 0);
+          if (process.env.TRANSFER_PATH_LOCAL_SEARCH_PHASE === 'baseline') {
+            assert.notEqual(Number(process.env.TEST_EXIT), 0);
+            assert(owned.every(c => c.status === 'failed'));
+            assert(owned.every(c => c.failureMessages.length > 0 && c.failureMessages.every(m => /^AssertionError:.*expected \[\] to have a length of 1 but got \+0/s.test(m))), 'Only the exact missing-option assertion earns red credit');
+            assert.equal(report.numFailedTests, owned.length);
+            assert(cases.filter(c => !owned.includes(c)).every(c => c.status === 'passed'));
+            console.log(`BASELINE: exactly ${owned.length} local-search checks reproduced the missing option; ${report.numPassedTests} other cases passed.`);
+          } else {
+            assert.equal(Number(process.env.TEST_EXIT), 0);
+            assert.equal(report.numFailedTests, 0);
+            assert(cases.every(c => c.status === 'passed'));
+            console.log(`FIXED: all ${cases.length} actual Board and hook cases passed.`);
+          }
+          NODE
+      - name: Complete app build with Transfer Path snapshot
+        run: |
+          npm run build:seo
+          cp scripts/data/lastmod.json "$TRANSFER_PATH_LOCAL_SEARCH_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$TRANSFER_PATH_LOCAL_SEARCH_OUT/build-lastmod.diff"
+      - name: Related route and built-site fences with effective controls
+        if: env.TRANSFER_PATH_LOCAL_SEARCH_PHASE == 'fixed'
+        run: |
+          ONLY=simTransferPathLocalSearch,simTransferPathRepeat,simTransferPathGuidance,simTransferPathSeasons,simTransferPathModes,simTransferPathHints,simTransferPathActiveIdentity,simTransferPathEmptyState,simCareerSeasonTruth,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser
+          for control in missing; do
+            TLS_CONTROL="$control" node scripts/simTransferPathLocalSearch.mjs
+          done
+      - name: Actual search outage and playable route journeys
+        run: |
+          if test "$TRANSFER_PATH_LOCAL_SEARCH_PHASE" = baseline; then
+            set +e
+            node scripts/playTransferPathLocalSearch.mjs
+            result=$?
+            set -e
+            BROWSER_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync(process.env.TRANSFER_PATH_LOCAL_SEARCH_OUT + '/baseline/report.json'));
+          assert.equal(Number(process.env.BROWSER_EXIT), 1);
+          assert.equal(r.status, 'baseline-reproduced');
+          assert.equal(r.blockedLegalSearches, 9);
+          assert.equal(r.controls.length, 0);
+          assert.equal(r.setupFailures, 0);
+          assert.equal(r.failures, 0);
+          assert.equal(r.sourceHeld, true);
+          assert.equal(r.installedHeld, true);
+          assert.equal(r.inventory.length, 9);
+          assert.equal(r.cases.length, 9);
+          assert(r.checks > 0);
+          console.log('BASELINE: nine legal loaded-pool searches were blocked after both remote search legs failed.');
+          NODE
+          else
+            node scripts/playTransferPathLocalSearch.mjs
+          fi
+      - name: Final source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$TRANSFER_PATH_LOCAL_SEARCH_OUT/source-hashes.txt"
+          sha256sum --check "$TRANSFER_PATH_LOCAL_SEARCH_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.TRANSFER_PATH_LOCAL_SEARCH_OUT + '/installed.json'));
+          for (const p of installed) assert.equal(JSON.parse(fs.readFileSync(p.path + '/package.json')).version, p.version, p.path);
+          console.log(`Held all ${installed.length} installed locked versions.`);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-path-local-search-${{ github.sha }}
+          path: transfer-path-local-search-artifacts/
