@@ -1,0 +1,157 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.23147535882890224,
+      0.21313480869866908,
+      0.31649208161979914,
+...
+      frozenOut: 0,
++     generatedBallonPool: {
++       entries: [
++         {
++           baseGoals: [
++             10,
++             28
++           ],
++           club: 'AC Milan',
++           entryAge: 22,
++           firstYear: 2029,
++           id: 0,
++           name: 'Ferdi Doornbos',
++           nationality: 'Belgium',
++           position: 'LW',
++           retiredYear: null,
++           role: 'primary',
++           seed: 9900,
++           slot: 0
++         },
++         {
++           baseGoals: [
++             2,
++             8
++           ],
++           club: 'Chelsea',
++           entryAge: 20,
++           firstYear: 2029,
++           id: 1,
++           name: 'Shohei Nishizawa',
++           nationality: 'Japan',
++           position: 'CDM',
++           retiredYear: null,
++           role: 'primary',
++           seed: 9901,
++           slot: 1
++         },
++         {
++           baseGoals: [
++             10,
++             28
++           ],
++           club: 'Arsenal',
++           entryAge: 25,
++           firstYear: 2029,
++           id: 2,
++           name: 'Agustín Quiroga',
++           nationality: 'Argentina',
++           position: 'RW',
++           retiredYear: null,
++           role: 'primary',
++           seed: 9902,
++           slot: 2
++         },
++         {
++           baseGoals: [
++             1,
++             5
++           ],
++           club: 'Real Madrid',
++           entryAge: 21,
++           firstYear: 2029,
++           id: 3,
++           name: 'Nahuel Lombardero',
++           nationality: 'Uruguay',
++           position: 'CB',
++           retiredYear: null,
++           role: 'primary',
++           seed: 9903,
++           slot: 3
++         },
++         {
++           baseGoals: [
++             8,
++             22
++           ],
++           club: 'Tottenham',
++           entryAge: 27,
++           firstYear: 2029,
++           id: 4,
++           name: 'Wanderson Guimarães',
++           nationality: 'Brazil',
++           position: 'CAM',
++           retiredYear: null,
++           role: 'primary',
++           seed: 9904,
++           slot: 4
++         },
++         {
++           baseGoals: [
++             18,
++             40
++           ],
++           club: 'Dortmund',
++           entryAge: 26,
++           firstYear: 2029,
++           id: 5,
++           name: 'Hidde Lindeboom',
++           nationality: 'Netherlands',
++           position: 'ST',
++           retiredYear: null,
++           role: 'primary',
++           seed: 9905,
++           slot: 5
++         }
++       ],
++       nextId: 6,
++       version: 1,
++       year: 2029
++     },
+      hasRelationship: false,
+      intStats: {
+        assists: 3,
+        caps: 20,
+        continentalWins: 1,
+
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All nine healthy outcome groups pass
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerTrophyRuns.mjs:161:50
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

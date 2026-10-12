@@ -1,0 +1,39 @@
+#!build
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerSeasonRatings: node scripts/simCareerSeasonRatings.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simSoccerCareerAmbitions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
