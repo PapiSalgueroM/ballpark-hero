@@ -1,0 +1,1 @@
+p2side: node .rc/x/p2side.mjs
