@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+head: git rev-parse HEAD^; git log -1 --format=%s HEAD^ | cut -c1-120
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs > $RC_OUT/playSaveKeeper.log 2>&1; s=$?; tail -2 $RC_OUT/playSaveKeeper.log | cut -c1-300; exit $s
