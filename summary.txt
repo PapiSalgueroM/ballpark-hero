@@ -1,0 +1,2 @@
+simCmLedgerJourney-futureyear exit=1 3s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 journeys hold a ledger their reader refuses
+simCmLedgerJourney exit=0 130s | simCmLedgerJourney: green. 45 seeded journeys, 9392 ledgers read at a step or a reload, and the reader refused none the game wrote

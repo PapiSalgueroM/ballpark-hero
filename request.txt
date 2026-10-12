@@ -1,0 +1,2 @@
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmLedgerJourney-futureyear: CM_LEDGER_CONTROL=futureyear node scripts/simCmLedgerJourney.mjs
