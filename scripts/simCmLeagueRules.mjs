@@ -402,7 +402,8 @@
       other lane's PR224): every new career now carries a world seed, so
       `start` and every whole state hash moves with nothing wrong (47
       entries red after the merge, remote check az-e1b, among them the
-      board's objectives the summer after in four leagues, whose club
+      board's objectives the summer after in eight entries, four modern
+      leagues and four era ones, whose club
       strengths a seeded world draws). Attribution on a GitHub runner at
       5b0da7f1 (remote check az-digest, line attrib-inverse): with the
       seed block of startCareer taken out by scripts/lib/cmWorldSeed1250.mjs
