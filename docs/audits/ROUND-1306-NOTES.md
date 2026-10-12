@@ -198,3 +198,13 @@ constant, comments in two unit files. `src/lib/clubManager.ts` is untouched, so 
   section that goes with it and the words its own failure in doors must hold ("has no readable book"). The
   first run after the recordings were wired read "did not fire" for it (remote check r1306-f2b), which is
   how this was found. The harness holds 42 controls.
+- WHERE THE SECOND PASS IS PROVEN (remote checks, the logs are on the branches origin/rc-results/<name>):
+  r1306-f2a (the video referee arm on five seed sets, control `novar`, the recordings written three times),
+  r1306-f2b (thirteen fleets, all 42 controls, the fences), r1306-f2c (the type gate, the unit files, the
+  harness with and without the base, `seasonstamp` and `stampv2` each with and without the base), r1306-f2d
+  (the weight sweep on a served build: /club-manager 588.6K of 589, /manager-hot-seat 605.9K of 606,
+  /deadline-day 616.0K of 616), r1306-f2e (more fences), and the release gate's own lists run whole on the
+  head before the pass as r1306-gA, gB, gC, gH1, gH2, gH3 and gH4. The full account is the lead's file
+  results-g/fix2-1306.md, which is not in the repo.
+- WHAT A LATER SESSION MUST NOT TRUST: the two unit files for the engine's binding (they say so at their
+  top); the weight rows having room (about half a kilobyte on /deadline-day); the number 95 (not ruled).
