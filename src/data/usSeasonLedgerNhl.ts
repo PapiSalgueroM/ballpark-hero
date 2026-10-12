@@ -337,6 +337,36 @@ export const NHL_OVERTIME: Readonly<Record<string, { games: number; pastSixty: n
 };
 export const NHL_OVERTIME_SRC: readonly string[] = ['nhl', 'hr', 'hr-shootout'];
 
+/* Round 1312 (Part B3): PAST SIXTY MINUTES, SEASON BY SEASON, 2006-07 to
+   2025-26, read on 2026-10-12: the league's standings feed on the last day
+   of each regular season and Hockey Reference's expanded standings agree
+   club for club on every club's losses after sixty minutes and its shootout
+   wins and losses. `games` is the league's games (NHL_SEASONS' own), and
+   the first and last seasons are NHL_OVERTIME's two. Nothing reads it yet. */
+export const NHL_OVERTIME_BY_SEASON: Readonly<Record<number, { games: number; pastSixty: number; shootouts: number }>> = {
+  2006: { games: 1230, pastSixty: 281, shootouts: 164 },
+  2007: { games: 1230, pastSixty: 272, shootouts: 156 },
+  2008: { games: 1230, pastSixty: 282, shootouts: 159 },
+  2009: { games: 1230, pastSixty: 301, shootouts: 184 },
+  2010: { games: 1230, pastSixty: 297, shootouts: 149 },
+  2011: { games: 1230, pastSixty: 300, shootouts: 181 },
+  2012: { games: 720, pastSixty: 162, shootouts: 97 },
+  2013: { games: 1230, pastSixty: 307, shootouts: 178 },
+  2014: { games: 1230, pastSixty: 306, shootouts: 170 },
+  2015: { games: 1230, pastSixty: 275, shootouts: 107 },
+  2016: { games: 1230, pastSixty: 289, shootouts: 99 },
+  2017: { games: 1271, pastSixty: 296, shootouts: 103 },
+  2018: { games: 1271, pastSixty: 271, shootouts: 87 },
+  2019: { games: 1082, pastSixty: 250, shootouts: 86 },
+  2020: { games: 868, pastSixty: 195, shootouts: 65 },
+  2021: { games: 1312, pastSixty: 288, shootouts: 102 },
+  2022: { games: 1312, pastSixty: 302, shootouts: 95 },
+  2023: { games: 1312, pastSixty: 271, shootouts: 82 },
+  2024: { games: 1312, pastSixty: 271, shootouts: 77 },
+  2025: { games: 1312, pastSixty: 326, shootouts: 119 },
+};
+export const NHL_OVERTIME_BY_SEASON_SRC: readonly string[] = ['nhl-feed-1312', 'hr-standings-1312'];
+
 /* THE RULES AFTER SIXTY MINUTES, regular season: five minutes of sudden
    death overtime, three skaters a side since 2015-16, then a shootout of
    three rounds that goes on until one side leads; the loser keeps a point in

@@ -111,3 +111,49 @@ that row (T2) out of this round because nothing prints it; it is left null and t
 
 Check N11: the year is the harness's own; it is no later than the ledger's first season and every era of the
 game; the overtime receipts count shootouts in that first season. Control shootoutfrom (2006: N11).
+
+## Step 6 (Part B3): past sixty minutes, season by season
+
+The league's standings feed on the last day of every regular season of 2006-07 to 2025-26 (new key
+nhl-feed-1312: the 1211 feed read again) and Hockey Reference's "Expanded Standings" of the same twenty seasons
+(new key hr-standings-1312; the table sits in a comment of the page and was read from it) were drawn on the
+runner (r1312-read3, 40 of 40). Summed club by club they agree in every club of every season: the losses after
+sixty minutes, the shootout wins and the shootout losses (equal to the wins in every season). Written:
+NHL_OVERTIME_BY_SEASON (games, past sixty, shootouts), whose 2006-07 and 2025-26 are NHL_OVERTIME's own two
+(281 and 164 of 1,230; 326 and 119 of 1,312). Nothing in src reads it.
+
+| Season | Games | Past sixty | Shootouts |
+|---|---|---|---|
+| 2006-07 | 1230 | 281 | 164 |
+| 2007-08 | 1230 | 272 | 156 |
+| 2008-09 | 1230 | 282 | 159 |
+| 2009-10 | 1230 | 301 | 184 |
+| 2010-11 | 1230 | 297 | 149 |
+| 2011-12 | 1230 | 300 | 181 |
+| 2012-13 | 720 | 162 | 97 |
+| 2013-14 | 1230 | 307 | 178 |
+| 2014-15 | 1230 | 306 | 170 |
+| 2015-16 | 1230 | 275 | 107 |
+| 2016-17 | 1230 | 289 | 99 |
+| 2017-18 | 1271 | 296 | 103 |
+| 2018-19 | 1271 | 271 | 87 |
+| 2019-20 | 1082 | 250 | 86 |
+| 2020-21 | 868 | 195 | 65 |
+| 2021-22 | 1312 | 288 | 102 |
+| 2022-23 | 1312 | 302 | 95 |
+| 2023-24 | 1312 | 271 | 82 |
+| 2024-25 | 1312 | 271 | 77 |
+| 2025-26 | 1312 | 326 | 119 |
+
+Check N12 (every finished season once, typed in the harness's own table; games the season row's own; both
+receipts' sums; shootout wins equal losses; no more shootouts than games past sixty). Control otseason (N12).
+
+## B1 and B2: not done in this round
+
+B1 (the 82 game formula of 2006-07 and 2007-08 and which division of the other conference a club hosted and
+visited) needs the league's own schedule release of those seasons or a newspaper, and a 2007-08 club counted;
+no such release was found on an open page today, and a contributor's post is no source (correction 5). B2 (the
+6, 4 and 18 formula of 2009-10 and 2010-11 on a second source) needs the league's "A numerical look at the
+2010-11 NHL schedule" read in a browser and a second source for 2009-10. Both stay in NHL_THIN as the row "The
+schedule formula of the 82 game seasons (any of them)". Nothing reads them, and no career season is named
+before 2026 (the throwback plays unnamed opponents), so leaving them costs no view anything.

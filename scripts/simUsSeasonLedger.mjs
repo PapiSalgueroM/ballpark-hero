@@ -230,6 +230,9 @@ const OWN = {
      whether a stage came before the four rounds]. */
   /* Round 1312: the first season (a start year) of the regular season shootout. */
   nhlShootoutFrom: 2005,
+  /* Round 1312 (Part B3): every season's games past sixty minutes and shootouts, "year:past/shootouts". */
+  nhlOvertimeBySeason: '2006:281/164 2007:272/156 2008:282/159 2009:301/184 2010:297/149 2011:300/181 2012:162/97 2013:307/178 2014:306/170 2015:275/107 '
+    + '2016:289/99 2017:296/103 2018:271/87 2019:250/86 2020:195/65 2021:288/102 2022:302/95 2023:271/82 2024:271/77 2025:326/119',
   nhlRoundWindows: [
     [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season', true, false],
     [2013, 2018, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true, false],
@@ -333,6 +336,8 @@ const CONTROLS = {
   /* Round 1312: NBC's page of the 2021 semifinals taken from the 2020 window's names: the league alone
      names the round "Stanley Cup Semifinals" (the typed table still agrees, so only the season check sees it). */
   semisone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2020); must(w && w.namesSrc.includes('nbc-2021-semis'), 'NBC\'s semifinal page behind the 2020 window'); w.namesSrc = w.namesSrc.filter(k => k !== 'nbc-2021-semis'); } },
+  /* Round 1312 (Part B3): one shootout of 2015-16 moved into regulation in the ledger; still fewer than the games past sixty. */
+  otseason: { expect: ['N12'], run() { const o = nhl.NHL_OVERTIME_BY_SEASON?.[2015]; must(o && o.shootouts === 107, 'the 107 shootouts of 2015-16'); o.shootouts = 106; } },
   /* Round 1312: the shootout era moved a season later; it still begins before every era of the game. */
   shootoutfrom: { expect: ['N11'], run() { must(nhl.NHL_SHOOTOUT_FROM === 2005, 'the shootout from 2005'); nhl.NHL_SHOOTOUT_FROM = 2006; } },
   /* Round 1312: the qualifying stage of 2019-20 forgotten. */
@@ -716,6 +721,27 @@ const OWN_MLB_DIVISIONS = {
   check('N11', so === OWN.nhlShootoutFrom, `NHL_SHOOTOUT_FROM is ${so}, this harness's own table says ${OWN.nhlShootoutFrom}`);
   check('N11', typeof so === 'number' && so <= rows[0].year && game.NHL_ERAS.every(e => e.startYear >= so), `NHL_SHOOTOUT_FROM ${so} is after a season the ledger or the game holds (${rows[0].year}; eras from ${game.NHL_ERAS.map(e => e.startYear).join(', ')})`);
   check('N11', (nhl.NHL_OVERTIME.y2006?.shootouts ?? 0) > 0 && (SRC['hr-shootout']?.values?.shootoutWins?.[rows[0].year] ?? 0) > 0, `no shootout is counted in ${rows[0].year}, the first season of the ledger`);
+
+  /* N12 (Round 1312, Part B3): past sixty minutes season by season. Every finished season once, as this
+     harness's own table has it; its games the season row's own; its numbers both receipts' sums (the
+     league feed's overtime losses and shootout wins, Hockey Reference's), every shootout with one winner
+     and one loser; no more shootouts than games past sixty; and NHL_OVERTIME's two seasons the same. */
+  const obs = nhl.NHL_OVERTIME_BY_SEASON ?? {};
+  const ownOt = Object.fromEntries(OWN.nhlOvertimeBySeason.split(' ').map(x => { const [y, v] = x.split(':'); const [p, s] = v.split('/').map(Number); return [y, [p, s]]; }));
+  const done = rows.filter(r => r.finished).map(r => String(r.year));
+  check('N12', sameSet(Object.keys(obs), done) && sameSet(Object.keys(ownOt), done), `NHL_OVERTIME_BY_SEASON holds ${Object.keys(obs).join(' ')}, the finished seasons are ${done.join(' ')}`);
+  const feedOt = SRC['nhl-feed-1312']?.values; const hrOt = SRC['hr-standings-1312']?.values;
+  for (const [y, o] of Object.entries(obs)) {
+    const row = rows.find(r => String(r.year) === y);
+    check('N12', !!row && o.games === row.leagueGames && feedOt?.teamGames?.[y] === 2 * o.games, `${y}: past sixty over ${o.games} games, the season row says ${row?.leagueGames} and the feed ${feedOt?.teamGames?.[y]} team games`);
+    check('N12', JSON.stringify([o.pastSixty, o.shootouts]) === JSON.stringify(ownOt[y]), `${y}: ${o.pastSixty} past sixty and ${o.shootouts} shootouts, this harness's own table says ${ownOt[y]?.join(' and ')}`);
+    check('N12', o.pastSixty === feedOt?.overtimeLosses?.[y] && o.pastSixty === hrOt?.overtimeLosses?.[y], `${y}: ${o.pastSixty} past sixty, the receipts say ${feedOt?.overtimeLosses?.[y]} and ${hrOt?.overtimeLosses?.[y]}`);
+    check('N12', o.shootouts === feedOt?.shootoutWins?.[y] && o.shootouts === hrOt?.shootoutWins?.[y] && o.shootouts === feedOt?.shootoutLosses?.[y] && o.shootouts === hrOt?.shootoutLosses?.[y], `${y}: ${o.shootouts} shootouts, the receipts' wins and losses say otherwise`);
+    check('N12', o.shootouts > 0 && o.shootouts <= o.pastSixty && o.pastSixty < o.games, `${y}: ${o.shootouts} shootouts of ${o.pastSixty} games past sixty of ${o.games}`);
+  }
+  /* NHL_OVERTIME's two seasons are not compared here: N7 holds them to the 1211 receipts, and a check
+     across the two blocks would turn the old control nhlscore red at a second check. They agree today
+     (281 and 164 of 1,230; 326 and 119 of 1,312), read twice on two days. */
 }
 
 /* ===== THE RECEIPTS ===== */
@@ -736,6 +762,7 @@ const OWN_MLB_DIVISIONS = {
   /* Round 1312: a window speaks of its finished seasons; names held season by season do too, and names
      that are NHL_PLAYOFF_FORMAT's speak of today's format, as that block does. */
   const nhlDone = nhl.NHL_LENGTHS_VERIFIED_TO;
+  if (nhl.NHL_OVERTIME_BY_SEASON) cited.push(['NHL_OVERTIME_BY_SEASON', [nhl.NHL_SEASONS[0].year, nhlDone], nhl.NHL_OVERTIME_BY_SEASON_SRC ?? []]);
   for (const w of nhl.NHL_ROUND_NAMES ?? []) {
     const span = [w.from, Math.min(w.to ?? nhlDone, nhlDone)];
     const own = OWN.nhlRoundWindows.find(x => x[0] === w.from);
