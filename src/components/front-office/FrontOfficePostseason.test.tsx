@@ -743,4 +743,27 @@ describe('NFL front office: Watch in the playoffs', () => {
     }
     expect(seen.sort(), 'a title game won and one lost, each with a clock, in forty streams').toEqual(['lost', 'won']);
   });
+
+  /* The fix pass (the review's gap: brief section 4 asks it, and only a regular week was ever watched with reduced motion) */
+  it('reduced motion: a watched playoff game shows his result at once with no clock, and the title game\'s recap comes at once', async () => {
+    (window as any).matchMedia = (query: string) => ({ matches: /reduce/.test(query), media: query, addEventListener: () => undefined, removeEventListener: () => undefined, addListener: () => undefined, removeListener: () => undefined });
+    bracketSave(1);
+    counted(31);
+    render(<Board />);
+    await openBox();
+    fireEvent.click(btn('[data-watch-round]'));
+    expect(q('[data-match-clock]'), 'no clock on the press').toBeNull();
+    await waitFor(() => expect(q('[data-gameday-final]')).not.toBeNull());
+    expect(textOf('[data-gameday-where]')).toContain('AFC Wild Card');
+    expect(q('[data-match-clock]'), 'no clock at all').toBeNull();
+    expect(btn('[data-press="rest"]').disabled, 'nothing to wait for: the presses are open again').toBe(false);
+    cleanup();
+    titleGameSave();
+    counted(51);
+    render(<Board />);
+    await openBox();
+    fireEvent.click(btn('[data-watch-round]'));
+    await waitFor(() => expect(q('[data-verdict-reveal]')).not.toBeNull());
+    expect(q('[data-match-clock]'), 'no clock on the title game').toBeNull();
+  });
 });
