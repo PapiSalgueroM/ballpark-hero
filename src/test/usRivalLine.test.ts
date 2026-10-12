@@ -12,6 +12,7 @@ import {
 } from '@/lib/usCareerStatLine';
 import { keyedRng } from '@/lib/keyedRng';
 import { nflStatLineFor } from '@/lib/nflMyCareer';
+import { mlbStatLineFor, mlbFullWorkload, mlbLineOnSlate } from '@/lib/mlbMyCareer';
 import type { CareerPos, SeasonLine } from '@/lib/nflMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
@@ -173,5 +174,57 @@ describe('Round 1227: the other two sports', () => {
         expect(picked(nhlLineAsPrinted(line, pos)), `${pos} "${text}"`).toEqual(read);
       }
     }
+  });
+});
+
+/* Round 1313: the MLB season sim's stat block, healthy workload and carry, cut into three functions with not one
+   draw and not one saved byte moved. The keys and their order are part of a saved line's bytes, so they are held
+   here position by position, with the draws each takes on a counting stream. */
+describe('Round 1313: the MLB cut (mlbStatLineFor, mlbFullWorkload, mlbLineOnSlate)', () => {
+  const HITTER = ['avg', 'hr', 'rbi', 'sb', 'doubles', 'obp'];
+  const CASES: { pos: MlbCareerPos; kind: string; keys: string[]; draws: number }[] = [
+    { pos: 'SP', kind: 'flame', keys: ['era', 'wins', 'lossesP', 'so'], draws: 4 },
+    { pos: 'RP', kind: 'closer', keys: ['era', 'so', 'wins', 'lossesP', 'saves', 'holds'], draws: 6 },
+    { pos: 'RP', kind: 'setup', keys: ['era', 'so', 'wins', 'lossesP', 'saves', 'holds'], draws: 6 },
+    { pos: 'C', kind: 'framer', keys: HITTER, draws: 6 },
+    { pos: 'SS', kind: 'sparkplug', keys: HITTER, draws: 6 },
+    { pos: 'CF', kind: 'burner', keys: HITTER, draws: 6 },
+    { pos: 'DH', kind: 'pure_masher', keys: HITTER, draws: 6 },
+  ];
+  it('writes only its position\'s keys, in the order the block wrote them, each a number, on its draws', () => {
+    for (const { pos, kind, keys, draws } of CASES) {
+      const base = keyedRng(`usRivalLine|mlbcut|${pos}|${kind}`);
+      for (const games of [20, 32, 62, 71, 155, 162]) for (const form of [45, 62, 80, 99]) {
+        const seen: number[] = [];
+        const line = mlbStatLineFor({ form, pos, kind, games }, () => { const v = base(); seen.push(v); return v; });
+        expect(Object.keys(line), `${pos} ${kind} at form ${form}, ${games} games`).toEqual(keys);
+        for (const v of Object.values(line)) expect(Number.isFinite(v)).toBe(true);
+        expect(seen.length, `${pos} ${kind} draws`).toBe(draws);
+        let k = 0;
+        expect(mlbStatLineFor({ form, pos, kind, games }, () => seen[k++]), `${pos} ${kind}: the same draws give the same line`).toEqual(line);
+      }
+    }
+  });
+  it('the healthy workload: 32 starts on no draw, 62 to 71 appearances and 155 to 162 games on one', () => {
+    for (const [pos, lo, hi, draws] of [['SP', 32, 32, 0], ['RP', 62, 71, 1], ['CF', 155, 162, 1]] as [string, number, number, number][]) {
+      for (const v of [0, 0.5, 0.999]) {
+        let n = 0;
+        const games = mlbFullWorkload(pos, () => { n += 1; return v; });
+        expect(n, `${pos} draws`).toBe(draws);
+        expect(games).toBeGreaterThanOrEqual(lo);
+        expect(games).toBeLessThanOrEqual(hi);
+      }
+    }
+  });
+  it('the carry: the line itself at 162, every count carried and the key order kept at any other length', () => {
+    const full: MlbSeasonLine = { year: 2020, team: 'X', age: 25, ovr: 80, games: 150, awards: [], teamResult: '', salary: 1, slate: 60,
+      ...mlbStatLineFor({ form: 80, pos: 'CF', kind: 'burner', games: 150 }, keyedRng('usRivalLine|carry')) };
+    expect(mlbLineOnSlate(full, 162)).toBe(full);
+    const short = mlbLineOnSlate(full, 60);
+    expect(short).not.toBe(full);
+    expect(Object.keys(short)).toEqual(Object.keys(full));
+    expect(short.avg).toBe(full.avg);
+    expect(short.obp).toBe(full.obp);
+    for (const k of ['games', 'hr', 'rbi', 'sb', 'doubles'] as const) expect(short[k]).toBe(Math.round(((full[k] ?? 0) * 60) / 162));
   });
 });
