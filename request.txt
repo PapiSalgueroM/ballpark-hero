@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walkClubDetail: node .rc/x/walkClubDetail.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs

@@ -1,0 +1,3 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSaveKeeper exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+walkClubDetail exit=1 86s | walkClubDetail: 3 failures

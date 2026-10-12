@@ -1,0 +1,14 @@
+under 12px on the screen (all three widths, seeded): []
+  FAIL: 320: TimeoutError: locator.waitFor: Timeout 25000ms exceeded.
+Call log:
+  - waiting for locator('[data-cm-way="quick"]') to be visible
+
+  FAIL: 390: TimeoutError: locator.waitFor: Timeout 25000ms exceeded.
+Call log:
+  - waiting for locator('[data-cm-way="quick"]') to be visible
+
+  FAIL: 1280: TimeoutError: locator.waitFor: Timeout 25000ms exceeded.
+Call log:
+  - waiting for locator('[data-cm-way="quick"]') to be visible
+
+walkClubDetail: 3 failures
