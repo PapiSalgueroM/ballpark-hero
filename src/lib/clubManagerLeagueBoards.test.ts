@@ -1,11 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { creditMine, openBook, openLateBook, readBook, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 import {
-  BOARD_ROWS, BOOK_FULL_SHARE, bestOfMine, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
+  BOARD_ROWS, bestOfMine, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
   type BoardClub, type BoardInput, type BoardMine,
 } from '@/lib/clubManagerLeagueBoards';
 
-/* Round 1306. A made up league of three rival clubs and mine. Roles and made up names only, nobody real. */
+/* Round 1306. A made up league of three rival clubs and mine. Roles and made up names only, nobody real.
+ *
+ * WHAT THIS FILE DOES NOT HOLD (said so nobody cites it for them). It tests the pure reader with typed
+ * books. Two rules of the round live in the engine's binding (src/lib/clubManager.ts), where no unit file
+ * of the round reaches, and are held by scripts/simCmLeagueBook.mjs on its default fleet instead:
+ *  - who of a club's outfield is given its clean sheet (section thin (vi) and section law; controls
+ *    thinbacks, nobacks and allbacks). A reviewer's three mutations of that rule left both unit files green.
+ *  - when a save with no book is given a whole book and when a late one (section oldsave (i), the
+ *    goalless save; control goallesswhole).
+ * And the share under which a board carries the honest line is not pinned here: the number is not ruled
+ * yet (see the note above BOARD_ROWS in the module). */
 const STAMP = 'league|test';
 const LINE: BookLineOf = pos => (pos === 'GK' ? 'GK' : ['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(pos) ? 'DEF' : ['CDM', 'CM', 'CAM', 'LM', 'RM'].includes(pos) ? 'MID' : 'ATT');
 
@@ -111,7 +121,6 @@ describe('the boards', () => {
   it('says how much of the rivals\' goals is on record, an own goal counted as on record', () => {
     /* Rows 25 + 20 + 20 = 65, own goals 3, unnamed 13: 68 of 81. */
     expect(bookShare(book(), CLUBS)).toEqual({ named: 65, own: 3, unnamed: 13, share: 83 });
-    expect(BOOK_FULL_SHARE).toBe(95);
     expect(bookShare(openBook(STAMP), CLUBS).share).toBe(100);
     /* A late book in a league whose data is whole: the goals from before it are not a gap in the data. */
     const late = openLateBook(STAMP, 20, CLUBS, []);

@@ -27,13 +27,14 @@
 import type { Position } from '@/types/game';
 import { bookClubGoals, bookRows, mineSheets, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 
-/** Under this share of rival goals on record a board carries the honest line about thin data.
- *  NOT YET BOUND: nothing in src reads it, and the lead's ruling is owed before a screen does. Measured
- *  over 47 leagues in Round 1306, seven sit within two points of 95 (94, 96, 96, 96, 97, 97, 97), which
- *  by that round's own rule means the number is reported and not bound; the real gaps between the
- *  leagues' shares are 81 to 87 and 87 to 91 (their middles 84 and 89). The unit test that holds the
- *  number moves with the ruling. */
-export const BOOK_FULL_SHARE = 95;
+/* THE SHARE UNDER WHICH A BOARD CARRIES THE HONEST LINE ABOUT THIN DATA IS NOT IN THIS MODULE YET, on
+ * purpose: the lead's ruling on the number is owed, and a constant nobody ruled on must not sit here
+ * for the next round to read. The brief put 95 in 100 on record, to be confirmed from the table of every
+ * league. Measured over 47 leagues in Round 1306, seven sit within two points of 95 (94, 96, 96, 96, 97,
+ * 97, 97), which by that round's own rule means the number is reported and not bound; the real gaps
+ * between the leagues' shares are 81 to 87 and 87 to 91 (their middles 84 and 89). The round that draws
+ * the line adds the constant here with the number the lead ruled, and a unit line that holds it.
+ * bookShare below already gives the share a line would print. */
 /** How many rows a board shows. */
 export const BOARD_ROWS = 10;
 
