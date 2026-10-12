@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+head-xi: node scripts/playStartingXi.mjs
+base-xi: R="$PWD"; git worktree add /tmp/basexi 48cb9d4b > /dev/null 2>&1 && cd /tmp/basexi && ln -s "$R/node_modules" node_modules && npm run build > /tmp/basexi-build.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/basexi-server.log 2>&1 & } && sleep 5 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playStartingXi.mjs
