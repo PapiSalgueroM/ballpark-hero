@@ -1,0 +1,1 @@
+c-othersport exit=1 85s | simNbaAwardsSense: 167 checks, 1 failed (full size, control othersport), 85s
