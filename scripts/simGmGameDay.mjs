@@ -1126,7 +1126,8 @@ for (const set of SEEDSETS) {
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
     /* Round 1309, the playoffs on the board: the press and load half of the postseason, the NFL's bind to it and the
        bracket machine (the card and its words stay lazy: STORY_FILES below) */
-    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD), noExt(POST), noExt(NFL_POST), noExt(BRACKET)])],
+    /* and (Round 1309, the mount) the bound bracket card, through a lazy import (the check at the end of this section) */
+    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD), noExt(POST), noExt(NFL_POST), noExt(BRACKET), noExt(NFL_BRACKET_CARD)])],
     ['src/test/frontOfficeSaveRecovery.test.tsx', new Set([noExt(NFL_POST), noExt(BRACKET)])],
     ['src/components/front-office/FrontOfficePostseason.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(POST), noExt(NFL_POST), noExt(BRACKET)])],
     /* Round 1307, the tile: the board reaches the bound card (through a lazy import: the check below) and nothing
@@ -1213,6 +1214,9 @@ for (const set of SEEDSETS) {
      card nobody mounts would be holding nothing, and a lazy part made inside a render remounts on every save) */
   const lazyCard = boardText.split(`lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'))`).length - 1;
   check(6, 'the NFL board mounts the bound Game Day card through one lazy import, made before the component', lazyCard === 1 && boardText.indexOf('lazyPart<GmGameDayMount>') < boardText.indexOf('export default function FrontOfficeBoard') && /<NflGameDay\b/.test(boardText));
+  /* Round 1309: and the bound bracket card the same way, the other face of the same box */
+  const lazyBracket = boardText.split(`lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'))`).length - 1;
+  check(6, 'the NFL board mounts the bound bracket card through one lazy import, made before the component', lazyBracket === 1 && boardText.indexOf('lazyPart<GmBracketMount>') < boardText.indexOf('export default function FrontOfficeBoard') && /<NflBracket\b/.test(boardText));
 }
 
 /* ─── What was measured, for the header and the notes ─── */

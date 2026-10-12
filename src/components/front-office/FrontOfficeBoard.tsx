@@ -79,7 +79,7 @@ import { addToGmGameLog, lastGmGame, readGmGameLog, GM_GAME_DAY_BOX, type GmGame
    bracket machine, the NFL's bracket data and its bind in the same tick, so
    they are static; the bracket card and every word only it prints are not
    imported here (they ride with the card's lazy chunk). */
-import { inGmPostseason, loadGmPostseason } from '@/lib/gmPostseason';
+import { inGmPostseason, loadGmPostseason, type GmBracketMount } from '@/lib/gmPostseason';
 import { NFL_POSTSEASON, nflPlayTie, nflRoundsOf } from '@/lib/frontOfficePostseason';
 import {
   bracketChampion, bracketPairings, bracketWeek, openBracket, playBracketAll, playBracketWeek, type BracketFormat, type GmBracketSave,
@@ -90,11 +90,14 @@ import {
    a lazy part must be the same component on every render. */
 import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
 const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
-/* What the tile says under the fixture on the final week, when nothing has
-   been told yet (a save from before the log that sits on Week 17). The
-   tile's own line offers a watch and a result in the box, and the final
-   week has neither: no Watch button, and its press goes to the recap. */
-const FINAL_WEEK_NOTE = 'No Watch on this one. The final week runs straight into the playoffs.';
+/* Round 1309: the bracket card, the face of the same box in the playoffs. Made
+   once at module level, so the card, its "?" and the ledger's week names are
+   one chunk the week box asks for. (Round 1307's note that the final week has
+   no Watch is gone: Week 17 has Watch now, and its press opens the bracket.) */
+const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'));
+/* the three button rows of the playoffs (Week 17, and a round): stacked under sm, three a row from sm up, each one
+   height whatever its words, so the box under them never moves from one round to the next */
+const PRESS_THREE = 'inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-bold leading-tight disabled:opacity-40 sm:h-14';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -190,17 +193,13 @@ export default function FrontOfficeBoard() {
      are shut. It is let go at full time and at Results (the card says so),
      when he leaves the week box, and when the press played nothing. */
   const [held, setHeld] = useState<LeagueState | null>(null);
-  const hold = tab === 'week' && held && league && held !== league && league.season === held.season && league.week === held.week + 1 ? held : null;
+  /* Round 1309: a press in the playoffs leaves the week at 18 (and the title game puts it back to 17), so a hold of
+     the playoffs is any press after a league held past the last week, in the same season */
+  const hold = tab === 'week' && held && league && held !== league && league.season === held.season && (league.week === held.week + 1 || held.week > REGULAR_WEEKS) ? held : null;
   useEffect(() => { if (held && (tab !== 'week' || !league || league === held)) setHeld(null); }, [held, tab, league]);
   /* where the Game Day "?" is drawn: an empty element at the end of the week
      box, so the sheet lies over the whole box and takes none of its spacing */
   const [helpHost, setHelpHost] = useState<HTMLDivElement | null>(null);
-  /* The ref is on ONE wrapper that starts at the Game Day tile and holds the
-     league grid, so the thing pulled into view is his result and never the
-     grid alone; the key moves again at full time, so that is a reveal too. */
-  const revealRef = useRevealScroll<HTMLDivElement>(
-    `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}`,
-  );
   const [tradePartner, setTradePartner] = useState<string>('');
   // Round 82: trade finder
   const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
@@ -260,6 +259,35 @@ export default function FrontOfficeBoard() {
   const playoffsLive = useRef<GmBracketSave | null>(null);
   const setPlayoffs = (b: GmBracketSave | null) => { playoffsLive.current = b; setPlayoffsState(b); };
   const ask = useRef<'week' | 'bracket' | 'round' | 'rest'>('week');
+  /* Round 1309, the mount. The bracket as it stood before a watched press,
+     beside `held` (never saved: a reload shows the result), so nothing drawn
+     while he watches reads the round's result. And what the box shows in the
+     bracket: null, the bracket; 'last', his last game of the log; a tie id,
+     his game of that tie. A press sets it (his game when the press logged
+     one, the bracket when it logged none: his bye, or he is out); "Your
+     game" on the bracket and the back chip under the box move it. */
+  const [heldBracket, setHeldBracket] = useState<GmBracketSave | null>(null);
+  const [boxGame, setBoxGame] = useState<string | null>(null);
+  /* the breakpoint the reveal's element is chosen by (sm, 640 px): see the reveal below */
+  const [wide, setWide] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 640px)').matches);
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+    const mq = window.matchMedia('(min-width: 640px)');
+    const on = () => setWide(mq.matches);
+    mq.addEventListener?.('change', on);
+    return () => mq.removeEventListener?.('change', on);
+  }, []);
+  /* THE REVEAL (Round 1307, and Round 1309's ruling from its review). The key
+     moves at a press, at full time and when a playoff round is played, and the
+     element pulled into view is his result: under sm (640 px) ONE wrapper that
+     starts at the Game Day box, as shipped; from sm up the wrapper one element
+     up, which starts at the button row and holds the box, because there a first
+     press put the tile at the top of the screen and Play and Watch above it.
+     ONE hook whose ref is handed to one wrapper or the other by the width, so a
+     window resized across sm moves no key and scrolls nothing. */
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}:${playoffs?.played.length ?? 0}`,
+  );
 
   useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
 
@@ -1225,7 +1253,8 @@ export default function FrontOfficeBoard() {
   }
 
   /* ------------------------------ recap screen ------------------------------ */
-  if (phase === 'recap') {
+  /* Round 1309: not while he watches the title game; full time (or Results) lets the hold go and the recap comes */
+  if (phase === 'recap' && !hold) {
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
     /* Round 187: the verdict curtain. Every string below is exactly what
@@ -1594,18 +1623,46 @@ export default function FrontOfficeBoard() {
   const seenGame = hold ? hold.schedule[hold.week - 1]?.find(g => g.home === myTeam || g.away === myTeam) : myGameThisWeek;
   /* his seed today as the engine itself would seed the conference (division winners first, then three wild cards) */
   const seedsNow = conferenceSeeds(league.teams, conf);
-  const gameLogNow = gameLogLive.current;
-  /* Round 1309: the playoffs on the week box. The round to play next, and
-     his tie in it when he has one (named by the bracket data's own round:
-     "AFC Wild Card"); null when he has the bye or is out. */
-  const bracketOpen = !!playoffs && seen.week > REGULAR_WEEKS;
+  /* Round 1309: the playoffs on the week box. The bracket as it is SEEN (while
+     he watches, as it stood before the press: Round 1307's rule for every
+     reader), the round to play next, and his tie in it when he has one (named
+     by the bracket data's own round: "AFC Wild Card"; null when he has the bye
+     or is out). */
+  const seenPlayoffs = hold ? heldBracket : playoffs;
+  const bracketFormat = seenPlayoffs ? NFL_POSTSEASON.formatFor(league.season) : null;
+  const bracketOpen = !!seenPlayoffs && seen.week > REGULAR_WEEKS;
   const roundNow = ((): { round: string | null; mine: boolean } => {
-    const fmt = playoffs ? NFL_POSTSEASON.formatFor(league.season) : null;
-    const w = fmt && playoffs ? bracketWeek(fmt, playoffs) : null;
-    const pairs = fmt && playoffs && w !== null ? bracketPairings(fmt, playoffs, w) : null;
+    const fmt = bracketFormat;
+    const w = fmt && seenPlayoffs ? bracketWeek(fmt, seenPlayoffs) : null;
+    const pairs = fmt && seenPlayoffs && w !== null ? bracketPairings(fmt, seenPlayoffs, w) : null;
     const his = pairs ? pairs.find(p => p.homeId === myTeam || p.awayId === myTeam) ?? null : null;
     return { round: his && fmt ? fmt.ties.find(x => x.id === his.id)?.round ?? null : null, mine: !!his };
   })();
+  /* the row under the box (the back chip): drawn for the whole bracket, and through the watch of the press that
+     opened it, so the box never moves when its face changes or a watch ends */
+  const bracketRow = bracketOpen || (!!playoffs && league.week > REGULAR_WEEKS);
+  /* his game of a tie, as its place in the log (-1: none): the game told under the tie's round between its two clubs */
+  const tieGameAt = (tieId: string): number => {
+    const tie = bracketFormat?.ties.find(x => x.id === tieId);
+    const p = seenPlayoffs?.played.find(x => x.id === tieId);
+    const games = gameLogLive.current?.games ?? [];
+    return tie && p ? games.findIndex(g => g.where === tie.round && (g.home === p.home || g.away === p.home) && (g.home === p.away || g.away === p.away)) : -1;
+  };
+  const openAt = bracketOpen && !hold && boxGame !== null && boxGame !== 'last' ? tieGameAt(boxGame) : -1;
+  /* the tile in the bracket is handed the log up to the game that is open, so it opens on that game */
+  const logOpen = gameLogLive.current && openAt >= 0 ? { ...gameLogLive.current, games: gameLogLive.current.games.slice(0, openAt + 1) } : null;
+  const gameLogNow = logOpen ?? gameLogLive.current;
+  /* the box's face: in the bracket, the bracket, unless a game of his is open or being watched */
+  const bracketFace = bracketOpen && !hold && (boxGame === null || (boxGame !== 'last' && openAt < 0));
+  /* the presses that open the bracket or play in it: the box then shows his game when the press logged one (a Watch
+     runs it on the clock) and the bracket when it logged none (his bye, or he is out) */
+  const pressPlayoffs = (asked: 'bracket' | 'round' | 'rest', watch: boolean) => {
+    const before = gameLogLive.current?.games.length ?? 0;
+    if (watch) { setHeld(league); setHeldBracket(playoffs); }
+    ask.current = asked;
+    playWeek();
+    setBoxGame((gameLogLive.current?.games.length ?? 0) > before ? 'last' : null);
+  };
 
   return (
     <div className="space-y-4">
@@ -2032,52 +2089,84 @@ export default function FrontOfficeBoard() {
               "whichever fits". Left to wrap, "Week 1" shared a row at 390 and
               "Week 2" did not, so the box grew a button row at the first
               press of a season and the tile moved as its result arrived. */}
-          {/* Round 1309: Week 17 has "Play Week 17" first (it opens the
-              bracket) and the old button after it, in outline, word for word
-              and playing what it always played. In the playoffs: the round
-              (his tie's name when he plays in it), and the rest. Every button
-              says what it asks of playWeek. */}
+          {/* Round 1309: Week 17 has "Play Week 17" first (it plays the week
+              and opens the bracket), "Watch Week 17" (the same press, his game
+              on the clock) and the old button last, in outline, word for word
+              and playing what it always played. In the playoffs: the round (his
+              tie's name when he plays in it), "Watch your game" when he plays
+              in it, and the rest. Every button says what it asks of playWeek.
+              The two rows of three are stacked under sm and three a row from
+              sm up, at one height (PRESS_THREE). */}
+          <div ref={wide ? revealRef : undefined} className="space-y-3" data-reveal-wide>
+          {bracketOpen ? (
+            <div className={cn('grid grid-cols-1 gap-2', roundNow.mine ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
+              <button
+                onClick={() => pressPlayoffs('round', false)}
+                disabled={overLimit > 0 || !!hold}
+                data-press="round"
+                className={cn(PRESS_THREE, 'bg-primary text-primary-foreground hover:opacity-90')}
+              >
+                <ShieldHalf className="h-4 w-4 shrink-0" /> {roundNow.round ? `Play the ${roundNow.round}` : 'Play the next round'}
+              </button>
+              {roundNow.mine && (
+                <button
+                  onClick={() => pressPlayoffs('round', true)}
+                  disabled={overLimit > 0 || !!hold}
+                  data-watch-round
+                  className={cn(PRESS_THREE, 'border border-primary text-primary hover:bg-primary/10')}
+                >
+                  Watch your game
+                </button>
+              )}
+              <button
+                onClick={() => pressPlayoffs('rest', false)}
+                disabled={overLimit > 0 || !!hold}
+                data-press="rest"
+                className={cn(PRESS_THREE, 'border border-border text-foreground hover:bg-muted/40')}
+              >
+                Sim the rest of the playoffs
+              </button>
+            </div>
+          ) : seen.week >= REGULAR_WEEKS ? (
+            <div className={cn('grid grid-cols-1 gap-2', seenGame ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
+              <button
+                onClick={() => pressPlayoffs('bracket', false)}
+                disabled={overLimit > 0 || !!hold}
+                data-press="week"
+                className={cn(PRESS_THREE, 'bg-primary text-primary-foreground hover:opacity-90')}
+              >
+                <ShieldHalf className="h-4 w-4 shrink-0" /> {`Play Week ${seen.week}`}
+              </button>
+              {seenGame && (
+                <button
+                  onClick={() => pressPlayoffs('bracket', true)}
+                  disabled={overLimit > 0 || !!hold}
+                  data-watch-week
+                  className={cn(PRESS_THREE, 'border border-primary text-primary hover:bg-primary/10')}
+                >
+                  Watch Week {seen.week}
+                </button>
+              )}
+              <button
+                onClick={() => { ask.current = 'week'; playWeek(); }}
+                disabled={overLimit > 0 || !!hold}
+                data-press="old"
+                className={cn(PRESS_THREE, 'border border-border text-foreground hover:bg-muted/40')}
+              >
+                Play the final week + playoffs
+              </button>
+            </div>
+          ) : (
           <div className="flex flex-col items-center justify-center gap-2 sm:flex-row" data-press-row>
-            {bracketOpen ? (
-              <>
-                <button
-                  onClick={() => { ask.current = 'round'; playWeek(); }}
-                  disabled={overLimit > 0 || !!hold}
-                  data-press="round"
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
-                >
-                  <ShieldHalf className="h-4 w-4" /> {roundNow.round ? `Play the ${roundNow.round}` : 'Play the next round'}
-                </button>
-                <button
-                  onClick={() => { ask.current = 'rest'; playWeek(); }}
-                  disabled={overLimit > 0 || !!hold}
-                  data-press="rest"
-                  className="inline-flex min-h-[44px] items-center rounded-full border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:bg-muted/40 disabled:opacity-40"
-                >
-                  Sim the rest of the playoffs
-                </button>
-              </>
-            ) : (
-            <>
             <button
-              onClick={() => { ask.current = seen.week >= REGULAR_WEEKS ? 'bracket' : 'week'; playWeek(); }}
+              onClick={() => { ask.current = 'week'; playWeek(); }}
               disabled={overLimit > 0 || !!hold}
               data-press="week"
               className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
             >
               <ShieldHalf className="h-4 w-4" /> {`Play Week ${seen.week}`}
             </button>
-            {seen.week >= REGULAR_WEEKS && (
-              <button
-                onClick={() => { ask.current = 'week'; playWeek(); }}
-                disabled={overLimit > 0 || !!hold}
-                data-press="old"
-                className="inline-flex min-h-[44px] items-center rounded-full border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:bg-muted/40 disabled:opacity-40"
-              >
-                Play the final week + playoffs
-              </button>
-            )}
-            {seen.week < REGULAR_WEEKS && seenGame && (
+            {seenGame && (
               <button
                 onClick={() => { ask.current = 'week'; setHeld(league); playWeek(); }}
                 disabled={overLimit > 0 || !!hold}
@@ -2087,12 +2176,23 @@ export default function FrontOfficeBoard() {
                 Watch Week {seen.week}
               </button>
             )}
-            </>
-            )}
           </div>
-          <div ref={revealRef} className="space-y-3">
+          )}
+          <div ref={wide ? undefined : revealRef} className="space-y-3">
             {/* the board owns the tile's box: the same height while the card loads, on every face and after every press */}
-            <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box>
+            {/* Round 1309: ONE BOX, TWO FACES. In the playoffs the box shows the bracket, or his game on the tile when a
+                press logged one or he opened one ("Your game"); the row under it holds the back chip. */}
+            <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
+              {bracketFace && seenPlayoffs && bracketFormat ? (
+                <NflBracket
+                  format={bracketFormat}
+                  save={seenPlayoffs}
+                  my={myTeam}
+                  name={nickname}
+                  onOpenGame={tieId => setBoxGame(tieId)}
+                  helpHost={helpHost}
+                />
+              ) : (
               <NflGameDay
                 key={`${league.season}:${gameLogNow?.games.length ?? 0}`}
                 log={gameLogNow?.games ?? []}
@@ -2100,14 +2200,29 @@ export default function FrontOfficeBoard() {
                 name={nickname}
                 short={id => id}
                 next={hubFacts.nextOpponent}
-                nextNote={seen.week >= REGULAR_WEEKS ? FINAL_WEEK_NOTE : undefined}
                 mode={hold ? 'watch' : 'result'}
                 onWatched={() => setHeld(null)}
-                standing={{ table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
+                standing={bracketRow ? null : { table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
                 helpHost={helpHost}
               />
+              )}
             </div>
-          {weekResults.length > 0 && !hold && (
+            {bracketRow && (
+              <div className="flex h-11 items-center justify-start" data-bracket-row>
+                {bracketFace ? null : (
+                  <button
+                    type="button"
+                    onClick={() => setBoxGame(null)}
+                    disabled={!!hold}
+                    data-bracket-back
+                    className="inline-flex h-11 items-center gap-1 rounded-full border border-border bg-background px-4 text-xs font-bold text-foreground hover:border-primary disabled:opacity-40"
+                  >
+                    <ChevronLeft className="h-4 w-4" /> The bracket
+                  </button>
+                )}
+              </div>
+            )}
+          {weekResults.length > 0 && !hold && (!bracketRow) && (
             <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
               {weekResults.map((g, i) => {
                 const involved = g.home === myTeam || g.away === myTeam;
@@ -2121,6 +2236,7 @@ export default function FrontOfficeBoard() {
               })}
             </div>
           )}
+          </div>
           </div>
           <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
         </div>

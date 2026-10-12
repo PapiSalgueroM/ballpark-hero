@@ -42,7 +42,11 @@
  * score, as Round 1305's blind spot asks) and "Sim the rest" playing one
  * round (restround); then the chip reading Week 18/17 in the playoffs
  * (weekeighteen) and trades left open there with the desk off
- * (playofftrades).
+ * (playofftrades); then the mount: the bracket read after the press while
+ * he watches (roundspoils), a playoff press never held (holdround), the
+ * recap drawn under the title game's clock (recapnow), the league grid in
+ * the bracket (bracketgrid) and "Your game" opening his last game instead of
+ * that tie's (tiegame).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -101,6 +105,11 @@ const T = {
   psChipPress: [PS, '"Play Week 17" turns the chip to Playoffs'],
   psTradeOff: [PS, 'a trade is refused in the bracket (GM desk on: false)'],
   psTradeOn: [PS, 'a trade is refused in the bracket (GM desk on: true)'],
+  psFaces: [PS, 'a round he plays opens his game on the box with the back chip'],
+  psBye: [PS, 'a round he does not play (his bye) shows the bracket'],
+  psWatchRound: [PS, 'WATCH YOUR GAME is the same press'],
+  psWatch17: [PS, '"Watch Week 17" is "Play Week 17" on the clock'],
+  psTitleWatch: [PS, 'the title game watched: the recap waits for full time'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -150,6 +159,12 @@ const CONTROLS = {
   restround: ['"Sim the rest" plays one round', [["playPlayoffs(asked === 'rest');", 'playPlayoffs(false);']], [T.psRestAny], [T.psKeep]],
   weekeighteen: ['the chip reads Week 18/17 in the playoffs', [["{seen.season} · {seen.week > REGULAR_WEEKS ? 'Playoffs' : `Week ${seen.week}/${REGULAR_WEEKS}`}", '{seen.season} · Week {seen.week}/{REGULAR_WEEKS}']], [T.psChip, T.psChipPress], [T.psKeep]],
   playofftrades: ['trades stay open in the playoffs with the desk off', [['const why = deadline ?? (playoffsLive.current && league && league.week > REGULAR_WEEKS ? PLAYOFF_TRADE_LINE : null);', 'const why = deadline;']], [T.psTradeOff], [T.psTradeOn]],
+  /* Round 1309 (c), the mount: the bracket on the box, his game on the tile, and Watch in the playoffs */
+  roundspoils: ['while he watches a playoff game the page reads the bracket AFTER the press', [['const seenPlayoffs = hold ? heldBracket : playoffs;', 'const seenPlayoffs = playoffs;']], [T.psWatchRound], [T.psKeep, T.psFaces]],
+  holdround: ['a playoff press is never held (the hold asks only for the next week)', [['(league.week === held.week + 1 || held.week > REGULAR_WEEKS)', 'league.week === held.week + 1']], [T.psWatchRound, T.psTitleWatch], [T.psWatch17]],
+  recapnow: ['the recap is drawn while he watches the title game', [["if (phase === 'recap' && !hold) {", "if (phase === 'recap') {"]], [T.psTitleWatch], [T.psWatchRound]],
+  bracketgrid: ['the league grid is drawn in the bracket', [['(!bracketRow) && (', '']], [T.psWatch17], [T.psFaces]],
+  tiegame: ['"Your game" opens his last game and not the game of that tie', [['const gameLogNow = logOpen ?? gameLogLive.current;', 'const gameLogNow = gameLogLive.current;']], [T.psFaces], [T.psBye, T.psWatchRound]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 

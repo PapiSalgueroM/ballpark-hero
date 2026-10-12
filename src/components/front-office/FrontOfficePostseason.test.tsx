@@ -16,8 +16,10 @@
  * Abandon nor a new franchise carries it over.
  *
  * Negative controls: scripts/controlFrontOfficeBoard.mjs (noplayoffs,
- * abandonbracket, rebuiltkeeps, champopen), which point this file at a copy
- * of the board through FO_BOARD_NFL.
+ * abandonbracket, rebuiltkeeps, champopen, bracketnoedges, restround,
+ * weekeighteen, playofftrades, roundspoils, holdround, recapnow,
+ * bracketgrid, tiegame), which point this file at a copy of the board
+ * through FO_BOARD_NFL.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
@@ -29,7 +31,7 @@ import { openNflDesk } from '@/lib/nflGmDesk';
 import { addToGmGameLog, readGmGameLog, type GmGameLog } from '@/lib/gmGameLog';
 import { nflIsRegular, nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
 import { NFL_POSTSEASON, nflPlayTie } from '@/lib/frontOfficePostseason';
-import { BRACKET_REBUILT_LINES, openBracket, playBracketWeek, type GmBracketSave } from '@/lib/gmBracket';
+import { BRACKET_REBUILT_LINES, bracketPairings, bracketWeek, openBracket, playBracketWeek, type GmBracketSave } from '@/lib/gmBracket';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -465,5 +467,192 @@ describe('NFL front office: Week 18 reads as the playoffs', () => {
     expect(text(), 'no offers were asked for').not.toContain('Nobody bit');
     expect(text()).not.toMatch(/[A-Z]{2,3} offer: /);
     expect(localStorage.getItem(SAVE_KEY), 'nothing was saved').toBe(before);
+  });
+});
+
+/* ───────────── Round 1309 (c): the mount ─────────────
+   ONE BOX, TWO FACES. In the playoffs the Game Day box shows the bracket
+   card, or his game on the tile when a press logged one of his or he opened
+   one ("Your game" on a decided tie of his); the row under the box holds the
+   back chip on both faces, so the box never moves. No league grid in the
+   bracket and no standing line on the tile (the bracket says where he
+   stands). WATCH IN THE BRACKET is Round 1307's rule: the same press, the
+   page as it stood before it until full time (the round's name, the line,
+   the buttons shut, the bracket not drawn), and the title game's recap waits
+   for the clock. Controls in scripts/controlFrontOfficeBoard.mjs:
+   roundspoils, holdround, recapnow, bracketgrid. */
+const q = (sel: string) => document.querySelector(sel);
+const textOf = (sel: string) => (q(sel)?.textContent ?? '').replace(/\s+/g, ' ').trim();
+const btn = (sel: string) => { const b = q(sel) as HTMLButtonElement | null; expect(b, `the button ${sel}`).toBeTruthy(); return b!; };
+const face = () => q('[data-gameday-box]')!.getAttribute('data-box-face');
+/** A media query that never matches: full motion, and under sm (the Round 1307 tile test's own stand in) */
+const motion = () => { (window as any).matchMedia = (query: string) => ({ matches: false, media: query, addEventListener: () => undefined, removeEventListener: () => undefined, addListener: () => undefined, removeListener: () => undefined }); };
+/** An unplayed bracket on the morning after Week 17, for the club at `at` of the frozen seeds (1: the AFC's second
+ *  seed, who plays the Wild Card; 0: the top seed, who has the bye). `strong`: his club made good enough to win. */
+function bracketSave(at: number, strong = false) {
+  const o = seasonOver();
+  const team = o.seeds[at];
+  if (strong) { for (const p of o.league.teams[team].players) p.ovr = 99; o.league.teams[team].defense = 99; }
+  const log = regularLog({ ...o, team });
+  save(shape(o.league, team, { playoffs: openBracket(o.format, o.league.season, o.seeds), gameLog: log }));
+  return { o, team, log };
+}
+const openBox = async () => {
+  fireEvent.click(screen.getByText('This week'));
+  await waitFor(() => expect(q('[data-bracket]')).not.toBeNull());
+};
+
+describe('NFL front office: one box, two faces in the playoffs', () => {
+  it('a round he plays opens his game on the box with the back chip; the chip shows the bracket, and "Your game" opens that game', async () => {
+    motion();
+    const { team } = bracketSave(1, true);
+    counted(21);
+    render(<Board />);
+    await openBox();
+    expect(face()).toBe('bracket');
+    expect(q('[data-bracket-back]'), 'no back chip on the bracket').toBeNull();
+    expect(q('[data-bracket-row]'), 'the row under the box is there on both faces').not.toBeNull();
+    const boxClass = q('[data-gameday-box]')!.className;
+    for (const round of ['AFC Wild Card', 'AFC Divisional']) {
+      fireEvent.click(btn('[data-press="round"]'));
+      await waitFor(() => expect(q('[data-gameday]')).not.toBeNull());
+      expect(face()).toBe('game');
+      const last = logOf(read())!.games.at(-1)!;
+      expect([last.where, last.winner], 'his game of the round, and he won it').toEqual([round, team]);
+      expect(textOf('[data-gameday-where]')).toContain(round);
+      expect(q('[data-gameday-standing]'), 'no standing line in the bracket').toBeNull();
+      expect(q('div.grid.max-h-56'), 'no league grid in the bracket').toBeNull();
+      expect(q('[data-gameday-box]')!.className).toBe(boxClass);
+      expect(btn('[data-bracket-back]').disabled).toBe(false);
+    }
+    fireEvent.click(btn('[data-bracket-back]'));
+    await waitFor(() => expect(q('[data-bracket]')).not.toBeNull());
+    expect(face()).toBe('bracket');
+    /* the Wild Card's week, and his game of it: the box opens THAT game, not the last one he played */
+    fireEvent.click(btn('[data-bracket-week="1"]'));
+    fireEvent.click(btn('[data-bracket-mine="true"] [data-bracket-open]'));
+    await waitFor(() => expect(q('[data-gameday]')).not.toBeNull());
+    expect(textOf('[data-gameday-where]')).toContain('AFC Wild Card');
+    expect(q('[data-gameday-box]')!.className).toBe(boxClass);
+  });
+
+  it('a round he does not play (his bye) shows the bracket, and the log takes nothing', async () => {
+    motion();
+    const { log } = bracketSave(0);
+    counted(22);
+    render(<Board />);
+    await openBox();
+    expect(screen.queryByText('Watch your game'), 'no game of his to watch this round').toBeNull();
+    fireEvent.click(btn('[data-press="round"]'));
+    await waitFor(() => expect(q('[data-bracket]')).not.toBeNull());
+    expect(face()).toBe('bracket');
+    expect(read().playoffs.played.length, 'the round was played').toBeGreaterThan(0);
+    expect(logOf(read())!.games).toEqual(log.games);
+  });
+});
+
+/** The bracket three rounds on, with his club (made strong) in the title game; the log holds his games of it. */
+function titleGameSave() {
+  for (let k = 1; k <= 12; k += 1) {
+    const o = seasonOver();
+    const team = o.seeds[0];
+    for (const p of o.league.teams[team].players) p.ovr = 99;
+    o.league.teams[team].defense = 99;
+    const told: GmGameLog['games'] = [];
+    const play = nflPlayTie(o.league.teams, lehmer(k), o.league.season, undefined, told);
+    let block = openBracket(o.format, o.league.season, o.seeds);
+    for (let w = 0; w < 3; w += 1) block = playBracketWeek(o.format, block, play);
+    const week = bracketWeek(o.format, block);
+    const final = week === null ? null : bracketPairings(o.format, block, week);
+    if (!final || !final.some(p => p.homeId === team || p.awayId === team)) continue;
+    const log = addToGmGameLog(regularLog({ ...o, team }), o.league.season, told.filter(g => g.home === team || g.away === team))!;
+    save(shape(o.league, team, { playoffs: block, gameLog: log }));
+    return { o, team };
+  }
+  throw new Error('no stream of the twelve put his club in the title game');
+}
+
+describe('NFL front office: Watch in the playoffs', () => {
+  it('WATCH YOUR GAME is the same press and gives nothing away: the page is the round before it until full time', async () => {
+    motion();
+    bracketSave(1);
+    const start = localStorage.getItem(SAVE_KEY)!;
+    counted(31);
+    render(<Board />);
+    await openBox();
+    fireEvent.click(btn('[data-press="round"]'));
+    const played = localStorage.getItem(SAVE_KEY)!;
+    cleanup();
+    localStorage.setItem(SAVE_KEY, start);
+    counted(31);
+    render(<Board />);
+    await openBox();
+    const before = { line: textOf('[data-week-matchup]'), round: textOf('[data-press="round"]'), chip: textOf('[data-week-chip]') };
+    expect(before.round).toBe('Play the AFC Wild Card');
+    fireEvent.click(btn('[data-watch-round]'));
+    expect(localStorage.getItem(SAVE_KEY), 'the watched round saved what the played round saved').toBe(played);
+    await waitFor(() => expect(q('[data-match-clock]')).not.toBeNull());
+    expect(face()).toBe('game');
+    expect([textOf('[data-week-matchup]'), textOf('[data-press="round"]'), textOf('[data-week-chip]')]).toEqual([before.line, before.round, before.chip]);
+    for (const sel of ['[data-press="round"]', '[data-watch-round]', '[data-press="rest"]', '[data-bracket-back]']) expect(btn(sel).disabled, `${sel} is shut while he watches`).toBe(true);
+    expect(q('[data-bracket]'), 'the bracket and its place line are not drawn while he watches').toBeNull();
+    for (const sel of ['[data-gameday-final]', '[data-line-score]', '[data-gameday-chips]']) expect(q(sel)).toBeNull();
+    expect(document.body.textContent).not.toMatch(/Out in the|Champions|AFC Divisional/);
+    fireEvent.click(q('[data-gameday-speed="Results"]')!);
+    await waitFor(() => expect(q('[data-gameday-final]')).not.toBeNull());
+    expect(textOf('[data-press="round"]'), 'full time moves the page on').not.toBe(before.round);
+    expect(btn('[data-press="rest"]').disabled).toBe(false);
+    expect(btn('[data-bracket-back]').disabled).toBe(false);
+    expect(localStorage.getItem(SAVE_KEY), 'full time saved nothing').toBe(played);
+  });
+
+  it('"Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket behind the chip, and no league grid', async () => {
+    motion();
+    const rng = lehmer(7);
+    const league: any = initLeague(rng);
+    for (let w = 1; w < REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => simGame(g, league.teams, rng)); league.week += 1; }
+    const start = JSON.stringify(shape(league, Object.keys(league.teams)[0]));
+    localStorage.setItem(SAVE_KEY, start);
+    counted(41);
+    render(<Board />);
+    fireEvent.click(screen.getByText('This week'));
+    fireEvent.click(btn('[data-press="week"]'));
+    const played = localStorage.getItem(SAVE_KEY)!;
+    expect(JSON.parse(played).league.week).toBe(REGULAR_WEEKS + 1);
+    cleanup();
+    localStorage.setItem(SAVE_KEY, start);
+    counted(41);
+    render(<Board />);
+    fireEvent.click(screen.getByText('This week'));
+    fireEvent.click(btn('[data-watch-week]'));
+    expect(localStorage.getItem(SAVE_KEY), 'the watched press saved what the played press saved').toBe(played);
+    await waitFor(() => expect(q('[data-match-clock]')).not.toBeNull());
+    expect(textOf('[data-week-chip]')).toContain(`Week ${REGULAR_WEEKS}/${REGULAR_WEEKS}`);
+    for (const sel of ['[data-press="week"]', '[data-watch-week]', '[data-press="old"]', '[data-bracket-back]']) expect(btn(sel).disabled, `${sel} is shut while he watches`).toBe(true);
+    expect(q('[data-bracket]')).toBeNull();
+    fireEvent.click(q('[data-gameday-speed="Results"]')!);
+    await waitFor(() => expect(q('[data-gameday-final]')).not.toBeNull());
+    expect(textOf('[data-week-chip]')).toContain('Playoffs');
+    expect(face()).toBe('game');
+    expect(q('div.grid.max-h-56'), 'no league grid in the bracket, Week 17 played or not').toBeNull();
+    fireEvent.click(btn('[data-bracket-back]'));
+    await waitFor(() => expect(q('[data-bracket]')).not.toBeNull());
+    expect(localStorage.getItem(SAVE_KEY), 'full time and the chip saved nothing').toBe(played);
+  });
+
+  it('the title game watched: the recap waits for full time, and then it comes', async () => {
+    motion();
+    titleGameSave();
+    counted(51);
+    render(<Board />);
+    await openBox();
+    fireEvent.click(btn('[data-watch-round]'));
+    await waitFor(() => expect(q('[data-match-clock]')).not.toBeNull());
+    const s = read();
+    expect([s.phase, 'playoffs' in s, s.league.week], 'the press closed the season in the save').toEqual(['recap', false, REGULAR_WEEKS]);
+    expect(screen.queryByText('Go to the draft'), 'no recap while he watches').toBeNull();
+    expect(textOf('[data-week-chip]')).toContain('Playoffs');
+    fireEvent.click(q('[data-gameday-speed="Results"]')!);
+    await waitFor(() => expect(screen.queryByText('Go to the draft')).not.toBeNull());
   });
 });
