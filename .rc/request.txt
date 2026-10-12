@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitestAll: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+rivalPlain: node scripts/simUsRivalSense.mjs
+senseC: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+board: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
+ledger: US_LEDGER_MEASURE=1 node scripts/simUsSeasonLedger.mjs
+mlbCareer: node scripts/simMlbCareer.mjs
+nhlCareer: node scripts/simNhlCareer.mjs
+nflCareer: node scripts/simNflCareer.mjs
+nbaCareer: node scripts/simNbaCareer.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs
+seasonCentre: node scripts/simUsSeasonCentre.mjs
+lawCmp: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seamCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+layCmp: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+fightCareer: node scripts/simFightCareer.mjs
