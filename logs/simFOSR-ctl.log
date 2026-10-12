@@ -1,0 +1,15 @@
+Front Office save recovery: 38/38 actual component checks passed.
+Front Office save recovery: 13 current, older, draft, recap, playoffs and ID-repair restore cases passed.
+Front Office save recovery: 21 nested-corruption cases retain raw bytes, reject before render and delete only their own save on request.
+Front Office save recovery: four malformed-JSON and fresh-club recovery cases passed; fresh replacements preserve other game saves.
+Front Office save recovery control pool: 4 targeted assertions failed, all other checks passed.
+Front Office save recovery control pool: rejected NFL actual save recovery rejects missing free agent pool before render and deletes only this save on request.
+Front Office save recovery control pool: rejected NFL actual save recovery allows a fresh club to replace the unusable save without clearing another game.
+Front Office save recovery control pool: rejected NHL actual save recovery rejects missing free agent pool before render and deletes only this save on request.
+Front Office save recovery control pool: rejected NHL actual save recovery allows a fresh club to replace the unusable save without clearing another game.
+Front Office save recovery control pool: 34 unaffected component checks passed out of 38 total checks.
+Front Office save recovery control period: 2 targeted assertions failed, all other checks passed.
+Front Office save recovery control period: rejected NFL actual save recovery rejects zero period before render and deletes only this save on request.
+Front Office save recovery control period: rejected NHL actual save recovery rejects zero period before render and deletes only this save on request.
+Front Office save recovery control period: 36 unaffected component checks passed out of 38 total checks.
+Front Office save recovery cleanup: disposable reader copies and result directory removed; the production reader was read only.

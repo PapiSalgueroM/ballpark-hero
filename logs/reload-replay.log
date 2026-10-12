@@ -1,0 +1,19 @@
+1) The four boards, rendered: a reload on the recap draws the recap again and never replays the season
+   NEGATIVE CONTROL ON: NFL Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: NFL Front Office, full rosters renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: NBA Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: MLB Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   NEGATIVE CONTROL ON: NHL Front Office renders a copy that maps a recap save back to the hub and has no closed season guard
+   vitest exit 1, 25 failed (25)
+   NFL Front Office: 0 green, 5 red. NFL Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 1 -> 2, titles 0 -> 0, league games 544 -> 576, period 17, phase recap -> recap
+  FAIL: on the pre-fix NFL Front Office board a reload on the recap re-arms the final week and the season is played twice
+   NFL Front Office, full rosters: 0 green, 5 red. NFL Front Office, full rosters: after finishing the season and reloading, hub shown=true, seasonsPlayed 1 -> 2, titles 0 -> 0, league games 544 -> 576, period 17, phase recap -> recap
+  FAIL: on the pre-fix NFL Front Office, full rosters board a reload on the recap re-arms the final week and the season is played twice
+   NBA Front Office: 0 green, 5 red. NBA Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 1 -> 2, titles 0 -> 0, league games 2400 -> 2520, period 20, phase recap -> fired
+  FAIL: on the pre-fix NBA Front Office board a reload on the recap re-arms the final week and the season is played twice
+   MLB Front Office: 0 green, 5 red. MLB Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 1 -> 2, titles 0 -> 0, league games 4860 -> 5040, period 27, phase recap -> recap
+  FAIL: on the pre-fix MLB Front Office board a reload on the recap re-arms the final week and the season is played twice
+   NHL Front Office: 0 green, 5 red. NHL Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 1 -> 2, titles 0 -> 0, league games 2560 -> 2688, period 20, phase recap -> recap
+  FAIL: on the pre-fix NHL Front Office board a reload on the recap re-arms the final week and the season is played twice
+
+control "replay": 5 failure(s) fired as expected on all four boards, the check works
