@@ -1,0 +1,4 @@
+probe-head exit=0 3s |    Duration  1.68s (transform 258ms, setup 79ms, collect 305ms, tests 22ms, environment 479ms, prepare 268ms)
+vitest-bingo exit=0 9s |    Duration  8.54s (transform 1.04s, setup 480ms, collect 3.31s, tests 9.51s, environment 2.88s, prepare 904ms)
+simPlayerBingoHonours exit=0 12s | simPlayerBingoHonours PASS
+tsc exit=2 13s |     Matched by include pattern 'src' in 'tsconfig.app.json'

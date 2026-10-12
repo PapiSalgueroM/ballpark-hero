@@ -1,0 +1,3 @@
+error TS6053: File '/home/runner/work/ballpark-hero/ballpark-hero/src/test/ffProbe.test.ts' not found.
+  The file is in the program because:
+    Matched by include pattern 'src' in 'tsconfig.app.json'

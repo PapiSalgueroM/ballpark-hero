@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+probe-head: head -n 243 src/test/playerBingoHonours.test.ts > src/test/ffProbe.test.ts && cat .rc/x/ffProbeTail.ts >> src/test/ffProbe.test.ts && node_modules/.bin/vitest run src/test/ffProbe.test.ts --testTimeout=300000; s=$?; rm -f src/test/ffProbe.test.ts; exit $s
+vitest-bingo: node_modules/.bin/vitest run src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoTransport.test.ts src/test/playerBingoLineFeedback.test.tsx --testTimeout=300000 --hookTimeout=120000
