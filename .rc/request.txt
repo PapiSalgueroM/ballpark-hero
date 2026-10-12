@@ -1,0 +1,3 @@
+#!serial
+controls-all: node scripts/controlFrontOfficeBoard.mjs all
+controls-blank: node scripts/controlFrontOfficeBoard.mjs blank
