@@ -1,0 +1,4 @@
+MUT edges applied to src/lib/frontOfficePostseason.ts
+  season 0 (test): first differing game NFC Championship|DAL|DET|DET against NFC Championship|DAL|DET|DAL; champions NE and NE
+desk club's titles over 300 seasons: one press 52, bracket path 24
+probeEdges: 300 seasons; seasons where the bracket path is not the one press path: no edges 0, the unit test's edges 90, a real desk's +3 62

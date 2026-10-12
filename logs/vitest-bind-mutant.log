@@ -1,0 +1,5 @@
+MUT edges applied to src/lib/frontOfficePostseason.ts
+ [32m✓[39m src/lib/frontOfficePostseason.test.ts[2m > [22mnflPlayTie and nflRoundsOf: the bracket path is the one press path[2m > [22mseason 1309, with the desk's edges: game for game, key for key, draw for draw[32m 14[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficePostseason.test.ts[2m > [22mnflPlayTie and nflRoundsOf: the bracket path is the one press path[2m > [22mseason 77, with the desk's edges: game for game, key for key, draw for draw[32m 12[2mms[22m[39m
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
