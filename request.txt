@@ -1,0 +1,2 @@
+#!serial
+timeProbe2: node .rc/x/timeProbe2.mjs

@@ -1,0 +1,7 @@
+Everton season 5: ledger 31 records; buildMarket 434.6 ms; matchday 39.2 ms
+Everton season 10: ledger 75 records; buildMarket 1008.6 ms; matchday 77.3 ms
+Everton season 15: ledger 123 records; buildMarket 1606.1 ms; matchday 125.8 ms
+Real Madrid season 5: ledger 32 records; buildMarket 447.5 ms; matchday 35.2 ms
+Real Madrid season 10: ledger 76 records; buildMarket 1027.2 ms; matchday 69.5 ms
+Real Madrid season 15: ledger 124 records; buildMarket 1626.6 ms; matchday 102.6 ms
+timeProbe2: done
