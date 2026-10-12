@@ -1,0 +1,17 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simCmLeagueBookFacts.mjs
+c-samehost: CM_FACTS_CONTROL=samehost node scripts/simCmLeagueBookFacts.mjs
+c-pausedrow: CM_FACTS_CONTROL=pausedrow node scripts/simCmLeagueBookFacts.mjs
+c-staleowed: CM_FACTS_CONTROL=staleowed node scripts/simCmLeagueBookFacts.mjs
+c-keeperowed: CM_FACTS_CONTROL=keeperowed node scripts/simCmLeagueBookFacts.mjs
+c-seasontoken: CM_FACTS_CONTROL=seasontoken node scripts/simCmLeagueBookFacts.mjs
+c-boundary: CM_FACTS_CONTROL=boundary node scripts/simCmLeagueBookFacts.mjs
+c-wikimirror: CM_FACTS_CONTROL=wikimirror node scripts/simCmLeagueBookFacts.mjs
+c-badurl: CM_FACTS_CONTROL=badurl node scripts/simCmLeagueBookFacts.mjs
+mutrev: node .rc/x/mut1310v.mjs; s=$?; git checkout -- scripts; rm -f scripts/.mut-fence.mjs; git status --short scripts | head -5; exit $s
+mutfix: node .rc/x/mutfix.mjs; s=$?; rm -f scripts/.mut-fence.mjs; exit $s
+runall: ONLY=simCmLeagueBookFacts node scripts/runAllSims.mjs
+sha: tr -d '\r' < scripts/data/cmLeagueBookFacts.json | sha256sum; grep sha256 scripts/data/cmLeagueBookFacts.receipt.json
+difffiles: git diff --name-only origin/main...d98a7746 && test "$(git diff --name-only origin/main...d98a7746 | wc -l)" = "4" && echo "four files"
+simNoRivalNames: node scripts/simNoRivalNames.mjs

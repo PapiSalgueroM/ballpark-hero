@@ -1,0 +1,16 @@
+tsc exit=0 43s | 
+facts exit=0 0s | simCmLeagueBookFacts: all 5894 checks passed.
+c-samehost exit=1 0s | simCmLeagueBookFacts control samehost: FIRED (Premier League 2015-16 topScorerGoals is THIN (premierleague, samehostcontrol), length USED (premierleague, rsssf), and the 
+c-pausedrow exit=1 0s | simCmLeagueBookFacts control pausedrow: FIRED (Premier League 2019-20 topScorerGoals is USED but its length is THIN (premierleague, mykhel), length THIN (rsssf), and the 
+c-staleowed exit=1 0s | simCmLeagueBookFacts control staleowed: FIRED (Premier League 2015-16 topScorerGoals is USED and owed still names it (stale))
+c-keeperowed exit=1 0s | simCmLeagueBookFacts control keeperowed: FIRED (Bundesliga 2015-16 keeperCleanSheets is NONE and not named under owed)
+c-seasontoken exit=1 0s | simCmLeagueBookFacts control seasontoken: FIRED (plsite-pl-2015-16: topScorerGoals 16 is not printed in its literals)
+c-boundary exit=1 0s | simCmLeagueBookFacts control boundary: FIRED (plsite-pl-2015-16: topScorerGoals 2 is not printed in its literals)
+c-wikimirror exit=1 0s | simCmLeagueBookFacts control wikimirror: FIRED (plsite-pl-2015-16: https://www.wikiwand.com/en/articles/Premier_League is a wiki host)
+c-badurl exit=1 0s | simCmLeagueBookFacts control badurl: FIRED (plsite-pl-2015-16: url not a url is not an https url)
+mutrev exit=0 18s | mut1310: probe complete
+mutfix exit=0 23s | mutfix: every mutant killed
+runall exit=0 1s | All 1 harnesses green.
+sha exit=0 0s |   "sha256": "c56b3a5d4b3c024960839091c9772adb2b7f5de0e105480a177a2bcb2ff6f0ff"
+difffiles exit=0 0s | four files
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
