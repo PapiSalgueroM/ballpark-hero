@@ -1,0 +1,2 @@
+simGmGameDay: 303 checks, 10 failed (control strict)
+control strict: RED AT THE NAMED CHECK (section 4); its named checks red: 2 of 2 ("bracketProblems finds nothing in a bracket the machine played", "finds nothing after any game"); checks that had to stay green and did not: none; sections red: 4

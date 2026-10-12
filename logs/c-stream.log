@@ -1,0 +1,2 @@
+simGmGameDay: 303 checks, 56 failed (control stream)
+control stream: RED AT THE NAMED CHECK (section 5); its named checks red: 3 of 3 ("holds no Math.random", "takes no draw from Math.random", "moves none of its 272 winners"); sections red: 5, 7, 8

@@ -1,0 +1,1 @@
+control "replay": 5 failure(s) fired as expected on all four boards, the check works
