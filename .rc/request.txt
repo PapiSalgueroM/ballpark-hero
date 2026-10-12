@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/r1309RunWalk.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
