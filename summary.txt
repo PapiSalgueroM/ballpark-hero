@@ -1,0 +1,8 @@
+rules-attr-old-inv exit=0 44s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-attr-new-inv exit=1 43s | simCmLeagueRules: 47 failure(s)
+rules-old-head exit=1 108s | simCmLeagueRules: 47 failure(s)
+shoot-field exit=0 22s | simCmShootoutOrder: all sections passed
+shoot-noarm exit=1 22s | simCmShootoutOrder: 3 FAILURE(S)
+var-fix exit=0 133s | simCmVar normal: actual review outcomes and full prior baseline passed.
+var-inv exit=0 132s | simCmVar normal: actual review outcomes and full prior baseline passed.
+var-fix-all exit=0 576s | simCmVar: 13 actual outcomes and 27 effective controls passed.
