@@ -1,0 +1,56 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1309RunFleet.test.tsx > the default path over a fleet > 40 saves, one or two regular presses each
+FLEET 0 fifteen desk off week 1: Play Week 1 -> 907d8ff5ec93f5bd (564 draws, week 2 hub) | Play Week 2 -> 2ce7e20a5046f3f0 (1128 draws, week 3 hub)
+FLEET 1 deep desk off week 6: Play Week 6 -> 10fd25feefd72ec6 (1734 draws, week 7 hub) | Play Week 7 -> 24a90aadcf8882a3 (3458 draws, week 8 hub)
+FLEET 2 fifteen desk on week 11: Play Week 11 -> c840f9d00e0d273a (563 draws, week 12 hub) | Play Week 12 -> 430f095e6a206f25 (1125 draws, week 13 hub)
+FLEET 3 deep desk on week 16: Play Week 16 -> ec38803ace54b066 (1734 draws, week 17 hub) | Play the final week + playoffs -> 0d136b0f9cf7eb23 (3490 draws, week 17 recap)
+FLEET 4 fifteen desk off week 17: Play the final week + playoffs -> 8c9a6664e688da38 (605 draws, week 17 recap)
+FLEET 5 deep desk off week 9: Play Week 9 -> 95f2ca1f5218620d (1729 draws, week 10 hub) | Play Week 10 -> 5d750ae09b7e75c8 (3451 draws, week 11 hub)
+FLEET 6 fifteen desk on week 14: Play Week 14 -> 9ca4f62fa8b5c402 (563 draws, week 15 hub) | Play Week 15 -> 1a60c97e66b62874 (1126 draws, week 16 hub)
+FLEET 7 deep desk on week 2: Play Week 2 -> 56283eb17fbaf7bf (1732 draws, week 3 hub) | Play Week 3 -> 75943e29e83e6ed6 (3458 draws, week 4 hub)
+FLEET 8 fifteen desk off week 7: Play Week 7 -> fd5e2d1ededc50f3 (566 draws, week 8 hub) | Play Week 8 -> f5726a48dfac91e1 (1120 draws, week 9 hub)
+FLEET 9 deep desk off week 17: Play the final week + playoffs -> 669d15a02c112db1 (1784 draws, week 17 recap)
+FLEET 10 fifteen desk on week 17: Play the final week + playoffs -> 7d597e53eacb052e (604 draws, week 17 recap)
+FLEET 11 deep desk on week 5: Play Week 5 -> 75eaa39f7d3d2d01 (1744 draws, week 6 hub) | Play Week 6 -> 795c5f72751004ee (3456 draws, week 7 hub)
+FLEET 12 fifteen desk off week 10: Play Week 10 -> cfc2a233fc386db4 (562 draws, week 11 hub) | Play Week 11 -> 706c63498b09e56b (1130 draws, week 12 hub)
+FLEET 13 deep desk off week 15: Play Week 15 -> 3e7cee05b7d3f5fa (1737 draws, week 16 hub) | Play Week 16 -> 599b12925bbdc0fe (3454 draws, week 17 hub)
+FLEET 14 fifteen desk on week 17: Play the final week + playoffs -> 7d5da6b111bed317 (600 draws, week 17 recap)
+FLEET 15 deep desk on week 8: Play Week 8 -> c94f4a142fc48d6a (1739 draws, week 9 hub) | Play Week 9 -> 7bed28b74943e0dc (3453 draws, week 10 hub)
+FLEET 16 fifteen desk off week 13: Play Week 13 -> 99f0a99bb8e11d23 (565 draws, week 14 hub) | Play Week 14 -> d6221be955bd01eb (1126 draws, week 15 hub)
+FLEET 17 deep desk off week 1: Play Week 1 -> 84f36005af7e5fa6 (1749 draws, week 2 hub) | Play Week 2 -> d4625c9580140a6a (3453 draws, week 3 hub)
+FLEET 18 fifteen desk on week 6: Play Week 6 -> 58fa28a8342b1a81 (567 draws, week 7 hub) | Play Week 7 -> 9413bb17bf903fa2 (1127 draws, week 8 hub)
+FLEET 19 deep desk on week 17: Play the final week + playoffs -> 1969440a20ca55ac (1768 draws, week 17 recap)
+FLEET 20 fifteen desk off week 16: Play Week 16 -> b3241aeb6ff10b73 (565 draws, week 17 hub) | Play the final week + playoffs -> 0ac7f74c12ee4b44 (1164 draws, week 17 recap)
+FLEET 21 deep desk off week 4: Play Week 4 -> f2a23d580c15499d (1738 draws, week 5 hub) | Play Week 5 -> 80cae0c0c3c6d77d (3457 draws, week 6 hub)
+FLEET 22 fifteen desk on week 9: Play Week 9 -> 9de18ed0b0043a70 (566 draws, week 10 hub) | Play Week 10 -> 539ba0cf5d7a35e6 (1127 draws, week 11 hub)
+FLEET 23 deep desk on week 14: Play Week 14 -> 7a21f322868486cc (1738 draws, week 15 hub) | Play Week 15 -> e6018ad6b023115a (3451 draws, week 16 hub)
+FLEET 24 fifteen desk off week 17: Play the final week + playoffs -> 3259d7b62a2a2555 (604 draws, week 17 recap)
+FLEET 25 deep desk off week 7: Play Week 7 -> ab02cc8036adf17b (1743 draws, week 8 hub) | Play Week 8 -> 94e31dddf57ee9b1 (3450 draws, week 9 hub)
+FLEET 26 fifteen desk on week 12: Play Week 12 -> 3452c8364a7cf568 (565 draws, week 13 hub) | Play Week 13 -> a0210d899950fb22 (1131 draws, week 14 hub)
+FLEET 27 deep desk on week 17: Play the final week + playoffs -> 19bbf4fb2976901c (1775 draws, week 17 recap)
+FLEET 28 fifteen desk off week 5: Play Week 5 -> 074f227756ea8ee7 (565 draws, week 6 hub) | Play Week 6 -> 39b3caf6078f09c8 (1124 draws, week 7 hub)
+FLEET 29 deep desk off week 17: Play the final week + playoffs -> 1a954716a7c5d98c (0 draws, week 17 hub) | Play the final week + playoffs -> 1a954716a7c5d98c (0 draws, week 17 hub)
+FLEET 30 fifteen desk on week 15: Play Week 15 -> 132aeed3ed67a054 (563 draws, week 16 hub) | Play Week 16 -> 9b0112a4ee359d33 (1124 draws, week 17 hub)
+FLEET 31 deep desk on week 3: Play Week 3 -> cc530f3bf426de22 (1735 draws, week 4 hub) | Play Week 4 -> 10c7e01b728b6a43 (3455 draws, week 5 hub)
+FLEET 32 fifteen desk off week 8: Play Week 8 -> b09983cd8269f7a1 (566 draws, week 9 hub) | Play Week 9 -> 5f772109ae439405 (1121 draws, week 10 hub)
+FLEET 33 deep desk off week 13: Play Week 13 -> 573e32f8a96b4588 (1733 draws, week 14 hub) | Play Week 14 -> a191d8f993c4f3ce (3450 draws, week 15 hub)
+FLEET 34 fifteen desk on week 17: Play the final week + playoffs -> 32110446fb733fc2 (603 draws, week 17 recap)
+FLEET 35 deep desk on week 6: Play Week 6 -> 2c5a862493afb985 (1736 draws, week 7 hub) | Play Week 7 -> ef1b73b55c9d93d1 (3458 draws, week 8 hub)
+FLEET 36 fifteen desk off week 11: Play Week 11 -> 19d6ae919ccaa4a7 (566 draws, week 12 hub) | Play Week 12 -> 063bffa24166cda6 (1124 draws, week 13 hub)
+FLEET 37 deep desk off week 16: Play Week 16 -> ff09b1149cf641e9 (1729 draws, week 17 hub) | Play the final week + playoffs -> 28cc3336d81c73ec (3487 draws, week 17 recap)
+FLEET 38 fifteen desk on week 4: Play Week 4 -> a9a6f15b44120d61 (563 draws, week 5 hub) | Play Week 5 -> 200f3b2d2619077e (1123 draws, week 6 hub)
+FLEET 39 deep desk on week 17: Play the final week + playoffs -> b79fa58f83f3d402 (1774 draws, week 17 recap)
+
+ ✓ src/test/r1309RunFleet.test.tsx (1 test) 2045ms
+   ✓ the default path over a fleet > 40 saves, one or two regular presses each  2044ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:59:45
+   Duration  3.55s (transform 780ms, setup 32ms, collect 1.01s, tests 2.04s, environment 162ms, prepare 56ms)
+

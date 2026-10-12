@@ -1,0 +1,4 @@
+probe exit=1 2s |       Tests  1 failed | 1 passed (2)
+fleet-head exit=0 4s |       Tests  1 passed (1)
+fleet-base exit=0 4s |       Tests  1 passed (1)
+fleet-cmp exit=1 0s | fleet: 40 cases, 71 presses (14 on the old button), 71 differ, 0 errors

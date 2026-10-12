@@ -1,0 +1,21 @@
+PROBE P1 champion BAL his BAL trust 100 phase recap
+PROBE P1 before: press="" owner="🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a failed season upstairs."
+PROBE P1 during the clock: press="🎙️ Press conferenceThe podiumConfetti still on the floor and the room wants the architect. Every question is the same question: was this the plan, and does it " owner="🏛️ OwnershipTrust 100Win the Super Bowl. Anything less is a failed season upstairs."
+PROBE P1 verdict on screen during the clock: false
+PROBE P2 seed 1 DEN vs LAC (AFC Wild Card): the tile reads "AFC Wild Card · vs LAC"
+PROBE P2 seed 1 LAC vs DEN (AFC Wild Card): the tile reads "AFC Wild Card · at DEN"
+ × src/test/r1309RunProbe.test.tsx > P1: the title game watched gives nothing away > the press card and the owner card are as they were until full time 145ms
+   → the press card during the title game clock: expected '🎙️ Press conferenceThe podiumConfett…' to be '' // Object.is equality
+PROBE P2 seed 2 KC vs LAC (AFC Wild Card): the tile reads "AFC Wild Card · vs LAC"
+PROBE P2 seed 2 JAX vs HOU (AFC Wild Card): the tile reads "AFC Wild Card · vs HOU"
+PROBE P2 seed 2 HOU vs JAX (AFC Wild Card): the tile reads "AFC Wild Card · at JAX"
+PROBE P2 seed 2 LAC vs KC (AFC Wild Card): the tile reads "AFC Wild Card · at KC"
+PROBE P2 looked 12, rivals met in the regular season 6, wrong game opened 0
+ ✓ src/test/r1309RunProbe.test.tsx > P2: "Your game" opens that tie's game for every played tie of his, over seeds > across leagues where his first opponent is a club he met in the regular season 219ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: the press card during the title game clock: expected '🎙️ Press conferenceThe podiumConfett…' to be '' // Object.is equality
+- Expected
++ Received
+    107|     console.log(`PROBE P1 during the clock: press="${during.press.slic…
+    108|     console.log(`PROBE P1 verdict on screen during the clock: ${!!q('[…
+      Tests  1 failed | 1 passed (2)

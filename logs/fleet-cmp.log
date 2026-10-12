@@ -1,0 +1,72 @@
+case 0 (fifteen, desk false, week 1) press 0 "Play Week 1": base a26cb814502c5de1/83454/564 head 907d8ff5ec93f5bd/83954/564
+case 0 (fifteen, desk false, week 1) press 1 "Play Week 2": base e5acdeff5a1ead8e/83572/1128 head 2ce7e20a5046f3f0/84072/1128
+case 1 (deep, desk false, week 6) press 0 "Play Week 6": base 58ca1c351c333ff9/633238/1734 head 10fd25feefd72ec6/635421/1734
+case 1 (deep, desk false, week 6) press 1 "Play Week 7": base 7028f5537c497ec9/633360/3458 head 24a90aadcf8882a3/635543/3458
+case 2 (fifteen, desk true, week 11) press 0 "Play Week 11": base b1240c6b148de4c5/100509/563 head c840f9d00e0d273a/101024/563
+case 2 (fifteen, desk true, week 11) press 1 "Play Week 12": base 55910eb68dc4fd43/100637/1125 head 430f095e6a206f25/101152/1125
+case 3 (deep, desk true, week 16) press 0 "Play Week 16": base c923dce3667adbf8/651995/1734 head ec38803ace54b066/654228/1734
+case 3 (deep, desk true, week 16) press 1 "Play the final week + playoffs": base fec56476cc8c6c12/653976/3490 head 0d136b0f9cf7eb23/656209/3490
+case 4 (fifteen, desk false, week 17) press 0 "Play the final week + playoffs": base e59f43fa948b5253/85673/605 head 8c9a6664e688da38/86173/605
+case 5 (deep, desk false, week 9) press 0 "Play Week 9": base a56d5ae1a171e502/633736/1729 head 95f2ca1f5218620d/635919/1729
+case 5 (deep, desk false, week 9) press 1 "Play Week 10": base 927ae6efbc9da07c/633858/3451 head 5d750ae09b7e75c8/636041/3451
+case 6 (fifteen, desk true, week 14) press 0 "Play Week 14": base 97cdc6ee702e0211/100516/563 head 9ca4f62fa8b5c402/101031/563
+case 6 (fifteen, desk true, week 14) press 1 "Play Week 15": base 529a95075a0ddaf8/100642/1126 head 1a60c97e66b62874/101157/1126
+case 7 (deep, desk true, week 2) press 0 "Play Week 2": base 0b4f28744417c1cd/652791/1732 head 56283eb17fbaf7bf/655024/1732
+case 7 (deep, desk true, week 2) press 1 "Play Week 3": base 07dac5750e882e63/652910/3458 head 75943e29e83e6ed6/655143/3458
+case 8 (fifteen, desk false, week 7) press 0 "Play Week 7": base 865e1f98d0dbf4e6/84604/566 head fd5e2d1ededc50f3/85104/566
+case 8 (fifteen, desk false, week 7) press 1 "Play Week 8": base f341beaf9c1d897f/84726/1120 head f5726a48dfac91e1/85226/1120
+case 9 (deep, desk false, week 17) press 0 "Play the final week + playoffs": base cccd4ab5708c47bd/637380/1784 head 669d15a02c112db1/639563/1784
+case 10 (fifteen, desk true, week 17) press 0 "Play the final week + playoffs": base 98f498a1ecbe01d4/102472/604 head 7d597e53eacb052e/102987/604
+case 11 (deep, desk true, week 5) press 0 "Play Week 5": base 95b35d0b0ac50d50/654354/1744 head 75eaa39f7d3d2d01/656590/1744
+case 11 (deep, desk true, week 5) press 1 "Play Week 6": base 3d8f84ef9c966914/654476/3456 head 795c5f72751004ee/656712/3456
+case 12 (fifteen, desk false, week 10) press 0 "Play Week 10": base 005bb5ca5e694d1a/84599/562 head cfc2a233fc386db4/85099/562
+case 12 (fifteen, desk false, week 10) press 1 "Play Week 11": base ae8ed9360555443b/84724/1130 head 706c63498b09e56b/85224/1130
+case 13 (deep, desk false, week 15) press 0 "Play Week 15": base 1d56c1fb87b549c0/635948/1737 head 3e7cee05b7d3f5fa/638131/1737
+case 13 (deep, desk false, week 15) press 1 "Play Week 16": base 4a3cc405e6d1f879/636080/3454 head 599b12925bbdc0fe/638263/3454
+case 14 (fifteen, desk true, week 17) press 0 "Play the final week + playoffs": base 56c76985a756942d/102760/600 head 7d5da6b111bed317/103275/600
+case 15 (deep, desk true, week 8) press 0 "Play Week 8": base fd7bf09d2abe13ce/654263/1739 head c94f4a142fc48d6a/656497/1739
+case 15 (deep, desk true, week 8) press 1 "Play Week 9": base 145b5ffd7fd84c8d/654386/3453 head 7bed28b74943e0dc/656620/3453
+case 16 (fifteen, desk false, week 13) press 0 "Play Week 13": base f45b57ca76391a20/84614/565 head 99f0a99bb8e11d23/85114/565
+case 16 (fifteen, desk false, week 13) press 1 "Play Week 14": base 32abd0ba777757cc/84738/1126 head d6221be955bd01eb/85238/1126
+case 17 (deep, desk false, week 1) press 0 "Play Week 1": base 99d0a047dd46dbda/635919/1749 head 84f36005af7e5fa6/638102/1749
+case 17 (deep, desk false, week 1) press 1 "Play Week 2": base 60593049af29db8d/636041/3453 head d4625c9580140a6a/638224/3453
+case 18 (fifteen, desk true, week 6) press 0 "Play Week 6": base 961387f04d54c31e/101000/567 head 58fa28a8342b1a81/101515/567
+case 18 (fifteen, desk true, week 6) press 1 "Play Week 7": base b35b5935d252028c/101117/1127 head 9413bb17bf903fa2/101632/1127
+case 19 (deep, desk true, week 17) press 0 "Play the final week + playoffs": base 2ecdf57ff088d44a/656126/1768 head 1969440a20ca55ac/658360/1768
+case 20 (fifteen, desk false, week 16) press 0 "Play Week 16": base b121756439066eb1/84609/565 head b3241aeb6ff10b73/85109/565
+case 20 (fifteen, desk false, week 16) press 1 "Play the final week + playoffs": base 3969cf9f3507d95e/86442/1164 head 0ac7f74c12ee4b44/86942/1164
+case 21 (deep, desk false, week 4) press 0 "Play Week 4": base 22b1da564bedf020/635924/1738 head f2a23d580c15499d/638107/1738
+case 21 (deep, desk false, week 4) press 1 "Play Week 5": base aae66128ab06e330/636045/3457 head 80cae0c0c3c6d77d/638228/3457
+case 22 (fifteen, desk true, week 9) press 0 "Play Week 9": base e3ced4133a1a0663/101036/566 head 9de18ed0b0043a70/101551/566
+case 22 (fifteen, desk true, week 9) press 1 "Play Week 10": base be920de43af65482/101161/1127 head 539ba0cf5d7a35e6/101676/1127
+case 23 (deep, desk true, week 14) press 0 "Play Week 14": base 08a636ab8f71ee2b/654276/1738 head 7a21f322868486cc/656510/1738
+case 23 (deep, desk true, week 14) press 1 "Play Week 15": base de615f48ba1e2bd8/654403/3451 head e6018ad6b023115a/656637/3451
+case 24 (fifteen, desk false, week 17) press 0 "Play the final week + playoffs": base 17e849fc8459031e/86067/604 head 3259d7b62a2a2555/86567/604
+case 25 (deep, desk false, week 7) press 0 "Play Week 7": base d8a7755597f91716/635919/1743 head ab02cc8036adf17b/638102/1743
+case 25 (deep, desk false, week 7) press 1 "Play Week 8": base 9aedb66d2cd8ae58/636039/3450 head 94e31dddf57ee9b1/638222/3450
+case 26 (fifteen, desk true, week 12) press 0 "Play Week 12": base 4005318829478d0d/101013/565 head 3452c8364a7cf568/101528/565
+case 26 (fifteen, desk true, week 12) press 1 "Play Week 13": base 8c86af7191cdd48a/101138/1131 head a0210d899950fb22/101653/1131
+case 27 (deep, desk true, week 17) press 0 "Play the final week + playoffs": base 553dcc3222ba2ca1/656083/1775 head 19bbf4fb2976901c/658316/1775
+case 28 (fifteen, desk false, week 5) press 0 "Play Week 5": base 8bcb7b0a31267576/84583/565 head 074f227756ea8ee7/85083/565
+case 28 (fifteen, desk false, week 5) press 1 "Play Week 6": base c1c366adcb969515/84705/1124 head 39b3caf6078f09c8/85205/1124
+case 29 (deep, desk false, week 17) press 0 "Play the final week + playoffs": base 12405b1ee0370b64/635563/0 head 1a954716a7c5d98c/637746/0
+case 29 (deep, desk false, week 17) press 1 "Play the final week + playoffs": base 12405b1ee0370b64/635563/0 head 1a954716a7c5d98c/637746/0
+case 30 (fifteen, desk true, week 15) press 0 "Play Week 15": base 961621c37cb446e8/101018/563 head 132aeed3ed67a054/101533/563
+case 30 (fifteen, desk true, week 15) press 1 "Play Week 16": base 8bcae60a190932f7/101146/1124 head 9b0112a4ee359d33/101661/1124
+case 31 (deep, desk true, week 3) press 0 "Play Week 3": base 85d99250152c3a29/654248/1735 head cc530f3bf426de22/656482/1735
+case 31 (deep, desk true, week 3) press 1 "Play Week 4": base d2d02f1411a11dc7/654367/3455 head 10c7e01b728b6a43/656601/3455
+case 32 (fifteen, desk false, week 8) press 0 "Play Week 8": base f3e9f16e0cb12e75/84567/566 head b09983cd8269f7a1/85067/566
+case 32 (fifteen, desk false, week 8) press 1 "Play Week 9": base f82f3d4f9b773f3c/84690/1121 head 5f772109ae439405/85190/1121
+case 33 (deep, desk false, week 13) press 0 "Play Week 13": base 738cbd7830d27b84/635941/1733 head 573e32f8a96b4588/638124/1733
+case 33 (deep, desk false, week 13) press 1 "Play Week 14": base 51d8fbaccc7ec21a/636066/3450 head a191d8f993c4f3ce/638249/3450
+case 34 (fifteen, desk true, week 17) press 0 "Play the final week + playoffs": base 5bd705f9d4379c8d/102466/603 head 32110446fb733fc2/102981/603
+case 35 (deep, desk true, week 6) press 0 "Play Week 6": base eea3dbde950bcdbe/654218/1736 head 2c5a862493afb985/656451/1736
+case 35 (deep, desk true, week 6) press 1 "Play Week 7": base 30f5bfdc2645de07/654340/3458 head ef1b73b55c9d93d1/656573/3458
+case 36 (fifteen, desk false, week 11) press 0 "Play Week 11": base 980dae5c2613d48e/84622/566 head 19d6ae919ccaa4a7/85122/566
+case 36 (fifteen, desk false, week 11) press 1 "Play Week 12": base 3b0ad780addf663c/84751/1124 head 063bffa24166cda6/85251/1124
+case 37 (deep, desk false, week 16) press 0 "Play Week 16": base 433bc8b94cb671ac/635963/1729 head ff09b1149cf641e9/638146/1729
+case 37 (deep, desk false, week 16) press 1 "Play the final week + playoffs": base 172b103b45a1aa0d/637783/3487 head 28cc3336d81c73ec/639966/3487
+case 38 (fifteen, desk true, week 4) press 0 "Play Week 4": base 519a400a89b8ce5c/101012/563 head a9a6f15b44120d61/101527/563
+case 38 (fifteen, desk true, week 4) press 1 "Play Week 5": base 2bea1c6d043b733d/101132/1123 head 200f3b2d2619077e/101647/1123
+case 39 (deep, desk true, week 17) press 0 "Play the final week + playoffs": base aab1bb0173237cba/656081/1774 head b79fa58f83f3d402/658314/1774
+fleet: 40 cases, 71 presses (14 on the old button), 71 differ, 0 errors
