@@ -1,0 +1,8 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkNhl exit=1 44s | Node.js v24.21.0
+flipMlb exit=1 296s | playUsRivalLines: 369 checks, 28 failed (control rivalflip)
+flipNhl exit=1 43s | Node.js v24.21.0
+oldlineMlb exit=1 54s | playUsRivalLines: 32 checks, 12 failed (control oldline)
+oldlineNhl exit=1 27s | playUsRivalLines: 16 checks, 4 failed (control oldline)
+walkMlb exit=1 872s | playUsRivalLines: 818 checks, 8 failed
+walkNfl exit=0 968s | playUsRivalLines: 821 checks, 0 failed
