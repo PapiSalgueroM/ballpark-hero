@@ -1,0 +1,50 @@
+mutation floorgt: APPLIED in src/lib/clubManagerLeagueBoards.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 12[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22morders Top scorers by goals, then assists, then the name as plain text, then the club[32m 2[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mdrops a rival row under the name of a man now in my squad: he counts for me, off my own line[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22morders Assists by assists, then goals, then name, then club[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mkeeps the Clean sheets board for keepers, mine among them, the club higher in the table first when level[32m 1[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mcuts a board at its limit and says where my best man stands on the whole order[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mcounts everybody from the round a late book opened at: my man off his line minus what he held then, never under nought[32m 1[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22msays whether the book adds up to the table, club by club[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22msays how much of the rivals' goals is on record, an own goal counted as on record[32m 0[2mms[22m[39m
+   [32m✓[39m the boards[2m > [22mnever changes what it is handed[32m 0[2mms[22m[39m
+   [32m✓[39m the ruled numbers[2m > [22mdraws the honest line under 95 in 100 on record and reads awards from a book at 73 or more[32m 0[2mms[22m[39m
+[31m   [31m×[31m the ruled numbers[2m > [22ma whole book on exactly 73 in 100 decides the awards, on 72 it does not, and a late book never does[39m[32m 4[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m the team of the season[2m > [22mpicks a keeper, four defenders, four midfielders and two forwards by the rule, ties and all[32m 1[2mms[22m[39m
+   [32m✓[39m the team of the season[2m > [22mnames no team when a line cannot be filled, and never pads one[32m 0[2mms[22m[39m
+   [32m✓[39m the team of the season[2m > [22mcarries the team in the season's awards, and the awards survive a JSON round trip[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBoards.test.ts[2m > [22mthe ruled numbers[2m > [22ma whole book on exactly 73 in 100 decides the awards, on 72 it does not, and a late book never does
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/clubManagerLeagueBoards.test.ts:[2m166:42[22m[39m
+    [90m164| [39m    }[33m;[39m
+    [90m165| [39m    expect(bookShare(at(AWARD_FLOOR).book, at(AWARD_FLOOR).clubs).shar…
+    [90m166| [39m    [34mexpect[39m([34mbookDecides[39m([34mat[39m([33mAWARD_FLOOR[39m)))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m167| [39m    expect(bookShare(at(AWARD_FLOOR - 1).book, at(AWARD_FLOOR - 1).clu…
+    [90m168| [39m    [34mexpect[39m([34mbookDecides[39m([34mat[39m([33mAWARD_FLOOR[39m [33m-[39m [34m1[39m)))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 21:42:07
+[2m   Duration [22m 486ms[2m (transform 57ms, setup 28ms, collect 58ms, tests 12ms, environment 164ms, prepare 67ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBoards.test.ts,title=src/lib/clubManagerLeagueBoards.test.ts > the ruled numbers > a whole book on exactly 73 in 100 decides the awards%2C on 72 it does not%2C and a late book never does,line=166,column=42::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/clubManagerLeagueBoards.test.ts:166:42%0A%0A

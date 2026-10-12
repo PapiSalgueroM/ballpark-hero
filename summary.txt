@@ -1,0 +1,5 @@
+vitest-head exit=0 3s |    Duration  2.81s (transform 889ms, setup 63ms, collect 1.23s, tests 1.14s, environment 408ms, prepare 195ms)
+m1-floorgt exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBoards.test.ts,title=src/lib/clubManagerLeagueBoards.test.ts > the ruled numbers > a w
+m5-nolatestate exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the season review > a seaso
+m6-thinfloor exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the season review > a leagu
+m7-sumthinfloor exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the season review > a leagu

@@ -1,0 +1,43 @@
+mutation thinfloor: APPLIED in src/components/club-manager/LeagueLeadersCard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1187[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mA: says when there is no book, in the two wordings[32m 21[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mC: three tiles, each the first of its board, a whole league with no thin line[32m 50[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mD: a board is the reader top ten, my men marked, made up men tagged, my best named when out of it[32m 26[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22ma thin league carries the honest line with the save's own number[32m 7[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22ma late book in a whole league counts from its round and draws no thin line[32m 31[2mms[22m[39m
+   [32m✓[39m the league leaders card[2m > [22mthe ? holds the rules and a worked example computed from the book's own rule[32m 7[2mms[22m[39m
+   [32m✓[39m the Stats screen with a board open[2m > [22mdraws the board alone and Back brings the tiles and the table back[32m 31[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 323[2mms[22m[39m
+   [32m✓[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why[32m 208[2mms[22m[39m
+[31m   [31m×[31m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review[39m[32m 238[2mms[22m[39m
+[31m     → the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+   [32m✓[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin[32m 216[2mms[22m[39m
+   [32m✓[39m past winners[2m > [22mopens on the newest season, steps older and back, and says when a season was thin[32m 14[2mms[22m[39m
+   [32m✓[39m past winners[2m > [22moffers no Past winners tile before any season has closed with awards[32m 3[2mms[22m[39m
+   [32m✓[39m the team of the season on the records[2m > [22mkeeps the team on the newest five records and the winners on all of them[32m 9[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmLeagueLeadersCard.test.tsx[2m > [22mthe season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review
+[31m[1mAssertionError[22m: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string[39m
+[36m [2m❯[22m src/test/cmLeagueLeadersCard.test.tsx:[2m258:56[22m[39m
+    [90m256| [39m    [34mexpect[39m(summary[33m.[39mawards[33m?.[39mcov)[33m.[39m[34mtoBe[39m(lb[33m.[39mshare)[33m;[39m
+    [90m257| [39m    [35mconst[39m c [33m=[39m [34mdraw[39m(end)[33m;[39m
+    [90m258| [39m    expect(c.q('[data-cm-leaders-thin]')?.textContent).toContain(`${lb…
+    [90m   | [39m                                                       [31m^[39m
+    [90m259| [39m    [34mcleanup[39m()[33m;[39m
+    [90m260| [39m    const r = render(<ClubManagerSeasonSummary sm={summary} c={state} …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 21:42:11
+[2m   Duration [22m 2.75s[2m (transform 811ms, setup 29ms, collect 1.10s, tests 1.19s, environment 161ms, prepare 41ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmLeagueLeadersCard.test.tsx,title=src/test/cmLeagueLeadersCard.test.tsx > the season review > a league between the floor and 95 is settled by the book and still carries the honest line%2C on the card and on the review,line=258,column=56::AssertionError: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string%0A ❯ src/test/cmLeagueLeadersCard.test.tsx:258:56%0A%0A
