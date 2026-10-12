@@ -1,0 +1,9 @@
+tsc exit=0 91s | 
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSaveKeeper-partballon exit=0 5s | PARTBALLON FIRED ON ITS OWN SENTENCE
+simSoccerAwardReveal exit=0 33s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+vitest-all exit=0 585s |    Duration  584.33s (transform 38.81s, setup 22.32s, collect 173.17s, tests 1239.06s, environment 175.84s, prepare 38.00s)
+simSoccerAwardGenerations exit=0 951s | PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
