@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-noprune-EXPECT-RED: CM_LEDGER_BOUND_CONTROL=noprune node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-madeup-EXPECT-RED: CM_LEDGER_BOUND_CONTROL=madeup node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-release-EXPECT-RED: CM_LEDGER_BOUND_CONTROL=release node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-nocache-EXPECT-RED: CM_LEDGER_BOUND_CONTROL=nocache node scripts/simCmLedgerBound.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmVar-all: CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simCmUnseededWorld-guard-EXPECT-RED: CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+simCmUnseededWorld-noinverse-EXPECT-RED: CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmLedgerJourney-futureyear-EXPECT-RED: CM_LEDGER_CONTROL=futureyear node scripts/simCmLedgerJourney.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSaveSize-s3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+simClubManagerSaveSize-uncapped-EXPECT-RED: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
