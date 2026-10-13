@@ -1,3 +1,19 @@
+## Pending maintenance: retire shipped PR234 candidate workflow, 2026-10-13
+
+H's accepted Release BB record below explicitly requests this retirement after publication.
+Delete only .github/workflows/career-award-generations-verification.yml and reconcile the historical Save scope in docs/ROUND1280-1282.md.
+The dedicated push-only driver still pins candidate AA and its narrow source/package contracts; those contracts no longer describe joined main.
+Its automatic archives, setup/type/SEO build, lifecycle/component/control execution, independent artifact consumers, six related methods, fifteen readers, census/generated-output/cap checks and uploads are explicitly retired.
+Workflow-inline helper/consumer definitions are part of that retired orchestration; their frozen definition and accepted artifacts remain replayable from 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c.
+Retired inline consumers include complete lifecycle/control and 31-case result checks, persisted-object reconstruction/decoder-fault undo, deterministic gear-table regeneration and gzip-length/hash comparisons; no YAML-inline application mutation launcher exists.
+PR234 original head f9f540670034df4447508350db23b297e9e1cbbc and original bounded evidence remain immutable; historical invalid-part refusals do not override shipped C3 ABSENT reading.
+All application/tests/scripts/helpers/assertions/packages/public/Supabase/other workflows are unchanged by this proposal.
+The original candidate driver is not a claim of current-main full-suite coverage; retained source does not imply its old automatic jobs continue.
+Native scope/diff checks and independent full-definition/proposal review are required before the draft is frozen.
+Accepted BB qualified runner gates, plain publish 20/20 and H 04:41 live proof are reused within unchanged-code maintenance scope, no repeated runtime or CI.
+H retains integration, main and publication and reconciles this pending prefix at normal integration.
+No new main/live acceptance for this proposal; all protected root source/index/drafts/seven stashes and peer leases stay held.
+
 ## Release BB LIVE, 2026-10-13 04:39 EDT: the NFL playoffs one round at a time, Club Manager's league leaders and awards, Ballon d'Or rivals who stay, a club loan that only goes where you will play, Report a problem on every game, the MLB and NHL rival on your own line
 
 Claude lane (session H). main c9c77eba, deployment f3407b80-12d4-452a-a813-0ac5631ae4a9, entry index-DaI30mwt.js (was index-Df_rcqsU.js, Release AY,
