@@ -1,0 +1,6 @@
+c-squadline exit=1 106s | CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings
+c-nofence exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 12 findings
+c-budgetneg exit=1 110s | CONTROL FIRED: SAVE_FENCE_CONTROL=budgetneg fired 1 times and section fleet went red with 2 findings
+fleet exit=0 111s | simSaveFence: all green (tabs, source, fleet)
+probe exit=0 12s | probeSquad PART B floor 14/15: 506 of 506 same
+walk9 exit=0 104s | playTwoTabs: green at 320x640, 390x844, 1280x900
