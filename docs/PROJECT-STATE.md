@@ -1,8 +1,6 @@
-## Codex Round 1362: Manager note snapshots, native proof preparation, 2026-10-13
+## Codex Round1362: Manager snapshot descriptions implemented after actual baseline, fixed verification pending, 2026-10-13
 
-The isolated codex/manager-note-snapshots branch starts at qualified Manager handoff 8caf3307. Only three recorded-context descriptions are proposed: injurySupport, boardPressure and pressPressure will say the captured number was true when the note was written. All effects, gates, deadlines, state schemas and H core/UI/save/week/world/finance scopes stay held. No app edit or new runtime qualification exists.
-
-New pinned QA and workflow prepare actual parent/candidate whistle comparisons, complete input vectors, save/reply literals and effective old-caption controls. The fixed phase reuses every qualified257 gate and the unchanged1351 context browser with its original-seven baseline report. No old or unrelated image grants new-caption UI credit. See docs/audits/manager-note-snapshots-2026-10-13.md. Root owns review, remote execution and shipping.
+Actualbaseline838fc84a/run38478780436 SUCCESS:three completeoriginalwhistles each243draws,captured34/34/1→saved37.8/35/0,18canonical rawreloads6wholeliteralreplies6consumedrepeat refusals. Whole81/45.9MB0PNG+official947250LF physicallyclosedRoot/helper;3490source/3489hold(package521/type0),28before11compiled18bindings,old20+late5/15,14+substring1/13,7,567actual36/36answers+two33/36cohortcontrols held. Onlythree Decisions descriptions nowidentifycapturedcontext (+83bytes),GitLF04a2a47e wholeinverse6e1c967d; WFphaseonlyfixed4c815c6c inversefc3cd476. All otherapp/proofs/packages/index held838. Freshfixed/sourcecontrols/fullunits/build/17readers/oldbudgets/38newcontext+42deadlineoriginals required. Stacked draftPR262,noHcore/main/live/finishedclaim.
 
 ## Codex Round1357: Manager kickoff reply cutoff, fixed proof qualified and ready for integration, 2026-10-13
 

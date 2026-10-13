@@ -20,7 +20,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CM_LOCAL_ONLY: '1'
-      MANAGER_NOTES_PHASE: baseline
+      MANAGER_NOTES_PHASE: fixed
       MANAGER_NOTES_OUT: ${{ github.workspace }}/manager-note-artifacts
       MANAGER_DEADLINE_PHASE: fixed
       MANAGER_DEADLINE_OUT: ${{ github.workspace }}/manager-note-artifacts/prior-deadline

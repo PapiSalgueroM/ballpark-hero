@@ -309,7 +309,7 @@ export const DECK: DeckCard[] = [
   {
     id: 'boardPressure', from: 'The board',
     fits: s => hasPress(s) && Number.isFinite(s.boardConfidence) && s.boardConfidence < 35,
-    text: s => `Board patience is ${Math.round(s.boardConfidence * 10) / 10}. They want a progress review; the press officer offers an update too.`,
+    text: s => `Board patience was ${Math.round(s.boardConfidence * 10) / 10} when this note was written. They want a progress review; the press officer offers an update too.`,
     options: [
       { verb: 'Meet the board', effect: move('board', 3) },
       { verb: 'Give the public update', effect: move('press', 3) },
@@ -318,7 +318,7 @@ export const DECK: DeckCard[] = [
   },
   {
     id: 'pressPressure', from: 'The press officer', fits: s => hasPress(s) && s.press!.mood < 35,
-    text: s => `Press mood is ${s.press!.mood}. The press officer suggests a calm briefing, or a private review with the board.`,
+    text: s => `Press mood was ${s.press!.mood} when this note was written. The press officer suggests a calm briefing, or a private review with the board.`,
     options: [
       { verb: 'Hold the calm briefing', effect: move('press', 4) },
       { verb: 'Review it with the board', effect: move('board', 3) },
@@ -327,7 +327,7 @@ export const DECK: DeckCard[] = [
   },
   {
     id: 'injurySupport', from: 'The medical team', fits: () => true, who: injuredPlayer,
-    text: s => { const p = injuredPlayer(s)!; return `${p.name} has ${p.injuryWeeks} injury week${p.injuryWeeks === 1 ? '' : 's'} left. Staff suggest a check in or a board update. Neither changes the recovery time.`; },
+    text: s => { const p = injuredPlayer(s)!; return `${p.name} had ${p.injuryWeeks} injury week${p.injuryWeeks === 1 ? '' : 's'} left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.`; },
     options: [
       { verb: 'Check in with him', effect: move('morale', 6) },
       { verb: 'Update the board', effect: move('board', 2) },
