@@ -1,0 +1,22 @@
+#!serial
+og-head: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000
+og-base-src: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- src && node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+og-base-engine-only: git show c9c77ebab727b9bd624459388e33b6579538e4ca:src/lib/soccerCareerEngine.ts > src/lib/soccerCareerEngine.ts && node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+h-storyrole: node scripts/simCareerStoryRole.mjs
+h-awards: node scripts/simCareerAwardsNight.mjs
+h-leagueseasons: node scripts/simCareerLeagueSeasons.mjs
+h-seasonhist: node scripts/simSoccerSeasonHistory.mjs
+h-derby: node scripts/simSoccerDerbyHistory.mjs
+h-trophy: node scripts/simCareerTrophyRuns.mjs
+h-social: node scripts/simCareerSocialBrands.mjs
+h-finish: node scripts/simCareerLeagueFinish.mjs
+h-dev: node scripts/simSoccerCareerDevelopment.mjs
+sens-storyrole: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simCareerStoryRole.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-awards: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simCareerAwardsNight.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-leagueseasons: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simCareerLeagueSeasons.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-seasonhist: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simSoccerSeasonHistory.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-derby: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simSoccerDerbyHistory.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-trophy: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simCareerTrophyRuns.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-social: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-finish: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+sens-dev: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- scripts && node scripts/simSoccerCareerDevelopment.mjs; s=$?; git checkout HEAD -- scripts; exit $s

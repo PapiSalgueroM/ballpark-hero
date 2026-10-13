@@ -1,0 +1,243 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.23147535882890224,
+      0.21313480869866908,
+      0.31649208161979914,
+...
+      0.470784007338807,
+-     0.497924821684137,
+-     0.13568823342211545,
+-     0.6737974579446018
+    ],
+    value: {
+      academyClubName: 'Ajax',
+      activeSponsorship: null,
+      age: 20,
+...
+          {
++           club: 'Barcelona',
++           goals: 16,
++           isPlayer: false,
++           name: 'Lamine Yamal',
++           nationality: 'Spain',
++           points: 81,
++           position: 'RW',
++           trophies: [
++             'League',
++             'Cup'
++           ]
++         },
++         {
+            club: 'Leverkusen',
++           goals: 36,
+-           goals: 41,
+            isPlayer: false,
+            name: 'Erling Haaland',
+            nationality: 'Norway',
++           points: 75,
+-           points: 78,
+            position: 'ST',
+            trophies: [
+              'Cup'
+            ]
+          },
+          {
++           club: 'Real Madrid',
+-           club: 'Barcelona',
+            goals: 27,
+            isPlayer: false,
++           name: 'Vinícius Jr',
++           nationality: 'Brazil',
++           points: 60,
++           position: 'LW',
++           trophies: []
++         },
++         {
++           club: 'Sporting CP',
++           goals: 35,
++           isPlayer: false,
++           name: 'Kylian Mbappé',
++           nationality: 'France',
++           points: 59,
++           position: 'ST',
+-           name: 'Lamine Yamal',
+-           nationality: 'Spain',
+-           points: 74,
+-           position: 'RW',
+            trophies: [
+-             'League',
+              'Cup'
+            ]
+          },
+          {
+            club: 'Feyenoord',
++           goals: 11,
+-           goals: 19,
+            isPlayer: false,
+            name: 'Florian Wirtz',
+            nationality: 'Germany',
++           points: 56,
+-           points: 61,
+            position: 'CAM',
+            trophies: [
+              'League',
+              'Cup'
+            ]
+          },
+          {
++           club: 'Bayern Munich',
++           goals: 19,
+-           club: 'Barcelona',
+-           goals: 7,
+            isPlayer: false,
++           name: 'Jamal Musiala',
++           nationality: 'Germany',
++           points: 51,
++           position: 'CAM',
+-           name: 'Rodri',
+-           nationality: 'Spain',
+-           points: 61,
+-           position: 'CDM',
+            trophies: [
+              'League',
+-             'Cup'
+            ]
+          },
+          {
++           club: 'Real Madrid',
++           goals: 24,
+-           club: 'Sporting CP',
+-           goals: 39,
+            isPlayer: false,
++           name: 'Jude Bellingham',
++           nationality: 'England',
++           points: 50,
++           position: 'CAM',
++           trophies: []
++         },
++         {
++           club: 'Barcelona',
++           goals: 3,
++           isPlayer: false,
++           name: 'Rodri',
++           nationality: 'Spain',
++           points: 43,
++           position: 'CDM',
+-           name: 'Kylian Mbappé',
+-           nationality: 'France',
+-           points: 57,
+-           position: 'ST',
+            trophies: [
++             'League',
+              'Cup'
+            ]
+          },
+          {
+            club: 'Man City',
++           goals: 24,
+-           goals: 27,
+            isPlayer: false,
+            name: 'Harry Kane',
+            nationality: 'England',
++           points: 37,
+-           points: 55,
+            position: 'ST',
+            trophies: []
+          },
+          {
+            club: 'Feyenoord',
++           goals: 7,
+-           goals: 5,
+            isPlayer: false,
+            name: 'Pedri',
+            nationality: 'Spain',
++           points: 36,
+-           points: 48,
+            position: 'CM',
+            trophies: [
+              'League',
+              'Cup'
+            ]
+          },
+-         {
+-           club: 'Real Madrid',
+-           goals: 27,
+-           isPlayer: false,
+-           name: 'Vinícius Jr',
+-           nationality: 'Brazil',
+-           points: 47,
+-           position: 'LW',
+-           trophies: []
+-         },
+-         {
+-           club: 'Real Madrid',
+-           goals: 19,
+-           isPlayer: false,
+-           name: 'Jude Bellingham',
+-           nationality: 'England',
+-           points: 40,
+-           position: 'CAM',
+-           trophies: []
+-         },
+-         {
+-           club: 'Bayern Munich',
+-           goals: 13,
+-           isPlayer: false,
+-           name: 'Jamal Musiala',
+-           nationality: 'Germany',
+-           points: 40,
+-           position: 'CAM',
+-           trophies: [
+-             'League'
+-           ]
+-         }
+        ],
+        playerNominated: false,
+        playerPoints: 0,
+        playerRank: null,
+        year: 2029
+...
+          headline: 'World ere Named In Team Of The Season',
++         newspaper: 'The Beautiful Game Report',
+-         newspaper: 'El Golazo',
+          type: 'positive'
+        }
+      ],
+      pendingOffers: [],
+      pendingRivalryEvent: null,
+
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All nine healthy outcome groups pass
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerTrophyRuns.mjs:165:50
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

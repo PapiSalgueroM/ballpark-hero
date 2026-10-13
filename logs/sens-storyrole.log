@@ -1,0 +1,57 @@
+FAIL [uncopied AR parity] AssertionError: uncopied entire saved values and global draw vectors match AR
++ actual - expected
+
++ [
++   '119002:season:state',
++   '119002:season:draws',
++   '119005:season:state',
++   '119005:season:draws',
++   '119006:season:state',
++   '119006:season:draws',
++   '119007:season:state',
++   '119007:season:draws',
++   '119009:season:state'
++ ]
+- []
+
+PASS [attribution boundaries]
+FAIL [uncopied full AR baseline] AssertionError: AR full career119101 every global draw
+FAIL [candidate full AR baseline] AssertionError: all twelve independent original careers are held
+
+1 !== 12
+
+FAIL [candidate AR parity] AssertionError: candidate-attributed entire saved values and global draw vectors match AR
++ actual - expected
+
++ [
++   '119002:season:state',
++   '119002:season:draws',
++   '119005:season:state',
++   '119005:season:draws',
++   '119006:season:state',
++   '119006:season:draws',
++   '119007:season:state',
++   '119007:season:draws',
++   '119009:season:state'
++ ]
+- []
+
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+FAIL [milestone engine news] AssertionError: actual weighted newspaper uses every original global draw
++ actual - expected
+
+  [
+    0.54364118934609,
+-   0.511361874639988
+  ]
+
+PASS [source held]
+simCareerStoryRole: 16 groups, 5 failed, 0 full AR pairs
