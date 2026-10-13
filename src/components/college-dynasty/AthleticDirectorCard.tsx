@@ -18,6 +18,7 @@
 import { useState } from 'react';
 import { ArrowLeft, CircleHelp } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { revealDelay } from '@/components/club-manager/Celebration';
 import {
   championOf, collegePack, collegeSeatRules, collegeStintRows, collegeTileView, holdsSeat,
   type CollegeLeagueView, type CollegeMarket, type CollegeSeatBlock,
@@ -232,7 +233,7 @@ export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }
       {market.offers.map((o, i) => {
         const f = market.facts[o.teamId];
         return (
-          <div key={o.teamId} className="cm-rise rounded-2xl border border-gold/40 bg-card p-4" style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+          <div key={o.teamId} className="cm-rise rounded-2xl border border-gold/40 bg-card p-4" style={{ animationDelay: revealDelay(i, 0.1, 0.08) }}>
             <p className="flex items-baseline justify-between gap-2">
               <span className="font-display text-base font-bold text-foreground">{o.teamName}</span>
               <span className="shrink-0 text-xs text-muted-foreground">{TIER_WORDS[o.tier]} program</span>
@@ -240,7 +241,7 @@ export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }
             {f && <p className="mt-0.5 text-xs text-muted-foreground">Prestige {f.prestige}, roster #{f.rosterRank} of {f.of}, {f.record} last season</p>}
             <p className="mt-2 text-xs text-foreground">{o.ask.text}</p>
             <p className="mt-1 text-xs text-muted-foreground">{o.reason}</p>
-            <span className="cm-rise-gated mt-2 flex" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
+            <span className="cm-rise-gated mt-2 flex" style={{ animationDelay: revealDelay(i, 0.3, 0.08) }}>
               <button type="button" onClick={() => onTake(o.teamId)} aria-label={`Take the job at ${o.teamName}`} className={cn(TAP, 'w-full rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground hover:opacity-90')}>
                 Take the job
               </button>
