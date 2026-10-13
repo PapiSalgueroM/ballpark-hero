@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvwalk.mjs
+draftNight: node scripts/playDraftNight.mjs

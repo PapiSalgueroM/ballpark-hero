@@ -1,0 +1,41 @@
+  plain-nfl-390: ok "Bench press: grade A. Draft stock +10, now 55."
+  opened-steady-nfl-390: ok "Bench press: grade A. Draft stock +5, now 50.", draft 112
+  opened-allout-nfl-390: ok "Bench press: grade A. Draft stock +10, now 55.", draft 95
+  played-nfl-390: ok "Burst test and Agility run: grade B. Draft stock +4, now 49."
+  plain-nfl-390rm: ok "Bench press: grade A. Draft stock +10, now 55."
+  opened-steady-nfl-390rm: ok "Bench press: grade A. Draft stock +5, now 50.", draft 112
+  opened-allout-nfl-390rm: ok "Bench press: grade A. Draft stock +10, now 55.", draft 95
+  plain-nfl-1280: ok "Bench press: grade A. Draft stock +10, now 55."
+  opened-allout-nfl-1280: ok "Bench press: grade A. Draft stock +10, now 55.", draft 95
+  played-nfl-1280: ok "Burst test and Agility run: grade B. Draft stock +4, now 49."
+  plain-nba-390: ok "Three on three: grade A. Draft stock +10, now 55."
+  opened-steady-nba-390: ok "Three on three: grade A. Draft stock +5, now 50.", draft 27
+  opened-allout-nba-390: ok "Three on three: grade A. Draft stock +10, now 55.", draft 23
+  played-nba-390: ok "Burst test and Agility run: grade B. Draft stock +4, now 49."
+  plain-nba-390rm: ok "Three on three: grade A. Draft stock +10, now 55."
+  opened-steady-nba-390rm: ok "Three on three: grade A. Draft stock +5, now 50.", draft 27
+  opened-allout-nba-390rm: ok "Three on three: grade A. Draft stock +10, now 55.", draft 23
+  plain-nba-1280: ok "Three on three: grade A. Draft stock +10, now 55."
+  opened-allout-nba-1280: ok "Three on three: grade A. Draft stock +10, now 55.", draft 23
+  played-nba-1280: ok "Burst test and Agility run: grade B. Draft stock +4, now 49."
+  plain-mlb-390: ok "Bullpen session: grade A. Draft stock +10, now 63."
+  opened-steady-mlb-390: ok "Bullpen session: grade A. Draft stock +5, now 58.", draft 221
+  opened-allout-mlb-390: ok "Bullpen session: grade A. Draft stock +10, now 63.", draft 180
+  played-mlb-390: ok "Burst test and Agility run: grade B. Draft stock +4, now 57."
+  plain-mlb-390rm: ok "Bullpen session: grade A. Draft stock +10, now 63."
+  opened-steady-mlb-390rm: ok "Bullpen session: grade A. Draft stock +5, now 58.", draft 221
+  opened-allout-mlb-390rm: ok "Bullpen session: grade A. Draft stock +10, now 63.", draft 180
+  plain-mlb-1280: ok "Bullpen session: grade A. Draft stock +10, now 63."
+  opened-allout-mlb-1280: ok "Bullpen session: grade A. Draft stock +10, now 63.", draft 180
+  played-mlb-1280: ok "Burst test and Agility run: grade B. Draft stock +4, now 57."
+  plain-nhl-390: ok "Pro agility: grade B. Draft stock +4, now 57."
+  opened-steady-nhl-390: ok "Pro agility: grade B. Draft stock +2, now 55.", draft 96
+  opened-allout-nhl-390: ok "Pro agility: grade B. Draft stock +4, now 57.", draft 90
+  played-nhl-390: ok "Bike test and Pro agility: grade B. Draft stock +4, now 57."
+  plain-nhl-390rm: ok "Pro agility: grade B. Draft stock +4, now 57."
+  opened-steady-nhl-390rm: ok "Pro agility: grade B. Draft stock +2, now 55.", draft 96
+  opened-allout-nhl-390rm: ok "Pro agility: grade B. Draft stock +4, now 57.", draft 90
+  plain-nhl-1280: ok "Pro agility: grade B. Draft stock +4, now 57."
+  opened-allout-nhl-1280: ok "Pro agility: grade B. Draft stock +4, now 57.", draft 90
+  played-nhl-1280: ok "Bike test and Pro agility: grade B. Draft stock +4, now 57."
+RVWALK GREEN: 40 cases passed, 0 failures
