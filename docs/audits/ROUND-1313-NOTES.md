@@ -261,11 +261,17 @@ print), ca8e5a0e (the rule sentences' wording, docs only). No src file moved, so
 - The lead's rulings this round leaves open: open question 1's fallback (score both printed lines with their
   counts read back at full pace), with the measuring swap's numbers in the header of scripts/simUsRivalSense.mjs;
   whether a defenseman's kind should follow the player (Q2; the kind pairing table is printed); the dead heat.
-- Found by the read review, data first, both older than this round and left alone by the fix pass:
-  (a) "Josh Hader's 138 in 2019 is the modern high" is false (he struck out 143 in 2018, two sources in
-  review-read-1313.md finding 5). It sits in the Round 97 comment inside mlbStatLineFor (mlbMyCareer.ts line
-  739) AND in the note of scripts/simCareerRealism.mjs line 117, which is not this round's file, so one later
-  round fixes both together (and words "149 ... no reliever has come close to" again, since 143 is close).
+- Found by the read review, data first, both older than this round:
+  (a) DONE in fix pass 2 (b2f1a5e0, comment and note text only, both files in one commit): "Josh Hader's 138
+  in 2019 is the modern high" was false. The Round 97 comment inside mlbStatLineFor now says Hader's 143 in
+  2018 was the most in the National League since Brad Lidge's 157 in 2004, and scripts/simCareerRealism.mjs
+  (its comment above the MLB checks and the RP note) says the relief record is Dick Radatz's 181 in 1964 over
+  157 innings (it said "about 137" and "anything near 150 has never happened") and that its RP ceiling of 143
+  is Hader's 2018, not the record. Sources: reviewingthebrew.com, cbs58.com and cbssports.com (Hader 143);
+  sabr.org's Lidge biography and brewcrewball.com (Lidge 157); sabr.org's game account of October 4, 1964 and
+  baseballhall.org's card corner (Radatz 181 over 157 innings). No check value moved. Left in that same
+  comment of simCareerRealism.mjs and not checked here: "Nolan Ryan again for wins is 27", which reads
+  garbled (owed to whoever next touches that file).
   (b) wonAward has no year (careerAwards.ts line 600), so the player and now the rival can be All-Stars, and
   beat 206 or 306 can say "The All-Star rosters are out", in MLB's 2020 and the NHL's 2012-13, when no game was
   played. careerAwards.ts is read only here; the awards table needs a year rule.
