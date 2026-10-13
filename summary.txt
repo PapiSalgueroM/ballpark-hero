@@ -1,0 +1,5 @@
+dg-base-old exit=0 26s | simCmLeagueRules: all checks passed (modern, eras, pure)
+dg-head-old exit=1 26s | simCmLeagueRules: 63 failure(s)
+dg-head-new exit=0 25s | simCmLeagueRules: all checks passed (modern, eras, pure)
+pin-check exit=0 1s | manifest {"src/lib/clubManager.ts":"3a1c9040ccba15ef07421dca35ef057961a6ae7b751195fa7f568dfa712fd65d","src/lib/clubManagerSlots.ts":"953c366dbe5e56163c81ca2185a60625da927
+pin-old exit=1 7s | Node.js v24.21.0
