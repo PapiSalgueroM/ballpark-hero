@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+simWritesAreSent-head: node scripts/simWritesAreSent.mjs
+simWritesAreSent-main: R=$PWD; git worktree add -q /tmp/sm 36cc9ffe && ln -s "$R/node_modules" /tmp/sm/node_modules && cd /tmp/sm && node_modules/.bin/vite build > /tmp/sm-build.log 2>&1 && node scripts/simWritesAreSent.mjs
