@@ -35,7 +35,9 @@ const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.SEAT_WALK_CONTROL || '';
 if (CONTROL && CONTROL !== 'smalltap') { console.error(`SEAT_WALK_CONTROL=${CONTROL} is not a control this walk knows (smalltap)`); process.exit(2); }
-const OUT = process.env.RC_OUT || path.resolve('.tmp-fx/college-seat-shots');
+/* A control's pictures go in a folder of their own: run beside the walk in one request, the two would
+   otherwise write the same names, and a reviewer could look at the control's shrunken buttons as the walk's. */
+const OUT = path.join(process.env.RC_OUT || path.resolve('.tmp-fx/college-seat-shots'), CONTROL ? `control-${CONTROL}` : '');
 fs.mkdirSync(OUT, { recursive: true });
 const VIEWPORTS = [[320, 568], [390, 844], [1280, 800]];
 const ROUTES = [
