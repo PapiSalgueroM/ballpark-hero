@@ -62,7 +62,7 @@ async function open(base, profile, row, failBuild = false) {
     reducedMotion: 'reduce', colorScheme: 'dark', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: base, localStorage: [
       { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: 'dark' }, { name: 'dukb-guest-handle', value: 'SteadyVolley-18' }] }] } });
   const page = await context.newPage(); page.setDefaultTimeout(25000);
-  const aborted = new Set(), fault = { enabled: failBuild }, pending = [];
+  const aborted = new Set(), fault = { enabled: failBuild }, pending = [], navigationRequests = new Map();
   const ownedChunkError = text => row.transport.some(request => request.action === 'build-fault' && text.includes(request.url))
     && /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module/i.test(text);
   await context.route('**/*', route => {
@@ -89,7 +89,16 @@ async function open(base, profile, row, failBuild = false) {
     else row.errors.push(`${url}: ${text}`);
   });
   page.on('requestfailed', request => { if (new URL(request.url()).origin === base && !row.transport.some(item => item.action === 'build-fault' && item.url === request.url())) row.errors.push(`Owned request failed: ${request.url()}`); });
+  page.on('request', request => {
+    if (!request.isNavigationRequest() || request.frame() !== page.mainFrame()) return;
+    const observation = { stage: row.stage, url: request.url(), method: request.method() };
+    navigationRequests.set(request, observation); row.navigationRequests.push(observation);
+  });
   page.on('response', response => {
+    const request = response.request();
+    if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
+      row.navigationResponses.push({ stage: navigationRequests.get(request)?.stage, url: response.url(), status: response.status() });
+    }
     const url = new URL(response.url());
     if (url.origin !== base) return;
     if (response.status() >= 400) { row.errors.push(`Owned asset ${response.status()}: ${response.url()}`); return; }
@@ -120,7 +129,7 @@ async function open(base, profile, row, failBuild = false) {
   await page.goto(`${base}/soccer-career`, { waitUntil: 'domcontentloaded' }); await ready();
   return { context, page, fault, activate, raw, creator, preview, ready, flush };
 }
-const rowFor = (id, width) => ({ id, width, stage: 'cold', issues: [], errors: [], diagnostics: [], transport: [], jsLoads: [], documents: [], stages: [], shots: [], roster: [] });
+const rowFor = (id, width) => ({ id, width, stage: 'cold', issues: [], errors: [], diagnostics: [], transport: [], jsLoads: [], documents: [], navigationRequests: [], navigationResponses: [], stages: [], shots: [], roster: [] });
 const buildLoads = row => row.jsLoads.filter(load => load.marker);
 const editor = page => page.getByRole('heading', { name: /Build Your Player$/ }).locator('..').locator('..');
 const customize = page => page.getByRole('button', { name: /Customize your build$/ });
@@ -272,7 +281,11 @@ async function recovery(base) {
     check(await walk.page.getByLabel('Player Name', { exact: true }).inputValue() === '', `${row.id}: actual Retry did not reload the fresh creator.`, row);
     await generate(walk, row); row.stage = 'retry-customize'; await walk.activate(customize(walk.page)); await editor(walk.page).waitFor(); await walk.flush();
     check(buildLoads(row).length === 1 && await walk.page.getByRole('button', { name: /Lock in build$/ }).isEnabled(), `${row.id}: actual Retry did not fetch a healthy usable editor.`, row);
-    check(row.documents.length === 3, `${row.id}: failure recovery navigated beyond initial load, one automatic reload and one requested Retry.`, row);
+    // Frame events include same-document history changes; document requests measure actual reloads.
+    const navigationStages = ['cold', 'first-fault', 'retry'], documentUrl = `${base}/soccer-career`;
+    check(JSON.stringify(row.navigationRequests.map(item => [item.stage, item.url, item.method])) === JSON.stringify(navigationStages.map(stage => [stage, documentUrl, 'GET']))
+      && JSON.stringify(row.navigationResponses.map(item => [item.stage, item.url, item.status])) === JSON.stringify(navigationStages.map(stage => [stage, documentUrl, 200])),
+    `${row.id}: recovery needs exactly the initial document, one automatic reload and one requested Retry at the owned route.`, row);
     const recovered = await allocation(walk.page);
     await capture(walk, row, 'retry-build-restored', editor(walk.page));
     await walk.activate(walk.page.getByRole('button', { name: /Lock in build$/ })); await walk.creator().waitFor();
