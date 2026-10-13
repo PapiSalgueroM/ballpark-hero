@@ -1,0 +1,4 @@
+deck: node scripts/simEventDeck.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+since: git diff --stat 69dee50e HEAD

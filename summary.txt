@@ -1,0 +1,4 @@
+rivals exit=0 22s | No rival product names found. 0 findings.
+since exit=0 0s |  5 files changed, 158 insertions(+), 1 deletion(-)
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+deck exit=0 68s | simEventDeck: green.
