@@ -1,0 +1,13 @@
+MUTATION neverrelease APPLIED to src/hooks/useClubManager.ts
+fixtures: Brighton 55818 chars, Everton 54091 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 390x844
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (390x844)
+  FAIL [case 9]: tab A never put a live match on the stage
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-0" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-0" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-1" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-1" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Brighton week 3, 3 results, last Leeds United 1-1"
+  FAIL [case 9]: after the stale tab let go, its Hot Seat carry on did not land: the save holds "Brighton week 3, 3 results, last Leeds United 1-1", not Arsenal
+cases red: 9; pictures in /home/runner/work/_temp/rc-out/files
+playTwoTabs: RED, 2 findings

@@ -1,0 +1,7 @@
+#!serial
+#!playwright
+back-head: npm run build > /tmp/b0.log 2>&1 && ENGINES=chromium SIZES=390x844 CASES=9 node scripts/playTwoTabs.mjs
+back-oldrelease: node .rc/x/mutf.mjs oldrelease && npm run build > /tmp/b1.log 2>&1 && ENGINES=chromium SIZES=390x844 CASES=9 node scripts/playTwoTabs.mjs; s=$?; git checkout -- src scripts; exit $s
+back-releasefirst: node .rc/x/mutf.mjs releasefirst && npm run build > /tmp/b2.log 2>&1 && ENGINES=chromium SIZES=390x844 CASES=9 node scripts/playTwoTabs.mjs; s=$?; git checkout -- src scripts; exit $s
+back-neverrelease: node .rc/x/mutf.mjs neverrelease && npm run build > /tmp/b3.log 2>&1 && ENGINES=chromium SIZES=390x844 CASES=9 node scripts/playTwoTabs.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short src scripts | wc -l
