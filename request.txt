@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playCollegeSeat: node scripts/playCollegeSeat.mjs
+smalltap: SEAT_WALK_CONTROL=smalltap node scripts/playCollegeSeat.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
