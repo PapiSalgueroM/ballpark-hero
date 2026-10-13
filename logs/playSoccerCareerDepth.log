@@ -1,0 +1,993 @@
+ok   390x844: target instructions and worked example precede the choice
+ok   390x844: choice writes exactly the engine target, without changing this season's stats
+ok   390x844: target survives reload with its exact year and club
+ok   390x844: cancelling only removes the target
+ok   390x844: actual lazy chunk shows an accessible loading dialog
+ok   390x844: loading contains focus and locks body scrolling
+ok   390x844: loaded record sheet retains focus and body lock after fallback unmounts
+ok   390x844: record totals agree with saved senior rows
+ok   390x844: best opens the actual winning record's season
+ok   390x844: every saved club spell appears
+ok   390x844: club detail contains only that spell's seasons
+ok   390x844: record help and worked example can reopen
+ok   390x844: forward and reverse keyboard navigation stay in the record dialog
+ok   390x844: no horizontal overflow
+ok   390x844: Escape closes and restores the record tile focus
+ok   390x844: closing the record sheet restores body scrolling without moving the page
+ok   390x844: all record tabs and details preserve the whole save
+ok   390x844: reload preserves the cancelled target and career history
+390x844: normal engine seed 118400, phase newspaper, apps 40, target achieved
+390x844: Node/Chromium/actual RNG calls 170/170/150, sort draws 0/0/0, full runtime differences 0
+ok   390x844: playing a real season seals target against its actual stats and consumes the choice
+career-season-390: full save mismatch, 83 recursive differences
+[
+  {
+    "at": "$.events.[keys]",
+    "expected": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "actual": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "at": "$.events.4",
+    "expected": "⭐ Named Young Player of the Year!",
+    "actual": "🎯 Ambition achieved: Score 5 club goals. +1 shooting with next season's growth."
+  },
+  {
+    "at": "$.events.5",
+    "expected": "🎯 Ambition achieved: Score 5 club goals. +1 shooting with next season's growth.",
+    "actual": "<absent>"
+  },
+  {
+    "at": "$.pendingNews.1.newspaper",
+    "expected": "The Daily Sport",
+    "actual": "Tackle Weekly"
+  },
+  {
+    "at": "$.totalEarnings",
+    "expected": 3.98,
+    "actual": 3.6
+  },
+  {
+    "at": "$.popularity",
+    "expected": 40,
+    "actual": 35
+  },
+  {
+    "at": "$.netWorth",
+    "expected": 3.66,
+    "actual": 3.28
+  },
+  {
+    "at": "$.socialMediaFollowers",
+    "expected": 2.64,
+    "actual": 2.6
+  },
+  {
+    "at": "$.sponsorshipIncome",
+    "expected": 0.64,
+    "actual": 0.26
+  },
+  {
+    "at": "$.awards.[keys]",
+    "expected": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "actual": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "at": "$.awards.5",
+    "expected": {
+      "year": 2029,
+      "name": "Young Player of the Year",
+      "emoji": "⭐"
+    },
+    "actual": "<absent>"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.name",
+    "expected": "Erling Haaland",
+    "actual": "Kylian Mbappé"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.nationality",
+    "expected": "Norway",
+    "actual": "France"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.club",
+    "expected": "Man City",
+    "actual": "Real Madrid"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.points",
+    "expected": 85,
+    "actual": 96
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.goals",
+    "expected": 31,
+    "actual": 34
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.name",
+    "expected": "Florian Wirtz",
+    "actual": "Jude Bellingham"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.nationality",
+    "expected": "Germany",
+    "actual": "England"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.club",
+    "expected": "Liverpool",
+    "actual": "Real Madrid"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.points",
+    "expected": 73,
+    "actual": 66
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.goals",
+    "expected": 12,
+    "actual": 19
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.trophies.0",
+    "expected": "UCL",
+    "actual": "League"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.name",
+    "expected": "Lamine Yamal",
+    "actual": "Harry Kane"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.nationality",
+    "expected": "Spain",
+    "actual": "England"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.position",
+    "expected": "RW",
+    "actual": "ST"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.club",
+    "expected": "Barcelona",
+    "actual": "Bayern Munich"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.points",
+    "expected": 69,
+    "actual": 64
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.goals",
+    "expected": 26,
+    "actual": 32
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.trophies.[keys]",
+    "expected": [
+      "0"
+    ],
+    "actual": []
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.trophies.0",
+    "expected": "Cup",
+    "actual": "<absent>"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.name",
+    "expected": "Vinícius Jr",
+    "actual": "Erling Haaland"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.nationality",
+    "expected": "Brazil",
+    "actual": "Norway"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.position",
+    "expected": "LW",
+    "actual": "ST"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.club",
+    "expected": "Real Madrid",
+    "actual": "Man City"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.points",
+    "expected": 64,
+    "actual": 62
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.goals",
+    "expected": 20,
+    "actual": 39
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.name",
+    "expected": "Kylian Mbappé",
+    "actual": "Vinícius Jr"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.nationality",
+    "expected": "France",
+    "actual": "Brazil"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.position",
+    "expected": "ST",
+    "actual": "LW"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.points",
+    "expected": 59,
+    "actual": 61
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.goals",
+    "expected": 29,
+    "actual": 22
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.name",
+    "expected": "Phil Foden",
+    "actual": "Lamine Yamal"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.nationality",
+    "expected": "England",
+    "actual": "Spain"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.position",
+    "expected": "CAM",
+    "actual": "RW"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.club",
+    "expected": "Man City",
+    "actual": "Barcelona"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.points",
+    "expected": 57,
+    "actual": 61
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.goals",
+    "expected": 15,
+    "actual": 25
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.trophies.0",
+    "expected": "League",
+    "actual": "Cup"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.name",
+    "expected": "Harry Kane",
+    "actual": "Florian Wirtz"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.nationality",
+    "expected": "England",
+    "actual": "Germany"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.position",
+    "expected": "ST",
+    "actual": "CAM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.club",
+    "expected": "Bayern Munich",
+    "actual": "Liverpool"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.points",
+    "expected": 55,
+    "actual": 53
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.goals",
+    "expected": 36,
+    "actual": 10
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.trophies.[keys]",
+    "expected": [],
+    "actual": [
+      "0"
+    ]
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.trophies.0",
+    "expected": "<absent>",
+    "actual": "UCL"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.name",
+    "expected": "Jamal Musiala",
+    "actual": "Federico Valverde"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.nationality",
+    "expected": "Germany",
+    "actual": "Uruguay"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.position",
+    "expected": "CAM",
+    "actual": "CM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.club",
+    "expected": "Bayern Munich",
+    "actual": "Real Madrid"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.points",
+    "expected": 52,
+    "actual": 51
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.goals",
+    "expected": 16,
+    "actual": 7
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.trophies.[keys]",
+    "expected": [],
+    "actual": [
+      "0"
+    ]
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.trophies.0",
+    "expected": "<absent>",
+    "actual": "League"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.name",
+    "expected": "Jude Bellingham",
+    "actual": "Rodri"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.nationality",
+    "expected": "England",
+    "actual": "Spain"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.position",
+    "expected": "CAM",
+    "actual": "CDM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.club",
+    "expected": "Real Madrid",
+    "actual": "Barcelona"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.points",
+    "expected": 45,
+    "actual": 47
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.goals",
+    "expected": 13,
+    "actual": 9
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.trophies.0",
+    "expected": "League",
+    "actual": "Cup"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.name",
+    "expected": "Federico Valverde",
+    "actual": "Phil Foden"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.nationality",
+    "expected": "Uruguay",
+    "actual": "England"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.position",
+    "expected": "CM",
+    "actual": "CAM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.club",
+    "expected": "Real Madrid",
+    "actual": "Man City"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.points",
+    "expected": 45,
+    "actual": 47
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.goals",
+    "expected": 7,
+    "actual": 13
+  },
+  {
+    "at": "$.generatedBallonPool.entries.0.entryAge",
+    "expected": 22,
+    "actual": 27
+  },
+  {
+    "at": "$.generatedBallonPool.entries.1.entryAge",
+    "expected": 25,
+    "actual": 20
+  },
+  {
+    "at": "$.generatedBallonPool.entries.2.entryAge",
+    "expected": 22,
+    "actual": 27
+  },
+  {
+    "at": "$.generatedBallonPool.entries.3.entryAge",
+    "expected": 26,
+    "actual": 24
+  },
+  {
+    "at": "$.generatedBallonPool.entries.4.entryAge",
+    "expected": 22,
+    "actual": 24
+  },
+  {
+    "at": "$.generatedBallonPool.entries.5.entryAge",
+    "expected": 20,
+    "actual": 22
+  }
+]
+FAIL 390x844: actual Next Season writes the unchanged real engine's complete seeded save
+ok   390x844: completed target and queued reward survive reload without another payout
+ok   390x844: actual newspaper Continue changes only the normal summary transition
+ok   390x844: actual season summary shows the sealed target outcome
+ok   390x844: summary shows the exact saved target and final statistic
+ok   390x844: summary reload preserves the result and whole save without repeating the reward
+ok   390x844: complete target and record journey has no page errors
+ok   390x844 failed chunk: the first real chunk failure performs exactly one global stale-chunk reload
+ok   390x844 failed chunk: automatic recovery returns to the actual career with every saved byte intact
+ok   390x844 failed chunk: a second real failed import reaches the accessible error without a reload loop
+ok   390x844 failed chunk: error dialog contains focus through forward and reverse Tab
+ok   390x844 failed chunk: error locks body scrolling without moving the page
+ok   390x844 failed chunk: failure preserves every saved byte and fits the viewport
+ok   390x844 failed chunk: Escape restores the tile focus and original body scrolling
+ok   390x844 failed chunk: Escape preserves the whole save
+ok   390x844 failed chunk: keyboard Back restores tile focus and body scrolling after reopening
+ok   390x844 failed chunk: keyboard Back preserves the whole save
+ok   390x844 failed chunk: caught lazy failure causes no uncaught page error ()
+ok   390x844 failed chunk: failure and close survive reload without changing the career
+ok   390x844 failed chunk: restoring the real chunk after a reload opens the saved record book
+ok   390x844 failed chunk: closing the recovered book preserves the complete career
+ok   1280x900: target instructions and worked example precede the choice
+ok   1280x900: choice writes exactly the engine target, without changing this season's stats
+ok   1280x900: target survives reload with its exact year and club
+ok   1280x900: cancelling only removes the target
+ok   1280x900: actual lazy chunk shows an accessible loading dialog
+ok   1280x900: loading contains focus and locks body scrolling
+ok   1280x900: loaded record sheet retains focus and body lock after fallback unmounts
+ok   1280x900: record totals agree with saved senior rows
+ok   1280x900: best opens the actual winning record's season
+ok   1280x900: every saved club spell appears
+ok   1280x900: club detail contains only that spell's seasons
+ok   1280x900: record help and worked example can reopen
+ok   1280x900: forward and reverse keyboard navigation stay in the record dialog
+ok   1280x900: no horizontal overflow
+ok   1280x900: Escape closes and restores the record tile focus
+ok   1280x900: closing the record sheet restores body scrolling without moving the page
+ok   1280x900: all record tabs and details preserve the whole save
+ok   1280x900: reload preserves the cancelled target and career history
+1280x900: normal engine seed 118400, phase newspaper, apps 40, target achieved
+1280x900: Node/Chromium/actual RNG calls 170/170/150, sort draws 0/0/0, full runtime differences 0
+ok   1280x900: playing a real season seals target against its actual stats and consumes the choice
+career-season-1280: full save mismatch, 83 recursive differences
+[
+  {
+    "at": "$.events.[keys]",
+    "expected": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "actual": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "at": "$.events.4",
+    "expected": "⭐ Named Young Player of the Year!",
+    "actual": "🎯 Ambition achieved: Score 5 club goals. +1 shooting with next season's growth."
+  },
+  {
+    "at": "$.events.5",
+    "expected": "🎯 Ambition achieved: Score 5 club goals. +1 shooting with next season's growth.",
+    "actual": "<absent>"
+  },
+  {
+    "at": "$.pendingNews.1.newspaper",
+    "expected": "The Daily Sport",
+    "actual": "Tackle Weekly"
+  },
+  {
+    "at": "$.totalEarnings",
+    "expected": 3.98,
+    "actual": 3.6
+  },
+  {
+    "at": "$.popularity",
+    "expected": 40,
+    "actual": 35
+  },
+  {
+    "at": "$.netWorth",
+    "expected": 3.66,
+    "actual": 3.28
+  },
+  {
+    "at": "$.socialMediaFollowers",
+    "expected": 2.64,
+    "actual": 2.6
+  },
+  {
+    "at": "$.sponsorshipIncome",
+    "expected": 0.64,
+    "actual": 0.26
+  },
+  {
+    "at": "$.awards.[keys]",
+    "expected": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "actual": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "at": "$.awards.5",
+    "expected": {
+      "year": 2029,
+      "name": "Young Player of the Year",
+      "emoji": "⭐"
+    },
+    "actual": "<absent>"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.name",
+    "expected": "Erling Haaland",
+    "actual": "Kylian Mbappé"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.nationality",
+    "expected": "Norway",
+    "actual": "France"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.club",
+    "expected": "Man City",
+    "actual": "Real Madrid"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.points",
+    "expected": 85,
+    "actual": 96
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.0.goals",
+    "expected": 31,
+    "actual": 34
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.name",
+    "expected": "Florian Wirtz",
+    "actual": "Jude Bellingham"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.nationality",
+    "expected": "Germany",
+    "actual": "England"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.club",
+    "expected": "Liverpool",
+    "actual": "Real Madrid"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.points",
+    "expected": 73,
+    "actual": 66
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.goals",
+    "expected": 12,
+    "actual": 19
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.1.trophies.0",
+    "expected": "UCL",
+    "actual": "League"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.name",
+    "expected": "Lamine Yamal",
+    "actual": "Harry Kane"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.nationality",
+    "expected": "Spain",
+    "actual": "England"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.position",
+    "expected": "RW",
+    "actual": "ST"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.club",
+    "expected": "Barcelona",
+    "actual": "Bayern Munich"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.points",
+    "expected": 69,
+    "actual": 64
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.goals",
+    "expected": 26,
+    "actual": 32
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.trophies.[keys]",
+    "expected": [
+      "0"
+    ],
+    "actual": []
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.2.trophies.0",
+    "expected": "Cup",
+    "actual": "<absent>"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.name",
+    "expected": "Vinícius Jr",
+    "actual": "Erling Haaland"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.nationality",
+    "expected": "Brazil",
+    "actual": "Norway"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.position",
+    "expected": "LW",
+    "actual": "ST"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.club",
+    "expected": "Real Madrid",
+    "actual": "Man City"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.points",
+    "expected": 64,
+    "actual": 62
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.3.goals",
+    "expected": 20,
+    "actual": 39
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.name",
+    "expected": "Kylian Mbappé",
+    "actual": "Vinícius Jr"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.nationality",
+    "expected": "France",
+    "actual": "Brazil"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.position",
+    "expected": "ST",
+    "actual": "LW"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.points",
+    "expected": 59,
+    "actual": 61
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.4.goals",
+    "expected": 29,
+    "actual": 22
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.name",
+    "expected": "Phil Foden",
+    "actual": "Lamine Yamal"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.nationality",
+    "expected": "England",
+    "actual": "Spain"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.position",
+    "expected": "CAM",
+    "actual": "RW"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.club",
+    "expected": "Man City",
+    "actual": "Barcelona"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.points",
+    "expected": 57,
+    "actual": 61
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.goals",
+    "expected": 15,
+    "actual": 25
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.5.trophies.0",
+    "expected": "League",
+    "actual": "Cup"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.name",
+    "expected": "Harry Kane",
+    "actual": "Florian Wirtz"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.nationality",
+    "expected": "England",
+    "actual": "Germany"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.position",
+    "expected": "ST",
+    "actual": "CAM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.club",
+    "expected": "Bayern Munich",
+    "actual": "Liverpool"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.points",
+    "expected": 55,
+    "actual": 53
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.goals",
+    "expected": 36,
+    "actual": 10
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.trophies.[keys]",
+    "expected": [],
+    "actual": [
+      "0"
+    ]
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.6.trophies.0",
+    "expected": "<absent>",
+    "actual": "UCL"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.name",
+    "expected": "Jamal Musiala",
+    "actual": "Federico Valverde"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.nationality",
+    "expected": "Germany",
+    "actual": "Uruguay"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.position",
+    "expected": "CAM",
+    "actual": "CM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.club",
+    "expected": "Bayern Munich",
+    "actual": "Real Madrid"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.points",
+    "expected": 52,
+    "actual": 51
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.goals",
+    "expected": 16,
+    "actual": 7
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.trophies.[keys]",
+    "expected": [],
+    "actual": [
+      "0"
+    ]
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.7.trophies.0",
+    "expected": "<absent>",
+    "actual": "League"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.name",
+    "expected": "Jude Bellingham",
+    "actual": "Rodri"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.nationality",
+    "expected": "England",
+    "actual": "Spain"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.position",
+    "expected": "CAM",
+    "actual": "CDM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.club",
+    "expected": "Real Madrid",
+    "actual": "Barcelona"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.points",
+    "expected": 45,
+    "actual": 47
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.goals",
+    "expected": 13,
+    "actual": 9
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.8.trophies.0",
+    "expected": "League",
+    "actual": "Cup"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.name",
+    "expected": "Federico Valverde",
+    "actual": "Phil Foden"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.nationality",
+    "expected": "Uruguay",
+    "actual": "England"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.position",
+    "expected": "CM",
+    "actual": "CAM"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.club",
+    "expected": "Real Madrid",
+    "actual": "Man City"
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.points",
+    "expected": 45,
+    "actual": 47
+  },
+  {
+    "at": "$.pendingBallonDor.nominees.9.goals",
+    "expected": 7,
+    "actual": 13
+  },
+  {
+    "at": "$.generatedBallonPool.entries.0.entryAge",
+    "expected": 22,
+    "actual": 27
+  },
+  {
+    "at": "$.generatedBallonPool.entries.1.entryAge",
+    "expected": 25,
+    "actual": 20
+  },
+  {
+    "at": "$.generatedBallonPool.entries.2.entryAge",
+    "expected": 22,
+    "actual": 27
+  },
+  {
+    "at": "$.generatedBallonPool.entries.3.entryAge",
+    "expected": 26,
+    "actual": 24
+  },
+  {
+    "at": "$.generatedBallonPool.entries.4.entryAge",
+    "expected": 22,
+    "actual": 24
+  },
+  {
+    "at": "$.generatedBallonPool.entries.5.entryAge",
+    "expected": 20,
+    "actual": 22
+  }
+]
+FAIL 1280x900: actual Next Season writes the unchanged real engine's complete seeded save
+ok   1280x900: completed target and queued reward survive reload without another payout
+ok   1280x900: actual newspaper Continue changes only the normal summary transition
+ok   1280x900: actual season summary shows the sealed target outcome
+ok   1280x900: summary shows the exact saved target and final statistic
+ok   1280x900: summary reload preserves the result and whole save without repeating the reward
+ok   1280x900: complete target and record journey has no page errors
+ok   1280x900 failed chunk: the first real chunk failure performs exactly one global stale-chunk reload
+ok   1280x900 failed chunk: automatic recovery returns to the actual career with every saved byte intact
+ok   1280x900 failed chunk: a second real failed import reaches the accessible error without a reload loop
+ok   1280x900 failed chunk: error dialog contains focus through forward and reverse Tab
+ok   1280x900 failed chunk: error locks body scrolling without moving the page
+ok   1280x900 failed chunk: failure preserves every saved byte and fits the viewport
+ok   1280x900 failed chunk: Escape restores the tile focus and original body scrolling
+ok   1280x900 failed chunk: Escape preserves the whole save
+ok   1280x900 failed chunk: keyboard Back restores tile focus and body scrolling after reopening
+ok   1280x900 failed chunk: keyboard Back preserves the whole save
+ok   1280x900 failed chunk: caught lazy failure causes no uncaught page error ()
+ok   1280x900 failed chunk: failure and close survive reload without changing the career
+ok   1280x900 failed chunk: restoring the real chunk after a reload opens the saved record book
+ok   1280x900 failed chunk: closing the recovered book preserves the complete career
+playSoccerCareerDepth: 80 checks, 2 failed
