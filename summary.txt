@@ -1,0 +1,4 @@
+legA-seedout-vs-1326digest exit=0 61s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-plain-committed exit=1 65s | simCmLeagueRules: 47 failure(s)
+legB-seedout-vs-maindigest exit=1 65s | simCmLeagueRules: 63 failure(s)
+write-digest exit=0 73s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
