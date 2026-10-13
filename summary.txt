@@ -1,0 +1,21 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pd-a exit=0 14s | simCareerPreDraft [seed set a]: ALL GREEN
+vitest exit=0 16s |    Duration  15.63s (transform 3.37s, setup 465ms, collect 9.86s, tests 22.98s, environment 2.89s, prepare 694ms)
+pd-b exit=0 9s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-c exit=0 9s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 9s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 9s | simCareerPreDraft [seed set e]: ALL GREEN
+tsc exit=0 60s | 
+ctl-2 exit=0 57s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+ctl-1 exit=0 106s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+parity exit=0 50s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+nflTruth exit=0 48s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+season-law exit=3 14s | simUsSeasonCentre digest compare: NOT COMPARED, 2 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+seasonCentre exit=0 73s | simUsSeasonCentre: 158 checks, 0 failed
+season-lay exit=3 17s | simUsSeasonCentre digest compare: NOT COMPARED, 2 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)
+season-seam exit=3 21s | simUsSeasonCentre digest compare: NOT COMPARED, 2 bundled files are not the ones the record was made on (exit 3: this is no red of the seam)
+rivals exit=0 12s | No rival product names found. 0 findings.
+anchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+weight4 exit=0 8s | WEIGHT4 done
+pjloop exit=0 215s | PJLOOP prospect=0 predraft=0 total 215s
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

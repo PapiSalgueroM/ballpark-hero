@@ -1,0 +1,41 @@
+simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+prospect before: simUsCareerProspect control before: 4 named assertion failures and 4 independent legacy passes
+prospect save: simUsCareerProspect control save: 4 named assertion failures and 4 independent legacy passes
+prospect restore: simUsCareerProspect control restore: 4 named assertion failures and 4 independent legacy passes
+prospect handoff: simUsCareerProspect control handoff: 4 named assertion failures and 4 independent legacy passes
+prospect duplicate: simUsCareerProspect control duplicate: 4 named assertion failures and 4 independent legacy passes
+prospect choice: simUsCareerProspect control choice: 4 named assertion failures and 4 independent legacy passes
+prospect invalid: simUsCareerProspect control invalid: 4 named assertion failures and 4 independent legacy passes
+prospect showcase: simUsCareerProspect control showcase: 4 named assertion failures and 4 independent legacy passes
+prospect undrafted: simUsCareerProspect control undrafted: 4 named assertion failures and 4 independent legacy passes
+prospect archive: simUsCareerProspect control archive: 4 named assertion failures and 4 independent legacy passes
+prospect corrupt: simUsCareerProspect control corrupt: 4 named assertion failures and 4 independent legacy passes
+prospect back: simUsCareerProspect control back: 4 named assertion failures and 4 independent legacy passes
+prospect rules: simUsCareerProspect control rules: 4 named assertion failures and 4 independent legacy passes
+prospect historical: simUsCareerProspect control historical: 4 named assertion failures and 4 independent legacy passes
+prospect outcome: simUsCareerProspect control outcome: 4 named assertion failures and 4 independent legacy passes
+TIMING prospect step 85s status 0
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 00:33:09
+[2m   Duration [22m 3.60s[2m (transform 965ms, setup 50ms, collect 1.32s, tests 1.57s, environment 305ms, prepare 111ms)[22m
+
+
+simCareerPreDraft [seed set a]: ALL GREEN
+TIMING default run 10s
+control randomteam exit=1 8s | simCareerPreDraft [control randomteam] [seed set a]: 24 FAILURE(S)
+control flatstock exit=1 8s | simCareerPreDraft [control flatstock] [seed set a]: 24 FAILURE(S)
+control flatlottery exit=1 9s | simCareerPreDraft [control flatlottery] [seed set a]: 4 FAILURE(S)
+control mathrandom exit=1 6s | simCareerPreDraft [control mathrandom] [seed set a]: 11 FAILURE(S)
+control cardwords exit=1 10s | simCareerPreDraft [control cardwords] [seed set a]: 24 FAILURE(S)
+control showcasewords exit=1 9s | simCareerPreDraft [control showcasewords] [seed set a]: 16 FAILURE(S)
+control erarule exit=1 7s | simCareerPreDraft [control erarule] [seed set a]: 2 FAILURE(S)
+control ceiling exit=1 11s | simCareerPreDraft [control ceiling] [seed set a]: 24 FAILURE(S)
+control ladderskip exit=1 11s | simCareerPreDraft [control ladderskip] [seed set a]: 4 FAILURE(S)
+control undraftedtop exit=1 8s | simCareerPreDraft [control undraftedtop] [seed set a]: 6 FAILURE(S)
+control squeeze exit=1 8s | simCareerPreDraft [control squeeze] [seed set a]: 32 FAILURE(S)
+control laterlottery exit=1 8s | simCareerPreDraft [control laterlottery] [seed set a]: 4 FAILURE(S)
+control flatlater exit=1 6s | simCareerPreDraft [control flatlater] [seed set a]: 4 FAILURE(S)
+control loadershallow exit=1 7s | simCareerPreDraft [control loadershallow] [seed set a]: 1 FAILURE(S)
+TIMING predraft step 130s status 0
+PJLOOP prospect=0 predraft=0 total 215s
