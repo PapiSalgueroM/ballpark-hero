@@ -1,0 +1,6 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+w1077-head exit=1 15s | Node.js v24.21.0
+w1077-base exit=1 15s | Node.js v24.21.0
+simWritesAreSent-head exit=1 14s | simWritesAreSent: 2 failures
+simWritesAreSent-base exit=1 40s | simWritesAreSent: 2 failures
+playCmRealFixtures exit=1 2s | Node.js v24.21.0
