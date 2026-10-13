@@ -1,0 +1,1 @@
+usc-head: node scripts/simUsCareerSummer.mjs > /tmp/u.txt 2>&1; s=$?; cp /tmp/u.txt "$RC_OUT/usc-head.txt"; tail -2 /tmp/u.txt; exit $s
