@@ -1,0 +1,16 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 12 node harnesses
+  PASS  simAccessibility.mjs            0.4s
+  PASS  simActivityNotCompletion.mjs   19.2s
+  PASS  simCareerAcademy.mjs           21.2s
+  PASS  simCareerAwardsNight.mjs      228.9s
+  PASS  simCareerDerbies.mjs          148.4s
+  PASS  simCareerDilemmaReach.mjs     174.3s
+  PASS  simCareerEras.mjs               0.9s
+  PASS  simCareerFacts.mjs             27.0s
+  PASS  simCareerKeepPlaying.mjs      190.7s
+  PASS  simCareerLeagueSeasons.mjs     59.4s
+  PASS  simCareerNoDeadEnd.mjs          1.2s
+  PASS  simCareerPositionRatings.mjs  183.3s
+
+All 12 harnesses green.

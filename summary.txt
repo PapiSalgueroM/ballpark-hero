@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sims2 exit=0 132s | All 12 harnesses green.
+sims1 exit=0 415s | All 12 harnesses green.
+prerender16 exit=0 2s | --- base
+simCreation exit=1 558s | 1 FAILURES
+sims3 exit=1 1200s | 1 harness not green.
