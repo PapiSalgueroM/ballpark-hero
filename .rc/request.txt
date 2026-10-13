@@ -1,0 +1,36 @@
+# Release BB, lane X2: the save keeper and the US ledger, every control; rivalry, fight and the dailies
+#!playwright
+keeper-dropkey: SIM_SAVE_KEEPER_CONTROL=dropkey node scripts/simSaveKeeper.mjs
+keeper-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs
+keeper-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs
+keeper-onebyte: SIM_SAVE_KEEPER_CONTROL=onebyte node scripts/simSaveKeeper.mjs
+keeper-bootwrite: SIM_SAVE_KEEPER_CONTROL=bootwrite node scripts/simSaveKeeper.mjs
+keeper-noaside: SIM_SAVE_KEEPER_CONTROL=noaside node scripts/simSaveKeeper.mjs
+keeper-journalfirst: SIM_SAVE_KEEPER_CONTROL=journalfirst node scripts/simSaveKeeper.mjs
+keeper-pileup: SIM_SAVE_KEEPER_CONTROL=pileup node scripts/simSaveKeeper.mjs
+keeper-nocopycheck: SIM_SAVE_KEEPER_CONTROL=nocopycheck node scripts/simSaveKeeper.mjs
+keeper-hidebehind: SIM_SAVE_KEEPER_CONTROL=hidebehind node scripts/simSaveKeeper.mjs
+keeper-twins: SIM_SAVE_KEEPER_CONTROL=twins node scripts/simSaveKeeper.mjs
+keeper-numberonly: SIM_SAVE_KEEPER_CONTROL=numberonly node scripts/simSaveKeeper.mjs
+keeper-nomaincall: SIM_SAVE_KEEPER_CONTROL=nomaincall node scripts/simSaveKeeper.mjs
+keeper-assign: SIM_SAVE_KEEPER_CONTROL=assign node scripts/simSaveKeeper.mjs
+keeper-partrow: SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+keeper-partrowus: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
+keeper-partbrief: SIM_SAVE_KEEPER_CONTROL=partbrief node scripts/simSaveKeeper.mjs
+keeper-partagent: SIM_SAVE_KEEPER_CONTROL=partagent node scripts/simSaveKeeper.mjs
+keeper-partreturn: SIM_SAVE_KEEPER_CONTROL=partreturn node scripts/simSaveKeeper.mjs
+keeper-partfarewell: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+keeper-partpress: SIM_SAVE_KEEPER_CONTROL=partpress node scripts/simSaveKeeper.mjs
+keeper-partgamelog: SIM_SAVE_KEEPER_CONTROL=partgamelog node scripts/simSaveKeeper.mjs
+keeper-partballon: SIM_SAVE_KEEPER_CONTROL=partballon node scripts/simSaveKeeper.mjs
+keeper-partplayoffs: SIM_SAVE_KEEPER_CONTROL=partplayoffs node scripts/simSaveKeeper.mjs
+ledger-allcontrols: bash .rc/x/allcontrols.sh
+rivalry-homeimport: RIVALRY_CONTROL=homeimport node scripts/simCareerRivalryEvents.mjs
+rivalry-homeback: RIVALRY_CONTROL=homeback node scripts/simCareerRivalryEvents.mjs
+rivalry-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+rivalry-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+fight-lifeleak: FIGHT_CONTROL=lifeleak node scripts/simFightCareer.mjs
+fight-nocards: FIGHT_CONTROL=nocards node scripts/simFightCareer.mjs
+fight-freecard: FIGHT_CONTROL=freecard node scripts/simFightCareer.mjs
+fight-redeal: FIGHT_CONTROL=redeal node scripts/simFightCareer.mjs
+fight-wipesave: FIGHT_CONTROL=wipesave node scripts/simFightCareer.mjs
