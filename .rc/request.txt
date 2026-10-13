@@ -1,0 +1,22 @@
+managerRosterCacheControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs
+simManagerEraWorldOracles: MANAGER_ERA_WORLD_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerEraWorldOracles.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simClubManager: node scripts/simClubManager.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-seed-EXPECT-RED: DAILY_DEALS_CONTROL=seed node scripts/simDailyDeals.mjs
+simDailyDeals-seeddeadline-EXPECT-RED: DAILY_DEALS_CONTROL=seeddeadline node scripts/simDailyDeals.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simTransfers: node scripts/simTransfers.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
