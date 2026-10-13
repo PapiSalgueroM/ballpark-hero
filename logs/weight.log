@@ -1,0 +1,4 @@
+  FAIL: /front-office: 369K of gzipped JavaScript against a budget of 366K
+   /front-office       369K gz over  37 files (budget 366K, 369.3K to the tenth)
+sweepWeight: 1 failure
+FrontOffice chunk FrontOffice-Ce71NkVo.js: 111644 raw, 36396 gzipped

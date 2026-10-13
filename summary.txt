@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 61s | 
+walk exit=0 307s | playFrontOfficeGameDay: 386 checks, 0 failed
+rwalk exit=0 144s | review walk: 64 checks, 0 failed
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 41 controls is in the board exactly once.
+weight exit=1 27s | FrontOffice chunk FrontOffice-Ce71NkVo.js: 111644 raw, 36396 gzipped

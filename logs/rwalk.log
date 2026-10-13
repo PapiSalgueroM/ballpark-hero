@@ -1,0 +1,136 @@
+
+=== T, the title game watched, 390 by 844 ===
+  ....  before the title game: chip "2026 · Playoffs", buttons [Play the Super Bowl 464..508 | Watch your game 516..560 | Sim the rest of the playoffs 568..612], face bracket, box 680..1080, back none, scrollY 0; press card ""; owner "🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a "
+  ....  390 T1-title watching: chip "2026 · Playoffs", buttons [Play the Super Bowl (shut) 464..508 | Watch your game (shut) 516..560 | Sim the rest of the playoffs (shut) 568..612], face game, box 680..1080, back 624..668 shut, scrollY 0
+  PASS  390 T1-title: until full time nothing of the result on the page (20 samples, clock true)
+  ....  after full time: recap true; champion SF, his club BAL, trust 44
+  PASS  390: the recap comes after the title game
+  PASS  390: no page error (clean)
+
+=== A, 390 by 844 ===
+  ....  Week 17: chip "2026 · Week 17/17", buttons [Play Week 17 484..528 | Watch Week 17 536..580 | Play the final week + playoffs 588..632], face game, box 644..1044, back none, scrollY 0
+  PASS  390: Week 17's three buttons
+  PASS  390: 44 px each, none overflowing, no sideways scroll (44, 44, 44; page 390 of 390)
+  ....  390 A1-w17 watching: chip "2026 · Week 17/17", buttons [Play Week 17 (shut) 228..272 | Watch Week 17 (shut) 280..324 | Play the final week + playoffs (shut) 332..376], face game, box 444..844, back 388..432 shut, scrollY 330
+  PASS  390 A1-w17: until full time nothing of the result on the page (20 samples, clock true)
+  ....  after Week 17: chip "2026 · Playoffs", buttons [Play the next round 208..252 | Sim the rest of the playoffs 260..304], face game, box 372..772, back 316..360, scrollY 330; where "Wk 17 · at HOU" final "WARI 34, HOU 10"
+  PASS  390: after Watch Week 17, the chip reads Playoffs, no Week 18 anywhere, his game on the box, the back chip open
+  ....  the bracket: place "You have the bye."; chip "2026 · Playoffs", buttons [Play the next round 208..252 | Sim the rest of the playoffs 260..304], face bracket, box 372..772, back none, scrollY 330
+  PASS  390: the hub in the bracket says Postseason and counts no weeks (regular season over: true)
+  ....  round 1 (played, no game of his): chip "2026 · Playoffs", buttons [Play the NFC Divisional 208..252 | Watch your game 260..304 | Sim the rest of the playoffs 312..356], face bracket, box 424..824, back none, scrollY 330; where "" final "" place "Next: the NFC Divisional, against 49ers."
+  PASS  390: round 1: no sideways scroll, every press 44 px and none overflowing
+  ....  390 A5-r1 watching: chip "2026 · Playoffs", buttons [Play the NFC Divisional (shut) 208..252 | Watch your game (shut) 260..304 | Sim the rest of the playoffs (shut) 312..356], face game, box 424..824, back 368..412 shut, scrollY 330
+  PASS  390 A5-r1: until full time nothing of the result on the page (20 samples, clock true)
+  ....  round 2 (watched his game): chip "2026 · Playoffs", buttons [Play the NFC Championship 208..252 | Watch your game 260..304 | Sim the rest of the playoffs 312..356], face game, box 424..824, back 368..412, scrollY 330; where "NFC Divisional · vs SF" final "WARI 38, SF 34" place ""
+  PASS  390: round 2: no sideways scroll, every press 44 px and none overflowing
+  ....  round 2: box on screen true, first press on screen true
+  ....  390 A5-r2 watching: chip "2026 · Playoffs", buttons [Play the NFC Championship (shut) 208..252 | Watch your game (shut) 260..304 | Sim the rest of the playoffs (shut) 312..356], face game, box 424..824, back 368..412 shut, scrollY 330
+  PASS  390 A5-r2: until full time nothing of the result on the page (20 samples, clock true)
+  ....  round 3 (watched his game): chip "2026 · Playoffs", buttons [Play the Super Bowl 208..252 | Watch your game 260..304 | Sim the rest of the playoffs 312..356], face game, box 424..824, back 368..412, scrollY 330; where "NFC Championship · vs PHI" final "WARI 20, PHI 9" place ""
+  PASS  390: round 3: no sideways scroll, every press 44 px and none overflowing
+  ....  round 3: box on screen true, first press on screen true
+  ....  390 A5-r3 watching: chip "2026 · Playoffs", buttons [Play the Super Bowl (shut) 208..252 | Watch your game (shut) 260..304 | Sim the rest of the playoffs (shut) 312..356], face game, box 424..824, back 368..412 shut, scrollY 330
+  PASS  390 A5-r3: until full time nothing of the result on the page (20 samples, clock true)
+  ....  round 4: the recap
+  PASS  390: the run ends on the recap
+  PASS  390: no page error (clean)
+
+=== T, the title game watched, 390 by 844, reduced motion ===
+  ....  before the title game: chip "2026 · Playoffs", buttons [Play the Super Bowl 464..508 | Watch your game 516..560 | Sim the rest of the playoffs 568..612], face bracket, box 680..1080, back none, scrollY 0; press card ""; owner "🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a "
+  PASS  390 rm T1-title: reduced motion shows the result with no clock (clock seen: false)
+  ....  after full time: recap true; champion SF, his club BAL, trust 44
+  PASS  390 rm: the recap comes after the title game
+  PASS  390: no page error (clean)
+
+=== A, 390 by 844, reduced motion ===
+  ....  Week 17: chip "2026 · Week 17/17", buttons [Play Week 17 484..528 | Watch Week 17 536..580 | Play the final week + playoffs 588..632], face game, box 644..1044, back none, scrollY 0
+  PASS  390: Week 17's three buttons
+  PASS  390: 44 px each, none overflowing, no sideways scroll (44, 44, 44; page 390 of 390)
+  PASS  390 rm A1-w17: reduced motion shows the result with no clock (clock seen: false)
+  ....  after Week 17: chip "2026 · Playoffs", buttons [Play the next round 280..324 | Sim the rest of the playoffs 332..376], face game, box 444..844, back 388..432, scrollY 258; where "Wk 17 · at HOU" final "WARI 34, HOU 10"
+  PASS  390: after Watch Week 17, the chip reads Playoffs, no Week 18 anywhere, his game on the box, the back chip open
+  ....  the bracket: place "You have the bye."; chip "2026 · Playoffs", buttons [Play the next round 280..324 | Sim the rest of the playoffs 332..376], face bracket, box 444..844, back none, scrollY 258
+  PASS  390: the hub in the bracket says Postseason and counts no weeks (regular season over: true)
+  ....  round 1 (played, no game of his): chip "2026 · Playoffs", buttons [Play the NFC Divisional 280..324 | Watch your game 332..376 | Sim the rest of the playoffs 384..428], face bracket, box 496..896, back none, scrollY 258; where "" final "" place "Next: the NFC Divisional, against 49ers."
+  PASS  390: round 1: no sideways scroll, every press 44 px and none overflowing
+  PASS  390 rm A5-r1: reduced motion shows the result with no clock (clock seen: false)
+  ....  round 2 (watched his game): chip "2026 · Playoffs", buttons [Play the NFC Championship 280..324 | Watch your game 332..376 | Sim the rest of the playoffs 384..428], face game, box 496..896, back 440..484, scrollY 258; where "NFC Divisional · vs SF" final "WARI 38, SF 34" place ""
+  PASS  390: round 2: no sideways scroll, every press 44 px and none overflowing
+  ....  round 2: box on screen false, first press on screen true
+  PASS  390 rm A5-r2: reduced motion shows the result with no clock (clock seen: false)
+  ....  round 3 (watched his game): chip "2026 · Playoffs", buttons [Play the Super Bowl 280..324 | Watch your game 332..376 | Sim the rest of the playoffs 384..428], face game, box 496..896, back 440..484, scrollY 258; where "NFC Championship · vs PHI" final "WARI 20, PHI 9" place ""
+  PASS  390: round 3: no sideways scroll, every press 44 px and none overflowing
+  ....  round 3: box on screen false, first press on screen true
+  PASS  390 rm A5-r3: reduced motion shows the result with no clock (clock seen: false)
+  ....  round 4: the recap
+  PASS  390: the run ends on the recap
+  PASS  390: no page error (clean)
+
+=== T, the title game watched, 1280 by 900 ===
+  ....  before the title game: chip "2026 · Playoffs", buttons [Play the Super Bowl 410..466 | Watch your game 410..466 | Sim the rest of the playoffs 410..466], face bracket, box 478..830, back none, scrollY 0; press card ""; owner "🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a "
+  ....  1280 T1-title watching: chip "2026 · Playoffs", buttons [Play the Super Bowl (shut) 410..466 | Watch your game (shut) 410..466 | Sim the rest of the playoffs (shut) 410..466], face game, box 478..830, back 842..886 shut, scrollY 0
+  PASS  1280 T1-title: until full time nothing of the result on the page (20 samples, clock true)
+  ....  after full time: recap true; champion SF, his club BAL, trust 44
+  PASS  1280: the recap comes after the title game
+  PASS  1280: no page error (clean)
+
+=== A, 1280 by 900 ===
+  ....  Week 17: chip "2026 · Week 17/17", buttons [Play Week 17 430..486 | Watch Week 17 430..486 | Play the final week + playoffs 430..486], face game, box 498..850, back none, scrollY 0
+  PASS  1280: Week 17's three buttons
+  PASS  1280: 44 px each, none overflowing, no sideways scroll (56, 56, 56; page 1280 of 1280)
+  ....  1280 A1-w17 watching: chip "2026 · Week 17/17", buttons [Play Week 17 (shut) 424..480 | Watch Week 17 (shut) 424..480 | Play the final week + playoffs (shut) 424..480], face game, box 492..844, back 856..900 shut, scrollY 80
+  PASS  1280 A1-w17: until full time nothing of the result on the page (20 samples, clock true)
+  ....  after Week 17: chip "2026 · Playoffs", buttons [Play the next round 404..460 | Sim the rest of the playoffs 404..460], face game, box 472..824, back 836..880, scrollY 80; where "Wk 17 · at HOU" final "WARI 34, HOU 10"
+  PASS  1280: after Watch Week 17, the chip reads Playoffs, no Week 18 anywhere, his game on the box, the back chip open
+  ....  the bracket: place "You have the bye."; chip "2026 · Playoffs", buttons [Play the next round 404..460 | Sim the rest of the playoffs 404..460], face bracket, box 472..824, back none, scrollY 80
+  PASS  1280: the hub in the bracket says Postseason and counts no weeks (regular season over: true)
+  ....  round 1 (played, no game of his): chip "2026 · Playoffs", buttons [Play the NFC Divisional 404..460 | Watch your game 404..460 | Sim the rest of the playoffs 404..460], face bracket, box 472..824, back none, scrollY 80; where "" final "" place "Next: the NFC Divisional, against 49ers."
+  PASS  1280: round 1: no sideways scroll, every press 44 px and none overflowing
+  ....  1280 A5-r1 watching: chip "2026 · Playoffs", buttons [Play the NFC Divisional (shut) 404..460 | Watch your game (shut) 404..460 | Sim the rest of the playoffs (shut) 404..460], face game, box 472..824, back 836..880 shut, scrollY 80
+  PASS  1280 A5-r1: until full time nothing of the result on the page (20 samples, clock true)
+  ....  round 2 (watched his game): chip "2026 · Playoffs", buttons [Play the NFC Championship 404..460 | Watch your game 404..460 | Sim the rest of the playoffs 404..460], face game, box 472..824, back 836..880, scrollY 80; where "NFC Divisional · vs SF" final "WARI 38, SF 34" place ""
+  PASS  1280: round 2: no sideways scroll, every press 44 px and none overflowing
+  ....  round 2: box on screen true, first press on screen true
+  ....  1280 A5-r2 watching: chip "2026 · Playoffs", buttons [Play the NFC Championship (shut) 404..460 | Watch your game (shut) 404..460 | Sim the rest of the playoffs (shut) 404..460], face game, box 472..824, back 836..880 shut, scrollY 80
+  PASS  1280 A5-r2: until full time nothing of the result on the page (20 samples, clock true)
+  ....  round 3 (watched his game): chip "2026 · Playoffs", buttons [Play the Super Bowl 404..460 | Watch your game 404..460 | Sim the rest of the playoffs 404..460], face game, box 472..824, back 836..880, scrollY 80; where "NFC Championship · vs PHI" final "WARI 20, PHI 9" place ""
+  PASS  1280: round 3: no sideways scroll, every press 44 px and none overflowing
+  ....  round 3: box on screen true, first press on screen true
+  ....  1280 A5-r3 watching: chip "2026 · Playoffs", buttons [Play the Super Bowl (shut) 404..460 | Watch your game (shut) 404..460 | Sim the rest of the playoffs (shut) 404..460], face game, box 472..824, back 836..880 shut, scrollY 80
+  PASS  1280 A5-r3: until full time nothing of the result on the page (20 samples, clock true)
+  ....  round 4: the recap
+  PASS  1280: the run ends on the recap
+  PASS  1280: no page error (clean)
+
+=== T, the title game watched, 1280 by 900, reduced motion ===
+  ....  before the title game: chip "2026 · Playoffs", buttons [Play the Super Bowl 410..466 | Watch your game 410..466 | Sim the rest of the playoffs 410..466], face bracket, box 478..830, back none, scrollY 0; press card ""; owner "🏛️ OwnershipTrust 60Win the Super Bowl. Anything less is a "
+  PASS  1280 rm T1-title: reduced motion shows the result with no clock (clock seen: false)
+  ....  after full time: recap true; champion SF, his club BAL, trust 44
+  PASS  1280 rm: the recap comes after the title game
+  PASS  1280: no page error (clean)
+
+=== A, 1280 by 900, reduced motion ===
+  ....  Week 17: chip "2026 · Week 17/17", buttons [Play Week 17 430..486 | Watch Week 17 430..486 | Play the final week + playoffs 430..486], face game, box 498..850, back none, scrollY 0
+  PASS  1280: Week 17's three buttons
+  PASS  1280: 44 px each, none overflowing, no sideways scroll (56, 56, 56; page 1280 of 1280)
+  PASS  1280 rm A1-w17: reduced motion shows the result with no clock (clock seen: false)
+  ....  after Week 17: chip "2026 · Playoffs", buttons [Play the next round 404..460 | Sim the rest of the playoffs 404..460], face game, box 472..824, back 836..880, scrollY 80; where "Wk 17 · at HOU" final "WARI 34, HOU 10"
+  PASS  1280: after Watch Week 17, the chip reads Playoffs, no Week 18 anywhere, his game on the box, the back chip open
+  ....  the bracket: place "You have the bye."; chip "2026 · Playoffs", buttons [Play the next round 404..460 | Sim the rest of the playoffs 404..460], face bracket, box 472..824, back none, scrollY 80
+  PASS  1280: the hub in the bracket says Postseason and counts no weeks (regular season over: true)
+  ....  round 1 (played, no game of his): chip "2026 · Playoffs", buttons [Play the NFC Divisional 404..460 | Watch your game 404..460 | Sim the rest of the playoffs 404..460], face bracket, box 472..824, back none, scrollY 80; where "" final "" place "Next: the NFC Divisional, against 49ers."
+  PASS  1280: round 1: no sideways scroll, every press 44 px and none overflowing
+  PASS  1280 rm A5-r1: reduced motion shows the result with no clock (clock seen: false)
+  ....  round 2 (watched his game): chip "2026 · Playoffs", buttons [Play the NFC Championship 404..460 | Watch your game 404..460 | Sim the rest of the playoffs 404..460], face game, box 472..824, back 836..880, scrollY 80; where "NFC Divisional · vs SF" final "WARI 38, SF 34" place ""
+  PASS  1280: round 2: no sideways scroll, every press 44 px and none overflowing
+  ....  round 2: box on screen true, first press on screen true
+  PASS  1280 rm A5-r2: reduced motion shows the result with no clock (clock seen: false)
+  ....  round 3 (watched his game): chip "2026 · Playoffs", buttons [Play the Super Bowl 404..460 | Watch your game 404..460 | Sim the rest of the playoffs 404..460], face game, box 472..824, back 836..880, scrollY 80; where "NFC Championship · vs PHI" final "WARI 20, PHI 9" place ""
+  PASS  1280: round 3: no sideways scroll, every press 44 px and none overflowing
+  ....  round 3: box on screen true, first press on screen true
+  PASS  1280 rm A5-r3: reduced motion shows the result with no clock (clock seen: false)
+  ....  round 4: the recap
+  PASS  1280: the run ends on the recap
+  PASS  1280: no page error (clean)
+
+review walk: 64 checks, 0 failed
