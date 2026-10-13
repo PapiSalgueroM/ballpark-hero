@@ -105,6 +105,22 @@ describe('the follower promises', () => {
   });
 });
 
+describe('card 11 names the row\'s injury', () => {
+  it.each([
+    ['MCL sprain', 'Your MCL sprain this season', 'Took time to recover from an MCL sprain'],
+    ['Achilles tendon rupture', 'Your Achilles tendon rupture this season', 'Took time to recover from an Achilles tendon rupture'],
+    ['Twisted ankle', 'Your twisted ankle this season', 'Took time to recover from a twisted ankle'],
+  ])('%s on its face and in the log line its first choice writes', (injury, face, log) => {
+    const s = career([row({ injury, injuryWeeks: 3 })]);
+    const card = getAllEvents(s).find(e => e.id === 11)!;
+    expect(card.description).toContain(face);
+    const after = card.choices[0].apply({ ...s, events: [...s.events] });
+    const line = after.events[after.events.length - 1];
+    expect(line).toContain(log);
+    expect(line).not.toMatch(/hamstring/i);
+  });
+});
+
 describe('an older save with card 17 on screen', () => {
   it('answers it and records the debut the way the season\'s call up does', () => {
     const s = career([row({ year: 2026 })], { internationalCareer: false, age: 23 });

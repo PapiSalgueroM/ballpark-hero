@@ -6428,7 +6428,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 11, emoji: "🏥", title: "Injury Trouble!", description: seasonCardText(11, state, "An injury this season has left its mark."),
       category: "negative", choices: [
         { label: "Focus on recovery", emoji: "🏥", color: "bg-red-600", consequence: "Pace -2, Morale -10",
-          apply: s => { s.pace = clamp(s.pace - 2, 20, 99); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "🏥 Serious hamstring injury: Pace -2"]; return s; } },
+          /* the log names the row's injury, as the card does (it used to log a serious hamstring injury whatever the row held) */
+          apply: s => { const injury = rowInjury(s); s.pace = clamp(s.pace - 2, 20, 99); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, `🏥 Took time to recover from ${injury ? withArticle(lowerFirst(injury)) : "an injury"}: Pace -2`]; return s; } },
         { label: "Rush back early", emoji: "⚡", color: "bg-amber-600", consequence: "Pace -1, with a 30% chance of reinjury (Pace -3 instead)",
           apply: s => { if (rollCareerChance(s, 0.3, 'Injury return', 'Reinjury', 'Successful return')) { s.pace = clamp(s.pace - 3, 20, 99); s.events = [...s.events, "🏥 Rushed back, reinjured! Pace -3"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🏥 Rushed back successfully: Pace -1"]; } return s; } },
       ] },
@@ -6746,12 +6747,18 @@ const lowerFirst = (t: string) => (/^(?!Achilles)[A-Z][a-z]/.test(t) ? t[0].toLo
 /* "an" before a vowel and before a letter read as a vowel sound in an abbreviation ("an MCL sprain") */
 const withArticle = (t: string) => `${/^([AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t) ? "an" : "a"} ${t}`;
 
+/** The injury the season's row holds, or null. Card 11's words and its log line both read it. */
+function rowInjury(state: CareerState): string | null {
+  const row = state.seasons[state.seasons.length - 1];
+  return row && row.type === "playing" && typeof row.injury === "string" && row.injury.length > 0 ? row.injury : null;
+}
+
 /** The words a narrating card prints, read off the season's row, or the
  *  fallback when the row does not hold the fact (an older saved card). */
 function seasonCardText(id: number, state: CareerState, fallback: string): string {
   const row = state.seasons[state.seasons.length - 1];
   if (!row || row.type !== "playing") return fallback;
-  if (id === 11 && row.injury) return `Your ${lowerFirst(row.injury)} this season has left its mark.`;
+  if (id === 11 && rowInjury(state)) return `Your ${lowerFirst(rowInjury(state)!)} this season has left its mark.`;
   if (id === 12 && typeof row.leagueFinish === "number") return `After finishing ${ordinalOf(row.leagueFinish)}, the club sacks the manager. The new one does not rate you.`;
   if (id === 15 && typeof row.leagueApps === "number") return `Only ${row.leagueApps} league game${row.leagueApps === 1 ? "" : "s"} this season, and now you are dropped from the starting lineup without explanation.`;
   if (id === 19 && row.tournament) return `You are left out of the ${row.tournament} squad.`;
