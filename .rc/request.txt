@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+simPotential: node scripts/simPotential.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareerAmbitions: node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerCareerUcl: node scripts/simSoccerCareerUcl.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simSoccerOpponentLabels: node scripts/simSoccerOpponentLabels.mjs
+simSoccerOwnGoals: node scripts/simSoccerOwnGoals.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
+simTraining: node scripts/simTraining.mjs
+simUsRivalSense: node scripts/simUsRivalSense.mjs
