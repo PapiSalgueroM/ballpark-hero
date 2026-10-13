@@ -45,7 +45,8 @@
  *      whose last row holds that fact, read here by this file's own rules;
  *      each of those cards but 17 fires; 17 never fires. Fixed rows the
  *      fleet cannot be relied on to reach are asked of the engine and of
- *      these rules directly: a season before the Puskas Award.
+ *      these rules directly: a season before the Puskas Award, and a bad
+ *      finish or a short season at a loan club he has since left.
  *   5  SENSATION. The headline prints in the fleet, and only at a million
  *      followers or more (the figure it prints ends in M).
  *   6  WORDING. Every story the paper can print, rendered for every position:
@@ -77,6 +78,7 @@
  *   globalpick the deck and the paper draw from Math.random: section 3.
  *   nogate     the row gate line out of the deck's filter: section 4.
  *   puskas     card 7 forgets the award's first season: section 4 (fixed rows).
+ *   loanclub   card 12 forgets the row must be his club's: section 4 (fixed rows).
  *   unit       the sensation check back to 1000000: section 5.
  *   poscode    the paper prints the raw position code: section 6.
  *   uncapped   the booed story calls an uncapped player an international: section 6.
@@ -137,6 +139,8 @@ const CONTROLS = {
     edits: [['    if (!cardFitsSeason(e.id, state)) return false;\n', '']] },
   puskas: { breaks: '4', note: 'card 7 deals a Puskas nominated goal in any season with goals, before the award existed too',
     edits: [['    case 7: return row.goals > 0 && row.year >= 2008;', '    case 7: return row.goals > 0;']] },
+  loanclub: { breaks: '4', note: 'card 12 deals a sacking at a loan club he has already left',
+    edits: [['    case 12: return row.club === state.currentClub && typeof row.leagueFinish', '    case 12: return typeof row.leagueFinish']] },
   unit: { breaks: '5', note: 'the sensation story needs 1000000 on a field held in millions again',
     edits: [['check: () => s.socialMediaFollowers >= 1,', 'check: () => s.socialMediaFollowers >= 1000000,']] },
   poscode: { breaks: '6', note: 'the paper prints the raw position code',
@@ -596,6 +600,10 @@ console.log('4) Gates: a card that narrates the season fires only when the row h
   const FIXTURES = [
     ['7, goals in 2005/06, before the Puskas Award existed', 7, { year: 2005, goals: 4 }, false],
     ['7, goals in 2008/09, the first season it covered', 7, { year: 2008, goals: 4 }, true],
+    ['12, 18th of 20 at a loan club he has since left', 12, { club: 'A Loan Club He Left', leagueFinish: 18, leagueSize: 20 }, false],
+    ['12, 18th of 20 at his club', 12, { leagueFinish: 18, leagueSize: 20 }, true],
+    ['15, 8 league games at a loan club he has since left', 15, { club: 'A Loan Club He Left', leagueApps: 8 }, false],
+    ['15, 8 league games at his club', 15, { leagueApps: 8 }, true],
   ];
   let asked = 0;
   for (const [what, id, over, want] of FIXTURES) {

@@ -83,6 +83,10 @@ describe('cards that narrate the season need the row to hold it', () => {
     expect(cardFitsSeason(15, career([row({ leagueApps: 25 })]))).toBe(false);
     expect(cardFitsSeason(15, career([row({ leagueApps: 12 })]))).toBe(true);
   });
+  it('12 and 15 are never dealt for a loan club he has already left', () => {
+    expect(cardFitsSeason(12, career([row({ club: 'A Loan Club He Left', leagueFinish: 17, leagueSize: 20 })]))).toBe(false);
+    expect(cardFitsSeason(15, career([row({ club: 'A Loan Club He Left', leagueApps: 12 })]))).toBe(false);
+  });
   it('17 is never dealt; 18 needs a first season of caps with a goal', () => {
     expect(cardFitsSeason(17, career([row()], { internationalCareer: false }))).toBe(false);
     expect(cardFitsSeason(18, career([row({ intApps: 4, intGoals: 0 })]))).toBe(false);
