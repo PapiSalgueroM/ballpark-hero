@@ -1,0 +1,236 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Elite patience\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"The board\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Next: Everton\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Form: L D L L W\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"FA Cup\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Alexander Isak leads with 7\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Kitty change this season\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Stadium, training, medical, more\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Attack, defence, keepers, scouts\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Seven skill trees to grow\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Currency, nation job, haggling\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"25% win rate\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"No injuries or bans\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"They sit #13\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"One question, one tap\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Jeremie Frimpong\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Recruitment 14/20 · 0 scouting\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"12 players still improving\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s320 Liverpool hub: under 12px: tile line: \"Latest transfers inside\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Elite patience\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"No messages yet\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Next: Newcastle\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Premier League\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"FA Cup\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Goals, assists, ratings\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Kitty change this season\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Stadium, training, medical, more\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Attack, defence, keepers, scouts\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Seven skill trees to grow\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Currency, nation job, haggling\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"New in the job\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"No injuries or bans\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"They sit #9\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"0 fronted up this career\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Set everyone a role\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"Recruitment 12/20 · 0 scouting\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"12 players still improving\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool hub: under 12px: tile line: \"2 bids for your players\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Underdogs patience\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"The head coach\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"See the schedule\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Form: L L D W D\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Copa del Rey\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Pablo Durán leads with 10\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Kitty change this season\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Stadium, training, medical, more\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Attack, defence, keepers, scouts\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Seven skill trees to grow\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Currency, nation job, haggling\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"29% win rate\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"No injuries or bans\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"They sit #14\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"One question, one tap\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Hugo Álvarez\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Recruitment 5/20 · 0 scouting\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"11 players still improving\" at 11px"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo hub: under 12px: tile line: \"Latest transfers inside\" at 11px"
+  }
+ ],
+ "counts": {
+  "C": 108
+ }
+}

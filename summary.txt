@@ -1,0 +1,15 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 42s | base server 200
+vitest exit=0 13s |    Duration  12.43s (transform 3.71s, setup 679ms, collect 10.88s, tests 14.55s, environment 4.60s, prepare 1.16s)
+control-small exit=1 28s | playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 108 pass 57 fail)
+tsc exit=0 85s | tsc exit 0
+playEra2005 exit=0 12s | playEra2005: green. The 2005-06 branch plays like a person would find it.
+control-cut exit=1 27s | playCmHubLanding: CONTROL cut FIRED, 60 C check(s) went red, first: s320 Liverpool team: cut: Board wants line: "Board wants Win the Premier League" (242/40 wide, 17/17 t
+playSponsors exit=0 17s | playSponsors: green. The desk offers three real deals and pays for the one you take.
+playInboxCard exit=0 12s | playInboxCard: owned temporary files, headless browser and localhost server cleaned.
+playNationJob exit=1 37s | Node.js v24.21.0
+simEarlyReturnScope exit=0 9s | simEarlyReturnScope: all green
+simClubManagerFinances exit=0 52s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk-head exit=1 281s | playCmHubLanding: 1 failure(s) (A 8 pass 0 fail, B 63 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 51 pass 1 fail, F 9 pass 0 fail)
+playClubManager exit=1 134s | Played Club Manager through its own screens. 1 findings.
