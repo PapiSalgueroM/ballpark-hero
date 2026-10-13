@@ -1,0 +1,2 @@
+#!serial
+arrival-control: node .rc/x/mutArrival.mjs && node_modules/.bin/vitest run src/test/useArrivalTop.test.tsx --testTimeout=300000; s=$?; git checkout -- src; echo "control vitest exit $s"; exit $s

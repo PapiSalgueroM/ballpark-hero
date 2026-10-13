@@ -1,0 +1,1 @@
+arrival-control exit=1 2s | control vitest exit 1

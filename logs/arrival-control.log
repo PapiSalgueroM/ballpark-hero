@@ -1,0 +1,69 @@
+CONTROL APPLIED: readable test removed from src/hooks/useArrivalTop.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/useArrivalTop.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 28[2mms[22m[39m
+   [32m✓[39m useArrivalTop[2m > [22ma top far above the screen lands once, at block start, instantly[32m 12[2mms[22m[39m
+[31m   [31m×[31m useArrivalTop[2m > [22ma top that is already readable moves nothing[39m[32m 6[2mms[22m[39m
+[31m     → expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array [
+      Object {
+        "behavior": "instant",
+        "block": "start",
+        "inline": "nearest",
+      },
+    ]
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+   [32m✓[39m useArrivalTop[2m > [22ma top below the fold with too little of it showing lands[32m 2[2mms[22m[39m
+   [32m✓[39m useArrivalTop[2m > [22ma null key does nothing[32m 2[2mms[22m[39m
+   [32m✓[39m useArrivalTop[2m > [22ma rerender with the same key does nothing more[32m 2[2mms[22m[39m
+   [32m✓[39m useArrivalTop[2m > [22ma zero height element does nothing[32m 1[2mms[22m[39m
+   [32m✓[39m useArrivalTop[2m > [22mleaving (null) and coming back (hub) lands again[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/useArrivalTop.test.tsx[2m > [22museArrivalTop[2m > [22ma top that is already readable moves nothing
+[31m[1mAssertionError[22m: expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array [
+      Object {
+        "behavior": "instant",
+        "block": "start",
+        "inline": "nearest",
+      },
+    ]
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/test/useArrivalTop.test.tsx:[2m44:27[22m[39m
+    [90m 42| [39m    rect [33m=[39m { top[33m:[39m [34m40[39m[33m,[39m bottom[33m:[39m [34m640[39m[33m,[39m height[33m:[39m [34m600[39m }[33m;[39m
+    [90m 43| [39m    [34mrender[39m([33m<[39m[33mProbe[39m [33mk[39m[33m=[39m[32m"hub"[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 44| [39m    [34mexpect[39m(scrollSpy)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 45| [39m  })[33m;[39m
+    [90m 46| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 04:12:57
+[2m   Duration [22m 711ms[2m (transform 45ms, setup 42ms, collect 100ms, tests 28ms, environment 237ms, prepare 110ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/useArrivalTop.test.tsx,title=src/test/useArrivalTop.test.tsx > useArrivalTop > a top that is already readable moves nothing,line=44,column=27::AssertionError: expected "spy" to not be called at all, but actually been called 1 times%0A%0AReceived: %0A%0A  1st spy call:%0A%0A    Array [%0A      Object {%0A        "behavior": "instant",%0A        "block": "start",%0A        "inline": "nearest",%0A      },%0A    ]%0A%0A%0ANumber of calls: 1%0A%0A ❯ src/test/useArrivalTop.test.tsx:44:27%0A%0A
+control vitest exit 1
