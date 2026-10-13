@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+hubgrid: node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/playSoccerHubGrid1089.mjs
+offerReview: node scripts/qa/soccerOfferAssets1082.mjs > /dev/null 2>&1; SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.mjs
+resultsLayout: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerResultsLayout.mjs
+pressMarket: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playCmHubLanding: ENGINES=chromium node scripts/playCmHubLanding.mjs
+playCorruptSaves: ENGINES=chromium node scripts/playCorruptSaves.mjs
+browser-sims: ONLY=simRevealScroll,simVictoryMoment node scripts/runAllSims.mjs --browser
