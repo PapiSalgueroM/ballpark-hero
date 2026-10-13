@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+cm-nobusiness: ENGINES=chromium CM_CONTROL=nobusiness node scripts/playClubManager.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+nation-nooffer: ENGINES=chromium NATION_JOB_CONTROL=nooffer node scripts/playNationJob.mjs
+nation-twotiles: ENGINES=chromium NATION_JOB_CONTROL=twotiles node scripts/playNationJob.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+wild-nooffers: ENGINES=chromium WILDERNESS_CONTROL=nooffers node scripts/playWilderness.mjs
+wild-nosack: ENGINES=chromium WILDERNESS_CONTROL=nosack node scripts/playWilderness.mjs
