@@ -1,0 +1,40 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/sag node scripts/simSoccerAwardGenerations.mjs
+vitest: node_modules/.bin/vitest run src/test/soccerAwardGeneration.test.ts src/test/soccerBallonPoolNameClash.test.tsx src/test/soccerBallonPoolReadAsAbsent.test.tsx src/test/soccerBallonPoolRetirement.test.tsx src/test/soccerCareerAwardGenerations.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+keeper-partballon: SIM_SAVE_KEEPER_CONTROL=partballon node scripts/simSaveKeeper.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+story-poolcopy: CAREER_STORY_CONTROL=poolcopy node scripts/simCareerStory.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simSoccerSeasonHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+keeper-partplayoffs: SIM_SAVE_KEEPER_CONTROL=partplayoffs node scripts/simSaveKeeper.mjs
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/lib/gmBracketView.test.ts src/test/gmBracketLedger.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+simFoHub: node scripts/simFoHub.mjs
+simFoHub-nopost: FO_HUB_CONTROL=nopost node scripts/simFoHub.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+gameday-undo: GM_GAMEDAY_CONTROL=undo node scripts/simGmGameDay.mjs
+gameday-keydrift: GM_GAMEDAY_CONTROL=keydrift node scripts/simGmGameDay.mjs
+gameday-trust: GM_GAMEDAY_CONTROL=trust node scripts/simGmGameDay.mjs
+gameday-keyrebuilt: GM_GAMEDAY_CONTROL=keyrebuilt node scripts/simGmGameDay.mjs
+gameday-logplayoff: GM_GAMEDAY_CONTROL=logplayoff node scripts/simGmGameDay.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+uspost-gmclubs: US_POST_CONTROL=gmclubs node scripts/simUsPostseason.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simGmReload: node scripts/simGmReload.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs

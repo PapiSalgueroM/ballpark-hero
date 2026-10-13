@@ -1,0 +1,44 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerBallonPoolNameClash.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 459[2mms[22m[39m
+ [32m✓[39m src/test/soccerBallonPoolRetirement.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 355[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 300[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 126802 bytes, save without story 111359
+[save parts] seed 9748: rest 61936 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+[save parts] seed 9748: opening cup ties 1978 bytes over 18 seasons, chance wheel 149 bytes
+[save parts] seed 9748: generated rivals' pool 4700 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 111161 bytes, save without story 93462
+[save parts] seed 9749: rest 74528 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+[save parts] seed 9749: opening cup ties 1967 bytes over 18 seasons, chance wheel 164 bytes
+[save parts] seed 9749: generated rivals' pool 5513 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 149823 bytes, save without story 128761
+[save parts] seed 9750: rest 79485 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+[save parts] seed 9750: opening cup ties 2276 bytes over 21 seasons, chance wheel 136 bytes
+[save parts] seed 9750: generated rivals' pool 5513 bytes
+
+ [32m✓[39m src/test/soccerCareerAwardGenerations.test.tsx [2m([22m[2m31 tests[22m[2m)[22m[33m 5946[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career generated-candidate save boundaries[2m > [22mholds complete legacy pool and old pending ballot over actual page reload [33m 494[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career generated-candidate save boundaries[2m > [22mholds complete generated pool and old pending ballot over actual page reload [33m 322[2mms[22m[39m
+ [32m✓[39m src/test/soccerBallonPoolReadAsAbsent.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 1737[2mms[22m[39m
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 6977[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9742: every line kept, in order, once [33m 442[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9743: every line kept, in order, once [33m 325[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 620[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 533[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound [33m 502[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 899[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 1056[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m79 passed[39m[22m[90m (79)[39m
+[2m   Start at [22m 03:16:27
+[2m   Duration [22m 13.48s[2m (transform 4.32s, setup 625ms, collect 13.88s, tests 15.77s, environment 4.39s, prepare 1.30s)[22m
+
