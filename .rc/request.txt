@@ -1,0 +1,6 @@
+simCreation: node scripts/simCreation.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simSaveRetry: SOCCER_CAREER_SAVE_RETRY_CONTROL=all node scripts/simSoccerCareerSaveRetry.mjs
+simSaveRecovery: SOCCER_CAREER_SAVE_CONTROL=all node scripts/simSoccerCareerSaveRecovery.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
