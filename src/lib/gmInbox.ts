@@ -190,6 +190,10 @@ export interface GmEventDef extends Omit<InboxMessageDef, 'phase' | 'choices' | 
 export interface GmInboxMessage extends InboxMessage {
   w?: number;
   auto?: true;
+  /** Round 1332, a compact pack's message only: the wording it was dealt
+   *  (0 is `text`) and what its slots printed, so it can be rebuilt. */
+  t?: number;
+  sv?: Record<string, string>;
 }
 
 /** Words for the meters, so the card reads in the seat's own language. */
@@ -224,6 +228,12 @@ export interface GmInboxPack {
    *  each filled from a fact. A person slot's fact is a person's id, printed
    *  as the name the seat gives it; any other prints the fact as it is. */
   slots?: Record<string, { fact: string; person?: true }>;
+  /** Round 1332: 'compact' opts in to a pruned cooldown book (on a rising
+   *  clock only: a pruned entry is not rebased when a clock falls) and to
+   *  messages saved as numbers by gmDeskSave. Absent is 'whole'. Its words
+   *  are then frozen (scripts/data/eventDeckWords.json): a saved message is
+   *  rebuilt from them. */
+  store?: 'whole' | 'compact';
   events: GmEventDef[];
 }
 
@@ -363,6 +373,17 @@ export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, G
     else if (pack.facts[sl.fact].kind === 'bool') out.push(`slot ${name} reads a yes or no fact, which names nobody`);
   }
   for (const [k, t] of Object.entries(pack.targets)) if (/[{}]/.test(t)) out.push(`target ${k} holds a brace`);
+  if (pack.store !== undefined && pack.store !== 'whole' && pack.store !== 'compact') out.push(`store ${pack.store} is neither whole nor compact`);
+  if (pack.store === 'compact') {
+    /* A compact save keeps ids and book keys short: two may never share one. */
+    const seen = new Map<string, string>();
+    for (const k of new Set(pack.events.flatMap(e => [e.id, bookKey(e)]))) {
+      const sk = gmShortKey(k);
+      const other = seen.get(sk);
+      if (other !== undefined) out.push(`${k} and ${other} share the short key ${sk}`);
+      else seen.set(sk, k);
+    }
+  }
   const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
   if (pack.subjectRest !== undefined && !whole(pack.subjectRest, 0)) out.push(`subjectRest ${pack.subjectRest} is not a whole number`);
   if (pack.clock !== undefined && pack.clock !== 'week' && pack.clock !== 'season') out.push(`clock ${pack.clock} is neither week nor season`);
@@ -576,7 +597,8 @@ const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
  * event in pack order; (6) up to `perWeek` picks, never past GM_INBOX_OPEN
  * unanswered (rule 3), each dropping its story and subject siblings with no
  * draw; (7) each pick's wording, from a keyed draw, never `rng`; (7b) its
- * slots filled; (8) the kept cap.
+ * slots filled; (8) the kept cap; (8b) a compact pack's book pruned to the
+ * entries still cooling.
  * The deck's draws all come from `rng`, so the same seed deals the same
  * deck. Returns what arrived. A seat that hands in `settled` gets every card
  * step (2) settled pushed onto it, even one the kept cap then drops, so it
@@ -653,6 +675,10 @@ export function gmInboxWeek<S extends GmInboxHost>(
       year, choices: e.choices, beat: e.beat,
     };
     if (e.expires !== undefined) msg.w = clock;
+    if (pack.store === 'compact') {
+      msg.t = pick;
+      if (sv && Object.keys(sv).length > 0) msg.sv = sv;
+    }
     inbox.push(msg);
     fresh.push(msg);
     if (e.oneShot) used.push(e.story ? bookKey(e) : e.id);
@@ -665,6 +691,8 @@ export function gmInboxWeek<S extends GmInboxHost>(
     if (idx === -1) break;
     inbox.splice(idx, 1);
   }
+  /* (8b) Round 1332: a compact pack's book keeps only what still cools. */
+  if (pack.store === 'compact') gmPruneBook(pack, last, clock);
   s.phoneInbox = inbox;
   s.phoneUsedIds = used;
   s.gmInboxLast = last;
@@ -789,4 +817,181 @@ export function repairGmInbox<S extends GmInboxHost>(s: S): S {
   if (s.gmInboxLast !== undefined && !isBook(s.gmInboxLast)) s.gmInboxLast = {};
   if (s.gmInboxRest !== undefined && !isBook(s.gmInboxRest)) delete s.gmInboxRest;
   return s;
+}
+
+/* ─── Round 1332: the compact desk ───────────────────────────────────────────
+
+   A Club Manager save has little room, and a desk dealt forty five cards a
+   season would grow its book every season and save every message whole. A
+   pack that opts in (`store: 'compact'`) keeps a pruned book (step 8b) and
+   is saved by gmDeskSave as numbers: short keys for ids and book keys, and
+   each message as its card, year, clock, wording and slot values, rebuilt
+   from the pack by gmDeskLoad. Its words are frozen once shipped
+   (scripts/data/eventDeckWords.json), so a rebuilt message reads exactly as
+   it was dealt. Nothing calls the codec yet: the binding rounds will, at
+   save and load. It holds no answer or cap logic. */
+
+/** A ledger key or id as a short key: FNV 1a, 32 bit, in base 36. */
+export function gmShortKey(key: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < key.length; i++) {
+    h ^= key.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(36);
+}
+
+/* The pack's cards by book key and by short key, built once a deck. */
+const KEY_INDEX = new WeakMap<GmEventDef[], Map<string, GmEventDef[]>>();
+const SHORT_INDEX = new WeakMap<GmEventDef[], Map<string, string>>();
+const keyIndex = (pack: GmInboxPack): Map<string, GmEventDef[]> => {
+  let m = KEY_INDEX.get(pack.events);
+  if (!m) {
+    m = new Map();
+    for (const e of pack.events) m.set(bookKey(e), [...(m.get(bookKey(e)) ?? []), e]);
+    KEY_INDEX.set(pack.events, m);
+  }
+  return m;
+};
+const shortIndex = (pack: GmInboxPack): Map<string, string> => {
+  let m = SHORT_INDEX.get(pack.events);
+  if (!m) {
+    m = new Map();
+    for (const e of pack.events) for (const k of [e.id, bookKey(e)]) m.set(gmShortKey(k), k);
+    SHORT_INDEX.set(pack.events, m);
+  }
+  return m;
+};
+
+/** Step 8b: an entry goes once every card sharing its key has cooled at
+ *  this clock (the week rule, or careerEventDeck's on a season clock), or
+ *  when no card holds its key. On a rising clock a cooled entry and an
+ *  absent one deal the same. */
+function gmPruneBook(pack: GmInboxPack, last: Record<string, number>, clock: number): void {
+  const byKey = keyIndex(pack);
+  for (const [k, at] of Object.entries(last)) {
+    const sharing = byKey.get(k) ?? [];
+    if (sharing.every(e => (pack.clock === 'season' ? !onCooldown(last, e, clock, pack.cooldown) : clock - at >= (e.cooldown ?? pack.cooldown)))) delete last[k];
+  }
+}
+
+/** One message as numbers: its card's short key, year, clock, the id's
+ *  repeat suffix, wording, slot values, arrival, answer and auto. */
+export interface GmCompactMsg { d: string; y: number; c: number; n?: number; t?: number; s?: Record<string, string>; w?: number; a?: number; x?: 1 }
+/** A desk's four inbox fields as saved. */
+export interface GmDeskBlock { v: 1; l?: Record<string, number>; u?: string[]; r?: Record<string, number>; m?: (GmCompactMsg | InboxMessage)[] }
+/** The four host fields a block reads back to. */
+export interface GmDeskFields { phoneInbox?: InboxMessage[]; phoneUsedIds?: string[]; gmInboxLast?: Record<string, number>; gmInboxRest?: Record<string, number> }
+
+const ID_TAIL = /^(\d+)(?:-(\d+))?$/;
+const isNumBook = (b: unknown): b is Record<string, number> => !!b && typeof b === 'object' && !Array.isArray(b)
+  && Object.values(b as Record<string, unknown>).every(v => typeof v === 'number' && Number.isFinite(v));
+const isWordBook = (b: unknown): b is Record<string, string> => !!b && typeof b === 'object' && !Array.isArray(b)
+  && Object.values(b as Record<string, unknown>).every(v => typeof v === 'string');
+
+/** A compact pack's message as numbers, or null to save it whole: a message
+ *  whose id does not parse as `${defId}-${year}-w${clock}` (and `-${n}`),
+ *  whose card is gone, or that was not dealt compact (no wording index). */
+function compactOf(m: InboxMessage, pack: GmInboxPack): GmCompactMsg | null {
+  const g = m as GmInboxMessage;
+  if (typeof g.t !== 'number' || !pack.events.some(e => e.id === m.defId)) return null;
+  const head = `${m.defId}-${m.year}-w`;
+  const tail = m.id.startsWith(head) ? ID_TAIL.exec(m.id.slice(head.length)) : null;
+  if (!tail) return null;
+  const out: GmCompactMsg = { d: gmShortKey(m.defId), y: m.year, c: Number(tail[1]) };
+  if (tail[2] !== undefined) out.n = Number(tail[2]);
+  if (g.t) out.t = g.t;
+  if (g.sv) out.s = g.sv;
+  if (g.w !== undefined) out.w = g.w;
+  if (m.answered !== undefined) out.a = m.answered;
+  if (g.auto) out.x = 1;
+  return out;
+}
+
+/** A desk's four inbox fields as a block for the save: a compact pack's as
+ *  numbers, any other pack's as they are. */
+export function gmDeskSave(s: GmInboxHost, pack: GmInboxPack): GmDeskBlock {
+  const compact = pack.store === 'compact';
+  const out: GmDeskBlock = { v: 1 };
+  if (s.gmInboxLast) {
+    const l: Record<string, number> = {};
+    for (const [k, at] of Object.entries(s.gmInboxLast)) l[compact ? gmShortKey(k) : k] = at;
+    out.l = l;
+  }
+  if (s.phoneUsedIds) out.u = compact ? s.phoneUsedIds.map(gmShortKey) : [...s.phoneUsedIds];
+  if (s.gmInboxRest) out.r = { ...s.gmInboxRest };
+  if (s.phoneInbox) out.m = s.phoneInbox.map(m => (compact ? compactOf(m, pack) ?? m : m));
+  return out;
+}
+
+/** A compact message rebuilt from its card, or null when its card or its
+ *  wording is gone or a field is broken. */
+function rebuild(c: GmCompactMsg, pack: GmInboxPack): GmInboxMessage | null {
+  const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
+  const id = typeof c.d === 'string' ? shortIndex(pack).get(c.d) : undefined;
+  const e = id === undefined ? undefined : pack.events.find(x => x.id === id);
+  if (!e || !whole(c.y, 0) || !whole(c.c, 0) || !(c.n === undefined || whole(c.n, 2))) return null;
+  const t = c.t ?? 0;
+  const words = !whole(t, 0) ? undefined : t === 0 ? e.text : e.texts?.[t - 1];
+  if (words === undefined) return null;
+  if (c.s !== undefined && !isWordBook(c.s)) return null;
+  if (c.w !== undefined && !(typeof c.w === 'number' && Number.isFinite(c.w))) return null;
+  if (c.a !== undefined && !(whole(c.a, 0) && c.a < e.choices.length)) return null;
+  if (c.x !== undefined && !(c.x === 1 && c.a !== undefined)) return null;
+  const msg: GmInboxMessage = {
+    id: `${e.id}-${c.y}-w${c.c}${c.n === undefined ? '' : `-${c.n}`}`, defId: e.id, from: e.from, emoji: e.emoji,
+    text: c.s ? gmFill(words, c.s) : words, year: c.y, choices: e.choices, beat: e.beat,
+  };
+  if (c.w !== undefined) msg.w = c.w;
+  msg.t = t;
+  if (c.s) msg.sv = c.s;
+  if (c.a !== undefined) msg.answered = c.a;
+  if (c.x === 1) msg.auto = true;
+  return msg;
+}
+
+/**
+ * A saved block back to the desk's four fields. It fails closed field by
+ * field, like repairGmInbox: a block that is not `v: 1` reads as an empty
+ * desk, a broken field resets alone, a compact message whose card or
+ * wording is gone is dropped and counted, and a whole message from an older
+ * build is kept when it reads as a message.
+ */
+export function gmDeskLoad(block: unknown, pack: GmInboxPack): { host: GmDeskFields; dropped: number } {
+  const b = block as Partial<GmDeskBlock> | null;
+  if (!b || typeof b !== 'object' || b.v !== 1) return { host: { phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} }, dropped: 0 };
+  const compact = pack.store === 'compact';
+  const keys = shortIndex(pack);
+  const host: GmDeskFields = {};
+  let dropped = 0;
+  if (b.m !== undefined) {
+    const list: InboxMessage[] = [];
+    if (Array.isArray(b.m)) {
+      for (const raw of b.m as unknown[]) {
+        const isCompact = !!raw && typeof raw === 'object' && 'd' in raw && !('id' in raw);
+        const m = isCompact ? (compact ? rebuild(raw as GmCompactMsg, pack) : null) : (isMsg(raw) ? raw : null);
+        if (m && isMsg(m)) list.push(m);
+        else dropped++;
+      }
+    }
+    host.phoneInbox = list;
+  }
+  if (b.u !== undefined) {
+    const u: unknown = b.u;
+    const ok = Array.isArray(u) && u.every(x => typeof x === 'string');
+    host.phoneUsedIds = !ok ? [] : compact
+      ? (u as string[]).map(k => keys.get(k)).filter((k): k is string => k !== undefined) : [...(u as string[])];
+  }
+  if (b.l !== undefined) {
+    const l: Record<string, number> = {};
+    if (isNumBook(b.l)) {
+      for (const [k, at] of Object.entries(b.l)) {
+        const full = compact ? keys.get(k) : k;
+        if (full !== undefined) l[full] = at;
+      }
+    }
+    host.gmInboxLast = l;
+  }
+  if (b.r !== undefined && isNumBook(b.r)) host.gmInboxRest = { ...b.r };
+  return { host, dropped };
 }

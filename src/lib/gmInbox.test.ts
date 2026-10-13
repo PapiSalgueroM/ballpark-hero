@@ -12,6 +12,7 @@ import { onCooldown } from './careerEventDeck';
 import { gmChoiceLabel } from './gmInbox';
 import type { GmChoiceDef, GmFxRegistry, GmInboxBinding } from './gmInbox';
 import { gmCardSafe } from './gmInbox';
+import { gmDeskLoad, gmDeskSave, gmShortKey } from './gmInbox';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -708,5 +709,102 @@ describe('gmInbox Round 1332: slots, tags and the resolver', () => {
     expect(gmPackProblems(SLOT_TOY)).toEqual([]);
     expect(() => bindGmInbox<SquadDesk>(SLOT_TOY, { moodOf: s => s.trust, setMood: () => undefined, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year, setOut: () => undefined }))
       .toThrow(/cannot say who anyone is/);
+  });
+});
+
+/* ─── Round 1332: the compact desk ───────────────────────────────────────── */
+
+const COMPACT_TOY: GmInboxPack = {
+  ...TOY, seat: 'compacttoy', calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 }, cooldown: 3, chance: 0.5, perWeek: 1,
+  facts: {}, targets: { star: 'Your star' }, store: 'compact',
+  events: [
+    { id: 'c1', beat: 'a', from: 'Ownership', emoji: 'x', text: 'One.', texts: ['One again.', 'One more time.'], choices: [{ label: 'Go', reply: 'Go.', karma: 1 }, { label: 'Wait', reply: 'Wait.', karma: 0 }] },
+    { id: 'c2', beat: 'a', from: 'Ownership', emoji: 'x', text: 'Two.', story: 'pair', cooldown: 5, choices: [{ label: 'Go', reply: 'Go.', karma: 1 }] },
+    { id: 'c3', beat: 'a', from: 'Ownership', emoji: 'x', text: 'Three.', story: 'pair', choices: [{ label: 'Go', reply: 'Go.', karma: 1 }] },
+    { id: 'c4', beat: 'a', from: 'Ownership', emoji: 'x', text: 'Four.', oneShot: true, choices: [{ label: 'Go', reply: 'Go.', karma: 1 }] },
+  ],
+};
+const runToy = (pack: GmInboxPack, weeks: number, codec = false) => {
+  const s = desk();
+  const seat = seatFor(pack);
+  const rng = keyedRng('compact-toy');
+  const log: string[] = [];
+  for (let w = 0; w < weeks; w++) {
+    const got = gmInboxWeek(s, seat, 'a', {}, w, rng);
+    for (const m of (s.phoneInbox ?? []).filter(x => x.answered === undefined)) if (w % 3 !== 0) answerGmInbox(s, m.id, 0, seat);
+    log.push(`${got.map(m => `${m.id}:${m.text}`).join(',')}|${(s.phoneInbox ?? []).map(m => `${m.id}:${m.answered}`).join(',')}|${s.trust}`);
+    if (codec) Object.assign(s, gmDeskLoad(JSON.parse(JSON.stringify(gmDeskSave(s, pack))), pack).host);
+  }
+  return { s, log };
+};
+
+describe('gmInbox Round 1332: the compact desk', () => {
+  it('a compact desk deals, answers and moves exactly as a whole one over 200 weeks', () => {
+    const whole = runToy({ ...COMPACT_TOY, store: undefined }, 200);
+    const compact = runToy(COMPACT_TOY, 200);
+    expect(compact.log).toEqual(whole.log);
+    for (const [k, at] of Object.entries(compact.s.gmInboxLast ?? {})) expect(whole.s.gmInboxLast?.[k]).toBe(at);
+    expect(Object.keys(compact.s.gmInboxLast ?? {}).length).toBeLessThan(Object.keys(whole.s.gmInboxLast ?? {}).length);
+  });
+
+  it('prunes on the week clock once every card of a key has cooled, and keeps one still cooling', () => {
+    const s = desk();
+    const seat = seatFor({ ...COMPACT_TOY, chance: 1, events: [COMPACT_TOY.events[1], COMPACT_TOY.events[2]] });
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    expect(s.gmInboxLast).toEqual({ 'story:pair': 0 });
+    /* c2 cools after 5, c3 after the pack's 3: the stamp stays until both
+       have. Beat b deals nothing, so only the prune moves the book. */
+    gmInboxWeek(s, seat, 'b', {}, 3, () => 0);
+    expect(s.gmInboxLast).toEqual({ 'story:pair': 0 });
+    gmInboxWeek(s, seat, 'b', {}, 5, () => 0);
+    expect(s.gmInboxLast).toEqual({});
+  });
+
+  it('prunes on the season clock by careerEventDeck\'s rule', () => {
+    const pack: GmInboxPack = { ...COMPACT_TOY, clock: 'season', cooldown: 1, chance: 1, events: [COMPACT_TOY.events[0]] };
+    const s = desk();
+    const seat = seatFor(pack);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    answerGmInbox(s, s.phoneInbox![0].id, 0, seat);
+    gmInboxWeek(s, seat, 'a', {}, 1, () => 0);
+    expect(s.gmInboxLast).toEqual({ c1: 0 });
+    expect(onCooldown({ c1: 0 }, pack.events[0], 1, 1)).toBe(true);
+    gmInboxWeek(s, seat, 'a', {}, 2, () => 0);
+    expect(s.gmInboxLast).toEqual({ c1: 2 });
+  });
+
+  it('a save and load between every two weeks changes nothing, and saves numbers', () => {
+    const plain = runToy(COMPACT_TOY, 120);
+    const codec = runToy(COMPACT_TOY, 120, true);
+    expect(codec.log).toEqual(plain.log);
+    const block = gmDeskSave(plain.s, COMPACT_TOY);
+    expect((block.m ?? []).every(m => 'd' in m)).toBe(true);
+    expect(JSON.stringify(gmDeskLoad(JSON.parse(JSON.stringify(block)), COMPACT_TOY).host.phoneInbox)).toBe(JSON.stringify(plain.s.phoneInbox));
+  });
+
+  it('the loader: a block not v 1 is an empty desk, a bad field resets alone, an older whole message stays, a lost card is dropped and counted', () => {
+    const { s } = runToy(COMPACT_TOY, 40);
+    const block = JSON.parse(JSON.stringify(gmDeskSave(s, COMPACT_TOY)));
+    expect(gmDeskLoad({ ...block, v: 2 }, COMPACT_TOY).host).toEqual({ phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} });
+    const bent = gmDeskLoad({ ...block, l: 'x', u: [1] }, COMPACT_TOY).host;
+    expect([bent.gmInboxLast, bent.phoneUsedIds]).toEqual([{}, []]);
+    expect(bent.phoneInbox).toEqual(s.phoneInbox);
+    const old = { id: 'c1-2025-w1', defId: 'c1', from: 'Ownership', emoji: 'x', text: 'Saved whole long ago.', year: 2025, choices: COMPACT_TOY.events[0].choices, answered: 1 };
+    const out = gmDeskLoad({ ...block, m: [old, { d: gmShortKey('gone'), y: 2026, c: 1 }, { d: gmShortKey('c1'), y: 2026, c: 2, t: 9 }] }, COMPACT_TOY);
+    expect(out.host.phoneInbox).toEqual([old]);
+    expect(out.dropped).toBe(2);
+  });
+
+  it('a compact pack whose keys collide is refused, and short keys are stable', () => {
+    expect(gmShortKey('c1')).toBe(gmShortKey('c1'));
+    expect(gmShortKey('c1')).not.toBe(gmShortKey('c2'));
+    expect(gmPackProblems(COMPACT_TOY)).toEqual([]);
+    expect(gmPackProblems({ ...COMPACT_TOY, store: 'tiny' as never }).join()).toMatch(/neither whole nor compact/);
+    /* Two different ids with one short key, found by a search over card_0
+       to card_1500000 (the first pair it met). */
+    const pair = ['card_730575', 'card_1340920'];
+    expect(gmShortKey(pair[0])).toBe(gmShortKey(pair[1]));
+    const clash = { ...COMPACT_TOY, events: pair.map(id => ({ ...COMPACT_TOY.events[0], id })) };
+    expect(gmPackProblems(clash).join()).toMatch(/share the short key/);
   });
 });

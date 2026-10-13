@@ -108,6 +108,30 @@
         real: every tagged card dealt and every answer to one lands on
         generated men only, tagged cards were held for real men, and no
         dealt text keeps a brace.
+     13) COMPACT. Every GM pack with store: 'compact' set in memory, plus
+        FX_COMPACT (stories, a subject, one shots, wordings, slots, expiry)
+        and its season clock twin, on the FLEET drive at seeds 1 to 3 (a
+        rising clock), each desk three ways: whole, compact, and compact
+        through gmDeskSave, JSON and gmDeskLoad between every two weeks.
+        Compact deals, answers and moves exactly as whole (a hash over ids,
+        texts, the inbox, answer lines and meters a week; never the book,
+        which differs by design); the codec run equals the compact one to
+        the byte (all four fields, text included); every week the book
+        holds exactly the entries still cooling, the one shots never pass
+        the pack's one shot keys, never more than eight kept. Then a size
+        report (FX_BIG, 420 cards, Club Manager's rhythm, 20 desks of 15
+        seasons: the compact block's mean bytes and the whole desk's) and
+        the loader's three cases.
+     14) FROZEN WORDS. scripts/data/eventDeckWords.json, for every pack whose
+        source declares store: 'compact' (FX_COMPACT today, COMPACT_PACKS
+        append only): no recorded card gone, no wording changed or moved,
+        a new wording only at the end, no option added, removed, reordered
+        or relabelled, no story added or taken away, no card without a row.
+        SIM_EVENT_DECK_WORDS=append adds rows and trailing wordings, never
+        rewrites one (a changed row is the lead's call, like the replay).
+
+   SIM_EVENT_DECK_SECTIONS=11,12 runs only the sections named (section 1
+   also runs when 2 or 3 does); the green line then names them.
 
    No board binds gmInbox yet (the importers are its own test, the packs, the
    panel and two harnesses), so every drive here is a synthetic desk: each
@@ -166,6 +190,16 @@
                 12 fails.
      rosterword a real roster name goes into an FX_CONDUCT text (in
                 memory); section 12 fails.
+     pruneearly the prune drops an entry one tick before it cools; section
+                13 fails (the book no longer holds every entry still
+                cooling).
+     codecword  the codec drops the wording index; section 13 fails.
+     codecslot  the codec drops the slot values; section 13 fails.
+     wordedit   FX_COMPACT's k_words gets an edited first wording (in
+                memory); section 14 fails.
+     wordorder  k_words's two wordings swap places (in memory); section 14
+                fails.
+     storymove  k_plain joins a story (in memory); section 14 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -188,9 +222,15 @@ const ROOT = path.resolve(path.dirname(SELF), '..');
 const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
+/* Round 1332: SIM_EVENT_DECK_SECTIONS=11,12 runs only those sections (1 runs
+   too when 2 or 3 does, which read its rows), so the gate can split the kit
+   in two lines. Absent: every section. */
+const SECTIONS = (process.env.SIM_EVENT_DECK_SECTIONS || '').split(',').filter(Boolean).map(Number);
+const runs = n => SECTIONS.length === 0 || SECTIONS.includes(n) || (n === 1 && (SECTIONS.includes(2) || SECTIONS.includes(3)));
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
-  'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword'];
+  'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
+  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -238,6 +278,10 @@ const ENGINE_CONTROLS = {
   fxneutral: ['    && !gmFxMoves(c));', '    ); /* fxneutral control */'],
   conductreal: ['  return people.every(ref => who(ref)?.real === false);', '  return true; /* conductreal control */'],
   slotopen: ['    if (!sl || !named(v)) return false;', '    if (!sl) return false; /* slotopen control */'],
+  pruneearly: ['    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock, pack.cooldown) : clock - at >= (e.cooldown ?? pack.cooldown)))) delete last[k];',
+    '    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock + 1, pack.cooldown) : clock + 1 - at >= (e.cooldown ?? pack.cooldown)))) delete last[k]; /* pruneearly control */'],
+  codecword: ['  if (g.t) out.t = g.t;', '  /* codecword control */'],
+  codecslot: ['  if (g.sv) out.s = g.sv;', '  /* codecslot control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -392,7 +436,7 @@ const secs = () => ((Date.now() - T0) / 1000).toFixed(1);
 
 console.log(`1) Replay: ${GM_SEATS.length} GM packs, seeds ${SEEDS.join(', ')}, drives ${KINDS.join(', ')}, ${SEASONS} seasons a desk`);
 const ROWS = {};
-{
+if (runs(1)) {
   const seats = SHARD ? GM_SEATS.filter(k => k === SHARD) : GM_SEATS;
   if (SHARD && seats.length === 0) { console.error(`SIM_EVENT_DECK_SHARD=${SHARD} is not a GM seat`); process.exit(2); }
   for (const seat of seats) for (const seed of SEEDS) for (const kind of KINDS) ROWS[`${seat}|${seed}|${kind}`] = runRow(GM[seat], seat, seed, kind);
@@ -483,7 +527,7 @@ function fxRun(pack, key, ticks, { facts = () => ({}), answer = 'all', bind = {}
 console.log('2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing');
 let gmStates = 0;
 let gmGrew = 0;
-{
+if (runs(2)) {
   const seats = Object.keys(ROWS).map(k => k.split('|')[0]).filter((k, i, a) => a.indexOf(k) === i);
   const k0 = seats[0];
   const again = runRow(GM[k0], k0, 1, 'FLEET');
@@ -517,7 +561,7 @@ let gmGrew = 0;
 
 console.log('3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank');
 const REC = fs.existsSync(REPLAY_FILE) ? JSON.parse(fs.readFileSync(REPLAY_FILE, 'utf8')) : { rows: {} };
-{
+if (runs(3)) {
   const seats = Object.keys(ROWS).map(k => k.split('|')[0]).filter((k, i, a) => a.indexOf(k) === i);
   for (const w of [1, 2.5]) {
     const moved = seats.filter(seat => {
@@ -560,7 +604,7 @@ const REC = fs.existsSync(REPLAY_FILE) ? JSON.parse(fs.readFileSync(REPLAY_FILE,
 /* ═══ 4. STORY: cards of one story share one stamp and one one shot ═══ */
 
 console.log('4) Story: never two of one story inside its cooldown or in one week, a one shot story once');
-{
+if (runs(4)) {
   const FX_STORY = fxPack('fx_story', [
     fxCard('feud1', { story: 'feud' }), fxCard('feud2', { story: 'feud', cooldown: 9 }), fxCard('feud3', { story: 'feud' }),
     fxCard('exitA', { story: 'exit', oneShot: true }), fxCard('exitB', { story: 'exit', oneShot: true }), fxCard('exitC', { story: 'exit' }),
@@ -611,7 +655,7 @@ console.log('4) Story: never two of one story inside its cooldown or in one week
 /* ═══ 5. SUBJECT REST: no one man twice inside his rest ═══ */
 
 console.log('5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned');
-{
+if (runs(5)) {
   const REST = 6;
   const FX_SUBJECT = fxPack('fx_subject', [
     fxCard('cap1', { subject: 'captain' }), fxCard('cap2', { subject: 'captain' }), fxCard('keep1', { subject: 'keeper' }),
@@ -714,7 +758,7 @@ console.log('5) Subject rest: no subject inside its rest or twice in a week, the
 /* ═══ 6. TEXTS: wordings move no deal, and a key reads the same words ═══ */
 
 console.log('6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words');
-{
+if (runs(6)) {
   /* The variant counts this section was measured on: 2 and 4 wordings. */
   const FX_TEXTS = fxPack('fx_texts', [
     fxCard('pair', { texts: ['The pair matter is back on the desk.'] }),
@@ -774,7 +818,7 @@ const fxHard = (id, extra = {}) => fxCard(id, {
 const FX_EXPIRE = fxPack('fx_expire', [
   fxHard('e2', { expires: 2 }), fxHard('e3', { expires: 3 }), fxHard('e4', { expires: 4 }), fxHard('e6', { expires: 6 }),
 ], { chance: 0.5, cooldown: 3 });
-{
+if (runs(7)) {
   const ttl = new Map(FX_EXPIRE.events.map(e => [e.id, e.expires]));
   const meters = s => JSON.stringify([s.morale, s.trust, s.fans, s.cash, s.recruit, s.out, s.rating]);
   const calm = meters(newDesk());
@@ -957,7 +1001,7 @@ const NEUTRAL_BASELINE = ['afl', 'college', 'gym', 'mlb', 'nba', 'nfl', 'nhl'];
 const FX_NEUTRAL = fxPack('fx_neutral', [
   fxHard('n1'), fxHard('n2'), fxCard('n3'),
 ]);
-{
+if (runs(8)) {
   if (CONTROL === 'neutral') {
     const c = FX_NEUTRAL.events[0].choices[1];
     if (!c || c.karma !== 0 || E.gmNeutralIndex(FX_NEUTRAL.events[0].choices) !== 1) { console.error('neutral control: n1 has no neutral second option, refusing to run'); process.exit(2); }
@@ -990,7 +1034,7 @@ const FX_NEUTRAL = fxPack('fx_neutral', [
 /* ═══ 9. SEASON CLOCK: careerEventDeck's rule, and the week rule kept ═══ */
 
 console.log('9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N');
-{
+if (runs(9)) {
   const FX_SEASON = fxPack('fx_season', [
     fxCard('s0', { cooldown: 0 }), fxCard('s1', { cooldown: 1 }), fxCard('s3', { cooldown: 3 }), fxCard('sd'),
     fxCard('arcA', { story: 'arc', cooldown: 4 }), fxCard('arcB', { story: 'arc' }),
@@ -1035,7 +1079,7 @@ console.log('9) Season clock: a card is held out exactly as careerEventDeck hold
 /* ═══ 10. SHARE AND REACH over the FLEET drive ═══ */
 
 console.log('10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack\'s measured ceiling');
-{
+if (runs(10)) {
   const packs = { ...ALL_PACKS };
   /* The brief's form of this control (one NFL card at weight 50) changed
      nothing here, measured: every NFL card sits out a whole season (cooldown
@@ -1116,9 +1160,9 @@ const FX_REGISTRY = fxPack('fx_registry', [
     fxCh('Rest him', { out: { who: 'keeper', weeks: 1 }, rating: { who: 'keeper', delta: 1 }, fx: { ban: { who: 'keeper', v: 1 } } }),
     fxCh('Play him', { fx: { form: { who: 'captain', v: 0 } } })] }),
   fxCard('r5', { choices: [fxCh('Fine him', { fx: { fund: 0.5 } }), fxCh('Let it go')] }),
-  fxCard('r6', { choices: [fxCh('Call the family', { recruit: 2, fx: { board: -1 } }), fxCh('Skip it')] }),
+  fxCard('r6', { choices: [fxCh('Make the recruiting call', { recruit: 2, fx: { board: -1 } }), fxCh('Skip it')] }),
 ]);
-{
+if (runs(11)) {
   const pack = FX_REGISTRY;
   const T = Object.keys(pack.targets);
   /* Everything a desk holds that an option could move, read the slow way. */
@@ -1265,7 +1309,7 @@ const PRIVATE_WORDS = /\b(family|homesick|faith|pray\w*|fasting|religio\w*|illne
    generated youngster, or reword it, and re-record the replay by the lead's
    leave. */
 const LEGAL_BASELINE = { 'afl/afl_go_home': 'homesick', 'nba/nba_trade_demand': 'leaked' };
-{
+if (runs(12)) {
   if (CONTROL === 'quoteslot') {
     const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
     if (!e || e.texts) { console.error('quoteslot control: n_form is not there without wordings, refusing to run'); process.exit(2); }
@@ -1377,7 +1421,7 @@ const LEGAL_BASELINE = { 'afl/afl_go_home': 'homesick', 'nba/nba_trade_demand': 
    at least one tagged card must have been held for a real man; no dealt
    text may keep a brace. Desks answer every open card the week it lands,
    so a role is the same man at the deal and at the answer. */
-{
+if (runs(12)) {
   const seat = E.bindGmInbox(FX_CONDUCT, { ...BINDING, fx: FX_CONDUCT_FX, person: conductPerson });
   const byId = new Map(FX_CONDUCT.events.map(e => [e.id, e]));
   const refsOf = (e, facts) => {
@@ -1434,6 +1478,232 @@ const LEGAL_BASELINE = { 'afl/afl_go_home': 'homesick', 'nba/nba_trade_demand': 
   else ok(`${line}; every tagged card and every answer to one landed on generated men only, no dealt text kept a brace`);
 }
 
+/* ═══ 13. COMPACT: a pruned book and messages saved as numbers deal the same ═══ */
+
+/* FX_COMPACT: stories, a subject with a rest, one shots (plain and a
+   story's), wordings, a person slot and a plain one, an expiring card, a
+   long cooldown, on the week clock; FX_COMPACT_SEASON is the same cards on
+   the season clock. Placeholder people only. */
+const FX_COMPACT = fxPack('fx_compact', [
+  fxCard('k_plain', { cooldown: 3 }), fxCard('k_once', { oneShot: true }),
+  fxCard('k_arc_a', { story: 'arc', cooldown: 6 }), fxCard('k_arc_b', { story: 'arc' }),
+  fxCard('k_saga_a', { story: 'saga', oneShot: true }), fxCard('k_saga_b', { story: 'saga', oneShot: true }),
+  fxCard('k_words', { texts: ['The k_words matter came up again.', 'Another k_words matter landed on the desk.'] }),
+  fxCard('k_slot', { text: '{player} has a matter for you this week.', texts: ['A matter about {player} needs a call.'], subject: { fact: 'man' } }),
+  fxCard('k_rival', { text: 'The {opponent} matter needs a call before the weekend.' }),
+  fxHard('k_exp', { expires: 3 }), fxCard('k_cool', { cooldown: 12 }),
+], { store: 'compact', chance: 0.6, cooldown: 4, subjectRest: 3,
+  facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
+  slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } } });
+const FX_COMPACT_SEASON = { ...FX_COMPACT, seat: 'fx_compact_season', clock: 'season', cooldown: 2 };
+const compactPerson = (s, ref) => ('role' in ref ? { name: `Your ${ref.role}`, real: false } : { name: `Player ${Math.round(Number(ref.id))}`, real: false });
+const COMPACT_BIND = { person: compactPerson };
+const whole4 = s => JSON.stringify([s.phoneInbox, s.phoneUsedIds, s.gmInboxLast, s.gmInboxRest]);
+if (runs(13)) {
+  console.log('13) Compact: a pruned book and messages saved as numbers deal, answer and read exactly as a whole desk does');
+  const meters = s => JSON.stringify([s.morale, s.trust, s.fans, s.cash, s.recruit, s.out, s.rating]);
+  const oneShotKeys = p => new Set(p.events.filter(e => e.oneShot).map(e => (e.story ? `story:${e.story}` : e.id))).size;
+  const keyOf = e => (e.story ? `story:${e.story}` : e.id);
+  /* One FLEET row three ways: whole, compact, compact through the codec
+     between every two weeks. Returns per desk hashes and the breaks. */
+  const row = (pack, tag, seed) => {
+    const whole = { ...pack, store: undefined };
+    const compact = { ...pack, store: 'compact' };
+    const bind = pack.slots ? COMPACT_BIND : {};
+    const out = { i: 0, ii: 0, desks: 0, bad: [], weeks: 0, pruned: 0, dropped: 0 };
+    const limitUsed = oneShotKeys(pack);
+    const byKey = new Map();
+    for (const e of pack.events) byKey.set(keyOf(e), [...(byKey.get(keyOf(e)) ?? []), e]);
+    for (let d = 0; d < DRIVES.FLEET.desks; d++) {
+      const hashes = [];
+      for (const mode of ['whole', 'compact', 'codec']) {
+        const hI = crypto.createHash('sha256');
+        const hII = crypto.createHash('sha256');
+        const book = {};
+        const observe = w => {
+          const s = w.s;
+          hI.update(`${w.got.map(m => `${m.id}|${m.text}`).join(',')}|${(s.phoneInbox ?? []).map(m => `${m.id}|${m.text}|${m.answered}|${m.auto}`).join(',')}|${w.lines.join('/')}|${meters(s)}\n`);
+          hII.update(`${whole4(s)}|${w.lines.join('/')}|${meters(s)}\n`);
+          if (mode !== 'compact') return;
+          out.weeks++;
+          for (const m of w.got) book[keyOf(pack.events.find(e => e.id === m.defId))] = w.clock;
+          const cooling = k => (byKey.get(k) ?? []).some(e => (pack.clock === 'season' ? B.onCooldown(book, e, w.clock, pack.cooldown) : w.clock - book[k] < (e.cooldown ?? pack.cooldown)));
+          const want = Object.keys(book).filter(cooling).sort();
+          const have = Object.keys(s.gmInboxLast ?? {}).sort();
+          if (want.join(',') !== have.join(',')) out.bad.push(`${tag} desk ${d} week ${w.clock}: the book holds [${have.slice(0, 4).join(',')}], still cooling [${want.slice(0, 4).join(',')}]`);
+          for (const k of have) if (s.gmInboxLast[k] !== book[k]) out.bad.push(`${tag} desk ${d} week ${w.clock}: ${k} stamped ${s.gmInboxLast[k]}, dealt ${book[k]}`);
+          out.pruned += Object.keys(book).length - have.length;
+          if ((s.phoneUsedIds ?? []).length > limitUsed) out.bad.push(`${tag} desk ${d}: ${(s.phoneUsedIds ?? []).length} one shots used, the pack has ${limitUsed}`);
+          if ((s.phoneInbox ?? []).length > GM_MAX) out.bad.push(`${tag} desk ${d}: ${(s.phoneInbox ?? []).length} kept`);
+        };
+        const between = mode !== 'codec' ? undefined : s => {
+          const { host, dropped } = E.gmDeskLoad(JSON.parse(JSON.stringify(E.gmDeskSave(s, compact))), compact);
+          out.dropped += dropped;
+          for (const k of ['phoneInbox', 'phoneUsedIds', 'gmInboxLast', 'gmInboxRest']) { if (k in host) s[k] = host[k]; else delete s[k]; }
+          return s;
+        };
+        runDesk(mode === 'whole' ? whole : compact, tag, seed, 'FLEET', d, { observe, between, bind });
+        hashes.push([hI.digest('hex'), hII.digest('hex')]);
+      }
+      out.desks++;
+      if (hashes[0][0] !== hashes[1][0]) { out.i++; if (out.i <= 2) out.bad.push(`${tag} seed ${seed} desk ${d}: the compact desk dealt or moved differently from the whole one`); }
+      if (hashes[1][1] !== hashes[2][1]) { out.ii++; if (out.ii <= 2) out.bad.push(`${tag} seed ${seed} desk ${d}: a save and load between weeks changed the desk`); }
+    }
+    return out;
+  };
+  const GM_MAX = E.GM_INBOX_MAX;
+  const packs = { ...Object.fromEntries(GM_SEATS.map(k => [k, GM[k]])), fx_compact: FX_COMPACT, fx_compact_season: FX_COMPACT_SEASON };
+  const tot = { desks: 0, weeks: 0, pruned: 0, dropped: 0, bad: [] };
+  for (const [k, p] of Object.entries(packs)) for (const seed of SEEDS) {
+    const r = row(p, k, seed);
+    tot.desks += r.desks; tot.weeks += r.weeks; tot.pruned += r.pruned; tot.dropped += r.dropped; tot.bad.push(...r.bad);
+  }
+  for (const b of tot.bad.slice(0, 8)) console.error(`     ${b}`);
+  const line = `${Object.keys(packs).length} packs at seeds ${SEEDS.join(', ')}, ${tot.desks} FLEET desks three ways (${tot.weeks} compact weeks, ${tot.pruned} cooled book entries pruned in all)`;
+  if (tot.bad.length || tot.dropped) fail(13, `${tot.bad.length} breaks, ${tot.dropped} messages dropped on load: ${line}`);
+  else if (tot.pruned < 1000) fail(13, `${line}: too little pruned to have tested it`);
+  else ok(`${line}: compact and whole dealt, answered and moved alike; a save, JSON and load between every two weeks changed nothing, text included; the book held exactly the entries still cooling, the one shots never past the pack's, never more than ${GM_MAX} kept`);
+  /* Size, a report for W3 (it states its own against
+     simClubManagerSaveSize): FX_BIG, 420 generated cards with Club
+     Manager's rhythm (a fifty week season, about one deal a week the open
+     cap allows, a quarter of them one shots, cooldowns 4 to 40), on 20 desks
+     of fifteen seasons answering like the FLEET drive. The compact block's
+     mean bytes beside the same desk saved whole. */
+  const bigRng = keyedRng('simEventDeck|big|cards');
+  const FX_BIG = fxPack('fx_big', Array.from({ length: 420 }, (_, i) => fxCard(`b${i}`, {
+    ...(i % 4 === 0 ? { oneShot: true } : { cooldown: 4 + Math.floor(bigRng() * 37) }),
+    ...(i % 3 === 0 ? { texts: [`The b${i} matter is back on the desk.`] } : {}),
+  })), { span: { a: 50 }, chance: 0.02, store: 'compact' });
+  const sizeAt = [1, 5, 10, 15];
+  const sums = { compact: sizeAt.map(() => 0), whole: sizeAt.map(() => 0), deals: 0 };
+  const BIG_DESKS = 20;
+  for (const [mode, pack] of [['compact', FX_BIG], ['whole', { ...FX_BIG, store: undefined }]]) {
+    const seat = E.bindGmInbox(pack, BINDING);
+    for (let d = 0; d < BIG_DESKS; d++) {
+      const rng = keyedRng(`simEventDeck|big|${SEED}|${d}|deck`);
+      const ar = keyedRng(`simEventDeck|big|${SEED}|${d}|answer`);
+      const s = newDesk();
+      let clock = 0;
+      for (let season = 1; season <= 15; season++) {
+        s.year = 2030 + season;
+        for (let w = 0; w < 50; w++) {
+          const got = E.gmInboxWeek(s, seat, 'a', {}, clock++, rng);
+          if (mode === 'compact') sums.deals += got.length;
+          for (const m of openOf(s)) if (ar() < 0.75) E.answerGmInbox(s, m.id, Math.floor(ar() * m.choices.length), seat);
+        }
+        const at = sizeAt.indexOf(season);
+        if (at >= 0) sums[mode][at] += JSON.stringify(E.gmDeskSave(s, pack)).length;
+      }
+    }
+  }
+  const mean = (mode, i) => Math.round(sums[mode][i] / BIG_DESKS);
+  const slope = mode => Math.round((mean(mode, 3) - mean(mode, 2)) / 5);
+  console.log(`   size report: FX_BIG (420 cards, ${(sums.deals / BIG_DESKS / 15).toFixed(1)} deals a season) on ${BIG_DESKS} desks: compact block ${sizeAt.map((y, i) => `season ${y} ${mean('compact', i)} B`).join(', ')}, slope ${slope('compact')} B a season from 10 to 15; the same desk whole ${sizeAt.map((y, i) => `season ${y} ${mean('whole', i)} B`).join(', ')}, slope ${slope('whole')} B a season`);
+  if (sums.deals / BIG_DESKS / 15 < 20) fail(13, `FX_BIG dealt only ${(sums.deals / BIG_DESKS / 15).toFixed(1)} cards a season: the size report measures nothing`);
+  if (mean('compact', 3) >= mean('whole', 3)) fail(13, `the compact block (${mean('compact', 3)} B) is no smaller than the whole desk (${mean('whole', 3)} B) at season 15`);
+  /* The loader's three cases. */
+  {
+    const pack = FX_COMPACT;
+    const s = newDesk();
+    const seat = E.bindGmInbox(pack, { ...BINDING, ...COMPACT_BIND });
+    for (let t = 0; t < 30; t++) E.gmInboxWeek(s, seat, 'a', { man: 2, rival: 5 }, t, keyedRng(`simEventDeck|load|${t}`));
+    const block = JSON.parse(JSON.stringify(E.gmDeskSave(s, pack)));
+    const cases = [];
+    const empty = E.gmDeskLoad({ ...block, v: 2 }, pack);
+    cases.push(['a block of v: 2 reads as an empty desk', JSON.stringify(empty.host) === JSON.stringify({ phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} })]);
+    const bent = E.gmDeskLoad({ ...block, l: [1], u: 'x' }, pack);
+    cases.push(['a bad book and a bad one shot list reset alone', JSON.stringify(bent.host.gmInboxLast) === '{}' && JSON.stringify(bent.host.phoneUsedIds) === '[]'
+      && JSON.stringify(bent.host.phoneInbox) === JSON.stringify(s.phoneInbox)]);
+    const old = { id: 'k_plain-2029-w3', defId: 'k_plain', from: 'Your assistant', emoji: '📋', text: 'An older build saved this whole.', year: 2029, choices: pack.events[0].choices, beat: 'a', answered: 0 };
+    const gone = { d: E.gmShortKey('no_such_card'), y: 2030, c: 4 };
+    const mixed = E.gmDeskLoad({ ...block, m: [old, gone, ...block.m] }, pack);
+    cases.push(['a whole message from an older build is kept, a compact one whose card is gone is dropped and counted',
+      JSON.stringify(mixed.host.phoneInbox[0]) === JSON.stringify(old) && mixed.dropped === 1 && mixed.host.phoneInbox.length === block.m.length + 1]);
+    const compactShare = block.m.filter(m => 'd' in m).length;
+    cases.push([`the saved messages are compact (${compactShare} of ${block.m.length})`, block.m.length > 0 && compactShare === block.m.length]);
+    const wrong = cases.filter(c => !c[1]);
+    if (wrong.length) fail(13, `the loader: ${wrong.map(c => c[0]).join('; ')} FAILED`);
+    else ok(`the loader: ${cases.map(c => c[0]).join('; ')}`);
+  }
+}
+
+/* ═══ 14. FROZEN WORDS: a compact pack's words never change once recorded ═══ */
+
+/* A compact message is rebuilt from its pack on read, so an edit to a
+   shipped card's words would rewrite messages already sitting in saves.
+   scripts/data/eventDeckWords.json records, for every pack whose source
+   declares store: 'compact' (FX_COMPACT here; W2 and W3 append theirs to
+   COMPACT_PACKS), each card's ledger key, a hash of each wording in order,
+   a hash of each option label, and its slots. A wording may only be added
+   at the end; nothing recorded may change. SIM_EVENT_DECK_WORDS=append adds
+   rows for new cards and new trailing wordings and never rewrites a row;
+   changing a recorded row is the lead's call, like the replay. */
+const WORDS_FILE = path.join(ROOT, 'scripts/data/eventDeckWords.json');
+const COMPACT_PACKS = { fx_compact: FX_COMPACT };
+if (runs(14)) {
+  console.log('14) Frozen words: no recorded card of a compact pack changes its words, options, story or slots');
+  const APPEND = process.env.SIM_EVENT_DECK_WORDS === 'append';
+  if (APPEND && CONTROL) { console.error('the words ledger is appended with no control, refusing'); process.exit(2); }
+  const h12 = t => crypto.createHash('sha256').update(String(t)).digest('hex').slice(0, 12);
+  const packs = Object.fromEntries(Object.entries(COMPACT_PACKS).map(([k, p]) => [k, { ...p, events: p.events.map(e => ({ ...e })) }]));
+  const fx = packs.fx_compact.events;
+  if (CONTROL === 'wordedit') {
+    const e = fx.find(x => x.id === 'k_words');
+    if (!e || !e.texts?.length) { console.error('wordedit control: k_words has no wordings, refusing to run'); process.exit(2); }
+    e.texts = [`${e.texts[0]} Again.`, ...e.texts.slice(1)];
+  }
+  if (CONTROL === 'wordorder') {
+    const e = fx.find(x => x.id === 'k_words');
+    if (!e || !(e.texts?.length >= 2) || e.texts[0] === e.texts[1]) { console.error('wordorder control: k_words lacks two different wordings, refusing to run'); process.exit(2); }
+    e.texts = [e.texts[1], e.texts[0], ...e.texts.slice(2)];
+  }
+  if (CONTROL === 'storymove') {
+    const e = fx.find(x => x.id === 'k_plain');
+    if (!e || e.story !== undefined) { console.error('storymove control: k_plain is not a plain card, refusing to run'); process.exit(2); }
+    e.story = 'arc';
+  }
+  const rowOf = e => ({
+    key: e.story ? `story:${e.story}` : e.id,
+    words: [e.text, ...(e.texts ?? [])].map(h12),
+    options: e.choices.map(c => h12(c.label)),
+    slots: [...new Set([e.text, ...(e.texts ?? [])].flatMap(t => [...t.matchAll(/\{(\w+)\}/g)].map(m => m[1])))].sort(),
+  });
+  const rec = fs.existsSync(WORDS_FILE) ? JSON.parse(fs.readFileSync(WORDS_FILE, 'utf8')) : { rows: {} };
+  const rows = rec.rows ?? {};
+  const bad = [];
+  const added = [];
+  const now = {};
+  for (const [k, p] of Object.entries(packs)) for (const e of p.events) now[`${k}/${e.id}`] = rowOf(e);
+  for (const [id, r] of Object.entries(rows)) {
+    const n = now[id];
+    if (!n) { bad.push(`${id}: a recorded card is gone`); continue; }
+    if (n.key !== r.key) bad.push(`${id}: its ledger key moved from ${r.key} to ${n.key} (a story added or taken away)`);
+    const prefix = n.words.slice(0, r.words.length);
+    if (prefix.join() !== r.words.join()) bad.push(`${id}: a recorded wording changed or moved`);
+    else if (n.words.length > r.words.length) {
+      if (APPEND) { r.words = n.words; added.push(`${id} +${n.words.length - prefix.length} wording`); }
+      else bad.push(`${id}: ${n.words.length - r.words.length} new wording(s) at the end, not yet recorded (SIM_EVENT_DECK_WORDS=append)`);
+    }
+    if (n.options.join() !== r.options.join()) bad.push(`${id}: an option was added, removed, reordered or relabelled`);
+    if (n.slots.join() !== r.slots.join() && prefix.join() === r.words.join()) bad.push(`${id}: its slots changed`);
+  }
+  for (const [id, n] of Object.entries(now)) {
+    if (rows[id]) continue;
+    if (APPEND) { rows[id] = n; added.push(id); } else bad.push(`${id}: a card with no row (SIM_EVENT_DECK_WORDS=append)`);
+  }
+  if (APPEND && added.length && !bad.length) {
+    const text = `{\n  "note": "Round 1332: the frozen words of every compact pack (scripts/simEventDeck.mjs section 14). Appended by SIM_EVENT_DECK_WORDS=append only; a changed row is the lead's call.",\n  "rows": {\n${
+      Object.entries(rows).map(([k, r]) => `    ${JSON.stringify(k)}: ${JSON.stringify(r)}`).join(',\n')}\n  }\n}\n`;
+    fs.writeFileSync(WORDS_FILE, text);
+    console.log(`   APPENDED ${added.length} rows or wordings to scripts/data/eventDeckWords.json: ${added.slice(0, 6).join(', ')}`);
+  }
+  for (const b of bad.slice(0, 8)) console.error(`     ${b}`);
+  const count = Object.keys(rows).length;
+  if (bad.length) fail(14, `${bad.length} frozen word breaks over ${count} recorded cards`);
+  else if (count < 10) fail(14, `only ${count} recorded cards: nothing was tested`);
+  else ok(`${count} recorded cards of ${Object.keys(packs).length} compact pack(s): every wording, option, story and slot as recorded`);
+}
+
 /* ═══ end ═══ */
 
 
@@ -1443,5 +1713,5 @@ if (failures > 0) {
   console.error(`simEventDeck: ${failures} failure${failures === 1 ? '' : 's'}, red sections ${[...red].sort((a, b) => a - b).join(', ')}${CONTROL ? ` (CONTROL=${CONTROL} fired)` : ''}`);
   process.exit(1);
 }
-console.log(`simEventDeck: green.${CONTROL ? ` CONTROL=${CONTROL} did not fire, which is itself a failure of the control.` : ''}`);
+console.log(`simEventDeck: green.${SECTIONS.length ? ` Sections ${SECTIONS.join(', ')} only.` : ''}${CONTROL ? ` CONTROL=${CONTROL} did not fire, which is itself a failure of the control.` : ''}`);
 if (CONTROL) process.exit(3);
