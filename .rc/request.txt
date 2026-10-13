@@ -1,0 +1,7 @@
+#!playwright
+#!serial
+base-setup: git worktree add /tmp/base 48cb9d4b && ln -s $PWD/node_modules /tmp/base/node_modules && cd /tmp/base && npm run build > /dev/null 2>&1 && echo BASE BUILT $(git -C /tmp/base rev-parse --short HEAD)
+draftNight-base: cd /tmp/base && RC_OUT=$RC_OUT/dnbase node scripts/playDraftNight.mjs
+recovery-base: R=$PWD; cd /tmp/base && CI=1 node scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only && CI=1 NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/usCareerSaveRecovery1084.mjs; s=$?; node $R/.rc/x/recrep.mjs; exit $s
+parity-base: cd /tmp/base && node scripts/simUsBoardParity.mjs
+nflTruth-base: cd /tmp/base && node scripts/simNflTruth.mjs
