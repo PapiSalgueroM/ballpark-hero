@@ -101,6 +101,37 @@ document height back where they were (390: 2143 and 14952 before, 2285 and 15094
 Final proof readings at the last head are in the closing report
 (C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1329.md), because What's New is the round's last commit.
 
+## Records the brief asks for (written 2026-10-13 by the review fixer, base c5fc5470)
+
+- OVERLAP (decision 2), `git diff --name-only c5fc5470...origin/<branch>`, grepped for the engine, the phone, the
+  quiz, the panel, soccerWorldTruth, careerEras and WhatsNew: codex/soccer-career-daily-life (75e03f37, 14 files)
+  none; codex/manager-daily-decisions (1ed26406, 7 files) none; codex/career-continental-score (3e4a6da6, 6 files)
+  src/lib/soccerCareerEngine.ts only, hunks at base lines 6739 to 6899 inside simulateUCL, about 1,000 lines below
+  this round's month hunk (5694 to 5737) and its tournament lines (5088 to 5093); codex/f1-driver-career (a46d326b,
+  21 files) src/pages/WhatsNew.tsx only (an append conflict at most, keep both blocks). Nothing touches the phone,
+  the quiz, the panel or careerEras.ts.
+- THE GUIDE (decision 4): soccer2.ts's /soccer-career block (lines 1748 to 1975) never names the feed, the quiz or
+  Player of the Month (a case blind grep for player of the month, sportsfeed, sports feed, ball quiz, the feed and
+  the quiz counts 0). Its one World Cup section is "The World Cup cycle and your legacy score", whose first item
+  reads "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation
+  mostly needs a world class you." Nothing in it promises a winner line, so no "?" changes.
+- THE DAILIES (decision 3 (v)): `git grep -l` of every src file outside src/test that imports soccerCareerEngine
+  finds the same 81 files on c5fc5470 and on the head. Of Round 1327's list, soccerArcade, careerEras,
+  careerSeasonRatings and seasonFamilySummary import it as types only on both trees; careerDrills imports values
+  (effectivePotential, trainingStatFor) on both trees, unchanged by this round. soccerWorldTruth.ts imports nothing.
+
+## Review fixes (2026-10-13)
+
+- The feed names no winner of a summer that happened, not even finals he played (7580b259): decision 2's principle
+  makes every feed line world news. His finals stay in the season log and on the International card.
+- The quiz's two champion questions print the season in full, "in 2026-27?" (3a898747).
+- A history row with no result of his own carries no empty pill (20c5fa4f). The pill line sits one line below the
+  brief's 565 to 573 on the base, in the same row; simSoccerWorldTruth's history row region now ends at the row's
+  close.
+- simSoccerWorldTruth: section 4's old saves play on until the world ticks (9b45a4a7), section 2 plants the draw
+  count of both lotteries (cb2c58e9), section 0 holds soccerWorldTruth.ts to literal constants and rules
+  (25ca7a88), and the header carries the bands' readings (2a7863cb).
+
 ## Deviations from the brief's hunk list, and why
 
 - InternationalPanel.tsx gains one import line (soccerWorldTruth), which the brief's list of panel lines leaves out
@@ -127,3 +158,11 @@ Final proof readings at the last head are in the closing report
   world draws its own 2025 champions and 2026 edition and the Ballon d'Or honours those.
 - Moving LAST_PLAYED_SEASON or LAST_PLAYED_SUMMER is a data round with its own sources.
 - Transfer news for 2026 to 2032 could come from Round 1318's generated Ballon d'Or pool in a later round.
+- From the reviews, for the lead to rule: a long historical career's feed repeats the honest line once a season
+  (decision 2 asks for one a season), and an old save's invented lines stay on screen longer because a season that
+  happened now adds 1 to 3 items where the base added 7 to 9 (MAX_FEED 12; ensurePhone's repair is outside the
+  round's hunks).
+- Re-seating a real nominee at his era club also moves his honours points on Ballon d'Or night (clubHonours of the
+  era club), so ranks can move; the player's own finish base against head is not measured here.
+- The 2012 Ballon d'Or night still prints sim honours beside real men (owed to the Ballon d'Or round), and a toast
+  can cover the chance wheel's Show result button at 390 (not this round's screen).
