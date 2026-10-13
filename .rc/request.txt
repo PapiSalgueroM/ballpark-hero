@@ -1,0 +1,8 @@
+e5-9000-seeded: SEED_BASE=9000 node .rc/x/eras5probe.mjs
+e5-9000-unseeded: SEED_BASE=9000 UNSEEDED=1 node .rc/x/eras5probe.mjs
+e5-19000-seeded: SEED_BASE=19000 node .rc/x/eras5probe.mjs
+e5-19000-unseeded: SEED_BASE=19000 UNSEEDED=1 node .rc/x/eras5probe.mjs
+e5-29000-seeded: SEED_BASE=29000 node .rc/x/eras5probe.mjs
+e5-29000-unseeded: SEED_BASE=29000 UNSEEDED=1 node .rc/x/eras5probe.mjs
+e5-39000-seeded: SEED_BASE=39000 node .rc/x/eras5probe.mjs
+e5-39000-unseeded: SEED_BASE=39000 UNSEEDED=1 node .rc/x/eras5probe.mjs
