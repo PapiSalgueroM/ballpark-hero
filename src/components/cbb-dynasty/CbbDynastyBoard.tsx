@@ -19,6 +19,8 @@ import {
   ensureCbbIds,
 } from '@/lib/cbbDynasty';
 import type { StaffRole } from '@/lib/collegeProgram';
+/* Round 1320: the athletic director, bound once in its own file. */
+import { cbbSeatBinding } from '@/lib/cbbSeatBind';
 
 const SAVE_KEY = 'cbb-dynasty-save-v1';
 
@@ -224,6 +226,7 @@ function cbbSport(): CollegeSport<CbbTeam, CbbState, CbbGame, CbbRecruit, Recap>
       feedBox: 'plain',
       slateList: 'max-h-80 space-y-0.5 overflow-y-auto',
     },
+    seat: cbbSeatBinding,
   });
 }
 

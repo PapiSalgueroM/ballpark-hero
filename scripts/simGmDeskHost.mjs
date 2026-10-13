@@ -171,7 +171,7 @@ const EDITS = {
   badlyceiling: ['4', 'seat', "lastGradeOf(last) === 'badly' ? BADLY_FIRED_CEILING : 1", 'false ? BADLY_FIRED_CEILING : 1'],
   askseason: ['4', 'host', '    host.pack, teams, seat.career, season + 1,', '    host.pack, teams, seat.career, season,'],
   rankplace: ['4', 'host', 'facts[o.teamId] = { strengthRank: strengthRank(strengths, c.id), record:', 'facts[o.teamId] = { strengthRank: c.place, record:'],
-  closedquiet: ['5', 'host', '  for (let t = p.lastTier - 1; t >= 1; t--) {', '  for (let t = 0; t >= 1; t--) {'],
+  closedquiet: ['5', 'seat', '  for (let t = p.lastTier - 1; t >= 1; t--) {', '  for (let t = 0; t >= 1; t--) {'],
   twice: ['6', 'host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['6', 'host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
   failopen: ['6', 'host', 'v => isGmSeatBlock(v) && seatFitsSave(v, l)', 'v => !!v'],

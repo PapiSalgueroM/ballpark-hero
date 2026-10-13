@@ -19,6 +19,8 @@ import {
   ensureCfbIds,
 } from '@/lib/cfbDynasty';
 import type { StaffRole } from '@/lib/collegeProgram';
+/* Round 1320: the athletic director, bound once in its own file. */
+import { cfbSeatBinding } from '@/lib/cfbSeatBind';
 
 const SAVE_KEY = 'cfb-dynasty-save-v1';
 
@@ -228,6 +230,7 @@ function cfbSport(): CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postse
       feedBox: 'live',
       slateList: 'space-y-0.5',
     },
+    seat: cfbSeatBinding,
   });
 }
 
