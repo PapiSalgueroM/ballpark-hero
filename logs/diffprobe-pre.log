@@ -1,0 +1,7 @@
+diffProbe: wrote 3 states to /home/runner/work/_temp/rc-out/files/pre.json
+Arsenal: 1 differing leaves
+  Arsenal.clubStrengths.Arsenal: 87 | 87.6
+Real Madrid: 1 differing leaves
+  Real Madrid.clubStrengths.Real Madrid: 87.1 | 89
+Ajax: 1 differing leaves
+  Ajax.clubStrengths.Ajax: 79.5 | 81.2
