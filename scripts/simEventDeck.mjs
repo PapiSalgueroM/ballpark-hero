@@ -28,8 +28,9 @@
         the builder's.
 
      2) SAME SEED, SAME DECK, another seed another deck; a JSON round trip
-        and repairGmInbox between every two weeks leave every seed 1 row
-        byte equal, every base state repairs to itself, and no GM desk ever
+        and repairGmInbox between every two weeks leave every row of
+        section 1 (seeds 1, 2 and 3) byte equal, every base state repairs to
+        itself, and no GM desk ever
         gains a field only a new pack writes.
      3) WEIGHTS. Every GM card at weight 1, then 2.5, deals the recording
         (the uniform line, by construction). FX_WEIGHT (weights 1 and 3) over
@@ -428,15 +429,15 @@ let gmGrew = 0;
     return back;
   };
   const moved = [];
-  for (const seat of seats) for (const kind of KINDS) {
-    const r = runRow(GM[seat], seat, 1, kind, { between });
-    if (r.hash !== ROWS[`${seat}|1|${kind}`].hash) moved.push(`${seat}|1|${kind}`);
+  for (const seat of seats) for (const seed of SEEDS) for (const kind of KINDS) {
+    const r = runRow(GM[seat], seat, seed, kind, { between });
+    if (r.hash !== ROWS[`${seat}|${seed}|${kind}`].hash) moved.push(`${seat}|${seed}|${kind}`);
   }
   if (gmStates < 1000) fail(2, `only ${gmStates} desk states reloaded: nothing was tested`);
   if (bent) fail(2, `${bent} of ${gmStates} base states did not repair to themselves`);
-  else ok(`all ${gmStates} desk states of seed 1 repaired to themselves`);
+  else ok(`all ${gmStates} desk states of seeds ${SEEDS.join(', ')} repaired to themselves`);
   if (moved.length) fail(2, `reloading between weeks moved ${moved.length} rows: ${moved.slice(0, 4).join(', ')}`);
-  else ok(`${seats.length * KINDS.length} rows dealt byte equal with a reload between every two weeks`);
+  else ok(`${seats.length * SEEDS.length * KINDS.length} rows (every row of section 1) dealt byte equal with a reload between every two weeks`);
   if (gmGrew) fail(2, `${gmGrew} GM desk states gained a field a GM pack never writes (gmInboxRest, w or auto)`);
 }
 
