@@ -1,0 +1,102 @@
+playLiveMatchFit: seed 820997140 (drawn fresh from the clock). Replay this run with: LIVE_FIT_SEED=820997140 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 820997140, 1806 draws at kick off, digest bc72b379 over 6252 characters of drawn match: Crystal Palace v Everton, goals of the first half 10' Tyrick Mitchell (own goal), 29' Ismaïla Sarr, 39' Jørgen Strand Larsen, 45+4' Merlin Röhl; own goals among them 1
+  the goal watched: 10' Tyrick Mitchell (own goal), against me; own goals in its half 1 of 4 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 31 frames it was up
+  ok    a tap on the card ended the hold (45 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 101 through 251 frames before, during and after a goal
+  ok    window.scrollY stayed at 101 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 3.80 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.13 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.08
+  ok    name labels overlap 0.13 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.60 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.00 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 1.20 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 1EvertonPaused at 34'Back to", and the clock held at 34' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (34' to 35')
+5) The reload
+  ok    reload: left at 35', the save holds 35, the match came back at 35'
+  ok    close: left at 37', the save holds 37, the match came back at 37'
+  ok    hidden tab: the clock read 39' and the save holds 39
+2) Reduced motion
+  [match calm] seed 820997141, 1805 draws at kick off, digest 00510d1c over 4320 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  the goal watched: 52' Brennan Johnson, against me; own goals in its half 0 of 1 goals
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 820997142, 1828 draws at kick off, digest b203accd over 6050 characters of drawn match: Crystal Palace v Everton, goals of the first half 10' Brennan Johnson, 33' Merlin Röhl, 40' Brennan Johnson; own goals among them 0
+  the goal watched: 10' Brennan Johnson, against me; own goals in its half 0 of 3 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 1)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+9) An own goal is drawn as one
+  [own goal for me] found by the engine on seed 820997149 in match 50 of the search: Real Madrid v Rayo Vallecano, 38' Marash Kumbulla (own goal), for me; the man on the page is theirs, number 4
+  [match own-me-390] seed 820997150, 7 draws at kick off, digest 13ca046d over 4474 characters of drawn match: Real Madrid v Rayo Vallecano, goals of the first half 38' Marash Kumbulla (own goal); own goals among them 1
+  own-me-390:
+  the goal watched: 38' Marash Kumbulla (own goal), for me; own goals in its half 1 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Marash Kumbulla 38' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.3 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 62.7 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+  [match own-me-1280] seed 820997150, 7 draws at kick off, digest 13ca046d over 4474 characters of drawn match: Real Madrid v Rayo Vallecano, goals of the first half 38' Marash Kumbulla (own goal); own goals among them 1
+  own-me-1280:
+  the goal watched: 38' Marash Kumbulla (own goal), for me; own goals in its half 1 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 1 - 0)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Marash Kumbulla 38' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.3 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 62.7 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+  [own goal against me] found by the engine on seed 820997149 in match 97 of the search: Lyon v Paris FC, 16' Loïs Openda (own goal), against me; the man on the page is mine, id p-lois-openda
+  [match own-opp-390] seed 820997151, 7 draws at kick off, digest ad2e42c6 over 4834 characters of drawn match: Lyon v Paris FC, goals of the first half 16' Loïs Openda (own goal); own goals among them 1
+  own-opp-390:
+  the goal watched: 16' Loïs Openda (own goal), against me; own goals in its half 1 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Loïs Openda 16' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.3 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 67.7 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (67.7 when the ball went in)
+  [match own-opp-1280] seed 820997151, 7 draws at kick off, digest ad2e42c6 over 4834 characters of drawn match: Lyon v Paris FC, goals of the first half 16' Loïs Openda (own goal); own goals among them 1
+  own-opp-1280:
+  the goal watched: 16' Loïs Openda (own goal), against me; own goals in its half 1 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 1)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Loïs Openda 16' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.3 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 67.7 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (67.7 when the ball went in)
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
