@@ -87,6 +87,10 @@ describe('the history tile', () => {
     expect(text[1]).toContain('Watched from home');
     expect(text[2]).not.toContain('Uruguay');
     expect(text[3]).toContain('Uruguay');
+    /* a row with no result of his own (no international career) carries no empty pill; a row with one keeps it */
+    const pills = rows.map(r => r.querySelectorAll('span.inline-block.rounded-md').length);
+    expect(pills).toEqual([1, 0, 1, 1]);
+    expect(rows[2].querySelector('span.inline-block.rounded-md')!.textContent).toBe('Not Selected');
   });
 
   it('keeps the last tile quiet about a missed past summer and never opens its bracket', () => {

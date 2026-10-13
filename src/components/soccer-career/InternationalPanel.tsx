@@ -580,7 +580,7 @@ export function InternationalHistoryTile({
                 ) : (
                   <span className="flex-1 min-w-0 text-xs text-muted-foreground">Watched from home</span>
                 )}
-                <span className="shrink-0"><ResultPill result={h.myResult} /></span>
+                {h.myResult && <span className="shrink-0"><ResultPill result={h.myResult} /></span>}
               </div>
             </div>
           ))}

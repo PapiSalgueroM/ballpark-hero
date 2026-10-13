@@ -25,7 +25,7 @@
  *     head sha256 456ec78d275469f520b1ecd7df8fde60a91fed06f5d3b17d8b6332b87c0ef791
  *     base sha256 bc8301f8b1405f6e4c037d6a04f13551fa8751031bdf4aa351fab378d02fd3d8
  *   src/components/soccer-career/InternationalPanel.tsx
- *     head sha256 872a55fb5a772279f263611b040afcbfb25dcecdcf6cc5586794370e487c993b
+ *     head sha256 5c39697167844a7dc3329e580cd9a984c3dc51412a4556a880e63897bce69ea9
  *     base sha256 df3dd4e16e8a046a6928c832068a2e92f3ecbf15504eeb32fcbf598d59b66bb7
  * (base: git show c5fc5470:<file>, origin/release-bc-gate when the round started), so the recordings
  * and the base pins stay as they were taken: this is an attribution, not a new recording.
@@ -52,7 +52,7 @@ export const WORLD_TRUTH_SHA256 = {
     "base": "bc8301f8b1405f6e4c037d6a04f13551fa8751031bdf4aa351fab378d02fd3d8"
   },
   "src/components/soccer-career/InternationalPanel.tsx": {
-    "head": "872a55fb5a772279f263611b040afcbfb25dcecdcf6cc5586794370e487c993b",
+    "head": "5c39697167844a7dc3329e580cd9a984c3dc51412a4556a880e63897bce69ea9",
     "base": "df3dd4e16e8a046a6928c832068a2e92f3ecbf15504eeb32fcbf598d59b66bb7"
   }
 };
@@ -149,8 +149,8 @@ const EDITS = [
     from: "\n      <div className={`grid grid-cols-2 gap-1.5${tiles.length % 2 === 1 ? \" [&>*:last-child]:col-span-2\" : \"\"}`}>\n        {tiles.map(tile => (",
     to: "\n      <div className=\"grid grid-cols-2 gap-1.5\">\n        {tiles.map(tile => (" },
   { name: "panel-7", file: "src/components/soccer-career/InternationalPanel.tsx",
-    from: "              <div className=\"flex items-start justify-between gap-2\">\n                {tournamentWinnerShown(h.year, h.myResult) ? (\n                  <span className=\"flex flex-1 items-center gap-1 min-w-0\">\n                    <FlagImg name={h.champion} size={13} />\n                    <span className=\"min-w-0 break-words\">{h.champion}</span>\n                  </span>\n                ) : (\n                  <span className=\"flex-1 min-w-0 text-xs text-muted-foreground\">Watched from home</span>\n                )}\n                <span className=\"shrink-0\"><ResultPill result={h.myResult} /></span>",
-    to: "              <div className=\"flex items-start justify-between gap-2\">\n                <span className=\"flex flex-1 items-center gap-1 min-w-0\">\n                  <FlagImg name={h.champion} size={13} />\n                  <span className=\"min-w-0 break-words\">{h.champion}</span>\n                </span>\n                <span className=\"shrink-0\"><ResultPill result={h.myResult} /></span>" },
+    from: "              <div className=\"flex items-start justify-between gap-2\">\n                {tournamentWinnerShown(h.year, h.myResult) ? (\n                  <span className=\"flex flex-1 items-center gap-1 min-w-0\">\n                    <FlagImg name={h.champion} size={13} />\n                    <span className=\"min-w-0 break-words\">{h.champion}</span>\n                  </span>\n                ) : (\n                  <span className=\"flex-1 min-w-0 text-xs text-muted-foreground\">Watched from home</span>\n                )}\n                {h.myResult && <span className=\"shrink-0\"><ResultPill result={h.myResult} /></span>}\n              </div>",
+    to: "              <div className=\"flex items-start justify-between gap-2\">\n                <span className=\"flex flex-1 items-center gap-1 min-w-0\">\n                  <FlagImg name={h.champion} size={13} />\n                  <span className=\"min-w-0 break-words\">{h.champion}</span>\n                </span>\n                <span className=\"shrink-0\"><ResultPill result={h.myResult} /></span>\n              </div>" },
   { name: "panel-8", file: "src/components/soccer-career/InternationalPanel.tsx",
     from: "\n  /* Round 1329: the last edition's bracket and winner follow the card's rule. */\n  const lastShown = !!last && tournamentWinnerShown(last.year, last.myResult);\n  if (open === \"bracket\" && last && lastShown) {\n    return (",
     to: "\n  if (open === \"bracket\" && last) {\n    return (" },

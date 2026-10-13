@@ -207,9 +207,12 @@ try {
         const box = head?.parentElement;
         const home = [...(box?.querySelectorAll('span') ?? [])].filter(s => s.textContent === 'Watched from home').map(s => parseFloat(getComputedStyle(s).fontSize));
         const back = [...(box?.querySelectorAll('button') ?? [])].map(b => b.getBoundingClientRect().height);
-        return { text: box?.innerText ?? '', named: (box?.innerText ?? '').includes(champion), home, back };
+        /* a result pill with nothing in it reads as a broken element (the review's finding 16) */
+        const emptyPills = [...(box?.querySelectorAll('span.inline-block.rounded-md') ?? [])].filter(s => !s.textContent.trim()).length;
+        return { text: box?.innerText ?? '', named: (box?.innerText ?? '').includes(champion), home, back, emptyPills };
       }, saveB.lastTournament.champion);
       if (list.named) failNote(`${tag} B: the history list names ${saveB.lastTournament.champion} for a summer he missed`);
+      if (list.emptyPills) failNote(`${tag} B: the history list shows ${list.emptyPills} empty result pills`);
       if (!list.home.length) failNote(`${tag} B: the history list has no "Watched from home" row`);
       for (const size of list.home) if (size < 12) failNote(`${tag} B: "Watched from home" is ${size} px`);
       for (const h of list.back) if (h < 44) report.knownSmall.push(`${tag}: the history list's Back is ${Math.round(h)} px (h-8, owed)`);
