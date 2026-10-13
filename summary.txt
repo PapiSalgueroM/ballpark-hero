@@ -1,0 +1,7 @@
+simCareerProgramme exit=1 3s | Node.js v24.21.0
+simCareerPressMarket exit=0 8s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+simCareerTransferBrief exit=0 11s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerFarewell exit=0 10s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simSoccerAgentReview exit=0 16s | PASS agent review product and proof source bytes held.
+simSoccerInternationalReturn exit=0 9s | PASS international return copied production source bytes held.
+fairness exit=0 46s | simSoccerDeckFairness: all sections green
