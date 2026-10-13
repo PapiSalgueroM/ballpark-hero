@@ -1,0 +1,3 @@
+runEach: done, 9 of 60 exited non zero
+simFootleKitNumbers exit=SIGKILL 1500s | [SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+runEach: done, 9 of 60 exited non zero
