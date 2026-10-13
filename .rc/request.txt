@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBoards.test.ts src/lib/clubManagerLeagueBook.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+appeal1081: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+decisions: node scripts/simClubManagerDecisions.mjs
+book: node scripts/simCmLeagueBook.mjs
+book-bookleak: BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+awardRaces: node scripts/simAwardRaces.mjs
+rules: node scripts/simCmLeagueRules.mjs
+ownGoals: node scripts/simCmOwnGoals.mjs
+slots: node scripts/simClubManagerSlots.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+facts: node scripts/simCmLeagueBookFacts.mjs
