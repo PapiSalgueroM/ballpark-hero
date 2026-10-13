@@ -529,7 +529,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
       }
       if (!/Fast forward/i.test(tc)) note('BROKEN ', 'the calendar has no fast forward');
       if (!/Rest of season/i.test(tc)) note('BROKEN ', 'no rest-of-season fast forward');
-      if (!/Rest first|Balanced|Full training/i.test(tc)) note('BROKEN ', 'no training policy on the calendar');
+      if (!/Light|Normal|Double/i.test(tc)) note('BROKEN ', 'no training policy on the calendar');
       if (!/match day/i.test(tc)) note('BROKEN ', 'no legend on the calendar');
       if (!await tap(/Club home/i, 'back out of the calendar')) {
         note('BROKEN ', 'no way back out of the calendar');
