@@ -83,6 +83,21 @@ push; the closing report is C:/Users/antho/dukb-handoff/2026-10-10/results-g/fin
 - Owed to the release: this round goes live with Round 1326 or after it (the Finances tile prints the Kitty change
   while the desk it opens still prints Season result until 1326's desk row is live).
 
+## Release BB merge (2026-10-13, second fix pass)
+- f8518349 merges main at 36cc9ffe (Release BB live). Only src/pages/WhatsNew.tsx conflicted: every entry kept,
+  1328's on top. playClubManager.mjs merged on its own, 1328's line now at 687. The base for the walk's section D is
+  now 36cc9ffe.
+- fx2-1328-a on f8518349 (base build of 36cc9ffe): walk-full green (A 8, B 65, C 156, D 12, E 63, F 9, 0 fail;
+  season 2 seed 21 lands the header at 12 px from scrollY 23345); noscroll and stale fired; simCmRealFixtures and
+  playCmRealFixtures green twice (390-real passed); playNationJob green; playClubManager 0 findings; simRevealScroll
+  green.
+- fx2-1328-b on f8518349: tsc 0, vitest 8 files 60 tests, simNoRivalNames 0 findings, simHarnessAnchors,
+  simStorageWrites (owed 12), simEarlyReturnScope, simMidSeasonStart, simCalendarCurrentDate,
+  simClubManagerCalendar, simClubManagerFinances, simDailyDeals, simClubManagerSaveSize, simClubManagerSlots green;
+  weight green with /club-manager at 592.9K of its 593K row (BB measured 592.0K).
+- Still owed to the release: this round goes live with Round 1326 or after it, or the Finances tile is held (see
+  the fix report); commit 7d34f0ee stays or playCmRealFixtures goes red on 390-real again.
+
 ## Owed (decision 2d), not this round
 - ManagerForm.tsx says "It is a simulated run-in, not the real one" for an Autumn or New year takeover; and
   simMidSeasonStart line 220 anchors on it.
