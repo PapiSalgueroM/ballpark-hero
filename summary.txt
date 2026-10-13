@@ -1,0 +1,5 @@
+vitest-panel exit=0 10s |    Duration  9.58s (transform 4.65s, setup 709ms, collect 12.91s, tests 6.07s, environment 3.67s, prepare 1.19s)
+simCareerMoments exit=0 12s | simCareerMoments: 1077 checks, 0 failed
+worldtruth exit=0 90s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 93s | 
+simCareerAwardsNight exit=0 84s | simCareerAwardsNight: ALL 179 CHECKS PASSED
