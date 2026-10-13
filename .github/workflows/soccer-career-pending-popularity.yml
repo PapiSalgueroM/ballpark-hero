@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      CAREER_POPULARITY_PHASE: baseline
+      CAREER_POPULARITY_PHASE: fixed
       CAREER_POPULARITY_OUT: ${{ github.workspace }}/career-popularity-artifacts
       CAREER_MORALE_PHASE: fixed
       CAREER_MORALE_OUT: ${{ github.workspace }}/career-popularity-artifacts/prior-morale

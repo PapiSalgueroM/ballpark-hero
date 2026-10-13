@@ -509,11 +509,11 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.popularity >= 60) {
+  if (state.pendingEvents.some(event => event.id === 233) || state.popularity >= 60) {
     push({ id: 233, cooldown: COOLDOWN.once, emoji: "🗽", title: "The Wax Statue",
       description: "A famous wax museum unveils your figure. It looks like you, if you were a startled substitute teacher from a different, sadder timeline.",
       category: "life", choices: [
-        { label: "Pose next to it grinning", emoji: "📸", color: "bg-emerald-600", consequence: "Followers +800k, self-awareness is elite",
+        { label: "Pose next to it grinning", emoji: "📸", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[233][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "📸 Posed with your terrible wax figure. Comedy gold"]; return s; } },
         { label: "Demand a redo", emoji: "😤", color: "bg-red-600", consequence: "Popularity -3, the museum posts the demand letter",
           apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "😤 Demanded a wax redo. The internet sided with the statue"]; return s; } },
