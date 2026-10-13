@@ -1,0 +1,5 @@
+tsc exit=0 35s | 
+probe-head exit=0 1s | PROBE ferran uclAccepted=false withoutThe2026Row=false
+probe-prefix exit=0 1s | PROBE ferran uclAccepted=true withoutThe2026Row=false
+simPlayerBingoHonours exit=0 4s | simPlayerBingoHonours PASS
+vitest-bingo exit=0 3s |    Duration  2.69s (transform 342ms, setup 166ms, collect 1.14s, tests 2.90s, environment 1.15s, prepare 322ms)
