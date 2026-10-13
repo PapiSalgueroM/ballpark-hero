@@ -48,3 +48,15 @@ mode only).
 - r1332-b (53717858): the same, all green; fxsilent, fxdrop, fxunbound, fxneutral each exit 1 (red
   section 11, fired).
 - r1332-c (f5bc595e) and r1332-d (fc80a418): see the closing report.
+- r1332-c (f5bc595e): all green but the kit, red in section 12 only for one fixture label of the kit's own
+  FX_REGISTRY ("Call the family" matched the private list); fixed in (d).
+- r1332-d2 (fc80a418): all green; the kit 206.2 s; all 31 kit controls (each on its own sections) exit 1 and fired.
+- r1332-e-measure (a3567006): section 15 measured at seeds 1 to 10 (written in the kit header).
+- r1332-f-walk (f6943255): npm run build 0; no chunk of either build carries an engine error string; sweepWeight
+  green on the head (/nfl-my-career 486.4K, /front-office 372.5K, /club-manager 602.2K, /soccer-career 828.2K);
+  playCareerHub green; the walk (36 boxes, /nfl-my-career and /nhl-my-career at 320, 390, 1280) head equal to the base
+  within 1 px, same text and fonts, no sideways scroll. Pictures: dukb-handoff/2026-10-10/results-g/r1332-shots.
+- The adversarial review was this builder's own (no reviewer agent in this run): it added the rule that a tagged card
+  must name who it is about, the whole desk t and sv check, and the fence over pack modules imported alone. A hostile
+  save probe (ten broken blocks through gmDeskLoad) loaded every one sane, no crash, no prototype pollution.
+- Final gate results: see dukb-handoff/2026-10-10/results-g/finish-1332.md.

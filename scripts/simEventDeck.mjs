@@ -1890,6 +1890,8 @@ if (runs(16)) {
     const p = spec.startsWith('@/') ? `src/${spec.slice(2)}` : spec.startsWith('.') ? path.posix.normalize(`${path.posix.dirname(from)}/${spec}`) : null;
     if (!p) return null;
     const bare = p.replace(/\.(ts|tsx|js)$/, '');
+    /* A pack module imported on its own is the deck too, not only its index. */
+    if (deckDirs.some(d => bare.startsWith(`${d}/`))) return bare;
     return DECK.includes(bare) ? bare : DECK.includes(`${bare}/index`) ? `${bare}/index` : null;
   };
   let read = 0;
