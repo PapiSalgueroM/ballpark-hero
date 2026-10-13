@@ -19,7 +19,14 @@ import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
    first, as an attribution kept apart from the copied faults: scripts/lib/careerDeckFair1327.mjs. The milestone
    engine news check compares the paper's global draws with AR's, so it reads that attributed engine too. */
 import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
-const deckFair1327 = () => deckFairPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to }));
+/* Round 1329: the world truth round comes out first, in front of Round 1327 (scripts/lib/careerWorldTruth1329.mjs): its
+   engine rows before 1327's, and its phone rows when the engine's import of the phone loads (the quiz and the
+   International panel are not in this bundle). */
+import { worldTruthPatches } from './lib/careerWorldTruth1329.mjs';
+const deckFair1327 = () => {
+  const truth = worldTruthPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to }));
+  return [...truth.filter(row => row.file === 'src/lib/soccerCareerEngine.ts'), ...deckFairPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to })), ...truth.filter(row => row.file === 'src/lib/soccerPhone.ts')];
+};
 import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

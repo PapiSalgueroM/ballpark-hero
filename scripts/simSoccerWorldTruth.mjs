@@ -49,7 +49,12 @@
  *      summer still to come or finals he played (and keeps it there); the
  *      International card and the history tile follow the same rule, rendered
  *      with renderToStaticMarkup inside a MemoryRouter for four cases.
- *   6  INVERSE. (step f) The eighth inverse gives the base's four files back.
+ *   6  INVERSE. scripts/lib/careerWorldTruth1329.mjs (the eighth inverse)
+ *      applied in order to this tree's engine, phone, quiz and International
+ *      panel gives the base's four files byte for byte (sha256 printed and
+ *      asserted, and pinned in the module), every row applied once, and every
+ *      hunk of the diff against the base sits inside the regions this round
+ *      may edit.
  *
  * MEASURED: see docs/audits/ROUND-1329-NOTES.md, updated every step.
  *
@@ -65,6 +70,7 @@
  *   summer      the feed names the winner of a missed summer that happened: section 3.
  *   arcade      the quiz asks about the world of every season again: section 4.
  *   log         the season log names the winner of every summer again: section 5.
+ *   outside     one constant of the transfer market changes, outside the hunks: section 6.
  *   panel       the International panel names every winner again: section 5.
  *
  * Run: node scripts/simSoccerWorldTruth.mjs [seeds]   (default 5 seeds, 400 careers a tree)
@@ -75,9 +81,11 @@ import './lib/offlineTransport.cjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_SHA256, WORLD_TRUTH_FILES, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(ROOT, 'package.json'));
@@ -101,6 +109,9 @@ const fail = m => {
   else if (n === 13) console.error(`  FAIL (section ${SECTION}): ... further failures in this section counted, not printed`);
 };
 const r2 = v => Math.round(v * 100) / 100;
+/* WORLD_TRUTH_ONLY=6 (or 1,3) runs only those sections, for a quick look; a gate runs them all. */
+const ONLY = (process.env.WORLD_TRUTH_ONLY || '').split(',').filter(Boolean);
+const runs = k => ONLY.length === 0 || ONLY.includes(k);
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const PHONE = 'src/lib/soccerPhone.ts';
 const ARCADE = 'src/lib/soccerArcade.ts';
@@ -125,6 +136,8 @@ const CONTROLS = {
     edits: { [PHONE]: [['  if (intl && tournamentWinnerShown(year, myFinals))', '  if (intl)']] } },
   arcade: { breaks: '4', note: 'the quiz asks about the world of every season again',
     edits: { [ARCADE]: [['  if (w && !seasonHappened(w.year)) {', '  if (w) {'], ['    if (w.year > LAST_REAL_YEAR && w.moves.length >= 1) {', '    if (w.moves.length >= 1) {'], ['    if (w.year > LAST_REAL_YEAR && w.topScorer) {', '    if (w.topScorer) {']] } },
+  outside: { breaks: '6', note: 'one constant of the transfer market changes, outside this round\'s hunks',
+    edits: { [ENGINE]: [['export const LEAGUE_DRAW_CAP = 5;', 'export const LEAGUE_DRAW_CAP = 6;']] } },
   log: { breaks: '5', note: 'the season log names the winner of every summer again',
     edits: { [ENGINE]: [['  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {', '  if (true) {']] } },
   panel: { breaks: '5', note: 'the International panel names every winner again',
@@ -354,9 +367,10 @@ function recordOf(B, s, row, c) {
 }
 
 const t0 = Date.now();
-const headRecs = FLEET.map(c => drive(HEAD, c));
+const needFleet = ['1', '3', '4', '5'].some(runs);
+const headRecs = needFleet ? FLEET.map(c => drive(HEAD, c)) : [];
 const t1 = Date.now();
-const baseRecs = FLEET.map(c => drive(BASEB, c));
+const baseRecs = needFleet ? FLEET.map(c => drive(BASEB, c)) : [];
 const flatHead = headRecs.flat(), flatBase = baseRecs.flat();
 console.log(`fleet: ${FLEET.length} careers a tree (seed offset ${SEED_OFFSET}, ${SEEDS} seeds), ${flatHead.length} seasons on this tree in ${Math.round((t1 - t0) / 1000)} s, ${flatBase.length} on the base`);
 
@@ -411,7 +425,7 @@ function monthAudit(recs) {
 }
 SECTION = '1';
 console.log('1) Player of the Month reads the month\'s football, with the true year');
-{
+if (runs('1')) {
   const h = monthAudit(flatHead), b = monthAudit(flatBase);
   const g = x => ['GK', 'DEF', 'MID', 'ATT'].map(k => `${k} ${r2(x.groups[k].mean)} (${x.groups[k].n})`).join(', ');
   console.log(`   this tree: ${h.won} months over ${h.seasons} seasons; rated 8.0+ ${r2(h.great)} a season (${h.counts.great}), 7.0 to 7.5 any ${r2(h.fairAny)} (${h.counts.fair}); at 7.5 to 8.5 all ${r2(h.groupAll)}: ${g(h)}`);
@@ -529,7 +543,7 @@ function lockstep(c) {
 }
 SECTION = '2';
 console.log('2) The month award and the world tick leave the season\'s draws where they were');
-{
+if (runs('2')) {
   const careers = [];
   for (const start of [1990, 2000, 2010, 2020, 2025]) for (let p = 0; p < POSITIONS.length; p += 1) for (let k = 0; k < 4; k += 1) {
     const seed = 50000 + SEED_OFFSET * 1000 + start * 0 + careers.length;
@@ -585,7 +599,9 @@ function feedAudit(recs) {
       if (r.club && namesClub(line, r.club)) { a.own += 1; ex('own', `the feed names his club: "${line}"`); }
       if (line === pastLine || line === futureLine) continue;
       const mv = line.match(LINE.move), rv = line.match(LINE.rival), eu = line.match(LINE.europe), ti = line.match(LINE.title), tp = line.match(LINE.top), su = line.match(LINE.summer);
-      if (happened && ERA_NAMES.some(n => line.includes(n))) { a.pastName += 1; ex('pastName', `${r.year}: a real name in "${line}"`); }
+      /* The rival's line names a generated man (Round 499's generator, simInventedNames), whose first name may be
+         an era star's single name ("Xavi Kovac"): it is the one line every year keeps. */
+      if (happened && !(rv && rv[1] === r.rival) && ERA_NAMES.some(n => line.includes(n))) { a.pastName += 1; ex('pastName', `${r.year}: a real name in "${line}"`); }
       if (happened && (mv || eu || ti || tp)) { a.pastClaim += 1; ex('pastClaim', `${r.year}: "${line}"`); }
       if (!happened && (eu || ti)) a.futureClaims += 1;
       if (su && !T.tournamentWinnerShown(r.year, r.hist ? r.hist.myResult : '')) { a.summer += 1; ex('summer', `${r.year}: a summer he missed, "${line}"`); }
@@ -614,7 +630,7 @@ function feedAudit(recs) {
 }
 SECTION = '3';
 console.log('3) The phone\'s world says nothing it cannot stand behind');
-{
+if (runs('3')) {
   const h = feedAudit(flatHead), b = feedAudit(flatBase);
   const row = x => `real names in a past season ${x.pastName}, past champions, transfers or scorers ${x.pastClaim}, a missed summer's winner ${x.summer}, moves of real men ${x.realMove}, real top scorers ${x.realTop}, real men off their era club ${x.clubs}, lines off the record ${x.record}`;
   console.log(`   this tree: ${h.seasons} seasons (${h.past} happened, ${h.future} to come), ${h.lines} lines, ${h.futureClaims} champion lines in seasons to come, ${h.generatedMoves} moves of generated men`);
@@ -651,7 +667,7 @@ function quizAudit(recs) {
 }
 SECTION = '4';
 console.log('4) The phone\'s quiz asks about the world only where the world is the game\'s own');
-{
+if (runs('4')) {
   const h = quizAudit(flatHead), b = quizAudit(flatBase);
   console.log(`   this tree: three questions in ${h.ready} of ${h.seasons} seasons (${r2(h.rate)}); world questions about a season that happened ${h.world}, about a real man ${h.real}, answers not in the save ${h.missing}, world questions asked ${h.worldAsked}`);
   console.log(`   base:      three questions in ${b.ready} of ${b.seasons} seasons (${r2(b.rate)}); world questions about a season that happened ${b.world}, about a real man ${b.real}, answers not in the save ${b.missing}`);
@@ -740,7 +756,7 @@ function panelAudit(B) {
 }
 SECTION = '5';
 console.log('5) The season log and the International panel name a winner only where the rule allows');
-{
+if (runs('5')) {
   const h = logAudit(flatHead), b = logAudit(flatBase);
   console.log(`   this tree: ${h.summers} summers; winner lines missing where they belong ${h.shownMissing}, printed for a summer he missed ${h.hiddenShown}; kept for finals he played ${h.keptPlayed}, kept for a summer to come ${h.keptFuture}, held back ${h.hiddenPast}`);
   console.log(`   base:      ${b.summers} summers; printed for a summer he missed that happened ${b.hiddenShown}`);
@@ -754,6 +770,78 @@ console.log('5) The season log and the International panel name a winner only wh
     console.log(`   ${x.name}: champions line ${x.champions}, bracket tile ${x.bracket}, last tile winner ${x.wonIt} (base ${y.champions}, ${y.bracket}, ${y.wonIt})`);
     for (const k of ['champions', 'bracket', 'wonIt']) if (x[k] !== x.want) fail(`${x.name}: ${k} is ${x[k]}, the rule says ${x.want}`);
   }
+}
+
+/* ─── 6. the inverse ───────────────────────────────────────────────────── */
+
+/* The regions of each file this round may edit (the brief's decision 1), as anchors in this tree's text: a region
+   runs from the line holding its start to the line before its end. Every diff hunk against the base must sit
+   inside one. The panel's import line and its tile grid's class are the two lines past the brief's list
+   (docs/audits/ROUND-1329-NOTES.md says why). */
+const REGIONS = {
+  [ENGINE]: [
+    ['import { monthAwards, monthYear, tournamentWinnerShown } from "./soccerWorldTruth";', 'import { personalGoalMilestone } from "./soccerCareerMilestone";'],
+    ['  /* The champion is announced whether you were there or not. Round 1329:', '  if (!eligible) return;'],
+    ['  /* Awards: Player of the Month. Round 1329:', '  // Player of the Year (domestic)'],
+  ],
+  [PHONE]: [
+    ['import { LAST_REAL_YEAR, seasonHappened, tournamentWinnerShown, feedPastSeasonLine, feedFutureSeasonLine } from "./soccerWorldTruth";', '/* ─── storage caps ─── */'],
+    ['/* LAST_REAL_YEAR (2032:', 'function leagueOfClub('],
+    ['export function worldSeasonTick(', '/** The feed, newest first, ready to print. */'],
+  ],
+  [ARCADE]: [
+    ['import { LAST_REAL_YEAR, seasonHappened } from "./soccerWorldTruth";', 'export interface ArcadeQuestion {'],
+    ['export function arcadeQuestions(', '/** Whether the app has anything to offer this season. */'],
+  ],
+  [PANEL]: [
+    ['import { summerAtHomeLine, tournamentWinnerShown } from "@/lib/soccerWorldTruth";', 'import type {'],
+    ['        {screen === "bracket" && tournamentWinnerShown(t.year, t.myResult) && (', '            <h3 className="text-sm font-black uppercase tracking-wide">The Bracket</h3>'],
+    ['    /* Round 1329: the whole edition\'s bracket names who won it', '    { key: "matches", emoji: "⚽", label: "Your Games", sub: `${t.playerApps} apps` },'],
+    ['  /* Round 1329: who won a summer that really happened is the world\'s fact, so', '\n  return (\n    <div\n      ref={cardRef}'],
+    ['      <div className="grid grid-cols-2 gap-1.5 [&>*:last-child:nth-child(odd)]:col-span-2">', '        {tiles.map(tile => ('],
+    ['                {tournamentWinnerShown(h.year, h.myResult) ? (', '                <span className="shrink-0"><ResultPill result={h.myResult} /></span>'],
+    ['  /* Round 1329: the last edition\'s bracket and winner follow the card\'s rule. */', '    return (\n      <div ref={revealRef} className="space-y-2">\n        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">\n          {last.name} {last.year}'],
+    ['        onClick={() => setOpen(lastShown ? "bracket" : "history")}', '        className="bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors min-w-0"\n      >\n        <div className="text-base leading-none">🏆</div>'],
+    ['        <div className="text-[9px] text-muted-foreground truncate">\n          {latest && tournamentWinnerShown', '      </button>\n    </div>\n  );\n}'],
+  ],
+};
+const sha256 = s => createHash('sha256').update(s).digest('hex');
+const lineOf = (text, index) => text.slice(0, index).split('\n').length;
+SECTION = '6';
+console.log('6) The eighth inverse gives the base\'s four files back, and every change sits in this round\'s hunks');
+if (runs('6')) {
+  const receipt = [];
+  for (const file of WORLD_TRUTH_FILES) {
+    const head = (controlSources.get(file) ?? fs.readFileSync(path.join(ROOT, file), 'utf8')).split('\r\n').join('\n');
+    const base = execFileSync('git', ['show', `${BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).split('\r\n').join('\n');
+    let back = null;
+    try { back = inverseWorldTruth(file, head, receipt); } catch (e) { fail(`${file}: the inverse does not apply (${e.message.split('\n')[0]})`); }
+    const hs = sha256(head), bs = sha256(base), rs = back === null ? '(none)' : sha256(back);
+    console.log(`   ${file}: head ${hs.slice(0, 16)} (pinned ${WORLD_TRUTH_SHA256[file].head.slice(0, 16)}), inverse ${rs.slice(0, 16)}, base ${bs.slice(0, 16)} (pinned ${WORLD_TRUTH_SHA256[file].base.slice(0, 16)})`);
+    if (back !== null && rs !== bs) fail(`${file}: the eighth inverse gives sha256 ${rs}, the base is ${bs}`);
+    if (bs !== WORLD_TRUTH_SHA256[file].base) fail(`${file}: the base pinned in the inverse is not ${BASE.slice(0, 8)}'s`);
+    if (hs !== WORLD_TRUTH_SHA256[file].head) fail(`${file}: this tree is not the head the inverse was written for (regenerate the rows)`);
+    /* every hunk inside a region */
+    const dir = fs.mkdtempSync(path.join(TMP, 'hunks-'));
+    fs.writeFileSync(path.join(dir, 'base'), base); fs.writeFileSync(path.join(dir, 'head'), head);
+    const diff = spawnSync('git', ['diff', '--no-index', '-U0', '--no-color', path.join(dir, 'base'), path.join(dir, 'head')], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).stdout;
+    const regions = REGIONS[file].map(([from, to]) => {
+      const a = head.indexOf(from), b = a < 0 ? -1 : head.indexOf(to, a + from.length);
+      if (a < 0 || b < 0 || head.indexOf(from, a + 1) >= 0) { fail(`${file}: the region anchor ${JSON.stringify(from.slice(0, 50))} is not in this tree exactly once with its end after it`); return null; }
+      return [lineOf(head, a), lineOf(head, b) - 1];
+    }).filter(Boolean);
+    let hunks = 0;
+    for (const m of diff.matchAll(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/gm)) {
+      hunks += 1;
+      const c = Number(m[1]), d = m[2] === undefined ? 1 : Number(m[2]);
+      const lo = d === 0 ? c : c, hi = d === 0 ? c + 1 : c + d - 1;
+      if (!regions.some(([x, y]) => lo >= x && hi <= y + (d === 0 ? 1 : 0))) fail(`${file}: the change at head lines ${lo} to ${hi} is outside every region this round may edit`);
+    }
+    console.log(`     ${hunks} hunks against the base, in ${regions.length} regions`);
+  }
+  const problem = worldTruthReceiptProblem(receipt, WORLD_TRUTH_FILES);
+  if (problem) fail(problem);
+  console.log(`   rows applied: ${receipt.length} of ${WORLD_TRUTH_ADDITIONS.length}`);
 }
 
 /* ─── the verdict ──────────────────────────────────────────────────────── */

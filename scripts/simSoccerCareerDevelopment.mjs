@@ -12,6 +12,7 @@ import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
 import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
+import { worldTruthPatches } from './lib/careerWorldTruth1329.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
@@ -184,7 +185,9 @@ if (!IMPORT_ONLY) {
      (scripts/lib/careerAwardGenerations1318.mjs). */
   /* Round 1327: and Round 1327's event deck and paper first, the newest change first (scripts/lib/careerDeckFair1327.mjs):
      its keyed draws move every seeded career's Math.random from the first deck or paper on. */
-  const nextTen = [...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
+  /* Round 1329: and the world truth round before that, the newest change first (scripts/lib/careerWorldTruth1329.mjs): the
+     engine's and the phone's rows, the two files of it this bundle loads. */
+  const nextTen = [...worldTruthPatches().filter(patch => patch.file === 'src/lib/soccerCareerEngine.ts' || patch.file === 'src/lib/soccerPhone.ts'), ...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
   const neutralB = await developmentBundle({ patches: [...activePatches, ...nextTen] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
   const mentorMetadata = seeded(118500, () => B.soccer.getAllEvents(developmentFixture(B)).find(event => event.id === 6)).value;
   async function check(name, fn) {
