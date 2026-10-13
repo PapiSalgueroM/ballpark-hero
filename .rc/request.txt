@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+desk: node scripts/playCmFinanceDesk.mjs
+desk-small: CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs
+desk-cut: CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs
+desk-wrap: CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs
+playSponsors: node scripts/playSponsors.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
