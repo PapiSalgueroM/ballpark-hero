@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+playCollegeSeat exit=0 250s | playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
+smalltap exit=1 253s | control pictures: 74
