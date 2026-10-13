@@ -1,0 +1,6 @@
+head: node scripts/simCareerSocialBrands.mjs
+ba: git worktree add -q --detach /tmp/ba a5519151 && ln -s "$PWD/node_modules" /tmp/ba/node_modules && cd /tmp/ba && node scripts/simCareerSocialBrands.mjs
+r1318: git worktree add -q --detach /tmp/r1318 12f7e041 && ln -s "$PWD/node_modules" /tmp/r1318/node_modules && cd /tmp/r1318 && node scripts/simCareerSocialBrands.mjs
+main: git worktree add -q --detach /tmp/main 8fea14e2 && ln -s "$PWD/node_modules" /tmp/main/node_modules && cd /tmp/main && node scripts/simCareerSocialBrands.mjs
+baParent: git worktree add -q --detach /tmp/bap a7c6befe~1 && ln -s "$PWD/node_modules" /tmp/bap/node_modules && cd /tmp/bap && node scripts/simCareerSocialBrands.mjs
+baFix: git worktree add -q --detach /tmp/baf a7c6befe && ln -s "$PWD/node_modules" /tmp/baf/node_modules && cd /tmp/baf && node scripts/simCareerSocialBrands.mjs
