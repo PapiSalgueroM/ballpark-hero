@@ -15,7 +15,9 @@
  *   D. Must not move: three careers with a seeded, counted Math.random and a
  *      frozen Date, identical presses on a base build and a head build; every
  *      saved key byte equal and the draw count equal. Needs BASE_URL.
- *   E. Old saves: two committed fixtures resume to a whole hub.
+ *   E. Old saves: two committed fixtures resume to a whole hub; and with the
+ *      meters' chunk held back, nothing shifts when it lands, a board on the
+ *      edge (the longest meter words) at all three sizes included.
  *   F. Motion and help: nothing animates under reduced motion; the help opens.
  *
  * Run on a served build (scripts/lib/hostLikeServer.mjs, never a single page
@@ -866,6 +868,41 @@ if (SECTIONS.has('E')) {
       await ctx.close();
     } catch (e) {
       fail('E', `${file}: ${String(e).split('\n')[0].slice(0, 200)}`);
+    }
+  }
+  /* The meters' slot holds the strip's own height while its lazy chunk loads.
+     The chunk is held back 1.5 s here so it lands well after the first hub
+     frame (and past the half second a shift after a tap is forgiven), then
+     nothing on the hub may have shifted. The board on the edge carries the
+     meters' longest words ("One bad week from the sack"), which wrap; the
+     plain fixture is the one line case beside it. */
+  const edge = [['edge-320', SIZE.s320, 5], ['edge-390', SIZE.s390, 5], ['edge-1280', SIZE.s1280, 5], ['plain-390', SIZE.s390, null]];
+  for (const [tag, size, board] of edge) {
+    try {
+      const j = JSON.parse(fs.readFileSync(path.join('scripts', 'data', OLD_SAVES[0]), 'utf8'));
+      if (board !== null) j.boardConfidence = board;
+      const { ctx, page, errors } = await openPage(HEAD, size);
+      await ctx.route(/\/assets\/MetersStrip-[^/]*\.js$/, async r => { await new Promise(res => setTimeout(res, 1500)); await r.continue(); });
+      await ctx.addInitScript(([k, v]) => { try { if (!localStorage.getItem(k)) localStorage.setItem(k, v); } catch { /* storage blocked */ } }, [SAVE_KEY, JSON.stringify(j)]);
+      await page.goto(`${HEAD}/club-manager`, { waitUntil: 'domcontentloaded' });
+      await page.locator('button', { hasText: 'Resume Career' }).first().click({ timeout: 20000 });
+      await page.waitForFunction(() => window.__hubFirst !== null, null, { timeout: 60000 });
+      const early = await page.evaluate(() => !!document.querySelector('[data-cm-meters]'));
+      await page.locator('[data-cm-meter="board"]').waitFor({ timeout: 20000 });
+      await page.waitForTimeout(800);
+      const m = await page.evaluate(() => {
+        const s = document.querySelector('[data-cm-meters]');
+        const b = document.querySelector('[data-cm-meter="board"]');
+        return { cls: window.__clsAfterHub, strip: Math.round(s.getBoundingClientRect().height + parseFloat(getComputedStyle(s).marginTop)), slot: Math.round(s.parentElement.getBoundingClientRect().height), band: b.innerText.replace(/\s+/g, ' ').trim() };
+      });
+      check('E', !early, `${OLD_SAVES[0]} ${tag}: the meters' chunk was still loading on the first hub frame`);
+      if (board !== null) check('E', /One bad week from the sack/.test(m.band), `${OLD_SAVES[0]} ${tag}: the board meter reads "${m.band}"`);
+      check('E', m.cls < 0.0001, `${OLD_SAVES[0]} ${tag}: nothing on the hub shifts when the meters land late (layout shift ${m.cls.toFixed(4)}, strip ${m.strip}px in a ${m.slot}px slot)`);
+      if (errors.length) fail('E', `${tag}: page error ${errors[0].slice(0, 160)}`);
+      await shot(page, `E-meters-${tag}`);
+      await ctx.close();
+    } catch (e) {
+      fail('E', `${tag}: ${String(e).split('\n')[0].slice(0, 200)}`);
     }
   }
 }
