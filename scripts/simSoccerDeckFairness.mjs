@@ -117,7 +117,7 @@ import * as esbuild from 'esbuild';
 import { inverseDeckFair, DECK_FAIR_ADDITIONS, DECK_FAIR_BASE_SHA256, DECK_FAIR_HEAD_SHA256 } from './lib/careerDeckFair1327.mjs';
 /* Round 1329 edits the engine after this round (the month award, the tournament lines): section 8 takes that off
    first with the eighth inverse, then proves the seventh against its own pinned head and base. */
-import { inverseWorldTruth, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
+import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The tree this round was cut from. Section 7 bundles it from git. */
@@ -218,7 +218,7 @@ function mark(source) {
   }
   return `${out}\nexport { generateRandomEvents as __r1327Deck, generateNewsArticles as __r1327News };\n`;
 }
-async function bundle(tag, { ref = null, control = null } = {}) {
+async function bundle(tag, { ref = null, control = null, truthOut = null } = {}) {
   let hits = 0;
   const plugin = { name: 'r1327-source', setup(b) {
     b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
@@ -228,6 +228,7 @@ async function bundle(tag, { ref = null, control = null } = {}) {
         ? execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replace(/\r\n/g, '\n')
         : fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
       if (control && rel === ENGINE) { source = control; hits += 1; }
+      if (truthOut) source = inverseWorldTruth(rel, source, truthOut);
       if (rel === ENGINE) source = mark(source);
       return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
     });
@@ -250,6 +251,12 @@ globalThis.localStorage = {
 };
 const E = await bundle('head', { control: controlSource });
 const B = await bundle('base', { ref: BASE });
+/* Round 1329 changes the month award, the phone's world and the season log after this round, on purpose, before any
+   paper or deck runs: section 7's lockstep with the base reads this tree with Round 1329 taken out (the eighth
+   inverse, scripts/lib/careerWorldTruth1329.mjs), every row of every file it loads once, in order. */
+const truthOutReceipt = [];
+const E7 = await bundle('head-1329out', { control: controlSource, truthOut: truthOutReceipt });
+assert.equal(worldTruthReceiptProblem(truthOutReceipt), '', 'section 7\'s bundle takes Round 1329 out of every file it loads, once, in order');
 
 /* ─── seeded streams ───────────────────────────────────────────────────── */
 
@@ -792,12 +799,12 @@ console.log('7) Before the first paper or deck nothing moves; saves the base wro
   for (let i = 0; i < 200; i += 1) {
     const seed = 70000 + i + SEED_OFFSET;
     const rE = seeded(seed), rB = seeded(seed);
-    let a = run(rE, () => startOf(E, seed, 'ordinary'));
+    let a = run(rE, () => startOf(E7, seed, 'ordinary'));
     let b = run(rB, () => startOf(B, seed, 'ordinary'));
     let touched = false;
     for (let k = 0; k < 80; k += 1) {
       const phase = a.s.phase;
-      const na = run(rE, () => step(E, a.s, seed, false, E.FALLBACK_CLUBS));
+      const na = run(rE, () => step(E7, a.s, seed, false, E7.FALLBACK_CLUBS));
       const nb = run(rB, () => step(B, b.s, seed, false, B.FALLBACK_CLUBS));
       steps += 1;
       const same = na.n === nb.n && JSON.stringify(na.s) === JSON.stringify(nb.s);
