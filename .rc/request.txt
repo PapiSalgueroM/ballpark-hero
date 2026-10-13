@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+mobile-head: node scripts/simMobileChrome.mjs > "$RC_OUT/mob-head.log" 2>&1; s=$?; grep -n -E "identity|name is not whole|FAIL|fail|Green|green|RED|red" "$RC_OUT/mob-head.log" | tail -25; tail -6 "$RC_OUT/mob-head.log"; exit $s
+mobile-base: git worktree add -q /tmp/mb c5fc5470 && ln -s "$PWD/node_modules" /tmp/mb/node_modules && cd /tmp/mb && node_modules/.bin/vite build > /tmp/mb-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/mb/dist 4195 > /dev/null 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4195 SWEEP_BASE=http://127.0.0.1:4195 node scripts/simMobileChrome.mjs > "$RC_OUT/mob-base.log" 2>&1; s=$?; grep -n -E "identity|name is not whole|FAIL|fail|Green|green|RED|red" "$RC_OUT/mob-base.log" | tail -25; tail -6 "$RC_OUT/mob-base.log"; exit $s
