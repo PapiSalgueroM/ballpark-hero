@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmLedgerJourney-nokey-EXPECT-RED: CM_LEDGER_CONTROL=nokey node scripts/simCmLedgerJourney.mjs
+simCmLedgerJourney-futureyear-EXPECT-RED: CM_LEDGER_CONTROL=futureyear node scripts/simCmLedgerJourney.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSaveSize-s3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs

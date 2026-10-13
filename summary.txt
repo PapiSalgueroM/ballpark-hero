@@ -1,0 +1,12 @@
+tsc exit=0 82s | 
+simCmLedgerJourney exit=0 124s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmLedgerJourney-nokey-EXPECT-RED exit=1 129s | simCmLedgerJourney: CONTROL nokey FIRED: 3 failure(s) of the kind "no man of my squad carries his key"
+simCmLedgerJourney-futureyear-EXPECT-RED exit=1 5s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 failure(s) of the kind "a ledger its reader refuses"
+vitest-all exit=0 598s |    Duration  597.40s (transform 36.99s, setup 22.90s, collect 178.24s, tests 1261.57s, environment 178.38s, prepare 38.78s)
+simCmLedgerBound exit=0 290s | simCmLedgerBound: green, all four sections held
+simCmLeagueRules exit=0 40s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simManagerWorldContinuity exit=0 664s | Private world variation is measured, no historical fixture was re-recorded
+simClubManagerSaveSize exit=0 40s | simClubManagerSaveSize: all sections green
+simClubManagerSaveSize-s3 exit=0 42s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 37s | simClubManagerSlots: all sections green
+simCmUnseededWorld exit=0 79s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w

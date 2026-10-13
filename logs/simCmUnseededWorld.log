@@ -1,0 +1,11 @@
+  now: Brentford, Cardiff City, and the thinnest roster of the era AC Horsens (0 projected men)
+  era2020: Chelsea, Real Betis, and the thinnest roster of the era Crotone (3 projected men)
+  era2015: Chelsea, Eibar, and the thinnest roster of the era GFC Ajaccio (2 projected men)
+  era2010: Blackburn Rovers, Espanyol, and the thinnest roster of the era Cesena (3 projected men)
+  era2005: Blackburn Rovers, Celta Vigo, and the thinnest roster of the era Cádiz (1 projected men)
+quiet: 49 saves, 2221 steps compared, 0 red, 31s
+deals: 49 saves, 2998 steps compared, 0 red, 34s
+  deals on the base engine: buy done 49, loan-option done 49, release done 31, release refused 18, sale done 49, swap done 49
+fresh: 15 saves, 929 steps compared, 0 red, 10s
+  deals on the base engine: buy done 15, loan-option done 15, release done 9, release refused 6, sale done 15, swap done 15
+simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers with the seed block out do too
