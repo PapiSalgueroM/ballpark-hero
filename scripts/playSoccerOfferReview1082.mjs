@@ -168,7 +168,7 @@ async function loadedFonts(page) {
   assert(result.every(row => row.faces.length && row.faces.every(face => face.status === 'loaded' && face.family.replaceAll('"', '') === row.family)), 'All eight actual template font faces loaded');
   return result;
 }
-const snapshot = page => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(window.__offerReview.writes), rng: { seed: window.__offerReview.seed, draws: window.__offerReview.draws }, now: Date.now(), scrollY,
+const snapshot = page => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).filter(([key]) => !key.startsWith('dukb-fence:')).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(window.__offerReview.writes), rng: { seed: window.__offerReview.seed, draws: window.__offerReview.draws }, now: Date.now(), scrollY,
   layout: window.__offerReview.readLayout(), telemetry: { events: structuredClone(window.__offerReview.events), trace: structuredClone(window.__offerReview.trace) } }));
 async function visibleImages(page, trigger, country) {
   await page.waitForFunction(() => [...document.images].filter(node => { const r = node.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.bottom > 0 && r.y < innerHeight; }).every(node => node.complete && node.naturalWidth > 0));
@@ -323,7 +323,7 @@ try {
       Math.random = () => { const state = window.__offerReview; state.draws++; state.seed = (Math.imul(state.seed, 1664525) + 1013904223) >>> 0; return state.seed / 4294967296; };
       for (const method of ['setItem', 'removeItem', 'clear']) {
         const original = Storage.prototype[method];
-        Storage.prototype[method] = function(...args) { if (this === localStorage) window.__offerReview.writes.push({ method, key: method === 'clear' ? '*' : args[0], value: args[1] ?? null }); return original.apply(this, args); };
+        Storage.prototype[method] = function(...args) { /* Round 1330: the save fence's generation key moves beside every game write; it is kept out of the write log */ if (this === localStorage && !String(args[0]).startsWith('dukb-fence:')) window.__offerReview.writes.push({ method, key: method === 'clear' ? '*' : args[0], value: args[1] ?? null }); return original.apply(this, args); };
       }
       for (const type of ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'click', 'keydown', 'keyup', 'focusin']) window.addEventListener(type, event => { const target = event.target instanceof Element ? event.target : null; state.events.push({ type, trusted: event.isTrusted, key: event.key, pointerType: event.pointerType, target: target?.closest('button')?.getAttribute('aria-label') || target?.closest('button')?.textContent || target?.tagName, layout: state.readLayout() }); }, true);
     }, { seed: BROWSER_SEED, now: FROZEN_NOW, triggerName: `Review contract with ${fixture.offer.club.name}` });
