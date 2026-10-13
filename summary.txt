@@ -1,0 +1,3 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+smalltap exit=1 249s | control pictures: 74
+playCollegeSeat exit=0 250s | playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
