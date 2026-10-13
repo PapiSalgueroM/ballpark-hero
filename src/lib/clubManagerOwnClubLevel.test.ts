@@ -97,4 +97,20 @@ describe("the manager's own club is read from his club, never the world roster",
     expect(projectedXIAvg('Everton', yearsOn(fresh), fresh.eraId)! - ledger).toBeGreaterThan(1);
     expect(fresh.clubStrengths.Everton).toBeCloseTo(ledger + 1, 6);
   });
+
+  it('the club he joins mid season is his from that day, read as the base, though the career handed over names the old one', () => {
+    /* Season two, so the seeded world and the base differ for Liverpool too (season one is the bake for both). */
+    const first = evertonWithoutHisBest();
+    const s = withRoll(0.6, () => startNextSeason(first));
+    expect(s.clubName).toBe('Everton');
+    expect(yearsOn(s)).toBe(1);
+    const fresh = withRoll(0.6, () => startCareer('Liverpool', s.eraId, undefined, s.manager, {
+      yearsOn: yearsOn(s), uclField: s.uclField ?? null, keepLeagueOverrides: true, rosterCareer: s, worldSeed: s.worldSeed,
+    }));
+    expect(fresh.clubName).toBe('Liverpool');
+    const base = projectedXIAvg('Liverpool', yearsOn(fresh), fresh.eraId)!;
+    expect(xi(worldRosterFor(fresh, 'Liverpool'))).not.toBe(base);
+    expect(fresh.clubStrengths.Liverpool).toBeCloseTo(base + 1, 6);
+    expect(worldRosterXIAvg(fresh, 'Liverpool')).toBe(base);
+  });
 });
