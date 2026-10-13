@@ -684,7 +684,9 @@ if (runs('2')) {
    every case, and at 30 and 35 goals the loops must really add calls, so the case has something to hold. */
 function plantedDraws() {
   const lf = s => s.replace(/\r\n/g, '\n');
-  const headSrc = lf(controlSources.get(ENGINE) ?? fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
+  /* each read sits straight inside lf(), so simHarnessAnchors sees it normalised (a read behind ?? it cannot follow) */
+  const controlled = controlSources.get(ENGINE);
+  const headSrc = controlled != null ? lf(controlled) : lf(fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
   const baseSrc = lf(execFileSync('git', ['show', `${BASE}:${ENGINE}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
   const cut = (src, from, to, where) => {
     const a = src.indexOf(from), b = a < 0 ? -1 : src.indexOf(to, a + from.length);
