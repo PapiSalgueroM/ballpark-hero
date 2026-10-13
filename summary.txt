@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+desk-small exit=1 29s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+desk exit=0 30s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+desk-cut exit=1 30s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+desk-wrap exit=1 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
