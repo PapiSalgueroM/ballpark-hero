@@ -1,3 +1,6 @@
+## Codex Round 1352: Player Bingo Robertson World Cup report, baseline pending, 2026-10-12
+
+Isolated codex/player-bingo-world-cup-alias from48cb9d4b. Exact source diagnosis is Andy Robertson in the recorded2026Scotland World Cup row versus Andrew Robertson on the drawn card. Scottish FA's actual13June Haiti report and FIFA's match-photo caption independently verify2026finals participation. The new causal loader/criterion proof is authored before an exact country-qualified ingestion alias retaining both keys; page/sharednormalizer/criteria/database/real data remain held. Baseline requires exactly one owned rejection and eight preservation passes; no application change until it qualifies. Remote-only runtime and offline controlled transport, source/packages/installed holds. See docs/audits/player-bingo-world-cup-alias-2026-10-12.md. Main/integration/publication belong to H; no live or production-row claim.
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
