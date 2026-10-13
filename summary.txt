@@ -1,0 +1,11 @@
+promises exit=0 27s | simSoccerEventPromises: all sections green
+fairness exit=0 75s | simSoccerDeckFairness: all sections green
+tsc exit=0 85s | 
+fair1 exit=0 68s | simSoccerDeckFairness: all sections green
+fair3 exit=0 59s | simSoccerDeckFairness: all sections green
+fair2 exit=0 76s | simSoccerDeckFairness: all sections green
+fair4 exit=0 70s | simSoccerDeckFairness: all sections green
+fair-nogate exit=1 68s | CONTROL nogate FIRED: section 4 failed (12 failures in all)
+vitestUnit exit=0 5s |    Duration  3.53s (transform 1.89s, setup 698ms, collect 4.39s, tests 103ms, environment 2.06s, prepare 492ms)
+fair-outside exit=1 69s | CONTROL outside FIRED: section 8 failed (67 failures in all)
+cool0 exit=0 60s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
