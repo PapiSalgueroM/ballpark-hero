@@ -1,0 +1,15 @@
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+vitest exit=0 34s |    Duration  34.01s (transform 6.96s, setup 2.16s, collect 20.44s, tests 47.29s, environment 14.05s, prepare 3.54s)
+simSaveFence exit=0 3s | simSaveFence: all green (tabs, source)
+simManagerAppealIsolation exit=0 61s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerSlots exit=0 59s | simClubManagerSlots: all sections green
+tsc exit=0 109s | 
+simCmLeagueRules exit=0 63s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCmVarLedger exit=0 0s | simCmVarLedger: all 691 checks passed.
+simClubManagerScore exit=0 97s | ALL SEASON SCORE CHECKS PASSED
+simLiveSimMotion exit=0 66s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simAcademy exit=0 345s | ALL ACADEMY CHECKS PASSED
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simPrerender exit=1 0s | NO dist/sitemap.xml. BUILD AND PRERENDER FIRST. NOT CHECKED.
+simRoles exit=0 1206s | ALL ROLE CHECKS PASSED
+simPress exit=0 1939s | ALL PRESS AND TEAM TALK CHECKS PASSED
