@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe exit=0 14s | probeSquad PART B floor 14/15: 506 of 506 same
+weight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+tsc exit=0 83s | 
+fleet exit=0 90s | simSaveFence: all green (tabs, source, fleet)

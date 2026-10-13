@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+weight: ENGINES=chromium node scripts/sweepWeight.mjs
+probe: git worktree add -q /tmp/pb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb node .rc/x/probeSquad.mjs
+fleet: git worktree add -q /tmp/f1 36cc9ffe && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
