@@ -1,0 +1,6 @@
+fight: git rev-parse HEAD && node scripts/simFightCareer.mjs
+fightLifeleak: FIGHT_CONTROL=lifeleak node scripts/simFightCareer.mjs
+fightNocards: FIGHT_CONTROL=nocards node scripts/simFightCareer.mjs
+fightFreecard: FIGHT_CONTROL=freecard node scripts/simFightCareer.mjs
+fightRedeal: FIGHT_CONTROL=redeal node scripts/simFightCareer.mjs
+fightWipesave: FIGHT_CONTROL=wipesave node scripts/simFightCareer.mjs
