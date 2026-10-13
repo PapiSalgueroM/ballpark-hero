@@ -1,0 +1,6 @@
+trophy exit=1 4s | Node.js v24.21.0
+storyRole exit=1 8s | simCareerStoryRole: 16 groups, 5 failed, 0 full AR pairs
+development exit=1 5s | simSoccerCareerDevelopment: 18 outcome groups, 0+0 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 2 failed
+leagueFinish exit=1 19s | Node.js v24.21.0
+leagueSeasons exit=1 19s | Node.js v24.21.0
+social exit=1 34s | 1 FAILURE
