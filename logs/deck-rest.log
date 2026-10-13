@@ -1,0 +1,37 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=rest
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72509 events dealt, 267577 deck draws, 296 repeat ids suffixed on FALLEN desks (13.5 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+   ok all 84 rows byte equal to the base engine's recording (desk states, ids, answer lines, deck draws, deals)
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+   ok nfl seed 1 dealt the same 2793 events twice; seed 4 dealt another deck
+   ok all 212800 desk states of seed 1 repaired to themselves
+   ok 28 rows dealt byte equal with a reload between every two weeks
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+   ok every card at weight 1: 7 FLEET rows byte equal to the recording
+   ok every card at weight 2.5: 7 FLEET rows byte equal to the recording
+   ok FX_WEIGHT (weights 1 and 3): the light card took 0.2424 of 10000 deals (band 0.23 to 0.272)
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+   ok 6083 story cards over 100 ten season desks, no story twice in a week or inside a cooldown, the one shot story once a desk
+   ok without the story field the same cards dealt 10692, 1.76 times as many (floor 1.5)
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+     desk 0: role:captain again after 1 weeks, rest 6
+     desk 0: role:keeper again after 2 weeks, rest 6
+     desk 0: role:captain again after 3 weeks, rest 6
+     desk 0: role:captain again after 1 weeks, rest 6
+     desk 0: role:captain again after 1 weeks, rest 6
+     desk 0: id:2 again after 2 weeks, rest 6
+   FAIL 26968 subject rest breaks
+   ok subjectRest 0 deals exactly as no subjects (765 deals, 2802 draws) and writes no book
+   ok no GM desk gained gmInboxRest over section 2's 212800 states
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+   ok with and without wordings: the same 15517 deals and 60001 deck draws
+   ok the same key reads the same words; another key reads other words on 6483 weeks with the same deal
+   ok every one of the 6 wordings came up, each at 0.971 to 1.015 of an even share (band 0.865 to 1.1)
+   packs the kit knows that use texts: none yet
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+   ok 2,000 random ledgers and seasons: the season deck held out exactly what careerEventDeck holds out (3336 of 12000 cards)
+   ok a cooldown of N is back after exactly N weeks on the week clock and sits out exactly N seasons on the season clock
+
+runtime 31.3 s
+simEventDeck: 1 failure, red sections 5 (CONTROL=rest fired)
