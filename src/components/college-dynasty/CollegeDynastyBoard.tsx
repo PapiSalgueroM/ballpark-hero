@@ -33,7 +33,7 @@ import {
   type CollegeSeatBinding,
 } from '@/lib/collegeSeatBind';
 import {
-  collegeBid, collegeBidView, collegeCanSitOut, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, type CollegeSeatBlock,
+  collegeBid, collegeBidView, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, type CollegeSeatBlock,
 } from '@/lib/collegeSeat';
 import {
   SeatBid, SeatCard, SeatFiredRecap, SeatMarket, SeatPickLine, SeatRecapLine, SeatSeeWhoCalls, SeatSlot,
@@ -495,9 +495,10 @@ export default function CollegeDynastyBoard<
   if (phase === 'recap' && recap && sport.recapDrawable(recap)) {
     const isChamp = sport.championOf(recap) === st.myTeam;
     const { RecapBody } = sport;
-    const seatRecap = sport.seat && st.seat ? collegeRecapView(st.seat, sport.seat.view(st)) : null;
-    const seatBidOffer = seatRecap && !seatRecap.fired ? collegeBid(st.seat!, sport.seat!.view(st)) : null;
-    const seatBid = seatBidOffer ? collegeBidView(seatBidOffer, sport.seat!.view(st)) : null;
+    const recapView = sport.seat && st.seat ? sport.seat.view(st) : null;
+    const seatRecap = recapView ? collegeRecapView(st.seat!, recapView) : null;
+    const seatBidOffer = seatRecap && !seatRecap.fired ? collegeBid(st.seat!, recapView!) : null;
+    const seatBid = seatBidOffer ? collegeBidView(seatBidOffer, recapView!) : null;
     /* Round 530: the season curtain. Pure presentation over the postseason
        the engine already ran: the champion slams in, your own line rises,
        the award lands after the champion, then the title game and the ledger
@@ -512,7 +513,7 @@ export default function CollegeDynastyBoard<
           <Crown className="cm-slam mx-auto h-10 w-10 text-gold" />
           <RecapBody st={st} my={my} recap={recap} isChamp={isChamp} label={label} signed={signed} />
           {seatRecap && (seatRecap.fired
-            ? <SeatFiredRecap verdict={seatRecap.verdict} line={collegeMarket(st.seat!, sport.seat!.view(st))?.line ?? ''} />
+            ? <SeatFiredRecap verdict={seatRecap.verdict} line={collegeMarket(st.seat!, recapView!)?.line ?? ''} />
             : <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />)}
           {seatBid && <SeatBid bid={seatBid} onGo={() => goToBid(seatBid.teamId)} onStay={startRecruiting} />}
           <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
@@ -541,7 +542,7 @@ export default function CollegeDynastyBoard<
         <div className="space-y-4">
           <CelebrationStyles />
           <SeatMarket
-            block={st.seat} view={marketView} market={market} canSit={collegeCanSitOut(st.seat, marketView)}
+            block={st.seat} view={marketView} market={market} canSit={market.nextYear !== 'shut'}
             onTake={takeJob} onSit={sitYearOut} onNew={reset}
           />
         </div>
