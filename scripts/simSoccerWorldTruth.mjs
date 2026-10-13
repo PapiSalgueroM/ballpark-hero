@@ -19,6 +19,12 @@
  * arrives a fact about a season that happened is printed nowhere.
  *
  * THE SECTIONS
+ *   0  PINS. The harness judges with its own literals (season 2025, summer
+ *      2026, real names to 2032, the floor of 10 games and 6.8), and
+ *      soccerWorldTruth.ts must agree with them: its constants, and
+ *      seasonHappened, summerHappened, playedFinals, tournamentWinnerShown and
+ *      monthYear over 1980 to 2045. Planted: a 9 game season rated 9.5 and a
+ *      34 game season rated 6.7 never win a month; one rated 8.6 does.
  *   1  MONTHS. A fleet (starts 1990 to 2025 every five years, all ten positions,
  *      five seeds a run) driven on this tree and on the base: no month is won in
  *      a season under the floor (fewer than 10 games or rated under 6.8), so a
@@ -72,6 +78,8 @@
  *   extradraw   one extra draw in the world tick: section 2.
  *   legacy30    the old lottery's 30 goal guarantee loop is no longer drawn: section 2 (planted).
  *   legacy35    the old lottery's 35 goal guarantee loop is no longer drawn: section 2 (planted).
+ *   boundary    soccerWorldTruth.ts says 2025-26 has not happened (LAST_PLAYED_SEASON 2024): section 0.
+ *   floor       the month award's 10 game floor is dropped: section 0 (planted).
  *   realmoves   real men are moved between clubs again: section 3.
  *   pastchampions  a season that happened prints its champions: section 3.
  *   summer      the feed names the winner of every summer that happened again: section 3.
@@ -123,6 +131,7 @@ const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const PHONE = 'src/lib/soccerPhone.ts';
 const ARCADE = 'src/lib/soccerArcade.ts';
 const PANEL = 'src/components/soccer-career/InternationalPanel.tsx';
+const TRUTH = 'src/lib/soccerWorldTruth.ts';
 
 /* ─── the controls ─────────────────────────────────────────────────────── */
 
@@ -149,6 +158,10 @@ const CONTROLS = {
     edits: { [ENGINE]: [['  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {', '  if (true) {']] } },
   panel: { breaks: '5', note: 'the International panel names every winner again',
     edits: { [PANEL]: [['import { summerAtHomeLine, tournamentWinnerShown } from "@/lib/soccerWorldTruth";', 'import { summerAtHomeLine } from "@/lib/soccerWorldTruth";\nconst tournamentWinnerShown = (..._: unknown[]) => true;']] } },
+  boundary: { breaks: '0', note: 'the module says the 2025-26 season has not happened',
+    edits: { [TRUTH]: [['export const LAST_PLAYED_SEASON = 2025;', 'export const LAST_PLAYED_SEASON = 2024;']] } },
+  floor: { breaks: '0', note: 'the month award\'s 10 game floor is dropped',
+    edits: { [TRUTH]: [['  if (!(row.apps >= MONTH_AWARD_MIN_APPS) || !(row.rating >= MONTH_AWARD_MIN_RATING)) return [];', '  if (!(row.rating >= MONTH_AWARD_MIN_RATING)) return [];']] } },
   legacy30: { breaks: '2', note: 'the old lottery\'s 30 goal guarantee loop is no longer drawn',
     edits: { [ENGINE]: [['    if (goals >= 30) for (; won < 6; won += 1) total += rand(0, 9 - won);\n', '']] } },
   legacy35: { breaks: '2', note: 'the old lottery\'s 35 goal guarantee loop is no longer drawn',
@@ -244,7 +257,23 @@ globalThis.localStorage = {
 };
 const HEAD = await bundle('head');
 const BASEB = await bundle('base', BASE);
-const T = HEAD.truth;
+/* The harness judges with its own copy of the boundary and the rule, written here as literals, never with the
+   module's own functions alone: judging by HEAD.truth let a wrong constant or rule inside soccerWorldTruth.ts
+   leave every section green (the review's finding 3; only the unit files caught it). Moving the boundary is a
+   data round with its own sources, and that round moves these numbers too. Section 0 holds the module to them.
+   Everything else (monthAwards, the feed's two lines) is the module's own, as the thing under test. */
+const PIN = { season: 2025, summer: 2026, realNames: 2032, minApps: 10, minRating: 6.8 };
+const FINALS_PINNED = new Set(['Group Stage', 'Round of 32', 'Round of 16', 'Quarter-final', 'Semi-final', 'Runner-up', 'Winner']);
+const MONTHS_PINNED = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+const T = {
+  ...HEAD.truth,
+  LAST_REAL_YEAR: PIN.realNames,
+  seasonHappened: y => y <= PIN.season,
+  summerHappened: y => y <= PIN.summer,
+  playedFinals: r => FINALS_PINNED.has(r),
+  tournamentWinnerShown: (y, r) => y > PIN.summer || FINALS_PINNED.has(r),
+  monthYear: (m, y) => (MONTHS_PINNED.indexOf(m) >= 5 ? y + 1 : y),
+};
 
 /* Every real name an era pool lists from 1990 to the last real names year, and the club each year gives him. */
 const ERA = new Map();
@@ -255,6 +284,43 @@ for (let y = 1990; y <= T.LAST_REAL_YEAR; y += 1) {
   }
 }
 const ERA_NAMES = [...ERA.keys()];
+
+/* ─── 0. the module against the pins ───────────────────────────────────── */
+
+SECTION = '0';
+console.log('0) soccerWorldTruth.ts states the boundary and the rule this harness pins');
+{
+  const M = HEAD.truth;
+  let off = 0;
+  const no = m => { off += 1; fail(m); };
+  for (const [k, v] of [['LAST_PLAYED_SEASON', PIN.season], ['LAST_PLAYED_SUMMER', PIN.summer], ['LAST_REAL_YEAR', PIN.realNames], ['MONTH_AWARD_MIN_APPS', PIN.minApps], ['MONTH_AWARD_MIN_RATING', PIN.minRating]]) {
+    if (M[k] !== v) no(`soccerWorldTruth.ts says ${k} = ${M[k]}, this harness pins ${v} (moving it is a data round: move the pin with its sources)`);
+  }
+  const RESULTS = [...FINALS_PINNED, 'Did Not Qualify', 'Not Selected', '', null, undefined];
+  for (let y = 1980; y <= 2045; y += 1) {
+    if (M.seasonHappened(y) !== T.seasonHappened(y)) no(`seasonHappened(${y}) is ${M.seasonHappened(y)}`);
+    if (M.summerHappened(y) !== T.summerHappened(y)) no(`summerHappened(${y}) is ${M.summerHappened(y)}`);
+    for (const r of RESULTS) if (M.tournamentWinnerShown(y, r) !== T.tournamentWinnerShown(y, r)) no(`tournamentWinnerShown(${y}, ${JSON.stringify(r)}) is ${M.tournamentWinnerShown(y, r)}`);
+    for (const m of MONTHS_PINNED) if (M.monthYear(m, y) !== T.monthYear(m, y)) no(`monthYear(${m}, ${y}) is ${M.monthYear(m, y)}`);
+  }
+  for (const r of RESULTS) if (M.playedFinals(r) !== T.playedFinals(r)) no(`playedFinals(${JSON.stringify(r)}) is ${M.playedFinals(r)}`);
+  /* The floor, planted: a 9 game season rated 9.5 and a 34 game season rated 6.7 never win a month (dropping
+     either half of the floor goes red here; the fleet alone seldom tests it), while a 34 game season rated 8.6
+     does, so the case is not empty. */
+  const plant = (row, pos) => {
+    let won = 0;
+    for (let i = 0; i < 2000; i += 1) won += M.monthAwards(row, pos, HEAD.keyed.keyedRng(`Pin ${i}|2000s|England|${pos}|${1990 + (i % 40)}|potm`)).length;
+    return won;
+  };
+  const short = plant({ apps: 9, goals: 9, assists: 4, cleanSheets: 6, rating: 9.5, injuryWeeks: 0 }, 'ST');
+  const flat = plant({ apps: 34, goals: 14, assists: 6, cleanSheets: 14, rating: 6.7, injuryWeeks: 0 }, 'ST');
+  const great = plant({ apps: 34, goals: 25, assists: 8, cleanSheets: 14, rating: 8.6, injuryWeeks: 0 }, 'ST');
+  console.log(`   pins: season ${PIN.season}, summer ${PIN.summer}, real names to ${PIN.realNames}, floor ${PIN.minApps} games and ${PIN.minRating}; ${off} disagreements over 1980 to 2045`);
+  console.log(`   planted over 2,000 identities each: 9 games rated 9.5 won ${short} months, 34 games rated 6.7 won ${flat}, 34 games rated 8.6 won ${great}`);
+  if (short) fail(`a 9 game season rated 9.5 won ${short} months under the floor`);
+  if (flat) fail(`a 34 game season rated 6.7 won ${flat} months under the floor`);
+  if (!(great > 0)) fail(`a 34 game season rated 8.6 won no month in 2,000 identities, so the floor cases hold nothing`);
+}
 
 /* ─── the fleet ────────────────────────────────────────────────────────── */
 
@@ -696,7 +762,7 @@ SECTION = '3';
 console.log('3) The phone\'s world says nothing it cannot stand behind');
 if (runs('3')) {
   const h = feedAudit(flatHead), b = feedAudit(flatBase);
-  const row = x => `real names in a past season ${x.pastName}, past champions, transfers or scorers ${x.pastClaim}, a missed summer's winner ${x.summer}, moves of real men ${x.realMove}, real top scorers ${x.realTop}, real men off their era club ${x.clubs}, lines off the record ${x.record}`;
+  const row = x => `real names in a past season ${x.pastName}, past champions, transfers or scorers ${x.pastClaim}, a winner of a summer that happened ${x.summer}, moves of real men ${x.realMove}, real top scorers ${x.realTop}, real men off their era club ${x.clubs}, lines off the record ${x.record}`;
   console.log(`   this tree: ${h.seasons} seasons (${h.past} happened, ${h.future} to come), ${h.lines} lines, ${h.futureClaims} champion lines in seasons to come, ${h.generatedMoves} moves of generated men`);
   console.log(`              ${row(h)}`);
   console.log(`   base:      ${b.seasons} seasons, ${b.lines} lines; ${row(b)}`);
