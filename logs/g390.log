@@ -1,0 +1,41 @@
+[6s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 0->0
+[7s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 0->0
+[10s] explore squad-s0: 👥 Squad Real squad The plan: Starter most weeks On our rati -> closed true via ← Back/Escape scroll 0->0
+[14s] explore press-s0: 🎙️ Press room Answer for your season 50/100 -> closed true via Escape scroll 575->575
+[17s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 575->575
+[19s] explore mentor-s0: 🤝 Academy mentor GENERATED academy player Shohei Nishizawa  -> closed true via Back to your career scroll 575->575
+[21s] explore records-s0: 📖 Record book Your best seasons and every club spell 218 se -> closed true via Close scroll 575->575
+[23s] explore attributes-s0: Full attributes 187 cm · 82 kg · every number under the six -> closed true via ← Back scroll 1608->193
+[24s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 3652->3652
+[26s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 3652->3652
+[28s] explore trophy-s0: 🏆 1 Leagues -> closed true via ‹ Back scroll 2029->2029
+[30s] explore replays-s0: 📺 Season replays -> closed true via Back to your career scroll 3700->3700
+[42s] explore training-s0: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[63s] explore phone-s0: 📱 Phone 3 unread -> closed true via ‹ Home/Escape scroll 0->0
+[94s] reload (step 12 in social_media_action): same=true phase social_media_action->social_media_action
+[103s] explore ambition-s1: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 176->176
+[105s] explore preseason-s1: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 176->176
+[107s] explore squad-s1: 👥 Squad Real squad The plan: Starter most weeks On our rati -> closed true via Escape scroll 176->176
+[110s] explore press-s1: 🎙️ Press room Answer for your season 52/100 -> closed true via Escape scroll 185->575
+[114s] explore programme-s1: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 575->575
+[115s] explore mentor-s1: 🤝 Academy mentor GENERATED academy player Shohei Nishizawa  -> closed true via Back to your career scroll 575->575
+[117s] explore records-s1: 📖 Record book Your best seasons and every club spell 257 se -> closed true via Close scroll 575->575
+[119s] explore attributes-s1: Full attributes 187 cm · 82 kg · every number under the six -> closed true via ← Back scroll 1608->193
+[121s] explore ratings-s1: 📈 Ratings -> closed true via Close scroll 3758->3758
+[123s] explore story-s1: 📖 Career Story -> closed true via Back to your career scroll 3758->3758
+[125s] explore trophy-s1: 🏆 2 Leagues -> closed true via ‹ Back scroll 2029->2029
+[127s] explore replays-s1: 📺 Season replays -> closed true via Back to your career scroll 3806->3806
+[139s] explore training-s1: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[160s] explore phone-s1: 📱 Phone 3 unread -> closed true via ‹ Home/Escape scroll 0->0
+[175s] reload (step 30 in social_media_action): same=true phase social_media_action->social_media_action
+[186s] explore ambition-s2: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 254->254
+[188s] explore preseason-s2: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 254->254
+[190s] explore squad-s2: 👥 Squad By role The plan: Nailed on starter On our ratings  -> closed true via Escape scroll 254->254
+[193s] explore press-s2: 🎙️ Press room Answer for your season 52/100 -> closed true via Escape scroll 254->254
+[197s] explore programme-s2: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 254->254
+[208s] explore training-s2: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[228s] explore phone-s2: 📱 Phone 3 unread -> closed true via ‹ Home/Escape scroll 0->0
+[244s] target reached: 3 senior seasons
+[247s] reload (final): same=true phase playing->playing
+[247s] done: {"phase":"playing","age":27,"senior":10,"club":"Inter Miami","ovr":81,"steps":54,"secs":244} shots=111 audits=92 errors=7 pageErrors=0 stuck=0 traps=0
+WALK g390 FINISHED

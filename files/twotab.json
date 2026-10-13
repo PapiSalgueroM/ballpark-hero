@@ -1,0 +1,61 @@
+{
+ "steps": [],
+ "start": {
+  "phase": "playing",
+  "age": 23,
+  "seasons": 8,
+  "last": {
+   "year": 2007,
+   "club": "Lille",
+   "apps": 27,
+   "goals": 7,
+   "rating": 7
+  },
+  "nw": 14.85
+ },
+ "uiA0": "son Retire 📺 23 AGE",
+ "uiB0": "son Retire 📺 23 AGE",
+ "aPressed": true,
+ "afterA": {
+  "phase": "newspaper",
+  "age": 24,
+  "seasons": 9,
+  "last": {
+   "year": 2008,
+   "club": "Sporting CP",
+   "apps": 28,
+   "goals": 9,
+   "rating": 7.2
+  },
+  "nw": 21.75
+ },
+ "uiB1": "son Retire 📺 23 AGE",
+ "bPressed": true,
+ "afterB": {
+  "phase": "newspaper",
+  "age": 24,
+  "seasons": 9,
+  "last": {
+   "year": 2008,
+   "club": "Sporting CP",
+   "apps": 36,
+   "goals": 15,
+   "rating": 7.4
+  },
+  "nw": 21.75
+ },
+ "aAfterReload": {
+  "phase": "newspaper",
+  "age": 24,
+  "seasons": 9,
+  "last": {
+   "year": 2008,
+   "club": "Sporting CP",
+   "apps": 36,
+   "goals": 15,
+   "rating": 7.4
+  },
+  "nw": 21.75
+ },
+ "verdict": "A season REPLACED by B"
+}
