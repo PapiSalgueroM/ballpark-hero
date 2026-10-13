@@ -156,6 +156,17 @@ jobs:
         if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
         run: |
           ONLY=simClubManagerDecisions,simClubManagerMeters,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/related.log"
+      - name: Existing page download budgets
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$MANAGER_DECISION_DEPTH_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/weight.log"
       - name: Final source and locked-tool holds
         if: always()
         run: |

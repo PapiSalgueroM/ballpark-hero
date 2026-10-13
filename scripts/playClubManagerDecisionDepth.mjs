@@ -143,6 +143,8 @@ function findContexts() {
   const clubs = ['Arsenal', 'Everton', 'Brighton'];
   let entries = 0;
   let careers = 0;
+  let preflights = 0;
+  let preflightInputsHeld = true;
   for (let run = 0; run < 24 && found.size < CONTRACTS.length; run++) {
     const club = clubs[run % clubs.length];
     const seed = 979 + run * 100;
@@ -150,11 +152,18 @@ function findContexts() {
     let state = withSeed(seed, () => E.startCareer(club));
     for (let step = 0; step < 180 && !state.sacked && found.size < CONTRACTS.length; step++) {
       state = withSeed(seed + step * 101 + 1, () => policy(state));
-      if (state.calendar[state.week]?.kind === 'match' && state.week < state.calendar.length - 1) {
+      const entry = state.calendar[state.week];
+      if (entry && E.entryInvolvesMe(state, entry) && state.week < state.calendar.length - 1) {
         for (const contract of CONTRACTS) {
           if (found.has(contract.id) || !eligible(contract, state)) continue;
           const expirySeed = seed + step * 101 + 99;
-          const next = withSeed(expirySeed, () => E.playNextEntry(state, { skipHalftime: true }));
+          const observedBytes = JSON.stringify(state);
+          const preflightInput = clone(state);
+          const next = withSeed(expirySeed, () => E.playNextEntry(preflightInput, { skipHalftime: true }));
+          preflights++;
+          const inputHeld = JSON.stringify(state) === observedBytes && JSON.stringify(preflightInput) === observedBytes;
+          preflightInputsHeld &&= inputHeld;
+          setup(inputHeld, `${contract.id}: next-match preflight changed its input or the observed career.`);
           if (next.kind !== 'match' || next.state.sacked || next.state.week >= next.state.calendar.length) continue;
           const natural = D.deskOf(state).find(card => card.deckId === contract.id);
           found.set(contract.id, { state: clone(state), run, club, seed, step, expirySeed, naturalOffer: natural ? { id: natural.id, resolved: natural.resolved ?? null } : null });
@@ -166,7 +175,7 @@ function findContexts() {
       if (result.kind === 'seasonOver') state = withSeed(seed + step * 101 + 3, () => E.startNextSeason(E.finishSeason(state).state));
     }
   }
-  report.fixtureSearch = { careers, entries, boundCareers: 24, boundEntriesPerCareer: 180, policy: 'autoPickXI, promoteProspect, legal graduate lineup and actual lowest-mood press answer' };
+  report.fixtureSearch = { careers, entries, preflights, preflightInputsHeld, boundCareers: 24, boundEntriesPerCareer: 180, policy: 'autoPickXI, promoteProspect, legal graduate lineup and actual lowest-mood press answer' };
   for (const contract of CONTRACTS) setup(found.has(contract.id), `No actual engine context found for ${contract.id}; this is setup failure, never baseline credit.`);
   return found;
 }
