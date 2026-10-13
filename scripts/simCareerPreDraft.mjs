@@ -72,7 +72,8 @@
  *      never falls and flips exactly at the printed cut. The curves on a grid
  *      are whole, inside 0 to 100, monotone and equal a copy built from
  *      COMBINE_CURVES. And the played path's code holds no draw and no clock.
- *      Controls `combinewords`, `combinemean`, `combinemono`, `combinecut`.
+ *      Controls `combinewords`, `combinemean`, `combinemono`, `combinecut`,
+ *      `combinedraw` (the code read).
  *  11. Round 1319: THE ENGINE GIVES NO SECOND TRY. After open no scouts'
  *      button and no second open moves the state; a reload of an opened
  *      attempt (the loader, with the descriptor) is byte for byte the scouts'
@@ -85,7 +86,8 @@
  *      and the played block and its draft, loads JSON equal to itself with
  *      and without the descriptor; an attempt put on any season or card
  *      state is dropped alone, with and without it.
- *                                Controls `reroll`, `wayback`, `combinegone`.
+ *                                Controls `reroll`, `wayback`, `combinegone`,
+ *      `combinephase`, `attemptbare`, `combineloose`, `scoutskeys`.
  *      Sections 10, 11 and 12 check each pair in its own try, so a throw
  *      names its pair and every other pair is still checked.
  *  12. Round 1319: WHAT HANDS ARE WORTH, MEASURED AGAINST THE SCOUTS' DRAW.
@@ -281,6 +283,12 @@ const CONTROLS = {
   flathands: ['src/lib/careerPreDraft.ts', 'const g = preDraftShowcaseGradeFrom(total / (100 * scores.length), s);', 'const g = preDraftShowcaseGradeFrom(0.5, s);'],
   curveflip: ['src/lib/careerPreDraft.ts', 'clampMeter(100 * (taps - b.zeroAt) / (b.fullAt - b.zeroAt))', 'clampMeter(100 * (b.fullAt - taps) / (b.fullAt - b.zeroAt))'],
   keyscurve: ['src/lib/careerPreDraft.ts', "const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';", "const which: PreDraftInput = 'pointer';"],
+  /* Round 1319 review fixes: a control for each check that had none. */
+  combinephase: ['src/lib/careerPreDraft.ts', "&& s.phase === 'showcase' && s.showcase === null) s.combine = { approach: cb.approach };", '&& s.showcase === null) s.combine = { approach: cb.approach };'],
+  attemptbare: ['src/lib/careerPreDraft.ts', "&& s.phase === 'showcase' && s.showcase === null) s.combine = { approach: cb.approach };", "&& s.phase === 'showcase' && s.showcase === null && desc) s.combine = { approach: cb.approach };"],
+  combineloose: ['src/lib/careerPreDraft.ts', 'if (!scores.every(x => Number.isInteger(x) && x >= 0 && x <= 100)) return prev;', 'if (!scores.every(x => x <= 100)) return prev;'],
+  scoutskeys: ['src/lib/careerPreDraft.ts', 's.showcase = { approach, drill, grade, stockDelta: move };', 's.showcase = { approach, drill, grade, stockDelta: move, played: undefined };'],
+  combinedraw: ['src/lib/careerPreDraft.ts', "const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';", "const which: PreDraftInput = input === 'keys' && Date.now() > 0 ? 'keys' : 'pointer';"],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
@@ -718,8 +726,11 @@ const curveCopy = (kind, raw, input) => {
   const v = kind === 'burst' ? 100 * (raw.taps - c.zeroAt) / (c.fullAt - c.zeroAt) : 100 * (c.zeroAt - raw.ms) / (c.zeroAt - c.fullAt) - c.slip * raw.slips;
   return Math.max(0, Math.min(100, Math.round(v)));
 };
-/** One function's code, comments stripped, found by its name and its braces. */
-const engineCode = stripComments(fs.readFileSync(path.join(ROOT, 'src/lib/careerPreDraft.ts'), 'utf-8'));
+/** One function's code, comments stripped, found by its name and its braces.
+ *  Under a control on the engine this is the mutated code the bundle runs,
+ *  so the read in 10(0) has a control of its own (`combinedraw`). */
+const engineRaw = fs.readFileSync(path.join(ROOT, 'src/lib/careerPreDraft.ts'), 'utf-8');
+const engineCode = stripComments(CONTROL && CONTROLS[CONTROL][0] === 'src/lib/careerPreDraft.ts' ? engineRaw.replace(CONTROLS[CONTROL][1], CONTROLS[CONTROL][2]) : engineRaw);
 const codeOf = name => {
   const at = engineCode.indexOf(`export function ${name}(`);
   if (at < 0) return null;
