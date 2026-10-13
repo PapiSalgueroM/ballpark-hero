@@ -1,0 +1,60 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoHonours.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 2633[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 1428[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mdeals the assist of a goal a report already named on its own key, never to the scorer or a keeper [33m 339[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoTransport.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 357[2mms[22m[39m
+ [32m✓[39m src/test/soccerTransferBriefPromise.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 765[2mms[22m[39m
+   [33m[2m✓[22m[39m The brief tells the player the chance that is really used[2m > [22ma player whose club broke its promise is told the request gets a response, not a coin toss [33m 414[2mms[22m[39m
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 4198[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 1316[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 559[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 776[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 791[2mms[22m[39m
+ [32m✓[39m src/test/soccerTransferBriefUi.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2415[2mms[22m[39m
+   [33m[2m✓[22m[39m Transfer brief UI[2m > [22muses actual eligible preview counts and bands, and preview remains read only [33m 370[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/statDetectiveScope.test.tsx[2m > [22m[2mStat Detective recorded profile scope[2m > [22m[2mexplains what the career span covers before play and in reopened help
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/gameReportPlacement.test.tsx[2m > [22m[2mgame report placement[2m > [22m[2mputs one context-aware button after play and before the guide, including after a state change
+[22m[39mWarning: An update to GameSeoContent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at GameSeoContent (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/GameSeoContent.tsx:162:27)
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:20:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/gameReportPlacement.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 392[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveScope.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1214[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective recorded profile scope[2m > [22mexplains what the career span covers before play and in reopened help [33m 504[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective recorded profile scope[2m > [22mshows the complete career span and franchises under their shipped labels [33m 398[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective recorded profile scope[2m > [22mcaptures the exact random case and mode while keeping the answer out of visible play [33m 308[2mms[22m[39m
+ [32m✓[39m src/test/reportDetails.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2808[2mms[22m[39m
+   [33m[2m✓[22m[39m game report[2m > [22mcannot send a category without an actual typed description [33m 415[2mms[22m[39m
+ [32m✓[39m src/test/reportContext.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m src/test/soccerOfferReviewAgeRule.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 215[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoReport.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 731[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo minimal report context[2m > [22mremembers the rejected card after advancing once without repeating validation [33m 726[2mms[22m[39m
+ [32m✓[39m src/test/perfectSeasonReport.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 192[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[32m145 passed[39m[22m[90m (145)[39m
+[2m   Start at [22m 03:12:43
+[2m   Duration [22m 17.37s[2m (transform 7.39s, setup 1.76s, collect 15.16s, tests 16.15s, environment 9.28s, prepare 2.62s)[22m
+

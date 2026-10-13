@@ -1,0 +1,8 @@
+t2: 500 careers (767 tried, seeds 0+), 0 bitten, nofilter club loans to a club forecast under 20 29 (5.80% a career), head zero offer 0, loan season league games none to none, overall at 26 none to none
+  ok   t2 1 reached: 5.80% club loans a career go to a club forecast under 20 without the filter (floor 3.50%)
+  FAIL t2 2 bites: 0.00% of careers differ (floor 3.50%)
+  ok   t2 3 cause: 0 of 0 differing careers first differ anywhere but a filtered loan window
+  FAIL t2 4 rule: the head sent 29 club loans to a club forecast under 20
+  FAIL t2 5 outcome: of 0 bitten, on loan 0.00%, a lower tier 0.00%, as many league games 0.00% (each floor 90.00%), mean gain none (floor +6)
+report: /home/runner/work/_temp/t-loanbite-nofilter/loan-bite-6R2pHK/report.json
+control "nofilter" fired: checks 2, 4, 5 failed as expected
