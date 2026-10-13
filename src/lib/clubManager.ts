@@ -20491,7 +20491,7 @@ export function saveCareer(career: CareerState): boolean {
     }
   }) === 'written';
 }
-import { saveFence } from './saveFence';
+import { saveFence } from '@/lib/saveFence';
 
 /**
  * Round 832: which era the saved career plays in, read without opening it, so
