@@ -47,9 +47,10 @@
  *      the men signed and never runs dry; nobody is on two rosters; every row a
  *      run shows is a man now on that club at his scout's read.
  *   4. DRAWN ONCE. Opening the same season twice gives the identical block;
- *      the block survives a JSON round trip and every press changes only `made`
- *      and `seen`; a draft replayed with the table swapped under the saved block
- *      is the same draft.
+ *      opening again over a night in progress answers it as it stands and
+ *      writes nothing; the block survives a JSON round trip and every press
+ *      changes only `made` and `seen`; a draft replayed with the table swapped
+ *      under the saved block is the same draft.
  *   6. THE CLASS. The curve's shape; today's twelve found in every class by
  *      replaying nbaDraftClass on a twin generator; every man after them held
  *      to the curve rating by rating; the mean true rating falls ten slots
@@ -103,6 +104,7 @@
  *   shortclass   a class four short of the picks                          (3, 6)
  *   shownread    the run prints the engine's grade                        (3)
  *   redraw       the order's key takes a Math.random draw                 (4)
+ *   reopen       a second open over a night in progress draws it afresh  (4)
  *   fatclass     the curve is the old class's 70 to 87                    (6)
  *   flatclass    the curve flattened to one range                         (6)
  *   nocurve      the class ignores the curve                              (6)
@@ -205,6 +207,8 @@ const CONTROLS = {
   /* the order's key takes a Math.random draw, so the same season draws another night */
   redraw: { expect: [4], swaps: { bind: [['  return buildDraftOrder(season, rules, nbaGamePickRules(), key ?? draftSeasonKey(season, rules.id));',
     '  return buildDraftOrder(season, rules, nbaGamePickRules(), `${key ?? draftSeasonKey(season, rules.id)}|${Math.random()}`);']] } },
+  /* a second open over a night in progress draws a fresh night (review 2026-10-12, the reopen probe) */
+  reopen: { expect: [4], swaps: { bind: [['  if (current) return { desk, night: current };', '  if (current && !current) return { desk, night: current };']] } },
   /* any block on the desk is trusted */
   trustblock: { expect: [8], swaps: { bind: [['  return isGmDraftNight(raw, Object.keys(league.teams), league.season) ? raw : null;', '  return raw as GmDraftNight;']] } },
   /* rivals choose on their read alone */
@@ -545,7 +549,7 @@ const LOTTERIES = FLEET === 'full' ? 40000 : 10000;
    too, said in the notes. */
 const NEED_WEIGHT = 2;
 const Q = { 2: [], 3: [], 4: [], 8: [] };
-const W = { seasons: 0, drawn: 0, tieFree: 0, drafts: 0, opened: 0, moved: 0, mineMoved: 0, three: 0, none: 0, clocks: 0, steps: 0, rivalRows: 0, swaps: 0, breaks: 0, fallbacks: 0 };
+const W = { seasons: 0, drawn: 0, tieFree: 0, drafts: 0, opened: 0, moved: 0, mineMoved: 0, three: 0, none: 0, clocks: 0, steps: 0, rivalRows: 0, swaps: 0, breaks: 0, fallbacks: 0, reopens: 0 };
 const seasonsForLotteries = [];
 const needRows = [];
 const shareOf = t => (t.wins + t.losses > 0 ? t.wins / (t.wins + t.losses) : 0.5);
@@ -764,6 +768,12 @@ function walkDraft(lg, team, rng, desk, series, where, first) {
     return res;
   };
   let res = press(N.nbaDraftContinue(lg, desk, team, cls, rng), 'Continue');
+  if (res) {
+    /* Section 4: opening again over the night in progress answers it as it stands and writes nothing. */
+    const reopen = N.openNbaDraftNight(JSON.parse(J(desk)), JSON.parse(J(lg)), series, team);
+    W.reopens += 1;
+    if (!reopen || J(reopen.night) !== J(N.nbaDraftNightOf(desk, lg)) || J(reopen.desk) !== J(desk)) Q[4].push(`${where}: opening again after Continue did not answer the night as it stands (made ${reopen?.night.made}, the desk's ${N.nbaDraftNightOf(desk, lg)?.made})`);
+  }
   if (first && res && !res.done) breakNight(lg, team, desk, cls, where, 8000 + W.drafts);
   while (res && !res.done) {
     const best = [...cls].sort((a, b) => read(b) - read(a) || (a.id < b.id ? -1 : 1))[0];
@@ -839,8 +849,8 @@ open(3);
 open(4);
 {
   for (const p of Q[4]) fail(p);
-  check(W.opened > 0 && W.swaps > 0, `${W.opened} nights opened, ${W.swaps} tables swapped`);
-  console.log(`   ${W.opened} nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; ${W.swaps} drafts replayed with the table swapped under the block`);
+  check(W.opened > 0 && W.swaps > 0 && W.reopens > 0, `${W.opened} nights opened, ${W.swaps} tables swapped, ${W.reopens} opened again mid draft`);
+  console.log(`   ${W.opened} nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; ${W.reopens} opened again after Continue and answered as they stood; ${W.swaps} drafts replayed with the table swapped under the block`);
 }
 
 open(8);

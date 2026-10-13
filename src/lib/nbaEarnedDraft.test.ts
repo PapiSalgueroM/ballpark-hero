@@ -39,7 +39,8 @@ function opened(seed = 7): { league: NbaLeague; desk: GmDesk; night: GmDraftNigh
   const o = openNbaDraftNight(openNbaDesk(league, ME), league, series, ME)!;
   return { league, desk: o.desk, night: o.night };
 }
-/** Move picks of this year's draft in the desk's ledger and the engine lists, the way a deal does. */
+/** Move picks of this year's draft in the desk's ledger and the engine lists, the way a deal does, on a desk the night has not
+    opened on yet (a night already open is answered as it stands, so a deal after it would not reach it). */
 function moved(league: NbaLeague, desk: GmDesk, moves: [number, string, string][]): GmDesk {
   let ledger = nbaPicksOf(desk, league);
   for (const [round, orig, to] of moves) ledger = movePicks(ledger, [pickKey({ year: league.season, round, orig })], to);
@@ -90,6 +91,17 @@ describe('opening the night refuses, having written nothing, whatever it cannot 
     early.league.champions = [{ season: 2025, team: early.made[15] }];
     expect(openNbaDraftNight(openNbaDesk(early.league, ME), early.league, early.series, ME)).toBeNull();
     for (const d of [spare, desk]) expect(Object.keys(d.blocks)).not.toContain(NBA_DRAFT_BLOCK);
+  });
+  it('opening again over a night in progress answers that night as it stands, writing nothing', () => {
+    /* Review 2026-10-12: a second open used to answer a fresh night with made 0 over markers already spent. */
+    const { league, desk, night } = opened();
+    const at = nbaDraftContinue(league, desk, ME, nbaEarnedDraftClass(mulberry32(13), night.slots.length, new Set()), mulberry32(14))!;
+    const run = nbaDraftPick(league, at.desk, ME, at.left, at.left[0].id, mulberry32(15))!;
+    const now = nbaDraftNightOf(run.desk, league)!;
+    expect(now.made).toBeGreaterThan(0);
+    const again = openNbaDraftNight(run.desk, league, closed().series, ME)!;
+    expect(again.night).toEqual(now);
+    expect(again.desk).toBe(run.desk);
   });
   it('a block broken at any field, or of another season, is never current', () => {
     const { league, desk, night } = opened();
@@ -153,14 +165,14 @@ describe('the host and the three presses', () => {
   });
   it('a GM with no pick is done on Continue; a GM whose last slot is the last pick is done by it', () => {
     const a = opened();
-    const none = moved(a.league, a.desk, [[1, ME, 'LAL'], [2, ME, 'LAL']]);
+    const none = moved(a.league, openNbaDesk(a.league, ME), [[1, ME, 'LAL'], [2, ME, 'LAL']]);
     const n1 = openNbaDraftNight(none, a.league, closed().series, ME)!;
     const r1 = nbaDraftContinue(a.league, n1.desk, ME, nbaEarnedDraftClass(mulberry32(5), 60, new Set()), mulberry32(6))!;
     expect(r1).toMatchObject({ done: true, onClock: null });
     expect(r1.steps).toHaveLength(60);
     const b = opened();
     const last = b.night.order.later[29];
-    const late = moved(b.league, b.desk, [[1, ME, 'LAL'], [2, last, ME], [2, ME, last]]);
+    const late = moved(b.league, openNbaDesk(b.league, ME), [[1, ME, 'LAL'], [2, last, ME], [2, ME, last]]);
     const n2 = openNbaDraftNight(late, b.league, closed().series, ME)!;
     const at = nbaDraftContinue(b.league, n2.desk, ME, nbaEarnedDraftClass(mulberry32(7), 60, new Set()), mulberry32(8))!;
     expect(at).toMatchObject({ done: false });
@@ -172,7 +184,8 @@ describe('the host and the three presses', () => {
   it('a GM who holds the first pick gets an empty run and is on the clock at 1', () => {
     const a = opened();
     const top = a.night.order.first[0];
-    const desk = top === ME ? a.desk : moved(a.league, a.desk, [[1, top, ME]]);
+    const pre = openNbaDesk(a.league, ME);
+    const desk = top === ME ? pre : moved(a.league, pre, [[1, top, ME]]);
     const n = openNbaDraftNight(desk, a.league, closed().series, ME)!;
     const run = nbaDraftContinue(a.league, n.desk, ME, nbaEarnedDraftClass(mulberry32(10), 60, new Set()), mulberry32(11))!;
     expect(run.steps).toEqual([]);

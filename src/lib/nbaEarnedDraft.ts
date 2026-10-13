@@ -79,10 +79,14 @@ export function nbaDraftNightOf(desk: GmDesk, league: NbaLeague): GmDraftNight |
 /** Open draft night: draw the order once (keyed, so it draws no number), lay it over the pick ledger, and write the
     block. Null, having written nothing, before the game's first earned draft, when his club holds no draft list the
     engine can read, when the season is not closed or the playoff sixteen is not on hand, and when the night it would
-    write is one its own validator refuses (a migrated ledger can hold such a list). */
+    write is one its own validator refuses (a migrated ledger can hold such a list). A night already open for this
+    season is answered as it stands, the desk untouched: opening it again would hand back a fresh night with no
+    pick made over markers already spent, and put him back on the clock at a slot whose pick is gone. */
 export function openNbaDraftNight(desk: GmDesk, league: NbaLeague, series: SeriesResult[], me: string): { desk: GmDesk; night: GmDraftNight } | null {
   const mine = league.teams[me];
   if (!mine || nbaDraftCapital(mine) === null) return null;
+  const current = nbaDraftNightOf(desk, league);
+  if (current) return { desk, night: current };
   const season = nbaDraftSeason(league, series);
   const order = season ? nbaDraftOrder(season) : null;
   if (!order) return null;
