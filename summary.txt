@@ -1,0 +1,9 @@
+simCareerLeagueSeasons exit=0 36s | simCareerLeagueSeasons: all sections green
+seasons-oldbase exit=0 40s | simCareerLeagueSeasons: all sections green
+seasons-future exit=0 83s | CONTROL future: section c went red as it should (12 failures there, 12 in all)
+simHarnessAnchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+worldtruth exit=0 95s | simSoccerWorldTruth: OK, every section green
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+ctl-legacy30 exit=1 83s | FIRED: WORLD_TRUTH_CONTROL=legacy30 failed section 2 (3 failures; section 2: 3, section 6: 3)
+ctl-legacy35 exit=1 77s | FIRED: WORLD_TRUTH_CONTROL=legacy35 failed section 2 (1 failures; section 2: 1, section 6: 3)
