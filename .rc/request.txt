@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+d390: TAG=d390 W=390 H=844 SEED=101 SENIOR=10 POS="Attacking Mid" NAT=Argentina ERA="Current era" EXPLORE=hub EXPLORE_EVERY=4 RELOADS=30,77 MAXMIN=18 SHOTMAX=60 node .rc/x/scwalk.mjs
+e390: TAG=e390 W=390 H=844 SEED=202 SENIOR=7 POS="Centre Back" NAT=Japan ERA="Early 2010s" EXPLORE=phone RELOADS=44 MAXMIN=18 SHOTMAX=60 node .rc/x/scwalk.mjs
+f1280: TAG=f1280 W=1280 H=900 SEED=303 SENIOR=6 POS="Left Wing" NAT=France ERA="Early 2000s" EXPLORE=hub EXPLORE_EVERY=3 RELOADS=20 MAXMIN=18 SHOTMAX=50 node .rc/x/scwalk.mjs
