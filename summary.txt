@@ -1,0 +1,16 @@
+rival-sitekindmlb exit=1 16s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: M.U6, M.F3
+rival-siteslatemlb exit=1 18s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.U6
+simUsRivalSense exit=0 18s | simUsRivalSense: 43 checks, 0 failed (full size)
+rival-siteslatenhl exit=1 17s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: H.U6, H.F3
+rival-fullscoremlb exit=1 16s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: M.U6, M.F2, M.F3
+rival-lastyearmlb exit=1 17s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: M.F5
+rival-soldascoin exit=1 17s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: H.F5
+rival-lastyearnhl exit=1 19s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: H.F5
+rival-oldscalemlb exit=1 17s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: M.U2, M.F2, M.F3
+rival-oldscalenhl exit=1 18s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U2, H.F2, H.F3
+rival-offshapemlb exit=1 17s | simUsRivalSense: 43 checks, 6 failed (full size), red sections: M.U2, M.U4, M.U6, M.F1, M.F2, M.O
+rival-offshapenhl exit=1 18s | simUsRivalSense: 43 checks, 4 failed (full size), red sections: H.U2, H.F1, H.F2, H.O
+rival-wrongposmlb exit=1 16s | simUsRivalSense: 43 checks, 7 failed (full size), red sections: M.U2, M.U4, M.U6, M.F1, M.F2, M.F3, M.O
+rival-wrongposnhl exit=1 17s | simUsRivalSense: 43 checks, 5 failed (full size), red sections: H.U2, H.F1, H.F2, H.F3, H.O
+rival-workloadmlb exit=1 18s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: M.U2, M.U6
+rival-workloadnhl exit=1 12s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: H.U2, H.U6, H.F3

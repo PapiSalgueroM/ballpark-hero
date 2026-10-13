@@ -1,0 +1,17 @@
+# Release BB, lane U1: simUsRivalSense plain and the first half of 1313s controls
+simUsRivalSense: node scripts/simUsRivalSense.mjs
+rival-siteslatemlb: US_RIVAL_CONTROL=siteslatemlb node scripts/simUsRivalSense.mjs
+rival-sitekindmlb: US_RIVAL_CONTROL=sitekindmlb node scripts/simUsRivalSense.mjs
+rival-siteslatenhl: US_RIVAL_CONTROL=siteslatenhl node scripts/simUsRivalSense.mjs
+rival-fullscoremlb: US_RIVAL_CONTROL=fullscoremlb node scripts/simUsRivalSense.mjs
+rival-lastyearmlb: US_RIVAL_CONTROL=lastyearmlb node scripts/simUsRivalSense.mjs
+rival-lastyearnhl: US_RIVAL_CONTROL=lastyearnhl node scripts/simUsRivalSense.mjs
+rival-soldascoin: US_RIVAL_CONTROL=soldascoin node scripts/simUsRivalSense.mjs
+rival-oldscalemlb: US_RIVAL_CONTROL=oldscalemlb node scripts/simUsRivalSense.mjs
+rival-oldscalenhl: US_RIVAL_CONTROL=oldscalenhl node scripts/simUsRivalSense.mjs
+rival-offshapemlb: US_RIVAL_CONTROL=offshapemlb node scripts/simUsRivalSense.mjs
+rival-offshapenhl: US_RIVAL_CONTROL=offshapenhl node scripts/simUsRivalSense.mjs
+rival-wrongposmlb: US_RIVAL_CONTROL=wrongposmlb node scripts/simUsRivalSense.mjs
+rival-wrongposnhl: US_RIVAL_CONTROL=wrongposnhl node scripts/simUsRivalSense.mjs
+rival-workloadmlb: US_RIVAL_CONTROL=workloadmlb node scripts/simUsRivalSense.mjs
+rival-workloadnhl: US_RIVAL_CONTROL=workloadnhl node scripts/simUsRivalSense.mjs
