@@ -1,0 +1,4 @@
+rules-head exit=1 44s | simCmLeagueRules: 24 failure(s)
+rules-noprune exit=1 48s | simCmLeagueRules: 7 failure(s)
+rules-noguard exit=1 43s | simCmLeagueRules: 24 failure(s)
+rules-both exit=0 46s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
