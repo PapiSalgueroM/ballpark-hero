@@ -1,0 +1,7 @@
+oldsaves-s7: SEED_OFFSET=7 node .rc/x/r1329run-oldsaves.mjs
+oldsaves-s0: SEED_OFFSET=0 node .rc/x/r1329run-oldsaves.mjs
+worldtruth-s5: SEED_OFFSET=5 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s6: SEED_OFFSET=6 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s8: SEED_OFFSET=8 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s9: SEED_OFFSET=9 node scripts/simSoccerWorldTruth.mjs
+merge-gate: R=$PWD && git fetch -q origin +release-bc-gate:refs/remotes/origin/release-bc-gate && git worktree add -q /tmp/mg HEAD && cd /tmp/mg && ln -s $R/node_modules node_modules && git -c user.email=r@r -c user.name=r merge -q --no-edit origin/release-bc-gate && git log --oneline -1 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json && WORLD_TRUTH_ONLY=6 node scripts/simSoccerWorldTruth.mjs
