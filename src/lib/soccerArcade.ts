@@ -29,7 +29,7 @@ import type { CareerState, SeasonRecord } from "./soccerCareerEngine";
 import { ensureMoney } from "./soccerMoney";
 import type { WorldSeason } from "./soccerPhone";
 import { phoneWorld } from "./soccerPhone";
-import { LAST_REAL_YEAR, seasonHappened } from "./soccerWorldTruth";
+import { LAST_REAL_YEAR, seasonHappened, seasonLabel } from "./soccerWorldTruth";
 
 export interface ArcadeQuestion {
   /** What is being asked. */
@@ -209,14 +209,16 @@ export function arcadeQuestions(s: CareerState): ArcadeQuestion[] {
      so the world is asked about only for a season still to come, the game's
      own; and a move or a goal tally only past the last real names year, so an
      old save whose 2028 world still holds a real man's move never asks about
-     him. That is how the quiz stays never wrong. */
+     him. That is how the quiz stays never wrong. The two champion questions
+     name the season in full (2026-27), so the first one asked never reads
+     like a question about a final that really happened in 2026. */
   const w: WorldSeason | null = world;
   if (w && !seasonHappened(w.year)) {
     const leagueNames = Object.keys(w.leagues);
     if (w.ucl) {
       const others = Object.values(w.leagues).concat(leagueNames.length ? [] : []);
       const q = build(
-        `Who were champions of Europe in ${w.year}?`,
+        `Who were champions of Europe in ${seasonLabel(w.year)}?`,
         w.ucl, others.filter(c => c !== w.ucl),
         `${w.ucl} won it that season.`, rng,
       );
@@ -226,7 +228,7 @@ export function arcadeQuestions(s: CareerState): ArcadeQuestion[] {
       const lg = leagueNames[rng.int(0, leagueNames.length - 1)];
       const champ = w.leagues[lg];
       const q = build(
-        `Who won ${lg} in ${w.year}?`,
+        `Who won ${lg} in ${seasonLabel(w.year)}?`,
         champ, Object.values(w.leagues).filter(c => c !== champ).concat([w.ucl]),
         `${champ} took it.`, rng,
       );

@@ -84,6 +84,7 @@
  *   pastchampions  a season that happened prints its champions: section 3.
  *   summer      the feed names the winner of every summer that happened again: section 3.
  *   arcade      the quiz asks about the world of every season again: section 4.
+ *   quizyear    the Europe question names its season by the start year again: section 4.
  *   log         the season log names the winner of every summer again: section 5.
  *   outside     one constant of the transfer market changes, outside the hunks: section 6.
  *   panel       the International panel names every winner again: section 5.
@@ -150,6 +151,8 @@ const CONTROLS = {
     edits: { [PHONE]: [['  if (!happened) {\n    if (ucl !== s.currentClub)', '  if (true) {\n    if (ucl !== s.currentClub)']] } },
   summer: { breaks: '3', note: 'the feed names the winner of every summer that happened again',
     edits: { [PHONE]: [['  if (intl && !summerHappened(year))', '  if (intl)']] } },
+  quizyear: { breaks: '4', note: 'the quiz names the Europe question\'s season by its start year again',
+    edits: { [ARCADE]: [['`Who were champions of Europe in ${seasonLabel(w.year)}?`', '`Who were champions of Europe in ${w.year}?`']] } },
   arcade: { breaks: '4', note: 'the quiz asks about the world of every season again',
     edits: { [ARCADE]: [['  if (w && !seasonHappened(w.year)) {', '  if (w) {'], ['    if (w.year > LAST_REAL_YEAR && w.moves.length >= 1) {', '    if (w.moves.length >= 1) {'], ['    if (w.year > LAST_REAL_YEAR && w.topScorer) {', '    if (w.topScorer) {']] } },
   outside: { breaks: '6', note: 'one constant of the transfer market changes, outside this round\'s hunks',
@@ -778,8 +781,9 @@ if (runs('3')) {
 
 const WORLD_Q = [/champions of Europe/, /^Who won /, / move to in /, / finish on in /];
 const REAL_Q = [/ move to in /, / finish on in /];
+const CHAMP_Q = [/champions of Europe/, /^Who won /];
 function quizAudit(recs) {
-  const a = { seasons: 0, ready: 0, world: 0, real: 0, missing: 0, worldAsked: 0, examples: [] };
+  const a = { seasons: 0, ready: 0, world: 0, real: 0, missing: 0, worldAsked: 0, bareYear: 0, champAsked: 0, examples: [] };
   for (const r of recs) {
     if (r.type === 'youth') continue;
     a.seasons += 1;
@@ -787,6 +791,8 @@ function quizAudit(recs) {
     for (const q of r.quiz) {
       const isWorld = WORLD_Q.some(re => re.test(q.q));
       if (isWorld) a.worldAsked += 1;
+      /* a champion question names its season in full (2026-27), never the bare start year (the review's finding 7) */
+      if (CHAMP_Q.some(re => re.test(q.q)) && r.world) { a.champAsked += 1; const y = r.world.year; if (!q.q.includes(`in ${y}-${String((y + 1) % 100).padStart(2, '0')}?`)) { a.bareYear += 1; if (a.examples.length < 4) a.examples.push(`${y}: "${q.q}" does not name the season in full`); } }
       if (isWorld && r.world && T.seasonHappened(r.world.year)) { a.world += 1; if (a.examples.length < 4) a.examples.push(`${r.world.year}: "${q.q}" (${q.right})`); }
       if (REAL_Q.some(re => re.test(q.q)) && r.world && r.world.year <= T.LAST_REAL_YEAR) { a.real += 1; if (a.examples.length < 4) a.examples.push(`${r.world.year}: "${q.q}"`); }
       if (!q.inSave) a.missing += 1;
@@ -799,12 +805,14 @@ SECTION = '4';
 console.log('4) The phone\'s quiz asks about the world only where the world is the game\'s own');
 if (runs('4')) {
   const h = quizAudit(flatHead), b = quizAudit(flatBase);
-  console.log(`   this tree: three questions in ${h.ready} of ${h.seasons} seasons (${r2(h.rate)}); world questions about a season that happened ${h.world}, about a real man ${h.real}, answers not in the save ${h.missing}, world questions asked ${h.worldAsked}`);
+  console.log(`   this tree: three questions in ${h.ready} of ${h.seasons} seasons (${r2(h.rate)}); world questions about a season that happened ${h.world}, about a real man ${h.real}, answers not in the save ${h.missing}, world questions asked ${h.worldAsked}, champion questions without the full season ${h.bareYear} of ${h.champAsked}`);
   console.log(`   base:      three questions in ${b.ready} of ${b.seasons} seasons (${r2(b.rate)}); world questions about a season that happened ${b.world}, about a real man ${b.real}, answers not in the save ${b.missing}`);
   for (const e of h.examples) console.log(`     e.g. ${e}`);
   if (h.world) fail(`${h.world} quiz questions about the world in a season that happened`);
   if (h.real) fail(`${h.real} quiz questions about a real man's move or goals`);
   if (h.missing) fail(`${h.missing} quiz answers are not in the save`);
+  if (h.bareYear) fail(`${h.bareYear} champion questions name a bare year, not the season in full`);
+  if (h.champAsked < 100) fail(`only ${h.champAsked} champion questions were asked, too few to judge their wording`);
   if (!(h.rate >= b.rate)) fail(`the quiz is ready in ${r2(h.rate)} of seasons against ${r2(b.rate)} on the base`);
   /* Old saves: careers the base drove to its 2028 world, which still holds real men's moves and a real top
      scorer, read by this tree's quiz (through JSON, the way a save loads). */
@@ -944,7 +952,7 @@ const REGIONS = {
     ['export function worldSeasonTick(', '/** The feed, newest first, ready to print. */'],
   ],
   [ARCADE]: [
-    ['import { LAST_REAL_YEAR, seasonHappened } from "./soccerWorldTruth";', 'export interface ArcadeQuestion {'],
+    ['import { LAST_REAL_YEAR, seasonHappened, seasonLabel } from "./soccerWorldTruth";', 'export interface ArcadeQuestion {'],
     ['export function arcadeQuestions(', '/** Whether the app has anything to offer this season. */'],
   ],
   [PANEL]: [
