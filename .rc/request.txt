@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-units: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/components/front-office-shared src/lib/collegeSeat.test.ts src/lib/gmSeat.test.ts src/lib/gmDeskHost.test.ts src/test/cfbRecruitFilters.test.tsx src/test/cbbRecruitFilters.test.tsx src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+anchors: SIM_COLLEGE_SEAT_ANCHORS=1 node scripts/simCollegeSeat.mjs
+c-allowfirer: SIM_COLLEGE_SEAT_SEEDS=1 SIM_COLLEGE_SEAT_CONTROL=allowfirer node scripts/simCollegeSeat.mjs
+c-bidfirer: SIM_COLLEGE_SEAT_SEEDS=1 SIM_COLLEGE_SEAT_CONTROL=bidfirer node scripts/simCollegeSeat.mjs
+c-placeoff: SIM_COLLEGE_SEAT_SEEDS=1 SIM_COLLEGE_SEAT_CONTROL=placeoff node scripts/simCollegeSeat.mjs
+board: node scripts/simCollegeDynastyBoard.mjs
+board-seatleak: COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw: COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff: COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+board-cfbword: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword: COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board: COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHomeFront: node scripts/simHomeFront.mjs
