@@ -202,6 +202,13 @@ describe('the "?" (correction 9)', () => {
     expect(lines.filter(l => /league's order/i.test(l))).toEqual([]);
     for (const p of nbaGamePickRules().partial) expect(lines).not.toContain(p);
   });
+  it('promises the class the engine draws for the night, never a size of its own', () => {
+    /* Review 2026-10-12: the help used to retype the size rule. */
+    const { night } = opened();
+    const drawn = nbaEarnedDraftClass(mulberry32(16), night.slots.length, new Set()).length;
+    const lines = nbaDraftHelp(night, ME).flatMap(b => b.lines);
+    expect(lines.filter(l => l.includes(`${night.slots.length} picks tonight and a class of ${drawn},`))).toHaveLength(1);
+  });
   it('prints no chance the table cannot compute', () => {
     const { night } = opened();
     const total = NBA_PICK_RULES.lottery!.odds.reduce((a, b) => a + b, 0);

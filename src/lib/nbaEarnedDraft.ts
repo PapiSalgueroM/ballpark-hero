@@ -21,7 +21,7 @@
 import { NBA_TEAM_MAP } from '@/data/conquestDataNba';
 import {
   NBA_DRAFT_NEED_WEIGHT, NBA_ROUNDS, nbaConsumeDraftRound, nbaDraftCapital, nbaDraftNeed, nbaDraftSigning,
-  nbaProspectToPlayer,
+  nbaEarnedClassSize, nbaProspectToPlayer,
 } from './nbaFrontOffice';
 import type { NbaLeague, NbaProspect, SeriesResult } from './nbaFrontOffice';
 import { nbaGamePickRules, nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf } from './nbaGmDesk';
@@ -192,7 +192,7 @@ export function nbaDraftHeading(night: GmDraftNight, me: string, labelOf: (club:
     desk's pick rules' `partial`, which still describes the old draft. */
 export function nbaDraftHelp(night: GmDraftNight, me: string): LotteryHelpBlock[] {
   const lottery = nbaGamePickRules().lottery;
-  const size = Math.min(70, night.slots.length + 4);
+  const size = nbaEarnedClassSize(night.slots.length);
   const own: string[] = [
     `This game's draft is two rounds of prospects it generates: ${night.slots.length} picks tonight and a class of ${size}, so the last club still has a choice.`,
     'Each rival club takes the best man on its own read, leaning a little to a position its best eight are short of.',

@@ -872,6 +872,14 @@ export const NBA_EARNED_CLASS_CURVE: readonly { from: number; to: number; ovr: r
   { from: 46, to: 70, ovr: [66, 72] },
 ];
 
+/** How many men an earned class of `slots` picks holds: four more than the
+    picks, so the last club still has a choice, and never more than the 70 a
+    saved class may hold. One rule, read by the class below and by the words
+    that describe it, so the two cannot drift apart. */
+export function nbaEarnedClassSize(slots: number): number {
+  return Math.min(70, Math.max(0, Math.floor(slots)) + 4);
+}
+
 /** A class for an earned draft of `slots` picks: four men more than the
     picks, so the last club still has a choice, and never more than the 70 a
     saved class may hold. Its best twelve are today's twelve, drawn exactly as
@@ -879,7 +887,7 @@ export const NBA_EARNED_CLASS_CURVE: readonly { from: number; to: number; ovr: r
     man after them is drawn along NBA_EARNED_CLASS_CURVE with nbaDraftClass's
     own draws and clamps. Sorted by grade, best first, as nbaDraftClass is. */
 export function nbaEarnedDraftClass(rng: () => number, slots: number, taken: Set<string> = new Set()): NbaProspect[] {
-  const size = Math.min(70, Math.max(0, Math.floor(slots)) + 4);
+  const size = nbaEarnedClassSize(slots);
   const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(12, size));
   const POS: NbaPos[] = ['G', 'G', 'F', 'F', 'C'];
   const last = NBA_EARNED_CLASS_CURVE[NBA_EARNED_CLASS_CURVE.length - 1];

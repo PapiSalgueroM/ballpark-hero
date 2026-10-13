@@ -202,7 +202,7 @@ const CONTROLS = {
   /* every slot used by its first owner, whoever holds the pick */
   origholder: { expect: [3], swaps: { bind: [['draftSlots(order, nbaPicksOf(desk, league), league.season, 2)', 'draftSlots(order, nbaPicksOf(desk, league), league.season, 2).map(s => ({ ...s, holder: s.orig }))']] } },
   /* a class four short of the picks instead of four over */
-  shortclass: { expect: [3, 6], swaps: { engine: [['  const size = Math.min(70, Math.max(0, Math.floor(slots)) + 4);', '  const size = Math.min(70, Math.max(0, Math.floor(slots)) - 4);']] } },
+  shortclass: { expect: [3, 6], swaps: { engine: [['  return Math.min(70, Math.max(0, Math.floor(slots)) + 4);', '  return Math.min(70, Math.max(0, Math.floor(slots)) - 4);']] } },
   /* the run prints the engine's grade, not his scout's read */
   shownread: { expect: [3], swaps: { bind: [['    shown: scout,', '    shown: p => p.grade,']] } },
   /* the order's key takes a Math.random draw, so the same season draws another night */
