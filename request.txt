@@ -1,0 +1,6 @@
+simCmSubs: node scripts/simCmSubs.mjs
+subs-oldcap: SUBS_CONTROL=oldcap node scripts/simCmSubs.mjs
+subs-nostops: SUBS_CONTROL=nostops node scripts/simCmSubs.mjs
+subs-htstop: SUBS_CONTROL=htstop node scripts/simCmSubs.mjs
+subs-opproom: SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+subs-coachall: SUBS_CONTROL=coachall node scripts/simCmSubs.mjs

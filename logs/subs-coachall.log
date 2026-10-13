@@ -1,0 +1,7 @@
+ok   [coach] the coach never passes the rule's changes or stoppages (0 of 336 matches over)
+ok   [coach] a three change match carries no stoppage marks (0 matches marked)
+FAIL [coach] every change he makes for legs keeps a change and a stoppage back (104 of 727 changes for legs kept nothing back)
+   the coach: 3.01 changes a match, five (126 matches)
+   the coach: 2.21 changes a match, base (126 matches)
+   the coach: 1.96 changes a match, three (84 matches)
+control coachall FIRED: 1 of 3 checks red

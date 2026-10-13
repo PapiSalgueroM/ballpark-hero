@@ -1,0 +1,15 @@
+ok   [rule] 2005-06 Everton plays three with no stoppage limit (3/none)
+ok   [rule] 2005-06 Everton takes a third change
+ok   [rule] 2005-06 Everton refuses a fourth
+ok   [rule] 2005-06 writes no stoppage marks
+ok   [rule] 2026-27 Liverpool plays five in three stoppages (5/3)
+FAIL [rule] 2026-27 two changes at half time use no stoppage
+FAIL [rule] 2026-27 takes one each at 60, 70 and 80: five changes, three stoppages (refused)
+FAIL [rule] 2026-27 refuses a sixth
+FAIL [rule] 2026-27 one at the break then 60, 70, 80: four changes, three stoppages
+FAIL [rule] 2026-27 refuses a change at a fourth minute
+FAIL [rule] 2026-27 takes a second change at the third stoppage's minute
+ok   [rule] matchRules base plays three with no limit
+ok   [rule] 2020-21 Premier League plays three (3/none)
+ok   [rule] 2020-21 La Liga plays five in three (5/3)
+control htstop FIRED: 6 of 14 checks red
