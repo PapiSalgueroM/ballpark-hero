@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playSoccerWorldTruth.mjs
+walk-pastfeed: WALK_CONTROL=pastfeed RC_OUT=$RC_OUT/control node scripts/playSoccerWorldTruth.mjs
