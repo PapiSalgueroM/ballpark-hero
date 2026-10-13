@@ -38,7 +38,7 @@ jobs:
           git rev-parse HEAD > "$AUTOCOMPLETE_TOUCH_OUT/source-head.txt"
           git status --porcelain --untracked-files=no > "$AUTOCOMPLETE_TOUCH_OUT/source-before.txt"
           test ! -s "$AUTOCOMPLETE_TOUCH_OUT/source-before.txt"
-          git diff --exit-code 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c -- src scripts package.json package-lock.json bun.lock ':!src/components/game/PlayerAutocomplete.tsx' ':!src/test/playerAutocompleteStale.test.tsx' ':!scripts/simPlayerAutocompleteInteraction.mjs' ':!src/test/playerAutocompleteTouchScroll.test.tsx' ':!scripts/simPlayerAutocompleteTouchScroll.mjs' ':!scripts/playPlayerAutocompleteTouchScroll.mjs'
+          git diff --exit-code 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c -- src scripts package.json package-lock.json bun.lock ':!src/components/game/PlayerAutocomplete.tsx' ':!src/test/playerAutocompleteStale.test.tsx' ':!scripts/simPlayerAutocompleteInteraction.mjs' ':!src/test/playerAutocompleteTouchScroll.test.tsx' ':!scripts/simPlayerAutocompleteTouchScroll.mjs' ':!scripts/playPlayerAutocompleteTouchScroll.mjs' ':!scripts/playAutocompleteRace.mjs'
           git diff --exit-code 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c -- .github/workflows ':!.github/workflows/player-autocomplete-touch-scroll.yml' index.html
           if test "$AUTOCOMPLETE_TOUCH_PHASE" = baseline; then
             git diff --exit-code 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c -- src/components/game/PlayerAutocomplete.tsx src/test/playerAutocompleteStale.test.tsx scripts/simPlayerAutocompleteInteraction.mjs
@@ -124,7 +124,84 @@ jobs:
           fi
       - name: Existing player search browser race
         if: env.AUTOCOMPLETE_TOUCH_PHASE == 'fixed'
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs 2>&1 | tee "$AUTOCOMPLETE_TOUCH_OUT/race.log"
+        run: |
+          git show 7735fd3c6097a2b608b81e0d4bafcbec596b1c73:scripts/playAutocompleteRace.mjs > "$AUTOCOMPLETE_TOUCH_OUT/race-original.mjs.before"
+          sha256sum "$AUTOCOMPLETE_TOUCH_OUT/race-original.mjs.before" > "$AUTOCOMPLETE_TOUCH_OUT/race-original-source.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const root = process.env.AUTOCOMPLETE_TOUCH_OUT;
+          const original = fs.readFileSync(root + '/race-original.mjs.before', 'utf8');
+          const anchor = 'const { cells, target, pageErrors } = await walk(distDir);';
+          const receipt = "\nconsole.log('RACE_RECEIPT ' + JSON.stringify({ cells, target, pageErrors }));";
+          assert.equal(original.split(anchor).length - 1, 1);
+          const observed = original.replace(anchor, anchor + receipt);
+          assert.equal(observed.replace(receipt, ''), original);
+          fs.writeFileSync(root + '/race-original-observed.mjs', observed);
+          fs.writeFileSync('scripts/.autocomplete-touch-race-original.mjs', observed);
+          NODE
+          trap 'rm -f scripts/.autocomplete-touch-race-original.mjs' EXIT
+          set +e
+          AUTOCOMPLETE_RACE_CONTROL=notag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/.autocomplete-touch-race-original.mjs 2>&1 | tee "$AUTOCOMPLETE_TOUCH_OUT/race-original.log"
+          original_status=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$original_status" > "$AUTOCOMPLETE_TOUCH_OUT/race-original.process.txt"
+          rm -f scripts/.autocomplete-touch-race-original.mjs
+          mkdir -p "$AUTOCOMPLETE_TOUCH_OUT/race-controls"
+          cp -R .sim-control/race-notag-* "$AUTOCOMPLETE_TOUCH_OUT/race-controls/"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const root = process.env.AUTOCOMPLETE_TOUCH_OUT;
+          assert.equal(fs.readFileSync(root + '/race-original.process.txt', 'utf8').trim(), '1');
+          const log = fs.readFileSync(root + '/race-original.log', 'utf8');
+          const receipts = log.split('\n').filter(line => line.startsWith('RACE_RECEIPT '));
+          assert.equal(receipts.length, 1);
+          const report = JSON.parse(receipts[0].slice('RACE_RECEIPT '.length));
+          const names = ['/build-your-xi', '/football-connect-4', '/missing-xi'].flatMap(route => [390, 1280].map(width => route + '@' + width));
+          assert.deepEqual(report.cells.map(cell => cell.route + '@' + cell.width).sort(), names.sort());
+          assert.deepEqual(report.pageErrors, []);
+          assert.deepEqual(report.target, { targetLooks: 20, targetStale: 0 });
+          const faults = log.split('\n').filter(line => line.startsWith('  FAIL  '));
+          assert.equal(faults.length, 6);
+          for (const cell of report.cells) {
+            assert.equal(cell.taps, 34); assert.equal(cell.staleVisible, 34); assert.equal(cell.stalePicked, 0);
+            assert.equal(cell.otherOption, 0); assert.equal(cell.positive, true);
+            assert(faults.includes('  FAIL  ' + cell.route + ' at ' + cell.width + ': 0 stale picks of 34 (needs at least 17)'));
+          }
+          fs.writeFileSync(root + '/race-original-receipt.json', JSON.stringify(report, null, 2));
+          console.log('Original down-only race: six owned missed-pick faults with all six completed positive taps and no setup failure.');
+          NODE
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs 2>&1 | tee "$AUTOCOMPLETE_TOUCH_OUT/race.log"
+          printf '0\n' > "$AUTOCOMPLETE_TOUCH_OUT/race.process.txt"
+          set +e
+          AUTOCOMPLETE_RACE_CONTROL=notag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs 2>&1 | tee "$AUTOCOMPLETE_TOUCH_OUT/race-control.log"
+          control_status=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$control_status" > "$AUTOCOMPLETE_TOUCH_OUT/race-control.process.txt"
+          cp -R .sim-control/race-notag-* "$AUTOCOMPLETE_TOUCH_OUT/race-controls/"
+          find "$AUTOCOMPLETE_TOUCH_OUT/race-controls" -type f -print0 | sort -z | xargs -0 sha256sum > "$AUTOCOMPLETE_TOUCH_OUT/race-control-hashes.txt"
+          test "$control_status" = 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const root = process.env.AUTOCOMPLETE_TOUCH_OUT;
+          const names = ['/build-your-xi', '/football-connect-4', '/missing-xi'].flatMap(route => [390, 1280].map(width => route + '@' + width)).sort();
+          for (const [file, stale] of [['race.log', 0], ['race-control.log', 34]]) {
+            const log = fs.readFileSync(root + '/' + file, 'utf8');
+            const receipts = log.split('\n').filter(line => line.startsWith('RACE_RECEIPT '));
+            assert.equal(receipts.length, 1);
+            const report = JSON.parse(receipts[0].slice('RACE_RECEIPT '.length));
+            assert.deepEqual(report.cells.map(cell => cell.route + '@' + cell.width).sort(), names); assert.deepEqual(report.pageErrors, []);
+            assert.deepEqual(report.target, { targetLooks: 20, targetStale: 0 });
+            for (const cell of report.cells) {
+              assert.equal(cell.taps, 34); assert.equal(cell.staleVisible, stale); assert.equal(cell.stalePicked, stale);
+              assert.equal(cell.otherOption, 0); assert.equal(cell.positive, true);
+            }
+            fs.writeFileSync(root + '/' + file.replace('.log', '-receipt.json'), JSON.stringify(report, null, 2));
+          }
+          console.log('Completed race activation: 204 current trials and an effective 204-stale-pick query-tag control, all original bounds held.');
+          NODE
       - name: All unchanged route download budgets
         if: env.AUTOCOMPLETE_TOUCH_PHASE == 'fixed'
         run: |
