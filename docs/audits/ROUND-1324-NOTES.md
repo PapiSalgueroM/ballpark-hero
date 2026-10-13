@@ -109,9 +109,11 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
 - Judgement call: the neutral index is read off the message's own saved choices, not the def's, because `answered`
   indexes the saved choices; on a deal they are the same array, and if a later pack edit removed the neutral option
   the message stays open (fail closed) instead of landing on a wrong option.
-- `gmExpiredLine(msg, pack)` returns `📨 <voice>: your assistant dealt with it (<neutral label>).` read off the saved
-  message (so a later pack edit never rewrites a line already on a desk); `pack` is accepted for the brief's call shape
-  and not read. Null for any message not settled this way.
+- `gmExpiredLine(msg)` returns `📨 <voice>: your assistant dealt with it (<neutral label>).` read off the saved
+  message (so a later pack edit never rewrites a line already on a desk), and `📨 <voice> dealt with it (<neutral
+  label>).` when the voice is the assistant itself (closing check finding 3: the brief's template read "Your
+  assistant: your assistant dealt with it", and its unread `pack` parameter is gone). Null for any message not settled
+  this way.
 - `isMsg` in the repair accepts a finite `w` and `auto: true` on an answered message only; anything else bends the
   message and the inbox resets alone (today's rule).
 - gmPackProblems names an `expires` that is not a whole number at or above 1, and an expiring card with no option

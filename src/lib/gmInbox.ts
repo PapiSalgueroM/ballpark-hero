@@ -515,12 +515,15 @@ export function answerGmInbox<S extends GmInboxHost>(
 
 /** The line a seat shows for a card the staff settled, null for any other.
  *  The voice and the label are read off the saved message, so a later edit
- *  of the pack never rewrites a line already on a desk; `pack` is accepted
- *  for the call shape the deck's binders use. */
-export function gmExpiredLine(msg: InboxMessage, pack?: GmInboxPack): string | null {
+ *  of the pack never rewrites a line already on a desk. A card the assistant
+ *  sent names the assistant once, not twice. */
+export function gmExpiredLine(msg: InboxMessage): string | null {
   const m = msg as GmInboxMessage;
   const c = m.auto && m.answered !== undefined ? m.choices[m.answered] : undefined;
-  return c ? `📨 ${m.from}: your assistant dealt with it (${c.label}).` : null;
+  if (!c) return null;
+  return /^your assistant\b/i.test(m.from.trim())
+    ? `📨 ${m.from} dealt with it (${c.label}).`
+    : `📨 ${m.from}: your assistant dealt with it (${c.label}).`;
 }
 
 /** Open decisions sitting on the desk. */

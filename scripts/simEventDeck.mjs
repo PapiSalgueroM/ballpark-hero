@@ -726,7 +726,7 @@ const FX_EXPIRE = fxPack('fx_expire', [
         settled++;
         if (m.answered !== 1) bad.push(`${m.id}: settled on option ${m.answered}, the neutral one is 1`);
         if (w.clock !== m.w + ttl.get(m.defId)) bad.push(`${m.id}: settled at week ${w.clock}, it arrived at ${m.w} and expires after ${ttl.get(m.defId)}`);
-        line = line ?? E.gmExpiredLine(m, pack);
+        line = line ?? E.gmExpiredLine(m);
       }
     };
     for (let d = 0; d < DRIVES.SILENT.desks; d++) runDesk(pack, 'fx_expire', seed, 'SILENT', d, { observe });
@@ -740,7 +740,10 @@ const FX_EXPIRE = fxPack('fx_expire', [
   if (r.bad.length) fail(7, `${r.bad.length} expiry breaks on ${DRIVES.SILENT.desks} silent desks`);
   else ok(`${r.settled} cards settled on ${DRIVES.SILENT.desks} silent desks, each at exactly w plus expires on its neutral option, no meter moved`);
   const dash = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
-  if (!r.line || !r.line.includes('(Leave it)') || !r.line.includes('your assistant') || dash.some(d => r.line.includes(d))) fail(7, `the settled line reads "${r.line}"`);
+  /* FX_EXPIRE's cards come from the assistant, so the line names the
+     assistant once, never "Your assistant: your assistant". */
+  const assistants = r.line ? r.line.toLowerCase().split('your assistant').length - 1 : 0;
+  if (!r.line || !r.line.includes('(Leave it)') || assistants !== 1 || dash.some(d => r.line.includes(d))) fail(7, `the settled line reads "${r.line}"`);
   else ok(`the settled line: ${r.line}`);
   /* Measured 2026-10-13 at seeds 1 to 10: silent desks are dealt 44.75 to
      45.42 times as many cards with expiry as without (without it every desk

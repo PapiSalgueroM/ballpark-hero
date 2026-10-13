@@ -396,8 +396,8 @@ describe('gmInbox deck rules', () => {
     const settled = s.phoneInbox![0] as GmInboxMessage;
     expect([settled.answered, settled.auto]).toEqual([1, true]);
     expect(JSON.stringify([s.trust, s.fans, s.cash, s.morale, s.recruit, s.out, s.rating])).toBe(before);
-    expect(gmExpiredLine(settled, p)).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
-    expect(gmExpiredLine(m, p)).toBeNull();
+    expect(gmExpiredLine(settled)).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
+    expect(gmExpiredLine(m)).toBeNull();
     expect(answerGmInbox(s, settled.id, 0, seat)).toBeNull();
   });
 
@@ -493,5 +493,33 @@ describe('gmInbox deck rules, the review cases', () => {
     expect(gmPackProblems(p).join(' ')).toMatch(/yes or no fact/);
     expect(() => seatFor(p)).toThrow(/yes or no fact/);
     expect(gmPackProblems(deck([card('m', { subject: { fact: 'man' } })], { facts }))).toEqual([]);
+  });
+});
+
+/* Round 1324's closing check: what a seat needs to say a card was settled. */
+describe('gmInbox deck rules, the closing check cases', () => {
+  const card = (id: string, extra: Partial<GmEventDef> = {}): GmEventDef => ({
+    id, beat: 'a', from: 'Ownership', emoji: 'x', text: `${id}.`,
+    choices: [{ label: 'Leave it', reply: 'Fine.', karma: 0 }, { label: 'Push', reply: 'Push.', karma: 2 }], ...extra,
+  });
+  const deck = (events: GmEventDef[], extra: Partial<GmInboxPack> = {}): GmInboxPack => ({
+    ...TOY, calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 },
+    facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' } }, perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
+  });
+
+  it('a card the assistant sent names the assistant once in its settled line', () => {
+    const settle = (from: string) => {
+      const s = desk();
+      const seat = seatFor(deck([card('x', { from, expires: 1 })], { cooldown: 50 }));
+      gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+      gmInboxWeek(s, seat, 'a', {}, 1, () => 0);
+      return gmExpiredLine(s.phoneInbox![0]);
+    };
+    expect(settle('Your assistant')).toBe('📨 Your assistant dealt with it (Leave it).');
+    expect(settle('Your assistant GM')).toBe('📨 Your assistant GM dealt with it (Leave it).');
+    expect(settle('The board')).toBe('📨 The board: your assistant dealt with it (Leave it).');
+    for (const from of ['Your assistant', 'Your assistant GM', 'The board']) {
+      expect(settle(from)!.toLowerCase().split('your assistant')).toHaveLength(2);
+    }
   });
 });
