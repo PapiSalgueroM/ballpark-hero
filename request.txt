@@ -1,0 +1,3 @@
+#!serial
+pr249-asis: git fetch -q origin codex/soccer-career-daily-life && git -c user.email=r1327@x -c user.name=r1327 merge -q --no-edit FETCH_HEAD >/dev/null 2>&1; node scripts/simSoccerCareerRoutineEvents.mjs
+pr249-fixed: git fetch -q origin codex/soccer-career-daily-life && git -c user.email=r1327@x -c user.name=r1327 merge -q --no-edit FETCH_HEAD >/dev/null 2>&1; node .rc/x/fix249.mjs && node scripts/simSoccerCareerRoutineEvents.mjs

@@ -1,0 +1,8 @@
+fix249 applied
+Actual physical unit files: 2; 53 exact completed outcomes.
+Routine outcomes: 38 owned; 6 preservation; 44 passed.
+Promised followups: followup missing: esports results have priority in the actual next playing season=passed; followup missing: the boots story has priority in the actual next playing season=passed; 7 preservation passes.
+Actual causal totals: 0 intended failures; 53 passes; pending 0; runner exit 0.
+Source receipts held: 9; file errors empty; raw setup and unhandled markers absent.
+Actual bounded picker: 7537 attempts; 30/30 queued; 30/30 answered; 0 duplicate keys; 0 cooldown losses.
+simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.

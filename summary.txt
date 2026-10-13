@@ -1,0 +1,2 @@
+pr249-asis exit=1 4s | Node.js v24.21.0
+pr249-fixed exit=0 5s | simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.
