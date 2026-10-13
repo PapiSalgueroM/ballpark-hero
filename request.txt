@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-seat: node_modules/.bin/vitest run src/components/college-dynasty src/components/cfb-dynasty src/components/cbb-dynasty src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+board-seatleak: COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw: COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff: COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+board-cfbword: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword: COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board: COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+simCfbDynasty: node scripts/simCfbDynasty.mjs
+simCfbStaff: node scripts/simCfbStaff.mjs
+simCbbStaff: node scripts/simCbbStaff.mjs
+simCollegeRecruiting: node scripts/simCollegeRecruiting.mjs
+simCfbRecruitFilters: node scripts/simCfbRecruitFilters.mjs
+simCbbRecruitFilters: node scripts/simCbbRecruitFilters.mjs
+simCoachCalls: node scripts/simCoachCalls.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

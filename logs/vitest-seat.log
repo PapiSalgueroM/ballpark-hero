@@ -1,0 +1,23 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1170[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB Dynasty: the program layer on the board[2m > [22mplays a save from before assistant coaches existed without adding anything to it [33m 393[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1988[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 402[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a block that does not check out loads as an old save, never a crash [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: the live line follows the record, and the recap grades the year and moves trust [33m 324[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 706[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 533[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 322[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 6137[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture [33m 4065[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 2067[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 00:31:15
+[2m   Duration [22m 8.85s[2m (transform 936ms, setup 641ms, collect 3.54s, tests 10.57s, environment 4.42s, prepare 1.17s)[22m
+

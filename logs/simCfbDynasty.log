@@ -1,0 +1,10 @@
+1) structure: 44 schools, twelve players each with a quarterback, a full slate every round
+   ok
+2) CFB: over 20 seeds and 8 seasons every AI roster keeps a QB, an RB and a WR, and the Heisman race is never empty
+   160 seasons: empty Heisman races 0, skill position holes 0
+3) CBB: over 20 seeds and 8 seasons every roster keeps a point guard and a center
+   160 seasons: position holes 0
+4) the board: a reload on the recap draws the recap again and never replays the season
+   vitest exit 0, 3 passed (3)
+
+simCfbDynasty: all green

@@ -1,0 +1,25 @@
+vitest-seat exit=0 9s |    Duration  8.85s (transform 936ms, setup 641ms, collect 3.54s, tests 10.57s, environment 4.42s, prepare 1.17s)
+simCollegeDynastyBoard exit=0 9s | simCollegeDynastyBoard: all green
+board-seatdraw exit=0 7s | control "seatdraw": 1 failure(s) fired as expected, the check works
+board-seatleak exit=0 7s | control "seatleak": 1 failure(s) fired as expected, the check works
+board-seatunmarked exit=0 7s | control "seatunmarked": 1 failure(s) fired as expected, the check works
+board-seatoff exit=0 7s | control "seatoff": 1 failure(s) fired as expected, the check works
+board-cbbword exit=0 7s | control "cbbword": 1 failure(s) fired as expected, the check works
+board-cfbword exit=0 7s | control "cfbword": 1 failure(s) fired as expected, the check works
+simCfbDynasty exit=0 4s | simCfbDynasty: all green
+board-board exit=0 5s | control "board": 1 failure(s) fired as expected, the check works
+simCfbStaff exit=0 17s | simCfbStaff: all green
+simCbbStaff exit=0 18s | simCbbStaff: all green
+simCfbRecruitFilters exit=0 7s | simCfbRecruitFilters: source bytes held, only owned disposable copies removed.
+simCollegeRecruiting exit=0 10s | simCollegeRecruiting: all checks green
+simCbbRecruitFilters exit=0 4s | simCbbRecruitFilters: seven actual-Board combination, order, reset, empty, no-write, hidden-ability, signing-ID and NIL checks passed.
+simCoachCalls exit=0 6s | simCoachCalls: 75 checks, 0 failed
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simEngineIds exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simLeaderboardCaps exit=1 2s | the database refused game_score_caps?select=game,max_score&limit=2000: TypeError: fetch failed
+simInventedNames exit=0 8s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 24s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 104s | 
