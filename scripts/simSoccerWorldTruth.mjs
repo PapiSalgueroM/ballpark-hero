@@ -27,7 +27,14 @@
  *      line's year is monthYear's and every award's year is the row's. Planted:
  *      10,000 identities of a 0 goal keeper rated 6.0 through monthAwards win
  *      nothing.
- *   2  STREAM. (step b) Base and head in lockstep under one seeded Math.random.
+ *   2  STREAM. 200 careers (starts 1990, 2000, 2010, 2020 and 2025, all ten
+ *      positions) on this tree and the base in lockstep, each under the same
+ *      seeded Math.random: the call count at the end of the month block, at the
+ *      end of the world tick and at the end of every step, and the phone's seed
+ *      after the tick, equal the base's, and so do the world's Europe, leagues,
+ *      cups and tournament, until a season's input differs. The first fields to
+ *      differ are always this round's (an award, a log line, the phone's map,
+ *      moves, scorer or feed, a nominee's club on the night).
  *   3  FEED. Over the fleet, every season that happened: no feed line holds a
  *      name from any era pool (1990 to 2032), no champion, Europe, cup,
  *      transfer or top scorer line, the honest line once, and a tournament
@@ -49,6 +56,10 @@
  * NEGATIVE CONTROLS (WORLD_TRUTH_CONTROL), each on a COPY of a source file.
  * Text not in the file exactly once refuses to run (ABORT, exit 1); the last
  * line says FIRED (its section failed) or DID NOT FIRE, and both exit 1.
+ *   goalsonly   the old goals lottery decides the months again: section 1.
+ *   seasonyear  every month printed with the season's starting year: section 1.
+ *   nolegacy    the old lottery's draws are no longer made: section 2.
+ *   extradraw   one extra draw in the world tick: section 2.
  *
  * Run: node scripts/simSoccerWorldTruth.mjs [seeds]   (default 5 seeds, 400 careers a tree)
  *      SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs   another five seeds
@@ -92,7 +103,16 @@ const PANEL = 'src/components/soccer-career/InternationalPanel.tsx';
 /* ─── the controls ─────────────────────────────────────────────────────── */
 
 /* Each: the file it edits, its edits (text that must be in the file exactly once), and the section it breaks. */
+const OLD_LOTTERY = '((g: number) => { const out: string[] = []; for (const m of ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May"]) { const mg = Math.max(0, Math.round(g / 10 + (Math.random() * 2 - 1))); const c = mg >= 4 ? 0.75 : mg >= 3 ? 0.5 : mg >= 2 ? 0.25 : mg >= 1 ? 0.1 : 0.02; if (Math.random() < c) out.push(m); } return out; })(season.goals)';
 const CONTROLS = {
+  goalsonly: { breaks: '1', note: 'the old goals lottery decides the months again',
+    edits: { [ENGINE]: [['  for (const month of monthAwards(season, s.position, keyedRng(`${soccerDeckIdentity(s)}|${season.year}|potm`))) {', `  for (const month of ${OLD_LOTTERY}) {`]] } },
+  seasonyear: { breaks: '1', note: 'every month is printed with the season\'s starting year again',
+    edits: { [ENGINE]: [['  s.events.push(`🏆 Won Player of the Month (${month} ${monthYear(month, thisYear)})!`);', '  s.events.push(`🏆 Won Player of the Month (${month} ${thisYear})!`);']] } },
+  nolegacy: { breaks: '2', note: 'the old lottery\'s Math.random calls are no longer made',
+    edits: { [ENGINE]: [['  legacyMonthDraws(season.goals);\n', '']] } },
+  extradraw: { breaks: '2', note: 'the world tick makes one extra draw before Europe',
+    edits: { [PHONE]: [['  const ucl = draw(notMine(topClubs, opts.playerUcl));', '  rng.next();\n  const ucl = draw(notMine(topClubs, opts.playerUcl));']] } },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`WORLD_TRUTH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const controlSources = new Map();
@@ -111,6 +131,18 @@ if (CONTROL) {
 }
 
 /* ─── bundles ──────────────────────────────────────────────────────────── */
+
+/* Two marks added to every copy, base and head alike, neither of which draws: the end of the month block (the
+   line after it has not moved since the base) and the end of the world tick (the phone's state after it). */
+const MARKS = [
+  [ENGINE, '\n  // Player of the Year (domestic)\n', "\n  globalThis.__r1329Mark?.('month');\n  // Player of the Year (domestic)\n"],
+  [PHONE, '\n  p.seed = rng.state;\n  pruneClubs(p);\n', "\n  p.seed = rng.state;\n  globalThis.__r1329Mark?.('tick', p.seed);\n  pruneClubs(p);\n"],
+];
+function mark(source, from, to, where) {
+  const hits = source.split(from).length - 1;
+  if (hits !== 1) { console.error(`ABORT: the harness mark ${JSON.stringify(from.slice(0, 40))} is in ${where} ${hits} times, it must be once`); process.exit(1); }
+  return source.replace(from, () => to);
+}
 
 /** One CommonJS bundle of the engine, the phone, the quiz, the eras and the International panel's two
  *  renders, from the working tree or from a commit. A control replaces its file's source in this tree's bundle. */
@@ -145,7 +177,9 @@ export const render = {
       if (!ref && controlSources.has(rel)) { source = controlSources.get(rel); used.add(rel); }
       else if (ref) source = execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
       else source = fs.readFileSync(args.path, 'utf8');
-      return { contents: source.replace(/\r\n/g, '\n'), loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
+      source = source.replace(/\r\n/g, '\n');
+      for (const [file, from, to] of MARKS) if (rel === file) source = mark(source, from, to, `${tag} ${file}`);
+      return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
     });
   } };
   const out = path.join(TMP, `${tag}.cjs`);
@@ -370,6 +404,121 @@ console.log('1) Player of the Month reads the month\'s football, with the true y
   }
   console.log(`   planted: a 0 goal keeper rated 6.0 over 10,000 identities won ${planted} months`);
   if (planted) fail(`the planted 0 goal keeper rated 6.0 won ${planted} months`);
+}
+
+/* ─── 2. the stream ────────────────────────────────────────────────────── */
+
+/* What this round may change, and nothing else: Player of the Month awards and their lines, the season log's
+   tournament winner lines, the phone's who plays where map, its moves, its top scorer and its feed, and on the
+   Ballon d'Or night the clubs (so the points and order) of other nominees. */
+const ROUND_LINE = l => typeof l === 'string' && (l.startsWith('🏆 Won Player of the Month') || WON_LINE.test(l) || l.startsWith('⚽ Solid season at '));
+function normal(s) {
+  const o = copy(s);
+  o.awards = (o.awards || []).filter(a => a.name !== 'Player of the Month');
+  o.events = (o.events || []).filter(l => !ROUND_LINE(l));
+  delete o.story;
+  if (o.phone) { delete o.phone.clubs; delete o.phone.feed; if (o.phone.world) { delete o.phone.world.moves; delete o.phone.world.topScorer; } }
+  if (o.pendingBallonDor) o.pendingBallonDor = { year: o.pendingBallonDor.year, rank: o.pendingBallonDor.playerRank, points: o.pendingBallonDor.playerPoints };
+  return o;
+}
+/** The archived season logs agree once this round's lines are out, as far as the shorter of the two runs. */
+function storiesAgree(a, b) {
+  const x = a.story || [], y = b.story || [];
+  if (x.length !== y.length) return false;
+  for (let i = 0; i < x.length; i += 1) {
+    if (x[i].year !== y[i].year || x[i].club !== y[i].club) return false;
+    const lx = x[i].lines.filter(l => !ROUND_LINE(l)), ly = y[i].lines.filter(l => !ROUND_LINE(l));
+    const n = Math.min(lx.length, ly.length);
+    if (JSON.stringify(lx.slice(0, n)) !== JSON.stringify(ly.slice(0, n))) return false;
+  }
+  return true;
+}
+const topDiff = (a, b) => {
+  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+  const out = [];
+  for (const k of keys) {
+    if (JSON.stringify(a[k]) === JSON.stringify(b[k])) continue;
+    if (k === 'phone' && a.phone && b.phone) { for (const p of new Set([...Object.keys(a.phone), ...Object.keys(b.phone)])) if (JSON.stringify(a.phone[p]) !== JSON.stringify(b.phone[p])) out.push(`phone.${p}`); }
+    else out.push(k);
+  }
+  return out;
+};
+const ALLOWED_FIRST = new Set(['awards', 'events', 'phone.clubs', 'phone.world', 'phone.feed', 'pendingBallonDor']);
+
+function lockstep(c) {
+  const sides = [HEAD, BASEB].map(B => ({ M: B.engine, rand: seeded(c.seed), calls: 0, marks: [] }));
+  const run = (side, fn) => {
+    const real = Math.random;
+    side.marks = [];
+    Math.random = () => { side.calls += 1; return side.rand(); };
+    globalThis.__r1329Mark = (kind, v) => { side.marks.push({ kind, calls: side.calls, v }); };
+    try { return fn(); } finally { Math.random = real; globalThis.__r1329Mark = undefined; }
+  };
+  const [h, b] = sides;
+  let sh = run(h, () => h.M.initCareer(`Stream ${c.seed}`, c.nation, c.pos, `${Math.floor(c.start / 10) * 10}s`, stats(c.ovr), c.ovr, c.start, h.M.FALLBACK_CLUBS, null, c.pot));
+  let sb = run(b, () => b.M.initCareer(`Stream ${c.seed}`, c.nation, c.pos, `${Math.floor(c.start / 10) * 10}s`, stats(c.ovr), c.ovr, c.start, b.M.FALLBACK_CLUBS, null, c.pot));
+  const out = { steps: 0, seasons: 0, months: 0, ticks: 0, worlds: 0, problems: [], first: null, firstStep: null, diverged: false };
+  let rawEqual = true;
+  for (let guard = 0; guard < 400; guard += 1) {
+    if (sh.retired && sb.retired) break;
+    const nh = run(h, () => step(h.M, sh, c.seed)), nb = run(b, () => step(b.M, sb, c.seed));
+    if (!nh || !nb) break;
+    out.steps += 1;
+    const mh = h.marks, mb = b.marks;
+    if (mh.map(m => m.kind).join() !== mb.map(m => m.kind).join()) out.problems.push(`step ${out.steps}: marks ${mh.map(m => m.kind)} against ${mb.map(m => m.kind)}`);
+    else {
+      for (let i = 0; i < mh.length; i += 1) {
+        if (mh[i].calls !== mb[i].calls) out.problems.push(`step ${out.steps} (${nb.seasons.at(-1)?.year}): Math.random count at the end of the ${mh[i].kind === 'month' ? 'month block' : 'world tick'} ${mh[i].calls} against ${mb[i].calls}`);
+        if (mh[i].kind === 'tick' && mh[i].v !== mb[i].v) out.problems.push(`step ${out.steps} (${nb.seasons.at(-1)?.year}): phone seed after the tick ${mh[i].v} against ${mb[i].v}`);
+        if (mh[i].kind === 'month') out.months += 1; else out.ticks += 1;
+      }
+    }
+    if (h.calls !== b.calls) out.problems.push(`step ${out.steps}: Math.random count at the end of the step ${h.calls} against ${b.calls}`);
+    const wh = nh.phone?.world, wb = nb.phone?.world;
+    if (wh && wb) {
+      out.worlds += 1;
+      for (const k of ['year', 'ucl', 'leagues', 'cups', 'intl']) if (JSON.stringify(wh[k]) !== JSON.stringify(wb[k])) out.problems.push(`step ${out.steps}: world.${k} differs from the base`);
+    }
+    if (nb.seasons.length > sb.seasons.length) out.seasons += 1;
+    sh = nh; sb = nb;
+    if (rawEqual && JSON.stringify(sh) !== JSON.stringify(sb)) {
+      rawEqual = false;
+      out.first = topDiff(sh, sb); out.firstStep = out.steps;
+    }
+    if (out.problems.length) break;
+    if (!rawEqual) {
+      const xh = normal(sh), xb = normal(sb);
+      const same = JSON.stringify(xh) === JSON.stringify(xb);
+      if (!same || !storiesAgree(sh, sb)) { out.diverged = true; out.ended = same ? 'story' : topDiff(xh, xb).join(' '); break; }
+    }
+  }
+  return out;
+}
+SECTION = '2';
+console.log('2) The month award and the world tick leave the season\'s draws where they were');
+{
+  const careers = [];
+  for (const start of [1990, 2000, 2010, 2020, 2025]) for (let p = 0; p < POSITIONS.length; p += 1) for (let k = 0; k < 4; k += 1) {
+    const seed = 50000 + SEED_OFFSET * 1000 + start * 0 + careers.length;
+    careers.push({ seed, start, pos: POSITIONS[p], nation: NATIONS[(p + k) % NATIONS.length], ovr: 50 + ((seed * 7) % 26), pot: 72 + ((seed * 11) % 24) });
+  }
+  let steps = 0, seasons = 0, months = 0, ticks = 0, worlds = 0, problems = 0, diverged = 0, never = 0, badFirst = 0;
+  const firsts = new Map(), ends = new Map();
+  for (const c of careers) {
+    const r = lockstep(c);
+    steps += r.steps; seasons += r.seasons; months += r.months; ticks += r.ticks; worlds += r.worlds;
+    if (r.problems.length) { problems += 1; fail(`career ${c.seed} (${c.pos}, ${c.start}): ${r.problems[0]}`); }
+    if (r.diverged) { diverged += 1; ends.set(r.ended, (ends.get(r.ended) || 0) + 1); }
+    if (!r.first) never += 1;
+    else {
+      const key = r.first.join(' ');
+      firsts.set(key, (firsts.get(key) || 0) + 1);
+      if (!r.first.some(f => ALLOWED_FIRST.has(f))) { badFirst += 1; fail(`career ${c.seed}: the first fields to differ from the base (step ${r.firstStep}) are ${key}, none of them this round's`); }
+    }
+  }
+  console.log(`   ${careers.length} careers in lockstep with the base: ${steps} steps, ${seasons} seasons, ${months} month blocks and ${ticks} world ticks compared, ${worlds} world records; ${problems} careers with a count, seed or record off the base`);
+  console.log(`   first fields to differ: ${[...firsts].sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k, v]) => `${k} ${v}`).join('; ')}; never differed ${never}; compared until a season's input differed in ${diverged}, by ${[...ends].sort((x, y) => y[1] - x[1]).slice(0, 5).map(([k, v]) => `${k} ${v}`).join('; ')}`);
+  if (months < careers.length * 2 || ticks < careers.length * 2) fail(`only ${months} month blocks and ${ticks} world ticks were compared`);
 }
 
 /* ─── 3. the feed ──────────────────────────────────────────────────────── */

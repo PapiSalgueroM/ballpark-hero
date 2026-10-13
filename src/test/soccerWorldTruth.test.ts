@@ -7,9 +7,10 @@ import { describe, it, expect } from 'vitest';
 import {
   LAST_PLAYED_SEASON, LAST_PLAYED_SUMMER, LAST_REAL_YEAR, seasonHappened, summerHappened, playedFinals,
   tournamentWinnerShown, monthYear, MONTHS, monthAwards, seasonLabel, feedPastSeasonLine, feedFutureSeasonLine,
-  MONTH_AWARD_MAX, type MonthGroup,
+  MONTH_AWARD_MAX, monthGroupOf,
 } from '@/lib/soccerWorldTruth';
 import { runInternationalSummer } from '@/lib/soccerInternationalSquads';
+import { positionGroup } from '@/lib/soccerInternational';
 import { keyedRng } from '@/lib/keyedRng';
 
 const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
@@ -75,7 +76,7 @@ describe('the month and its year', () => {
 describe('Player of the Month', () => {
   const row = (o: Partial<{ apps: number; goals: number; assists: number; cleanSheets: number; rating: number; injuryWeeks: number }>) =>
     ({ apps: 34, goals: 0, assists: 0, cleanSheets: 0, rating: 7, injuryWeeks: 0, ...o });
-  const won = (r: ReturnType<typeof row>, g: MonthGroup, n: number) => {
+  const won = (r: ReturnType<typeof row>, g: string, n: number) => {
     let total = 0, seasons = 0;
     for (let i = 0; i < n; i += 1) {
       const m = monthAwards(r, g, keyedRng(`id ${i}|2010|potm`));
@@ -84,32 +85,36 @@ describe('Player of the Month', () => {
     return { mean: total / n, any: seasons / n };
   };
 
+  it('groups the ten positions exactly as the international squads do', () => {
+    for (const p of ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST']) expect(monthGroupOf(p)).toBe(positionGroup(p));
+  });
+
   it('never goes to a 6.0 keeper with no goals, nor to a season under ten games', () => {
     expect(won(row({ rating: 6, cleanSheets: 20 }), 'GK', 2000).any).toBe(0);
-    expect(won(row({ apps: 8, goals: 6, rating: 8.6 }), 'ATT', 2000).any).toBe(0);
+    expect(won(row({ apps: 8, goals: 6, rating: 8.6 }), 'ST', 2000).any).toBe(0);
   });
 
   it('goes to a keeper or a defender on his own football, and to a great season far more than a fair one', () => {
     expect(won(row({ rating: 8.3, cleanSheets: 16 }), 'GK', 2000).mean).toBeGreaterThan(1);
-    expect(won(row({ rating: 8.3, cleanSheets: 14, goals: 2 }), 'DEF', 2000).mean).toBeGreaterThan(1);
-    const fair = won(row({ rating: 7.2, goals: 10, assists: 4 }), 'ATT', 2000);
-    const great = won(row({ rating: 8.4, goals: 22, assists: 9 }), 'ATT', 2000);
+    expect(won(row({ rating: 8.3, cleanSheets: 14, goals: 2 }), 'CB', 2000).mean).toBeGreaterThan(1);
+    const fair = won(row({ rating: 7.2, goals: 10, assists: 4 }), 'ST', 2000);
+    const great = won(row({ rating: 8.4, goals: 22, assists: 9 }), 'ST', 2000);
     expect(fair.any).toBeLessThan(0.2);
     expect(great.mean).toBeGreaterThan(fair.mean * 5);
   });
 
   it('never wins more than four, keeps calendar order, and gives nothing in a month an injury took', () => {
     for (let i = 0; i < 500; i += 1) {
-      const m = monthAwards(row({ rating: 9.5, goals: 30, injuryWeeks: 20 }), 'ATT', keyedRng(`inj ${i}`));
+      const m = monthAwards(row({ rating: 9.5, goals: 30, injuryWeeks: 20 }), 'ST', keyedRng(`inj ${i}`));
       expect(m.length).toBeLessThanOrEqual(MONTH_AWARD_MAX);
       const idx = m.map(x => (MONTHS as readonly string[]).indexOf(x));
       expect(idx).toEqual([...idx].sort((a, b) => a - b));
     }
-    expect(won(row({ rating: 9.5, goals: 30, injuryWeeks: 36 }), 'ATT', 2000).mean).toBeLessThanOrEqual(1);
+    expect(won(row({ rating: 9.5, goals: 30, injuryWeeks: 36 }), 'ST', 2000).mean).toBeLessThanOrEqual(1);
   });
 
   it('is the same months for the same stream', () => {
     const r = row({ rating: 8.2, goals: 18, assists: 6 });
-    expect(monthAwards(r, 'ATT', keyedRng('k'))).toEqual(monthAwards(r, 'ATT', keyedRng('k')));
+    expect(monthAwards(r, 'ST', keyedRng('k'))).toEqual(monthAwards(r, 'ST', keyedRng('k')));
   });
 });

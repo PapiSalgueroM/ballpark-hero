@@ -137,9 +137,19 @@ const MONTH_FOOTBALL: Record<MonthGroup, { per: (r: MonthRow) => number; usual: 
 };
 const clampN = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
+/** The position groups of soccerInternational.ts positionGroup, held here so this file stays import free
+    (src/test/soccerWorldTruth.test.ts holds the two equal for all ten positions). */
+export function monthGroupOf(position: string): MonthGroup {
+  if (position === "GK") return "GK";
+  if (["ST", "CAM", "LW", "RW"].includes(position)) return "ATT";
+  if (["CM", "CDM"].includes(position)) return "MID";
+  return "DEF";
+}
+
 /** The months of one season he won, in calendar order. Pure: the same row,
-    group and stream always give the same months. */
-export function monthAwards(row: MonthRow, group: MonthGroup, rng: () => number): string[] {
+    position and stream always give the same months. */
+export function monthAwards(row: MonthRow, position: string, rng: () => number): string[] {
+  const group = monthGroupOf(position);
   if (!(row.apps >= MONTH_AWARD_MIN_APPS) || !(row.rating >= MONTH_AWARD_MIN_RATING)) return [];
   const lost = clampN(Math.round((row.injuryWeeks ?? 0) / 4), 0, 9);
   const order = MONTHS.map((_, i) => i);
