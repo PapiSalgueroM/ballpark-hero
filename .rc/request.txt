@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+land-toasts: git worktree add -q /tmp/lt c28b078b && ln -s "$PWD/node_modules" /tmp/lt/node_modules && (cd /tmp/lt && node_modules/.bin/vite build > /tmp/lt-build.log 2>&1) && mkdir -p $RC_OUT/toasts && RC_OUT=$RC_OUT/toasts PORT=4181 BASE_PORT=4182 SECTIONS=toasts,bytes SOCCER_LANDING_BASE_DIST=/tmp/lt/dist ENGINES=chromium node scripts/playSoccerLanding.mjs > "$RC_OUT/toasts.out" 2>&1; s=$?; grep -E "^== |FAIL|coverage|sample\(s\)|reached|ok |BLIND|base toasts|the base arm|playSoccerLanding" "$RC_OUT/toasts.out" | grep -v "not judged" | cut -c1-230 | head -60; exit $s
+browser-sims: ONLY=simRevealScroll,simVictoryMoment node scripts/runAllSims.mjs --browser 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+creation-base: git worktree add -q /tmp/cb c28b078b && ln -s "$PWD/node_modules" /tmp/cb/node_modules && cd /tmp/cb && node scripts/simCreation.mjs 2>&1 | grep -E "FAIL|FAILURES" | head -4; exit ${PIPESTATUS[0]}
+anchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+rivals: node scripts/simNoRivalNames.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+storage: node scripts/simStorageWrites.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
