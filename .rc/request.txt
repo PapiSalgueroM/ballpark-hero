@@ -1,0 +1,42 @@
+# Release BC gate, lane P5: the nine pieces' plain lines and controls
+#!playwright
+pd-e: export TMPDIR=$(mktemp -d); SEEDSET=e node scripts/simCareerPreDraft.mjs
+ctl-new: export TMPDIR=$(mktemp -d); bash .rc/x/ctl.sh $RC_OUT/ctl softedge combinephase attemptbare combineloose scoutskeys combinedraw mathrandom gradeshift extradraw
+ctl-round: export TMPDIR=$(mktemp -d); bash .rc/x/ctl.sh $RC_OUT/ctl combinewords combinemean combinemono combinecut reroll wayback combinegone flathands curveflip keyscurve nightoffbyone nightlottery nightopen nightdedup nightdraw projection
+pjloop: export TMPDIR=$(mktemp -d); bash .rc/x/pjloop.sh
+softedge-old: export TMPDIR=$(mktemp -d); bash .rc/x/oldfloors.sh softedge
+vitest-college: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+simCollegeSeat: export TMPDIR=$(mktemp -d); node scripts/simCollegeSeat.mjs
+board: export TMPDIR=$(mktemp -d); node scripts/simCollegeDynastyBoard.mjs
+seat-rankbyprestige-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=rankbyprestige node scripts/simCollegeSeat.mjs
+seat-placeoff-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=placeoff node scripts/simCollegeSeat.mjs
+seat-ccgcount-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=ccgcount node scripts/simCollegeSeat.mjs
+seat-flattrust-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=flattrust node scripts/simCollegeSeat.mjs
+seat-firedends-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=firedends node scripts/simCollegeSeat.mjs
+seat-allowfirer-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=allowfirer node scripts/simCollegeSeat.mjs
+seat-bidfirer-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=bidfirer node scripts/simCollegeSeat.mjs
+seat-anyseason-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=anyseason node scripts/simCollegeSeat.mjs
+seat-bidtier-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=bidtier node scripts/simCollegeSeat.mjs
+seat-seatdraw-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=seatdraw node scripts/simCollegeSeat.mjs
+seat-seatleak-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=seatleak node scripts/simCollegeSeat.mjs
+seat-nextyear-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=nextyear node scripts/simCollegeSeat.mjs
+seat-yearoutskip-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_COLLEGE_SEAT_CONTROL=yearoutskip node scripts/simCollegeSeat.mjs
+board-cfbword-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+board-seatleak-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff-control: export TMPDIR=$(mktemp -d); COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+simCfbDynasty: export TMPDIR=$(mktemp -d); node scripts/simCfbDynasty.mjs
+simCfbStaff: export TMPDIR=$(mktemp -d); node scripts/simCfbStaff.mjs
+simCbbStaff: export TMPDIR=$(mktemp -d); node scripts/simCbbStaff.mjs
+simCollegeRecruiting: export TMPDIR=$(mktemp -d); node scripts/simCollegeRecruiting.mjs
+simCfbRecruitFilters: export TMPDIR=$(mktemp -d); node scripts/simCfbRecruitFilters.mjs
+simCbbRecruitFilters: export TMPDIR=$(mktemp -d); node scripts/simCbbRecruitFilters.mjs
+simCoachCalls: export TMPDIR=$(mktemp -d); node scripts/simCoachCalls.mjs
+simGmSeat: export TMPDIR=$(mktemp -d); node scripts/simGmSeat.mjs
+simEngineIds: export TMPDIR=$(mktemp -d); node scripts/simEngineIds.mjs
+deskhost-closedquiet-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_GM_DESK_HOST_CONTROL=closedquiet node scripts/simGmDeskHost.mjs
+simCmUnseededWorld: export TMPDIR=$(mktemp -d); CM_UNSEEDED_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe) && export CM_UNSEEDED_BASE && node scripts/simCmUnseededWorld.mjs
+unseeded-guard-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_UNSEEDED_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
