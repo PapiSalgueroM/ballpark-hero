@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walkA: RW_SECTION=A node .rc/x/walk1325.mjs
+walkB: RW_SECTION=B node .rc/x/walk1325.mjs
+basebuild: git worktree add /tmp/b1325 8fea14e2 >/dev/null 2>&1; ln -sfn $PWD/node_modules /tmp/b1325/node_modules && cd /tmp/b1325 && npm run build > /tmp/b1325-build.log 2>&1; s=$?; tail -2 /tmp/b1325-build.log; exit $s
+walkC: node scripts/lib/hostLikeServer.mjs /tmp/b1325/dist 4174 > /tmp/b1325-serve.log 2>&1 & SP=$!; sleep 2; RW_SECTION=C RW_BASE_URL=http://localhost:4174 node .rc/x/walk1325.mjs; s=$?; kill $SP; exit $s
