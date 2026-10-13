@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+desk: ENGINES=chromium mkdir -p $RC_OUT/head && RC_OUT=$RC_OUT/head node scripts/playCmFinanceDesk.mjs
+desk-small-EXPECT-RED: ENGINES=chromium mkdir -p $RC_OUT/small && RC_OUT=$RC_OUT/small CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs
+desk-cut-EXPECT-RED: ENGINES=chromium mkdir -p $RC_OUT/cut && RC_OUT=$RC_OUT/cut CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs
+desk-wrap-EXPECT-RED: ENGINES=chromium mkdir -p $RC_OUT/wrap && RC_OUT=$RC_OUT/wrap CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs
