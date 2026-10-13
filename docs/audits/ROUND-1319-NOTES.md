@@ -22,6 +22,7 @@ the settle in the loader are new code that runs on every load but is INERT, beca
 | 3a | the engine (curves, open, resolve, settle, cuts, the guard, the loader) and harness sections 10 and 11, seven controls, the engine vitest | dd31f2f9 | `r1319-s3a` | tsc 0; a to e ALL GREEN; every control exit 1 in its sections (table below); the loop passes in 216 s; vitest exit 1 on a test of mine that read the keys curve the wrong way round, fixed in 626996f8 |
 | 3b | harness section 12 and controls flathands, curveflip, keyscurve; the bands | 626996f8 | `r1319-s3b` | tsc 0; a to e ALL GREEN; vitest careerPreDraft green; the three controls exit 1 in sections 10 and 12. BOTH STOP CONDITIONS OF THE BRIEF FIRE: see "For the lead" |
 | R | the two reviews' fixes, harness, vitest and notes only (no engine or descriptor change): see "Review fixes" | 3e09e9d1 to the head | `r1319-x1`, `r1319-x2`, `r1319-x2b`, final in `results-g/fix-1319.md` | below |
+| C | the closing check's fixes: section 12's expert and novice lines from measured headroom, control softedge (harness and notes only) | f1deffb6 to the head | `r1319-y1`, final in `results-g/fix2-1319.md` | below |
 
 ## Review fixes (2026-10-12, after review-run-1319 and review-read-1319)
 
@@ -42,8 +43,31 @@ No file under src/lib changed, so section 9's 80 digests and the scouts' path ca
 - NOT FIXED, recorded for the lead: the scouts' drill is drawn from the sport's whole list whatever the
   position (a center fielder graded on a "Bullpen session"), careerPreDraft.ts line 500 on this head,
   line 470 on the base. It is pre-existing and decision 1 forbids touching `desc.drills` or the draw here.
-- The section 12 floors for the expert and the novice are half their measured extremes: measured and
-  stated, but wide (only `flathands` reaches them). Recorded by the read review, not changed.
+  Whoever fixes it re-deals the scouts' path, so that round says so and re-records section 9's digests
+  in its own commit. For the lead's board.
+- The section 12 floors for the expert and the novice were half their measured extremes: fixed by the
+  closing check, below.
+
+## Closing check fixes (2026-10-12, after verify-1319)
+
+- f1deffb6: section 12's expert and novice lines from measured headroom. They were half the extremes
+  (expert 3.4 all out, 1.6 safe; novice -2.8, -1.3), so a curve change that shrank the expert's edge
+  stayed green. Read from the 80 rows of seed sets a to e on 3e45eb71 (`r1319-x3`, pd-a to pd-e): expert
+  +6.78 to +7.29 all out, +3.23 to +3.43 safe; novice -7.00 to -5.68, -3.14 to -2.60; one row's largest
+  sd across the five sets 0.059, 0.027, 0.063, 0.022. The lines are now 6.5, 3.0, -5.4 and -2.4: 0.20
+  to 0.28 beyond the nearest row, 4.4 to 9 sds (the rule the median band uses). Seed sets a to e are
+  ALL GREEN on f1deffb6 (`r1319-y1`). No control's sections move: every one of the 37 control logs of
+  `r1319-x3` was read against the new lines, and the four that already failed section 12
+  (combinewords, combinegone, flathands, curveflip) were the only ones past them.
+- New control `softedge`: the pointer burst's anchors 15 to 50 become 6 to 59, the slope cut by a third
+  about the median bot's 33 taps (still about 51 there), a data edit so section 10's grid follows it.
+  It shrinks the expert's edge 7 to 13 percent in the pairs with two stations and 22 percent in
+  nhl:y2006 (one burst station). On f1deffb6, seed set a (`r1319-y1`): exit 1, 1 FAILURE(S), section
+  12 only, first "nfl:now allout expert +6.15". Against a copy of the harness with the old lines
+  (label softedge-old): exit 0, ALL GREEN. That is the proof the old lines let it through.
+- The fix report's prose (results-g/fix-1319.md item 1) said the `i >= 200` cut keeps 13 older drop
+  cases; it keeps 12 (4 on `pre`, 1 on `scouts`, 1 on `done`, 5 played lists, 1 on the skipped
+  showcase). Corrected in that report; nothing in the repo carried the number.
 
 
 ## For the lead: two rulings owed before Round B (step 3 stopped here, as the brief orders)
@@ -162,6 +186,7 @@ its grade stream) moves the grade of an attempt left sitting at the showcase, an
 | combineloose (review fix) | the resolve takes any score under 101 | 1, 8, section 11 (it took 50.5 and -1) |
 | scoutskeys (review fix) | the scouts' button puts `played: undefined` on its result (JSON hides it from section 9) | 1, 8, section 11 |
 | combinedraw (review fix) | the station score reads the clock, behaviour unchanged | 1, 1, section 10 (the code read) |
+| softedge (closing check) | the pointer burst flattened by a third about the median bot | 1, 1, section 12 only (`r1319-y1`, f1deffb6); ALL GREEN against the old lines |
 
 Review fixes (`r1319-x2`, eaa7eff4, seed set a): every one of the 37 controls exits 1 with "mutated" and
 the same counts and sections as above and as the run review's r1319-run-h, except `mathrandom`, now 18

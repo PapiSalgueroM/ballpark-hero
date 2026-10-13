@@ -122,8 +122,11 @@
  *          0.063 and 0.022 in that order, so each line sits 0.20 to 0.28
  *          beyond the nearest measured row, 4.4 to 9 sds (the median band's
  *          rule). Until the closing check of 2026-10-12 these lines were half
- *          the extremes (3.4, 1.6, -2.8, -1.3), which an expert edge cut by a
- *          third would have passed: `softedge` is that cut;
+ *          the extremes (3.4, 1.6, -2.8, -1.3), and a pointer burst curve
+ *          flattened by a third (`softedge`: the expert's edge 7 to 13 percent
+ *          smaller where a pair runs two stations, 22 percent in nhl:y2006)
+ *          passed them ALL GREEN; these lines catch it on seed set a in 14
+ *          of the 16 rows at least (the two MLB safe rows print +3.00);
  *        two thumbs +1.03 to +7.53, above the expert in nhl:y2006 (one burst
  *          station) in both approaches on all five sets;
  *        the optimal leaver gains +1.08 to +1.64 all out and +0.49 to +0.75
@@ -131,7 +134,8 @@
  *        the median at 0.75x speed -5.82 to -2.04, at 1.25x +1.98 to +4.72.
  *      flathands: sections 10 and 12 (the expert's gap collapses to the
  *      median's, the means tie); curveflip: 10 and 12 (the order breaks);
- *      keyscurve: 10 and 12 (the keyboard median gains +3 to +6.5).
+ *      keyscurve: 10 and 12 (the keyboard median gains +3 to +6.5);
+ *      softedge: 12 only (the expert or the novice past its line).
  *  13. Round 1220: DRAFT NIGHT SHOWS WHAT THE ENGINE DID, AND NEVER DRAWS
  *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 went to the combine
  *      of Round 1319, built on this head). On every finished road:
@@ -260,7 +264,10 @@ const ok = m => console.log('  ok: ' + m);
      scoutskeys    s11: 8 pairs (a scouts path state carries `played`).
      combinedraw   s10: 1 (the code read finds the clock in preDraftStationScore).
      mathrandom    now 18: s5 2, s9 8 and s11 8 (one per pair since each pair
-                   runs in its own try; it was 11, with one s11 line). */
+                   runs in its own try; it was 11, with one s11 line).
+   Round 1319 closing check, measured on seed set a, 2026-10-12 (r1319-y1):
+     softedge      s12: 1, exit 1 (the expert or the novice past its line);
+                   against a copy with the old lines it exits 0, ALL GREEN. */
 const CONTROLS = {
   randomteam: ['src/lib/careerPreDraft.ts', 'const team = pick ? order[pick - 1] : teams[Math.floor(rng() * teams.length)];', 'const team = teams[Math.floor(rng() * teams.length)];'],
   flatstock: ['src/lib/careerPreDraft.ts', 'const z = (100 - clampMeter(stock)) / 100;', 'const z = 0.5 + 0 * stock;'],
