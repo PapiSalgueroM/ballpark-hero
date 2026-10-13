@@ -1,0 +1,3 @@
+vitest-college exit=0 13s |    Duration  12.28s (transform 1.20s, setup 717ms, collect 3.33s, tests 16.21s, environment 2.57s, prepare 1.57s)
+simHarnessAnchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 70s | 

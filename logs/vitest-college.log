@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 356[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 7107[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture [33m 4229[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 2875[2mms[22m[39m
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcfb: the second dynasty's bid came on try 18 at Utah, of 25 programs that can bid
+
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcbb: the second dynasty's bid came on try 1 at Virginia, of 22 programs that can bid
+
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 8750[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 521[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 438[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him [33m 392[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: the live line follows the record, and the recap grades the year and moves trust [33m 304[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 345[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's [33m 4302[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 03:19:53
+[2m   Duration [22m 12.28s[2m (transform 1.20s, setup 717ms, collect 3.33s, tests 16.21s, environment 2.57s, prepare 1.57s)[22m
+
