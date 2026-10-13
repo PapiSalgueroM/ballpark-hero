@@ -1,0 +1,7 @@
+subs-legacyleak: git worktree add -f /tmp/sb2 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb2 SUBS_CONTROL=legacyleak SUBS_LEGACY_SEEDS=2 node scripts/simCmSubs.mjs
+subs-pressnew: git worktree add -f /tmp/sb3 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb3 SUBS_CONTROL=pressnew SUBS_LEGACY_SEEDS=2 node scripts/simCmSubs.mjs
+subs-nodate: git worktree add -f /tmp/sb4 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb4 SUBS_CONTROL=nodate node scripts/simCmSubs.mjs
+simPress: node scripts/simPress.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+pressCoverage: node scripts/qa/managerPressCoverageProof.mjs
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOnCard.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/dailyMenuResume.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/lib/clubManagerSubsRule.test.ts --testTimeout=300000 --hookTimeout=120000
