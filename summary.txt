@@ -1,0 +1,2 @@
+slots-3ac2 exit=1 209s | SLOTS EXIT 1
+diag-ci exit=0 420s | ==== DIAG EXIT 0

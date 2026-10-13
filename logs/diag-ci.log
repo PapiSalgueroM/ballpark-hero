@@ -1,0 +1,32 @@
+DIAGNOSTIC observer stop control: one effective after-stop frame, full undo and source bytes held
+DIAGNOSTIC original simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC original simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC current simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC current simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC control-input simClubManagerSlots.mjs: exit 1, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC digest control on 3ac21642326a76f4dbc1e173a2c82bddcbabfd5e: healthy 20 of 20 pairs equal, missing decode 5, undo 20
+DIAGNOSTIC decoded Slots: twenty complete pairs, effective missing-decode rejection and full undo
+DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+==== CI STDOUT TAIL
+1) Three careers, 20 switches round robin with a season after each (7, 7, 6 seasons), every season equal to the same career played alone
+   slots after creation: Everton | Lincoln City | Barcelona; manager in slot 2: Harness Manager
+   Everton (today)                      alone: #6 58pts 0T, #15 43pts 0T, #20 21pts 0T, #12 71pts 0T, #19 50pts 0T, #17 61pts 0T, #13 63pts 0T
+                                        slots: #6 58pts 0T, #15 43pts 0T, #20 21pts 0T, #12 71pts 0T, #19 50pts 0T, #17 61pts 0T, #13 63pts 0T
+   Lincoln City (today, named manager)  alone: #24 15pts 0T, #24 19pts 0T, #24 13pts 0T, #24 9pts 0T, #24 15pts 0T, #24 8pts 0T, #24 14pts 0T
+                                        slots: #24 15pts 0T, #24 19pts 0T, #24 13pts 0T, #24 9pts 0T, #24 15pts 0T, #24 8pts 0T, #24 14pts 0T
+   Barcelona (2010-11 era)              alone: #2 91pts 1T, #2 77pts 0T, #5 63pts 0T, #14 49pts 0T, #19 35pts 0T, #7 59pts 0T
+                                        slots: #2 91pts 1T, #2 77pts 0T, #5 63pts 0T, #14 49pts 0T, #19 35pts 0T, #7 59pts 0T
+   20 of 20 season digests identical to the career played alone; board nudges 190; alone arm 38 s, total 74 s
+2) The three careers played on, switching, to season 15 each: everything on the device under 495000 characters
+   seasons played: 15, 15, 15; keys: dukb-club-manager-save 124680, dukb-cm-slot-1 193921, dukb-cm-slots 31, dukb-cm-slot-2 191422
+   total 510054 characters across 4 keys (budget 495000)
+3) A store that refuses: every refused swap answers false and moves nothing
+   6 refused swaps from slot 3; holdings unchanged: Everton s15 | Lincoln City s15 | Barcelona s15
+4) An old save, from before slots: slot 1, and reading writes nothing
+   old save (season 5, week 19, 186 h2h rows, 138812 chars) in slot 1, 1 key on the device, bytes untouched: true
+   through slot 2 and back: equal but h2h true, h2h 186 -> 177 rows, last six per opponent kept true
+==== CI STDERR TAIL
+  FAIL: three season 15 careers take 510054 characters, over the 495000 budget
+
+simClubManagerSlots: RED, sections 2 (1 failures)
+==== DIAG EXIT 0
