@@ -1,0 +1,171 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 20 node harnesses
+  FAIL  simAcademyFilters.mjs           4.9s
+  FAIL  simActivityNotCompletion.mjs    7.4s
+  FAIL  simBrand.mjs                    0.7s
+  FAIL  simConnect4ClubRecords.mjs      5.9s
+  FAIL  simFootleDaily.mjs              4.3s
+        it reported success after an offline transport block; checks needing live data did not run
+  EMPTY simFootleUnlimited.mjs          7.5s
+        printed 1 line, so its checks did not run
+  FAIL  simGmStaff.mjs                  5.3s
+  FAIL  simIdleTimers.mjs               5.1s
+        it reported success after an offline transport block; checks needing live data did not run
+  FAIL  simMoney.mjs                  195.5s
+  FAIL  simNascarDriver.mjs             2.0s
+  EMPTY simNbaOpeningRatingInputs.mjs    8.6s
+        printed 1 line, so its checks did not run
+  EMPTY simNflDraftCapital.mjs          7.8s
+        printed 3 lines, so its checks did not run
+  EMPTY simNflRatingEvidence.mjs        5.1s
+        printed 2 lines, so its checks did not run
+  FAIL  simPerfectSeasonWheel.mjs     113.7s
+  EMPTY simRugbyLeagueReview.mjs        7.8s
+        printed 1 line, so its checks did not run
+  FAIL  simSafari.mjs                   0.9s
+  FAIL  simSoccerStints.mjs             5.8s
+  EMPTY simTransferBriefPageControl.mjs   10.7s
+        printed 1 line, so its checks did not run
+  FAIL  simTycoonSeasonReview.mjs       1.0s
+  FAIL  simWhodTheyBeat.mjs             0.6s
+        it reported success after an offline transport block; checks needing live data did not run
+
+----- simAcademyFilters.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: 
+
+----- simActivityNotCompletion.mjs (FAIL) -----
+  FAIL: the season advance (advanceProSeason(career, clubs)) is not in the file, the check needs re-anchoring
+  FAIL: the season advance no longer pings recordActivity('/soccer-career') within 600 characters
+
+----- simBrand.mjs (FAIL) -----
+  FAIL: the generator could not be run: Error: Command failed: python3 /home/runner/work/ballpark-hero/ballpark-hero/scripts/logo/gen_logo.py /home/runner/work/_temp/t-cmp-head2/dukb-logo-ikr0TR
+
+----- simConnect4ClubRecords.mjs (FAIL) -----
+   29 club labels parsed out of the shipped validator
+   92 "Played for" attribute uses across the boards, 29 distinct
+1) every board label resolves, and the map carries nothing spare
+   29/29 labels resolve, 0 spare entries
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+could not read soccer_player_club_stints after id null (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+
+
+----- simFootleDaily.mjs (FAIL) -----
+1) The real hook, rendered: the daily target is drawn from the fetched pool
+   vitest exit 0, 2 passed (2)
+2) The live pool holds players the file does not, on every tier
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[fetchFootlePlayerPool] Obscure batch failed, using fallback
+   SKIPPED: the live pool could not be read (fetchFootlePlayerPool returned nothing), section 1 stands on its own
+
+simFootleDaily: all green
+
+
+----- simFootleUnlimited.mjs (EMPTY) -----
+simFootleUnlimited normal: 10 passed, 0 intended failures, 0 intentional skips; 10 source inputs held.
+
+
+----- simGmStaff.mjs (FAIL) -----
+  FAIL: Arsenal natural: line 5 of 81 differs
+  FAIL: Bayern Munich nines: line 5 of 63 differs
+  FAIL: PSG nines: line 5 of 74 differs
+  FAIL: AC Milan natural: line 4 of 55 differs
+  FAIL: AC Milan nines: line 4 of 70 differs
+  FAIL: Coventry City natural: line 5 of 53 differs
+  FAIL: Ipswich Town natural: line 5 of 55 differs
+  FAIL: Ipswich Town nines: line 5 of 68 differs
+  FAIL: run 26 is Clermont  natural, the fixture has Club Brugge  natural
+  FAIL: run 27 is Clermont  nines, the fixture has Club Brugge  nines
+  FAIL: run 28 is Krasnodar  natural, the fixture has Konyaspor  natural
+  FAIL: run 29 is Krasnodar  nines, the fixture has Konyaspor  nines
+
+----- simIdleTimers.mjs (FAIL) -----
+A) behaviour: tap three times, unmount, every floater timer cleared
+   Vitest exit 0, 2 of 2 passed, unhandled errors none
+B) source: no floater timer started without useOwnedTimeouts
+   1614 source files read, 0 raw floater timers
+
+simIdleTimers: green. Every idle game floater timer is owned by its page and dies with it.
+
+
+----- simMoney.mjs (FAIL) -----
+  FAIL: biggest save is 84.3 KB
+1 FAILURES
+
+----- simNascarDriver.mjs (FAIL) -----
+    if (!rows) throw new Error(`${table}: the database did not answer after three attempts`);
+Error: nascar_drivers: the database did not answer after three attempts
+
+----- simNbaOpeningRatingInputs.mjs (EMPTY) -----
+NBA opening inputs normal: 0 intended failed / 10 held, full10. Receipt /home/runner/work/_temp/t-cmp-head2/dukb-nba-opening895-AluX4T
+
+
+----- simNflDraftCapital.mjs (EMPTY) -----
+NFL draft reference eb6a9add: engine a11acf15acb805cbaea61247b44120af82639a28ae7fbcef463ef1afa409da89, Board 313c0f61ccc85d66914c1eaca26a09843bd149e6fcb5976e31f45fc9b67b2fda, captured-original matches false, strict historical mode false.
+NFL draft capital normal: 25 held passes, 0 exact outcome rejections, all25 ran.
+NFL draft capital cleanup: only owned disposable copies removed, original source bytes held.
+
+
+----- simNflRatingEvidence.mjs (EMPTY) -----
+NFL rating evidence: {"original":false,"control":"","passed":4,"failed":[]}
+NFL rating evidence: all4 actual Board cases ran; no browser, production or save migration credited.
+
+
+----- simPerfectSeasonWheel.mjs (FAIL) -----
+  FAIL [nba]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nhl]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [mlb]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nfl]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nba]: no full wheel to check against (section 1 failed to read it)
+  FAIL [nhl]: no full wheel to check against (section 1 failed to read it)
+  FAIL [mlb]: no full wheel to check against (section 1 failed to read it)
+  FAIL [nfl]: no full wheel to check against (section 1 failed to read it)
+
+----- simRugbyLeagueReview.mjs (EMPTY) -----
+simRugbyLeagueReview normal: 10 passed, 0 intended failures, 0 intentional skips; 8 source inputs held.
+
+
+----- simSafari.mjs (FAIL) -----
+  FAIL: src/hooks/useTransferPathGuidance.test.ts: regex lookbehind, a parse error in Safari before 16.4
+  FAIL: src/components/club-manager/LiveSimMotion.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+
+----- simSoccerStints.mjs (FAIL) -----
+0) the overlay, both function maps and the migration list are one list
+   overlay 241, grid map 241, connect4 map 241, migration list 241, expected_entries 241
+   0 mismatches across the four copies
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+could not read soccer_player_club_stints after id null (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+
+
+----- simTransferBriefPageControl.mjs (EMPTY) -----
+CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+
+
+----- simTycoonSeasonReview.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: node:fs:1630
+Error: ENOENT: no such file or directory, scandir '/home/runner/work/ballpark-hero/ballpark-hero/tycoon-season-review-artifacts/asset-cache'
+
+----- simWhodTheyBeat.mjs (FAIL) -----
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   sb: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   nba: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   ws: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   cup: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+   wnba: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+SUPABASE UNREACHABLE FOR AT LEAST ONE POOL. THE YEAR SIMULATION DID NOT RUN.
+
+simWhodTheyBeat: green (WITH LOUD SKIPS ABOVE)
+
+
+20 harnesses not green.
