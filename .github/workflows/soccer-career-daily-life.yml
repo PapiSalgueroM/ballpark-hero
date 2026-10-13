@@ -17,6 +17,7 @@ jobs:
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
       SOCCER_ROUTINE_PHASE: fixed
+      SOCCER_BUILD_PHASE: baseline
       SOCCER_ROUTINE_OUT: ${{ github.workspace }}/soccer-routine-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/soccer-routine-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career
@@ -48,6 +49,10 @@ jobs:
           if test "$SOCCER_ROUTINE_PHASE" = fixed; then
             sha256sum src/lib/soccerCareerRoutineEvents.ts scripts/playSoccerCareerRoutineEvents.mjs >> "$SOCCER_ROUTINE_OUT/source-hashes.txt"
           fi
+          if test "$SOCCER_BUILD_PHASE" = baseline; then
+            git diff --exit-code 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src/pages/SoccerCareer.tsx
+          fi
+          sha256sum scripts/playSoccerCareerBuildLazy.mjs >> "$SOCCER_ROUTINE_OUT/source-hashes.txt"
           npm ci
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
@@ -93,6 +98,47 @@ jobs:
       - name: Actual career event browser journeys
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/browser.log"
+      - name: Actual creator build loading and callback journeys
+        if: env.SOCCER_ROUTINE_PHASE == 'fixed'
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerBuildLazy.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/build-lazy.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          BUILD_METHOD_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const phase = process.env.SOCCER_BUILD_PHASE;
+          const baseline = phase === 'baseline';
+          const report = JSON.parse(fs.readFileSync(process.env.SOCCER_ROUTINE_OUT + '/build-lazy/' + phase + '/report.json'));
+          assert.equal(Number(process.env.BUILD_METHOD_EXIT), baseline ? 1 : 0);
+          assert.equal(report.status, baseline ? 'baseline-reproduced' : 'passed');
+          assert.equal(report.eagerBuildFetches, baseline ? 3 : 0);
+          assert.equal(report.healthyFlows, 3);
+          assert.equal(report.cases.length, 3);
+          assert.deepEqual(report.cases.map(row => row.width), [320, 390, 1280]);
+          assert.equal(report.controls.length, baseline ? 0 : 1);
+          assert.equal(report.recoveries.length, baseline ? 0 : 1);
+          assert.equal(report.inventory.length, baseline ? 9 : 12);
+          assert.equal(report.failures, 0);
+          assert.equal(report.setupFailures, 0);
+          for (const held of ['sourceHeld', 'distHeld', 'toolsHeld', 'installedHeld', 'fontsHeld']) assert.equal(report[held], true, held);
+          assert(report.checks > 0);
+          for (const row of report.cases) {
+            assert.equal(row.issues.length, 0);
+            assert.equal(row.errors.length, 0);
+            assert.equal(row.coldBuildLoads.length, baseline ? 1 : 0);
+            if (baseline) {
+              const load = row.coldBuildLoads[0];
+              assert.equal(load.stage, 'cold');
+              assert.equal(load.marker, true);
+              assert.equal(load.bytes, report.markerAsset.bytes);
+              assert.equal(load.sha256, report.markerAsset.sha256);
+              assert.equal(new URL(load.url).pathname, '/' + report.markerAsset.file.slice('dist/'.length));
+            }
+          }
+          console.log(baseline ? 'BASELINE: three healthy creator flows fetch the held editor asset before Customize.' : 'FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.');
+          NODE
       - name: Existing page download budgets
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: |
