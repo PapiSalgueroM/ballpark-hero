@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+sweep-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+sweep-base: git worktree add -q /tmp/b1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/b1329/node_modules && cd /tmp/b1329 && node_modules/.bin/vite build > /tmp/b1329-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4180 > /tmp/b1329-serve.log 2>&1 &) && sleep 5 && BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
