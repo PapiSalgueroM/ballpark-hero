@@ -1,0 +1,7 @@
+vitest-world exit=1 27s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > lossless inactive world r
+managerRosterCacheControl exit=1 7s | Node.js v24.21.0
+tsc exit=0 100s | 
+simCmLedgerJourney exit=0 144s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote
+simCmUnseededWorld exit=0 193s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+bound exit=0 314s | simCmLedgerBound: green, all four sections held
+simManagerWorldContinuity exit=0 640s | Private world variation is measured, no historical fixture was re-recorded

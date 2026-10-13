@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+managerRosterCacheControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+bound: node scripts/simCmLedgerBound.mjs
