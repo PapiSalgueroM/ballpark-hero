@@ -1,0 +1,94 @@
+{
+  "_about": "Round 1331: the sourcing ledger behind src/lib/clubManagerSubsRule.ts. Every law line and every league row names two sources on two different hosts, none of them a wiki, each with the date it was read and the line quoted. scripts/simCmSubs.mjs section 1 holds the module's table to this file. Read by the Round 1331 builder on 2026-10-13.",
+  "laws": [
+    {
+      "id": "threeBefore2020",
+      "line": "Before the May 2020 temporary amendment a top division club side could use at most three substitutes, with no limit on when.",
+      "sources": [
+        { "host": "downloads.theifab.com", "url": "https://downloads.theifab.com/downloads/circular-20_2020", "published": "2020-07-15", "read": "2026-10-13", "quote": "Law 3, current wording: the 1st teams of clubs in the top division or senior 'A' international teams, where the maximum is three substitutes." },
+        { "host": "espn.com", "url": "https://www.espn.com/soccer/story/_/id/37630254", "published": "2022-08-04", "read": "2026-10-13", "quote": "Barcelona won 17 points in 2018-19 when only three substitutions were possible." }
+      ]
+    },
+    {
+      "id": "fiveInThree2020",
+      "line": "From May 2020 a competition could allow five substitutes in at most three opportunities during play, with changes at half time on top; unused changes carry into extra time.",
+      "sources": [
+        { "host": "inside.fifa.com", "url": "https://inside.fifa.com/en/news/five-substitutes-option-temporarily-allowed-for-competition-organisers", "published": "2020-05-08", "read": "2026-10-13", "quote": "Each team will be permitted to use a maximum of five substitutes. ... each team will only have three opportunities to make substitutions; substitutions may also be made at half-time." },
+        { "host": "news.stv.tv", "url": "https://news.stv.tv/sport/rule-change-allows-football-teams-five-substitutions-each", "published": "2020-05-08", "read": "2026-10-13", "quote": "Football's lawmakers have approved a temporary rule change that will allow each side up to five substitutions a match." }
+      ]
+    },
+    {
+      "id": "breaksAreFree",
+      "line": "A change at half time, before extra time or at half time in extra time does not use one of the three opportunities.",
+      "sources": [
+        { "host": "downloads.theifab.com", "url": "https://downloads.theifab.com/downloads/circular-20_2020", "published": "2020-07-15", "read": "2026-10-13", "quote": "making substitutions at half-time does not count as using one of the three opportunities" },
+        { "host": "inside.fifa.com", "url": "https://inside.fifa.com/en/news/five-substitutes-option-temporarily-allowed-for-competition-organisers", "published": "2020-05-08", "read": "2026-10-13", "quote": "substitutions may also be made before the start of extra time and at half-time in extra time." }
+      ]
+    },
+    {
+      "id": "fivePermanent2022",
+      "line": "From 1 July 2022 the five substitute option is part of the Laws of the Game for good, still three opportunities plus half time.",
+      "sources": [
+        { "host": "inside.fifa.com", "url": "https://inside.fifa.com/en/news/the-ifab-permanently-approves-five-substitute-option-in-top-level", "published": "2022-06-13", "read": "2026-10-13", "quote": "that this option be permanently introduced into the Laws of the Game 2022/23. ... The current restriction of three substitution slots plus half-time was confirmed." },
+        { "host": "cbssports.com", "url": "https://www.cbssports.com/soccer/news/world-cup-ifab-green-lights-permanent-five-sub-option-opens-door-to-26-man-squads-in-qatar", "published": "2022-06-13", "read": "2026-10-13", "quote": "The International Football Association Board has finally ratified the decision to make the option for five substitutes permanent." }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "league": "laliga", "fiveFrom": 2020,
+      "facts": [{ "claim": "five changes from 2020-21 on", "sources": "bigFourFive2020" }]
+    },
+    {
+      "league": "seriea", "fiveFrom": 2020,
+      "facts": [{ "claim": "five changes from 2020-21 on", "sources": "bigFourFive2020" }]
+    },
+    {
+      "league": "bundesliga", "fiveFrom": 2020,
+      "facts": [{ "claim": "five changes from 2020-21 on", "sources": "bigFourFive2020" }]
+    },
+    {
+      "league": "ligue1", "fiveFrom": 2020,
+      "facts": [{ "claim": "five changes from 2020-21 on", "sources": "bigFourFive2020" }]
+    },
+    {
+      "league": "premier", "fiveFrom": 2022,
+      "facts": [
+        { "claim": "three changes in 2020-21", "sources": [
+          { "host": "insideworldfootball.com", "url": "https://insideworldfootball.com/?p=124151", "published": "2020-12-18", "read": "2026-10-13", "quote": "Yet 10 of the 20 top-flight English clubs are reported to have again opposed the change at a shareholders meeting on Thursday" },
+          { "host": "nbcsports.com", "url": "https://nbcsports.com/soccer/news/premier-league-to-re-introduce-five-subs-rule-next-season", "published": "2022-03-31", "read": "2026-10-13", "quote": "Clubs voted to return to just three substitutes from the start of the 2020-21 season, and again ahead of the 2021-22 campaign" }
+        ] },
+        { "claim": "three changes in 2021-22", "sources": [
+          { "host": "nbcsports.com", "url": "https://nbcsports.com/soccer/news/premier-league-to-re-introduce-five-subs-rule-next-season", "published": "2022-03-31", "read": "2026-10-13", "quote": "Clubs voted to return to just three substitutes from the start of the 2020-21 season, and again ahead of the 2021-22 campaign" },
+          { "host": "football365.com", "url": "https://www.football365.com/news/premier-league-clubs-vote-to-allow-five-subs-from-start-of-next-season", "published": "2022-03-31", "read": "2026-10-13", "quote": "critics of not adopting the changes for the current domestic league campaign" }
+        ] },
+        { "claim": "five changes in three occasions plus half time from 2022-23 on", "sources": [
+          { "host": "cpfc.co.uk", "url": "https://cpfc.co.uk/news/statement/premier-league-issue-statement-on-five-substitutions-in-2022-23-season/", "published": "2022-03-31", "read": "2026-10-13", "quote": "From next season, clubs will be permitted to use five substitutions, to be made on three occasions during a match, with an additional opportunity at half-time." },
+          { "host": "espn.com", "url": "https://www.espn.com/soccer/story/_/id/37630254", "published": "2022-08-04", "read": "2026-10-13", "quote": "But from this season, five subs will be used in English football across all competitions." }
+        ] }
+      ]
+    },
+    {
+      "league": "championship", "fiveFrom": 2022,
+      "facts": [
+        { "claim": "five changes in three opportunities from 2022-23 on, a standing EFL rule", "sources": [
+          { "host": "irishexaminer.com", "url": "https://www.irishexaminer.com/sport/soccer/arid-40892609.html", "published": "2022-06-10", "read": "2026-10-13", "quote": "make five substitutions in Sky Bet Championship, League One and League Two matches from the 2022-23 season ... each club is only permitted a maximum of three opportunities to make changes during the fixture" },
+          { "host": "espn.com", "url": "https://www.espn.com/soccer/story/_/id/37630254", "published": "2022-08-04", "read": "2026-10-13", "quote": "But from this season, five subs will be used in English football across all competitions." }
+        ] }
+      ],
+      "corroboration": { "host": "leedsunited.com", "url": "https://www.leedsunited.com/en/news/efl-202324-substitutes", "published": "2023-06-29", "read": "2026-10-13", "quote": "Championship clubs have opted to use five substitutes from nine named" },
+      "caveat": "No source dated for 2026-27 itself was found, and none that reverses the 2022-23 rule (the 2023 statement above kept five and only grew the bench). The lead may want one more line dated 2026-27 before the release."
+    }
+  ],
+  "shared": {
+    "bigFourFive2020": [
+      { "host": "insideworldfootball.com", "url": "https://insideworldfootball.com/?p=124151", "published": "2020-12-18", "read": "2026-10-13", "quote": "La Liga has it, so does the Bundesliga, Serie A and France's Ligue1." },
+      { "host": "espn.com", "url": "https://www.espn.com/soccer/story/_/id/37630254", "published": "2022-08-04", "read": "2026-10-13", "quote": "teams in LaLiga, Serie A, Bundesliga and Ligue 1 (as well as all UEFA competitions) have continued with five subs" }
+    ]
+  },
+  "partial": {
+    "leagues": ["eredivisie", "saudi", "primeira", "scottish", "superlig", "bundesliga2", "proleague", "austria", "greece", "denmark", "switzerland", "croatia", "brasileirao", "ligamx", "aleague", "serieb", "ligue2", "segunda", "russia"],
+    "why": "Round 1331 could not two source these leagues' rule for 2026-27 in the time it had, so they keep three changes with no stoppage limit, the game's behaviour before this round, and the help says so. Adding one is a row here with two sources plus the same league in the module's table."
+  },
+  "notCovered": "A nation's matches (the international jobs) keep three. Cups and continental ties follow the career league's row. Seasons are ruled by their start year, so the 2019-20 restart plays three."
+}
