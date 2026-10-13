@@ -1,0 +1,14 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+w1077 exit=1 22s | Node.js v24.21.0
+simResultMoment exit=0 8s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+playClubManagerSaveLeave exit=0 23s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManagerSlots exit=0 12s | playClubManagerSlots: green
+w1079 exit=0 88s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+playCmQuickSubs exit=0 14s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+playCmRealFixtures exit=1 0s | Node.js v24.21.0
+simManagerWorldBrowser exit=0 88s | All 1 harnesses green.
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playStorageBlocked exit=0 275s | playStorageBlocked: 826 checks, 0 failed
+playSaveKeeper-base exit=1 856s | playSaveKeeper: RED, 6 problem(s).
