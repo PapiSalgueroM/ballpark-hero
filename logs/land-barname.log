@@ -1,0 +1,91 @@
+== head 320x640
+   name "Danny Okafor-Whitfield": 2 line(s), scrollWidth 200 of 200
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 200 of 200
+   bar youth (floating): ["Next Year"], AGE 283 to 303
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 283 to 303
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 283 to 303
+   bar pundit (floating): ["Next Season"], AGE 283 to 303
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 283 to 303
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 283 to 303
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 283 to 303
+== head 390x844
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 224
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 270 of 270
+   bar youth (floating): ["Next Year"], AGE 353 to 373
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 353 to 373
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 353 to 373
+   bar pundit (floating): ["Next Season"], AGE 353 to 373
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 353 to 373
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 353 to 373
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 353 to 373
+== head 1280x900
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 466
+   bar youth (floating): ["Next Year"], AGE 1099 to 1119
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 1099 to 1119
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 1099 to 1119
+   bar pundit (floating): ["Next Season"], AGE 1099 to 1119
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 1099 to 1119
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 1099 to 1119
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 1099 to 1119
+== head 360x780 (bar only)
+   bar youth (floating): ["Next Year"], AGE 323 to 343
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 323 to 343
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== head 375x667 (bar only)
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+== head 480x800 (name only)
+   name "Danny Okafor-Whitfield": 3 line(s), scrollWidth 106 of 106
+   name "Supercalifragilisticexpialidociouswinger": 4 line(s), scrollWidth 106 of 106
+== head 768x1024 (name only)
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 379 of 379
+== base 320x640
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 200
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 389 of 200
+   bar youth (floating): ["Next Year","Retire"], AGE 271 to 291
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 324 to 344
+  base [bar 320x640]: playing: the AGE number is not fully on screen (324 to 344)
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+  base [bar 320x640]: manager: the AGE number is not fully on screen (352 to 372)
+   bar pundit (floating): ["Next Season"], AGE 271 to 291
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 320x640]: owner: the AGE number is not fully on screen (355 to 375)
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+  base [bar 320x640]: retired: the AGE number is not fully on screen (346 to 366)
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+  base [bar 320x640]: managerOut: the AGE number is not fully on screen (343 to 363)
+== base 390x844
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 224
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 389 of 270
+   bar youth (floating): ["Next Year","Retire"], AGE 341 to 361
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 341 to 361
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+   bar pundit (floating): ["Next Season"], AGE 341 to 361
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+== base 1280x900
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 466
+   bar youth (floating): ["Next Year","Retire"], AGE 1099 to 1119
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 1099 to 1119
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 1099 to 1119
+   bar pundit (floating): ["Next Season"], AGE 1099 to 1119
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 1099 to 1119
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 1099 to 1119
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 1099 to 1119
+== base 360x780 (bar only)
+   bar youth (floating): ["Next Year","Retire"], AGE 311 to 331
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 324 to 344
+grep: write error: Broken pipe

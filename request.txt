@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+mobile: ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/mobile.out" 2>&1; s=$?; tail -6 "$RC_OUT/mobile.out"; exit $s
+mobile-nowrap: SIM_MOBILE_CONTROL=nowrap ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/nowrap.out" 2>&1; s=$?; grep -E "identity|name is not whole|CONTROL" "$RC_OUT/nowrap.out" | head -8; tail -3 "$RC_OUT/nowrap.out"; exit $s
+mobile-unpin: SIM_MOBILE_CONTROL=unpin ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/unpin.out" 2>&1; s=$?; tail -4 "$RC_OUT/unpin.out"; exit $s
+land-barname: git worktree add -q /tmp/lb c5fc5470 && ln -s "$PWD/node_modules" /tmp/lb/node_modules && (cd /tmp/lb && node_modules/.bin/vite build > /tmp/lb-build.log 2>&1) && mkdir -p $RC_OUT/land && RC_OUT=$RC_OUT/land SECTIONS=landing,name,bar SOCCER_LANDING_BASE_DIST=/tmp/lb/dist ENGINES=chromium node scripts/playSoccerLanding.mjs > "$RC_OUT/land.out" 2>&1; s=$?; grep -E "^== |FAIL|name \"|AGE|BLIND|base (landing|name|bar)|playSoccerLanding" "$RC_OUT/land.out" | head -90; exit $s
