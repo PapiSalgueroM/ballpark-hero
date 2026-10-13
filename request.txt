@@ -1,0 +1,10 @@
+# Round 1311 fixer: playClubManager's sack rate on the head's own build, six more runs
+#!serve
+#!playwright
+#!serial
+head-4: node scripts/playClubManager.mjs
+head-5: node scripts/playClubManager.mjs
+head-6: node scripts/playClubManager.mjs
+head-7: node scripts/playClubManager.mjs
+head-8: node scripts/playClubManager.mjs
+head-9: node scripts/playClubManager.mjs
