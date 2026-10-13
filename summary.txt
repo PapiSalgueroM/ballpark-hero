@@ -1,0 +1,5 @@
+unit exit=0 4s |    Duration  3.19s (transform 1.59s, setup 167ms, collect 3.78s, tests 74ms, environment 1.12s, prepare 229ms)
+fair0 exit=0 52s | simSoccerDeckFairness: all sections green
+fair-s3 exit=0 53s | simSoccerDeckFairness: all sections green
+tsc exit=0 65s | 
+prom exit=0 15s | simSoccerEventPromises: all sections green

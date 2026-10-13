@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit: node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts src/test/eventChoiceAfterReload.test.ts --testTimeout=300000 --hookTimeout=120000
+fair0: node scripts/simSoccerDeckFairness.mjs
+fair-s3: SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs
+prom: node scripts/simSoccerEventPromises.mjs
