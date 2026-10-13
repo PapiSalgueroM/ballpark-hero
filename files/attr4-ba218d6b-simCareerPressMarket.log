@@ -1,0 +1,455 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: No active Market retains the entire original sport state and RNG
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.1356478596571833,
+      0.764801949961111,
+      0.5406083094421774,
+...
+          age: 22,
++         hisYears: 1,
++         lastAllStar: false,
++         lastLine: '.228, 11 HR, 54 RBI',
++         lastScore: 35.6,
++         lastYear: 2026,
++         myYears: 0,
+-         hisYears: 0,
+-         lastLine: '0.233, 7 HR',
+-         lastScore: 9.1,
+-         myYears: 1,
+          name: 'Rhys Bergeron',
+          ovr: 70,
+          pos: 'CF',
+          pot: 99,
+          retired: false,
+...
+          '🔥 Everything you hit found grass. Career year.',
++         '🪞 Rhys Bergeron went .228, 11 HR, 54 RBI and had the better year of the two of you. Head to head 0-1.'
+-         '🪞 Rhys Bergeron went 0.233, 7 HR. You had the better year. Head to head 1-0.'
+        ]
+      },
+      tq: 74
+    }
+  }
+
+    at file:///tmp/w4-ba218d6b-simCareerPressMarket/scripts/simCareerPressMarket.mjs:22:548
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    value: {
+      c: {
+        name: 'Neutral Market',
+        pos: 'CF',
+        archetype: {
+          id: 'fivetool',
+          label: 'Five-Tool Freak',
+          desc: 'Does everything, the face of the game',
+          ovrBoost: 3,
+          potBoost: 5,
+          durability: 0.9
+        },
+        team: 'WSN',
+        year: 2027,
+        age: 22,
+        ovr: 69,
+        pot: 95,
+        morale: 71,
+        fanbase: 28,
+        health: 100,
+        salary: 0.8,
+        contractYears: 5,
+        seasons: [
+          {
+            year: 2026,
+            team: 'WSN',
+            age: 21,
+            ovr: 68,
+            games: 79,
+            awards: [],
+            teamResult: 'Lost the Wild Card series',
+            salary: 0.8,
+            avg: 0.258,
+            hr: 9,
+            rbi: 30,
+            sb: 2,
+            doubles: 13,
+            obp: 0.345,
+            poGames: 3,
+            poLine: '3 for 12 (.250), 0 HR'
+          }
+        ],
+        rings: 0,
+        mvpCys: 0,
+        allStars: 0,
+        retired: false,
+        draftPick: 35,
+        earnings: 0.8,
+        netWorth: 0.8,
+        dirtyMoney: 0,
+        heat: 0,
+        suspendedSeasons: 0,
+        purchased: [],
+        lifeFlags: {},
+        appearance: {
+          skinTone: 'olive',
+          hairstyle: 'fade',
+          hairColor: 'black',
+          facialHair: 'none',
+          celebration: 'knee_slide',
+          boots: 'vortex_strike',
+          accessory: 'none'
+        },
+        yearlyCosts: 0,
+        rival: {
+          name: 'Rhys Bergeron',
+          pos: 'CF',
+          team: 'WSN',
+          ovr: 70,
+          pot: 99,
+          age: 22,
+          rings: 0,
+          hisYears: 1,
+          myYears: 0,
+          retired: false,
+          lastLine: '.228, 11 HR, 54 RBI',
+          lastScore: 35.6,
+          lastYear: 2026,
+          lastAllStar: false
+        },
+        role: 'backup',
+        pendingRivalryEvent: {
+          id: 218,
+          emoji: '🪞',
+          title: 'One Line Apart',
+          description: 'Rhys Bergeron plays your position, and every list of the best at it this year has the two of you one line apart.',
+          consequence: 'Morale +4, the rivalry heats up'
+        },
+        money: {
+          seed: 2200827062,
+          vault: 0,
+          hold: { ladder: 0, bricks: 0, cleats: 0, screens: 0, spark: 0 },
+          cost: { ladder: 0, bricks: 0, cleats: 0, screens: 0, spark: 0 },
+          price: {
+            ladder: 103.6,
+            bricks: 89.61,
+            cleats: 94.66,
+            screens: 99.74,
+            spark: 71.25
+          },
+          hist: {
+            ladder: [Array],
+            bricks: [Array],
+            cleats: [Array],
+            screens: [Array],
+            spark: [Array]
+          },
+          log: [],
+          year: 2026,
+          age: 1,
+          won: 0,
+          lost: 0,
+          cPlays: 0,
+          cNet: 0,
+          cYear: 0,
+          cShut: false,
+          aYear: 0,
+          aBest: 0,
+          aPlays: 0
+        },
+        karma: 50,
+        phoneInbox: [
+          {
+            id: 'kid_dm-2026',
+            defId: 'kid_dm',
+            from: 'Fan DM',
+            emoji: '🧒',
+            text: "you're my favorite player ever. im in the hospital and all i want is a signed bat. no worries if youre busy",
+            year: 2026,
+            choices: [Array],
+            beat: 'allstar'
+          },
+          {
+            id: 'oct_radio-2026',
+            defId: 'oct_radio',
+            from: 'Local radio',
+            emoji: '📻',
+            text: "We'd love you on the morning show before Game 1. Ten minutes, fire the city up.",
+            year: 2026,
+            choices: [Array],
+            beat: 'october'
+          },
+          {
+            id: 'offseason_caravan-2026',
+            defId: 'offseason_caravan',
+            from: 'Team community office',
+            emoji: '🚐',
+            text: 'Winter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?',
+            year: 2026,
+            choices: [Array],
+            beat: 'offseason'
+          }
+        ],
+        phoneUsedIds: [ 'kid_dm', 'oct_radio', 'offseason_caravan' ]
+      },
+      tq: 74,
+      camp: '🪑 Another spring on the bench. The gap is closing.',
+      season: {
+        line: {
+          year: 2026,
+          team: 'WSN',
+          age: 21,
+          ovr: 68,
+          games: 79,
+          awards: [],
+          teamResult: 'Lost the Wild Card series',
+          salary: 0.8,
+          avg: 0.258,
+          hr: 9,
+          rbi: 30,
+          sb: 2,
+          doubles: 13,
+          obp: 0.345,
+          poGames: 3,
+          poLine: '3 for 12 (.250), 0 HR'
+        },
+        notes: [
+          '🪑 A bench season: 79 games of pinch hits and spot starts.',
+          '📊 Postseason: 3 games, 3 for 12 (.250), 0 HR.',
+          '🔥 Everything you hit found grass. Career year.',
+          '🪞 Rhys Bergeron went .228, 11 HR, 54 RBI and had the better year of the two of you. Head to head 0-1.'
+        ]
+      }
+    },
+    draws: [
+        0.1356478596571833,     0.764801949961111,  0.5406083094421774,
+        0.6430164149496704,    0.3840809662360698,  0.6933569198008627,
+        0.5875219090376049,    0.9633324407041073, 0.22859293804503977,
+       0.07766593317501247,   0.38572820043191314,   0.794073564466089,
+       0.39131955173797905,    0.8752983931917697, 0.47591003542765975,
+       0.10997878038324416,   0.06098071322776377,  0.4177168821915984,
+      0.029398477636277676,   0.19555869256146252,  0.7605496817268431,
+       0.27124617039225996,  0.056639939080923796,  0.6472128634341061,
+       0.04225659277290106,    0.5903576535638422, 0.05264255404472351,
+       0.43573919613845646,    0.8601368283852935,   0.435212358366698,
+        0.7462286006193608,    0.9205259948503226,  0.6273447596468031,
+       0.06827775342389941,   0.15861607040278614, 0.14567712997086346,
+        0.5158691452816129, 0.0009475760161876678,   0.642504844814539,
+       0.12262913514859974,   0.17355566914193332, 0.04095316492021084,
+        0.9579757410101593,    0.4322803618852049, 0.14619996212422848,
+        0.7698221823666245,   0.33665312291122973,  0.7526358312461525
+    ]
+  },
+  expected: {
+    value: {
+      c: {
+        name: 'Neutral Market',
+        pos: 'CF',
+        archetype: {
+          id: 'fivetool',
+          label: 'Five-Tool Freak',
+          desc: 'Does everything, the face of the game',
+          ovrBoost: 3,
+          potBoost: 5,
+          durability: 0.9
+        },
+        team: 'WSN',
+        year: 2027,
+        age: 22,
+        ovr: 69,
+        pot: 95,
+        morale: 71,
+        fanbase: 28,
+        health: 100,
+        salary: 0.8,
+        contractYears: 5,
+        seasons: [
+          {
+            year: 2026,
+            team: 'WSN',
+            age: 21,
+            ovr: 68,
+            games: 79,
+            awards: [],
+            teamResult: 'Lost the Wild Card series',
+            salary: 0.8,
+            avg: 0.258,
+            hr: 9,
+            rbi: 30,
+            sb: 2,
+            doubles: 13,
+            obp: 0.345,
+            poGames: 3,
+            poLine: '3 for 12 (.250), 0 HR'
+          }
+        ],
+        rings: 0,
+        mvpCys: 0,
+        allStars: 0,
+        retired: false,
+        draftPick: 35,
+        earnings: 0.8,
+        netWorth: 0.8,
+        dirtyMoney: 0,
+        heat: 0,
+        suspendedSeasons: 0,
+        purchased: [],
+        lifeFlags: {},
+        appearance: {
+          skinTone: 'olive',
+          hairstyle: 'fade',
+          hairColor: 'black',
+          facialHair: 'none',
+          celebration: 'knee_slide',
+          boots: 'vortex_strike',
+          accessory: 'none'
+        },
+        yearlyCosts: 0,
+        rival: {
+          name: 'Rhys Bergeron',
+          pos: 'CF',
+          team: 'WSN',
+          ovr: 70,
+          pot: 99,
+          age: 22,
+          rings: 0,
+          hisYears: 0,
+          myYears: 1,
+          retired: false,
+          lastLine: '0.233, 7 HR',
+          lastScore: 9.1
+        },
+        role: 'backup',
+        pendingRivalryEvent: {
+          id: 218,
+          emoji: '🪞',
+          title: 'One Line Apart',
+          description: 'Rhys Bergeron plays your position, and every list of the best at it this year has the two of you one line apart.',
+          consequence: 'Morale +4, the rivalry heats up'
+        },
+        money: {
+          seed: 2200827062,
+          vault: 0,
+          hold: { ladder: 0, bricks: 0, cleats: 0, screens: 0, spark: 0 },
+          cost: { ladder: 0, bricks: 0, cleats: 0, screens: 0, spark: 0 },
+          price: {
+            ladder: 103.6,
+            bricks: 89.61,
+            cleats: 94.66,
+            screens: 99.74,
+            spark: 71.25
+          },
+          hist: {
+            ladder: [Array],
+            bricks: [Array],
+            cleats: [Array],
+            screens: [Array],
+            spark: [Array]
+          },
+          log: [],
+          year: 2026,
+          age: 1,
+          won: 0,
+          lost: 0,
+          cPlays: 0,
+          cNet: 0,
+          cYear: 0,
+          cShut: false,
+          aYear: 0,
+          aBest: 0,
+          aPlays: 0
+        },
+        karma: 50,
+        phoneInbox: [
+          {
+            id: 'kid_dm-2026',
+            defId: 'kid_dm',
+            from: 'Fan DM',
+            emoji: '🧒',
+            text: "you're my favorite player ever. im in the hospital and all i want is a signed bat. no worries if youre busy",
+            year: 2026,
+            choices: [Array],
+            beat: 'allstar'
+          },
+          {
+            id: 'oct_radio-2026',
+            defId: 'oct_radio',
+            from: 'Local radio',
+            emoji: '📻',
+            text: "We'd love you on the morning show before Game 1. Ten minutes, fire the city up.",
+            year: 2026,
+            choices: [Array],
+            beat: 'october'
+          },
+          {
+            id: 'offseason_caravan-2026',
+            defId: 'offseason_caravan',
+            from: 'Team community office',
+            emoji: '🚐',
+            text: 'Winter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?',
+            year: 2026,
+            choices: [Array],
+            beat: 'offseason'
+          }
+        ],
+        phoneUsedIds: [ 'kid_dm', 'oct_radio', 'offseason_caravan' ]
+      },
+      tq: 74,
+      camp: '🪑 Another spring on the bench. The gap is closing.',
+      season: {
+        line: {
+          year: 2026,
+          team: 'WSN',
+          age: 21,
+          ovr: 68,
+          games: 79,
+          awards: [],
+          teamResult: 'Lost the Wild Card series',
+          salary: 0.8,
+          avg: 0.258,
+          hr: 9,
+          rbi: 30,
+          sb: 2,
+          doubles: 13,
+          obp: 0.345,
+          poGames: 3,
+          poLine: '3 for 12 (.250), 0 HR'
+        },
+        notes: [
+          '🪑 A bench season: 79 games of pinch hits and spot starts.',
+          '📊 Postseason: 3 games, 3 for 12 (.250), 0 HR.',
+          '🔥 Everything you hit found grass. Career year.',
+          '🪞 Rhys Bergeron went 0.233, 7 HR. You had the better year. Head to head 1-0.'
+        ]
+      }
+    },
+    draws: [
+        0.1356478596571833,     0.764801949961111,  0.5406083094421774,
+        0.6430164149496704,    0.3840809662360698,  0.6933569198008627,
+        0.5875219090376049,    0.9633324407041073, 0.22859293804503977,
+       0.07766593317501247,   0.38572820043191314,   0.794073564466089,
+       0.39131955173797905,    0.8752983931917697, 0.47591003542765975,
+       0.10997878038324416,   0.06098071322776377,  0.4177168821915984,
+      0.029398477636277676,   0.19555869256146252,  0.7605496817268431,
+       0.27124617039225996,  0.056639939080923796,  0.6472128634341061,
+       0.04225659277290106,    0.5903576535638422, 0.05264255404472351,
+       0.43573919613845646,    0.8601368283852935,   0.435212358366698,
+        0.7462286006193608,    0.9205259948503226,  0.6273447596468031,
+       0.06827775342389941,   0.15861607040278614, 0.14567712997086346,
+        0.5158691452816129, 0.0009475760161876678,   0.642504844814539,
+       0.12262913514859974,   0.17355566914193332, 0.04095316492021084,
+        0.9579757410101593,    0.4322803618852049, 0.14619996212422848,
+        0.7698221823666245,   0.33665312291122973,  0.7526358312461525
+    ]
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

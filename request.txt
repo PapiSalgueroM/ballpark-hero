@@ -1,0 +1,4 @@
+#!playwright
+pm-HEAD: bash .rc/x/attr4.sh HEAD simCareerPressMarket
+pm-ba: bash .rc/x/attr4.sh a5519151 simCareerPressMarket
+pm-ba218: bash .rc/x/attr4.sh ba218d6b simCareerPressMarket

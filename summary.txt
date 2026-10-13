@@ -1,0 +1,3 @@
+pm-HEAD exit=1 4s | attr4 HEAD simCareerPressMarket exit=1
+pm-ba218 exit=1 5s | attr4 ba218d6b simCareerPressMarket exit=1
+pm-ba exit=0 7s | attr4 a5519151 simCareerPressMarket exit=0

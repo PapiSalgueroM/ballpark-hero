@@ -1,0 +1,15 @@
+pool mentions: 0
+3-    ^
+4-
+5:AssertionError [ERR_ASSERTION]: No active Market retains the entire original sport state and RNG
+6-+ actual - expected
+7-... Skipped lines
+8-
+9-  {
+10-    draws: [
+11-      0.1356478596571833,
+41:    at file:///tmp/w4-ba218d6b-simCareerPressMarket/scripts/simCareerPressMarket.mjs:22:548
+42:    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+
+Node.js v24.21.0
+attr4 ba218d6b simCareerPressMarket exit=1
