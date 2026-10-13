@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mandate exit=0 26s | ALL OWNER MANDATE WALK CHECKS PASSED
+fohub exit=1 48s | playFoHub: 26 failures
+gmpress exit=1 86s | playGmPress: 2 failures
+sessionmarks exit=0 18s | playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.
+weight exit=1 27s | FrontOffice chunk FrontOffice-Ce71NkVo.js: 111644 raw, 36396 gzipped
+playgames exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk exit=0 292s | playFrontOfficeGameDay: 381 checks, 0 failed
