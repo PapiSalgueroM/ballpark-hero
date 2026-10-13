@@ -1,0 +1,12 @@
+vitest-round exit=0 17s |    Duration  16.25s (transform 5.30s, setup 710ms, collect 14.94s, tests 22.91s, environment 4.43s, prepare 1.07s)
+fence-rawsoccer exit=1 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawsoccer fired 1 times and section source went red with 1 findings
+tsc exit=0 80s | 
+saveRecovery-all exit=0 24s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+saveFence-base exit=0 105s | simSaveFence: all green (tabs, source, fleet)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+retry-disk exit=0 6s | simSoccerCareerSaveRetry disk: mapped save retry outcome rejected changed source; independent restore passed.
+saveRetry-all exit=0 102s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simActivityNotCompletion-head exit=0 5s | simActivityNotCompletion: all green
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCreation-head exit=1 295s | 1 FAILURES

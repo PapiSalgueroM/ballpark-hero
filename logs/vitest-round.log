@@ -1,0 +1,37 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/soccerFarewellPage.test.tsx[2m > [22m[2mSoccer farewell real page actions[2m > [22m[2mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks
+[22m[39mFAREWELL_ASYNC_ACT_STARTUP {"scope":"Unfiltered empty async act initialization before either career action tape","values":[0.02040268573909998],"stacks":["Error: Farewell action random draw\n    at Math.<anonymous> (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellPage.test.tsx:108:18)\n    at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15)\n    at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80)\n    at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45)\n    at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9)\n    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)"],"attribution":{"diagnosticRun":"38051776558","source":"11c30639","caller":"react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork"}}
+
+ [32m✓[39m src/test/soccerFarewellPage.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3525[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22msaves one next-year announcement for two captured confirmation clicks without playing or drawing [33m 479[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mplays one complete final year and draw vector for two captured Next Season clicks [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks [33m 757[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mresumes the already-aged suggestion exactly once for two captured page announcement callbacks [33m 308[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 6087[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 363[2mms[22m[39m
+ [32m✓[39m src/test/soccerTransferBriefPage.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1013[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer transfer brief actual page request[2m > [22mcommits one full offered response and draw vector for two captured rapid request clicks [33m 326[2mms[22m[39m
+ [32m✓[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/useSaveFenceWatch.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1254[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing [33m 356[2mms[22m[39m
+ [32m✓[39m src/test/useArrivalTop.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/saveMovedNotice.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 10734[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast [33m 497[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast [33m 328[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 3728[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 2873[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 2782[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 366[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m106 passed[39m[22m[90m (106)[39m
+[2m   Start at [22m 19:49:11
+[2m   Duration [22m 16.25s[2m (transform 5.30s, setup 710ms, collect 14.94s, tests 22.91s, environment 4.43s, prepare 1.07s)[22m
+
