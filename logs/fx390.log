@@ -1,0 +1,16 @@
+AUDIT picker-team: 2 overlapping text pairs: "Qualify for the Europa League" x "Board wants" (29x12 at 212,863)
+EFFECT facilities upgrade first: btn="Upgrade £57m" disabled=false changed=budget,boardConfidence,aiHeadlines,facilities,finance budget 69->12 screen=true CHECK {"before":"null","after":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"}
+EFFECT facilities upgrade again: btn="Upgrade £81m" disabled=true changed= budget 12->12 screen=true CHECK {"before":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}","after":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"}
+EFFECT finances premium tickets: btn="💼 Premium More per seat, a few empty ones up in the corners" disabled=false changed=budget,boardConfidence,aiHeadlines,finance,books,sponsor budget 12->33.1 screen=true CHECK {"prices":["null","null"]}
+EFFECT finances push sponsor: no such control
+EFFECT finances sign sponsor: no such control
+EFFECT staff pay off coach: btn="Pay off £360k" disabled=false changed=budget,aiHeadlines,staff budget 33.1->32.74 screen=true 
+EFFECT staff hire: btn="Track stats" disabled=false changed= budget 32.74->32.74 screen=true 
+EFFECT tactics formation 4-4-2: no such control
+EFFECT tactics attacking mentality: no such control
+EFFECT market sell tab: no such control
+EFFECT market latest tab: no such control
+EFFECT market buy tab: no such control
+EFFECT market open talks: no such control
+EFFECT market offer: no such control
+EFFECTS done: 0 findings, 0 errors, 110s

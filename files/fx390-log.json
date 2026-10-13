@@ -1,0 +1,506 @@
+{
+ "tag": "fx390",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T00:59:37.990Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 8,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Brentford",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 69,
+    "squad": 24,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 20,
+   "what": "facilities: upgrade first"
+  },
+  {
+   "s": 21,
+   "what": "facilities: upgrade again"
+  },
+  {
+   "s": 28,
+   "what": "finances: premium tickets"
+  },
+  {
+   "s": 30,
+   "what": "finances: push sponsor"
+  },
+  {
+   "s": 30,
+   "what": "finances: sign sponsor"
+  },
+  {
+   "s": 34,
+   "what": "staff: pay off coach"
+  },
+  {
+   "s": 36,
+   "what": "staff: hire"
+  },
+  {
+   "s": 69,
+   "what": "tactics: formation 4-4-2"
+  },
+  {
+   "s": 69,
+   "what": "tactics: attacking mentality"
+  },
+  {
+   "clickFail": "quick sim",
+   "e": "TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator('[data-cm-way=\"quick\"]').first()"
+  },
+  {
+   "s": 105,
+   "what": "market: sell tab"
+  },
+  {
+   "s": 105,
+   "what": "market: latest tab"
+  },
+  {
+   "s": 105,
+   "what": "market: buy tab"
+  },
+  {
+   "s": 110,
+   "what": "market: open talks"
+  },
+  {
+   "s": 110,
+   "what": "market: offer"
+  },
+  {
+   "s": 110,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "fx390-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "fx390-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 23231
+  },
+  {
+   "file": "fx390-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 27533
+  },
+  {
+   "file": "fx390-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 113851
+  },
+  {
+   "file": "fx390-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 30432
+  },
+  {
+   "file": "fx390-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 72130
+  },
+  {
+   "file": "fx390-007-facilities-before.jpg",
+   "at": "hub reached",
+   "bytes": 90421
+  },
+  {
+   "file": "fx390-008-facilities-upgrade_first.jpg",
+   "at": "facilities: upgrade first",
+   "bytes": 97439
+  },
+  {
+   "file": "fx390-009-facilities-upgrade_again.jpg",
+   "at": "facilities: upgrade again",
+   "bytes": 97412
+  },
+  {
+   "file": "fx390-010-finances-premium_tickets.jpg",
+   "at": "finances: premium tickets",
+   "bytes": 97189
+  },
+  {
+   "file": "fx390-011-finances-after.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 97712
+  },
+  {
+   "file": "fx390-012-staff-before.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 102106
+  },
+  {
+   "file": "fx390-013-staff-pay_off_coach.jpg",
+   "at": "staff: pay off coach",
+   "bytes": 102044
+  },
+  {
+   "file": "fx390-014-staff-hire.jpg",
+   "at": "staff: hire",
+   "bytes": 93177
+  },
+  {
+   "file": "fx390-015-staff-after.jpg",
+   "at": "staff: hire",
+   "bytes": 93177
+  },
+  {
+   "file": "fx390-016-tactics.jpg",
+   "at": "staff: hire",
+   "bytes": 132829
+  },
+  {
+   "file": "fx390-017-market-sell.jpg",
+   "at": "market: sell tab",
+   "bytes": 109156
+  },
+  {
+   "file": "fx390-018-market-latest.jpg",
+   "at": "market: latest tab",
+   "bytes": 109156
+  },
+  {
+   "file": "fx390-019-negotiation.jpg",
+   "at": "market: open talks",
+   "bytes": 109156
+  },
+  {
+   "file": "fx390-020-negotiation-after.jpg",
+   "at": "market: offer",
+   "bytes": 109156
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 21599,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [
+    "\"Qualify for the Europa League\" x \"Board wants\" (29x12 at 212,863)",
+    "\"Qualify for the Conference League\" x \"Board wants\" (52x12 at 212,986)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 22791,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Brentford\" 72x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 23172,
+   "label": "manager-form"
+  }
+ ],
+ "effects": [
+  {
+   "where": "facilities",
+   "label": "upgrade first",
+   "text": "Upgrade £57m",
+   "ctx": "Upgrade £57m",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "boardConfidence",
+     "aiHeadlines",
+     "facilities",
+     "finance"
+    ],
+    "budget": [
+     69,
+     12
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "null",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "facilities",
+   "label": "upgrade again",
+   "text": "Upgrade £81m",
+   "ctx": "Upgrade £81m",
+   "disabled": true,
+   "diff": {
+    "changed": [],
+    "budget": [
+     12,
+     12
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "finances",
+   "label": "premium tickets",
+   "text": "💼 Premium More per seat, a few empty ones up in the corners.",
+   "ctx": "💼 Premium More per seat, a few empty ones up in the corners.",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "boardConfidence",
+     "aiHeadlines",
+     "finance",
+     "books",
+     "sponsor"
+    ],
+    "budget": [
+     12,
+     33.1
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "prices": [
+     "null",
+     "null"
+    ]
+   }
+  },
+  {
+   "where": "finances",
+   "label": "push sponsor",
+   "result": "no such control"
+  },
+  {
+   "where": "finances",
+   "label": "sign sponsor",
+   "result": "no such control"
+  },
+  {
+   "where": "staff",
+   "label": "pay off coach",
+   "text": "Pay off £360k",
+   "ctx": "🧑‍🏫 STAFF · £33.1M TO SPEND · 62K A WEEK ON THE FOUR 🎯 Bram Ilving Attack coach · level 5/10, can reach 7 · 14k a week Pay off £360k The forwards grow 4.4% faster where there is room. Midfield gets half of it. 🛡️ Idris Kettleby Defence coach · level 6/10, can reach 7 · 16k a week Pay off £420k T",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "aiHeadlines",
+     "staff"
+    ],
+    "budget": [
+     33.1,
+     32.74
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "staff",
+   "label": "hire",
+   "text": "Track stats",
+   "ctx": "Track stats",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     32.74,
+     32.74
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "tactics",
+   "label": "formation 4-4-2",
+   "result": "no such control"
+  },
+  {
+   "where": "tactics",
+   "label": "attacking mentality",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "sell tab",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "latest tab",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "buy tab",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "open talks",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "offer",
+   "result": "no such control"
+  }
+ ],
+ "elapsedS": 110,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "financesAfter": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£33.1m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 0, 54 left\nIN SO FAR SEASON\nTickets · 20 certain home games left £0k £36.3m\nFood and drink £0k £6.9m\nSponsor · guaranteed money, landed £21.1m £21.1m\nPlayers sold · assumes no more deals £0k £0k\nIncome £21.1m £64.3m\nOUT\nPlayer wages · £668k a week £0k £36.1m\nStaff wages · £163k a week £0k £8.8m\nTravel · 19 certain away trips left £0k £1.7m\nPlayers bought · assumes no more deals £0k £0k\nFacilities £57m £57m\nStaff fees · hires and pay offs £0k £0k\nSpend £57m £103.6m\nSeason result -£35.9m -£39.3m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£33.1m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Hopeful\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £39 a head. Fans cool on it (-5 on the meter, and the ground empties over the weeks). The board adds a point of confidence the day you set it.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £7.41 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nSolstice Motors (global) pay £21.1m a season. No bonuses, just the cheque.\n\n2 seasons left. Paid so far: £21.1m.\n\n💰 THE BOOKS\n£33.1m\nTransfer kitty\n£0k\nMatchday money this season\n-\nLast home gate\n\nEvery home crowd pays the kitty: attendance times about £46.41 a head, tickets plus food and drink at your prices. Sc",
+ "staffAfter": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£32.7m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £32.7M TO SPEND · 48K A WEEK ON THE FOUR\n🎯\n🎯 Attack coach: nobody\nWorks the forwards and the number ten. They grow a little faster, and nobody grows past his ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles sea",
+ "tacticsText": "☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £32.7M TO SPEND · 48K A WEEK ON THE FOUR\n🎯\n🎯 Attack coach: nobody\nWorks the forwards and the number ten. They grow a little faster, and nobody grows past his ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.",
+ "afterTacticsReport": "false",
+ "afterMatch": {
+  "mentality": "balanced",
+  "training": {
+   "intensity": "normal",
+   "focus": "balanced"
+  },
+  "budget": 32.74
+ },
+ "sellText": "☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £32.7M TO SPEND · 48K A WEEK ON THE FOUR\n🎯\n🎯 Attack coach: nobody\nWorks the forwards and the number ten. They grow a little faster, and nobody grows past his ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.",
+ "latestText": "☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £32.7M TO SPEND · 48K A WEEK ON THE FOUR\n🎯\n🎯 Attack coach: nobody\nWorks the forwards and the number ten. They grow a little faster, and nobody grows past his ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.",
+ "negText": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£32.7m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £32.7M TO SPEND · 48K A WEEK ON THE FOUR\n🎯\n🎯 Attack coach: nobody\nWorks the forwards and the number ten. They grow a little faster, and nobody grows past his ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles sea",
+ "negAfter": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£32.7m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £32.7M TO SPEND · 48K A WEEK ON THE FOUR\n🎯\n🎯 Attack coach: nobody\nWorks the forwards and the number ten. They grow a little faster, and nobody grows past his ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles sea"
+}

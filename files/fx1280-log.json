@@ -1,0 +1,358 @@
+{
+ "tag": "fx1280",
+ "width": 1280,
+ "height": 900,
+ "started": "2026-10-13T00:59:37.983Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 8,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Aston Villa",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 73,
+    "squad": 26,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 20,
+   "what": "facilities: upgrade first"
+  },
+  {
+   "s": 22,
+   "what": "facilities: upgrade again"
+  },
+  {
+   "s": 59,
+   "what": "tactics: formation 4-4-2"
+  },
+  {
+   "s": 59,
+   "what": "tactics: attacking mentality"
+  },
+  {
+   "clickFail": "quick sim",
+   "e": "TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator('[data-cm-way=\"quick\"]').first()"
+  },
+  {
+   "s": 95,
+   "what": "market: sell tab"
+  },
+  {
+   "s": 95,
+   "what": "market: latest tab"
+  },
+  {
+   "s": 95,
+   "what": "market: buy tab"
+  },
+  {
+   "s": 99,
+   "what": "market: open talks"
+  },
+  {
+   "s": 100,
+   "what": "market: offer"
+  },
+  {
+   "s": 100,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "fx1280-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 44873
+  },
+  {
+   "file": "fx1280-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 40863
+  },
+  {
+   "file": "fx1280-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 50607
+  },
+  {
+   "file": "fx1280-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 196260
+  },
+  {
+   "file": "fx1280-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 48682
+  },
+  {
+   "file": "fx1280-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 125554
+  },
+  {
+   "file": "fx1280-007-facilities-before.jpg",
+   "at": "hub reached",
+   "bytes": 139660
+  },
+  {
+   "file": "fx1280-008-facilities-upgrade_first.jpg",
+   "at": "facilities: upgrade first",
+   "bytes": 142622
+  },
+  {
+   "file": "fx1280-009-facilities-upgrade_again.jpg",
+   "at": "facilities: upgrade again",
+   "bytes": 141076
+  },
+  {
+   "file": "fx1280-010-tactics.jpg",
+   "at": "facilities: upgrade again",
+   "bytes": 209478
+  },
+  {
+   "file": "fx1280-011-market-sell.jpg",
+   "at": "market: sell tab",
+   "bytes": 166768
+  },
+  {
+   "file": "fx1280-012-market-latest.jpg",
+   "at": "market: latest tab",
+   "bytes": 166768
+  },
+  {
+   "file": "fx1280-013-negotiation.jpg",
+   "at": "market: open talks",
+   "bytes": 166768
+  },
+  {
+   "file": "fx1280-014-negotiation-after.jpg",
+   "at": "market: offer",
+   "bytes": 166768
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13092,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 12821,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 13504,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Aston Villa\" 77x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 0,
+   "docH": 13972,
+   "label": "manager-form"
+  }
+ ],
+ "effects": [
+  {
+   "where": "facilities",
+   "label": "upgrade first",
+   "text": "Upgrade £57m",
+   "ctx": "Upgrade £57m",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "boardConfidence",
+     "aiHeadlines",
+     "facilities",
+     "finance"
+    ],
+    "budget": [
+     73,
+     16
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "null",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "facilities",
+   "label": "upgrade again",
+   "text": "Upgrade £81m",
+   "ctx": "Upgrade £81m",
+   "disabled": true,
+   "diff": {
+    "changed": [],
+    "budget": [
+     16,
+     16
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "tactics",
+   "label": "formation 4-4-2",
+   "result": "no such control"
+  },
+  {
+   "where": "tactics",
+   "label": "attacking mentality",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "sell tab",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "latest tab",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "buy tab",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "open talks",
+   "result": "no such control"
+  },
+  {
+   "where": "market",
+   "label": "offer",
+   "result": "no such control"
+  }
+ ],
+ "elapsedS": 100,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "tacticsText": "☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~85 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏗️ FACILITIES · £16M TO SPEND\n🏟️ Stadium\n8/10\nUpgrade £81m\n\nNow: Food and drink money 14% up a head. Crowds grown 1 of 3 times.\n\nNeed £65m more to upgrade.\n\n🏃 Training ground\n6/10\nUpgrade £27m\n\nNow: Growth 6.5% faster for anyone with room to grow.\n\nNeed £11m more to upgrade.\n\n🩺 Medical\n6/10\nUpgrade £22m\n\nNow: Injury spells written 20% shorter, never under a week.\n\nNeed £6m more to upgrade.\n\n🚿 Dressing room\n6/10\nUpgrade £16m\n\nNow: Unhappy players climb 0.4 morale a week, up to 70.\n\nNext, level 7: Unhappy players climb 0.5 morale a week, up to 70.\n\nLeaves £0k in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.",
+ "afterTacticsReport": "false",
+ "afterMatch": {
+  "mentality": "balanced",
+  "training": {
+   "intensity": "normal",
+   "focus": "balanced"
+  },
+  "budget": 16
+ },
+ "sellText": "☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~85 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏗️ FACILITIES · £16M TO SPEND\n🏟️ Stadium\n8/10\nUpgrade £81m\n\nNow: Food and drink money 14% up a head. Crowds grown 1 of 3 times.\n\nNeed £65m more to upgrade.\n\n🏃 Training ground\n6/10\nUpgrade £27m\n\nNow: Growth 6.5% faster for anyone with room to grow.\n\nNeed £11m more to upgrade.\n\n🩺 Medical\n6/10\nUpgrade £22m\n\nNow: Injury spells written 20% shorter, never under a week.\n\nNeed £6m more to upgrade.\n\n🚿 Dressing room\n6/10\nUpgrade £16m\n\nNow: Unhappy players climb 0.4 morale a week, up to 70.\n\nNext, level 7: Unhappy players climb 0.5 morale a week, up to 70.\n\nLeaves £0k in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.",
+ "latestText": "☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~85 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏗️ FACILITIES · £16M TO SPEND\n🏟️ Stadium\n8/10\nUpgrade £81m\n\nNow: Food and drink money 14% up a head. Crowds grown 1 of 3 times.\n\nNeed £65m more to upgrade.\n\n🏃 Training ground\n6/10\nUpgrade £27m\n\nNow: Growth 6.5% faster for anyone with room to grow.\n\nNeed £11m more to upgrade.\n\n🩺 Medical\n6/10\nUpgrade £22m\n\nNow: Injury spells written 20% shorter, never under a week.\n\nNeed £6m more to upgrade.\n\n🚿 Dressing room\n6/10\nUpgrade £16m\n\nNow: Unhappy players climb 0.4 morale a week, up to 70.\n\nNext, level 7: Unhappy players climb 0.5 morale a week, up to 70.\n\nLeaves £0k in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.",
+ "negText": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£16m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~85 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏗️ FACILITIES · £16M TO SPEND\n🏟️ Stadium\n8/10\nUpgrade £81m\n\nNow: Food and drink money 14% up a head. Crowds grown 1 of 3 times.\n\nNeed £65m more to upgrade.\n\n🏃 Training ground\n6/10\nUpgrade £27m\n\nNow: Growth 6.5% faster for anyone with room to grow.\n\nNeed £11m more to upgrade.\n\n🩺 Medical\n6/10\nUpgrade £22m\n\nNow: Injury spells written 20% shorter, never under a week.\n\nNeed £6m more to upgrade.\n\n🚿 Dressing room\n6/10\nUpgrade £16m\n\nNow: Unhappy players climb 0.4 morale a week, up to 70.\n\nNext, level 7: Unhappy players climb 0.5 morale a week, up to 70.\n\nLeaves £0k in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Braz",
+ "negAfter": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£16m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~85 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏗️ FACILITIES · £16M TO SPEND\n🏟️ Stadium\n8/10\nUpgrade £81m\n\nNow: Food and drink money 14% up a head. Crowds grown 1 of 3 times.\n\nNeed £65m more to upgrade.\n\n🏃 Training ground\n6/10\nUpgrade £27m\n\nNow: Growth 6.5% faster for anyone with room to grow.\n\nNeed £11m more to upgrade.\n\n🩺 Medical\n6/10\nUpgrade £22m\n\nNow: Injury spells written 20% shorter, never under a week.\n\nNeed £6m more to upgrade.\n\n🚿 Dressing room\n6/10\nUpgrade £16m\n\nNow: Unhappy players climb 0.4 morale a week, up to 70.\n\nNext, level 7: Unhappy players climb 0.5 morale a week, up to 70.\n\nLeaves £0k in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Braz"
+}

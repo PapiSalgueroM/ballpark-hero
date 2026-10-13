@@ -1,0 +1,10 @@
+EFFECT facilities upgrade first: btn="Upgrade £57m" disabled=false changed=budget,boardConfidence,aiHeadlines,facilities,finance budget 73->16 screen=true CHECK {"before":"null","after":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"}
+EFFECT facilities upgrade again: btn="Upgrade £81m" disabled=true changed= budget 16->16 screen=true CHECK {"before":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}","after":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"}
+EFFECT tactics formation 4-4-2: no such control
+EFFECT tactics attacking mentality: no such control
+EFFECT market sell tab: no such control
+EFFECT market latest tab: no such control
+EFFECT market buy tab: no such control
+EFFECT market open talks: no such control
+EFFECT market offer: no such control
+EFFECTS done: 0 findings, 0 errors, 100s
