@@ -1,0 +1,6 @@
+#!serial
+dg-base-old: mkdir -p .rd1 && git archive 36cc9ffe | tar -x -C .rd1 && ln -s $PWD/node_modules .rd1/node_modules && cd .rd1 && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+dg-head-old: git show 36cc9ffe:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure; s=$?; git checkout -- scripts; exit $s
+dg-head-new: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+pin-check: node -e "const c=require('crypto'),f=require('fs');const t=f.readFileSync('src/lib/clubManager.ts','utf8').split(String.fromCharCode(13,10)).join(String.fromCharCode(10));const m=JSON.parse(f.readFileSync('scripts/fixtures/managerAppealIsolation1081/manifest.json','utf8'));console.log('lf sha256',c.createHash('sha256').update(t).digest('hex'));console.log('manifest',JSON.stringify(m.unchangedSource||m).slice(0,200))"
+pin-old: git show 36cc9ffe:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- scripts; exit $s
