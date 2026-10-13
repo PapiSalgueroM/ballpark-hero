@@ -1,0 +1,4600 @@
+{
+ "tag": "c320",
+ "W": 320,
+ "H": 640,
+ "SEED": 5,
+ "POS": "Central Mid",
+ "NAT": "Nigeria",
+ "ERA": "Early 90s",
+ "steps": [
+  {
+   "step": 1,
+   "phase": "youth",
+   "age": 16,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 52,
+   "action": "Next Season",
+   "options": [],
+   "next": "contract_offer"
+  },
+  {
+   "step": 2,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract"
+   ],
+   "modal": false,
+   "next": "contract_offer",
+   "txt": "🎓 Academy report Enyimba Youth, 1991/92 53 to 56 Overall +3 Pace 54 +6 Shooting 51 +2 Passing 59 +1 Dribbling 57 +2 Defending 58 +6 Physical 59 +4 18 games, 2 goals and 5 assists for the under 18s. The under 18s reached the quarter-finals of the youth cup. Your academy coach calls it a good, honest year. You are right where the staff hoped you would be. 📩 Contract Offers Choose a club to start your professional career EN Enyimba 📋 5yr 💰 €4k/wk Free transfer Tier 4 Review contract FI Fiorentina Serie A, 1992-93 📋 4yr 💰 €13k/wk Free transfer Tier 3 Review contract RE Red Star Belgrade 📋 4yr 💰 €10k/wk Free transfer Tier 3 Review contract TO Tottenham Premier League, 1992-93 📋 3yr 💰 €7"
+  },
+  {
+   "step": 3,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Sign contract",
+   "options": [
+    "Back",
+    "?",
+    "Sign contract",
+    "Close"
+   ],
+   "modal": true,
+   "next": "playing",
+   "txt": "🎓 Academy report Enyimba Youth, 1991/92 53 to 56 Overall +3 Pace 54 +6 Shooting 51 +2 Passing 59 +1 Dribbling 57 +2 Defending 58 +6 Physical 59 +4 18 games, 2 goals and 5 assists for the under 18s. The under 18s reached the quarter-finals of the youth cup. Your academy coach calls it a good, honest year. You are right where the staff hoped you would be. 📩 Contract Offers Choose a club to start your professional career EN Enyimba 📋 5yr 💰 €4k/wk Free transfer Tier 4 Review contract FI Fiorentina Serie A, 1992-93 📋 4yr 💰 €13k/wk Free transfer Tier 3 Review contract RE Red Star Belgrade 📋 4yr 💰 €10k/wk Free transfer Tier 3 Review contract TO Tottenham Premier League, 1992-93 📋 3yr 💰 €7"
+  },
+  {
+   "step": 4,
+   "phase": "playing",
+   "age": 17,
+   "senior": 0,
+   "club": "Red Star Belgrade",
+   "ovr": 56,
+   "action": "Week by week",
+   "options": [],
+   "next": "newspaper"
+  },
+  {
+   "step": 5,
+   "phase": "newspaper",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue to Season Summary →",
+   "options": [
+    "Continue to Season Summary →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "season_summary",
+   "txt": "📰 IN THE HEADLINES EL GOLAZO ⚠️ THE COLUMN: Ottoline Pemberton Says The Argument About Danny Okafor-Whitfield Is Over 1 goals and 2 assists in 8 games. Ottoline Pemberton wrote the obituary column, in full, with a photograph from four years ago. SOCCER TIMES ⚠️ Danny Okafor-Whitfield Booed By Own Fans After Another Disappointing Display Ugly scenes at Red Star Belgrade as sections of the crowd turned on Danny Okafor-Whitfield after another below-par performance. The Nigeria midfielder looked visibly shaken as boos rang around the stadium. Continue to Season Summary → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marki"
+  },
+  {
+   "step": 6,
+   "phase": "season_summary",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue →",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "Season Summary Red Star Belgrade · 1992/93 8 Apps 1 Goals 2 Assists Avg Rating: 5.6 · Played at OVR 56 🟨 2 🟥 0 🎯 Target missed Make 3 club assists. Finished on 2. 🏃 Development push completed +1 passing after natural growth. 🛝 One goal this season, and you tear off toward the corner flag and slide across the grass on your knees. Continue → 📺 Watch it week by week ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby h"
+  },
+  {
+   "step": 7,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "🏅 Ballon d'Or 1992 9. Alan Shearer ST · Blackburn Rovers 43pts 26G · League 10. Lothar Matthäus CM · Real Madrid 39pts 13G · Cup The ranked list is coming in... ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Go"
+  },
+  {
+   "step": 8,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "← Back"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "🏅 Ballon d'Or 1992 🥈 Dennis Bergkamp ST · Ajax 67pts 21G · League, Cup 🥉 Romário ST · PSV 58pts 28G 4. Marco van Basten ST · AC Milan 55pts 26G 5. Roberto Baggio CAM · Juventus 47pts 15G 6. Ruud Gullit CAM · AC Milan 46pts 14G 7. Gabriel Batistuta ST · Fiorentina 45pts 23G 8. George Weah ST · PSG 43pts 18G · Cup 9. Alan Shearer ST · Blackburn Rovers 43pts 26G · League 10. Lothar Matthäus CM · Real Madrid 39pts 13G · Cup The ranked list is coming in... ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats"
+  },
+  {
+   "step": 9,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "⭐ Ballon d'Or 1992 You were not nominated this year 🥇 Hristo Stoichkov ST · Ajax 80pts 19G · League, Cup 🥈 Dennis Bergkamp ST · Ajax 67pts 21G · League, Cup 🥉 Romário ST · PSV 58pts 28G 4. Marco van Basten ST · AC Milan 55pts 26G 5. Roberto Baggio CAM · Juventus 47pts 15G 6. Ruud Gullit CAM · AC Milan 46pts 14G 7. Gabriel Batistuta ST · Fiorentina 45pts 23G 8. George Weah ST · PSG 43pts 18G · Cup 9. Alan Shearer ST · Blackburn Rovers 43pts 26G · League 10. Lothar Matthäus CM · Real Madrid 39pts 13G · Cup Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 18"
+  },
+  {
+   "step": 10,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "Continue →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "⭐ Ballon d'Or 1992 You were not nominated this year 🥇 Hristo Stoichkov ST · Ajax 80pts 19G · League, Cup 🥈 Dennis Bergkamp ST · Ajax 67pts 21G · League, Cup 🥉 Romário ST · PSV 58pts 28G 4. Marco van Basten ST · AC Milan 55pts 26G 5. Roberto Baggio CAM · Juventus 47pts 15G 6. Ruud Gullit CAM · AC Milan 46pts 14G 7. Gabriel Batistuta ST · Fiorentina 45pts 23G 8. George Weah ST · PSG 43pts 18G · Cup 9. Alan Shearer ST · Blackburn Rovers 43pts 26G · League 10. Lothar Matthäus CM · Real Madrid 39pts 13G · Cup Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 18"
+  },
+  {
+   "step": 11,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue →",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "⭐ Ballon d'Or 1992 You were not nominated this year 🥇 Hristo Stoichkov ST · Ajax 80pts 19G · League, Cup 🥈 Dennis Bergkamp ST · Ajax 67pts 21G · League, Cup 🥉 Romário ST · PSV 58pts 28G 4. Marco van Basten ST · AC Milan 55pts 26G 5. Roberto Baggio CAM · Juventus 47pts 15G 6. Ruud Gullit CAM · AC Milan 46pts 14G 7. Gabriel Batistuta ST · Fiorentina 45pts 23G 8. George Weah ST · PSG 43pts 18G · Cup 9. Alan Shearer ST · Blackburn Rovers 43pts 26G · League 10. Lothar Matthäus CM · Real Madrid 39pts 13G · Cup Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 18"
+  },
+  {
+   "step": 12,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "🏋️ Post training video Show off your sk",
+    "🎬 Go viral with celebration clip Post a",
+    "❤️ Announce charity work Highlight your ",
+    "😈 Troll your rival on social media Take",
+    "🧘 Stay off social media Focus on footba",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Choose one action this season to manage your online presence 70k followers Next unlock: 🏪 Local Brand Deal at 1M followers 🏪 1M 👟 5M 🌍 15M 👕 30M 🎮 50M 🏋️ Post training video Show off your skills in the gym +0.1-0.2M followers 🎬 Go viral with celebration clip Post an iconic goal celebration +0.5-2.0M followers 🔥 Post controversial opinion Share a hot take about football +1.0M followers ⚡ Reputation -10 ❤️ Announce charity work Highlight your philanthropic efforts +0.2M followers ⚡ Reputation +15 📸 Post about personal life Share a glimpse into your life off the pitch +0.3M followers 😈 Troll your rival on social media Take a shot at your rival online +0.8M followers ⚡"
+  },
+  {
+   "step": 13,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🧘 Stay off social media Focus on football, no distractions ⚡ +2 to al",
+   "options": [
+    "🏋️ Post training video Show off your sk",
+    "🎬 Go viral with celebration clip Post a",
+    "❤️ Announce charity work Highlight your ",
+    "😈 Troll your rival on social media Take",
+    "🧘 Stay off social media Focus on footba",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Choose one action this season to manage your online presence 70k followers Next unlock: 🏪 Local Brand Deal at 1M followers 🏪 1M 👟 5M 🌍 15M 👕 30M 🎮 50M 🏋️ Post training video Show off your skills in the gym +0.1-0.2M followers 🎬 Go viral with celebration clip Post an iconic goal celebration +0.5-2.0M followers 🔥 Post controversial opinion Share a hot take about football +1.0M followers ⚡ Reputation -10 ❤️ Announce charity work Highlight your philanthropic efforts +0.2M followers ⚡ Reputation +15 📸 Post about personal life Share a glimpse into your life off the pitch +0.3M followers 😈 Troll your rival on social media Take a shot at your rival online +0.8M followers ⚡"
+  },
+  {
+   "step": 14,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "Continue →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Update 70k followers Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists AFRICA CUP OF NATIONS 1992 FINAL Morocco 3-1 Nigeria SEMI-FINALS Egypt 1-4 Morocco Ivory Coast 1-3 N"
+  },
+  {
+   "step": 15,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Update 70k followers Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists 🗂️ Tournaments 1 played out 🏆 AFCON 1992 Morocco won it"
+  },
+  {
+   "step": 16,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue →",
+   "options": [
+    "Continue →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "📱 Social Media Update 70k followers Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists AFRICA CUP OF NATIONS 1992 FINAL Morocco 3-1 Nigeria SEMI-FINALS Egypt 1-4 Morocco Ivory Coast 1-3 N"
+  },
+  {
+   "step": 17,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🎭 The Showman Fame comes easy: followers grow 60% faster, sponsors pa",
+   "options": [
+    "🎭 The Showman Fame comes easy: follower",
+    "🧊 Ice Cold Unshakeable: steadier morale",
+    "🌋 The Hothead Fire in everything: exclu",
+    "📐 The Professor Student of the game: ma",
+    "🃏 The Enigma Pure wildcard: cult follow",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 5 EVENTS REMAINING 🪞 Who Are You, Really? Teammates, journalists and fans keep asking the same question: what is your deal? Time to decide what kind of player, and person, you are. This shapes your whole career. 🎭 The Showman Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals sting 🧊 Ice Cold Unshakeable: steadier morale, trusted by sponsors, slower follower growth 🌋 The Hothead Fire in everything: exclusive chaos events, fear factor, riskier sponsors 📐 The Professor Student of the game: manager and brand respect, fewer viral moments 🃏 The Enigma Pure wildcard: cult following, chaos bonuses in both directions ATTRIBUTES Pace Acceleration 54 54 S"
+  },
+  {
+   "step": 18,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🙄 Ignore the bird The mascot declares victory by forfeit",
+   "options": [
+    "🏃 Race the mascot 70%: win, +400k follo",
+    "🙄 Ignore the bird The mascot declares v",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 4 EVENTS REMAINING 🦅 Mascot Beef The club mascot challenged you to a race at halftime and has been talking trash on the club's official account all week. 🏃 Race the mascot 70%: win, +400k followers. 30%: lose to a person in a giant bird suit 🙄 Ignore the bird The mascot declares victory by forfeit ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons "
+  },
+  {
+   "step": 19,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🔥 Burn them in the parking lot Morale +5, sponsor mildly concerned, t",
+   "options": [
+    "🧪 Keep wearing them: superstition is fa",
+    "🔥 Burn them in the parking lot Morale +",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 3 EVENTS REMAINING 👟 The Cursed Boots Your new limited-edition boots have not seen a single win. Seven matches. The kit man refuses to touch them. He crosses himself near your locker. 🧪 Keep wearing them: superstition is fake Science! The curse saga continues next season 🔥 Burn them in the parking lot Morale +5, sponsor mildly concerned, the video goes viral ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥"
+  },
+  {
+   "step": 20,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "✋ Stay away from crypto Smart move? Or missed opportunity?",
+   "options": [
+    "🪙 Invest €200k Could go 10x (+€2M), dou",
+    "✋ Stay away from crypto Smart move? Or m",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 2 EVENTS REMAINING 📈 Crypto Tip! A friend tips you on a crypto investment. High risk, high reward. 🪙 Invest €200k Could go 10x (+€2M), double (+€200k) or crash (-€200k) ✋ Stay away from crypto Smart move? Or missed opportunity? ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continenta"
+  },
+  {
+   "step": 21,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "⛳ Embrace the golf life Morale +8, Pace ",
+    "🗑️ Delete the tee time app Focus preser",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 1 EVENT REMAINING ⛳ The Golf Bug A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind. ⛳ Embrace the golf life Morale +8, Pace -1 next season (cart life) 🗑️ Delete the tee time app Focus preserved. The putters stay in the garage ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cu"
+  },
+  {
+   "step": 22,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "⛳ Embrace the golf life Morale +8, Pace ",
+    "🗑️ Delete the tee time app Focus preser",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 1 EVENT REMAINING ⛳ The Golf Bug A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind. ⛳ Embrace the golf life Morale +8, Pace -1 next season (cart life) 🗑️ Delete the tee time app Focus preserved. The putters stay in the garage ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cu"
+  },
+  {
+   "step": 23,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "⛳ Embrace the golf life Morale +8, Pace -1 next season (cart life)",
+   "options": [
+    "⛳ Embrace the golf life Morale +8, Pace ",
+    "🗑️ Delete the tee time app Focus preser",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "transfer_window",
+   "txt": "🏠 LIFE EVENT · 1 EVENT REMAINING ⛳ The Golf Bug A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind. ⛳ Embrace the golf life Morale +8, Pace -1 next season (cart life) 🗑️ Delete the tee time app Focus preserved. The putters stay in the garage ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cu"
+  },
+  {
+   "step": 24,
+   "phase": "transfer_window",
+   "age": 18,
+   "senior": 1,
+   "club": "Coventry City",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "Continue at Coventry City →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "transfer_window",
+   "txt": "📤 Your club sold you Red Star Belgrade → Coventry City The club chose this move. Your next season is at Coventry City. €2k/wk · 2-year contract Transfer fee: €0.9M 7 league games all season, and the projection here was 20 to 30 You averaged 5.6 across the season You are 5 rating points under what this squad expects Continue at Coventry City → Your next season Roles, contracts, playing time and your comeback ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps"
+  },
+  {
+   "step": 25,
+   "phase": "transfer_window",
+   "age": 18,
+   "senior": 1,
+   "club": "Coventry City",
+   "ovr": 57,
+   "action": "Continue at Coventry City →",
+   "options": [
+    "Continue at Coventry City →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "playing",
+   "txt": "📤 Your club sold you Red Star Belgrade → Coventry City The club chose this move. Your next season is at Coventry City. €2k/wk · 2-year contract Transfer fee: €0.9M 7 league games all season, and the projection here was 20 to 30 You averaged 5.6 across the season You are 5 rating points under what this squad expects Continue at Coventry City → Your next season Roles, contracts, playing time and your comeback ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps"
+  }
+ ],
+ "audits": [
+  {
+   "label": "phase contract_offer #2",
+   "step": 2,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "Review contract",
+     "by": "Review contract\n\nRed Star Belgrade\n\nCurr",
+     "byCls": "fixed left-[50%] top-[50%] z-50 translate-x-[-50%]",
+     "toast": false,
+     "toastY": null,
+     "btnY": 124
+    },
+    {
+     "text": "Review contract",
+     "by": "Current deal\nFirst senior contract. No c",
+     "byCls": "grid grid-cols-2 gap-3 rounded-lg border border-bo",
+     "toast": false,
+     "toastY": null,
+     "btnY": 298
+    },
+    {
+     "text": "Review contract",
+     "by": "Review contract\n\nRed Star Belgrade\n\nCurr",
+     "byCls": "fixed left-[50%] top-[50%] z-50 translate-x-[-50%]",
+     "toast": false,
+     "toastY": null,
+     "btnY": 472
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 533
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open ambition-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Your season target\n\nA personal best to c",
+     "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-",
+     "toast": false,
+     "toastY": null,
+     "btnY": 201
+    },
+    {
+     "text": "🎯 Season target\nChoose a personal chall",
+     "by": "Your season target\n\nA personal best to c",
+     "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-",
+     "toast": false,
+     "toastY": null,
+     "btnY": 288
+    },
+    {
+     "text": "🏃 Preseason plan\nBalanced, or choose yo",
+     "by": "Reward: +1 Shooting with next season's g",
+     "byCls": "block text-xs text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 352
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Reward: +1 Passing with next season's gr",
+     "byCls": "block text-xs text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 430
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    },
+    {
+     "text": "📺",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open preseason-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Development push adds 1 passing point af",
+     "byCls": "text-sm",
+     "toast": false,
+     "toastY": null,
+     "btnY": 201
+    },
+    {
+     "text": "🎯 Season target\nMake 3 club assists\n199",
+     "by": "Example: a 20% injury chance becomes 23%",
+     "byCls": "text-xs text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 288
+    },
+    {
+     "text": "🏃 Preseason plan\nBalanced, or choose yo",
+     "by": "Example: a 20% injury chance becomes 23%",
+     "byCls": "text-xs text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 370
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "+1 passing, higher injury risk",
+     "byCls": "block text-xs text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 448
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    },
+    {
+     "text": "📺",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open squad-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "This screen shows what the game already ",
+     "byCls": "flex list-decimal flex-col gap-2 pl-5 text-xs lead",
+     "toast": false,
+     "toastY": null,
+     "btnY": 201
+    },
+    {
+     "text": "🎯 Season target\nMake 3 club assists\n199",
+     "by": "Trust is how much of the league season t",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 288
+    },
+    {
+     "text": "🏃 Preseason plan\nDevelopment push · 199",
+     "by": "Trust is how much of the league season t",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 370
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Trust is how much of the league season t",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 434
+    },
+    {
+     "text": "Next Season",
+     "by": "← Back",
+     "byCls": "min-h-[44px] rounded-xl border border-border px-4 ",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    },
+    {
+     "text": "📺",
+     "by": "← Back",
+     "byCls": "min-h-[44px] rounded-xl border border-border px-4 ",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open programme-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 201
+    },
+    {
+     "text": "🎯 Season target\nMake 3 club assists\n199",
+     "by": "Some choices need a transfer offer, a lo",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 288
+    },
+    {
+     "text": "🏃 Preseason plan\nDevelopment push · 199",
+     "by": "A plan is not a guaranteed result. The d",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 370
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "space-y-3",
+     "toast": false,
+     "toastY": null,
+     "btnY": 434
+    },
+    {
+     "text": "Next Season",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "space-y-3",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    },
+    {
+     "text": "📺",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "space-y-3",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open attributes-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Danny Okafor-Whitfield, full attributes",
+     "w": 223,
+     "need": 293,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "open ratings-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "📈 Ratings",
+     "by": "Availability",
+     "byCls": "min-h-11 rounded-xl border border-border px-3 py-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 298
+    },
+    {
+     "text": "📖 Career Story",
+     "by": "Two saved senior seasons unlock comparis",
+     "byCls": "mb-3 text-xs text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 346
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    },
+    {
+     "text": "📺",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open story-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "📈 Ratings",
+     "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+     "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 298
+    },
+    {
+     "text": "📖 Career Story",
+     "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+     "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 346
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    },
+    {
+     "text": "📺",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open trophy-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏆\n0\nLeagues",
+     "by": "‹ Back",
+     "byCls": "min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-",
+     "toast": false,
+     "toastY": null,
+     "btnY": 281
+    },
+    {
+     "text": "🏆\n0\nCups",
+     "by": "‹ Back\nLeague titles\n?",
+     "byCls": "flex shrink-0 items-center gap-2 border-b border-b",
+     "toast": false,
+     "toastY": null,
+     "btnY": 281
+    },
+    {
+     "text": "⭐\n0\nUCL",
+     "by": "‹ Back\nLeague titles\n?",
+     "byCls": "flex shrink-0 items-center gap-2 border-b border-b",
+     "toast": false,
+     "toastY": null,
+     "btnY": 281
+    },
+    {
+     "text": "🌍\n0\nWorld Cup",
+     "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 367
+    },
+    {
+     "text": "🌐\n0\nContinental",
+     "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 367
+    },
+    {
+     "text": "🏅\n0\nBallon d'Or",
+     "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 367
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open training-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining\nDrill ready",
+     "by": "Tap cones in order with as few slips as ",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "Tap cones in order with as few slips as ",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Pause or opening these rules freezes the",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Pause or opening these rules freezes the",
+     "byCls": "",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "🎯\nThrough Ball NEW\nYour CM drill. Train",
+     "byCls": "w-full flex items-center gap-3 rounded-xl border b",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "First Touch",
+     "byCls": "block text-sm font-black",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open phone-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "£0K to your name",
+     "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "£0K to your name",
+     "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "📈",
+     "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "🛒",
+     "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\nDanny Okafor-W",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone messages",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Groundskeeper",
+     "byCls": "text-xs font-black truncate",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Groundskeeper\n1990",
+     "byCls": "flex items-center justify-between gap-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n💬 Mess",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone contacts",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Grandad",
+     "byCls": "block text-xs font-black truncate",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Grandad",
+     "byCls": "block text-xs font-black truncate",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n👥 Cont",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone news",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n📰 Spor",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone column",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+     "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+     "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+     "byCls": "rounded-2xl bg-white/5 border border-white/10 p-3 ",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+     "byCls": "rounded-2xl bg-white/5 border border-white/10 p-3 ",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🗞️ The",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone bank",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone market",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone shop",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone arcade",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone cards",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone social",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone player",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone peaks",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone life",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💷 Savings\npays 2.5% a season, never los",
+     "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+     "toast": false,
+     "toastY": null,
+     "btnY": 509
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+     "toast": false,
+     "toastY": null,
+     "btnY": 574
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "week-open",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining\nDrill ready",
+     "by": "Your season was played the moment you pr",
+     "byCls": "leading-relaxed text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "Your season was played the moment you pr",
+     "byCls": "leading-relaxed text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 149
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Earlier-season tables use verified leagu",
+     "byCls": "leading-relaxed text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Earlier-season tables use verified leagu",
+     "byCls": "leading-relaxed text-muted-foreground",
+     "toast": false,
+     "toastY": null,
+     "btnY": 299
+    },
+    {
+     "text": "?",
+     "by": "How the Season Centre works\n\nYour season",
+     "byCls": "w-full max-w-lg space-y-3 rounded-2xl border borde",
+     "toast": false,
+     "toastY": null,
+     "btnY": 8
+    },
+    {
+     "text": "Back to the papers",
+     "by": "How the Season Centre works\n\nYour season",
+     "byCls": "w-full max-w-lg space-y-3 rounded-2xl border borde",
+     "toast": false,
+     "toastY": null,
+     "btnY": 8
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase newspaper #1",
+   "step": 4,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 5,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #1",
+   "step": 16,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "🧘 Stay off social media",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "🧘 Stay off social media",
+     "byCls": "group toast group-[.toaster]:bg-background group-[",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #2",
+   "step": 17,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "Fame comes easy: followers grow 60% fast",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Fame comes easy: followers grow 60% fast",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #3",
+   "step": 18,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "The mascot declares victory by forfeit",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "The mascot declares victory by forfeit",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #4",
+   "step": 19,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "Morale +5, sponsor mildly concerned, the",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Morale +5, sponsor mildly concerned, the",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #5",
+   "step": 20,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "Smart move? Or missed opportunity?",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Smart move? Or missed opportunity?",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 25,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Starter most ",
+     "by": "Next Season\n📺\n18\nAGE",
+     "byCls": "flex items-center gap-3 max-[359px]:gap-2 fixed bo",
+     "toast": false,
+     "toastY": null,
+     "btnY": 513
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "final",
+   "step": 25,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Starter most ",
+     "by": "Next Season\n📺\n18\nAGE",
+     "byCls": "flex items-center gap-3 max-[359px]:gap-2 fixed bo",
+     "toast": false,
+     "toastY": null,
+     "btnY": 513
+    }
+   ],
+   "boundary": false
+  }
+ ],
+ "explore": [
+  {
+   "name": "ambition-s0",
+   "season": 0,
+   "label": "🎯 Season target Choose a personal challenge for next season",
+   "step": 3,
+   "opened": "Your season target A personal best to chase at Red Star Belgrade. Choose one before you play. Beat your saved best to bank +1 training with next season's growth. It doesn't change this season's selection or stats. Example: your best is 12 goals, so the next target is 13. A serious injury or a year without appearances interrupts it. Moving clubs cancels it. Score 5 club goals Reward: +1 Shooting with next season's growth Make 3 club assists Reward: +1 Passing with next season's growth Earn a 7.0 ",
+   "shot": "c320-011-ambition-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Your season target\n\nA personal best to c",
+      "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-",
+      "toast": false,
+      "toastY": null,
+      "btnY": 201
+     },
+     {
+      "text": "🎯 Season target\nChoose a personal chall",
+      "by": "Your season target\n\nA personal best to c",
+      "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-",
+      "toast": false,
+      "toastY": null,
+      "btnY": 288
+     },
+     {
+      "text": "🏃 Preseason plan\nBalanced, or choose yo",
+      "by": "Reward: +1 Shooting with next season's g",
+      "byCls": "block text-xs text-muted-foreground",
+      "toast": false,
+      "toastY": null,
+      "btnY": 352
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "Reward: +1 Passing with next season's gr",
+      "byCls": "block text-xs text-muted-foreground",
+      "toast": false,
+      "toastY": null,
+      "btnY": 430
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     },
+     {
+      "text": "📺",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "afterPick": null,
+   "interact": "Make 3 club assists Reward: +1 Passing with next season's gr",
+   "closed": {
+    "ok": true,
+    "tried": []
+   },
+   "scroll": {
+    "y0": 494,
+    "y1": 308
+   },
+   "saveChanged": true
+  },
+  {
+   "name": "preseason-s0",
+   "season": 0,
+   "label": "🏃 Preseason plan Balanced, or choose your next-season workl",
+   "step": 3,
+   "opened": "Set your preseason workload One season at Red Star Belgrade. A simulated choice, with a tradeoff. Development push adds 1 passing point after natural growth, with 3 percentage points more injury risk. Recovery focus subtracts 1 passing point after growth, with 4 percentage points less risk. Existing injury and attribute limits still apply. Example: a 20% injury chance becomes 23% with development or 16% with recovery. A serious injury or no appearances interrupts the development modifier. Moving",
+   "shot": "c320-013-preseason-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Development push adds 1 passing point af",
+      "byCls": "text-sm",
+      "toast": false,
+      "toastY": null,
+      "btnY": 201
+     },
+     {
+      "text": "🎯 Season target\nMake 3 club assists\n199",
+      "by": "Example: a 20% injury chance becomes 23%",
+      "byCls": "text-xs text-muted-foreground",
+      "toast": false,
+      "toastY": null,
+      "btnY": 288
+     },
+     {
+      "text": "🏃 Preseason plan\nBalanced, or choose yo",
+      "by": "Example: a 20% injury chance becomes 23%",
+      "byCls": "text-xs text-muted-foreground",
+      "toast": false,
+      "toastY": null,
+      "btnY": 370
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "+1 passing, higher injury risk",
+      "byCls": "block text-xs text-muted-foreground",
+      "toast": false,
+      "toastY": null,
+      "btnY": 448
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     },
+     {
+      "text": "📺",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "afterPick": null,
+   "interact": "Development push +1 passing, higher injury risk",
+   "closed": {
+    "ok": true,
+    "tried": []
+   },
+   "scroll": {
+    "y0": 308,
+    "y1": 308
+   },
+   "saveChanged": true
+  },
+  {
+   "name": "squad-s0",
+   "season": 0,
+   "label": "👥 Squad By role The plan: Squad player On our ratings 4th o",
+   "step": 3,
+   "opened": "Red Star Belgrade 1992/93 ROLES ONLY ? How the squad works This screen shows what the game already decided. Nothing here changes how many games you play. Your rank is where your rating puts you in your position group at the club. A teammate on the same rating counts as ahead of you. The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager's team sheet. Trust is how much of the league season the mana",
+   "shot": "c320-014-squad-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "This screen shows what the game already ",
+      "byCls": "flex list-decimal flex-col gap-2 pl-5 text-xs lead",
+      "toast": false,
+      "toastY": null,
+      "btnY": 201
+     },
+     {
+      "text": "🎯 Season target\nMake 3 club assists\n199",
+      "by": "Trust is how much of the league season t",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 288
+     },
+     {
+      "text": "🏃 Preseason plan\nDevelopment push · 199",
+      "by": "Trust is how much of the league season t",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 370
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "Trust is how much of the league season t",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 434
+     },
+     {
+      "text": "Next Season",
+      "by": "← Back",
+      "byCls": "min-h-[44px] rounded-xl border border-border px-4 ",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     },
+     {
+      "text": "📺",
+      "by": "← Back",
+      "byCls": "min-h-[44px] rounded-xl border border-border px-4 ",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "← Back",
+     "Escape"
+    ]
+   },
+   "scroll": {
+    "y0": 308,
+    "y1": 308
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "press-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "programme-s0",
+   "season": 0,
+   "label": "Your next season Roles, contracts, playing time and your com",
+   "step": 3,
+   "opened": "? Close Your career plans: how it works Choices for your simulated career. Check the context before choosing. Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail. Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing. A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Op",
+   "shot": "c320-015-programme-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 201
+     },
+     {
+      "text": "🎯 Season target\nMake 3 club assists\n199",
+      "by": "Some choices need a transfer offer, a lo",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 288
+     },
+     {
+      "text": "🏃 Preseason plan\nDevelopment push · 199",
+      "by": "A plan is not a guaranteed result. The d",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 370
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "space-y-3",
+      "toast": false,
+      "toastY": null,
+      "btnY": 434
+     },
+     {
+      "text": "Next Season",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "space-y-3",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     },
+     {
+      "text": "📺",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "space-y-3",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "tileText": "? Close Your career plans: how it works Choices for your simulated career. Check the context before choosing. Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail. Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing. A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Op",
+   "optText": "? Close Your career plans: how it works Choices for your simulated career. Check the context before choosing. Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail. Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing. A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Op",
+   "interact": [
+    null,
+    null
+   ],
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Close"
+    ]
+   },
+   "scroll": {
+    "y0": 308,
+    "y1": 308
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "mentor-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "records-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "attributes-s0",
+   "season": 0,
+   "label": "Full attributes 180 cm · 75 kg · every number under the six",
+   "step": 3,
+   "opened": null,
+   "shot": "c320-018-attributes-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Danny Okafor-Whitfield, full attributes",
+      "w": 223,
+      "need": 293,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "← Back"
+    ]
+   },
+   "scroll": {
+    "y0": 1293,
+    "y1": 193
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "ratings-s0",
+   "season": 0,
+   "label": "📈 Ratings",
+   "step": 3,
+   "opened": "📈 Season Ratings ? Close Read your saved season ratings, compare two seasons or check recorded availability. Compare seasons Availability Two saved senior seasons unlock comparison. No senior seasons yet. Your ratings show up here after your first season as a pro.",
+   "shot": "c320-019-ratings-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "📈 Ratings",
+      "by": "Availability",
+      "byCls": "min-h-11 rounded-xl border border-border px-3 py-2",
+      "toast": false,
+      "toastY": null,
+      "btnY": 298
+     },
+     {
+      "text": "📖 Career Story",
+      "by": "Two saved senior seasons unlock comparis",
+      "byCls": "mb-3 text-xs text-muted-foreground",
+      "toast": false,
+      "toastY": null,
+      "btnY": 346
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     },
+     {
+      "text": "📺",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Close"
+    ]
+   },
+   "scroll": {
+    "y0": 2029,
+    "y1": 2029
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "story-s0",
+   "season": 0,
+   "label": "📖 Career Story",
+   "step": 3,
+   "opened": "📖 Career Story Your recorded moments, one season at a time. 1990 Enyimba Youth Age 16 · 1 moment 1991 NOW Red Star Belgrade Age 17 · 3 moments Back to your career Close",
+   "shot": "c320-020-story-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "📈 Ratings",
+      "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+      "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2",
+      "toast": false,
+      "toastY": null,
+      "btnY": 298
+     },
+     {
+      "text": "📖 Career Story",
+      "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+      "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2",
+      "toast": false,
+      "toastY": null,
+      "btnY": 346
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     },
+     {
+      "text": "📺",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Back to your career"
+    ]
+   },
+   "scroll": {
+    "y0": 2029,
+    "y1": 2029
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "trophy-s0",
+   "season": 0,
+   "label": "🏆 0 Leagues",
+   "step": 3,
+   "opened": "‹ Back League titles ? No wins recorded here yet.",
+   "shot": "c320-021-trophy-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "🏆\n0\nLeagues",
+      "by": "‹ Back",
+      "byCls": "min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-",
+      "toast": false,
+      "toastY": null,
+      "btnY": 281
+     },
+     {
+      "text": "🏆\n0\nCups",
+      "by": "‹ Back\nLeague titles\n?",
+      "byCls": "flex shrink-0 items-center gap-2 border-b border-b",
+      "toast": false,
+      "toastY": null,
+      "btnY": 281
+     },
+     {
+      "text": "⭐\n0\nUCL",
+      "by": "‹ Back\nLeague titles\n?",
+      "byCls": "flex shrink-0 items-center gap-2 border-b border-b",
+      "toast": false,
+      "toastY": null,
+      "btnY": 281
+     },
+     {
+      "text": "🌍\n0\nWorld Cup",
+      "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+      "toast": false,
+      "toastY": null,
+      "btnY": 367
+     },
+     {
+      "text": "🌐\n0\nContinental",
+      "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+      "toast": false,
+      "toastY": null,
+      "btnY": 367
+     },
+     {
+      "text": "🏅\n0\nBallon d'Or",
+      "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+      "toast": false,
+      "toastY": null,
+      "btnY": 367
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "‹ Back"
+    ]
+   },
+   "scroll": {
+    "y0": 1653,
+    "y1": 1653
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "replays-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "training-s0",
+   "season": 0,
+   "label": "🏋️ Training Drill ready",
+   "step": 3,
+   "opened": "🏋️ Training Ground ? Close Tap cones in order with as few slips as possible. Sprint Burst gives you five seconds to tap the track. Pick five penalty spots, or watch the tell and dive for five keeper shots. Hit eight passing gates before they close. Pause or opening these rules freezes the drill, including a shot reveal. Leaving the tab pauses it too. Close the rules, then choose Resume practice to carry on. Drills and Close discard the unfinished run. One bank per season: 50 earns +1 to the sho",
+   "shot": "c320-022-training-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [
+     {
+      "text": "🏋️\nTraining\nDrill ready",
+      "by": "Tap cones in order with as few slips as ",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 149
+     },
+     {
+      "text": "📱\nPhone\n3\nunread",
+      "by": "Tap cones in order with as few slips as ",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 149
+     },
+     {
+      "text": "🚪 Retire",
+      "by": "Pause or opening these rules freezes the",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 299
+     },
+     {
+      "text": "🔄 New Career",
+      "by": "Pause or opening these rules freezes the",
+      "byCls": "",
+      "toast": false,
+      "toastY": null,
+      "btnY": 299
+     },
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "🎯\nThrough Ball NEW\nYour CM drill. Train",
+      "byCls": "w-full flex items-center gap-3 rounded-xl border b",
+      "toast": false,
+      "toastY": null,
+      "btnY": 509
+     },
+     {
+      "text": "Next Season",
+      "by": "First Touch",
+      "byCls": "block text-sm font-black",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "result": "🏋️ Training Ground ? Close 🎯 20 SESSION SCORE Rough day. No gains this time Bank the session",
+   "interact": {
+    "drill": "🎯\nPenalty Placement\nTrains Shooting\n›",
+    "bank": true
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Close"
+    ]
+   },
+   "scroll": {
+    "y0": 0,
+    "y1": 0
+   },
+   "saveChanged": true
+  },
+  {
+   "name": "phone-s0",
+   "season": 0,
+   "label": "📱 Phone 3 unread",
+   "step": 3,
+   "opened": "1991 · age 17 😐 50 📶 🔋 Danny Okafor-Whitfield Red Star Belgrade · OVR 56 £0K to your name 💬 3 Messages 👥 Contacts 📰 SportsFeed 🗞️ The Column 🏦 Bank 📈 Market 🛒 My Life 🎮 Ball Quiz 🃏 Cards 📸 SocialGram ⭐ My Player 🎖️ Peaks 😐 Life Keep in touch and people look after you. Money you leave sitting still does nothing. Put phone away",
+   "shot": "c320-025-phone-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [
+     {
+      "text": "🏋️\nTraining",
+      "by": "£0K to your name",
+      "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5",
+      "toast": false,
+      "toastY": null,
+      "btnY": 149
+     },
+     {
+      "text": "📱\nPhone\n3\nunread",
+      "by": "£0K to your name",
+      "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5",
+      "toast": false,
+      "toastY": null,
+      "btnY": 149
+     },
+     {
+      "text": "🚪 Retire",
+      "by": "📈",
+      "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b",
+      "toast": false,
+      "toastY": null,
+      "btnY": 299
+     },
+     {
+      "text": "🔄 New Career",
+      "by": "🛒",
+      "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b",
+      "toast": false,
+      "toastY": null,
+      "btnY": 299
+     },
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Put phone away",
+      "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+      "toast": false,
+      "toastY": null,
+      "btnY": 509
+     },
+     {
+      "text": "Next Season",
+      "by": "1991 · age 17\n😐 50\n📶 🔋\nDanny Okafor-W",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+      "toast": false,
+      "toastY": null,
+      "btnY": 574
+     }
+    ],
+    "boundary": false
+   },
+   "apps": [
+    {
+     "id": "messages",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 💬 Messages ❤️ Mum 1990 Hi love, haven't heard from you in weeks. Everything ok? Call me when you can. 🤙 Best mate 1990 Went past your old house today. New people have painted the door red. Thought you should know. 💬 Groundskeeper 1990 Found a wallet in the car par",
+     "shot": "c320-026-phone-messages-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "Groundskeeper",
+        "byCls": "text-xs font-black truncate",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "Groundskeeper\n1990",
+        "byCls": "flex items-center justify-between gap-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n💬 Mess",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "❤️ Mum 1990 Hi love, haven't heard from you in weeks. Everything ok? C",
+      "🤙 Best mate 1990 Went past your old house today. New people have pain",
+      "💬 Groundskeeper 1990 Found a wallet in the car park with 800 quid ins",
+      "Put phone away"
+     ],
+     "clicked": "❤️ Mum 1990 Hi love, haven't heard from you in weeks. Everything ok? C",
+     "after": "1991 · age 17 😐 50 📶 🔋 ‹ Chats ❤️ Mum Where you stand: Fine Hi love, haven't heard from you in weeks. Everything ok? Call me when you can. Call her tonightLeave it on read Put phone away",
+     "shot2": "c320-027-phone-messages-act-s0.jpg"
+    },
+    {
+     "id": "contacts",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 👥 Contacts ❤️ Mum Answers on the first ring Fine 🧔 Dad Watched every minute you ever played New 🧓 Grandad Shouts at the telly on your behalf New 🤙 Best mate Knew you before any of this Fine 💼 Your agent Always half a deal ahead of you New 📋 The gaffer Picks the",
+     "shot": "c320-028-phone-contacts-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "Grandad",
+        "byCls": "block text-xs font-black truncate",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "Grandad",
+        "byCls": "block text-xs font-black truncate",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n👥 Cont",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "❤️ Mum Answers on the first ring Fine",
+      "🧔 Dad Watched every minute you ever played New",
+      "🧓 Grandad Shouts at the telly on your behalf New",
+      "🤙 Best mate Knew you before any of this Fine",
+      "💼 Your agent Always half a deal ahead of you New",
+      "📋 The gaffer Picks the team, picks his words New",
+      "🦁 Club captain Runs the dressing room New",
+      "🩹 Club physio Knows your body better than you New",
+      "🏋️ Fitness coach Owns the sadistic clipboard New",
+      "👴 Old youth coach Still calls you kid New",
+      "🧺 Kit man Has seen forty years of you lot New",
+      "Put phone away"
+     ],
+     "clicked": "🦁 Club captain Runs the dressing room New",
+     "after": "1991 · age 17 😐 50 📶 🔋 ‹ Contacts 🦁 Club captain 🦁 Club captain You have not spoken yet MESSAGE THEM ABOUT Ask how the group isAsk about the new signing Put phone away",
+     "shot2": "c320-029-phone-contacts-act-s0.jpg"
+    },
+    {
+     "id": "news",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 📰 SportsFeed World football. Nothing about you in here. Quiet window. Check back after the season. Put phone away",
+     "shot": "c320-030-phone-news-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n📰 Spor",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "column",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🗞️ The Column 🧐 Ottoline Pemberton Reserving judgement He has written about you since the day you turned pro. He has not filed anything about you yet. Play a season. Put phone away",
+     "shot": "c320-031-phone-column-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+        "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+        "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+        "byCls": "rounded-2xl bg-white/5 border border-white/10 p-3 ",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+        "byCls": "rounded-2xl bg-white/5 border border-white/10 p-3 ",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🗞️ The",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "bank",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-032-phone-bank-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "Put phone away"
+     ]
+    },
+    {
+     "id": "market",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-033-phone-market-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "Put phone away"
+     ]
+    },
+    {
+     "id": "shop",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-034-phone-shop-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     },
+     "cat": "Save half",
+     "catShot": "c320-035-phone-shopcat-s0.jpg",
+     "bought": null,
+     "nw": [
+      0,
+      0
+     ],
+     "buyShot": "c320-036-phone-bought-s0.jpg"
+    },
+    {
+     "id": "arcade",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-037-phone-arcade-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "cards",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-038-phone-cards-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "social",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-039-phone-social-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "player",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-040-phone-player-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "peaks",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": null,
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "life",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": null,
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4",
+        "toast": false,
+        "toastY": null,
+        "btnY": 149
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💷 Savings\npays 2.5% a season, never los",
+        "byCls": "rounded-2xl border border-emerald-500/25 bg-emeral",
+        "toast": false,
+        "toastY": null,
+        "btnY": 299
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover",
+        "toast": false,
+        "toastY": null,
+        "btnY": 509
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente",
+        "toast": false,
+        "toastY": null,
+        "btnY": 574
+       }
+      ],
+      "boundary": false
+     }
+    }
+   ],
+   "interact": 13,
+   "closed": {
+    "ok": true,
+    "tried": [
+     "‹ Home",
+     "Escape"
+    ]
+   },
+   "scroll": {
+    "y0": 0,
+    "y1": 0
+   },
+   "saveChanged": false
+  }
+ ],
+ "reloads": [
+  {
+   "why": "step 6 in season_summary",
+   "step": 5,
+   "same": true,
+   "phaseBefore": "season_summary",
+   "phaseAfter": "season_summary",
+   "lenBefore": 14960,
+   "lenAfter": 14960,
+   "shot": null,
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Training Drill ready 📱 Phone 3 unread Danny Okafor-Whitfield CM · Age 18 · Nigeria 🚪 Retire 🔄 New Career 57 OVR POT 80 €490k Net Worth €10k/wk Wage €2M Value CAREER TIMELINE A 16y Enyimba Youth"
+  },
+  {
+   "why": "final",
+   "step": 25,
+   "same": true,
+   "phaseBefore": "playing",
+   "phaseAfter": "playing",
+   "lenBefore": 13318,
+   "lenAfter": 13318,
+   "shot": null,
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Starter most ",
+      "by": "Next Season\n📺\n18\nAGE",
+      "byCls": "flex items-center gap-3 max-[359px]:gap-2 fixed bo",
+      "toast": false,
+      "toastY": null,
+      "btnY": 513
+     }
+    ],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Training Drill ready 📱 Phone 3 unread Danny Okafor-Whitfield CM · Age 18 · Nigeria 🚪 Retire 🔄 New Career 57 OVR POT 80 €490k Net Worth €2k/wk Wage €2M Value CAREER TIMELINE A 16y Enyimba Youth "
+  }
+ ],
+ "errors": [
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 3,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 5,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 25,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "phase": "newspaper",
+   "age": 18,
+   "ev": "[\"THE COLUMN: Ottoline Pemberton Says The Argument About Danny Okafor-Whitfield Is Over\",\"Danny Okafor-Whitfield Booed By Own Fans After Another Disappointing Display\"]"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":200,\"cooldown\":99,\"emoji\":\"🪞\",\"title\":\"Who Are You, Really?\",\"description\":\"Teammates, journalists and fans keep asking the same question: what is your deal? Time to decide what kind of player, and person, you are. This shapes your whole career.\",\"category\":\"life\",\"choices\":[{\"label\":\"The Showman\",\"emoji\":\"🎭\",\"color\":\"bg-pink-600\",\"consequence\":\"Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals sting\"},{\"label\":\"Ice Cold\",\"emoji\":\"🧊\",\"color\":\"bg-blue-600\",\"consequence\":\"Unshakeable: steadier morale, trusted by sponsors, slower follower growth\"},{\"label\":\"The "
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":224,\"cooldown\":2,\"emoji\":\"🦅\",\"title\":\"Mascot Beef\",\"description\":\"The club mascot challenged you to a race at halftime and has been talking trash on the club's official account all week.\",\"category\":\"life\",\"choices\":[{\"label\":\"Race the mascot\",\"emoji\":\"🏃\",\"color\":\"bg-amber-600\",\"consequence\":\"70%: win, +400k followers. 30%: lose to a person in a giant bird suit\"},{\"label\":\"Ignore the bird\",\"emoji\":\"🙄\",\"color\":\"bg-muted\",\"consequence\":\"The mascot declares victory by forfeit\"}]}"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":230,\"cooldown\":99,\"emoji\":\"👟\",\"title\":\"The Cursed Boots\",\"description\":\"Your new limited-edition boots have not seen a single win. Seven matches. The kit man refuses to touch them. He crosses himself near your locker.\",\"category\":\"life\",\"choices\":[{\"label\":\"Keep wearing them: superstition is fake\",\"emoji\":\"🧪\",\"color\":\"bg-red-600\",\"consequence\":\"Science! The curse saga continues next season\"},{\"label\":\"Burn them in the parking lot\",\"emoji\":\"🔥\",\"color\":\"bg-amber-600\",\"consequence\":\"Morale +5, sponsor mildly concerned, the video goes viral\"}]}"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":26,\"emoji\":\"📈\",\"title\":\"Crypto Tip!\",\"description\":\"A friend tips you on a crypto investment. High risk, high reward.\",\"category\":\"life\",\"choices\":[{\"label\":\"Invest €200k\",\"emoji\":\"🪙\",\"color\":\"bg-amber-600\",\"consequence\":\"Could go 10x (+€2M), double (+€200k) or crash (-€200k)\"},{\"label\":\"Stay away from crypto\",\"emoji\":\"✋\",\"color\":\"bg-muted\",\"consequence\":\"Smart move? Or missed opportunity?\"}]}"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":228,\"cooldown\":99,\"emoji\":\"⛳\",\"title\":\"The Golf Bug\",\"description\":\"A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind.\",\"category\":\"life\",\"choices\":[{\"label\":\"Embrace the golf life\",\"emoji\":\"⛳\",\"color\":\"bg-emerald-600\",\"consequence\":\"Morale +8, Pace -1 next season (cart life)\"},{\"label\":\"Delete the tee time app\",\"emoji\":\"🗑️\",\"color\":\"bg-muted\",\"consequence\":\"Focus preserved. The putters stay in the garage\"}]}"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":228,\"cooldown\":99,\"emoji\":\"⛳\",\"title\":\"The Golf Bug\",\"description\":\"A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind.\",\"category\":\"life\",\"choices\":[{\"label\":\"Embrace the golf life\",\"emoji\":\"⛳\",\"color\":\"bg-emerald-600\",\"consequence\":\"Morale +8, Pace -1 next season (cart life)\"},{\"label\":\"Delete the tee time app\",\"emoji\":\"🗑️\",\"color\":\"bg-muted\",\"consequence\":\"Focus preserved. The putters stay in the garage\"}]}"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":228,\"cooldown\":99,\"emoji\":\"⛳\",\"title\":\"The Golf Bug\",\"description\":\"A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind.\",\"category\":\"life\",\"choices\":[{\"label\":\"Embrace the golf life\",\"emoji\":\"⛳\",\"color\":\"bg-emerald-600\",\"consequence\":\"Morale +8, Pace -1 next season (cart life)\"},{\"label\":\"Delete the tee time app\",\"emoji\":\"🗑️\",\"color\":\"bg-muted\",\"consequence\":\"Focus preserved. The putters stay in the garage\"}]}"
+  }
+ ],
+ "stuck": [],
+ "notes": [
+  {
+   "kind": "season-press",
+   "pre": {
+    "age": 16,
+    "ovr": 52,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.1,
+    "club": "Enyimba Youth",
+    "years": 2
+   },
+   "post": {
+    "phase": "contract_offer",
+    "age": 17,
+    "ovr": 56,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.8,
+    "club": "Enyimba Youth",
+    "years": 2
+   }
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "▶ Kick off",
+   "why": "week",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"4\"]').first()"
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "⏭ Sim the rest",
+   "why": "week",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"6\"]').first()"
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "Back to the papers",
+   "why": "week",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "kind": "week",
+   "ok": true,
+   "clicks": [
+    "▶ Kick off",
+    "⏭ Sim the rest",
+    "Back to the papers"
+   ],
+   "end": null
+  },
+  {
+   "kind": "season-press",
+   "pre": {
+    "age": 17,
+    "ovr": 56,
+    "nw": 0,
+    "wage": 10402,
+    "val": 0.8,
+    "club": "Red Star Belgrade",
+    "years": 4
+   },
+   "post": {
+    "phase": "newspaper",
+    "age": 18,
+    "ovr": 57,
+    "nw": 0.49,
+    "wage": 10402,
+    "val": 1.5,
+    "club": "Red Star Belgrade",
+    "years": 3
+   }
+  }
+ ],
+ "shots": [
+  "c320-001-create-empty.jpg",
+  "c320-002-create-rolled.jpg",
+  "c320-003-create-rolled-full.jpg",
+  "c320-004-landing-after-begin.jpg",
+  "c320-005-ph-youth-1.jpg",
+  "c320-006-ph-contract_offer-1.jpg",
+  "c320-007-ph-contract_offer-2.jpg",
+  "c320-008-ph-playing-1.jpg",
+  "c320-009-hub-s0-top.jpg",
+  "c320-010-hub-s0-full.jpg",
+  "c320-011-ambition-s0.jpg",
+  "c320-012-ambition-picked-s0.jpg",
+  "c320-013-preseason-s0.jpg",
+  "c320-014-squad-s0.jpg",
+  "c320-015-programme-s0.jpg",
+  "c320-016-programme-tile-s0.jpg",
+  "c320-017-programme-opt-s0.jpg",
+  "c320-018-attributes-s0.jpg",
+  "c320-019-ratings-s0.jpg",
+  "c320-020-story-s0.jpg",
+  "c320-021-trophy-s0.jpg",
+  "c320-022-training-s0.jpg",
+  "c320-023-training-menu-s0.jpg",
+  "c320-024-training-result-s0.jpg",
+  "c320-025-phone-s0.jpg",
+  "c320-026-phone-messages-s0.jpg",
+  "c320-027-phone-messages-act-s0.jpg",
+  "c320-028-phone-contacts-s0.jpg",
+  "c320-029-phone-contacts-act-s0.jpg",
+  "c320-030-phone-news-s0.jpg",
+  "c320-031-phone-column-s0.jpg",
+  "c320-032-phone-bank-s0.jpg",
+  "c320-033-phone-market-s0.jpg",
+  "c320-034-phone-shop-s0.jpg",
+  "c320-035-phone-shopcat-s0.jpg",
+  "c320-036-phone-bought-s0.jpg",
+  "c320-037-phone-arcade-s0.jpg",
+  "c320-038-phone-cards-s0.jpg",
+  "c320-039-phone-social-s0.jpg",
+  "c320-040-phone-player-s0.jpg",
+  "c320-041-final-hub-full.jpg"
+ ],
+ "scroll": [],
+ "auditCount": 48,
+ "landing": {
+  "atBegin": {
+   "y": 1852,
+   "docH": 14980
+  },
+  "after": {
+   "y": 193,
+   "docH": 15051,
+   "nameTop": 12,
+   "nameText": "Danny Okafor-Whitfield",
+   "innerH": 640,
+   "firstVisibleHeading": "Live"
+  }
+ },
+ "created": {
+  "nat": "Nigeria🇳🇬",
+  "pos": "Central Mid (CM)",
+  "era": "Early 90s (1990 start)",
+  "phase": "youth",
+  "age": 16,
+  "club": "Enyimba Youth",
+  "ovr": 52,
+  "pot": 80
+ },
+ "toastHits": 5,
+ "toastHitList": [
+  {
+   "label": "phase random_events #1",
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "🧘 Stay off social media",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "🧘 Stay off social media",
+     "byCls": "group toast group-[.toaster]:bg-background group-[",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ]
+  },
+  {
+   "label": "phase random_events #2",
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "Fame comes easy: followers grow 60% fast",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Fame comes easy: followers grow 60% fast",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ]
+  },
+  {
+   "label": "phase random_events #3",
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "The mascot declares victory by forfeit",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "The mascot declares victory by forfeit",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ]
+  },
+  {
+   "label": "phase random_events #4",
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "Morale +5, sponsor mildly concerned, the",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Morale +5, sponsor mildly concerned, the",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ]
+  },
+  {
+   "label": "phase random_events #5",
+   "covered": [
+    {
+     "text": "🚪 Retire",
+     "by": "Smart move? Or missed opportunity?",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Smart move? Or missed opportunity?",
+     "byCls": "",
+     "toast": true,
+     "toastY": 16,
+     "btnY": 27
+    }
+   ]
+  }
+ ],
+ "final": {
+  "phase": "playing",
+  "age": 18,
+  "senior": 1,
+  "club": "Coventry City",
+  "ovr": 57,
+  "steps": 26,
+  "secs": 102
+ },
+ "finalText": "🏋️\nTraining\nDrill ready\n📱\nPhone\n3\nunread\nDanny Okafor-Whitfield\n\nCM · Age 18 · \nNigeria\n\n🚪 Retire\n🔄 New Career\n57\nOVR\nPOT 80\n€490k\nNet Worth\n€2k/wk\nWage\n€2M\nValue\nCAREER TIMELINE\nA\n16y\nEnyimba Youth\nYouth Academy\nA\n17y\nEnyimba Youth\nYouth Academy\n92\n18y\nRed Star Belgrade\n5.6\nOVR 56\n8A · 1G · 2As\nCO\nCoventry City\nPremier League · 2yr left · €2k/wk · €2M\nCM\n1992/93\n👥 Squad\nBy role\nThe plan: Starter most weeks\nOn our ratings\n2nd\nof 8 midfielders\n🎯 Season target\nChoose a personal challenge for next season\n🏃 Preseason plan\nBalanced, or choose your next-season workload\n📖 Record book\nYour best seasons and every club spell\n8 senior appearances · 1 club spell\nYour next season\nRoles, contracts, playing time and your comeback\n🎙️ Press room\nAnswer for your season\n50/100\n💰 FINANCES & LIFESTYLE\n€490k\nNet Worth\n🏚️ Humble\nLifestyle\n970k\n📱 Followers\n€2k/wk\nWeekly Wage\nShow money in\n€ EUR\n£ GBP\n$ USD\nR$ BRL\nMX$ MXN\n¥ JPY\n₹ INR\nA$ AUD\n💸 Costs: €0.1M/yr\n🕴️ Agent fees: €0.1M total\n🎭 The Showman\nMorale\n65\nPopularity\n10\n🏠 MY LIFE & MONEY\n0 things owned\n€490k\nin the account\n€0k\nsavings\n€0k\ninvested\nOpen your phone\nBank, market, everything you can buy, and the card school\nATTRIBUTES\nPace\nAcceleration 54\n54\nShooting\nFinishing 52\n52\nPassing\nVision 60\n60\nDribbling\nBall Control 58\n58\nDefending\nMarking 58\n58\nPhysical\nStrength 61\n61\nFull attributes\n180 cm · 75 kg · every number under the six\nCAREER STATS\n\nOnly stats kept in your season records are shown.\n\n26\nApps\n3\nGoals\n7\nAssists\n0\nTrophies\n🔥 Derby history\nTROPHY CABINET\n\nTap a trophy to see the seasons behind it.\n\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\n🏆 AWARDS\n🏆 Player of the Month\n INTERNATIONAL CAREER\n0\nCaps\n0\nGoals\n0\nAssists\n🗂️\nTournaments\n1 played out\n🏆\nAFCON 1992\nMorocco won it\nLATEST EVENTS\n📈 Ratings\n📖 Career Story\n📺 Season replays\n›\n⛳ Fully golf-pilled. Your happy place has 18 holes\n›\n📤 Red Star Belgrade have put you on the transfer list.\n›\n✍️ Signed with Coventry City \n (2yr, €2k/wk) · Agent fee: €0.1M\nNext Season\n📺\n18\nAGE"
+}

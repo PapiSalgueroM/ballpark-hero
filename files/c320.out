@@ -1,0 +1,16 @@
+[11s] created Nigeria🇳🇬/Central Mid (CM)/Early 90s (1990 start) -> youth age 16 at Enyimba Youth
+[17s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 494->308
+[18s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 308->308
+[21s] explore squad-s0: 👥 Squad By role The plan: Squad player On our ratings 4th o -> closed true via ← Back/Escape scroll 308->308
+[24s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 308->308
+[26s] explore attributes-s0: Full attributes 180 cm · 75 kg · every number under the six -> closed true via ← Back scroll 1293->193
+[28s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 2029->2029
+[30s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 2029->2029
+[32s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1653->1653
+[44s] explore training-s0: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[62s] explore phone-s0: 📱 Phone 3 unread -> closed true via ‹ Home/Escape scroll 0->0
+[81s] reload (step 6 in season_summary): same=true phase season_summary->season_summary
+[102s] target reached: 1 senior seasons
+[105s] reload (final): same=true phase playing->playing
+[105s] done: {"phase":"playing","age":18,"senior":1,"club":"Coventry City","ovr":57,"steps":26,"secs":102} shots=41 audits=34 errors=5 pageErrors=0 stuck=0 traps=0
+WALK c320 FINISHED

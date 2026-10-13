@@ -1,0 +1,144 @@
+f1280b 1280x900: 163 steps; phases {"youth":1,"contract_offer":2,"playing":6,"newspaper":9,"season_summary":8,"ballon_dor":26,"international_debut":2,"world_cup":13,"social_media_action":17,"random_events":44,"transfer_window":25,"rivalry_event":7,"moral_dilemma":3}
+audited screens 82; screens with a toast over a button 43
+  phase youth #1: "📱
+2
+unread" (y 824) under toast "Joined Nice Youth!" (toast top 815); "Retire" (y 834) under toast "Joined Nice Youth!" (toast top 815)
+  phase contract_offer #1: "📱
+3
+unread" (y 824) under toast "Joined Nice Youth!" (toast top 815)
+  phase playing #1: "📱
+3
+unread" (y 824) under toast "Signed with Monaco!" (toast top 815); "📺
+Week by week
+NEW" (y 834) under toast "Signed with Monaco!" (toast top 815)
+  phase social_media_action #2: "📱
+3
+unread" (y 824) under toast "🧘 Stay off social media" (toast top 815)
+  phase random_events #1: "📱
+3
+unread" (y 824) under toast "🧘 Stay off social media" (toast top 815)
+  phase random_events #2: "🏋️
+Drill ready" (y 756) under toast "Pure wildcard: cult following, chaos bon" (toast top 795); "📱
+3
+unread" (y 824) under toast "Pure wildcard: cult following, chaos bon" (toast top 795)
+  phase random_events #3: "🏋️
+Drill ready" (y 756) under toast "Pure wildcard: cult following, chaos bon" (toast top 795); "📱
+3
+unread" (y 824) under toast "Pure wildcard: cult following, chaos bon" (toast top 795)
+  phase random_events #4: "📱
+3
+unread" (y 824) under toast "-€30k, Morale +7, instant legend status" (toast top 815)
+  phase random_events #7: "🏋️
+Drill ready" (y 756) under toast "Could go 10x (+€2M), double (+€200k) or " (toast top 795); "📱
+3
+unread" (y 824) under toast "Could go 10x (+€2M), double (+€200k) or " (toast top 795)
+  phase transfer_window #1: "📱
+3
+unread" (y 824) under toast "Followers +600k, confidence is a haircut" (toast top 815)
+  phase transfer_window #2: "📱
+3
+unread" (y 824) under toast "Followers +600k, confidence is a haircut" (toast top 815); "📖 Career Story" (y 834) under toast "Followers +600k, confidence is a haircut" (toast top 815); "📺 Season replays" (y 834) under toast "Followers +600k, confidence is a haircut" (toast top 815)
+  phase playing #2: "🏋️
+Drill ready" (y 756) under toast "No clubs are interested right now. You m" (toast top 795); "📱
+3
+unread" (y 824) under toast "No clubs are interested right now. You m" (toast top 795); "📺
+Week by week
+NEW" (y 834) under toast "No clubs are interested right now. You m" (toast top 795)
+  phase newspaper #2: "🏋️
+Drill ready" (y 756) under toast "No clubs are interested right now. You m" (toast top 795); "📱
+3
+unread" (y 824) under toast "No clubs are interested right now. You m" (toast top 795)
+  phase season_summary #2: "🏋️
+Drill ready" (y 756) under toast "No clubs are interested right now. You m" (toast top 795); "📱
+3
+unread" (y 824) under toast "No clubs are interested right now. You m" (toast top 795)
+  phase random_events #8: "📱
+3
+unread" (y 824) under toast "😈 Troll your rival on social media" (toast top 815)
+  phase random_events #9: "📱
+3
+unread" (y 824) under toast "No cuts at all, no wage boost, no string" (toast top 815)
+  phase random_events #10: "🏋️
+Drill ready" (y 756) under toast "Net worth -€800k, Followers +500k, Popul" (toast top 795); "📱
+3
+unread" (y 824) under toast "Net worth -€800k, Followers +500k, Popul" (toast top 795)
+  phase random_events #11: "🏋️
+Drill ready" (y 756) under toast "Net worth -€90k, Popularity +8, Integrit" (toast top 795); "📱
+3
+unread" (y 824) under toast "Net worth -€90k, Popularity +8, Integrit" (toast top 795)
+  phase random_events #12: "📱
+3
+unread" (y 824) under toast "❤️ Announce charity work" (toast top 815)
+  phase random_events #18: "🏋️
+Drill ready" (y 756) under toast "He softens for good. Morale -4: the dres" (toast top 776); "📱
+3
+unread" (y 824) under toast "He softens for good. Morale -4: the dres" (toast top 776)
+  phase random_events #19: "📱
+3
+unread" (y 824) under toast "Popularity +4, Followers +0.4M" (toast top 815)
+  phase random_events #20: "📱
+3
+unread" (y 824) under toast "Popularity +4, Followers +0.4M" (toast top 815)
+  phase random_events #21: "📱
+3
+unread" (y 824) under toast "Followers +1.9M, Popularity +11, Morale " (toast top 815)
+  phase random_events #22: "📱
+3
+unread" (y 824) under toast "Shooting +1 next season, Morale +3" (toast top 815)
+  phase random_events #23: "📱
+3
+unread" (y 824) under toast "Shooting +1 next season, Morale +3" (toast top 815)
+  phase random_events #24: "📱
+3
+unread" (y 824) under toast "😈 Troll your rival on social media" (toast top 815)
+  phase random_events #28: "📱
+3
+unread" (y 824) under toast "50%: board backs you · 50%: board backs " (toast top 815)
+  phase random_events #29: "📱
+3
+unread" (y 824) under toast "Popularity +10, Social media +50k" (toast top 815)
+  phase random_events #30: "📱
+3
+unread" (y 824) under toast "Popularity +10, Social media +50k" (toast top 815)
+  phase random_events #31: "📱
+3
+unread" (y 824) under toast "Popularity +10, Social media +50k" (toast top 815)
+  phase random_events #32: "📱
+3
+unread" (y 824) under toast "Popularity +10, Social media +50k" (toast top 815)
+  phase random_events #33: "📱
+3
+unread" (y 824) under toast "❤️ Announce charity work" (toast top 815)
+  phase random_events #34: "🏋️
+Drill ready" (y 756) under toast "Followers +200k, Integrity -1, the crayo" (toast top 795); "📱
+3
+unread" (y 824) under toast "Followers +200k, Integrity -1, the crayo" (toast top 795)
+  phase moral_dilemma #1: "📱
+3
+unread" (y 824) under toast "❤️ Announce charity work" (toast top 815)
+  phase moral_dilemma #2: "📱
+3
+unread" (y 824) under toast "❤️ Announce charity work" (toast top 815)
+  phase random_events #37: "🏋️
+Drill ready" (y 756) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795); "📱
+3
+unread" (y 824) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795)
+  phase random_events #38: "🏋️
+Drill ready" (y 756) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795); "📱
+3
+unread" (y 824) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795)
+  phase random_events #39: "🏋️
+Drill ready" (y 756) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795); "📱
+3
+unread" (y 824) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795)
+  phase random_events #40: "🏋️
+Drill ready" (y 756) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795); "📱
+3
+unread" (y 824) under toast "Sponsor income +€300k, Popularity +2, th" (toast top 795)
+  phase random_events #41: "🏋️
+Drill ready" (y 756) under toast "Integrity +6, Morale +4, he gets a prope" (toast top 795); "📱
+3
+unread" (y 824) under toast "Integrity +6, Morale +4, he gets a prope" (toast top 795)
+page errors 0; stuck 0
+[214s] done: {"phase":"playing","age":23,"senior":6,"club":"Liverpool","ovr":76,"steps":164,"secs":211} shots=41 audits=80 errors=10 pageErrors=0 stuck=0 traps=0
+WALK f1280b FINISHED

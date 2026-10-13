@@ -1,0 +1,15 @@
+e390 390x844: 134 steps; phases {"youth":1,"contract_offer":2,"playing":7,"newspaper":11,"season_summary":9,"ballon_dor":27,"social_media_action":18,"random_events":27,"transfer_window":19,"rivalry_event":7,"moral_dilemma":4,"international_debut":1,"world_cup":1}
+audited screens 151; screens with a toast over a button 4
+  phase transfer_window #2: "🏆
+1
+Leagues" (y 49) under toast "Student of the game: manager and brand r" (toast top 47); "🏆
+0
+Cups" (y 49) under toast "Student of the game: manager and brand r" (toast top 47); "⭐
+0
+UCL" (y 49) under toast "Student of the game: manager and brand r" (toast top 47)
+  phase playing #2: "🚪 Retire" (y 32) under toast "Staying at Yokohama F. Marinos" (toast top 16); "🔄 New Career" (y 32) under toast "Staying at Yokohama F. Marinos" (toast top 16)
+  phase random_events #12: "🚪 Retire" (y 5) under toast "Passing +2 next season, Morale -2" (toast top 16); "🔄 New Career" (y 5) under toast "Passing +2 next season, Morale -2" (toast top 16)
+  phase random_events #13: "🚪 Retire" (y 5) under toast "Morale -8, Physical -1 from travel" (toast top 16); "🔄 New Career" (y 5) under toast "Morale -8, Physical -1 from travel" (toast top 16)
+page errors 0; stuck 0
+[294s] done: {"phase":"playing","age":24,"senior":7,"club":"Celtic","ovr":76,"steps":135,"secs":291} shots=41 audits=110 errors=11 pageErrors=0 stuck=0 traps=0
+WALK e390 FINISHED

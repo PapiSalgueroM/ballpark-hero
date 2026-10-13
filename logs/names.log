@@ -1,0 +1,13 @@
+== head 480x800
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 106, under ["🚪 Retire","🔄 New Career"]
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 389 of 106, under ["🚪 Retire","🔄 New Career"]
+== head 560x900
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 186, under ["🚪 Retire"]
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 389 of 186, under ["🚪 Retire","🔄 New Career"]
+== head 640x900
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 251, under ["🚪 Retire"]
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 251, under ["🚪 Retire","🔄 New Career"]
+== head 768x1024
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 379, under ["🚪 Retire"]
+playSoccerLanding: green at 480x800, 560x900, 640x900, 768x1024 (name), HEAD ONLY
