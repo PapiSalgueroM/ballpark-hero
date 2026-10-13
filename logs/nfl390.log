@@ -1,0 +1,60 @@
+[0s] walk nfl390b: http://localhost:4173/nfl-my-career at 390x844
+[24s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[24s] AUDIT hub draft trunc: With pick 158, the Baltimore Ravens select Maximilian Okonkwo-Smith. [149<301]
+[31s] AUDIT tile Trophy Case s0 trunc: Defensive Player of the Year [138<155]
+[35s] AUDIT tile Inbox s0 trunc: I cried the whole time they said your name. Your little cousins haven' [302<616]
+[94s] centre s1: games watched 2, first card 1s, 24s, closed true
+[103s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 77, team BAL, $1.2M x3, last {"year":2026,"team":"BAL","age":21,"ovr":75,"games":17,"awards":[],"teamResult":"Missed the playoffs","salary":1.2,"passYds":2761,"passTd":16,"ints":17}
+[103s] AUDIT hub s1 trunc: It is very large and very loud and the whole parking lot came out to l [149<458]
+[110s] AUDIT bank shop small: 🏡 Home 80x29
+[110s] AUDIT bank shop small: 🏎️ Rides 80x29
+[110s] AUDIT bank shop small: 📈 Invest 80x29
+[110s] AUDIT bank shop small: 💪 Body 80x29
+[110s] AUDIT bank shop small: 💎 Flex 80x29
+[110s] AUDIT bank shop small: ❤️ Family 80x29
+[110s] AUDIT bank shop small: $1.2M 57x29
+[110s] AUDIT bank shop small: $3.5M 59x29
+[110s] AUDIT bank shop small: $6M 48x29
+[110s] AUDIT bank shop small: $14M 53x29
+[110s] AUDIT bank shop small: $4M 48x29
+[110s] AUDIT bank shop small: $2.5M 59x29
+[118s] AUDIT tile Inbox s1 trunc: ACL's gone. Nine months. Sitting in this hospital bed wondering if I'l [302<512]
+[118s] AUDIT tile Inbox s1 trunc: Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]
+[118s] AUDIT tile Inbox s1 trunc: Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]
+[124s] AUDIT practice menu trunc: 📱 Replied to Teammate: Visit weekly. Karma up. [149<210]
+[241s] AUDIT event s2 trunc: Baltimore Ravens fall one game short of the Super Bowl [149<235]
+[242s] AUDIT event s2 trunc: Forty minutes, 63 questions, 61 answers of five words. The supercut ha [149<494]
+[244s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 79, team BAL, $1.2M x2, last {"year":2027,"team":"BAL","age":22,"ovr":77,"games":17,"awards":[],"teamResult":"Lost the Super Bowl","salary":1.2,"passYds":3858,"passTd":24,"ints":15,"poGames
+[244s] AUDIT hub s2 trunc: You cleaned out the passenger seat of his car in your head and went to [149<393]
+[250s] AUDIT tile Inbox s2 trunc: We'd love you on the pregame show the morning of the game. Ten minutes [302<482]
+[295s] AUDIT event s3 trunc: 💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]
+[296s] AUDIT event s3 trunc: They let him go back down and brought in somebody else. Your word did  [149<497]
+[298s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 81, team BAL, $1.2M x1, last {"year":2028,"team":"BAL","age":23,"ovr":79,"games":17,"awards":[],"teamResult":"Lost the Conference Championship","salary":1.2,"passYds":3391,"passTd":23,"ints
+[298s] AUDIT hub s3 trunc: He works marketing under your actual agent for 0.3M a year. He is thri [149<514]
+[299s] AUDIT tile Inbox s3 trunc: The whole street put your number up in their windows. The kids made a  [302<548]
+[334s] AUDIT extension s4 trunc: 📱 Replied to Neighbor: Stop by and sign it. Karma up. [149<237]
+[341s] season 4: hub, seasons on save 3 -> 3, year 2029, age 24, ovr 81, team BAL, $28.9M x5, last {"year":2028,"team":"BAL","age":23,"ovr":79,"games":17,"awards":[],"teamResult":"Lost the Conference Championship","salary":1.2,"passYds":3391,"passTd":23,"ints
+[385s] AUDIT event s5 trunc: 🧊 No ads, no posts. Just the tape. [149<153]
+[386s] AUDIT event s5 trunc: She said no on the jumbotron and the internet decided it was somehow y [149<450]
+[389s] season 5: hub, seasons on save 3 -> 4, year 2030, age 25, ovr 82, team BAL, $28.9M x4, last {"year":2029,"team":"BAL","age":24,"ovr":81,"games":17,"awards":[],"teamResult":"Lost in the Wild Card round","salary":28.9,"passYds":4647,"passTd":37,"ints":11
+[390s] AUDIT tile Inbox s5 trunc: The whole family wants playoff tickets. All fourteen of us. Your uncle [302<501]
+[434s] AUDIT event s6 trunc: One phone call and it turned out he was quoting a two year old joke. M [149<582]
+[436s] season 6: hub, seasons on save 4 -> 5, year 2031, age 26, ovr 83, team BAL, $28.9M x3, last {"year":2030,"team":"BAL","age":25,"ovr":82,"games":17,"awards":[],"teamResult":"Lost in the Wild Card round","salary":28.9,"passYds":3776,"passTd":30,"ints":13
+[436s] AUDIT hub s6 trunc: 0.6M in shirts with a taquito on them. Fanbase +12, and the gas statio [149<447]
+[437s] AUDIT tile Inbox s6 trunc: If we both win this weekend we see each other next round. Loser buys d [302<414]
+[463s] AUDIT centre fixtures again trunc: Washington Commanders [140<146]
+[466s] centre again: games watched 2, first card 0s, 23s, closed true
+[488s] DONE nfl390b: seasons undefined, events 17, curtains 9, page errors 0, console 3, stuck 5, shots 60
+[488s] event titles: The first real check x1 | Media day is a circus x1 | 25,000 autographs in eleven weeks x1 | Cutdown day x1 | Up on Saturday, down on Monday x1 | Voluntary means voluntary x1 | Your brother has business cards now x1 | He wants you to carry the ring x1 | The documentary crew wants your whole season x1 | Wings at scale x1 | The feud x1 | They got the job x1 | The gas station taquito x1
+[488s] EDGE {"test":"reload on an offseason card","before":"lifeA_media_day","after":{"id":"lifeA_media_day","title":"Media day is a circus"},"phase":null,"saveBefore":{"year":2027,"ids":["lifeA_media_day","lifeB_tradingCards","lifeC_final_cuts"],"at":0},"saveAfter":{"year":2027,"ids":["lifeA_media_day","lifeB_tradingCards","lifeC_final_cuts"],"at":0},"buttons":["Work the room and be the star of it Fame up, e
+[488s] EDGE {"test":"double tap on an offseason answer","before":{"morale":84,"fanbase":52,"health":100,"net":0,"ovr":81,"summer":{"year":2028,"ids":["lifeC_ps_elevation","lifeC_voluntary_spring","lifeB_siblingManager"],"at":0}},"after":{"morale":81,"fanbase":52,"health":100,"net":0,"ovr":81,"summer":{"year":2028,"ids":["lifeC_ps_elevation","lifeC_voluntary_spring","lifeB_siblingManager"],"at":1}},"outcome":"
+[488s] EDGE {"test":"back then forward at the hub","backUrl":"about:blank","same":true,"before":["Maximilian Okonkwo-Smith · QB","Baltimore Ravens","2031 · age 26","OVR 83","$28.9M x3","⭐ Starter"],"after":["Maximilian Okonkwo-Smith · QB","Baltimore Ravens","2031 · age 26","OVR 83","$28.9M x3","⭐ Starter"]}
+[488s] EDGE {"test":"hostile save: wrong types","create":false,"buttons":[],"newPageErrors":[],"shot":null,"stored":"{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""}
+[488s] EDGE {"test":"hostile save: not json","create":true,"buttons":["🏈 2026 The league as it is today. Full money, every current franchise","⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers","QB","RB","WR","TE","LB","CB"],"newPageErrors":[],"shot":null,"stored":"{{{garbage"}
+[488s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[488s] CONSOLE error TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)
+    at Object.Ny [as legacyOf] (http://loca
+[488s] CONSOLE error A page failed to render: TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)
+    at Object.Ny [

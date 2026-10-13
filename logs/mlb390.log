@@ -1,0 +1,74 @@
+[0s] walk mlb390b: http://localhost:4173/mlb-my-career at 390x844
+[4s] AUDIT first visit help small: SP 55x28
+[4s] AUDIT first visit help small: RP 55x28
+[4s] AUDIT first visit help small: C 55x28
+[4s] AUDIT first visit help small: 1B 55x28
+[4s] AUDIT first visit help small: 2B 55x28
+[4s] AUDIT first visit help small: 3B 55x28
+[4s] AUDIT first visit help small: SS 55x28
+[4s] AUDIT first visit help small: LF 55x28
+[4s] AUDIT first visit help small: CF 55x28
+[4s] AUDIT first visit help small: RF 55x28
+[4s] AUDIT first visit help small: DH 55x28
+[24s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[24s] AUDIT hub draft trunc: With pick 464, the Chicago Cubs select Maximilian Okonkwo-Smith. [149<292]
+[93s] centre s1: games watched 2, first card 1s, 24s, closed true
+[102s] AUDIT event s1 trunc: 💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]
+[103s] AUDIT event s1 trunc: One morning with the kids, one photo in the paper, and the rest of the [149<477]
+[104s] season 1: hub, seasons on save 0 -> 1, year 2029, age 24, ovr 78, team CHC, $0.8M x5, last {"year":2028,"team":"CHC","age":23,"ovr":77,"games":159,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.257,"hr":17,"rbi":64,"sb":6,"doubles":28,
+[104s] AUDIT hub s1 trunc: You came down with it and the replay ran for a week. Morale +6, fanbas [149<373]
+[110s] AUDIT bank shop small: 🏡 Home 80x29
+[110s] AUDIT bank shop small: 🏎️ Rides 80x29
+[110s] AUDIT bank shop small: 📈 Invest 80x29
+[110s] AUDIT bank shop small: 💪 Body 80x29
+[110s] AUDIT bank shop small: 💎 Flex 80x29
+[110s] AUDIT bank shop small: ❤️ Family 80x29
+[110s] AUDIT bank shop small: $1.5M 57x29
+[110s] AUDIT bank shop small: $4.5M 59x29
+[110s] AUDIT bank shop small: $8M 48x29
+[110s] AUDIT bank shop small: $20M 55x29
+[110s] AUDIT bank shop small: $5M 48x29
+[110s] AUDIT bank shop small: $2M 48x29
+[118s] AUDIT tile Inbox s1 trunc: CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]
+[118s] AUDIT tile Inbox s1 trunc: Your postgame comments about last night's umpiring went viral. We'd we [302<535]
+[118s] AUDIT tile Inbox s1 trunc: Our little league team made the town all-star game. The kids would los [302<521]
+[124s] AUDIT practice menu trunc: 📱 Replied to Unknown: Report and warn fans. Karma up. [149<246]
+[136s] AUDIT hub after practice trunc: Practice: Rough day. No gains this time. [149<172]
+[179s] season 2: hub, seasons on save 1 -> 2, year 2030, age 25, ovr 79, team CHC, $0.8M x4, last {"year":2029,"team":"CHC","age":24,"ovr":78,"games":156,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.262,"hr":19,"rbi":68,"sb":7,"doubles":29,
+[179s] AUDIT hub s2 trunc: Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in [149<307]
+[185s] AUDIT tile Inbox s2 trunc: Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]
+[230s] season 3: hub, seasons on save 2 -> 3, year 2031, age 26, ovr 81, team CHC, $0.8M x3, last {"year":2030,"team":"CHC","age":25,"ovr":79,"games":96,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.282,"hr":15,"rbi":37,"sb":4,"doubles":19,"
+[230s] AUDIT hub s3 trunc: You cut the paid session in half and stayed an extra hour taking free  [149<507]
+[231s] AUDIT tile Inbox s3 trunc: Built your case. Players with your service time and numbers, what they [302<653]
+[274s] AUDIT event s4 trunc: 👏 You posted a congrats for Emmett Ashford. Classy, and people notice [149<321]
+[275s] AUDIT event s4 trunc: You took him to dinner and told him where everything was. He got bette [149<488]
+[277s] season 4: hub, seasons on save 3 -> 4, year 2032, age 27, ovr 82, team CHC, $0.8M x2, last {"year":2031,"team":"CHC","age":26,"ovr":81,"games":158,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.285,"hr":21,"rbi":80,"sb":5,"doubles":39,
+[278s] AUDIT tile Inbox s4 trunc: We're arbitration eligible. We file a number, they file a number. Sett [302<545]
+[322s] AUDIT event s5 trunc: He does marketing under your actual agent for 0.3M a year. He is thriv [149<501]
+[324s] season 5: hub, seasons on save 4 -> 5, year 2033, age 28, ovr 82, team CHC, $0.8M x1, last {"year":2032,"team":"CHC","age":27,"ovr":82,"games":155,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.296,"hr":25,"rbi":91,"sb":6,"doubles":39,
+[325s] AUDIT tile Inbox s5 trunc: Hearing your side and the club are still apart. Anything on the record [302<518]
+[360s] AUDIT extension s6 trunc: 📱 Replied to Beat writer: No comment, love it here. [149<220]
+[367s] season 6: hub, seasons on save 5 -> 5, year 2033, age 28, ovr 82, team CHC, $16.5M x5, last {"year":2032,"team":"CHC","age":27,"ovr":82,"games":155,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.296,"hr":25,"rbi":91,"sb":6,"doubles":39,
+[367s] AUDIT hub s6 trunc: 🖊️ Extension signed: 4 more years at $16.5M a year. [149<225]
+[411s] AUDIT event s7 trunc: 🧊 No ads, no posts. Just the numbers. [149<171]
+[412s] AUDIT event s7 trunc: 0.2M of your own money for a second mold that actually has your jaw. M [149<575]
+[414s] season 7: hub, seasons on save 5 -> 6, year 2034, age 29, ovr 83, team CHC, $16.5M x4, last {"year":2033,"team":"CHC","age":28,"ovr":82,"games":162,"awards":["All-Star","Gold Glove"],"teamResult":"Lost the Wild Card series","salary":16.5,"avg":0.309,"h
+[415s] AUDIT tile Inbox s7 trunc: Tarp crew has pulled it four times this week, at 2am twice. The guys w [302<558]
+[459s] AUDIT event s8 trunc: Clean six days, chicken on the seventh. Net worth down 0.08M, health + [149<369]
+[462s] season 8: hub, seasons on save 6 -> 7, year 2035, age 30, ovr 83, team CHC, $16.5M x3, last {"year":2034,"team":"CHC","age":29,"ovr":83,"games":158,"awards":[],"teamResult":"Missed October","salary":16.5,"avg":0.282,"hr":24,"rbi":73,"sb":3,"doubles":40
+[463s] AUDIT tile Inbox s8 trunc: Your bobblehead night is next week. The face is... a choice. Want to s [302<489]
+[491s] centre again: games watched 2, first card 0s, 24s, closed true
+[514s] DONE mlb390b: seasons undefined, events 20, curtains 14, page errors 0, console 3, stuck 5, shots 60
+[514s] event titles: Home for the winter, a big leaguer x1 | The wall in the ninth x1 | Four hours, one folding chair x1 | September brings company x1 | Your number or theirs x1 | The mattress commercial x1 | Your brother printed business cards x1 | Kangaroo court x1 | A man in Ohio legally changed his name to yours x1 | The bobblehead does not look like you x1 | The due date lands in the middle of a ten game trip x1 | A country singer wants you in the video x1 | The 11pm spread problem x1 | The 40,000 dollar ask x1 | There is a raccoon living in the bullpen x1
+[514s] EDGE {"test":"reload on an offseason card","before":"pressDisaster","after":null,"phase":null,"saveBefore":{"year":2029,"ids":["pressDisaster"],"at":0},"saveAfter":null,"buttons":["Play the 2030 season","📺 Week by week","↺ Watch the 2029 season again","Plan your season","Start practice","📊 MY PLAYER OVR 79 CF, age 25, 0 rings","💰 THE BANK $0.4M $0.8M a year, 4 years left","📜 CAREER LOG 2 seasons .2
+[514s] EDGE {"test":"double tap on an offseason answer","before":{"morale":93,"fanbase":54,"health":89,"net":0.8,"ovr":81,"summer":{"year":2030,"ids":["mlbA_card_show"],"at":0}},"after":{"morale":100,"fanbase":67,"health":89,"net":0.84,"ovr":81,"summer":null},"outcome":""}
+[514s] EDGE {"test":"back then forward at the hub","backUrl":"about:blank","same":true,"before":["Maximilian Okonkwo-Smith · CF","Chicago Cubs","2035 · age 30","OVR 83","$16.5M x3","⭐ Everyday"],"after":["Maximilian Okonkwo-Smith · CF","Chicago Cubs","2035 · age 30","OVR 83","$16.5M x3","⭐ Everyday"]}
+[514s] EDGE {"test":"hostile save: wrong types","create":false,"buttons":[],"newPageErrors":[],"shot":null,"stored":"{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""}
+[514s] EDGE {"test":"hostile save: not json","create":true,"buttons":["⚾ 2026 The league as it is today. Full money, all 30 franchises.","⏪ 2004 throwback The 2004 league: the Expos in their last Montreal sum","SP","RP","C","1B","2B","3B"],"newPageErrors":[],"shot":null,"stored":"{{{garbage"}
+[514s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[514s] CONSOLE error TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)
+    at Object.We [as legacyOf] (http://loca
+[514s] CONSOLE error A page failed to render: TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)
+    at Object.We [

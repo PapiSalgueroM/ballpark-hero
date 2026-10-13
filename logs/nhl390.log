@@ -1,0 +1,56 @@
+[0s] walk nhl390b: http://localhost:4173/nhl-my-career at 390x844
+[22s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[22s] AUDIT hub draft trunc: With pick 61, the Colorado Avalanche select Maximilian Okonkwo-Smith. [149<306]
+[74s] AUDIT event s1 trunc: 🕊️ You shrugged it off on camera and called Cole Bergeron a good play [149<518]
+[75s] AUDIT event s1 trunc: Six hours of night vision footage and one genuinely unexplained bang a [149<569]
+[76s] season 1: hub, seasons on save 0 -> 1, year 2028, age 20, ovr 82, team COL, $0.9M x2, last {"year":2027,"team":"COL","age":19,"ovr":81,"games":82,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":15,"assists":47,"points":6
+[76s] AUDIT hub s1 trunc: You sat and waited like a pro. The goal stood and the building got twi [149<447]
+[83s] AUDIT bank shop small: 🏡 Home 80x29
+[83s] AUDIT bank shop small: 🏎️ Rides 80x29
+[83s] AUDIT bank shop small: 📈 Invest 80x29
+[83s] AUDIT bank shop small: 💪 Body 80x29
+[83s] AUDIT bank shop small: 💎 Flex 80x29
+[83s] AUDIT bank shop small: ❤️ Family 80x29
+[83s] AUDIT bank shop small: $1.5M 57x29
+[83s] AUDIT bank shop small: $4.5M 59x29
+[83s] AUDIT bank shop small: $8M 48x29
+[83s] AUDIT bank shop small: $20M 55x29
+[83s] AUDIT bank shop small: $5M 48x29
+[83s] AUDIT bank shop small: $2M 48x29
+[83s] AUDIT bank shop small: $0.8M 59x29
+[83s] AUDIT bank shop small: $2.5M 59x29
+[91s] AUDIT tile Inbox s1 trunc: CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]
+[91s] AUDIT tile Inbox s1 trunc: Your national team asked to borrow you for the World Juniors. Your cal [302<519]
+[91s] AUDIT tile Inbox s1 trunc: Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]
+[96s] AUDIT practice menu trunc: 📱 Replied to Unknown: Report and warn fans. Karma up. [149<246]
+[216s] AUDIT event s2 trunc: Maximilian Okonkwo-Smith puts up 56 assists from the blue line [149<273]
+[218s] AUDIT event s2 trunc: Twenty minutes of hockey school each way: which refs hold a grudge, wh [149<634]
+[219s] season 2: hub, seasons on save 1 -> 2, year 2029, age 21, ovr 84, team COL, $0.9M x1, last {"year":2028,"team":"COL","age":20,"ovr":82,"games":83,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":16,"assists":56,"points":7
+[219s] AUDIT hub s2 trunc: He built a rival chat within the hour and named it after himself. Fanb [149<363]
+[225s] AUDIT tile Inbox s2 trunc: Contract years get loud. Don't let the money talk get in your head. Pl [302<539]
+[260s] AUDIT extension s3 trunc: 📱 Replied to Veteran teammate: Thank him. [149<190]
+[267s] season 3: hub, seasons on save 2 -> 2, year 2029, age 21, ovr 84, team COL, $11.3M x5, last {"year":2028,"team":"COL","age":20,"ovr":82,"games":83,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":16,"assists":56,"points":7
+[267s] AUDIT hub s3 trunc: 🖊️ Extension signed: 4 more years at $11.3M a year. [149<224]
+[311s] AUDIT event s4 trunc: Six hours in a cart, 288 handshakes, 50k of your own money into the pr [149<566]
+[312s] season 4: hub, seasons on save 2 -> 3, year 2030, age 22, ovr 85, team COL, $11.3M x4, last {"year":2029,"team":"COL","age":21,"ovr":84,"games":83,"awards":["All-Star"],"teamResult":"Missed the playoffs","salary":11.3,"slate":84,"goals":18,"assists":55
+[313s] AUDIT tile Inbox s4 trunc: A few days off for the break. Your room is exactly how you left it, po [302<498]
+[358s] season 5: hub, seasons on save 3 -> 4, year 2031, age 23, ovr 87, team COL, $11.3M x3, last {"year":2030,"team":"COL","age":22,"ovr":85,"games":83,"awards":["All-Star","Masterton Nominee"],"teamResult":"Lost in Round 1","salary":11.3,"slate":84,"goals"
+[359s] AUDIT tile Inbox s5 trunc: Playoff money just hit. The trainers and equipment staff make a fracti [302<640]
+[398s] AUDIT event s6 trunc: 🪞 Cole Bergeron went 35G 42A 77P. You had the better year. Head to he [149<346]
+[399s] AUDIT event s6 trunc: Every home game there are twelve kids from a minor hockey team sitting [149<389]
+[401s] season 6: hub, seasons on save 4 -> 5, year 2032, age 24, ovr 89, team COL, $11.7M x4, last {"year":2031,"team":"COL","age":23,"ovr":87,"games":81,"awards":[],"teamResult":"Missed the playoffs","salary":11.3,"slate":84,"goals":23,"assists":66,"points":
+[401s] AUDIT hub s6 trunc: 0.06M, a free truck, and a line the student section now chants at you  [149<567]
+[402s] AUDIT tile Inbox s6 trunc: The stick company sent a new model. Try it in camp, or keep the old on [302<543]
+[427s] DONE nhl390b: seasons undefined, events 14, curtains 9, page errors 0, console 3, stuck 3, shots 60
+[427s] event titles: The room is haunted, apparently x1 | Your goal is under review x1 | The 38 year old winger x1 | The family group chat leaked x1 | Your name on a golf tournament x1 | A steakhouse with your name over the door x1 | The zamboni driver is your best friend now x1 | Your player tickets x1 | Expansion draft exposure x1 | The truck dealership ad x1
+[427s] EDGE {"test":"reload on an offseason card","before":"nhlA_vet_mentor","after":{"id":"nhlA_vet_mentor","title":"The 38 year old winger"},"phase":null,"saveBefore":{"year":2028,"ids":["nhlA_vet_mentor","nhlB_groupChatLeak"],"at":0},"saveAfter":{"year":2028,"ids":["nhlA_vet_mentor","nhlB_groupChatLeak"],"at":0},"buttons":["Ride with him every day Free education","Sleep in, drive yourself Rest first","Ask 
+[427s] EDGE {"test":"back then forward at the hub","backUrl":"about:blank","same":true,"before":["Maximilian Okonkwo-Smith · D","Colorado Avalanche","2032 · age 24","OVR 89","$11.7M x4","⭐ Top of the lineup"],"after":["Maximilian Okonkwo-Smith · D","Colorado Avalanche","2032 · age 24","OVR 89","$11.7M x4","⭐ Top of the lineup"]}
+[427s] EDGE {"test":"hostile save: wrong types","create":false,"buttons":[],"newPageErrors":[],"shot":null,"stored":"{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""}
+[427s] EDGE {"test":"hostile save: not json","create":true,"buttons":["🏒 2026 The league as it is today. Full money, all 32 franchises.","⏪ 2006-07 throwback The 30 team league of 2006-07: the Thrashers in At","C","LW","RW","D","G","🎲 Surprise me"],"newPageErrors":[],"shot":null,"stored":"{{{garbage"}
+[427s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[427s] CONSOLE error TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)
+    at Object.Se [as legacyOf] (http://loca
+[427s] CONSOLE error A page failed to render: TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)
+    at Object.Se [

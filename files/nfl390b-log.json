@@ -1,0 +1,3687 @@
+{
+ "tag": "nfl390b",
+ "SPORT": "nfl",
+ "W": 390,
+ "H": 844,
+ "SEED": 3202,
+ "POS": "QB",
+ "steps": [
+  {
+   "t": 6,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    644,
+    644,
+    185
+   ]
+  },
+  {
+   "act": "route 0"
+  },
+  {
+   "t": 9,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    129,
+    129,
+    129
+   ]
+  },
+  {
+   "t": 11,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    142,
+    142,
+    142
+   ]
+  },
+  {
+   "t": 13,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    142,
+    142,
+    142
+   ]
+  },
+  {
+   "t": 16,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    142,
+    142,
+    268
+   ]
+  },
+  {
+   "t": 22,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    268,
+    268,
+    268
+   ]
+  },
+  {
+   "t": 26,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 28,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 30,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    185,
+    185,
+    923
+   ]
+  },
+  {
+   "t": 32,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 34,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 37,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 68,
+   "act": "week by week",
+   "text": "📺 Week by week",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 70,
+   "act": "centre help got it",
+   "text": "Got it",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 71,
+   "act": "centre start",
+   "text": "▶ Kick off",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 71,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 77,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 84,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 92,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 93,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 97,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 102,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 103,
+   "act": "event option 1",
+   "text": "Buy the truck first Fanbase +3, net worth -0.3M",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 103,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 108,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 111,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 113,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    240,
+    197,
+    919
+   ]
+  },
+  {
+   "t": 115,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 117,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 121,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 122,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 201,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 232,
+   "act": "play season 2",
+   "text": "Play the 2027 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 237,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 241,
+   "act": "event option 1",
+   "text": "Answer everything in five words or less Meme, mystery",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 242,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 242,
+   "act": "event option 2",
+   "text": "Launch your own card brand Own the print run",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 243,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 243,
+   "act": "event option 2",
+   "text": "Keep your head down, it is a business Morale -2",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 244,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 249,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 253,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 284,
+   "act": "play season 3",
+   "text": "Play the 2028 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 289,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 291,
+   "act": "rivalry option",
+   "text": "💸 Send a check, skip it Net worth -$1M, Karma +3",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 294,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 296,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 297,
+   "act": "event option 0",
+   "text": "Show up for all of it Morale +5, health -2",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 297,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 298,
+   "act": "event option 1",
+   "text": "Real job, under a real agency Supervised, safer",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 298,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 302,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 333,
+   "act": "play season 4",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 334,
+   "act": "extension push",
+   "text": "Ask for more, once",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 336,
+   "act": "wheel spin",
+   "text": "Spin",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 340,
+   "act": "wheel continue",
+   "text": "Continue to the offers",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 341,
+   "act": "extension sign",
+   "text": "Sign it: 4 more years at $28.9M",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 344,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 375,
+   "act": "play season 5",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 380,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 382,
+   "act": "rivalry option",
+   "text": "🧊 Let the tape talk Morale +4",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 385,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 386,
+   "act": "event option 0",
+   "text": "Full production, jumbotron, everything Enormous, risky",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 386,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 387,
+   "act": "event option 1",
+   "text": "Football only, no house, no family Balanced deal",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 387,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 388,
+   "act": "event option 1",
+   "text": "Buy one and actually run it One store, real work",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 389,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 392,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 423,
+   "act": "play season 6",
+   "text": "Play the 2030 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 427,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 432,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 433,
+   "act": "event option 2",
+   "text": "Text him and squash it Peace, fans bored",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 434,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 434,
+   "act": "event option 2",
+   "text": "They pause it for a year Stability, quiet debt",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 435,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 435,
+   "act": "event option 2",
+   "text": "Sell taquito merch Monetize the myth",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 436,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 440,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 443,
+   "act": "centre start",
+   "text": "▶ Kick off",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 443,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 449,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 455,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 464,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 464,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 467,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 469,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 471,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    0,
+    0,
+    320
+   ]
+  },
+  {
+   "t": 473,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 475,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 477,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12899,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12233,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12382,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12382,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 12382,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect season",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 12365,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect showcase",
+   "t": 14
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 12151,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect draft day",
+   "t": 15
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 12635,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 17
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 12635,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 21
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 12445,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 158, the Baltimore Ravens select Maximilian Okonkwo-Smith. [149<301]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub draft",
+   "t": 24
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12015,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 25
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12074,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 27
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11707,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 29
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12598,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 31
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 33
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11610,
+   "bad": [],
+   "trunc": [
+    "I cried the whole time they said your name. Your little cousins haven' [302<616]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Inbox s0",
+   "t": 35
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff s1",
+   "t": 70
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 74
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 77
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 80
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 83
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review s1",
+   "t": 91
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures s1",
+   "t": 92
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 96
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 101
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 102
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11788,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "It is very large and very loud and the whole parking lot came out to l [149<458]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s1",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12015,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 108
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 110
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12474,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.2M 57x29",
+    "$3.5M 59x29",
+    "$6M 48x29",
+    "$14M 53x29",
+    "$4M 48x29",
+    "$2.5M 59x29"
+   ],
+   "buttonsInView": 16,
+   "where": "bank shop",
+   "t": 110
+  },
+  {
+   "overX": 0,
+   "scrollY": 240,
+   "docH": 11783,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s1",
+   "t": 112
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12598,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 114
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11818,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 116
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [
+    "ACL's gone. Nine months. Sitting in this hospital bed wondering if I'l [302<512]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]",
+    "I cried the whole time they said your name. Your little cousins haven' [302<616]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s1",
+   "t": 118
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12505,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Teammate: Visit weekly. Karma up. [149<210]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 19,
+   "where": "practice menu",
+   "t": 124
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12505,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Teammate: Visit weekly. Karma up. [149<210]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 201
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11835,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 236
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Baltimore Ravens fall one game short of the Super Bowl [149<235]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s2",
+   "t": 241
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11808,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s2",
+   "t": 241
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12261,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Forty minutes, 63 questions, 61 answers of five words. The supercut ha [149<494]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s2",
+   "t": 242
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12505,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You cleaned out the passenger seat of his car in your head and went to [149<393]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s2",
+   "t": 244
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12505,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You cleaned out the passenger seat of his car in your head and went to [149<393]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "programme open",
+   "t": 245
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12505,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You cleaned out the passenger seat of his car in your head and went to [149<393]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "programme menu",
+   "t": 246
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12014,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 248
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11836,
+   "bad": [],
+   "trunc": [
+    "We'd love you on the pregame show the morning of the game. Ten minutes [302<482]",
+    "ACL's gone. Nine months. Sitting in this hospital bed wondering if I'l [302<512]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]",
+    "I cried the whole time they said your name. Your little cousins haven' [302<616]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "tile Inbox s2",
+   "t": 250
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11863,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 289
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11999,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s3",
+   "t": 290
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11972,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 294
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12309,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s3",
+   "t": 295
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12313,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "They let him go back down and brought in somebody else. Your word did  [149<497]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s3",
+   "t": 296
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "He works marketing under your actual agent for 0.3M a year. He is thri [149<514]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s3",
+   "t": 298
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11892,
+   "bad": [],
+   "trunc": [
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "We'd love you on the pregame show the morning of the game. Ten minutes [302<482]",
+    "ACL's gone. Nine months. Sitting in this hospital bed wondering if I'l [302<512]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]",
+    "I cried the whole time they said your name. Your little cousins haven' [302<616]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s3",
+   "t": 299
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12537,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Neighbor: Stop by and sign it. Karma up. [149<237]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s4",
+   "t": 334
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12340,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Neighbor: Stop by and sign it. Karma up. [149<237]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "wheel s4",
+   "t": 335
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12479,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Neighbor: Stop by and sign it. Karma up. [149<237]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s4",
+   "t": 340
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11892,
+   "bad": [],
+   "trunc": [
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "We'd love you on the pregame show the morning of the game. Ten minutes [302<482]",
+    "ACL's gone. Nine months. Sitting in this hospital bed wondering if I'l [302<512]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]",
+    "I cried the whole time they said your name. Your little cousins haven' [302<616]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s4",
+   "t": 342
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11818,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 379
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11996,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s5",
+   "t": 380
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11933,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 384
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🧊 No ads, no posts. Just the tape. [149<153]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s5",
+   "t": 385
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12297,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "She said no on the jumbotron and the internet decided it was somehow y [149<450]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s5",
+   "t": 386
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11892,
+   "bad": [],
+   "trunc": [
+    "The whole family wants playoff tickets. All fourteen of us. Your uncle [302<501]",
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "We'd love you on the pregame show the morning of the game. Ten minutes [302<482]",
+    "ACL's gone. Nine months. Sitting in this hospital bed wondering if I'l [302<512]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s5",
+   "t": 390
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s6",
+   "t": 427
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s6",
+   "t": 432
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s6",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12261,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "One phone call and it turned out he was quoting a two year old joke. M [149<582]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s6",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "0.6M in shirts with a taquito on them. Fanbase +12, and the gas statio [149<447]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s6",
+   "t": 436
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11892,
+   "bad": [],
+   "trunc": [
+    "If we both win this weekend we see each other next round. Loser buys d [302<414]",
+    "The whole family wants playoff tickets. All fourteen of us. Your uncle [302<501]",
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "We'd love you on the pregame show the morning of the game. Ten minutes [302<482]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s6",
+   "t": 437
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff again",
+   "t": 442
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 446
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 449
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 452
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 455
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review again",
+   "t": 463
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12585,
+   "bad": [],
+   "trunc": [
+    "Washington Commanders [140<146]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures again",
+   "t": 463
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12015,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player end",
+   "t": 467
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank end",
+   "t": 469
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11947,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "tile Career Log end",
+   "t": 471
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12598,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case end",
+   "t": 473
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12316,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News end",
+   "t": 475
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11892,
+   "bad": [],
+   "trunc": [
+    "If we both win this weekend we see each other next round. Loser buys d [302<414]",
+    "The whole family wants playoff tickets. All fourteen of us. Your uncle [302<501]",
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "We'd love you on the pregame show the morning of the game. Ten minutes [302<482]",
+    "Watched you on TV Sunday. Still remember you at 14 refusing to run the [302<561]",
+    "Just got the locker next to yours. Any advice? Honestly kind of terrif [302<379]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox end",
+   "t": 477
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  },
+  {
+   "t": "error",
+   "at": 92,
+   "text": "TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)\n    at Object.Ny [as legacyOf] (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:262158)\n    at $y (http://localhost:4173/assets"
+  },
+  {
+   "t": "error",
+   "at": 92,
+   "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)\n    at Object.Ny [as legacyOf] (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:262158)\n    at $y (htt"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "id": "lifeC_first_check",
+   "text": "OFFSEASON, CARD 1 OF 1\n\nThe first real check\n\nYour rookie season is done and so is your first full year of game checks, and the taxes took more than you were ready for. Your agent knows an adviser who will sit down with you. Your cousins know a truck dealership.\n\nSit down and build a budget\nMorale +3\nBuy the truck first\nFanbase +3, net worth -0.3M\nSend a share of it home\nMorale +6, net worth -0.2M",
+   "opts": [
+    "Sit down and build a budget Morale +3",
+    "Buy the truck first Fanbase +3, net worth -0.3M",
+    "Send a share of it home Morale +6, net worth -0.2M"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     77,
+     77
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeA_media_day",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nMedia day is a circus\n\nFive thousand credentials, a man in a wedding dress proposing on live television, and a nine year old with better questions than anyone in the room. Kickoff is six days away.\n\nWork the room and be the star of it\nFame up, energy down\nAnswer everything in five words or less\nMeme, mystery\nHide behind the vets and study\nFocus over shine",
+   "opts": [
+    "Work the room and be the star of it Fame up, energy down",
+    "Answer everything in five words or less Meme, mystery",
+    "Hide behind the vets and study Focus over shine"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     79,
+     79
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeB_tradingCards",
+   "text": "OFFSEASON, CARD 2 OF 3\n\n25,000 autographs in eleven weeks\n\nA card company has the contract drawn up. Your wrist is already suspicious of this arrangement.\n\nSign all 25,000\nWrist money\nSign 5,000 and price them like art\nScarcity play\nLaunch your own card brand\nOwn the print run",
+   "opts": [
+    "Sign all 25,000 Wrist money",
+    "Sign 5,000 and price them like art Scarcity play",
+    "Launch your own card brand Own the print run"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     79,
+     79
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeC_final_cuts",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nCutdown day\n\nThe roster has to be down to the limit by the end of the day, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.\n\nCall him that night\nMorale +4\nTell the coaches they got it wrong\nCoin flip: morale +5 or morale -4\nKeep your head down, it is a business\nMorale -2",
+   "opts": [
+    "Call him that night Morale +4",
+    "Tell the coaches they got it wrong Coin flip: morale +5 or morale -4",
+    "Keep your head down, it is a business Morale -2"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     79,
+     79
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nQuinn Moreau's foundation asks you to co-host a free youth camp. Same field, same whistle, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n81\nVS\nQuinn Moreau\n81\n🤝 Co-host and split the bill\nFanbase +10, Net worth -$1M, Karma +8, the feud cools\n😉 Show up and talk trash all day\nFanbase +12, the feud heats up\n💸 Send a check, skip it\nNet worth -$1M, Karma +3"
+  },
+  {
+   "tag": "s3",
+   "id": "lifeC_ps_elevation",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nUp on Saturday, down on Monday\n\nThe team keeps calling the same practice squad kid up for game day and sending him back down the morning after. The rules only allow that so many times before they have to sign him for real or stop. The last one was last week. A coach asks what you think of him.\n\nVouch for him, loudly\nCoin flip: morale +7 or morale -3\nTell the truth: he is not ready yet\nMorale -2\nStay out of it\nNo change",
+   "opts": [
+    "Vouch for him, loudly Coin flip: morale +7 or morale -3",
+    "Tell the truth: he is not ready yet Morale -2",
+    "Stay out of it No change"
+   ],
+   "chose": 0,
+   "delta": {
+    "dbl": true
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeC_voluntary_spring",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nVoluntary means voluntary\n\nThe spring workouts are voluntary. It says so in the labor deal. The minicamp at the end of them is not, and skipping that one costs real money. Your trainer back home wants you with him until camp.\n\nShow up for all of it\nMorale +5, health -2\nSkip the voluntary part, report for minicamp\nMorale -3\nSkip all of it and pay the fines\nMorale -6, net worth -0.1M",
+   "opts": [
+    "Show up for all of it Morale +5, health -2",
+    "Skip the voluntary part, report for minicamp Morale -3",
+    "Skip all of it and pay the fines Morale -6, net worth -0.1M"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeB_siblingManager",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nYour brother has business cards now\n\nThey say MANAGER in a font he chose himself. He has already told two brands he speaks for you.\n\nHire him, full trust\nFamily on payroll\nReal job, under a real agency\nSupervised, safer\nSay no, buy him a truck\nA no with a bow",
+   "opts": [
+    "Hire him, full trust Family on payroll",
+    "Real job, under a real agency Supervised, safer",
+    "Say no, buy him a truck A no with a bow"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s4",
+   "extension": "Baltimore Ravens\nLUKEWARM\n\n$28.9M\n\nA YEAR\n\n4\n\nYEARS\n\n-25%\n\nVS MARKET\n\nIt is an offer. It is not a compliment.\n\nBefore you push: Raise accepted 0% · Held 70% · Withdrawn 30%\n\nSign it: 4 more years at $28.9M\nAsk for more, once"
+  },
+  {
+   "tag": "s4",
+   "extension": "Baltimore Ravens\nLUKEWARM\n\n$28.9M\n\nA YEAR\n\n4\n\nYEARS\n\n-25%\n\nVS MARKET\n\nIt is an offer. It is not a compliment.\n\nSign it: 4 more years at $28.9M\nYou have made your case"
+  },
+  {
+   "tag": "s5",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n🗳️\n\nTHE BALLOT CAMPAIGN\n\nFan voting is open and Quinn Moreau's team is running ads for him everywhere. Your team's social people want to run one for you too.\n\nMaximilian Okonkwo-Smith\n82\nVS\nQuinn Moreau\n83\n📣 Run the campaign\nMorale +2, Fanbase +6, Net worth -$200k\n🧊 Let the tape talk\nMorale +4\n🎯 Call out the vote buying\nThe feud heats up, otherwise Fanbase +8\n40% chance it reads as sour grapes: Fanbase -6"
+  },
+  {
+   "tag": "s5",
+   "id": "lifeB_stadiumProposal",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nHe wants you to carry the ring\n\nA season ticket holder has diagrammed a midfield proposal like a red zone play. He has sent you three versions of the diagram.\n\nFull production, jumbotron, everything\nEnormous, risky\nHand it over in the tunnel, no cameras\nSafe and kind\nNo. Warmups are sacred.\nRoutine protected",
+   "opts": [
+    "Full production, jumbotron, everything Enormous, risky",
+    "Hand it over in the tunnel, no cameras Safe and kind",
+    "No. Warmups are sacred. Routine protected"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     28.9,
+     28.9
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "lifeA_doc_crew",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe documentary crew wants your whole season\n\nA streaming service wants cameras in your kitchen, your rehab table and your worst days. The check is real. So is the part where a stranger films you crying.\n\nFull access, take the money\nMoney and fame, no privacy\nFootball only, no house, no family\nBalanced deal\nNo cameras at all\nPeace, no bag",
+   "opts": [
+    "Full access, take the money Money and fame, no privacy",
+    "Football only, no house, no family Balanced deal",
+    "No cameras at all Peace, no bag"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     28.9,
+     28.9
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "lifeB_restaurantFranchise",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nWings at scale\n\nA franchise group wants you as a multi unit owner. The pitch deck says athlete equity nine separate times.\n\nThree locations, 2.4M\nWings at scale\nBuy one and actually run it\nOne store, real work\nLet your cousin run the register\nCash business, obviously",
+   "opts": [
+    "Three locations, 2.4M Wings at scale",
+    "Buy one and actually run it One store, real work",
+    "Let your cousin run the register Cash business, obviously"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     28.9,
+     28.9
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeA_trash_talk_feud",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe feud\n\nan edge rusher has said your name in four separate interviews this offseason and none of them were nice. You play him twice a year. Possibly forever.\n\nAnswer him every single week\nFame up, target on you\nBeat him and say absolutely nothing\nRating and respect\nText him and squash it\nPeace, fans bored",
+   "opts": [
+    "Answer him every single week Fame up, target on you",
+    "Beat him and say absolutely nothing Rating and respect",
+    "Text him and squash it Peace, fans bored"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     28.9,
+     28.9
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeB_partnerCity",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThey got the job\n\nYour partner just landed the role they have been chasing since college. It is in a city with a different team in it.\n\nAsk the front office to move you there\nTrade toward them\nDo the long distance thing\nFlights and FaceTime\nThey pause it for a year\nStability, quiet debt",
+   "opts": [
+    "Ask the front office to move you there Trade toward them",
+    "Do the long distance thing Flights and FaceTime",
+    "They pause it for a year Stability, quiet debt"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     28.9,
+     28.9
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeB_taquitoRitual",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe gas station taquito\n\nYou ate one before a three touchdown game. Now nine grown men require the taquito. The team nutritionist has stopped attending meetings.\n\nCommit fully to the taquito\nRitual over nutrition\nHave the chef make a clean replica\nScience wins\nSell taquito merch\nMonetize the myth",
+   "opts": [
+    "Commit fully to the taquito Ritual over nutrition",
+    "Have the chef make a clean replica Science wins",
+    "Sell taquito merch Monetize the myth"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     28.9,
+     28.9
+    ],
+    "team": [
+     "BAL",
+     "BAL"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe first real check\n\nYou chose: Buy the truck first\n\nFanbase\n38 → \nto\n41\n+3\nCash\n$0.6M → \nto\n$0.3M\n-$0.3M\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nMedia day is a circus\n\nYou chose: Answer everything in five words or less\n\nMorale\n81 → \nto\n85\n+4\nFanbase\n41 → \nto\n48\n+7\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\n25,000 autographs in eleven weeks\n\nYou chose: Launch your own card brand\n\nCash\n$0.8M → \nto\n$0.3M\n-$0.5M\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nCutdown day\n\nYou chose: Keep your head down, it is a business\n\nMorale\n85 → \nto\n83\n-2\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nUp on Saturday, down on Monday\n\nYou chose: Vouch for him, loudly\n\nMorale\n84 → \nto\n81\n-3\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nVoluntary means voluntary\n\nYou chose: Show up for all of it\n\nHealth\n100 → \nto\n98\n-2\nMorale\n81 → \nto\n86\n+5\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nYour brother has business cards now\n\nYou chose: Real job, under a real agency\n\nMorale\n86 → \nto\n92\n+6\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nHe wants you to carry the ring\n\nYou chose: Full production, jumbotron, everything\n\nMorale\n98 → \nto\n93\n-5\nFanbase\n57 → \nto\n60\n+3\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nThe documentary crew wants your whole season\n\nYou chose: Football only, no house, no family\n\nFanbase\n60 → \nto\n67\n+7\nCareer earnings\n$32.5M → \nto\n$34.1M\n+$1.6M\nCash\n$13M → \nto\n$14.6M\n+$1.6M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nWings at scale\n\nYou chose: Buy one and actually run it\n\nMorale\n93 → \nto\n88\n-5\nCash\n$14.6M → \nto\n$15.1M\n+$0.5M\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe feud\n\nYou chose: Text him and squash it\n\nHealth\n98 → \nto\n100\n+2\nMorale\n92 → \nto\n98\n+6\nFanbase\n69 → \nto\n65\n-4\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThey got the job\n\nYou chose: They pause it for a year\n\nMorale\n98 → \nto\n100\n+2\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe gas station taquito\n\nYou chose: Sell taquito merch\n\nHealth\n100 → \nto\n98\n-2\nFanbase\n65 → \nto\n77\n+12\nCareer earnings\n$63M → \nto\n$63.6M\n+$0.6M\nCash\n$28M → \nto\n$28.6M\n+$0.6M\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2026 SEASON\n\nBaltimore Ravens · age 21 · QB\n\nMissed the playoffs\n\n2,761 yds, 16 TD, 17 INT\n\n🪞 Quinn Moreau went 3,794 yds, 26 TD, 15 INT and had the better year of the two of you. Head to head 0-1.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🤬\n\nSideline Scuffle\n\nCameras catch you and Quinn Moreau jawing at midfield after the whistle. It is the only clip anybody is talking about Monday.\n\nRivalry intensifies, Fanbase +3\n\nMaximilian Okonkwo-Smith\n77\nVS\nQuinn Moreau\n77\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 1,
+   "txt": "THE 2027 SEASON\n\nBaltimore Ravens · age 22 · QB\n\nLost the Super Bowl\n\n3,858 yds, 24 TD, 15 INT\n\n📊 Playoffs: 4 games, 944 yds, 7 TD, 2 INT.\n\n🧊 January football suited you. You were the best player on the field.\n\n🪞 Quinn Moreau went 3,470 yds, 21 TD, 15 INT. You had the better year. Head to head 1-1.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 1,
+   "txt": "THE 2028 SEASON\n\nBaltimore Ravens · age 23 · QB\n\nLost the Conference Championship\n\n3,391 yds, 23 TD, 15 INT\n\n📊 Playoffs: 3 games, 675 yds, 5 TD, 2 INT.\n\n🧊 January football suited you. You were the best player on the field.\n\n🪞 Quinn Moreau went 3,430 yds, 25 TD, 16 INT. Nothing in it again. He leads the head to head 2-1.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nQuinn Moreau's foundation asks you to co-host a free youth camp. Same field, same whistle, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n81\nVS\nQuinn Moreau\n81\n\nYOU CHOSE: 💸 SEND A CHECK, SKIP IT\n\n💸 You sent the check and skipped the cameras. The quiet kind of good.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 1,
+   "txt": "THE 2029 SEASON\n\nBaltimore Ravens · age 24 · QB\n\nLost in the Wild Card round\n\n4,647 yds, 37 TD, 11 INT\n\n📊 Playoffs: 1 game, 257 yds, 2 TD, 1 INT.\n\n🔥 Every read was right. Career year.\n\n🪞 Quinn Moreau went 4,355 yds, 34 TD, 12 INT. You had the better year. Head to head 2-2.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n🗳️\n\nTHE BALLOT CAMPAIGN\n\nFan voting is open and Quinn Moreau's team is running ads for him everywhere. Your team's social people want to run one for you too.\n\nMaximilian Okonkwo-Smith\n82\nVS\nQuinn Moreau\n83\n\nYOU CHOSE: 🧊 LET THE TAPE TALK\n\n🧊 No ads, no posts. Just the tape.\n\nContinue"
+  },
+  {
+   "tag": "s6",
+   "n": 1,
+   "txt": "THE 2030 SEASON\n\nBaltimore Ravens · age 25 · QB\n\nLost in the Wild Card round\n\n3,776 yds, 30 TD, 13 INT\n\n📊 Playoffs: 1 game, 225 yds, 2 TD, 1 INT.\n\n🪞 Quinn Moreau went 3,717 yds, 25 TD, 15 INT. You had the better year. Head to head 3-2.\n\nContinue"
+  },
+  {
+   "tag": "s6",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📋\n\nRoster Squeeze\n\nWord around the building is the front office is choosing between you and Quinn Moreau for the same cap space.\n\nMorale -5\n\nMaximilian Okonkwo-Smith\n83\nVS\nQuinn Moreau\n85\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2026,
+    "age": 21,
+    "ovr": 75,
+    "team": "BAL",
+    "salary": 1.2,
+    "cy": 4,
+    "morale": 70,
+    "fanbase": 35,
+    "health": 100,
+    "net": 0.1,
+    "summer": null,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2026 · age 21",
+    "OVR 75",
+    "$1.2M x4",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2026 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 75 The fans down at 35",
+    "💰 THE BANK $0.1M $1.2M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 158, the Baltimore Ravens select Maximilian Okonkwo-Smith.",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 77,
+    "team": "BAL",
+    "salary": 1.2,
+    "cy": 3,
+    "morale": 77,
+    "fanbase": 41,
+    "health": 100,
+    "net": 0.3,
+    "summer": null,
+    "last": {
+     "year": 2026,
+     "team": "BAL",
+     "age": 21,
+     "ovr": 75,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 1.2,
+     "passYds": 2761,
+     "passTd": 16,
+     "ints": 17
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2027 · age 22",
+    "OVR 77",
+    "$1.2M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,761 pass yds",
+   "last": "Last season: 2,761 yds, 16 TD, 17 INT · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 77 QB, age 22, 0 rings",
+    "💰 THE BANK $0.3M $1.2M a year, 3 years left",
+    "📜 CAREER LOG 1 season 2,761 yds, 16 TD, 17 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines It is very large and very loud and the whole parking lot came out to look at it. Fanbase +3, net worth -0.3M.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2028,
+    "age": 23,
+    "ovr": 79,
+    "team": "BAL",
+    "salary": 1.2,
+    "cy": 2,
+    "morale": 83,
+    "fanbase": 48,
+    "health": 100,
+    "net": 0.3,
+    "summer": null,
+    "last": {
+     "year": 2027,
+     "team": "BAL",
+     "age": 22,
+     "ovr": 77,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost the Super Bowl",
+     "salary": 1.2,
+     "passYds": 3858,
+     "passTd": 24,
+     "ints": 15,
+     "poGames": 4,
+     "poLine": "944 yds, 7 TD, 2 INT"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2028 · age 23",
+    "OVR 79",
+    "$1.2M x2",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2028 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 6,619 pass yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 79 QB, age 23, 0 rings",
+    "💰 THE BANK $0.3M $1.2M a year, 2 years left",
+    "📜 CAREER LOG 2 seasons 3,858 yds, 24 TD, 15 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines You cleaned out the passenger seat of his car in your head and went to meetings. Morale -2.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s3",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 24,
+    "ovr": 81,
+    "team": "BAL",
+    "salary": 1.2,
+    "cy": 1,
+    "morale": 92,
+    "fanbase": 52,
+    "health": 98,
+    "net": 0,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "BAL",
+     "age": 23,
+     "ovr": 79,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost the Conference Championship",
+     "salary": 1.2,
+     "passYds": 3391,
+     "passTd": 23,
+     "ints": 15,
+     "poGames": 3,
+     "poLine": "675 yds, 5 TD, 2 INT"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2029 · age 24",
+    "OVR 81",
+    "$1.2M x1",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 10,010 pass yds",
+   "last": "Last season: 3,391 yds, 23 TD, 15 INT · Lost the Conference Championship",
+   "tiles": [
+    "📊 MY PLAYER OVR 81 QB, age 24, 0 rings",
+    "💰 THE BANK $0M $1.2M a year, final year of the deal",
+    "📜 CAREER LOG 3 seasons 3,391 yds, 23 TD, 15 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines He works marketing under your actual agent for 0.3M a year. He is thriving and nobody can lose your money. Morale +6.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s4",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 24,
+    "ovr": 81,
+    "team": "BAL",
+    "salary": 28.9,
+    "cy": 5,
+    "morale": 92,
+    "fanbase": 55,
+    "health": 98,
+    "net": 0,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "BAL",
+     "age": 23,
+     "ovr": 79,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost the Conference Championship",
+     "salary": 1.2,
+     "passYds": 3391,
+     "passTd": 23,
+     "ints": 15,
+     "poGames": 3,
+     "poLine": "675 yds, 5 TD, 2 INT"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2029 · age 24",
+    "OVR 81",
+    "$28.9M x5",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 10,010 pass yds",
+   "last": "Last season: 3,391 yds, 23 TD, 15 INT · Lost the Conference Championship",
+   "tiles": [
+    "📊 MY PLAYER OVR 81 QB, age 24, 0 rings",
+    "💰 THE BANK $0M $29M a year, 5 years left",
+    "📜 CAREER LOG 3 seasons 3,391 yds, 23 TD, 15 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines 🖊️ Extension signed: 4 more years at $28.9M a year.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s5",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 4,
+    "year": 2030,
+    "age": 25,
+    "ovr": 82,
+    "team": "BAL",
+    "salary": 28.9,
+    "cy": 4,
+    "morale": 88,
+    "fanbase": 67,
+    "health": 98,
+    "net": 15.1,
+    "summer": null,
+    "last": {
+     "year": 2029,
+     "team": "BAL",
+     "age": 24,
+     "ovr": 81,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 28.9,
+     "passYds": 4647,
+     "passTd": 37,
+     "ints": 11,
+     "poGames": 1,
+     "poLine": "257 yds, 2 TD, 1 INT"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2030 · age 25",
+    "OVR 82",
+    "$28.9M x4",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 14,657 pass yds",
+   "last": "Last season: 4,647 yds, 37 TD, 11 INT · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 QB, age 25, 0 rings",
+    "💰 THE BANK $15M $29M a year, 4 years left",
+    "📜 CAREER LOG 4 seasons 4,647 yds, 37 TD, 11 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You did the schedule yourself every Sunday night. 0.9M in, 1.4M out over three years, morale -5 because payroll is not a hobby.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s6",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 5,
+    "year": 2031,
+    "age": 26,
+    "ovr": 83,
+    "team": "BAL",
+    "salary": 28.9,
+    "cy": 3,
+    "morale": 100,
+    "fanbase": 77,
+    "health": 98,
+    "net": 28.6,
+    "summer": null,
+    "last": {
+     "year": 2030,
+     "team": "BAL",
+     "age": 25,
+     "ovr": 82,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 28.9,
+     "passYds": 3776,
+     "passTd": 30,
+     "ints": 13,
+     "poGames": 1,
+     "poLine": "225 yds, 2 TD, 1 INT"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2031 · age 26",
+    "OVR 83",
+    "$28.9M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2031 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 18,433 pass yds",
+   "last": "Last season: 3,776 yds, 30 TD, 13 INT · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 83 QB, age 26, 0 rings",
+    "💰 THE BANK $29M $29M a year, 3 years left",
+    "📜 CAREER LOG 5 seasons 3,776 yds, 30 TD, 13 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines 0.6M in shirts with a taquito on them. Fanbase +12, and the gas station chain named a location after you.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "nfl390b-16-tile-myplayer-s0.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n75\n\nOVERALL\n\nMaximilian Okonkwo-Smith · QB · age 21\n\nMorale\n70\nFanbase\n35\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    268,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "nfl390b-17-tile-thebank-s0.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$100k\n\n$1.2M a year, 4 years left on the deal\n\n$100k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "nfl390b-18-tile-careerlog-s0.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    923
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "nfl390b-19-tile-trophycase-s0.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🔒\nFirst m",
+   "backOk": true,
+   "scroll": [
+    923,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "nfl390b-20-tile-news-s0.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 158, the Baltimore Ravens select Maximilian Okonkwo-Smith.\n\nLate pick. Everything must be earned.\n\n📋 You outplayed the veteran in camp. The chart has your name on top.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "nfl390b-21-tile-inbox-s0.jpg",
+   "text": "Hub\n📱 Inbox\n❤️\nMom\n🎓 Draft night, 2026\nI cried the whole time they said your name. Your little cousins haven't stopped screaming. Come home before camp?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "nfl390b-38-tile-myplayer-s1.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n77\n\nOVERALL\n\nMaximilian Okonkwo-Smith · QB · age 22\n\nMorale\n77\nFanbase\n41\nHealth\n100\nKarma\n56\n\n1\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "nfl390b-39-tile-thebank-s1.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$300k\n\n$1.2M a year, 3 years left on the deal\n\n$300k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "nfl390b-41-tile-careerlog-s1.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2026\nBaltimore Ravens",
+   "backOk": true,
+   "scroll": [
+    185,
+    240,
+    919
+   ],
+   "focus": "📜 CAREER LOG 1 season 2,761 yds, 16 TD,"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "nfl390b-42-tile-trophycase-s1.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🔒\nFirst m",
+   "backOk": true,
+   "scroll": [
+    919,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "nfl390b-43-tile-news-s1.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.\n\nBACK PAGES\n\n📰 17 interceptions. Maximilian Okonkwo-Smith's turnover problem is the story",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "nfl390b-44-tile-inbox-s1.jpg",
+   "text": "Hub\n📱 Inbox\n🏥\nTeammate\n⏰ Trade deadline, 2026\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.\n❤️\nMom\n🎓 Draft night, 2026\nI cried the whole time they said your name. Your little cousins haven't stopped screaming. Come home before camp?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nYou cleaned out the passenger seat of his car in your head and went to meetings. Morale -2.\n\nYou now personally own 61,000 unsold cards of your own face. 0.8M in, 0.3M back, one very full garage.\n\nForty minutes, 63 questions, 61 answers of five words. The supercut has nine million views. Fanbase +7, morale +4.\n\nBACK PAGES\n\n📰 Baltimore Ravens fall one game short of the Super Bowl\n\n📰 Maximilian Okonkwo-Smith throws for 3,858 yards and 24 touchdowns\n\n📰 17 interceptions. Maximilian Okonkwo-Smith's turnover problem is the story",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🏥\nTeammate\n⏰ Trade deadline, 2026\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.\n❤️\nMom\n🎓 Draft night, 2026\nI cried the whole time they said your name. Your little cousins haven't stopped screaming. Come home before camp?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s3",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🏠\nNeighbor\n🏟️ Playoffs, 2028\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🏥\nTeammate\n⏰ Trade deadline, 2026\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.\n❤️\nMom\n🎓 Draft night, 2026\nI cried the whole time they said your name. Your little cousins haven't stopped screaming. Come home before camp?",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s4",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🏠\nNeighbor\n🏟️ Playoffs, 2028\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🏥\nTeammate\n⏰ Trade deadline, 2026\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.\n❤️\nMom\n🎓 Draft night, 2026\nI cried the whole time they said your name. Your little cousins haven't stopped screaming. Come home before camp?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s5",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🎟️\nMom\n🏟️ Playoffs, 2029\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏠\nNeighbor\n🏟️ Playoffs, 2028\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🏥\nTeammate\n⏰ Trade deadline, 2026\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s6",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🤙\nOld teammate\n🏟️ Playoffs, 2030\nIf we both win this weekend we see each other next round. Loser buys dinner?\n🎟️\nMom\n🏟️ Playoffs, 2029\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏠\nNeighbor\n🏟️ Playoffs, 2028\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "My Player",
+   "shot": null,
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n83\n\nOVERALL\n\nMaximilian Okonkwo-Smith · QB · age 26\n\nMorale\n100\nFanbase\n77\nHealth\n98\nKarma\n78\n\n5\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "The Bank",
+   "shot": null,
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$28.6M\n\n$28.9M a year, 3 years left on the deal\n\n$28.6M\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "Career Log",
+   "shot": null,
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\nCompare seasons\n2030\nBaltimore Ravens\n2029\nBaltimore Ravens\n2028\nBaltimore Ravens\n2027\nBaltimore Ravens\n2026\nBaltimore Ravens",
+   "backOk": true,
+   "scroll": [
+    185,
+    0,
+    320
+   ],
+   "focus": "📜 CAREER LOG 5 seasons 3,776 yds, 30 TD"
+  },
+  {
+   "tag": "end",
+   "word": "Trophy Case",
+   "shot": null,
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n3 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🎯\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🩺\nIron man\n\nFive full seasons without missing a game.\n\n🪙\nFirst m",
+   "backOk": true,
+   "scroll": [
+    320,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\n📱 Replied to Old teammate: Bet's on.\n\n0.6M in shirts with a taquito on them. Fanbase +12, and the gas station chain named a location after you.\n\nThey deferred the job for you. Morale +3, and a favor is now on the books that neither of you will forget.\n\nOne phone call and it turned out he was quoting a two year old joke. Morale +6, health +2, fanbase -4 from a very disappointed timeline.\n\n📋 Roster Squeeze\n\n📊 Playoffs: 1 game, 225 yds, 2 TD, 1 INT.\n\n🪞 Quinn Moreau went 3,717 yds, 25 TD, 15 INT. You had the better year. Head to head 3-2.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith throws for 3,776 yards and 30 touchdowns\n\n📰 Maximilian Okonkwo-Smith throws for 4,647 yards and 37 touchdowns\n\n📰 Maximilian Okonkwo-Smith throws for 3,391 yards and 23 touchdowns\n\n📰 Baltimore Ravens fall one game short of the Super Bowl\n\n📰 Maximilian Okonkwo-Smith throws for 3,858 yards and 24 touchdowns\n\n📰 17 interceptions. Maximilian Okonkwo-Smith's turnover problem is the story",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🤙\nOld teammate\n🏟️ Playoffs, 2030\nIf we both win this weekend we see each other next round. Loser buys dinner?\n🎟️\nMom\n🏟️ Playoffs, 2029\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏠\nNeighbor\n🏟️ Playoffs, 2028\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n👴\nHigh school coach\n🛋️ Bye week, 2026\nWatched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.\n🌱\nRookie\n🏕️ Training camp, 2026\nJust got the locker next to yours. Any advice? Honestly kind of terrified.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [
+  {
+   "tag": "s1",
+   "games": 2,
+   "help": true,
+   "kickoff": null,
+   "firstCard": 1,
+   "review": "📺 Season Center\nBaltimore Ravens · 2026\n?\nBack to your season\nSeason review\n7-10 · Missed the playoffs\n17\nGames\n2,761\nPass yds\n16\nPass TD\n17\nINT\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 4, W 29-26 vs Pittsburgh Steelers, 261 yards, 3 touchdowns, 1 interception\nLast five:\nW\nL\nL\nL\nL\nAfter game 17\n7-10\nHome 6-2\nAway 1-8\nStreak L4\nDivision 2-4\nConference 5-7\nLast 10:\nW\nW\nL\nL\nL\nW\nL\nL\nL\nL\n📋 Game log\n🗓 Schedule\n17\nPlayed\n2,761\nPass yds\n16\nTD\n17\nINT\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 24
+  },
+  {
+   "tag": "again",
+   "games": 2,
+   "help": false,
+   "kickoff": null,
+   "firstCard": 0,
+   "review": "📺 Season Center\nBaltimore Ravens · 2030\n?\nBack to your season\nSeason review\n12-5 · Lost in the Wild Card round\n17\nGames\n3,776\nPass yds\n30\nPass TD\n13\nINT\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 11, W 42-17 vs Dallas Cowboys, 319 yards, 6 touchdowns, 2 interceptions\nLast five:\nL\nW\nL\nW\nW\nPLAYOFFS\nL\nWild Card\nlost to the New York Jets\nYour playoffs: 1 game, 225 yds, 2 TD, 1 INT\nAfter game 17\n12-5\nHome 7-2\nAway 5-3\nStreak W2\nDivision 3-3\nConference 7-5\nLast 10:\nL\nW\nL\nW\nL\nL\nW\nL\nW\nW\n📋 Game log\n🗓 Schedule\n17\nPlayed\n3,776\nPass yds\n30\nTD\n13\nINT\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 23
+  }
+ ],
+ "stuck": [
+  {
+   "tag": "s1",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s2",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s3",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s5",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s6",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "pushed ext s4",
+  "watch again: ↺ Watch the 2030 season again"
+ ],
+ "shots": [
+  "nfl390b-01-first-visit.jpg",
+  "nfl390b-02-create.jpg",
+  "nfl390b-03-create-filled.jpg",
+  "nfl390b-04-prospect-help.jpg",
+  "nfl390b-05-prospect-routes.jpg",
+  "nfl390b-06-prospect-season1.jpg",
+  "nfl390b-07-prospect-choice.jpg",
+  "nfl390b-08-prospect-season2.jpg",
+  "nfl390b-09-prospect-showcase.jpg",
+  "nfl390b-10-prospect-draftday.jpg",
+  "nfl390b-11-draft-night-1.jpg",
+  "nfl390b-12-draft-night-2.jpg",
+  "nfl390b-13-draft-night-end.jpg",
+  "nfl390b-14-hub-draft.jpg",
+  "nfl390b-15-hub-draft-full.jpg",
+  "nfl390b-16-tile-myplayer-s0.jpg",
+  "nfl390b-17-tile-thebank-s0.jpg",
+  "nfl390b-18-tile-careerlog-s0.jpg",
+  "nfl390b-19-tile-trophycase-s0.jpg",
+  "nfl390b-20-tile-news-s0.jpg",
+  "nfl390b-21-tile-inbox-s0.jpg",
+  "nfl390b-22-inbox-open.jpg",
+  "nfl390b-23-centre-help-s1.jpg",
+  "nfl390b-24-centre-kickoff-s1.jpg",
+  "nfl390b-25-centre-live-s1-g1.jpg",
+  "nfl390b-26-centre-final-s1-g1.jpg",
+  "nfl390b-27-centre-live-s1-g2.jpg",
+  "nfl390b-28-centre-final-s1-g2.jpg",
+  "nfl390b-29-centre-review-s1.jpg",
+  "nfl390b-30-centre-review-late-s1.jpg",
+  "nfl390b-31-centre-fixtures-s1.jpg",
+  "nfl390b-32-continue-s1-1.jpg",
+  "nfl390b-33-stuck-s1-1.jpg",
+  "nfl390b-34-continue-s1-2.jpg",
+  "nfl390b-35-event-s1-1.jpg",
+  "nfl390b-36-outcome-s1.jpg",
+  "nfl390b-37-hub-s1.jpg",
+  "nfl390b-38-tile-myplayer-s1.jpg",
+  "nfl390b-39-tile-thebank-s1.jpg",
+  "nfl390b-40-bank-shop.jpg",
+  "nfl390b-41-tile-careerlog-s1.jpg",
+  "nfl390b-42-tile-trophycase-s1.jpg",
+  "nfl390b-43-tile-news-s1.jpg",
+  "nfl390b-44-tile-inbox-s1.jpg",
+  "nfl390b-45-inbox-open.jpg",
+  "nfl390b-46-inbox-open.jpg",
+  "nfl390b-47-practice-menu.jpg",
+  "nfl390b-48-practice-drill.jpg",
+  "nfl390b-49-practice-result.jpg",
+  "nfl390b-50-hub-after-practice.jpg",
+  "nfl390b-51-stuck-s2-0.jpg",
+  "nfl390b-52-continue-s2-1.jpg",
+  "nfl390b-53-edge-reload-event-s2.jpg",
+  "nfl390b-54-event-s2-1.jpg",
+  "nfl390b-55-outcome-s2.jpg",
+  "nfl390b-56-event-s2-2.jpg",
+  "nfl390b-57-hub-s2.jpg",
+  "nfl390b-58-programme-open.jpg",
+  "nfl390b-59-programme-menu.jpg",
+  "nfl390b-60-programme-picked.jpg"
+ ],
+ "draft": {
+  "routes": [
+   "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start",
+   "3 seasons Small school Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare. Star"
+  ],
+  "route": "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start",
+  "seasonShots": 3,
+  "choices": [
+   "A big stage -> 1/2",
+   "The offseason -> 0/2",
+   "Playing through it -> 1/2"
+  ],
+  "showcase": "Skip it No drill and no grade. The scouts notice. Draft stock -2",
+  "range": "The scouts have you between pick 106 and pick 177 of 224.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nNFL Road to the Draft\n\nThis is your moment.\n\nBaltimore Ravens\n\nMaximilian Okonkwo-Smith\nQB · Age 21\nRating\n75\nPotential\n88\nHealth\n100\nDraft stock\n35/100\nThis is your moment.\nYou skipped it. Draft stock -2, now 35.\n\n2026 DRAFT\n\nThe scouts had you between pick 106 and pick 177 of 224.\n\n1\nTennessee Titans\nRound 1\n2\nCincinnati Bengals\nRound 1\n3\nNew England Patriots\nRound 1\nPicks 4 to 154 come off the board, round 1 into round 5.\n155\nSeattle Seahawks\nRound 5\n156\nHouston Texans\nRound 5\n157\nCarolina Panthers\nRound 5\nPick 158: Baltimore Ravens\nYour name is called. Round 5, pick 30.\n\nRound 5, pick 30, 158 overall. Baltimore Ravens take you.\n\nStart your career\n2026 DRAFT\nRound 5, pick 30 (158 overall)\n\nBaltimore Ravens hold the pick, and they take you.\n\nYour scout file\n3 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · QB",
+     "Baltimore Ravens",
+     "2027 · age 22",
+     "OVR 77",
+     "$1.2M x3",
+     "⭐ Starter"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,761 pass yds",
+    "last": "Last season: 2,761 yds, 16 TD, 17 INT · Missed the playoffs",
+    "tiles": [
+     "📊 MY PLAYER OVR 77 QB, age 22, 0 rings",
+     "💰 THE BANK $0.3M $1.2M a year, 3 years left",
+     "📜 CAREER LOG 1 season 2,761 yds, 16 TD, 17 INT",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 3 headlines It is very large and very loud and the whole parking lot came out to look at it. Fanbase +3, net worth -0.3M.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · QB",
+     "Baltimore Ravens",
+     "2027 · age 22",
+     "OVR 77",
+     "$1.2M x3",
+     "⭐ Starter"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,761 pass yds",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 77 QB, age 22, 0 rings",
+     "💰 THE BANK $0.3M $1.2M a year, 3 years left",
+     "📜 CAREER LOG 1 season 2,761 yds, 16 TD, 17 INT",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 1 headline 17 interceptions. Maximilian Okonkwo-Smith's turnover problem is the story",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 77,
+    "team": "BAL",
+    "salary": 1.2,
+    "cy": 3,
+    "morale": 77,
+    "fanbase": 41,
+    "health": 100,
+    "net": 0.3,
+    "summer": null,
+    "last": {
+     "year": 2026,
+     "team": "BAL",
+     "age": 21,
+     "ovr": 75,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 1.2,
+     "passYds": 2761,
+     "passTd": 16,
+     "ints": 17
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 1
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n❤️ MOM\n\n🎓 Draft night, 2026\n\nI cried the whole time they said your name. Your little cousins haven't stopped screaming. Come home before camp?\n\nFly home for the weekendAfter camp, promise",
+   "answered": "Fly home for the weekend"
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏥 TEAMMATE\n\n⏰ Trade deadline, 2026\n\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n\nVisit weeklySend a messageRead it later",
+   "answered": "Visit weekly"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏥 TEAMMATE\n\n⏰ Trade deadline, 2026\n\nACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.\n\nYou replied: Visit weekly",
+   "answered": false
+  },
+  {
+   "rows": 5
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📻 LOCAL RADIO\n\n🏟️ Playoffs, 2027\n\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n\nDo it, hype the cityDecline, locked in",
+   "answered": "Do it, hype the city"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📻 LOCAL RADIO\n\n🏟️ Playoffs, 2027\n\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n\nYou replied: Do it, hype the city",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2028\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nStop by and sign itSend signed photos",
+   "answered": "Stop by and sign it"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2028\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nYou replied: Stop by and sign it",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2028\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nYou replied: Stop by and sign it",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎟️ MOM\n\n🏟️ Playoffs, 2029\n\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n\nBuy them allFour tickets, that's it",
+   "answered": "Buy them all"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎟️ MOM\n\n🏟️ Playoffs, 2029\n\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n\nYou replied: Buy them all",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🤙 OLD TEAMMATE\n\n🏟️ Playoffs, 2030\n\nIf we both win this weekend we see each other next round. Loser buys dinner?\n\nBet's onNot this week, locked in",
+   "answered": "Bet's on"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🤙 OLD TEAMMATE\n\n🏟️ Playoffs, 2030\n\nIf we both win this weekend we see each other next round. Loser buys dinner?\n\nYou replied: Bet's on",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": null,
+   "secs": 75
+  }
+ ],
+ "edge": [
+  {
+   "test": "reload on an offseason card",
+   "before": "lifeA_media_day",
+   "after": {
+    "id": "lifeA_media_day",
+    "title": "Media day is a circus"
+   },
+   "phase": null,
+   "saveBefore": {
+    "year": 2027,
+    "ids": [
+     "lifeA_media_day",
+     "lifeB_tradingCards",
+     "lifeC_final_cuts"
+    ],
+    "at": 0
+   },
+   "saveAfter": {
+    "year": 2027,
+    "ids": [
+     "lifeA_media_day",
+     "lifeB_tradingCards",
+     "lifeC_final_cuts"
+    ],
+    "at": 0
+   },
+   "buttons": [
+    "Work the room and be the star of it Fame up, energy down",
+    "Answer everything in five words or less Meme, mystery",
+    "Hide behind the vets and study Focus over shine",
+    "📊 MY PLAYER OVR 79 QB, age 23, 0 rings",
+    "💰 THE BANK $0.8M $1.2M a year, 2 years left",
+    "📜 CAREER LOG 2 seasons 3,858 yds, 24 TD, 15 INT",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines Baltimore Ravens fall one game short of the Super "
+   ]
+  },
+  {
+   "test": "double tap on an offseason answer",
+   "before": {
+    "morale": 84,
+    "fanbase": 52,
+    "health": 100,
+    "net": 0,
+    "ovr": 81,
+    "summer": {
+     "year": 2028,
+     "ids": [
+      "lifeC_ps_elevation",
+      "lifeC_voluntary_spring",
+      "lifeB_siblingManager"
+     ],
+     "at": 0
+    }
+   },
+   "after": {
+    "morale": 81,
+    "fanbase": 52,
+    "health": 100,
+    "net": 0,
+    "ovr": 81,
+    "summer": {
+     "year": 2028,
+     "ids": [
+      "lifeC_ps_elevation",
+      "lifeC_voluntary_spring",
+      "lifeB_siblingManager"
+     ],
+     "at": 1
+    }
+   },
+   "outcome": ""
+  },
+  {
+   "test": "back then forward at the hub",
+   "backUrl": "about:blank",
+   "same": true,
+   "before": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2031 · age 26",
+    "OVR 83",
+    "$28.9M x3",
+    "⭐ Starter"
+   ],
+   "after": [
+    "Maximilian Okonkwo-Smith · QB",
+    "Baltimore Ravens",
+    "2031 · age 26",
+    "OVR 83",
+    "$28.9M x3",
+    "⭐ Starter"
+   ]
+  },
+  {
+   "test": "hostile save: wrong types",
+   "create": false,
+   "buttons": [],
+   "newPageErrors": [],
+   "shot": null,
+   "stored": "{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""
+  },
+  {
+   "test": "hostile save: not json",
+   "create": true,
+   "buttons": [
+    "🏈 2026 The league as it is today. Full money, every current franchise",
+    "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers",
+    "QB",
+    "RB",
+    "WR",
+    "TE",
+    "LB",
+    "CB"
+   ],
+   "newPageErrors": [],
+   "shot": null,
+   "stored": "{{{garbage"
+  }
+ ],
+ "programme": [
+  {
+   "tiles": [
+    "Workload and recovery Usual routine",
+    "Tactical approach Your usual approach",
+    "Coach expectations No extra target",
+    "Teammate partnership Keep your own routine",
+    "Performance bonus No bonus challenge",
+    "Veteran reinvention Keep your usual routine"
+   ]
+  },
+  {
+   "choices": [
+    "*Usual routine Keep your current inputs.",
+    "Push the workload Season health -8, morale +6. More form, more injury risk.",
+    "Prioritize recovery Nothing to add this season: your health is already at 100. Choosing it"
+   ]
+  },
+  {
+   "saved": false
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏈 2026 The league as it is today. Full money, every current franchise",
+   "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers",
+   "QB",
+   "RB",
+   "WR",
+   "TE",
+   "LB",
+   "CB",
+   "EDGE",
+   "K",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.\nPick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.\nBuild your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.\nEnter the draft. Your hidden rating decides the slot, and a real team calls your name.\nCheck the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.\nPlay each season with one tap: yards, touchdowns, awards, how far the team went.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nWhen the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.\nMake up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.\nSpend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nFrom 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.\nCollect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts o",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏈 2026 The league as it is today. Full money, every current",
+  "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, th",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Cannon Arm Big throws, big turnovers",
+  "Field Surgeon Accuracy and brains, slower start",
+  "Dual Threat Legs change everything, hits add up"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": "unreadable",
+  "chips": {
+   "chips": [
+    "Play Now",
+    "Play Now",
+    "Play Now"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": []
+  },
+  "secs": 488
+ }
+}

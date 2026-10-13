@@ -1,0 +1,4212 @@
+{
+ "tag": "mlb390b",
+ "SPORT": "mlb",
+ "W": 390,
+ "H": 844,
+ "SEED": 3303,
+ "POS": "CF",
+ "steps": [
+  {
+   "t": 6,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    636,
+    636,
+    185
+   ]
+  },
+  {
+   "act": "route 2"
+  },
+  {
+   "t": 9,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    209,
+    209,
+    209
+   ]
+  },
+  {
+   "t": 11,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    209,
+    209,
+    209
+   ]
+  },
+  {
+   "t": 13,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    209,
+    209,
+    209
+   ]
+  },
+  {
+   "t": 16,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    209,
+    209,
+    288
+   ]
+  },
+  {
+   "t": 22,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    288,
+    288,
+    288
+   ]
+  },
+  {
+   "t": 26,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 28,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 30,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    196,
+    196,
+    944
+   ]
+  },
+  {
+   "t": 32,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 34,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 36,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 67,
+   "act": "week by week",
+   "text": "📺 Week by week",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 69,
+   "act": "centre help got it",
+   "text": "Got it",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 70,
+   "act": "centre start",
+   "text": "▶ Play ball",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 70,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 76,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 82,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 91,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 92,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 96,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 98,
+   "act": "rivalry option",
+   "text": "💸 Send a check, skip it Net worth -$1M, Karma +3",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 101,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 102,
+   "act": "event option 1",
+   "text": "Do the little league and nothing else Morale up, fans up",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 103,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 103,
+   "act": "event option 0",
+   "text": "Go up the wall for it Could go either way: morale up, fans u",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 104,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 108,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 111,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 113,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    240,
+    197,
+    919
+   ]
+  },
+  {
+   "t": 115,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 117,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 121,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 122,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 135,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 166,
+   "act": "play season 2",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 170,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 175,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 184,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 188,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 219,
+   "act": "play season 3",
+   "text": "Play the 2030 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 223,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 228,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 230,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 234,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 265,
+   "act": "play season 4",
+   "text": "Play the 2031 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 269,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 270,
+   "act": "rivalry option",
+   "text": "👏 Congratulate him publicly Fanbase +4, Karma +5, the feud ",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 273,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 274,
+   "act": "event option 0",
+   "text": "Show him around and help him Fans up",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 275,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 275,
+   "act": "event option 2",
+   "text": "Take their number and move on Morale down, fans up",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 276,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 276,
+   "act": "event option 2",
+   "text": "Pass on it Clean brand",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 277,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 281,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 312,
+   "act": "play season 5",
+   "text": "Play the 2032 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 315,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 320,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 321,
+   "act": "event option 1",
+   "text": "Real job under your real agency Supervised, safer",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 322,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 322,
+   "act": "event option 2",
+   "text": "Take over as the judge yourself Power, some enemies",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 323,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 323,
+   "act": "event option 0",
+   "text": "Fly him out, jersey, field passes Wholesome and viral",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 324,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 328,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 359,
+   "act": "play season 6",
+   "text": "Play the 2033 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 360,
+   "act": "extension push",
+   "text": "Ask for more, once",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 361,
+   "act": "wheel spin",
+   "text": "Spin",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 366,
+   "act": "wheel continue",
+   "text": "Continue to the offers",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 367,
+   "act": "extension sign",
+   "text": "Sign it: 4 more years at $16.5M",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 369,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 400,
+   "act": "play season 7",
+   "text": "Play the 2033 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 405,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 407,
+   "act": "rivalry option",
+   "text": "🧊 Let the numbers talk Morale +4",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 410,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 412,
+   "act": "event option 1",
+   "text": "Pay to have it remade Vanity, on you",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 412,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 413,
+   "act": "event option 2",
+   "text": "Fly everybody into the team hotel Expensive togetherness",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 413,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 414,
+   "act": "event option 1",
+   "text": "Only if they let you sing one line Fame with a cost",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 414,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 418,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 449,
+   "act": "play season 8",
+   "text": "Play the 2034 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 453,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 458,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 459,
+   "act": "event option 1",
+   "text": "Half in, keep Sunday chicken Cheaper, still better",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 459,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 460,
+   "act": "event option 1",
+   "text": "Lend it with a written agreement Business, some tension",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 461,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 461,
+   "act": "event option 1",
+   "text": "Call animal control quietly Clean and boring",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 462,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 465,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 468,
+   "act": "centre start",
+   "text": "▶ Play ball",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 469,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 475,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 481,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 490,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 490,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 493,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 495,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 497,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    0,
+    0,
+    356
+   ]
+  },
+  {
+   "t": 499,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 501,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 503,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "SP 55x28",
+    "RP 55x28",
+    "C 55x28",
+    "1B 55x28",
+    "2B 55x28",
+    "3B 55x28",
+    "SS 55x28",
+    "LF 55x28",
+    "CF 55x28",
+    "RF 55x28",
+    "DH 55x28"
+   ],
+   "buttonsInView": 15,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "SP 55x28",
+    "RP 55x28",
+    "C 55x28",
+    "1B 55x28",
+    "2B 55x28",
+    "3B 55x28",
+    "SS 55x28",
+    "LF 55x28",
+    "CF 55x28",
+    "RF 55x28",
+    "DH 55x28"
+   ],
+   "buttonsInView": 14,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12278,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11612,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11608,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11608,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11608,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11591,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect showcase",
+   "t": 14
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11397,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "prospect draft day",
+   "t": 15
+  },
+  {
+   "overX": 0,
+   "scrollY": 288,
+   "docH": 11949,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 17
+  },
+  {
+   "overX": 0,
+   "scrollY": 288,
+   "docH": 11949,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 21
+  },
+  {
+   "overX": 0,
+   "scrollY": 288,
+   "docH": 11686,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 464, the Chicago Cubs select Maximilian Okonkwo-Smith. [149<292]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub draft",
+   "t": 24
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11240,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 25
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11302,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 27
+  },
+  {
+   "overX": 0,
+   "scrollY": 196,
+   "docH": 10933,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 29
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11851,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 31
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11004,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 33
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10835,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Inbox s0",
+   "t": 35
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff s1",
+   "t": 69
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 73
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 76
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 79
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 82
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review s1",
+   "t": 90
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures s1",
+   "t": 90
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 95
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11224,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s1",
+   "t": 96
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11198,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 100
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11518,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 102
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11014,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 102
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11532,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "One morning with the kids, one photo in the paper, and the rest of the [149<477]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s1",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11102,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11754,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You came down with it and the replay ran for a week. Morale +6, fanbas [149<373]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s1",
+   "t": 104
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11240,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 108
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11300,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 110
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11650,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.5M 57x29",
+    "$4.5M 59x29",
+    "$8M 48x29",
+    "$20M 55x29",
+    "$5M 48x29",
+    "$2M 48x29"
+   ],
+   "buttonsInView": 16,
+   "where": "bank shop",
+   "t": 110
+  },
+  {
+   "overX": 0,
+   "scrollY": 240,
+   "docH": 11009,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s1",
+   "t": 112
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11851,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 114
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11043,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 116
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10948,
+   "bad": [],
+   "trunc": [
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile Inbox s1",
+   "t": 118
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11730,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Unknown: Report and warn fans. Karma up. [149<246]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 17,
+   "where": "practice menu",
+   "t": 124
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 136
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 170
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11114,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 174
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11730,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in [149<307]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s2",
+   "t": 179
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11730,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in [149<307]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "programme open",
+   "t": 180
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11730,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in [149<307]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "programme menu",
+   "t": 181
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11093,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 183
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11005,
+   "bad": [],
+   "trunc": [
+    "Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s2",
+   "t": 185
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 223
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11094,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 227
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11502,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s3",
+   "t": 229
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11794,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You cut the paid session in half and stayed an extra hour taking free  [149<507]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s3",
+   "t": 230
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11061,
+   "bad": [],
+   "trunc": [
+    "Built your case. Players with your service time and numbers, what they [302<653]",
+    "Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "tile Inbox s3",
+   "t": 231
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s4",
+   "t": 268
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11222,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s4",
+   "t": 269
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11179,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s4",
+   "t": 273
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11502,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "👏 You posted a congrats for Emmett Ashford. Classy, and people notice [149<321]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s4",
+   "t": 274
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11534,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You took him to dinner and told him where everything was. He got bette [149<488]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s4",
+   "t": 275
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11118,
+   "bad": [],
+   "trunc": [
+    "We're arbitration eligible. We file a number, they file a number. Sett [302<545]",
+    "Built your case. Players with your service time and numbers, what they [302<653]",
+    "Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s4",
+   "t": 278
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 315
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11133,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 320
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11502,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s5",
+   "t": 321
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11502,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "He does marketing under your actual agent for 0.3M a year. He is thriv [149<501]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s5",
+   "t": 322
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11118,
+   "bad": [],
+   "trunc": [
+    "Hearing your side and the club are still apart. Anything on the record [302<518]",
+    "We're arbitration eligible. We file a number, they file a number. Sett [302<545]",
+    "Built your case. Players with your service time and numbers, what they [302<653]",
+    "Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s5",
+   "t": 325
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Beat writer: No comment, love it here. [149<220]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s6",
+   "t": 360
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11565,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Beat writer: No comment, love it here. [149<220]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "wheel s6",
+   "t": 361
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11721,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Beat writer: No comment, love it here. [149<220]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s6",
+   "t": 366
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11794,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🖊️ Extension signed: 4 more years at $16.5M a year. [149<225]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s6",
+   "t": 367
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11118,
+   "bad": [],
+   "trunc": [
+    "Hearing your side and the club are still apart. Anything on the record [302<518]",
+    "We're arbitration eligible. We file a number, they file a number. Sett [302<545]",
+    "Built your case. Players with your service time and numbers, what they [302<653]",
+    "Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s6",
+   "t": 368
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11125,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s7",
+   "t": 405
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11222,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s7",
+   "t": 406
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11159,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s7",
+   "t": 410
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11486,
+   "bad": [],
+   "trunc": [
+    "🧊 No ads, no posts. Just the numbers. [149<171]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s7",
+   "t": 411
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11522,
+   "bad": [],
+   "trunc": [
+    "0.2M of your own money for a second mold that actually has your jaw. M [149<575]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s7",
+   "t": 412
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11118,
+   "bad": [],
+   "trunc": [
+    "Tarp crew has pulled it four times this week, at 2am twice. The guys w [302<558]",
+    "Hearing your side and the club are still apart. Anything on the record [302<518]",
+    "We're arbitration eligible. We file a number, they file a number. Sett [302<545]",
+    "Built your case. Players with your service time and numbers, what they [302<653]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s7",
+   "t": 415
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10979,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s8",
+   "t": 452
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11114,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s8",
+   "t": 457
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11502,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s8",
+   "t": 458
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11502,
+   "bad": [],
+   "trunc": [
+    "Clean six days, chicken on the seventh. Net worth down 0.08M, health + [149<369]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s8",
+   "t": 459
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11118,
+   "bad": [],
+   "trunc": [
+    "Your bobblehead night is next week. The face is... a choice. Want to s [302<489]",
+    "Tarp crew has pulled it four times this week, at 2am twice. The guys w [302<558]",
+    "Hearing your side and the club are still apart. Anything on the record [302<518]",
+    "We're arbitration eligible. We file a number, they file a number. Sett [302<545]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s8",
+   "t": 463
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff again",
+   "t": 468
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 472
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 475
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 478
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 481
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review again",
+   "t": 488
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11846,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures again",
+   "t": 489
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11240,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player end",
+   "t": 492
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11302,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank end",
+   "t": 494
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11255,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile Career Log end",
+   "t": 496
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11960,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case end",
+   "t": 498
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11657,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News end",
+   "t": 500
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11118,
+   "bad": [],
+   "trunc": [
+    "Your bobblehead night is next week. The face is... a choice. Want to s [302<489]",
+    "Tarp crew has pulled it four times this week, at 2am twice. The guys w [302<558]",
+    "Hearing your side and the club are still apart. Anything on the record [302<518]",
+    "We're arbitration eligible. We file a number, they file a number. Sett [302<545]",
+    "Your postgame comments about last night's umpiring went viral. We'd we [302<535]",
+    "Our little league team made the town all-star game. The kids would los [302<521]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox end",
+   "t": 502
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  },
+  {
+   "t": "error",
+   "at": 106,
+   "text": "TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)\n    at Object.We [as legacyOf] (http://localhost:4173/assets/MlbMyCareer-CdEPjzfb.js:2:217387)\n    at $y (http://localhost:4173/assets/usCareer"
+  },
+  {
+   "t": "error",
+   "at": 106,
+   "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)\n    at Object.We [as legacyOf] (http://localhost:4173/assets/MlbMyCareer-CdEPjzfb.js:2:217387)\n    at $y (http://local"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nEmmett Ashford's foundation asks you to co-host a free youth clinic. Same field, same cages, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n78\nVS\nEmmett Ashford\n76\n🤝 Co-host and split the bill\nFanbase +10, Net worth -$1M, Karma +8, the feud cools\n😉 Show up and talk trash all day\nFanbase +12, the feud heats up\n💸 Send a check, skip it\nNet worth -$1M, Karma +3"
+  },
+  {
+   "tag": "s1",
+   "id": "mlbC_rookie_home",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nHome for the winter, a big leaguer\n\nYour hometown wants you at everything: the high school banquet, the little league opener, the local news, a parade nobody asked you about. Your old coach has already told everyone you will be there.\n\nSay yes to all of it\nMorale up, fans up, health down\nDo the little league and nothing else\nMorale up, fans up\nStay in your team's city and train\nRating up, fans down",
+   "opts": [
+    "Say yes to all of it Morale up, fans up, health down",
+    "Do the little league and nothing else Morale up, fans up",
+    "Stay in your team's city and train Rating up, fans down"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s1",
+   "id": "mlbC_of_wall",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nThe wall in the ninth\n\nTwo outs, tying run on first, and a ball hit to the deepest part of the park. You have the angle. You also know exactly where the padding stops.\n\nGo up the wall for it\nCould go either way: morale up, fans up, health down, or fans up, health down\nPlay it off the wall and hold him to second\nMorale up\nDive short of the track\nCould go either way: morale up, fans up, or morale down, fans down",
+   "opts": [
+    "Go up the wall for it Could go either way: morale up, fans up, health down, or fans up, health down",
+    "Play it off the wall and hold him to second Morale up",
+    "Dive short of the track Could go either way: morale up, fans up, or morale down, fans down"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "mlbA_card_show",
+   "text": "OFFSEASON, CARD 1 OF 1\n\nFour hours, one folding chair\n\nA convention center in January, 900 autographs, 70,000 dollars, and one man who very sincerely wants you to sign a photograph of somebody else.\n\nDo the full four hours\nMoney, dead wrist\nTwo paid hours, then free photos with kids\nLess money, more love\nSkip it and stay in the cage\nWork over appearance fee",
+   "opts": [
+    "Do the full four hours Money, dead wrist",
+    "Two paid hours, then free photos with kids Less money, more love",
+    "Skip it and stay in the cage Work over appearance fee"
+   ],
+   "chose": 1,
+   "delta": {
+    "dbl": true
+   }
+  },
+  {
+   "tag": "s4",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n💰\n\nTHE BIGGER DEAL\n\nEmmett Ashford just signed the biggest free agent deal anyone at your position has ever seen. Your phone has not stopped buzzing.\n\nMaximilian Okonkwo-Smith\n82\nVS\nEmmett Ashford\n81\n👏 Congratulate him publicly\nFanbase +4, Karma +5, the feud cools\n🔥 Use it as fuel\nMorale +6, the feud heats up\n📰 Complain to the press\nMorale +2, Karma -6, otherwise Fanbase +3\n50% chance the fans side with him: Fanbase -6"
+  },
+  {
+   "tag": "s4",
+   "id": "mlbC_rule_september",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nSeptember brings company\n\nRosters expanded in September and Chicago Cubs called up a kid from Triple A who plays your position. He is 22, he is fast, and the front office wants to see him play.\n\nShow him around and help him\nFans up\nMake sure he does not take your at bats\nCould go either way: rating up, or morale down\nIgnore him completely\nNo change",
+   "opts": [
+    "Show him around and help him Fans up",
+    "Make sure he does not take your at bats Could go either way: rating up, or morale down",
+    "Ignore him completely No change"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s4",
+   "id": "mlbC_rule_arbitration",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nYour number or theirs\n\nYou and the club are apart on next year's salary. You file a number, they file a number, and if nobody budges a panel picks one of the two. Not in between. In the hearing the club has to argue that you are not as good as you think.\n\nGo to the hearing\nCould go either way: money in, or morale down\nSettle in the middle the night before\nMoney in\nTake their number and move on\nMorale down, fans up",
+   "opts": [
+    "Go to the hearing Could go either way: money in, or morale down",
+    "Settle in the middle the night before Money in",
+    "Take their number and move on Morale down, fans up"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s4",
+   "id": "mlbA_local_ad",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe mattress commercial\n\nA furniture warehouse out on the interstate wants 30 seconds of you saying a slogan about sleeping like a champion. It runs 300 times a week between innings.\n\nDo it, slogan and all\nMoney, mild mockery\nDo it, but write your own script\nLess money, dignity\nPass on it\nClean brand",
+   "opts": [
+    "Do it, slogan and all Money, mild mockery",
+    "Do it, but write your own script Less money, dignity",
+    "Pass on it Clean brand"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "mlbB_siblingAgent",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nYour brother printed business cards\n\nThey say AGENT in a font he chose himself. He has already told a bat company and a cleat company that he speaks for you.\n\nHire him, full trust\nFamily on payroll\nReal job under your real agency\nSupervised, safer\nSay no, buy him a truck\nA no with a bow",
+   "opts": [
+    "Hire him, full trust Family on payroll",
+    "Real job under your real agency Supervised, safer",
+    "Say no, buy him a truck A no with a bow"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "mlbA_kangaroo_court",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nKangaroo court\n\nThe clubhouse has a judge, a gavel from a thrift store, and a fine schedule taped inside a locker. Missing a sign is 50. Getting quoted in the paper is 200.\n\nPay every fine instantly and smile\nRoom love, small bleed\nAppeal loudly, become the entertainment\nComedy, mixed results\nTake over as the judge yourself\nPower, some enemies",
+   "opts": [
+    "Pay every fine instantly and smile Room love, small bleed",
+    "Appeal loudly, become the entertainment Comedy, mixed results",
+    "Take over as the judge yourself Power, some enemies"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "mlbB_nameChangeFan",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nA man in Ohio legally changed his name to yours\n\nForty one years old, three kids, full legal name change at a county courthouse. His wife found out from a piece of mail.\n\nFly him out, jersey, field passes\nWholesome and viral\nHave your lawyer send a letter\nSafe and cold\nHire him as your assistant\nTwo of you now",
+   "opts": [
+    "Fly him out, jersey, field passes Wholesome and viral",
+    "Have your lawyer send a letter Safe and cold",
+    "Hire him as your assistant Two of you now"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "extension": "Chicago Cubs\nLUKEWARM\n\n$16.5M\n\nA YEAR\n\n4\n\nYEARS\n\n-29%\n\nVS MARKET\n\nThe number says what they think of you more clearly than the words did.\n\nBefore you push: Raise accepted 55% · Held 45% · Withdrawn 0%\n\nSign it: 4 more years at $16.5M\nAsk for more, once"
+  },
+  {
+   "tag": "s6",
+   "extension": "Chicago Cubs\nLUKEWARM\n\n$16.5M\n\nA YEAR\n\n4\n\nYEARS\n\n-29%\n\nVS MARKET\n\nThe number says what they think of you more clearly than the words did.\n\nSign it: 4 more years at $16.5M\nYou have made your case"
+  },
+  {
+   "tag": "s7",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n🗳️\n\nTHE ALL-STAR VOTE\n\nAll-Star fan voting is open and Emmett Ashford's team is running ads for him everywhere. Your team's social people want to run one for you too.\n\nMaximilian Okonkwo-Smith\n83\nVS\nEmmett Ashford\n82\n📣 Run the campaign\nMorale +2, Fanbase +6, Net worth -$200k\n🧊 Let the numbers talk\nMorale +4\n🎯 Call out the vote buying\nThe feud heats up, otherwise Fanbase +8\n40% chance it reads as sour grapes: Fanbase -6"
+  },
+  {
+   "tag": "s7",
+   "id": "mlbB_bobbleheadNight",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe bobblehead does not look like you\n\nTwenty thousand of them ship in March. The face belongs to a stranger and the mold is already paid for.\n\nApprove it, let the internet cook\nCursed and viral\nPay to have it remade\nVanity, on you\nSign the ugly ones, auction them off\nCharity out of chaos",
+   "opts": [
+    "Approve it, let the internet cook Cursed and viral",
+    "Pay to have it remade Vanity, on you",
+    "Sign the ugly ones, auction them off Charity out of chaos"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     16.5,
+     16.5
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "mlbB_newbornRoadTrip",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe due date lands in the middle of a ten game trip\n\nYour first kid is due somewhere between Seattle and Anaheim. The doctor keeps repeating that babies do not read the schedule.\n\nLeave the trip the second it starts\nMiss games, be there\nPlay the day game, fly at night\nBoth, barely\nFly everybody into the team hotel\nExpensive togetherness",
+   "opts": [
+    "Leave the trip the second it starts Miss games, be there",
+    "Play the day game, fly at night Both, barely",
+    "Fly everybody into the team hotel Expensive togetherness"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     16.5,
+     16.5
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "mlbB_countryMusicVideo",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nA country singer wants you in the video\n\nYou play a guy who loses a fight outside a bar and then drives a truck through a field for no stated reason. Two days of shooting in Tennessee.\n\nDo the whole thing\nTruck, field, paycheck\nOnly if they let you sing one line\nFame with a cost\nPass, go hunting instead\nWoods over cameras",
+   "opts": [
+    "Do the whole thing Truck, field, paycheck",
+    "Only if they let you sing one line Fame with a cost",
+    "Pass, go hunting instead Woods over cameras"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     16.5,
+     16.5
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "mlbA_nutritionist",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe 11pm spread problem\n\nThe postgame food is fried chicken at eleven at night, 81 times a year. A private nutritionist has offered to build every meal and travel with you, for a real fee.\n\nHire her and pay for it yourself\nMoney out, body up\nHalf in, keep Sunday chicken\nCheaper, still better\nThe spread is part of the game\nRoom love, worse body",
+   "opts": [
+    "Hire her and pay for it yourself Money out, body up",
+    "Half in, keep Sunday chicken Cheaper, still better",
+    "The spread is part of the game Room love, worse body"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     16.5,
+     16.5
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "mlbA_teammate_loan",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe 40,000 dollar ask\n\nA guy you rode buses with in Double A is out of the game and needs money for something he will not fully explain. He has never asked you for anything in nine years.\n\nGive it to him and call it a gift\nMoney gone, real love\nLend it with a written agreement\nBusiness, some tension\nSay no and help a different way\nMoney kept, awkward",
+   "opts": [
+    "Give it to him and call it a gift Money gone, real love",
+    "Lend it with a written agreement Business, some tension",
+    "Say no and help a different way Money kept, awkward"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     16.5,
+     16.5
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "mlbB_bullpenRaccoon",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThere is a raccoon living in the bullpen\n\nNine days now. He has a name. It is Rico and he is 3 for 3 against the strength staff.\n\nAdopt Rico as the lucky charm\nBullpen mascot\nCall animal control quietly\nClean and boring\nGive Rico his own account\nMonetize the raccoon",
+   "opts": [
+    "Adopt Rico as the lucky charm Bullpen mascot",
+    "Call animal control quietly Clean and boring",
+    "Give Rico his own account Monetize the raccoon"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     16.5,
+     16.5
+    ],
+    "team": [
+     "CHC",
+     "CHC"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nHome for the winter, a big leaguer\n\nYou chose: Do the little league and nothing else\n\nMorale\n70 → \nto\n74\n+4\nFanbase\n30 → \nto\n33\n+3\nContinue"
+  },
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe wall in the ninth\n\nYou chose: Go up the wall for it\n\nHealth\n100 → \nto\n97\n-3\nMorale\n74 → \nto\n80\n+6\nFanbase\n33 → \nto\n41\n+8\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nFour hours, one folding chair\n\nYou chose: Two paid hours, then free photos with kids\n\nMorale\n93 → \nto\n100\n+7\nFanbase\n54 → \nto\n67\n+13\nCareer earnings\n$2.4M → \nto\n$2.44M\n+$0.04M\nCash\n$0.8M → \nto\n$0.84M\n+$0.04M\nContinue"
+  },
+  {
+   "tag": "s4",
+   "txt": "YOUR DECISION\n\nSeptember brings company\n\nYou chose: Show him around and help him\n\nFanbase\n71 → \nto\n73\n+2\nContinue"
+  },
+  {
+   "tag": "s4",
+   "txt": "YOUR DECISION\n\nYour number or theirs\n\nYou chose: Take their number and move on\n\nMorale\n100 → \nto\n98\n-2\nFanbase\n73 → \nto\n75\n+2\nContinue"
+  },
+  {
+   "tag": "s4",
+   "txt": "YOUR DECISION\n\nThe mattress commercial\n\nYou chose: Pass on it\n\nMorale\n98 → \nto\n100\n+2\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nYour brother printed business cards\n\nYou chose: Real job under your real agency\n\nCash\n$1.6M → \nto\n$1.3M\n-$0.3M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nKangaroo court\n\nYou chose: Take over as the judge yourself\n\nNo rating, money, team or status changes to show.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nA man in Ohio legally changed his name to yours\n\nYou chose: Fly him out, jersey, field passes\n\nFanbase\n80 → \nto\n94\n+14\nCash\n$1.3M → \nto\n$1.2M\n-$0.1M\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nThe bobblehead does not look like you\n\nYou chose: Pay to have it remade\n\nFanbase\n97 → \nto\n95\n-2\nCash\n$8.6M → \nto\n$8.4M\n-$0.2M\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nThe due date lands in the middle of a ten game trip\n\nYou chose: Fly everybody into the team hotel\n\nHealth\n89 → \nto\n85\n-4\nCash\n$8.4M → \nto\n$7.6M\n-$0.8M\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nA country singer wants you in the video\n\nYou chose: Only if they let you sing one line\n\nMorale\n100 → \nto\n96\n-4\nFanbase\n95 → \nto\n100\n+5\nCareer earnings\n$20.54M → \nto\n$20.7M\n+$0.16M\nCash\n$7.6M → \nto\n$7.8M\n+$0.2M\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nThe 11pm spread problem\n\nYou chose: Half in, keep Sunday chicken\n\nHealth\n85 → \nto\n91\n+6\nCash\n$15.2M → \nto\n$15.12M\n-$0.08M\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nThe 40,000 dollar ask\n\nYou chose: Lend it with a written agreement\n\nNo rating, money, team or status changes to show.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nThere is a raccoon living in the bullpen\n\nYou chose: Call animal control quietly\n\nHealth\n91 → \nto\n95\n+4\nMorale\n100 → \nto\n96\n-4\nFanbase\n100 → \nto\n97\n-3\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2028 SEASON\n\nChicago Cubs · age 23 · CF\n\nMissed October\n\n.257, 17 HR, 64 RBI\n\n🪞 Emmett Ashford went 0.262, 16 HR. Nothing in it again. He leads the head to head 1-0.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nEmmett Ashford's foundation asks you to co-host a free youth clinic. Same field, same cages, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n78\nVS\nEmmett Ashford\n76\n\nYOU CHOSE: 💸 SEND A CHECK, SKIP IT\n\n💸 You sent the check and skipped the cameras. The quiet kind of good.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 1,
+   "txt": "THE 2029 SEASON\n\nChicago Cubs · age 24 · CF\n\nMissed October\n\n.262, 19 HR, 68 RBI\n\n🪞 Emmett Ashford went 0.277, 21 HR and had the better year of the two of you. Head to head 0-2.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n⚾\n\nSeason Series Win\n\nYour club took the season series from Emmett Ashford's team, and you had the better box score.\n\nFanbase +5, confidence boost\n\nMaximilian Okonkwo-Smith\n79\nVS\nEmmett Ashford\n77\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 1,
+   "txt": "THE 2030 SEASON\n\nChicago Cubs · age 25 · CF\n\nMissed October\n\n.282, 15 HR, 37 RBI\n\n🚑 Injured list stints ate the season.\n\n🪞 Emmett Ashford went 0.282, 23 HR and had the better year of the two of you. Head to head 0-3.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🤝\n\nRival Shows Respect\n\nEmmett Ashford tells reporters you are the best in the league at your position.\n\nFanbase +5, Morale +5\n\nMaximilian Okonkwo-Smith\n81\nVS\nEmmett Ashford\n79\nContinue"
+  },
+  {
+   "tag": "s4",
+   "n": 1,
+   "txt": "THE 2031 SEASON\n\nChicago Cubs · age 26 · CF\n\nMissed October\n\n.285, 21 HR, 80 RBI\n\n🪞 Emmett Ashford went 0.266, 18 HR. You had the better year. Head to head 1-3.\n\nContinue"
+  },
+  {
+   "tag": "s4",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n💰\n\nTHE BIGGER DEAL\n\nEmmett Ashford just signed the biggest free agent deal anyone at your position has ever seen. Your phone has not stopped buzzing.\n\nMaximilian Okonkwo-Smith\n82\nVS\nEmmett Ashford\n81\n\nYOU CHOSE: 👏 CONGRATULATE HIM PUBLICLY\n\n👏 You posted a congrats for Emmett Ashford. Classy, and people noticed.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 1,
+   "txt": "THE 2032 SEASON\n\nChicago Cubs · age 27 · CF\n\nMissed October\n\n.296, 25 HR, 91 RBI\n\n🪞 Emmett Ashford went 0.288, 23 HR. You had the better year. Head to head 2-3.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🤬\n\nDugout Chirping\n\nCameras catch you and Emmett Ashford jawing from the dugouts after a bang-bang call at first. It is the only clip anybody is talking about Monday.\n\nRivalry intensifies, Fanbase +3\n\nMaximilian Okonkwo-Smith\n82\nVS\nEmmett Ashford\n82\nContinue"
+  },
+  {
+   "tag": "s7",
+   "n": 1,
+   "txt": "THE 2033 SEASON\n\nChicago Cubs · age 28 · CF\n\nLost the Wild Card series\n\n.309, 31 HR, 95 RBI\n\n📊 Postseason: 3 games, 3 for 12 (.250), 0 HR.\n\n😬 You could not buy a hit in October. It will follow you all winter.\n\n⭐ All-Star.\n\n🧤 Gold Glove.\n\n🪞 Emmett Ashford went 0.291, 26 HR. You had the better year. Head to head 3-3.\n\nContinue"
+  },
+  {
+   "tag": "s7",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n🗳️\n\nTHE ALL-STAR VOTE\n\nAll-Star fan voting is open and Emmett Ashford's team is running ads for him everywhere. Your team's social people want to run one for you too.\n\nMaximilian Okonkwo-Smith\n83\nVS\nEmmett Ashford\n82\n\nYOU CHOSE: 🧊 LET THE NUMBERS TALK\n\n🧊 No ads, no posts. Just the numbers.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "n": 1,
+   "txt": "THE 2034 SEASON\n\nChicago Cubs · age 29 · CF\n\nMissed October\n\n.282, 24 HR, 73 RBI\n\n🪞 Emmett Ashford went 0.294, 25 HR and had the better year of the two of you. Head to head 3-4.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🪞\n\nOne Line Apart\n\nEmmett Ashford plays your position, and every list of the best at it this year has the two of you one line apart.\n\nMorale +4, the rivalry heats up\n\nMaximilian Okonkwo-Smith\n83\nVS\nEmmett Ashford\n82\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2028,
+    "age": 23,
+    "ovr": 77,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 6,
+    "morale": 70,
+    "fanbase": 30,
+    "health": 100,
+    "net": 0.4,
+    "summer": null,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2028 · age 23",
+    "OVR 77",
+    "$0.8M x6",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2028 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 77 The fans down at 30",
+    "💰 THE BANK $0.4M $0.8M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 464, the Chicago Cubs select Maximilian Okonkwo-Smith.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2029,
+    "age": 24,
+    "ovr": 78,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 5,
+    "morale": 80,
+    "fanbase": 41,
+    "health": 97,
+    "net": 0,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "CHC",
+     "age": 23,
+     "ovr": 77,
+     "games": 159,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.257,
+     "hr": 17,
+     "rbi": 64,
+     "sb": 6,
+     "doubles": 28,
+     "obp": 0.34
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2029 · age 24",
+    "OVR 78",
+    "$0.8M x5",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 17 career home runs",
+   "last": "Last season: .257, 17 HR, 64 RBI · Missed October",
+   "tiles": [
+    "📊 MY PLAYER OVR 78 CF, age 24, 0 rings",
+    "💰 THE BANK $0M $0.8M a year, 5 years left",
+    "📜 CAREER LOG 1 season .257, 17 HR, 64 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 4 headlines You came down with it and the replay ran for a week. Morale +6, fanbase +8, health -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2030,
+    "age": 25,
+    "ovr": 79,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 4,
+    "morale": 88,
+    "fanbase": 49,
+    "health": 97,
+    "net": 0.4,
+    "summer": null,
+    "last": {
+     "year": 2029,
+     "team": "CHC",
+     "age": 24,
+     "ovr": 78,
+     "games": 156,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.262,
+     "hr": 19,
+     "rbi": 68,
+     "sb": 7,
+     "doubles": 29,
+     "obp": 0.331
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2030 · age 25",
+    "OVR 79",
+    "$0.8M x4",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 36 career home runs",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 79 CF, age 25, 0 rings",
+    "💰 THE BANK $0.4M $0.8M a year, 4 years left",
+    "📜 CAREER LOG 2 seasons .262, 19 HR, 68 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s3",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2031,
+    "age": 26,
+    "ovr": 81,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 3,
+    "morale": 100,
+    "fanbase": 67,
+    "health": 89,
+    "net": 0.84,
+    "summer": null,
+    "last": {
+     "year": 2030,
+     "team": "CHC",
+     "age": 25,
+     "ovr": 79,
+     "games": 96,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.282,
+     "hr": 15,
+     "rbi": 37,
+     "sb": 4,
+     "doubles": 19,
+     "obp": 0.362
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2031 · age 26",
+    "OVR 81",
+    "$0.8M x3",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2031 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 51 career home runs",
+   "last": "Last season: .282, 15 HR, 37 RBI · Missed October",
+   "tiles": [
+    "📊 MY PLAYER OVR 81 CF, age 26, 0 rings",
+    "💰 THE BANK $0.8M $0.8M a year, 3 years left",
+    "📜 CAREER LOG 3 seasons .282, 15 HR, 37 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 4 headlines You cut the paid session in half and stayed an extra hour taking free pictures. 0.035M earned, fanbase +13, morale +7.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s4",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 4,
+    "year": 2032,
+    "age": 27,
+    "ovr": 82,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 2,
+    "morale": 100,
+    "fanbase": 75,
+    "health": 89,
+    "net": 1.2,
+    "summer": null,
+    "last": {
+     "year": 2031,
+     "team": "CHC",
+     "age": 26,
+     "ovr": 81,
+     "games": 158,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.285,
+     "hr": 21,
+     "rbi": 80,
+     "sb": 5,
+     "doubles": 39,
+     "obp": 0.362
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2032 · age 27",
+    "OVR 82",
+    "$0.8M x2",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2032 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 72 career home runs",
+   "last": "Last season: .285, 21 HR, 80 RBI · Missed October",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 CF, age 27, 0 rings",
+    "💰 THE BANK $1.2M $0.8M a year, 2 years left",
+    "📜 CAREER LOG 4 seasons .285, 21 HR, 80 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines You passed and nobody called. Morale +4, and one Saturday with no camera crew in your driveway.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s5",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 5,
+    "year": 2033,
+    "age": 28,
+    "ovr": 82,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 1,
+    "morale": 100,
+    "fanbase": 94,
+    "health": 89,
+    "net": 1.2,
+    "summer": null,
+    "last": {
+     "year": 2032,
+     "team": "CHC",
+     "age": 27,
+     "ovr": 82,
+     "games": 155,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.296,
+     "hr": 25,
+     "rbi": 91,
+     "sb": 6,
+     "doubles": 39,
+     "obp": 0.387
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2033 · age 28",
+    "OVR 82",
+    "$0.8M x1",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2033 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 97 career home runs",
+   "last": "Last season: .296, 25 HR, 91 RBI · Missed October",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 CF, age 28, 0 rings",
+    "💰 THE BANK $1.2M $0.8M a year, final year of the deal",
+    "📜 CAREER LOG 5 seasons .296, 25 HR, 91 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines 60k for flights, seats behind the dugout and a jersey with a name that is now legally both of yours. Fanbase +14, morale +7.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s6",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 5,
+    "year": 2033,
+    "age": 28,
+    "ovr": 82,
+    "team": "CHC",
+    "salary": 16.5,
+    "cy": 5,
+    "morale": 100,
+    "fanbase": 95,
+    "health": 89,
+    "net": 1.2,
+    "summer": null,
+    "last": {
+     "year": 2032,
+     "team": "CHC",
+     "age": 27,
+     "ovr": 82,
+     "games": 155,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.296,
+     "hr": 25,
+     "rbi": 91,
+     "sb": 6,
+     "doubles": 39,
+     "obp": 0.387
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2033 · age 28",
+    "OVR 82",
+    "$16.5M x5",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2033 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 97 career home runs",
+   "last": "Last season: .296, 25 HR, 91 RBI · Missed October",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 CF, age 28, 0 rings",
+    "💰 THE BANK $1.2M $17M a year, 5 years left",
+    "📜 CAREER LOG 5 seasons .296, 25 HR, 91 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines 🖊️ Extension signed: 4 more years at $16.5M a year.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s7",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 6,
+    "year": 2034,
+    "age": 29,
+    "ovr": 83,
+    "team": "CHC",
+    "salary": 16.5,
+    "cy": 4,
+    "morale": 96,
+    "fanbase": 100,
+    "health": 85,
+    "net": 7.8,
+    "summer": null,
+    "last": {
+     "year": 2033,
+     "team": "CHC",
+     "age": 28,
+     "ovr": 82,
+     "games": 162,
+     "awards": [
+      "All-Star",
+      "Gold Glove"
+     ],
+     "teamResult": "Lost the Wild Card series",
+     "salary": 16.5,
+     "avg": 0.309,
+     "hr": 31,
+     "rbi": 95,
+     "sb": 13,
+     "doubles": 41,
+     "obp": 0.371,
+     "poGames": 3,
+     "poLine": "3 for 12 (.250), 0 HR"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2034 · age 29",
+    "OVR 83",
+    "$16.5M x4",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2034 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 1 All-Star · 128 career home runs",
+   "last": "Last season: .309, 31 HR, 95 RBI · Lost the Wild Card series",
+   "tiles": [
+    "📊 MY PLAYER OVR 83 CF, age 29, 0 rings",
+    "💰 THE BANK $7.8M $17M a year, 4 years left",
+    "📜 CAREER LOG 6 seasons .309, 31 HR, 95 RBI",
+    "🏆 TROPHY CASE 2 honours 1 All-Star nods, no ring yet",
+    "📰 NEWS 6 headlines 0.15M and one line of singing that is now a ringtone in every clubhouse in the league. Fanbase +16, morale -4.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s8",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 7,
+    "year": 2035,
+    "age": 30,
+    "ovr": 83,
+    "team": "CHC",
+    "salary": 16.5,
+    "cy": 3,
+    "morale": 96,
+    "fanbase": 97,
+    "health": 95,
+    "net": 15.12,
+    "summer": null,
+    "last": {
+     "year": 2034,
+     "team": "CHC",
+     "age": 29,
+     "ovr": 83,
+     "games": 158,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 16.5,
+     "avg": 0.282,
+     "hr": 24,
+     "rbi": 73,
+     "sb": 3,
+     "doubles": 40,
+     "obp": 0.379
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2035 · age 30",
+    "OVR 83",
+    "$16.5M x3",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2035 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 1 All-Star · 152 career home runs",
+   "last": "Last season: .282, 24 HR, 73 RBI · Missed October",
+   "tiles": [
+    "📊 MY PLAYER OVR 83 CF, age 30, 0 rings",
+    "💰 THE BANK $15M $17M a year, 3 years left",
+    "📜 CAREER LOG 7 seasons .282, 24 HR, 73 RBI",
+    "🏆 TROPHY CASE 2 honours 1 All-Star nods, no ring yet",
+    "📰 NEWS 5 headlines Rico was relocated to a state park 40 miles away. Health +4, morale -4, fanbase -3, and two relievers have not forgiven you.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "mlb390b-16-tile-myplayer-s0.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n77\n\nOVERALL\n\nMaximilian Okonkwo-Smith · CF · age 23\n\nMorale\n70\nFanbase\n30\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    287,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "mlb390b-17-tile-thebank-s0.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$400k\n\n$0.8M a year, 6 years left on the deal\n\n$400k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "mlb390b-18-tile-careerlog-s0.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    196,
+    944
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "mlb390b-19-tile-trophycase-s0.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 26\n\n🔒\nWorld Series champion\n\nA ring, and a parade down the middle of the city.\n\n🔒\nBack to back\n\nTwo World Series in two seasons.\n\n🔒\nMVP or Cy Young\n\nThe biggest individual award your side of the ball has.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nGold Glove\n\nThe best fielder at your position for a year.\n\n🔒\nSilver Slugger\n\nThe best bat at your position for a year.\n\n🔒\nBatting title\n\nThe highest average in the league.\n\n🔒\nHome run champion\n\nLed the league in home runs.\n\n🔒\nA 50 home run season\n\nFifty in one year. The single season record is 73.\n\n🔒\nA .330 season\n\nA .330 average over a full year. Nobody has hit .400 since 1941.\n\n🔒\nA 50 steal season\n\nFifty bags in one year. The single season record is 130.\n\n🔒\n500 home runs\n\nFive hundred career home runs.\n\n🔒\n1,500 driven in\n\nFifteen hundred career runs batted in.\n\n🔒\n400 stolen bases\n\nFour hundred career steals.\n\n🔒\nA sub 2.00 season\n\nAn ERA under 2.00 across a full year on the mound.\n\n🔒\n300 wins\n\nThree hundred career wins on the mound.\n\n🔒\n3,000 strikeouts\n\nThree thousand career strikeouts. The record is 5,714.\n\n🔒\n300 saves\n\nThree hundred career saves out of the bullpen.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons w",
+   "backOk": true,
+   "scroll": [
+    944,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "mlb390b-20-tile-news-s0.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 464, the Chicago Cubs select Maximilian Okonkwo-Smith.\n\nLate pick. Everything must be earned.\n\n📋 You outhit the veteran all spring. The job is yours from Opening Day.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "mlb390b-21-tile-inbox-s0.jpg",
+   "text": "Hub\n📱 Inbox\n\nNo texts yet. Play a season and your phone will buzz.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "mlb390b-39-tile-myplayer-s1.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n78\n\nOVERALL\n\nMaximilian Okonkwo-Smith · CF · age 24\n\nMorale\n80\nFanbase\n41\nHealth\n97\nKarma\n53\n\n1\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "mlb390b-40-tile-thebank-s1.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$0k\n\n$0.8M a year, 5 years left on the deal\n\n$0k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "mlb390b-42-tile-careerlog-s1.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2028\nChicago Cubs",
+   "backOk": true,
+   "scroll": [
+    185,
+    240,
+    919
+   ],
+   "focus": "📜 CAREER LOG 1 season .257, 17 HR, 64 R"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "mlb390b-43-tile-trophycase-s1.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 26\n\n🔒\nWorld Series champion\n\nA ring, and a parade down the middle of the city.\n\n🔒\nBack to back\n\nTwo World Series in two seasons.\n\n🔒\nMVP or Cy Young\n\nThe biggest individual award your side of the ball has.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nGold Glove\n\nThe best fielder at your position for a year.\n\n🔒\nSilver Slugger\n\nThe best bat at your position for a year.\n\n🔒\nBatting title\n\nThe highest average in the league.\n\n🔒\nHome run champion\n\nLed the league in home runs.\n\n🔒\nA 50 home run season\n\nFifty in one year. The single season record is 73.\n\n🔒\nA .330 season\n\nA .330 average over a full year. Nobody has hit .400 since 1941.\n\n🔒\nA 50 steal season\n\nFifty bags in one year. The single season record is 130.\n\n🔒\n500 home runs\n\nFive hundred career home runs.\n\n🔒\n1,500 driven in\n\nFifteen hundred career runs batted in.\n\n🔒\n400 stolen bases\n\nFour hundred career steals.\n\n🔒\nA sub 2.00 season\n\nAn ERA under 2.00 across a full year on the mound.\n\n🔒\n300 wins\n\nThree hundred career wins on the mound.\n\n🔒\n3,000 strikeouts\n\nThree thousand career strikeouts. The record is 5,714.\n\n🔒\n300 saves\n\nThree hundred career saves out of the bullpen.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons w",
+   "backOk": true,
+   "scroll": [
+    919,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "mlb390b-44-tile-news-s1.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith hits .257 with 17 home runs and 64 driven in",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "mlb390b-45-tile-inbox-s1.jpg",
+   "text": "Hub\n📱 Inbox\n🎣\nUnknown\n❄️ Offseason, 2028\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": "mlb390b-60-tile-news-s2.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in\n\n📰 Maximilian Okonkwo-Smith hits .257 with 17 home runs and 64 driven in",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🏥\nTeammate\n⏰ Trade deadline, 2029\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n🎣\nUnknown\n❄️ Offseason, 2028\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s3",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n📊\nAgency analyst\n⚖️ Arbitration winter, 2030\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n🏥\nTeammate\n⏰ Trade deadline, 2029\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n🎣\nUnknown\n❄️ Offseason, 2028\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s4",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n💼\nAgent\n⚖️ Arbitration winter, 2031\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n📊\nAgency analyst\n⚖️ Arbitration winter, 2030\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n🏥\nTeammate\n⏰ Trade deadline, 2029\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n🎣\nUnknown\n❄️ Offseason, 2028\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s5",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n📰\nBeat writer\n⚖️ Arbitration winter, 2032\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n💼\nAgent\n⚖️ Arbitration winter, 2031\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n📊\nAgency analyst\n⚖️ Arbitration winter, 2030\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n🏥\nTeammate\n⏰ Trade deadline, 2029\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s6",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n📰\nBeat writer\n⚖️ Arbitration winter, 2032\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n💼\nAgent\n⚖️ Arbitration winter, 2031\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n📊\nAgency analyst\n⚖️ Arbitration winter, 2030\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n🏥\nTeammate\n⏰ Trade deadline, 2029\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s7",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🌧️\nGrounds crew\n🏆 October, 2033\nTarp crew has pulled it four times this week, at 2am twice. The guys would love a signed ball for the shed.\n📰\nBeat writer\n⚖️ Arbitration winter, 2032\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n💼\nAgent\n⚖️ Arbitration winter, 2031\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n📊\nAgency analyst\n⚖️ Arbitration winter, 2030\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s8",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🎁\nTeam marketing\n🍂 September, 2034\nYour bobblehead night is next week. The face is... a choice. Want to see it before it goes out?\n🌧️\nGrounds crew\n🏆 October, 2033\nTarp crew has pulled it four times this week, at 2am twice. The guys would love a signed ball for the shed.\n📰\nBeat writer\n⚖️ Arbitration winter, 2032\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n💼\nAgent\n⚖️ Arbitration winter, 2031\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "My Player",
+   "shot": null,
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n83\n\nOVERALL\n\nMaximilian Okonkwo-Smith · CF · age 30\n\nMorale\n96\nFanbase\n100\nHealth\n95\nKarma\n86\n\n7\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "The Bank",
+   "shot": null,
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$15.1M\n\n$16.5M a year, 3 years left on the deal\n\n$15.1M\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "Career Log",
+   "shot": null,
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\nCompare seasons\n2034\nChicago Cubs\n2033\nChicago Cubs\n2032\nChicago Cubs\n2031\nChicago Cubs\n2030\nChicago Cubs\n2029\nChicago Cubs\n2028\nChicago Cubs",
+   "backOk": true,
+   "scroll": [
+    185,
+    0,
+    356
+   ],
+   "focus": "📜 CAREER LOG 7 seasons .282, 24 HR, 73 "
+  },
+  {
+   "tag": "end",
+   "word": "Trophy Case",
+   "shot": null,
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\n2 individual honours across 7 seasons.\n\nAll-Star\nx1\n\n2033\n\nGold Glove\nx1\n\n2033\n\n🎖️ BADGES\n3 of 26\n\n🔒\nWorld Series champion\n\nA ring, and a parade down the middle of the city.\n\n🔒\nBack to back\n\nTwo World Series in two seasons.\n\n🔒\nMVP or Cy Young\n\nThe biggest individual award your side of the ball has.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🧤\nGold Glove\n\nThe best fielder at your position for a year.\n\n🔒\nSilver Slugger\n\nThe best bat at your position for a year.\n\n🔒\nBatting title\n\nThe highest average in the league.\n\n🔒\nHome run champion\n\nLed the league in home runs.\n\n🔒\nA 50 home run season\n\nFifty in one year. The single season record is 73.\n\n🔒\nA .330 season\n\nA .330 average over a full year. Nobody has hit .400 since 1941.\n\n🔒\nA 50 steal season\n\nFifty bags in one year. The single season record is 130.\n\n🔒\n500 home runs\n\nFive hundred career home runs.\n\n🔒\n1,500 driven in\n\nFifteen hundred career runs batted in.\n\n🔒\n400 stolen bases\n\nFour hundred career steals.\n\n🔒\nA sub 2.00 season\n\nAn ERA under 2.00 across a full year on the mound.\n\n🔒\n300 wins\n\nThree hundred career wins on the mound.\n\n🔒\n3,000 strikeouts\n\nThree thousand career strikeouts. The record is 5,714.\n\n🔒\n300 saves\n\nThree hundred career saves out of the bullpen.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🩺\nIron man\n\nFive seasons ",
+   "backOk": true,
+   "scroll": [
+    356,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\n📱 Replied to Team marketing: Ship it as is.\n\nRico was relocated to a state park 40 miles away. Health +4, morale -4, fanbase -3, and two relievers have not forgiven you.\n\nHe paid back every dollar in 16 months and framed the signed page. Net worth back to even, morale +6.\n\nClean six days, chicken on the seventh. Net worth down 0.08M, health +6, morale +4.\n\n🪞 One Line Apart\n\n🪞 Emmett Ashford went 0.294, 25 HR and had the better year of the two of you. Head to head 3-4.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith hits .282 with 24 home runs and 73 driven in\n\n📰 Maximilian Okonkwo-Smith makes the All-Star team\n\n📰 Maximilian Okonkwo-Smith hits .309 with 31 home runs and 95 driven in\n\n📰 Maximilian Okonkwo-Smith hits .296 with 25 home runs and 91 driven in\n\n📰 Maximilian Okonkwo-Smith hits .285 with 21 home runs and 80 driven in\n\n📰 Injury cost Maximilian Okonkwo-Smith 59 games this season\n\n📰 Maximilian Okonkwo-Smith hits .282 with 15 home runs and 37 driven in\n\n📰 Maximilian Okonkwo-Smith hits .262 with 19 home runs and 68 driven in\n\n📰 Maximilian Okonkwo-Smith hits .257 with 17 home runs and 64 driven in",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🎁\nTeam marketing\n🍂 September, 2034\nYour bobblehead night is next week. The face is... a choice. Want to see it before it goes out?\n🌧️\nGrounds crew\n🏆 October, 2033\nTarp crew has pulled it four times this week, at 2am twice. The guys would love a signed ball for the shed.\n📰\nBeat writer\n⚖️ Arbitration winter, 2032\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n💼\nAgent\n⚖️ Arbitration winter, 2031\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n🟨\nLeague office\n⏰ Trade deadline, 2028\nYour postgame comments about last night's umpiring went viral. We'd welcome a public clarification.\n⚾\nLittle league coach\n⭐ All-Star break, 2028\nOur little league team made the town all-star game. The kids would lose it if you sent them a video.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [
+  {
+   "tag": "s1",
+   "games": 2,
+   "help": true,
+   "kickoff": null,
+   "firstCard": 1,
+   "review": "📺 Season Center\nChicago Cubs · 2028\n?\nBack to your season\nSeason review\n59-103 · Missed October\n159\nGames\n.257\nAVG\n17\nHR\n64\nRBI\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 67, L 3-5 vs Minnesota Twins, 2 for 4 with 2 home runs and 2 RBI\nLast five:\nL\nL\nW\nW\nW\nAfter game 162\n59-103\nHome 31-50\nAway 28-53\nStreak W3\nDivision 25-27\nLeague 48-66\nLast 10:\nL\nL\nW\nW\nL\nL\nL\nW\nW\nW\n📋 Game log\n🗓 Schedule\n159\nPlayed\n.257\nAVG\n17\nHR\n64\nRBI\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 24
+  },
+  {
+   "tag": "again",
+   "games": 2,
+   "help": false,
+   "kickoff": null,
+   "firstCard": 0,
+   "review": "📺 Season Center\nChicago Cubs · 2034\n?\nBack to your season\nSeason review\n72-90 · Missed October\n158\nGames\n.282\nAVG\n24\nHR\n73\nRBI\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 2, L 3-10 vs Toronto Blue Jays, 3 for 5 with 2 home runs and 2 RBI\nLast five:\nW\nL\nL\nL\nW\nAfter game 162\n72-90\nHome 36-45\nAway 36-45\nStreak W1\nDivision 20-32\nLeague 49-65\nLast 10:\nL\nL\nW\nL\nL\nW\nL\nL\nL\nW\n📋 Game log\n🗓 Schedule\n158\nPlayed\n.282\nAVG\n24\nHR\n73\nRBI\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 24
+  }
+ ],
+ "stuck": [
+  {
+   "tag": "s2",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s3",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s5",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s7",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s8",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "pushed ext s6",
+  "watch again: ↺ Watch the 2034 season again"
+ ],
+ "shots": [
+  "mlb390b-01-first-visit.jpg",
+  "mlb390b-02-create.jpg",
+  "mlb390b-03-create-filled.jpg",
+  "mlb390b-04-prospect-help.jpg",
+  "mlb390b-05-prospect-routes.jpg",
+  "mlb390b-06-prospect-season1.jpg",
+  "mlb390b-07-prospect-choice.jpg",
+  "mlb390b-08-prospect-season2.jpg",
+  "mlb390b-09-prospect-showcase.jpg",
+  "mlb390b-10-prospect-draftday.jpg",
+  "mlb390b-11-draft-night-1.jpg",
+  "mlb390b-12-draft-night-2.jpg",
+  "mlb390b-13-draft-night-end.jpg",
+  "mlb390b-14-hub-draft.jpg",
+  "mlb390b-15-hub-draft-full.jpg",
+  "mlb390b-16-tile-myplayer-s0.jpg",
+  "mlb390b-17-tile-thebank-s0.jpg",
+  "mlb390b-18-tile-careerlog-s0.jpg",
+  "mlb390b-19-tile-trophycase-s0.jpg",
+  "mlb390b-20-tile-news-s0.jpg",
+  "mlb390b-21-tile-inbox-s0.jpg",
+  "mlb390b-22-centre-help-s1.jpg",
+  "mlb390b-23-centre-kickoff-s1.jpg",
+  "mlb390b-24-centre-live-s1-g1.jpg",
+  "mlb390b-25-centre-final-s1-g1.jpg",
+  "mlb390b-26-centre-live-s1-g2.jpg",
+  "mlb390b-27-centre-final-s1-g2.jpg",
+  "mlb390b-28-centre-review-s1.jpg",
+  "mlb390b-29-centre-review-late-s1.jpg",
+  "mlb390b-30-centre-fixtures-s1.jpg",
+  "mlb390b-31-continue-s1-1.jpg",
+  "mlb390b-32-rivalry-choice-s1.jpg",
+  "mlb390b-33-continue-s1-2.jpg",
+  "mlb390b-34-event-s1-1.jpg",
+  "mlb390b-35-outcome-s1.jpg",
+  "mlb390b-36-event-s1-2.jpg",
+  "mlb390b-37-outcome-s1.jpg",
+  "mlb390b-38-hub-s1.jpg",
+  "mlb390b-39-tile-myplayer-s1.jpg",
+  "mlb390b-40-tile-thebank-s1.jpg",
+  "mlb390b-41-bank-shop.jpg",
+  "mlb390b-42-tile-careerlog-s1.jpg",
+  "mlb390b-43-tile-trophycase-s1.jpg",
+  "mlb390b-44-tile-news-s1.jpg",
+  "mlb390b-45-tile-inbox-s1.jpg",
+  "mlb390b-46-inbox-open.jpg",
+  "mlb390b-47-inbox-open.jpg",
+  "mlb390b-48-practice-menu.jpg",
+  "mlb390b-49-practice-drill.jpg",
+  "mlb390b-50-practice-result.jpg",
+  "mlb390b-51-hub-after-practice.jpg",
+  "mlb390b-52-continue-s2-1.jpg",
+  "mlb390b-53-stuck-s2-1.jpg",
+  "mlb390b-54-continue-s2-2.jpg",
+  "mlb390b-55-edge-reload-event-s2.jpg",
+  "mlb390b-56-hub-s2.jpg",
+  "mlb390b-57-programme-open.jpg",
+  "mlb390b-58-programme-menu.jpg",
+  "mlb390b-59-programme-picked.jpg",
+  "mlb390b-60-tile-news-s2.jpg"
+ ],
+ "draft": {
+  "routes": [
+   "1 season High school senior Eligible the day you graduate. The rawest road, and one season to show it. Start at age 17 ·",
+   "2 seasons Junior college Eligible after any year. Two seasons of reps against grown men. Start at age 18 · Draft at 20",
+   "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. St"
+  ],
+  "route": "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. St",
+  "seasonShots": 3,
+  "choices": [
+   "The film room -> 0/2",
+   "A summer wood bat league -> 1/2",
+   "A big stage -> 0/2"
+  ],
+  "showcase": "Go all out Push every drill to the limit. Grade A +10, B +4, C -3, D -8",
+  "range": "The scouts have you between pick 283 and pick 472 of 600.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nMLB Road to the Draft\n\nThis is your moment.\n\nChicago Cubs\n\nMaximilian Okonkwo-Smith\nCF · Age 23\nRating\n77\nPotential\n96\nHealth\n100\nDraft stock\n35/100\nThis is your moment.\nLive batting practice: grade C. Draft stock -3, now 35.\n\n2026 DRAFT\n\nThe scouts had you between pick 283 and pick 472 of 600.\n\n1\nHouston Astros\nRound 1\n2\nMinnesota Twins\nRound 1\n3\nBoston Red Sox\nRound 1\nPicks 4 to 460 come off the board, round 1 into round 16.\n461\nSan Diego Padres\nRound 16\n462\nMiami Marlins\nRound 16\n463\nCleveland Guardians\nRound 16\nPick 464: Chicago Cubs\nYour name is called. Round 16, pick 14.\n\nRound 16, pick 14, 464 overall. Chicago Cubs take you.\n\nStart your career\n2026 DRAFT\nRound 16, pick 14 (464 overall)\n\nChicago Cubs hold the pick, and they take you.\n\nMinor league seasons\nAge 21, Double-A\nAVG .315, OBP .397, SLG .534\nAge 22, Triple-A\nAVG .302, OBP .399, SLG .523\nYour scout file\n3 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · CF",
+     "Chicago Cubs",
+     "2029 · age 24",
+     "OVR 78",
+     "$0.8M x5",
+     "⭐ Everyday"
+    ],
+    "play": "Play the 2029 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 17 career home runs",
+    "last": "Last season: .257, 17 HR, 64 RBI · Missed October",
+    "tiles": [
+     "📊 MY PLAYER OVR 78 CF, age 24, 0 rings",
+     "💰 THE BANK $0M $0.8M a year, 5 years left",
+     "📜 CAREER LOG 1 season .257, 17 HR, 64 RBI",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 4 headlines You came down with it and the replay ran for a week. Morale +6, fanbase +8, health -3.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · CF",
+     "Chicago Cubs",
+     "2029 · age 24",
+     "OVR 78",
+     "$0.8M x5",
+     "⭐ Everyday"
+    ],
+    "play": "Play the 2029 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 17 career home runs",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 78 CF, age 24, 0 rings",
+     "💰 THE BANK $0M $0.8M a year, 5 years left",
+     "📜 CAREER LOG 1 season .257, 17 HR, 64 RBI",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 1 headline Maximilian Okonkwo-Smith hits .257 with 17 home runs and 64 driven in",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2029,
+    "age": 24,
+    "ovr": 78,
+    "team": "CHC",
+    "salary": 0.8,
+    "cy": 5,
+    "morale": 80,
+    "fanbase": 41,
+    "health": 97,
+    "net": 0,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "CHC",
+     "age": 23,
+     "ovr": 77,
+     "games": 159,
+     "awards": [],
+     "teamResult": "Missed October",
+     "salary": 0.8,
+     "avg": 0.257,
+     "hr": 17,
+     "rbi": 64,
+     "sb": 6,
+     "doubles": 28,
+     "obp": 0.34
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 0
+  },
+  {
+   "rows": 3
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎣 UNKNOWN\n\n❄️ Offseason, 2028\n\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n\nReport and warn fansDelete itReply as a joke",
+   "answered": "Report and warn fans"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎣 UNKNOWN\n\n❄️ Offseason, 2028\n\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n\nYou replied: Report and warn fans",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏥 TEAMMATE\n\n⏰ Trade deadline, 2029\n\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n\nVisit weeklySend a messageRead it later",
+   "answered": "Visit weekly"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏥 TEAMMATE\n\n⏰ Trade deadline, 2029\n\nTommy John's gone. Twelve months. Sitting in this hospital bed wondering if I'll ever throw the same again, honestly.\n\nYou replied: Visit weekly",
+   "answered": false
+  },
+  {
+   "rows": 5
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📊 AGENCY ANALYST\n\n⚖️ Arbitration winter, 2030\n\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n\nSend it, I'll read it allJust tell me the figure",
+   "answered": "Send it, I'll read it all"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📊 AGENCY ANALYST\n\n⚖️ Arbitration winter, 2030\n\nBuilt your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?\n\nYou replied: Send it, I'll read it all",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n⚖️ Arbitration winter, 2031\n\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n\nSettle, keep it friendlyGo to the hearing",
+   "answered": "Settle, keep it friendly"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n⚖️ Arbitration winter, 2031\n\nWe're arbitration eligible. We file a number, they file a number. Settle before a hearing, or go all the way?\n\nYou replied: Settle, keep it friendly",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📰 BEAT WRITER\n\n⚖️ Arbitration winter, 2032\n\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n\nNo comment, love it hereSay the club is lowballing",
+   "answered": "No comment, love it here"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📰 BEAT WRITER\n\n⚖️ Arbitration winter, 2032\n\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n\nYou replied: No comment, love it here",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📰 BEAT WRITER\n\n⚖️ Arbitration winter, 2032\n\nHearing your side and the club are still apart. Anything on the record before the figures come out?\n\nYou replied: No comment, love it here",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🌧️ GROUNDS CREW\n\n🏆 October, 2033\n\nTarp crew has pulled it four times this week, at 2am twice. The guys would love a signed ball for the shed.\n\nSigned balls and breakfastOne signed ball",
+   "answered": "Signed balls and breakfast"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🌧️ GROUNDS CREW\n\n🏆 October, 2033\n\nTarp crew has pulled it four times this week, at 2am twice. The guys would love a signed ball for the shed.\n\nYou replied: Signed balls and breakfast",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎁 TEAM MARKETING\n\n🍂 September, 2034\n\nYour bobblehead night is next week. The face is... a choice. Want to see it before it goes out?\n\nShip it as isAsk for a redo",
+   "answered": "Ship it as is"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎁 TEAM MARKETING\n\n🍂 September, 2034\n\nYour bobblehead night is next week. The face is... a choice. Want to see it before it goes out?\n\nYou replied: Ship it as is",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": "20",
+   "secs": 9
+  },
+  {
+   "banked": true,
+   "ovr": [
+    78,
+    78
+   ]
+  }
+ ],
+ "edge": [
+  {
+   "test": "reload on an offseason card",
+   "before": "pressDisaster",
+   "after": null,
+   "phase": null,
+   "saveBefore": {
+    "year": 2029,
+    "ids": [
+     "pressDisaster"
+    ],
+    "at": 0
+   },
+   "saveAfter": null,
+   "buttons": [
+    "Play the 2030 season",
+    "📺 Week by week",
+    "↺ Watch the 2029 season again",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 79 CF, age 25, 0 rings",
+    "💰 THE BANK $0.4M $0.8M a year, 4 years left",
+    "📜 CAREER LOG 2 seasons .262, 19 HR, 68 RBI"
+   ]
+  },
+  {
+   "test": "double tap on an offseason answer",
+   "before": {
+    "morale": 93,
+    "fanbase": 54,
+    "health": 89,
+    "net": 0.8,
+    "ovr": 81,
+    "summer": {
+     "year": 2030,
+     "ids": [
+      "mlbA_card_show"
+     ],
+     "at": 0
+    }
+   },
+   "after": {
+    "morale": 100,
+    "fanbase": 67,
+    "health": 89,
+    "net": 0.84,
+    "ovr": 81,
+    "summer": null
+   },
+   "outcome": ""
+  },
+  {
+   "test": "back then forward at the hub",
+   "backUrl": "about:blank",
+   "same": true,
+   "before": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2035 · age 30",
+    "OVR 83",
+    "$16.5M x3",
+    "⭐ Everyday"
+   ],
+   "after": [
+    "Maximilian Okonkwo-Smith · CF",
+    "Chicago Cubs",
+    "2035 · age 30",
+    "OVR 83",
+    "$16.5M x3",
+    "⭐ Everyday"
+   ]
+  },
+  {
+   "test": "hostile save: wrong types",
+   "create": false,
+   "buttons": [],
+   "newPageErrors": [],
+   "shot": null,
+   "stored": "{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""
+  },
+  {
+   "test": "hostile save: not json",
+   "create": true,
+   "buttons": [
+    "⚾ 2026 The league as it is today. Full money, all 30 franchises.",
+    "⏪ 2004 throwback The 2004 league: the Expos in their last Montreal sum",
+    "SP",
+    "RP",
+    "C",
+    "1B",
+    "2B",
+    "3B"
+   ],
+   "newPageErrors": [],
+   "shot": null,
+   "stored": "{{{garbage"
+  }
+ ],
+ "programme": [
+  {
+   "tiles": [
+    "Workload and recovery Usual routine",
+    "Tactical approach Your usual approach",
+    "Coach expectations No extra target",
+    "Teammate partnership Keep your own routine",
+    "Performance bonus No bonus challenge",
+    "Veteran reinvention Keep your usual routine"
+   ]
+  },
+  {
+   "choices": [
+    "*Usual routine Keep your current inputs.",
+    "Push the workload Season health -8, morale +6. More form, more injury risk.",
+    "Prioritize recovery Season health +3 (health tops out at 100), morale -6. Less injury risk"
+   ]
+  },
+  {
+   "saved": false
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "⚾ 2026 The league as it is today. Full money, all 30 franchises.",
+   "⏪ 2004 throwback The 2004 league: the Expos in their last Montreal sum",
+   "SP",
+   "RP",
+   "C",
+   "1B",
+   "2B",
+   "3B",
+   "SS",
+   "LF",
+   "CF",
+   "RF",
+   "DH",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.\nPick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.\nBuild your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the clubhouse is one sitting a season on odds that are printed before you sit in.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nCollect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to 500 home runs, 3,000 strikeouts and $100M to your name, each lit the moment the facts of your career say so.\nAnswer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.\nSome seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.\nEnter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nCheck the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.\nHandle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).\nAfter a normal offsea",
+  "closedByEscape": true
+ },
+ "create": [
+  "*⚾ 2026 The league as it is today. Full money, all 30 franchi",
+  "⏪ 2004 throwback The 2004 league: the Expos in their last Mo",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Five-Tool Freak Does everything, the face of the game",
+  "Burner Eighty steals if you let him",
+  "The Wall Climber Highlight-reel glove, growing bat"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": "unreadable",
+  "chips": {
+   "chips": [
+    "Play Now",
+    "Play Now",
+    "Play Now"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": []
+  },
+  "secs": 514
+ }
+}

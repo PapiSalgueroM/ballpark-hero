@@ -1,0 +1,3160 @@
+{
+ "tag": "nhl390b",
+ "SPORT": "nhl",
+ "W": 390,
+ "H": 844,
+ "SEED": 3404,
+ "POS": "D",
+ "steps": [
+  {
+   "t": 6,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    628,
+    644,
+    185
+   ]
+  },
+  {
+   "act": "route 0"
+  },
+  {
+   "t": 9,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    129,
+    129,
+    129
+   ]
+  },
+  {
+   "t": 11,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    142,
+    142,
+    142
+   ]
+  },
+  {
+   "t": 14,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    142,
+    142,
+    268
+   ]
+  },
+  {
+   "t": 20,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    268,
+    268,
+    268
+   ]
+  },
+  {
+   "t": 24,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 26,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 28,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    185,
+    185,
+    887
+   ]
+  },
+  {
+   "t": 30,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 32,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 34,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 65,
+   "act": "play season 1",
+   "text": "Play the 2027 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 69,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 70,
+   "act": "rivalry option",
+   "text": "🕊️ Shrug it off on camera Fanbase +5, Karma +5, the feud co",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 73,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 74,
+   "act": "event option 0",
+   "text": "Sleep in there overnight and film it Ghost content",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 75,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 75,
+   "act": "event option 1",
+   "text": "Skate to the bench and wait Morale up, fans up",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 76,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 81,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    40,
+    40,
+    40
+   ]
+  },
+  {
+   "t": 83,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    40,
+    40,
+    40
+   ]
+  },
+  {
+   "t": 85,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    0,
+    0,
+    144
+   ]
+  },
+  {
+   "t": 87,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    144,
+    144,
+    144
+   ]
+  },
+  {
+   "t": 89,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 94,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 95,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 173,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 204,
+   "act": "play season 2",
+   "text": "Play the 2028 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 208,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 210,
+   "act": "rivalry option",
+   "text": "🤝 Co-host and split the bill Fanbase +10, Net worth -$1M, K",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 213,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 217,
+   "act": "event option 0",
+   "text": "Ride with him every day Free education",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 218,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 218,
+   "act": "event option 2",
+   "text": "Kick uncle out of the chat Family exile",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 219,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 224,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 228,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 259,
+   "act": "play season 3",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 260,
+   "act": "extension push",
+   "text": "Ask for more, once",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 262,
+   "act": "wheel spin",
+   "text": "Spin",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 266,
+   "act": "wheel continue",
+   "text": "Continue to the offers",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 267,
+   "act": "extension sign",
+   "text": "Sign it: 4 more years at $11.3M",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 270,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 301,
+   "act": "play season 4",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 304,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 309,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 310,
+   "act": "event option 0",
+   "text": "Host it, play a hole with every group Full send",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 311,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 312,
+   "act": "event option 2",
+   "text": "Pass, buy into the beef supplier Boring money",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 312,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 316,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 347,
+   "act": "play season 5",
+   "text": "Play the 2030 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 352,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 357,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 358,
+   "act": "event option 2",
+   "text": "Keep it exactly as it is Do not ruin it",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 358,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 362,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 393,
+   "act": "play season 6",
+   "text": "Play the 2031 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 397,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 398,
+   "act": "event option 1",
+   "text": "Give them to minor hockey instead Fanbase +8",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 399,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 399,
+   "act": "event option 2",
+   "text": "Waive only if they extend you Leverage the favor",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 400,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 400,
+   "act": "event option 0",
+   "text": "Say the line, take the truck Local legend",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 401,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 405,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 407,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 409,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 411,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    208,
+    197,
+    723
+   ]
+  },
+  {
+   "t": 413,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 415,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 417,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11613,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11613,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11761,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 7
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11095,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11091,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11091,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 11091,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect season",
+   "t": 11
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 11074,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect showcase",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 10860,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect draft day",
+   "t": 13
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 11432,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 15
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 11432,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 19
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 61, the Colorado Avalanche select Maximilian Okonkwo-Smith. [149<306]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "hub draft",
+   "t": 22
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10723,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 23
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10785,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 25
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10416,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 27
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11250,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 29
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10487,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 31
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10318,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Inbox s0",
+   "t": 33
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10462,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 68
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10740,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s1",
+   "t": 69
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10701,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 73
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10985,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🕊️ You shrugged it off on camera and called Cole Bergeron a good play [149<518]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 74
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10585,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 74
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11000,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Six hours of night vision footage and one genuinely unexplained bang a [149<569]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s1",
+   "t": 75
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10497,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 75
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11141,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You sat and waited like a pro. The goal stood and the building got twi [149<447]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "hub s1",
+   "t": 76
+  },
+  {
+   "overX": 0,
+   "scrollY": 40,
+   "docH": 10723,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 80
+  },
+  {
+   "overX": 0,
+   "scrollY": 40,
+   "docH": 10785,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 82
+  },
+  {
+   "overX": 0,
+   "scrollY": 40,
+   "docH": 11391,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.5M 57x29",
+    "$4.5M 59x29",
+    "$8M 48x29",
+    "$20M 55x29",
+    "$5M 48x29",
+    "$2M 48x29",
+    "$0.8M 59x29",
+    "$2.5M 59x29"
+   ],
+   "buttonsInView": 15,
+   "where": "bank shop",
+   "t": 83
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10492,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "tile Career Log s1",
+   "t": 85
+  },
+  {
+   "overX": 0,
+   "scrollY": 144,
+   "docH": 11250,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 87
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10526,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 89
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10431,
+   "bad": [],
+   "trunc": [
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile Inbox s1",
+   "t": 91
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Unknown: Report and warn fans. Karma up. [149<246]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 19,
+   "where": "practice menu",
+   "t": 96
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Unknown: Report and warn fans. Karma up. [149<246]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 174
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10462,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 208
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10707,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s2",
+   "t": 209
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10701,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 212
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11017,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Maximilian Okonkwo-Smith puts up 56 assists from the blue line [149<273]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s2",
+   "t": 216
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10985,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Twenty minutes of hockey school each way: which refs hold a grudge, wh [149<634]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s2",
+   "t": 218
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "He built a rival chat within the hour and named it after himself. Fanb [149<363]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "hub s2",
+   "t": 219
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "He built a rival chat within the hour and named it after himself. Fanb [149<363]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "programme open",
+   "t": 220
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "He built a rival chat within the hour and named it after himself. Fanb [149<363]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "programme menu",
+   "t": 221
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10622,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 223
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10488,
+   "bad": [],
+   "trunc": [
+    "Contract years get loud. Don't let the money talk get in your head. Pl [302<539]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s2",
+   "t": 225
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11245,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Veteran teammate: Thank him. [149<190]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s3",
+   "t": 260
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11048,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Veteran teammate: Thank him. [149<190]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "wheel s3",
+   "t": 261
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11188,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Veteran teammate: Thank him. [149<190]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s3",
+   "t": 266
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11101,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🖊️ Extension signed: 4 more years at $11.3M a year. [149<224]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub s3",
+   "t": 267
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10488,
+   "bad": [],
+   "trunc": [
+    "Contract years get loud. Don't let the money talk get in your head. Pl [302<539]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s3",
+   "t": 268
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10494,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s4",
+   "t": 304
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10597,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s4",
+   "t": 309
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10985,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s4",
+   "t": 310
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10985,
+   "bad": [],
+   "trunc": [
+    "Six hours in a cart, 288 handshakes, 50k of your own money into the pr [149<566]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s4",
+   "t": 311
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10544,
+   "bad": [],
+   "trunc": [
+    "A few days off for the break. Your room is exactly how you left it, po [302<498]",
+    "Contract years get loud. Don't let the money talk get in your head. Pl [302<539]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "tile Inbox s4",
+   "t": 313
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10592,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 351
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10577,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 356
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10985,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s5",
+   "t": 357
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10601,
+   "bad": [],
+   "trunc": [
+    "Playoff money just hit. The trainers and equipment staff make a fracti [302<640]",
+    "A few days off for the break. Your room is exactly how you left it, po [302<498]",
+    "Contract years get loud. Don't let the money talk get in your head. Pl [302<539]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s5",
+   "t": 359
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10462,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s6",
+   "t": 396
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10926,
+   "bad": [],
+   "trunc": [
+    "🪞 Cole Bergeron went 35G 42A 77P. You had the better year. Head to he [149<346]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "event s6",
+   "t": 398
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10985,
+   "bad": [],
+   "trunc": [
+    "Every home game there are twelve kids from a minor hockey team sitting [149<389]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s6",
+   "t": 399
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11181,
+   "bad": [],
+   "trunc": [
+    "0.06M, a free truck, and a line the student section now chants at you  [149<567]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "hub s6",
+   "t": 401
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10601,
+   "bad": [],
+   "trunc": [
+    "The stick company sent a new model. Try it in camp, or keep the old on [302<543]",
+    "Playoff money just hit. The trainers and equipment staff make a fracti [302<640]",
+    "A few days off for the break. Your room is exactly how you left it, po [302<498]",
+    "Contract years get loud. Don't let the money talk get in your head. Pl [302<539]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s6",
+   "t": 402
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10723,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player end",
+   "t": 406
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10785,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank end",
+   "t": 408
+  },
+  {
+   "overX": 0,
+   "scrollY": 208,
+   "docH": 10656,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Career Log end",
+   "t": 410
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11359,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case end",
+   "t": 412
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11006,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News end",
+   "t": 414
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10601,
+   "bad": [],
+   "trunc": [
+    "The stick company sent a new model. Try it in camp, or keep the old on [302<543]",
+    "Playoff money just hit. The trainers and equipment staff make a fracti [302<640]",
+    "A few days off for the break. Your room is exactly how you left it, po [302<498]",
+    "Contract years get loud. Don't let the money talk get in your head. Pl [302<539]",
+    "Your national team asked to borrow you for the World Juniors. Your cal [302<519]",
+    "Fitness testing tomorrow. The bike test, the one everybody hates. You  [302<407]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox end",
+   "t": 416
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  },
+  {
+   "t": "error",
+   "at": 73,
+   "text": "TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)\n    at Object.Se [as legacyOf] (http://localhost:4173/assets/NhlMyCareer-BRkJwLwL.js:2:223306)\n    at $y (http://localhost:4173/assets/usCareer"
+  },
+  {
+   "t": "error",
+   "at": 73,
+   "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'toLocaleString')\n    at Kt (http://localhost:4173/assets/usCareerSeasonReview-B3QATWN2.js:7:225705)\n    at Object.Se [as legacyOf] (http://localhost:4173/assets/NhlMyCareer-BRkJwLwL.js:2:223306)\n    at $y (http://local"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n🏒\n\nTHE CHEAP SHOT\n\nCole Bergeron got away with a cheap shot after the whistle on Saturday, no call. Your bench wants him to answer for it the next time you two meet.\n\nMaximilian Okonkwo-Smith\n82\nVS\nCole Bergeron\n80\n😈 Settle it next game\nThe feud heats up, otherwise Morale +8\n30% chance you're the one who gets the penalty: Morale -5, Fanbase -5, Net worth -$100k\n🕊️ Shrug it off on camera\nFanbase +5, Karma +5, the feud cools\n🎞️ Say nothing, watch the tape\nMorale +6, the feud heats up"
+  },
+  {
+   "tag": "s1",
+   "id": "nhlB_dressingRoomGhost",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nThe room is haunted, apparently\n\nEvery rookie hears about the ghost in the old visitors room. Last night three grown men swore they heard skates on concrete at 1am. The building is 94 years old.\n\nSleep in there overnight and film it\nGhost content\nStart the legend yourself\nFeed the myth\nGet the building blessed\nFull ceremony",
+   "opts": [
+    "Sleep in there overnight and film it Ghost content",
+    "Start the legend yourself Feed the myth",
+    "Get the building blessed Full ceremony"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.9,
+     0.9
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s1",
+   "id": "nhlC_rule_coach_challenge",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nYour goal is under review\n\nYou scored the biggest goal of the month and the other coach challenged it for offside. The whole building waits while the officials watch your skate on a replay.\n\nCelebrate anyway\nCould go either way: morale up, fans up, or morale down, fans down\nSkate to the bench and wait\nMorale up, fans up\nTell the linesman what you think\nMorale down, fans up",
+   "opts": [
+    "Celebrate anyway Could go either way: morale up, fans up, or morale down, fans down",
+    "Skate to the bench and wait Morale up, fans up",
+    "Tell the linesman what you think Morale down, fans up"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     0.9,
+     0.9
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nCole Bergeron's foundation asks you to co-host a free youth hockey clinic. Same rink, same whistle, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n83\nVS\nCole Bergeron\n81\n🤝 Co-host and split the bill\nFanbase +10, Net worth -$1M, Karma +8, the feud cools\n😉 Show up and chirp all day\nFanbase +12, the feud heats up\n💸 Send a check, skip it\nNet worth -$1M, Karma +3"
+  },
+  {
+   "tag": "s2",
+   "id": "nhlA_vet_mentor",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nThe 38 year old winger\n\nTwo Cups, one working knee, and the stall right next to yours. He has seen a hundred kids like you come and go, and for some reason he has decided you are worth the trouble. He offers to drive you to the rink every morning at 7, coffee included, lecture optional.\n\nRide with him every day\nFree education\nSleep in, drive yourself\nRest first\nAsk him about the Cup year\nSteal the map",
+   "opts": [
+    "Ride with him every day Free education",
+    "Sleep in, drive yourself Rest first",
+    "Ask him about the Cup year Steal the map"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     83,
+     84
+    ],
+    "salary": [
+     0.9,
+     0.9
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "nhlB_groupChatLeak",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nThe family group chat leaked\n\nSomeone screenshotted your uncle calling the head coach a clipboard salesman. It was on every hockey account by noon.\n\nPublic apology, private laugh\nDamage control\nSay absolutely nothing\nLet it die\nKick uncle out of the chat\nFamily exile",
+   "opts": [
+    "Public apology, private laugh Damage control",
+    "Say absolutely nothing Let it die",
+    "Kick uncle out of the chat Family exile"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     84,
+     84
+    ],
+    "salary": [
+     0.9,
+     0.9
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "extension": "Colorado Avalanche\nFAIR\n\n$10.2M\n\nA YEAR\n\n4\n\nYEARS\n\n-9%\n\nVS MARKET\n\nThey would like you to stay. They would also like a discount.\n\nBefore you push: Raise accepted 55% · Held 45% · Withdrawn 0%\n\nSign it: 4 more years at $10.2M\nAsk for more, once"
+  },
+  {
+   "tag": "s3",
+   "extension": "Colorado Avalanche\nFAIR\n\n$11.3M\n\nA YEAR\n\n4\n\nYEARS\n\n+1%\n\nVS MARKET\n\nThey found the money. They usually do, for players like you.\n\nSign it: 4 more years at $11.3M\nYou have made your case"
+  },
+  {
+   "tag": "s4",
+   "id": "nhlB_golfTournament",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nYour name on a golf tournament\n\nShotgun start, 144 players, a silent auction and a scramble so nobody has to be good. You have to shake 288 hands in six hours.\n\nHost it, play a hole with every group\nFull send\nHost it, charity keeps everything\nAll to charity\nSkip it, send a signed jersey\nSummer off",
+   "opts": [
+    "Host it, play a hole with every group Full send",
+    "Host it, charity keeps everything All to charity",
+    "Skip it, send a signed jersey Summer off"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     85,
+     85
+    ],
+    "salary": [
+     11.3,
+     11.3
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s4",
+   "id": "nhlB_steakhouseDeal",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nA steakhouse with your name over the door\n\nA restaurant group wants your name, your face and 1.2M. The chef is genuinely good. The projections are genuinely fiction.\n\nPut in 1.2M for 30 percent\nReal equity\nLicense the name only\nCash, zero risk\nPass, buy into the beef supplier\nBoring money",
+   "opts": [
+    "Put in 1.2M for 30 percent Real equity",
+    "License the name only Cash, zero risk",
+    "Pass, buy into the beef supplier Boring money"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     85,
+     85
+    ],
+    "salary": [
+     11.3,
+     11.3
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "nhlB_zamboniDriver",
+   "text": "OFFSEASON, CARD 1 OF 1\n\nThe zamboni driver is your best friend now\n\nGary has flooded this ice for 31 years, could not care less that you make 11M, and is the only person who tells you the truth about your game.\n\nFly Gary to every road game\nBring Gary\nGet him on the payroll as a scout\nGive him a real job\nKeep it exactly as it is\nDo not ruin it",
+   "opts": [
+    "Fly Gary to every road game Bring Gary",
+    "Get him on the payroll as a scout Give him a real job",
+    "Keep it exactly as it is Do not ruin it"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     87,
+     87
+    ],
+    "salary": [
+     11.3,
+     11.3
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "hcorr_tickets",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nYour player tickets\n\nEvery player gets comps. A broker offers to buy yours in bulk for playoff games, in cash, forever, which is very much against your contract.\n\nSell them all, 400k a year\n400k dirty, heat +9\nGive them to minor hockey instead\nFanbase +8",
+   "opts": [
+    "Sell them all, 400k a year 400k dirty, heat +9",
+    "Give them to minor hockey instead Fanbase +8"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     89,
+     89
+    ],
+    "salary": [
+     11.3,
+     11.3
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "nhlB_expansionExposure",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nExpansion draft exposure\n\nThe new franchise picks in June. The GM asked, completely off the record, if you would waive protection so he can keep two young defensemen.\n\nWaive it, let them expose you\nTake one for the room\nRefuse, make them protect you\nProtect yourself\nWaive only if they extend you\nLeverage the favor",
+   "opts": [
+    "Waive it, let them expose you Take one for the room",
+    "Refuse, make them protect you Protect yourself",
+    "Waive only if they extend you Leverage the favor"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     89,
+     89
+    ],
+    "salary": [
+     11.3,
+     11.7
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "nhlA_truck_ad",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe truck dealership ad\n\nThe biggest dealer in town wants you for a local ad: a green screen, a cowboy hat they will not let you refuse, and one line of dialogue about zero percent financing. They will pay you and give you a truck. Every player who has done one of these still hears about it.\n\nSay the line, take the truck\nLocal legend\nBring your linemate in and split it\nTwo man bit\nPass, keep the dignity\nNo green screen",
+   "opts": [
+    "Say the line, take the truck Local legend",
+    "Bring your linemate in and split it Two man bit",
+    "Pass, keep the dignity No green screen"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     89,
+     89
+    ],
+    "salary": [
+     11.7,
+     11.7
+    ],
+    "team": [
+     "COL",
+     "COL"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe room is haunted, apparently\n\nYou chose: Sleep in there overnight and film it\n\nHealth\n100 → \nto\n97\n-3\nMorale\n66 → \nto\n70\n+4\nFanbase\n37 → \nto\n51\n+14\nContinue"
+  },
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nYour goal is under review\n\nYou chose: Skate to the bench and wait\n\nMorale\n70 → \nto\n73\n+3\nFanbase\n51 → \nto\n53\n+2\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nThe 38 year old winger\n\nYou chose: Ride with him every day\n\nOVR\n83 → \nto\n84\n+1\nMorale\n69 → \nto\n76\n+7\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nThe family group chat leaked\n\nYou chose: Kick uncle out of the chat\n\nMorale\n76 → \nto\n74\n-2\nFanbase\n66 → \nto\n73\n+7\nContinue"
+  },
+  {
+   "tag": "s4",
+   "txt": "YOUR DECISION\n\nYour name on a golf tournament\n\nYou chose: Host it, play a hole with every group\n\nHealth\n97 → \nto\n95\n-2\nMorale\n72 → \nto\n77\n+5\nFanbase\n75 → \nto\n84\n+9\nCash\n$5.4M → \nto\n$5.35M\n-$0.05M\nContinue"
+  },
+  {
+   "tag": "s4",
+   "txt": "YOUR DECISION\n\nA steakhouse with your name over the door\n\nYou chose: Pass, buy into the beef supplier\n\nCash\n$5.35M → \nto\n$4.85M\n-$0.5M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nThe zamboni driver is your best friend now\n\nYou chose: Keep it exactly as it is\n\nMorale\n89 → \nto\n98\n+9\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nYour player tickets\n\nYou chose: Give them to minor hockey instead\n\nFanbase\n93 → \nto\n100\n+7\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nExpansion draft exposure\n\nYou chose: Waive only if they extend you\n\nAnnual salary\n$11.3M → \nto\n$11.7M\n+$0.4M\nContract years\n2 → \nto\n4\n+2\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe truck dealership ad\n\nYou chose: Say the line, take the truck\n\nMorale\n100 → \nto\n98\n-2\nCareer earnings\n$35.7M → \nto\n$35.8M\n+$0.1M\nCash\n$14.9M → \nto\n$15M\n+$0.1M\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2027 SEASON\n\nColorado Avalanche · age 19 · D\n\nMissed the playoffs\n\n15 G, 47 A, 62 P\n\n🪞 Cole Bergeron went 23G 29A 52P. You had the better year. Head to head 1-0.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n🏒\n\nTHE CHEAP SHOT\n\nCole Bergeron got away with a cheap shot after the whistle on Saturday, no call. Your bench wants him to answer for it the next time you two meet.\n\nMaximilian Okonkwo-Smith\n82\nVS\nCole Bergeron\n80\n\nYOU CHOSE: 🕊️ SHRUG IT OFF ON CAMERA\n\n🕊️ You shrugged it off on camera and called Cole Bergeron a good player. The grown up in the rink, and the fans noticed.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 1,
+   "txt": "THE 2028 SEASON\n\nColorado Avalanche · age 20 · D\n\nMissed the playoffs\n\n16 G, 56 A, 72 P\n\n🪞 Cole Bergeron went 25G 34A 59P. You had the better year. Head to head 2-0.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nCole Bergeron's foundation asks you to co-host a free youth hockey clinic. Same rink, same whistle, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n83\nVS\nCole Bergeron\n81\n\nYOU CHOSE: 🤝 CO-HOST AND SPLIT THE BILL\n\n💛 One day, one sheet of ice, two hundred kids. You and Cole Bergeron split the bill and the feud took the day off.\n\nContinue"
+  },
+  {
+   "tag": "s4",
+   "n": 1,
+   "txt": "THE 2029 SEASON\n\nColorado Avalanche · age 21 · D\n\nMissed the playoffs\n\n18 G, 55 A, 73 P\n\n⭐ All-Star.\n\n🪞 Cole Bergeron went 22G 29A 51P. You had the better year. Head to head 3-0.\n\nContinue"
+  },
+  {
+   "tag": "s4",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📋\n\nCap Squeeze\n\nWord around the room is the front office is choosing between you and Cole Bergeron for the same cap space.\n\nMorale -5\n\nMaximilian Okonkwo-Smith\n85\nVS\nCole Bergeron\n83\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 1,
+   "txt": "THE 2030 SEASON\n\nColorado Avalanche · age 22 · D\n\nLost in Round 1\n\n20 G, 67 A, 87 P\n\n📊 Playoffs: 6 games, 2G 7A 9P.\n\n⭐ All-Star.\n\n🎖️ Masterton nomination for perseverance.\n\n🔥 The puck followed you around all season.\n\n🪞 Cole Bergeron went 25G 35A 60P. You had the better year. Head to head 4-0.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🏒\n\nHead to Head Win\n\nYour team beat Cole Bergeron's team this week, and you had the better box score.\n\nFanbase +5, confidence boost\n\nMaximilian Okonkwo-Smith\n87\nVS\nCole Bergeron\n85\nContinue"
+  },
+  {
+   "tag": "s6",
+   "n": 1,
+   "txt": "THE 2031 SEASON\n\nColorado Avalanche · age 23 · D\n\nMissed the playoffs\n\n23 G, 66 A, 89 P\n\n🪞 Cole Bergeron went 35G 42A 77P. You had the better year. Head to head 5-0.\n\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2027,
+    "age": 19,
+    "ovr": 81,
+    "team": "COL",
+    "salary": 0.9,
+    "cy": 3,
+    "morale": 70,
+    "fanbase": 32,
+    "health": 100,
+    "net": 0.5,
+    "summer": null,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2027 · age 19",
+    "OVR 81",
+    "$0.9M x3",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 0 All-Star · 0 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 81 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 61, the Colorado Avalanche select Maximilian Okonkwo-Smith.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2028,
+    "age": 20,
+    "ovr": 82,
+    "team": "COL",
+    "salary": 0.9,
+    "cy": 2,
+    "morale": 73,
+    "fanbase": 53,
+    "health": 97,
+    "net": 0.9,
+    "summer": null,
+    "last": {
+     "year": 2027,
+     "team": "COL",
+     "age": 19,
+     "ovr": 81,
+     "games": 82,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 0.9,
+     "slate": 84,
+     "goals": 15,
+     "assists": 47,
+     "points": 62
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2028 · age 20",
+    "OVR 82",
+    "$0.9M x2",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2028 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 0 All-Star · 62 career points",
+   "last": "Last season: 15 G, 47 A, 62 P · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 D, age 20, 0 Cups",
+    "💰 THE BANK $0.9M $0.9M a year, 2 years left",
+    "📜 CAREER LOG 1 season 15 G, 47 A, 62 P",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 4 headlines You sat and waited like a pro. The goal stood and the building got twice as loud. Morale +3, fanbase +2.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2029,
+    "age": 21,
+    "ovr": 84,
+    "team": "COL",
+    "salary": 0.9,
+    "cy": 1,
+    "morale": 74,
+    "fanbase": 73,
+    "health": 97,
+    "net": 0.3,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "COL",
+     "age": 20,
+     "ovr": 82,
+     "games": 83,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 0.9,
+     "slate": 84,
+     "goals": 16,
+     "assists": 56,
+     "points": 72
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2029 · age 21",
+    "OVR 84",
+    "$0.9M x1",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 0 All-Star · 134 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 84 D, age 21, 0 Cups",
+    "💰 THE BANK $0.3M $0.9M a year, final year of the deal",
+    "📜 CAREER LOG 2 seasons 16 G, 56 A, 72 P",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines He built a rival chat within the hour and named it after himself. Fanbase +7, morale -2.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s3",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2029,
+    "age": 21,
+    "ovr": 84,
+    "team": "COL",
+    "salary": 11.3,
+    "cy": 5,
+    "morale": 77,
+    "fanbase": 73,
+    "health": 97,
+    "net": 0.3,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "COL",
+     "age": 20,
+     "ovr": 82,
+     "games": 83,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 0.9,
+     "slate": 84,
+     "goals": 16,
+     "assists": 56,
+     "points": 72
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2029 · age 21",
+    "OVR 84",
+    "$11.3M x5",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 0 All-Star · 134 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 84 D, age 21, 0 Cups",
+    "💰 THE BANK $0.3M $11M a year, 5 years left",
+    "📜 CAREER LOG 2 seasons 16 G, 56 A, 72 P",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 4 headlines 🖊️ Extension signed: 4 more years at $11.3M a year.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s4",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2030,
+    "age": 22,
+    "ovr": 85,
+    "team": "COL",
+    "salary": 11.3,
+    "cy": 4,
+    "morale": 77,
+    "fanbase": 84,
+    "health": 95,
+    "net": 4.85,
+    "summer": null,
+    "last": {
+     "year": 2029,
+     "team": "COL",
+     "age": 21,
+     "ovr": 84,
+     "games": 83,
+     "awards": [
+      "All-Star"
+     ],
+     "teamResult": "Missed the playoffs",
+     "salary": 11.3,
+     "slate": 84,
+     "goals": 18,
+     "assists": 55,
+     "points": 73
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2030 · age 22",
+    "OVR 85",
+    "$11.3M x4",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 1 All-Star · 207 career points",
+   "last": "Last season: 18 G, 55 A, 73 P · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 85 D, age 22, 0 Cups",
+    "💰 THE BANK $4.9M $11M a year, 4 years left",
+    "📜 CAREER LOG 3 seasons 18 G, 55 A, 73 P",
+    "🏆 TROPHY CASE 1 honour 1 All-Star nods, no Cup yet",
+    "📰 NEWS 5 headlines Nobody takes a selfie with a distribution warehouse that returns 9 percent. Net worth -0.5M to 4.85M, invested.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s5",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 4,
+    "year": 2031,
+    "age": 23,
+    "ovr": 87,
+    "team": "COL",
+    "salary": 11.3,
+    "cy": 3,
+    "morale": 98,
+    "fanbase": 91,
+    "health": 95,
+    "net": 9.9,
+    "summer": null,
+    "last": {
+     "year": 2030,
+     "team": "COL",
+     "age": 22,
+     "ovr": 85,
+     "games": 83,
+     "awards": [
+      "All-Star",
+      "Masterton Nominee"
+     ],
+     "teamResult": "Lost in Round 1",
+     "salary": 11.3,
+     "slate": 84,
+     "goals": 20,
+     "assists": 67,
+     "points": 87,
+     "poGames": 6,
+     "poGoals": 2,
+     "poAssists": 7,
+     "poPoints": 9
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2031 · age 23",
+    "OVR 87",
+    "$11.3M x3",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2031 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 2 All-Star · 294 career points",
+   "last": "Last season: 20 G, 67 A, 87 P · Lost in Round 1",
+   "tiles": [
+    "📊 MY PLAYER OVR 87 D, age 23, 0 Cups",
+    "💰 THE BANK $9.9M $11M a year, 3 years left",
+    "📜 CAREER LOG 4 seasons 20 G, 67 A, 87 P",
+    "🏆 TROPHY CASE 3 honours 2 All-Star nods, no Cup yet",
+    "📰 NEWS 6 headlines Twelve minutes after every practice, no phones, no cameras, no changes. Morale +9.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s6",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 5,
+    "year": 2032,
+    "age": 24,
+    "ovr": 89,
+    "team": "COL",
+    "salary": 11.7,
+    "cy": 4,
+    "morale": 98,
+    "fanbase": 100,
+    "health": 95,
+    "net": 15,
+    "summer": null,
+    "last": {
+     "year": 2031,
+     "team": "COL",
+     "age": 23,
+     "ovr": 87,
+     "games": 81,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 11.3,
+     "slate": 84,
+     "goals": 23,
+     "assists": 66,
+     "points": 89
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2032 · age 24",
+    "OVR 89",
+    "$11.7M x4",
+    "⭐ Top of the lineup"
+   ],
+   "play": "Play the 2032 season",
+   "so": "Career so far: 0 Cups · 0 Norris Trophies · 2 All-Star · 383 career points",
+   "last": "Last season: 23 G, 66 A, 89 P · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 89 D, age 24, 0 Cups",
+    "💰 THE BANK $15M $12M a year, 4 years left",
+    "📜 CAREER LOG 5 seasons 23 G, 66 A, 89 P",
+    "🏆 TROPHY CASE 3 honours 2 All-Star nods, no Cup yet",
+    "📰 NEWS 4 headlines 0.06M, a free truck, and a line the student section now chants at you in warmups. It follows you to the grave. Fanbase +0, morale -2.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "nhl390b-16-tile-myplayer-s0.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n81\n\nOVERALL\n\nMaximilian Okonkwo-Smith · D · age 19\n\nMorale\n70\nFanbase\n32\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nCups",
+   "backOk": true,
+   "scroll": [
+    268,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "nhl390b-17-tile-thebank-s0.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$500k\n\n$0.9M a year, 3 years left on the deal\n\n$500k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "nhl390b-18-tile-careerlog-s0.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    887
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "nhl390b-19-tile-trophycase-s0.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 Cups\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 23\n\n🔒\nStanley Cup champion\n\nYour name goes on the Cup, and it stays there.\n\n🔒\nBack to back\n\nTwo Cups in two seasons.\n\n🔒\nThe major\n\nThe Hart, the Vezina or the Norris, whichever your position plays for.\n\n🔒\nConn Smythe\n\nThe best player in the run that won it.\n\n🔒\nCalder Trophy\n\nThe best first year player in the league.\n\n🔒\nArt Ross\n\nMost points in the league across a season.\n\n🔒\nRocket Richard\n\nMost goals in the league across a season.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nA 50 goal season\n\nFifty in one season. The single season record is 92.\n\n🔒\nA 100 point season\n\nA hundred points in one season. The record is 215.\n\n🔒\n500 goals\n\nFive hundred career goals.\n\n🔒\n1,000 points\n\nA thousand career points.\n\n🔒\n1,500 points\n\nFifteen hundred career points.\n\n🔒\nA 40 win season\n\nForty wins in the crease in one season. The record is 48, shared.\n\n🔒\nA .930 season\n\nA .930 save percentage across a season in the crease.\n\n🔒\n400 wins\n\nFour hundred career wins in the crease.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons with the whole schedule played.\n\n🔒\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the rivalry\n\nYour",
+   "backOk": true,
+   "scroll": [
+    887,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "nhl390b-20-tile-news-s0.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 61, the Colorado Avalanche select Maximilian Okonkwo-Smith.\n\nLate pick. Everything must be earned.\n\n📋 You outplayed the veteran in camp. Big minutes from night one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "nhl390b-21-tile-inbox-s0.jpg",
+   "text": "Hub\n📱 Inbox\n\nNo texts yet. Play a season and your phone will buzz.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "nhl390b-30-tile-myplayer-s1.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n82\n\nOVERALL\n\nMaximilian Okonkwo-Smith · D · age 20\n\nMorale\n73\nFanbase\n53\nHealth\n97\nKarma\n55\n\n1\n\nseasons\n\n0\n\nCups",
+   "backOk": true,
+   "scroll": [
+    0,
+    40,
+    40
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "nhl390b-31-tile-thebank-s1.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$900k\n\n$0.9M a year, 2 years left on the deal\n\n$900k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    40,
+    40,
+    40
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "nhl390b-33-tile-careerlog-s1.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2027\nColorado Avalanche",
+   "backOk": true,
+   "scroll": [
+    40,
+    0,
+    144
+   ],
+   "focus": "📜 CAREER LOG 1 season 15 G, 47 A, 62 P"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "nhl390b-34-tile-trophycase-s1.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 Cups\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 23\n\n🔒\nStanley Cup champion\n\nYour name goes on the Cup, and it stays there.\n\n🔒\nBack to back\n\nTwo Cups in two seasons.\n\n🔒\nThe major\n\nThe Hart, the Vezina or the Norris, whichever your position plays for.\n\n🔒\nConn Smythe\n\nThe best player in the run that won it.\n\n🔒\nCalder Trophy\n\nThe best first year player in the league.\n\n🔒\nArt Ross\n\nMost points in the league across a season.\n\n🔒\nRocket Richard\n\nMost goals in the league across a season.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nA 50 goal season\n\nFifty in one season. The single season record is 92.\n\n🔒\nA 100 point season\n\nA hundred points in one season. The record is 215.\n\n🔒\n500 goals\n\nFive hundred career goals.\n\n🔒\n1,000 points\n\nA thousand career points.\n\n🔒\n1,500 points\n\nFifteen hundred career points.\n\n🔒\nA 40 win season\n\nForty wins in the crease in one season. The record is 48, shared.\n\n🔒\nA .930 season\n\nA .930 save percentage across a season in the crease.\n\n🔒\n400 wins\n\nFour hundred career wins in the crease.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons with the whole schedule played.\n\n🔒\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the rivalry\n\nYour",
+   "backOk": true,
+   "scroll": [
+    144,
+    144,
+    144
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "nhl390b-35-tile-news-s1.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith puts up 47 assists from the blue line",
+   "backOk": true,
+   "scroll": [
+    144,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "nhl390b-36-tile-inbox-s1.jpg",
+   "text": "Hub\n📱 Inbox\n🎣\nUnknown\n🌴 Offseason, 2027\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": "nhl390b-53-tile-news-s2.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nHe built a rival chat within the hour and named it after himself. Fanbase +7, morale -2.\n\nTwenty minutes of hockey school each way: which refs hold a grudge, which goalies cheat glove side, where to sit on the plane. Morale +7, rating +1.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith puts up 56 assists from the blue line\n\n📰 Maximilian Okonkwo-Smith puts up 47 assists from the blue line",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": "nhl390b-54-tile-inbox-s2.jpg",
+   "text": "Hub\n📱 Inbox\n🧔\nVeteran teammate\n✍️ Contract year ahead, 2028\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n🎣\nUnknown\n🌴 Offseason, 2027\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s3",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🧔\nVeteran teammate\n✍️ Contract year ahead, 2028\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n🎣\nUnknown\n🌴 Offseason, 2027\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s4",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🏠\nMom\n⭐ All-Star break, 2029\nA few days off for the break. Your room is exactly how you left it, posters and all. Come home?\n🧔\nVeteran teammate\n✍️ Contract year ahead, 2028\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n🎣\nUnknown\n🌴 Offseason, 2027\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s5",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n💼\nAgent\n🏆 Playoffs, 2030\nPlayoff money just hit. The trainers and equipment staff make a fraction of what you do. Want to do something for them?\n🏠\nMom\n⭐ All-Star break, 2029\nA few days off for the break. Your room is exactly how you left it, posters and all. Come home?\n🧔\nVeteran teammate\n✍️ Contract year ahead, 2028\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n🎣\nUnknown\n🌴 Offseason, 2027\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s6",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🧺\nEquipment manager\n🏒 Training camp, 2031\nThe stick company sent a new model. Try it in camp, or keep the old one all season like you always do?\n💼\nAgent\n🏆 Playoffs, 2030\nPlayoff money just hit. The trainers and equipment staff make a fraction of what you do. Want to do something for them?\n🏠\nMom\n⭐ All-Star break, 2029\nA few days off for the break. Your room is exactly how you left it, posters and all. Come home?\n🧔\nVeteran teammate\n✍️ Contract year ahead, 2028\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "My Player",
+   "shot": null,
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n89\n\nOVERALL\n\nMaximilian Okonkwo-Smith · D · age 24\n\nMorale\n99\nFanbase\n100\nHealth\n95\nKarma\n83\n\n5\n\nseasons\n\n0\n\nCups",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "The Bank",
+   "shot": null,
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$15.0M\n\n$11.7M a year, 4 years left on the deal\n\n$15.0M\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "Career Log",
+   "shot": null,
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\nCompare seasons\n2031\nColorado Avalanche\n2030\nColorado Avalanche\n2029\nColorado Avalanche\n2028\nColorado Avalanche\n2027\nColorado Avalanche",
+   "backOk": true,
+   "scroll": [
+    185,
+    208,
+    723
+   ],
+   "focus": "📜 CAREER LOG 5 seasons 23 G, 66 A, 89 P"
+  },
+  {
+   "tag": "end",
+   "word": "Trophy Case",
+   "shot": null,
+   "text": "Hub\n🏆 Trophy Case\n\n0 Cups\n\n3 individual honours across 5 seasons.\n\nAll-Star\nx2\n\n2029, 2030\n\nMasterton Nominee\nx1\n\n2030\n\n🎖️ BADGES\n2 of 23\n\n🔒\nStanley Cup champion\n\nYour name goes on the Cup, and it stays there.\n\n🔒\nBack to back\n\nTwo Cups in two seasons.\n\n🔒\nThe major\n\nThe Hart, the Vezina or the Norris, whichever your position plays for.\n\n🔒\nConn Smythe\n\nThe best player in the run that won it.\n\n🔒\nCalder Trophy\n\nThe best first year player in the league.\n\n🔒\nArt Ross\n\nMost points in the league across a season.\n\n🔒\nRocket Richard\n\nMost goals in the league across a season.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nA 50 goal season\n\nFifty in one season. The single season record is 92.\n\n🔒\nA 100 point season\n\nA hundred points in one season. The record is 215.\n\n🔒\n500 goals\n\nFive hundred career goals.\n\n🔒\n1,000 points\n\nA thousand career points.\n\n🔒\n1,500 points\n\nFifteen hundred career points.\n\n🔒\nA 40 win season\n\nForty wins in the crease in one season. The record is 48, shared.\n\n🔒\nA .930 season\n\nA .930 save percentage across a season in the crease.\n\n🔒\n400 wins\n\nFour hundred career wins in the crease.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🩺\nIron man\n\nFive seasons with the whole schedule played.\n\n🪙\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the",
+   "backOk": true,
+   "scroll": [
+    723,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\n📱 Replied to Equipment manager: Try the new one.\n\n0.06M, a free truck, and a line the student section now chants at you in warmups. It follows you to the grave. Fanbase +0, morale -2.\n\nTwo extra years and 0.4M more a year for one signature. Contract now 4 years at 11.7M, morale +6.\n\nEvery home game there are twelve kids from a minor hockey team sitting behind the bench.\n\n🪞 Cole Bergeron went 35G 42A 77P. You had the better year. Head to head 5-0.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith puts up 66 assists from the blue line\n\n📰 Maximilian Okonkwo-Smith makes the All-Star team\n\n📰 Maximilian Okonkwo-Smith puts up 67 assists from the blue line\n\n📰 Maximilian Okonkwo-Smith makes the All-Star team\n\n📰 Maximilian Okonkwo-Smith puts up 55 assists from the blue line\n\n📰 Maximilian Okonkwo-Smith puts up 56 assists from the blue line\n\n📰 Maximilian Okonkwo-Smith puts up 47 assists from the blue line",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "end",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🧺\nEquipment manager\n🏒 Training camp, 2031\nThe stick company sent a new model. Try it in camp, or keep the old one all season like you always do?\n💼\nAgent\n🏆 Playoffs, 2030\nPlayoff money just hit. The trainers and equipment staff make a fraction of what you do. Want to do something for them?\n🏠\nMom\n⭐ All-Star break, 2029\nA few days off for the break. Your room is exactly how you left it, posters and all. Come home?\n🧔\nVeteran teammate\n✍️ Contract year ahead, 2028\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n📋\nGM\n🌍 World Juniors, 2027\nYour national team asked to borrow you for the World Juniors. Your call. We'll miss you either way.\n🚴\nStrength coach\n🏒 Training camp, 2027\nFitness testing tomorrow. The bike test, the one everybody hates. You ready?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [],
+ "stuck": [
+  {
+   "tag": "s4",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s5",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s5",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "pushed ext s3"
+ ],
+ "shots": [
+  "nhl390b-01-first-visit.jpg",
+  "nhl390b-02-create.jpg",
+  "nhl390b-03-create-filled.jpg",
+  "nhl390b-04-prospect-help.jpg",
+  "nhl390b-05-prospect-routes.jpg",
+  "nhl390b-06-prospect-season1.jpg",
+  "nhl390b-07-prospect-choice.jpg",
+  "nhl390b-08-prospect-season2.jpg",
+  "nhl390b-09-prospect-showcase.jpg",
+  "nhl390b-10-prospect-draftday.jpg",
+  "nhl390b-11-draft-night-1.jpg",
+  "nhl390b-12-draft-night-2.jpg",
+  "nhl390b-13-draft-night-end.jpg",
+  "nhl390b-14-hub-draft.jpg",
+  "nhl390b-15-hub-draft-full.jpg",
+  "nhl390b-16-tile-myplayer-s0.jpg",
+  "nhl390b-17-tile-thebank-s0.jpg",
+  "nhl390b-18-tile-careerlog-s0.jpg",
+  "nhl390b-19-tile-trophycase-s0.jpg",
+  "nhl390b-20-tile-news-s0.jpg",
+  "nhl390b-21-tile-inbox-s0.jpg",
+  "nhl390b-22-continue-s1-1.jpg",
+  "nhl390b-23-rivalry-choice-s1.jpg",
+  "nhl390b-24-continue-s1-2.jpg",
+  "nhl390b-25-event-s1-1.jpg",
+  "nhl390b-26-outcome-s1.jpg",
+  "nhl390b-27-event-s1-2.jpg",
+  "nhl390b-28-outcome-s1.jpg",
+  "nhl390b-29-hub-s1.jpg",
+  "nhl390b-30-tile-myplayer-s1.jpg",
+  "nhl390b-31-tile-thebank-s1.jpg",
+  "nhl390b-32-bank-shop.jpg",
+  "nhl390b-33-tile-careerlog-s1.jpg",
+  "nhl390b-34-tile-trophycase-s1.jpg",
+  "nhl390b-35-tile-news-s1.jpg",
+  "nhl390b-36-tile-inbox-s1.jpg",
+  "nhl390b-37-inbox-open.jpg",
+  "nhl390b-38-inbox-open.jpg",
+  "nhl390b-39-practice-menu.jpg",
+  "nhl390b-40-practice-drill.jpg",
+  "nhl390b-41-practice-result.jpg",
+  "nhl390b-42-hub-after-practice.jpg",
+  "nhl390b-43-continue-s2-1.jpg",
+  "nhl390b-44-rivalry-choice-s2.jpg",
+  "nhl390b-45-continue-s2-2.jpg",
+  "nhl390b-46-edge-reload-event-s2.jpg",
+  "nhl390b-47-event-s2-1.jpg",
+  "nhl390b-48-event-s2-2.jpg",
+  "nhl390b-49-hub-s2.jpg",
+  "nhl390b-50-programme-open.jpg",
+  "nhl390b-51-programme-menu.jpg",
+  "nhl390b-52-programme-picked.jpg",
+  "nhl390b-53-tile-news-s2.jpg",
+  "nhl390b-54-tile-inbox-s2.jpg",
+  "nhl390b-55-inbox-open.jpg",
+  "nhl390b-56-inbox-open.jpg",
+  "nhl390b-57-extension-s3.jpg",
+  "nhl390b-58-wheel-s3.jpg",
+  "nhl390b-59-wheel-result-s3.jpg",
+  "nhl390b-60-extension-s3.jpg"
+ ],
+ "draft": {
+  "routes": [
+   "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft",
+   "2 seasons US junior, then college Two seasons of US junior, enter the draft at 18, then take your college place. Start a",
+   "2 seasons Europe Two seasons in a European junior league, enter the draft at 18, then develop at home. Start at age 16 ·"
+  ],
+  "route": "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft",
+  "seasonShots": 2,
+  "choices": [
+   "A big stage -> 1/2",
+   "Playing through it -> 1/2"
+  ],
+  "showcase": "Skip it No drill and no grade. The scouts notice. Draft stock -2",
+  "range": "The scouts have you between pick 55 and pick 92 of 224.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nNHL Road to the Draft\n\nThis is your moment.\n\nColorado Avalanche\n\nMaximilian Okonkwo-Smith\nD · Age 19\nRating\n81\nPotential\n98\nHealth\n100\nDraft stock\n57/100\nThis is your moment.\nYou skipped it. Draft stock -2, now 57.\n\n2026 DRAFT\n\nThe scouts had you between pick 55 and pick 92 of 224.\n\n1\nCalgary Flames\nRound 1\n2\nNashville Predators\nRound 1\n3\nWinnipeg Jets\nRound 1\nPicks 4 to 57 come off the board, round 1 into round 2.\n58\nFlorida Panthers\nRound 2\n59\nSt. Louis Blues\nRound 2\n60\nSan Jose Sharks\nRound 2\nPick 61: Colorado Avalanche\nYour name is called. Round 2, pick 29.\n\nRound 2, pick 29, 61 overall. Colorado Avalanche take you.\n\nStart your career\n2026 DRAFT\nRound 2, pick 29 (61 overall)\n\nColorado Avalanche hold the pick, and they take you.\n\nDevelopment seasons\nAge 18, Major junior\nG/GP 0.14, A/GP 0.49, PTS/GP 0.63\nYour scout file\n2 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · D",
+     "Colorado Avalanche",
+     "2028 · age 20",
+     "OVR 82",
+     "$0.9M x2",
+     "⭐ Top of the lineup"
+    ],
+    "play": "Play the 2028 season",
+    "so": "Career so far: 0 Cups · 0 Norris Trophies · 0 All-Star · 62 career points",
+    "last": "Last season: 15 G, 47 A, 62 P · Missed the playoffs",
+    "tiles": [
+     "📊 MY PLAYER OVR 82 D, age 20, 0 Cups",
+     "💰 THE BANK $0.9M $0.9M a year, 2 years left",
+     "📜 CAREER LOG 1 season 15 G, 47 A, 62 P",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 4 headlines You sat and waited like a pro. The goal stood and the building got twice as loud. Morale +3, fanbase +2.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · D",
+     "Colorado Avalanche",
+     "2028 · age 20",
+     "OVR 82",
+     "$0.9M x2",
+     "⭐ Top of the lineup"
+    ],
+    "play": "Play the 2028 season",
+    "so": "Career so far: 0 Cups · 0 Norris Trophies · 0 All-Star · 62 career points",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 82 D, age 20, 0 Cups",
+     "💰 THE BANK $0.9M $0.9M a year, 2 years left",
+     "📜 CAREER LOG 1 season 15 G, 47 A, 62 P",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 1 headline Maximilian Okonkwo-Smith puts up 47 assists from the blue line",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2028,
+    "age": 20,
+    "ovr": 82,
+    "team": "COL",
+    "salary": 0.9,
+    "cy": 2,
+    "morale": 73,
+    "fanbase": 53,
+    "health": 97,
+    "net": 0.9,
+    "summer": null,
+    "last": {
+     "year": 2027,
+     "team": "COL",
+     "age": 19,
+     "ovr": 81,
+     "games": 82,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 0.9,
+     "slate": 84,
+     "goals": 15,
+     "assists": 47,
+     "points": 62
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 0
+  },
+  {
+   "rows": 3
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎣 UNKNOWN\n\n🌴 Offseason, 2027\n\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n\nReport and warn fansDelete itReply as a joke",
+   "answered": "Report and warn fans"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎣 UNKNOWN\n\n🌴 Offseason, 2027\n\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n\nYou replied: Report and warn fans",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🧔 VETERAN TEAMMATE\n\n✍️ Contract year ahead, 2028\n\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n\nThank himEasy for you to say",
+   "answered": "Thank him"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🧔 VETERAN TEAMMATE\n\n✍️ Contract year ahead, 2028\n\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n\nYou replied: Thank him",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🧔 VETERAN TEAMMATE\n\n✍️ Contract year ahead, 2028\n\nContract years get loud. Don't let the money talk get in your head. Play your game, the money follows.\n\nYou replied: Thank him",
+   "answered": false
+  },
+  {
+   "rows": 5
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 MOM\n\n⭐ All-Star break, 2029\n\nA few days off for the break. Your room is exactly how you left it, posters and all. Come home?\n\nFly homeStay and rest",
+   "answered": "Fly home"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 MOM\n\n⭐ All-Star break, 2029\n\nA few days off for the break. Your room is exactly how you left it, posters and all. Come home?\n\nYou replied: Fly home",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🏆 Playoffs, 2030\n\nPlayoff money just hit. The trainers and equipment staff make a fraction of what you do. Want to do something for them?\n\nSplit a bonus with the staffBuy them dinnerKeep it",
+   "answered": "Split a bonus with the staff"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🏆 Playoffs, 2030\n\nPlayoff money just hit. The trainers and equipment staff make a fraction of what you do. Want to do something for them?\n\nYou replied: Split a bonus with the staff",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🧺 EQUIPMENT MANAGER\n\n🏒 Training camp, 2031\n\nThe stick company sent a new model. Try it in camp, or keep the old one all season like you always do?\n\nTry the new oneNo changes",
+   "answered": "Try the new one"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🧺 EQUIPMENT MANAGER\n\n🏒 Training camp, 2031\n\nThe stick company sent a new model. Try it in camp, or keep the old one all season like you always do?\n\nYou replied: Try the new one",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": null,
+   "secs": 75
+  }
+ ],
+ "edge": [
+  {
+   "test": "reload on an offseason card",
+   "before": "nhlA_vet_mentor",
+   "after": {
+    "id": "nhlA_vet_mentor",
+    "title": "The 38 year old winger"
+   },
+   "phase": null,
+   "saveBefore": {
+    "year": 2028,
+    "ids": [
+     "nhlA_vet_mentor",
+     "nhlB_groupChatLeak"
+    ],
+    "at": 0
+   },
+   "saveAfter": {
+    "year": 2028,
+    "ids": [
+     "nhlA_vet_mentor",
+     "nhlB_groupChatLeak"
+    ],
+    "at": 0
+   },
+   "buttons": [
+    "Ride with him every day Free education",
+    "Sleep in, drive yourself Rest first",
+    "Ask him about the Cup year Steal the map",
+    "📊 MY PLAYER OVR 83 D, age 21, 0 Cups",
+    "💰 THE BANK $0.3M $0.9M a year, final year of the deal",
+    "📜 CAREER LOG 2 seasons 16 G, 56 A, 72 P",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines Maximilian Okonkwo-Smith puts up 56 assists from t"
+   ]
+  },
+  {
+   "test": "back then forward at the hub",
+   "backUrl": "about:blank",
+   "same": true,
+   "before": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2032 · age 24",
+    "OVR 89",
+    "$11.7M x4",
+    "⭐ Top of the lineup"
+   ],
+   "after": [
+    "Maximilian Okonkwo-Smith · D",
+    "Colorado Avalanche",
+    "2032 · age 24",
+    "OVR 89",
+    "$11.7M x4",
+    "⭐ Top of the lineup"
+   ]
+  },
+  {
+   "test": "hostile save: wrong types",
+   "create": false,
+   "buttons": [],
+   "newPageErrors": [],
+   "shot": null,
+   "stored": "{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""
+  },
+  {
+   "test": "hostile save: not json",
+   "create": true,
+   "buttons": [
+    "🏒 2026 The league as it is today. Full money, all 32 franchises.",
+    "⏪ 2006-07 throwback The 30 team league of 2006-07: the Thrashers in At",
+    "C",
+    "LW",
+    "RW",
+    "D",
+    "G",
+    "🎲 Surprise me"
+   ],
+   "newPageErrors": [],
+   "shot": null,
+   "stored": "{{{garbage"
+  }
+ ],
+ "programme": [
+  {
+   "tiles": [
+    "Workload and recovery Usual routine",
+    "Tactical approach Your usual approach",
+    "Coach expectations No extra target",
+    "Teammate partnership Keep your own routine",
+    "Performance bonus No bonus challenge",
+    "Veteran reinvention Keep your usual routine"
+   ]
+  },
+  {
+   "choices": [
+    "*Usual routine Keep your current inputs.",
+    "Push the workload Season health -8, morale +6. More form, more injury risk.",
+    "Prioritize recovery Season health +3 (health tops out at 100), morale -6. Less injury risk"
+   ]
+  },
+  {
+   "saved": false
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏒 2026 The league as it is today. Full money, all 32 franchises.",
+   "⏪ 2006-07 throwback The 30 team league of 2006-07: the Thrashers in At",
+   "C",
+   "LW",
+   "RW",
+   "D",
+   "G",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "⛸️ Skates",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair",
+   "Sand",
+   "Olive",
+   "Honey"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.\nPick your league: today's NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix, before Vegas or Seattle existed.\nBuild your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school at the back of the plane is one sitting a season on odds that are printed before you sit in.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nCollect badges in the Trophy Case: 23 of them, from a first Cup and the Calder to 500 goals, a 50 goal season and $100M to your name, each lit the moment the facts of your career say so.\nAnswer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the hockey year: draft day, camp, the World Juniors while you are young enough to go, the All-Star break, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.\nSome seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.\nGet drafted by a real club; your slot reflects your starting ability.\nCheck the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.\nPlay each season: skaters post goals, assists and points, goalies post wins and save percentage.\nFace up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen Career Log and pick a year to review its sav",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏒 2026 The league as it is today. Full money, all 32 franch",
+  "⏪ 2006-07 throwback The 30 team league of 2006-07: the Thras",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Offensive Defenseman Norris numbers from the blue line",
+  "Shutdown Pair Stars hate your zip code",
+  "Complete Defenseman Thirty minutes a night",
+  "Puck Mover First pass out of the zone is always perfect"
+ ],
+ "wbw": {
+  "visible": false,
+  "held": null
+ },
+ "final": {
+  "save": "unreadable",
+  "chips": {
+   "chips": [
+    "Play Now",
+    "Play Now",
+    "Play Now"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": []
+  },
+  "secs": 427
+ }
+}

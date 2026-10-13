@@ -1,0 +1,57 @@
+[0s] walk nba390b: http://localhost:4173/nba-my-career at 390x844
+[24s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[24s] AUDIT hub draft trunc: With pick 2, the Orlando Magic select Maximilian Okonkwo-Smith. [149<280]
+[31s] AUDIT tile Trophy Case s0 trunc: Defensive Player of the Year [138<155]
+[35s] AUDIT tile Inbox s0 trunc: Loved the game last night. We made a pair with your initials on the to [302<757]
+[35s] AUDIT tile Inbox s0 trunc: We had you at the top of our board for months. A lot of people in this [302<678]
+[95s] centre s1: games watched 2, first card 1s, 24s, closed true
+[100s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 88, team ORL, $15.8M x3, last {"year":2026,"team":"ORL","age":21,"ovr":86,"games":80,"ppg":13.8,"rpg":8.4,"apg":1.6,"awards":["Rookie of the Year","All-Rookie Team"],"teamResult":"Lost the C
+[100s] AUDIT hub s1 trunc: Fifteen years, same chair, and the only room in your life where nobody [149<520]
+[107s] AUDIT bank shop small: 🏡 Home 80x29
+[107s] AUDIT bank shop small: 🏎️ Rides 80x29
+[107s] AUDIT bank shop small: 📈 Invest 80x29
+[107s] AUDIT bank shop small: 💪 Body 80x29
+[107s] AUDIT bank shop small: 💎 Flex 80x29
+[107s] AUDIT bank shop small: ❤️ Family 80x29
+[107s] AUDIT bank shop small: $1.5M 57x29
+[107s] AUDIT bank shop small: $4.5M 59x29
+[107s] AUDIT bank shop small: $8M 48x29
+[107s] AUDIT bank shop small: $20M 55x29
+[107s] AUDIT bank shop small: $5M 48x29
+[107s] AUDIT bank shop small: $2M 48x29
+[115s] AUDIT tile Inbox s1 trunc: Two a days through August if you want that jumper fixed. It's not fun. [302<417]
+[115s] AUDIT tile Inbox s1 trunc: We'd love you on the morning show before Game 1. Ten minutes, fire the [302<424]
+[121s] AUDIT practice menu trunc: 📱 Replied to Skills trainer: Book every day. Karma up. [149<233]
+[237s] AUDIT event s2 trunc: Maximilian Okonkwo-Smith goes for 18 points and 11 rebounds a night [149<299]
+[238s] AUDIT event s2 trunc: The game underperformed and your equity paid 1.2M. Fanbase +10, morale [149<339]
+[239s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 89, team ORL, $15.8M x2, last {"year":2027,"team":"ORL","age":22,"ovr":88,"games":78,"ppg":18,"rpg":11,"apg":2,"awards":[],"teamResult":"Missed the playoffs","salary":15.8,"mpg":30.5,"spg":0
+[239s] AUDIT hub s2 trunc: You put it somewhere boring and it quietly made 0.9M while you slept.  [149<498]
+[245s] AUDIT tile Inbox s2 trunc: Four days off for the break. Your room is exactly how you left it. Com [302<409]
+[290s] AUDIT event s3 trunc: 😎 You passed. Let them argue about you and Zane Rylander without you. [149<314]
+[291s] AUDIT event s3 trunc: Three sponsors wrote the checks and you gave 40 days a year. Fanbase + [149<426]
+[293s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 90, team ORL, $15.8M x1, last {"year":2028,"team":"ORL","age":23,"ovr":89,"games":81,"ppg":18.2,"rpg":11,"apg":2.4,"awards":["All-Star"],"teamResult":"Missed the playoffs","salary":15.8,"mpg
+[293s] AUDIT hub s3 trunc: Thirty eight minutes on tired legs with the whole country watching. Wo [149<530]
+[294s] AUDIT tile Inbox s3 trunc: Whatever they offer, remember I drove a truck for thirty years for les [302<666]
+[329s] AUDIT extension s4 trunc: 📱 Replied to Dad: Happy first, I hear you. Karma up. [149<229]
+[336s] season 4: hub, seasons on save 3 -> 3, year 2029, age 24, ovr 90, team ORL, $45.8M x5, last {"year":2028,"team":"ORL","age":23,"ovr":89,"games":81,"ppg":18.2,"rpg":11,"apg":2.4,"awards":["All-Star"],"teamResult":"Missed the playoffs","salary":15.8,"mpg
+[380s] AUDIT event s5 trunc: Same three letters on your feet as the poster on your childhood wall.  [149<449]
+[382s] season 5: hub, seasons on save 3 -> 4, year 2030, age 25, ovr 91, team ORL, $45.8M x4, last {"year":2029,"team":"ORL","age":24,"ovr":90,"games":80,"ppg":19.9,"rpg":13.2,"apg":2.3,"awards":[],"teamResult":"Missed the playoffs","salary":45.8,"mpg":33.4,"
+[383s] AUDIT tile Inbox s5 trunc: Your name is all over the trade rumor accounts this week lol. You sayi [302<472]
+[425s] season 6: hub, seasons on save 4 -> 5, year 2031, age 26, ovr 92, team ORL, $45.8M x3, last {"year":2030,"team":"ORL","age":25,"ovr":91,"games":73,"ppg":24.1,"rpg":13.5,"apg":2.8,"awards":["All-Star","All-NBA","Rebounding Champion"],"teamResult":"Misse
+[425s] AUDIT hub s6 trunc: The knee went again in the third game back, and the rest of the month  [149<447]
+[426s] AUDIT tile Inbox s6 trunc: Conditioning test tomorrow. Seventeens, sideline to sideline, under th [302<616]
+[455s] centre again: games watched 2, first card 0s, 24s, closed true
+[477s] DONE nba390b: seasons undefined, events 14, curtains 7, page errors 0, console 3, stuck 3, shots 60
+[477s] event titles: The shop on the corner x1 | The video game cover shoot x1 | A 26 year old in a 900 dollar hoodie x1 | The foundation x1 | Your podcast did 11 million downloads on a laptop mic x1 | Your rest night is the national TV game x1 | The shoe deal is up x1 | There is a raccoon above the film room x1 | They got the job x1 | Podcast wars x1 | The knee and the games count x1
+[477s] EDGE {"test":"reload on an offseason card","before":"nbaB_gameCover","after":{"id":"nbaB_gameCover","title":"The video game cover shoot"},"phase":null,"saveBefore":{"year":2027,"ids":["nbaB_gameCover","nbaB_techPitch"],"at":0},"saveAfter":{"year":2027,"ids":["nbaB_gameCover","nbaB_techPitch"],"at":0},"buttons":["Take the cover, 4M Cash and the curse","Ask for equity instead of cash Bet on the game","Tu
+[477s] EDGE {"test":"double tap on an offseason answer","before":{"morale":94,"fanbase":81,"health":100,"net":23.1,"ovr":90,"summer":{"year":2028,"ids":["nbaB_foundationLaunch","nbaB_mediaCompany","nbaC_rule_national_tv"],"at":0}},"after":{"morale":100,"fanbase":91,"health":97,"net":23.1,"ovr":90,"summer":{"year":2028,"ids":["nbaB_foundationLaunch","nbaB_mediaCompany","nbaC_rule_national_tv"],"at":1}},"outcom
+[477s] EDGE {"test":"back then forward at the hub","backUrl":"about:blank","same":true,"before":["Maximilian Okonkwo-Smith · C","Orlando Magic","2031 · age 26","OVR 92","$45.8M x3","⭐ Starting five"],"after":["Maximilian Okonkwo-Smith · C","Orlando Magic","2031 · age 26","OVR 92","$45.8M x3","⭐ Starting five"]}
+[477s] EDGE {"test":"hostile save: wrong types","create":false,"buttons":[],"newPageErrors":[],"shot":null,"stored":"{\"c\":{\"name\":5,\"seasons\":\"x\",\"year\":\"soon\"},\"phase\":\"season\""}
+[477s] EDGE {"test":"hostile save: not json","create":true,"buttons":["🏀 2026 The league as it is today. Full money, all 30 franchises.","⏪ 2003-04 throwback The 29 team league of 2003-04: the SuperSonics in ","PG","SG","SF","PF","C","🎲 Surprise me"],"newPageErrors":[],"shot":null,"stored":"{{{garbage"}
+[477s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[477s] CONSOLE error TypeError: (e || "x").split is not a function
+    at it (http://localhost:4173/assets/AppearanceBuilder-BNJPnI0h.js:1:16666)
+    at Object.seedOf (http://localhost:4173/assets/NbaMyCareer-CVu5SjC1.js:
+[477s] CONSOLE error A page failed to render: TypeError: (e || "x").split is not a function
+    at it (http://localhost:4173/assets/AppearanceBuilder-BNJPnI0h.js:1:16666)
+    at Object.seedOf (http://localhost:4173/assets
