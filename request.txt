@@ -1,0 +1,8 @@
+# Round 1311 closing check on c0fb060a: the type gate, the unit files, the Round 1081 pin, the merged facts fence, simCmLeagueBook default and one full fleet against main, the full fleet facts control
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerLeagueBoards.test.ts src/lib/clubManagerLeagueBook.test.ts src/test/cmLeagueLeadersCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+appeal1081: TMPDIR=$(mktemp -d) node scripts/simManagerAppealIsolation.mjs
+factsFence: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBookFacts.mjs
+book-plain: TMPDIR=$(mktemp -d) node scripts/simCmLeagueBook.mjs
+book-f0: TMPDIR=$(mktemp -d) mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-f0 && git worktree add -q $B 48cb9d4b && BOOK_BASE=$B SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-bookleak-full: TMPDIR=$(mktemp -d) BOOK_FLEET=full BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs

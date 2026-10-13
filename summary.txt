@@ -1,0 +1,7 @@
+vitest exit=0 8s |    Duration  7.06s (transform 2.34s, setup 287ms, collect 3.41s, tests 4.65s, environment 1.57s, prepare 834ms)
+factsFence exit=0 0s | simCmLeagueBookFacts: all 5897 checks passed.
+appeal1081 exit=0 41s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+book-plain exit=0 62s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (62s)
+tsc exit=0 77s | 
+c-bookleak-full exit=1 110s | simCmLeagueBook: CONTROL bookleak FIRED: section facts went red (1 failures), with shapes, thin as it must and no other section did (110s)
+book-f0 exit=0 151s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (151s)
