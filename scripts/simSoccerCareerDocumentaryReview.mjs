@@ -159,7 +159,16 @@ async function fixtures() {
     const O = await import(pathToFileURL(observedCompiled).href);
     function acquire(name, state, targets, priorityReview = false) {
       const context = canonical({ ...canonical(state), phase: 'social_media_action', pendingEvents: [], socialMediaActionUsedThisSeason: true });
-      const held = JSON.stringify(context), inputs = [], comparisons = [], prefix = [
+      const held = JSON.stringify(context);
+      const available = catalog(context, 'all');
+      const targetAvailability = targets.map(id => {
+        const matches = available.filter(event => event.id === id), card = matches.length === 1 ? matches[0] : null;
+        const read = random([], () => card ? { ledgerKey: E.eventLedgerKey(card), cooldown: E.eventCooldown(card), onCooldown: E.isEventOnCooldown(context, card) } : null);
+        return { id, matches: matches.length, card: card ? copy(card) : null, season: year(context), lastEventId: context.lastEventId,
+          lastFired: card ? context.eventLastFired?.[read.result.ledgerKey] ?? null : null, ...read.result, draws: read.draws };
+      });
+      assert.equal(JSON.stringify(context), held, name + ': catalog and zero-draw availability reads must hold the whole input');
+      const inputs = [], comparisons = [], prefix = [
         { value: 0.99, cause: 'original ordinary moral-dilemma gate rejects' },
         { value: 0.99, cause: 'original iceman212 gate rejects' },
         { value: 0.99, cause: 'original iceman213 gate rejects' },
@@ -167,9 +176,11 @@ async function fixtures() {
           ? [{ value: 0.99, cause: 'original RealismB494 release-clause caption draw' }] : []),
         { value: 0.99, cause: 'original picker count is4' },
       ].map((row, index) => ({ ordinal: index + 1, ...row }));
-      const witness = { name, targets, priorityReview, contextSha256: sha(held), comparisons,
+      const witness = { name, targets, priorityReview, targetAvailability, contextSha256: sha(held), comparisons,
         input: { mode: 'controlled-sort-vector', prefix, draws: inputs, drawCount: 0 }, observed: null, replay: null };
       progress.acquisitions.push({ context, witness }); saveProgress();
+      for (const target of targetAvailability) assert(target.matches === 1 && !target.onCooldown && target.lastEventId !== target.id
+        && target.draws.length === 0, name + ': requested target must exist in the actual catalog and be available to the original picker');
       const rank = id => priorityReview && id === 631 ? 100000 : targets.includes(id) ? targets.indexOf(id) : targets.length + id;
       let comparison = null, outsideSort = 0, picked;
       assert.equal(globalThis.__SC_DOCUMENTARY_PICKER_COMPARISON, undefined);
@@ -199,7 +210,7 @@ async function fixtures() {
       assert.deepEqual(witness.replay.rawBatch, witness.observed.rawBatch); assert.deepEqual(batch, observedBatch);
       assert(batch.phase === 'random_events' && batch.pendingEvents.length > 1 && batch.pendingEvents.length <= 5);
       assert.equal(batch.pendingEvents[0].id, priorityReview ? 631 : targets[0]);
-      if (priorityReview) { assert.equal(batch.pendingEvents[1].id, 220); assert(priorities(context).includes(631));
+      if (priorityReview) { assert.equal(batch.pendingEvents[1].id, targets[0]); assert(priorities(context).includes(631));
         assert.equal(batch.pendingEvents.filter(event => event.id === 631).length, 1); }
       assert.equal(new Set(batch.pendingEvents.map(event => E.eventLedgerKey(event))).size, batch.pendingEvents.length);
       for (const event of batch.pendingEvents) assert.equal(batch.eventLastFired[E.eventLedgerKey(event)], year(batch));
@@ -261,7 +272,7 @@ async function fixtures() {
     const producerCard = catalog(repeatReady, 'all').find(event => event.id === 408);
     assert(producerCard && !E.isEventOnCooldown(repeatReady, producerCard));
     const repeatAcquisition = acquire('second-full-access408', repeatReady, [408]), repeated = apply('second-full-access408', repeatAcquisition.batch, 408, 0);
-    const secondLater = nextPlaying('second-later-season', repeated.after), repeatBatch = acquire('second-priority631', secondLater, [220], true);
+    const secondLater = nextPlaying('second-later-season', repeated.after), repeatBatch = acquire('second-priority631', secondLater, [4], true);
     const repeatFamily = apply('second-family-request631', repeatBatch.batch, 631, 1);
     assert.equal(year(secondLater), 2030); assert.equal(repeatFamily.after.lifeFlags.rDocCrew, 3);
     const scenarios = [

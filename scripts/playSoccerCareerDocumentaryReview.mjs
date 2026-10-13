@@ -125,6 +125,17 @@ function verifyDelivery(delivery, name, targets, priority) {
   setup(witness?.name === name && JSON.stringify(witness.targets) === JSON.stringify(targets) && witness.priorityReview === priority
     && witness.contextSha256 === stateHash(context) && context.phase === 'social_media_action' && context.pendingEvents.length === 0,
     name + ': actual picker context, targets or priority disclosure differs.');
+  setup(witness.targetAvailability?.length === targets.length, name + ': actual target availability receipts missing.');
+  for (const [index, target] of witness.targetAvailability.entries()) {
+    const id = targets[index], key = id === 220 ? 'story:squadChatLeak' : String(id), cooldown = id === 220 ? 99 : id === 4 ? 1 : 2;
+    setup(target.id === id && target.matches === 1 && target.card?.id === id && target.ledgerKey === key && target.cooldown === cooldown
+      && target.season === year(context) && target.lastEventId === context.lastEventId && target.lastEventId !== id
+      && target.lastFired === (context.eventLastFired?.[key] ?? null) && target.onCooldown === false
+      && (typeof target.lastFired !== 'number' || !Number.isFinite(target.lastFired) || target.season - target.lastFired > cooldown)
+      && JSON.stringify(target.draws) === '[]', name + ': original catalog target is absent, cooled, repeated or read with extra RNG.');
+    if (id === 4) setup(target.card.title === 'Player of the Month!' && target.card.category === 'positive'
+      && context.eventLastFired['story:squadChatLeak'] === 2027 && year(context) === 2030, name + ': repeat continuation must preserve the real cooled220 history.');
+  }
   const input = witness.input, prefix = pickerPrefix(context), firstComparison = prefix.length + 1;
   setup(input?.mode === 'controlled-sort-vector' && JSON.stringify(input.prefix) === JSON.stringify(prefix)
     && input.drawCount === input.draws.length && input.drawCount > prefix.length
@@ -147,8 +158,8 @@ function verifyDelivery(delivery, name, targets, priority) {
     name + ': plain replay must consume every input and reproduce all observed raw and canonical fields.');
   setup(batch.phase === 'random_events' && batch.pendingEvents.length > 1 && batch.pendingEvents.length <= 5
     && batch.pendingEvents[0].id === (priority ? 631 : targets[0]), name + ': original picked card or real continuation differs.');
-  if (priority) setup(batch.pendingEvents[1].id === 220 && batch.pendingEvents.filter(event => event.id === 631).length === 1,
-    name + ': priority631 must lead the ordinary220 batch exactly once.');
+  if (priority) setup(batch.pendingEvents[1].id === targets[0] && batch.pendingEvents.filter(event => event.id === 631).length === 1,
+    name + ': priority631 must lead its actual available ordinary continuation exactly once.');
   const keys = batch.pendingEvents.map(event => event.story ? 'story:' + event.story : String(event.id));
   setup(new Set(keys).size === keys.length && keys.every(key => batch.eventLastFired[key] === year(batch)), name + ': actual delivery stamps or identities differ.');
 }
@@ -351,7 +362,8 @@ try {
       && event.choices.every(choice => choice.apply === undefined) && step.eventId === 631 && [0, 1].includes(step.choiceIndex) && step.choiceLabel === CHOICES[step.choiceIndex]?.label
       && step.reloadAfter === true && step.resolverDrawCount === resolverInputs(initial).length && JSON.stringify(step.resolverDraws) === JSON.stringify(resolverInputs(initial))
       && stateHash(step.expected) === step.expectedSha256 && outcomeIssues(initial, JSON.stringify(step.expected), step).length === 0, fixture.id + ': original saved choices or independent complete expected effect differs.');
-    verifyDelivery({ context: provenance.context, batch: provenance.actualPickerBatch, witness: provenance.pickerWitness }, provenance.pickerWitness.name, [220], true);
+    verifyDelivery({ context: provenance.context, batch: provenance.actualPickerBatch, witness: provenance.pickerWitness }, provenance.pickerWitness.name,
+      [fixture.id === '631-repeat-family-request' ? 4 : 220], true);
     verifyDelivery(history.acquisition, 'first-full-access408', [408], false); verifyAnswer(history.acquired, 408, 0, 'first actual full-access deal');
     setup(history.acquired.after.lifeFlags.rDocCrew === 1 && history.acquired.after.eventLastFired['408'] === 2026, fixture.id + ': actual408 record/stamp missing.');
     let due;
