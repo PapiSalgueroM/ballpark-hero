@@ -47,7 +47,13 @@ const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/Club
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
 const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
-import SaveMovedNotice from '@/components/SaveMovedNotice';
+/* Round 1323 review: lazy, for this page's weight (593.6K against its 593K row
+   once Release BB joined). Fetched only once another tab has moved the career
+   on. If the fetch fails (a deploy since this tab opened took the old file
+   away), the page reloads itself the site's way, which is all the notice
+   asks: the reload makes this tab the newest. Offline it stays put, never on
+   a crash screen. Its writes are refused either way (saveCareer's fence). */
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
 const WorldEditorScreen = lazy(() => import('@/components/club-manager/WorldEditorScreen'));
@@ -300,7 +306,7 @@ const ClubManager = () => {
           )}
           {/* Round 1323: another tab has played this career on, so this one
               writes nothing more and covers itself until it is reloaded. */}
-          {g.saveMoved && <SaveMovedNotice message="This career moved on in another tab. Reload to carry on." />}
+          {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {inner}
         </div>
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
