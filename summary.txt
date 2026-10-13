@@ -1,0 +1,17 @@
+worldtruth exit=0 131s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 160s | 
+vitest-all exit=0 167s |    Duration  165.90s (transform 13.85s, setup 7.50s, collect 76.08s, tests 315.89s, environment 52.00s, prepare 11.92s)
+ctl-goalsonly exit=1 91s | FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 201, section 6: 3)
+ctl-nolegacy exit=1 78s | FIRED: WORLD_TRUTH_CONTROL=nolegacy failed section 2 (201 failures; section 2: 201, section 6: 3)
+ctl-seasonyear exit=1 90s | FIRED: WORLD_TRUTH_CONTROL=seasonyear failed section 1 (1 failures; section 1: 1, section 6: 3)
+ctl-extradraw exit=1 78s | FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 6: 2)
+ctl-realmoves exit=1 89s | FIRED: WORLD_TRUTH_CONTROL=realmoves failed section 3 (2 failures; section 3: 2, section 4: 1, section 6: 3)
+ctl-pastchampions exit=1 89s | FIRED: WORLD_TRUTH_CONTROL=pastchampions failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-summer exit=1 86s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-arcade exit=1 88s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2, section 6: 3)
+ctl-log exit=1 88s | FIRED: WORLD_TRUTH_CONTROL=log failed section 5 (1 failures; section 5: 1, section 6: 3)
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+ctl-panel exit=1 88s | FIRED: WORLD_TRUTH_CONTROL=panel failed section 5 (6 failures; section 5: 6, section 6: 5)
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-outside exit=1 76s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 29, section 6: 3)
