@@ -175,12 +175,17 @@ export function collegeSeasonStart(block: CollegeSeatBlock, view: CollegeLeagueV
   return { ...block, mandate: collegeAsk(view, view.season) };
 }
 
-/** The live line on the tile: on pace for the ask, read off his record and his place in the rankings. */
+/** The live line on the tile: on pace for the ask, read off his record and his place in the rankings.
+    Whether he is on pace is foOwnerMandate.mandatePace's; a win total ask is worded here, in college
+    words and with one win said as one win (mandatePace's own line speaks of the front office's mandate). */
 export function collegePace(block: CollegeSeatBlock, view: CollegeLeagueView): { onTrack: boolean; line: string } | null {
   if (!holdsSeat(block)) return null;
   const mandate = block.mandate && block.mandate.season === view.season ? block.mandate : collegeAsk(view, view.season);
-  const me = view.programs.find(p => p.id === view.myTeam);
-  return mandatePace(mandate, me?.wins ?? 0, (view.round - 1) / view.rounds, view.place <= view.fieldSize);
+  const wins = view.programs.find(p => p.id === view.myTeam)?.wins ?? 0;
+  const pace = mandatePace(mandate, wins, (view.round - 1) / view.rounds, view.place <= view.fieldSize);
+  if (mandate.reqLevel >= 1) return pace;
+  const sofar = `${wins} ${wins === 1 ? 'win' : 'wins'} so far`;
+  return { onTrack: pace.onTrack, line: pace.onTrack ? `${sofar}, on pace for the ask.` : `${sofar}, behind the pace for ${mandate.winFloor} wins.` };
 }
 
 /** One reading of a bracket for both sports. Only national postseason games are

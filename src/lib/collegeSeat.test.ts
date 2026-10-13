@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  bracketOutcome, championOf, collegeAsk, collegeBid, collegeBidKey, collegeClose, collegeFeedKey, collegeMarket,
+  bracketOutcome, championOf, collegeAsk, collegeBid, collegePace, collegeBidKey, collegeClose, collegeFeedKey, collegeMarket,
   collegeMarketLine, collegeNextYear, collegePack, collegeSeatLoad, collegeSeatTeams, collegeSitOut, collegeTakeJob,
   collegeTiers, formerFirers, holdsSeat, isFired, lastGraded, newCollegeSeat, sanitizeCollegeSeat, COLLEGE_ASK_TILT,
   type CollegeLeagueView, type CollegeSeatBlock,
@@ -41,6 +41,19 @@ describe('the ask', () => {
     /* the best roster: basketball asks for the title, football one step less (a single elimination field of 12) */
     expect(collegeAsk(top, 2026).tier).toBe('title');
     expect(collegeAsk({ ...top, sport: 'cfb' }, 2026).tier).toBe('contend');
+  });
+});
+
+describe('the live line', () => {
+  it('words a win total ask in college words, one win as one win', () => {
+    const b: CollegeSeatBlock = { ...newCollegeSeat(view()), mandate: { tier: 'respect', text: 'Win 6 games.', winFloor: 6, reqLevel: 0, season: 2026 } };
+    const withWins = (wins: number, round: number) => {
+      const v = view({ round });
+      return { ...v, programs: v.programs.map(p => (p.id === 'p00' ? { ...p, wins } : p)) };
+    };
+    expect(collegePace(b, withWins(1, 3))).toEqual({ onTrack: true, line: '1 win so far, on pace for the ask.' });
+    expect(collegePace(b, withWins(0, 7))).toEqual({ onTrack: false, line: '0 wins so far, behind the pace for 6 wins.' });
+    expect(collegePace(b, withWins(4, 7))!.line).toBe('4 wins so far, on pace for the ask.');
   });
 });
 
