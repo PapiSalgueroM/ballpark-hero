@@ -856,7 +856,7 @@ open(10);
   /* The shared half knows no sport (correction 10), and neither new library draws from Math.random or carries an
      address. Code is read with comments stripped; the address scan reads the raw file, as simGmDraftOrder's does. */
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
-  const raw = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  const raw = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
   let shared = strip(raw(FILES.shared));
   if (CONTROL === 'sportname') shared += "\nconst league = 'nba';\n";
   const ALLOWED = ['./gmDraftNight', './gmDraftOrder', './gmLotteryNight', './gmPicks', '@/data/gmDraftOrder/rules'];
