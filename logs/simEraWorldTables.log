@@ -1,0 +1,17 @@
+1) the era world plays its own season
+   4 era world league(s) at full distance with real tables
+2) the modern world still advances (control)
+   26 modern world leagues all moved
+3) the picker offers this save's world and nothing else
+   era picker: La Liga, Premier League, Serie A, Bundesliga, Ligue 1; modern picker: 27 leagues
+4) the knockout field is the clubs that earned it
+   8 groups sent up 16 round of 16 clubs and 8 quarter finalists, all from the top twos in the competition's order; 2 level pair(s) held against the ledger; the bare goal difference order would have picked a different top two in 0 group(s)
+   projection carries the second placed club (checked as Anderlecht) and never pairs a group with itself
+5) the source shape that keeps it fixed
+   syncWorld iterates the era aware league list
+6) every era league id has a nation for its flag
+   20 era league id(s) checked against LEAGUE_NATIONS
+7) the verified Champions League fields, and the full eight group draw
+   4 era field(s) held to the 32 club shape, and the 2005 save drew 8 groups of 4
+
+simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.
