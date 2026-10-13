@@ -31,7 +31,21 @@
  *               check fails: it never passes on nothing.
  *   The zero offer card ("Nobody has come in for you") is recorded, never asserted.
  *
- * MEASURED: see BANDS below for the floors and the runs they come from.
+ * MEASURED on a GitHub runner, request rBA-close-2 (head 0ed38f76, 2026-10-12), 1500 careers a line:
+ *   t2, seed blocks 0, 1000000, 2000000: reached 6.93, 6.93, 7.00 percent a career; bitten 6.47, 6.60,
+ *     6.80 percent (97, 99, 102 careers); outcome shares 100 percent each; mean gain +12.19, +11.09, +11.88
+ *     (loan season league games about 10 to about 22); head zero offer 0; 180 to 221 s a line.
+ *   t1, seed blocks 0, 1000000, 2000000, 3000000: reached 1.33, 1.20, 0.80, 1.40 percent; bitten 1.27,
+ *     1.07, 0.80, 1.40 percent (19, 16, 12, 21 careers); outcome shares 100 percent; mean gain +12.16,
+ *     +12.00, +12.00, +12.00; head zero offer 0; 160 to 233 s a line.
+ *   The engine-saves review's own fleets (5000 and 4000 careers, the same seeds from 0 and 400000) gave
+ *   t2 7.1 and 7.3 percent bitten and t1 1.05 percent, every bitten career on loan one tier lower.
+ *   Floors: t2 3.5 percent for both (about 4.5 standard deviations under the lowest block at 1500 careers),
+ *   t1 0.4 percent (6 careers in 1500, half the lowest block's 12), outcome shares 90 percent, mean gain +6.
+ *   The default run is seeded, so it answers the same on the same engine; the floors are for the next one.
+ *   Controls, same request, 500 t2 careers: strict26 exit 0 (100 of 129 differing careers unattributed; on
+ *   loan 2.33 percent, mean gain -16.39, 126 zero offer cards), nofilter exit 0 (0 bitten, 29 head loans to a
+ *   club forecast under 20), each about 70 s.
  *
  * CONTROLS (SOCCER_LOAN_BITE_CONTROL; group t2 only, 500 careers unless set):
  *   strict26  the head's threshold raised to 26: the club loan turns into a freeze out, so 3 and 5 must fail;
@@ -211,7 +225,8 @@ for (const name of wanted) {
   };
   report.groups[name] = { summary: s, checks: [], unattributed: unattributed.slice(0, 20), sample: bitten.slice(0, 20) };
   const pct = x => (100 * x).toFixed(2) + '%';
-  console.log(`${name}: ${s.careers} careers (${tried} tried, seeds ${off}+), ${s.bitten} bitten, nofilter club loans to a club forecast under 20 ${T.nofilter.loansUnder20} (${pct(s.reachedPerCareer)} a career), head zero offer ${s.headZeroOffer}, loan season league games ${s.loanSeasonLeague.nofilter?.toFixed(2)} to ${s.loanSeasonLeague.head?.toFixed(2)}, overall at 26 ${s.overallAt26.nofilter?.toFixed(2)} to ${s.overallAt26.head?.toFixed(2)}`);
+  const f2 = x => x === null ? "none" : x.toFixed(2);
+  console.log(`${name}: ${s.careers} careers (${tried} tried, seeds ${off}+), ${s.bitten} bitten, nofilter club loans to a club forecast under 20 ${T.nofilter.loansUnder20} (${pct(s.reachedPerCareer)} a career), head zero offer ${s.headZeroOffer}, loan season league games ${f2(s.loanSeasonLeague.nofilter)} to ${f2(s.loanSeasonLeague.head)}, overall at 26 ${f2(s.overallAt26.nofilter)} to ${f2(s.overallAt26.head)}`);
   const b = BANDS[name];
   check(name, 1, s.reachedPerCareer >= b.reached, `reached: ${pct(s.reachedPerCareer)} club loans a career go to a club forecast under 20 without the filter (floor ${pct(b.reached)})`);
   check(name, 2, s.bitesPerCareer >= b.bites, `bites: ${pct(s.bitesPerCareer)} of careers differ (floor ${pct(b.bites)})`);
