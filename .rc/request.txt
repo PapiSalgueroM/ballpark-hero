@@ -1,0 +1,42 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-college: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+board: node scripts/simCollegeDynastyBoard.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+seat-rankbyprestige-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=rankbyprestige node scripts/simCollegeSeat.mjs
+seat-placeoff-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=placeoff node scripts/simCollegeSeat.mjs
+seat-ccgcount-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=ccgcount node scripts/simCollegeSeat.mjs
+seat-flattrust-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=flattrust node scripts/simCollegeSeat.mjs
+seat-firedends-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=firedends node scripts/simCollegeSeat.mjs
+seat-allowfirer-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=allowfirer node scripts/simCollegeSeat.mjs
+seat-bidfirer-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=bidfirer node scripts/simCollegeSeat.mjs
+seat-anyseason-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=anyseason node scripts/simCollegeSeat.mjs
+seat-bidtier-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=bidtier node scripts/simCollegeSeat.mjs
+seat-seatdraw-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=seatdraw node scripts/simCollegeSeat.mjs
+seat-seatleak-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=seatleak node scripts/simCollegeSeat.mjs
+seat-nextyear-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=nextyear node scripts/simCollegeSeat.mjs
+seat-yearoutskip-EXPECT-RED: SIM_COLLEGE_SEAT_CONTROL=yearoutskip node scripts/simCollegeSeat.mjs
+board-cfbword-control: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword-control: COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board-control: COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+board-seatleak-control: COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw-control: COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked-control: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff-control: COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+simCfbDynasty: node scripts/simCfbDynasty.mjs
+simCfbStaff: node scripts/simCfbStaff.mjs
+simCbbStaff: node scripts/simCbbStaff.mjs
+simCollegeRecruiting: node scripts/simCollegeRecruiting.mjs
+simCfbRecruitFilters: node scripts/simCfbRecruitFilters.mjs
+simCbbRecruitFilters: node scripts/simCbbRecruitFilters.mjs
+simCoachCalls: node scripts/simCoachCalls.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+deskhost-closedquiet-EXPECT-RED: SIM_GM_DESK_HOST_CONTROL=closedquiet node scripts/simGmDeskHost.mjs
