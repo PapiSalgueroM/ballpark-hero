@@ -202,13 +202,13 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
               )}
             >
               <div className="text-base leading-none">{INTENSITY_INFO[i].emoji}</div>
-              <div className={cn('text-[10px] font-bold mt-1', plan.intensity === i ? 'text-primary' : 'text-foreground')}>
+              <div className={cn('text-xs font-bold mt-1', plan.intensity === i ? 'text-primary' : 'text-foreground')}>
                 {INTENSITY_INFO[i].label}
               </div>
             </button>
           ))}
         </div>
-        <p className="text-[9px] text-muted-foreground mt-1.5">{INTENSITY_INFO[plan.intensity].desc}</p>
+        <p className="text-xs text-muted-foreground mt-1.5">{INTENSITY_INFO[plan.intensity].desc}</p>
       </div>
 
       <div className="bg-card border border-border rounded-xl p-3">
