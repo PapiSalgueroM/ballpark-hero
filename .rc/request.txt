@@ -1,0 +1,8 @@
+#!serial
+m3b-legacy30: node .rc/x/r1329run-mut.mjs M3b && WORLD_TRUTH_ONLY=2 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m3b-legacy30-s3: node .rc/x/r1329run-mut.mjs M3b && SEED_OFFSET=3 WORLD_TRUTH_ONLY=2 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m6b-quizoff1: node .rc/x/r1329run-mut.mjs M6b && WORLD_TRUTH_ONLY=4 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m9-panelrow: node .rc/x/r1329run-mut.mjs M9 && WORLD_TRUTH_ONLY=5 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m9-panelrow-vitest: node .rc/x/r1329run-mut.mjs M9 && node_modules/.bin/vitest run src/test/internationalPanelTruth.test.tsx src/test/tournamentCardMoment.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m10-floorapps: node .rc/x/r1329run-mut.mjs M10 && WORLD_TRUTH_ONLY=1 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m10-floorapps-vitest: node .rc/x/r1329run-mut.mjs M10 && node_modules/.bin/vitest run src/test/soccerWorldTruth.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
