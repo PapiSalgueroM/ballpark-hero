@@ -256,6 +256,7 @@
  */
 import './lib/seedRandom.mjs';
 import { buildSync } from 'esbuild';
+import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
@@ -394,7 +395,15 @@ if (!WRITE_FIXTURE) {
      section 1. */
   const ownGoalCall = '  tagOwnGoals(state, live, fx, half, me.goals, oppGoals);\n';
   if (source.split(ownGoalCall).length - 1 !== 1) abort('Historical arm needs the one own goal call to take out');
-  const coachless = source.replace(header, header + '  return career;\n').replace(ownGoalCall, '');
+  /* Release AZ: and with no world seed. Since Round 1250 (the other lane's PR224) startCareer gives every new
+     career a world seed, and the rows of sections 4 and 5 hash the save after the match from a new career, so
+     the arm that stands for the engine before it takes the seed block out (scripts/lib/cmWorldSeed1250.mjs,
+     which fails closed unless its anchor stands exactly once). Same shape as the own goal call above: every
+     other change to the engine is still held to changing nothing. The fixture belongs to a frozen engine and
+     is never taken again. */
+  let coachless = '';
+  try { coachless = withoutWorldSeed(source.replace(header, header + '  return career;\n').replace(ownGoalCall, '')); }
+  catch (e) { abort(`Historical arm needs the world seed block to take out: ${e.message}`); }
   fs.writeFileSync(historicalPath, coachless);
   historicalEnginePath = historicalPath;
   const baselineSource = execFileSync('git', ['show', '5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });

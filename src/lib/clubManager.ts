@@ -55,6 +55,8 @@ import {
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
+import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -76,10 +78,11 @@ import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
 // from this file, so there is no cycle.
 import {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
-  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
+  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,
   ageDriftBand, declineScale, retireChance,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName, eraBakeRating, bakedValueForRating,
+  eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 /* Round 467: the facilities and the books. Both modules import from this
@@ -250,13 +253,14 @@ const RACE_SECOND_SHARE = 0.26;
  * pickOppSquad and the scorer draws, so the match engine's random stream
  * changes only through the men available to it.
  */
-function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>): ProjectedPlayer[] {
+function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>, career?: CareerState): ProjectedPlayer[] {
   /* Round 1028: a 2015 save from before Round 899 can still meet Paris
      Saint-Germain or Borussia Mönchengladbach under the long name its group
      was drawn with. The strength and the association already read that as the
      club it always was (eraEuroName); the roster now does too, so its line up
      and its scorers are the 2015 squad rather than nobody. */
-  return projectedRoster(eraEuroName(eraId, club), yearsOnNow, eraId).filter(p => !exclude.has(p.n));
+  const name = eraEuroName(eraId, club);
+  return (career ? worldRosterFor(career, name, yearsOnNow) : projectedRoster(name, yearsOnNow, eraId)).filter(p => !exclude.has(p.n));
 }
 const NO_NAMES: ReadonlySet<string> = new Set();
 
@@ -265,9 +269,197 @@ export function mySquadNames(state: CareerState): Set<string> {
   return new Set(state.squad.map(p => p.name));
 }
 
+/** The held seed is optional, so an old save keeps the original projected world. */
+export function worldSeedOf(career: CareerState): number | undefined {
+  const seed = career.worldSeed;
+  return Number.isInteger(seed) && seed! >= 0 && seed! <= 0xffffffff ? seed : undefined;
+}
+
+/* Release AZ fix (reviewer 1, MAJOR 1): a ledger a year behind was aged and packed again on EVERY roster read,
+   once a club. The answer is kept per ledger object, world year, club, era and seed, unless a record the
+   refresh copies from my own squad is due (the one branch that reads the squad), so it is the same answer the
+   refresh always gave. */
+const REFRESH_MEMO = new WeakMap<object, { year: number; start: unknown; era: unknown; club: string; seed: number | undefined; out: unknown }>();
+
+/** Refresh only recorded affected players with the existing aging rules and a private stream. */
+export function refreshWorldRoster(career: CareerState): CareerState {
+  const held = worldRosterView(career);
+  if (!held) return career;
+  const year = worldYear(career);
+  if (!held.records.some(record => record.year < year && record.status !== 'retired')) return career;
+  const raw = career.worldRoster as object, seed = worldSeedOf(career);
+  const hit = REFRESH_MEMO.get(raw);
+  if (hit && hit.year === year && hit.start === career.startYear && hit.era === career.eraId && hit.club === career.clubName && hit.seed === seed) {
+    return { ...career, worldRoster: hit.out as WorldRosterState };
+  }
+  const out = refreshWorldRosterOnce(career, held, year);
+  if (!held.records.some(record => record.year < year && record.status !== 'retired' && record.owner === career.clubName)) {
+    REFRESH_MEMO.set(raw, { year, start: career.startYear, era: career.eraId, club: career.clubName, seed, out: out.worldRoster });
+  }
+  return out;
+}
+
+function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, year: number): CareerState {
+  const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
+  const records = held.records.map(record => {
+    if (record.year === year || record.status === 'retired') return record;
+    const actual = career.squad.find(p => p.worldRosterKey === record.key && !p.onLoan
+      && p.name === record.origin.name && year - p.age === record.origin.birthYear);
+    if (record.owner === career.clubName && actual) return { ...plainCopy(record), year, player: plainCopy(actual) };
+    let player = plainCopy(record.player);
+    let status: WorldRosterState['records'][number]['status'] = record.status;
+    let owner = record.owner;
+    for (let next = record.year + 1; next <= year; next++) {
+      const random = keyedRng(`world-roster|${worldSeedOf(career) ?? 'legacy'}|${record.key}|${next}`);
+      player = agePlayer(player, neutral, random);
+      if (random() < retireChance(player.age, player.rating, player.position)) { status = 'retired'; owner = null; break; }
+      /* Release AZ fix (reviewer 4, MAJOR 2): a man I sold kept the countdown of the deal he had with ME, and at
+         zero this line released him, so an 86 rated 25 year old sold in the last year of his deal was gone from
+         the buyer a season later and from the whole world after that, against the help's worked example and
+         What's New's "stay where they went". The club that holds him keeps him the way the projected world keeps
+         its own men until they retire: at zero it signs him again on the engine's renewal length (renewalTerms,
+         what a club would offer him). No random draw is taken. scripts/simCmLedgerBound.mjs holds it. */
+      if (status === 'owned' && (player.contractYears ?? 1) <= 0) player = { ...player, contractYears: renewalTerms(player).years };
+    }
+    return { ...plainCopy(record), year: record.origin.birthYear + player.age, player, status, owner };
+  });
+  return { ...career, worldRoster: compactWorldRoster({ ...held, records }) };
+}
+
+/* Release AZ fix (reviewer 2, MAJOR 1): the ledger never dropped a record, so a seeded career gained about nine a
+   season for ever (374 by season 40), and the save and the cost of every read grew with it. A released or retired
+   man's record does one thing: it takes him off the projected roster of the club he came from. Once that club's
+   projected roster (this world year, this seed) no longer lists him, by his key or by the name, position and birth
+   year worldRosterClub matches on, the record changes no roster, so the summer rollover drops it before the save
+   stores it. A man who retired this summer keeps his record for the season. Owned records always stay: they put a
+   man at a club. Never pruned while the era's squads are not loaded. The refresh above still only ages (PR224's
+   own rule and cases). scripts/simCmLedgerBound.mjs holds the bound (CM_LEDGER_BOUND_CONTROL=noprune). */
+function pruneWorldRoster(career: CareerState): CareerState {
+  const held = worldRosterView(career);
+  if (!held || !eraRostersLoaded(career.eraId)) return career;
+  const year = worldYear(career), years = yearsOn(career), seed = worldSeedOf(career), era = career.eraId ?? 'now';
+  const listed = (record: WorldRosterState['records'][number]): boolean => projectedRoster(record.origin.club, years, era, seed)
+    .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && year - p.a === record.origin.birthYear);
+  const kept = held.records.filter(record => record.status === 'owned' || record.status === 'retired' && record.year >= year || listed(record));
+  if (kept.length === held.records.length) return career;
+  const ledger = compactWorldRoster({ ...held, records: kept });
+  /* A packed ledger pruned down to owned records is stored plain, so it must not share the read's objects. */
+  return { ...career, worldRoster: ledger.packedRecords === undefined && held !== career.worldRoster
+    ? { ...ledger, records: kept.map(record => plainCopy(record)) } : ledger };
+}
+
+/** Ownership is applied to the same projected players used for rivals and the market. */
+export function worldRosterFor(career: CareerState, club: string, onYears = yearsOn(career)): ProjectedPlayer[] {
+  const fallback = projectedRoster(club, onYears, career.eraId ?? 'now', worldSeedOf(career));
+  const current = refreshWorldRoster(career);
+  if (!worldRosterView(current)) return fallback;
+  const base = fallback.map(bakedToCMPlayer);
+  const roster = worldRosterClub(current, club, base);
+  if (roster === base) return fallback;
+  return roster.map(p => {
+    const original = fallback.find(b => b.worldRosterKey === p.worldRosterKey && b.worldRosterKey !== undefined
+      || b.n === p.name && b.p === p.position && b.a === p.age);
+    if (original && p.worldRosterKey === undefined) return original;
+    /* Release AZ fix (reviewer 4, MAJOR 1): a boy from my academy or a youth pad is a name this game made up,
+       and once I sell him the ledger lists him at a real club. He carries academyGrad or isYouth rather than
+       generated, so every reader of this list (the club screen, the market, the scorer race) showed him with no
+       MADE UP tag under a caption that promises every made up man is marked. Real footballers never carry
+       either flag. scripts/simCmLedgerBound.mjs holds it. */
+    return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
+      ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
+      since: p.worldRosterSince ?? original?.since ?? 0,
+      ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}),
+      ...(p.potential === undefined ? {} : { potential: p.potential }) };
+  });
+}
+
+function rosterXIAvg(roster: readonly ProjectedPlayer[]): number | null {
+  if (!roster.length) return null;
+  const top = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
+  while (top.length < 11) top.push(60);
+  return Math.round(top.reduce((sum, rating) => sum + rating, 0) / 11 * 10) / 10;
+}
+
+/* Release AZ fix, the lead's ruling of 2026-10-12: the manager's OWN club is never read off the world roster.
+   The ledger takes every man who left him off his club's world roster and adds nothing for the boys who replaced
+   them, so a seeded career's club sank season by season (74.49 against 79.15 by season three) and took the free
+   agent level rule with it (freeAgentClubLevel is the one reader of his club's strength in src: no board reads
+   it). His club reads the base's projection exactly as before
+   PR224; the world roster serves the other clubs only. genClubStrengths and fillSquadGaps keep the same rule.
+   projectedClubXIAvg is projectedXIAvg taken for the one club, so a seeded career never builds a second whole
+   world for it. src/lib/clubManagerOwnClubLevel.test.ts holds it. */
+export function worldRosterXIAvg(career: CareerState, club: string): number | null {
+  if (!worldRosterView(career) && worldSeedOf(career) === undefined) return projectedXIAvg(club, yearsOn(career), career.eraId);
+  return club === career.clubName ? projectedClubXIAvg(club, yearsOn(career), career.eraId) : rosterXIAvg(worldRosterFor(career, club));
+}
+
+/* Release AZ fix (reviewer 1, MAJOR 1): buildMarket runs on every change of the save, and with a ledger this
+   walked every club of the world each time. The list is kept per ledger object and world year, so a tap that
+   changes no deal reads it back; it is shared like marketBase's, and buildMarket only ever filters it. */
+const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; out: MarketPlayer[] }>();
+
+/* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
+   roster): in a career that plays the living world the market lists nobody at my own club. My club is my squad,
+   and buildMarket drops every man of my squad by name, so what the world roster still put at my club were men
+   who are not mine (the men a deep club's bake holds beyond the 26 a squad starts with, then the projection's
+   replacements): on sale from my own club, and named in the feed as signed from it. A career from before the
+   release keeps the projected world's market exactly as it was (ruling Y1). src/lib/clubManagerOwnClubLevel.test.ts
+   and scripts/simFreeAgents.mjs section 17 (FA_CONTROL=ownclub) hold it. */
+function worldMarket(career: CareerState): MarketPlayer[] {
+  const fallback = marketBase(yearsOn(career), career.eraId, worldSeedOf(career));
+  const current = refreshWorldRoster(career);
+  const held = worldRosterView(current);
+  if (!held) return worldSeedOf(career) === undefined ? fallback : fallback.filter(p => p.club !== career.clubName);
+  const raw = current.worldRoster as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
+  const hit = WORLD_MARKET_MEMO.get(raw);
+  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName) return hit.out;
+  const clubs = new Set(fallback.map(p => p.club));
+  for (const record of held.records) if (record.owner) clubs.add(record.owner);
+  const out: MarketPlayer[] = [];
+  for (const club of clubs) {
+    if (club === current.clubName) continue;
+    for (const p of worldRosterFor(current, club)) out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
+      price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined,
+      ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
+  }
+  out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+  /* Release AZ fix pass 4 (scripts/simBooks.mjs section 1, which nobody had run on this train): marketBase lists
+     one man per name, because a few real men share one (Paulinho of Palmeiras and of Toluca, Allan of Manchester
+     City and of Corinthians), and this list did not, so from a seeded career's first recorded deal six names were
+     on sale twice. One listing per name again: the one the projected market lists while he is still there,
+     otherwise the best rated. */
+  const baseClub = new Map(fallback.map(p => [p.name, p.club] as const));
+  const chosen = new Map<string, MarketPlayer>();
+  for (const p of out) {
+    const had = chosen.get(p.name);
+    if (!had || (had.club !== baseClub.get(p.name) && p.club === baseClub.get(p.name))) chosen.set(p.name, p);
+  }
+  const once = chosen.size === out.length ? out : out.filter(p => chosen.get(p.name) === p);
+  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName, out: once });
+  return once;
+}
+
+/** Only a projected source or an already certified ownership record supplies deal provenance. */
+function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire'): CareerState {
+  /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
+     Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
+     turns on the same branches the seed does, so this is the one place both are kept off together.
+     scripts/simCmUnseededWorld.mjs holds it (CM_UNSEEDED_CONTROL=guard takes this line out). */
+  if (worldSeedOf(state) === undefined) return state;
+  const held = worldRosterView(state);
+  const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
+  const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
+    .filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
+  const source = sources.length === 1 ? sources[0] : undefined;
+  if (!carried && (sources.length > 1 || player.worldRosterKey && !source)) return state;
+  return recordWorldRosterTransfer(state, { player, from, to, kind,
+    since: carried?.origin.since ?? source?.since ?? player.worldRosterSince,
+    originPosition: carried?.origin.position ?? source?.p,
+    ...(carried ? { key: carried.key } : {}) });
+}
 /** A rival club's projected roster minus every man who is in my squad. */
 export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
-  return projectedRosterWithout(club, yearsOn(state), state.eraId ?? 'now', mine);
+  return projectedRosterWithout(club, yearsOn(state), state.eraId ?? 'now', mine, state);
 }
 
 /**
@@ -828,6 +1020,8 @@ export interface LoanOut {
 }
 
 export interface CMPlayer {
+  worldRosterKey?: string;
+  worldRosterSince?: number;
   id: string;
   name: string;
   position: Position;
@@ -1240,6 +1434,9 @@ export interface TierInfo { label: string; emoji: string; blurb: string; }
 export interface MentalityDef { id: Mentality; label: string; emoji: string; desc: string; }
 
 export interface MarketPlayer {
+  worldRosterKey?: string;
+  worldRosterSince?: number;
+  potential?: number;
   name: string;
   club: string;
   position: Position;
@@ -2503,6 +2700,8 @@ export interface CareerState {
   loanedOut?: LoanOut[];
   /** Round 95: live standings for every league that is not mine, by league id. */
   world?: Record<string, WorldLeague>;
+  worldRoster?: WorldRosterState;
+  worldSeed?: number;
   /** Round 95: the full Champions League knockout bracket. */
   uclBracket?: UclTie[];
   /** Round 163: every OTHER Champions League group, simulated alongside mine. */
@@ -5124,6 +5323,8 @@ function bakedToCMPlayer(b: BakedPlayer | ProjectedPlayer): CMPlayer {
     seasonAssists: 0,
     value: b.v,
     generated: gen || undefined,
+    ...((b as ProjectedPlayer).worldRosterKey ? { worldRosterKey: (b as ProjectedPlayer).worldRosterKey,
+      worldRosterSince: (b as ProjectedPlayer).since, potential: (b as ProjectedPlayer).potential } : {}),
   };
 }
 
@@ -6274,7 +6475,7 @@ export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, e
   return { label: demand.label, replaced };
 }
 
-function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now'): CMPlayer[] {
+function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', career?: CareerState): CMPlayer[] {
   // Round 70: baked real rosters first (with real market values); the old
   // static pool only backs up clubs outside the bake. Round 72: cap the
   // start at the 26 most valuable so deep baked squads (Real Madrid has 29
@@ -6282,11 +6483,11 @@ function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now'): CM
   // people. Round 132: at yearsOn 0 the projection IS the bake, so a career
   // in the current era gets exactly the squad it always got. Round 146: the
   // era picks the bake, so a 2010 save is handed the real 2010 squad.
-  const baked = projectedRoster(clubName, yearsOnNow, eraId);
+  const baked = projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined);
   const real = baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
-  return ensureSquadCoverage(real);
+  return ensureSquadCoverage(career ? [...worldRosterClub(refreshWorldRoster(career), clubName, real)] : real);
 }
 
 /* ================================================================== */
@@ -7159,7 +7360,7 @@ export function topUpFreeAgents(state: CareerState): void {
     ...(state.releasedNames ?? []),
     ...(state.academy?.prospects ?? []).map(pr => pr.name),
     ...(state.loanedOut ?? []).map(l => l.player.name),
-    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+    ...marketBase(yearsOn(state), state.eraId, worldSeedOf(state)).map(m => m.name),
   ]);
   const out = [...pool];
   for (let k = 0; have < FREE_AGENT_POOL_TARGET && k < FREE_AGENT_POOL_TARGET * 3; k++) {
@@ -7207,7 +7408,7 @@ export function seedRealFreeAgents(state: CareerState): void {
   const taken = new Set<string>([
     ...state.squad.map(p => p.name),
     ...pool.map(f => f.name),
-    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+    ...marketBase(yearsOn(state), state.eraId, worldSeedOf(state)).map(m => m.name),
   ]);
   const real: FreeAgent[] = CM_REAL_FREE_AGENTS
     .filter(r => !taken.has(r.name))
@@ -7342,7 +7543,7 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
       ? career.releasedNames
       : [...(career.releasedNames ?? []), p.name],
   };
-  return next;
+  return recordActualRosterTransfer(next, p, career.clubName, null, 'release');
 }
 
 /**
@@ -7521,7 +7722,7 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
   };
   /* Round 640 review: a founder signed back still sells at his ratio. */
   if (fa.founderSaleRatio !== undefined) player.founderSaleRatio = fa.founderSaleRatio;
-  return {
+  const state: CareerState = {
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
     squad: [...career.squad, player],
@@ -7531,6 +7732,14 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
        transfer fee. */
     seasonSignings: [...career.seasonSignings, { dir: 'in', name: fa.name, fee: 0, bonus: fee }],
   };
+  /* Release AZ fix (reviewer 1, minor 6): the one ledger writer that does not pass recordActualRosterTransfer, so
+     ruling Y1's guard did not stand in front of it. Inert before this line too (it needs a readable ledger, which a
+     career with no seed never gets), now said where it is done. */
+  if (worldSeedOf(career) === undefined) return state;
+  const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
+    && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
+  return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
+    kind: 'permanent', key: released[0].key }) : state;
 }
 
 /**
@@ -9015,14 +9224,14 @@ const MARKET_BASE_CACHE = new Map<string, MarketPlayer[]>();
    2026 one, so Bellingham cannot be signed in 2010 and 2010 Messi cannot be
    signed today. The cache key carries the era for the same reason the world
    cache does. */
-function marketBase(yearsOnNow: number, eraId: string = 'now'): MarketPlayer[] {
+function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: number): MarketPlayer[] {
   const y = Math.max(0, Math.round(yearsOnNow));
-  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}`;
+  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}${worldSeed === undefined ? '' : `|${worldSeed}`}`;
   const hit = MARKET_BASE_CACHE.get(key);
   if (hit) return hit;
   const out: MarketPlayer[] = [];
   const seen = new Set<string>();
-  for (const [club, roster] of Object.entries(projectedWorldFor(eraId, y))) {
+  for (const [club, roster] of Object.entries(projectedWorldFor(eraId, y, worldSeed))) {
     for (const b of roster) {
       if (seen.has(b.n)) continue;
       seen.add(b.n);
@@ -9035,6 +9244,7 @@ function marketBase(yearsOnNow: number, eraId: string = 'now'): MarketPlayer[] {
         price: askingPrice(b.v, b.a),
         value: b.v,
         generated: b.g || undefined,
+        ...(b.worldRosterKey ? { worldRosterKey: b.worldRosterKey, worldRosterSince: b.since, potential: b.potential } : {}),
       });
     }
   }
@@ -9065,7 +9275,7 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
   /* Keyed on sameManKey, so a different man who happens to share his name is
      still on the market. */
   const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
-  return marketBase(yearsOn(career), career.eraId)
+  return worldMarket(career)
     .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
 }
 
@@ -9179,6 +9389,8 @@ function completeSigning(
     seasonGoals: 0,
     seasonAssists: 0,
     value: mp.value,
+    ...(mp.worldRosterKey ? { worldRosterKey: mp.worldRosterKey, worldRosterSince: mp.worldRosterSince,
+      potential: mp.potential, generated: mp.generated } : {}),
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
     contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
@@ -9213,7 +9425,7 @@ function completeSigning(
   };
   pushNews(state, { name: mp.name, from: mp.club, to: state.clubName, fee, loan: loan || undefined });
   if (!loan) trackDealExtremes(state, 'in', mp.name, fee);
-  return state;
+  return loan ? state : recordActualRosterTransfer(state, player, mp.club, state.clubName, 'permanent');
 }
 
 /** Returns the new state, or null if the deal is not allowed. */
@@ -9313,7 +9525,7 @@ export function exerciseLoanOption(career: CareerState, playerId: string): Caree
   };
   pushNews(state, { name: p.name, from, to: state.clubName, fee });
   trackDealExtremes(state, 'in', p.name, fee);
-  return state;
+  return from === 'his club' ? state : recordActualRosterTransfer(state, bought, from, state.clubName, 'permanent');
 }
 
 /**
@@ -10373,6 +10585,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
     const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
     signed.seasonSignings = [...signed.seasonSignings, { dir: 'out', name: swap.name, fee: swapVal }];
     pushNews(signed, { name: swap.name, from: career.clubName, to: neg.player.club, fee: swapVal });
+    Object.assign(signed, recordActualRosterTransfer(signed, swap, career.clubName, neg.player.club, 'permanent'));
   }
   const sellOnPct = clamp(Math.round(extras?.sellOnPct ?? 0), 0, 30);
   if (sellOnPct > 0) {
@@ -10392,7 +10605,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
     ...neg, status: 'agreed', phase: 'terms',
     note: `Done: ${bits.join(', ')}. Welcome to ${career.clubName}, ${neg.player.name}.`,
   };
-  return signed;
+  return snapshotWorldRosterClub(signed, signed.clubName);
 }
 
 /** Walk away. If a rival was circling, they usually take him. */
@@ -10465,7 +10678,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     ].slice(0, 8);
   }
   trackDealExtremes(state, 'out', p.name, netFee);
-  return state;
+  return recordActualRosterTransfer(state, p, career.clubName, bid.club, 'permanent');
 }
 
 /**
@@ -10714,10 +10927,10 @@ export function loanOutPlayer(
  */
 function returnLoanedPlayers(career: CareerState): {
   home: CMPlayer[];
-  bought: { name: string; club: string; fee: number }[];
+  bought: { name: string; club: string; fee: number; player: CMPlayer }[];
 } {
   const out: CMPlayer[] = [];
-  const bought: { name: string; club: string; fee: number }[] = [];
+  const bought: { name: string; club: string; fee: number; player: CMPlayer }[] = [];
   for (const l of career.loanedOut ?? []) {
     const p = l.player;
     const bump =
@@ -10752,7 +10965,7 @@ function returnLoanedPlayers(career: CareerState): {
        has to be the exception that makes the option interesting rather than the
        default outcome that makes loaning out a bad idea. */
     if (l.optionFee !== undefined && (bump >= 3 || grown.rating >= 80) && Math.random() < 0.25) {
-      bought.push({ name: p.name, club: l.club, fee: l.optionFee });
+      bought.push({ name: p.name, club: l.club, fee: l.optionFee, player: grown });
       continue;
     }
     out.push(grown);
@@ -11091,15 +11304,22 @@ function generateHeadlines(state: CareerState): void {
  * average of the value-derived ratings), so the data drives the sim. The
  * old priors only back up anything outside the bake.
  */
-function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now'): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, myClub?: string): Record<string, number> {
   const out: Record<string, number> = {};
   // Round 132: from the PROJECTED roster for this world year, not from the
   // frozen 2026 bake. Before this, every AI club in the game was recomputed
   // from August 2026 every single summer, so Arsenal were 89.5 in season one
   // and 89.5 in season thirteen while my own squad was ageing underneath me.
   // At yearsOn 0 the projection is the bake, so season one has not moved.
+  /* Release AZ fix, the lead's ruling (see worldRosterXIAvg): the club I manage this season reads the base's
+     projection, never the world roster. It is named by the caller, because the career handed over on a job taken
+     mid season (joinClubNow) still carries the club I just left, which is another club from now on. */
+  const seededWorld = !!career && (worldRosterView(career) || worldSeedOf(career) !== undefined);
   const baseFor = (name: string): number =>
-    projectedXIAvg(name, yearsOnNow, eraId) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
+    (!seededWorld ? projectedXIAvg(name, yearsOnNow, eraId)
+      : name === myClub ? projectedClubXIAvg(name, yearsOnNow, eraId)
+        : rosterXIAvg(worldRosterFor(career!, name, yearsOnNow)))
+      ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
     out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
   }
@@ -13828,7 +14048,7 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight, career?: CareerState): ScorerLine[] {
   /* Round 504: a segment of a half asks for its own window; the whole match
      shape splits at the interval as before. Round 781: a window that runs
      into a board weights it (BoardWeight). */
@@ -13841,7 +14061,7 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
   // Round 742: minus the men in my squad (`exclude`, passed in because no
   // save is in scope here), so a man I bought off this club never scores
   // against me for them. See oppRosterFor.
-  const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude).filter(p =>
+  const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude, career).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
   /* Round 1028: the static pool is today's squads, so it only ever backs up
      today's world. A historic era's foreign Champions League club (AC Milan in
@@ -15167,7 +15387,7 @@ function drawSegment(
   let oppGoals: ScorerLine[];
   let oppCards: CardLine[] = [];
   if (!oppStart) {
-    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board);
+    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board, state);
     live.oppSubs = drawOppSubs(live, from, to, []);
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
@@ -15413,7 +15633,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
     for (const l of live.h1My) taken.add(l.minute);
   }
   if (!live.h1Opp || live.h1Opp.length !== live.oppGoals) {
-    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken, undefined, mySquadNames(state));
+    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken, undefined, mySquadNames(state), undefined, state);
     markOppSetPieceGoals(live.h1Opp);
   }
   if (!live.h1Play) {
@@ -17252,17 +17472,18 @@ const SCOUT_LAST = [
  * The ceiling a player is carrying. Older players are at or near it already,
  * which is why the whole system is about teenagers.
  */
-export function rollPotential(rating: number, age: number): number {
+export function rollPotential(rating: number, age: number, random?: () => number): number {
+  const range = (lo: number, hi: number) => random ? lo + Math.floor(random() * (hi - lo + 1)) : ri(lo, hi);
   let head: number;
   if (age >= 30) head = 0;
-  else if (age >= 28) head = ri(0, 1);
-  else if (age >= 26) head = ri(0, 2);
-  else if (age >= 24) head = ri(1, 4);
-  else if (age >= 22) head = ri(1, 6);
-  else if (age >= 20) head = ri(2, 10);
-  else head = ri(3, 15);
+  else if (age >= 28) head = range(0, 1);
+  else if (age >= 26) head = range(0, 2);
+  else if (age >= 24) head = range(1, 4);
+  else if (age >= 22) head = range(1, 6);
+  else if (age >= 20) head = range(2, 10);
+  else head = range(3, 15);
   // About one young player in twelve is carrying something special.
-  if (age <= 21 && Math.random() < 0.085) head += ri(4, 9);
+  if (age <= 21 && (random ? random() : Math.random()) < 0.085) head += range(4, 9);
   return clamp(rating + head, rating, 95);
 }
 
@@ -17711,6 +17932,8 @@ export interface SeasonWorld {
   yearsOn: number;
   uclField: string[] | null;
   keepLeagueOverrides: boolean;
+  worldSeed?: number;
+  rosterCareer?: CareerState;
 }
 
 /* Round 964: `edit` is a world editor edit (src/lib/clubManagerWorldEdit.ts),
@@ -17759,7 +17982,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
-  const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id);
+  const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id, world?.rosterCareer);
   // Owner task 61: the league is the club's REAL league with its real clubs.
   // Round 1035: withClubCup, so a club outside its league's cup starts cupless.
   const league = withClubCup((custom && customLeagueDef(custom, era.id))
@@ -17815,7 +18038,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id),
+    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id, world?.rosterCareer, club.name),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -17853,6 +18076,12 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
+  if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
+    state.season = world.rosterCareer.season;
+    state.startYear = world.rosterCareer.startYear;
+    if (world.rosterCareer.worldRoster !== undefined) state.worldRoster = plainCopy(world.rosterCareer.worldRoster);
+    if (world.rosterCareer.worldSeed !== undefined) state.worldSeed = world.rosterCareer.worldSeed;
+  }
   /* Round 964: the edited world rides on the save the way a promoted one
      does, so the first summer resolves on it and a reload registers it. */
   if (worldEdit) state.leagueOverrides = worldEdit;
@@ -17945,6 +18174,16 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      answer it. Only a late season can have a window before its opener, so
      every other save draws exactly what it did. */
   if (lateWeeks !== null) for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
+  if (!world) {
+    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,
+      state.manager ? [state.manager.name, state.manager.nationality, state.manager.background, state.manager.style] : null,
+      state.squad.map(p => [p.name, p.position, p.age, p.rating, p.potential]),
+      [state.academy?.recruitment, state.academy?.coaching, state.academy?.facilities,
+        state.academy?.prospects.map(p => [p.name, p.position, p.age, p.rating, p.potential])]]);
+    state.worldSeed = Math.floor(keyedRng(`manager-world|${entropy}`)() * 0x100000000);
+  } else if (world.worldSeed !== undefined && state.worldSeed === undefined) {
+    state.worldSeed = world.worldSeed;
+  }
   return state;
 }
 
@@ -19511,7 +19750,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
  * the player's ceiling. Decline is untouched: no amount of coaching keeps a
  * thirty four year old from slowing down.
  */
-function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
+function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMPlayer {
   const age = p.age + 1;
   /* Round 132: the same single curve the projected world runs on, so my squad
      and every AI squad in the game age on identical rules. That symmetry is
@@ -19527,9 +19766,9 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
      38, -1.83 at 40 and -1.69 at 43. A perfectly straight line, and nobody
      ever stopped playing. */
   const [lo, hi] = ageDriftBand(age);
-  let drift = ri(lo, hi);
+  let drift = random ? lo + Math.floor(random() * (hi - lo + 1)) : ri(lo, hi);
   if (drift < 0) drift = Math.round(drift * declineScale(p.position));
-  const potential = p.potential ?? rollPotential(p.rating, p.age);
+  const potential = p.potential ?? rollPotential(p.rating, p.age, random);
   if (drift > 0) {
     drift = Math.round(drift * developmentRate(p, career));
     drift = Math.min(drift, Math.max(0, potential - p.rating));
@@ -19541,7 +19780,8 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
     value = value * Math.pow(1.2, drift) * (age >= 31 ? 0.85 : 1);
     value = Math.max(0.2, Math.round(value * 10) / 10);
   }
-  const rating = clamp(p.rating + drift, 40, 95);
+  const ceiling = worldRosterView(career) || worldSeedOf(career) !== undefined ? Math.max(95, Math.min(99, p.rating)) : 95;
+  const rating = clamp(p.rating + drift, 40, ceiling);
   return {
     ...p,
     age,
@@ -19614,10 +19854,16 @@ function fillSquadGaps(
   clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
   retiredNames: string[], eraId: string = 'now', realPool: FreeAgent[] = [],
   released: string[] = [],
-): { squad: CMPlayer[]; signed: string[] } {
+  worldSeed?: number,
+): { squad: CMPlayer[]; signed: string[]; from: Map<string, string> } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
-  if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
-  const baseline = projectedXIAvg(clubName, yearsOnNow, eraId)
+  if (seniors >= SENIOR_FLOOR) return { squad, signed: [], from: new Map() };
+  /* Release AZ fix (reviewer 1, minor 2): a seeded career fills its gaps from ITS world (the seed is undefined on
+     every other career, so theirs read exactly what they always read), and each man taken off a club's list is
+     recorded from that club below, so a man signed here and sold later is not left on his old club's list too.
+     The band itself is MY club's level, so it reads the base's projection with no seed (the lead's ruling of
+     2026-10-12, see worldRosterXIAvg): the same level genClubStrengths gives my club. */
+  const baseline = (worldSeed === undefined ? projectedXIAvg(clubName, yearsOnNow, eraId) : projectedClubXIAvg(clubName, yearsOnNow, eraId))
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);
@@ -19647,15 +19893,16 @@ function fillSquadGaps(
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
-  const invented = marketBase(yearsOnNow, eraId)
+  const invented = marketBase(yearsOnNow, eraId, worldSeed)
     .filter(p => !letGo.has(p.name) && !taken.has(p.name) && !retired.has(p.name) && band(p.rating)
       && !fromReal.some(f => f.name === p.name))
     .sort((a, b) => a.rating - b.rating);
   const pool = [...fromReal.sort((a, b) => a.rating - b.rating), ...invented];
-  if (!pool.length) return { squad, signed: [] };
+  if (!pool.length) return { squad, signed: [], from: new Map() };
   const want = clamp(SENIOR_FLOOR - seniors, 0, 4);
   const out = [...squad];
   const signed: string[] = [];
+  const from = new Map<string, string>();
   for (let i = 0; i < want; i++) {
     // The thinnest position first, so an emergency window does not hand you
     // six strikers and no keeper.
@@ -19668,6 +19915,7 @@ function fillSquadGaps(
     const mp = (fits.length ? fits : pool.filter(p => !signed.includes(p.name)))[0];
     if (!mp) break;
     signed.push(mp.name);
+    if (mp.club) from.set(mp.name, mp.club);
     const player: CMPlayer = {
       /* Round 567's rule, which this signing skipped: unique inside the squad. */
       id: freeSquadId(out, `fa-${slug(mp.name)}-s${season}`),
@@ -19693,7 +19941,7 @@ function fillSquadGaps(
     if (ratio !== undefined) player.founderSaleRatio = ratio;
     out.push(player);
   }
-  return { squad: out, signed };
+  return { squad: out, signed, from };
 }
 
 /**
@@ -19792,6 +20040,7 @@ export function toLeague(name: string): string {
  * competitions and reopens the summer window.
  */
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
+  career = snapshotWorldRosterClub(career, career.clubName);
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
   /*
@@ -19889,6 +20138,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const freeAgentNews: string[] = [];
   const releasedNews: string[] = [];
   const freeAgentsIn: string[] = [];
+  let emergencyFrom = new Map<string, string>();
   const retiredNow: { name: string; age: number; rating: number }[] = [];
   /* Round 619: men whose deals ran out this summer, collected here and
      written into the new season's free agent pool below. */
@@ -19901,8 +20151,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      sale on the record, so it is settled here rather than inside the return. */
   const loanReturn = returnLoanedPlayers(career);
   const homeFromLoan = loanReturn.home;
+  let rosterCareer: CareerState = career;
+  for (const sale of loanReturn.bought) rosterCareer = recordActualRosterTransfer(rosterCareer, sale.player, career.clubName, sale.club, 'permanent');
+  const rosterExits: { player: CMPlayer; kind: 'release' | 'retire' }[] = [];
   if (moving) {
-    squad = buildSquad(clubName, nextYearsOn, eraId);
+    rosterCareer = refreshWorldRoster({ ...rosterCareer, season, clubName, squad: [] });
+    squad = buildSquad(clubName, nextYearsOn, eraId, rosterCareer);
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
@@ -19919,12 +20173,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     for (const p of aged) {
       if (Math.random() < retireChance(p.age, p.rating, p.position)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
+        rosterExits.push({ player: p, kind: 'retire' });
       } else {
         stillPlaying.push(p);
       }
     }
     const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0);
-    for (const p of walked) freeAgentNews.push(p.name);
+    for (const p of walked) { freeAgentNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
     /* Round 619: a deal that ran out does not delete the man. He walks for
        nothing, which is what Round 105 always said, and now there is somewhere
        for him to walk TO. No severance, because nothing was broken early. */
@@ -19966,9 +20221,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       eraId,
       career.freeAgents ?? [],
       [...releasedByYouNames(career)],
+      worldSeedOf(career),
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);
+    emergencyFrom = emergency.from;
     squad = ensureSquadCoverage(squad);
     /* Round 132: and the books get balanced. Keeping veterans alive (see
        renewalTerms) plus a bigger intake pushed a well managed squad to 41
@@ -19991,10 +20248,24 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
         !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
       spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
-      for (const p of squad) if (cut.has(p.id)) releasedNews.push(p.name);
+      for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
       squad = squad.filter(p => !cut.has(p.id));
     }
   }
+
+  rosterCareer = { ...rosterCareer, season, clubName, squad };
+  if (worldRosterView(rosterCareer) || worldSeedOf(rosterCareer) !== undefined) {
+    for (const exit of rosterExits) rosterCareer = recordActualRosterTransfer(rosterCareer, exit.player, career.clubName, null, exit.kind);
+    for (const [name, club] of emergencyFrom) {
+      const man = squad.find(p => p.name === name);
+      if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
+    }
+    /* Release AZ fix (closing check, NEW-A): the record copies its key onto the man in rosterCareer's squad only,
+       and the new season is built from this one, so the ledger held him as mine while no man of my squad carried
+       his key. The exits above write no squad, so this takes exactly the emergency signings' keys. */
+    if (emergencyFrom.size) squad = rosterCareer.squad;
+  }
+  rosterCareer = pruneWorldRoster(refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName)));
 
   const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
 
@@ -20116,7 +20387,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId),
+    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId, rosterCareer, clubName),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -20201,6 +20472,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     leagueOverrides: pr.overrides ?? undefined,
   };
   delete state.realLeagueFixtures;
+  if (worldRosterView(rosterCareer)) state.worldRoster = plainCopy(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make
      the outcome explicit: staying keeps the re-measured spec, moving drops
      the club you built. */
@@ -20493,7 +20765,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
-  return state;
+  return snapshotWorldRosterClub(state, state.clubName);
 }
 
 /* ================================================================== */

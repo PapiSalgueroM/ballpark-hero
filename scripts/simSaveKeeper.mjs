@@ -28,6 +28,13 @@
  *      neither table is red. (Release AU fix pass: the fixtures are played
  *      saves now. As start states they held no parts, and this section said
  *      "none" over five games that had one.)
+ *      (Release AZ: a game WITH a row in SAVE_VERSIONS is never searched for
+ *      a part's number. '/club-manager' is such a row, the whole save at
+ *      saveVersion 3, so the version of the world ledger Round 1250 added
+ *      (worldRoster.version, read by readWorldRoster in
+ *      src/lib/clubManagerWorldRoster.ts) is invisible here. That reader holds
+ *      its own number: a ledger of another version reads as no ledger, held
+ *      by src/lib/clubManagerWorldRoster.test.ts.)
  *   2  an ordinary boot writes nothing. A fixture of every game planted,
  *      runSaveKeeper through the real seam: zero writes, zero removes, the
  *      exact set of keys read, and every stored save byte equal before and

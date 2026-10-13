@@ -29,12 +29,13 @@ import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
   cupProgressRank, uclProgressRank, objectiveStatuses,
   /* Round 783: the mid season takeover an accepted application walks into. */
-  startCareer, interimManagerName,
+  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
+import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
 
 /* ================================================================== */
 /* Dates                                                              */
@@ -884,6 +885,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   if (!open || open.status !== 'accepted' || career.sacked) return null;
   const club = open.club;
   const from = career.clubName;
+  const departed = refreshWorldRoster(snapshotWorldRosterClub(career, from));
   const eraId = career.eraId ?? DEFAULT_ERA_ID;
   const historic = isHistoricEra(eraId);
   const eraBase = historic ? eraById(eraId).startYear : CM_BASE_YEAR;
@@ -894,6 +896,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
       yearsOn,
       uclField: career.uclField ?? null,
       keepLeagueOverrides: true,
+      ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
+        ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),
     });
   } catch {
     return null;
@@ -963,6 +967,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
+    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
+    ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
     managers,

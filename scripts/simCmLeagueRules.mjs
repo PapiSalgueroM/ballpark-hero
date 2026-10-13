@@ -423,6 +423,47 @@
       same 33 saves moved, in summary and wholeNext (and s2_whole for the
       six pyramid saves), 72 hashes, nothing else. Written the same way,
       then green whole.
+      Release AZ (2026-10-12) re-took it once more, for Round 1250 (the
+      other lane's PR224): every new career now carries a world seed, so
+      `start` and every whole state hash moves with nothing wrong (47
+      entries red after the merge, remote check az-e1b, among them the
+      board's objectives the summer after in eight entries, four modern
+      leagues and four era ones, whose club
+      strengths a seeded world draws). Attribution on a GitHub runner at
+      5b0da7f1 (remote check az-digest, line attrib-inverse): with the
+      seed block of startCareer taken out by scripts/lib/cmWorldSeed1250.mjs
+      the harness is green whole against Release AX's file, so the seed
+      is the only cause. Written with --part=modern,eras,pure --write on
+      the tree itself (201 lines changed), then run green whole on the
+      same runner (line write-digest).
+      Release AZ's fix pass (2026-10-12) took it once more, for two
+      intended changes to seeded careers only: the summer rollover now
+      drops a released or retired ledger record that changes no roster
+      (pruneWorldRoster), and a seeded career's free agent name guards and
+      emergency signings read its own world. 24 entries moved, in the
+      state after the summer only (wholeNext 24, s2_whole 9, no readable
+      field). Attribution on a runner at 91019024 (remote check azfx-4):
+      with both taken out the committed file is green whole (rules-both);
+      the prune alone out leaves 7 entries red, the other alone out 24.
+      Written on the runner (azfx-5, line write-digest, 33 lines changed),
+      then run green whole there.
+      The closing check's fixer (2026-10-12) took it once more, for
+      7942d4d1: a seeded career's summer emergency signing now carries
+      the key of its ledger record. 6 modern entries moved, in the state
+      after the summer only (wholeNext 6, s2_whole 3, no readable field).
+      Attribution on a runner at 7942d4d1 (remote check fx2-b, line
+      rules-nokey): with that one line taken out the committed file is
+      green whole. Written on the same runner (line write-digest, 9 lines
+      changed), then run green whole there.
+      Fix pass 3 (2026-10-13) took it once more, for the lead's ruling that
+      the club I manage is never read off the world roster: its strength
+      in the state after the summer now reads the base's projection. All
+      47 entries moved in wholeNext and the ten pyramid saves in s2_whole,
+      no readable field and no other hash. Attribution on a runner at
+      342e67b0 (remote check fx3-Fe, line rules-revert): with the
+      engine's fix taken out the committed file is green whole. Written on
+      the same runner (line write-digest, 57 lines changed), then run green
+      whole there.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

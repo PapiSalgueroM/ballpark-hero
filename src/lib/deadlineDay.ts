@@ -350,6 +350,11 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        match, so it would only ever be an empty block in the day's state; it comes off so the state is
        the shape it was. scripts/simCmLeagueBook.mjs (section dailies) holds it. */
     delete state0.leagueBook;
+    /* Release AZ, the lead's ruling Y3: nor a world seed (Round 1250 gives every new career one). With no
+       seed the engine never writes the day a ledger, so the signings and sales a day completes through the
+       engine leave its state the shape it was, and every market and roster read of the day stays on the
+       projected world. scripts/simDailyDeals.mjs holds it: its seeddeadline control puts this line back out. */
+    delete state0.worldSeed;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);

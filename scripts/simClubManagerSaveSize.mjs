@@ -614,6 +614,12 @@ let pairState = null;
      three years on carries two generated men under one name. */
   let s = startCareer('Real Madrid');
   for (let season = 1; season <= 3 && s; season++) {
+    /* Release AZ fix (reviewer 2, MAJOR 2): the pair is a fact of the projected world a career from before
+       Round 1250 plays, and a new career is seeded from its own drawn squad, so whether a seeded world three
+       years on still held it was a draw (red on half the seeds). The career plays its first two seasons as a
+       new career does (rmSeason3, which section 6 sweeps, is seeded), then carries on as a save from before
+       that release would, seed and ledger off, so the job it takes holds the pair on every seed. */
+    if (season === 3 && s) { s = JSON.parse(JSON.stringify(s)); delete s.worldSeed; delete s.worldRoster; for (const p of s.squad) { delete p.worldRosterKey; delete p.worldRosterSince; } }
     s = toSummer(s, season === 3 ? PAIR_CLUB : undefined);
     if (season === 2) rmSeason3 = s;
   }
@@ -686,7 +692,10 @@ console.log('6) The repair, on saves that really carry the duplicate the pre 634
 /* ================================================================== */
 section = 6;
 {
-  const base = startCareer('Real Madrid');
+  /* Release AZ fix pass 4: a save the pre 634 engine wrote is a save from before Round 1250's world seed, so the
+     duplicate is rebuilt on one. Since the lead's ruling a seeded career's market lists nobody at my own club,
+     where the pre 634 market listed him, so on a seeded save it could not be rebuilt at all. */
+  const { worldSeed: _preReleaseSeed, ...base } = startCareer('Real Madrid');
   const him = base.squad.find(p => !p.isYouth && p.rating < 80 && p.age < 27 && canLeaveSquad(base, p));
   const out = him ? loanOutPlayer(base, him.id, 'Sevilla', 1) : null;
   /* The pre 634 market: the same world with the loan record out of sight,
@@ -866,7 +875,10 @@ section = 8;
   /* A man out on loan, and his card from the pre 634 market. */
   const lent = A.squad.find(p => !p.isYouth && p.rating < 80 && canLeaveSquad(A, p));
   const away = lent ? loanOutPlayer(fresh(), lent.id, 'Sevilla', 1) : null;
-  const awayCard = away ? buildMarket({ ...away, loanedOut: [] }).find(m => m.name === lent.name) : null;
+  /* Release AZ fix pass 4: the pre 634 market is read on the same save as it was before Round 1250 (no world seed,
+     no ledger), because a seeded career's market lists nobody at my own club since the lead's ruling. */
+  const preRelease = away ? (({ worldSeed: _seed, worldRoster: _ledger, ...rest }) => rest)(away) : null;
+  const awayCard = preRelease ? buildMarket({ ...preRelease, loanedOut: [] }).find(m => m.name === lent.name) : null;
   const coldName = cards[1].name;
   const states = [
     ['open window', A, []],
