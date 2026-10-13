@@ -1,0 +1,6 @@
+M4: applied (const w = Math.min(m.w, clock); -> const w = m.w; /* M4 */)
+R rest on a falling clock: dealt 0:0 0:4 0:8 1:4 1:8; season 2 deals 2; book at the end {"role:star":8}
+E expiry on a falling clock: 0:9:open 1:0:open 1:1:open 1:2:open 1:3:open 1:4:open 1:5:open 1:6:open 1:7:open 1:8:open 1:9:open
+E settled at never (rebased like the book: 1:2)
+E FAIL: an open card dealt late in a season is not settled two weeks into the next
+rv1324fall: 1 failure(s)

@@ -1,0 +1,6 @@
+M3: applied (if (clock - Math.min(at, clock) < restFor) rest[k] = Math.mi -> if (clock - at < restFor) rest[k] = at; /* M3 */)
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+simEventDeck: green.
+simGmInbox: green.
+kit=0 gm=0 vitest=0
+VERDICT: SURVIVED

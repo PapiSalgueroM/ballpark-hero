@@ -1,0 +1,8 @@
+M8: applied (if (sk === null) return false; -> /* M8: fail closed removed */)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox deck rules[2m > [22ma role subject and a fact subject rest, and a missing fact holds the card
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m38 passed[39m[22m[90m (39)[39m
+simEventDeck: green.
+simGmInbox: green.
+kit=0 gm=0 vitest=1
+VERDICT: CAUGHT

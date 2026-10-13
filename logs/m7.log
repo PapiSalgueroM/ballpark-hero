@@ -1,0 +1,6 @@
+M7: applied (return came.splice(i, 1)[0]; -> return came[i]; /* M7 */)
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+simEventDeck: green.
+simGmInbox: green.
+kit=0 gm=0 vitest=0
+VERDICT: SURVIVED

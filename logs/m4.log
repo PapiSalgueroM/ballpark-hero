@@ -1,0 +1,6 @@
+M4: applied (const w = Math.min(m.w, clock); -> const w = m.w; /* M4 */)
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+simEventDeck: green.
+simGmInbox: green.
+kit=0 gm=0 vitest=0
+VERDICT: SURVIVED

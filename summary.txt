@@ -1,0 +1,10 @@
+fall-head exit=0 0s | rv1324fall: green (both rebased)
+fall-m3 exit=1 0s | rv1324fall: 1 failure(s)
+fall-m4 exit=1 0s | rv1324fall: 1 failure(s)
+m0 exit=0 20s | VERDICT: SURVIVED
+m2 exit=1 20s | VERDICT: CAUGHT
+m3 exit=0 20s | VERDICT: SURVIVED
+m4 exit=0 20s | VERDICT: SURVIVED
+m6 exit=1 20s | VERDICT: CAUGHT
+m7 exit=0 20s | VERDICT: SURVIVED
+m8 exit=1 20s | VERDICT: CAUGHT
