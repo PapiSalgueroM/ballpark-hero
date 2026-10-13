@@ -612,7 +612,7 @@ function playFleet(M, sport, seed, per) {
           }
           if (notes.some(n => n.startsWith('\u{1FA9E}') && n.includes('Nothing in it again'))) m.near += 1;
           bump(job, jobNow, mine); bump(age, bandOf(ageNow), mine); bump(arm, `${pos} ${era}`, mine); bump(jobPos, `${pos} ${jobNow}`, mine);
-          if (ENGINE_LEN[sport]) { const games = played.line.slate ?? ENGINE_LEN[sport]; bump(len, String(games), mine); bump(lenPos, `${pos} ${games === ENGINE_LEN[sport] ? 'own' : 'other'}`, mine); }
+          if (ENGINE_LEN[sport]) { const games = played.line.slate ?? ENGINE_LEN[sport]; bump(len, String(games), mine); bump(lenPos, `${pos} ${games === ENGINE_LEN[sport] ? 'own' : 'other'}`, mine); if (games < ENGINE_LEN[sport] * 0.9) bump(lenPos, `${pos} short`, mine); }
           if (sport === 'nhl' && pos !== 'G') bump(kind, `${pos} ${c.archetype.id} v ${M.rival.rivalKindOf('nhl-rival-kind', r, S.create.archetypes[pos]).id}`, mine);
           if (sport === 'mlb' && pos === 'RP') bump(kind, `RP ${c.archetype.id}`, mine);
           const hisText = r.lastLine; const myText = S.statLine(played.line, pos);
@@ -684,6 +684,10 @@ function printTable(label, sport, total, perSeed) {
   if (ENGINE_LEN[sport]) {
     console.log(`     by season length: ${Object.keys(total.len ?? {}).sort((a, b) => Number(b) - Number(a)).map(k => `${k} games ${f1(shareOf(total.len[k]))}% of ${total.len[k].judged}`).join(', ')}`);
     console.log(`     by position, the engine's own length against another: ${FLEET[sport].pos.map(p => `${p} ${f1(shareOf(total.lenPos?.[`${p} own`]))} of ${total.lenPos?.[`${p} own`]?.judged ?? 0} / ${f1(shareOf(total.lenPos?.[`${p} other`]))} of ${total.lenPos?.[`${p} other`]?.judged ?? 0}`).join('; ')}`);
+    /* The fix pass of Round 1313 (review finding 3): "another" above is mostly MLB's 161 and 163 game years and
+       the NHL's 84, so the rate weight of a truly short year (open question 1) needs its own row: the years under
+       nine tenths of the engine's length (MLB 60 and 58; NHL 48, 56 and the 2019-20 club lengths), by position. */
+    console.log(`     by position, the short years alone (under nine tenths of the engine's ${ENGINE_LEN[sport]}): ${FLEET[sport].pos.map(p => `${p} ${f1(shareOf(total.lenPos?.[`${p} short`]))} of ${total.lenPos?.[`${p} short`]?.judged ?? 0}`).join('; ')}`);
   }
   const kinds = Object.keys(total.kind ?? {}).sort();
   if (kinds.length) console.log(`     by kind pairing: ${kinds.map(k => `${k} ${f1(shareOf(total.kind[k]))}% of ${total.kind[k].judged}`).join('; ')}`);
