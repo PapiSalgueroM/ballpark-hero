@@ -1,0 +1,7 @@
+AUDIT picker-team: 2 overlapping text pairs: "Qualify for the Europa League" x "Board wants" (29x12 at 212,863)
+AUDIT tab-Squad: 6 overlapping text pairs: "Giorgi Mamardashvili" x "XI" (9x11 at 204,873)
+FIND [major] tab not clickable :: Market
+AUDIT ff-report-0: 8 overlapping text pairs: "🧤 Shot saved: Dominik Szoboszlai" x "42'" (15x11 at 188,1284)
+AUDIT ff-report-1: 2 overlapping text pairs: "🧤 Shot saved: Federico Chiesa" x "30'" (14x11 at 188,1072)
+AUDIT ff-report-2: 5 overlapping text pairs: "⚽ Goal: Alexander Isak" x "(P)" (12x12 at 153,1159)
+TOUR t390pl done: 1 findings, 0 errors, 38 shots, 371s

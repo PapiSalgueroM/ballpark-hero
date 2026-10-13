@@ -1,0 +1,4 @@
+DEAD? tab-Squad: FIT
+FIND [major] tab not clickable :: Market
+AUDIT ff-report-1: 5 overlapping text pairs: "⚽ Goal: Jamie Vaszary (Youth)" x "(P)" (4x12 at 598,1117)
+TOUR t1280sco done: 1 findings, 0 errors, 38 shots, 335s

@@ -1,0 +1,4 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tour390era exit=0 237s | TOUR t390era done: 0 findings, 0 errors, 66 shots, 236s
+tour1280sco exit=0 337s | TOUR t1280sco done: 1 findings, 0 errors, 38 shots, 335s
+tour390pl exit=0 372s | TOUR t390pl done: 1 findings, 0 errors, 38 shots, 371s
