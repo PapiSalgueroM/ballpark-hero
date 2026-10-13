@@ -240,10 +240,12 @@
  *                                                                        save that closes under the floor is
  *                                                                        then given awards)
  *   bookleak      every goal of a side to its taker                    -> facts (shapes and thin with it: the
- *                                                                        deal no longer follows the weight); run
- *                                                                        it on the full fleet, the only one judged
- *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); run it on the
- *                                                                        full fleet, the only one judged
+ *                                                                        deal no longer follows the weight); it
+ *                                                                        plays the full fleet whatever BOOK_FLEET
+ *                                                                        says, the only one judged
+ *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); it plays the
+ *                                                                        full fleet whatever BOOK_FLEET says, the
+ *                                                                        only one judged
  *   nocap         the team of the season is never let go               -> awards (ii)
  * Round 1311 derived two red lists again (remote check r1311-f1b): dropmine leaves no book that adds up, so
  * no season is decided by it, no team is named and no 38 match season reaches section facts (awards and facts
@@ -264,6 +266,8 @@
  *
  *   node scripts/simCmLeagueBook.mjs                      the default (small) fleet
  *   BOOK_FLEET=full node scripts/simCmLeagueBook.mjs      the whole fleet (the round's remote check)
+ *   BOOK_CONTROL=<name> ...                               one control; bookleak and teamsheets always play
+ *                                                         the whole fleet (their sections judge no other)
  *   BOOK_BASE=<a worktree of the base commit> ...         adds the base commit as a reference
  *   BOOK_MEASURE=1 ...                                    also prints the boards with CM_BOOK_TAKER false
  *   BOOK_MEASURE=leagues ...                              Round 1306: plays MEASURE_SEEDS (2) careers of one
@@ -288,7 +292,6 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BOOK_BASE ? path.resolve(process.env.BOOK_BASE) : null;
 const CONTROL = process.env.BOOK_CONTROL || '';
-const FULL = process.env.BOOK_FLEET === 'full';
 const SEEDSET = Number(process.env.SEEDSET ?? 0);
 const SEASONS = Number(process.env.SEASONS ?? 2);
 const T0 = Date.now();
@@ -383,10 +386,10 @@ const CONTROLS = {
   /* Round 1311: the awards are read from a late book, or from a book under the floor. awardlate moves the
      golden boot of every late book save of section oldsave too, which judges it against the old race. */
   /* Round 1311 step 4: every goal of a side to its taker, a leak the band of section facts must catch. */
-  bookleak: { patch: [{ file: BOOK, from: "      : kind !== 'open' && taker ? taker", to: '      : taker ? taker' }], red: 'facts', also: ['shapes', 'thin'] },
+  bookleak: { patch: [{ file: BOOK, from: "      : kind !== 'open' && taker ? taker", to: '      : taker ? taker' }], red: 'facts', also: ['shapes', 'thin'], fleet: 'full' },
   awardlate: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookShare(input.book, input.clubs).share >= AWARD_FLOOR;' }], red: 'awards', also: ['oldsave'], mentions: ['a late book'] },
   awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', also: ['oldsave'], mentions: ['under the floor'] },
-  teamsheets: { patch: [{ file: BOARDS, from: TEAM_DEF_ORDER, to: TEAM_DEF_SHEETS }], red: 'awards', mentions: ['back four'] },
+  teamsheets: { patch: [{ file: BOARDS, from: TEAM_DEF_ORDER, to: TEAM_DEF_SHEETS }], red: 'awards', mentions: ['back four'], fleet: 'full' },
   nocap: { patch: [{ file: ENGINE, from: '  state.history = keepTeams(state.history);', to: '' }], red: 'awards', mentions: ['team on'] },
   /* Since Round 1311 the engine itself reads leaders at a season's end (goldenBootTable and finishSeason, on a
      season the book decides), so a draw in it moves the match stream as well: derived on r1311-s2b and r1311-s4. */
@@ -403,6 +406,11 @@ const CONTROLS = {
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
+/* A control whose section is judged only on the full fleet (bookleak: FACTS_MIN_SEASONS; teamsheets:
+   BACK_FOUR_MIN_TEAMS) plays the full fleet whatever BOOK_FLEET says. On the default fleet it could only end
+   "DID NOT FIRE" (exit 3), which a gate's plain control line read as a broken control (the closing check of
+   Round 1311). The first line printed names the fleet played. */
+const FULL = process.env.BOOK_FLEET === 'full' || (CONTROL !== '' && CONTROLS[CONTROL].fleet === 'full');
 
 /* The fleet: [club, era]. The clubs cover the league sizes (20, 18, 24 and 15) and both pair ledger cases.
    The last one is there for its league's ODD number of clubs: fifteen clubs means a week I do not play in

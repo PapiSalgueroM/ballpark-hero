@@ -131,6 +131,8 @@ remote check; the result of a check is read with `git show origin/rc-results/<na
   in 9 px; Past winners names each season's league; the review's club lines read "Your top scorer" and "Your
   most assists", and its golden boot and player of the season lines wrap as text.
 - simCmLeagueBook judges the 38 match facts band only on a fleet of 20 such seasons or more (the full fleet);
-  control bookleak runs on the full fleet.
+  control bookleak runs on the full fleet. Since the closing check, the controls bookleak and teamsheets play
+  the full fleet whatever BOOK_FLEET says, so a gate's plain line (BOOK_CONTROL=bookleak, no BOOK_FLEET) fires
+  with exit 1 instead of ending "DID NOT FIRE" with exit 3 on a fleet that cannot judge it.
 - Not changed: dealShares stays in the book module (control twoman patches a line of it, and the weight rows
   are the lead's); What's New keeps the brief's own text (decision 7).
