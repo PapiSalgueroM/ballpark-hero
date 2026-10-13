@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays, ChevronLeft, ChevronRight, FastForward } from 'lucide-react';
 import { INTENSITY_INFO, careerFixtureCoverage } from '@/lib/clubManager';
@@ -8,7 +8,7 @@ import {
   MONTH_NAMES,
 } from '@/lib/clubManagerCalendar';
 import type { CalendarDay, FastForward as FastForwardTarget } from '@/lib/clubManagerCalendar';
-import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { bannerClearance } from './deskCue';
 /* Round 978: the international breaks on the grid. */
 import { intlMarks, intlMarkLine } from '@/lib/clubManagerInternationals';
 
@@ -45,10 +45,15 @@ function Cone({ className }: { className?: string }) {
   );
 }
 
-const POLICY_LABEL: Record<TrainingIntensity, { label: string; blurb: string }> = {
-  light: { label: 'Rest first', blurb: 'Two light sessions. Freshest legs on Saturday, slowest growth.' },
-  normal: { label: 'Balanced', blurb: 'Train one day, rest the next. The default rhythm.' },
-  double: { label: 'Full training', blurb: 'On the grass every weekday. Fastest growth, tired legs and knocks.' },
+/* Round 1328: the calendar used to give these three names of its own while
+   the Training screen, the hub's Training tile and the footnote below called
+   the same setting Light, Normal and Double. The buttons now print
+   INTENSITY_INFO's names and only the blurbs live here, so "Balanced" is only
+   ever the training focus. */
+const POLICY_BLURB: Record<TrainingIntensity, string> = {
+  light: 'Two light sessions. Freshest legs on Saturday, slowest growth.',
+  normal: 'Train one day, rest the next. The default rhythm.',
+  double: 'On the grass every weekday. Fastest growth, tired legs and knocks.',
 };
 
 /** "vs Everton", "at Everton", or the neutral "v Everton". */
@@ -120,8 +125,17 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
   }, [days, c.week, stopWeek]);
   /** True when a window will stop the run before the day you tapped. */
   const stopsAtWindow = selectedTarget !== null && stopWeek !== null && stopWeek < selectedTarget;
-  /* The strip appears under the grid; on a phone that can sit below the fold. */
-  const stripRef = useRevealScroll<HTMLDivElement>(`cal-day:${selectedKey ?? ''}`, { skipFirst: true });
+  /* The strip appears under the grid; on a phone that can sit below the fold.
+     Round 1328: it used to pull itself into view, which threw the month about
+     980 px off the screen on every tap, so the next day could not be tapped
+     without scrolling back. Now nothing moves: the strip keeps its place under
+     the grid and is sticky to the foot of the screen, so while that place is
+     below the fold it rides the bottom edge over the grid. Its offset clears
+     the cookie banner while that is still up (the desks' DeskCueLine rule). */
+  const stripRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (stripRef.current) stripRef.current.style.bottom = bannerClearance();
+  }, [selectedKey]);
 
   /* The window a selected day sits inside, for the strip's second line. */
   const windowLine = useMemo(() => {
@@ -200,7 +214,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
             onClick={() => step(-1)}
             disabled={!canPrev}
             aria-label="Previous month"
-            className="rounded-lg border border-border px-2 py-1 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-border px-2 py-1 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
           >
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
@@ -219,7 +233,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
             onClick={() => step(1)}
             disabled={!canNext}
             aria-label="Next month"
-            className="rounded-lg border border-border px-2 py-1 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-border px-2 py-1 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
           >
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
@@ -283,30 +297,32 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
 
         {/* The tapped day: what it holds, and the button that sims to it. */}
         {selected && (
-          <div ref={stripRef} className="mt-2 rounded-lg border border-primary/40 bg-primary/5 p-2" data-testid="cm-calendar-day">
-            <div className="text-[11px] font-bold text-foreground">{shortDate(selected.date)}{selected.isToday ? ' · today' : ''}</div>
-            <div className="text-[11px] text-foreground/90">{dayEmoji(selected) ? `${dayEmoji(selected)} ` : ''}{dayLine(selected)}</div>
-            {windowLine && <div className="text-[10px] text-gold mt-0.5">{selected.deadline ? '🔒' : '🔓'} {windowLine}</div>}
-            {selectedIntl && <div data-cm-intl-line className="text-[10px] text-emerald-300 mt-0.5">🌍 {intlMarkLine(selectedIntl)}</div>}
-            <div className="mt-1.5 flex items-center gap-2">
-              {selectedTarget !== null ? (
-                <button
-                  onClick={() => onSimTo(selectedTarget)}
-                  className="rounded-lg border border-primary bg-primary/15 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/25 transition-colors"
-                >
-                  Sim to {shortDate(selected.date)}
-                </button>
-              ) : (
-                <span className="text-[10px] text-muted-foreground">
-                  {selected.past || (selected.kind === 'match' && selected.res) ? 'Already played.' : 'Nothing to play before then.'}
-                </span>
-              )}
-              {selectedTarget !== null && (
-                <span className="text-[9px] text-muted-foreground">
-                  {matchesToSelected === 0 ? 'no match on the way' : matchesToSelected === 1 ? 'plays 1 match' : `plays ${matchesToSelected} matches`}
-                  {stopsAtWindow ? ', then stops at the window' : ''}
-                </span>
-              )}
+          <div ref={stripRef} className="sticky bottom-3 z-10 mt-2 rounded-lg bg-card" data-testid="cm-calendar-day">
+            <div className="rounded-lg border border-primary/40 bg-primary/5 p-2">
+              <div className="text-xs font-bold text-foreground">{shortDate(selected.date)}{selected.isToday ? ' · today' : ''}</div>
+              <div className="text-xs text-foreground/90">{dayEmoji(selected) ? `${dayEmoji(selected)} ` : ''}{dayLine(selected)}</div>
+              {windowLine && <div className="text-xs text-gold mt-0.5">{selected.deadline ? '🔒' : '🔓'} {windowLine}</div>}
+              {selectedIntl && <div data-cm-intl-line className="text-xs text-emerald-300 mt-0.5">🌍 {intlMarkLine(selectedIntl)}</div>}
+              <div className="mt-1.5 flex items-center gap-2">
+                {selectedTarget !== null ? (
+                  <button
+                    onClick={() => onSimTo(selectedTarget)}
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-primary bg-primary/15 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/25 transition-colors"
+                  >
+                    Sim to {shortDate(selected.date)}
+                  </button>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    {selected.past || (selected.kind === 'match' && selected.res) ? 'Already played.' : 'Nothing to play before then.'}
+                  </span>
+                )}
+                {selectedTarget !== null && (
+                  <span className="text-xs text-muted-foreground">
+                    {matchesToSelected === 0 ? 'no match on the way' : matchesToSelected === 1 ? 'plays 1 match' : `plays ${matchesToSelected} matches`}
+                    {stopsAtWindow ? ', then stops at the window' : ''}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -371,14 +387,14 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
               key={k}
               onClick={() => onSetTraining({ intensity: k, focus: c.training?.focus ?? 'balanced' })}
               className={cn(
-                'rounded-lg border px-2 py-2 text-center transition-colors',
+                'min-h-[44px] min-w-[44px] rounded-lg border px-2 py-2 text-center transition-colors',
                 intensity === k ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/50',
               )}
             >
-              <span className={cn('block text-[10px] font-bold', intensity === k ? 'text-primary' : 'text-foreground')}>
-                {POLICY_LABEL[k].label}
+              <span className={cn('block text-xs font-bold', intensity === k ? 'text-primary' : 'text-foreground')}>
+                {INTENSITY_INFO[k].label}
               </span>
-              <span className="block text-[8px] text-muted-foreground mt-0.5 leading-tight">{POLICY_LABEL[k].blurb}</span>
+              <span className="block text-xs text-muted-foreground mt-0.5 leading-tight">{POLICY_BLURB[k]}</span>
             </button>
           ))}
         </div>
