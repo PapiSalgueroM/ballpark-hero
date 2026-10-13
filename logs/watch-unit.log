@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/useSaveFenceWatch.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1226[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mDelete unusable save in a stale tab deletes nothing [33m 394[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 18:44:20
+[2m   Duration [22m 6.55s[2m (transform 2.89s, setup 160ms, collect 4.22s, tests 1.28s, environment 1.10s, prepare 631ms)[22m
+

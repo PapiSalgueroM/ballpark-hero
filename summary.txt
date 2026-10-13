@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+watch-unit exit=0 8s |    Duration  6.55s (transform 2.89s, setup 160ms, collect 4.22s, tests 1.28s, environment 1.10s, prepare 631ms)
+weight exit=0 33s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+tsc exit=0 71s | 
