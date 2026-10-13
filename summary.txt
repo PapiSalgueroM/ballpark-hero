@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+playSaveKeeper exit=2 1s | playSaveKeeper: REFUSED. Give it that build (the header says which), or set KEEPER_NO_BASE=1 to walk the branch arm alone; the closing line then says the control was not 
+playClubManagerSaveLeave exit=0 23s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playCmQuickSubs exit=1 1s | Node.js v24.21.0
+w1079 exit=0 84s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
+playStorageBlocked exit=0 273s | playStorageBlocked: 826 checks, 0 failed
