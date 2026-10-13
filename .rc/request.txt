@@ -1,0 +1,9 @@
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+seasons-future: SIM_LEAGUE_SEASONS_CONTROL=future node scripts/simCareerLeagueSeasons.mjs
+seasons-oldbase: SIM_LEAGUE_SEASONS_BASE=36cc9ffe node scripts/simCareerLeagueSeasons.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-legacy30: WORLD_TRUTH_CONTROL=legacy30 node scripts/simSoccerWorldTruth.mjs
+ctl-legacy35: WORLD_TRUTH_CONTROL=legacy35 node scripts/simSoccerWorldTruth.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
