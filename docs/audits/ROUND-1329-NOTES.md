@@ -41,7 +41,62 @@ real men off their era club); section 4 red (1,488 world questions about a seaso
 man); section 5 red (213 missed past summers named in the log; the panel shows the champion, bracket and last tile
 winner for a missed 2006).
 
+## Steps (b) to (f), runner readings (GitHub runners through the rc kit)
+
+Month award, head against the base, five seeds a run (400 careers a tree, about 6,700 seasons each):
+- seed offset 0 (r1329-b): head 2,343 months over 6,675 seasons; rated 8.0+ 2.60 a season (636 seasons); rated 7.0 to
+  7.5 wins any 0.03 (1,613); under the floor 0; zero goal keepers rated 6.0 or less who won 0 of 38; wrong years 0.
+  Base: 5,094 months over 6,664 seasons; 8.0+ 2.11; 7.0 to 7.5 any 0.48; under the floor 976; zero goal keepers
+  12 of 35; month lines with the wrong year 2,609.
+- groups at 7.5 to 8.5, rating for rating (0.1 strata weighted by the whole fleet), seed offsets 1 to 4 (r1329-f3):
+  all 1.10, 1.06, 1.07, 1.11; GK 0.94, 0.90, 0.95, 1.00; DEF 1.12, 1.09, 0.98, 1.12; MID 1.02, 0.88, 0.91, 1.01;
+  ATT 1.18, 1.17, 1.19, 1.16. Band 30 percent: the widest reading is MID at minus 17 percent. 8.0+: 2.64, 2.61,
+  2.74, 2.72 against the band 1.0 to 3.0. Base groups (unstratified, seed 0): GK 0.40, DEF 0.46, MID 0.66, ATT 2.08.
+- planted: a 0 goal keeper rated 6.0 over 10,000 identities wins 0 months.
+Stream (section 2, 200 careers in lockstep with the base): 0 careers with a Math.random count, phone seed or world
+record off the base; about 600 month blocks and world ticks compared; the first fields to differ are always this
+round's (events and awards, or the phone's clubs, world and feed with the Ballon d'Or night).
+Feed (section 3): 0 real names, champion, transfer or top scorer lines in about 4,300 seasons that happened; every
+season to come opens with its framing line; 0 real men off their era club; base: 17,093 real names, 29,868 claims,
+1,044 winners of missed summers, 63,636 real men off their era club.
+Quiz (section 4): three questions in every season on the head (base 6,659 of 6,664); 0 world questions about a
+season that happened (base 7,377), 0 about a real man (base 4,561); 40 old 2028 saves holding real moves ask 0
+about a real man and play a season on without a throw.
+Log and panel (section 5): 0 missed past summers named in the log (base 1,059); kept for finals he played and for
+summers to come; the panel's four cases follow the rule (the base shows every winner).
+Inverse (section 6): 31 rows (engine 5, phone 11, quiz 5, panel 10) give the base's four files back byte for byte;
+every hunk inside the regions. The regenerate recipe, from the worktree root:
+  node .tmp-fx/gen-inverse.mjs c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && node .tmp-fx/write-inverse.mjs
+(the two generator scripts live in the worktree's .tmp-fx and are copied into the closing report's folder).
+
+Controls, each run red once (exit 1, last line FIRED): goalsonly (section 1, 7 failures), seasonyear (1, 1),
+nolegacy (2, 202), extradraw (2, 201), realmoves (3, 2), pastchampions (3, 1), summer (3, 1), arcade (4, 2),
+log (5, 1), panel (5, 6), outside (6, 3).
+
+Known reds carried (decision 5): simPhone2 and simMoney are red on their save size budgets on the base and the head
+alike, and only there (simPhone2 biggest save 98.9 KB head, 99.6 KB base; simMoney 88.3 KB head, 89.5 KB base); the
+sections that read this round's code (simPhone2 section 6: 840 feed items, 227 transfers on the head, 245 on the
+base; simMoney section 6: 180 questions, every one answerable from the save) are green on both.
+
+## Deviations from the brief's hunk list, and why
+
+- InternationalPanel.tsx gains one import line (soccerWorldTruth), which the brief's list of panel lines leaves out
+  but the rule needs; and its tile grid's class line, so a card that loses its Bracket tile spans its last tile
+  across both columns. The class is added only when the tile count is odd, so every four tile card's markup stays
+  the base's (careerMomentKitLift's recorded markup holds without a re-record).
+- monthAwards takes the position and groups it with monthGroupOf, a copy of soccerInternational.ts positionGroup
+  held equal to it for all ten positions by src/test/soccerWorldTruth.test.ts, so the engine keeps its one import
+  line.
+- simCareerStoryRole and simSoccerCareerDevelopment take the engine's and the phone's rows only (their bundles load
+  neither the quiz nor the panel); simCareerLeagueSeasons' existing 1327 arm takes 1329 out first instead of a new
+  arm; simSoccerDeckFairness section 7 compares the base with this tree with 1329 taken out.
+
 ## Owed
+- Small type this round shows but did not write (PhonePanel.tsx and InternationalPanel.tsx): the feed items at
+  text-[11px] (PR178's PhonePanel), the champions line text-[11px], the last tile's line text-[9px], the history
+  list's Back button h-8 (32 px).
+- The tournament card's Qualifying and Squad tiles, and the group table, still show his nation's simulated run in a
+  summer that happened; this round's rule covers the winner only.
 
 - F13b: sourced history (soccerWorldHistory.ts) for champions, cups, top scorers and transfers of seasons that
   happened; the repo already sources the 2026 World Cup (src/data/wc2026Results.ts) and the 2025-26 European tables

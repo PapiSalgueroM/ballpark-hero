@@ -830,7 +830,8 @@ console.log('6) The eighth inverse gives the base\'s four files back, and every 
 if (runs('6')) {
   const receipt = [];
   for (const file of WORLD_TRUTH_FILES) {
-    const head = (controlSources.get(file) ?? fs.readFileSync(path.join(ROOT, file), 'utf8')).split('\r\n').join('\n');
+    /* a control's copy is LF already; the tree's file is normalised on read */
+    const head = controlSources.get(file) ?? fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
     const base = execFileSync('git', ['show', `${BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).split('\r\n').join('\n');
     let back = null;
     try { back = inverseWorldTruth(file, head, receipt); } catch (e) { fail(`${file}: the inverse does not apply (${e.message.split('\n')[0]})`); }
