@@ -430,6 +430,15 @@
       rules-nokey): with that one line taken out the committed file is
       green whole. Written on the same runner (line write-digest, 9 lines
       changed), then run green whole there.
+      Fix pass 3 (2026-10-13) took it once more, for the lead's ruling that
+      the club I manage is never read off the world roster: its strength
+      in the state after the summer now reads the base's projection. All
+      47 entries moved in wholeNext and the ten pyramid saves in s2_whole,
+      no readable field and no other hash. Attribution on a runner at
+      342e67b0 (remote check fx3-Fe, line rules-revert): with the
+      engine's fix taken out the committed file is green whole. Written on
+      the same runner (line write-digest, 57 lines changed), then run green
+      whole there.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
