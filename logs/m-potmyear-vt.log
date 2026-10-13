@@ -1,0 +1,49 @@
+MUTATION APPLIED: potmyear in src/lib/soccerCareerEngine.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerEventDeckIntegrity.test.ts [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 27[2mms[22m[39m
+   [32m✓[39m the keyed deck[2m > [22mdeals the same batch for the same key, two to four distinct cards[32m 3[2mms[22m[39m
+   [32m✓[39m the keyed deck[2m > [22mdeals other batches for other careers and other seasons[32m 1[2mms[22m[39m
+   [32m✓[39m cards that narrate the season need the row to hold it[2m > [22m1 and 7 need goals[32m 2[2mms[22m[39m
+[31m   [31m×[31m cards that narrate the season need the row to hold it[2m > [22m4 needs a Player of the Month award in the row's year[39m[32m 7[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+   [32m✓[39m cards that narrate the season need the row to hold it[2m > [22m9 needs a red card, 11 an injury[32m 1[2mms[22m[39m
+   [32m✓[39m cards that narrate the season need the row to hold it[2m > [22m12 needs a verified bottom third finish, 15 under half a season of league games[32m 1[2mms[22m[39m
+   [32m✓[39m cards that narrate the season need the row to hold it[2m > [22m17 is never dealt; 18 needs a first season of caps with a goal[32m 1[2mms[22m[39m
+   [32m✓[39m cards that narrate the season need the row to hold it[2m > [22m19 needs a World Cup his nation plays and a row that says he was not picked[32m 1[2mms[22m[39m
+   [32m✓[39m cards that narrate the season need the row to hold it[2m > [22ma season that is not a playing season deals none of them, and other cards are untouched[32m 1[2mms[22m[39m
+   [32m✓[39m the follower promises[2m > [22mcard 1 adds the followers it prints[32m 1[2mms[22m[39m
+   [32m✓[39m the follower promises[2m > [22mcard 7 adds the followers it prints[32m 0[2mms[22m[39m
+   [32m✓[39m the follower promises[2m > [22mcard 18 adds the followers it prints[32m 0[2mms[22m[39m
+   [32m✓[39m an older save with card 17 on screen[2m > [22manswers it and records the debut the way the season's call up does[32m 6[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerEventDeckIntegrity.test.ts[2m > [22mcards that narrate the season need the row to hold it[2m > [22m4 needs a Player of the Month award in the row's year
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/soccerEventDeckIntegrity.test.ts:[2m64:120[22m[39m
+    [90m 62| [39m  [34mit[39m([32m'4 needs a Player of the Month award in the row\'s year'[39m[33m,[39m () [33m=>[39m {
+    [90m 63| [39m    expect(cardFitsSeason(4, career([row()], { awards: [] }))).toBe(fa…
+    [90m 64| [39m    expect(cardFitsSeason(4, career([row()], { awards: [{ year: 2025, …
+    [90m   | [39m                                                                                                                       [31m^[39m
+    [90m 65| [39m    expect(cardFitsSeason(4, career([row()], { awards: [{ year: 2026, …
+    [90m 66| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 10:45:34
+[2m   Duration [22m 2.06s[2m (transform 1.06s, setup 52ms, collect 1.31s, tests 27ms, environment 292ms, prepare 128ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerEventDeckIntegrity.test.ts,title=src/test/soccerEventDeckIntegrity.test.ts > cards that narrate the season need the row to hold it > 4 needs a Player of the Month award in the row's year,line=64,column=120::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/soccerEventDeckIntegrity.test.ts:64:120%0A%0A

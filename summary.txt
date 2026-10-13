@@ -1,0 +1,15 @@
+m-keyseason-fair exit=1 47s | simSoccerDeckFairness: 1 failures in section 8
+m-keyseason-cool exit=0 42s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+m-keyseason-vt exit=0 3s |    Duration  2.15s (transform 1.08s, setup 56ms, collect 1.36s, tests 22ms, environment 317ms, prepare 125ms)
+m-newsyear-fair exit=1 47s | simSoccerDeckFairness: 1 failures in section 8
+m-newsyear-vt exit=0 3s |    Duration  2.11s (transform 1.08s, setup 53ms, collect 1.35s, tests 22ms, environment 296ms, prepare 143ms)
+m-loanclub-fair exit=1 47s | simSoccerDeckFairness: 2 failures in section 4, 8
+m-loanclub-fair400 exit=1 87s | simSoccerDeckFairness: 2 failures in section 4, 8
+m-boostwipe-prom exit=1 16s | simSoccerEventPromises: 2 failures in section 1
+m-injname-fair exit=1 48s | simSoccerDeckFairness: 1 failures in section 8
+m-injname-prom exit=0 16s | simSoccerEventPromises: all sections green
+m-injname-vt exit=0 2s |    Duration  2.02s (transform 1.03s, setup 53ms, collect 1.26s, tests 22ms, environment 302ms, prepare 121ms)
+m-potmyear-fair exit=1 46s | simSoccerDeckFairness: 2 failures in section 4, 8
+m-potmyear-vt exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerEventDeckIntegrity.test.ts,title=src/test/soccerEventDeckIntegrity.test.ts > cards that narrate 
+m-injblow-fair exit=1 47s | simSoccerDeckFairness: 1 failures in section 8
+m-walkoff-fair exit=1 46s | simSoccerDeckFairness: 3 failures in section 2, 8

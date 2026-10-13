@@ -1,0 +1,33 @@
+MUTATION APPLIED: loanclub in src/lib/soccerCareerEngine.ts
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 400 ordinary, 400 elite and 200 loyal careers through the real engine
+   1000 careers, 16479 playing seasons, 14948 batches, 14948 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 85 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.007, 0.992, 1.005, 0.998, 0.992, 1.011, 0.99, 0.993, 1.008, 1.003; single cards 0.924 to 1.061 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 14948 papers printed 20 of the 23 stories under weight 1, 6810 prints against a fair 6812.683; REDEMPTION 2 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 327/363.253/5462; Followers After Viral Mo 0.5 2797/2767.788/13412; Booed By Own Fans After  0.7 592/580.788/1495; Wants Out As Contract Ta 0.5 71/74.312/376; Out For Weeks With 0.5 14/12.928/69; Hits Out At Manager In S 0.3 27/31.391/245; Agent Demands Record Dea 0.4 100/94.126/2072; : Another Season Of Riva 0.5 78/76.907/1231; M Bid For 0.7 917/911.068/6765; Available On Free Transf 0.5 191/169.828/1403; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 450/446.578/2202; Never Celebrates, Never  0.9 162/151.421/1155; Walks Disciplinary Tight 0.9 80/91.675/427; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 419/427.861/4116; 's Monster Contract 0.7 16/16.924/245; LEADER OF THE NATION: 0.6 317/369.261/4575; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 44/37.646/373; Is Football's Coldest Wa 0.6 1/2.498/32; 's Money Now Works Harde 0.5 206/185.337/2812; Refuses To Read The Cale 0.5 1/1.092/19
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 287/0/11999  4: 169/0/7597  7: 202/0/11999  9: 28/0/1166  11: 67/0/2740  12: 19/1/892  15: 75/0/2498  17: 0/0/0  18: 16/0/512  19: 16/0/487
+  FAIL (section 4): card 12 fired 1 times in a season whose row does not hold its fact
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 2797 times in 14948 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1228 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+  FAIL (section 8): the inverse does not apply: the deck-helpers-and-gate row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head 785415a17ea58cc82f04bfe541e4c11951a32b8204951b99b83b3396d63e8c15; inverse applied 16 of 18 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+   64 diff hunks against the base, each checked against 6 regions
+simSoccerDeckFairness: 2 failures in section 4, 8

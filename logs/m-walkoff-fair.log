@@ -1,0 +1,34 @@
+MUTATION APPLIED: walkoff in src/lib/soccerCareerEngine.ts
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8230 playing seasons, 7451 batches, 7451 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 85 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.007, 0.992, 1.005, 0.998, 0.992, 1.011, 0.99, 0.993, 1.008, 1.003; single cards 0.924 to 1.061 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 11389 times, the weight 1 story 0, others 28611: ratio 0 (sd 0)
+  FAIL (section 2): the weight 0.5 story prints at 0 of the weight 1 story's rate, outside 0.44 to 0.56
+   the fleet's 7451 papers printed 19 of the 23 stories under weight 1, 4532 prints against a fair 3377.165; REDEMPTION 2 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 365/178.481/2690; Followers After Viral Mo 0.5 1473/1389.143/6702; Booed By Own Fans After  0.7 551/298.298/763; Wants Out As Contract Ta 0.5 48/35.105/180; Out For Weeks With 0.5 16/6.367/35; Hits Out At Manager In S 0.3 32/14.406/121; Agent Demands Record Dea 0.4 57/48.441/1062; : Another Season Of Riva 0.5 46/33.608/518; M Bid For 0.7 363/442.894/3320; Available On Free Transf 0.5 216/89.823/703; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 316/223.01/1080; Never Celebrates, Never  0.9 77/71.299/579; Walks Disciplinary Tight 0.9 68/42.916/203; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 344/198.286/1944; 's Monster Contract 0.7 13/9.307/135; LEADER OF THE NATION: 0.6 309/181.182/2223; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 40/19.031/193; Is Football's Coldest Wa 0.6 0/1.938/27; 's Money Now Works Harde 0.5 197/93.168/1407; Refuses To Read The Cale 0.5 1/0.464/8
+  FAIL (section 2): the stories under weight 1 printed 4532 times against a fair 3377.165
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 148/0/5997  4: 70/0/3793  7: 90/0/5997  9: 16/0/582  11: 33/0/1366  12: 9/0/478  15: 41/0/1241  17: 0/0/0  18: 11/0/249  19: 5/0/232
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1473 times in 7451 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1228 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+  FAIL (section 8): the inverse does not apply: the weighted-paper row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head 0f77db66bd66b593c864437a1d2e840b264a8dfa2c776552630a0e4eced77034; inverse applied 9 of 18 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+   64 diff hunks against the base, each checked against 6 regions
+simSoccerDeckFairness: 3 failures in section 2, 8
