@@ -81,6 +81,41 @@
  *      drops a bad attempt or bad played scores alone and keeps good ones, and
  *      no scouts path state ever carries either key.
  *                                Controls `reroll`, `wayback`, `combinegone`.
+ *  12. Round 1319: WHAT HANDS ARE WORTH, MEASURED AGAINST THE SCOUTS' DRAW.
+ *      For every road and approach the scouts' EXACT expected move (the four
+ *      intervals of u the rating and health cut, times the table), then five
+ *      bots whose raw results come from the harness's own keyed stream (4
+ *      replicates a road), fed through the REAL station score, open and
+ *      resolve. The bots are stated ASSUMPTIONS about hands, never facts about
+ *      people (the table is at BOTS below). Printed per pair and approach:
+ *      grade shares, the fleet gap to the draw for every bot, the median by
+ *      starting rating third beside the draw's exact mean there, the median
+ *      at 0.75 and 1.25 times its speed, MLB pitchers apart, picks per stock
+ *      point, and THE OPTIMAL LEAVER (perfect foresight of his own hands: he
+ *      keeps them only when their move beats the draw's exact expectation and
+ *      otherwise leaves, which settles to the keyed draw), for the pointer
+ *      median and the keyboard median. Asserted: the median's and the keyboard
+ *      median's fleet gaps sit within T = 0.75 stock and inside their bands;
+ *      the expert gains and the novice loses by at least half their measured
+ *      extremes; the three means are ordered novice, median, expert. The
+ *      leaver and the two thumb bot are printed for the lead, never asserted.
+ *                         Controls `flathands`, `curveflip`, `keyscurve`.
+ *      Measured 2026-10-12 over seed sets a to e (80 rows each), with the
+ *      curves as they stand (the draft's starting anchors; no tuning was
+ *      needed to bring both medians inside T):
+ *        median (pointer) gap -0.34 to +0.09, band -0.55 to +0.30 (about 0.2
+ *          beyond each end: one row's sd across the five sets is about 0.04);
+ *        keyboard median gap -0.31 to -0.05, band -0.50 to +0.15;
+ *        expert all out +6.78 to +7.29, safe +3.23 to +3.43: floors 3.4, 1.6;
+ *        novice all out -7.00 to -5.68, safe -3.14 to -2.60: ceilings -2.8, -1.3;
+ *        two thumbs +1.03 to +7.53, above the expert in nhl:y2006 (one burst
+ *          station) in both approaches on all five sets;
+ *        the optimal leaver gains +1.08 to +1.64 all out and +0.49 to +0.75
+ *          safe over honest hands (pointer and keys together);
+ *        the median at 0.75x speed -5.82 to -2.04, at 1.25x +1.98 to +4.72.
+ *      flathands: sections 10 and 12 (the expert's gap collapses to the
+ *      median's, the means tie); curveflip: 10 and 12 (the order breaks);
+ *      keyscurve: 10 and 12 (the keyboard median gains +3 to +6.5).
  *  13. Round 1220: DRAFT NIGHT SHOWS WHAT THE ENGINE DID, AND NEVER DRAWS
  *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 went to the combine
  *      of Round 1319, built on this head). On every finished road:
@@ -188,7 +223,19 @@ const ok = m => console.log('  ok: ' + m);
                    stay inside their bands, which is why the middle band exists.
      laterlottery  4b: 200 and 192 of 200 NBA orders.
      flatlater     s4: pick 2 |z| 136.4 and 146.2 while pick 1 stays green.
-     loadershallow s8: the two broken season line cases load. */
+     loadershallow s8: the two broken season line cases load.
+   Round 1319, measured on seed set a, 2026-10-12, each exit 1:
+     combinewords  s10: 8 pairs (an all out grade moved by the safe table).
+     combinemean   s10: 7 pairs (every pair with two stations; the 2006 NHL runs one).
+     combinemono   s10: the grid (a slip adds points).
+     combinecut    s10: 8 pairs (a mean on the cut graded above the printed line).
+     reroll        s11: 8 pairs (a reload hands the choice back).
+     wayback       s11: 8 pairs (a scouts' button grades an opened attempt).
+     combinegone   s10 and s11: 16 (nothing on the save before the stations).
+     flathands     s10 and s12: 10 (the expert's gap collapses, the means tie).
+     curveflip     s10 and s12: 2 (the grid, and the order breaks).
+     keyscurve     s10 and s12: 2 (the grid, and the keyboard median gains +3 to +6.5).
+     gradeshift    s9 and s10: 16 (one cut, two paths); extradraw s9 only: 8. */
 const CONTROLS = {
   randomteam: ['src/lib/careerPreDraft.ts', 'const team = pick ? order[pick - 1] : teams[Math.floor(rng() * teams.length)];', 'const team = teams[Math.floor(rng() * teams.length)];'],
   flatstock: ['src/lib/careerPreDraft.ts', 'const z = (100 - clampMeter(stock)) / 100;', 'const z = 0.5 + 0 * stock;'],
@@ -223,6 +270,9 @@ const CONTROLS = {
   reroll: ['src/lib/careerPreDraft.ts', "if (s.phase === 'showcase' && s.combine) return preDraftCombineSettle(desc, s);", "if (s.phase === 'showcase' && s.combine) delete s.combine;"],
   wayback: ['src/lib/careerPreDraft.ts', 'if (prev.combine) return prev;', ''],
   combinegone: ['src/lib/careerPreDraft.ts', 'return { ...prev, combine: { approach } };', 'return { ...prev };'],
+  flathands: ['src/lib/careerPreDraft.ts', 'const g = preDraftShowcaseGradeFrom(total / (100 * scores.length), s);', 'const g = preDraftShowcaseGradeFrom(0.5, s);'],
+  curveflip: ['src/lib/careerPreDraft.ts', 'clampMeter(100 * (taps - b.zeroAt) / (b.fullAt - b.zeroAt))', 'clampMeter(100 * (b.fullAt - taps) / (b.fullAt - b.zeroAt))'],
+  keyscurve: ['src/lib/careerPreDraft.ts', "const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';", "const which: PreDraftInput = 'pointer';"],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
@@ -819,6 +869,140 @@ try {
 } catch (e) {
   fail(`section 11 threw: ${e.message}`);
 } finally { Math.random = realRandom11; }
+
+console.log('\n12. What hands are worth, measured against the scouts\' draw');
+/* The bots are ASSUMPTIONS about hands, stated here, never facts about
+   people: no record of real drill results exists outside each player's own
+   save. taps: burst taps in the five seconds (mean, sd); ms: the cone run
+   from the first marker to the last (mean, sd); slips: Poisson mean. The
+   keyboard bot tabs onto each marker and presses Enter (it cannot slip) and
+   alternates Enter and Space on the burst, eight keys a second; the two
+   thumb bot is a pointer at about ten taps a second on the burst. */
+const BOTS = {
+  novice: { input: 'pointer', taps: [22, 3], ms: [6200, 900], slips: 1.2 },
+  median: { input: 'pointer', taps: [33, 4], ms: [4300, 600], slips: 0.5 },
+  expert: { input: 'pointer', taps: [48, 4], ms: [3000, 300], slips: 0.15 },
+  keys: { input: 'keys', taps: [40, 4], ms: [1900, 250], slips: 0 },
+  thumbs: { input: 'pointer', taps: [50, 5], ms: [4300, 600], slips: 0.5 },
+};
+const HAND_K = 4;
+const TARGET_T = 0.75;
+/* Measured 2026-10-12 over seed sets a to e (80 rows each: 8 pairs, 2
+   approaches, 5 sets), see the header for the numbers and the margins. */
+const HANDS_BAND = {
+  median: [-0.55, 0.30],
+  keys: [-0.50, 0.15],
+  expertMin: { allout: 3.4, steady: 1.6 },
+  noviceMax: { allout: -2.8, steady: -1.3 },
+};
+const realRandom12 = Math.random;
+Math.random = () => { throw new Error('Math.random was called'); };
+try {
+  const normal = (rng, [mu, sd], f) => { const z = Math.sqrt(-2 * Math.log(1 - rng())) * Math.cos(2 * Math.PI * rng()); return mu * f + sd * f * z; };
+  const poisson = (rng, lam) => { const L = Math.exp(-lam); let k = 0, p = 1; do { k += 1; p *= rng(); } while (p > L); return k - 1; };
+  /** One bot's station scores on one road, through the REAL curve. speed scales taps up and time down. */
+  const hands = (bot, stations, key, speed = 1) => {
+    const rng = M.keyedRng(key);
+    return stations.map(st => {
+      const raw = st.kind === 'burst'
+        ? { taps: Math.max(0, Math.round(normal(rng, bot.taps, speed))) }
+        : { ms: Math.max(0, Math.round(normal(rng, bot.ms, 1 / speed))), slips: bot.slips ? poisson(rng, bot.slips) : 0 };
+      return M.preDraftStationScore(st.kind, raw, bot.input);
+    });
+  };
+  /** The scouts' EXACT expected move for this state and approach: the four intervals of u the rating and health cut, times the table. */
+  const exactMove = (s, approach) => {
+    const r = (s.rating - 70) * 0.02 - (100 - s.health) * 0.003;
+    const above = u0 => Math.min(1, Math.max(0, 1 - u0));
+    const pA = above(0.8 - r), pB = above(0.5 - r) - pA, pC = above(0.2 - r) - above(0.5 - r), pD = 1 - above(0.2 - r);
+    const t = M.SHOWCASE_DELTAS[approach];
+    return pA * M.preDraftShowcaseMove(s.stock, t.A) + pB * M.preDraftShowcaseMove(s.stock, t.B) + pC * M.preDraftShowcaseMove(s.stock, t.C) + pD * M.preDraftShowcaseMove(s.stock, t.D);
+  };
+  const thirdOf = (d, i) => { const p = M.keyedRng(`sim|${SEEDSET}|${tag(d)}|${i}`); p(); const r0 = 58 + Math.floor(p() * 21); return r0 <= 64 ? 0 : r0 <= 71 ? 1 : 2; };
+  const f2 = x => (x >= 0 ? '+' : '') + x.toFixed(2);
+  const ARMS = [...Object.keys(BOTS), 'slow', 'fast', 'leaveP', 'leaveK'];
+  const MEASURED = [];
+  for (const d of DESCS) {
+    const rs = RUNS.get(tag(d));
+    const acc = {};
+    const add = (arm, a, third, gap, move, grade, sub) => {
+      for (const k of [`${arm}|${a}`, `${arm}|${a}|t${third}`, ...(sub ? [`${arm}|${a}|${sub}`] : [])]) {
+        const o = acc[k] ??= { n: 0, gap: 0, move: 0, A: 0, B: 0, C: 0, D: 0 };
+        o.n += 1; o.gap += gap; o.move += move; if (grade) o[grade] += 1;
+      }
+    };
+    const draw = {};
+    for (let i = 0; i < rs.length; i += 1) {
+      const pre = rs[i].pre;
+      const stations = M.preDraftStations(d, pre);
+      const third = thirdOf(d, i);
+      const sub = d.sport === 'mlb' ? (stations.length === 1 ? 'pitchers' : 'hitters') : '';
+      for (const a of PLAYED) {
+        const exact = exactMove(pre, a);
+        for (const k of [`${a}`, `${a}|t${third}`, ...(sub ? [`${a}|${sub}`] : [])]) { const o = draw[k] ??= { n: 0, sum: 0 }; o.n += 1; o.sum += exact; }
+        const opened = M.preDraftCombineOpen(d, pre, a);
+        const settleMove = M.preDraftCombineSettle(d, opened).stock - pre.stock;
+        for (let k = 0; k < HAND_K; k += 1) {
+          const runArm = (arm, bot, speed, keyBot) => {
+            const after = M.preDraftCombineResolve(d, opened, hands(bot, stations, `hands|${SEEDSET}|${tag(d)}|${i}|${keyBot}|${k}`, speed));
+            const move = after.stock - pre.stock;
+            add(arm, a, third, move - exact, move, after.showcase?.grade, sub);
+            return move;
+          };
+          for (const [name, bot] of Object.entries(BOTS)) {
+            const move = runArm(name, bot, 1, name);
+            /* THE OPTIMAL LEAVER: perfect foresight of his own hands, keeps them
+               only when their move beats the draw's exact expectation, and
+               otherwise leaves, which settles to the scouts' keyed draw. */
+            if (name === 'median' || name === 'keys') {
+              const kept = move > exact ? move : settleMove;
+              add(name === 'median' ? 'leaveP' : 'leaveK', a, third, kept - move, kept, '', sub);
+            }
+          }
+          runArm('slow', BOTS.median, 0.75, 'median');
+          runArm('fast', BOTS.median, 1.25, 'median');
+        }
+      }
+    }
+    const g = (arm, k) => { const o = acc[`${arm}|${k}`]; return o ? o.gap / o.n : NaN; };
+    const mv = (arm, k) => { const o = acc[`${arm}|${k}`]; return o ? o.move / o.n : NaN; };
+    const dm = k => (draw[k] ? draw[k].sum / draw[k].n : NaN);
+    const scoutGrades = rs.filter(r => r.s.showcase.grade).map(r => r.s.showcase.grade);
+    const shares = ['A', 'B', 'C', 'D'].map(x => `${x} ${(scoutGrades.filter(y => y === x).length / scoutGrades.length * 100).toFixed(0)}%`).join(' ');
+    console.log(`  ${tag(d)}: the scouts' draw, exact mean move all out ${f2(dm('allout'))}, safe ${f2(dm('steady'))}; realized grades of section 9's roads ${shares}; one stock point is about ${((M.preDraftBoardRankAt(median(rs.map(r => r.pre.stock)) - 1, d.teamIds().length * d.rounds, 0.5) - M.preDraftBoardRankAt(median(rs.map(r => r.pre.stock)) + 1, d.teamIds().length * d.rounds, 0.5)) / 2).toFixed(1)} picks at the fleet's median stock ${median(rs.map(r => r.pre.stock))}`);
+    for (const a of PLAYED) {
+      const shareOf = arm => { const o = acc[`${arm}|${a}`]; return ['A', 'B', 'C', 'D'].map(x => `${x}${Math.round(o[x] / o.n * 100)}`).join(' '); };
+      console.log(`    ${a}: fleet gap to the draw, novice ${f2(g('novice', a))}, median ${f2(g('median', a))}, keys ${f2(g('keys', a))}, thumbs ${f2(g('thumbs', a))}, expert ${f2(g('expert', a))}; median at 0.75x ${f2(g('slow', a))}, at 1.25x ${f2(g('fast', a))}; leaver gain pointer ${f2(g('leaveP', a))}, keys ${f2(g('leaveK', a))}`);
+      console.log(`      grades (percent) median ${shareOf('median')}; keys ${shareOf('keys')}; expert ${shareOf('expert')}; novice ${shareOf('novice')}`);
+      console.log(`      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median ${[0, 1, 2].map(t => `${f2(g('median', `${a}|t${t}`))} [${f2(dm(`${a}|t${t}`))}]`).join(', ')}; keys ${[0, 1, 2].map(t => f2(g('keys', `${a}|t${t}`))).join(', ')}; leaver pointer ${[0, 1, 2].map(t => f2(g('leaveP', `${a}|t${t}`))).join(', ')}, keys ${[0, 1, 2].map(t => f2(g('leaveK', `${a}|t${t}`))).join(', ')}`);
+      if (d.sport === 'mlb') console.log(`      pitchers (one station) median ${f2(g('median', `${a}|pitchers`))}, keys ${f2(g('keys', `${a}|pitchers`))}; hitters median ${f2(g('median', `${a}|hitters`))}, keys ${f2(g('keys', `${a}|hitters`))}`);
+      MEASURED.push({ pair: tag(d), a, novice: g('novice', a), median: g('median', a), keys: g('keys', a), thumbs: g('thumbs', a), expert: g('expert', a), leaveP: g('leaveP', a), leaveK: g('leaveK', a), order: [mv('novice', a), mv('median', a), mv('expert', a)] });
+    }
+  }
+  /* The assertions. Bands from five seed sets (see the header), never on a
+     max, never "not significant". The leaver and the two thumbs are printed
+     for the lead and asserted nowhere: both are open rulings. */
+  const outBand = [], wrongWay = [];
+  for (const m of MEASURED) {
+    const at = `${m.pair} ${m.a}`;
+    if (!(Math.abs(m.median) <= TARGET_T && m.median >= HANDS_BAND.median[0] && m.median <= HANDS_BAND.median[1])) outBand.push(`${at} median ${f2(m.median)}`);
+    if (!(Math.abs(m.keys) <= TARGET_T && m.keys >= HANDS_BAND.keys[0] && m.keys <= HANDS_BAND.keys[1])) outBand.push(`${at} keys ${f2(m.keys)}`);
+    if (!(m.expert > 0 && m.expert >= HANDS_BAND.expertMin[m.a])) wrongWay.push(`${at} expert ${f2(m.expert)}`);
+    if (!(m.novice < 0 && m.novice <= HANDS_BAND.noviceMax[m.a])) wrongWay.push(`${at} novice ${f2(m.novice)}`);
+    if (!(m.order[0] < m.order[1] && m.order[1] < m.order[2])) wrongWay.push(`${at} means out of order (novice ${f2(m.order[0])}, median ${f2(m.order[1])}, expert ${f2(m.order[2])})`);
+  }
+  if (outBand.length) fail(`the median hands are not worth the draw (T ${TARGET_T}, median band ${HANDS_BAND.median.join(' to ')}, keys band ${HANDS_BAND.keys.join(' to ')}): ${outBand.slice(0, 6).join('; ')}`);
+  else ok(`in all ${MEASURED.length} pair and approach rows the median hands, pointer and keys, sit within ${TARGET_T} stock of the scouts' draw and inside their bands`);
+  if (wrongWay.length) fail(`hands do not order novice, median, expert: ${wrongWay.slice(0, 6).join('; ')}`);
+  else ok(`in all ${MEASURED.length} rows the expert gains (at least ${HANDS_BAND.expertMin.allout} all out, ${HANDS_BAND.expertMin.steady} safe), the novice loses (at least ${-HANDS_BAND.noviceMax.allout}, ${-HANDS_BAND.noviceMax.steady}), and the three means are in order`);
+  const leaveOver = MEASURED.filter(m => m.leaveP > 1 || m.leaveK > 1);
+  const most = Math.max(...MEASURED.flatMap(m => [m.leaveP, m.leaveK]));
+  console.log(`  for the lead (open question 1, never asserted): the optimal leaver gains ${f2(Math.min(...MEASURED.flatMap(m => [m.leaveP, m.leaveK])))} to ${f2(most)} stock over honest hands; above 1.0 in ${leaveOver.length} of ${MEASURED.length} rows (${[...new Set(leaveOver.map(m => m.a))].join(', ') || 'none'})`);
+  const thumbsOver = MEASURED.filter(m => m.thumbs > m.expert);
+  console.log(`  for the lead (open question 3, never asserted): two thumbs above the expert in ${thumbsOver.length} of ${MEASURED.length} rows${thumbsOver.length ? `: ${thumbsOver.map(m => `${m.pair} ${m.a} ${f2(m.thumbs)} over ${f2(m.expert)}`).join('; ')}` : ''}`);
+} catch (e) {
+  fail(`section 12 threw: ${e.message}`);
+} finally { Math.random = realRandom12; }
 
 /* ─── Section 13: the night shows what the engine did ─── */
 console.log('\n13. Draft night shows what the engine did, and never draws');

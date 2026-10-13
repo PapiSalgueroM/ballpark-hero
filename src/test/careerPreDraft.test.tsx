@@ -415,10 +415,16 @@ describe('the combine you run, the engine', () => {
       expect(preDraftStationScore('burst', { taps: NaN }, input)).toBe(0);
       expect(preDraftStationScore('cones', { ms: NaN, slips: 0 }, input)).toBe(0);
     }
-    /* The keys have a curve of their own: a keyboard run is not scored as a pointer run. */
+    /* The keys have a curve of their own: a keyboard run (Tab onto every
+       marker) is held to a stricter line than a pointer run of the same time,
+       and so is a burst of two alternating keys. */
     const k = COMBINE_CURVES.cones.keys;
-    expect(preDraftStationScore('cones', { ms: k.fullAt, slips: 0 }, 'keys')).toBe(100);
-    expect(preDraftStationScore('cones', { ms: k.fullAt, slips: 0 }, 'pointer')).toBeLessThan(100);
+    const mid = (k.zeroAt + k.fullAt) / 2;
+    expect(preDraftStationScore('cones', { ms: mid, slips: 0 }, 'keys')).toBe(50);
+    expect(preDraftStationScore('cones', { ms: mid, slips: 0 }, 'pointer')).toBeGreaterThan(50);
+    const kb = COMBINE_CURVES.burst.keys;
+    expect(preDraftStationScore('burst', { taps: (kb.zeroAt + kb.fullAt) / 2 }, 'keys')).toBe(50);
+    expect(preDraftStationScore('burst', { taps: (kb.zeroAt + kb.fullAt) / 2 }, 'pointer')).toBeGreaterThan(50);
   });
   it('the cuts are where the grade flips, floats included: rating 74, health 90', () => {
     expect(preDraftCombineCuts({ rating: 74, health: 90 }, 2)).toEqual({ A: 75.5, B: 45.5, C: 15.5 });
