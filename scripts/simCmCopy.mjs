@@ -38,6 +38,15 @@
       approach, at 2, 1 and 0 matches left: the line names the club, the
       man, his post and the weeks off the approach, counts offers, and never
       says "N matches left this season". Control staff: the line back.
+   5. THE MONEY CARD (cm M14, the display half). FinancesScreen rendered with
+      react-dom/server inside a MemoryRouter for a seeded Liverpool season at
+      week 18, the same week with a made up 400m signing on the books (the
+      kitty change goes below zero) and a fresh career at week 0: the cover
+      row is the sum of the spend lines with kitty false as printed, the kitty
+      row is the result plus the cover, red only below zero, and "Season
+      result" is nowhere. Control finance: the old result row back.
+      Measured on 6c0a8686 plus the card: Liverpool week 18 income 64.1m,
+      spend 70.9m, board covers +70.9m, kitty change +64.1m.
 
    Run: node scripts/simCmCopy.mjs [--section=1,2,3,4,5]
         CM_COPY_ROOT=<another tree> node scripts/simCmCopy.mjs   (the base: must be red)
@@ -55,7 +64,7 @@ const ROOT = path.resolve(process.env.CM_COPY_ROOT || SCRIPT_ROOT);
 const FWD = ROOT.split(String.fromCharCode(92)).join('/');
 const CONTROL = process.env.CM_COPY_CONTROL || '';
 const secArg = process.argv.slice(2).find(a => a.startsWith('--section='));
-const SECTIONS = secArg ? secArg.slice(10).split(',').map(Number) : [1, 2, 3, 4];
+const SECTIONS = secArg ? secArg.slice(10).split(',').map(Number) : [1, 2, 3, 4, 5];
 const cannot = m => { console.error(`simCmCopy: could not run: ${m}`); process.exit(2); };
 
 /* Each control rewrites one line of one file as the bundler (and the source
@@ -75,6 +84,28 @@ const CONTROLS = {
     file: 'src/lib/clubManagerInternationals.ts', section: 3,
     fixed: "'and the calendar here keeps your fixtures going through it, so they went straight after your last game'",
     broken: "'and your fixtures do not stop for it, so they went straight after your last game'",
+  },
+  finance: {
+    file: 'src/components/club-manager/FinancesScreen.tsx', section: 5,
+    fixed: [
+      '            <tr className="border-t border-border" data-projection-total="cover">',
+      '              <td className="py-0.5 text-muted-foreground">Board covers running costs</td>',
+      '              <td className="py-0.5 text-right tabular-nums text-muted-foreground">{signed(k.coverActual)}</td>',
+      '              <td className="py-0.5 pl-2 text-right tabular-nums text-muted-foreground">{signed(k.coverProjected)}</td>',
+      '            </tr>',
+      '            <tr className="border-t border-border" data-projection-total="kitty">',
+      '              <td className="py-0.5 font-bold text-foreground">Kitty change</td>',
+      "              <td className={cn('py-0.5 text-right tabular-nums', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>",
+      "              <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>",
+      '            </tr>',
+    ].join('\n'),
+    broken: [
+      '            <tr className="border-t border-border" data-projection-total="result">',
+      '              <td className="py-0.5 font-bold text-foreground">Season result</td>',
+      "              <td className={cn('py-0.5 text-right tabular-nums', p.resultActual < 0 ? 'text-red-400' : 'text-muted-foreground')}>{p.resultActual < 0 ? '-' : ''}{money(Math.abs(p.resultActual))}</td>",
+      "              <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', p.resultProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{p.resultProjected < 0 ? '-' : ''}{money(Math.abs(p.resultProjected))}</td>",
+      '            </tr>',
+    ].join('\n'),
   },
   staff: {
     file: 'src/lib/clubManagerStaff.ts', section: 4,
@@ -121,6 +152,8 @@ async function bundle(name, lines) {
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', jsx: 'automatic',
     alias: { '@': `${FWD}/src` }, nodePaths: [path.join(SCRIPT_ROOT, 'node_modules')],
+    /* react-dom/server asks for node's own modules with a require. */
+    banner: { js: "import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);" },
     plugins: [{
       name: 'cm-copy-control',
       setup(b) {
@@ -377,8 +410,70 @@ async function sectionStaff() {
   }
 }
 
+async function sectionMoney() {
+  console.log('5) the money card: what the board covers and what that leaves the kitty');
+  /* Rendered through react-dom/server inside a MemoryRouter, so a Link added
+     to the desk later cannot crash the harness. */
+  const ui = await bundle('screen', [
+    `export { FinancesScreen } from '${FWD}/src/components/club-manager/FinancesScreen.tsx';`,
+    `export * as fin from '${FWD}/src/lib/clubManagerFinances.ts';`,
+    `export * as cmx from '${FWD}/src/lib/clubManager.ts';`,
+    "export { createElement } from 'react';",
+    "export { renderToStaticMarkup } from 'react-dom/server';",
+    "export { MemoryRouter } from 'react-router-dom';",
+  ]);
+  if (ctl && ctl.section === 5 && !reached) cannot(`control ${CONTROL}: the rewritten ${ctl.file} never reached the bundle`);
+  const noop = () => {};
+  const render = c => {
+    /* The server renderer's note about layout effects is not a finding here. */
+    const err = console.error;
+    console.error = (...a) => { if (!String(a[0]).includes('useLayoutEffect does nothing on the server')) err(...a); };
+    try {
+      return ui.renderToStaticMarkup(ui.createElement(ui.MemoryRouter, null,
+        ui.createElement(ui.FinancesScreen, { career: c, onTickets: noop, onConcessions: noop, onSponsor: noop, onPush: noop })));
+    } finally { console.error = err; }
+  };
+  const cells = (html, id) => {
+    const row = html.match(new RegExp(`<tr[^>]*data-projection-total="${id}"[^>]*>(.*?)</tr>`, 's'));
+    return row ? [...row[1].matchAll(/<td class="([^"]*)"[^>]*>(.*?)<\/td>/gs)].map(m => ({ cls: m[1], text: m[2].replace(/<[^>]+>/g, '') })) : null;
+  };
+  /* The three careers: a seeded Liverpool season at week 18, the same week
+     with a made up 400m signing on the books (the kitty change goes below
+     zero), and a fresh career at week 0. */
+  Math.random = seeded(hashKey('cm-copy|money'));
+  let s = ui.cmx.startCareer('Liverpool', 'now');
+  const fresh = JSON.parse(JSON.stringify(s));
+  for (let i = 0; i < 200 && s.week < 18; i++) s = ui.cmx.playNextEntry(s, { skipHalftime: true }).state;
+  Math.random = REAL_RANDOM;
+  const spender = { ...s, seasonSignings: [...(s.seasonSignings ?? []), { dir: 'in', name: 'A made up signing', fee: 400 }] };
+  for (const [tag, c, wantRed] of [['Liverpool, week 18', s, false], ['the same week with a 400m signing', spender, true], ['a fresh career, week 0', fresh, false]]) {
+    const html = render(c);
+    const money = ui.cmx.moneyIn(c);
+    const signed = n => `${n > 0 ? '+' : n < 0 ? '-' : ''}${money(Math.abs(n))}`;
+    const p = ui.fin.projectFinances(c);
+    const r2 = n => Math.round(n * 100) / 100;
+    let ca = 0;
+    let cp = 0;
+    for (const l of p.spend) if (l.kitty === false) { ca += l.actual; cp += l.projected; }
+    const want = { cover: [signed(r2(ca)), signed(r2(cp))], kitty: [signed(r2(p.resultActual + ca)), signed(r2(p.resultProjected + cp))] };
+    if (/Season result/.test(html)) fail(`${tag}: the desk still prints "Season result"`);
+    const cover = cells(html, 'cover');
+    const kitty = cells(html, 'kitty');
+    if (!cover || !kitty) { fail(`${tag}: the desk has no ${cover ? '' : 'cover '}${kitty ? '' : 'kitty '}row`); continue; }
+    if (cover[1].text !== want.cover[0] || cover[2].text !== want.cover[1]) fail(`${tag}: the cover row prints ${cover[1].text} and ${cover[2].text}, the spend lines the board pays add to ${want.cover.join(' and ')}`);
+    if (kitty[1].text !== want.kitty[0] || kitty[2].text !== want.kitty[1]) fail(`${tag}: the kitty row prints ${kitty[1].text} and ${kitty[2].text}, the result plus the cover is ${want.kitty.join(' and ')}`);
+    const values = [r2(p.resultActual + ca), r2(p.resultProjected + cp)];
+    values.forEach((v, i) => {
+      const red = kitty[i + 1].cls.includes('text-red-400');
+      if (red !== (v < 0)) fail(`${tag}: the kitty change ${kitty[i + 1].text} is ${red ? '' : 'not '}red`);
+    });
+    if (wantRed && !(values[1] < 0)) fail(`${tag}: the made up signing did not push the projected kitty change below zero (${values[1]})`);
+    console.log(`   ${tag}: income ${money(p.incomeProjected)}, spend ${money(p.spendProjected)}, board covers ${want.cover[1]}, kitty change ${want.kitty[1]} (so far ${want.kitty[0]})`);
+  }
+}
+
 /* ------------------------------------------------------------------ */
-const RUN = { 1: sectionArticles, 2: sectionDrama, 3: sectionIntl, 4: sectionStaff };
+const RUN = { 1: sectionArticles, 2: sectionDrama, 3: sectionIntl, 4: sectionStaff, 5: sectionMoney };
 for (const n of SECTIONS) {
   if (!RUN[n]) cannot(`no section ${n}`);
   await RUN[n]();

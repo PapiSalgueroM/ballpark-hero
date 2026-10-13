@@ -9,7 +9,7 @@ import {
    meter prints. This desk used to print a second one from its own stored
    number and the two disagreed on screen. */
 import { fanMeter } from '@/lib/clubManagerMeters';
-import type { ConcessionTier, ProjectionLine } from '@/lib/clubManagerFinances';
+import type { ConcessionTier, FinanceProjection, ProjectionLine } from '@/lib/clubManagerFinances';
 
 /* ─── Round 467: the finances desk. ───
    The projection first, because it is the screen he asked for and it has to
@@ -48,12 +48,33 @@ function Row({ line, tone, fmt }: { line: ProjectionLine; tone: 'in' | 'out'; fm
 
 const BONUS_FOR: Record<string, string> = { title: 'winning the league', europe: 'reaching Europe', topHalf: 'a top half finish' };
 
+/* Round 1326: what the board covers and what that leaves the kitty. A red
+   "Season result" on a wage bill the board pays was a loss that never
+   happened (Liverpool showed -£7.6m while the kitty climbed £63m). The
+   running costs are summed by each spend line's own kitty flag, never by its
+   id, so a new running cost line counts the day it lands. Pure; kept here and
+   not exported, so the hub does not pull this lazy screen in. */
+function kittyView(p: FinanceProjection) {
+  const r2 = (n: number) => Math.round(n * 100) / 100;
+  const running = p.spend.filter(l => l.kitty === false);
+  const coverActual = r2(running.reduce((n, l) => n + l.actual, 0));
+  const coverProjected = r2(running.reduce((n, l) => n + l.projected, 0));
+  return {
+    coverActual,
+    coverProjected,
+    kittyActual: r2(p.resultActual + coverActual),
+    kittyProjected: r2(p.resultProjected + coverProjected),
+  };
+}
+
 export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor, onPush }: FinancesScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(c);
   const books = booksOf(c);
   const p = projectFinances(c);
+  const k = kittyView(p);
+  const signed = (n: number) => `${n > 0 ? '+' : n < 0 ? '-' : ''}${money(Math.abs(n))}`;
   const ticketTier = c.finance?.ticketTier ?? 1;
   const tReact = ticketReaction(ticketTier);
   const cReact = concessionReaction(books.concessionTier);
@@ -90,15 +111,20 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
               <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(p.spendActual)}</td>
               <td className="py-0.5 pl-2 text-right tabular-nums font-bold text-foreground">{money(p.spendProjected)}</td>
             </tr>
-            <tr className="border-t border-border" data-projection-total="result">
-              <td className="py-0.5 font-bold text-foreground">Season result</td>
-              <td className={cn('py-0.5 text-right tabular-nums', p.resultActual < 0 ? 'text-red-400' : 'text-muted-foreground')}>{p.resultActual < 0 ? '-' : ''}{money(Math.abs(p.resultActual))}</td>
-              <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', p.resultProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{p.resultProjected < 0 ? '-' : ''}{money(Math.abs(p.resultProjected))}</td>
+            <tr className="border-t border-border" data-projection-total="cover">
+              <td className="py-0.5 text-muted-foreground">Board covers running costs</td>
+              <td className="py-0.5 text-right tabular-nums text-muted-foreground">{signed(k.coverActual)}</td>
+              <td className="py-0.5 pl-2 text-right tabular-nums text-muted-foreground">{signed(k.coverProjected)}</td>
+            </tr>
+            <tr className="border-t border-border" data-projection-total="kitty">
+              <td className="py-0.5 font-bold text-foreground">Kitty change</td>
+              <td className={cn('py-0.5 text-right tabular-nums', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>
+              <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>
             </tr>
           </tbody>
         </table>
         <p className="text-[9px] text-muted-foreground mt-1.5">
-          Tickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. {p.caveat}
+          Tickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty, and the kitty change adds them back. Not counted above, and they move the kitty too: a ground expansion, the academy, scout trips, promoted prospects, contract renewals, role settlements, loan recalls and broken loans, fines, the board's top ups and the decisions desk. {p.caveat}
           {p.possibleBonus > 0 && c.sponsor?.bonusFor ? ` A ${money(p.possibleBonus)} sponsor bonus pays at the summer for ${BONUS_FOR[c.sponsor.bonusFor]}, not counted until it is earned.` : ''}
         </p>
       </div>
