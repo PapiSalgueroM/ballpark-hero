@@ -1,0 +1,96 @@
+{
+ "landing": [
+  {
+   "id": "liverpool-take-390",
+   "scrollY": 1743,
+   "top": -1630,
+   "bottom": -1436,
+   "vh": 844
+  },
+  {
+   "id": "liverpool-skip-390",
+   "scrollY": 1794,
+   "top": -1681,
+   "bottom": -1487,
+   "vh": 844
+  },
+  {
+   "id": "celta-skip-320",
+   "scrollY": 2118,
+   "top": -2005,
+   "bottom": -1811,
+   "vh": 640
+  },
+  {
+   "id": "aberdeen-take-1280",
+   "scrollY": 1276,
+   "top": -1151,
+   "bottom": -1015,
+   "vh": 900
+  },
+  {
+   "id": "aberdeen-skip-1280",
+   "scrollY": 1276,
+   "top": -1151,
+   "bottom": -1015,
+   "vh": 900
+  },
+  {
+   "id": "everton2005-newyear-390",
+   "scrollY": 1826,
+   "top": -1713,
+   "bottom": -1487.5,
+   "vh": 844
+  },
+  {
+   "id": "liverpool-autumn-320",
+   "scrollY": 2231,
+   "top": -2118,
+   "bottom": -1860.5,
+   "vh": 640
+  },
+  {
+   "id": "liverpool-season2-390",
+   "seed": 21,
+   "scrollY": 853,
+   "top": -740,
+   "bottom": -546,
+   "vh": 844
+  }
+ ],
+ "fails": [
+  {
+   "section": "A",
+   "msg": "liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)"
+  },
+  {
+   "section": "A",
+   "msg": "liverpool-skip-390: hub header top -1681 px at scrollY 1794 on the first hub frame (screen 844 px)"
+  },
+  {
+   "section": "A",
+   "msg": "celta-skip-320: hub header top -2005 px at scrollY 2118 on the first hub frame (screen 640 px)"
+  },
+  {
+   "section": "A",
+   "msg": "aberdeen-take-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)"
+  },
+  {
+   "section": "A",
+   "msg": "aberdeen-skip-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)"
+  },
+  {
+   "section": "A",
+   "msg": "everton2005-newyear-390: hub header top -1713 px at scrollY 1826 on the first hub frame (screen 844 px)"
+  },
+  {
+   "section": "A",
+   "msg": "liverpool-autumn-320: hub header top -2118 px at scrollY 2231 on the first hub frame (screen 640 px)"
+  },
+  {
+   "section": "A",
+   "msg": "liverpool-season2-390: from scrollY 2437 at the review, hub header top -740 px on the first frame of season 2 (seed 21, 6 presses to the review)"
+  }
+ ],
+ "counts": {}
+}

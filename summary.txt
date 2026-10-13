@@ -1,0 +1,8 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 34s | base server 200
+walk-full exit=0 239s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its firs
+ctl-noscroll exit=1 20s | playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+walk-base-A exit=1 19s | playCmHubLanding: 8 failure(s) (A 0 pass 8 fail)
+mw-hubKey exit=1 53s | playCmHubLanding: 1 failure(s) (A 7 pass 1 fail)
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.

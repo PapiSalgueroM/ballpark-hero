@@ -1,0 +1,2 @@
+  FAIL  A  liverpool-season2-390: from scrollY 2437 at the review, hub header top -740 px on the first frame of season 2 (seed 21, 6 presses to the review)
+playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px) (A 0 pass 8 fail)
