@@ -1,0 +1,2 @@
+oldfleet: node .rc/x/oldfleet.mjs
+oldfleetCtl: git worktree add --detach .wt/ofc HEAD && ln -s "$PWD/node_modules" .wt/ofc/node_modules && node .rc/x/mut.mjs .wt/ofc deadheat && cd .wt/ofc && node ../../.rc/x/oldfleet.mjs
