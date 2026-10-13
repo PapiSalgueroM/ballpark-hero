@@ -1,0 +1,24 @@
+tsc exit=0 110s | 
+vitest-all exit=0 784s |    Duration  782.23s (transform 46.98s, setup 34.11s, collect 233.57s, tests 1649.81s, environment 244.67s, prepare 50.36s)
+diag exit=0 721s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+simFreeAgents exit=0 88s | simFreeAgents: all sections passed
+simManagerWorldContinuity exit=0 882s | Private world variation is measured, no historical fixture was re-recorded
+fa-ownclub-EXPECT-RED exit=1 94s | simFreeAgents: 1 failure(s)
+fa-marketreleased-EXPECT-RED exit=1 95s | simFreeAgents: 1 failure(s)
+own-pre-EXPECT-RED exit=1 6s | ::error file=/tmp/w-ownpre/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never t
+fa-buyreleased-EXPECT-RED exit=1 94s | simFreeAgents: 1 failure(s)
+screen-pre-EXPECT-RED exit=1 5s | ::error file=/tmp/w-scrpre/src/test/clubDetailOwnClub.test.tsx,title=src/test/clubDetailOwnClub.test.tsx > the club screen reads my own club from my squad > in a seeded c
+fa-noreleasedlist-EXPECT-RED exit=1 96s | simFreeAgents: 2 failure(s)
+unseeded-guard-EXPECT-RED exit=1 155s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+simCmLedgerJourney exit=0 113s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmUnseededWorld exit=0 163s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+simCmLeagueRules exit=0 50s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simClubManagerSaveSize exit=1 48s | simClubManagerSaveSize: 3 failures in sections 6, 8
+simClubManagerSlots exit=1 61s | simClubManagerSlots: RED, sections 2 (1 failures)
+simManagerAppealIsolation exit=0 36s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerDecisions exit=0 13s | simClubManagerDecisions: 0 findings
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simCmLedgerBound exit=0 286s | simCmLedgerBound: green, all four sections held
+bound-nocache-EXPECT-RED exit=1 717s | simCmLedgerBound: CONTROL nocache FIRED: section 1 red

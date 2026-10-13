@@ -1,0 +1,44 @@
+ src/lib/clubManager.ts | 18 +++++-------------
+ 1 file changed, 5 insertions(+), 13 deletions(-)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/w-ownpre[39m
+
+ [31m❯[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 888[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club screen average is the base read in season one, however many men he released[32m 74[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level rule reads the base[32m 163[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mthe club he leaves in the summer is another club at once, read off the world roster[32m 70[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 433[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22ma job taken mid season (the door joinClubNow opens) reads the club he left off the world roster[32m 38[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mthe club he joins mid season is his from that day, read as the base, though the career handed over names the old one[32m 83[2mms[22m[39m
+[31m   [31m×[31m the manager's own club is read from his club, never the world roster[2m > [22min a seeded career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once[39m[32m 25[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerOwnClubLevel.test.ts[2m > [22mthe manager's own club is read from his club, never the world roster[2m > [22min a seeded career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/lib/clubManagerOwnClubLevel.test.ts:[2m129:64[22m[39m
+    [90m127| [39m    [34mexpect[39m(oldMine[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m128| [39m    expect(oldMine.some(m => s.squad.some(p => p.name === m.name))).to…
+    [90m129| [39m    expect(buildMarket(s).some(m => m.club === 'Real Madrid')).toBe(fa…
+    [90m   | [39m                                                               [31m^[39m
+    [90m130| [39m    expect(buildMarket(s).some(m => m.club === 'Barcelona')).toBe(true…
+    [90m131| [39m    const man = [...s.squad].filter(p => p.position !== 'GK' && !p.isY…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 07:03:35
+[2m   Duration [22m 4.53s[2m (transform 2.10s, setup 126ms, collect 2.33s, tests 888ms, environment 609ms, prepare 298ms)[22m
+
+
+::error file=/tmp/w-ownpre/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never the world roster > in a seeded career the market lists nobody at his own club%2C ledger or none%2C and the club he leaves is listed at once,line=129,column=64::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/clubManagerOwnClubLevel.test.ts:129:64%0A%0A

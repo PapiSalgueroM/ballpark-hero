@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simManagerWorldContinuity: MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+diag: MANAGER_SIZE_DIAGNOSTICS=/tmp/diag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+fa-ownclub-EXPECT-RED: FA_CONTROL=ownclub node scripts/simFreeAgents.mjs
+fa-marketreleased-EXPECT-RED: FA_CONTROL=marketreleased node scripts/simFreeAgents.mjs
+fa-buyreleased-EXPECT-RED: FA_CONTROL=buyreleased node scripts/simFreeAgents.mjs
+fa-noreleasedlist-EXPECT-RED: FA_CONTROL=noreleasedlist node scripts/simFreeAgents.mjs
+own-pre-EXPECT-RED: R=$PWD; W=/tmp/w-ownpre; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && cd $W && git checkout 51bb3c5fe6ce64c5f7ee04abaecc268123991dc7 -- src/lib/clubManager.ts && git diff --cached --stat && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000
+screen-pre-EXPECT-RED: R=$PWD; W=/tmp/w-scrpre; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && cd $W && git checkout 1a91b13785d0d6859cba1f59c97729f42dc462d3 -- src/components/club-manager/ClubDetailScreen.tsx && git diff --cached --stat && node_modules/.bin/vitest run src/test/clubDetailOwnClub.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+unseeded-guard-EXPECT-RED: CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+bound-nocache-EXPECT-RED: CM_LEDGER_BOUND_CONTROL=nocache node scripts/simCmLedgerBound.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

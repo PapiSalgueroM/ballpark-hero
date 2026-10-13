@@ -1,0 +1,37 @@
+ src/components/club-manager/ClubDetailScreen.tsx | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/w-scrpre[39m
+
+ [31m❯[39m src/test/clubDetailOwnClub.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 199[2mms[22m[39m
+[31m   [31m×[31m the club screen reads my own club from my squad[2m > [22min a seeded career, my own club lists my squad, its best eleven and its worth[39m[32m 117[2mms[22m[39m
+[31m     → expected ' BackReal MadridLa Liga · 👑 Elite · …' to contain 'Squad (25 on the books)'[39m
+   [32m✓[39m the club screen reads my own club from my squad[2m > [22min a seeded career, a rival club still lists its world roster[32m 45[2mms[22m[39m
+   [32m✓[39m the club screen reads my own club from my squad[2m > [22ma career from before the release reads its own club off the projected world exactly as it did[32m 35[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubDetailOwnClub.test.tsx[2m > [22mthe club screen reads my own club from my squad[2m > [22min a seeded career, my own club lists my squad, its best eleven and its worth
+[31m[1mAssertionError[22m: expected ' BackReal MadridLa Liga · 👑 Elite · …' to contain 'Squad (25 on the books)'[39m
+
+Expected: [32m"Squad (25 on the books)"[39m
+Received: [31m" BackReal MadridLa Liga · 👑 Elite · your club90Best XI£14mSquad value#16Position0-0-0W-D-L0 scored0 conceded0 pointsBoard wants: win the La Liga · transfer budget around £195mSquad (4 on the books)Worth · OVRLBFerland Mendy30y£4.5m74RBDavid Jiménez21y£3.8m73CBDiego Aguado18y£3.8m73RWDaniel Yáñez18y£2.3m70"[39m
+
+[36m [2m❯[22m src/test/clubDetailOwnClub.test.tsx:[2m46:18[22m[39m
+    [90m 44| [39m    [35mconst[39m text [33m=[39m [34mscreenText[39m(s[33m,[39m [32m'Real Madrid'[39m)[33m;[39m
+    [90m 45| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m'your club'[39m)[33m;[39m
+    [90m 46| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m`Squad ([39m[36m${[39ms[33m.[39msquad[33m.[39mlength[36m}[39m[32m on the books)`[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 47| [39m    [35mfor[39m ([35mconst[39m p [35mof[39m s[33m.[39msquad) [34mexpect[39m(text)[33m.[39m[34mtoContain[39m(p[33m.[39mname)[33m;[39m
+    [90m 48| [39m    [35mfor[39m ([35mconst[39m p [35mof[39m offWorld) [34mexpect[39m(text)[33m.[39mnot[33m.[39m[34mtoContain[39m(p[33m.[39mn)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 07:03:41
+[2m   Duration [22m 3.42s[2m (transform 1.75s, setup 62ms, collect 2.33s, tests 199ms, environment 337ms, prepare 133ms)[22m
+
+
+::error file=/tmp/w-scrpre/src/test/clubDetailOwnClub.test.tsx,title=src/test/clubDetailOwnClub.test.tsx > the club screen reads my own club from my squad > in a seeded career%2C my own club lists my squad%2C its best eleven and its worth,line=46,column=18::AssertionError: expected ' BackReal MadridLa Liga · 👑 Elite · …' to contain 'Squad (25 on the books)'%0A%0AExpected: "Squad (25 on the books)"%0AReceived: " BackReal MadridLa Liga · 👑 Elite · your club90Best XI£14mSquad value#16Position0-0-0W-D-L0 scored0 conceded0 pointsBoard wants: win the La Liga · transfer budget around £195mSquad (4 on the books)Worth · OVRLBFerland Mendy30y£4.5m74RBDavid Jiménez21y£3.8m73CBDiego Aguado18y£3.8m73RWDaniel Yáñez18y£2.3m70"%0A%0A ❯ src/test/clubDetailOwnClub.test.tsx:46:18%0A%0A
