@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+simMobileChrome: node scripts/simMobileChrome.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+playSoccerCareerDepth: node scripts/playSoccerCareerDepth.mjs
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playSoccerCareerContracts: node scripts/playSoccerCareerContracts.mjs
+playCorruptSaves: node scripts/playCorruptSaves.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+playSoccerEventCards: node scripts/playSoccerEventCards.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+base-simCreation: git worktree add -q /tmp/base1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/base1329/node_modules && cd /tmp/base1329 && node scripts/simCreation.mjs
+base-simRevealMoments: git worktree add -q /tmp/base1329b c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/base1329b/node_modules && cd /tmp/base1329b && node scripts/simRevealMoments.mjs
