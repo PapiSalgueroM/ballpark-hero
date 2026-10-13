@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wh.log 2>&1; s=$?; grep -E "soccer-career|sweepWeight:" /tmp/wh.log | head -8; tail -2 /tmp/wh.log; exit $s
+weight-merged: R=$PWD; git worktree add -q /tmp/mg d8f4de3b2816fc555014b5c56c8792184524ad8a && cd /tmp/mg && git -c user.name=rev -c user.email=rev@example.invalid merge -q --no-edit c28b078bb64a9ed10db9956f15095d8b305759e2 && git log --oneline -1 && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build > /tmp/mg.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/mg/dist 4210 > /dev/null 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4210 SWEEP_BASE=http://127.0.0.1:4210 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wm.log 2>&1; s=$?; grep -E "soccer-career|sweepWeight:" /tmp/wm.log | head -8; tail -2 /tmp/wm.log; exit $s
