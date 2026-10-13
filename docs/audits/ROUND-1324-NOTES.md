@@ -228,3 +228,41 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   21 per harness reds of shards 2 and 5, 21 of 21 identical, exit code and last line. rc r1324-usc: simUsCareerSummer
   alone on the head exit 0, `simUsCareerSummer: green.` (2,513 s). No red is this round's; most need the live
   database or a browser the runner does not give them.
+
+## Fix pass after the two adversarial reviews (2026-10-13, from head 557e5439)
+
+The run review found two majors, both harness gaps (the engine was right and is unchanged in behaviour): three
+mutations of rules this round adds survived every gate. The read review found minors only. Each fix is its own commit.
+
+- Major 1, the falling clock (5be1cc00). The rest book's rebase and an expiring card's
+  arrival week rebase were never driven on a clock that falls. `fxRun` takes a `clockOf` (the tick, or the week of a
+  season). Kit section 5 runs FX_SUBJECT on a clock that falls every 20 weeks (50 desks of 400 weeks: no subject
+  inside its rest in real weeks, the book never ahead of the clock or past a rest) and one card about the captain on
+  that clock (exactly 31 deals over ten seasons: weeks 0, 6, 12 and 18, then 6, 12 and 18 of every later season).
+  Kit section 7 runs FX_EXPIRE on the FALLEN drive's clock, answered never: every card settles in exactly its due real
+  week (arrival plus expiry inside the season, otherwise the expiry counted from the fall), a card the kept cap drops
+  in the settling call counted as settled that week. New controls `restfall` and `expirefall` (each the reviewer's
+  mutation as an engine swap), and two unit tests.
+- Major 2, the weighted draw of two a week (68a2b308). Kit section 3 adds FX_WEIGHT two a week (weights 1, 3 and 2,
+  5,000 weeks): no week deals one card twice, every week deals two. New control `weightkeep`, and a unit test.
+- Minors 4 and 6 (0546cd3f). subjectRest 0 is scoped to every fact present (kit header, the comment, and this file's
+  step (b) text); kit section 5 now states that a card about a missing fact is still held at subjectRest 0 (it is
+  dealt on no week without the fact, where the pack without subjects deals one). New control `failopen` (the fail
+  closed line removed), which the kit could not see before (only the unit test could).
+- Minor 7 (bdbcd91e). simGmInbox's wording scan also fails a wording with "out N weeks" or "rating +N", as
+  choiceEffects prints them. New controls `effectout` and `effectrating`. No GM text matches either pattern.
+- Minor 8 (ed107b67). gmInboxWeek's doc comment writes the eight steps in order and no longer says the clock only goes
+  up. Comment only.
+- Minor 9 (985c7227). Kit section 2 reloads every row of section 1 (seeds 1, 2 and 3), not seed 1 alone.
+- Minor 10 (573a4c73). gmPackProblems refuses a `{ fact }` subject that names a yes or no fact (gmSubjectKey reads
+  every bool as no value, so the card could never be dealt), with a unit test.
+
+Not fixed here, for the lead's next briefs (W1b, W2, W3):
+- Minor 3 and the second half of minor 5: the shared panel (GmInboxPanel.tsx and us-career/InboxPanel.tsx) would show
+  a settled card as "You replied: <label>" and keep saying "Nothing new lands until you answer one." This round may
+  not touch src/components; the binding round must read `auto` and render gmExpiredLine.
+- Minor 5: a card the staff settle can be dropped by the kept cap in the same call, and gmInboxWeek returns only what
+  was dealt, so a seat cannot reliably show gmExpiredLine. The brief (3.3.6) prescribed the drop; returning or
+  recording what was settled this tick is an API change for the W1b or W3 brief.
+- Minor 11: the settled line doubles when the voice is the assistant ("Your assistant: your assistant dealt with
+  it"), and `gmExpiredLine`'s `pack` parameter is unused. The template is the brief's; a copy pass in W3.
