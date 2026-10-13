@@ -1,0 +1,23 @@
+# Release BC gate, lane W3: the nine pieces' served walks and controls
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playSoccerEventCards.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerDilemmaTruth: node scripts/simCareerDilemmaTruth.mjs
+simClubCaptaincy: node scripts/simClubCaptaincy.mjs
+simInjuryArc: node scripts/simInjuryArc.mjs
+simInternational: node scripts/simInternational.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
+playCollegeSeat: node scripts/playCollegeSeat.mjs
+smalltap-EXPECT-RED: SEAT_WALK_CONTROL=smalltap node scripts/playCollegeSeat.mjs; s=$?; echo "control pictures: $(ls $RC_OUT/control-smalltap | wc -l)"; exit $s
+simRevealScroll: node scripts/simRevealScroll.mjs
+playCorruptSaves: node scripts/playCorruptSaves.mjs
+keeper-gate: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q --detach /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+keeper-extrafence-EXPECT-RED: KEEPER_CONTROL=extrafence KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+keeper-extrakey-EXPECT-RED: KEEPER_CONTROL=extrakey KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+twoTabs9: ENGINES=chromium CASES=9 node scripts/playTwoTabs.mjs
