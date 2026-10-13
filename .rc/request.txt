@@ -1,0 +1,13 @@
+#!playwright
+simSoccerInternationalReturn-12f7e041: bash .rc/x/attr3.sh 12f7e041 simSoccerInternationalReturn FREE_KICK_FONT_CACHE=/tmp/fc-12f7e041 ENGINES=chromium
+simSoccerInternationalReturn-a5519151: bash .rc/x/attr3.sh a5519151 simSoccerInternationalReturn FREE_KICK_FONT_CACHE=/tmp/fc-a5519151 ENGINES=chromium
+simSoccerInternationalReturn-HEAD: bash .rc/x/attr3.sh HEAD simSoccerInternationalReturn FREE_KICK_FONT_CACHE=/tmp/fc-HEAD ENGINES=chromium
+simSoccerFarewell-12f7e041: bash .rc/x/attr3.sh 12f7e041 simSoccerFarewell FREE_KICK_FONT_CACHE=/tmp/fc-12f7e041 ENGINES=chromium
+simSoccerFarewell-a5519151: bash .rc/x/attr3.sh a5519151 simSoccerFarewell FREE_KICK_FONT_CACHE=/tmp/fc-a5519151 ENGINES=chromium
+simSoccerFarewell-HEAD: bash .rc/x/attr3.sh HEAD simSoccerFarewell FREE_KICK_FONT_CACHE=/tmp/fc-HEAD ENGINES=chromium
+simCareerPressMarket-12f7e041: bash .rc/x/attr3.sh 12f7e041 simCareerPressMarket FREE_KICK_FONT_CACHE=/tmp/fc-12f7e041 ENGINES=chromium
+simCareerPressMarket-a5519151: bash .rc/x/attr3.sh a5519151 simCareerPressMarket FREE_KICK_FONT_CACHE=/tmp/fc-a5519151 ENGINES=chromium
+simCareerPressMarket-HEAD: bash .rc/x/attr3.sh HEAD simCareerPressMarket FREE_KICK_FONT_CACHE=/tmp/fc-HEAD ENGINES=chromium
+train1178-main: bash .rc/x/attr3.sh 8fea14e2 simCareerSocialBrands SOCIAL_BRANDS_ATTRIBUTION=train1178
+train1178-ba: bash .rc/x/attr3.sh a5519151 simCareerSocialBrands SOCIAL_BRANDS_ATTRIBUTION=train1178
+train1178-1318: bash .rc/x/attr3.sh 12f7e041 simCareerSocialBrands SOCIAL_BRANDS_ATTRIBUTION=train1178
