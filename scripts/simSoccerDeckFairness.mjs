@@ -39,7 +39,11 @@
  *   3  KEYED. On 200 mid career saves from the fleet, the deck makes exactly
  *      the Math.random calls the catalog build makes on its own, and the
  *      batch is the same under two different streams after the build; the
- *      paper's chosen stories are the same under two different seeds.
+ *      paper's chosen stories are the same under two different seeds. The
+ *      keys hold the season: 100 saves dealt eight seasons running with
+ *      only the year moved deal six or more different batches (all but 5
+ *      percent of saves), and print more than one story (all but a quarter
+ *      of the saves where two or more qualify).
  *   4  GATES. Over the fleet (simCareerLifeCooldowns' drive, 500 careers),
  *      every batch holding a card that narrates the season sits in a season
  *      whose last row holds that fact, read here by this file's own rules;
@@ -68,6 +72,12 @@
  *      the regions the brief gives this round (the imports, the dilemma
  *      comment, pickN, generateNewsArticles, the 40 inline cards, the new
  *      helpers and generateRandomEvents).
+ *   9  FACES. Card 11 (its face and the log line its first choice writes)
+ *      and INJURY BLOW, rendered for every injury careerEras.ts can put in
+ *      a row, name that injury with "a" or "an" as it is said; across the
+ *      fleet every card 11, 12, 15 and 19 dealt and every INJURY BLOW and
+ *      move story printed says what its row holds (the injury, the finish,
+ *      the league games, the tournament, a loan or not, the club).
  *
  * MEASURED: see docs/audits/ROUND-1327-NOTES.md, updated every step.
  *
@@ -77,6 +87,8 @@
  *   shuffle    the old sort shuffle back in front of the pick: section 1.
  *   ranking    the paper keeps only its top weight again: section 2.
  *   globalpick the deck and the paper draw from Math.random: section 3.
+ *   keyseason  the deck's key loses the season: section 3.
+ *   newsyear   the paper's key loses the year: section 3.
  *   nogate     the row gate line out of the deck's filter: section 4.
  *   puskas     card 7 forgets the award's first season: section 4 (fixed rows).
  *   loanclub   card 12 forgets the row must be his club's: section 4 (fixed rows).
@@ -86,6 +98,8 @@
  *   prefix     one extra Math.random call in the youth year: section 7.
  *   olddebut   an old card 17 no longer records the debut: section 7.
  *   outside    one constant of the transfer market changes: section 8.
+ *   injlog     card 11 logs a hamstring whatever the row holds: section 9.
+ *   injblow    INJURY BLOW names one fixed injury: section 9.
  *
  * Run: node scripts/simSoccerDeckFairness.mjs [careers]   (default 200, so 500)
  *      SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs   another draw
@@ -136,6 +150,10 @@ const CONTROLS = {
   globalpick: { breaks: '3', note: 'the deck and the paper draw from Math.random instead of their keyed streams',
     edits: [['  const rng = keyedRng(key);', '  const rng = Math.random;'],
       ['  const rng = keyedRng(`${soccerDeckIdentity(s)}|${season.year}|news`);', '  const rng = Math.random;']] },
+  keyseason: { breaks: '3', note: 'the deck\'s key loses the season, so a career deals one batch every season',
+    edits: [['  const picked = drawEventBatch(eligible, `${soccerDeckIdentity(state)}|${season}|deck`);', '  const picked = drawEventBatch(eligible, `${soccerDeckIdentity(state)}|deck`);']] },
+  newsyear: { breaks: '3', note: 'the paper\'s key loses the year, so a career prints one story every season',
+    edits: [['  const rng = keyedRng(`${soccerDeckIdentity(s)}|${season.year}|news`);', '  const rng = keyedRng(`${soccerDeckIdentity(s)}|news`);']] },
   nogate: { breaks: '4', note: 'the deck no longer asks whether a card fits the season just played',
     edits: [['    if (!cardFitsSeason(e.id, state)) return false;\n', '']] },
   puskas: { breaks: '4', note: 'card 7 deals a Puskas nominated goal in any season with goals, before the award existed too',
@@ -152,6 +170,10 @@ const CONTROLS = {
     edits: [[YOUTH, YOUTH.replace('\n', '\n  Math.random();\n')]] },
   olddebut: { breaks: '7', note: 'an old card 17 answered from a save no longer records the debut',
     edits: [['s.intStats = { ...s.intStats, debutYear: eventSeasonIndex(s), debutAge: s.age }; ', '']] },
+  injlog: { breaks: '9', note: 'card 11 logs a serious hamstring injury again, whatever the row holds',
+    edits: [['`🏥 Took time to recover from ${injury ? withArticle(lowerFirst(injury)) : "an injury"}: Pace -2`', '"🏥 Serious hamstring injury: Pace -2"']] },
+  injblow: { breaks: '9', note: 'INJURY BLOW names one fixed injury, whatever the row holds',
+    edits: [['headline: `INJURY BLOW: ${name} Out For Weeks With ${injury}`,', 'headline: `INJURY BLOW: ${name} Out For Weeks With Hamstring Tear`,']] },
   outside: { breaks: '8', note: 'one constant of the transfer market changes, outside this round\'s hunks',
     edits: [['export const LEAGUE_DRAW_CAP = 5;', 'export const LEAGUE_DRAW_CAP = 6;']] },
 };
@@ -348,6 +370,19 @@ const fleetSeeds = () => {
   return out;
 };
 
+/** For section 9: what the narrating cards of a fresh batch print and the row they were dealt for. Card 11's first
+ *  choice is applied to a copy under a stream of its own, so the fleet's stream does not move. */
+function facesOf(s) {
+  const row = s.seasons[s.seasons.length - 1] || {};
+  const faces = {};
+  for (const ev of s.pendingEvents || []) {
+    if (![11, 12, 15, 19].includes(ev.id)) continue;
+    faces[ev.id] = { text: ev.description };
+    if (ev.id === 11) faces[11].log = withStream(() => { const a = ev.choices[0].apply(copy(s)); return a.events[a.events.length - 1]; }, seeded(7)).value;
+  }
+  return { faces, row: { injury: row.injury ?? null, leagueFinish: row.leagueFinish, leagueApps: row.leagueApps, tournament: row.tournament ?? null } };
+}
+
 function driveFleetCareer(M, seed, mode) {
   const real = Math.random;
   Math.random = seeded(seed + SEED_OFFSET + 1);
@@ -358,10 +393,14 @@ function driveFleetCareer(M, seed, mode) {
     let prevPhase = s.phase, playing = 0, midSave = null;
     for (let guard = 0; guard < 400 && !s.retired; guard += 1) {
       if (s.phase === 'random_events' && prevPhase !== 'random_events' && prevPhase !== 'red_card_appeal_result') {
-        batches.push({ ids: s.pendingEvents.map(e => e.id), facts: factsOf(M, s), year: s.seasons[s.seasons.length - 1]?.year });
+        batches.push({ ids: s.pendingEvents.map(e => e.id), facts: factsOf(M, s), year: s.seasons[s.seasons.length - 1]?.year, ...facesOf(s) });
         if (!midSave && playing >= 3 && playing <= 6) midSave = copy(s);
       }
-      if (s.phase === 'newspaper' && prevPhase !== 'newspaper') papers.push({ news: (s.pendingNews || []).map(a => ({ headline: a.headline, body: a.body })), followers: s.socialMediaFollowers });
+      if (s.phase === 'newspaper' && prevPhase !== 'newspaper') {
+        const row = s.seasons[s.seasons.length - 1] || {};
+        papers.push({ news: (s.pendingNews || []).map(a => ({ headline: a.headline, body: a.body })), followers: s.socialMediaFollowers,
+          row: { injury: row.injury ?? null, onLoanFrom: row.onLoanFrom ?? null, club: row.club } });
+      }
       prevPhase = s.phase;
       if (s.phase === 'playing') playing += 1;
       const next = step(M, s, seed, mode === 'loyal', clubs);
@@ -492,7 +531,11 @@ SECTION = '2';
 console.log('2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story');
 /* Measured on the runner (r1327-g1, head d50c85d4) at seed offsets 0 to 4: 0.490, 0.480, 0.491, 0.493 and 0.489,
    sd about 0.008 a run; on the base (the weight ranking) 0. The band keeps at least five sd from each edge: the lowest
-   reading 0.480 sits 0.040 above 0.44, the highest 0.493 sits 0.067 below 0.56. */
+   reading 0.480 sits 0.040 above 0.44, the highest 0.493 sits 0.067 below 0.56.
+   Why all five read under 0.5 (review 2026-10-13): the five offsets share one key family (Paper n, one era, nation,
+   position and year), and that family's draws happen to sit low. A probe of keyedRng's first output over the same
+   family at four years reads 0.4916 (the year this section's save holds: 0.488, 0.481, 0.501, 0.502, 0.486), 0.4984, 0.5024 and 0.5048,
+   0.4993 over all twenty, and its first output is flat over 20 bins (chi square 6.7 to 30 on 19 df): noise, not bias. */
 const PAPER_BAND = [0.44, 0.56];
 const HALF = 'Reveals Secret To Success';
 const ONE = 'Named In Team Of The Season';
@@ -572,6 +615,41 @@ console.log('3) Keyed: the deck and the paper draw nothing from the global strea
   if (extra) fail(`${extra} of ${saves.length} decks drew from Math.random beyond the catalog build`);
   if (moved) fail(`${moved} of ${saves.length} batches changed with the stream after the catalog build`);
   if (paperMoved) fail(`${paperMoved} of ${saves.length} papers chose different stories under a different seed`);
+
+  /* The keys hold the season (review 2026-10-13: a deck key without its season, or a paper key without its year,
+     passed every check above). Each save is dealt eight seasons running with its last row's year moved on one at a
+     time and its ledger emptied, so the cards it may deal barely change (only a card that reads the year, such as a
+     Player of the Month or a World Cup snub, can come and go). The deck must deal at least six different batches
+     over the eight in nearly every save; the paper, given the same row with only its year moved, must not print one
+     story all eight years in most saves where two or more stories qualify. */
+  let deckFew = 0, paperOne = 0, paperAsked = 0;
+  const distinct = [];
+  saves.slice(0, 100).forEach((save, i) => {
+    const batches = new Set(), stories = new Set();
+    const row = save.seasons[save.seasons.length - 1];
+    const goals = save.seasons.reduce((n, r) => n + (r.goals || 0), 0);
+    const apps = save.seasons.reduce((n, r) => n + (r.apps || 0), 0);
+    let qualified = 0;
+    for (let y = 0; y < 8; y += 1) {
+      const s = copy(save);
+      s.eventLastFired = {};
+      s.seasons[s.seasons.length - 1] = { ...row, year: row.year + y };
+      const X = 4242 + i;
+      const K = withStream(() => E.getAllEvents({ ...s }), seeded(X)).calls;
+      batches.add(withStream(() => E.__r1327Deck({ ...s }), seeded(X), seeded(99 + i), K).value.map(e => e.id).join(','));
+      const news = withStream(() => E.__r1327News(copy(save), { ...row, year: row.year + y }, goals, apps), seeded(X)).value;
+      qualified = (globalThis.__r1327Templates || []).filter(t => t.check()).length;
+      stories.add(news.filter(x => !x.headline.startsWith('THE COLUMN')).map(x => storyOf(x.headline)).join(','));
+    }
+    distinct.push(batches.size);
+    if (batches.size < 6) deckFew += 1;
+    if (qualified >= 2) { paperAsked += 1; if (stories.size === 1) paperOne += 1; }
+  });
+  const meanDistinct = distinct.reduce((a, b) => a + b, 0) / Math.max(1, distinct.length);
+  console.log(`   eight seasons a save: the deck dealt ${r3(meanDistinct)} different batches on average, ${deckFew} of ${distinct.length} saves under six; the paper printed one story all eight years in ${paperOne} of ${paperAsked} saves with two or more stories`);
+  if (deckFew > distinct.length * 0.05) fail(`${deckFew} of ${distinct.length} saves dealt under six different batches over eight seasons: the deck's key does not move with the season`);
+  if (paperAsked < 20) fail(`only ${paperAsked} saves had two or more stories to choose from`);
+  else if (paperOne > paperAsked * 0.25) fail(`${paperOne} of ${paperAsked} papers printed the same story eight years running: the paper's key does not move with the year`);
 }
 
 /* ─── 4. the cards that narrate the season ─────────────────────────────── */
@@ -843,6 +921,65 @@ console.log('8) The seventh inverse gives the base\'s engine back byte for byte,
   }
   console.log(`   ${hunks} diff hunks against the base, each checked against ${regions.length} regions`);
   if (hunks === 0 && !CONTROL) fail('no diff hunks against the base: this harness is reading the base');
+}
+
+/* ─── 9. faces ─────────────────────────────────────────────────────────── */
+
+SECTION = '9';
+console.log('9) What a narrating card or story prints is what the row holds');
+{
+  /* Every injury the season can hold, read off careerEras.ts, on card 11 (its face and the log line its first choice
+     writes) and on INJURY BLOW: each names the row's injury, with "a" or "an" as it is said. The review of
+     2026-10-13 found card 11 logging a serious hamstring injury whatever the row held, and nothing here read it. */
+  const erasSource = fs.readFileSync(path.join(ROOT, 'src/lib/careerEras.ts'), 'utf8');
+  const INJURIES = [...erasSource.matchAll(/const INJ_[A-Z]+ = \[([^\]]*)\]/g)].flatMap(m => [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]));
+  const badArticle = t => /\ba (?:[AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t) || /\ban (?![AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t);
+  const names = (t, injury) => typeof t === 'string' && t.toLowerCase().includes(String(injury).toLowerCase());
+  const blowAt = TEMPLATES.findIndex(t => t.fragments.some(f => f.includes('Out For Weeks With')));
+  if (INJURIES.length < 10) fail(`only ${INJURIES.length} injury names read from careerEras.ts`);
+  if (blowAt < 0) fail('the INJURY BLOW story is gone from the paper\'s table');
+  let rendered = 0;
+  for (const injury of INJURIES) {
+    const s = copy(midOf);
+    const last = s.seasons.length - 1;
+    s.seasons[last] = { ...s.seasons[last], type: 'playing', club: s.currentClub, injury, injuryWeeks: 8 };
+    const card = withStream(() => E.getAllEvents(s), seeded(11)).value.find(e => e.id === 11);
+    const after = card.choices[0].apply({ ...copy(s), events: [...s.events] });
+    const log = after.events[after.events.length - 1];
+    if (!names(card.description, injury)) fail(`card 11 on a row holding "${injury}" reads "${card.description}"`);
+    if (!names(log, injury) || badArticle(log) || (/hamstring/i.test(log) && !/hamstring/i.test(injury))) fail(`card 11 on a row holding "${injury}" logs "${log}"`);
+    if (/^Achilles/.test(injury) && !card.description.includes('Achilles')) fail(`card 11 lowercases a name: "${card.description}"`);
+    const { s: ps, season } = paperCase();
+    const row = { ...season, injury, injuryWeeks: 8, apps: 10 };
+    E.__r1327News({ ...ps }, row, 50, 200);
+    const story = (globalThis.__r1327Templates || [])[blowAt];
+    if (!story || !story.check()) { fail(`INJURY BLOW does not qualify on a row with "${injury}" for 8 weeks and 10 games`); continue; }
+    const a = story.gen();
+    if (!names(a.headline, injury) || !names(a.body, injury) || badArticle(a.body)) fail(`INJURY BLOW on "${injury}" prints "${a.headline}" / "${a.body}"`);
+    rendered += 1;
+  }
+  /* The fleet: every narrating card and story that was dealt or printed, against the row it was dealt for. */
+  const ord = n => `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th'}`;
+  const seen = { 11: 0, 12: 0, 15: 0, 19: 0, blow: 0, move: 0 };
+  for (const b of allBatches) for (const [id, f] of Object.entries(b.faces || {})) {
+    seen[id] += 1;
+    const r = b.row;
+    if (id === '11' && (!names(f.text, r.injury) || !names(f.log, r.injury))) fail(`card 11 dealt for "${r.injury}" reads "${f.text}" and logs "${f.log}"`);
+    if (id === '12' && !f.text.includes(`finishing ${ord(r.leagueFinish)}`)) fail(`card 12 dealt for a ${r.leagueFinish} finish reads "${f.text}"`);
+    if (id === '15' && !f.text.includes(`Only ${r.leagueApps} league game`)) fail(`card 15 dealt for ${r.leagueApps} league games reads "${f.text}"`);
+    if (id === '19' && !f.text.includes(`${r.tournament} squad`)) fail(`card 19 dealt for ${r.tournament} reads "${f.text}"`);
+  }
+  for (const p of allPapers) for (const a of p.news) {
+    if (a.headline.includes('INJURY BLOW')) { seen.blow += 1; if (!names(a.headline, p.row.injury)) fail(`INJURY BLOW printed "${a.headline}" for a row holding "${p.row.injury}"`); }
+    const move = /^(ON LOAN|BACK AGAIN|NEW CHAPTER):/.exec(a.headline);
+    if (move) {
+      seen.move += 1;
+      if ((move[1] === 'ON LOAN') !== !!p.row.onLoanFrom) fail(`"${a.headline}" printed for a row ${p.row.onLoanFrom ? `on loan from ${p.row.onLoanFrom}` : 'that is no loan'}`);
+      if (!a.headline.includes(p.row.club)) fail(`"${a.headline}" printed for a season at ${p.row.club}`);
+    }
+  }
+  console.log(`   ${INJURIES.length} injuries read; card 11 and INJURY BLOW rendered for ${rendered}; the fleet dealt card 11 ${seen[11]}, 12 ${seen[12]}, 15 ${seen[15]}, 19 ${seen[19]} times and printed INJURY BLOW ${seen.blow}, a move story ${seen.move} times, each read against its row`);
+  if (rendered < INJURIES.length) fail(`INJURY BLOW rendered for ${rendered} of ${INJURIES.length} injuries`);
 }
 
 /* ─── verdict ──────────────────────────────────────────────────────────── */
