@@ -1,0 +1,79 @@
+seed 1987332285; arms head, base; sections retire; sizes 320x640, 390x844, 1280x900
+bar save youth: phase youth, age 16
+bar save playing: phase playing, age 18
+bar save manager: phase manager_season, age 18, employed
+bar save pundit: phase pundit_season, age 18
+bar save owner: phase owner_season, age 18
+bar save retired: phase retired, age 18
+bar save managerOut: phase manager_season, age 18, out of work
+== head 320x640
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+== head 390x844
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+== head 1280x900
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+== base 320x640
+   youth: 2 Retire control(s)
+  base [retire 320x640]: youth: 2 Retire controls on the hub
+   youth: "🚪 Retire" is 40 px tall
+  base [retire 320x640]: youth: the header's "🚪 Retire" is 40 px tall, under 44
+   youth: "🔄 New Career" is 40 px tall
+  base [retire 320x640]: youth: the header's "🔄 New Career" is 40 px tall, under 44
+   playing: 2 Retire control(s)
+  base [retire 320x640]: playing: 2 Retire controls on the hub
+   playing: "🚪 Retire" is 40 px tall
+  base [retire 320x640]: playing: the header's "🚪 Retire" is 40 px tall, under 44
+   playing: "🔄 New Career" is 40 px tall
+  base [retire 320x640]: playing: the header's "🔄 New Career" is 40 px tall, under 44
+   retired: 1 Weekly Wage tile(s)
+  base [retire 320x640]: the retired screen shows 1 Weekly Wage tile(s)
+== base 390x844
+   youth: 2 Retire control(s)
+  base [retire 390x844]: youth: 2 Retire controls on the hub
+   youth: "🚪 Retire" is 40 px tall
+  base [retire 390x844]: youth: the header's "🚪 Retire" is 40 px tall, under 44
+   youth: "🔄 New Career" is 40 px tall
+  base [retire 390x844]: youth: the header's "🔄 New Career" is 40 px tall, under 44
+   playing: 2 Retire control(s)
+  base [retire 390x844]: playing: 2 Retire controls on the hub
+   playing: "🚪 Retire" is 40 px tall
+  base [retire 390x844]: playing: the header's "🚪 Retire" is 40 px tall, under 44
+   playing: "🔄 New Career" is 40 px tall
+  base [retire 390x844]: playing: the header's "🔄 New Career" is 40 px tall, under 44
+   retired: 1 Weekly Wage tile(s)
+  base [retire 390x844]: the retired screen shows 1 Weekly Wage tile(s)
+== base 1280x900
+   youth: 2 Retire control(s)
+  base [retire 1280x900]: youth: 2 Retire controls on the hub
+   youth: "🚪 Retire" is 40 px tall
+  base [retire 1280x900]: youth: the header's "🚪 Retire" is 40 px tall, under 44
+   youth: "🔄 New Career" is 40 px tall
+  base [retire 1280x900]: youth: the header's "🔄 New Career" is 40 px tall, under 44
+   playing: 2 Retire control(s)
+  base [retire 1280x900]: playing: 2 Retire controls on the hub
+   playing: "🚪 Retire" is 40 px tall
+  base [retire 1280x900]: playing: the header's "🚪 Retire" is 40 px tall, under 44
+   playing: "🔄 New Career" is 40 px tall
+  base [retire 1280x900]: playing: the header's "🔄 New Career" is 40 px tall, under 44
+   retired: 1 Weekly Wage tile(s)
+  base [retire 1280x900]: the retired screen shows 1 Weekly Wage tile(s)
+  base retire: the measurement sees the bug on the base (21 finding(s))
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; retire), every marked section red on the base
