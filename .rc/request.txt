@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node .rc/x/walkRun.mjs
+weight: ENGINES=chromium node scripts/sweepWeight.mjs
+twoTabs9: ENGINES=chromium CASES=9 node scripts/playTwoTabs.mjs
