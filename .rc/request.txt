@@ -1,0 +1,9 @@
+# Release BC gate, lane W4: Round 1325's fit Part 2 against this head without 1325, and Round 1328's other hub controls
+#!serve
+#!playwright
+#!serial
+fit-base: bash .rc/x/basesrv.sh 79b08e00 d84d8328 4175
+fit-part2: CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-4175/dist node scripts/playCmTablesFit.mjs
+hub-nosticky-EXPECT-RED: RC_OUT="$RC_OUT/nosticky" HUB_LANDING_CONTROL=nosticky HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs > /tmp/h-nosticky.log 2>&1; s=$?; tail -1 /tmp/h-nosticky.log | cut -c1-300; exit $s
+hub-small-EXPECT-RED: RC_OUT="$RC_OUT/small" HUB_LANDING_CONTROL=small HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > /tmp/h-small.log 2>&1; s=$?; tail -1 /tmp/h-small.log | cut -c1-300; exit $s
+hub-cut-EXPECT-RED: RC_OUT="$RC_OUT/cut" HUB_LANDING_CONTROL=cut HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > /tmp/h-cut.log 2>&1; s=$?; tail -1 /tmp/h-cut.log | cut -c1-300; exit $s
