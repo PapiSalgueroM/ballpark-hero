@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000
+draftorder: node scripts/simGmDraftOrder.mjs
+draftorder-mounted: SIM_GM_DRAFT_ORDER_CONTROL=mounted node scripts/simGmDraftOrder.mjs
+earned: node scripts/simNbaEarnedDraft.mjs
