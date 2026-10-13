@@ -11,6 +11,7 @@ import { build } from 'esbuild';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
 import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
+import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
@@ -181,7 +182,9 @@ if (!IMPORT_ONLY) {
      the contracts file (scripts/lib/careerVeteranPay1262.mjs): a career of 30 or more is offered other money on purpose. */
   /* Round 1318: and the saved pool of made up Ballon d'Or rivals of Rounds 1280 to 1282 and 1318, its rows in order
      (scripts/lib/careerAwardGenerations1318.mjs). */
-  const nextTen = [...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
+  /* Round 1327: and Round 1327's event deck and paper first, the newest change first (scripts/lib/careerDeckFair1327.mjs):
+     its keyed draws move every seeded career's Math.random from the first deck or paper on. */
+  const nextTen = [...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
   const neutralB = await developmentBundle({ patches: [...activePatches, ...nextTen] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
   const mentorMetadata = seeded(118500, () => B.soccer.getAllEvents(developmentFixture(B)).find(event => event.id === 6)).value;
   async function check(name, fn) {
