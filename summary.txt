@@ -1,0 +1,11 @@
+simCollegeDynastyBoard exit=0 8s | simCollegeDynastyBoard: all green
+board-seatleak exit=0 8s | control "seatleak": 1 failure(s) fired as expected, the check works
+board-seatdraw exit=0 7s | control "seatdraw": 1 failure(s) fired as expected, the check works
+board-seatunmarked exit=0 8s | control "seatunmarked": 1 failure(s) fired as expected, the check works
+board-cfbword exit=1 7s | control "cfbword": changed NOTHING it should have, the check is dead
+board-seatoff exit=0 7s | control "seatoff": 1 failure(s) fired as expected, the check works
+board-board exit=0 6s | control "board": 1 failure(s) fired as expected, the check works
+board-cbbword exit=0 7s | control "cbbword": 1 failure(s) fired as expected, the check works
+vitest-units exit=0 13s |    Duration  12.05s (transform 1.02s, setup 739ms, collect 4.39s, tests 20.77s, environment 5.16s, prepare 1.25s)
+tsc exit=0 84s | 
+simCollegeSeat exit=0 169s | simCollegeSeat: all sections green (S1 to S9 and SY)

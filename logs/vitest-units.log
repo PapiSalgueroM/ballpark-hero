@@ -1,0 +1,33 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1642[2mms[22m[39m
+ [32m✓[39m src/test/cbbRecruitFilters.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 3367[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB recruiting position and minimum-star targeting[2m > [22mcombines position and inclusive star threshold across both boards in source order [33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB recruiting position and minimum-star targeting[2m > [22mresets both no-match boards and restores every remaining row [33m 894[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB recruiting position and minimum-star targeting[2m > [22mdoes not save, regenerate, mutate pools or expose hidden ability while filtering [33m 312[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB recruiting position and minimum-star targeting[2m > [22msigns only the selected high school ID and pays the unchanged NIL cost [33m 328[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB recruiting position and minimum-star targeting[2m > [22msigns only the selected portal ID as a sophomore and removes the last filtered match [33m 504[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 6558[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture [33m 3695[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 2858[2mms[22m[39m
+ [32m✓[39m src/test/cfbRecruitFilters.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 6837[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mcombines position and inclusive star threshold across both boards in source order [33m 1886[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mresets both no-match boards and restores every remaining row [33m 1432[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mdoes not save, regenerate, mutate pools or expose hidden ability while filtering [33m 727[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22msigns only the selected high school ID and pays the unchanged NIL cost [33m 555[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22msigns only the selected portal ID as a sophomore and removes the last filtered match [33m 865[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mpreserves the existing unaffordable-sign rejection with no saved roster or NIL change [33m 413[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mholds independent original signing and refusal effects without targeting [33m 666[2mms[22m[39m
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 853[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mplays a save from before coordinators existed without adding anything to it [33m 352[2mms[22m[39m
+ [32m✓[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1010[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 467[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 306[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m108 passed[39m[22m[90m (108)[39m
+[2m   Start at [22m 00:23:46
+[2m   Duration [22m 12.05s[2m (transform 1.02s, setup 739ms, collect 4.39s, tests 20.77s, environment 5.16s, prepare 1.25s)[22m
+
