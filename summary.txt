@@ -1,0 +1,12 @@
+simCmSubs exit=2 0s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-oldcap exit=2 0s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-nostops exit=2 0s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-htstop exit=2 0s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-onesource exit=1 0s | control onesource FIRED: 1 of 21 checks red
+vitest exit=0 5s |    Duration  4.47s (transform 2.79s, setup 241ms, collect 5.73s, tests 146ms, environment 2.16s, prepare 481ms)
+simLiveMatch exit=0 7s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+quickSubs-all exit=0 19s | simCmQuickSubs: 10 actual outcomes and 13 effective controls passed.
+simMatchDetail exit=0 6s | simMatchDetail: all green
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 95s | 
+simHalftime exit=0 671s | ALL HALFTIME CHECKS PASSED

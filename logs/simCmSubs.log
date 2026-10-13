@@ -1,0 +1,32 @@
+ok   [ledger] the ledger holds law lines and league rows (4 laws, 6 rows)
+ok   [ledger] laliga: has at least one sourced fact
+ok   [ledger] seriea: has at least one sourced fact
+ok   [ledger] bundesliga: has at least one sourced fact
+ok   [ledger] ligue1: has at least one sourced fact
+ok   [ledger] premier: has at least one sourced fact
+ok   [ledger] championship: has at least one sourced fact
+ok   [ledger] law threeBefore2020: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law fiveInThree2020: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law breaksAreFree: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law fivePermanent2022: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] laliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] seriea: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] bundesliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] ligue1: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2020-21: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2021-22: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: five changes in three occasions plus half time from 2022-23 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] championship: five changes in three opportunities from 2022-23 on, a standing EFL rule: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] the module rows equal the ledger rows
+ok   [ledger] the module partial list equals the ledger
+simCmSubs could not run: Error: Club Manager: the era2005 squads are not loaded yet (await ensureEraRosters first)
+    at eraRostersRaw (/home/runner/work/_temp/t-simCmSubs/simCmSubs-ODL5pQ/head.cjs:33808:23)
+    at eraClubDefMap (/home/runner/work/_temp/t-simCmSubs/simCmSubs-ODL5pQ/head.cjs:40389:19)
+    at eraClubDefFor (/home/runner/work/_temp/t-simCmSubs/simCmSubs-ODL5pQ/head.cjs:40414:17)
+    at Object.startCareer (/home/runner/work/_temp/t-simCmSubs/simCmSubs-ODL5pQ/head.cjs:48855:62)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:125:42
+    at withSeed (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:55:16)
+    at toHalftime (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:125:11)
+    at ruleSection (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:138:11)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:198:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

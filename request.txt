@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerSubsRule.test.ts src/test/managerScorerMarks.test.tsx src/test/cmMinuteLabel.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmSubs: node scripts/simCmSubs.mjs
+subs-oldcap: SUBS_CONTROL=oldcap node scripts/simCmSubs.mjs
+subs-nostops: SUBS_CONTROL=nostops node scripts/simCmSubs.mjs
+subs-htstop: SUBS_CONTROL=htstop node scripts/simCmSubs.mjs
+subs-onesource: SUBS_CONTROL=onesource node scripts/simCmSubs.mjs
+quickSubs-all: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simHalftime: node scripts/simHalftime.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
