@@ -36,6 +36,23 @@ const FREE_AGENT_REASON: Record<FreeAgent['reason'], string> = {
   unattached: 'no club',
 };
 
+/* Round 1325: how many rows of a long list show before "Show the other N". */
+const SHOWN = 3;
+
+/** Round 1325: the press that puts the rest of a list in place under it, and goes. */
+function ShowTheOther({ n, what, onShow }: { n: number; what: string; onShow: () => void }) {
+  return (
+    <button
+      type="button"
+      data-cm-show-more
+      onClick={onShow}
+      className="w-full min-h-11 rounded-lg border border-border bg-secondary/40 px-2 text-xs font-bold text-foreground hover:border-primary transition-colors motion-reduce:transition-none"
+    >
+      Show the other {n}{what}
+    </button>
+  );
+}
+
 interface ContractsCardProps {
   career: CareerState;
   onRenew: (playerId: string) => void;
@@ -68,6 +85,10 @@ interface ContractsCardProps {
 export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, onSignFreeAgent }: ContractsCardProps) {
   /* Round 619 review: the man whose release is waiting on a second tap. */
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  /* Round 1325: whether the rest of each long list has been asked for. One
+     way, held only while the desk is open, never saved. */
+  const [allExpiring, setAllExpiring] = useState(false);
+  const [allClaused, setAllClaused] = useState(false);
   /* Round 982: the line that says what a press just did. */
   const { cue, press } = useDeskCue<string, CareerState>(career);
   /* Round 514: the money symbol follows the start option. Shadowing the
@@ -212,7 +233,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
       </div>
       <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
         <div
-          className={cn('h-full rounded-full transition-all', over ? 'bg-red-500' : pct > 88 ? 'bg-yellow-500' : 'bg-emerald-500')}
+          className={cn('h-full rounded-full transition-all motion-reduce:transition-none', over ? 'bg-red-500' : pct > 88 ? 'bg-yellow-500' : 'bg-emerald-500')}
           style={{ width: `${Math.min(100, pct)}%` }}
         />
       </div>
@@ -234,7 +255,15 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] text-gold uppercase tracking-wider font-bold pt-1">
             ⏳ Final year ({expiring.length})
           </div>
-          <div className="max-h-64 overflow-y-auto">{expiring.map(row)}</div>
+          {/* Round 1325: no box scrolling inside the card, which cut the second
+              row in half on a phone. Three rows sit whole in the page, and the
+              rest come in under them on a press, where the button was. */}
+          <div data-cm-final-year-list>
+            {(allExpiring ? expiring : expiring.slice(0, SHOWN)).map(row)}
+            {!allExpiring && expiring.length > SHOWN && (
+              <ShowTheOther n={expiring.length - SHOWN} what=" in their final year" onShow={() => setAllExpiring(true)} />
+            )}
+          </div>
           <p className="text-[9px] text-muted-foreground">
             Let a deal run out and he leaves in the summer for nothing. The clause deal pays him 12 percent
             less, and the price is an exit door at 1.5x his value today that any club can walk through.
@@ -247,8 +276,8 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] uppercase tracking-wider font-bold pt-1 text-muted-foreground">
             🔓 Release clauses you have granted ({claused.length})
           </div>
-          <div className="max-h-64 overflow-y-auto" data-contract-clauses>
-          {claused.map(p => {
+          <div data-contract-clauses>
+          {(allClaused ? claused : claused.slice(0, SHOWN)).map(p => {
             const ratio = sellValue(p) / (p.releaseClause as number);
             const terms = renewalTerms(p);
             const affordable = terms.fee <= career.budget;
@@ -256,7 +285,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
               <div key={p.id} className="py-1 border-b border-border/30 last:border-0">
                 <div className="flex items-center gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-foreground truncate">{p.name}</div>
+                    <div className="text-xs text-foreground truncate" title={p.name}>{p.name}</div>
                     <div className={cn('text-[9px]', ratio >= 1 ? 'text-red-400 font-bold' : 'text-muted-foreground')}>
                       clause {money(p.releaseClause as number)} · worth {money(sellValue(p))}{ratio >= 1 ? ' · A BARGAIN, clubs will pay this' : ''}
                     </div>
@@ -277,6 +306,9 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
               </div>
             );
           })}
+          {!allClaused && claused.length > SHOWN && (
+            <ShowTheOther n={claused.length - SHOWN} what="" onShow={() => setAllClaused(true)} />
+          )}
           </div>
         </>
       )}
@@ -294,7 +326,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
               later and released again owes two settlements under one name. */}
           {(career.severance ?? []).map((r, i) => (
             <div key={`${r.name}-${i}`} className="flex justify-between text-[10px] text-muted-foreground py-0.5">
-              <span className="truncate">{r.name}</span>
+              <span className="truncate" title={r.name}>{r.name}</span>
               <span className="shrink-0 tabular-nums">{r.weekly}k for {r.weeksLeft} more week{r.weeksLeft === 1 ? '' : 's'}</span>
             </div>
           ))}
@@ -311,7 +343,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
             You keep paying half his wage until his deal would have run out, capped at two seasons, and it counts
             against the cap the whole time.
           </div>
-          <div className="max-h-40 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto">
             {releasable.map(p => {
               const sev = severanceFor(career, p);
               /* Round 619 review: the engine's own refusal, so a button is
@@ -335,7 +367,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                       onClick={() => setConfirmId(confirming ? null : p.id)}
                       disabled={!!block}
                       title={block ? RELEASE_BLOCK_COPY[block].title : `Settle at ${sev.weekly}k a week for ${sev.weeksLeft} weeks`}
-                      className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                      className={cn('shrink-0 max-w-[55%] min-h-11 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all',
                         block ? 'bg-secondary text-muted-foreground cursor-not-allowed'
                           : confirming ? 'bg-secondary text-foreground'
                             : 'bg-secondary text-muted-foreground hover:bg-destructive hover:text-destructive-foreground')}
@@ -353,13 +385,13 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                       <div className="flex gap-1.5">
                         <button
                           onClick={() => { press(p.id, releaseRead(p.id), () => onRelease(p.id)); setConfirmId(null); }}
-                          className="flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold bg-destructive text-destructive-foreground hover:opacity-90 transition-all"
+                          className="flex-1 min-h-11 px-2 py-1.5 rounded-lg text-xs font-bold bg-destructive text-destructive-foreground hover:opacity-90 transition-all"
                         >
                           Release him
                         </button>
                         <button
                           onClick={() => setConfirmId(null)}
-                          className="flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold bg-secondary text-foreground hover:opacity-90 transition-all"
+                          className="flex-1 min-h-11 px-2 py-1.5 rounded-lg text-xs font-bold bg-secondary text-foreground hover:opacity-90 transition-all"
                         >
                           Keep him
                         </button>
@@ -382,7 +414,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           </div>
           {/* Scrolls inside the card, like the lists above it: after a few
               summers of deals running out the pool can hold twenty men. */}
-          <div className="max-h-64 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto">
             {(career.freeAgents ?? []).map((f, i) => {
               /* A button that looks available and silently does nothing is
                  worse than no button. Round 619 review: the first build checked
@@ -397,7 +429,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                 <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1 min-w-0">
-                      <span className="min-w-0 text-xs text-foreground truncate">{f.name}</span>
+                      <span className="min-w-0 text-xs text-foreground truncate" title={f.name}>{f.name}</span>
                       {f.generated && <MadeUpTag title="Not a real player. This game made him up to fill the free agent list." />}
                     </div>
                     <div className="text-[9px] text-muted-foreground">
@@ -412,7 +444,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                     onClick={() => press(f.name, signRead(f.name), () => onSignFreeAgent(f.name))}
                     disabled={!!block}
                     title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week and ${money(t.fee)} to sign. No transfer fee, and the window being shut does not matter.`}
-                    className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                    className={cn('shrink-0 max-w-[55%] min-h-11 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all',
                       block ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:opacity-90')}
                   >
                     {block ? FREE_AGENT_BLOCK_COPY[block].face : `Sign · ${t.wage}k/w · ${t.years}y · ${money(t.fee)}`}
