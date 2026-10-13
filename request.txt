@@ -1,0 +1,33 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-units: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/components/front-office-shared src/lib/collegeSeat.test.ts src/lib/gmSeat.test.ts src/lib/gmDeskHost.test.ts src/test/cfbRecruitFilters.test.tsx src/test/cbbRecruitFilters.test.tsx src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+simCollegeSeat-anchors: SIM_COLLEGE_SEAT_ANCHORS=1 node scripts/simCollegeSeat.mjs
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+board-seatleak: COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw: COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff: COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+board-cfbword: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword: COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board: COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+simCfbDynasty: node scripts/simCfbDynasty.mjs
+simCfbStaff: node scripts/simCfbStaff.mjs
+simCbbStaff: node scripts/simCbbStaff.mjs
+simCollegeRecruiting: node scripts/simCollegeRecruiting.mjs
+simCfbRecruitFilters: node scripts/simCfbRecruitFilters.mjs
+simCbbRecruitFilters: node scripts/simCbbRecruitFilters.mjs
+simCoachCalls: node scripts/simCoachCalls.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDeskHost-closedquiet: SIM_GM_DESK_HOST_CONTROL=closedquiet node scripts/simGmDeskHost.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simTicker: node scripts/simTicker.mjs
+simAccessibility: node scripts/simAccessibility.mjs

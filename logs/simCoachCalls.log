@@ -1,0 +1,95 @@
+base games: cfb 1584, cbb 2400, afl 3600 (4.4s)
+cfb: callsGap 0.0114 planGap 0.0227 policyGap 0.0366 randomShare 0.3448 randomCallShare 0.5833 rosterSpread 0.5593 rosterRatio 15.2759 rosterEdge 0.5215
+cfb: calls/season mean 4.2652 p10 1 p90 8; swing/call 2.6625; blowouts 2410 with calls 0; over cap call 0 game 0; count/dice/rerun diffs 0/0/0
+cbb: callsGap 0.0119 planGap 0.076 policyGap 0.0862 randomShare 0.4106 randomCallShare 0.5263 rosterSpread 0.6158 rosterRatio 7.1401 rosterEdge 0.4817
+cbb: calls/season mean 11.3792 p10 7 p90 16; swing/call 0.7917; blowouts 2906 with calls 0; over cap call 0 game 0; count/dice/rerun diffs 0/0/0
+afl: callsGap 0.0378 planGap 0.0312 policyGap 0.0703 randomShare 0.4674 randomCallShare 0.5699 rosterSpread 0.1272 rosterRatio 1.8103 rosterEdge 0.0514
+afl: calls/season mean 5.275 p10 3 p90 8; swing/call 2.8752; blowouts 4080 with calls 0; over cap call 0 game 0; count/dice/rerun diffs 0/0/0
+replays done (5.2s)
+1. packs are well formed
+  ok: cfb: 3 to 4 identities a side, each scored on every tendency, none dominates another
+  ok: cfb: 2 to 3 options a moment, every swing within one score (8)
+  ok: cfb: a moment can come up at every margin inside the blowout line (0 uncovered)
+  ok: cbb: 3 to 4 identities a side, each scored on every tendency, none dominates another
+  ok: cbb: 2 to 3 options a moment, every swing within one score (3)
+  ok: cbb: a moment can come up at every margin inside the blowout line (0 uncovered)
+  ok: afl: 3 to 4 identities a side, each scored on every tendency, none dominates another
+  ok: afl: 2 to 3 options a moment, every swing within one score (6)
+  ok: afl: a moment can come up at every margin inside the blowout line (0 uncovered)
+2. the packs use the engines' own points per edge
+  ok: cfb 1.5 = CFB_POINTS_PER_EDGE 1.5
+  ok: cbb 1.5 = CBB_POINTS_PER_EDGE 1.5
+  afl: engine slope 1.8122 points a rating point over 3600 games, pack pointsPerEdge 1.5
+  ok: afl: the engine's own slope 1.8122 sits in [1.2,2.5] and the pack's 1.5 is 0.8277 of it, band [0.6,1.15]
+3 to 9. cfb
+  ok: cfb: calls matter, best calls beat worst by 0.0114 of win share, band [0.004,0.018]
+  ok: cfb: the plan matters, best plan beats worst by 0.0227, band [0.012,0.033]
+  ok: cfb: best policy beats worst by 0.0366, band [0.025,0.05]
+  ok: cfb: random calls sit between, 0.5833 of the way from worst to best, band [0.15,0.85]
+  ok: cfb: the roster still decides, a top quarter roster coached worst out-wins a bottom quarter roster coached best by 0.5215 (floor 0.35)
+  ok: cfb: 4.2652 calls a season, band [3.4,5]
+  ok: cfb: 80 percent of seasons have 1 to 8 calls, stated range [1,10]
+  ok: cfb: none of 2410 blowouts had a call (0 did)
+  ok: cfb: same seed, same moments; a plan never changes the dice or the count (diffs 0/0/0)
+  ok: cfb: no call and no game moved past one score (0 calls, 0 games)
+3 to 9. cbb
+  ok: cbb: calls matter, best calls beat worst by 0.0119 of win share, band [0.007,0.022]
+  ok: cbb: the plan matters, best plan beats worst by 0.076, band [0.06,0.1]
+  ok: cbb: best policy beats worst by 0.0862, band [0.07,0.115]
+  ok: cbb: random calls sit between, 0.5263 of the way from worst to best, band [0.15,0.85]
+  ok: cbb: the roster still decides, a top quarter roster coached worst out-wins a bottom quarter roster coached best by 0.4817 (floor 0.35)
+  ok: cbb: 11.3792 calls a season, band [9.8,12.4]
+  ok: cbb: 80 percent of seasons have 7 to 16 calls, stated range [4,19]
+  ok: cbb: none of 2906 blowouts had a call (0 did)
+  ok: cbb: same seed, same moments; a plan never changes the dice or the count (diffs 0/0/0)
+  ok: cbb: no call and no game moved past one score (0 calls, 0 games)
+3 to 9. afl
+  ok: afl: calls matter, best calls beat worst by 0.0378 of win share, band [0.032,0.06]
+  ok: afl: the plan matters, best plan beats worst by 0.0312, band [0.02,0.046]
+  ok: afl: best policy beats worst by 0.0703, band [0.055,0.1]
+  ok: afl: random calls sit between, 0.5699 of the way from worst to best, band [0.15,0.85]
+  ok: afl: the roster still decides, a top quarter roster coached worst out-wins a bottom quarter roster coached best by 0.0514 (floor 0.015)
+  ok: afl: 5.275 calls a season, band [4.6,5.9]
+  ok: afl: 80 percent of seasons have 3 to 8 calls, stated range [1,12]
+  ok: afl: none of 4080 blowouts had a call (0 did)
+  ok: afl: same seed, same moments; a plan never changes the dice or the count (diffs 0/0/0)
+  ok: afl: no call and no game moved past one score (0 calls, 0 games)
+10. every call, step by step: where its words allow, once, closing last, inside the cap, exactly the card
+  ok: cfb: the walk made 4550 calls and every moment came up (none missing)
+  ok: cfb: every moment came up at a margin inside its own lead range (0 did not)
+  ok: cfb: no moment came up twice in a game (0 did)
+  ok: cfb: a closing moment only ever filled the last slot (0 did not)
+  ok: cfb: every option of every moment fit what was left of one score (0 did not)
+  ok: cfb: every call moved the margin by exactly its card's win or loss (0 did not)
+  ok: cfb: the points landed on the side the card says, and each side of 12529 box scores agrees with the call log (0 calls, 0 scores off)
+  ok: cbb: the walk made 11072 calls and every moment came up (none missing)
+  ok: cbb: every moment came up at a margin inside its own lead range (0 did not)
+  ok: cbb: no moment came up twice in a game (0 did)
+  ok: cbb: a closing moment only ever filled the last slot (0 did not)
+  ok: cbb: every option of every moment fit what was left of one score (0 did not)
+  ok: cbb: every call moved the margin by exactly its card's win or loss (0 did not)
+  ok: cbb: the points landed on the side the card says, and each side of 19006 box scores agrees with the call log (0 calls, 0 scores off)
+  ok: afl: the walk made 17556 calls and every moment came up (none missing)
+  ok: afl: every moment came up at a margin inside its own lead range (0 did not)
+  ok: afl: no moment came up twice in a game (0 did)
+  ok: afl: a closing moment only ever filled the last slot (0 did not)
+  ok: afl: every option of every moment fit what was left of one score (0 did not)
+  ok: afl: every call moved the margin by exactly its card's win or loss (0 did not)
+  ok: afl: the points landed on the side the card says, and each side of 28800 box scores agrees with the call log (0 calls, 0 scores off)
+11. the cards say which way the numbers go
+  ok: cfb: his tendency reads the way its label says on both sides (all four plus level)
+  ok: cfb: each of 4 staked options names the units its blurb does (none off)
+  ok: cbb: his tendency reads the way its label says on both sides (all four plus level)
+  ok: cbb: each of 5 staked options names the units its blurb does (none off)
+  ok: afl: his tendency reads the way its label says on both sides (all four plus level)
+  ok: afl: each of 5 staked options names the units its blurb does (none off)
+12. a better unit raises the odds, every step of the ladder
+  ok: cfb: over 4 staked options and 59 steps each way, odds never fell with your unit or rose with his (0), and every one moved (0 did not)
+  ok: cbb: over 5 staked options and 59 steps each way, odds never fell with your unit or rose with his (0), and every one moved (0 did not)
+  ok: afl: over 5 staked options and 59 steps each way, odds never fell with your unit or rose with his (0), and every one moved (0 did not)
+13. the blowout line, exactly
+  ok: cfb: a game won by exactly 17 still has a call and one won by 18 has none (0 dice off)
+  ok: cbb: a game won by exactly 15 still has a call and one won by 16 has none (0 dice off)
+  ok: afl: a game won by exactly 24 still has a call and one won by 25 has none (0 dice off)
+
+simCoachCalls: 75 checks, 0 failed
