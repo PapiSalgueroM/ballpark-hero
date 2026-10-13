@@ -1,0 +1,49 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=neutral
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72509 events dealt, 267577 deck draws, 296 repeat ids suffixed on FALLEN desks (21.9 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+   ok all 84 rows byte equal to the base engine's recording (desk states, ids, answer lines, deck draws, deals)
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+   ok nfl seed 1 dealt the same 2793 events twice; seed 4 dealt another deck
+   ok all 212800 desk states of seed 1 repaired to themselves
+   ok 28 rows dealt byte equal with a reload between every two weeks
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+   ok every card at weight 1: 7 FLEET rows byte equal to the recording
+   ok every card at weight 2.5: 7 FLEET rows byte equal to the recording
+   ok FX_WEIGHT (weights 1 and 3): the light card took 0.2424 of 10000 deals (band 0.23 to 0.272)
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+   ok 6083 story cards over 100 ten season desks, no story twice in a week or inside a cooldown, the one shot story once a desk
+   ok without the story field the same cards dealt 10692, 1.76 times as many (floor 1.5)
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+   ok 13343 subject cards over 50 desks of 400 weeks, none inside its rest or twice in a week, the book never above 5 entries
+   ok subjectRest 0 deals exactly as no subjects (765 deals, 2802 draws) and writes no book
+   ok no GM desk gained gmInboxRest over section 2's 212800 states
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+   ok with and without wordings: the same 15517 deals and 60001 deck draws
+   ok the same key reads the same words; another key reads other words on 6483 weeks with the same deal
+   ok every one of the 6 wordings came up, each at 0.971 to 1.015 of an even share (band 0.865 to 1.1)
+   packs the kit knows that use texts: none yet
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+   ok 2634 cards settled on 20 silent desks, each at exactly w plus expires on its neutral option, no meter moved
+   ok the settled line: 📨 Your assistant: your assistant dealt with it (Leave it).
+   ok silent desks were dealt 2686 cards, 44.8 times the 60 of the same pack without expiry, 270 in the tenth season
+   ok a card whose def lost its expiry stays open for the manager
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+     FX_NEUTRAL: n1 has no option that moves nothing
+   FAIL 1 neutral or pack problems
+   ok bind refuses a zero weight, an expiring card with nothing neutral, an undeclared subject fact
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+   ok 2,000 random ledgers and seasons: the season deck held out exactly what careerEventDeck holds out (3336 of 12000 cards)
+   ok a cooldown of N is back after exactly N weeks on the week clock and sits out exactly N seasons on the season clock
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+   ok nfl: all 10 cards reached in 2793 deals, the top card nfl_fan_night at 20.2% (ceiling 22.4%)
+   ok nba: all 8 cards reached in 2308 deals, the top card nba_jersey_night at 27.2% (ceiling 29.8%)
+   ok mlb: all 8 cards reached in 2535 deals, the top card mlb_giveaway at 26.2% (ceiling 28.8%)
+   ok nhl: all 8 cards reached in 2780 deals, the top card nhl_line_juggle at 25.3% (ceiling 27.8%)
+   ok college: all 8 cards reached in 3321 deals, the top card col_game_day_visit at 28.0% (ceiling 30.5%)
+   ok gym: all 6 cards reached in 2833 deals, the top card gym_six_am_kid at 33.9% (ceiling 36.7%)
+   ok afl: all 6 cards reached in 2193 deals, the top card afl_sore_midfielder at 35.0% (ceiling 37.4%)
+   reach by position: no pack the kit knows names a reachBy fact yet
+
+runtime 52.5 s
+simEventDeck: 1 failure, red sections 8 (CONTROL=neutral fired)
