@@ -392,7 +392,7 @@ export function getRealismEventsA(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (pro >= 1) {
+  if (state.pendingEvents.some(event => event.id === 426)) {
     push({ id: 426, emoji: "❄️", title: "Minus Twenty And The League Plays On",
       description: "The pitch is heated. The air is not. Your eyelashes froze during the anthem and a substitute lost feeling in three fingers before he got on.",
       category: "life", choices: [

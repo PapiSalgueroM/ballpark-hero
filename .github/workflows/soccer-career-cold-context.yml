@@ -17,7 +17,7 @@ jobs:
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
       CAREER_POPULARITY_PHASE: fixed
-      CAREER_COLD_PHASE: baseline
+      CAREER_COLD_PHASE: fixed
       CAREER_COLD_OUT: ${{ github.workspace }}/career-cold-artifacts
       CAREER_POPULARITY_OUT: ${{ github.workspace }}/career-cold-artifacts/prior-popularity
       CAREER_MORALE_PHASE: fixed
