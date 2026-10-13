@@ -1,0 +1,22 @@
+TEXT club list, Barcelona tile: Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win the La Liga
+TEXT club list, Real Madrid tile: Real Madrid 👑 Elite Squad 90 Budget £195m Board wants Win the La Liga
+PICTURE base-club-list-laliga-{320,390,1280}.png: the La Liga club list, the giants asked to Win La Liga (no "the")
+PICTURE base-club-card-barcelona-{320,390,1280}.png: Barcelona picked, its card with the board demand
+STATE in the job at Barcelona, week 0
+TEXT board panel: Window OPEN 2 bids for your players Report a problem Club Manag
+PICTURE base-board-panel-{320,390,1280}.png: the Board panel: the title objective reads Win La Liga, the double keeps its "the"
+MISS no Match Centre button
+STATE staff doctored: {"ok":false,"why":"no staff block in the save"}
+STATE before the first press after the edit: staff levels 8,8,9,9
+TEXT news week 4: 📊 Real Madrid top the La Liga on 9 points after 3 rounds.
+TEXT news week 5: ⚽ Villarreal have the sharpest attack in the La Liga: 10 scored in 4 rounds.
+TEXT news week 6: ⚽ Villarreal have the sharpest attack in the La Liga: 10 scored in 4 rounds.
+TEXT news week 7: 📊 Real Madrid top the La Liga on 18 points after 6 rounds.
+TEXT news week 8: 📊 Real Madrid top the La Liga on 18 points after 6 rounds.
+TEXT inbox note, week 9: International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (Spain: Lamine Yamal, Pedri, Fermín López, Rodri, Pau Cubarsí, Dani Olmo, Alejandro Balde and Joan
+PICTURE base-inbox-intl-{320,390,1280}.png: the inbox after the first international window: the note says this calendar keeps your fixtures going
+TEXT news week 9: 📊 Real Madrid top the La Liga on 18 points after 6 rounds.
+STUCK at week 9
+SUMMARY intl true, staff false, week 9
+PAGE ERRORS none
+p4walk: done

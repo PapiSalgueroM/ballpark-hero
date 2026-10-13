@@ -1,0 +1,22 @@
+TEXT club list, Barcelona tile: Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win La Liga
+TEXT club list, Real Madrid tile: Real Madrid 👑 Elite Squad 90 Budget £195m Board wants Win La Liga
+PICTURE head-club-list-laliga-{320,390,1280}.png: the La Liga club list, the giants asked to Win La Liga (no "the")
+PICTURE head-club-card-barcelona-{320,390,1280}.png: Barcelona picked, its card with the board demand
+STATE in the job at Barcelona, week 0
+TEXT board panel: Window OPEN Latest transfers inside Report a problem Club Manag
+PICTURE head-board-panel-{320,390,1280}.png: the Board panel: the title objective reads Win La Liga, the double keeps its "the"
+MISS no Match Centre button
+STATE staff doctored: {"ok":false,"why":"no staff block in the save"}
+STATE before the first press after the edit: staff levels 8,8,9,9
+TEXT news week 4: 📊 Atlético Madrid top La Liga on 9 points after 3 rounds.
+TEXT news week 5: ⚽ Barcelona have the sharpest attack in La Liga: 12 scored in 4 rounds.
+TEXT news week 6: ⚽ Barcelona have the sharpest attack in La Liga: 12 scored in 4 rounds.
+TEXT news week 7: 📊 Athletic Club top La Liga on 16 points after 6 rounds.
+TEXT news week 8: 📊 Athletic Club top La Liga on 16 points after 6 rounds.
+TEXT inbox note, week 9: International break: the window runs 21 Sep to 6 Oct, and the calendar here keeps your fixtures going through it, so they went straight after your last game. Away with their countries (Spain: Lamine Yamal, Pedri, Fermín López, Rodri, Pau Cubarsí, Dani Olmo, Al
+PICTURE head-inbox-intl-{320,390,1280}.png: the inbox after the first international window: the note says this calendar keeps your fixtures going
+TEXT news week 9: 📊 Athletic Club top La Liga on 16 points after 6 rounds.
+STUCK at week 9
+SUMMARY intl true, staff false, week 9
+PAGE ERRORS none
+p4walk: done
