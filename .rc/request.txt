@@ -1,0 +1,19 @@
+# Round 1326 step 2 (articles): the step's own checks, the pins' legs and the digest retake
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .tb0 && git archive c9c77eba src | tar -x -C .tb0 && CM_COPY_ROOT=$PWD/.tb0 node scripts/simCmCopy.mjs
+simCmCopy-article: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs
+copyonly-A: mkdir -p .tb1 && git archive c9c77eba src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A
+copyonly-B: mkdir -p .tb2 && git archive c9c77eba src | tar -x -C .tb2 && node scripts/qa/cmCopyOnly1326.mjs --base .tb2 --fleet=B
+rules-baseleg: mkdir -p .tb3 && git archive c9c77eba src | tar -x -C .tb3 && CM_RULES_ROOT=$PWD/.tb3 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-head: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-write: mkdir -p .tw && git archive HEAD^ | tar -x -C .tw && cd .tw && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/"
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simBoard: node scripts/simBoard.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
