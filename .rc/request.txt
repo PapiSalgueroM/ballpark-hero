@@ -1,0 +1,42 @@
+# Release BC gate, lane P2: the nine pieces' plain lines and controls
+#!playwright
+simSquadRows: export TMPDIR=$(mktemp -d); node scripts/simSquadRows.mjs
+simContractPreview: export TMPDIR=$(mktemp -d); node scripts/simContractPreview.mjs
+simReleaseClause: export TMPDIR=$(mktemp -d); node scripts/simReleaseClause.mjs
+simAcademy: export TMPDIR=$(mktemp -d); node scripts/simAcademy.mjs
+simCmLeagueFixtures: export TMPDIR=$(mktemp -d); node scripts/simCmLeagueFixtures.mjs
+simWilderness: export TMPDIR=$(mktemp -d); node scripts/simWilderness.mjs
+vitest: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: export TMPDIR=$(mktemp -d); node scripts/simCmCopy.mjs
+simCmCopy-article-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+simCmCopy-drama-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+simCmCopy-intl-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+simCmCopy-staff-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+simCmCopy-finance-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+shootout-unsetpath-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+simGmStaff-knownred: export TMPDIR=$(mktemp -d); node scripts/simGmStaff.mjs
+simBoard: export TMPDIR=$(mktemp -d); node scripts/simBoard.mjs
+simBoardObjectives: export TMPDIR=$(mktemp -d); node scripts/simBoardObjectives.mjs
+simClubManagerNewLeagues: export TMPDIR=$(mktemp -d); node scripts/simClubManagerNewLeagues.mjs
+simClubManagerFinances: export TMPDIR=$(mktemp -d); node scripts/simClubManagerFinances.mjs
+simCmInternationals: export TMPDIR=$(mktemp -d); node scripts/simCmInternationals.mjs
+simDailyDeals-bind-EXPECT-RED: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline-EXPECT-RED: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+vitest: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/clubManagerHubLines.test.ts src/test/useArrivalTop.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/clubManagerDeskCues.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vt.log 2>&1; s=$?; grep -E "Test Files|Tests |FAIL" /tmp/vt.log | cut -c1-200 | head -8; exit $s
+simNoRivalNames: export TMPDIR=$(mktemp -d); node scripts/simNoRivalNames.mjs > /tmp/nr.log 2>&1; s=$?; tail -2 /tmp/nr.log | cut -c1-250; exit $s
+simHarnessAnchors: export TMPDIR=$(mktemp -d); node scripts/simHarnessAnchors.mjs > /tmp/ha.log 2>&1; s=$?; tail -3 /tmp/ha.log | cut -c1-250; exit $s
+simStorageWrites: export TMPDIR=$(mktemp -d); node scripts/simStorageWrites.mjs > /tmp/sw.log 2>&1; s=$?; tail -2 /tmp/sw.log | cut -c1-250; exit $s
+simEarlyReturnScope: export TMPDIR=$(mktemp -d); node scripts/simEarlyReturnScope.mjs > /tmp/er.log 2>&1; s=$?; tail -2 /tmp/er.log | cut -c1-250; exit $s
+simMidSeasonStart: export TMPDIR=$(mktemp -d); node scripts/simMidSeasonStart.mjs > /tmp/ms.log 2>&1; s=$?; tail -2 /tmp/ms.log | cut -c1-250; exit $s
+simCalendarCurrentDate: export TMPDIR=$(mktemp -d); node scripts/simCalendarCurrentDate.mjs > /tmp/cd.log 2>&1; s=$?; tail -2 /tmp/cd.log | cut -c1-250; exit $s
+simClubManagerCalendar: export TMPDIR=$(mktemp -d); node scripts/simClubManagerCalendar.mjs > /tmp/cc.log 2>&1; s=$?; tail -2 /tmp/cc.log | cut -c1-250; exit $s
+simClubManagerFinances: export TMPDIR=$(mktemp -d); node scripts/simClubManagerFinances.mjs > /tmp/cf.log 2>&1; s=$?; tail -2 /tmp/cf.log | cut -c1-250; exit $s
+simClubManagerSaveSize: export TMPDIR=$(mktemp -d); node scripts/simClubManagerSaveSize.mjs > /tmp/ss.log 2>&1; s=$?; tail -2 /tmp/ss.log | cut -c1-250; exit $s
+simClubManagerSlots: export TMPDIR=$(mktemp -d); node scripts/simClubManagerSlots.mjs > /tmp/sl.log 2>&1; s=$?; tail -2 /tmp/sl.log | cut -c1-250; exit $s
+simDailyDeals: export TMPDIR=$(mktemp -d); node scripts/simDailyDeals.mjs > /tmp/dd.log 2>&1; s=$?; tail -2 /tmp/dd.log | cut -c1-250; exit $s
+vitest-round: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run saveFence saveMovedNotice clubManagerSlots managerHotSeatCarryOn clubManagerSave --testTimeout=300000 --hookTimeout=120000
+fence-nofence-EXPECT-RED: export TMPDIR=$(mktemp -d); SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+appeal1081-committed: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+vitest: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+deck: export TMPDIR=$(mktemp -d); node scripts/simEventDeck.mjs
+deck-replay-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=replay node scripts/simEventDeck.mjs
