@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ownGoalsHead exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goal
+writesSent exit=1 15s | simWritesAreSent: 2 failures
+ownGoalsBase exit=0 7s |    Duration  4.97s (transform 1.90s, setup 94ms, collect 2.40s, tests 1.28s, environment 538ms, prepare 159ms)
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
