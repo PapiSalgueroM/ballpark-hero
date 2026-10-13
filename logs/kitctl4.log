@@ -1,0 +1,5 @@
+fxsilent exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxsilent fired)
+fxdrop exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxdrop fired)
+fxunbound exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxunbound fired)
+fxneutral exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxneutral fired)
+ctl: every control exited 1

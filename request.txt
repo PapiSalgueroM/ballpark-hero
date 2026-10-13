@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+kit: node scripts/simEventDeck.mjs
+kitctl1: bash .rc/x/ctl.sh EVENT_DECK_CONTROL scripts/simEventDeck.mjs replay weightoff weightkeep story rest failopen
+kitctl2: bash .rc/x/ctl.sh EVENT_DECK_CONTROL scripts/simEventDeck.mjs restfall expirefall textrng seasonweek expireoff
+kitctl3: bash .rc/x/ctl.sh EVENT_DECK_CONTROL scripts/simEventDeck.mjs expirefx settledoff panelexpiry neutral heavy
+gmdiff: bash .rc/x/gmdiff.sh
+gmctl: bash .rc/x/ctl.sh GM_INBOX_CONTROL scripts/simGmInbox.mjs quote flip cool drift never random shift opencap maxcap oneshot ungate unclamp quotevariant effectvariant effectout effectrating
+careerInbox: node scripts/simCareerInbox.mjs
+careerInbox-privatecap: INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+reveal: node scripts/simRevealMoments.mjs
+storage: node scripts/simStorageWrites.mjs
+kitctl4: bash .rc/x/ctl.sh EVENT_DECK_CONTROL scripts/simEventDeck.mjs fxsilent fxdrop fxunbound fxneutral
