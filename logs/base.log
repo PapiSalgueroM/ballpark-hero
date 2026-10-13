@@ -1,0 +1,83 @@
+ .../front-office-shared/GmInboxPanel.tsx           | 23 +++++-----------------
+ src/components/us-career/InboxPanel.tsx            | 17 +++-------------
+ 2 files changed, 8 insertions(+), 32 deletions(-)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/us-career/InboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 88[2mms[22m[39m
+   [32m✓[39m InboxPanel[2m > [22mwithout settledLine: the list, the buttons and "You replied" as before[32m 69[2mms[22m[39m
+[31m   [31m×[31m InboxPanel[2m > [22mwith settledLine: its line in the reply box, and no "You replied"[39m[32m 11[2mms[22m[39m
+[31m     → Cannot read properties of null (reading 'textContent')[39m
+   [32m✓[39m InboxPanel[2m > [22msettledLine is never asked about an open card: its buttons stay[32m 5[2mms[22m[39m
+ [31m❯[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 109[2mms[22m[39m
+   [32m✓[39m GmInboxPanel[2m > [22mshows newest first, the beat line, and every option with what it moves[32m 62[2mms[22m[39m
+   [32m✓[39m GmInboxPanel[2m > [22man empty desk says so in desk words[32m 2[2mms[22m[39m
+   [32m✓[39m GmInboxPanel[2m > [22msays when the desk is full[32m 7[2mms[22m[39m
+[31m   [31m×[31m GmInboxPanel[2m > [22man opened card the staff settled shows the settled line, never "You replied"[39m[32m 12[2mms[22m[39m
+[31m     → expected null to be truthy[39m
+   [32m✓[39m GmInboxPanel[2m > [22ma card the manager answered himself still reads "You replied"[32m 7[2mms[22m[39m
+   [32m✓[39m GmInboxPanel[2m > [22ma full desk with nothing that can expire says only that he must answer one[32m 6[2mms[22m[39m
+[31m   [31m×[31m GmInboxPanel[2m > [22ma full desk holding a card that can expire says the assistant may deal with one[39m[32m 11[2mms[22m[39m
+[31m     → expected '3 waiting on you. Each answer shows w…' to contain ' Nothing new lands until you answer o…'[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmInboxPanel.test.tsx[2m > [22mGmInboxPanel[2m > [22man opened card the staff settled shows the settled line, never "You replied"
+[31m[1mAssertionError[22m: expected null to be truthy[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/components/front-office-shared/GmInboxPanel.test.tsx:[2m48:17[22m[39m
+    [90m 46| [39m    fireEvent[33m.[39m[34mclick[39m(document[33m.[39m[34mquerySelector[39m([32m'[data-inbox-row="s"]'[39m)[33m![39m)[33m;[39m
+    [90m 47| [39m    [35mconst[39m box [33m=[39m document[33m.[39m[34mquerySelector[39m([32m'[data-inbox-settled]'[39m)[33m;[39m
+    [90m 48| [39m    [34mexpect[39m(box)[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 49| [39m    [34mexpect[39m(box[33m![39m[33m.[39mtextContent)[33m.[39m[34mtoBe[39m([34mgmExpiredLine[39m(settled))[33m;[39m
+    [90m 50| [39m    [34mexpect[39m(box[33m![39m[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m`([39m[36m${[39mdef[33m.[39mchoices[[34m0[39m][33m.[39mlabel[36m}[39m[32m)`[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmInboxPanel.test.tsx[2m > [22mGmInboxPanel[2m > [22ma full desk holding a card that can expire says the assistant may deal with one
+[31m[1mAssertionError[22m: expected '3 waiting on you. Each answer shows w…' to contain ' Nothing new lands until you answer o…'[39m
+
+Expected: [32m"[7m Nothing new lands until you answer one, [27mor you[7mr assistant deals with one for you[27m."[39m
+Received: [31m"[7m3 waiting on you. Each answer shows what it moves bef[27mor[7me[27m you[7m pick it. Nothing new lands until you answer one[27m."[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmInboxPanel.test.tsx:[2m76:18[22m[39m
+    [90m 74| [39m    render(<GmInboxPanel pack={expiring} messages={[msg('a'), msg('b')…
+    [90m 75| [39m    const line = document.querySelector('[data-gm-inbox] > p')!.textCo…
+    [90m 76| [39m    expect(line).toContain(' Nothing new lands until you answer one, o…
+    [90m   | [39m                 [31m^[39m
+    [90m 77| [39m    [34mexpect[39m(line[33m.[39m[34msplit[39m([32m'Nothing new lands'[39m)[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m 78| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/us-career/InboxPanel.test.tsx[2m > [22mInboxPanel[2m > [22mwith settledLine: its line in the reply box, and no "You replied"
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'textContent')[39m
+[36m [2m❯[22m src/components/us-career/InboxPanel.test.tsx:[2m41:16[22m[39m
+    [90m 39| [39m    fireEvent.click(document.querySelector('[data-inbox-row="auto"]')!…
+    [90m 40| [39m    [35mconst[39m box [33m=[39m document[33m.[39m[34mquerySelector[39m([32m'[data-inbox-settled]'[39m)[33m![39m[33m;[39m
+    [90m 41| [39m    expect(box.textContent).toBe('Your assistant dealt with it (Let it…
+    [90m   | [39m               [31m^[39m
+    [90m 42| [39m    [34mexpect[39m(box[33m.[39mclassName)[33m.[39m[34mtoBe[39m([33mREPLY_BOX[39m)[33m;[39m
+    [90m 43| [39m    expect(screen.queryByText('You replied', { exact: false })).toBeNu…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 22:50:24
+[2m   Duration [22m 1.23s[2m (transform 168ms, setup 115ms, collect 450ms, tests 197ms, environment 701ms, prepare 336ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmInboxPanel.test.tsx,title=src/components/front-office-shared/GmInboxPanel.test.tsx > GmInboxPanel > an opened card the staff settled shows the settled line%2C never "You replied",line=48,column=17::AssertionError: expected null to be truthy%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Anull%0A%0A ❯ src/components/front-office-shared/GmInboxPanel.test.tsx:48:17%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmInboxPanel.test.tsx,title=src/components/front-office-shared/GmInboxPanel.test.tsx > GmInboxPanel > a full desk holding a card that can expire says the assistant may deal with one,line=76,column=18::AssertionError: expected '3 waiting on you. Each answer shows w…' to contain ' Nothing new lands until you answer o…'%0A%0AExpected: " Nothing new lands until you answer one, or your assistant deals with one for you."%0AReceived: "3 waiting on you. Each answer shows what it moves before you pick it. Nothing new lands until you answer one."%0A%0A ❯ src/components/front-office-shared/GmInboxPanel.test.tsx:76:18%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/InboxPanel.test.tsx,title=src/components/us-career/InboxPanel.test.tsx > InboxPanel > with settledLine%3A its line in the reply box%2C and no "You replied",line=41,column=16::TypeError: Cannot read properties of null (reading 'textContent')%0A ❯ src/components/us-career/InboxPanel.test.tsx:41:16%0A%0A

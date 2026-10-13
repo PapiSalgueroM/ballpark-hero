@@ -1,0 +1,2 @@
+#!serial
+base: git show 082fc277:src/components/us-career/InboxPanel.tsx > src/components/us-career/InboxPanel.tsx && git show 082fc277:src/components/front-office-shared/GmInboxPanel.tsx > src/components/front-office-shared/GmInboxPanel.tsx && git diff --stat && node_modules/.bin/vitest run src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s

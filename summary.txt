@@ -1,0 +1,1 @@
+base exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/InboxPanel.test.tsx,title=src/components/us-career/InboxPanel.test.tsx > InboxPanel > 
