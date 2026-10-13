@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmQuickSubs exit=0 12s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+simDailyDeals-bind-EXPECT-RED exit=1 2s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline-EXPECT-RED exit=1 2s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+playSaveKeeper exit=0 840s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+controlFrontOfficeBoard exit=0 623s | blank exit 1 (1 means the control fired)
