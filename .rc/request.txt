@@ -1,0 +1,5 @@
+#!serial
+m-noclear: node .rc/x/mut.mjs noclear && node_modules/.bin/vitest run src/components/college-dynasty/CollegeSeat.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-boundB: node .rc/x/mut.mjs boundB && node_modules/.bin/vitest run src/lib/collegeSeat.test.ts src/components/college-dynasty/CollegeSeat.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-F: node .rc/x/mut.mjs mutF && node_modules/.bin/vitest run src/lib/collegeSeat.test.ts; s=$?; git checkout -- src scripts; exit $s
+m-G: node .rc/x/mut.mjs mutG && node_modules/.bin/vitest run src/lib/collegeSeat.test.ts; s=$?; git checkout -- src scripts; exit $s
