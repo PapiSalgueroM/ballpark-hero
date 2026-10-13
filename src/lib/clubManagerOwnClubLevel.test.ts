@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  releaseBlock, releasePlayer, startCareer, startNextSeason, worldRosterFor, worldRosterXIAvg, yearsOn,
+  buildMarket, releaseBlock, releasePlayer, startCareer, startNextSeason, worldRosterFor, worldRosterXIAvg, yearsOn,
 } from '@/lib/clubManager';
 import {
   ensureEraRosters, eraRosters, projectedClubRoster, projectedClubXIAvg, projectedRoster, projectedXIAvg, type ProjectedPlayer,
@@ -112,5 +112,33 @@ describe("the manager's own club is read from his club, never the world roster",
     expect(xi(worldRosterFor(fresh, 'Liverpool'))).not.toBe(base);
     expect(fresh.clubStrengths.Liverpool).toBeCloseTo(base + 1, 6);
     expect(worldRosterXIAvg(fresh, 'Liverpool')).toBe(base);
+  });
+
+  it("in a seeded career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once", () => {
+    /* Release AZ fix pass 4: his club is his squad, and the market drops every man of his squad, so what the world
+       roster put at his club were men who are not his. Real Madrid's bake holds more men than the 26 a squad starts with. */
+    const s: CareerState = withRoll(0.6, () => ({ ...startCareer('Real Madrid'), budget: 9999, wageCap: 9999, transferWindow: 'summer' as const }));
+    expect(s.worldSeed).toBeDefined();
+    expect(s.worldRoster).toBeUndefined();
+    const old: CareerState = { ...s };
+    delete old.worldSeed;
+    /* A career from before the release lists them, on sale from his own club, exactly as it always did (ruling Y1). */
+    const oldMine = buildMarket(old).filter(m => m.club === 'Real Madrid');
+    expect(oldMine.length).toBeGreaterThan(0);
+    expect(oldMine.some(m => s.squad.some(p => p.name === m.name))).toBe(false);
+    expect(buildMarket(s).some(m => m.club === 'Real Madrid')).toBe(false);
+    expect(buildMarket(s).some(m => m.club === 'Barcelona')).toBe(true);
+    const man = [...s.squad].filter(p => p.position !== 'GK' && !p.isYouth).find(p => releaseBlock(s, p) === null)!;
+    const rel = releasePlayer(s, man.id)!;
+    expect(rel.worldRoster).toBeDefined();
+    expect(buildMarket(rel).some(m => m.club === 'Real Madrid')).toBe(false);
+    const next = withRoll(0.6, () => startNextSeason(rel));
+    expect(next.clubName).toBe('Real Madrid');
+    expect(next.worldRoster).toBeDefined();
+    expect(buildMarket(next).some(m => m.club === 'Real Madrid')).toBe(false);
+    const moved = withRoll(0.6, () => startNextSeason(rel, 'Barcelona'));
+    expect(moved.clubName).toBe('Barcelona');
+    expect(buildMarket(moved).some(m => m.club === 'Real Madrid')).toBe(true);
+    expect(buildMarket(moved).some(m => m.club === 'Barcelona')).toBe(false);
   });
 });
