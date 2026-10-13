@@ -1,0 +1,15 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+realFixtures: mkdir -p cm-real-fixture-artifacts && FREE_KICK_FONT_CACHE=cm-real-fixture-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs && FREE_KICK_FONT_CACHE=cm-real-fixture-artifacts/font-cache NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" CI=1 node scripts/playCmRealFixtures.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+slots-nopark: SLOTS_CONTROL=nopark node scripts/simClubManagerSlots.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+slots-norollback: SLOTS_CONTROL=norollback node scripts/simClubManagerSlots.mjs
+slots-oldversion: SLOTS_CONTROL=oldversion node scripts/simClubManagerSlots.mjs
+slots-leanmore: SLOTS_CONTROL=leanmore node scripts/simClubManagerSlots.mjs
+slots-decisioncontent: SLOTS_CONTROL=decisioncontent node scripts/simClubManagerSlots.mjs
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+fleet: git worktree add -q /tmp/f1 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+vitest: node_modules/.bin/vitest run clubManagerSlots saveFence clubManagerSave managerHotSeatCarryOn --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs

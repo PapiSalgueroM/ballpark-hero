@@ -1,0 +1,14 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+realFixtures exit=0 31s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+simClubManagerSlots exit=0 42s | simClubManagerSlots: all sections green
+slots-nopark exit=1 14s | CONTROL FIRED: SLOTS_CONTROL=nopark turned section 1 red (red sections: 1, 2, 3, 4), as it must
+tsc exit=0 62s | 
+slots-oldversion exit=1 16s | CONTROL FIRED: SLOTS_CONTROL=oldversion turned section 4 red through its slot1 check (red sections: 1, 2, 4), as it must
+slots-dupe exit=1 40s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+slots-norollback exit=1 37s | CONTROL FIRED: SLOTS_CONTROL=norollback turned section 3 red through its moved check (red sections: 3), as it must
+slots-leanmore exit=1 39s | CONTROL FIRED: SLOTS_CONTROL=leanmore turned section 4 red through its roundtrip check (red sections: 1, 4), as it must
+simManagerAppealIsolation exit=0 40s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+vitest exit=0 8s |    Duration  7.23s (transform 3.39s, setup 359ms, collect 8.72s, tests 5.14s, environment 2.72s, prepare 729ms)
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+slots-decisioncontent exit=1 77s | CONTROL FIRED: SLOTS_CONTROL=decisioncontent changed only decision roundtrip; fresh normal baseline green, executable receipt verified and source bytes held
+fleet exit=0 49s | simSaveFence: all green (tabs, source, fleet)

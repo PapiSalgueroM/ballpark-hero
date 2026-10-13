@@ -1,0 +1,40 @@
+NEGATIVE CONTROL ON: SLOTS_CONTROL=nopark, the slots module is a rewritten copy
+1) Three careers, 20 switches round robin with a season after each (7, 7, 6 seasons), every season equal to the same career played alone
+   slots after creation:  |  | Barcelona; manager in slot 2: none
+  FAIL: the three slots read , , Barcelona after creation
+  FAIL: slot 2 does not carry its manager name
+  FAIL: slot 1 opened nothing, not Everton (today)
+  FAIL: Everton (today): 0 seasons played through the slots, 7 alone
+   Everton (today)                      alone: #6 58pts 0T, #15 42pts 0T, #20 19pts 0T, #8 75pts 0T, #23 26pts 0T, #22 35pts 0T, #19 45pts 0T
+                                        slots: 
+  FAIL: Lincoln City (today, named manager): 0 seasons played through the slots, 7 alone
+   Lincoln City (today, named manager)  alone: #24 15pts 0T, #23 31pts 0T, #24 16pts 0T, #24 13pts 0T, #24 8pts 0T, #24 10pts 0T, #24 17pts 0T
+                                        slots: 
+  FAIL: Barcelona (2010-11 era): 0 seasons played through the slots, 6 alone
+   Barcelona (2010-11 era)              alone: #2 91pts 1T, #2 86pts 1T, #2 74pts 0T, #13 47pts 0T, #20 21pts 0T, #19 35pts 0T
+                                        slots: 
+   0 of 0 season digests identical to the career played alone; board nudges 108; alone arm 12 s, total 12 s
+  FAIL: only 0 of 20 seasons were compared
+2) The three careers played on, switching, to season 15 each: everything on the device under 495000 characters
+   seasons played: 0, 0, 0; keys: 
+   total 0 characters across 0 keys (budget 495000)
+  FAIL: the careers reached only 0, 0, 0 seasons, short of 15
+  FAIL: 0 Club Manager keys on the device, not three saves and an index
+3) A store that refuses: every refused swap answers false and moves nothing
+  FAIL: slot 1 to 2: the park was refused and the swap still said it worked
+  FAIL: slot 1 to 2: the park was refused and the store changed (now - | - | -, was - | - | -)
+  FAIL: slot 1 to 2: the index was refused and the swap still said it worked
+  FAIL: slot 1 to 2: the incoming career was refused and the swap still said it worked
+  FAIL: slot 1 to 3: the park was refused and the swap still said it worked
+  FAIL: slot 1 to 3: the park was refused and the store changed (now - | - | -, was - | - | -)
+  FAIL: slot 1 to 3: the index was refused and the swap still said it worked
+  FAIL: slot 1 to 3: the incoming career was refused and the swap still said it worked
+  FAIL: a store with 1,000 characters to spare took a whole parked career
+  FAIL: a store out of room changed while refusing the swap
+   7 refused swaps from slot 1; holdings unchanged: - | - | -
+  FAIL: slot 2 opened nothing after the refusals
+4) An old save, from before slots: slot 1, and reading writes nothing
+   old save (season 5, week 19, 190 h2h rows, 135559 chars) in slot 1, 1 key on the device, bytes untouched: true
+  FAIL: the trip through slot 2 did not come back (true, true, false)
+
+CONTROL FIRED: SLOTS_CONTROL=nopark turned section 1 red (red sections: 1, 2, 3, 4), as it must
