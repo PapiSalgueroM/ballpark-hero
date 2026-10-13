@@ -1,0 +1,831 @@
+{
+ "tag": "t390pl",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T00:12:34.554Z",
+ "steps": [
+  {
+   "s": 0,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 7,
+   "what": "era picked"
+  },
+  {
+   "s": 8,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 14,
+   "what": "club picked"
+  },
+  {
+   "s": 19,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 137,
+    "squad": 26,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 19,
+   "what": "tab Squad"
+  },
+  {
+   "jump": "tab-Squad > LW Rio Ngumoha 17y 🌱 fit 100 93-98 81 🙂",
+   "from": 0,
+   "to": 553
+  },
+  {
+   "fuzz": "tab-Squad",
+   "tried": [
+    "Sorted high to low, tap for low to high",
+    "CAM Florian Wirtz XI 22y ⭐ fit 100 93-97 91 🙂",
+    "ST Alexander Isak XI C 26y ⭐ fit 100 90-92 90 🙂",
+    "CAM Dominik Szoboszlai XI 25y ⭐ fit 100 90-93 90 🙂",
+    "ST Hugo Ekitiké XI 23y 🔥 fit 100 90-93 90 🙂",
+    "CM Alexis Mac Allister 27y 🔄 fit 100 91-93 89 🙂",
+    "CDM Ryan Gravenberch 24y 🔄 fit 100 89-91 89 🙂",
+    "LW Bradley Barcola XI 23y 🔥 fit 100 89-93 88 🙂",
+    "LW Cody Gakpo 26y 🔄 fit 100 88-90 88 🙂",
+    "CB Jérémy Jacquet XI 20y 🔥 fit 100 90-95 87 🙂",
+    "LB Milos Kerkez XI 22y 🔥 fit 100 85-87 85 🙂",
+    "RB Jeremie Frimpong 25y 🔄 fit 100 84-87 84 🙂",
+    "RB Conor Bradley 22y 🧥 fit 100 86-90 83 🙂",
+    "GK Giorgi Mamardashvili XI 25y 🔥 fit 100 83-87 83 🙂",
+    "CB Giovanni Leoni XI 19y 🔥 fit 100 94-99 82 🙂",
+    "LW Rio Ngumoha 17y 🌱 fit 100 93-98 81 🙂",
+    "CB Ronald Araujo XI 26y 🔥 fit 100 81-83 81 🙂",
+    "LW Víctor Muñoz 22y 🧥 fit 100 81-83 81 🙂"
+   ],
+   "dead": []
+  },
+  {
+   "s": 127,
+   "what": "tab Tactics"
+  },
+  {
+   "fuzz": "tab-Tactics",
+   "tried": [
+    "3-5-2",
+    "3-4-3",
+    "3-4-2-1",
+    "3-5-2 high wing backs",
+    "4-3-3",
+    "4-4-2",
+    "4-2-3-1",
+    "4-1-2-1-2",
+    "4-5-1",
+    "4-4-1-1",
+    "4-3-3 holding",
+    "4-2-2-2",
+    "4-1-4-1",
+    "4-3-1-2",
+    "4-2-3-1 wide",
+    "5-3-2",
+    "5-4-1",
+    "🛡️ Defensive"
+   ],
+   "dead": []
+  },
+  {
+   "s": 168,
+   "what": "tab Table"
+  },
+  {
+   "jump": "tab-Table > Report",
+   "from": 0,
+   "to": 21577
+  },
+  {
+   "fuzz": "tab-Table",
+   "tried": [
+    "Browse leagues",
+    "· Arsenal 0 0 0 0-0 0 0",
+    "Track stats",
+    "Report"
+   ],
+   "dead": []
+  },
+  {
+   "s": 301,
+   "what": "tab Market"
+  },
+  {
+   "jump": "tab-Market > Track stats",
+   "from": 21577,
+   "to": 0
+  },
+  {
+   "jump": "tab-Market > Report",
+   "from": 0,
+   "to": 21577
+  },
+  {
+   "fuzz": "tab-Market",
+   "tried": [
+    "Track stats",
+    "Report"
+   ],
+   "dead": []
+  },
+  {
+   "s": 430,
+   "what": "live m1"
+  },
+  {
+   "s": 430,
+   "what": "reload test"
+  },
+  {
+   "s": 440,
+   "what": "ff month 0",
+   "r": "FULL TIME",
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 6,
+    "cal": 54,
+    "budget": 142.44,
+    "squad": 26,
+    "inbox": 3,
+    "form": "WLWWL",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 442,
+   "what": "ff month 1",
+   "r": "no calendar tile",
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 6,
+    "cal": 54,
+    "budget": 142.44,
+    "squad": 26,
+    "inbox": 3,
+    "form": "WLWWL",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 443,
+   "what": "ff month 2",
+   "r": "no calendar tile",
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 6,
+    "cal": 54,
+    "budget": 142.44,
+    "squad": 26,
+    "inbox": 3,
+    "form": "WLWWL",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 454,
+   "what": "end"
+  }
+ ],
+ "findings": [
+  {
+   "sev": "major",
+   "what": "tab not clickable",
+   "detail": "Market",
+   "at": "tab Market"
+  }
+ ],
+ "errors": [],
+ "shots": [
+  {
+   "file": "t390pl-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "t390pl-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 23231
+  },
+  {
+   "file": "t390pl-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 27533
+  },
+  {
+   "file": "t390pl-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 113851
+  },
+  {
+   "file": "t390pl-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 28473
+  },
+  {
+   "file": "t390pl-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 71527
+  },
+  {
+   "file": "t390pl-007-manager-form-filled.jpg",
+   "at": "club picked",
+   "bytes": 72519
+  },
+  {
+   "file": "t390pl-008-hub-top.jpg",
+   "at": "hub reached",
+   "bytes": 38941
+  },
+  {
+   "file": "t390pl-009-hub-full.jpg",
+   "at": "hub reached",
+   "bytes": 154650
+  },
+  {
+   "file": "t390pl-010-tab-Squad.jpg",
+   "at": "tab Squad",
+   "bytes": 124624
+  },
+  {
+   "file": "t390pl-011-tab-Squad-after.jpg",
+   "at": "tab-Squad > LW Víctor Muñoz 22y 🧥 fit 100 81-83 81 🙂",
+   "bytes": 72783
+  },
+  {
+   "file": "t390pl-012-tab-Tactics.jpg",
+   "at": "tab Tactics",
+   "bytes": 127532
+  },
+  {
+   "file": "t390pl-013-tab-Tactics-after.jpg",
+   "at": "tab-Tactics > 🛡️ Defensive",
+   "bytes": 77128
+  },
+  {
+   "file": "t390pl-014-tab-Table.jpg",
+   "at": "tab Table",
+   "bytes": 134848
+  },
+  {
+   "file": "t390pl-015-tab-Table-dlg.jpg",
+   "at": "tab-Table > Track stats",
+   "bytes": 16414
+  },
+  {
+   "file": "t390pl-016-tab-Table-dlg.jpg",
+   "at": "tab-Table > Report",
+   "bytes": 13740
+  },
+  {
+   "file": "t390pl-017-tab-Table-after.jpg",
+   "at": "tab-Table > Report",
+   "bytes": 72335
+  },
+  {
+   "file": "t390pl-018-tab-Market.jpg",
+   "at": "tab Market",
+   "bytes": 123532
+  },
+  {
+   "file": "t390pl-019-tab-Market-dlg.jpg",
+   "at": "tab-Market > Track stats",
+   "bytes": 16414
+  },
+  {
+   "file": "t390pl-020-tab-Market-dlg.jpg",
+   "at": "tab-Market > Report",
+   "bytes": 13740
+  },
+  {
+   "file": "t390pl-021-tab-Market-after.jpg",
+   "at": "tab-Market > Report",
+   "bytes": 72335
+  },
+  {
+   "file": "t390pl-022-after-reload.jpg",
+   "at": "reload test",
+   "bytes": 16268
+  },
+  {
+   "file": "t390pl-023-slots.jpg",
+   "at": "reload test",
+   "bytes": 83708
+  },
+  {
+   "file": "t390pl-024-ff-month-0.jpg",
+   "at": "ff month 0",
+   "bytes": 88105
+  },
+  {
+   "file": "t390pl-025-ff-month-1.jpg",
+   "at": "ff month 1",
+   "bytes": 102680
+  },
+  {
+   "file": "t390pl-026-ff-month-2.jpg",
+   "at": "ff month 2",
+   "bytes": 102680
+  },
+  {
+   "file": "t390pl-027-mid-tab-Squad.jpg",
+   "at": "ff month 2",
+   "bytes": 125375
+  },
+  {
+   "file": "t390pl-028-mid-tab-Table.jpg",
+   "at": "ff month 2",
+   "bytes": 136539
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 21599,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 22791,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Liverpool\" 71x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 0,
+   "docH": 23172,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans hopeful · prices, sponsor, the books\" shown 149px of 176px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px",
+    "\"Nobody has an opinion\" shown 149px of 160px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1691,
+   "docH": 22572,
+   "label": "hub"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Alexander Isak\" shown 78px of 84px",
+    "\"Dominik Szoboszlai\" shown 101px of 112px",
+    "\"Giorgi Mamardashvili\" shown 101px of 121px"
+   ],
+   "overlaps": [
+    "\"CB\" x \"Let a deal run out and he leaves in the \" (36x9 at 29,1890) static/static",
+    "\"34y · on 24k a week · final year\" x \"Let a deal run out and he leaves in the \" (263x14 at 73,1890) static/static",
+    "\"80\" x \"Let a deal run out and he leaves in the \" (17x9 at 344,1890) static/static",
+    "\"Renew · 23k/w · £2.1m\" x \"Let a deal run out and he leaves in the \" (163x23 at 29,1908) static/static",
+    "\"2 years at 23k a week. £2.1m to sign.\" x \"You keep paying half his wage until his \" (145x27 at 38,1966) static/static",
+    "\"No release clause.\" x \"Florian Wirtz\" (145x10 at 38,2003) static/static",
+    "\"Leaves in the transfer kitty.\" x \"91 rated, 91k a week, 4 years left\" (145x14 at 38,2019) static/static",
+    "\"£134.9m\" x \"Florian Wirtz\" (42x4 at 76,2015) static/static",
+    "\"£134.9m\" x \"91 rated, 91k a week, 4 years left\" (42x8 at 76,2019) static/static",
+    "\"Wage bill: 1070k of 1232k a week.\" x \"Alexander Isak\" (145x12 at 38,2046) static/static",
+    "\"Wage bill: 1070k of 1232k a week.\" x \"90 rated, 85k a week, 3 years left\" (145x14 at 38,2058) static/static",
+    "\"+Clause · 20k/w · exit £8.7m\" x \"Let a deal run out and he leaves in the \" (163x23 at 198,1908) static/static",
+    "\"2 years at 20k a week. £1.8m to sign.\" x \"You keep paying half his wage until his \" (145x27 at 207,1966) static/static",
+    "\"Exit clause £8.7m. Any club can pay it.\" x \"Release, 46k x 108\" (104x25 at 248,2004) static/static",
+    "\"Leaves in the transfer kitty.\" x \"Release, 43k x 108\" (103x19 at 249,2043) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 23435,
+   "label": "tab-Squad"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [
+    "\"Standard line\" x \"87\" (36x12 at 298,910) absolute/relative"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Auto Pick\" 73x16",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15"
+   ],
+   "scrollY": 0,
+   "docH": 22304,
+   "label": "tab-Tactics"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \"club to scout their full squad. · Arsenal 0 0 0 0-0 0 0 · Aston Villa 0 0 0 0-0 0 0 · Bournemouth 0\""
+   ],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 22083,
+   "label": "tab-Table"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \"nce S1 89 Best XI £1.0bn Squad value #1 Position 0-0-0 W-D-L 0 scored 0 conceded 0 points Board want\""
+   ],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Back\" 47x16"
+   ],
+   "scrollY": 21577,
+   "docH": 22438,
+   "label": "tab-Market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.text-xs.text-muted-foreground \"Delete\" 37x16"
+   ],
+   "scrollY": 0,
+   "docH": 21855,
+   "label": "slots"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"⚽ Goal, free kick: Junior Kroupi\" shown 119px of 155px",
+    "\"🧤 Shot saved: Justin Kluivert\" shown 119px of 141px",
+    "\"🧤 Shot saved: Junior Kroupi\" shown 119px of 138px",
+    "\"🧤 Shot saved: Adrien Truffert\" shown 119px of 144px",
+    "\"🔁 Sub: Cody Gakpo on for Milos Kerkez\" shown 119px of 193px",
+    "\"🧤 Shot saved: Bradley Barcola\" shown 119px of 151px",
+    "\"🔁 Sub: Evanilson on for Rayan\" shown 119px of 149px",
+    "\"🔁 Sub: Víctor Muñoz on for Jérémy Jacquet\" shown 119px of 217px",
+    "\"🩹 Injured: Bradley Barcola\" shown 119px of 131px",
+    "\"🔁 Sub: Conor Bradley on for Bradley Barcola\" shown 119px of 220px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"DoUKnowBall\" (150x21 at 12,-86) fixed/static"
+   ],
+   "leaks": [
+    "minus zero?: \"entford 1-2 Chelsea Brighton 1-1 Arsenal Everton 3-0 Ipswich Town Fulham 1-2 Manchester United Leeds\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 23077,
+   "label": "ff-report-0"
+  }
+ ],
+ "elapsedS": 454,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "startSave": {
+  "club": "Liverpool",
+  "season": 1,
+  "week": 0,
+  "cal": 54,
+  "budget": 137,
+  "squad": 26,
+  "inbox": 0,
+  "form": "",
+  "results": 0,
+  "live": false,
+  "window": "summer"
+ },
+ "hubText": "DOUKNOWBALL\nBack\nTrack stats\nLiverpool\n2026-27 · Season 1\nSeason not started\n£137m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nLiverpool vs Newcastle\nAway · their strength ~82 · your XI avg 86\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n2 behind\nElite patience\n📩\nINBOX\nAll quiet\nNo messages yet\n📅\nCALENDAR\nSeason start\nNext: Newcastle\n🏆\nLEAGUE\n#14\nPremier League\n🏅\nCUPS\nStill alive\nFA Cup\n📊\nSTATS\n0 goals\nGoals, assists, ratings\n💰\nFINANCES\n-£7.4m projected\nFans hopeful · prices, sponsor, the books\n🏗️\nFACILITIES\nLevel 9 · 8 · 8 · 8\nStadium, training, medical, dressing room\n🧑‍🏫\nSTAFF\nLevel 9 · 8 · 7 · 9\nAttack, defence, keepers, scouting\n🎖️\nSKILLS\nLevel 1\nTactics, recruitment, money, the press\n⚙️\nOPTIONS\n£ · Normal\nCurrency, the international job, haggling\n🧢\nMANAGER\n0W 0L\nNew in the job\n🏥\nTREATMENT\nAll fit\nNo injuries or bans\n🕵️\nRIVAL WATCH\nEverton\nThey sit #9\n🎙️\nPRESS ROOM\nNobody has an opinion\n0 fronted up this career\n🤝\nDRESSING ROOM\nWord kept\nSet everyone a role\n🎓\nACADEMY\nNobody yet\nRecruitment 13/20 · 0 scouting\n🏋️\nTRAINING\nNormal · Balanced\n12 players still improving\n🛒\nMARKET\nWindow OPEN\nLatest transfers inside\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management ",
+ "tab_Squad": "PLAYER (26 IN SQUAD)\nRating\nCeiling\nForm\nAge\nWage\nYears left\nWorth\nFitness\nMorale\nPosition\nName\nCAM\nFlorian Wirtz\nXI\n22y\n⭐\nfit 100\n93-97\n91\n🙂\nST\nAlexander Isak\nXI\nC\n26y\n⭐\nfit 100\n90-92\n90\n🙂\nCAM\nDominik Szoboszlai\nXI\n25y\n⭐\nfit 100\n90-93\n90\n🙂\nST\nHugo Ekitiké\nXI\n23y\n🔥\nfit 100\n90-93\n90\n🙂\nCM\nAlexis Mac Allister\n27y\n🔄\nfit 100\n91-93\n89\n🙂\nCDM\nRyan Gravenberch\n24y\n🔄\nfit 100\n89-91\n89\n🙂\nLW\nBradley Barcola\nXI\n23y\n🔥\nfit 100\n89-93\n88\n🙂\nLW\nCody Gakpo\n26y\n🔄\nfit 100\n88-90\n88\n🙂\nCB\nJérémy Jacquet\nXI\n20y\n🔥\nfit 100\n90-95\n87\n🙂\nLB\nMilos Kerkez\nXI\n22y\n🔥\nfit 100\n85-87\n85\n🙂\nRB\nJeremie Frimpong\n25y\n🔄\nfit 100\n84-87\n84\n🙂\nRB\nConor Bradley\n22y\n🧥\nfit 100\n86-90\n83\n🙂\nGK\nGiorgi Mamardashvili\nXI\n25y\n🔥\nfit 100\n83-87\n83\n🙂\nCB\nGiovanni Leoni\nXI\n19y\n🔥\nfit 100\n94-99\n82\n🙂\nLW\nRio Ngumoha\n17y\n🌱\nfit 100\n93-98\n81\n🙂\nCB\nRonald Araujo\nXI\n26y\n🔥\nfit 100\n81-83\n81\n🙂\nLW\nVíctor Muñoz\n22y\n🧥\nfit 100\n81-83\n81\n🙂\nGK\nAlisson\n33y\n🧥\nfit 100\n80-82\n80\n🙂\nCB\nVirgil van Dijk\n34y\n🧥\nfit 100\n80-82\n80\n🙂\nRW\nFederico Chiesa\nXI\n28y\n🔥\nfit 100\n79-81\n79\n🙂\nCB\nJoe Gomez\n28y\n🧥\nfit 100\n79-81\n79\n🙂\nLB\nKonstantinos Tsimikas\n29y\n🧥\nfit 100\n76-78\n76\n🙂\nCM\nTrey Nyoni\n18y\n🌱\nfit 100\n79-84\n74\n🙂\nCDM\nWataru Endo\n32y\n🧥\nfit 100\n72-74\n72\n🙂\nGK\nFreddie Woodman\n28y\n🧥\nfit 100\n70-72\n70\n🙂\nLW\nLewis Koumas\n20y\n🧥\nfit 100\n73-78\n70\n🙂\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n1071k of 1232k a week\n⏳ FINAL YEAR (3)\nLB\nMilos Kerkez\n22y · on 44k a week · final year\n85\nRenew · 51k/w · £9.2m\n\n4 years at 51k a week. £9.2m to sign.\n\nNo release clause.\n\nLeaves £127.8m in the transfer kitty.\n\nWage bill: 1078k of 1232k a week.\n\n+Clause · 45k/w · exit £19.7m\n\n4 years at 45k a week. £8.1m to sign.\n\nExit clause £19.7m. Any club can pay it.\n\nLeaves £128.9m in the transfer kitty.\n\nWage bill: 1072k of 1232k a week.\n\nCB\nVirgil van Dijk\n34y · on 24k a week · final year\n80\nRenew · 23k/w · £2.1m\n\n2 years at 23k a week. £2.1m to sign.\n\nNo release clause.\n\nLeaves £134.9m in the transfer kitty.\n\nWage bill: 1070k of 1232k a week.\n\n+Clause · 20k/w · exit £8.7m\n\n2 years at 20k a week. £1.8m to sign.\n\nExit clause £8.7m. Any club can pay it.\n\nLeaves £135.2m in the transfer kitty.\n\nWage bill: 1067k of 1232k a week.\n\nRW\nFederico Chiesa\n28y · on 22k a week · final year\n79\nRenew · 29k/w · £5.2m\n\n4 years at 29k a week. £5.2m to sign.\n\nNo release clause.\n\nLeaves £131.8m in the transfer kitty.\n\nWage bill: 1078k of 1232k a week.\n\n+Clause · 26k/w · exit £7.4m\n\n4 years at 26k a week. £4.7m to sign.\n\nExit clause £7.4m. Any club can pay it.\n\nLeaves £132.3m in the transfer kitty.\n\nWage bill: 1075k of 1232k a week.\n\nLet a deal run out and he leaves in the summer for nothing. The clause deal pays him 12 percent less, and the price is an exit door at 1.5x his value today that any club can walk through.\n\nLET SOMEBODY GO\nYou keep paying half his wage until his deal would have run out, capped at two seasons, and it counts against the cap the whole time.\nF",
+ "tab_Tactics": "FORMATION\nBACK THREE\n3-5-2\n3-4-3\n3-4-2-1\n3-5-2 high wing backs\nBACK FOUR\n4-3-3\n4-4-2\n4-2-3-1\n4-1-2-1-2\n4-5-1\n4-4-1-1\n4-3-3 holding\n4-2-2-2\n4-1-4-1\n4-3-1-2\n4-2-3-1 wide\nBACK FIVE\n5-3-2\n5-4-1\nMENTALITY\n🛡️\nDefensive\n⚖️\nBalanced\n⚔️\nAttacking\nSTARTING XI · AVG 86\nAuto Pick\nSTANDARD LINE\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\n83\nMamardashvili\n87\nJacquet\n82\nLeoni\n81\nAraujo\n85\nKerkez\n79\nChiesa\n91\nWirtz\n90\nSzoboszlai\n88\nBarcola\n90\nC\nIsak\n90\nEkitiké\n\nDrag a player onto another to swap them. Tap a spot to pick someone else, or a bench man below then a spot.\n\nMatch plans 0/3\nBENCH 15\nSET PIECES 5/5 captain Isak\nSHOOTOUT ORDER 0/11 not set, one draw decides it",
+ "tab_Table": "Premier League\n\n20 clubs · Your league\n\nBrowse leagues\nPREMIER LEAGUE · PRE-SEASON, ALPHABETICAL ORDER\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n·\nArsenal\n0\n0\n0\n0-0\n0\n0\n·\nAston Villa\n0\n0\n0\n0-0\n0\n0\n·\nBournemouth\n0\n0\n0\n0-0\n0\n0\n·\nBrentford\n0\n0\n0\n0-0\n0\n0\n·\nBrighton\n0\n0\n0\n0-0\n0\n0\n·\nChelsea\n0\n0\n0\n0-0\n0\n0\n·\nCoventry City\n0\n0\n0\n0-0\n0\n0\n·\nCrystal Palace\n0\n0\n0\n0-0\n0\n0\n·\nEverton\n0\n0\n0\n0-0\n0\n0\n·\nFulham\n0\n0\n0\n0-0\n0\n0\n·\nHull City\n0\n0\n0\n0-0\n0\n0\n·\nIpswich Town\n0\n0\n0\n0-0\n0\n0\n·\nLeeds United\n0\n0\n0\n0-0\n0\n0\n⭐\nLiverpool\n0\n0\n0\n0-0\n0\n0\n·\nManchester City\n0\n0\n0\n0-0\n0\n0\n·\nManchester United\n0\n0\n0\n0-0\n0\n0\n·\nNewcastle\n0\n0\n0\n0-0\n0\n0\n·\nNottingham Forest\n0\n0\n0\n0-0\n0\n0\n·\nSunderland\n0\n0\n0\n0-0\n0\n0\n·\nTottenham\n0\n0\n0\n0-0\n0\n0\n\nNo games yet, so the order means nothing. Positions appear with the first round.",
+ "tab_Market": "",
+ "tileText": {},
+ "tileValues": {
+  "Board": "ABSENT",
+  "Inbox": "ABSENT",
+  "Calendar": "ABSENT",
+  "League": "ABSENT",
+  "Cups": "ABSENT",
+  "Stats": "ABSENT",
+  "Finances": "ABSENT",
+  "Facilities": "ABSENT",
+  "Staff": "ABSENT",
+  "Skills": "ABSENT",
+  "Options": "ABSENT",
+  "Manager": "ABSENT",
+  "Treatment": "ABSENT",
+  "Rival watch": "ABSENT",
+  "Press room": "ABSENT",
+  "Dressing room": "ABSENT",
+  "Academy": "ABSENT",
+  "Training": "ABSENT",
+  "Market": "ABSENT",
+  "Cabinet": "ABSENT"
+ },
+ "m1": {
+  "ok": false,
+  "why": "no play live",
+  "reportText": ""
+ },
+ "m2": "false",
+ "reload": {
+  "before": {
+   "club": "Liverpool",
+   "season": 1,
+   "week": 0,
+   "cal": 54,
+   "budget": 137,
+   "squad": 26,
+   "inbox": 0,
+   "form": "",
+   "results": 0,
+   "live": false,
+   "window": "summer"
+  },
+  "after": {
+   "club": "Liverpool",
+   "season": 1,
+   "week": 0,
+   "cal": 54,
+   "budget": 137,
+   "squad": 26,
+   "inbox": 0,
+   "form": "",
+   "results": 0,
+   "live": false,
+   "window": "summer"
+  }
+ },
+ "midTileText": {},
+ "midtab_Squad": "PLAYER (26 IN SQUAD)\nRating\nCeiling\nForm\nAge\nWage\nYears left\nWorth\nFitness\nMorale\nPosition\nName\nCAM\nFlorian Wirtz\nXI\n22y\n⭐\nfit 73\n93-97\n91\n🙂\nST\nAlexander Isak\nXI\nC\n26y\n⭐\nfit 72\n90-92\n90\n😄\nCAM\nDominik Szoboszlai\nXI\n25y\n⭐\nfit 76\n90-93\n90\n😄\nST\nHugo Ekitiké\nXI\n23y\n🔥\nfit 71\n90-93\n90\n🙂\nCM\nAlexis Mac Allister\n27y\n🔄 Not happy\nfit 100\n91-93\n89\n🙂\nCDM\nRyan Gravenberch\n24y\n🔄 Not happy\nfit 98\n89-91\n89\n🙂\nLW\nBradley Barcola\nXI\n23y\n🔥\nfit 71\n🩹 3w\n89-93\n88\n🙂\nLW\nCody Gakpo\n26y\n🔄\nfit 82\n88-90\n88\n🙂\nCB\nJérémy Jacquet\nXI\n20y\n🔥\nfit 77\n90-95\n87\n🙂\nLB\nMilos Kerkez\nXI\n22y\n🔥\nfit 71\n85-87\n85\n🙂\nRB\nJeremie Frimpong\n25y\n🔄 Not happy\nfit 99\n84-87\n84\n🙂\nRB\nConor Bradley\n22y\n🧥\nfit 80\n86-90\n83\n🙂\nGK\nGiorgi Mamardashvili\nXI\n25y\n🔥\nfit 69\n83-87\n83\n🙂\nCB\nGiovanni Leoni\nXI\n19y\n🔥\nfit 78\n94-99\n82\n🙂\nLW\nRio Ngumoha\n17y\n🌱\nfit 99\n93-98\n81\n🙂\nCB\nRonald Araujo\nXI\n26y\n🔥\nfit 77\n81-83\n81\n🙂\nLW\nVíctor Muñoz\n22y\n🧥\nfit 80\n81-83\n81\n🙂\nGK\nAlisson\n33y\n🧥\nfit 100\n80-82\n80\n🙂\nCB\nVirgil van Dijk\n34y\n🧥\nfit 100\n80-82\n80\n🙂\nRW\nFederico Chiesa\nXI\n28y\n🔥\nfit 72\n79-81\n79\n😄\nCB\nJoe Gomez\n28y\n🧥\nfit 100\n79-81\n79\n🙂\nLB\nKonstantinos Tsimikas\n29y\n🧥\nfit 100\n76-78\n76\n🙂\nCM\nTrey Nyoni\n18y\n🌱\nfit 100\n79-84\n74\n🙂\nCDM\nWataru Endo\n32y\n🧥\nfit 100\n72-74\n72\n🙂\nGK\nFreddie Woodman\n28y\n🧥\nfit 100\n70-72\n70\n🙂\nLW\nLewis Koumas\n20y\n🧥\nfit 100\n73-78\n70\n🙂\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n1071k of 1232k a week\n⏳ FINAL YEAR (3)\nLB\nMilos Kerkez\n22y · on 44k a week · final year\n85\nRenew · 51k/w · £9.2m\n\n4 years at 51k a week. £9.2m to sign.\n\nNo release clause.\n\nLeaves £133.2m in the transfer kitty.\n\nWage bill: 1078k of 1232k a week.\n\n+Clause · 45k/w · exit £19.7m\n\n4 years at 45k a week. £8.1m to sign.\n\nExit clause £19.7m. Any club can pay it.\n\nLeaves £134.3m in the transfer kitty.\n\nWage bill: 1072k of 1232k a week.\n\nCB\nVirgil van Dijk\n34y · on 24k a week · final year\n80\nRenew · 23k/w · £2.1m\n\n2 years at 23k a week. £2.1m to sign.\n\nNo release clause.\n\nLeaves £140.3m in the transfer kitty.\n\nWage bill: 1070k of 1232k a week.\n\n+Clause · 20k/w · exit £8.7m\n\n2 years at 20k a week. £1.8m to sign.\n\nExit clause £8.7m. Any club can pay it.\n\nLeaves £140.6m in the transfer kitty.\n\nWage bill: 1067k of 1232k a week.\n\nRW\nFederico Chiesa\n28y · on 22k a week · final year\n79\nRenew · 29k/w · £5.2m\n\n4 years at 29k a week. £5.2m to sign.\n\nNo release clause.\n\nLeaves £137.2m in the transfer kitty.\n\nWage bill: 1078k of 1232k a week.\n\n+Clause · 26k/w · exit £7.4m\n\n4 years at 26k a week. £4.7m to sign.\n\nExit clause £7.4m. Any club can pay it.\n\nLeaves £137.7m in the transfer kitty.\n\nWage bill: 1075k of 1232k a week.\n\nLet a deal run out and he leaves in the summer for nothing. The clause deal pays him 12 percent less, and the price is an exit door at 1.5x his value today that any club can walk through.\n\nLET SOMEBODY GO\nYou keep paying half his wage until his deal would have run out, capped at two seasons, and it counts against the ca",
+ "midtab_Table": "Premier League\n\n20 clubs · Your league\n\nBrowse leagues\nPREMIER LEAGUE · ROUND 5 OF 38\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n1\nChelsea\n4\n0\n1\n14-3\n+11\n12\n2\nManchester United\n3\n2\n0\n13-8\n+5\n11\n3\nArsenal\n3\n2\n0\n7-3\n+4\n11\n4\nLeeds United\n3\n0\n2\n8-6\n+2\n9\n5\nTottenham\n3\n0\n2\n10-10\n0\n9\n6\nLiverpool\n3\n0\n2\n4-4\n0\n9\n7\nBrentford\n2\n2\n1\n7-5\n+2\n8\n8\nBournemouth\n2\n2\n1\n5-3\n+2\n8\n9\nCoventry City\n2\n2\n1\n7-6\n+1\n8\n10\nBrighton\n2\n2\n1\n8-9\n-1\n8\n11\nEverton\n2\n1\n2\n8-6\n+2\n7\n12\nCrystal Palace\n2\n1\n2\n5-6\n-1\n7\n13\nManchester City\n1\n3\n1\n8-8\n0\n6\n14\nSunderland\n1\n3\n1\n7-7\n0\n6\n15\nAston Villa\n1\n2\n2\n6-8\n-2\n5\n16\nNottingham Forest\n1\n2\n2\n5-7\n-2\n5\n17\nHull City\n1\n1\n3\n6-11\n-5\n4\n18\nNewcastle\n1\n0\n4\n5-9\n-4\n3\n19\nIpswich Town\n0\n1\n4\n4-11\n-7\n1\n20\nFulham\n0\n0\n5\n3-10\n-7\n0\n\nLevel on points splits on goal difference, then goals scored, then head to head once both games have been played.",
+ "endSave": {
+  "club": "Liverpool",
+  "season": 1,
+  "week": 6,
+  "cal": 54,
+  "budget": 142.44,
+  "squad": 26,
+  "inbox": 3,
+  "form": "WLWWL",
+  "results": 5,
+  "live": false,
+  "window": null
+ },
+ "inboxDump": [
+  [
+   5,
+   "",
+   "Ryan Gravenberch pulled you aside after training. The short version: he wants to start on "
+  ],
+  [
+   2,
+   "",
+   "Ryan Gravenberch pulled you aside after training. The short version: he wants to start on "
+  ],
+  [
+   1,
+   "",
+   "One of your keepers announced his retirement on social media by accident. He meant to post"
+  ]
+ ],
+ "newsDump": [],
+ "saveKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclField",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "realLeagueFixtures",
+  "manager",
+  "managerXp",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "setPieces",
+  "intl",
+  "xiDuties",
+  "facilities",
+  "books",
+  "staff",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "finance",
+  "decisions"
+ ]
+}

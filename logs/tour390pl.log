@@ -1,0 +1,7 @@
+AUDIT tab-Squad: 15 overlapping text pairs: "CB" x "Let a deal run out and he leaves in the " (36x9 at 29,1890) static/static
+AUDIT tab-Tactics: 1 overlapping text pairs: "Standard line" x "87" (36x12 at 298,910) absolute/relative
+AUDIT tab-Table: leak minus zero?: "club to scout their full squad. · Arsenal 0 0 0 0-0 0 0 · Aston Villa 0 0 0 0-0 0 0 · Bournemouth 0"
+FIND [major] tab not clickable :: Market
+AUDIT tab-Market: leak minus zero?: "nce S1 89 Best XI £1.0bn Squad value #1 Position 0-0-0 W-D-L 0 scored 0 conceded 0 points Board want"
+AUDIT ff-report-0: 1 overlapping text pairs: "Skip to main content" x "DoUKnowBall" (150x21 at 12,-86) fixed/static ;; leak minus zero?: "entford 1-2 Chelsea Brighton 1-1 Arsenal Everton 3-0 Ipswich Town Fulham 1-2 Manchester United Leeds"
+TOUR t390pl done: 1 findings, 0 errors, 28 shots, 454s

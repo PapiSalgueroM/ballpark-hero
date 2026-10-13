@@ -1,0 +1,8 @@
+AUDIT tab-Squad: 15 overlapping text pairs: "No release clause." x "Let somebody go" (394x12 at 234,1505) static/static
+DEAD? tab-Squad: FIT
+AUDIT tab-Tactics: 1 overlapping text pairs: "Standard line" x "67" (24x12 at 788,965) absolute/relative
+AUDIT tab-Table: leak minus zero?: "lub to scout their full squad. · Aberdeen 0 0 0 0-0 0 0 · Celtic 0 0 0 0-0 0 0 ⭐ Dundee 0 0 0 0-0 0"
+FIND [major] tab not clickable :: Market
+AUDIT tab-Market: leak minus zero?: " since S1 62 Best XI £5m Squad value #1 Position 0-0-0 W-D-L 0 scored 0 conceded 0 points Board want"
+AUDIT ff-report-0: 5 overlapping text pairs: "Skip to main content" x "Live" (57x18 at 8,-100) fixed/static ;; leak minus zero?: "1 Motherwell St Mirren 4-3 Dundee United Rangers 1-0 Hibernian Club Manager: Free Football Managemen"
+TOUR t1280sco done: 1 findings, 0 errors, 28 shots, 463s

@@ -1,0 +1,779 @@
+{
+ "tag": "t1280sco",
+ "width": 1280,
+ "height": 900,
+ "started": "2026-10-13T00:12:34.535Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 7,
+   "what": "era picked"
+  },
+  {
+   "s": 8,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 14,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Dundee",
+    "season": 1,
+    "week": 0,
+    "cal": 38,
+    "budget": 8,
+    "squad": 16,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 19,
+   "what": "tab Squad"
+  },
+  {
+   "fuzz": "tab-Squad",
+   "tried": [
+    "POS",
+    "PLAYER",
+    "AGE",
+    "Sign up to track your stats",
+    "Resume Career",
+    "OVR",
+    "POT",
+    "FORM",
+    "WAGE",
+    "DEAL",
+    "WORTH",
+    "FIT",
+    "MOOD",
+    "CB Ondrej Voskuil (Youth) XI ⭐ Star man 0 apps · 0g 0a 19 67 67-75 - 13k 4y £1.1",
+    "CB Andres Brennan (Youth) XI ⭐ Star man 0 apps · 0g 0a 18 64 64-73 - 10k 2y £800",
+    "RM Drey Wright XI C ⭐ Star man 0 apps · 0g 0a 30 64 64-66 - 3k 4y £700k 🙂",
+    "GK Enzo Nyman (Youth) 🌱 One for the future 0 apps · 0g 0a 17 63 69-78 - 9k 4y £",
+    "LB Mats Adeyemi (Youth) XI 🔥 Key first teamer 0 apps · 0g 0a 19 63 63-70 - 9k 4"
+   ],
+   "dead": [
+    "FIT"
+   ]
+  },
+  {
+   "s": 136,
+   "what": "tab Tactics"
+  },
+  {
+   "fuzz": "tab-Tactics",
+   "tried": [
+    "3-5-2",
+    "3-4-3",
+    "3-4-2-1",
+    "3-5-2 high wing backs",
+    "4-3-3",
+    "4-4-2",
+    "4-2-3-1",
+    "4-1-2-1-2",
+    "4-5-1",
+    "4-4-1-1",
+    "4-3-3 holding",
+    "4-2-2-2",
+    "4-1-4-1",
+    "4-3-1-2",
+    "4-2-3-1 wide",
+    "5-3-2",
+    "5-4-1",
+    "🛡️ Defensive Sit deep, frustrate them, protect the point"
+   ],
+   "dead": []
+  },
+  {
+   "s": 177,
+   "what": "tab Table"
+  },
+  {
+   "jump": "tab-Table > Report",
+   "from": 0,
+   "to": 11940
+  },
+  {
+   "fuzz": "tab-Table",
+   "tried": [
+    "Browse leagues",
+    "· Aberdeen 0 0 0 0-0 0 0",
+    "Sign up to track your stats",
+    "Report"
+   ],
+   "dead": []
+  },
+  {
+   "s": 309,
+   "what": "tab Market"
+  },
+  {
+   "jump": "tab-Market > Sign up to track your stats",
+   "from": 11940,
+   "to": 0
+  },
+  {
+   "jump": "tab-Market > Report",
+   "from": 0,
+   "to": 11940
+  },
+  {
+   "fuzz": "tab-Market",
+   "tried": [
+    "Sign up to track your stats",
+    "Report"
+   ],
+   "dead": []
+  },
+  {
+   "s": 439,
+   "what": "live m1"
+  },
+  {
+   "s": 439,
+   "what": "reload test"
+  },
+  {
+   "s": 449,
+   "what": "ff month 0",
+   "r": "FULL TIME",
+   "save": {
+    "club": "Dundee",
+    "season": 1,
+    "week": 7,
+    "cal": 38,
+    "budget": 8.59,
+    "squad": 16,
+    "inbox": 1,
+    "form": "DLLLD",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 451,
+   "what": "ff month 1",
+   "r": "no calendar tile",
+   "save": {
+    "club": "Dundee",
+    "season": 1,
+    "week": 7,
+    "cal": 38,
+    "budget": 8.59,
+    "squad": 16,
+    "inbox": 1,
+    "form": "DLLLD",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 451,
+   "what": "ff month 2",
+   "r": "no calendar tile",
+   "save": {
+    "club": "Dundee",
+    "season": 1,
+    "week": 7,
+    "cal": 38,
+    "budget": 8.59,
+    "squad": 16,
+    "inbox": 1,
+    "form": "DLLLD",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 463,
+   "what": "end"
+  }
+ ],
+ "findings": [
+  {
+   "sev": "major",
+   "what": "tab not clickable",
+   "detail": "Market",
+   "at": "tab Market"
+  }
+ ],
+ "errors": [],
+ "shots": [
+  {
+   "file": "t1280sco-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 44873
+  },
+  {
+   "file": "t1280sco-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 40863
+  },
+  {
+   "file": "t1280sco-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 54700
+  },
+  {
+   "file": "t1280sco-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 195560
+  },
+  {
+   "file": "t1280sco-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 49797
+  },
+  {
+   "file": "t1280sco-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 125676
+  },
+  {
+   "file": "t1280sco-007-hub-top.jpg",
+   "at": "hub reached",
+   "bytes": 65527
+  },
+  {
+   "file": "t1280sco-008-hub-full.jpg",
+   "at": "hub reached",
+   "bytes": 261691
+  },
+  {
+   "file": "t1280sco-009-tab-Squad.jpg",
+   "at": "tab Squad",
+   "bytes": 203970
+  },
+  {
+   "file": "t1280sco-010-tab-Squad-dlg.jpg",
+   "at": "tab-Squad > Sign up to track your stats",
+   "bytes": 27252
+  },
+  {
+   "file": "t1280sco-011-tab-Squad-after.jpg",
+   "at": "tab-Squad > LB Mats Adeyemi (Youth) XI 🔥 Key first teamer 0 apps · 0g 0a 19 63 63-70 - 9k 4",
+   "bytes": 119424
+  },
+  {
+   "file": "t1280sco-012-tab-Tactics.jpg",
+   "at": "tab Tactics",
+   "bytes": 195226
+  },
+  {
+   "file": "t1280sco-013-tab-Tactics-after.jpg",
+   "at": "tab-Tactics > 🛡️ Defensive Sit deep, frustrate them, protect the point",
+   "bytes": 115874
+  },
+  {
+   "file": "t1280sco-014-tab-Table.jpg",
+   "at": "tab Table",
+   "bytes": 223531
+  },
+  {
+   "file": "t1280sco-015-tab-Table-dlg.jpg",
+   "at": "tab-Table > Sign up to track your stats",
+   "bytes": 27902
+  },
+  {
+   "file": "t1280sco-016-tab-Table-dlg.jpg",
+   "at": "tab-Table > Report",
+   "bytes": 19980
+  },
+  {
+   "file": "t1280sco-017-tab-Table-after.jpg",
+   "at": "tab-Table > Report",
+   "bytes": 147488
+  },
+  {
+   "file": "t1280sco-018-tab-Market.jpg",
+   "at": "tab Market",
+   "bytes": 234376
+  },
+  {
+   "file": "t1280sco-019-tab-Market-dlg.jpg",
+   "at": "tab-Market > Sign up to track your stats",
+   "bytes": 27902
+  },
+  {
+   "file": "t1280sco-020-tab-Market-dlg.jpg",
+   "at": "tab-Market > Report",
+   "bytes": 19980
+  },
+  {
+   "file": "t1280sco-021-tab-Market-after.jpg",
+   "at": "tab-Market > Report",
+   "bytes": 147488
+  },
+  {
+   "file": "t1280sco-022-after-reload.jpg",
+   "at": "reload test",
+   "bytes": 49364
+  },
+  {
+   "file": "t1280sco-023-slots.jpg",
+   "at": "reload test",
+   "bytes": 155424
+  },
+  {
+   "file": "t1280sco-024-ff-month-0.jpg",
+   "at": "ff month 0",
+   "bytes": 146798
+  },
+  {
+   "file": "t1280sco-025-ff-month-1.jpg",
+   "at": "ff month 1",
+   "bytes": 163594
+  },
+  {
+   "file": "t1280sco-026-ff-month-2.jpg",
+   "at": "ff month 2",
+   "bytes": 163594
+  },
+  {
+   "file": "t1280sco-027-mid-tab-Squad.jpg",
+   "at": "ff month 2",
+   "bytes": 205034
+  },
+  {
+   "file": "t1280sco-028-mid-tab-Table.jpg",
+   "at": "ff month 2",
+   "bytes": 223698
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13092,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 59,
+   "docH": 12715,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Scottish Premiership\" 154x16"
+   ],
+   "scrollY": 59,
+   "docH": 13239,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Dundee\" 62x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 59,
+   "docH": 13972,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1253,
+   "docH": 13518,
+   "label": "hub"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"OVR\" shown 18px of 23px",
+    "\"MOOD\" shown 24px of 33px"
+   ],
+   "overlaps": [
+    "\"No release clause.\" x \"Let somebody go\" (394x12 at 234,1505) static/static",
+    "\"Leaves in the transfer kitty.\" x \"You keep paying half his wage until his \" (394x9 at 234,1524) static/static",
+    "\"£6.2m\" x \"You keep paying half his wage until his \" (31x7 at 272,1524) static/static",
+    "\"Wage bill: 128k of 146k a week.\" x \"You keep paying half his wage until his \" (394x4 at 234,1533) static/static",
+    "\"Exit clause £500k. Any club can pay it.\" x \"Let somebody go\" (394x12 at 652,1505) static/static",
+    "\"Leaves in the transfer kitty.\" x \"You keep paying half his wage until his \" (394x9 at 652,1524) static/static",
+    "\"£6.4m\" x \"You keep paying half his wage until his \" (32x7 at 690,1524) static/static",
+    "\"Wage bill: 127k of 146k a week.\" x \"You keep paying half his wage until his \" (394x4 at 652,1533) static/static",
+    "\"CM, 65 rated, 37, no club\" x \"Club Manager: Free Football Management G\" (636x14 at 320,1949) static/static",
+    "\"CAM, 65 rated, 30, no club\" x \"A full club-management sim in your brows\" (636x14 at 320,2001) static/static",
+    "\"3k a week for 3 years, £800k to sign, no\" x \"A full club-management sim in your brows\" (636x14 at 320,2014) static/static",
+    "\"CB, 63 rated, 40, no club\" x \"A full club-management sim in your brows\" (636x14 at 320,2053) static/static",
+    "\"3k a week for 2 years, £700k to sign, no\" x \"A full club-management sim in your brows\" (636x14 at 320,2066) static/static",
+    "\"ST, 60 rated, 39, no club\" x \"A full club-management sim in your brows\" (636x14 at 320,2105) static/static",
+    "\"2k a week for 2 years, £500k to sign, no\" x \"A full club-management sim in your brows\" (636x14 at 320,2118) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 14120,
+   "label": "tab-Squad"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [
+    "\"Standard line\" x \"67\" (24x12 at 788,965) absolute/relative"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Auto Pick\" 73x16",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15"
+   ],
+   "scrollY": 0,
+   "docH": 13638,
+   "label": "tab-Tactics"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \"lub to scout their full squad. · Aberdeen 0 0 0 0-0 0 0 · Celtic 0 0 0 0-0 0 0 ⭐ Dundee 0 0 0 0-0 0\""
+   ],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 13075,
+   "label": "tab-Table"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \" since S1 62 Best XI £5m Squad value #1 Position 0-0-0 W-D-L 0 scored 0 conceded 0 points Board want\""
+   ],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Back\" 47x16"
+   ],
+   "scrollY": 11940,
+   "docH": 12840,
+   "label": "tab-Market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.text-xs.text-muted-foreground \"Delete\" 37x16"
+   ],
+   "scrollY": 0,
+   "docH": 12703,
+   "label": "slots"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Kofi Brennan (Youth)\" shown 164px of 175px",
+    "\"⚽ Goal: Luca Calvet (Youth) 🅰️ Nils Kimura (Youth)\" shown 164px of 248px",
+    "\"🔁 Sub: Ondrej Ferreira (Youth) on for Ondrej Voskuil (Youth)\" shown 164px of 290px",
+    "\"⚽ Goal: Ondrej Ferreira (Youth) 🅰️ Drey Wright\" shown 164px of 229px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"Live\" (57x18 at 8,-100) fixed/static",
+    "\"Skip to main content\" x \"Live scores temporarily unavailable\" (133x18 at 65,-100) fixed/static",
+    "\"Skip to main content\" x \"DoUKnowBall\" (186x15 at 12,-71) fixed/static",
+    "\"🅰️ Nils Kimura (Youth)\" x \"61'\" (40x12 at 620,1040) static/static",
+    "\"🅰️ Drey Wright\" x \"71'\" (40x12 at 620,1120) static/static"
+   ],
+   "leaks": [
+    "minus zero?: \"1 Motherwell St Mirren 4-3 Dundee United Rangers 1-0 Hibernian Club Manager: Free Football Managemen\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 113,
+   "docH": 13978,
+   "label": "ff-report-0"
+  }
+ ],
+ "elapsedS": 463,
+ "clubList": [
+  "Rangers 🐺 Underdogs Squad 76 Budget £14m Board wants Win the Scottish Premiership",
+  "Celtic 🐺 Underdogs Squad 75 Budget £13m Board wants Win the Scottish Premiership",
+  "St Mirren 🐺 Underdogs· partial data Squad 66 Budget £8m Board wants Qualify for the Europa League",
+  "Hibernian 🐺 Underdogs· partial data Squad 63 Budget £8m Board wants Qualify for the Europa League",
+  "Aberdeen 🐺 Underdogs· partial data Squad 62 Budget £8m Board wants Qualify for the Europa League",
+  "Hearts 🐺 Underdogs· partial data Squad 62 Budget £8m Board wants Qualify for the Conference League",
+  "Motherwell 🐺 Underdogs· partial data Squad 62 Budget £8m Board wants Qualify for the Conference League",
+  "Kilmarnock 🐺 Underdogs· partial data Squad 62 Budget £8m Board wants Finish in the top half",
+  "Dundee United 🐺 Underdogs· partial data Squad 61 Budget £8m Board wants Stay up. Avoid relegation",
+  "Falkirk 🐺 Underdogs· partial data Squad 61 Budget £8m Board wants Stay up. Avoid relegation",
+  "St Johnstone 🐺 Underdogs· partial data Squad 61 Budget £8m Board wants Stay up. Avoid relegation",
+  "Dundee 🐺 Underdogs· partial data Squad 60 Budget £8m Board wants Stay up. Avoid relegation"
+ ],
+ "startSave": {
+  "club": "Dundee",
+  "season": 1,
+  "week": 0,
+  "cal": 38,
+  "budget": 8,
+  "squad": 16,
+  "inbox": 0,
+  "form": "",
+  "results": 0,
+  "live": false,
+  "window": "summer"
+ },
+ "hubText": "DOUKNOWBALL\nBack\nSign up to track your stats\nDundee\n2026-27 · Season 1\nSeason not started\n£8m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nSCOTTISH PREMIERSHIP · ROUND 1\nDundee vs Hearts\nHome · their strength ~62 · your XI avg 62\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n0/8 done\nUnderdogs patience\n📩\nINBOX\nAll quiet\nNo messages yet\n📅\nCALENDAR\nSeason start\nNext: Hearts\n🏆\nLEAGUE\n#3\nScottish Premiership\n🏅\nCUPS\nStill alive\nScottish Cup\n📊\nSTATS\n0 goals\nGoals, assists, ratings\n💰\nFINANCES\n-£4.6m projected\nFans hopeful · prices, sponsor, the books\n🏗️\nFACILITIES\nLevel 1 · 1 · 1 · 1\nStadium, training, medical, dressing room\n🧑‍🏫\nSTAFF\nLevel 1 · 1 · 1 · 1\nAttack, defence, keepers, scouting\n🎖️\nSKILLS\nLevel 1\nTactics, recruitment, money, the press\n⚙️\nOPTIONS\n£ · Normal\nCurrency, the international job, haggling\n🧢\nMANAGER\n0W 0L\nNew in the job\n🏥\nTREATMENT\nAll fit\nNo injuries or bans\n🕵️\nRIVAL WATCH\nDundee United\nThey sit #4\n🎙️\nPRESS ROOM\nNobody has an opinion\n0 fronted up this career\n🤝\nDRESSING ROOM\nWord kept\nSet everyone a role\n🎓\nACADEMY\nNobody yet\nRecruitment 6/20 · 0 scouting\n🏋️\nTRAINING\nNormal · Balanced\n15 players still improving\n🛒\nMARKET\nWindow OPEN\nLatest transfers inside\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free",
+ "tab_Squad": "PLAYER (16 IN SQUAD)\nPOS\nPLAYER\nAGE\nOVR\nPOT\nFORM\nWAGE\nDEAL\nWORTH\nFIT\nMOOD\nCB\nOndrej Voskuil (Youth)\nXI\n⭐ Star man\n0 apps · 0g 0a\n19\n67\n67-75\n-\n13k\n4y\n£1.1m\n🙂\nCB\nAndres Brennan (Youth)\nXI\n⭐ Star man\n0 apps · 0g 0a\n18\n64\n64-73\n-\n10k\n2y\n£800k\n🙂\nRM\nDrey Wright\nXI\nC\n⭐ Star man\n0 apps · 0g 0a\n30\n64\n64-66\n-\n3k\n4y\n£700k\n🙂\nGK\nEnzo Nyman (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n17\n63\n69-78\n-\n9k\n4y\n£700k\n🙂\nLB\nMats Adeyemi (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n19\n63\n63-70\n-\n9k\n4y\n£700k\n🙂\nRW\nOndrej Ferreira (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n18\n63\n68-77\n-\n9k\n3y\n£700k\n🙂\nCB\nOndrej Okonjo (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n18\n63\n73-82\n-\n9k\n1y\n£300k\n🙂\nGK\nSam Novak (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n19\n63\n67-76\n-\n9k\n1y\n£300k\n🙂\nCM\nLeo Walsh (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n19\n62\n66-75\n-\n9k\n4y\n£600k\n🙂\nST\nLuca Calvet (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n19\n62\n72-81\n-\n9k\n3y\n£600k\n🙂\nST\nOndrej Achebe (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n18\n60\n61-70\n-\n7k\n3y\n£500k\n🙂\nLW\nDiego Kimura (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n17\n59\n70-79\n-\n7k\n4y\n£500k\n🙂\nCAM\nKofi Brennan (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n19\n59\n70-79\n-\n7k\n4y\n£500k\n🙂\nRB\nMatteo Vaszary (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n18\n58\n60-69\n-\n6k\n3y\n£400k\n🙂\nCM\nNils Kimura (Youth)\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n19\n57\n57-61\n-\n6k\n2y\n£400k\n🙂\nCDM\nKaan Silva (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n17\n56\n62-71\n-\n5k\n3y\n£300k\n🙂\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n127k of 146k a week\n⏳ FINAL YEAR (2)\nGK\nSam Novak (Youth)\n19y · on 9k a week · final year\n63\nRenew · 10k/w · £1.8m\n\n4 years at 10k a week. £1.8m to sign.\n\nNo release clause.\n\nLeaves £6.2m in the transfer kitty.\n\nWage bill: 128k of 146k a week.\n\n+Clause · 9k/w · exit £500k\n\n4 years at 9k a week. £1.6m to sign.\n\nExit clause £500k. Any club can pay it.\n\nLeaves £6.4m in the transfer kitty.\n\nWage bill: 127k of 146k a week.\n\nCB\nOndrej Okonjo (Youth)\n18y · on 9k a week · final year\n63\nRenew · 10k/w · £1.8m\n\n4 years at 10k a week. £1.8m to sign.\n\nNo release clause.\n\nLeaves £6.2m in the transfer kitty.\n\nWage bill: 128k of 146k a week.\n\n+Clause · 9k/w · exit £500k\n\n4 years at 9k a week. £1.6m to sign.\n\nExit clause £500k. Any club can pay it.\n\nLeaves £6.4m in the transfer kitty.\n\nWage bill: 127k of 146k a week.\n\nLet a deal run out and he leaves in the summer for nothing. The clause deal pays him 12 percent less, and the price is an exit door at 1.5x his value today that any club can walk through.\n\nLET SOMEBODY GO\nYou keep paying half his wage until his deal would have run out, capped at two seasons, and it counts against the cap the whole time.\nDrey Wright\n64 rated, 3k a week, 4 years left\nNeed 12 seniors\nFREE AGENTS\nTaye Colombo\nMADE UP\nGK, 40 rated, 29, no club\n1k a week for 3 years, £500k to sign, no transfer fee\nSign · 1k/w · 3y · £500k\nHakan Johans",
+ "tab_Tactics": "FORMATION\nBACK THREE\n3-5-2\n3-4-3\n3-4-2-1\n3-5-2 high wing backs\nBACK FOUR\n4-3-3\n4-4-2\n4-2-3-1\n4-1-2-1-2\n4-5-1\n4-4-1-1\n4-3-3 holding\n4-2-2-2\n4-1-4-1\n4-3-1-2\n4-2-3-1 wide\nBACK FIVE\n5-3-2\n5-4-1\nMENTALITY\n🛡️\nDefensive\nSit deep, frustrate them, protect the point\n⚖️\nBalanced\nKeep your shape and pick your moments\n⚔️\nAttacking\nThrow bodies forward and chase goals\nSTARTING XI · AVG 62\nAuto Pick\nSTANDARD LINE\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\n63\nNovak\n67\nVoskuil\n64\nBrennan\n63\nOkonjo\n63\nAdeyemi\n62\nWalsh\n59\nBrennan\n57\nKimura\n64\nC\nWright\n62\nCalvet\n59\nKimura\n\nDrag a player onto another to swap them. Tap a spot to pick someone else, or a bench man below then a spot.\n\nMatch plans 0/3\nBENCH 5\nSET PIECES 5/5 captain Wright\nSHOOTOUT ORDER 0/11 not set, one draw decides it",
+ "tab_Table": "Scottish Premiership\n\n12 clubs · Your league\n\nBrowse leagues\nSCOTTISH PREMIERSHIP · PRE-SEASON, ALPHABETICAL ORDER\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n·\nAberdeen\n0\n0\n0\n0-0\n0\n0\n·\nCeltic\n0\n0\n0\n0-0\n0\n0\n⭐\nDundee\n0\n0\n0\n0-0\n0\n0\n·\nDundee United\n0\n0\n0\n0-0\n0\n0\n·\nFalkirk\n0\n0\n0\n0-0\n0\n0\n·\nHearts\n0\n0\n0\n0-0\n0\n0\n·\nHibernian\n0\n0\n0\n0-0\n0\n0\n·\nKilmarnock\n0\n0\n0\n0-0\n0\n0\n·\nMotherwell\n0\n0\n0\n0-0\n0\n0\n·\nRangers\n0\n0\n0\n0-0\n0\n0\n·\nSt Johnstone\n0\n0\n0\n0-0\n0\n0\n·\nSt Mirren\n0\n0\n0\n0-0\n0\n0\n\nNo games yet, so the order means nothing. Positions appear with the first round.",
+ "tab_Market": "",
+ "tileText": {},
+ "tileValues": {
+  "Board": "ABSENT",
+  "Inbox": "ABSENT",
+  "Calendar": "ABSENT",
+  "League": "ABSENT",
+  "Cups": "ABSENT",
+  "Stats": "ABSENT",
+  "Finances": "ABSENT",
+  "Facilities": "ABSENT",
+  "Staff": "ABSENT",
+  "Skills": "ABSENT",
+  "Options": "ABSENT",
+  "Manager": "ABSENT",
+  "Treatment": "ABSENT",
+  "Rival watch": "ABSENT",
+  "Press room": "ABSENT",
+  "Dressing room": "ABSENT",
+  "Academy": "ABSENT",
+  "Training": "ABSENT",
+  "Market": "ABSENT",
+  "Cabinet": "ABSENT"
+ },
+ "m1": {
+  "ok": false,
+  "why": "no play live",
+  "reportText": ""
+ },
+ "m2": "false",
+ "reload": {
+  "before": {
+   "club": "Dundee",
+   "season": 1,
+   "week": 0,
+   "cal": 38,
+   "budget": 8,
+   "squad": 16,
+   "inbox": 0,
+   "form": "",
+   "results": 0,
+   "live": false,
+   "window": "summer"
+  },
+  "after": {
+   "club": "Dundee",
+   "season": 1,
+   "week": 0,
+   "cal": 38,
+   "budget": 8,
+   "squad": 16,
+   "inbox": 0,
+   "form": "",
+   "results": 0,
+   "live": false,
+   "window": "summer"
+  }
+ },
+ "midTileText": {},
+ "midtab_Squad": "PLAYER (16 IN SQUAD)\nPOS\nPLAYER\nAGE\nOVR\nPOT\nFORM\nWAGE\nDEAL\nWORTH\nFIT\nMOOD\nCB\nOndrej Voskuil (Youth)\nXI\n⭐ Star man\n5 apps · 0g 0a\n🟨1\n19\n67\n67-75\n5.7\n13k\n4y\n£1.1m\n😐\nCB\nAndres Brennan (Youth)\nXI\n⭐ Star man\n5 apps · 0g 0a\n18\n64\n64-73\n5.9\n10k\n2y\n£800k\n😐\nRM\nDrey Wright\nXI\nC\n⭐ Star man\n5 apps · 0g 1a\n30\n64\n64-66\n6.2\n3k\n4y\n£700k\n😐\nGK\nEnzo Nyman (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n17\n63\n69-78\n-\n9k\n4y\n£700k\n😐\nLB\nMats Adeyemi (Youth)\nXI\n🔥 Key first teamer\n5 apps · 0g 0a\n🟨1\n19\n63\n63-70\n6.1\n9k\n4y\n£700k\n😐\nRW\nOndrej Ferreira (Youth)\n🌱 One for the future\n4 apps · 1g 0a\n18\n63\n68-77\n6.1\n9k\n3y\n£700k\n😐\nCB\nOndrej Okonjo (Youth)\nXI\n🔥 Key first teamer\n5 apps · 0g 0a\n🟨2\n18\n63\n73-82\n6.3\n9k\n1y\n£300k\n😐\nGK\nSam Novak (Youth)\nXI\n🔥 Key first teamer\n5 apps · 0g 0a\n19\n63\n67-76\n6.0\n9k\n1y\n£300k\n😐\nCM\nLeo Walsh (Youth)\nXI\n🔥 Key first teamer\n5 apps · 0g 0a\n19\n62\n66-75\n6.2\n9k\n4y\n£600k\n😐\nST\nLuca Calvet (Youth)\nXI\n🔥 Key first teamer\n5 apps · 2g 1a\n19\n62\n72-81\n6.3\n9k\n3y\n£600k\n🙂\nST\nOndrej Achebe (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n18\n60\n61-70\n-\n7k\n3y\n£500k\n😐\nLW\nDiego Kimura (Youth)\nXI\n🔥 Key first teamer\n5 apps · 0g 0a\n17\n59\n70-79\n5.9\n7k\n4y\n£500k\n😐\nCAM\nKofi Brennan (Youth)\nXI\n🔥 Key first teamer\n5 apps · 1g 0a\n🟨1\n19\n59\n70-79\n5.8\n7k\n4y\n£500k\n🙂\nRB\nMatteo Vaszary (Youth)\n🌱 One for the future\n1 apps · 0g 0a\n18\n58\n60-69\n6.1\n6k\n3y\n£400k\n😐\nCM\nNils Kimura (Youth)\nXI\n🔥 Key first teamer\n5 apps · 0g 1a\n🟨2\n19\n57\n57-61\n6.1\n6k\n2y\n£400k\n😐\nCDM\nKaan Silva (Youth)\n🌱 One for the future\n1 apps · 0g 0a\n17\n56\n62-71\n5.1\n5k\n3y\n£300k\n😐\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n127k of 146k a week\n⏳ FINAL YEAR (2)\nGK\nSam Novak (Youth)\n19y · on 9k a week · final year\n63\nRenew · 10k/w · £1.8m\n\n4 years at 10k a week. £1.8m to sign.\n\nNo release clause.\n\nLeaves £6.8m in the transfer kitty.\n\nWage bill: 128k of 146k a week.\n\n+Clause · 9k/w · exit £500k\n\n4 years at 9k a week. £1.6m to sign.\n\nExit clause £500k. Any club can pay it.\n\nLeaves £7m in the transfer kitty.\n\nWage bill: 127k of 146k a week.\n\nCB\nOndrej Okonjo (Youth)\n18y · on 9k a week · final year\n63\nRenew · 10k/w · £1.8m\n\n4 years at 10k a week. £1.8m to sign.\n\nNo release clause.\n\nLeaves £6.8m in the transfer kitty.\n\nWage bill: 128k of 146k a week.\n\n+Clause · 9k/w · exit £500k\n\n4 years at 9k a week. £1.6m to sign.\n\nExit clause £500k. Any club can pay it.\n\nLeaves £7m in the transfer kitty.\n\nWage bill: 127k of 146k a week.\n\nLet a deal run out and he leaves in the summer for nothing. The clause deal pays him 12 percent less, and the price is an exit door at 1.5x his value today that any club can walk through.\n\nLET SOMEBODY GO\nYou keep paying half his wage until his deal would have run out, capped at two seasons, and it counts against the cap the whole time.\nDrey Wright\n64 rated, 3k a week, 4 years left\nNeed 12 seniors\nFREE AGENTS, AND THE WINDOW BEING SHUT DOES NOT STOP THESE\nTaye Colombo\nMADE UP\nGK, 40 rated, 29, no club\n",
+ "midtab_Table": "Scottish Premiership\n\n12 clubs · Your league\n\nBrowse leagues\nSCOTTISH PREMIERSHIP · ROUND 5 OF 22\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n1\nCeltic\n4\n1\n0\n16-5\n+11\n13\n2\nHearts\n3\n2\n0\n9-4\n+5\n11\n3\nRangers\n3\n1\n1\n8-2\n+6\n10\n4\nHibernian\n3\n0\n2\n5-5\n0\n9\n5\nFalkirk\n2\n1\n2\n8-8\n0\n7\n6\nMotherwell\n2\n1\n2\n5-6\n-1\n7\n7\nDundee United\n2\n1\n2\n8-10\n-2\n7\n8\nSt Mirren\n2\n0\n3\n8-9\n-1\n6\n9\nKilmarnock\n1\n1\n3\n3-5\n-2\n4\n10\nSt Johnstone\n1\n1\n3\n7-10\n-3\n4\n11\nAberdeen\n1\n1\n3\n5-11\n-6\n4\n12\nDundee\n0\n2\n3\n4-11\n-7\n2\n\nLevel on points splits on goal difference, then goals scored.",
+ "endSave": {
+  "club": "Dundee",
+  "season": 1,
+  "week": 7,
+  "cal": 38,
+  "budget": 8.59,
+  "squad": 16,
+  "inbox": 1,
+  "form": "DLLLD",
+  "results": 5,
+  "live": false,
+  "window": null
+ },
+ "inboxDump": [
+  [
+   1,
+   "Otto Pereira, local paper",
+   "A reporter from the local paper is running a piece on whether this squad is good enough fo"
+  ]
+ ],
+ "newsDump": [],
+ "saveKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclField",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "cupByes",
+  "setPieces",
+  "intl",
+  "xiDuties",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "finance",
+  "decisions"
+ ]
+}

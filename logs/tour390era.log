@@ -1,0 +1,11 @@
+AUDIT hub: leak minus zero?: "nce 📩 INBOX 1 new No messages yet 📅 CALENDAR W 3-0 Next: Middlesbrough 🏆 LEAGUE #8 Form: W W W W "
+AUDIT tab-Squad: 15 overlapping text pairs: "CB" x "Let a deal run out and he leaves in the " (36x9 at 29,1652) static/static
+AUDIT tab-Tactics: 1 overlapping text pairs: "Standard line" x "74" (36x12 at 298,939) absolute/relative
+AUDIT tab-Market: 15 overlapping text pairs: "CM" x "Club Manager: Free Football Management G" (29x19 at 32,1262) static/static
+AUDIT m1-live-kickoff: 15 overlapping text pairs: "DoUKnowBall" x "?" (44x21 at 52,15) static/static
+AUDIT m1-interval: leak minus zero?: " TIME · PREMIER LEAGUE · ROUND 20 · AWAY Everton 1-0 Middlesbrough In front, and deservedly so. The"
+AUDIT m1-live-sheet: 15 overlapping text pairs: "Skip to main content" x "Club Manager is the site's big one: a fu" (166x40 at 32,-96) fixed/static
+AUDIT m1-report: 2 overlapping text pairs: "Skip to main content" x "DoUKnowBall" (150x21 at 12,-86) fixed/static ;; leak minus zero?: ") Secure Continue AROUND THE GROUNDS Aston Villa 1-0 Chelsea Arsenal 2-0 Manchester City Blackburn R"
+AUDIT m2-quick-report: 2 overlapping text pairs: "🅰️ Duncan Ferguson" x "43'" (40x12 at 175,1175) static/static ;; leak minus zero?: "0(+6) Secure Continue AROUND THE GROUNDS Chelsea 1-0 Manchester City Birmingham City 0-1 Arsenal Bol"
+AUDIT ff-report-0: 2 overlapping text pairs: "Skip to main content" x "DoUKnowBall" (150x21 at 12,-86) fixed/static ;; leak minus zero?: "helsea Sunderland 2-1 Liverpool Bolton Wanderers 0-0 West Brom Birmingham City 0-1 Newcastle Manches"
+TOUR t390era done: 0 findings, 0 errors, 34 shots, 107s

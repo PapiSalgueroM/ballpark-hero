@@ -1,0 +1,1038 @@
+{
+ "tag": "t390era",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T00:12:34.465Z",
+ "steps": [
+  {
+   "s": 0,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 7,
+   "what": "era picked"
+  },
+  {
+   "s": 8,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 14,
+   "what": "club picked"
+  },
+  {
+   "s": 19,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Everton",
+    "season": 1,
+    "week": 28,
+    "cal": 56,
+    "budget": 17.05,
+    "squad": 20,
+    "inbox": 0,
+    "form": "WWWWW",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 19,
+   "what": "tab Squad"
+  },
+  {
+   "s": 21,
+   "what": "tab Tactics"
+  },
+  {
+   "s": 23,
+   "what": "tab Table"
+  },
+  {
+   "s": 25,
+   "what": "tab Market"
+  },
+  {
+   "s": 28,
+   "what": "tile Board"
+  },
+  {
+   "tileScroll": "Board",
+   "y0": 0,
+   "y1": 0
+  },
+  {
+   "s": 38,
+   "what": "live m1"
+  },
+  {
+   "s": 80,
+   "what": "live m1 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 1,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "benchOffered": 8,
+    "liveSub": true
+   },
+   "save": {
+    "club": "Everton",
+    "season": 1,
+    "week": 29,
+    "cal": 56,
+    "budget": 17.05,
+    "squad": 20,
+    "inbox": 1,
+    "form": "WWWWD",
+    "results": 22,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 83,
+   "what": "reload test"
+  },
+  {
+   "s": 93,
+   "what": "ff month 0",
+   "r": "FULL TIME",
+   "save": {
+    "club": "Everton",
+    "season": 1,
+    "week": 39,
+    "cal": 56,
+    "budget": 19.52,
+    "squad": 20,
+    "inbox": 3,
+    "form": "LWLLW",
+    "results": 28,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 95,
+   "what": "ff month 1",
+   "r": "no calendar tile",
+   "save": {
+    "club": "Everton",
+    "season": 1,
+    "week": 39,
+    "cal": 56,
+    "budget": 19.52,
+    "squad": 20,
+    "inbox": 3,
+    "form": "LWLLW",
+    "results": 28,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 96,
+   "what": "ff month 2",
+   "r": "no calendar tile",
+   "save": {
+    "club": "Everton",
+    "season": 1,
+    "week": 39,
+    "cal": 56,
+    "budget": 19.52,
+    "squad": 20,
+    "inbox": 3,
+    "form": "LWLLW",
+    "results": 28,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 107,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "t390era-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "t390era-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 21215
+  },
+  {
+   "file": "t390era-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 33590
+  },
+  {
+   "file": "t390era-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 114270
+  },
+  {
+   "file": "t390era-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 29386
+  },
+  {
+   "file": "t390era-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 72065
+  },
+  {
+   "file": "t390era-007-manager-form-filled.jpg",
+   "at": "club picked",
+   "bytes": 71780
+  },
+  {
+   "file": "t390era-008-hub-top.jpg",
+   "at": "hub reached",
+   "bytes": 38883
+  },
+  {
+   "file": "t390era-009-hub-full.jpg",
+   "at": "hub reached",
+   "bytes": 154938
+  },
+  {
+   "file": "t390era-010-tab-Squad.jpg",
+   "at": "tab Squad",
+   "bytes": 128731
+  },
+  {
+   "file": "t390era-011-tab-Squad-after.jpg",
+   "at": "tab Squad",
+   "bytes": 73227
+  },
+  {
+   "file": "t390era-012-tab-Tactics.jpg",
+   "at": "tab Tactics",
+   "bytes": 125371
+  },
+  {
+   "file": "t390era-013-tab-Tactics-after.jpg",
+   "at": "tab Tactics",
+   "bytes": 74109
+  },
+  {
+   "file": "t390era-014-tab-Table.jpg",
+   "at": "tab Table",
+   "bytes": 136425
+  },
+  {
+   "file": "t390era-015-tab-Table-after.jpg",
+   "at": "tab Table",
+   "bytes": 88771
+  },
+  {
+   "file": "t390era-016-tab-Market.jpg",
+   "at": "tab Market",
+   "bytes": 142053
+  },
+  {
+   "file": "t390era-017-tab-Market-after.jpg",
+   "at": "tab Market",
+   "bytes": 92495
+  },
+  {
+   "file": "t390era-018-tile-Board.jpg",
+   "at": "tile Board",
+   "bytes": 25988
+  },
+  {
+   "file": "t390era-019-tile-Board-full.jpg",
+   "at": "tile Board",
+   "bytes": 140493
+  },
+  {
+   "file": "t390era-020-m1-live-kickoff.jpg",
+   "at": "live m1",
+   "bytes": 17510
+  },
+  {
+   "file": "t390era-021-m1-interval.jpg",
+   "at": "live m1",
+   "bytes": 86634
+  },
+  {
+   "file": "t390era-022-m1-after-sub.jpg",
+   "at": "live m1",
+   "bytes": 86153
+  },
+  {
+   "file": "t390era-023-m1-live-sheet.jpg",
+   "at": "live m1",
+   "bytes": 22476
+  },
+  {
+   "file": "t390era-024-m1-after-live-sub.jpg",
+   "at": "live m1",
+   "bytes": 18686
+  },
+  {
+   "file": "t390era-025-m1-fulltime-pitch.jpg",
+   "at": "live m1",
+   "bytes": 15121
+  },
+  {
+   "file": "t390era-026-m1-report.jpg",
+   "at": "live m1",
+   "bytes": 98948
+  },
+  {
+   "file": "t390era-027-m2-quick-report.jpg",
+   "at": "live m1 done",
+   "bytes": 97528
+  },
+  {
+   "file": "t390era-028-after-reload.jpg",
+   "at": "reload test",
+   "bytes": 16555
+  },
+  {
+   "file": "t390era-029-slots.jpg",
+   "at": "reload test",
+   "bytes": 83967
+  },
+  {
+   "file": "t390era-030-ff-month-0.jpg",
+   "at": "ff month 0",
+   "bytes": 90065
+  },
+  {
+   "file": "t390era-031-ff-month-1.jpg",
+   "at": "ff month 1",
+   "bytes": 102039
+  },
+  {
+   "file": "t390era-032-ff-month-2.jpg",
+   "at": "ff month 2",
+   "bytes": 102039
+  },
+  {
+   "file": "t390era-033-mid-tab-Squad.jpg",
+   "at": "ff month 2",
+   "bytes": 129019
+  },
+  {
+   "file": "t390era-034-mid-tab-Table.jpg",
+   "at": "ff month 2",
+   "bytes": 136794
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 101,
+   "docH": 21493,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the UEFA Cup\" shown 81px of 118px",
+    "\"Qualify for the UEFA Cup\" shown 81px of 118px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 101,
+   "docH": 22777,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Everton\" 62x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 23172,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans singing · prices, sponsor, the books\" shown 149px of 176px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \"nce 📩 INBOX 1 new No messages yet 📅 CALENDAR W 3-0 Next: Middlesbrough 🏆 LEAGUE #8 Form: W W W W \""
+   ],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1774,
+   "docH": 22601,
+   "label": "hub"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Andy van der Meyde\" shown 78px of 117px",
+    "\"Alessandro Pistone\" shown 101px of 108px"
+   ],
+   "overlaps": [
+    "\"CB\" x \"Let a deal run out and he leaves in the \" (36x9 at 29,1652) static/static",
+    "\"24y · on 11k a week · final year\" x \"Let a deal run out and he leaves in the \" (264x14 at 73,1652) static/static",
+    "\"74\" x \"Let a deal run out and he leaves in the \" (16x9 at 345,1652) static/static",
+    "\"Renew · 14k/w · £2.5m\" x \"Let a deal run out and he leaves in the \" (163x23 at 29,1670) static/static",
+    "\"4 years at 14k a week. £2.5m to sign.\" x \"You keep paying half his wage until his \" (145x27 at 38,1728) static/static",
+    "\"No release clause.\" x \"Andy van der Meyde\" (145x10 at 38,1765) static/static",
+    "\"Leaves in the transfer kitty.\" x \"79 rated, 20k a week, 1 year left\" (145x14 at 38,1781) static/static",
+    "\"£14.6m\" x \"Andy van der Meyde\" (36x4 at 76,1777) static/static",
+    "\"£14.6m\" x \"79 rated, 20k a week, 1 year left\" (36x8 at 76,1781) static/static",
+    "\"Wage bill: 165k of 186k a week.\" x \"Tim Cahill\" (145x12 at 38,1808) static/static",
+    "\"Wage bill: 165k of 186k a week.\" x \"76 rated, 14k a week, 4 years left\" (145x14 at 38,1820) static/static",
+    "\"+Clause · 12k/w · exit £2.7m\" x \"Let a deal run out and he leaves in the \" (163x23 at 198,1670) static/static",
+    "\"4 years at 12k a week. £2.2m to sign.\" x \"You keep paying half his wage until his \" (145x27 at 207,1728) static/static",
+    "\"Exit clause £2.7m. Any club can pay it.\" x \"Release, 10k x 28\" (96x25 at 256,1766) static/static",
+    "\"Leaves in the transfer kitty.\" x \"Release, 7k x 112\" (92x19 at 260,1805) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 23197,
+   "label": "tab-Squad"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [
+    "\"Standard line\" x \"74\" (36x12 at 298,939) absolute/relative"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Auto Pick\" 73x16",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15"
+   ],
+   "scrollY": 0,
+   "docH": 22333,
+   "label": "tab-Tactics"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 22105,
+   "label": "tab-Table"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Barcelona · 24y · worth £40.4m to £42.7m\" shown 175px of 183px",
+    "\"Bayern Munich · 28y · worth £24.5m to £29.3m\" shown 182px of 203px",
+    "\"Manchester United · 28y · worth £29.1m to £30m\" shown 181px of 211px",
+    "\"Manchester United · 19y · worth £28.9m to £33.3m\" shown 179px of 222px",
+    "\"Manchester United · 19y · worth £21.1m to £22.6m\" shown 181px of 215px",
+    "\"Real Madrid · 29y · worth £20.8m to £25.3m\" shown 178px of 192px",
+    "\"Manchester United · 26y · worth £21.8m to £27m\" shown 178px of 210px",
+    "\"Real Madrid · 18y · worth £21.5m to £23.6m\" shown 181px of 189px",
+    "\"Atlético Madrid · 20y · worth £18.6m to £23m\" shown 179px of 196px",
+    "\"Real Madrid · 23y · worth £18.8m to £22.7m\" shown 179px of 190px",
+    "\"Real Madrid · 23y · worth £17.2m to £20.6m\" shown 179px of 189px",
+    "\"Bayern Munich · 26y · worth £17.3m to £21.3m\" shown 180px of 199px",
+    "\"Newcastle · 25y · worth £16.3m to £19.4m\" shown 180px of 183px",
+    "\"Real Madrid · 27y · worth £17.4m to £20.8m\" shown 180px of 189px",
+    "\"Real Madrid · 20y · worth £20.2m to £23.4m\" shown 179px of 192px",
+    "\"Bayern Munich · 29y · worth £19.8m to £23m\" shown 180px of 194px",
+    "\"Liverpool · 23y · worth £14m to £17m\" shown 133px of 159px"
+   ],
+   "overlaps": [
+    "\"CM\" x \"Club Manager: Free Football Management G\" (29x19 at 32,1262) static/static",
+    "\"Michael Ballack\" x \"Club Manager: Free Football Management G\" (90x16 at 89,1258) static/static",
+    "\"Bayern Munich · 28y · worth £24.5m to £2\" x \"Club Manager: Free Football Management G\" (182x14 at 69,1273) static/static",
+    "\"91\" x \"Club Manager: Free Football Management G\" (15x20 at 259,1262) static/static",
+    "\"Talk · £31.4m\" x \"Club Manager: Free Football Management G\" (76x23 at 282,1258) static/static",
+    "\"CDM\" x \"Club Manager: Free Football Management G\" (29x9 at 32,1305) static/static",
+    "\"Patrick Vieira\" x \"Club Manager: Free Football Management G\" (77x14 at 89,1300) static/static",
+    "\"Juventus · 28y · worth £25.7m to £31.2m\" x \"A full club-management sim in your brows\" (182x8 at 69,1322) static/static",
+    "\"91\" x \"Club Manager: Free Football Management G\" (15x9 at 259,1304) static/static",
+    "\"Talk · £31.4m\" x \"Club Manager: Free Football Management G\" (76x13 at 282,1301) static/static",
+    "\"ST\" x \"A full club-management sim in your brows\" (29x19 at 32,1356) static/static",
+    "\"Ruud van Nistelrooy\" x \"A full club-management sim in your brows\" (114x16 at 89,1351) static/static",
+    "\"Manchester United · 28y · worth £29.1m t\" x \"A full club-management sim in your brows\" (181x14 at 69,1367) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (15x20 at 258,1355) static/static",
+    "\"Talk · £32.2m\" x \"A full club-management sim in your brows\" (77x23 at 281,1342) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £44.6m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £40.5m\" 86x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £33.9m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £38.5m\" 85x23",
+    "button.flex-1.px-1.5.py-0.5 \"£66.2m\" 85x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £35.6m\" 85x23",
+    "button.flex-1.px-1.5.py-0.5 \"£63m\" 85x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31.4m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £27.3m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31.4m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31.4m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31.4m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31.4m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £32.2m\" 84x23",
+    "button.flex-1.px-1.5.py-0.5 \"£58.9m\" 84x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31m\" 73x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £31.9m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £36.6m\" 86x23",
+    "button.flex-1.px-1.5.py-0.5 \"£44m\" 86x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £30m\" 76x23",
+    "button.flex-1.px-1.5.py-0.5 \"£50.2m\" 76x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £28.1m\" 82x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £27.3m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £24.8m\" 86x23"
+   ],
+   "scrollY": 0,
+   "docH": 22180,
+   "label": "tab-Market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 21962,
+   "label": "tile-Board"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"1 Schwarzer\" shown 47px of 52px",
+    "\"5 Southgate\" shown 47px of 51px",
+    "\"6 MeydeC\" shown 47px of 50px",
+    "\"11 Ferguson\" shown 47px of 53px",
+    "\"Balance of play:\" shown 1px of 83px"
+   ],
+   "overlaps": [
+    "\"DoUKnowBall\" x \"?\" (44x21 at 52,15) static/static",
+    "\"DoUKnowBall\" x \"Premier League · Round 20\" (62x21 at 100,15) static/static",
+    "\"Back\" x \"Stats\" (23x16 at 341,18) static/static",
+    "\"Track stats\" x \"-\" (55x16 at 173,57) static/static",
+    "\"Track stats\" x \"0\" (12x16 at 175,57) static/static",
+    "\"Track stats\" x \"0\" (12x16 at 204,57) static/static",
+    "\"MATCH LIVE\" x \"1 Schwarzer\" (47x5 at 171,140) static/static",
+    "\"2 Reiziger\" x \"Club Manager: Free Football Management G\" (42x9 at 68,225) static/static",
+    "\"3 Ehiogu\" x \"Club Manager: Free Football Management G\" (36x9 at 138,205) static/static",
+    "\"4 Queudrue\" x \"Club Manager: Free Football Management G\" (47x9 at 206,207) static/static",
+    "\"5 Southgate\" x \"Club Manager: Free Football Management G\" (47x9 at 277,226) static/static",
+    "\"6 Boateng\" x \"A full club-management sim in your brows\" (43x9 at 73,307) static/static",
+    "\"7 Mendieta\" x \"A full club-management sim in your brows\" (47x7 at 135,257) static/static",
+    "\"8 Parlour\" x \"Club Manager: Free Football Management G\" (37x3 at 204,246) static/static",
+    "\"9 Downing\" x \"A full club-management sim in your brows\" (45x9 at 273,307) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 21116,
+   "label": "m1-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \" TIME · PREMIER LEAGUE · ROUND 20 · AWAY Everton 1-0 Middlesbrough In front, and deservedly so. The\""
+   ],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22392,
+   "label": "m1-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"1 Schwarzer\" shown 47px of 52px",
+    "\"5 Southgate\" shown 47px of 51px",
+    "\"6 MeydeC\" shown 47px of 50px",
+    "\"11 Ferguson\" shown 47px of 53px",
+    "\"Balance of play:\" shown 1px of 83px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"Club Manager is the site's big one: a fu\" (166x40 at 32,-96) fixed/static",
+    "\"?\" x \"Club Manager is the site's big one: a fu\" (44x44 at 52,2) static/static",
+    "\"Everton\" x \"Club Manager is the site's big one: a fu\" (121x20 at 32,54) static/static",
+    "\"-\" x \"Club Manager is the site's big one: a fu\" (65x32 at 163,48) static/static",
+    "\"1\" x \"Club Manager is the site's big one: a fu\" (12x26 at 175,51) static/static",
+    "\"0\" x \"Club Manager is the site's big one: a fu\" (12x26 at 204,51) static/static",
+    "\"Middlesbrough\" x \"Club Manager is the site's big one: a fu\" (121x20 at 238,54) static/static",
+    "\"Premier League · Round 20\" x \"Club Manager is the site's big one: a fu\" (172x26 at 100,11) static/static",
+    "\"LIVE 55'\" x \"Club Manager is the site's big one: a fu\" (61x25 at 276,12) static/static",
+    "\"Stats\" x \"Club Manager is the site's big one: a fu\" (17x44 at 341,2) static/static",
+    "\"1 Schwarzer\" x \"Pick when you start too: today's game, o\" (47x4 at 177,144) static/static",
+    "\"2 Reiziger\" x \"Pick when you start too: today's game, o\" (42x9 at 80,218) static/static",
+    "\"3 Ehiogu\" x \"Pick when you start too: today's game, o\" (36x9 at 148,192) static/static",
+    "\"4 Queudrue\" x \"Pick when you start too: today's game, o\" (47x9 at 216,205) static/static",
+    "\"5 Southgate\" x \"Pick when you start too: today's game, o\" (47x9 at 288,213) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 825,
+   "docH": 21116,
+   "label": "m1-live-sheet"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Duncan Ferguson\" shown 119px of 159px",
+    "\"🧤 Shot saved: Andy van der Meyde\" shown 119px of 175px",
+    "\"⚽ Goal: Kevin Kilbane 🅰️ Andy van der Meyde\" shown 119px of 228px",
+    "\"🔁 Sub: Nigel Martyn on for Richard Wright\" shown 119px of 205px",
+    "\"🧤 Shot saved: Duncan Ferguson\" shown 119px of 159px",
+    "\"🧤 Shot saved: James Beattie\" shown 119px of 142px",
+    "\"🔁 Sub: Leon Osman on for Tim Cahill\" shown 119px of 180px",
+    "\"🔁 Sub: Jimmy Floyd Hasselbaink on for Franck Queudrue\" shown 119px of 278px",
+    "\"🟨 Booked: Kevin Kilbane\" shown 119px of 122px",
+    "\"🧤 Shot saved: Mark Viduka\" shown 119px of 133px",
+    "\"🧤 Shot saved: Ray Parlour\" shown 119px of 129px",
+    "\"🟨 Booked: Alessandro Pistone\" shown 119px of 147px",
+    "\"🧤 Shot saved: James Beattie\" shown 119px of 142px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"DoUKnowBall\" (150x21 at 12,-86) fixed/static",
+    "\"🅰️ Andy van der Meyde\" x \"37'\" (40x12 at 175,1040) static/static"
+   ],
+   "leaks": [
+    "minus zero?: \") Secure Continue AROUND THE GROUNDS Aston Villa 1-0 Chelsea Arsenal 2-0 Manchester City Blackburn R\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 23105,
+   "label": "m1-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🟨 Booked: Alessandro Pistone\" shown 119px of 147px",
+    "\"🧤 Shot saved: Milan Baros\" shown 119px of 130px",
+    "\"🧤 Shot saved: Lee Carsley\" shown 119px of 131px",
+    "\"🟨 Booked: Gavin McCann\" shown 119px of 127px",
+    "\"⚽ Goal: Tim Cahill 🅰️ Duncan Ferguson\" shown 119px of 194px",
+    "\"🧤 Shot saved: James Beattie\" shown 119px of 142px",
+    "\"🧤 Shot saved: Andy van der Meyde\" shown 119px of 175px",
+    "\"🧤 Shot saved: Duncan Ferguson\" shown 119px of 159px",
+    "\"🔁 Sub: David Weir on for Alan Stubbs\" shown 119px of 181px",
+    "\"🔁 Sub: Darius Vassell on for Ulises de la Cruz\" shown 119px of 218px",
+    "\"🔁 Sub: Carlton Cole on for Gareth Barry\" shown 119px of 194px",
+    "\"🔁 Sub: Marcus Bent on for Duncan Ferguson\" shown 119px of 220px",
+    "\"🧤 Shot saved: James Beattie\" shown 119px of 142px",
+    "\"🔁 Sub: Mark Delaney on for Jlloyd Samuel\" shown 119px of 206px",
+    "\"🧤 Shot saved: Milan Baros\" shown 119px of 130px",
+    "\"⚽ Goal: James Beattie 🅰️ Tim Cahill\" shown 119px of 176px"
+   ],
+   "overlaps": [
+    "\"🅰️ Duncan Ferguson\" x \"43'\" (40x12 at 175,1175) static/static",
+    "\"🅰️ Tim Cahill\" x \"90+5'\" (40x12 at 175,1434) static/static"
+   ],
+   "leaks": [
+    "minus zero?: \"0(+6) Secure Continue AROUND THE GROUNDS Chelsea 1-0 Manchester City Birmingham City 0-1 Arsenal Bol\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 71,
+   "docH": 23127,
+   "label": "m2-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.text-xs.text-muted-foreground \"Delete\" 37x16"
+   ],
+   "scrollY": 0,
+   "docH": 21855,
+   "label": "slots"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manchester United\" shown 109px of 130px",
+    "\"🧤 Shot saved: Ruud van Nistelrooy\" shown 119px of 170px",
+    "\"🟨 Booked: Kevin Kilbane\" shown 119px of 122px",
+    "\"🟨 Booked: Mikaël Silvestre\" shown 119px of 130px",
+    "\"🧤 Shot saved: Ryan Giggs\" shown 119px of 127px",
+    "\"🧤 Shot saved: Duncan Ferguson\" shown 119px of 159px",
+    "\"🧤 Shot saved: Gabriel Heinze\" shown 119px of 143px",
+    "\"🧤 Shot saved: James Beattie\" shown 119px of 142px",
+    "\"🔁 Sub: Marcus Bent on for Duncan Ferguson\" shown 119px of 220px",
+    "\"🔁 Sub: Ji-sung Park on for Ryan Giggs\" shown 119px of 187px",
+    "\"🧤 Shot saved: Roy Keane\" shown 119px of 126px",
+    "\"🔁 Sub: John O'Shea on for Gabriel Heinze\" shown 119px of 205px",
+    "\"⚽ Goal: Tim Cahill 🅰️ Lee Carsley\" shown 119px of 166px",
+    "\"🧤 Shot saved: Andy van der Meyde\" shown 119px of 175px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"DoUKnowBall\" (150x21 at 12,-86) fixed/static",
+    "\"🅰️ Lee Carsley\" x \"90+2'\" (40x12 at 175,1244) static/static"
+   ],
+   "leaks": [
+    "minus zero?: \"helsea Sunderland 2-1 Liverpool Bolton Wanderers 0-0 West Brom Birmingham City 0-1 Newcastle Manches\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 22987,
+   "label": "ff-report-0"
+  }
+ ],
+ "elapsedS": 107,
+ "clubList": [
+  "Chelsea 👑 Elite Squad 87 Budget £53m Board wants Win the Premier League",
+  "Manchester United 👑 Elite Squad 83 Budget £40m Board wants Win the Premier League",
+  "Arsenal 👑 Elite Squad 81 Budget £29m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 80 Budget £26m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 77 Budget £20m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 77 Budget £18m Board wants Qualify for the UEFA Cup",
+  "Middlesbrough 🥇 Contenders Squad 75 Budget £14m Board wants Qualify for the UEFA Cup",
+  "Aston Villa 🥇 Contenders Squad 74 Budget £11m Board wants Finish in the top half",
+  "Everton ⚔️ Challengers Squad 74 Budget £10m Board wants Finish in the top half",
+  "Birmingham City ⚔️ Challengers Squad 73 Budget £9m Board wants Finish in the top half",
+  "Manchester City ⚔️ Challengers Squad 73 Budget £9m Board wants Finish in the top half",
+  "Blackburn Rovers ⚔️ Challengers Squad 73 Budget £9m Board wants Finish in the top half",
+  "Charlton Athletic ⚔️ Challengers Squad 72 Budget £8m Board wants Finish in the top half",
+  "Bolton Wanderers ⚔️ Challengers Squad 72 Budget £8m Board wants Stay up. Avoid relegation",
+  "West Brom ⚔️ Challengers Squad 72 Budget £8m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 72 Budget £8m Board wants Stay up. Avoid relegation",
+  "Portsmouth ⚔️ Challengers Squad 71 Budget £8m Board wants Stay up. Avoid relegation",
+  "Sunderland 🐺 Underdogs Squad 69 Budget £8m Board wants Stay up. Avoid relegation",
+  "West Ham 🐺 Underdogs Squad 67 Budget £8m Board wants Stay up. Avoid relegation",
+  "Wigan Athletic 🐺 Underdogs Squad 66 Budget £8m Board wants Stay up. Avoid relegation"
+ ],
+ "startSave": {
+  "club": "Everton",
+  "season": 1,
+  "week": 28,
+  "cal": 56,
+  "budget": 17.05,
+  "squad": 20,
+  "inbox": 0,
+  "form": "WWWWW",
+  "results": 21,
+  "live": false,
+  "window": "january"
+ },
+ "hubText": "DOUKNOWBALL\nBack\nTrack stats\nEverton\n2005-06 · Season 1\n🗓️ Took over mid season · run-in simulated\n#8 in league\n£17.1m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\n❄️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 20\nEverton vs Middlesbrough\nAway · their strength ~77 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n1 behind\nContenders patience\n📩\nINBOX\n1 new\nNo messages yet\n📅\nCALENDAR\nW 3-0\nNext: Middlesbrough\n🏆\nLEAGUE\n#8\nForm: W W W W W\n🏅\nCUPS\nStill alive\nFA Cup\n📊\nSTATS\n33 goals\nJames Beattie leads with 14\n💰\nFINANCES\n-£2.8m projected\nFans singing · prices, sponsor, the books\n🏗️\nFACILITIES\nLevel 5 · 4 · 4 · 4\nStadium, training, medical, dressing room\n🧑‍🏫\nSTAFF\nLevel 4 · 5 · 4 · 5\nAttack, defence, keepers, scouting\n🎖️\nSKILLS\nLevel 1\nTactics, recruitment, money, the press\n⚙️\nOPTIONS\n£ · Normal\nCurrency, the international job, haggling\n🧢\nMANAGER\n11W 5L\n52% win rate\n🏥\nTREATMENT\nAll fit\nNo injuries or bans\n🕵️\nRIVAL WATCH\nLiverpool\nThey sit #6\n🎙️\nPRESS ROOM\nThey want a word\nOne question, one tap\n🤝\nDRESSING ROOM\n4 unhappy\nJames McFadden\n🎓\nACADEMY\nNobody yet\nRecruitment 10/20 · 0 scouting\n🏋️\nTRAINING\nNormal · Balanced\n5 players still improving\n🛒\nMARKET\nWindow OPEN\n1 bid for your players\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online footba",
+ "tab_Squad": "PLAYER (20 IN SQUAD)\nRating\nCeiling\nForm\nAge\nWage\nYears left\nWorth\nFitness\nMorale\nPosition\nName\nRW\nAndy van der Meyde\nXI\nC\n25y\n⭐\nfit 96\n80-85\n79\n😄\nST\nJames Beattie\nXI\n26y\n⭐\nfit 96\n76-78\n76\n😄\nCAM\nTim Cahill\nXI\n25y\n⭐\nfit 96\n76-81\n76\n😄\nCB\nJoseph Yobo\nXI\n24y\n🔥\nfit 96\n74-78\n74\n😄\nCB\nMatteo Ferrari\nXI\n25y\n🔥\nfit 97\n76-81\n74\n😄\nLM\nKevin Kilbane\nXI\n27y\n🔥\nfit 96\n73-76\n73\n😄\nLB\nAlessandro Pistone\nXI\n29y\n🔥\nfit 96\n72-75\n72\n😄\nCDM\nLee Carsley\nXI\n30y\n🔥\nfit 97\n72-74\n72\n😄\nRB\nSteve Watson\n30y\n🔄 Not happy\nfit 100\n72-74\n72\n🙂\nLW\nJames McFadden\n21y\n🔄 Not happy\nfit 100\n73-80\n70\n🙂\nCM\nLeon Osman\n23y\n🔄 Not happy\nfit 100\n72-77\n70\n🙂\nRB\nTony Hibbert\n23y\n🔄 Not happy\nfit 100\n74-79\n70\n🙂\nCB\nAlan Stubbs\nXI\n33y\n🔥\nfit 96\n68-70\n68\n😄\nCB\nDavid Weir\n34y\n🧥\nfit 100\n68-70\n68\n🙂\nST\nDuncan Ferguson\nXI\n33y\n🔥\nfit 100\n68-70\n68\n😄\nLB\nGary Naysmith\n26y\n🧥\nfit 100\n70-73\n68\n😄\nST\nMarcus Bent\n26y\n🧥\nfit 96\n68-70\n68\n😄\nGK\nRichard Wright\nXI\n27y\n🔥\nfit 98\n68-70\n68\n😄\nGK\nNigel Martyn\n38y\n🧥\nfit 100\n64-66\n64\n😄\nCM\nKwame Petrov (Youth)\n17y\n🌱\nfit 100\n68-75\n57\n😄\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n162k of 186k a week\n⏳ FINAL YEAR (5)\nRW\nAndy van der Meyde\n25y · on 20k a week · final year\n79\nRenew · 26k/w · £4.7m\n\n4 years at 26k a week. £4.7m to sign.\n\nNo release clause.\n\nLeaves £12.4m in the transfer kitty.\n\nWage bill: 168k of 186k a week.\n\n+Clause · 23k/w · exit £6.5m\n\n4 years at 23k a week. £4.1m to sign.\n\nExit clause £6.5m. Any club can pay it.\n\nLeaves £13m in the transfer kitty.\n\nWage bill: 165k of 186k a week.\n\nCB\nJoseph Yobo\n24y · on 11k a week · final year\n74\nRenew · 14k/w · £2.5m\n\n4 years at 14k a week. £2.5m to sign.\n\nNo release clause.\n\nLeaves £14.6m in the transfer kitty.\n\nWage bill: 165k of 186k a week.\n\n+Clause · 12k/w · exit £2.7m\n\n4 years at 12k a week. £2.2m to sign.\n\nExit clause £2.7m. Any club can pay it.\n\nLeaves £14.9m in the transfer kitty.\n\nWage bill: 163k of 186k a week.\n\nRB\nTony Hibbert\n23y · on 7k a week · final year\n70\nRenew · 8k/w · £1.4m\n\n4 years at 8k a week. £1.4m to sign.\n\nNo release clause.\n\nLeaves £15.7m in the transfer kitty.\n\nWage bill: 163k of 186k a week.\n\n+Clause · 7k/w · exit £1.4m\n\n4 years at 7k a week. £1.3m to sign.\n\nExit clause £1.4m. Any club can pay it.\n\nLeaves £15.8m in the transfer kitty.\n\nWage bill: 162k of 186k a week.\n\nLB\nGary Naysmith\n26y · on 5k a week · final year\n68\nRenew · 7k/w · £1.3m\n\n4 years at 7k a week. £1.3m to sign.\n\nNo release clause.\n\nLeaves £15.8m in the transfer kitty.\n\nWage bill: 164k of 186k a week.\n\n+Clause · 6k/w · exit £900k\n\n4 years at 6k a week. £1.1m to sign.\n\nExit clause £900k. Any club can pay it.\n\nLeaves £16m in the transfer kitty.\n\nWage bill: 163k of 186k a week.\n\nGK\nNigel Martyn\n38y · on 3k a week · final year\n64\nRenew · 3k/w · £300k\n\n2 years at 3k a week. £300k to sign.\n\nNo release clause.\n\nLeaves £16.8m in the transfer kitty.\n\nWage bill: 162k of 186k a week.\n\n+Clause · 3k/w · exit £500k\n\n2 years at 3k",
+ "tab_Tactics": "FORMATION\nBACK THREE\n3-5-2\n3-4-3\n3-4-2-1\n3-5-2 high wing backs\nBACK FOUR\n4-3-3\n4-4-2\n4-2-3-1\n4-1-2-1-2\n4-5-1\n4-4-1-1\n4-3-3 holding\n4-2-2-2\n4-1-4-1\n4-3-1-2\n4-2-3-1 wide\nBACK FIVE\n5-3-2\n5-4-1\nMENTALITY\n🛡️\nDefensive\n⚖️\nBalanced\n⚔️\nAttacking\nSTARTING XI · AVG 73\nAuto Pick\nSTANDARD LINE\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\n68\nWright\n74\nYobo\n74\nFerrari\n68\nStubbs\n72\nPistone\n79\nC\nMeyde\n76\nCahill\n72\nCarsley\n73\nKilbane\n76\nBeattie\n68\nFerguson\n\nDrag a player onto another to swap them. Tap a spot to pick someone else, or a bench man below then a spot.\n\nMatch plans 0/3\nBENCH 9\nSET PIECES 5/5 captain Meyde\nSHOOTOUT ORDER 0/11 not set, one draw decides it",
+ "tab_Table": "Premier League\n\n20 clubs · Your league\n\nBrowse leagues\nPREMIER LEAGUE · ROUND 19 OF 38\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n1\nChelsea\n14\n4\n1\n34-10\n+24\n46\n2\nBirmingham City\n11\n5\n3\n25-15\n+10\n38\n3\nArsenal\n10\n7\n2\n33-12\n+21\n37\n4\nNewcastle\n11\n2\n6\n30-21\n+9\n35\n5\nManchester United\n10\n3\n6\n33-22\n+11\n33\n6\nLiverpool\n10\n2\n7\n31-21\n+10\n32\n7\nFulham\n9\n5\n5\n26-18\n+8\n32\n8\nEverton\n9\n5\n5\n27-22\n+5\n32\n9\nMiddlesbrough\n10\n1\n8\n34-28\n+6\n31\n10\nBolton Wanderers\n9\n3\n7\n32-26\n+6\n30\n11\nTottenham\n9\n3\n7\n24-20\n+4\n30\n12\nPortsmouth\n7\n4\n8\n21-24\n-3\n25\n13\nManchester City\n6\n5\n8\n25-25\n0\n23\n14\nCharlton Athletic\n6\n4\n9\n18-25\n-7\n22\n15\nAston Villa\n4\n8\n7\n18-22\n-4\n20\n16\nBlackburn Rovers\n4\n6\n9\n20-30\n-10\n18\n17\nWest Brom\n4\n3\n12\n20-33\n-13\n15\n18\nWest Ham\n4\n1\n14\n18-37\n-19\n13\n19\nSunderland\n1\n8\n10\n13-39\n-26\n11\n20\nWigan Athletic\n2\n1\n16\n9-41\n-32\n7\n\nLevel on points splits on goal difference, then goals scored, then head to head once both games have been played.",
+ "tab_Market": "❄️ January window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£17.1m\nAROUND THE LEAGUE\n\n📰 Manchester United sign Frank Lampard from Chelsea for £33m.\n\n📰 Valencia sign Jermaine Jenas from Tottenham for £17m.\n\n📰 Chelsea sign Andrea Pirlo from AC Milan for £24m.\n\n📰 💰 The window's biggest deal so far: Frank Lampard to Manchester United for £33m.\n\nBuy\nSell\n1\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\nBundesliga\nLa Liga\nLigue 1\nPremier League\nSerie A\nAny nation\nSpain (215)\nFrance (212)\nItaly (196)\nGermany (159)\nEngland (142)\nNetherlands (30)\nPortugal (27)\nCzech Republic (23)\nIreland (23)\nSwitzerland (20)\nDenmark (18)\nCroatia (17)\nSerbia (15)\nTürkiye (14)\nWales (14)\nScotland (12)\nBelgium (11)\nSweden (11)\nGreece (9)\nFinland (8)\nNorway (7)\nPoland (7)\nBulgaria (6)\nNorthern Ireland (6)\nSlovakia (6)\nAlbania (5)\nRussia (5)\nAustria (4)\nBosnia-Herzegovina (4)\nHungary (4)\nNorth Macedonia (4)\nGeorgia (3)\nIsrael (3)\nMontenegro (3)\nRomania (3)\nBelarus (2)\nIceland (2)\nSlovenia (2)\nUkraine (2)\nLuxembourg (1)\nBrazil (90)\nArgentina (62)\nUruguay (27)\nColombia (8)\nParaguay (5)\nChile (4)\nPeru (4)\nBolivia (1)\nEcuador (1)\nVenezuela (1)\nUnited States (10)\nJamaica (5)\nTrinidad and Tobago (5)\nMartinique (4)\nCanada (3)\nMexico (3)\nFrench Guiana (2)\nGuadeloupe (2)\nHonduras (2)\nCosta Rica (1)\nGrenada (1)\nHaiti (1)\nSaint-Martin (1)\nCameroon (24)\nCote d'Ivoire (23)\nSenegal (22)\nNigeria (14)\nMali (12)\nMorocco (12)\nTunisia (11)\nGhana (10)\nAlgeria (6)\nDR Congo (6)\nGuinea (5)\nSouth Africa (4)\nCongo (3)\nEgypt (3)\nBurkina Faso (2)\nEquatorial Guinea (2)\nGabon (2)\nNamibia (2)\nTogo (2)\nAngola (1)\nCape Verde (1)\nMozambique (1)\nSierra Leone (1)\nThe Gambia (1)\nZambia (1)\nZimbabwe (1)\nAustralia (11)\nJapan (7)\nIran (6)\nKorea, South (3)\nChina (1)\nUzbekistan (1)\nNew Zealand (1)\nTahiti (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nLW\nRonaldinho\nBarcelona · 24y · worth £40.4m to £42.7m\n96\nTalk · £44.6m\nST\nThierry Henry\nArsenal · 27y · worth £34.2m to £39.7m\n96\nTalk · £40.5m\nST\nAndriy Shevchenko\nAC Milan · 28y · worth £27.3m to £31.7m\n93\nTalk · £33.9m\nCDM\nMichael Essien\nChelsea · 22y · worth £27.4m to £32m\n93\nTalk · £38.5m\n£66.2m\nST\nAdriano\nInter Milan · 22y · worth £26.9m to £31.5m\n91\nTalk · £35.6m\n£63m\nCB\nAlessandro Nesta\nAC Milan · 28y · worth £27.2m to £31.5m\n91\nTalk · £31.4m\nST\nDidier Drogba\nChelsea · 26y · worth £22.6m to £28.8m\n91\nTalk · £27.3m\nCF\nFrancesco Totti\nRoma · 28y · worth £27.3m to £29.1m\n91\nTalk · £31.4m\nGK\nGianluigi Buffon\nJuventus · 26y · worth £25.2m to £32.2m\n91\nTalk · £31.4m\nCM\nMichael Ballack\nBayern Munich · 28y · worth £24.5m to £29.3m\n91\nTalk · £31.4m\nCDM\nPatrick Vieira\nJuventus · 28y · worth £25.7m to £31.2m\n91\nTalk · £31.4m\nST\nRuud van Nistelrooy\nManchester United · 28y · worth £29.1m to £30m\n91\nTalk · £32.2m\n£58.9m\nST\nSamuel Eto'o\nBarcelona · 23y · worth £21.1m to £26.8m\n91\nTalk · £3",
+ "tileText": {
+  "Board": "DOUKNOWBALL\nBack\nTrack stats\nEverton\n2005-06 · Season 1\n🗓️ Took over mid season · run-in simulated\n#8 in league\n£17.1m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\n❄️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 20\nEverton vs Middlesbrough\nAway · their strength ~77 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nBOARD EXPECTATIONS · BIG SPENDERS EXPECTED TO CHALLENGE ON EVERY FRONT.\nFinish in the top half\nOn track\nReach the FA Cup semi-finals\nDone\nFinish above Liverpool\nBehind\nConcede fewer than 48 league goals\nOn track\nBlood 2 under-21 players in the league\nDone\nTurn a profit in the transfer market\nOn track\n🛒 IN THE MARKET\nSign a goalkeeper this season\nOn track\n\nAny signing in that line does it, loans included. It is the thinnest part of your squad right now.\n\nSign someone 21 or under rated 76 or better\nOn track\n\nA permanent signing only. He counts once he is in your squad at that age and that rating or better.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their "
+ },
+ "tileValues": {
+  "Board": "📋 BOARD 1 behind Contenders patience",
+  "Inbox": "ABSENT",
+  "Calendar": "ABSENT",
+  "League": "ABSENT",
+  "Cups": "ABSENT",
+  "Stats": "ABSENT",
+  "Finances": "ABSENT",
+  "Facilities": "ABSENT",
+  "Staff": "ABSENT",
+  "Skills": "ABSENT",
+  "Options": "ABSENT",
+  "Manager": "ABSENT",
+  "Treatment": "ABSENT",
+  "Rival watch": "ABSENT",
+  "Press room": "ABSENT",
+  "Dressing room": "ABSENT",
+  "Academy": "ABSENT",
+  "Training": "ABSENT",
+  "Market": "ABSENT",
+  "Cabinet": "ABSENT"
+ },
+ "m1": {
+  "ok": true,
+  "vars": 0,
+  "goalsSeen": 1,
+  "subRowsAtBreak": 11,
+  "sub": true,
+  "benchOffered": 8,
+  "liveSub": true,
+  "reportText": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 20\n🏟️ Away day · crowd 41,281\n45+3'\nADDED TIME\n90+7'\nDRAW\nMiddlesbrough\n1 - 1\nEverton\nEVERTON\n\n⚽ Kevin Kilbane 37' · 🅰️ Andy van der Meyde\n\nMIDDLESBROUGH\n\n⚽ Mark Viduka 90'\n\n🟨 Kevin Kilbane 75'\n🟨 Alessandro Pistone 87'\n🩹 Joseph Yobo 90+4' (2w)\n▲ Nigel Martyn ▼ Richard Wright 46'\n▲ Leon Osman ▼ Tim Cahill 55'\nMIDDLESBRO ▲ Jimmy Floyd Hasselbaink ▼ Franck Queudrue 59'\nEverton\nMATCH STATS\nMiddlesbrough\n51%\nPOSSESSION\n49%\n13\nSHOTS\n11\n6\nON TARGET\n4\n1.71\nEXPECTED GOALS\n1.40\n5\nCORNERS\n9\n10\nFOULS\n10\n3\nKEEPER SAVES\n5\n2\nYELLOW CARDS\n0\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n1\n51%\nBALANCE OF PLAY\n49%\n▲ EVERTON\n▼ MIDDLESBROUGH\n0'\n45'\n90'\n13 (6)\nSHOTS (ON TARGET)\n11 (4)\nEverton\nTIMELINE\nMiddlesbrough\n0'\n⏱️ KICK OFF\n🧤 Shot saved: Duncan Ferguson\n2'\n🧤 Shot saved: Andy van der Meyde\n23'\n⚽ Goal: Kevin Kilbane 🅰️ Andy van der Meyde\n37'\n39'\n🧤 Shot saved: Yakubu\n45+3'\n⏸️ HALF TIME\n🔁 Sub: Nigel Martyn on for Richard Wright\n46'\n🧤 Shot saved: Duncan Ferguson\n50'\n🧤 Shot saved: James Beattie\n55'\n🔁 Sub: Leon Osman on for Tim Cahill\n55'\n59'\n🔁 Sub: Jimmy Floyd Hasselbaink on for Franck Queudrue\n🟨 Booked: Kevin Kilbane\n75'\n82'\n🧤 Shot saved: Ma"
+ },
+ "m2": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 21\n🏟️ Your ground · crowd 29,118\n45+5'\nADDED TIME\n90+5'\nVICTORY\nEverton\n2 - 1\nAston Villa\nEVERTON\n\n⚽ Tim Cahill 43' · 🅰️ Duncan Ferguson\n\n⚽ James Beattie 90+5' · 🅰️ Tim Cahill\n\nASTON VILLA\n\n⚽ Darius Vassell 84'\n\n🟨 Alessandro Pistone 7'\n▲ David Weir ▼ Alan Stubbs 60'\n▲ Marcus Bent ▼ Duncan Ferguson 73'\nAV 🟨 Gavin McCann 34'\nAV ▲ Darius Vassell ▼ Ulises de la Cruz 60'\nAV ▲ Carlton Cole ▼ Gareth Barry 69'\nAV ▲ Mark Delaney ▼ Jlloyd Samuel 88'\nEverton\nMATCH STATS\nAston Villa\n59%\nPOSSESSION\n41%\n15\nSHOTS\n9\n8\nON TARGET\n3\n2.11\nEXPECTED GOALS\n0.86\n8\nCORNERS\n6\n7\nFOULS\n9\n2\nKEEPER SAVES\n6\n1\nYELLOW CARDS\n1\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n3\n59%\nBALANCE OF PLAY\n41%\n▲ EVERTON\n▼ ASTON VILLA\n0'\n45'\n90'\n15 (8)\nSHOTS (ON TARGET)\n9 (3)\nEverton\nTIMELINE\nAston Villa\n0'\n⏱️ KICK OFF\n🟨 Booked: Alessandro Pistone\n7'\n19'\n🧤 Shot saved: Milan Baros\n🧤 Shot saved: Lee Carsley\n30'\n34'\n🟨 Booked: Gavin McCann\n🧤 Shot saved: Tim Cahill\n36'\n⚽ Goal: Tim Cahill 🅰️ Duncan Ferguson\n43'\n45+5'\n⏸️ HALF TIME\n🧤 Shot saved: James Beattie\n47'\n🧤 Shot saved: Andy van der Meyde\n58'\n🧤 Shot saved: Duncan Ferguson\n59'\n🔁 Sub: David Weir on for Alan Stubbs\n60'\n60'",
+ "reload": {
+  "before": {
+   "club": "Everton",
+   "season": 1,
+   "week": 31,
+   "cal": 56,
+   "budget": 17.7,
+   "squad": 20,
+   "inbox": 2,
+   "form": "WWWDW",
+   "results": 23,
+   "live": false,
+   "window": "january"
+  },
+  "after": {
+   "club": "Everton",
+   "season": 1,
+   "week": 31,
+   "cal": 56,
+   "budget": 17.7,
+   "squad": 20,
+   "inbox": 2,
+   "form": "WWWDW",
+   "results": 23,
+   "live": false,
+   "window": "january"
+  }
+ },
+ "midTileText": {},
+ "midtab_Squad": "PLAYER (20 IN SQUAD)\nRating\nCeiling\nForm\nAge\nWage\nYears left\nWorth\nFitness\nMorale\nPosition\nName\nRW\nAndy van der Meyde\nXI\nC\n25y\n⭐\nfit 71\n80-85\n79\n😄\nST\nJames Beattie\nXI\n26y\n⭐\nfit 72\n76-78\n76\n😄\nCAM\nTim Cahill\nXI\n25y\n⭐\nfit 75\n76-81\n76\n😄\nCB\nJoseph Yobo\nXI\n24y\n🔥\nfit 74\n74-78\n74\n😄\nCB\nMatteo Ferrari\nXI\n25y\n🔥\nfit 79\n76-81\n74\n😄\nLM\nKevin Kilbane\nXI\n27y\n🔥\nfit 74\n73-76\n73\n😄\nLB\nAlessandro Pistone\nXI\n29y\n🔥\nfit 77\n72-75\n72\n😄\nCDM\nLee Carsley\nXI\n30y\n🔥\nfit 70\n72-74\n72\n😄\nRB\nSteve Watson\n30y\n🔄 Not happy\nfit 100\n72-74\n72\n🙂\nLW\nJames McFadden\n21y\n🔄 Not happy\nfit 100\n73-80\n70\n😐\nCM\nLeon Osman\n23y\n🔄 Not happy\nfit 100\n72-77\n70\n😐\nRB\nTony Hibbert\n23y\n🔄 Not happy\nfit 100\n74-79\n70\n😐\nCB\nAlan Stubbs\nXI\n33y\n🔥\nfit 71\n68-70\n68\n😄\nCB\nDavid Weir\n34y\n🧥\nfit 99\n68-70\n68\n🙂\nST\nDuncan Ferguson\nXI\n33y\n🔥\nfit 76\n68-70\n68\n😄\nLB\nGary Naysmith\n26y\n🧥\nfit 100\n70-73\n68\n🙂\nST\nMarcus Bent\n26y\n🧥\nfit 84\n68-70\n68\n😄\nGK\nRichard Wright\nXI\n27y\n🔥\nfit 79\n68-70\n68\n😄\nGK\nNigel Martyn\n38y\n🧥\nfit 100\n64-66\n64\n🙂\nCM\nKwame Petrov (Youth)\n17y\n🌱\nfit 100\n68-75\n57\n😄\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n162k of 186k a week\n⏳ FINAL YEAR (5)\nRW\nAndy van der Meyde\n25y · on 20k a week · final year\n79\nRenew · 26k/w · £4.7m\n\n4 years at 26k a week. £4.7m to sign.\n\nNo release clause.\n\nLeaves £14.8m in the transfer kitty.\n\nWage bill: 168k of 186k a week.\n\n+Clause · 23k/w · exit £6.5m\n\n4 years at 23k a week. £4.1m to sign.\n\nExit clause £6.5m. Any club can pay it.\n\nLeaves £15.4m in the transfer kitty.\n\nWage bill: 165k of 186k a week.\n\nCB\nJoseph Yobo\n24y · on 11k a week · final year\n74\nRenew · 14k/w · £2.5m\n\n4 years at 14k a week. £2.5m to sign.\n\nNo release clause.\n\nLeaves £17m in the transfer kitty.\n\nWage bill: 165k of 186k a week.\n\n+Clause · 12k/w · exit £2.7m\n\n4 years at 12k a week. £2.2m to sign.\n\nExit clause £2.7m. Any club can pay it.\n\nLeaves £17.3m in the transfer kitty.\n\nWage bill: 163k of 186k a week.\n\nRB\nTony Hibbert\n23y · on 7k a week · final year\n70\nRenew · 8k/w · £1.4m\n\n4 years at 8k a week. £1.4m to sign.\n\nNo release clause.\n\nLeaves £18.1m in the transfer kitty.\n\nWage bill: 163k of 186k a week.\n\n+Clause · 7k/w · exit £1.4m\n\n4 years at 7k a week. £1.3m to sign.\n\nExit clause £1.4m. Any club can pay it.\n\nLeaves £18.2m in the transfer kitty.\n\nWage bill: 162k of 186k a week.\n\nLB\nGary Naysmith\n26y · on 5k a week · final year\n68\nRenew · 7k/w · £1.3m\n\n4 years at 7k a week. £1.3m to sign.\n\nNo release clause.\n\nLeaves £18.2m in the transfer kitty.\n\nWage bill: 164k of 186k a week.\n\n+Clause · 6k/w · exit £900k\n\n4 years at 6k a week. £1.1m to sign.\n\nExit clause £900k. Any club can pay it.\n\nLeaves £18.4m in the transfer kitty.\n\nWage bill: 163k of 186k a week.\n\nGK\nNigel Martyn\n38y · on 3k a week · final year\n64\nRenew · 3k/w · £300k\n\n2 years at 3k a week. £300k to sign.\n\nNo release clause.\n\nLeaves £19.2m in the transfer kitty.\n\nWage bill: 162k of 186k a week.\n\n+Clause · 3k/w · exit £500k\n\n2 years at 3k",
+ "midtab_Table": "Premier League\n\n20 clubs · Your league\n\nBrowse leagues\nPREMIER LEAGUE · ROUND 26 OF 38\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n1\nChelsea\n20\n4\n2\n48-13\n+35\n64\n2\nArsenal\n15\n7\n4\n45-15\n+30\n52\n3\nNewcastle\n15\n3\n8\n44-30\n+14\n48\n4\nBirmingham City\n13\n7\n6\n29-21\n+8\n46\n5\nManchester United\n13\n5\n8\n41-29\n+12\n44\n6\nLiverpool\n13\n4\n9\n43-30\n+13\n43\n7\nEverton\n12\n6\n8\n36-30\n+6\n42\n8\nMiddlesbrough\n13\n2\n11\n44-39\n+5\n41\n9\nFulham\n12\n5\n9\n35-30\n+5\n41\n10\nTottenham\n11\n4\n11\n32-29\n+3\n37\n11\nBolton Wanderers\n11\n4\n11\n37-36\n+1\n37\n12\nPortsmouth\n11\n4\n11\n28-29\n-1\n37\n13\nAston Villa\n7\n10\n9\n28-29\n-1\n31\n14\nWest Brom\n9\n4\n13\n30-40\n-10\n31\n15\nCharlton Athletic\n8\n5\n13\n25-33\n-8\n29\n16\nManchester City\n7\n7\n12\n31-37\n-6\n28\n17\nBlackburn Rovers\n6\n6\n14\n26-43\n-17\n24\n18\nSunderland\n3\n10\n13\n20-50\n-30\n19\n19\nWigan Athletic\n5\n3\n18\n18-53\n-35\n18\n20\nWest Ham\n5\n2\n19\n23-47\n-24\n17\n\nLevel on points splits on goal difference, then goals scored, then head to head once both games have been played.",
+ "endSave": {
+  "club": "Everton",
+  "season": 1,
+  "week": 39,
+  "cal": 56,
+  "budget": 19.52,
+  "squad": 20,
+  "inbox": 3,
+  "form": "LWLLW",
+  "results": 28,
+  "live": false,
+  "window": null
+ },
+ "inboxDump": [
+  [
+   32,
+   "",
+   "Steve Watson pulled you aside after training. The short version: he wants to start on Satu"
+  ],
+  [
+   30,
+   "",
+   "James McFadden caught you in the corridor. He is down as a rotation option and he has star"
+  ],
+  [
+   28,
+   "Diogo Medina, agent",
+   "An agent has been in touch about Andy van der Meyde, who is 25 and has a year left. The de"
+  ]
+ ],
+ "newsDump": [],
+ "saveKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "setPieces",
+  "intl",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "decisions",
+  "finance",
+  "approach",
+  "pendingMove",
+  "wilderness",
+  "manager",
+  "midSeasonStart",
+  "handover"
+ ]
+}
