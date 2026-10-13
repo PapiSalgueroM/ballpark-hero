@@ -6,10 +6,11 @@
  *  1 a new dynasty's first screen: the tile, under the chips, above the tabs;
  *  2 the card open in place of the tab content, its "?" over it, Back twice;
  *  3 the seat never moves the page: the tile's top, the slot's height and the top of the tab bar under it
- *    before and after the first press, equal to the pixel (window.scrollY and the Play button's top are
- *    printed: the board's own feed above the Play card changes length with every round, as it did before
- *    this round); and on an older save the slot's height and the Play button's top before "Take the ask",
- *    after it, and after "Not now", all equal to the pixel;
+ *    before and after the first press, equal to the pixel, and the Play button moved by exactly what the
+ *    board's own feed above it moved (that feed changes length with every round, as it did before this
+ *    round; window.scrollY is printed, since the scoreboard's reveal is the board's); and on an older save
+ *    the slot's height, the Play button's top and window.scrollY before "Take the ask", after it, and
+ *    after "Not now", all equal to the pixel;
  *  4 the final press: the recap with the verdict and trust; under prefers-reduced-motion the verdict is on its
  *    last frame at first paint (opacity 1, no transform, no running animation);
  *  5 trust at zero: the fired recap, "See who calls" in place of the trail button;
@@ -96,6 +97,13 @@ const top = async (page, sel) => page.evaluate(s => document.querySelector(s)?.g
 const playTop = async page => page.evaluate(re => {
   const b = [...document.querySelectorAll('button')].find(x => new RegExp(re).test(x.textContent.trim()));
   return b ? b.getBoundingClientRect().top + window.scrollY : null;
+}, PLAY.source);
+
+/** The document bottom of whatever sits right above the Play card: the round's feed, or the tab bar without one. */
+const aboveBottom = async page => page.evaluate(re => {
+  const b = [...document.querySelectorAll('button')].find(x => new RegExp(re).test(x.textContent.trim()));
+  const prev = b?.closest('.space-y-3')?.previousElementSibling;
+  return prev ? prev.getBoundingClientRect().bottom + window.scrollY : null;
 }, PLAY.source);
 
 const browser = await chromium.launch();
@@ -197,32 +205,39 @@ for (const { route, key, school } of ROUTES) {
 
     where = 'S3';
     await clickText(page, /^Play$/);
-    const before = { tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]'), tabs: await underSlot(page) };
+    const measure3 = async () => ({ tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), above: await aboveBottom(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]'), tabs: await underSlot(page) });
+    const before = await measure3();
     await clickText(page, PLAY);
     await page.waitForTimeout(700);
-    const after = { tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]'), tabs: await underSlot(page) };
-    console.log(`   ${tag} first press: tile top ${before.tile} to ${after.tile}, slot ${before.h} to ${after.h}, tabs under it ${before.tabs} to ${after.tabs}, Play top ${before.play} to ${after.play} (the round's feed above it changes length, as it always has), scrollY ${before.y} to ${after.y}`);
+    const after = await measure3();
+    console.log(`   ${tag} first press: tile top ${before.tile} to ${after.tile}, slot ${before.h} to ${after.h}, tabs under it ${before.tabs} to ${after.tabs}, the feed's bottom above the Play card ${before.above} to ${after.above}, Play top ${before.play} to ${after.play}, scrollY ${before.y} to ${after.y} (the scoreboard's reveal, useRevealScroll, is the board's)`);
     /* The seat's promise: its slot neither moves nor changes height, so everything under it (the tabs, then the
        board's own feed and the Play card) sits where the board alone would put it. The feed above the Play card
-       has always grown and shrunk with the round's lines; that is the board's, measured and printed, not the seat's. */
+       has always grown and shrunk with the round's lines, so the Play button must move by exactly what the feed
+       moved, to the pixel, and by nothing else. */
     say(before.tile !== null && before.tile === after.tile && before.h === after.h && before.tabs === after.tabs, `${tag}: the first press moved the slot or what sits under it`);
+    say(before.play !== null && before.above !== null && after.play !== null && after.above !== null && after.play - before.play === after.above - before.above,
+      `${tag}: the first press moved the Play button by ${after.play - before.play} px, the feed above it by ${after.above - before.above} px`);
     await shot(page, `${tag}-3-press`);
     /* An older dynasty: the same start with no athletic director, at its first press. */
     const old = JSON.parse(startSave);
     delete old.st.seat;
     const plant = async () => { await page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, JSON.stringify(old)]); await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(700); await control(page); await clickText(page, /^Play$/); };
     await plant();
-    const offer = { h: await height(page, '[data-college-seat="optin"]'), play: await playTop(page) };
+    const scrollY = () => page.evaluate(() => window.scrollY);
+    const offer = { h: await height(page, '[data-college-seat="optin"]'), play: await playTop(page), y: await scrollY() };
     await seatChecks(page, `${tag} station 3 offer`);
     await shot(page, `${tag}-3-offer`);
     await clickText(page, /^Not now$/);
-    const passed = { h: await height(page, '[data-college-seat="passed"]'), play: await playTop(page) };
+    const passed = { h: await height(page, '[data-college-seat="passed"]'), play: await playTop(page), y: await scrollY() };
     await plant();
+    const preTake = await scrollY();
     await clickText(page, /^Take the ask$/);
-    const taken = { h: await height(page, '[data-college-seat="tile"]'), play: await playTop(page) };
-    console.log(`   ${tag} older save: slot ${offer.h} / ${passed.h} / ${taken.h}, Play top ${offer.play} / ${passed.play} / ${taken.play}`);
+    const taken = { h: await height(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await scrollY() };
+    console.log(`   ${tag} older save: slot ${offer.h} / ${passed.h} / ${taken.h}, Play top ${offer.play} / ${passed.play} / ${taken.play}, scrollY across Not now ${offer.y} to ${passed.y}, across Take the ask ${preTake} to ${taken.y}`);
     say(offer.h !== null && offer.h === passed.h && passed.h === taken.h && offer.h === before.h, `${tag}: the slot changed height between its states`);
     say(offer.play !== null && offer.play === passed.play && passed.play === taken.play, `${tag}: Not now or Take the ask moved the Play button`);
+    say(offer.y === passed.y && preTake === taken.y, `${tag}: Not now or Take the ask scrolled the page`);
 
     where = 'S4';
     for (let i = 0; i < 30 && await page.locator('[data-college-seat="recap"]').count() === 0; i += 1) {
