@@ -884,7 +884,8 @@ function partRelegatedCareer(cm) {
   const lg = cm.REAL_LEAGUES.find(l => l.id === pe.top);
   const club = [...lg.clubs].sort((a, b) => cm.clubPreviewRating(a) - cm.clubPreviewRating(b))[0];
   const secondDef = cm.REAL_LEAGUES.find(l => l.id === pe.second);
-  const ladderLabels = new Set([`Win the ${secondDef.name}`, 'Win automatic promotion', cm.leagueRulesOf(pe.second).playoff?.label, 'Finish in the top half', 'Stay up. Avoid relegation']);
+  /* Round 1326: was `Win the ${secondDef.name}`; the label takes the league's own article (toLeague). */
+  const ladderLabels = new Set([`Win ${cm.toLeague(secondDef.name)}`, 'Win automatic promotion', cm.leagueRulesOf(pe.second).playoff?.label, 'Finish in the top half', 'Stay up. Avoid relegation']);
   let tries = 0, finishes = [];
   for (; tries < R_TRIES; tries++) {
     Math.random = seeded(hashKey(`newleagues${SEED_SET}|R|${club}|${tries}`));

@@ -73,7 +73,9 @@ console.log('2) Heavyweights told to win the league');
     if (!lg) { fail(`${name} not in any league`); continue; }
     const objs = buildBoardObjectives(name, lg.euro, lg.clubs.length);
     const league = objs.find(o => o.id === 'league');
-    if (!/^Win the /.test(league.label)) fail(`${name} board says "${league.label}", expected to be told to win it`);
+    /* Round 1326: was /^Win the /. Now exact, with the league's own article
+       (toLeague): "Win La Liga", "Win the Premier League". */
+    if (league.label !== `Win ${cm.toLeague(lg.name)}`) fail(`${name} board says "${league.label}", expected "Win ${cm.toLeague(lg.name)}"`);
   }
   console.log('   all nine heavyweight boards demand the title');
 }

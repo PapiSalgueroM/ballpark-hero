@@ -78,7 +78,9 @@ const browser = await chromium.launch();
   say(await page.locator('button:has-text("Eibar")').count() === 0, 'Eibar correctly absent from 2005 La Liga');
   say(await page.locator('text=partial data').count() >= 2, 'the thin-squad marker shows for Cadiz AND Alaves');
   const barca = await page.locator('button:has-text("Barcelona")').first().textContent();
-  say(/Win the La Liga/i.test(barca ?? ''), 'the Barcelona tile demands the title');
+  /* Round 1326: was /Win the La Liga/i. La Liga carries its own article (toLeague). */
+  say(/Win La Liga/i.test(barca ?? ''), 'the Barcelona tile demands the title');
+  say(!/the La Liga/i.test(barca ?? ''), 'the Barcelona tile never says "the La Liga"');
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the Spain walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
   await page.close();

@@ -11001,7 +11001,7 @@ export function generateWeeklyNews(state: CareerState): void {
     } else if (gap <= 2 && stage > 0.25) {
       pushHeadline(state, `\u{1F3C6} ${leader.club} lead ${second.club} by ${gap === 0 ? 'goal difference alone' : `${gap} ${gap === 1 ? 'point' : 'points'}`}. Title race.`);
     } else {
-      pushHeadline(state, `\u{1F4CA} ${leader.club} top the ${league.name} on ${leader.pts} points after ${played} rounds.`);
+      pushHeadline(state, `\u{1F4CA} ${leader.club} top ${toLeague(league.name)} on ${leader.pts} points after ${played} rounds.`);
     }
     return;
   }
@@ -11024,7 +11024,7 @@ export function generateWeeklyNews(state: CareerState): void {
   const byGf = [...table].sort((a, b) => b.gf - a.gf)[0];
   const byGa = [...table].sort((a, b) => a.ga - b.ga)[0];
   if (played % 2 === 0 && byGf.gf > 0) {
-    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in the ${league.name}: ${byGf.gf} scored in ${played} rounds.`);
+    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in ${toLeague(league.name)}: ${byGf.gf} scored in ${played} rounds.`);
   } else if (byGa.ga >= 0) {
     pushHeadline(state, `\u{1F9F1} Nobody is harder to score on than ${byGa.club}: ${byGa.ga} conceded all season.`);
   }
@@ -13159,7 +13159,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // placed side plays the Bundesliga's sixteenth: each row's playoff rung.)
   if (rules.ladder === 'promotion') {
     // The single biggest club in the division is not aiming for second.
-    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 1) return { target: 1, label: `Win ${toLeague(league.name)}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
       return { target: 2, label: `Win automatic promotion` };
@@ -13171,7 +13171,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
 
   // MLS: no relegation exists, so no board can honestly threaten it.
   if (rules.ladder === 'playoffs') {
-    if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 2) return { target: 1, label: `Win ${toLeague(league.name)}` };
     if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
     return { target: size - (rules.floorFromBottom ?? 4), label: `Finish mid-table or better` };
   }
@@ -13181,7 +13181,9 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // measured XI gap catches the club that is title-class inside its own
   // league even when its absolute rating is modest (Sporting CP, Feyenoord).
   if (demandsTitle(rank, tier, titleGap, clubName, eraId)) {
-    return { target: 1, label: `Win the ${league.name}` };
+    /* Round 1326: the league takes its article by toLeague's rule ("Win La
+       Liga", "Win Serie A", "Win the Premier League"). */
+    return { target: 1, label: `Win ${toLeague(league.name)}` };
   }
 
   const slots = rules.europe;

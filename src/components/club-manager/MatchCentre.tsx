@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Play, Zap } from 'lucide-react';
 import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubManager';
+import { toLeague } from '@/lib/clubManager';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 
 /**
@@ -58,8 +59,8 @@ export function MatchCentre({
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
   const myPosLabel = f.myPos ? `#${f.myPos}` : null;
   const oppPosLabel = f.oppPos
-    ? `#${f.oppPos}${f.oppLeagueName ? ` in the ${f.oppLeagueName}` : ''}`
-    : f.oppLeagueName ? `Plays in the ${f.oppLeagueName}` : null;
+    ? `#${f.oppPos}${f.oppLeagueName ? ` in ${toLeague(f.oppLeagueName)}` : ''}`
+    : f.oppLeagueName ? `Plays in ${toLeague(f.oppLeagueName)}` : null;
 
   return (
     <div className="max-w-md mx-auto space-y-3">

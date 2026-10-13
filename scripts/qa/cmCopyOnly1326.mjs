@@ -122,6 +122,8 @@ async function bundleTree(label, root, control) {
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
     alias: { '@': `${fwd}/src` }, logLevel: 'error', jsx: 'automatic',
+    /* A base exported outside the repo still finds the packages (esbuild only). */
+    nodePaths: [path.join(SCRIPT_ROOT, 'node_modules')],
     plugins: [{
       name: 'cm1326-control',
       setup(b) {

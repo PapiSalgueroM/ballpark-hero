@@ -84,10 +84,11 @@ const browser = await chromium.launch();
   say(await page.locator('button:has-text("Eibar")').count() === 1, '2015 Eibar is a pickable club');
   say(await page.locator('button:has-text("Girona")').count() === 0, 'Girona correctly absent from 2015 La Liga');
   say(await page.locator('text=partial data').count() >= 1, 'the thin-squad marker shows for Las Palmas');
-  // The engine's standing phrase is "Win the <league name>" (playEra2010
-  // matches "Win the Premier League"), so Spain reads "Win the La Liga".
+  // The engine's phrase is "Win " plus the league with its own article
+  // (toLeague, Round 1326): "Win the Premier League", and Spain reads "Win La Liga".
   const barca = await page.locator('button:has-text("Barcelona")').first().textContent();
-  say(/Win the La Liga/i.test(barca ?? ''), 'the Barcelona tile demands the title');
+  say(/Win La Liga/i.test(barca ?? ''), 'the Barcelona tile demands the title');
+  say(!/the La Liga/i.test(barca ?? ''), 'the Barcelona tile never says "the La Liga"');
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the Spain walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
   await page.close();
@@ -175,7 +176,8 @@ const browser = await chromium.launch();
   const frosi = await page.locator('button:has-text("Frosinone")').first().textContent();
   say(/partial data/i.test(frosi ?? ''), 'the thin-squad marker shows for Frosinone');
   const juve = await page.locator('button:has-text("Juventus")').first().textContent();
-  say(/Win the Serie A/i.test(juve ?? ''), 'the Juventus tile demands the title');
+  say(/Win Serie A/i.test(juve ?? ''), 'the Juventus tile demands the title');
+  say(!/the Serie A/i.test(juve ?? ''), 'the Juventus tile never says "the Serie A"');
 
   console.log('6) Into the 2015 Turin dressing room');
   await page.locator('button:has-text("Juventus")').first().click();
