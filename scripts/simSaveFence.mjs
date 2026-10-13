@@ -22,6 +22,15 @@
  *           removes the Club Manager save sits inside a saveFence.write, or is
  *           on the short ALLOWED list with its reason, and every allowed entry
  *           is still there.
+ *   fleet   The three careers simClubManagerSlots plays (Everton today, a
+ *           padded Lincoln City with a named manager, 2010-11 Barcelona),
+ *           seeds 0 to 4 (SAVE_FENCE_SEEDS), two seasons each, a save, a load
+ *           and a save again after EVERY entry. No played save ever reaches a
+ *           state a load repair fires on. With FENCE_BASE (a worktree of the
+ *           commit before the round): every face (both saves' bytes and the
+ *           draw count) equals the base engine's, and every Club Manager save
+ *           scripts/lib/realSaves.mjs builds with the BASE engine opens to the
+ *           same JSON on head and base.
  *
  * NEGATIVE CONTROLS (each asserts the text it rewrites is present exactly once
  * and prints how many times it fired; a control that fired zero times exits 2):
@@ -30,11 +39,17 @@
  *                                and the replays come back, tabs goes red.
  *   SAVE_FENCE_CONTROL=rawwrite  a raw SAVE_KEY setItem planted in an in memory
  *                                copy of clubManagerSlots.ts: source goes red.
+ *   SAVE_FENCE_CONTROL=loaddraw  one Math.random call inside loadCareer: the
+ *                                draw count parts from the base, fleet red.
+ *   SAVE_FENCE_CONTROL=repairall the budget repair runs on every load: the
+ *                                saved bytes part from the base, fleet red.
+ *   (the two fleet controls need FENCE_BASE and refuse to run without it)
  *
  * MEASURED: see the numbers written under each section once taken on a runner.
  * Nothing here reads dist or the network.
- * Run: node scripts/simSaveFence.mjs [SAVE_FENCE_SECTIONS=tabs,source]
+ * Run: [FENCE_BASE=<worktree of the base commit>] [SAVE_FENCE_SECTIONS=tabs,source,fleet] node scripts/simSaveFence.mjs
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -46,9 +61,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SAVE_KEY = 'dukb-club-manager-save';
 const FENCE_KEY = 'dukb-fence:dukb-club-manager-save';
 const CONTROL = process.env.SAVE_FENCE_CONTROL || '';
-const CONTROLS = { nofence: 'tabs', rawwrite: 'source' };
+const CONTROLS = { nofence: 'tabs', rawwrite: 'source', loaddraw: 'fleet', repairall: 'fleet' };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`SAVE_FENCE_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
-const WANT = (process.env.SAVE_FENCE_SECTIONS || 'tabs,source').split(',').map(s => s.trim()).filter(Boolean);
+if (CONTROLS[CONTROL] === 'fleet' && !process.env.FENCE_BASE) { console.error(`control cannot run: SAVE_FENCE_CONTROL=${CONTROL} is judged against the base commit, set FENCE_BASE`); process.exit(1); }
+const WANT = (process.env.SAVE_FENCE_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : 'tabs,source,fleet')).split(',').map(s => s.trim()).filter(Boolean);
 const run = name => WANT.includes(name) || (CONTROL && CONTROLS[CONTROL] === name);
 const red = new Map();
 const checks = new Map();
@@ -75,31 +91,43 @@ globalThis.window = { localStorage: stub };
 /* ---------- the bundle (controls patch it on load) ---------- */
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'saveFence-'));
 const NOFENCE_FROM = '          s.setItem(fenceKeyOf(saveKey), String(next));\n';
-async function bundle() {
-  const entry = path.join(TMP, 'entry.mjs');
-  const out = path.join(TMP, 'bundle.mjs');
-  const P = rel => JSON.stringify(path.join(ROOT, rel).replaceAll('\\', '/'));
+const LOADDRAW_FROM = '    const rawBudget: unknown = parsed.budget;\n';
+const REPAIRALL_FROM = "    if (typeof rawBudget !== 'number' || !Number.isFinite(rawBudget)) {\n";
+/** The engine bundled from `root` (this tree, or FENCE_BASE). `patch` names a
+    head control to apply on load. Each call of the answer is a fresh module
+    instance: a fresh tab, or a fresh arm with no module state carried over. */
+async function bundle(root = ROOT, label = 'head', patch = CONTROL) {
+  const entry = path.join(TMP, `entry-${label}.mjs`);
+  const out = path.join(TMP, `bundle-${label}.mjs`);
+  const P = rel => JSON.stringify(path.join(root, rel).replaceAll('\\', '/'));
+  const has = rel => fs.existsSync(path.join(root, rel));
   fs.writeFileSync(entry, [
     `export * as cm from ${P('src/lib/clubManager.ts')};`,
+    `export * as eras from ${P('src/lib/clubManagerEras.ts')};`,
     `export * as slots from ${P('src/lib/clubManagerSlots.ts')};`,
-    `export * as fence from ${P('src/lib/saveFence.ts')};`,
+    has('src/lib/saveFence.ts') ? `export * as fence from ${P('src/lib/saveFence.ts')};` : 'export const fence = null;',
     `export * as hs from ${P('src/lib/managerHotSeat.ts')};`,
   ].join('\n') + '\n');
   await build({
     entryPoints: [entry], outfile: out, bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
-    absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') },
+    absWorkingDir: root, alias: { '@': path.join(root, 'src') },
     loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' },
     plugins: [{ name: 'save-fence-control', setup(b) {
-      b.onLoad({ filter: /saveFence\.ts$/ }, args => {
-        if (CONTROL !== 'nofence') return undefined;
-        const text = once(lf(args.path), NOFENCE_FROM, 'saveFence.ts');
+      b.onLoad({ filter: /(saveFence|clubManager)\.ts$/ }, args => {
+        const file = path.basename(args.path);
+        let text = null;
+        if (patch === 'nofence' && file === 'saveFence.ts') text = once(lf(args.path), NOFENCE_FROM, file).replace(NOFENCE_FROM, '');
+        if (patch === 'loaddraw' && file === 'clubManager.ts') text = once(lf(args.path), LOADDRAW_FROM, file).replace(LOADDRAW_FROM, `    Math.random();\n${LOADDRAW_FROM}`);
+        if (patch === 'repairall' && file === 'clubManager.ts') text = once(lf(args.path), REPAIRALL_FROM, file).replace(REPAIRALL_FROM, '    if (true) {\n');
+        if (text === null) return undefined;
         fired += 1;
-        return { contents: text.replace(NOFENCE_FROM, ''), loader: 'ts', resolveDir: path.dirname(args.path) };
+        console.log(`NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=${patch} rewrote ${file} in the ${label} bundle`);
+        return { contents: text, loader: 'ts', resolveDir: path.dirname(args.path) };
       });
     } }],
   });
   let copies = 0;
-  return async () => import(`${pathToFileURL(out).href}?tab=${++copies}`);
+  return async () => import(`${pathToFileURL(out).href}?copy=${++copies}`);
 }
 
 /** The stream from scripts/lib/seedRandom.mjs's family (mulberry32), counted. */
@@ -319,10 +347,130 @@ function sectionSource() {
   if (fenced < 5) fail('source', `only ${fenced} fenced writes found; saveCareer (2), clearCareer, the swap and deleteSlot make 5`);
 }
 
+/* ---------- fleet: the save's bytes and the stream do not move ---------- */
+const FLEET = [
+  { label: 'Everton (today)', club: 'Everton', era: 'now' },
+  { label: 'Lincoln City (today, named manager, padded)', club: 'Lincoln City', era: 'now',
+    manager: { name: 'Harness Manager', nationality: 'England', background: 'coachingBadges', style: 'counter' } },
+  { label: 'Barcelona (2010-11)', club: 'Barcelona', era: 'era2010' },
+];
+const FLEET_SEEDS = (process.env.SAVE_FENCE_SEEDS || '0,1,2,3,4').split(',').map(Number);
+const FLEET_SEASONS = Number(process.env.SAVE_FENCE_SEASONS || 2);
+const sha = s => crypto.createHash('sha256').update(s ?? '').digest('hex').slice(0, 16);
+/** A state the engine never writes: what each load repair fires on. */
+const repairWanted = raw => {
+  const c = JSON.parse(raw);
+  const ids = new Set(c.squad.map(p => p.id));
+  const out = [];
+  if (typeof c.budget !== 'number' || !Number.isFinite(c.budget)) out.push('budget');
+  if (c.squad.length < 14) out.push('squad');
+  if (c.xiIds.some(id => id !== null && !ids.has(id))) out.push('xi');
+  return out;
+};
+/** One career on one stream: after EVERY entry a save, a load and a save
+    again. The faces are both saves' hashes and the draws so far. */
+function playFleet(mod, C, seedN, wanted) {
+  const { cm } = mod;
+  const draw = seed(seedN * 7919 + FLEET.indexOf(C) * 104729 + 1);
+  const realRandom = Math.random, realNow = Date.now;
+  Math.random = draw;
+  Date.now = () => 1791302400000;
+  const faces = [];
+  const round = (s, tag) => {
+    cm.saveCareer(s);
+    const a = store.get(SAVE_KEY);
+    for (const w of repairWanted(a)) wanted.push(`${C.label} seed ${seedN} ${tag}: ${w}`);
+    const back = cm.loadCareer();
+    if (!back) { faces.push(`${tag}|unreadable`); return; }
+    cm.saveCareer(back);
+    faces.push(`${tag}|${sha(a)}|${sha(store.get(SAVE_KEY))}|${draw.calls()}`);
+  };
+  try {
+    store.clear();
+    let s = cm.startCareer(C.club, C.era, undefined, C.manager);
+    round(s, 'start');
+    for (let season = 0; season < FLEET_SEASONS; season++) {
+      for (let guard = 0; s.week < s.calendar.length && guard < 220; guard++) {
+        const r = cm.playNextEntry(s, { skipHalftime: true });
+        s = r.state;
+        round(s, `s${season} w${s.week}`);
+        if (r.kind === 'seasonOver') break;
+      }
+      const fin = cm.finishSeason(s);
+      s = cm.startNextSeason(fin.state);
+      round(s, `s${season + 1} start`);
+    }
+  } finally {
+    Math.random = realRandom;
+    Date.now = realNow;
+  }
+  return faces;
+}
+async function sectionFleet() {
+  const BASE = process.env.FENCE_BASE ? path.resolve(process.env.FENCE_BASE) : null;
+  console.log(`fleet: ${FLEET.length} careers x seeds ${FLEET_SEEDS.join(',')} x ${FLEET_SEASONS} seasons, a save, a load and a save after every entry${BASE ? `, against FENCE_BASE ${BASE}` : ' (no FENCE_BASE: the repairs alone)'}`);
+  const headLoad = await bundle(ROOT, 'fleet-head', CONTROL);
+  const baseLoad = BASE ? await bundle(BASE, 'fleet-base', '') : null;
+  const wanted = [];
+  let entries = 0, equal = 0, firstDiff = null;
+  for (const C of FLEET) {
+    for (const n of FLEET_SEEDS) {
+      const head = await headLoad();
+      await head.eras.ensureEraRosters(C.era);
+      const hf = playFleet(head, C, n, wanted);
+      entries += hf.length;
+      if (!baseLoad) continue;
+      const base = await baseLoad();
+      await base.eras.ensureEraRosters(C.era);
+      const bf = playFleet(base, C, n, []);
+      tick('fleet', hf.length);
+      for (let i = 0; i < Math.max(hf.length, bf.length); i++) {
+        if (hf[i] === bf[i]) { equal += 1; continue; }
+        firstDiff ??= `${C.label} seed ${n}: head "${hf[i]}" base "${bf[i]}"`;
+        break;
+      }
+      if (hf.length !== bf.length) firstDiff ??= `${C.label} seed ${n}: head played ${hf.length} entries, base ${bf.length}`;
+    }
+  }
+  tick('fleet');
+  console.log(`  ${entries} saves on head, ${wanted.length} of them in a state a load repair fires on${baseLoad ? `; ${equal} faces equal to the base commit's (both saves' bytes and the draw count)` : ''}`);
+  if (wanted.length) fail('fleet', `a played save reached a repair condition, so a repair would change it: ${wanted.slice(0, 3).join('; ')}`);
+  if (firstDiff) fail('fleet', `head and base part: ${firstDiff}`);
+  if (!baseLoad) { console.log('  (set FENCE_BASE to a worktree of the base commit for the byte and draw comparison and the old saves)'); return; }
+  /* OLD SAVES: every Club Manager save scripts/lib/realSaves.mjs builds with
+     the BASE engine (no fence key anywhere) opens to the same JSON on both. */
+  const { buildRealSaves } = await import(pathToFileURL(path.join(ROOT, 'scripts/lib/realSaves.mjs')).href);
+  const real = await buildRealSaves({ root: BASE, tmpDir: path.join(TMP, 'real'), seeds: [0, 1, 2, 3] });
+  globalThis.localStorage = stub; // its bundle plants a store of its own on globalThis
+  const raws = real.fleet['/club-manager'] ?? [];
+  const head = await headLoad();
+  const base = await baseLoad();
+  await head.eras.ensureAllEraRosters();
+  await base.eras.ensureAllEraRosters();
+  const realNow = Date.now;
+  Date.now = () => 1791302400000;
+  let same = 0;
+  try {
+    for (const [i, raw] of raws.entries()) {
+      const open = mod => { store.clear(); store.set(SAVE_KEY, raw); return JSON.stringify(mod.cm.loadCareer()); };
+      const h = open(head), b = open(base);
+      tick('fleet');
+      if (h === 'null') fail('fleet', `old save ${i} (base engine's bytes) does not open on head`);
+      else if (h !== b) fail('fleet', `old save ${i} opens differently on head and base`);
+      else same += 1;
+    }
+  } finally {
+    Date.now = realNow;
+  }
+  console.log(`  old saves: ${same} of ${raws.length} Club Manager saves the base engine wrote open to the same JSON on head and base`);
+  if (raws.length < 4) fail('fleet', `realSaves gave ${raws.length} Club Manager saves, not 4`);
+}
+
 /* ---------- run ---------- */
 const load = run('tabs') ? await bundle() : null;
 if (run('tabs')) await sectionTabs(load);
 if (run('source')) sectionSource();
+if (run('fleet')) await sectionFleet();
 fs.rmSync(TMP, { recursive: true, force: true });
 const sections = [...new Set([...WANT, ...(CONTROL ? [CONTROLS[CONTROL]] : [])])];
 for (const s of sections) console.log(`  section ${s}: ${checks.get(s) ?? 0} checks, ${(red.get(s) ?? []).length} red`);

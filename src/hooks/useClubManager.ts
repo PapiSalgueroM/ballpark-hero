@@ -124,6 +124,8 @@ type StartHold = { key: string; begin: () => void; settle: () => void; over: boo
 /* Round 1323: the save fence, imported here beside the hook that uses it. */
 import { saveFence, fenceKeyOf } from '@/lib/saveFence';
 import { SAVE_KEY } from '@/lib/clubManager';
+import { setAsideSave, browserStorage } from '@/lib/brokenSaveRecovery';
+import { CONTINUE_SAVES } from '@/data/continueSaves';
 
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
@@ -199,7 +201,10 @@ export function useClubManager() {
         } else {
           setPhase('resume');
         }
-      } else if (views.some(v => v.summary)) {
+      } else if (views.some(v => v.summary || v.damaged)) {
+        /* Round 1323: a slot holding a save that cannot be read lands here
+           too, on its damaged tile, never on the picker without a word (the
+           next pick used to write over it). */
         /* Round 928: nothing playable in the active slot, but another slot
            holds a career, so the slots screen, never a picker over them. A
            career the player just asked for that would not open says so,
@@ -466,7 +471,23 @@ export function useClubManager() {
       setSlotNote('That slot holds a career now, so nothing was started over it. Here are your managers as they stand.');
       return;
     }
+    /* Round 1323: a stale page clears nothing; the notice says why. */
+    if (movedOn()) return;
+    const damaged = !!readSlots()[slot - 1]?.damaged;
     if (slot !== activeSlot() && !leaveActive(slot)) return;
+    /* Round 1323: an unreadable save is never thrown away. Its bytes are set
+       aside to a backup first, the error boundary's own fresh start, so the
+       restore card offers it back; with no room for the copy nothing is
+       cleared and the managers screen says so. */
+    if (damaged) {
+      const entry = CONTINUE_SAVES.find(e => e.saveKey === SAVE_KEY);
+      if (!entry || !setAsideSave(entry, browserStorage()).ok) {
+        setSlots(readSlots());
+        setSlotNote('This browser had no room to keep a copy of that save, so nothing was cleared. Free up some site storage and try again.');
+        setPhase('resume');
+        return;
+      }
+    }
     /* Clears the engine's registrations; SAVE_KEY is already empty for a
        slot just switched to, and a damaged active one is cleared for good
        (the screen asks first). The career the picker starts is this slot's. */
@@ -477,7 +498,7 @@ export function useClubManager() {
     setDeskNote(null);
     setSlots(readSlots());
     setPhase('clubSelect');
-  }, [leaveActive]);
+  }, [leaveActive, movedOn]);
 
   /** Delete one slot's career for good (the screen asks first). */
   const removeSlot = useCallback((slot: number) => {

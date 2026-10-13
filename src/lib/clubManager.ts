@@ -20568,6 +20568,39 @@ export function loadCareer(): CareerState | null {
        in playNextEntry because a save can be opened on its summary and rolled
        straight into the summer without a ball being kicked. */
     ensureOneOfEach(parsed);
+    /* Round 1323: three repairs for states this engine never writes, so a
+       save edited by hand or damaged in storage opens playable instead of
+       showing "NaN" money, kicking off with five men or reading "your XI avg
+       0". Each fires only on its own condition, which no played save meets
+       (scripts/simSaveFence.mjs section fleet holds that, byte for byte and
+       draw for draw). A negative budget is NOT repaired: startNextSeason
+       clamps one with Math.max(0, ...), so the engine itself expects it. */
+    const rawBudget: unknown = parsed.budget;
+    if (typeof rawBudget !== 'number' || !Number.isFinite(rawBudget)) {
+      const spelled = typeof rawBudget === 'string' && rawBudget.trim() !== '' ? Number(rawBudget) : NaN;
+      parsed.budget = Number.isFinite(spelled) ? spelled : 0;
+    }
+    /* Under the match minimum of 14 (loanOutRefusal's floor): topped up the
+       way every squad this engine assembles is, with made up youth marked as
+       such, and the new men given their rungs. */
+    if (parsed.squad.length < 14) {
+      parsed.squad = ensureSquadCoverage(parsed.squad);
+      ensureRoles(parsed);
+    }
+    /* XI ids that name nobody in the squad are cleared, and only those slots
+       are filled, by the engine's own auto pick over the men not already in
+       the eleven. Pure, no draw. */
+    const squadIds = new Set(parsed.squad.map(p => p.id));
+    const lostSlots = parsed.xiIds.map((id, j) => (id !== null && !squadIds.has(id) ? j : -1)).filter(j => j >= 0);
+    if (lostSlots.length) {
+      const formation = FORMATIONS[parsed.formationIndex] ?? FORMATIONS[0];
+      const xi = parsed.xiIds.map(id => (id !== null && squadIds.has(id) ? id : null));
+      const used = new Set(xi.filter((id): id is string => !!id));
+      const fill = lostSlots.filter(j => j < formation.slots.length);
+      const picks = autoPickXI(parsed.squad.filter(p => !used.has(p.id)), { ...formation, slots: fill.map(j => formation.slots[j]) });
+      fill.forEach((j, k) => { xi[j] = picks[k] ?? null; });
+      parsed.xiIds = xi;
+    }
     /* Round 135: and the press room, for exactly the same reason. The hub tile
        and the press screen both read it before a ball is kicked. */
     ensurePress(parsed);
