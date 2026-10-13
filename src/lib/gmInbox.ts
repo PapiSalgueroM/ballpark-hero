@@ -228,6 +228,12 @@ export interface GmInboxPack {
    *  each filled from a fact. A person slot's fact is a person's id, printed
    *  as the name the seat gives it; any other prints the fact as it is. */
   slots?: Record<string, { fact: string; person?: true }>;
+  /** Round 1332: the pack's own ceiling per meter it moves ('trust',
+   *  'fans', 'cash', 'morale', 'recruit' or a registered key): the most its
+   *  cards may push that meter in a season when every card is answered the
+   *  way that moves it most (or least). Set by the binding round from the
+   *  real engine's meter harness; the kit holds every new pack to it. */
+  pressure?: Record<string, number>;
   /** Round 1332: 'compact' opts in to a pruned cooldown book (on a rising
    *  clock only: a pruned entry is not rebased when a clock falls) and to
    *  messages saved as numbers by gmDeskSave. Absent is 'whole'. Its words
@@ -351,6 +357,21 @@ export function gmNeutralIndex(choices: readonly GmChoiceDef[]): number {
 
 const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 
+/** Round 1332: the meters a pack's options move, by the names `pressure`
+ *  uses: the built in meters and every fx key with a value that moves. */
+export function gmMetersMoved(pack: GmInboxPack): Set<string> {
+  const out = new Set<string>();
+  for (const c of pack.events.flatMap(e => e.choices)) {
+    if (c.karma) out.add('trust');
+    if (c.popularity) out.add('fans');
+    if (c.cash) out.add('cash');
+    if (c.morale) out.add('morale');
+    if (c.recruit) out.add('recruit');
+    for (const [k, raw] of Object.entries(c.fx ?? {})) if (fxParts(raw).v) out.add(k);
+  }
+  return out;
+}
+
 /** Round 1332: a name slot in a wording, `{player}`. */
 const SLOT_RE = /\{(\w+)\}/g;
 /** The slot names a wording holds, in order, each once. */
@@ -366,6 +387,8 @@ export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, G
   const out: string[] = [];
   const reg = fx ?? {};
   for (const k of Object.keys(reg)) if (GM_BUILT_IN_FX.includes(k)) out.push(`the seat registers ${k}, the name of a built in effect`);
+  /* trust and fans are the built in meters' names in `pressure`. */
+  for (const k of Object.keys(reg)) if (k === 'trust' || k === 'fans') out.push(`the seat registers ${k}, the name of a built in meter`);
   /* Round 1332: a slot's fact is declared and names someone or something. */
   const slots = pack.slots ?? {};
   for (const [name, sl] of Object.entries(slots)) {
@@ -374,6 +397,13 @@ export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, G
   }
   for (const [k, t] of Object.entries(pack.targets)) if (/[{}]/.test(t)) out.push(`target ${k} holds a brace`);
   if (pack.store !== undefined && pack.store !== 'whole' && pack.store !== 'compact') out.push(`store ${pack.store} is neither whole nor compact`);
+  if (pack.pressure !== undefined) {
+    const moved = gmMetersMoved(pack);
+    for (const [k, v] of Object.entries(pack.pressure)) {
+      if (!(typeof v === 'number' && Number.isFinite(v) && v > 0)) out.push(`pressure on ${k} is ${v}, not a number above 0`);
+      if (!moved.has(k)) out.push(`pressure names ${k}, a meter the pack never moves`);
+    }
+  }
   if (pack.store === 'compact') {
     /* A compact save keeps ids and book keys short: two may never share one. */
     const seen = new Map<string, string>();

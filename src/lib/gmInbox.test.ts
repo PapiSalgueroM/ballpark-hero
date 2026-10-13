@@ -13,6 +13,7 @@ import { gmChoiceLabel } from './gmInbox';
 import type { GmChoiceDef, GmFxRegistry, GmInboxBinding } from './gmInbox';
 import { gmCardSafe } from './gmInbox';
 import { gmDeskLoad, gmDeskSave, gmShortKey } from './gmInbox';
+import { gmMetersMoved } from './gmInbox';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -806,5 +807,16 @@ describe('gmInbox Round 1332: the compact desk', () => {
     expect(gmShortKey(pair[0])).toBe(gmShortKey(pair[1]));
     const clash = { ...COMPACT_TOY, events: pair.map(id => ({ ...COMPACT_TOY.events[0], id })) };
     expect(gmPackProblems(clash).join()).toMatch(/share the short key/);
+  });
+});
+
+describe('gmInbox Round 1332: a pack\'s declared pressure', () => {
+  it('names only meters the pack moves, each with a ceiling above 0', () => {
+    expect([...gmMetersMoved(TOY)].sort()).toEqual(['cash', 'fans', 'morale', 'trust']);
+    expect(gmPackProblems({ ...TOY, pressure: { trust: 6, cash: 2 } })).toEqual([]);
+    expect(gmPackProblems({ ...TOY, pressure: { recruit: 3 } }).join()).toMatch(/never moves/);
+    expect(gmPackProblems({ ...TOY, pressure: { trust: 0 } }).join()).toMatch(/above 0/);
+    expect(gmPackProblems({ ...TOY, pressure: { trust: Number.NaN } }).join()).toMatch(/above 0/);
+    expect(gmPackProblems(FX_TOY, { ...FX_REG, trust: FX_REG.board }).join()).toMatch(/built in meter/);
   });
 });

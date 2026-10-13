@@ -230,7 +230,7 @@ const runs = n => SECTIONS.length === 0 || SECTIONS.includes(n) || (n === 1 && (
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
-  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove'];
+  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -1161,7 +1161,7 @@ const FX_REGISTRY = fxPack('fx_registry', [
     fxCh('Play him', { fx: { form: { who: 'captain', v: 0 } } })] }),
   fxCard('r5', { choices: [fxCh('Fine him', { fx: { fund: 0.5 } }), fxCh('Let it go')] }),
   fxCard('r6', { choices: [fxCh('Make the recruiting call', { recruit: 2, fx: { board: -1 } }), fxCh('Skip it')] }),
-]);
+], { pressure: { trust: 999, fans: 999, cash: 999, morale: 999, recruit: 999, board: 999, fund: 999, form: 999, ban: 999 } });
 if (runs(11)) {
   const pack = FX_REGISTRY;
   const T = Object.keys(pack.targets);
@@ -1492,7 +1492,7 @@ const FX_COMPACT = fxPack('fx_compact', [
   fxCard('k_slot', { text: '{player} has a matter for you this week.', texts: ['A matter about {player} needs a call.'], subject: { fact: 'man' } }),
   fxCard('k_rival', { text: 'The {opponent} matter needs a call before the weekend.' }),
   fxHard('k_exp', { expires: 3 }), fxCard('k_cool', { cooldown: 12 }),
-], { store: 'compact', chance: 0.6, cooldown: 4, subjectRest: 3,
+], { store: 'compact', chance: 0.6, cooldown: 4, subjectRest: 3, pressure: { trust: 999, morale: 999 },
   facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
   slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } } });
 const FX_COMPACT_SEASON = { ...FX_COMPACT, seat: 'fx_compact_season', clock: 'season', cooldown: 2 };
@@ -1702,6 +1702,80 @@ if (runs(14)) {
   if (bad.length) fail(14, `${bad.length} frozen word breaks over ${count} recorded cards`);
   else if (count < 10) fail(14, `only ${count} recorded cards: nothing was tested`);
   else ok(`${count} recorded cards of ${Object.keys(packs).length} compact pack(s): every wording, option, story and slot as recorded`);
+}
+
+/* ═══ 15. ECONOMY: no pack pushes a meter past its own seasonal ceiling ═══ */
+
+/* Correction 13: forty or fifty effect cards a season can drive board
+   confidence and the budget to their ends the way Soccer Career's fame
+   ran away. For every pack and every meter it moves, two answer policies
+   on the FLEET drive (100 desks of ten seasons): BEST answers every open
+   card the week it lands with the option that moves that meter most, WORST
+   with the one that moves it least. The statistic is declared pressure:
+   the chosen options' values on that meter summed per season, unclamped,
+   a mean over the 1,000 seasons. A pack off ECONOMY_BASELINE declares
+   `pressure` (its own ceiling per meter, set by its binding round from the
+   real engine's meter harness) and fails on a meter it moves with no
+   ceiling, or when BEST or WORST passes it either way. The seven GM packs
+   predate the rule: their numbers are printed and written here, never
+   gated (ECONOMY_MEASURED). */
+const ECONOMY_BASELINE = ['afl', 'college', 'gym', 'mlb', 'nba', 'nfl', 'nhl'];
+const ECONOMY_FX = {
+  fx_registry: { pack: FX_REGISTRY, bind: { fx: FX_REGISTRY_DEF } },
+  fx_compact: { pack: FX_COMPACT, bind: COMPACT_BIND },
+};
+if (runs(15)) {
+  console.log('15) Economy: every meter a pack moves, BEST and WORST answered, its seasonal push under the pack\'s own ceiling');
+  const valueOn = (c, meter) => {
+    const built = { trust: c.karma, fans: c.popularity, cash: c.cash, morale: c.morale, recruit: c.recruit }[meter];
+    if (built !== undefined || ['trust', 'fans', 'cash', 'morale', 'recruit'].includes(meter)) return built ?? 0;
+    const raw = c.fx?.[meter];
+    return raw === undefined ? 0 : typeof raw === 'number' ? raw : raw.v;
+  };
+  const metersOf = p => [...new Set(p.events.flatMap(e => e.choices).flatMap(c => ['trust', 'fans', 'cash', 'morale', 'recruit', ...Object.keys(c.fx ?? {})].filter(m => valueOn(c, m) !== 0)))].sort();
+  const pressureOf = (pack, tag, meter, sign, seed, bind) => {
+    let total = 0;
+    const policy = (s, got, bound, rng, lines) => {
+      for (const m of openOf(s)) {
+        let best = 0;
+        m.choices.forEach((c, i) => { if (sign * valueOn(c, meter) > sign * valueOn(m.choices[best], meter)) best = i; });
+        total += valueOn(m.choices[best], meter);
+        lines.push(E.answerGmInbox(s, m.id, best, bound));
+      }
+    };
+    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { policy, bind });
+    return total / (DRIVES.FLEET.desks * SEASONS);
+  };
+  const packs = { ...Object.fromEntries(GM_SEATS.map(k => [k, { pack: GM[k], bind: {} }])), ...ECONOMY_FX };
+  if (CONTROL === 'pressure') {
+    const p = packs.fx_compact.pack;
+    const times = c => ({ ...c, karma: c.karma * 10, ...(c.morale ? { morale: c.morale * 10 } : {}) });
+    packs.fx_compact = { ...packs.fx_compact, pack: { ...p, events: p.events.map(e => ({ ...e, choices: e.choices.map(times) })) } };
+    if (!packs.fx_compact.pack.events.some(e => e.choices.some(c => c.karma >= 20))) { console.error('pressure control changed nothing, refusing to run'); process.exit(2); }
+  }
+  const lines = [];
+  for (const [k, { pack, bind }] of Object.entries(packs)) {
+    const meters = metersOf(pack);
+    const parts = [];
+    for (const meter of meters) {
+      const hi = pressureOf(pack, k, meter, 1, SEED, bind);
+      const lo = pressureOf(pack, k, meter, -1, SEED, bind);
+      parts.push(`${meter} ${hi >= 0 ? '+' : ''}${hi.toFixed(2)} / ${lo >= 0 ? '+' : ''}${lo.toFixed(2)}`);
+      if (ECONOMY_BASELINE.includes(k)) continue;
+      const cap = pack.pressure?.[meter];
+      if (cap === undefined) fail(15, `${k} moves ${meter} and declares no pressure ceiling for it`);
+      else if (Math.max(Math.abs(hi), Math.abs(lo)) > cap) fail(15, `${k}: ${meter} pushed ${hi.toFixed(2)} (BEST) and ${lo.toFixed(2)} (WORST) a season, ceiling ${cap}`);
+      if (MEASURE) console.log(`   measure: ${k} ${meter} BEST and WORST at seeds 1 to 10: ${TEN.map(sd => `${pressureOf(pack, k, meter, 1, sd, bind).toFixed(2)}/${pressureOf(pack, k, meter, -1, sd, bind).toFixed(2)}`).join(', ')}`);
+    }
+    if (MEASURE && ECONOMY_BASELINE.includes(k)) {
+      for (const meter of meters) console.log(`   measure: ${k} ${meter} BEST and WORST at seeds 1 to 10: ${TEN.map(sd => `${pressureOf(pack, k, meter, 1, sd, bind).toFixed(2)}/${pressureOf(pack, k, meter, -1, sd, bind).toFixed(2)}`).join(', ')}`);
+    }
+    lines.push(`${k} ${parts.join(', ')}`);
+  }
+  for (const l of lines) console.log(`   pressure a season (BEST / WORST): ${l}`);
+  const missing = ECONOMY_BASELINE.filter(k => !packs[k]);
+  if (missing.length) fail(15, `ECONOMY_BASELINE names packs the kit does not know: ${missing.join(', ')}`);
+  if (!red.has(15)) ok(`${Object.keys(packs).length} packs: the ${ECONOMY_BASELINE.length} on the baseline printed, every other pack under its own ceiling on every meter it moves`);
 }
 
 /* ═══ end ═══ */
