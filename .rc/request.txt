@@ -1,0 +1,16 @@
+size-s0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSaveSize.mjs
+size-s1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-s2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-s3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-s4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-s5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped-s0: TMPDIR=$(mktemp -d) SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+size-uncapped-s1: TMPDIR=$(mktemp -d) SIM_SEED=1 SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+slots-s0: TMPDIR=$(mktemp -d) node scripts/simClubManagerSlots.mjs
+slots-s1: TMPDIR=$(mktemp -d) SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+slots-s2: TMPDIR=$(mktemp -d) SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+slots-s3: TMPDIR=$(mktemp -d) SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+slots-s4: TMPDIR=$(mktemp -d) SIM_SEED=4 node scripts/simClubManagerSlots.mjs
+slots-s5: TMPDIR=$(mktemp -d) SIM_SEED=5 node scripts/simClubManagerSlots.mjs
+slots-dupe-s0: TMPDIR=$(mktemp -d) SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+slots-dupe-s1: TMPDIR=$(mktemp -d) SIM_SEED=1 SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
