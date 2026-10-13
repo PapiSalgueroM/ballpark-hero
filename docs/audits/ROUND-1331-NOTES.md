@@ -8,7 +8,7 @@ Branch r1331-cm-engine-fixes, started from origin/main dec9075b (the Release BC 
   and the line quoted. Read 2026-10-13.
 - `src/lib/clubManagerSubsRule.ts`: `subsRuleFor(leagueBaseId, seasonStartYear)`, pure, no imports.
   Five in three stoppages: La Liga, Serie A, Bundesliga, Ligue 1 from 2020-21; Premier League and EFL Championship
-  from 2022-23. Every other league of the game is in `CM_SUBS_PARTIAL` and keeps three (no source found in the round's
+  from 2022-23. Every other league (MLS's two conferences included) of the game is in `CM_SUBS_PARTIAL` and keeps three (no source found in the round's
   time for its 2026-27 rule).
 - The Championship row is sourced as a standing EFL rule from 2022-23 (Irish Examiner, ESPN, a 2023 corroboration from
   leedsunited.com). No source dated 2026-27 itself was found, and none that reverses it: said in the ledger's caveat.

@@ -87,7 +87,7 @@
     ]
   },
   "partial": {
-    "leagues": ["eredivisie", "saudi", "primeira", "scottish", "superlig", "bundesliga2", "proleague", "austria", "greece", "denmark", "switzerland", "croatia", "brasileirao", "ligamx", "aleague", "serieb", "ligue2", "segunda", "russia"],
+    "leagues": ["eredivisie", "saudi", "mlsEast", "mlsWest", "primeira", "scottish", "superlig", "bundesliga2", "proleague", "austria", "greece", "denmark", "switzerland", "croatia", "brasileirao", "ligamx", "aleague", "serieb", "ligue2", "segunda", "russia"],
     "why": "Round 1331 could not two source these leagues' rule for 2026-27 in the time it had, so they keep three changes with no stoppage limit, the game's behaviour before this round, and the help says so. Adding one is a row here with two sources plus the same league in the module's table."
   },
   "notCovered": "A nation's matches (the international jobs) keep three. Cups and continental ties follow the career league's row. Seasons are ruled by their start year, so the 2019-20 restart plays three."

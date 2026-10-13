@@ -96,6 +96,8 @@ const {
   makeHalftimeSub, setHalftimeMentality, benchForHalftime, tiringAtHalftime,
   MAX_HALFTIME_SUBS,
 } = cm;
+/* Round 1331: the changes a match allows, by its own rule (the old constant on an engine without one). */
+const capOf = s => (cm.matchRuleOf ? cm.matchRuleOf(s).subs : MAX_HALFTIME_SUBS);
 
 let failures = 0;
 let section = 0;
@@ -141,7 +143,7 @@ function playSeason(club, mode) {
       if (want !== live.mentality) { s = setHalftimeMentality(s, want); shapeChanges++; }
       // Freshen up: the most tired player off, the best bench player on, but
       // only when the bench genuinely helps.
-      for (let i = 0; i < MAX_HALFTIME_SUBS; i++) {
+      for (let i = 0, cap = capOf(s); i < cap; i++) {
         const tired = tiringAtHalftime(s);
         const bench = benchForHalftime(s);
         if (!tired.length || !bench.length) break;
@@ -304,8 +306,8 @@ console.log('3) The break cannot be abused');
       const next = makeHalftimeSub(s, off, on ? on.id : 'nope');
       if (next) { s = next; made++; }
     }
-    console.log(`   tried six substitutions, ${made} went through (cap ${MAX_HALFTIME_SUBS})`);
-    if (made > MAX_HALFTIME_SUBS) fail('the substitution cap does not hold');
+    console.log(`   tried six substitutions, ${made} went through (cap ${capOf(s)})`);
+    if (made > capOf(s)) fail('the substitution cap does not hold');
     if (makeHalftimeSub(s, 'not-a-real-id', bench[0].id)) fail('substituting a player who is not on the pitch worked');
     if (makeHalftimeSub(s, s.live.onPitch[0], s.live.onPitch[1])) fail('a player already on the pitch was brought on');
     const week = s.live.week;

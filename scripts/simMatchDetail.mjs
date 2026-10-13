@@ -51,7 +51,9 @@ let failures = 0;
 const fail = msg => { failures += 1; console.error('  FAIL: ' + msg); };
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
 
-function checkDetail(report, ctx, { viaHalftime, subsMade }) {
+/* Round 1331: the changes a match allows, by its own rule (the old constant on an engine without one). */
+const capOf = s => (cm.matchRuleOf ? cm.matchRuleOf(s).subs : cm.MAX_SUBS);
+function checkDetail(report, ctx, { viaHalftime, subsMade, cap = cm.MAX_SUBS }) {
   const d = report.detail;
   if (!d) { fail(`${ctx}: report has no detail block`); return; }
   const myGoals = report.home === report.away ? 0 : (report.homeGoals + report.awayGoals) - (report.won || report.drawn ? 0 : 0);
@@ -121,7 +123,7 @@ function checkDetail(report, ctx, { viaHalftime, subsMade }) {
   }
 
   // Subs: legal automatic changes and exact manual changes, each with its own row.
-  if (d.subs.length > cm.MAX_SUBS) fail(`${ctx}: reported ${d.subs.length} subs, over the legal cap`);
+  if (d.subs.length > cap) fail(`${ctx}: reported ${d.subs.length} subs, over the legal cap of ${cap}`);
   const subRows = d.timeline.filter(e => e.kind === 'sub' && e.side === 'me');
   if (subRows.length !== d.subs.length || d.subs.some(s => !subRows.some(e => e.minute === s.minute
     && (e.plus ?? 0) === (s.plus ?? 0) && e.text === `${s.on} on for ${s.off}`))) fail(`${ctx}: sub lines do not match their timeline rows`);
@@ -164,7 +166,7 @@ while (state.week < state.calendar.length && guard < 90) {
   if (res.kind === 'seasonOver') break;
   if (res.kind === 'match' && res.report) {
     matches += 1;
-    checkDetail(res.report, `QS match ${matches}`, { viaHalftime: false, subsMade: 0 });
+    checkDetail(res.report, `QS match ${matches}`, { viaHalftime: false, subsMade: 0, cap: capOf(res.state) });
     const d = res.report.detail;
     if (d) {
       const myGoals = res.report.myScorers.length;
@@ -220,7 +222,7 @@ while (htMatches < 6 && ht.week < ht.calendar.length && htGuard < 40) {
     ht = done.state;
     if (done.report) {
       htMatches += 1;
-      checkDetail(done.report, `HT match ${htMatches}`, { viaHalftime: true, subsMade: subs });
+      checkDetail(done.report, `HT match ${htMatches}`, { viaHalftime: true, subsMade: subs, cap: capOf(done.state) });
       /* Round 157's half-split fix: the scorer minutes must agree with the
          scoreboard the manager saw at the break. Before it, a match that
          stood 1-0 at the interval could report its only goal in the 80th. */

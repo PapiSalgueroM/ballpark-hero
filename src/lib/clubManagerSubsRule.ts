@@ -38,7 +38,7 @@ export const CM_SUBS_FIVE_FROM: Readonly<Record<string, number>> = {
 
 /** Leagues whose rule this round could not two source: they keep three. */
 export const CM_SUBS_PARTIAL: string[] = [
-  'eredivisie', 'saudi', 'primeira', 'scottish', 'superlig', 'bundesliga2', 'proleague', 'austria', 'greece', 'denmark',
+  'eredivisie', 'saudi', 'mlsEast', 'mlsWest', 'primeira', 'scottish', 'superlig', 'bundesliga2', 'proleague', 'austria', 'greece', 'denmark',
   'switzerland', 'croatia', 'brasileirao', 'ligamx', 'aleague', 'serieb', 'ligue2', 'segunda', 'russia',
 ];
 

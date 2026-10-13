@@ -282,6 +282,9 @@ for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondH
   'matchFacts', 'initScorerRace', 'goldenBootTable']) {
   if (cm[name] === undefined) { console.error(`the engine does not export ${name}`); process.exit(1); }
 }
+/* Round 1331: the changes and stoppages a match allows, by its own rule (the old constant on an engine without one). */
+const capOf = s => (cm.matchRuleOf ? cm.matchRuleOf(s).subs : cm.MAX_SUBS);
+const stopsOf = s => (cm.matchRuleOf ? cm.matchRuleOf(s).stops : null);
 const {
   startCareer, playNextEntry, resumeMatch, startSecondHalf, changeLive, makeHalftimeSub,
   benchForHalftime, liveStatsAt, oppOnPitchAt, myOnPitchAt, projectedRoster, yearsOn, MAX_SUBS,
@@ -567,7 +570,8 @@ begin(3, 'The opposition eleven, their bench and their substitutions');
     const sheet = (d.oppRatings ?? []).map(p => p.name).sort();
     const expected = [...new Set([...names, ...subs.map(s => s.on)])].sort();
     if (J(sheet) !== J(expected)) fail(`${ctx}: the ratings sheet names [${sheet.join(', ')}], the eleven plus the men who came on are [${expected.join(', ')}]`);
-    if (!inRange(subs.length, 0, MAX_SUBS)) fail(`${ctx}: ${subs.length} opposition subs`);
+    /* Round 1331: the other dugout plays the match's own rule (three, or five where the league and season had it). */
+    if (!inRange(subs.length, 0, capOf(f.ht))) fail(`${ctx}: ${subs.length} opposition subs`);
     const lastGoal = new Map();
     for (const sc of r.oppScorers) lastGoal.set(sc.drawn ?? sc.name, Math.max(lastGoal.get(sc.drawn ?? sc.name) ?? 0, sc.minute));
     for (const s of subs) {
@@ -838,23 +842,28 @@ begin(7, 'Rules: three subs, on the pitch, not already on, 90 minutes, a clock t
     let s = withSeed(f.seed + 500, () => startSecondHalf(f.ht));
     if (!s) { fail(`${ctx}: startSecondHalf returned null`); continue; }
     if (s.live.minute !== 46) fail(`${ctx}: the clock reads ${s.live.minute} at the restart`);
-    /* Three subs go through, the fourth is refused. */
+    /* Every change the match's rule allows goes through, and one more is refused. Round 1331: under five in
+       three stoppages they are made at three minutes (46, 47 and 48, the later ones doubled up), so the refusal
+       is the cap and not a fourth stoppage. */
+    const cap = capOf(s), stops = stopsOf(s);
+    const minuteFor = i => 46 + (stops === null ? i : Math.min(i, stops - 1));
     let made = 0;
-    for (let i = 0; i < MAX_SUBS; i++) {
+    for (let i = 0; i < cap; i++) {
       const out = pickOut(s, s.live);
       const bench = benchForHalftime(s);
       if (!out || !bench.length) break;
-      const next = withSeed(f.seed + 510 + i, () => changeLive(s, 46 + i, { kind: 'sub', outId: out.id, inId: bench[0].id }));
-      if (!next) { fail(`${ctx}: sub ${i + 1} of ${MAX_SUBS} was refused`); break; }
+      const next = withSeed(f.seed + 510 + i, () => changeLive(s, minuteFor(i), { kind: 'sub', outId: out.id, inId: bench[0].id }));
+      if (!next) { fail(`${ctx}: sub ${i + 1} of ${cap} was refused`); break; }
       s = next;
       made += 1;
     }
-    if (made !== MAX_SUBS) { fail(`${ctx}: only ${made} subs could be made`); continue; }
-    if (s.live.subsUsed !== MAX_SUBS) fail(`${ctx}: subsUsed reads ${s.live.subsUsed} after ${MAX_SUBS} subs`);
+    if (made !== cap) { fail(`${ctx}: only ${made} subs could be made`); continue; }
+    if (s.live.subsUsed !== cap) fail(`${ctx}: subsUsed reads ${s.live.subsUsed} after ${cap} subs`);
     {
       const out = pickOut(s, s.live);
       const bench = benchForHalftime(s);
-      if (out && bench.length && changeLive(s, 60, { kind: 'sub', outId: out.id, inId: bench[0].id }) !== null) fail(`${ctx}: a fourth sub went through`);
+      const at = stops === null ? 60 : minuteFor(cap - 1);
+      if (out && bench.length && changeLive(s, at, { kind: 'sub', outId: out.id, inId: bench[0].id }) !== null) fail(`${ctx}: sub ${cap + 1} went through`);
     }
     /* On a fresh restart: the other refusals. */
     const fresh = withSeed(f.seed + 520, () => startSecondHalf(f.ht));
@@ -891,7 +900,7 @@ begin(7, 'Rules: three subs, on the pitch, not already on, 90 minutes, a clock t
     states += 1;
   }
   if (states < 5) fail(`only ${states} states exercised the rules`);
-  console.log(`   ${states} states: ${MAX_SUBS} subs go through and the fourth is refused, a man off the pitch, a man already on and minute 91 are refused, a change at 10 with the clock at 46 lands at 46, the dressing room sub prints at 46`);
+  console.log(`   ${states} states: every sub the match's rule allows goes through and one more is refused, a man off the pitch, a man already on and minute 91 are refused, a change at 10 with the clock at 46 lands at 46, the dressing room sub prints at 46`);
 }
 
 /* ---------- 8. a paused save is picked back up ---------- */

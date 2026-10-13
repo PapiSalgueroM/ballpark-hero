@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,
-  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
+  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
@@ -1452,7 +1452,9 @@ export function LiveSimScreen({
     if (!liveNow) return;
     onChange(changeMinute, { kind: 'shape', mentality: m }, plus);
   };
-  const subsLeft = liveNow ? Math.max(0, MAX_SUBS - liveNow.subsUsed) : 0;
+  /* Round 1331: the match's own rule, three or five in three stoppages, read at this clock. */
+  const room = liveNow ? changeRoom(career, liveNow, changeMinute, plus) : null;
+  const subsLeft = room?.subsLeft ?? 0;
   const picked = picking ? career.squad.find(p => p.id === picking) ?? null : null;
   const sheetOpen = !!(picking && picked && canChange);
   /* Round 505: ordered for the man coming off, same position first. */
@@ -1937,7 +1939,7 @@ export function LiveSimScreen({
                 <div ref={sheetRef} className="bg-card border border-border rounded-xl p-3" data-cm-live-sheet={picking ?? ''}>
                   <div className="flex items-center justify-between">
                     <div className="text-[11px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                      <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}
+                      <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}{room && room.stopsLeft !== null ? ` · ${room.stopsLeft} ${room.stopsLeft === 1 ? 'stop' : 'stops'} left` : ''}
                     </div>
                     <button
                       onClick={closeSheet}
@@ -1980,8 +1982,10 @@ export function LiveSimScreen({
                   </div>
 
                   <div className="text-[11px] text-muted-foreground uppercase tracking-wider mt-2 mb-1">Bring on for {lastName(picked.name)}</div>
-                  {subsLeft === 0 ? (
-                    <p className="text-[11px] text-yellow-400">You have used all three. Nobody else is coming off.</p>
+                  {subsLeft === 0 || (room && !room.open) ? (
+                    <p className="text-xs text-yellow-400" data-cm-live-refusal={subsLeft === 0 ? 'subs' : 'stops'}>{subsLeft === 0
+                      ? `You have used all ${room?.subs === 5 ? 'five' : 'three'}. Nobody else is coming off.`
+                      : 'No stoppages left for changes. All three are used.'}</p>
                   ) : bench.length === 0 ? (
                     <p className="text-[11px] text-muted-foreground">Nobody fit is left on the bench.</p>
                   ) : (

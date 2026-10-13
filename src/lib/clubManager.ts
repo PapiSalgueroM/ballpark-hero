@@ -118,6 +118,8 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
 import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+/* Round 1331: the substitution rule by league and season, a pure table. */
+import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
@@ -1628,6 +1630,10 @@ export interface SubLine {
   onGen?: boolean; offGen?: boolean;
   /** Round 781: into the board of `minute`, see ScorerLine. */
   plus?: number;
+  /** Round 1331: my changes only, true when the change was made in play under a rule that limits the
+   *  stoppages (five changes in three), so it used a stoppage; a change at a break carries none. Never
+   *  written under a rule with no limit, so a three change match saves what it always did. */
+  stop?: true;
 }
 export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
 
@@ -2935,6 +2941,14 @@ export interface CareerState {
   shootoutOrder?: string[];
   /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
   matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
+  /** Round 1331: 'base' plays the match rules from before Round 1331 (three changes with no stoppage
+   *  limit everywhere, and the press asking about the fixture the old way). Set only by Manager Hot Seat
+   *  on a day dated before HOT_SEAT_RULES_FROM or a free run started before it, so a run in flight and
+   *  every past daily replay exactly; taken off when the run is carried on to Club Manager and dropped by
+   *  loadCareer, so no Club Manager save ever plays it. Absent means the current rules. A later rule
+   *  that moves the dailies joins this same field (a dated value naming the newest rule a run plays)
+   *  rather than adding a second one. */
+  matchRules?: 'base';
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -18547,9 +18561,70 @@ export function tiringAtHalftime(career: CareerState): CMPlayer[] {
     .sort((a, b) => a.fitness - b.fitness);
 }
 
-/** Three changes a match, on the pitch or in the dressing room. */
+/** Three changes a match, on the pitch or in the dressing room: the old rule's number. Since Round 1331
+ *  a match plays its league and season's rule (matchRuleOf), which is this number with no stoppage
+ *  limit before 2020-21 and wherever the game has no sourced row, and the base rule an older Manager
+ *  Hot Seat day plays. Kept exported because harnesses read it as that number. */
 export const MAX_HALFTIME_SUBS = 3;
 export const MAX_SUBS = MAX_HALFTIME_SUBS;
+
+/** Round 1331: the substitution rule this career's matches play: its league's row for the season the
+ *  world stands in (src/lib/clubManagerSubsRule.ts, two sourced in scripts/data/cmSubsRuleSources.json),
+ *  or three with no limit on a Hot Seat day played on the base rules. Cups and continental ties follow
+ *  the career league's row, a stated simplification. */
+export function matchRuleOf(career: CareerState): SubsRule {
+  if (career.matchRules === 'base') return { subs: MAX_SUBS, stops: null, partial: false };
+  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));
+}
+
+/** Round 1331: is a change at this minute made at a break, which uses no stoppage? Half time is any
+ *  change before the second half is drawn (the dressing room records it at 46); the break before extra
+ *  time is the minute extra time is drawn from, before a ball of it is played. Extra time's own half
+ *  time is not a moment the engine has (its thirty minutes are one stretch), so a change at 105 counts
+ *  as a stoppage. */
+export function isBreakChange(live: LiveMatch, minute: number, plus?: number): boolean {
+  if (!live.h2Drawn && minute >= 46) return true;
+  return !!live.et && minute === live.et.from && !(plus && plus > 0);
+}
+
+const stopKey = (minute: number, plus?: number): string => `${minute}|${plus && plus > 0 ? plus : 0}`;
+
+/** Round 1331: the stoppages my changes have used: the distinct clock readings of the changes made in
+ *  play under a stoppage limit (two at the same minute share one). */
+export function stopsUsed(live: LiveMatch): number {
+  return new Set((live.subs ?? []).filter(s => s.stop).map(s => stopKey(s.minute, s.plus))).size;
+}
+
+/** Round 1331: does a change at this clock reading join a stoppage already used? */
+function sharesStop(live: LiveMatch, minute: number, plus?: number): boolean {
+  const key = stopKey(minute, plus);
+  return (live.subs ?? []).some(s => s.stop && stopKey(s.minute, s.plus) === key);
+}
+
+/** Round 1331: changes I have left in the match on, by its rule. */
+export function subsLeftOf(career: CareerState): number {
+  return career.live ? Math.max(0, matchRuleOf(career).subs - career.live.subsUsed) : 0;
+}
+
+/** Round 1331: stoppages I have left, or null under a rule with no limit. */
+export function stopsLeftOf(career: CareerState): number | null {
+  const stops = matchRuleOf(career).stops;
+  if (stops === null) return null;
+  return career.live ? Math.max(0, stops - stopsUsed(career.live)) : stops;
+}
+
+/** Round 1331: what the live sheet can offer at this clock reading: the changes and stoppages left,
+ *  and whether a change made now would be taken (a change at a break, or at a stoppage already used,
+ *  needs no stoppage of its own). */
+export function changeRoom(career: CareerState, live: LiveMatch, minute: number, plus?: number): { subs: number; subsLeft: number; stopsLeft: number | null; open: boolean } {
+  const rule = matchRuleOf(career);
+  const subsLeft = Math.max(0, rule.subs - live.subsUsed);
+  const stopsLeft = rule.stops === null ? null : Math.max(0, rule.stops - stopsUsed(live));
+  const m = Math.floor(minute);
+  const p = plus && plus > 0 ? Math.floor(plus) : 0;
+  const open = subsLeft > 0 && (stopsLeft === null || stopsLeft > 0 || isBreakChange(live, m, p) || sharesStop(live, m, p));
+  return { subs: rule.subs, subsLeft, stopsLeft, open };
+}
 
 export type LiveChange =
   | { kind: 'sub'; outId: string; inId: string }
@@ -18563,8 +18638,10 @@ export type LiveChange =
  * Nothing before it moves. At the interval (45, or 46 before the second half
  * is drawn) there is nothing to redraw, because the second half has not
  * been decided yet and will read your changes when it is. Returns null when
- * the change is not allowed: no match on, the third sub already made, the
- * man is not on the pitch or the one coming on is not fit.
+ * the change is not allowed: no match on, the last change the match's rule
+ * allows already made (Round 1331: three, or five in three stoppages where
+ * the league and season had it, see matchRuleOf), no stoppage left for a
+ * change in play, the man is not on the pitch or the one coming on is not fit.
  */
 export function changeLive(
   career: CareerState, minute: number, change: LiveChange,
@@ -18590,8 +18667,13 @@ export function changeLive(
   const boardNow = period ? live.added?.[period] ?? 0 : 0;
   const p = boardNow > 0 && Math.floor(minute) === m && plus !== undefined && Number.isFinite(plus) && plus > 0
     ? Math.min(Math.floor(plus), boardNow) : 0;
+  /* Round 1331: the match's own rule. Under five in three, a change in play that opens a new stoppage
+     needs one left; a change at a break, or at a stoppage already used, does not. */
+  const rule = change.kind === 'sub' ? matchRuleOf(state) : null;
+  const inPlay = !!rule && rule.stops !== null && !isBreakChange(live, m, p);
   if (change.kind === 'sub') {
-    if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
+    if (live.subsUsed >= rule!.subs) return null;
+    if (inPlay && !sharesStop(live, m, p) && stopsUsed(live) >= rule!.stops!) return null;
     const idx = live.onPitch.indexOf(change.outId);
     if (idx < 0) return null;
     if (live.onPitch.includes(change.inId)) return null;
@@ -18612,7 +18694,7 @@ export function changeLive(
     live.subsUsed += 1;
     live.subs = [...(live.subs ?? []), {
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
-      ...plusOf({ plus: p }),
+      ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
   } else {
     live.mentality = change.mentality;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeftRight, Gauge, Play } from 'lucide-react';
-import { benchFor, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf, liveGoneIds } from '@/lib/clubManager';
+import { benchFor, tiringAtHalftime, matchRuleOf, subsLeftOf, pressOf, liveGoneIds } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
@@ -49,7 +49,8 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
      first, then the family, then the rest, freshest first inside a tier. */
   const bench = benchFor(career, picking ?? undefined);
   const tired = new Set(tiringAtHalftime(career).map(p => p.id));
-  const subsLeft = MAX_HALFTIME_SUBS - live.subsUsed;
+  /* Round 1331: the match's own rule; changes at the break use no stoppage, so only the changes count here. */
+  const subsLeft = subsLeftOf(career);
   const started = new Set(live.startXi);
   /* Round 504: a man sent off in the first half is still in the eleven the
      save holds, and the engine refuses a sub for him, so his row says so and
@@ -118,7 +119,7 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
         </div>
 
         {subsLeft === 0 && (
-          <p className="text-[10px] text-yellow-400 mb-1.5">You have used all three. Nobody else is coming off.</p>
+          <p className="text-[10px] text-yellow-400 mb-1.5">You have used all {matchRuleOf(career).subs === 5 ? 'five' : 'three'}. Nobody else is coming off.</p>
         )}
 
         <div className="space-y-0.5">
