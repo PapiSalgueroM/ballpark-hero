@@ -1,0 +1,3 @@
+vitest-fence exit=0 24s |    Duration  23.59s (transform 8.66s, setup 1.80s, collect 17.33s, tests 27.17s, environment 7.84s, prepare 2.04s)
+vitest-pages exit=0 62s |    Duration  61.48s (transform 12.53s, setup 1.41s, collect 38.78s, tests 98.60s, environment 12.03s, prepare 2.68s)
+tsc exit=0 86s | 
