@@ -47,6 +47,7 @@ const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/Club
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
 const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
+import SaveMovedNotice from '@/components/SaveMovedNotice';
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
 const WorldEditorScreen = lazy(() => import('@/components/club-manager/WorldEditorScreen'));
@@ -297,6 +298,9 @@ const ClubManager = () => {
               </div>
             </div>
           )}
+          {/* Round 1323: another tab has played this career on, so this one
+              writes nothing more and covers itself until it is reloaded. */}
+          {g.saveMoved && <SaveMovedNotice message="This career moved on in another tab. Reload to carry on." />}
           {inner}
         </div>
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />

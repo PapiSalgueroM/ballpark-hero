@@ -20469,11 +20469,14 @@ export function leanCareer(state: CareerState): CareerState {
  * press or at page leave, and false comes back. Every writer of the career
  * reaches it here: the hook, the slot swap's own write in clubManagerSlots.ts,
  * and Hot Seat's carry on, which holds nothing and so writes as a claim. The
- * import sits here, beside its only callers in this file.
+ * import sits here, beside its only callers in this file. The write inside
+ * the fence keeps the name saveCareer on purpose: it is the same refusal
+ * answering false, and scripts/simStorageWrites.mjs follows it by that name
+ * to every caller that keeps the answer.
  */
 export function saveCareer(career: CareerState): boolean {
   const full = trimCareer(career);
-  return saveFence.write(SAVE_KEY, () => {
+  return saveFence.write(SAVE_KEY, function saveCareer() {
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify(full));
       return true;

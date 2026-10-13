@@ -122,7 +122,7 @@ function startFixtureKey(clubName: string, eraId: string): string | null {
 type StartHold = { key: string; begin: () => void; settle: () => void; over: boolean; timer: ReturnType<typeof setTimeout> | null };
 
 /* Round 1323: the save fence, imported here beside the hook that uses it. */
-import { saveFence } from '@/lib/saveFence';
+import { saveFence, fenceKeyOf } from '@/lib/saveFence';
 import { SAVE_KEY } from '@/lib/clubManager';
 
 export function useClubManager() {
@@ -423,6 +423,26 @@ export function useClubManager() {
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
   }, [phase, letGoIfStale]);
+
+  /* Round 1323: and in EVERY phase, a write another tab makes to this career
+     puts the notice up at once (the fence key moves on every game write; a
+     person or a walk editing the save by hand moves nothing). A page back from
+     the back forward cache missed the events, and a tab coming back into view
+     is the moment the player looks, so both check as well. */
+  useEffect(() => {
+    const fenceKey = fenceKeyOf(SAVE_KEY);
+    const onStorage = (e: StorageEvent) => { if (e.key === null || e.key === fenceKey) movedOn(); };
+    const onShow = () => { movedOn(); };
+    const onVisible = () => { if (document.visibilityState === 'visible') movedOn(); };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('pageshow', onShow);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', onShow);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, [movedOn]);
 
   /** Continue a slot's career. The active one opens straight away; a parked
    *  one is swapped in and opened through the boot, era squads first. */

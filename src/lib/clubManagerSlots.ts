@@ -184,8 +184,10 @@ export function switchSlot(slot: number, outgoing?: CareerState | null): boolean
     return false;
   }
   /* 3. The incoming career takes SAVE_KEY, through the fence (Round 1323), so
-     the page that swaps holds the new generation and every other tab is stale. */
-  const took = saveFence.write(SAVE_KEY, () => {
+     the page that swaps holds the new generation and every other tab is stale.
+     The write inside keeps the name switchSlot: it is this swap's second
+     refusal, as scripts/simStorageWrites.mjs has always counted it. */
+  const took = saveFence.write(SAVE_KEY, function switchSlot() {
     try {
       if (target !== null) localStorage.setItem(SAVE_KEY, target);
       else localStorage.removeItem(SAVE_KEY);
