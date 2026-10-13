@@ -1,0 +1,9 @@
+vitestLine exit=0 5s |    Duration  3.73s (transform 1.32s, setup 108ms, collect 1.61s, tests 725ms, environment 526ms, prepare 275ms)
+realism exit=0 10s | ALL CAREER REALISM CHECKS PASSED
+ledger exit=0 7s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+mlbCareer exit=0 30s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+noRival exit=0 17s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+nfHead exit=1 0s | Node.js v24.21.0
+anchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 89s | 

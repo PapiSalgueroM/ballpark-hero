@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+realism: node scripts/simCareerRealism.mjs
+vitestLine: node_modules/.bin/vitest run src/test/usRivalLine.test.ts --testTimeout=300000 --hookTimeout=120000
+ledger: node scripts/simUsSeasonLedger.mjs
+mlbCareer: node scripts/simMlbCareer.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+nfHead: node scripts/qa/numberFormatting1085Parity.mjs
