@@ -1,0 +1,240 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.9099940943997353,
+      0.5267227969598025,
+      0.6762043265625834,
+...
+      0.044359411811456084,
+-     0.23687422997318208,
+-     0.34536651987582445
+    ],
+    value: {
+      academyClubName: 'Ajax',
+      activeSponsorship: null,
+      age: 20,
+...
+          {
++           club: 'Barcelona',
++           goals: 24,
+-           club: 'Leverkusen',
+-           goals: 30,
+            isPlayer: false,
++           name: 'Lamine Yamal',
++           nationality: 'Spain',
+-           name: 'Erling Haaland',
+-           nationality: 'Norway',
+            points: 74,
++           position: 'RW',
+-           position: 'ST',
+            trophies: [
++             'League',
+              'Cup'
+            ]
+          },
+          {
++           club: 'Sporting CP',
++           goals: 39,
+-           club: 'Bayern Munich',
+-           goals: 20,
+            isPlayer: false,
++           name: 'Kylian Mbappé',
++           nationality: 'France',
+-           name: 'Jamal Musiala',
+-           nationality: 'Germany',
+            points: 65,
++           position: 'ST',
+-           position: 'CAM',
+            trophies: [
++             'Cup'
+-             'League'
+            ]
+          },
+          {
++           club: 'Leverkusen',
++           goals: 41,
+-           club: 'Sporting CP',
+-           goals: 35,
+            isPlayer: false,
++           name: 'Erling Haaland',
++           nationality: 'Norway',
++           points: 61,
+-           name: 'Kylian Mbappé',
+-           nationality: 'France',
+-           points: 58,
+            position: 'ST',
+            trophies: [
+              'Cup'
+            ]
+          },
+          {
++           club: 'Man City',
++           goals: 36,
++           isPlayer: false,
++           name: 'Harry Kane',
++           nationality: 'England',
++           points: 59,
++           position: 'ST',
++           trophies: []
++         },
++         {
+            club: 'Real Madrid',
++           goals: 26,
+-           goals: 22,
+            isPlayer: false,
+            name: 'Vinícius Jr',
+            nationality: 'Brazil',
++           points: 50,
+-           points: 58,
+            position: 'LW',
+            trophies: []
+          },
+          {
++           club: 'Bayern Munich',
++           goals: 18,
+-           club: 'Barcelona',
+-           goals: 24,
+            isPlayer: false,
++           name: 'Jamal Musiala',
++           nationality: 'Germany',
++           points: 48,
++           position: 'CAM',
+-           name: 'Lamine Yamal',
+-           nationality: 'Spain',
+-           points: 57,
+-           position: 'RW',
+            trophies: [
+              'League',
+-             'Cup'
+            ]
+          },
+          {
++           club: 'Man City',
++           goals: 18,
+-           club: 'Real Madrid',
+-           goals: 19,
+            isPlayer: false,
++           name: 'Phil Foden',
+-           name: 'Jude Bellingham',
+            nationality: 'England',
++           points: 48,
+-           points: 54,
+            position: 'CAM',
+            trophies: []
+          },
+          {
++           club: 'Feyenoord',
++           goals: 11,
+-           club: 'Man City',
+-           goals: 36,
+            isPlayer: false,
++           name: 'Pedri',
++           nationality: 'Spain',
++           points: 43,
++           position: 'CM',
++           trophies: [
++             'Cup'
++           ]
+-           name: 'Harry Kane',
+-           nationality: 'England',
+-           points: 49,
+-           position: 'ST',
+-           trophies: []
+          },
+          {
++           club: 'Barcelona',
++           goals: 3,
+-           club: 'Trabzonspor',
+-           goals: 26,
+            isPlayer: false,
++           name: 'Rodri',
++           nationality: 'Spain',
++           points: 40,
++           position: 'CDM',
++           trophies: [
++             'League',
++             'Cup'
++           ]
+-           name: 'Mohamed Salah',
+-           nationality: 'Egypt',
+-           points: 47,
+-           position: 'RW',
+-           trophies: []
+          },
+          {
+            club: 'Arsenal',
++           goals: 20,
+-           goals: 18,
+            isPlayer: false,
+            name: 'Bukayo Saka',
+            nationality: 'England',
++           points: 39,
+-           points: 46,
+            position: 'RW',
+            trophies: [
+              'Cup'
+            ]
+          },
+-         {
+-           club: 'Feyenoord',
+-           goals: 6,
+-           isPlayer: false,
+-           name: 'Pedri',
+-           nationality: 'Spain',
+-           points: 40,
+-           position: 'CM',
+-           trophies: [
+-             'Cup'
+-           ]
+-         }
+        ],
+        playerNominated: false,
+        playerPoints: 0,
+        playerRank: null,
+        year: 2029
+...
+          headline: 'World ere Named In Team Of The Season',
++         newspaper: 'The Daily Sport',
+-         newspaper: 'El Golazo',
+          type: 'positive'
+        }
+      ],
+      pendingOffers: [],
+      pendingRivalryEvent: null,
+
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+PASS rival totals
+PASS read boundary
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///tmp/u/scripts/qa/derbyHistory1195.mjs:152:307
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

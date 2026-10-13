@@ -1,0 +1,3 @@
+unwired-awards exit=1 44s | Node.js v24.21.0
+unwired-season exit=1 2s | Node.js v24.21.0
+unwired-derby exit=1 1s | Node.js v24.21.0

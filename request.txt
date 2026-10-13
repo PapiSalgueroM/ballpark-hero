@@ -1,0 +1,4 @@
+#!serial
+unwired-awards: git worktree add -f /tmp/u d25062296f20c828117aedf58ed8a011ef85dcb7 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/u/node_modules; cd /tmp/u && node scripts/simCareerAwardsNight.mjs
+unwired-season: git worktree add -f /tmp/u d25062296f20c828117aedf58ed8a011ef85dcb7 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/u/node_modules; cd /tmp/u && node scripts/simSoccerSeasonHistory.mjs
+unwired-derby: git worktree add -f /tmp/u d25062296f20c828117aedf58ed8a011ef85dcb7 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/u/node_modules; cd /tmp/u && node scripts/simSoccerDerbyHistory.mjs

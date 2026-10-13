@@ -1,0 +1,13 @@
+1) Soccer Career replays the pre-lift fixture byte for byte
+   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal
+file:///tmp/u/scripts/simCareerAwardsNight.mjs:232
+    if (!text.includes(p.from)) throw new Error(`train out refused: ${file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
+                                      ^
+
+Error: train out refused: src/lib/soccerCareerEngine.ts does not contain "consequence: \"3-match ban next season, Reputation -5\""
+    at trainOutOf (file:///tmp/u/scripts/simCareerAwardsNight.mjs:232:39)
+    at attributedAwardsBundle (file:///tmp/u/scripts/simCareerAwardsNight.mjs:446:20)
+    at file:///tmp/u/scripts/simCareerAwardsNight.mjs:604:99
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
