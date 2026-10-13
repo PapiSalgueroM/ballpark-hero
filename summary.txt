@@ -1,0 +1,16 @@
+rivals exit=0 24s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+vitest exit=0 25s |    Duration  24.31s (transform 4.49s, setup 535ms, collect 12.31s, tests 40.55s, environment 3.99s, prepare 1.06s)
+anchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+pd-a exit=0 29s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-b exit=0 31s | simCareerPreDraft [seed set b]: ALL GREEN
+tsc exit=0 102s | 
+pd-c exit=0 31s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 28s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 31s | simCareerPreDraft [seed set e]: ALL GREEN
+ctl-new exit=0 256s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+softedge-old exit=0 31s | OLDFLOORS control=softedge exit=0
+simNflTruth exit=0 89s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+simUsCareerProspect exit=0 17s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+ctl-round exit=0 414s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+pjloop exit=0 485s | PJLOOP prospect=0 predraft=0 total 485s
