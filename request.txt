@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+head: node scripts/simWritesAreSent.mjs > /tmp/w-head.log 2>&1; s=$?; grep -nE "FAIL|fail|ok |PASS|green|red" /tmp/w-head.log | head -20; tail -2 /tmp/w-head.log; exit $s
+base: git worktree add /tmp/b1325 8fea14e2 >/dev/null 2>&1; ln -sfn $PWD/node_modules /tmp/b1325/node_modules; cd /tmp/b1325 && (npm run build > /tmp/b1325-build.log 2>&1; node scripts/simWritesAreSent.mjs > /tmp/w-base.log 2>&1); s=$?; grep -nE "FAIL|fail|ok |PASS|green|red" /tmp/w-base.log | head -20; tail -2 /tmp/w-base.log; exit $s

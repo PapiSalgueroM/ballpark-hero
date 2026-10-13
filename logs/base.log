@@ -1,0 +1,5 @@
+4:  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+6:  FAIL: no guess was ever submitted, so this section proved nothing about the write
+8:simWritesAreSent: 2 failures
+
+simWritesAreSent: 2 failures
