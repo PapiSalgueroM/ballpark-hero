@@ -21,7 +21,7 @@ import {
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
-import { fanMeter } from '@/lib/clubManagerMeters';
+import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { deskOf } from '@/lib/clubManagerDecisions';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
@@ -137,8 +137,10 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
         {accent && <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />}
       </div>
       <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{title}</div>
-      <div className="text-sm font-bold font-display text-foreground truncate">{value}</div>
-      {sub && <div className="text-[9px] text-muted-foreground truncate mt-0.5">{sub}</div>}
+      {/* Round 1328: the value and the line wrap instead of cutting their key
+          words at 320 ("-£13.5m projec..."), and the line is 12px. */}
+      <div className="text-sm font-bold font-display text-foreground break-words">{value}</div>
+      {sub && <div className="text-xs leading-snug text-muted-foreground break-words mt-0.5">{sub}</div>}
     </button>
   );
 }
@@ -285,7 +287,9 @@ const ClubManager = () => {
         reportGameType="club-manager"
       >
         <div className="relative">
-          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center">
+          {/* Round 1328: the "?" is 44 by 44 now, pulled 8px further into the
+              corner so it covers no more of the screen than the old 36px one. */}
+          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="-mr-2 -mt-2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center">
             <ScreenLoading><ClubManagerHelp /></ScreenLoading>
           </HowToPlayPopover>
           {/* Round 634: the save was refused and the player is told, in plain
@@ -694,9 +698,11 @@ const ClubManager = () => {
                     {/* Round 145: this line said "Top 20" at a rank 20 club,
                         which is exactly the phrasing he told us to stop using.
                         It now quotes the board's actual named demand. */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] text-muted-foreground shrink-0">Board wants</span>
-                      <span className="text-[10px] font-bold text-foreground truncate" title={teamWants.get(c.name) ?? ''}>
+                    {/* Round 1328: the one line that tells clubs apart was cut at
+                        390 ("Win the Premi..."). It wraps now, at 12px, whole. */}
+                    <div className="text-xs leading-snug mt-0.5 break-words" data-cm-board-wants>
+                      <span className="text-muted-foreground">Board wants </span>
+                      <span className="font-bold text-foreground" title={teamWants.get(c.name) ?? ''}>
                         {teamWants.get(c.name) ?? ''}
                       </span>
                     </div>
@@ -912,9 +918,9 @@ const ClubManager = () => {
   // Round 74: tile summaries.
   const objBehind = objStatuses.filter(s => s.status === 'behind' || s.status === 'failed').length;
   const objDone = objStatuses.filter(s => s.status === 'done').length;
-  /* Round 979: an open appeal or decision counts as unread on the tile. */
-  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length + deskOf(c).filter(d => !d.resolved).length;
-  const latestMsg = (c.inbox ?? [])[0];
+  /* Round 979: an open appeal or decision counts as unread on the tile.
+     Round 1328: the count and the line come from one rule, the panel's own. */
+  const inboxLine = inboxTile(c);
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
@@ -941,7 +947,9 @@ const ClubManager = () => {
     <div ref={hubTopRef} data-cm-hub>
       {/* Header */}
       <header className="mb-4">
-        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap px-12 md:px-0">
+        {/* Round 1328: px-12 on both sides keeps the help button's corner clear
+            of the club name and the pills, and the row centred. */}
+        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap px-12">
           {/* Round 154: a club you founded wears its crest where every other
               club wears its color dot. */}
           {c.customClub && c.customClub.name === c.clubName
@@ -1157,9 +1165,9 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('board')}
               />
               <HubTile
-                icon="📩" title="Inbox" accent={unreadCount > 0}
-                value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={deskOf(c).find(d => !d.resolved)?.kind === 'appeal' ? 'Red card appeal' : latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
+                icon="📩" title="Inbox" accent={inboxLine.count > 0}
+                value={inboxLine.value}
+                sub={inboxLine.sub}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1170,7 +1178,7 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏆" title="League"
-                value={`#${g.myPosition || '-'}`}
+                value={leagueTileValue(c.week, g.myPosition)}
                 sub={c.form.length ? `Form: ${c.form.join(' ')}` : careerLeagueOf(c).name}
                 onClick={() => g.setActiveTab('table')}
               />
@@ -1192,10 +1200,14 @@ const ClubManager = () => {
               <HubTile
                 icon="💰" title="Finances"
                 value={(() => {
-                  const r = projectFinances(c).resultProjected;
-                  return `${r < 0 ? '-' : '+'}${money(Math.abs(r), c)} projected`;
+                  /* Round 1328: what the kitty will really do this season (the
+                     result plus the running costs the board covers), by Round
+                     1326's rule for the Finances desk, not the red loss the
+                     board never asks the kitty to pay. */
+                  const k = kittyChange(projectFinances(c)).projected;
+                  return `${k < 0 ? '-' : '+'}${money(Math.abs(k), c)}`;
                 })()}
-                sub={`Fans ${fanMeter(c).band.toLowerCase()} · prices, sponsor, the books`}
+                sub="Kitty change this season"
                 onClick={() => setHubPanel('finance')}
               />
               <HubTile
@@ -1204,7 +1216,7 @@ const ClubManager = () => {
                   const f = facilitiesOf(c);
                   return `Level ${FACILITY_IDS.map(id => f[id]).join(' · ')}`;
                 })()}
-                sub="Stadium, training, medical, dressing room"
+                sub="Stadium, training, medical, more"
                 onClick={() => setHubPanel('facilities')}
               />
               {/* Round 471: the staff desk. Accented while a rival has an
@@ -1221,7 +1233,8 @@ const ClubManager = () => {
                   const st = staffOf(c);
                   if (st.poach) return `They want your ${STAFF_POST_INFO[st.poach.postId].short.toLowerCase()} man`;
                   const empty = STAFF_POST_IDS.filter(p => !st[p]);
-                  return empty.length ? `Nobody on ${empty.map(p => STAFF_POST_INFO[p].short.toLowerCase()).join(', ')}` : 'Attack, defence, keepers, scouting';
+                  if (empty.length > 2) return 'Hire them on the staff desk';
+                  return empty.length ? `Nobody on ${empty.map(p => STAFF_POST_INFO[p].short.toLowerCase()).join(', ')}` : 'Attack, defence, keepers, scouts';
                 })()}
                 onClick={() => setHubPanel('staff')}
               />
@@ -1237,7 +1250,7 @@ const ClubManager = () => {
                 sub={(() => {
                   const level = levelFor(xpOf(c).xp);
                   if (pointsFree(xpOf(c)) > 0) return `Level ${level} · seven trees open`;
-                  return level >= MAX_LEVEL ? 'Every tree filled' : 'Tactics, recruitment, money, the press';
+                  return level >= MAX_LEVEL ? 'Every tree filled' : 'Seven skill trees to grow';
                 })()}
                 onClick={() => setHubPanel('xp')}
               />
@@ -1251,13 +1264,13 @@ const ClubManager = () => {
                 })()}
                 sub={(() => {
                   const o = startOptionsOf(c);
-                  return o.nationJobs ? 'Currency, the international job, haggling' : 'International job off';
+                  return o.nationJobs ? 'Currency, nation job, haggling' : 'International job off';
                 })()}
                 onClick={() => setHubPanel('options')}
               />
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer || c.jobHunt?.open?.status === 'accepted'}
-                value={c.jobHunt?.open?.status === 'accepted' ? '✅ A club said yes' : c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
+                value={c.jobHunt?.open?.status === 'accepted' ? '✅ A club said yes' : c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : recordLine(c.careerStats)}
                 sub={c.jobHunt?.open?.status === 'accepted'
                   ? `${c.jobHunt.open.club}: now or in the summer`
                   : c.approach
@@ -1265,7 +1278,7 @@ const ClubManager = () => {
                   : nationOffer
                     ? `${nationOffer.nation} want you for the summer`
                     : c.nationJob
-                      ? `${c.nationJob.nation} manager · ${c.careerStats.wins}W ${c.careerStats.losses}L`
+                      ? `${c.nationJob.nation} manager · ${recordLine(c.careerStats)}`
                       : c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
                 onClick={() => setHubPanel('manager')}
               />

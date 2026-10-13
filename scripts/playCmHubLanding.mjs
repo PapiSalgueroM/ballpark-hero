@@ -253,7 +253,8 @@ if (SECTIONS.has('A')) {
       await page.waitForTimeout(word === 'rest' || word === 'see-review' ? 2500 : 700);
     }
     if (word !== 'review') {
-      fail('A', `${s.id}: the season review never came up (${steps.slice(-8).join(', ')})`);
+      const seen = await page.evaluate(() => ({ h1: [...document.querySelectorAll("h1")].map(h => h.innerText.trim()).join(" / "), buttons: [...document.querySelectorAll("button")].filter(b => b.offsetParent).map(b => b.innerText.trim().slice(0, 30)).filter(Boolean).slice(0, 14).join(" | ") }));
+      fail('A', `${s.id}: the season review never came up (presses ${steps.join(", ")}; headings ${seen.h1}; buttons ${seen.buttons})`);
       await shot(page, `A-${s.id}-noreview`);
     } else {
       await page.evaluate(() => { window.__hubFirst = null; window.scrollTo(0, document.documentElement.scrollHeight); });
@@ -413,9 +414,13 @@ if (SECTIONS.has('B')) {
    'text:<tag>|<words>' for an element found by its words. */
 const FIT = {
   hub: {
-    font: [['season and mid season pills', '[data-cm-hub] header > div:first-child > span.rounded-full'], ['meter words', '[data-cm-meter] > div:first-child']],
+    font: [['season and mid season pills', '[data-cm-hub] header > div:first-child > span.rounded-full'], ['meter words', '[data-cm-meter] > div:first-child'], ['tile value', '[data-cm-hub] .grid > button > div.uppercase + div'], ['tile line', '[data-cm-hub] .grid > button > div.uppercase + div + div']],
     controls: [['help button', 'button[aria-label="How to play"]'], ['Managers button', '[data-testid="cm-show-slots"]'], ['meter button', '[data-cm-meter]']],
-    cut: [['pills', '[data-cm-hub] header > div:first-child > span.rounded-full']],
+    cut: [['pills', '[data-cm-hub] header > div:first-child > span.rounded-full'], ['tile value', '[data-cm-hub] .grid > button > div.uppercase + div'], ['tile line', '[data-cm-hub] .grid > button > div.uppercase + div + div']],
+  },
+  team: {
+    font: [['Board wants line', '[data-cm-board-wants]']],
+    cut: [['Board wants line', '[data-cm-board-wants]'], ['Board wants demand', '[data-cm-board-wants] span']],
   },
   calendar: {
     font: [['day strip', '[data-testid="cm-calendar-day"]'], ['intensity buttons', 'card:Between matches|.grid > button']],
@@ -483,6 +488,85 @@ function measureInPage({ spec, control }) {
   const cellSize = cell ? `${Math.round(cell.getBoundingClientRect().width)}x${Math.round(cell.getBoundingClientRect().height)}` : null;
   return { small, font, controls, sizes, cut, overlaps, overlapWords: overlapWords.slice(0, 4), sideways: document.documentElement.scrollWidth > window.innerWidth + 1, cellSize, control };
 }
+/* The hub's tiles as drawn: each tile's value and line, its height, and how
+   many lines each wraps to. Read off the hub root by the Managers button, so
+   it reads the base build too. */
+const readTiles = page => page.evaluate(() => {
+  const root = document.querySelector('[data-testid="cm-show-slots"]')?.closest('header')?.parentElement;
+  const out = {};
+  if (!root) return out;
+  const lines = el => {
+    const cs = getComputedStyle(el);
+    const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2;
+    return Math.round(el.getBoundingClientRect().height / lh);
+  };
+  for (const b of root.querySelectorAll('.grid > button')) {
+    const divs = [...b.querySelectorAll(':scope > div')];
+    const i = divs.findIndex(d => d.classList.contains('uppercase'));
+    if (i < 0) continue;
+    const value = divs[i + 1];
+    const sub = divs[i + 2];
+    out[divs[i].textContent.trim()] = {
+      value: value ? value.innerText.trim() : '', sub: sub ? sub.innerText.trim() : '',
+      h: Math.round(b.getBoundingClientRect().height), valueLines: value ? lines(value) : 0, subLines: sub ? lines(sub) : 0,
+    };
+  }
+  return out;
+});
+const panelText = async (page, title) => {
+  if (!(await clickTile(page, title))) return null;
+  await page.waitForTimeout(700);
+  const text = await page.evaluate(() => document.querySelector('[data-testid="cm-show-slots"]')?.closest('header')?.parentElement?.innerText ?? '');
+  await page.locator('button', { hasText: 'Club home' }).first().evaluate(b => b.click()).catch(() => {});
+  await page.waitForTimeout(300);
+  return text;
+};
+const toMillions = s => {
+  const m = /(-?)\D*?([\d.]+)(bn|m|k)/.exec(s ?? '');
+  if (!m) return null;
+  const n = Number(m[2]) * (m[3] === 'bn' ? 1000 : m[3] === 'k' ? 0.001 : 1);
+  return m[1] === '-' ? -n : n;
+};
+/* The tile words of section C and E: each tile agrees with its own screen. */
+async function checkTiles(page, section, tag) {
+  const tiles = await readTiles(page);
+  const header = await page.evaluate(() => document.querySelector('[data-testid="cm-show-slots"]')?.closest('header')?.innerText ?? '');
+  for (const [title, t] of Object.entries(tiles)) {
+    check(section, t.valueLines <= 2 && t.subLines <= 2, `${tag}: the ${title} tile wraps to ${t.valueLines} and ${t.subLines} line(s), ${t.h}px tall ("${t.value}" over "${t.sub}")`);
+  }
+  const record = /^([\d,]+)W ([\d,]+)D ([\d,]+)L$/;
+  if (tiles.Manager && record.test(tiles.Manager.value)) {
+    const panel = await panelText(page, 'Manager');
+    check(section, !!panel && panel.includes(tiles.Manager.value), `${tag}: the Manager tile's "${tiles.Manager.value}" is the record the Manager panel prints`);
+  } else if (tiles.Manager) check(section, !/W [\d,]+L/.test(tiles.Manager.value + tiles.Manager.sub) || /D /.test(tiles.Manager.value + tiles.Manager.sub), `${tag}: the Manager tile counts draws wherever it prints a record ("${tiles.Manager.value}", "${tiles.Manager.sub}")`);
+  if (tiles.Inbox) {
+    const panel = (await panelText(page, 'Inbox')) ?? '';
+    const empty = panel.includes('Nobody has texted you yet');
+    check(section, (tiles.Inbox.sub === 'No messages yet') === empty, `${tag}: the Inbox tile says "${tiles.Inbox.value}" over "${tiles.Inbox.sub}", and the panel ${empty ? 'is empty' : 'holds something'}`);
+    if (!['No messages yet', 'Red card appeal'].includes(tiles.Inbox.sub)) check(section, panel.includes(tiles.Inbox.sub), `${tag}: the Inbox panel names "${tiles.Inbox.sub}" too`);
+    check(section, /^(All quiet|[\d,]+ new)$/.test(tiles.Inbox.value), `${tag}: the Inbox tile's count reads "${tiles.Inbox.value}"`);
+  }
+  if (tiles.League && /Season not started/.test(header)) check(section, !tiles.League.value.startsWith('#'), `${tag}: at week 0 the League tile reads "${tiles.League.value}", not a rank, under "Season not started"`);
+  if (tiles.Finances) {
+    if (!(await clickTile(page, 'Finances'))) fail(section, `${tag}: no Finances tile to open`);
+    else {
+      await page.locator('[data-projection-total="result"]').waitFor({ timeout: 10000 }).catch(() => {});
+      const desk = await page.evaluate(() => {
+        const cell = s => document.querySelector(`${s} td:last-child`)?.textContent ?? null;
+        return { result: cell('[data-projection-total="result"]'), wages: cell('[data-projection-line="playerWages"]'), staff: cell('[data-projection-line="staffWages"]'), travel: cell('[data-projection-line="travel"]') };
+      });
+      await page.locator('button', { hasText: 'Club home' }).first().evaluate(b => b.click()).catch(() => {});
+      await page.waitForTimeout(300);
+      const parts = [desk.result, desk.wages, desk.staff, desk.travel].map(toMillions);
+      const tile = toMillions(tiles.Finances.value);
+      const want = parts.every(v => v !== null) ? parts.reduce((a, b) => a + b, 0) : null;
+      /* The desk prints each line rounded to a tenth, so four rounded terms can
+         drift 0.2 from the tile's own rounding of the exact sum. */
+      check(section, want !== null && tile !== null && Math.abs(tile - want) <= 0.25, `${tag}: the Finances tile's ${tiles.Finances.value} is the kitty change of the desk's own lines (result ${desk.result} plus wages ${desk.wages}, staff ${desk.staff}, travel ${desk.travel} = ${want === null ? '?' : want.toFixed(2)})`);
+    }
+  }
+  return tiles;
+}
 async function measure(page, screen) {
   return page.evaluate(measureInPage, { spec: FIT[screen] ?? {}, control: CONTROL });
 }
@@ -501,6 +585,7 @@ async function fitVisit(url, sizeKey, career) {
     await page.waitForTimeout(1200);
     out.hub = await measure(page, 'hub');
     out.hub.cls = await page.evaluate(() => window.__clsAfterHub);
+    out.tiles = url === HEAD ? await checkTiles(page, 'C', `${sizeKey} ${career.club}`) : await readTiles(page);
     await clickTile(page, 'Calendar');
     await page.locator('[data-testid="cm-calendar-grid"]').waitFor({ timeout: 15000 });
     await page.evaluate(() => [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(b => /: (vs|at|v) /.test(b.getAttribute('aria-label') ?? ''))?.click());
@@ -547,6 +632,7 @@ if (SECTIONS.has('C')) {
     }
     check('C', (head.hub?.cls ?? 1) === 0, `${tag} hub: layout shift after the first hub frame ${head.hub?.cls}`);
     if (head.errors?.length) fail('C', `${tag}: page error ${head.errors[0].slice(0, 160)}`);
+    for (const [title, t] of Object.entries(head.tiles ?? {})) console.log(`  INFO  C  ${tag} tile ${title}: ${t.h}px on head${base?.tiles?.[title] ? `, ${base.tiles[title].h}px on base` : ''} ("${t.value}" over "${t.sub}")`);
   }
 }
 
@@ -733,6 +819,7 @@ if (SECTIONS.has('E')) {
       const text = await hubText(page);
       const bad = BAD.filter(w => text.includes(w));
       check('E', text.length > 200 && bad.length === 0, `${file}: the hub draws ${text.length} characters and none of ${BAD.join(', ')}${bad.length ? ` (found ${bad.join(', ')})` : ''}`);
+      if (SECTIONS.has('C')) await checkTiles(page, 'E', `${file} at 390`);
       if (errors.length) fail('E', `${file}: page error ${errors[0].slice(0, 160)}`);
       await shot(page, `E-${file.replace('.json', '')}-390`);
       await ctx.close();
