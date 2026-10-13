@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1320.mjs
+playCollegeSeat: node scripts/playCollegeSeat.mjs
+smalltap: SEAT_WALK_CONTROL=smalltap node scripts/playCollegeSeat.mjs
+was-head: node scripts/simWritesAreSent.mjs
+was-base: git worktree add --detach /tmp/base 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 > /dev/null 2>&1 && R=$(pwd) && cd /tmp/base && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && echo "base built at $(git rev-parse --short HEAD)" && node scripts/simWritesAreSent.mjs
