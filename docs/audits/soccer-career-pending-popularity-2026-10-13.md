@@ -1,0 +1,31 @@
+# Soccer Career saved popularity choice and preview, 2026-10-13
+
+Round1358 starts at qualified1356 docs head0a43994b2de3f882e3010934e0375a0a13d6a1c1 on managed codex/soccer-career-pending-popularity. Root owns only the existing Life233 eligibility gate and its choice0 consequence-map entry after a qualified causal baseline. H owns core, page, calendar, save representation, finance and the new systems/deck. All app and old proof/package bytes remain unchanged at this stage.
+
+## Problem and intended behavior
+
+An actual source213 choice0 reduces popularity60 to58. A233 card already delivered at60 loses both effects after JSON reload because its factory only returns fresh events at popularity60 or above. An unsaved apply function still resolves it, so saved and unsaved play disagree. The intended fix returns a233 card if it is already pending, while preserving the original fresh threshold. All personality, agent, acquisition, cooldown, stamp, filtering, cap5 and other-event eligibility rules remain.
+
+Choice0 adds followers0.8M and popularity4; its existing caption omits the popularity effect. Add only its truthful caption to the existing pure consequence map, preserving every effect and old saved caption byte. The existing renderer already reads current map text without rewriting a save. Contracts code stays unchanged.
+
+## Proof-first source and bounded claims
+
+New unitacc266b864b1b5c888abb91c317570b4a678931fd7de078f291b040fbb9bb69d (196 lines) has22 exact named cases. Baseline requires four separate cause-specific Boolean faults and eighteen preserves. Fixed requires22 passes. A copied pending-gate reversion must yield only2faults/20preserves; copied preview reversion2/20; copied legacy Contracts fallback1/21. Setup, missing file, process failure, skipped/pending and unrelated assertions cannot qualify.
+
+Two saved low-popularity effect cases use real initialized/validated/repaired source-card presentations and source213 resolution, disclosed as prepared presentation. Full literal state, caller input, chance wheel, queue, history, seven current skills, queued bonuses, stamps, continuation and two JSON reloads are checked. Exact original resolver catalog inputs are [.99,.99], with no added effect draw. Presentation admits the original iceman213 using [.99,.01]. Preservation includes both live replies, both above-threshold saved replies, both predecessor choices, both threshold replies, fresh59/60/100, unchanged choice1 preview, pending/resolved repair, exact cooldown99 boundary, unknown preview and five genuine agent/persona/flag cards. The gate-only fixture was corrected from six to five cards before any execution; no original picker cap is waived.
+
+Helper raw nativefdc1085b25717c62024c636d7a18d4ab9d629f8b74c406213ecc177d0be940c6 has CRLF; normalized Git/remoteLF3ca1cc21895604c1b1576572b399905f130612f37b07d8e510a710d0ec924626 (378 lines). It retains complete raw outcomes/log,ten before copies,six parent bindings and five original compilations before classification. Copied faults require unique effective executable anchors and full-byte inverse. Normal output exceeds the existing four-line discovery requirement.
+
+For fixed browser fixtures only, a copied read-only sort observer records actual comparisons and legal inputs. Disclosed original pre-sort inputs [.99,.99,.01,.99] reject moral212, admit213 at its unchanged0.35 rate and set the original count4. Two whole vectors then replay through the unmodified actual engine with the receiver absent. Complete raw/canonical batches, context, every input ordinal, all picked cards/order/stamps and real remaining cards must match. No queue rewrite, sentinel, seed search, prepared fallback, raised bound or natural-frequency claim. Three scenarios have five whole-state actual model answers, with only selected old233 choice0 captions overlaid from the real parent factory.
+
+## Remote verification and ownership
+
+New workflowb3f7b4bf34dbb6f815f497f5e8dc8a0df3db81d3b31e12d3716353900a1d15a2 (251 lines) starts baseline. It binds all old app/proof/workflow/index/package source to0a439 and retains source/package/521 installed versions. New helper runs before frozen prior20+3 morale,21+3 rewards,40+4 pending,53 routine with all30 picker answers and20 review proofs. Baseline does not run fixed full units/build/browser/readers/download.
+
+Fixed later requires discovery, complete unit suite, full build, actual browser, all15 rebuilt-site readers plus related career checks, original824Career budget and complete Programme164 comparison with its effective B-only original-bug control. The ordinary60000-unit long-save failure remains recorded and unwaived; H's coordinated lossless reader correction is still owed. No local app/compiler/parser/browser/test/build/install runs, backend probes, new sports facts, main merge, publication or finished-game claim. Browser source and independent whole reviews are pending before the first remote baseline.
+
+## Browser source frozen before first baseline
+
+New browser51f6e62daec02dcec4072b5d1c5a0e11fc574fd305394b9b5732eab0bad35cce (707 LF lines,57949 bytes) is frozen for independent native review. Accepted scope is seven played journeys/thirteen played answers/twenty-seven literal played reloads/two effective controls/twenty-eight unique originals. Including controls, sixteen actual replies use thirty-two recorded catalog draws, thirty-one literal reload comparisons and one actual deleted-save document reload. Omitting only233 after true213 requires eight exact independent findings including full state; deleting the real two-answer save requires only the missing-key detector. No earlier capture substitutes for fresh originals.
+
+Root/Fleet/helper whole native unit/helper/workflow review closes without a concrete blocker. Helper fixed normal retains five original compilations plus one separately disclosed read-only picker observer, six physical compiled files in normal; baseline and copied fault arms retain five. Unitacc266/helperGitLF3ca1/nativefdc/WFb3f7 remain held. Baseline remote execution has not happened; no product edit, fixed delivery, browser/control or runtime credit. Browser independent review continues while its baseline-only source binding is checked.
