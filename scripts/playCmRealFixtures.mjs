@@ -204,7 +204,8 @@ async function journey(profile, kind, fixture) {
     } else assert.equal(await coverage.count(), 0, 'Generated calendars make no real fixture claim');
     await page.locator('[data-testid="cm-calendar-grid"] button').last().focus();
     await captureVisible(page.locator('[data-testid="cm-calendar-grid"]'), 'calendar-overview');
-    if (kind === 'real') { await coverage.locator('a').first().focus(); await captureVisible(coverage, 'calendar-sources'); }
+    /* Round 1328: the hub now opens at its top, so the calendar opens higher up the page and focusing the link can leave the note's first line above the screen while the link itself shows; the note is brought whole into view as a reader would, then held to the same readable and stable rule. */
+    if (kind === 'real') { await coverage.locator('a').first().focus(); await coverage.scrollIntoViewIfNeeded(); await captureVisible(coverage, 'calendar-sources'); }
     const venue = next.fixture.home ? 'vs' : 'at';
     const named = page.getByRole('button', { name: `${next.dateLabel}: ${venue} ${next.fixture.opponent} · ${next.fixture.compLabel}`, exact: true });
     await named.waitFor(); assert.match(await named.getAttribute('aria-label'), new RegExp(`${venue} ${next.fixture.opponent}`));
