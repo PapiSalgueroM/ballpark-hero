@@ -307,6 +307,10 @@ const controlPlugin = {
     const abs = path.join(ROOT, file).replace(/\\/g, '/');
     const src = fs.readFileSync(abs, 'utf-8');
     if (!src.includes(needle)) { console.error(`Control ${CONTROL}: needle not found in ${file}. Refusing to run.`); process.exit(2); }
+    /* Round 1319: and exactly once, or the replace below would mutate the
+       first copy only. A needle is one line, so line endings cannot move the count. */
+    const copies = src.split(needle).length - 1;
+    if (copies !== 1) { console.error(`Control ${CONTROL}: the needle is in ${file} ${copies} times, not exactly once. Refusing to run.`); process.exit(2); }
     b.onLoad({ filter: /(PreDraft|careerDraftNight)\.ts$/ }, args => {
       if (args.path.replace(/\\/g, '/') !== abs) return undefined;
       const out = src.replace(needle, repl);
