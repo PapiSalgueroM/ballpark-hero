@@ -1,0 +1,15 @@
+MUTATION M10 APPLIED to src/lib/soccerWorldTruth.ts
+finished saves: this tree mean 57.4 KB, median 55.8 KB, the base mean 58.1 KB, median 56.8 KB (a reading, not a check)
+fleet: 400 careers a tree (seed offset 0, 5 seeds), 7075 seasons on this tree in 23 s, 7064 on the base
+1) Player of the Month reads the month's football, with the true year
+   this tree: 2321 months over 6675 seasons; rated 8.0+ 2.6 a season (631), 7.0 to 7.5 any 0.03 (1616); at 7.5 to 8.5 all 1.04: GK 0.87 (208), DEF 1.12 (376), MID 0.86 (238), ATT 1.11 (616)
+   base:      5094 months over 6664 seasons; rated 8.0+ 2.11 a season (621), 7.0 to 7.5 any 0.48 (1551); at 7.5 to 8.5 all 1.16: GK 0.41 (209), DEF 0.47 (367), MID 0.67 (264), ATT 1.98 (600)
+   under the floor and still won: 0 here, 976 on the base; 0 goal keepers rated 6.0 or less who won: 0 of 38 here, 12 of 35 on the base
+   month lines with the wrong year: 0 here, 2609 on the base; seasons whose lines and awards disagree: 0 here, 0 on the base
+   planted: a 0 goal keeper rated 6.0 over 10,000 identities won 0 months
+2) The month award and the world tick leave the season's draws where they were
+3) The phone's world says nothing it cannot stand behind
+4) The phone's quiz asks about the world only where the world is the game's own
+5) The season log and the International panel name a winner only where the rule allows
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+simSoccerWorldTruth: OK, every section green

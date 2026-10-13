@@ -1,0 +1,47 @@
+MUTATION M10 APPLIED to src/lib/soccerWorldTruth.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerWorldTruth.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 146[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mholds the 2025-26 seasons and the 2026 summer as played, and nothing after[32m 2[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mknows a summer at the finals from one at home, for every result the engine writes[32m 1[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mshows who won a tournament only for a summer still to come or finals he played[32m 0[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mnever hands a stage result to a summer played without him (the engine passes no form then)[32m 75[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mwrites its feed lines in plain words with no dash[32m 1[2mms[22m[39m
+   [32m✓[39m the month and its year[2m > [22mputs August to December in the season year and January to May in the next[32m 0[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mgroups the ten positions exactly as the international squads do[32m 0[2mms[22m[39m
+[31m   [31m×[31m Player of the Month[2m > [22mnever goes to a 6.0 keeper with no goals, nor to a season under ten games[39m[32m 13[2mms[22m[39m
+[31m     → expected 0.757 to be +0 // Object.is equality[39m
+   [32m✓[39m Player of the Month[2m > [22mgoes to a keeper or a defender on his own football, and to a great season far more than a fair one[32m 26[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mnever wins more than four, keeps calendar order, and gives nothing in a month an injury took[32m 26[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mis the same months for the same stream[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerWorldTruth.test.ts[2m > [22mPlayer of the Month[2m > [22mnever goes to a 6.0 keeper with no goals, nor to a season under ten games
+[31m[1mAssertionError[22m: expected 0.757 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 0.757[39m
+
+[36m [2m❯[22m src/test/soccerWorldTruth.test.ts:[2m94:74[22m[39m
+    [90m 92| [39m  it('never goes to a 6.0 keeper with no goals, nor to a season under …
+    [90m 93| [39m    expect(won(row({ rating: 6, cleanSheets: 20 }), 'GK', 2000).any).t…
+    [90m 94| [39m    expect(won(row({ apps: 8, goals: 6, rating: 8.6 }), 'ST', 2000).an…
+    [90m   | [39m                                                                         [31m^[39m
+    [90m 95| [39m  })[33m;[39m
+    [90m 96| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 20:25:40
+[2m   Duration [22m 1.07s[2m (transform 179ms, setup 52ms, collect 209ms, tests 146ms, environment 294ms, prepare 103ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerWorldTruth.test.ts,title=src/test/soccerWorldTruth.test.ts > Player of the Month > never goes to a 6.0 keeper with no goals%2C nor to a season under ten games,line=94,column=74::AssertionError: expected 0.757 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 0.757%0A%0A ❯ src/test/soccerWorldTruth.test.ts:94:74%0A%0A

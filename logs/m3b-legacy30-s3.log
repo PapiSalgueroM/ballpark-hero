@@ -1,0 +1,11 @@
+MUTATION M3b APPLIED to src/lib/soccerCareerEngine.ts
+fleet: 400 careers a tree (seed offset 3, 5 seeds), 0 seasons on this tree in 0 s, 0 on the base
+1) Player of the Month reads the month's football, with the true year
+2) The month award and the world tick leave the season's draws where they were
+   200 careers in lockstep with the base: 5675 steps, 810 seasons, 589 month blocks and 589 world ticks compared, 5261 world records; 0 careers with a count, seed or record off the base
+   first fields to differ: events pendingBallonDor phone.feed phone.world phone.clubs 74; events awards pendingBallonDor phone.feed phone.world phone.clubs 69; pendingBallonDor phone.feed phone.world phone.clubs 28; events phone.feed phone.world phone.clubs 10; phone.feed phone.world phone.clubs 7; events 6; never differed 0; compared until a season's input differed in 199, by pendingEvents eventLastFired 187; seasons pendingSummary pendingBallonDor 11; pendingEvents 1
+3) The phone's world says nothing it cannot stand behind
+4) The phone's quiz asks about the world only where the world is the game's own
+5) The season log and the International panel name a winner only where the rule allows
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+simSoccerWorldTruth: OK, every section green

@@ -1,0 +1,39 @@
+MUTATION M9 APPLIED to src/components/soccer-career/InternationalPanel.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/internationalPanelTruth.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 127[2mms[22m[39m
+   [32m✓[39m the card[2m > [22mnames no winner and offers no bracket for a 2006 World Cup he missed, with a tidy three tile grid[32m 44[2mms[22m[39m
+   [32m✓[39m the card[2m > [22mnames the winner and offers the bracket for finals he played, and for a summer still to come[32m 37[2mms[22m[39m
+[31m   [31m×[31m the history tile[2m > [22mlists a champion only for finals he played and a summer still to come, his own line otherwise[39m[32m 31[2mms[22m[39m
+[31m     → expected '2006WCWatched from homeQuarter-final' to contain 'Uruguay'[39m
+   [32m✓[39m the history tile[2m > [22mkeeps the last tile quiet about a missed past summer and never opens its bracket[32m 6[2mms[22m[39m
+   [32m✓[39m the history tile[2m > [22mnames the last winner and opens the bracket for a summer still to come (an old save reads the same way)[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/tournamentCardMoment.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 1361[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/internationalPanelTruth.test.tsx[2m > [22mthe history tile[2m > [22mlists a champion only for finals he played and a summer still to come, his own line otherwise
+[31m[1mAssertionError[22m: expected '2006WCWatched from homeQuarter-final' to contain 'Uruguay'[39m
+
+Expected: [32m"Uruguay"[39m
+Received: [31m"2006WCWatched from homeQuarter-final"[39m
+
+[36m [2m❯[22m src/test/internationalPanelTruth.test.tsx:[2m89:21[22m[39m
+    [90m 87| [39m    [34mexpect[39m(text[[34m1[39m])[33m.[39m[34mtoContain[39m([32m'Watched from home'[39m)[33m;[39m
+    [90m 88| [39m    [34mexpect[39m(text[[34m2[39m])[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'Uruguay'[39m)[33m;[39m
+    [90m 89| [39m    [34mexpect[39m(text[[34m3[39m])[33m.[39m[34mtoContain[39m([32m'Uruguay'[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m 90| [39m  })[33m;[39m
+    [90m 91| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[2m   Start at [22m 20:24:47
+[2m   Duration [22m 3.60s[2m (transform 1.08s, setup 111ms, collect 2.87s, tests 1.49s, environment 669ms, prepare 278ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/internationalPanelTruth.test.tsx,title=src/test/internationalPanelTruth.test.tsx > the history tile > lists a champion only for finals he played and a summer still to come%2C his own line otherwise,line=89,column=21::AssertionError: expected '2006WCWatched from homeQuarter-final' to contain 'Uruguay'%0A%0AExpected: "Uruguay"%0AReceived: "2006WCWatched from homeQuarter-final"%0A%0A ❯ src/test/internationalPanelTruth.test.tsx:89:21%0A%0A

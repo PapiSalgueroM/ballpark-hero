@@ -1,0 +1,7 @@
+m3b-legacy30 exit=1 10s | simSoccerWorldTruth: 1 FAILURES (section 2: 1)
+m3b-legacy30-s3 exit=0 9s | simSoccerWorldTruth: OK, every section green
+m6b-quizoff1 exit=1 49s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+m9-panelrow exit=0 47s | simSoccerWorldTruth: OK, every section green
+m9-panelrow-vitest exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/internationalPanelTruth.test.tsx,title=src/test/internationalPanelTruth.test.tsx > the history tile > 
+m10-floorapps exit=0 48s | simSoccerWorldTruth: OK, every section green
+m10-floorapps-vitest exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerWorldTruth.test.ts,title=src/test/soccerWorldTruth.test.ts > Player of the Month > never goes to
