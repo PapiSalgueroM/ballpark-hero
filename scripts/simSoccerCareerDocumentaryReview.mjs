@@ -109,10 +109,15 @@ async function fixtures() {
       const held = JSON.stringify(state), run = random([], () => E.repairCareer(copy(state)));
       assert(S.isSoccerCareerSave(run.result)); assert.deepEqual(run.draws, []); assert.equal(JSON.stringify(run.result), held); return copy(run.result);
     }
+    function allCatalogInputs(state) {
+      // Original RealismB494 builds its release-clause caption after the two Life chance reads.
+      return state.overall >= 80 && state.marketValue >= 30 ? [0.99, 0.99, 0.99] : [0.99, 0.99];
+    }
     function catalog(state, kind = 'life') {
-      const held = JSON.stringify(state), run = random([0.99, 0.99], () => kind === 'life' ? L.getLifeEvents(state) : E.getAllEvents(state));
+      const held = JSON.stringify(state), inputs = kind === 'life' ? [0.99, 0.99] : allCatalogInputs(state);
+      const run = random(inputs, () => kind === 'life' ? L.getLifeEvents(state) : E.getAllEvents(state));
       progress.catalogs.push({ kind, context: copy(state), contextSha256: sha(held), cards: copy(run.result), draws: run.draws }); saveProgress();
-      assert.equal(JSON.stringify(state), held); assert.deepEqual(run.draws, [0.99, 0.99]); return run.result;
+      assert.equal(JSON.stringify(state), held); assert.deepEqual(run.draws, inputs); return run.result;
     }
     function priorities(state) {
       const held = JSON.stringify(state), run = random([], () => L.getPriorityLifeEventIds(state));
@@ -155,11 +160,13 @@ async function fixtures() {
     function acquire(name, state, targets, priorityReview = false) {
       const context = canonical({ ...canonical(state), phase: 'social_media_action', pendingEvents: [], socialMediaActionUsedThisSeason: true });
       const held = JSON.stringify(context), inputs = [], comparisons = [], prefix = [
-        { ordinal: 1, value: 0.99, cause: 'original ordinary moral-dilemma gate rejects' },
-        { ordinal: 2, value: 0.99, cause: 'original iceman212 gate rejects' },
-        { ordinal: 3, value: 0.99, cause: 'original iceman213 gate rejects' },
-        { ordinal: 4, value: 0.99, cause: 'original picker count is4' },
-      ];
+        { value: 0.99, cause: 'original ordinary moral-dilemma gate rejects' },
+        { value: 0.99, cause: 'original iceman212 gate rejects' },
+        { value: 0.99, cause: 'original iceman213 gate rejects' },
+        ...(context.overall >= 80 && context.marketValue >= 30
+          ? [{ value: 0.99, cause: 'original RealismB494 release-clause caption draw' }] : []),
+        { value: 0.99, cause: 'original picker count is4' },
+      ].map((row, index) => ({ ordinal: index + 1, ...row }));
       const witness = { name, targets, priorityReview, contextSha256: sha(held), comparisons,
         input: { mode: 'controlled-sort-vector', prefix, draws: inputs, drawCount: 0 }, observed: null, replay: null };
       progress.acquisitions.push({ context, witness }); saveProgress();
@@ -179,10 +186,11 @@ async function fixtures() {
       } finally { delete globalThis.__SC_DOCUMENTARY_PICKER_COMPARISON; witness.input.drawCount = inputs.length; saveProgress(); }
       witness.observed = { rawBatch: copy(picked.result), draws: picked.draws }; saveProgress();
       const observedBatch = canonical(picked.result); Object.assign(witness.observed, { batch: observedBatch, batchSha256: sha(JSON.stringify(observedBatch)) }); saveProgress();
-      assert.equal(JSON.stringify(context), held); assert.equal(comparison, null); assert.equal(outsideSort, 4);
-      assert.deepEqual(inputs.slice(0, 4), [0.99, 0.99, 0.99, 0.99]); assert.equal(comparisons[0]?.ordinal, 5); assert(comparisons.length > 0);
+      assert.equal(JSON.stringify(context), held); assert.equal(comparison, null); assert.equal(outsideSort, prefix.length);
+      assert.deepEqual(inputs.slice(0, prefix.length), prefix.map(row => row.value));
+      const firstComparatorOrdinal = prefix.length + 1; assert.equal(comparisons[0]?.ordinal, firstComparatorOrdinal); assert(comparisons.length > 0);
       assert.deepEqual(picked.draws, inputs); assert(comparisons.every((row, index) => Number.isInteger(row.a) && Number.isInteger(row.b)
-        && row.ordinal >= 5 && inputs[row.ordinal - 1] === row.value && (index === 0 || row.ordinal > comparisons[index - 1].ordinal)));
+        && row.ordinal >= firstComparatorOrdinal && inputs[row.ordinal - 1] === row.value && (index === 0 || row.ordinal > comparisons[index - 1].ordinal)));
       const replayContext = copy(context); let consumed = 0; assert.equal(globalThis.__SC_DOCUMENTARY_PICKER_COMPARISON, undefined);
       const replay = random(() => { assert(consumed < inputs.length); return inputs[consumed++]; }, () => E.dismissSocialMediaPhase(replayContext, E.FALLBACK_CLUBS));
       witness.replay = { rawBatch: copy(replay.result), draws: replay.draws, consumed }; saveProgress();
@@ -216,13 +224,14 @@ async function fixtures() {
     }
     function apply(name, state, id, index) {
       const before = canonical(canonical(state)), held = JSON.stringify(before); assert.equal(before.pendingEvents[0].id, id);
-      const wanted = literal(before, id, index), run = random([0.99, 0.99], () => E.applyEventChoice(before, index, E.FALLBACK_CLUBS));
+      const wanted = literal(before, id, index), inputs = allCatalogInputs(before);
+      const run = random(inputs, () => E.applyEventChoice(before, index, E.FALLBACK_CLUBS));
       const row = { name, eventId: id, choiceIndex: index, before: copy(before), beforeSha256: sha(held),
         actual: copy(run.result), expected: wanted, resolverDraws: run.draws, resolverDrawCount: run.draws.length };
       progress.answers.push(row); saveProgress();
       const first = canonical(run.result), second = canonical(first); Object.assign(row, { reload1: first, reload2: second,
         expectedSha256: sha(JSON.stringify(wanted)), actualSha256: sha(JSON.stringify(second)) }); saveProgress();
-      assert.equal(JSON.stringify(before), held); assert.deepEqual(run.draws, [0.99, 0.99]); assert.deepEqual(second, wanted);
+      assert.equal(JSON.stringify(before), held); assert.deepEqual(run.draws, inputs); assert.deepEqual(second, wanted);
       assert.equal(second.eventLastFired[String(id)], year(before)); return { before: copy(before), after: second, row };
     }
     function nextPlaying(name, state) {
@@ -274,7 +283,7 @@ async function fixtures() {
             'Review631 is ranked outside the ordinary four-card draw, so the original priority path supplies it. Queue order and outcomes are never rewritten.',
             'Legacy scenario removes only the acquisition stamp, preserving the actual saved full-access record without inventing a date.'] },
         steps: [{ eventId: 631, choiceIndex: result.row.choiceIndex, choiceLabel: result.before.pendingEvents[0].choices[result.row.choiceIndex].label,
-          resolverDraws: result.row.resolverDraws, resolverDrawCount: 2, expected: result.after,
+          resolverDraws: result.row.resolverDraws, resolverDrawCount: result.row.resolverDrawCount, expected: result.after,
           expectedSha256: sha(JSON.stringify(result.after)), reloadAfter: true }] };
       progress.scenarios.push(scenario); saveProgress(); return scenario;
     });

@@ -44,9 +44,13 @@ function context(): CareerState {
     lifeFlags: { unrelatedDocumentaryFixture: 7 }, eventLastFired: { '7777': 2022 }, pendingEvents: [], seriousInjuries: [],
     statBoostNextSeason: { physical: 2, reflexes: 3 }, events: ['Prepared fictional documentary context'] });
 }
+function allCatalogInputs(state: CareerState): number[] {
+  // Original RealismB494 builds its release-clause caption after the two Life chance reads.
+  return state.overall >= 80 && state.marketValue >= 30 ? [0.99, 0.99, 0.99] : [0.99, 0.99];
+}
 function catalog(state: CareerState): RandomEvent[] {
-  const held = JSON.stringify(state), run = draws([0.99, 0.99], () => E.getAllEvents(state));
-  expect(run.values).toEqual([0.99, 0.99]); expect(JSON.stringify(state)).toBe(held); return run.result;
+  const held = JSON.stringify(state), inputs = allCatalogInputs(state), run = draws(inputs, () => E.getAllEvents(state));
+  expect(run.values).toEqual(inputs); expect(JSON.stringify(state)).toBe(held); return run.result;
 }
 function producer(state: CareerState): RandomEvent {
   const run = draws([], () => A.getRealismEventsA(state)), matches = run.result.filter(event => event.id === 408);
@@ -64,8 +68,8 @@ function waiting(state: CareerState, event: RandomEvent): CareerState {
     eventLastFired: { ...state.eventLastFired, [String(event.id)]: year(state), 'story:squadChatLeak': year(state) } }));
 }
 function answer(state: CareerState, index: number): CareerState {
-  const held = JSON.stringify(state), run = draws([0.99, 0.99], () => E.applyEventChoice(state, index, E.FALLBACK_CLUBS));
-  expect(run.values).toEqual([0.99, 0.99]); expect(JSON.stringify(state)).toBe(held); return reload(run.result);
+  const held = JSON.stringify(state), inputs = allCatalogInputs(state), run = draws(inputs, () => E.applyEventChoice(state, index, E.FALLBACK_CLUBS));
+  expect(run.values).toEqual(inputs); expect(JSON.stringify(state)).toBe(held); return reload(run.result);
 }
 function acquired(choice = 0): CareerState {
   const state = context(); return answer(waiting(state, producer(state)), choice);
