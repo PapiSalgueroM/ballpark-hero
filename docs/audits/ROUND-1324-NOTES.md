@@ -196,3 +196,19 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   harness could not drive Guess the Nation to a finish: TimeoutError: locator.click". rc r1324-e3 (#!build,
   #!playwright, #!serial) ran it on the head and on a build of the base 8fea14e2 on the same runner: both exit 1 with
   the same first failing line, so the red is the runner's (Guess the Nation cannot be driven there), not this round's.
+
+## After merging origin/main (Release BB, 36cc9ffe) into the branch: head 0b6889d6
+
+- Main touched none of gmInbox.ts, careerInbox.ts, careerEventDeck.ts, keyedRng.ts or the packs, so the recording
+  stands. `git diff --quiet origin/main -- src/data/gmInbox src/lib/careerInbox.ts src/lib/careerEventDeck.ts
+  src/lib/keyedRng.ts src/components/front-office-shared` exit 0; `git diff --stat origin/main -- src public index.html
+  package.json package-lock.json vite.config.ts tsconfig.app.json` lists src/lib/gmInbox.ts and src/lib/gmInbox.test.ts
+  only.
+- rc r1324-m (55 lines on 0b6889d6): tsc exit 0 (70 s); vitest exit 0, 42 tests; simEventDeck exit 0 (42.5 s) and its
+  ten controls each exit 1 on their own section; simGmInbox printed every line the same as 8fea14e2 (gmcmp, 3 of 3)
+  and as the new main 36cc9ffe (gmcmp-main, 3 of 3); its fourteen controls exit 1; simCareerInbox exit 0, privatecap
+  exit 1; the five legal fences exit 0; the 24 rule fences as before (20 exit 0, two need the live database, two need
+  Playwright: simResultMoment green with it, simWritesAreSent red identically on base and head).
+- rc r1324-w2 (head 0b6889d6 against a build of the new main 36cc9ffe): build exit 0; 516 JS chunks, 0 carry "pack
+  moves" on either; sweepWeight exit 0 on both with equal rows: /club-manager 592.0K gz, /soccer-career 826.7K,
+  /front-office 372.1K.
