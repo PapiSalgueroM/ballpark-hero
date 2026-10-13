@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+gmpress: ENGINES=chromium node scripts/playGmPress.mjs
+mandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
+fohub: ENGINES=chromium node scripts/playFoHub.mjs
+sessionmarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+playgames: ONLY=/front-office ENGINES=chromium node scripts/playGames.mjs
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > $RC_OUT/weight.log 2>&1; s=$?; grep -E "front-office|FAIL|sweepWeight" $RC_OUT/weight.log | cut -c1-200 | head -12; f=$(ls dist/assets/FrontOffice-*.js | head -1); echo "FrontOffice chunk $(basename $f): $(wc -c < $f) raw, $(gzip -c $f | wc -c) gzipped"; exit $s
