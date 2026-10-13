@@ -14,12 +14,15 @@ jobs:
     env:
       CI: '1'
       SIM_NETWORK: offline
+      ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      CAREER_PENDING_PHASE: baseline
+      CAREER_PENDING_PHASE: fixed
       CAREER_PENDING_OUT: ${{ github.workspace }}/career-pending-artifacts
       SOCCER_ROUTINE_PHASE: fixed
       SOCCER_ROUTINE_OUT: ${{ github.workspace }}/career-pending-artifacts/prior-routines
       CAREER_REVIEWS_OUT: ${{ github.workspace }}/career-pending-artifacts/prior-reviews
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-pending-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
     defaults:
       run:
         shell: bash
@@ -39,7 +42,10 @@ jobs:
           git rev-parse HEAD > "$CAREER_PENDING_OUT/source-head.txt"
           git status --porcelain --untracked-files=no > "$CAREER_PENDING_OUT/source-before.txt"
           test ! -s "$CAREER_PENDING_OUT/source-before.txt"
-          git diff --exit-code 83831b32a9a4445a5d60a5c326a4e581e2a73237 -- src scripts package.json package-lock.json bun.lock ':!src/test/soccerCareerPendingLife.test.ts' ':!scripts/simSoccerCareerPendingLife.mjs' ':!scripts/playSoccerCareerPendingLife.mjs'
+          git diff --exit-code 83831b32a9a4445a5d60a5c326a4e581e2a73237 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/soccerCareerPendingLife.test.ts' ':!scripts/simSoccerCareerPendingLife.mjs' ':!scripts/playSoccerCareerPendingLife.mjs'
+          if test "$CAREER_PENDING_PHASE" = baseline; then
+            git diff --exit-code 83831b32a9a4445a5d60a5c326a4e581e2a73237 -- src/lib/soccerCareerLife.ts
+          fi
           find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CAREER_PENDING_OUT/source-hashes.txt"
           sha256sum package.json package-lock.json bun.lock > "$CAREER_PENDING_OUT/package-hashes.txt"
           npm ci
@@ -58,12 +64,65 @@ jobs:
           NODE
       - name: Actual application type gate
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CAREER_PENDING_OUT/types.log"
-      - name: Strict causal pending-card baseline
-        run: SC_PENDING_LIFE_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_PENDING_OUT/baseline.log"
+      - name: Saved choice outcomes and effective source controls
+        run: |
+          if test "$CAREER_PENDING_PHASE" = baseline; then
+            SC_PENDING_LIFE_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_PENDING_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_PENDING_OUT/fixed.log"
+            for control in missing profile draw rate; do
+              SC_PENDING_LIFE_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_PENDING_OUT/control-$control.log"
+            done
+          fi
       - name: Preserve prior routine and life-review outcomes
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs 2>&1 | tee "$CAREER_PENDING_OUT/prior-routines.log"
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs 2>&1 | tee "$CAREER_PENDING_OUT/prior-reviews.log"
+      - name: Normal fleet discovery without a packet artifact variable
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: env -u CAREER_PENDING_OUT ONLY=simSoccerCareerPendingLife node scripts/runAllSims.mjs 2>&1 | tee "$CAREER_PENDING_OUT/fleet-discovery.log"
+      - name: Full unit suite
+        id: full_unit_suite
+        continue-on-error: true
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test 2>&1 | tee "$CAREER_PENDING_OUT/full-tests.log"
+      - name: Browser and build tools
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/career-pending-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/career-pending-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/career-pending-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/career-pending-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CAREER_PENDING_OUT/fonts.log"
+          sha256sum --check "$CAREER_PENDING_OUT/package-hashes.txt"
+      - name: Complete application build and career snapshot
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CAREER_PENDING_OUT/build.log"
+          cp scripts/data/lastmod.json "$CAREER_PENDING_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$CAREER_PENDING_OUT/build-lastmod.diff"
+      - name: Actual pending choices at phone and desktop widths
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_PENDING_OUT/browser.log"
+      - name: Existing download budgets
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CAREER_PENDING_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CAREER_PENDING_OUT/weight.log"
+      - name: Related career checks and every rebuilt-site reader
+        if: env.CAREER_PENDING_PHASE == 'fixed'
+        run: |
+          ONLY=simCreation,simAllocation,simFlagshipWeight,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$CAREER_PENDING_OUT/related.log"
+      - name: Require the full unit-suite result
+        if: always() && env.CAREER_PENDING_PHASE == 'fixed'
+        run: test '${{ steps.full_unit_suite.outcome }}' = success
       - name: Final source and dependency holds
         if: always()
         run: |
