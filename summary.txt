@@ -1,0 +1,17 @@
+own-tests exit=0 5s |    Duration  4.46s (transform 2.12s, setup 156ms, collect 4.27s, tests 1.61s, environment 832ms, prepare 372ms)
+own-pre-EXPECT-RED exit=1 6s | ::error file=/tmp/w-v4ownpre/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never
+screen-pre-EXPECT-RED exit=1 5s | ::error file=/tmp/w-v4scrpre/src/test/clubDetailOwnClub.test.tsx,title=src/test/clubDetailOwnClub.test.tsx > the club screen reads my own club from my squad > in a seeded
+tsc exit=0 74s | 
+simFreeAgents exit=0 84s | simFreeAgents: all sections passed
+simClubManagerSaveSize exit=0 52s | simClubManagerSaveSize: all sections green
+fa-ownclub-EXPECT-RED exit=1 91s | simFreeAgents: 1 failure(s)
+size-norepair-EXPECT-RED exit=1 52s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+size-deaddoor-EXPECT-RED exit=1 55s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=deaddoor turned section 8 red (10 failures) and nothing else
+simBooks exit=0 10s | simBooks: green. Every number these games show agrees with every other number they show.
+simClubManagerSlots exit=0 56s | simClubManagerSlots: all sections green
+simCmLeagueRules exit=0 52s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simManagerAppealIsolation exit=0 38s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerDecisions exit=0 13s | simClubManagerDecisions: 0 findings
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simCmUnseededWorld exit=0 148s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+simEras exit=0 903s | ALL ERA AND AGEING CHECKS PASSED

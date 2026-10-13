@@ -1,0 +1,12 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubDetailOwnClub.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 291[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1321[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 512[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 08:35:43
+[2m   Duration [22m 4.46s[2m (transform 2.12s, setup 156ms, collect 4.27s, tests 1.61s, environment 832ms, prepare 372ms)[22m
+
