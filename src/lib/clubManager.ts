@@ -20118,6 +20118,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       const man = squad.find(p => p.name === name);
       if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
     }
+    /* Release AZ fix (closing check, NEW-A): the record copies its key onto the man in rosterCareer's squad only,
+       and the new season is built from this one, so the ledger held him as mine while no man of my squad carried
+       his key. The exits above write no squad, so this takes exactly the emergency signings' keys. */
+    if (emergencyFrom.size) squad = rosterCareer.squad;
   }
   rosterCareer = pruneWorldRoster(refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName)));
 
