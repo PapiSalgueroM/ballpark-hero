@@ -1,0 +1,40 @@
+simManagerWorldContinuity exit=1 28s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:483:24
+simFreeAgents exit=0 80s | simFreeAgents: all sections passed
+fa-ownclub-EXPECT-RED exit=1 79s | simFreeAgents: 1 failure(s)
+fa-marketreleased-EXPECT-RED exit=1 79s | simFreeAgents: 1 failure(s)
+fa-buyreleased-EXPECT-RED exit=1 82s | simFreeAgents: 1 failure(s)
+fa-noreleasedlist-EXPECT-RED exit=1 76s | simFreeAgents: 2 failure(s)
+simCmLedgerJourney exit=0 82s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+diag exit=0 398s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+size-norepair-EXPECT-RED exit=1 44s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+simCmLedgerBound exit=0 210s | simCmLedgerBound: green, all four sections held
+slots-dupe-EXPECT-RED exit=1 41s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+size-deaddoor-EXPECT-RED exit=1 45s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=deaddoor turned section 8 red (10 failures) and nothing else
+book-full-s0 exit=0 145s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (145s)
+book-full-s1 exit=0 145s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (145s)
+book-full-s3 exit=0 132s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (131s)
+book-full-s2 exit=0 143s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (142s)
+book-floor exit=0 39s | simCmLeagueBook: MEASURE floor done, nothing gated (38s)
+boards-timing exit=0 3s | TIMING unseeded: season 3, worldSeed none, boards built, first call 0.1 ms, median of 40 0.04 ms, max 0.11 ms
+simManagerEraWorldOracles exit=0 1s | PASS simManagerEraWorldOracles.mjs: actual joined-source baseline, 4 effective copied observation controls and complete undo/source holds
+managerRosterCacheControl exit=0 14s | PASS Manager cache control: 96 healthy named cases, exactly one decode-count failure, complete undo and all served source held
+simBooks exit=0 9s | simBooks: green. Every number these games show agrees with every other number they show.
+simManagerCareer exit=0 8s | ALL MANAGER CAREER CHECKS PASSED
+book-full-s4 exit=0 133s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (132s)
+simTransfers exit=0 51s | ALL TRANSFER CHECKS PASSED
+simClubManagerDeals exit=0 12s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+simBoardAsks exit=0 26s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+bound-nocache-EXPECT-RED exit=1 665s | simCmLedgerBound: CONTROL nocache FIRED: section 1 red
+simCreateClub exit=0 6s | simCreateClub: green. Found a club, and the world makes room for it.
+simDealDepth exit=0 25s | simDealDepth: all green
+simClubManagerScore exit=0 71s | ALL SEASON SCORE CHECKS PASSED
+simCustomClubValues exit=0 66s | simCustomClubValues: 25 checks, 0 failures
+simManagerXp exit=0 49s | simManagerXp: green. Nothing spent is the game that shipped, every point moves something, and nothing can be conjured.
+vitest-cm exit=0 19s |    Duration  18.15s (transform 4.22s, setup 379ms, collect 11.86s, tests 20.79s, environment 2.67s, prepare 723ms)
+simCmTablesTruth exit=0 14s | simCmTablesTruth: every case green
+truth-nomark-EXPECT-RED exit=1 12s | CONTROL nomark FIRED: 30 cases red (section 1: 10, section 2: 10, section 3: 10), none elsewhere
+truth-markall-EXPECT-RED exit=1 13s | CONTROL markall FIRED: 21 cases red (section 1: 7, section 2: 7, section 3: 7), none elsewhere
+truth-defeatraw-EXPECT-RED exit=1 14s | CONTROL defeatraw FIRED: 7 cases red (section 4: 7), none elsewhere
+truth-drawinrender-EXPECT-RED exit=1 13s | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
+simClubManagerBudget exit=0 136s | simClubManagerBudget: PASS
+simCmVar exit=0 117s | simCmVar normal: actual review outcomes and full prior baseline passed.

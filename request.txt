@@ -1,0 +1,42 @@
+# Release BC gate, lane P1: the nine pieces' plain lines and controls
+#!playwright
+simManagerWorldContinuity: export TMPDIR=$(mktemp -d); MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+diag: export TMPDIR=$(mktemp -d); MANAGER_SIZE_DIAGNOSTICS=/tmp/diag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+simFreeAgents: export TMPDIR=$(mktemp -d); node scripts/simFreeAgents.mjs
+fa-ownclub-EXPECT-RED: export TMPDIR=$(mktemp -d); FA_CONTROL=ownclub node scripts/simFreeAgents.mjs
+fa-marketreleased-EXPECT-RED: export TMPDIR=$(mktemp -d); FA_CONTROL=marketreleased node scripts/simFreeAgents.mjs
+fa-buyreleased-EXPECT-RED: export TMPDIR=$(mktemp -d); FA_CONTROL=buyreleased node scripts/simFreeAgents.mjs
+fa-noreleasedlist-EXPECT-RED: export TMPDIR=$(mktemp -d); FA_CONTROL=noreleasedlist node scripts/simFreeAgents.mjs
+simCmLedgerJourney: export TMPDIR=$(mktemp -d); node scripts/simCmLedgerJourney.mjs
+simCmLedgerBound: export TMPDIR=$(mktemp -d); node scripts/simCmLedgerBound.mjs
+bound-nocache-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_LEDGER_BOUND_CONTROL=nocache node scripts/simCmLedgerBound.mjs
+size-norepair-EXPECT-RED: export TMPDIR=$(mktemp -d); SAVE_SIZE_CONTROL=norepair node scripts/simClubManagerSaveSize.mjs
+size-deaddoor-EXPECT-RED: export TMPDIR=$(mktemp -d); SAVE_SIZE_CONTROL=deaddoor node scripts/simClubManagerSaveSize.mjs
+slots-dupe-EXPECT-RED: export TMPDIR=$(mktemp -d); SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+book-full-s0: export TMPDIR=$(mktemp -d); SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s1: export TMPDIR=$(mktemp -d); SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s2: export TMPDIR=$(mktemp -d); SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s3: export TMPDIR=$(mktemp -d); SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s4: export TMPDIR=$(mktemp -d); SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-floor: export TMPDIR=$(mktemp -d); BOOK_MEASURE=floor node scripts/simCmLeagueBook.mjs
+boards-timing: export TMPDIR=$(mktemp -d); node .rc/x/boardsTiming.mjs
+simManagerEraWorldOracles: export TMPDIR=$(mktemp -d); MANAGER_ERA_WORLD_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerEraWorldOracles.mjs
+managerRosterCacheControl: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs
+simBooks: export TMPDIR=$(mktemp -d); node scripts/simBooks.mjs
+simManagerCareer: export TMPDIR=$(mktemp -d); node scripts/simManagerCareer.mjs
+simTransfers: export TMPDIR=$(mktemp -d); node scripts/simTransfers.mjs
+simClubManagerDeals: export TMPDIR=$(mktemp -d); node scripts/simClubManagerDeals.mjs
+simClubManagerScore: export TMPDIR=$(mktemp -d); node scripts/simClubManagerScore.mjs
+simBoardAsks: export TMPDIR=$(mktemp -d); node scripts/simBoardAsks.mjs
+simCreateClub: export TMPDIR=$(mktemp -d); node scripts/simCreateClub.mjs
+simCustomClubValues: export TMPDIR=$(mktemp -d); node scripts/simCustomClubValues.mjs
+simDealDepth: export TMPDIR=$(mktemp -d); node scripts/simDealDepth.mjs
+simManagerXp: export TMPDIR=$(mktemp -d); node scripts/simManagerXp.mjs
+simClubManagerBudget: export TMPDIR=$(mktemp -d); node scripts/simClubManagerBudget.mjs
+simCmVar: export TMPDIR=$(mktemp -d); node scripts/simCmVar.mjs
+vitest-cm: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/cmTablesTruth.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/contractPreview.test.tsx src/test/numberFormatting.test.tsx src/test/rolesBrokenPromises.test.tsx src/test/clubDetailOwnClub.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmTablesTruth: export TMPDIR=$(mktemp -d); node scripts/simCmTablesTruth.mjs
+truth-nomark-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_TABLES_TRUTH_CONTROL=nomark node scripts/simCmTablesTruth.mjs
+truth-markall-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_TABLES_TRUTH_CONTROL=markall node scripts/simCmTablesTruth.mjs
+truth-defeatraw-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_TABLES_TRUTH_CONTROL=defeatraw node scripts/simCmTablesTruth.mjs
+truth-drawinrender-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_TABLES_TRUTH_CONTROL=drawinrender node scripts/simCmTablesTruth.mjs

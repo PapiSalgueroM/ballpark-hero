@@ -1,0 +1,2 @@
+TIMING seeded: season 3, worldSeed set, boards built, first call 0.3 ms, median of 40 0.22 ms, max 0.47 ms
+TIMING unseeded: season 3, worldSeed none, boards built, first call 0.1 ms, median of 40 0.04 ms, max 0.11 ms
