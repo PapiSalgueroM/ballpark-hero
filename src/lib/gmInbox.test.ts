@@ -378,6 +378,8 @@ describe('gmInbox deck rules', () => {
   it('the validator names an empty wording and a clock that is neither', () => {
     expect(gmPackProblems(deck([card('t', { texts: ['Fine.', ''] })])).join(' ')).toMatch(/empty wording/);
     expect(gmPackProblems(deck([card('t')], { clock: 'month' as 'week' })).join(' ')).toMatch(/neither week nor season/);
+    expect(gmPackProblems(deck([card('t')], { reachBy: 'position' })).join(' ')).toMatch(/reachBy position is not a declared fact/);
+    expect(gmPackProblems(deck([card('t')], { reachBy: 'man' }))).toEqual([]);
   });
 
   it('a card left open is settled on its neutral option at exactly w plus expires, and nothing moves', () => {

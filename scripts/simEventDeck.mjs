@@ -61,6 +61,12 @@
         out (and onCooldown its own written rule); a cooldown of N is back
         after exactly N weeks on the week clock and sits out N seasons on the
         season clock.
+     10) SHARE AND REACH. Every pack the kit knows over the FLEET drive (100
+        desks of ten seasons): every card dealt, and the top card's share of
+        its pack's deals (a mean over 1,000 seasons, never a max over runs)
+        under that pack's ceiling, measured at seeds 1 to 10 and written at
+        the section. A report line, not a gate: cards reached per value of a
+        pack's reachBy fact (a keeper meets keeper work); W2 makes it a gate.
 
    No board binds gmInbox yet (the importers are its own test, the packs, the
    panel and two harnesses), so every drive here is a synthetic desk: each
@@ -84,6 +90,12 @@
      neutral    FX_NEUTRAL's one neutral option on its first card is given
                 trust 1 (a data change in the kit, not the engine); section
                 8 fails.
+     heavy      the NFL's top card loses its cooldown and weighs 50 (in
+                memory); section 10 fails. The brief's weight alone changed
+                nothing (see section 10).
+
+   Runtime about 25 to 50 s on a runner; SIM_EVENT_DECK_MEASURE=1 adds the
+   seeds 1 to 10 measurements (about a minute more).
 
    Run: node scripts/simEventDeck.mjs
         SIM_EVENT_DECK_SHARD=nfl runs one seat's rows of section 1 only. */
@@ -102,7 +114,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'story', 'rest', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral'];
+const CONTROLS = ['replay', 'weightoff', 'story', 'rest', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -744,6 +756,67 @@ console.log('9) Season clock: a card is held out exactly as careerEventDeck hold
   }
   if (wrong.length) fail(9, wrong.join('; '));
   else ok('a cooldown of N is back after exactly N weeks on the week clock and sits out exactly N seasons on the season clock');
+}
+
+/* ═══ 10. SHARE AND REACH over the FLEET drive ═══ */
+
+console.log('10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack\'s measured ceiling');
+{
+  const packs = { ...ALL_PACKS };
+  /* The brief's form of this control (one NFL card at weight 50) changed
+     nothing here, measured: every NFL card sits out a whole season (cooldown
+     22, the season's 22 weeks) and the cards that share a beat almost never
+     come up together, so a weight has nothing to win. The card is made to
+     dominate the only way that pack allows: the top card loses its cooldown
+     (and is made heavy too, for when a pack round adds rivals to its beat). */
+  if (CONTROL === 'heavy') {
+    const hits = packs.nfl?.events.filter(x => x.id === 'nfl_fan_night') ?? [];
+    if (hits.length !== 1 || hits[0].cooldown !== undefined) { console.error('heavy control: nfl_fan_night is not there once with the pack cooldown, refusing to run'); process.exit(2); }
+    packs.nfl = { ...packs.nfl, events: packs.nfl.events.map(x => (x === hits[0] ? { ...x, cooldown: 0, weight: 50 } : x)) };
+  }
+  const shares = (pack, tag, seed) => {
+    const n = {};
+    const byValue = {};
+    let total = 0;
+    const observe = w => {
+      for (const m of w.got) {
+        n[m.defId] = (n[m.defId] ?? 0) + 1;
+        total++;
+        if (pack.reachBy) (byValue[String(w.facts[pack.reachBy])] ??= new Set()).add(m.defId);
+      }
+    };
+    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { observe });
+    const ranked = pack.events.map(e => ({ id: e.id, share: (n[e.id] ?? 0) / Math.max(1, total) })).sort((a, b) => b.share - a.share);
+    return { n, total, ranked, byValue };
+  };
+  /* The ceiling a card's share of its pack's deals may not pass, each a mean
+     over 1,000 seasons (100 desks of 10 seasons, the FLEET drive at SEED).
+     Measured 2026-10-13 at seeds 1 to 10, the top card's share of each pack
+     (always the same card), lowest to highest in percent: nfl 19.38 to
+     20.39, nba 26.58 to 27.79, mlb 25.56 to 26.82, nhl 24.66 to 25.81,
+     college 27.54 to 28.48, gym 33.60 to 34.71, afl 33.98 to 35.36. Each
+     ceiling is that pack's highest plus 2 points, about five seed to seed
+     standard deviations (about 0.4 points). A pack the kit knows with no
+     ceiling here fails until a pack round measures and writes one. */
+  const CEILING = { nfl: 0.224, nba: 0.298, mlb: 0.288, nhl: 0.278, college: 0.305, gym: 0.367, afl: 0.374 };
+  const reach = [];
+  for (const [k, p] of Object.entries(packs)) {
+    const r = shares(p, k, SEED);
+    const unreached = p.events.filter(e => !r.n[e.id]).map(e => e.id);
+    const top = r.ranked[0];
+    if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over 1,000 seasons (${unreached.slice(0, 3).join(', ')})`);
+    if (CEILING[k] === undefined) fail(10, `${k} has no measured share ceiling: run SIM_EVENT_DECK_MEASURE=1 and write one in`);
+    else if (top.share > CEILING[k]) fail(10, `${k}: ${top.id} took ${(top.share * 100).toFixed(1)}% of ${r.total} deals, ceiling ${(CEILING[k] * 100).toFixed(1)}%`);
+    else ok(`${k}: all ${p.events.length} cards reached in ${r.total} deals, the top card ${top.id} at ${(top.share * 100).toFixed(1)}% (ceiling ${(CEILING[k] * 100).toFixed(1)}%)`);
+    if (p.reachBy) reach.push(`${k} by ${p.reachBy}: ${Object.entries(r.byValue).slice(0, 8).map(([v, s]) => `${v} ${s.size}`).join(', ')}`);
+    if (MEASURE) {
+      const tops = TEN.map(sd => shares(p, k, sd).ranked[0]);
+      console.log(`   measure: ${k} top card share at seeds 1 to 10: ${tops.map(t => `${t.id} ${(t.share * 100).toFixed(2)}`).join(', ')}`);
+    }
+  }
+  /* Advice 22: reachable cards per value of a pack's reach fact (a keeper
+     meets keeper work). A report here; W2's packs make it a gate. */
+  console.log(`   reach by position: ${reach.length ? reach.join('; ') : 'no pack the kit knows names a reachBy fact yet'}`);
 }
 
 /* ═══ end ═══ */

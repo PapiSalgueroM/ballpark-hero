@@ -120,3 +120,29 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   w plus expires on option 1 with no meter moved; silent desks dealt 44.75 to 45.42 times the cards of the same pack
   without expiry (which freezes at three open), floor 30. Controls on this PC (shard afl): expireoff red section 7
   (0 settled, 1.0 times), expirefx red section 7 (6,570 breaks), neutral red section 8.
+
+### Step (c) proof on a runner (rc r1324-c, head 1a30cbe9)
+
+- tsc exit 0 (77 s); vitest exit 0, 38 tests passed; simEventDeck exit 0 in 37.7 s; controls replay, weightoff, story,
+  rest, textrng and seasonweek each exit 1 with a "fired" closing line on their own section.
+- simGmInbox at SEED 1, 2 and 3 printed every line the same as the base 8fea14e2 (`gmcmp`); its twelve old controls
+  and the new quotevariant and effectvariant each exit 1 with a closing failure line.
+- simCareerInbox exit 0 and privatecap exit 1; simHarnessAnchors, simNoRivalNames, simNoInventedQuotes,
+  simNoInventedConduct, simInventedNames exit 0.
+
+## Step (e): kit section 10, share and reach
+
+- Every pack the kit knows over the FLEET drive at SEED (100 desks of ten seasons): every card dealt, and the top
+  card's share of its pack's deals (a mean over 1,000 seasons) under that pack's ceiling. Measured at seeds 1 to 10
+  (lowest to highest, percent, always the same top card): nfl 19.38 to 20.39 (nfl_fan_night), nba 26.58 to 27.79,
+  mlb 25.56 to 26.82, nhl 24.66 to 25.81, college 27.54 to 28.48, gym 33.60 to 34.71, afl 33.98 to 35.36. Ceiling =
+  highest plus 2 points (about five seed to seed standard deviations). A pack with no ceiling fails until a pack round
+  measures one (SIM_EVENT_DECK_MEASURE=1 prints them).
+- `reachBy` (advice 22): an optional pack field naming a fact; the engine never reads it, gmPackProblems refuses an
+  undeclared one, and section 10 prints cards reached per value as a report line (no pack has one yet).
+- THE `heavy` CONTROL CHANGED FORM, measured: the brief's "one NFL card at weight 50" left section 10 exactly as it was
+  (2,793 deals, top card 20.2%), because every NFL card sits out a whole season (cooldown 22, the season's 22 weeks)
+  and the cards that share a beat almost never come up together, so a weight has nothing to win. The control now takes
+  the top card's cooldown away as well (and keeps the weight 50): nfl_fan_night then takes 31.7% of 3,283 deals,
+  ceiling 22.4%, section 10 red. A fact for W2, W3 and every pack round: in today's GM packs a weight barely moves
+  anything; weights matter only where cards compete for the same week.

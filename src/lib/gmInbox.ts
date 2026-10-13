@@ -157,6 +157,8 @@ export interface GmInboxPack {
    *  and a card sits out `cooldown` seasons (careerEventDeck's onCooldown).
    *  Absent is 'week': a card is back after `cooldown` weeks. */
   clock?: 'week' | 'season';
+  /** A fact (a position) the kit reports reach by. The engine never reads it. */
+  reachBy?: string;
   /** Ticks a subject rests after a card about him. Absent or 0: no rest. */
   subjectRest?: number;
   events: GmEventDef[];
@@ -261,6 +263,7 @@ export function gmPackProblems(pack: GmInboxPack): string[] {
   const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
   if (pack.subjectRest !== undefined && !whole(pack.subjectRest, 0)) out.push(`subjectRest ${pack.subjectRest} is not a whole number`);
   if (pack.clock !== undefined && pack.clock !== 'week' && pack.clock !== 'season') out.push(`clock ${pack.clock} is neither week nor season`);
+  if (pack.reachBy !== undefined && !has(pack.facts, pack.reachBy)) out.push(`reachBy ${pack.reachBy} is not a declared fact`);
   for (const e of pack.events) {
     if (e.expires !== undefined && !whole(e.expires, 1)) out.push(`${e.id} expires after ${e.expires}`);
     else if (e.expires !== undefined && gmNeutralIndex(e.choices) < 0) out.push(`${e.id} expires with no option that moves nothing`);
