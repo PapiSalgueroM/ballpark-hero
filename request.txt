@@ -1,0 +1,5 @@
+#!serial
+fa-head: node scripts/simFreeAgents.mjs
+fa-3ac2: git worktree add -q /tmp/w3ac 3ac21642 && cd /tmp/w3ac && ln -s $OLDPWD/node_modules node_modules && node scripts/simFreeAgents.mjs
+fa-base: git worktree add -q /tmp/wb6e b6eb78e7 && cd /tmp/wb6e && ln -s $OLDPWD/node_modules node_modules && node scripts/simFreeAgents.mjs
+fa-inverse: node scripts/lib/cmWorldSeed1250.mjs --apply && node scripts/simFreeAgents.mjs; s=$?; git checkout -- src; exit $s

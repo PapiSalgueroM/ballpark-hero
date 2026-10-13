@@ -1,0 +1,4 @@
+fa-head exit=1 54s | simFreeAgents: 2 failure(s)
+fa-3ac2 exit=1 181s | simFreeAgents: 2 failure(s)
+fa-base exit=0 10s | simFreeAgents: all sections passed
+fa-inverse exit=0 10s | simFreeAgents: all sections passed
