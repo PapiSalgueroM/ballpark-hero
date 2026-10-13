@@ -1,0 +1,30 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners; CONTROL stack
+playCmLeagueLeaders: page seed 2362537418
+  FAIL 3: S1-320: with the goals board open the Stats screen still holds the player table or the team record
+  FAIL 3: S1-320: with the assists board open the Stats screen still holds the player table or the team record
+  FAIL 3: S1-320: with the sheets board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-320: with the goals board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-320: with the assists board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-320: with the sheets board open the Stats screen still holds the player table or the team record
+  FAIL 3: S5-320: Past winners is drawn over the player table
+  FAIL 3: S1-390: with the goals board open the Stats screen still holds the player table or the team record
+  FAIL 3: S1-390: with the assists board open the Stats screen still holds the player table or the team record
+  FAIL 3: S1-390: with the sheets board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-390: with the goals board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-390: with the assists board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-390: with the sheets board open the Stats screen still holds the player table or the team record
+  FAIL 3: S5-390: Past winners is drawn over the player table
+  FAIL 3: S1-1280: with the goals board open the Stats screen still holds the player table or the team record
+  FAIL 3: S1-1280: with the assists board open the Stats screen still holds the player table or the team record
+  FAIL 3: S1-1280: with the sheets board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-1280: with the goals board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-1280: with the assists board open the Stats screen still holds the player table or the team record
+  FAIL 3: S2-1280: with the sheets board open the Stats screen still holds the player table or the team record
+  FAIL 3: S5-1280: Past winners is drawn over the player table
+5       the page drew 7 and 7 times before the match; the two saves are equal (121105 characters)
+green 1 the page is the reader: 18 checks
+green 2 the fit: 141 checks
+RED   3 nothing stacks or jumps: 57 checks, 21 failed
+green 4 the lines: 48 checks
+green 5 a match with the boards open: 2 checks
+playCmLeagueLeaders: CONTROL stack FIRED: section 3 went red (21 failures) and no other did

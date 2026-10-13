@@ -1,0 +1,39 @@
+# Release BB, lane W: the pieces walks on a plain served build, their controls, then the budgets
+#!serve
+#!playwright
+#!serial
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+saveSize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+flagship-rosterlink: FLAGSHIP_LAZY_CONTROL=rosterlink node scripts/simFlagshipWeight.mjs
+flagship-allchunks: FLAGSHIP_LAZY_CONTROL=allchunks node scripts/simFlagshipWeight.mjs
+playCmLeagueLeaders: node scripts/playCmLeagueLeaders.mjs
+leaders-swap: LEADERS_CONTROL=swap node scripts/playCmLeagueLeaders.mjs
+leaders-wide: LEADERS_CONTROL=wide node scripts/playCmLeagueLeaders.mjs
+leaders-stack: LEADERS_CONTROL=stack node scripts/playCmLeagueLeaders.mjs
+leaders-thin: LEADERS_CONTROL=thin node scripts/playCmLeagueLeaders.mjs
+leaders-younglate: LEADERS_CONTROL=younglate node scripts/playCmLeagueLeaders.mjs
+leaders-write: LEADERS_CONTROL=write node scripts/playCmLeagueLeaders.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+cm-nobusiness: ENGINES=chromium CM_CONTROL=nobusiness node scripts/playClubManager.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+nation-nooffer: ENGINES=chromium NATION_JOB_CONTROL=nooffer node scripts/playNationJob.mjs
+nation-twotiles: ENGINES=chromium NATION_JOB_CONTROL=twotiles node scripts/playNationJob.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+wild-nooffers: ENGINES=chromium WILDERNESS_CONTROL=nooffers node scripts/playWilderness.mjs
+wild-nosack: ENGINES=chromium WILDERNESS_CONTROL=nosack node scripts/playWilderness.mjs
+rvwalk: node .rc/x/rvwalk.mjs
+playFrontOfficeGameDay: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-bracketjump: ENGINES=chromium FO_GAMEDAY_WALK_CONTROL=bracketjump node scripts/playFrontOfficeGameDay.mjs
+walk-playoffspoil: ENGINES=chromium FO_GAMEDAY_WALK_CONTROL=playoffspoil node scripts/playFrontOfficeGameDay.mjs
+walk-lostblock: ENGINES=chromium FO_GAMEDAY_WALK_CONTROL=lostblock node scripts/playFrontOfficeGameDay.mjs
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all > $RC_OUT/ctl-all.log 2>&1; s=$?; grep -E "^control |controlFrontOfficeBoard:" $RC_OUT/ctl-all.log | cut -c1-200 | tail -60; exit $s
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+walkMlb: RIVAL_WALK_SPORT=mlb node scripts/playUsRivalLines.mjs
+walkNhl: RIVAL_WALK_SPORT=nhl node scripts/playUsRivalLines.mjs
+flipMlb: RIVAL_WALK_SPORT=mlb RIVAL_WALK_POS=SP,RP,CF PLAY_US_RIVAL_CONTROL=rivalflip node scripts/playUsRivalLines.mjs
+flipNhl: RIVAL_WALK_SPORT=nhl RIVAL_WALK_POS=G,C PLAY_US_RIVAL_CONTROL=rivalflip node scripts/playUsRivalLines.mjs
+oldlineMlb: RIVAL_WALK_SPORT=mlb PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
+oldlineNhl: RIVAL_WALK_SPORT=nhl PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
+walk-revealdown: node .rc/x/mut-revealdown.mjs && npm run build > /tmp/rd-build.log 2>&1 && FO_GAMEDAY_WALK_CONTROL=revealdown ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- src; exit $s

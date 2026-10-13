@@ -1,0 +1,10 @@
+playCmLeagueLeaders: saves built: S1 week 26, S2 week 27, S3 week 26 (no book), S4 season 1 closed, S5 season 7 with 6 past seasons of winners; CONTROL write
+playCmLeagueLeaders: page seed 2362537418
+  FAIL 5: the save after one Quick Sim differs with the boards opened before it, in boardOpened
+5       the page drew 7 and 7 times before the match; the two saves are NOT equal (121124 characters)
+green 1 the page is the reader: 18 checks
+green 2 the fit: 141 checks
+green 3 nothing stacks or jumps: 57 checks
+green 4 the lines: 48 checks
+RED   5 a match with the boards open: 2 checks, 1 failed
+playCmLeagueLeaders: CONTROL write FIRED: section 5 went red (1 failures) and no other did

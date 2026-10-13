@@ -1,0 +1,10 @@
+  control  the Rival watch tile title matched 1 time(s) in the built chunks (ClubManager-BVLCKZad.js)
+1) Take a job and build a record worth a country
+  CAUGHT  exactly one hub tile is titled Manager
+  PASS  the career is running
+  PASS  the save was given a record worth an international job
+2) The country calls on the Manager tile
+  CAUGHT  the manager tile is on the hub, exactly once
+  PASS  no real page errors on the walk (clean)
+
+playNationJob control twotiles: all 2 guarded checks fired (mutations landed: {"secondManagerTile":2})
