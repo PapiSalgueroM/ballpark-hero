@@ -356,7 +356,7 @@ async function partOne(which, browser, css) {
       await page.waitForFunction(() => !!window.__CMFIT__, null, { timeout: 60000 });
       const show = async (screen, career) => {
         await page.evaluate(([s, c]) => { window.__cls = 0; window.__CMFIT__.show(s, c); }, [screen, career]);
-        await page.waitForSelector(`[data-fit-screen="${screen}"]`, { timeout: 20000 }).catch(e => {
+        await page.waitForSelector(`[data-fit-screen="${screen}"]`, { state: 'attached', timeout: 20000 }).catch(e => {
           throw new Error(`${which} at ${w}: the ${screen} screen for ${career} never drew. Page errors: ${errors.join(' | ') || 'none'}. ${String(e).slice(0, 120)}`);
         });
         await page.waitForTimeout(400);
@@ -572,15 +572,25 @@ try {
     assert(cssFiles.length > 0, 'No built stylesheet in dist/assets. Nothing was checked.');
     const css = cssFiles.map(f => fs.readFileSync(f, 'utf8')).join('\n');
     console.log(`PART 1, CSS: ${process.env.CM_FIT_CSS ? 'PRE-BUILD PREVIEW, not release proof' : 'built dist/assets'} (${cssFiles.length} file(s)), every request blocked`);
+    /* Tailwind writes a rule only for a class its source holds, so the base's squad grid has no rule in this
+       tree's stylesheet. The base components are drawn with the base build's own stylesheet when
+       CM_FIT_BASE_DIST names it; otherwise, and for the oldgrid control, the one rule the old grid needs is
+       written out by hand (an attribute selector, so no escaping), and the log says so. */
+    const OLD_GRID_RULE = `@media (min-width: 768px) { [class~="${CONTROLS.oldgrid.to}"] { grid-template-columns: ${CONTROLS.oldgrid.to.slice('md:grid-cols-['.length, -1).replace(/_/g, ' ')}; } }`;
+    const baseDist = process.env.CM_FIT_BASE_DIST ? path.join(process.env.CM_FIT_BASE_DIST, 'assets') : '';
+    const baseCssFiles = baseDist && fs.existsSync(baseDist) ? fs.readdirSync(baseDist).filter(n => n.endsWith('.css')).sort().map(n => path.join(baseDist, n)) : [];
+    const baseCss = baseCssFiles.length ? baseCssFiles.map(f => fs.readFileSync(f, 'utf8')).join('\n') : `${css}\n${OLD_GRID_RULE}`;
     if (CONTROL) {
-      const head = await partOne('head', browser, css);
+      if (CONTROL === 'oldgrid') console.log(`   the old grid's rule, written by hand: ${OLD_GRID_RULE}`);
+      const head = await partOne('head', browser, CONTROL === 'oldgrid' ? `${css}\n${OLD_GRID_RULE}` : css);
       const c = CONTROLS[CONTROL];
       const hit = head.findings.filter(f => f.kind === c.kind && f.w === c.size);
       summarise(`control ${CONTROL}`, head.findings);
       if (hit.length) { console.log(`CONTROL ${CONTROL} FIRED: ${hit.length} ${c.kind} findings at ${c.size}, first: ${hit[0].where}: ${hit[0].detail}`); exitCode = 1; }
       else { console.log(`FAIL control ${CONTROL}: no ${c.kind} finding at ${c.size}`); exitCode = 3; }
     } else {
-      const base = await partOne('base', browser, css);
+      console.log(`   the base is drawn with ${baseCssFiles.length ? `the base build's stylesheet (${baseDist})` : 'this tree\'s stylesheet plus the old grid\'s rule written by hand'}`);
+      const base = await partOne('base', browser, baseCss);
       const baseLines = summarise(`PART 1 BASE (${BASE_SHA}, expected red: the findings this round closes)`, base.findings);
       const head = await partOne('head', browser, css);
       const headLines = summarise('PART 1 HEAD', head.findings);
@@ -867,14 +877,22 @@ if (PART === '2' || PART === 'all') {
     }
     /* E: the engine chunk, the one carrying the save key, is the same file in both builds */
     const baseDist = process.env.CM_FIT_BASE_DIST || '';
+    /* A chunk's file name carries a hash of its bytes, and those bytes hold the names of the chunks it imports, so
+       a change to any page renames every chunk that imports the entry. The engine chunk is therefore compared
+       twice: by name and bytes as built, and with every hashed chunk name set aside, which is the engine's own
+       code. The second is the one that must hold; the first is reported as measured. */
+    const unhash = s => s.replace(/-[A-Za-z0-9_-]{8}\.(js|css)/g, '-HASH.$1');
     const withKey = dir => fs.readdirSync(path.join(dir, 'assets')).filter(f => f.endsWith('.js') && fs.readFileSync(path.join(dir, 'assets', f), 'utf8').includes(SAVE_KEY)).sort();
     if (!baseDist || !fs.existsSync(path.join(baseDist, 'assets'))) fail('E: no CM_FIT_BASE_DIST, so the engine chunks were not compared');
     else {
       const h = withKey(path.join(ROOT, 'dist'));
       const b = withKey(baseDist);
-      const same = h.length === b.length && h.every((f, i) => f === b[i] && fs.readFileSync(path.join(ROOT, 'dist/assets', f)).equals(fs.readFileSync(path.join(baseDist, 'assets', b[i]))));
-      if (!same) fail(`E: the chunks holding the save key differ: base ${b.join(', ')}, this tree ${h.join(', ')}`);
-      else console.log(`   E: the chunks holding the save key are the same files, byte for byte: ${h.join(', ')}`);
+      const read = (dir, f) => fs.readFileSync(path.join(dir, 'assets', f), 'utf8');
+      const raw = h.length === b.length && h.every((f, i) => f === b[i] && read(path.join(ROOT, 'dist'), f) === read(baseDist, b[i]));
+      const code = h.length === b.length && h.every((f, i) => unhash(f) === unhash(b[i]) && unhash(read(path.join(ROOT, 'dist'), f)) === unhash(read(baseDist, b[i])));
+      console.log(`   E: the chunks holding the save key: base ${b.map(f => `${f} (${read(baseDist, f).length} bytes)`).join(', ')}; this tree ${h.map(f => `${f} (${read(path.join(ROOT, 'dist'), f).length} bytes)`).join(', ')}; same name and bytes as built: ${raw ? 'yes' : 'no'}`);
+      if (!code) fail('E: the chunks holding the save key differ in their own code, not only in the hashed names they import');
+      else console.log('   E: with the hashed chunk names set aside, the engine chunks are byte equal');
     }
   } finally {
     await b2.close();
