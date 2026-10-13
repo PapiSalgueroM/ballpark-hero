@@ -1,0 +1,6 @@
+MUT mE: applied to src/lib/careerPreDraft.ts
+pd-a: exit=0 sections: | simCareerPreDraft [seed set a]: ALL GREEN
+pd-c: exit=0 sections: | simCareerPreDraft [seed set c]: ALL GREEN
+vitest: exit=0 | 
+prospect: exit=0 | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+MUTRESULT mE SURVIVED harness-a=0 harness-c=0 vitest=0 prospect=0

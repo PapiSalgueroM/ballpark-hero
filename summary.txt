@@ -1,0 +1,12 @@
+mA exit=0 37s | MUTRESULT mA CAUGHT harness-a=1 harness-c=1 vitest=0 prospect=0
+mB exit=0 33s | MUTRESULT mB CAUGHT harness-a=1 harness-c=1 vitest=1 prospect=0
+mC exit=0 35s | MUTRESULT mC CAUGHT harness-a=1 harness-c=1 vitest=1 prospect=0
+mD exit=0 36s | MUTRESULT mD CAUGHT harness-a=0 harness-c=0 vitest=1 prospect=0
+mE exit=9 36s | MUTRESULT mE SURVIVED harness-a=0 harness-c=0 vitest=0 prospect=0
+mF exit=0 36s | MUTRESULT mF CAUGHT harness-a=0 harness-c=0 vitest=1 prospect=0
+r-law exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+r-lay exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+r-seam exit=0 20s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+saves exit=0 7s | RVSAVES GREEN: 219336 base saves loaded on head (8 pairs x 1200 roads, every phase, with and without the descriptor), 150102 next steps compared, 0 differences
+saves-ctl exit=1 1s | RVSAVES control FIRED
+status exit=0 0s | TREE-CLEAN-CHECK done

@@ -1,0 +1,7 @@
+MUT mC: applied to src/lib/careerPreDraft.ts
+pd-a: exit=1 sections:  1 12. | simCareerPreDraft [seed set a]: 1 FAILURE(S)
+pd-c: exit=1 sections:  1 12. | simCareerPreDraft [seed set c]: 1 FAILURE(S)
+vitest: exit=1 | [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯�
+[41m[1m FAIL [22m[49m src/test/careerPreDraft.test.tsx[2m > [22mthe combine you run, the engine[2m > [22ma station score is the curve over the raw resul
+prospect: exit=0 | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+MUTRESULT mC CAUGHT harness-a=1 harness-c=1 vitest=1 prospect=0

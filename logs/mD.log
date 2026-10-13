@@ -1,0 +1,8 @@
+MUT mD: applied to src/lib/mlbCareerPreDraft.ts
+pd-a: exit=0 sections: | simCareerPreDraft [seed set a]: ALL GREEN
+pd-c: exit=0 sections: | simCareerPreDraft [seed set c]: ALL GREEN
+vitest: exit=1 | [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯�
+[41m[1m FAIL [22m[49m src/test/careerPreDraft.test.tsx[2m > [22mthe stations a player can run himself[2m > [22mone or two a position, in order, burst an
+[41m[1m FAIL [22m[49m src/test/careerPreDraft.test.tsx[2m > [22mthe stations a player can run himself[2m > [22ma pitcher and the 2006 NHL run one statio
+prospect: exit=0 | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+MUTRESULT mD CAUGHT harness-a=0 harness-c=0 vitest=1 prospect=0

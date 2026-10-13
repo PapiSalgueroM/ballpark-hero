@@ -1,0 +1,13 @@
+#!serial
+mA: node .rc/x/rvmut.mjs mA && bash .rc/x/rvmutrun.sh mA; s=$?; git checkout -- src scripts; exit $s
+mB: node .rc/x/rvmut.mjs mB && bash .rc/x/rvmutrun.sh mB; s=$?; git checkout -- src scripts; exit $s
+mC: node .rc/x/rvmut.mjs mC && bash .rc/x/rvmutrun.sh mC; s=$?; git checkout -- src scripts; exit $s
+mD: node .rc/x/rvmut.mjs mD && bash .rc/x/rvmutrun.sh mD; s=$?; git checkout -- src scripts; exit $s
+mE: node .rc/x/rvmut.mjs mE && bash .rc/x/rvmutrun.sh mE; s=$?; git checkout -- src scripts; exit $s
+mF: node .rc/x/rvmut.mjs mF && bash .rc/x/rvmutrun.sh mF; s=$?; git checkout -- src scripts; exit $s
+r-law: node .rc/x/rvrcpt.mjs law && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+r-lay: node .rc/x/rvrcpt.mjs lay && US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+r-seam: node .rc/x/rvrcpt.mjs seam && US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+saves: git worktree add --detach /tmp/rvbase 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 > /dev/null 2>&1; node .rc/x/rvsaves.mjs /tmp/rvbase
+saves-ctl: RVSAVES_CONTROL=1 RVSAVES_N=40 node .rc/x/rvsaves.mjs /tmp/rvbase
+status: git status --short | grep -v '^??' | head; echo TREE-CLEAN-CHECK done

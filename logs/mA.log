@@ -1,0 +1,6 @@
+MUT mA: applied to src/lib/careerPreDraft.ts
+pd-a: exit=1 sections:  2 10. | simCareerPreDraft [seed set a]: 2 FAILURE(S)
+pd-c: exit=1 sections:  3 10. | simCareerPreDraft [seed set c]: 3 FAILURE(S)
+vitest: exit=0 | 
+prospect: exit=0 | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+MUTRESULT mA CAUGHT harness-a=1 harness-c=1 vitest=0 prospect=0
