@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+simRevealScroll: node scripts/simRevealScroll.mjs > /tmp/rs.log 2>&1; s=$?; grep -a -i "club-manager" /tmp/rs.log | cut -c1-220 | head -8; grep -a -c "YANK\|LOSTTOP" /tmp/rs.log; tail -2 /tmp/rs.log | cut -c1-260; exit $s
+playClubManager: node scripts/playClubManager.mjs > /tmp/pc.log 2>&1; s=$?; grep -a "BROKEN\|SHALLOW\|training policy" /tmp/pc.log | cut -c1-220 | head -10; tail -2 /tmp/pc.log | cut -c1-260; exit $s
+playEra2005: node scripts/playEra2005.mjs > /tmp/pe.log 2>&1; s=$?; tail -2 /tmp/pe.log | cut -c1-260; exit $s
+sweepPhone: MSYS_NO_PATHCONV=1 ROUTE=/club-manager node scripts/sweepPhone.mjs > /tmp/sp.log 2>&1; s=$?; tail -3 /tmp/sp.log | cut -c1-260; exit $s
+playReducedMotion: node scripts/playReducedMotion.mjs > /tmp/rm.log 2>&1; s=$?; tail -2 /tmp/rm.log | cut -c1-260; exit $s
+playClubManagerSlots: node scripts/playClubManagerSlots.mjs > /tmp/sl.log 2>&1; s=$?; tail -2 /tmp/sl.log | cut -c1-260; exit $s
