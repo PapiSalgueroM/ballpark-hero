@@ -1,0 +1,16 @@
+  PASS  simSoccerCurrency.mjs          14.3s
+  PASS  simSoccerFarewell.mjs          14.5s
+  PASS  simSoccerFarewellPageControl.mjs   59.2s
+  PASS  simSoccerInternationalReturn.mjs   14.6s
+  PASS  simSoccerInternationalReturnPageControl.mjs   42.0s
+  PASS  simSoccerVeteranTalks.mjs     106.0s
+  EMPTY simTransferBriefPageControl.mjs   19.0s
+        printed 1 line, so its checks did not run
+
+Skipping 2 browser harnesses (simRevealScroll, simVictoryMoment). Pass --browser to include them.
+
+----- simTransferBriefPageControl.mjs (EMPTY) -----
+CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+
+
+1 harness not green.

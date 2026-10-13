@@ -1,0 +1,16 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-fence exit=0 20s |    Duration  19.43s (transform 5.85s, setup 931ms, collect 13.13s, tests 24.42s, environment 5.61s, prepare 1.71s)
+vitest-pages exit=0 61s |    Duration  60.76s (transform 9.44s, setup 1.40s, collect 30.86s, tests 100.96s, environment 10.26s, prepare 2.01s)
+fence-adoptlate exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=adoptlate fired 1 times and section source went red with 1 findings
+fence-rawsoccer exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawsoccer fired 1 times and section source went red with 1 findings
+tsc exit=0 90s | 
+saveRecovery-all exit=0 24s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+saveFence-base exit=0 102s | simSaveFence: all green (tabs, source, fleet)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+saveRetry-all exit=0 99s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+sims2 exit=0 72s | All 12 harnesses green.
+sims1 exit=0 290s | All 12 harnesses green.
+simCreation exit=1 471s | 1 FAILURES
+sims3 exit=1 878s | 1 harness not green.
