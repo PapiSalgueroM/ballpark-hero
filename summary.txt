@@ -1,0 +1,6 @@
+vitest exit=0 3s |    Duration  2.56s (transform 629ms, setup 244ms, collect 1.41s, tests 1.48s, environment 1.93s, prepare 740ms)
+tsc exit=0 54s | 
+simCollegeSeat-anchors exit=0 0s | simCollegeSeat anchors: 13 rewrites of 11 controls checked, 0 cannot run
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simCollegeSeat exit=0 117s | simCollegeSeat: all sections green (S1 to S9 and SY)
+simCollegeSeat-tiltnone exit=0 119s | simCollegeSeat: all sections green (S1 to S9 and SY)
