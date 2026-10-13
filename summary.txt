@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-head exit=0 55s | head     /soccer-career   total  2897K  js  2665K  reqs  50  FCP    700ms  playable  18452ms  (3 runs, median; styled nodes 154)
+flagship-head exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+chunks-head exit=0 0s | 1400182 SoccerCareer-CPCNZdym.js
+weight-base exit=0 88s | 1397195 SoccerCareer-Aq6B7JOE.js
