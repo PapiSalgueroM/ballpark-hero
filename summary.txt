@@ -1,0 +1,2 @@
+diag-pre exit=0 511s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+diag-head-retained exit=0 14s | DIAGNOSTIC decoded Slots: twenty complete pairs, effective missing-decode rejection and full undo
