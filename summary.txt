@@ -1,0 +1,7 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 25s | base server 200
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+rf-head exit=1 2s | Node.js v24.21.0
+rf-fix exit=1 1s | Node.js v24.21.0
+rvwalk exit=1 104s | rvwalk: 2 flag(s), 52 note(s)
+fleet exit=0 259s | playCmHubLanding: green (D 24 pass 0 fail); the hub lands on the club on its first frame

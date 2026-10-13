@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -2 /tmp/basebuild.log; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2
+rf-head: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf1.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf1/report.json | cut -c1-400 | head -20; tail -1 /tmp/rf1.log | cut -c1-200; exit $s
+rf-fix: node .rc/x/rvrf.mjs || exit 9; FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf2 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixturesRv.mjs > /tmp/rf2.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf2/report.json | cut -c1-400 | head -20; tail -1 /tmp/rf2.log | cut -c1-200; exit $s
+rvwalk: RC_OUT="$RC_OUT/rv" BASE_URL=http://localhost:4174 node .rc/x/rvwalk.mjs > /tmp/rv.log 2>&1; s=$?; grep "FLAG" /tmp/rv.log | cut -c1-260 | head -30; tail -1 /tmp/rv.log; exit $s
+fleet: node .rc/x/rvfleet.mjs || exit 9; RC_OUT="$RC_OUT/fleet" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 HUB_LANDING_SECTIONS=D node scripts/playCmHubLandingFleet.mjs > /tmp/fl.log 2>&1; s=$?; grep "  FAIL\|  PASS" /tmp/fl.log | cut -c1-240 | head -30; tail -1 /tmp/fl.log; exit $s
