@@ -242,7 +242,7 @@ function phoneCell(p: CMPlayer, key: SquadSortKey, band: ScoutBand | null, money
 
 /* One template for the head and every row from 768 up, so a column can never
    drift out from under its heading. Below that the row is a flex line. */
-const GRID = 'md:grid md:grid-cols-[2.25rem_minmax(0,1fr)_1.75rem_2rem_3.25rem_2rem_2.75rem_2.25rem_3.5rem_3rem_1.5rem_1rem] md:gap-x-1.5 md:items-center';
+const GRID = 'md:grid md:grid-cols-[2.5rem_minmax(0,1fr)_2.5rem_2.5rem_3.25rem_3rem_3.25rem_3rem_3.75rem_3rem_3.25rem_1rem] md:gap-x-1.5 md:items-center';
 const DESK_HEADS: (SquadSortKey | null)[] = ['pos', 'name', 'age', 'ovr', 'pot', 'form', 'wage', 'deal', 'worth', 'fit', 'mood', null];
 
 /* ---------- Round 715: the tap open detail ---------- */
@@ -413,13 +413,13 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
         type="button"
         onClick={() => onToggle(p.id)}
         aria-expanded={isOpen}
-        className={cn('w-full min-h-[40px] flex items-center gap-2 py-1.5 text-left rounded transition-colors hover:bg-secondary/40', GRID)}
+        className={cn('w-full min-h-11 flex items-center gap-2 py-1.5 text-left rounded transition-colors hover:bg-secondary/40', GRID)}
       >
         <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
         <span className="flex-1 min-w-0 block">
           <span className="flex items-center gap-1.5 min-w-0">
             {nat ? <FlagImg name={nat} size={13} /> : null}
-            <span className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
+            <span title={p.name} className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
             {p.generated && <MadeUpTag className="text-[9px]" />}
             {inXI && <span className={cn(badge, 'text-primary border-primary/50')}>XI</span>}
             {/* Round 505: the armband, and any position he has learned in this save. */}
@@ -556,7 +556,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
               const key = e.target.value as SquadSortKey;
               setSort({ key, dir: SORT_BY_KEY.get(key)?.first ?? 'desc' });
             }}
-            className="h-8 rounded-lg border border-border bg-secondary px-2 text-[11px] text-foreground"
+            className="h-11 rounded-lg border border-border bg-secondary px-2 text-xs text-foreground"
           >
             {SQUAD_SORTS.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
           </select>
@@ -564,7 +564,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
             type="button"
             onClick={() => setSort(s => ({ key: s.key, dir: s.dir === 'asc' ? 'desc' : 'asc' }))}
             aria-label={sort.dir === 'asc' ? 'Sorted low to high, tap for high to low' : 'Sorted high to low, tap for low to high'}
-            className="h-8 w-8 flex items-center justify-center rounded-lg border border-border bg-secondary text-foreground"
+            className="h-11 w-11 flex items-center justify-center rounded-lg border border-border bg-secondary text-foreground"
           >
             <Arrow className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
