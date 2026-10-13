@@ -1,0 +1,3 @@
+simSoccerLoanBite-strict26 exit=0 85s | control "strict26" fired: checks 3, 5 failed as expected
+simSoccerLoanBite-nofilter exit=0 90s | control "nofilter" fired: checks 2, 4, 5 failed as expected
+simSoccerLoanBite exit=0 406s | simSoccerLoanBite PASS

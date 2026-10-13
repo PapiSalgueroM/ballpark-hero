@@ -1,0 +1,14 @@
+t2: 1500 careers (2336 tried, seeds 0+), 97 bitten, nofilter club loans to a club forecast under 20 104 (6.93% a career), head zero offer 0, loan season league games 10.04 to 22.23, overall at 26 57.77 to 57.74
+  ok   t2 1 reached: 6.93% club loans a career go to a club forecast under 20 without the filter (floor 3.50%)
+  ok   t2 2 bites: 6.47% of careers differ (floor 3.50%)
+  ok   t2 3 cause: 0 of 97 differing careers first differ anywhere but a filtered loan window
+  ok   t2 4 rule: the head sent 0 club loans to a club forecast under 20
+  ok   t2 5 outcome: of 97 bitten, on loan 100.00%, a lower tier 100.00%, as many league games 100.00% (each floor 90.00%), mean gain 12.19 (floor +6)
+t1: 1500 careers (3221 tried, seeds 400000+), 19 bitten, nofilter club loans to a club forecast under 20 20 (1.33% a career), head zero offer 0, loan season league games 9.89 to 22.05, overall at 26 68.53 to 68.16
+  ok   t1 1 reached: 1.33% club loans a career go to a club forecast under 20 without the filter (floor 0.40%)
+  ok   t1 2 bites: 1.27% of careers differ (floor 0.40%)
+  ok   t1 3 cause: 0 of 19 differing careers first differ anywhere but a filtered loan window
+  ok   t1 4 rule: the head sent 0 club loans to a club forecast under 20
+  ok   t1 5 outcome: of 19 bitten, on loan 100.00%, a lower tier 100.00%, as many league games 100.00% (each floor 90.00%), mean gain 12.16 (floor +6)
+report: /home/runner/work/_temp/t-simSoccerLoanBite/loan-bite-buxGjn/report.json
+simSoccerLoanBite PASS
