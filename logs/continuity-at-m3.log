@@ -1,0 +1,13 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///tmp/cm3/scripts/simManagerWorldContinuity.mjs:483:24

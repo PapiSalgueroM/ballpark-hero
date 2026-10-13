@@ -1,0 +1,16 @@
+PASS [healthy] inactive
+PASS [healthy] constructors
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+PASS [purchase] inactive
+PASS [purchase] constructors
+PASS [purchase] identity
+Completed transactions, original source identity and actual callback receipts retained
+Private world variation is measured, no historical fixture was re-recorded

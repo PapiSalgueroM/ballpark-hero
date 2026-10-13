@@ -1,0 +1,3 @@
+continuity-at-m3 exit=1 36s |     at async file:///tmp/cm3/scripts/simManagerWorldContinuity.mjs:483:24
+continuity-at-m2 exit=0 472s | Private world variation is measured, no historical fixture was re-recorded
+continuity-minusAZ exit=0 478s | Private world variation is measured, no historical fixture was re-recorded
