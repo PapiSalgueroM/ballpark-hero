@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+board-seatleak: COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw: COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff: COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+board-cfbword: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword: COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board: COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+vitest-units: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeSeat.test.ts src/test/cfbRecruitFilters.test.tsx src/test/cbbRecruitFilters.test.tsx src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCollegeSeat: node scripts/simCollegeSeat.mjs
