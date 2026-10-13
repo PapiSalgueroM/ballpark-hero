@@ -153,11 +153,14 @@ try {
     const page = await context.newPage(); page.setDefaultTimeout(15000);
     await page.clock.install({ time: new Date('2026-10-07T16:00:00Z') });
     await page.addInitScript(({ saveKey, warning }) => {
-      window.__saveRetry = { refuse: false, writes: [], events: [], toasts: [] };
+      window.__saveRetry = { refuse: false, writes: [], fenceWrites: [], events: [], toasts: [] };
       const original = Storage.prototype.setItem;
       Storage.prototype.setItem = function(key, value) {
         const refused = this === localStorage && key === saveKey && window.__saveRetry.refuse;
-        if (this === localStorage) window.__saveRetry.writes.push({ key, value: String(value), refused, at: Date.now() });
+        /* Round 1330: the page writes through the save fence, whose generation
+           key ('dukb-fence:' plus the save key) moves beside every save. It is
+           kept apart, so "one write" still counts the career's own writes. */
+        if (this === localStorage) (String(key).startsWith('dukb-fence:') ? window.__saveRetry.fenceWrites : window.__saveRetry.writes).push({ key, value: String(value), refused, at: Date.now() });
         if (refused) throw new DOMException('Native test refuses this career save only', 'QuotaExceededError');
         return original.call(this, key, value);
       };
