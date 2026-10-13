@@ -261,7 +261,7 @@ describe('Soccer farewell real page actions', () => {
   it('keeps the original manual Retire confirmation without declaring a farewell', () => {
     const view = mount(senior()), before = read();
     const expectedDraws = tape(), expected = copy(E.manualRetire(copy(before)));
-    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Retire' }));
+    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: '🚪 Retire' }));
     const dialog = view.getByRole('dialog', { name: 'Retire?' });
     fireEvent.click(within(dialog).getByRole('button', { name: 'Confirm Retirement' }));
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws);

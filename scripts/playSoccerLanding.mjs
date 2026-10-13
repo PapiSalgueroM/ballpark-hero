@@ -303,7 +303,8 @@ function judgeLanding(arm, size, label, m) {
 }
 async function measureName(p) {
   return p.evaluate(() => {
-    const span = document.querySelector('main h1 span');
+    /* The name is the heading's last child (the flag comes first). */
+    const span = document.querySelector('main h1')?.lastElementChild;
     if (!span) return null;
     const range = document.createRange();
     range.selectNodeContents(span);
@@ -444,13 +445,13 @@ function driveOne() {
   let save = null;
   try { save = JSON.parse(localStorage.getItem('soccerCareerSave')); } catch { save = null; }
   const phase = save?.phase ?? null;
-  const modal = [...document.querySelectorAll('[role="dialog"][aria-modal="true"],[role="alertdialog"]')].find(vis);
+  const modal = [...document.querySelectorAll('[role="dialog"],[role="alertdialog"]')].find(vis);
   const bar = document.querySelector('[data-career-action-bar] button');
   if (!modal && (phase === 'youth' || phase === 'playing') && bar && vis(bar) && /^Next (Year|Season)/.test(text(bar))) { bar.click(); return { phase, pressed: text(bar).slice(0, 40) }; }
   const scope = modal ? [modal] : [...document.querySelectorAll('main [class*="md:order-2"] > div')];
   let cands = scope.flatMap(s => [...s.querySelectorAll('button')]).filter(vis);
   if (!modal) cands = cands.filter(b => !TILE.test([...b.attributes].map(a => a.name).join(' ')) && !/^Full attributes/.test(text(b)));
-  cands = cands.filter(b => !/close/i.test(b.getAttribute('aria-label') || ''));
+  cands = cands.filter(b => !/close|help/i.test(b.getAttribute('aria-label') || '') && !/^(Close|Back)$/.test(text(b)));
   let pick = null;
   for (const a of ADV) { pick = cands.find(b => text(b).startsWith(a)); if (pick) break; }
   if (!pick) pick = cands[0] ?? null;
