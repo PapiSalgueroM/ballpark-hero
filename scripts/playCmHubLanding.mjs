@@ -31,7 +31,10 @@
  * turn its own check red, and the run says which check fired:
  *   noscroll  scrollIntoView, scrollTo and scrollBy do nothing: A fails on every start
  *   nosticky  the day strip loses position sticky: B's on screen check fails
- *   small     one tile line forced to 11 px: C's font check names it
+ *   stale     nothing hears the cookie banner come or go (an observer of the
+ *             body's consent mark observes nothing), so the strip keeps the
+ *             banner's offset after it is answered: B's foot check fails
+ *   small    one tile line forced to 11 px: C's font check names it
  *   cut       the Board wants line held to 40 px, nowrap, hidden: C's cut check names it
  *   drift     Math.random takes one extra draw on the head build only: D fails
  * A control run exits 1 when its check fired and 3 when it did not.
@@ -51,7 +54,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const SAVE_KEY = 'dukb-club-manager-save';
 const SIZE = { s320: { width: 320, height: 640 }, s390: { width: 390, height: 844 }, s1280: { width: 1280, height: 900 } };
 const NOW = Date.UTC(2026, 9, 12, 16, 0, 0);
-const KNOWN = ['noscroll', 'nosticky', 'small', 'cut', 'drift'];
+const KNOWN = ['noscroll', 'nosticky', 'stale', 'small', 'cut', 'drift'];
 if (CONTROL && !KNOWN.includes(CONTROL)) { console.log(`playCmHubLanding: unknown control ${CONTROL}`); process.exit(2); }
 
 const fails = [];
@@ -88,6 +91,15 @@ function initScript({ consent, seed, now, control, drift }) {
     Element.prototype.scrollIntoView = function () {};
     window.scrollTo = function () {};
     window.scrollBy = function () {};
+  }
+  if (control === 'stale') {
+    const Real = window.MutationObserver;
+    window.MutationObserver = class extends Real {
+      observe(target, opts) {
+        if (opts && Array.isArray(opts.attributeFilter) && opts.attributeFilter.includes('data-consent-pending')) return undefined;
+        return super.observe(target, opts);
+      }
+    };
   }
   window.__hubFirst = null;
   window.__cls = 0;
@@ -337,6 +349,33 @@ async function calendarTaps(page, tag, { banner = false } = {}) {
     if (banner) check('B', !!strip && strip.bannerTop !== null && strip.bottom <= strip.bannerTop + 1, `${tag} ${what}: the strip clears the cookie banner (strip bottom ${strip ? Math.round(strip.bottom) : '?'}, banner top ${strip?.bannerTop === null ? 'none' : Math.round(strip?.bannerTop ?? 0)})`);
   }
 }
+/* Then the player answers the banner with a day still picked, and scrolls so
+   the strip's own place is just below the fold, which is when it rides the
+   foot of the screen. It must ride the foot itself (bottom-3, 12 px up), not
+   the banner's old height above it over the grid. Its own place is read by
+   drawing it static for one synchronous measure, so nothing is painted. */
+async function stripAfterBannerAnswered(page, tag) {
+  await page.locator('[role="region"][aria-label="Cookie choices"] button', { hasText: 'Essential only' }).first().evaluate(b => b.click());
+  await page.waitForFunction(() => !document.body.dataset.consentPending, null, { timeout: 10000 });
+  await page.waitForTimeout(300);
+  const ownPlace = () => page.evaluate(() => {
+    const s = document.querySelector('[data-testid="cm-calendar-day"]');
+    if (!s) return null;
+    const keep = s.style.position;
+    s.style.position = 'static';
+    const n = s.getBoundingClientRect();
+    s.style.position = keep;
+    return { top: n.top, vh: innerHeight };
+  });
+  const before = await ownPlace();
+  if (before) await page.evaluate(dy => window.scrollBy(0, dy), before.top - (before.vh - 40));
+  await page.waitForTimeout(400);
+  const own = await ownPlace();
+  const strip = await stripBox(page);
+  const stuck = !!own && !!strip && strip.top < own.top - 1;
+  check('B', stuck, `${tag}: after the banner is answered the strip's own place is below the fold, so it rides the foot (own place top ${own ? Math.round(own.top) : '?'}, drawn ${strip ? Math.round(strip.top) : '?'}, of ${own?.vh ?? '?'})`);
+  check('B', stuck && Math.abs(strip.bottom - (strip.vh - 12)) <= 2, `${tag}: the strip rides the foot once the banner is answered (bottom ${strip ? Math.round(strip.bottom) : '?'}, foot ${strip ? strip.vh - 12 : '?'}, banner ${strip?.bannerTop === null ? 'gone' : 'still up'})`);
+}
 const OLD_NAMES = /Rest first|Full training/;
 async function intensityNames(page, heading) {
   return page.evaluate(h => {
@@ -402,6 +441,8 @@ if (SECTIONS.has('B')) {
     await clickTile(page, 'Calendar');
     await calendarTaps(page, 'banner-390', { banner: true });
     await shot(page, 'B-banner-390');
+    await stripAfterBannerAnswered(page, 'banner-390');
+    await shot(page, 'B-banner-390-answered');
   } catch (e) {
     fail('B', `banner-390: ${String(e).split('\n')[0].slice(0, 200)}`);
   }
@@ -835,10 +876,10 @@ fs.writeFileSync(path.join(OUT, 'landing.json'), JSON.stringify({ landing, fails
 const bySection = s => fails.filter(f => f.section === s).length;
 const summary = [...SECTIONS].map(s => `${s} ${counts[s] ?? 0} pass ${bySection(s)} fail`).join(', ');
 if (CONTROL) {
-  const target = { noscroll: 'A', nosticky: 'B', small: 'C', cut: 'C', drift: 'D' }[CONTROL];
+  const target = { noscroll: 'A', nosticky: 'B', stale: 'B', small: 'C', cut: 'C', drift: 'D' }[CONTROL];
   /* The check each control aims at, by the words of its FAIL line, so a red
      from anything else in the section is not taken for the control firing. */
-  const aim = { noscroll: /hub header top/, nosticky: /day strip is wholly on screen/, small: /tile line: .* at 11px/, cut: /cut: Board wants line/, drift: /differs|Math.random draws/ }[CONTROL];
+  const aim = { noscroll: /hub header top/, nosticky: /day strip is wholly on screen/, stale: /strip rides the foot once the banner is answered/, small: /tile line: .* at 11px/, cut: /cut: Board wants line/, drift: /differs|Math.random draws/ }[CONTROL];
   const hits = fails.filter(f => f.section === target && aim.test(f.msg));
   console.log(hits.length
     ? `playCmHubLanding: CONTROL ${CONTROL} FIRED, ${hits.length} ${target} check(s) went red, first: ${hits[0].msg.slice(0, 140)} (${summary})`

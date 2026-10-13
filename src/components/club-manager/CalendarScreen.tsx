@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays, ChevronLeft, ChevronRight, FastForward } from 'lucide-react';
 import { INTENSITY_INFO, careerFixtureCoverage } from '@/lib/clubManager';
@@ -131,11 +131,23 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
      without scrolling back. Now nothing moves: the strip keeps its place under
      the grid and is sticky to the foot of the screen, so while that place is
      below the fold it rides the bottom edge over the grid. Its offset clears
-     the cookie banner while that is still up (the desks' DeskCueLine rule). */
+     the cookie banner while that is still up (the desks' DeskCueLine rule).
+     The strip stays on screen, unlike a desk's passing cue, so the offset is
+     worked out again whenever the banner comes or goes: answered while a day is
+     picked, the strip drops back to the foot instead of floating the banner's
+     height above it over the grid. */
   const stripRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (stripRef.current) stripRef.current.style.bottom = bannerClearance();
   }, [selectedKey]);
+  useEffect(() => {
+    if (typeof MutationObserver === 'undefined') return undefined;
+    const pending = new MutationObserver(() => {
+      if (stripRef.current) stripRef.current.style.bottom = bannerClearance();
+    });
+    pending.observe(document.body, { attributes: true, attributeFilter: ['data-consent-pending'] });
+    return () => pending.disconnect();
+  }, []);
 
   /* The window a selected day sits inside, for the strip's second line. */
   const windowLine = useMemo(() => {
