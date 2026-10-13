@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tt-nolanding exit=1 24s | CONTROL FIRED: TWO_TABS_CONTROL=nolanding dropped 3 writes and turned case(s) 4 red
+tt-nokeep exit=1 85s | CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 6 writes and turned case(s) 5 red
+tt-all exit=0 439s | playTwoTabs: green at 320x640, 390x844, 1280x900
+tt-nofence exit=1 503s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red
+keeper-extrakey exit=1 115s | playSaveKeeper control extrakey: FIRED. Journey K failed on the key the branch arm added (dukb-control-extra-key).
+keeper-extrafence exit=1 111s | playSaveKeeper control extrafence: FIRED. Journey K failed on the key the branch arm added (dukb-fence:dukb-control-extra-key).
+keeper exit=0 861s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new beyond the 2 key(s) named in KEYS_ADDED_ON_PURPOS
