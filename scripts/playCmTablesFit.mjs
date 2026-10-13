@@ -717,7 +717,10 @@ async function playThrough(page, which, tag, reads) {
     for (let tries = 0; tries < 8; tries++) {
       const quick = page.locator('[data-cm-way="quick"]:visible').first();
       if (await quick.count()) { await quick.click({ timeout: 3000 }).catch(() => {}); sims += 1; await page.waitForTimeout(2500); break; }
-      const moved = await pressText(page, /^(Continue|Carry on|Next|Done|OK|Close the window|Shut the window|Back to club|Club home)$/i, 1500);
+      /* The full time report's Continue carries an icon beside its word, so it is found by its accessible name first. */
+      const ways = /^(Continue|Carry on|Next|Done|OK|Close the window|Shut the window|Back to club|Club home)$/i;
+      const moved = (await page.getByRole('button', { name: ways }).first().click({ timeout: 1500 }).then(() => true).catch(() => false))
+        || (await pressText(page, ways, 1500));
       if (!moved && !(await tab(page, 'Home'))) break;
       await page.waitForTimeout(900);
     }

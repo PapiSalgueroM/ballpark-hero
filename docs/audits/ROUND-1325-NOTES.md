@@ -32,6 +32,35 @@ lane's rc.sh kit; the request names are listed per step.
    Not labelled, on purpose: the forecast boxes and Renew buttons, the clause rows, the free agent rows, the squad
    list's Wage and Deal cells. Test sections 1, 2, 3, 5 and 6; controls nomark, markall, drawinrender.
 
+4. cm m15, the desk. The Final year list and the granted clauses list lose their 256 px inner scroller: three rows
+   sit whole in the page and a 44 px, 12 px "Show the other N" (Final year: "Show the other N in their final year")
+   puts the rest in place where it stood, one way, never saved. The Let somebody go and free agent lists keep their
+   scrollers (simFreeAgents section 15 reads every button), now max-h-80 so three whole rows show at 320 and 390 with
+   44 px buttons. Release, Sign, "Release him" and "Keep him" are 44 px and 12 px; the wage bar stops animating under
+   reduced motion.
+5. cm m14, the squad list. The desktop grid is 2.5/1fr/2.5/2.5/3.25/3/3.25/3/3.75/3/3.25/1 rem, so every head's
+   10 px word and its sort arrow fit with any sort on; the head word's class is untouched. The phone sort picker, its
+   direction button and the row button are 44 px; a name that truncates carries the whole name as its title. The
+   desktop sort heads stay 32 px: they show only from 768 up, which is mouse width.
+6. cm p6, the dressing room half, and the career card. The "Needs a word" window line, the rung tiles' label and
+   foot and the player view's header wrap at 12 px instead of truncating; the rung grid keeps equal heights
+   (auto-rows-fr) and the tiles do not lift under reduced motion; both back buttons, the player rows, the ladder
+   buttons and the career card's Edit, "Name your manager", nation and approach buttons are 44 px.
+7. The "?" paragraph (data-cm-help="game-deals", after the free agents paragraph), the What's New entry, and
+   scripts/playCmTablesFit.mjs (Part 1, the four components at 320, 390, 768 and 1280, base against head, with the
+   controls oldgrid, scrollbox, truncate and smalltap; Part 2, the real page on a build of the base and of this tree).
+   The walk draws the base with the base build's own stylesheet (Tailwind writes no rule for a class this tree no
+   longer holds) and the oldgrid control with the old grid's one rule written by hand.
+
+## Runner results
+- r1325-fit3-c on 83bd388a: every fit control fired with findings of its own kind only. oldgrid exit 1, 41 heads
+  findings at 1280 ("OVR" is cut, 24 of 18 px); scrollbox exit 1, 5 deskclip findings at 390 (the Milos Kerkez row
+  cut by a 256 px box); truncate exit 1, 11 cut findings at 320 ("0 starts, 2 off the bench in last 6 · star man",
+  261 of 116 px); smalltap exit 1, 69 tap findings at 390 (Release is 147.6 by 28 px).
+- Weight, r1325-fit2 on e8bd574a (the base measured inside its own build): /club-manager 588.8K on the base and on
+  this tree, /manager-hot-seat 606.1K on both, /deadline-day 616.2K on both. Every chunk is renamed between the two
+  builds (a changed page renames the entry and so every chunk importing it); over all chunks the tree grows 1.17K gz.
+
 ## Owed
 - ClubManagerHelp.tsx line 53, "Every player is on a real deal.", is owed to Round F8a. Proposed words: "Every player
   is on a deal."
