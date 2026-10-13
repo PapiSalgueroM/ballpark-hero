@@ -1,0 +1,50 @@
+Mobile chrome, base http://127.0.0.1:4173
+Top bar measured at 320, 390, 430, 1024, 1440 wide across 5 routes, signed out and signed in.
+Signed in means 98,765 points, rank #12345, a 365 day streak and 106 games played.
+
+Top bar, child boxes measured in the browser
+
+Soccer Career action bar, scrolled top to bottom
+   320    0 scroll stops, bar nullpx tall, page undefinedpx, controls unreachable at 0 of them, covering the footer at 0
+   390    0 scroll stops, bar nullpx tall, page undefinedpx, controls unreachable at 0 of them, covering the footer at 0
+   430    0 scroll stops, bar nullpx tall, page undefinedpx, controls unreachable at 0 of them, covering the footer at 0
+
+RED: 38 findings
+  -  320 signed out /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  -  320 signed out /club-manager: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager
+  -  320 signed out /dart-draft: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft
+  -  320 signed out /cfb-dynasty: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty
+  -  320 signed out /squad-deal: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/squad-deal
+  -  320 signed in  /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  -  320 signed in  /club-manager: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager
+  -  320 signed in  /dart-draft: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft
+  -  320 signed in  /cfb-dynasty: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty
+  -  320 signed in  /squad-deal: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/squad-deal
+  -  390 signed out /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  -  390 signed out /club-manager: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager
+  -  390 signed out /dart-draft: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft
+  -  390 signed out /cfb-dynasty: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty
+  -  390 signed out /squad-deal: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/squad-deal
+  -  390 signed in  /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  -  390 signed in  /club-manager: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager
+  -  390 signed in  /dart-draft: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft
+  -  390 signed in  /cfb-dynasty: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty
+  -  390 signed in  /squad-deal: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/squad-deal
+  -  430 signed out /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  -  430 signed out /club-manager: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager
+  -  430 signed out /dart-draft: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft
+  -  430 signed out /cfb-dynasty: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty
+  -  430 signed out /squad-deal: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/squad-deal
+  -  430 signed in  /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  -  430 signed in  /club-manager: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager
+  -  430 signed in  /dart-draft: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft
+  -  430 signed in  /cfb-dynasty: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty
+  -  430 signed in  /squad-deal: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/squad-deal
+  - 1024 signed out /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - 1024 signed in  /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - 1440 signed out /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - 1440 signed in  /soccer-career: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - action bar @320: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - action bar @390: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - action bar @430: threw Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career
+  - the action bar was never seen pinned and reachable more than 3000px down the page, so this run cannot tell the difference between a fixed bar and a deleted one

@@ -1,0 +1,19 @@
+Reveal scroll, 390x844, 5 games, base http://127.0.0.1:4173
+A press is a YANK if the page went down while the new panel was already readable,
+LOSTTOP if the panel's top ended up above the screen, PROOF if something hidden was brought into view.
+
+
+What each game did
+  /soccer-career    0 presses,  0 of them scrolled,  0 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career)
+  /club-manager     0 presses,  0 of them scrolled,  0 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager)
+  /dart-draft       0 presses,  0 of them scrolled,  0 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft)
+  /cfb-dynasty      0 presses,  0 of them scrolled,  0 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty)
+  /clue-auction     0 presses,  0 of them scrolled,  0 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/clue-auction)
+
+6 problems:
+  FAIL: /soccer-career: only 0 presses landed (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/soccer-career), so this game was not really measured
+  FAIL: /club-manager: only 0 presses landed (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/club-manager), so this game was not really measured
+  FAIL: /dart-draft: only 0 presses landed (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/dart-draft), so this game was not really measured
+  FAIL: /cfb-dynasty: only 0 presses landed (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/cfb-dynasty), so this game was not really measured
+  FAIL: /clue-auction: only 0 presses landed (threw: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/clue-auction), so this game was not really measured
+  FAIL: not one press brought unreadable content into view, so this run cannot tell the difference between a fixed hook and a deleted one
