@@ -25,6 +25,46 @@
  *      untouched and the round's git diff proves it. 1b: the desk off fixture
  *      and its harnesses equal the base (git diff --quiet against the sha the
  *      fixture was recorded from).
+ *   THE WALK, for sections 2, 3, 4, 8 and 9: ten leagues (thirty with
+ *      FLEET=full) of three seasons, desk on, the earned draft through the
+ *      libraries' own presses, a seeded handful of this year's picks moved
+ *      before each draft (a club holding none, a club holding four, his own
+ *      among the moved half the time).
+ *   2. THE LOTTERY THROUGH THE BIND. Every closed season gives the bind 30
+ *      rows and the first round's sixteen (read by the harness off the series'
+ *      names, by the bind off their numbers), and a lottery is drawn on every
+ *      one. On twenty of them, 10,000 keyed lotteries each (40,000 with
+ *      FLEET=full) through the bind's own order: each club's share of the first
+ *      pick within 4.5 standard errors of the chance the harness works out from
+ *      the TABLE (NBA_PICK_RULES, never the saved field) and the records, level
+ *      clubs on the mean of the seeds they span; a club alone on its record is
+ *      drawn on exactly its seed's chance.
+ *   3. THE SLOT IS THE TRUTH. The saved order agrees with the season the
+ *      harness saw (round one opens with the clubs out of the sixteen, then
+ *      worst record first; round two worst record first); every pick the ledger
+ *      holds is one slot, at its first owner's place, used by its holder; on
+ *      the clock at N exactly N minus 1 slots are used; the class loses exactly
+ *      the men signed and never runs dry; nobody is on two rosters; every row a
+ *      run shows is a man now on that club at his scout's read.
+ *   4. DRAWN ONCE. Opening the same season twice gives the identical block;
+ *      the block survives a JSON round trip and every press changes only `made`
+ *      and `seen`; a draft replayed with the table swapped under the saved block
+ *      is the same draft.
+ *   6. THE CLASS. The curve's shape; today's twelve found in every class by
+ *      replaying nbaDraftClass on a twin generator; every man after them held
+ *      to the curve rating by rating; the mean true rating falls ten slots
+ *      after ten; slots plus four, never over 70; the board's load guard.
+ *   8. THE FALLBACK. Mid draft, a block broken at its year, its order, a
+ *      slot, a `made` past the end or a `seen` that is not a boolean is never
+ *      current and no press runs on it, and the old engine calls (the old draft
+ *      on the class left, two rival batches) and the desk's summer finish on a
+ *      valid league without a throw.
+ *   9. NEED. No rival passes a man whose read beats its choice by more than
+ *      NBA_DRAFT_NEED_WEIGHT, and a rival short at a position takes it more
+ *      often than one that is not, by more than the floor, at every position.
+ *  10. THE SHARED HALF KNOWS NO SPORT. gmEarnedDraft.ts imports only the lift
+ *      and names no sport in its code (comments stripped); neither library
+ *      draws from Math.random or carries an address.
  *   7. THE TABLE (FLEET=full only). Step (a): the OLD arm alone, the board's
  *      draft of today replayed as simNbaGmDesk's draftNight does, on the
  *      fleet below; per seed set S1 to S6 and their spread over the sets.
@@ -53,9 +93,40 @@
  * cannot run, 4 on a crash. =all runs every control and exits 0 only if every
  * one fired.
  *   touchseason  one stray draw before the playoffs                    (1)
+ *   flatodds     the bound pick rules hand every club one weight          (2)
+ *   playinmade   a play-in game counts as the playoffs: no night opens    (2, 3, 4, 8, 9)
+ *   gmfirst      the night is drawn as if his club had the worst record   (3)
+ *   origholder   every slot used by its first owner                       (3)
+ *   shortclass   a class four short of the picks                          (3, 6)
+ *   shownread    the run prints the engine's grade                        (3)
+ *   redraw       the order's key takes a Math.random draw                 (4)
+ *   fatclass     the curve is the old class's 70 to 87                    (6)
+ *   flatclass    the curve flattened to one range                         (6)
+ *   nocurve      the class ignores the curve                              (6)
+ *   trustblock   any block on the desk is trusted                         (8)
+ *   noneed       rivals choose on their read alone                        (9)
+ *   sportname    the shared half names a sport (in memory)                (10)
  *
- * MEASURED: see the notes (docs/audits/ROUND-1321-NOTES.md); the numbers are
- * copied here as each section lands.
+ * MEASURED 2026-10-12 (quick walk, fixed seeds, so the same on every run of
+ * this commit), failures each control put in its sections on this PC:
+ *   1   30 seasons, 315,516 draws held to 48cb9d4b; touchseason 41.
+ *   2   30 seasons, a lottery on every one, none free of level records (real
+ *       fields rarely are); 280 club shares over 20 seasons, the worst 3.26
+ *       standard errors (band 4.5); flatodds 461, playinmade 32.
+ *   3   30 drafts, 1,800 picks, 150 picks moved first (16 his), a club with
+ *       three or more and a club with none in all 30, on the clock 46 times,
+ *       561 rival rows; gmfirst 60, origholder 192, shortclass 30, shownread
+ *       545, playinmade 32.
+ *   4   30 nights, 10 tables swapped; redraw 30, playinmade 1.
+ *   6   1,500 classes of 64, worst 1.63 standard errors from the curve, steps
+ *       by ten slots 5.11, 3.04, 2.16, 1.72, 1.70, 1.70 (floor 1.19); fatclass
+ *       3, flatclass 3, nocurve 22, shortclass 1,519.
+ *   8   50 broken blocks, 50 finished the old way; trustblock 100, playinmade 1.
+ *   9   1,754 rival choices, none past a better read by more than 2; taken
+ *       when short vs not, G 31.7, F 29.3, C 29.6 points (floor 20); noneed
+ *       4.4, -0.1, 0.9 (3 failures), playinmade 3.
+ *  10   sportname 1.
+ *   7   the OLD arm on 12 sets, two runs: see docs/audits/ROUND-1321-NOTES.md.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -90,7 +161,13 @@ const cannotRun = why => { console.error(`control cannot run: ${why}`); console.
 
 const SECTION_NAMES = {
   1: 'what must not move: the season before the draft, and the desk off fixture',
+  2: 'the lottery through the bind: the sixteen off the numbers, drawn every season, the table\'s chances',
+  3: 'the slot is the truth: every pick used once by its holder at its first owner\'s place',
+  4: 'drawn once: the block survives a round trip, every press, a second open and a swapped table',
   6: 'the class: today\'s twelve, then the curve, slots plus four, never over 70',
+  8: 'the fallback: a block broken mid draft finishes the old way on a valid league',
+  9: 'need: a club short at a position leans to it, and never past a better read by more than the weight',
+  10: 'the shared half names no sport; neither library draws from Math.random or carries an address',
   7: 'the table: the old arm on the fleet (FLEET=full only)',
 };
 
@@ -105,6 +182,30 @@ const CONTROLS = {
   ] } },
   /* the class ignores the curve and draws every man after the twelve as the old class does */
   nocurve: { expect: [6], swaps: { engine: [['    const trueOvr = lo + Math.floor(rng() * (hi - lo + 1));', '    const trueOvr = 70 + Math.floor(rng() * 18) + 0 * (lo + hi);']] } },
+  /* the bound pick rules hand every club one weight under the same table name */
+  flatodds: { expect: [2], swaps: { bind: [['  return buildDraftOrder(season, rules, nbaGamePickRules(), key ?? draftSeasonKey(season, rules.id));',
+    '  return buildDraftOrder(season, rules, { ...nbaGamePickRules(), lottery: { ...nbaGamePickRules().lottery!, odds: nbaGamePickRules().lottery!.odds.map(() => 100 / 14) } }, key ?? draftSeasonKey(season, rules.id));']] } },
+  /* a play-in game counts as making the playoffs, so no season is drawn and no night opens */
+  playinmade: { expect: [2, 3, 4, 8, 9], swaps: { bind: [['    if (s && (s.homeWins === 4 || s.awayWins === 4)) { made.add(s.home); made.add(s.away); }',
+    '    if (s && (s.homeWins >= 1 || s.awayWins >= 1)) { made.add(s.home); made.add(s.away); }']] } },
+  /* his slots put first: the night is drawn on a season where his club had the worst record */
+  gmfirst: { expect: [3], swaps: { bind: [['  const season = nbaDraftSeason(league, series);\n  const order = season ? nbaDraftOrder(season) : null;',
+    '  const real = nbaDraftSeason(league, series);\n  const season = real && { ...real, rows: real.rows.map(r => (r.id === me ? { ...r, wins: 0, losses: 82 } : r)) };\n  const order = season ? nbaDraftOrder(season) : null;']] } },
+  /* every slot used by its first owner, whoever holds the pick */
+  origholder: { expect: [3], swaps: { bind: [['draftSlots(order, nbaPicksOf(desk, league), league.season, 2)', 'draftSlots(order, nbaPicksOf(desk, league), league.season, 2).map(s => ({ ...s, holder: s.orig }))']] } },
+  /* a class four short of the picks instead of four over */
+  shortclass: { expect: [3, 6], swaps: { engine: [['  const size = Math.min(70, Math.max(0, Math.floor(slots)) + 4);', '  const size = Math.min(70, Math.max(0, Math.floor(slots)) - 4);']] } },
+  /* the run prints the engine's grade, not his scout's read */
+  shownread: { expect: [3], swaps: { bind: [['    shown: scout,', '    shown: p => p.grade,']] } },
+  /* the order's key takes a Math.random draw, so the same season draws another night */
+  redraw: { expect: [4], swaps: { bind: [['  return buildDraftOrder(season, rules, nbaGamePickRules(), key ?? draftSeasonKey(season, rules.id));',
+    '  return buildDraftOrder(season, rules, nbaGamePickRules(), `${key ?? draftSeasonKey(season, rules.id)}|${Math.random()}`);']] } },
+  /* any block on the desk is trusted */
+  trustblock: { expect: [8], swaps: { bind: [['  return isGmDraftNight(raw, Object.keys(league.teams), league.season) ? raw : null;', '  return raw as GmDraftNight;']] } },
+  /* rivals choose on their read alone */
+  noneed: { expect: [9], swaps: { bind: [['    needWeight: NBA_DRAFT_NEED_WEIGHT,', '    needWeight: 0,']] } },
+  /* the shared half names a sport (in memory, the shape of simGmDraftOrder's mounted control) */
+  sportname: { expect: [10] },
   /* the curve flattened: every band one range */
   flatclass: { expect: [6], swaps: { engine: [
     ['  { from: 13, to: 30, ovr: [72, 80] },', '  { from: 13, to: 30, ovr: [66, 80] },'],
@@ -148,6 +249,8 @@ const NM = modulesDir();
 const FILES = {
   engine: 'src/lib/nbaFrontOffice.ts',
   desk: 'src/lib/nbaGmDesk.ts',
+  bind: 'src/lib/nbaEarnedDraft.ts',
+  shared: 'src/lib/gmEarnedDraft.ts',
 };
 const overrides = new Map();
 const keyOf = abs => path.resolve(abs).toLowerCase();
@@ -181,6 +284,10 @@ export { nbaCloseSeasonStats } from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
 export { NBA_OPENING_RATINGS } from '${ROOT_URL}/src/data/nbaOpeningRatings.ts';
 export { leagueNames } from '${ROOT_URL}/src/lib/foNames.ts';
 export { deadCapUsed } from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
+export * as P from '${ROOT_URL}/src/lib/gmPicks.ts';
+export * as GD from '${ROOT_URL}/src/lib/gmDesk.ts';
+${RECORD ? '' : `export * as N from '${ROOT_URL}/src/lib/nbaEarnedDraft.ts';
+export * as G from '${ROOT_URL}/src/lib/gmEarnedDraft.ts';`}
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
 await esbuild.build({
@@ -212,7 +319,7 @@ await esbuild.build({
 const BUNDLE = `${WORK}/bundle.cjs`;
 const requireHere = createRequire(import.meta.url);
 const M = requireHere(BUNDLE);
-const { E, D, NBA_OPENING_RATINGS } = M;
+const { E, D, S, N, G, NBA_OPENING_RATINGS, leagueNames } = M;
 if (RECORD) console.log(`RECORDING from ${RECORD}: ${recordedFiles} src files read from that commit`);
 if (CONTROL) console.log(`NEGATIVE CONTROL ON: ${CONTROL}. Sections ${CONTROLS[CONTROL].expect.join(' and ')} must go red and no other.`);
 
@@ -415,6 +522,356 @@ open(6);
 }
 
 /* ================================================================== */
+/* THE WALK: the earned draft through the libraries on real seasons, for sections 2, 3, 4, 8 and 9. Each league
+   plays three seasons with the desk on, the board's way, and before each draft a seeded handful of this year's
+   picks change hands (one club gives both of its picks to another, so a club holds none and one holds four, and
+   two to four more move, his among them half the time). The GM continues, takes the best man on his scout's read
+   at each of his slots and lets the draft run on; the desk's summer follows. */
+const WALK_SEEDS = FLEET === 'full' ? 30 : 10;
+const WALK_SEASONS = 3;
+const LOTTERIES = FLEET === 'full' ? 40000 : 10000;
+const Q = { 2: [], 3: [], 4: [], 8: [] };
+const W = { seasons: 0, drawn: 0, tieFree: 0, drafts: 0, opened: 0, moved: 0, mineMoved: 0, three: 0, none: 0, clocks: 0, steps: 0, rivalRows: 0, swaps: 0, breaks: 0, fallbacks: 0 };
+const seasonsForLotteries = [];
+const needRows = [];
+const shareOf = t => (t.wins + t.losses > 0 ? t.wins / (t.wins + t.losses) : 0.5);
+/* The harness's own reading of the playoff sixteen: the first round's series, by name. The bind reads numbers. */
+const firstRoundClubs = series => { const s = new Set(); for (const x of series) if (/ R1$/.test(x.name)) { s.add(x.home); s.add(x.away); } return s; };
+
+function movePicksBeforeDraft(lg, team, desk, r) {
+  const ids = Object.keys(lg.teams).sort();
+  const any = list => list[Math.floor(r() * list.length)];
+  let ledger = D.nbaPicksOf(desk, lg);
+  const year = () => ledger.picks.filter(p => p.year === lg.season);
+  const move = (p, to) => {
+    if (p.holder === team || to === team) W.mineMoved += 1;
+    ledger = M.P.movePicks(ledger, [M.P.pickKey(p)], to);
+    W.moved += 1;
+  };
+  const giver = any(ids.filter(c => c !== team));
+  const taker = any(ids.filter(c => c !== team && c !== giver));
+  for (const p of year().filter(x => x.holder === giver)) move(p, taker);
+  const more = 2 + Math.floor(r() * 3);
+  for (let i = 0; i < more; i += 1) {
+    const pool = year().filter(x => x.holder !== giver);
+    const p = i === 0 && r() < 0.5 ? (pool.find(x => x.holder === team) ?? any(pool)) : any(pool);
+    move(p, any(ids.filter(c => c !== p.holder && c !== giver)));
+  }
+  D.syncNbaPicks(lg, ledger);
+  const held = ids.map(c => year().filter(p => p.holder === c).length);
+  if (held.some(n => n >= 3)) W.three += 1;
+  if (held.some(n => n === 0)) W.none += 1;
+  return M.GD.withGmBlock(desk, D.NBA_DESK_KEYS.picks, ledger);
+}
+
+/** Section 3's first half: the saved order against the season the harness saw. Round one opens with every club out
+    of the sixteen, the lottery field is worst record first, the sixteen follow worst record first, and round two is
+    every club worst record first. Level records may stand in any order. */
+function checkOrder(lg, series, order, where) {
+  const made = firstRoundClubs(series);
+  const share = id => shareOf(lg.teams[id]);
+  if (made.size !== 16 || order.first.slice(0, 30 - made.size).some(c => made.has(c))) Q[3].push(`${where}: round one's head holds a club of the sixteen`);
+  const rising = (list, label) => {
+    for (let i = 1; i < list.length; i += 1) {
+      if (share(list[i]) < share(list[i - 1]) - 1e-12) { Q[3].push(`${where}: ${label} puts ${list[i]} (${share(list[i]).toFixed(3)}) after ${list[i - 1]} (${share(list[i - 1]).toFixed(3)})`); return; }
+    }
+  };
+  rising(order.first.slice(30 - made.size), 'round one after the lottery');
+  rising(order.later, 'round two');
+  if (order.lottery) rising(order.lottery.field.map(f => f.club), 'the lottery field');
+}
+
+/** Section 2 on one closed season, through the bind's own season and order. */
+function checkSeason(lg, series, where) {
+  W.seasons += 1;
+  const season = N.nbaDraftSeason(lg, series);
+  if (!season) { Q[2].push(`${where}: the bind drew no season from a closed one`); return; }
+  const made = season.rows.filter(r => r.made).map(r => r.id).sort();
+  if (season.rows.length !== 30 || J(made) !== J([...firstRoundClubs(series)].sort())) Q[2].push(`${where}: the bind's sixteen are not the first round's clubs`);
+  const order = N.nbaDraftOrder(season);
+  if (!order || order.plain !== null || !order.lottery) { Q[2].push(`${where}: no lottery was drawn (${order?.plain})`); return; }
+  W.drawn += 1;
+  /* Every club's chance at the first pick, worked out here from the TABLE, read by the harness itself and never off
+     the saved field (a bad bind would carry it there too), and the season's records: clubs level on record share
+     the chances of the seeds they span (the rule set's level odds), the rest hold their seed's. */
+  const table = M.P.NBA_PICK_RULES.lottery.odds;
+  const missed = season.rows.filter(r => !r.made).sort((a, b) => a.wins / (a.wins + a.losses) - b.wins / (b.wins + b.losses));
+  const chance = new Map();
+  let level = 0;
+  for (let i = 0; i < missed.length;) {
+    let j = i + 1;
+    const at = r => r.wins / (r.wins + r.losses);
+    while (j < missed.length && at(missed[j]) === at(missed[i])) j += 1;
+    const mean = table.slice(i, j).reduce((a, b) => a + b, 0) / (j - i);
+    for (let k = i; k < j; k += 1) chance.set(missed[k].id, { pct: mean, seed: k + 1, alone: j - i === 1 });
+    if (j - i > 1) level += 1;
+    i = j;
+  }
+  for (const f of order.lottery.field) {
+    const c = chance.get(f.club);
+    if (c?.alone && Math.abs(f.pct - table[c.seed - 1]) > 1e-9) Q[2].push(`${where}: ${f.club}, alone on its record at seed ${c.seed}, is drawn on ${f.pct}, the table says ${table[c.seed - 1]}`);
+  }
+  if (level === 0) W.tieFree += 1;
+  if (seasonsForLotteries.length < 20) seasonsForLotteries.push({ season, chance });
+}
+
+/** Section 9's reading of one night, on a copy: every rival choice with the club's need and how far its read fell
+    short of the best man left on its own read. The copy's draws are its own, so the walk is untouched. */
+function readNeed(lg, team, desk, night, cls, level, key) {
+  const l = JSON.parse(J(lg));
+  const { host } = N.nbaDraftHost({ me: team, season: l.season, scoutLevel: level, rng: mulberry32(key) });
+  let pool = JSON.parse(J(cls));
+  const watched = {
+    ...host,
+    sign: (league, club, p, slot) => {
+      if (club !== team) {
+        const best = Math.max(...pool.map(x => host.read(x, club)));
+        needRows.push({ need: host.need(league, club), pos: p.pos, gap: best - host.read(p, club) });
+      }
+      pool = pool.filter(x => x !== p);
+      host.sign(league, club, p, slot);
+    },
+  };
+  G.earnedByStaff(watched, l, JSON.parse(J(night)), team, pool);
+}
+
+/** Section 8 on one night, mid draft: a block broken at each field is never current, no press runs on it, and the
+    old engine calls finish the draft and the summer on a valid league without a throw. */
+function breakNight(lg, team, desk, cls, where, key) {
+  const BREAKS = {
+    year: n => ({ ...n, year: n.year + 1 }),
+    order: n => ({ ...n, order: { ...n.order, first: [...n.order.first].reverse() } }),
+    slot: n => ({ ...n, slots: n.slots.map((x, i) => (i === 5 ? { ...x, slot: x.slot + 1 } : x)) }),
+    made: n => ({ ...n, made: n.slots.length + 1 }),
+    seen: n => ({ ...n, seen: 'yes' }),
+  };
+  for (const [name, broken] of Object.entries(BREAKS)) {
+    W.breaks += 1;
+    const l = JSON.parse(J(lg));
+    const c = JSON.parse(J(cls));
+    let d = JSON.parse(J(desk));
+    d = M.GD.withGmBlock(d, N.NBA_DRAFT_BLOCK, broken(d.blocks[N.NBA_DRAFT_BLOCK]));
+    try {
+      if (N.nbaDraftNightOf(d, l) !== null) Q[8].push(`${where}: a block broken at ${name} is still current`);
+      if (N.nbaDraftContinue(l, d, team, c, mulberry32(key)) !== null) Q[8].push(`${where}: Continue ran on a block broken at ${name}`);
+      d = oldDraftWith(M, l, team, mulberry32(key + 1), d, c).desk;
+      const summer = D.nbaDeskOffseason(l, d, team, mulberry32(key + 2));
+      if (!summer.ok) { Q[8].push(`${where}: the summer refused after the fallback at ${name}`); continue; }
+      const ids = Object.values(l.teams).flatMap(t => t.players.map(p => p.id));
+      const bad = [];
+      if (new Set(ids).size !== ids.length) bad.push('a man on two rosters');
+      if (!M.P.validateLedger(summer.desk.blocks[D.NBA_DESK_KEYS.picks], Object.keys(l.teams), D.nbaGamePickRules())) bad.push('a pick ledger that does not validate');
+      if (Object.values(l.teams).some(t => E.nbaDraftCapital(t) === null)) bad.push('a draft list the engine cannot read');
+      if (l.round !== 1 || l.season !== lg.season + 1) bad.push('a season that did not roll');
+      if (bad.length) Q[8].push(`${where}: after the fallback at ${name}: ${bad.join(', ')}`);
+      else W.fallbacks += 1;
+    } catch (error) {
+      Q[8].push(`${where}: the fallback at ${name} threw ${error.message}`);
+    }
+  }
+}
+
+/** One earned draft through the libraries, checked press by press (sections 3 and 4). Answers his first selection
+    and the desk, or null when the night did not open (the old draft then runs, so the walk goes on). */
+function walkDraft(lg, team, rng, desk, series, where, first) {
+  const before = J(desk);
+  const opened = N.openNbaDraftNight(desk, lg, series, team);
+  if (!opened) { Q[3].push(`${where}: the night did not open`); return null; }
+  W.opened += 1;
+  const night0 = opened.night;
+  desk = opened.desk;
+  const again = N.openNbaDraftNight(JSON.parse(before), JSON.parse(J(lg)), series, team);
+  if (!again || J(again.night) !== J(night0)) Q[4].push(`${where}: opening the same season twice gave another block`);
+  if (J(N.nbaDraftNightOf(JSON.parse(J(desk)), lg)) !== J(night0)) Q[4].push(`${where}: the block does not survive a JSON round trip`);
+  checkOrder(lg, series, night0.order, where);
+  const ledger = D.nbaPicksOf(desk, lg);
+  const held = ledger.picks.filter(p => p.year === lg.season);
+  if (night0.slots.length !== held.length) Q[3].push(`${where}: ${night0.slots.length} slots for the ${held.length} picks the ledger holds`);
+  for (const s of night0.slots) {
+    const line = s.round === 1 ? night0.order.first : night0.order.later;
+    if (line[s.slot - 1] !== s.orig) Q[3].push(`${where}: slot ${s.overall} is ${s.orig}'s, the order has ${line[s.slot - 1]} at ${s.slot}`);
+    const p = held.find(x => x.round === s.round && x.orig === s.orig);
+    if (!p || p.holder !== s.holder) Q[3].push(`${where}: slot ${s.overall} (${s.orig}'s round ${s.round}) is used by ${s.holder}, the ledger says ${p?.holder}`);
+  }
+  const level = S.gmStaffLevel(D.nbaStaffOf(desk, lg, team).block, 'scouting');
+  const read = p => D.nbaScoutRead(p, team, lg.season, level);
+  let cls = E.nbaEarnedDraftClass(rng, night0.slots.length, leagueNames(lg));
+  const byName = new Map(cls.map(p => [p.name, p]));
+  readNeed(lg, team, desk, night0, cls, level, 9000 + W.drafts);
+  if (first) {
+    /* Section 4: the table swapped under the saved block changes nothing in that draft. */
+    const play = swap => {
+      const odds = M.P.NBA_PICK_RULES.lottery.odds;
+      if (swap) M.P.NBA_PICK_RULES.lottery.odds = [...odds].reverse();
+      try {
+        const l = JSON.parse(J(lg));
+        const r = N.nbaDraftByStaff(l, JSON.parse(J(desk)), team, JSON.parse(J(cls)), mulberry32(4242));
+        return r ? J([r.steps, N.nbaDraftNightOf(r.desk, l)]) : 'refused';
+      } finally { M.P.NBA_PICK_RULES.lottery.odds = odds; }
+    };
+    W.swaps += 1;
+    if (play(false) !== play(true)) Q[4].push(`${where}: swapping the table under the saved block changed the draft`);
+  }
+  let signed = 0;
+  let firstPick = null;
+  const press = (res, label) => {
+    if (!res) { Q[3].push(`${where}: ${label} was refused`); return null; }
+    const night = N.nbaDraftNightOf(res.desk, lg);
+    if (!night || J(night.order) !== J(night0.order) || J(night.slots) !== J(night0.slots)) Q[4].push(`${where}: ${label} changed the saved order or slots`);
+    const gone = cls.filter(p => !res.left.includes(p)).map(p => p.name).sort();
+    if (J(gone) !== J(res.steps.map(s => s.playerName).sort())) Q[3].push(`${where}: ${label}: the class lost ${gone.length} men and ${res.steps.length} signed`);
+    for (const st of res.steps) {
+      const slot = night0.slots[st.overall - 1];
+      if (!slot || slot.holder !== st.team || st.mine !== (st.team === team)) Q[3].push(`${where}: pick ${st.overall} made by ${st.team}, the slot is ${slot?.holder}'s`);
+      if (!lg.teams[st.team]?.players.some(p => p.name === st.playerName)) Q[3].push(`${where}: ${st.playerName}, pick ${st.overall}, is not on ${st.team}`);
+      if (st.mine && !firstPick) firstPick = { overall: st.overall, trueOvr: byName.get(st.playerName)?.trueOvr };
+    }
+    for (const row of N.nbaDraftRun(res.steps, res.onClock).night.picks) {
+      if (!row.mine) W.rivalRows += 1;
+      const pr = byName.get(row.playerName);
+      if (!pr || row.grade !== Math.round(read(pr))) Q[3].push(`${where}: the run shows ${row.playerName} at ${row.grade}, his scout's read is ${pr ? Math.round(read(pr)) : 'nobody'}`);
+      if (!lg.teams[row.team]?.players.some(p => p.name === row.playerName)) Q[3].push(`${where}: the run shows ${row.playerName} at ${row.team}, who does not have him`);
+    }
+    if (res.onClock) {
+      W.clocks += 1;
+      if (res.onClock.holder !== team || night?.made !== res.onClock.overall - 1) Q[3].push(`${where}: on the clock at ${res.onClock.overall} with ${night?.made} slots used`);
+    }
+    if (res.done !== (night?.made === night0.slots.length)) Q[3].push(`${where}: ${label} says done ${res.done} with ${night?.made} of ${night0.slots.length} used`);
+    signed += res.steps.length;
+    cls = res.left;
+    desk = res.desk;
+    return res;
+  };
+  let res = press(N.nbaDraftContinue(lg, desk, team, cls, rng), 'Continue');
+  if (first && res && !res.done) breakNight(lg, team, desk, cls, where, 8000 + W.drafts);
+  while (res && !res.done) {
+    const best = [...cls].sort((a, b) => read(b) - read(a) || (a.id < b.id ? -1 : 1))[0];
+    res = press(best ? N.nbaDraftPick(lg, desk, team, cls, best.id, rng) : N.nbaDraftByStaff(lg, desk, team, cls, rng), best ? 'his pick' : 'the staff');
+  }
+  if (signed !== night0.slots.length) Q[3].push(`${where}: ${signed} men signed over ${night0.slots.length} slots, so a slot found the class empty`);
+  const ids = Object.values(lg.teams).flatMap(t => t.players.map(p => p.id));
+  if (new Set(ids).size !== ids.length) Q[3].push(`${where}: a man is on two rosters`);
+  W.drafts += 1;
+  W.steps += signed;
+  return { desk, first: firstPick, signed };
+}
+
+for (let seed = 1; seed <= WALK_SEEDS; seed += 1) {
+  const team = CLUBS[(seed * 7) % CLUBS.length];
+  const rng = mulberry32(70000 + seed);
+  const lg = E.initNbaLeague(rng, NBA_OPENING_RATINGS);
+  let desk = D.openNbaDesk(lg, team);
+  for (let s = 1; s <= WALK_SEASONS; s += 1) {
+    const where = `walk seed ${seed} season ${s} (${team})`;
+    const closedSeason = seasonToDraft(M, lg, team, desk, rng);
+    desk = closedSeason.desk;
+    checkSeason(lg, closedSeason.series, where);
+    desk = movePicksBeforeDraft(lg, team, desk, mulberry32(71000 + seed * 10 + s));
+    const done = walkDraft(lg, team, rng, desk, closedSeason.series, where, s === 1);
+    desk = done ? done.desk : oldDraft(M, lg, team, rng, desk).desk;
+    const summer = D.nbaDeskOffseason(lg, desk, team, rng);
+    if (!summer.ok) { Q[3].push(`${where}: the desk's summer refused`); break; }
+    desk = summer.desk;
+  }
+}
+
+open(2);
+{
+  for (const p of Q[2]) fail(p);
+  check(W.seasons > 0 && W.drawn === W.seasons, `${W.drawn} of ${W.seasons} closed seasons drew a lottery`);
+  check(seasonsForLotteries.length > 0, 'no closed season to draw keyed lotteries on');
+  /* Keyed lotteries through the bind's own order on real seasons: each club's share of the first pick against the
+     chance the harness worked out from the TABLE and the records, in the house band of simGmPicks (4.5 standard
+     errors). Real fields are rarely free of level records (W.tieFree counts the ones that were), so a level club is
+     held to the mean of the seeds its group spans; the drawing that hands out an odd combination changes with the
+     key, so over the keys that is its share. MEASURED in the header. */
+  let worst = 0;
+  let clubs = 0;
+  for (const { season, chance } of seasonsForLotteries) {
+    const base = G.draftSeasonKey(season, G.draftRulesFor('nba', season.draftYear).id);
+    const wins = new Map();
+    for (let i = 0; i < LOTTERIES; i += 1) {
+      const club = N.nbaDraftOrder(season, `${base}|k${i}`).lottery.wins[0].club;
+      wins.set(club, (wins.get(club) ?? 0) + 1);
+    }
+    for (const [club, c] of chance) {
+      clubs += 1;
+      const p = c.pct / 100;
+      const got = wins.get(club) ?? 0;
+      const z = Math.abs(got - LOTTERIES * p) / Math.sqrt(LOTTERIES * p * (1 - p));
+      worst = Math.max(worst, z);
+      check(z <= 4.5, () => `${club} (seed ${c.seed}${c.alone ? '' : ', level'}) won the first pick ${got} times in ${LOTTERIES}, the table says ${(LOTTERIES * p).toFixed(0)} (${z.toFixed(1)} standard errors)`);
+    }
+  }
+  console.log(`   ${W.seasons} closed seasons, a lottery drawn on ${W.drawn} (${W.tieFree} with no level records in the field); ${seasonsForLotteries.length} of them, ${LOTTERIES} keyed lotteries each: ${clubs} club shares, the worst ${worst.toFixed(2)} standard errors from the table (band 4.5)`);
+}
+
+open(3);
+{
+  for (const p of Q[3]) fail(p);
+  check(W.drafts > 0 && W.opened === W.drafts, `${W.opened} nights opened, ${W.drafts} drafts played`);
+  check(W.moved > 0 && W.mineMoved > 0 && W.three > 0 && W.none > 0, `picks moved ${W.moved}, his ${W.mineMoved}, a club holding three ${W.three} times, a club holding none ${W.none} times`);
+  check(W.clocks > 0 && W.rivalRows > 0, `on the clock ${W.clocks} times, ${W.rivalRows} rival rows shown`);
+  console.log(`   ${W.drafts} drafts, ${W.steps} picks: ${W.moved} of the year's picks moved first (${W.mineMoved} his), a club with three or more ${W.three} times, a club with none ${W.none} times; on the clock ${W.clocks} times; ${W.rivalRows} rival rows shown, every one on its club at his scout's read`);
+}
+
+open(4);
+{
+  for (const p of Q[4]) fail(p);
+  check(W.opened > 0 && W.swaps > 0, `${W.opened} nights opened, ${W.swaps} tables swapped`);
+  console.log(`   ${W.opened} nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; ${W.swaps} drafts replayed with the table swapped under the block`);
+}
+
+open(8);
+{
+  for (const p of Q[8]) fail(p);
+  check(W.breaks > 0 && W.fallbacks === W.breaks, `${W.fallbacks} of ${W.breaks} broken blocks finished the old way`);
+  console.log(`   ${W.breaks} blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, ${W.fallbacks} finished the old way to a valid league`);
+}
+
+open(9);
+{
+  /* Need: a rival short at a position takes it more often than one that is not; none passes a man whose read beats
+     its choice by more than the need weight. Floors in MEASURED. */
+  const weight = E.NBA_DRAFT_NEED_WEIGHT;
+  let over = 0;
+  for (const r of needRows) if (r.gap > weight + 1e-9) over += 1;
+  check(over === 0, `${over} rival choices passed a man whose read beat theirs by more than ${weight}`);
+  const lift = {};
+  for (const pos of ['G', 'F', 'C']) {
+    const short = needRows.filter(r => r.need[pos] > 0);
+    const not = needRows.filter(r => r.need[pos] === 0);
+    const rate = list => (list.length ? list.filter(r => r.pos === pos).length / list.length : NaN);
+    lift[pos] = { short: short.length, not: not.length, gap: 100 * (rate(short) - rate(not)) };
+  }
+  /* 70 percent of the smallest lift measured on the quick walk (F 29.3 points, 2026-10-12); with the need weight at
+     nothing (control noneed) the three read 4.4, -0.1 and 0.9. */
+  const NEED_FLOOR = 20;
+  for (const [pos, v] of Object.entries(lift)) check(v.short > 0 && v.not > 0 && v.gap > NEED_FLOOR, `${pos}: a club short there takes one ${v.gap.toFixed(1)} points more often than one that is not (${v.short} and ${v.not} choices), floor ${NEED_FLOOR}`);
+  console.log(`   ${needRows.length} rival choices; none passed a better read by more than ${weight}; taken when short vs not, in points: ${Object.entries(lift).map(([p, v]) => `${p} ${v.gap.toFixed(1)} (${v.short}/${v.not})`).join(', ')}`);
+}
+
+open(10);
+{
+  /* The shared half knows no sport (correction 10), and neither new library draws from Math.random or carries an
+     address. Code is read with comments stripped; the address scan reads the raw file, as simGmDraftOrder's does. */
+  const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const raw = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  let shared = strip(raw(FILES.shared));
+  if (CONTROL === 'sportname') shared += "\nconst league = 'nba';\n";
+  const ALLOWED = ['./gmDraftNight', './gmDraftOrder', './gmLotteryNight', './gmPicks', '@/data/gmDraftOrder/rules'];
+  const froms = [...shared.matchAll(/\bfrom\s*['"]([^'"]+)['"]/g)].map(m => m[1]);
+  check(froms.length > 0, `${FILES.shared} imports nothing this check can read`);
+  for (const f of froms) check(ALLOWED.includes(f), `${FILES.shared} imports ${f}; the shared half may import the lift and nothing of a sport`);
+  check(!/nba|nfl|nhl|mlb/i.test(shared), `${FILES.shared} names a sport in its code`);
+  for (const rel of [FILES.shared, FILES.bind]) {
+    check(!/Math\.random/.test(strip(raw(rel))), `${rel} draws from Math.random`);
+    check(!/https?:\/\/|www\.[a-z0-9-]+\.[a-z]/i.test(raw(rel)), `${rel} carries an address`);
+  }
+  console.log(`   ${FILES.shared}: ${froms.length} imports, all the lift's; no sport named; neither library draws from Math.random or carries an address`);
+}
+
+/* ================================================================== */
 /* THE FLEET. One career is one league, one user club, ten seasons, in a loaded copy of the bundle of its own whose
    id epoch is seeded by the career and the run, so both arms of a career walk the same ids and the same season one. */
 const SEASONS = 10;
@@ -443,10 +900,16 @@ function sixteenOf(series) {
 /** Today's draft, desk on, as the board plays it (simNbaGmDesk.mjs, draftNight): the GM takes the best man on his
     scout's read first in each batch, then the other clubs go in batches of five in reverse standings. */
 function oldDraft(X, lg, team, rng, desk) {
+  const capital = X.E.nbaDraftCapital(lg.teams[team]) ?? 0;
+  const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== team).reduce((s, t) => s + (X.E.nbaDraftCapital(t) ?? 0), 0);
+  return oldDraftWith(X, lg, team, rng, desk, X.E.nbaDraftClass(rng, Math.max(24, capital + Math.min(10, rivalCapital)), X.leagueNames(lg)));
+}
+/** The same old draft on a class already drawn: what a board falls back to when a saved night cannot be trusted,
+    with the two rival batches an open saves (the brief's open question 3). */
+function oldDraftWith(X, lg, team, rng, desk, drawn) {
   const mine = lg.teams[team];
   const capital = X.E.nbaDraftCapital(mine) ?? 0;
-  const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== team).reduce((s, t) => s + (X.E.nbaDraftCapital(t) ?? 0), 0);
-  let cls = X.E.nbaDraftClass(rng, Math.max(24, capital + Math.min(10, rivalCapital)), X.leagueNames(lg));
+  let cls = drawn;
   const level = X.S.gmStaffLevel(X.D.nbaStaffOf(desk, lg, team).block, 'scouting');
   const read = pr => X.D.nbaScoutRead(pr, team, lg.season, level);
   let batches = 2;
