@@ -37,7 +37,7 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
 - A NEGATIVE budget is NOT repaired: `startNextSeason` clamps one with `Math.max(0, career.budget)` (19939 on
   the base) and `realCapForBudget` with `Math.max(0, budget)`, so the engine itself expects a negative. The
   "£0k" display it gives is for the lead to rule into F2 or F3.
-- Carry on landing: `markLandOnHub` (clubManagerSlots.ts, sessionStorage, one shot) is written by CarryOnCard
+- Carry on landing: `markLandOnHub` (src/lib/clubManagerLanding.ts, sessionStorage, one shot) is written by CarryOnCard
   just before the page changes; the boot takes it and opens the career on its hub.
 - Help: one appended block "One tab at a time" with a worked example. What's New: one entry, October 2026.
 
@@ -55,7 +55,25 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
   the base open to the same JSON on head and base. fleet-loaddraw and fleet-repairall exit 1 and FIRED. tsc,
   vitest (15 files), simStorageWrites, simClubManagerSave, simSaveKeeper, simErrorBoundary, simClubManagerSlots,
   simManagerAppealIsolation 0; simCmLeagueBook with BOOK_BASE=8fea14e2 (default fleet) 0.
-- Later steps: see the closing report, C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1323.md.
+- r1323-walk2 (ed9e6ef0): playTwoTabs green at 320, 390 and 1280; controls nofence (cases 1, 2, 3, 6), nolanding
+  (case 4) and nokeep (case 5) each exit 1 and FIRED.
+- r1323-weight2 / r1323-final-f: sweepWeight green. /club-manager 590.3K (row 590; base 588.8K), /manager-hot-seat
+  606.8K (row 607; base 606.1K), /deadline-day 616.7K (row 617; base 616.2K). The carry on mark sits in its own
+  `src/lib/clubManagerLanding.ts` because in clubManagerSlots.ts it put /manager-hot-seat at 607.6K (red).
+- r1323-final-a (ed9e6ef0): simCmLeagueBook with BOOK_BASE=8fea14e2, default and full fleets, SEEDSET 0 to 4: all
+  green; vitest over every Club Manager, Hot Seat, fence and keeper unit file: 35 files, 424 passed.
+- r1323-final-d found a real defect: harnesses that copy clubManager.ts into a temp folder resolve only the @ alias,
+  so a relative './saveFence' failed to build there. c4314ed0 imports '@/lib/saveFence' in both files.
+- r1323-final-e and r1323-final-f (c4314ed0, the last code commit): tsc, simCmRealFixtures plus
+  playCmRealFixtures, simClubManagerSlots and its six controls, simManagerAppealIsolation, simSaveFence with
+  FENCE_BASE, playTwoTabs, sweepWeight, playClubManagerSaveLeave, playClubManagerSlots: green.
+- Red on head AND base with the same first line, not this round's: simActivityNotCompletion, managerWorldBrowser1077
+  ("One auth startup storage probe"), simWritesAreSent ("could not drive Guess the Nation"). Environment only:
+  simPrerender (needs build:seo), simSchemaNames and simLeaderboardCaps (need the live database).
+- playSaveKeeper with a build of origin/main as KEEPER_BASE_DIST: journey K reports exactly one added key,
+  `dukb-fence:dukb-club-manager-save`, which is this round's key by design (green again once on main); its five
+  loss control FAILs need a build from before Round 1219. With KEEPER_NO_BASE=1 it is green.
+- Full report: C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1323.md.
 
 ## Owed to the lead
 
