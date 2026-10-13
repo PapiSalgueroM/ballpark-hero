@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+tour390pl: TAG=t390pl W=390 H=844 NATION=/England/ LEAGUE=/Premier/ CLUB=/Liverpool/ NAME="Tom Hollis" MINUTES=30 node .rc/x/walkTour.mjs
+tour1280sco: TAG=t1280sco W=1280 H=900 NATION=/Scotland/ LEAGUE=0 CLUB=last MINUTES=30 node .rc/x/walkTour.mjs
+tour390era: TAG=t390era W=390 H=844 ERA=/2005-06/ NATION=/England/ LEAGUE=/Premier/ CLUB=/Everton/ NAME="Rob Keane" ENTRY="New year" FUZZ=0 MINUTES=25 node .rc/x/walkTour.mjs
