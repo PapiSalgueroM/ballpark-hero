@@ -57,7 +57,7 @@ const report = {
   phase: PHASE, status: 'running', sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(),
   checks: 0, failures: 0, setupFailures: 0, missingContexts: 0, sourceHeld: false, installedHeld: false,
   cases: [], controls: [], fixtures: [], inventory: [], issues: [], transport: [], diagnostics: [],
-  limits: ['Signed out and local storage only; every external request is aborted.', 'Recorded career contexts are produced by the actual engine.', 'New card presentation is prepared; automatic delivery is reported separately.', 'Expiry is a separate fresh-save fork of each answer journey.'],
+  limits: ['Signed out and local storage only; every external request is aborted.', 'Recorded career contexts are produced by the actual engine.', 'New card presentation is prepared; automatic delivery is reported separately.', 'Expiry is a separate fresh-save fork of each answer journey.', 'Match activity is proved by its blocked client body and unchanged local points, not a backend award.'],
 };
 const write = () => fs.writeFileSync(REPORT, `${JSON.stringify(report, null, 2)}\n`);
 const check = (condition, message, row) => {
@@ -209,7 +209,8 @@ async function open(base, profile, pre, seed, row, fork) {
     const url = new URL(request.url());
     if (url.origin === base) return route.continue();
     aborted.add(request.url());
-    report.transport.push({ case: row.id, fork, method: request.method(), url: request.url(), action: 'abort' });
+    const body = request.method() === 'POST' && url.pathname === '/rest/v1/game_completions' ? request.postDataJSON() : undefined;
+    report.transport.push({ case: row.id, fork, method: request.method(), url: request.url(), action: 'abort', body });
     return route.abort('blockedbyclient');
   });
   await context.routeWebSocket('**/*', socket => { report.transport.push({ case: row.id, fork, url: socket.url(), action: 'websocket-close' }); socket.close(); });
@@ -247,9 +248,15 @@ async function open(base, profile, pre, seed, row, fork) {
     await activate(tile);
     await page.locator('section[aria-label="Decisions desk"]').waitFor();
   };
-  const completionPosts = () => report.transport.filter(request => request.case === row.id && request.fork === fork && request.method === 'POST' && /\/game_completions(?:\?|$)/.test(request.url)).length;
+  const tableRequests = () => report.transport.filter(request => request.case === row.id && request.fork === fork && request.method === 'POST' && new URL(request.url).pathname === '/rest/v1/game_completions');
+  const tablePosts = () => tableRequests().length;
+  const authenticatedAwardPosts = () => report.transport.filter(request => request.case === row.id && request.fork === fork && request.method === 'POST' && new URL(request.url).pathname === '/rest/v1/rpc/record_auth_completion').length;
+  const streak = () => page.evaluate(() => {
+    const raw = localStorage.getItem('dukb-streaks-v1');
+    return { raw, totalPoints: raw === null ? 0 : JSON.parse(raw).totalPoints };
+  });
   await resume();
-  return { context, page, raw, saved, activate, resume, inbox, completionPosts, errors };
+  return { context, page, raw, saved, activate, resume, inbox, tableRequests, tablePosts, authenticatedAwardPosts, streak, errors };
 }
 async function shot(walk, name, target) {
   await target.scrollIntoViewIfNeeded();
@@ -290,12 +297,13 @@ function answerIssues(before, after, card, index) {
   if (resolved?.options?.length !== 0) issues.push('consumed-options');
   return issues;
 }
-function expiryIssues(before, after, card) {
+function expiryIssues(before, after, card, activityRequests) {
   const issues = [];
   const expired = after.decisions?.find(item => item.id === card.id);
   if (after.week !== before.week + 1) issues.push('actual-next-match');
   if (expired?.resolved !== 'Nobody answered before the next match, so nothing changed.') issues.push('expired-card');
   if (expired?.options?.length !== 0) issues.push('expired-options');
+  if (activityRequests.length !== 1) issues.push('activity-client-intent');
   return issues;
 }
 
@@ -321,8 +329,8 @@ async function runCase(base, profile, contract, fixture, variant = 'natural') {
     const beforeRaw = await walk.raw();
     const before = JSON.parse(beforeRaw);
     check(JSON.stringify(withoutDesk(before)) === JSON.stringify(withoutDesk(E.trimCareer(prepared))), `${row.id}: boot changed context outside the desk.`, row);
-    check(walk.completionPosts() === 0, `${row.id}: opening a decision attempted completion.`, row);
-    row.stages.push({ stage: 'offered', raw: beforeRaw, completionPosts: walk.completionPosts() });
+    check(walk.tablePosts() === 0 && walk.authenticatedAwardPosts() === 0, `${row.id}: opening a decision attempted an activity or award write.`, row);
+    row.stages.push({ stage: 'offered', raw: beforeRaw, tablePosts: walk.tablePosts(), authenticatedAwardPosts: walk.authenticatedAwardPosts() });
     if (variant === 'natural') row.shots.push(await shot(walk, `${row.id}-offered`, node));
     if (variant === 'omit-answer') {
       const after = await walk.saved();
@@ -340,19 +348,19 @@ async function runCase(base, profile, contract, fixture, variant = 'natural') {
     check(await node.getByRole('button').count() === 0, `${row.id}: an answered card still offers actions.`, row);
     const resolved = after.decisions.find(item => item.id === card.id);
     check((await node.innerText()).includes(resolved.resolved), `${row.id}: UI outcome is not the actual saved outcome.`, row);
-    check(walk.completionPosts() === 0, `${row.id}: answering a decision attempted completion.`, row);
-    row.stages.push({ stage: 'answered', index, effect: card.options[index].effect, raw: afterRaw, resolved: resolved.resolved, completionPosts: walk.completionPosts() });
+    check(walk.tablePosts() === 0 && walk.authenticatedAwardPosts() === 0, `${row.id}: answering a decision attempted an activity or award write.`, row);
+    row.stages.push({ stage: 'answered', index, effect: card.options[index].effect, raw: afterRaw, resolved: resolved.resolved, tablePosts: walk.tablePosts(), authenticatedAwardPosts: walk.authenticatedAwardPosts() });
     await walk.resume();
     await walk.inbox();
     const restoredNode = walk.page.locator(`[data-desk-card="${card.id}"]`);
     check(await walk.raw() === afterRaw, `${row.id}: reload changed literal saved bytes.`, row);
     check((await restoredNode.innerText()).includes(resolved.resolved), `${row.id}: reload lost saved outcome.`, row);
     check(await restoredNode.getByRole('button').count() === 0, `${row.id}: reload re-enabled an answered card.`, row);
-    check(walk.completionPosts() === 0, `${row.id}: reload attempted completion.`, row);
+    check(walk.tablePosts() === 0 && walk.authenticatedAwardPosts() === 0, `${row.id}: reload attempted an activity or award write.`, row);
     await restoredNode.focus();
     await restoredNode.press('Enter');
     check(await walk.raw() === afterRaw, `${row.id}: Enter on resolved card repeated its saved effect.`, row);
-    row.stages.push({ stage: 'resolved-after-reload', raw: await walk.raw(), completionPosts: walk.completionPosts() });
+    row.stages.push({ stage: 'resolved-after-reload', raw: await walk.raw(), tablePosts: walk.tablePosts(), authenticatedAwardPosts: walk.authenticatedAwardPosts() });
     if (variant === 'natural') row.shots.push(await shot(walk, `${row.id}-resolved-after-reload`, restoredNode));
   } finally {
     if (walk) {
@@ -368,24 +376,38 @@ async function runCase(base, profile, contract, fixture, variant = 'natural') {
     await walk.inbox();
     const beforeRaw = await walk.raw();
     const before = JSON.parse(beforeRaw);
+    const streakBefore = await walk.streak();
     const node = walk.page.locator(`[data-desk-card="${card.id}"]`);
     setup(!before.decisions.find(item => item.id === card.id).resolved, `${row.id}: expiry fork started answered.`);
+    check(walk.tablePosts() === 0 && walk.authenticatedAwardPosts() === 0, `${row.id}: opening the expiry fork attempted an activity or award write.`, row);
     if (variant === 'omit-expiry') {
-      row.detected = expiryIssues(before, await walk.saved(), card);
-      check(JSON.stringify(row.detected) === JSON.stringify(['actual-next-match', 'expired-card', 'expired-options']), `${row.id}: omitted next match detector did not reject exactly its owned outcomes.`, row);
+      row.detected = expiryIssues(before, await walk.saved(), card, walk.tableRequests());
+      check(JSON.stringify(row.detected) === JSON.stringify(['actual-next-match', 'expired-card', 'expired-options', 'activity-client-intent']), `${row.id}: omitted next match detector did not reject exactly its owned outcomes.`, row);
       check(await walk.raw() === beforeRaw, `${row.id}: omitted next match changed actual save.`, row);
+      const streakAfter = await walk.streak();
+      check(streakAfter.raw === streakBefore.raw, `${row.id}: omitted next match changed actual local streak bytes.`, row);
+      row.activity = { intent: 'omitted', tablePosts: walk.tablePosts(), authenticatedAwardPosts: walk.authenticatedAwardPosts(), streakBefore, streakAfter };
       row.shots.push(await shot(walk, `${row.id}-detected`, node));
       return;
     }
     await walk.activate(walk.page.getByRole('button', { name: 'Club home', exact: true }));
+    const activityAttempt = walk.page.waitForEvent('requestfailed', { predicate: request => request.method() === 'POST' && new URL(request.url()).pathname === '/rest/v1/game_completions' });
     await walk.activate(walk.page.locator('[data-cm-way="quick"]'));
+    await activityAttempt;
     await walk.page.waitForFunction(({ key, week }) => JSON.parse(localStorage.getItem(key)).week === week + 1, { key: KEY, week: before.week });
     const afterRaw = await walk.raw();
     const after = JSON.parse(afterRaw);
-    check(expiryIssues(before, after, card).length === 0, `${row.id}: actual next match failed unanswered expiry.`, row);
-    check(walk.completionPosts() === 0, `${row.id}: this nonterminal match attempted season completion.`, row);
+    const requests = walk.tableRequests();
+    const expectedScore = E.currentSeasonScore(after);
+    const streakAfter = await walk.streak();
+    check(expiryIssues(before, after, card, requests).length === 0, `${row.id}: actual next match failed unanswered expiry or its activity intent.`, row);
+    check(!after.sacked && after.week < after.calendar.length, `${row.id}: expiry did not end on a real nonterminal match state.`, row);
+    check(requests.length === 1 && requests[0].action === 'abort' && requests[0].body?.game === 'club-manager' && finite(expectedScore) && requests[0].body.score === expectedScore, `${row.id}: blocked activity body differs from the actual game or current-season score.`, row);
+    check(finite(streakBefore.totalPoints) && streakAfter.totalPoints === streakBefore.totalPoints, `${row.id}: nonterminal match awarded local completion points.`, row);
+    check(walk.authenticatedAwardPosts() === 0, `${row.id}: nonterminal match attempted an authenticated completion award.`, row);
     const expired = after.decisions.find(item => item.id === card.id);
-    row.stages.push({ stage: 'unanswered-expiry-fork', rawBefore: beforeRaw, rawAfter: afterRaw, resolved: expired?.resolved, completionPosts: walk.completionPosts() });
+    row.stages.push({ stage: 'unanswered-expiry-fork', rawBefore: beforeRaw, rawAfter: afterRaw, resolved: expired?.resolved,
+      activity: { intent: 'anonymous-match-activity', expectedScore, tablePosts: requests.length, requests, authenticatedAwardPosts: walk.authenticatedAwardPosts(), streakBefore, streakAfter } });
   } finally {
     if (walk) {
       check(walk.errors.length === 0, `${row.id}: unexpected expiry app errors: ${walk.errors.join(' | ')}`, row);
@@ -398,7 +420,7 @@ try {
   const built = await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'esm', outfile: bundle,
     absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') }, metafile: true, logLevel: 'error' });
   const paths = Object.keys(built.metafile.inputs).map(filename => path.resolve(ROOT, filename)).filter(filename => filename.startsWith(`${ROOT}${path.sep}`) && !filename.includes(`${path.sep}node_modules${path.sep}`));
-  paths.push(...['src/pages/ClubManager.tsx', 'src/hooks/useClubManager.ts', 'src/components/club-manager/InboxCard.tsx',
+  paths.push(...['src/pages/ClubManager.tsx', 'src/hooks/useClubManager.ts', 'src/lib/completions.ts', 'src/lib/streaks.ts', 'src/components/club-manager/InboxCard.tsx',
     'src/components/club-manager/InboxCard.module.css', 'src/test/clubManagerDecisionDepth.test.ts', 'scripts/playClubManagerDecisionDepth.mjs',
     'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/lib/offlineTransport.cjs', 'package.json', 'package-lock.json'].map(filename => path.join(ROOT, filename)));
   sources = [...new Set(paths)].sort().map(filename => ({ file: path.relative(ROOT, filename).replaceAll('\\', '/'), sha256: sha(filename), bytes: fs.statSync(filename).size }));
@@ -449,6 +471,8 @@ try {
   check(report.installedHeld, 'Installed package manifests changed during proof.');
   report.summary = { natural: report.cases.length, controls: report.controls.length, checks: report.checks,
     originals: report.inventory.length, externalAborts: report.transport.filter(request => request.action === 'abort').length,
+    anonymousTablePosts: report.transport.filter(request => request.method === 'POST' && new URL(request.url).pathname === '/rest/v1/game_completions').length,
+    authenticatedAwardPosts: report.transport.filter(request => request.method === 'POST' && new URL(request.url).pathname === '/rest/v1/rpc/record_auth_completion').length,
     expectedDiagnostics: report.diagnostics.length, failures: report.failures, setupFailures: report.setupFailures, sourceCount: sources.length };
   report.status = report.failures || report.setupFailures ? 'failed' : PHASE === 'baseline' && report.missingContexts === 6 ? 'baseline-reproduced' : PHASE === 'fixed' ? 'passed' : 'failed';
   write();
