@@ -1,0 +1,8 @@
+promises exit=1 23s | simSoccerEventPromises: 1 failures in section 1
+prom-breakapply exit=1 23s | CONTROL breakapply FIRED: section 1 failed (2 failures in all)
+prom-unannounced exit=1 19s | CONTROL unannounced FIRED: section 1 failed (2 failures in all)
+fairness exit=1 73s | simSoccerDeckFairness: 82 failures in section 4, 5, 6
+prom-reorder exit=1 25s | CONTROL reorder FIRED: section 3 failed (4 failures in all)
+tsc exit=0 100s | 
+fair-olddebut exit=1 58s | CONTROL olddebut FIRED: section 7 failed (83 failures in all)
+fair-prefix exit=1 52s | CONTROL prefix FIRED: section 7 failed (283 failures in all)

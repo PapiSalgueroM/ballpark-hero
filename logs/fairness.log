@@ -1,0 +1,50 @@
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8258 playing seasons, 7487 batches, 7487 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 89 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.007, 0.993, 1.006, 0.999, 0.992, 1.011, 0.985, 0.994, 1.011, 1.004; single cards 0.945 to 1.081 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 7487 papers printed 18 of the 23 stories under weight 1, 2350 prints against a fair 2367.567; REDEMPTION 3 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 199/194.529/2677; Followers After Viral Mo 0.5 0/0/0; Booed By Own Fans After  0.7 349/338.972/809; Wants Out As Contract Ta 0.5 62/57.072/253; Could Miss Months With S 0.5 67/75.825/376; Hits Out At Manager In S 0.3 25/23/188; Agent Demands Record Dea 0.4 48/48.313/980; : Another Season Of Riva 0.5 43/44.897/666; M Bid For 0.7 538/549.787/3373; Available On Free Transf 0.5 109/103.672/670; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 268/263.71/1080; Never Celebrates, Never  0.9 80/76.559/559; Walks Disciplinary Tight 0.9 56/56.738/228; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 212/213.59/1857; 's Monster Contract 0.7 10/8.671/118; LEADER OF THE NATION: 0.6 175/186.991/2105; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 17/19.462/181; Is Football's Coldest Wa 0.6 3/5.794/31; 's Money Now Works Harde 0.5 89/99.697/1367; Refuses To Read The Cale 0.5 0/0.286/5
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 180/37/5997  4: 165/87/3702  7: 101/15/5997  9: 170/157/654  11: 159/121/1365  12: 186/169/444  15: 172/131/1323  17: 10/10/0  18: 96/85/253  19: 106/99/261
+  FAIL (section 4): card 1 fired 37 times in a season whose row does not hold its fact
+  FAIL (section 4): card 4 fired 87 times in a season whose row does not hold its fact
+  FAIL (section 4): card 7 fired 15 times in a season whose row does not hold its fact
+  FAIL (section 4): card 9 fired 157 times in a season whose row does not hold its fact
+  FAIL (section 4): card 11 fired 121 times in a season whose row does not hold its fact
+  FAIL (section 4): card 12 fired 169 times in a season whose row does not hold its fact
+  FAIL (section 4): card 15 fired 131 times in a season whose row does not hold its fact
+  FAIL (section 4): card 17 fired 10 times in a season whose row does not hold its fact
+  FAIL (section 4): card 17 fired 10 times: the engine's own call up tells that story
+  FAIL (section 4): card 18 fired 85 times in a season whose row does not hold its fact
+  FAIL (section 4): card 19 fired 99 times in a season whose row does not hold its fact
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 0 times in 7487 papers, 0 of them under a million
+  FAIL (section 5): the sensation story never printed in the fleet
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+  FAIL (section 6): GK: "Is Sim 0 The Best GK In The World Right Now?" prints the code GK
+  FAIL (section 6): GK: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code GK
+  FAIL (section 6): GK: "INJURY BLOW: Sim 0 Could Miss Months With Serious Shoulder Dislocation" prints the code GK
+  FAIL (section 6): GK: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code GK
+  FAIL (section 6): GK: "DONE DEAL: Sim 0 Signs For Burnley In Major signing" prints the code GK
+  FAIL (section 6): GK: "CENTURION: Sim 0 Earns 100th International Cap" prints the code GK
+  FAIL (section 6): GK: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code GK
+  FAIL (section 6): CB: "Is Sim 0 The Best CB In The World Right Now?" prints the code CB
+  FAIL (section 6): CB: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code CB
+  FAIL (section 6): CB: "INJURY BLOW: Sim 0 Could Miss Months With Serious Hamstring Tear" prints the code CB
+  FAIL (section 6): CB: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code CB
+  FAIL (section 6): CB: "DONE DEAL: Sim 0 Signs For Burnley In Huge transfer" prints the code CB
+  FAIL (section 6): CB: "CENTURION: Sim 0 Earns 100th International Cap" prints the code CB
+  FAIL (section 6): CB: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code CB
+  FAIL (section 6): ... further failures in this section counted, not printed
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1228 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+simSoccerDeckFairness: 82 failures in section 4, 5, 6

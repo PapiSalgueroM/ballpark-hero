@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+promises: node scripts/simSoccerEventPromises.mjs
+fairness: node scripts/simSoccerDeckFairness.mjs
+prom-breakapply: SIM_SOCCER_EVENT_PROMISES_CONTROL=breakapply node scripts/simSoccerEventPromises.mjs
+prom-unannounced: SIM_SOCCER_EVENT_PROMISES_CONTROL=unannounced node scripts/simSoccerEventPromises.mjs
+prom-reorder: SIM_SOCCER_EVENT_PROMISES_CONTROL=reorder node scripts/simSoccerEventPromises.mjs
+fair-olddebut: SIM_SOCCER_DECK_FAIRNESS_CONTROL=olddebut node scripts/simSoccerDeckFairness.mjs
+fair-prefix: SIM_SOCCER_DECK_FAIRNESS_CONTROL=prefix node scripts/simSoccerDeckFairness.mjs

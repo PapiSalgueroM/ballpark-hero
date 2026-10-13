@@ -1,0 +1,13 @@
+Fixed saves: striker (ST, 7 rows, Arsenal); keeper (GK, 7 rows, Palmeiras); centreback (CB, 8 rows, Lille); international (CM, 8 rows, LAFC); queuedboost (LW, 7 rows, Chelsea); partner (RB, 7 rows, Racing Club)
+1) The inline 40: every printed clause applied, nothing unprinted applied
+   450 choices judged on 6 saves (30 seeded applies each), 444 kept their word
+  FAIL (section 1): card 28 "Financial Advisor" choice 1 "Invest €1M": moved investments by 1 and never said so [striker]; moved investments by 1 and never said so [keeper]; moved investments by 1 and never said so [centreback] (and 3 more)
+2) REPORT: the same reading of every other catalog (owed to other rounds, never failed)
+   eras 41 to 199: 26 of 104 choices read as kept; owed: 19 cards (41 46 47 48 49 50 51 52 53 54 55 56 58 62 63 64 65 66 70)
+   life 200 to 299: 6 of 182 choices read as kept; owed: 38 cards (205 206 220 221 222 223 224 226 228 229 230 234 236 238 239 240 241 243 244 246 247 248 251 252 253 254 255 256 257 258 ...)
+   corruption 300 to 399: 0 of 18 choices read as kept; owed: 4 cards (300 305 330 331)
+   realism 400 to 499: 58 of 337 choices read as kept; owed: 58 cards (400 401 402 404 405 406 408 409 410 411 412 413 414 415 416 418 419 420 421 422 423 424 425 426 427 428 431 432 433 434 ...)
+   critic and boot 500+: 0 of 0 choices read as kept; owed: 0 cards ()
+3) The inline 40 keep the base's ids, choice counts and choice order
+   40 of 40 inline cards match the base by id, choice count and label order
+simSoccerEventPromises: 1 failures in section 1
