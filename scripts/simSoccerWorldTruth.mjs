@@ -60,6 +60,9 @@
  *   seasonyear  every month printed with the season's starting year: section 1.
  *   nolegacy    the old lottery's draws are no longer made: section 2.
  *   extradraw   one extra draw in the world tick: section 2.
+ *   realmoves   real men are moved between clubs again: section 3.
+ *   pastchampions  a season that happened prints its champions: section 3.
+ *   summer      the feed names the winner of a missed summer that happened: section 3.
  *
  * Run: node scripts/simSoccerWorldTruth.mjs [seeds]   (default 5 seeds, 400 careers a tree)
  *      SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs   another five seeds
@@ -111,6 +114,12 @@ const CONTROLS = {
     edits: { [ENGINE]: [['  s.events.push(`🏆 Won Player of the Month (${month} ${monthYear(month, thisYear)})!`);', '  s.events.push(`🏆 Won Player of the Month (${month} ${thisYear})!`);']] } },
   nolegacy: { breaks: '2', note: 'the old lottery\'s Math.random calls are no longer made',
     edits: { [ENGINE]: [['  legacyMonthDraws(season.goals);\n', '']] } },
+  realmoves: { breaks: '3', note: 'real men are moved between clubs again',
+    edits: { [PHONE]: [['    if (realNames) continue;\n    p.clubs[st.name] = to;', '    p.clubs[st.name] = to;']] } },
+  pastchampions: { breaks: '3', note: 'a season that happened prints its champions again',
+    edits: { [PHONE]: [['  if (!happened) {\n    if (ucl !== s.currentClub)', '  if (true) {\n    if (ucl !== s.currentClub)']] } },
+  summer: { breaks: '3', note: 'the feed names the winner of a summer he missed that happened',
+    edits: { [PHONE]: [['  if (intl && tournamentWinnerShown(year, myFinals))', '  if (intl)']] } },
   extradraw: { breaks: '2', note: 'the world tick makes one extra draw before Europe',
     edits: { [PHONE]: [['  const ucl = draw(notMine(topClubs, opts.playerUcl));', '  rng.next();\n  const ucl = draw(notMine(topClubs, opts.playerUcl));']] } },
 };
