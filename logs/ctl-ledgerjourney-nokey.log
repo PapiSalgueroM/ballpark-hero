@@ -1,0 +1,13 @@
+  now: Bournemouth, Burnley, AC Horsens (the last has the era's thinnest roster, 0 projected men)
+  era2020: Liverpool, Real Sociedad, Crotone (the last has the era's thinnest roster, 3 projected men)
+  era2015: Bournemouth, Deportivo La Coruña, GFC Ajaccio (the last has the era's thinnest roster, 2 projected men)
+  era2010: Birmingham City, Deportivo La Coruña, Cesena (the last has the era's thinnest roster, 3 projected men)
+  era2005: Birmingham City, Cádiz, Nancy (the last has the era's thinnest roster, 3 projected men)
+journeys: 45 played to the end of season two, 92s
+  moves made: buy at the old club 3, buy 45, job move in season 39, loan option 45, release 27, retrain 45, sale 45, second buy 45, summer move back 45
+  ledgers held at a step: 9442, read: 9442; the largest held 13 records; records at the end by status: owned 158, released 138, retired 1
+  keys: 230 owned records of my club checked after a job move or a summer, 3 of them an emergency signing
+  FAIL AC Horsens (now, seed 2020865) after the first summer: Alan Halilovic is owned by my club in the ledger and no man of my squad carries his key
+  FAIL AC Horsens (now, seed 2020865) after the second summer: Alan Halilovic is owned by my club in the ledger and no man of my squad carries his key
+  FAIL AC Horsens (now, seed 2020867) after the second summer: Yaya Teixeira is owned by my club in the ledger and no man of my squad carries his key
+simCmLedgerJourney: CONTROL nokey FIRED: 3 failure(s) of the kind "no man of my squad carries his key"

@@ -1,0 +1,8 @@
+t2: 500 careers (767 tried, seeds 0+), 130 bitten, nofilter club loans to a club forecast under 20 37 (7.40% a career), head zero offer 130, loan season league games 18.52 to 2.71, overall at 26 58.54 to 58.63
+  ok   t2 1 reached: 7.40% club loans a career go to a club forecast under 20 without the filter (floor 3.50%)
+  ok   t2 2 bites: 26.00% of careers differ (floor 3.50%)
+  FAIL t2 3 cause: 94 of 130 differing careers first differ anywhere but a filtered loan window
+  ok   t2 4 rule: the head sent 0 club loans to a club forecast under 20
+  FAIL t2 5 outcome: of 130 bitten, on loan 0.00%, a lower tier 0.00%, as many league games 0.00% (each floor 90.00%), mean gain -15.81 (floor +6)
+report: /home/runner/work/_temp/t-ctl-loanbite-strict26/loan-bite-uhT6Ni/report.json
+control "strict26" fired: checks 3, 5 failed as expected
