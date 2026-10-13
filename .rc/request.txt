@@ -1,0 +1,13 @@
+#!serial
+probe: git worktree add -q /tmp/pb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb node .rc/x/probeSquad.mjs
+mut-nomoved-sim: node .rc/x/mut.mjs nomovedcheck && SAVE_FENCE_SECTIONS=tabs,source node scripts/simSaveFence.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nomoved-vt: node .rc/x/mut.mjs nomovedcheck && node_modules/.bin/vitest run src/test/saveFence.test.ts src/lib/clubManagerSlots.test.ts; s=$?; git checkout -- src scripts; exit $s
+mut-pluszero-sim: node .rc/x/mut.mjs pluszero && SAVE_FENCE_SECTIONS=tabs,source node scripts/simSaveFence.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-pluszero-vt: node .rc/x/mut.mjs pluszero && node_modules/.bin/vitest run src/test/saveFence.test.ts src/lib/clubManagerSlots.test.ts; s=$?; git checkout -- src scripts; exit $s
+mut-adoptzero-sim: node .rc/x/mut.mjs adoptzero && SAVE_FENCE_SECTIONS=tabs,source node scripts/simSaveFence.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-adoptzero-vt: node .rc/x/mut.mjs adoptzero && node_modules/.bin/vitest run src/test/saveFence.test.ts src/lib/clubManagerSlots.test.ts; s=$?; git checkout -- src scripts; exit $s
+mut-squadle14-fleet: git worktree add -q /tmp/g1 8fea14e2 && ln -s "$PWD/node_modules" /tmp/g1/node_modules && node .rc/x/mut.mjs squadle14 && FENCE_BASE=/tmp/g1 SAVE_FENCE_SECTIONS=fleet node scripts/simSaveFence.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-squadle14-save: node .rc/x/mut.mjs squadle14 && node scripts/simClubManagerSave.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-budgetneg-fleet: git worktree add -q /tmp/g2 8fea14e2 && ln -s "$PWD/node_modules" /tmp/g2/node_modules && node .rc/x/mut.mjs budgetneg && FENCE_BASE=/tmp/g2 SAVE_FENCE_SECTIONS=fleet node scripts/simSaveFence.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-budgetneg-save: node .rc/x/mut.mjs budgetneg && node scripts/simClubManagerSave.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; echo tree-clean-check-done
