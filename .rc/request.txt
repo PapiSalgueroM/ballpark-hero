@@ -1,0 +1,1 @@
+staff-rec-head: GM_STAFF_RECORD=1 node scripts/simGmStaff.mjs; s=$?; cp scripts/data/cmStaffFixture.json $RC_OUT/staff-head-f2.json; git checkout -- scripts/data/cmStaffFixture.json; exit $s
