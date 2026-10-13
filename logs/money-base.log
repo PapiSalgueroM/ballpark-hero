@@ -1,0 +1,30 @@
+   chaser    median wealth     6.9m   mean     8.3m   worst tenth    2.6m   best tenth    15.5m
+   savings over a mattress  +1.25m  (12.8 sigma, ahead in 250 of 260 careers)
+   the fund over savings    +1.63m  (16.6 sigma, ahead in 257 of 260 careers)
+   timing over holding      +3.08m  (8.8 sigma, ahead in 204 of 260 careers)
+   holding over chasing     +4.12m  (14.9 sigma, ahead in 244 of 260 careers)
+   best money player finishes 1.62x the wealth of the one who never invested
+   careers that ended under 1m: 0 timing, 0 chasing, of 260 each
+4) Spending it against hoarding it, same seeds
+   spends    peak 80.97  apps 595  morale 20.2  popularity 56.8  legacy credit 37.2  wealth 2.8m
+   hoards    peak 80.84  apps 584  morale 2.8  popularity 39.9  legacy credit 0.0  wealth 9.5m
+   the spender bought 11.9 things over a career
+   peak overall +0.13 (3.6 sigma), appearances +11 (10.7 sigma)
+   morale +17.4 (12.0 sigma), popularity +16.8 (17.6 sigma), legacy credit +37.2 (18.8 sigma)
+5) The card school on the bus
+   22050 sittings, 9266 of them won: 42.0% (the written figure is 42%)
+   average career result on the bus: -92k, worst -540k, best 730k
+   careers where the school closed itself for good: 83 of 900
+   the biggest stake anybody can ever put in is 50k, and it closes at 500k down
+6) The game inside the game
+   180 questions across 60 careers, every one of them answerable from the save
+   a perfect round is worth 20k and two points of morale, once a season
+7) Transaction history and save size over a full career
+   whole save: median 63.4 KB, biggest 88.9 KB
+   the money system's share: mean 1.21 KB, biggest 1.24 KB
+   transactions kept at the end of a career: 12 at most, cap 12
+  FAIL: biggest save is 88.9 KB
+8) Pre Round 134 saves open cold and then play
+   30 stripped saves opened cold on every money screen, loaded, and then traded
+
+1 FAILURES

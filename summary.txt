@@ -1,0 +1,15 @@
+prom exit=0 38s | simSoccerEventPromises: all sections green
+fair0 exit=0 111s | simSoccerDeckFairness: all sections green
+tsc exit=0 152s | 
+p-firstyear exit=1 37s | CONTROL firstyear FIRED: section 1 failed (1 failures in all)
+p-breakapply exit=1 35s | CONTROL breakapply FIRED: section 1 failed (1 failures in all)
+p-unannounced exit=1 36s | CONTROL unannounced FIRED: section 1 failed (1 failures in all)
+p-reorder exit=1 39s | CONTROL reorder FIRED: section 3 failed (3 failures in all)
+og-head exit=0 12s |    Duration  10.33s (transform 4.22s, setup 89ms, collect 5.55s, tests 3.08s, environment 688ms, prepare 286ms)
+og-revert exit=1 12s | ::error file=/tmp/ogrev/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read a
+c-outside exit=1 115s | CONTROL outside FIRED: section 8 failed (67 failures in all)
+money-head exit=1 447s | 1 FAILURES
+money-base exit=1 451s | 1 FAILURES
+vitest-all exit=0 1060s |    Duration  1058.38s (transform 60.54s, setup 45.07s, collect 301.48s, tests 2259.51s, environment 324.50s, prepare 70.45s)
+creation-head exit=1 593s | 1 FAILURES
+creation-base exit=1 531s | 1 FAILURES

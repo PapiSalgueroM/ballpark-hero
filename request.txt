@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+prom: node scripts/simSoccerEventPromises.mjs
+fair0: node scripts/simSoccerDeckFairness.mjs
+p-firstyear: SIM_SOCCER_EVENT_PROMISES_CONTROL=firstyear node scripts/simSoccerEventPromises.mjs
+p-breakapply: SIM_SOCCER_EVENT_PROMISES_CONTROL=breakapply node scripts/simSoccerEventPromises.mjs
+p-unannounced: SIM_SOCCER_EVENT_PROMISES_CONTROL=unannounced node scripts/simSoccerEventPromises.mjs
+p-reorder: SIM_SOCCER_EVENT_PROMISES_CONTROL=reorder node scripts/simSoccerEventPromises.mjs
+c-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+og-head: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000
+og-revert: R=$PWD && git worktree add -q /tmp/ogrev HEAD && cd /tmp/ogrev && git -c user.email=rc@rc -c user.name=rc revert --no-commit 8974536d && git diff --stat HEAD && ln -s "$R/node_modules" node_modules && node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000
+money-head: node scripts/simMoney.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+money-base: R=$PWD && git worktree add -q /tmp/mbase c9c77ebab727b9bd624459388e33b6579538e4ca && cd /tmp/mbase && ln -s "$R/node_modules" node_modules && node scripts/simMoney.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+creation-head: node scripts/simCreation.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+creation-base: R=$PWD && git worktree add -q /tmp/cbase c9c77ebab727b9bd624459388e33b6579538e4ca && cd /tmp/cbase && ln -s "$R/node_modules" node_modules && node scripts/simCreation.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
