@@ -1,0 +1,17 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+kit: node scripts/simEventDeck.mjs
+kitA: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kitB: SIM_EVENT_DECK_SECTIONS=13,14,15,16 node scripts/simEventDeck.mjs
+kctl1: bash .rc/x/kctl.sh replay:1 weightoff:3 weightkeep:3 story:4 rest:5 failopen:5 restfall:5 textrng:6 seasonweek:9
+kctl2: bash .rc/x/kctl.sh expirefall:7 expireoff:7 expirefx:7 settledoff:7 panelexpiry:7 neutral:8 heavy:10 fxsilent:11 fxdrop:11 fxunbound:11 fxneutral:11
+kctl3: bash .rc/x/kctl.sh conductreal:12 slotopen:12 quoteslot:12 untagged:12 rosterword:12 wordedit:14 wordorder:14 storymove:14 pressure:15 eager:16
+kctl4: bash .rc/x/kctl.sh pruneearly:13 codecword:13 codecslot:13
+gmdiff: bash .rc/x/gmdiff.sh
+gmctl: bash .rc/x/ctl.sh GM_INBOX_CONTROL scripts/simGmInbox.mjs quote flip cool drift never random shift opencap maxcap oneshot ungate unclamp quotevariant effectvariant effectout effectrating
+careerInbox: node scripts/simCareerInbox.mjs
+careerInbox-privatecap: INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+reveal: node scripts/simRevealMoments.mjs
+storage: node scripts/simStorageWrites.mjs
+fences: bash .rc/x/fences.sh simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionSlugs simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simSchemaNames simFetchRetry simGoogleOnlyReturn simReportRelay simNavbarStatsReads simLeaderboardCaps simScoringCoverage simSiteSearch simResultMoment simGuideHeadings 
