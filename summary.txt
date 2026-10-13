@@ -1,0 +1,9 @@
+simCmSubs exit=2 1s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-opproom exit=2 3s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-coachall exit=2 3s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+subs-oldcap exit=2 1s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+quickSubs-all exit=0 21s | simCmQuickSubs: 10 actual outcomes and 13 effective controls passed.
+simCmQuickLegs exit=0 70s | simCmQuickLegs: PASS, 10 sections green
+tsc exit=0 96s | 
+legs-nokeep exit=0 73s | simCmQuickLegs: CONTROL nokeep FIRED, section reserve went red as it must (red in all: reserve)
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

@@ -1,0 +1,11 @@
+simCmSubs could not run: Error: Club Manager: the era2005 squads are not loaded yet (await ensureEraRosters first)
+    at eraRostersRaw (/home/runner/work/_temp/t-subs-coachall/simCmSubs-HE9u4u/coachall.cjs:33808:23)
+    at eraClubDefMap (/home/runner/work/_temp/t-subs-coachall/simCmSubs-HE9u4u/coachall.cjs:40389:19)
+    at eraClubDefFor (/home/runner/work/_temp/t-subs-coachall/simCmSubs-HE9u4u/coachall.cjs:40414:17)
+    at Object.startCareer (/home/runner/work/_temp/t-subs-coachall/simCmSubs-HE9u4u/coachall.cjs:48868:62)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:214:48
+    at withSeed (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:74:16)
+    at quickFleet (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:214:13)
+    at Object.coachSection [as coach] (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:263:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmSubs.mjs:314:50)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

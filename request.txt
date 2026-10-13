@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmSubs: node scripts/simCmSubs.mjs
+subs-opproom: SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+subs-coachall: SUBS_CONTROL=coachall node scripts/simCmSubs.mjs
+subs-oldcap: SUBS_CONTROL=oldcap node scripts/simCmSubs.mjs
+quickSubs-all: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+legs-nokeep: CM_QUICK_LEGS_CONTROL=nokeep node scripts/simCmQuickLegs.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
