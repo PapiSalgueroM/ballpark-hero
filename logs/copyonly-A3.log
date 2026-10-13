@@ -1,0 +1,23 @@
+cmCopyOnly1326: base /home/runner/work/ballpark-hero/ballpark-hero/.rb5, head /home/runner/work/ballpark-hero/ballpark-hero
+  fleets A,D, 3 seasons a career; bare league names La Liga, Serie A, Ligue 1, Serie B, Ligue 2
+  active rewrites: article-board, article-news, drama, intl, staff
+fleet A: 13 careers
+  A Liverpool (now) [Premier League]: seasons 2, entries 108, draws 122091/122091, bytes 154951/154951 174241/174241, rewrites intl 62, staff 17, stopped: sacked at season 3 entry 12 (week 12) (3s)
+  A Barcelona (now) [La Liga]: seasons 3, entries 158, draws 168042/168042, bytes 165575/165660 173377/173357 180196/180198, rewrites article-board 172, article-news 453, intl 119, staff 33, drama 12 (4s)
+  A Real Madrid (now) [La Liga]: seasons 3, entries 162, draws 169268/169268, bytes 166568/166556 176772/176782 181993/181977, rewrites article-board 176, staff 24, article-news 394, intl 120, drama 47 (4s)
+  A Celta Vigo (now) [La Liga]: seasons 3, entries 124, draws 152024/152024, bytes 151509/151519 159761/159745 164313/164305, rewrites article-news 329, intl 75, drama 5, article-board 2 (3s)
+  A Juventus (now) [Serie A]: seasons 3, entries 144, draws 162792/162792, bytes 155287/155297 173071/173081 178437/178505, rewrites article-board 169, article-news 326, intl 104, staff 25, drama 28 (3s)
+  A PSG (now) [Ligue 1]: seasons 3, entries 153, draws 165078/165078, bytes 162980/162990 171157/171145 177211/177225, rewrites article-board 167, article-news 419, intl 121, staff 16, drama 49 (4s)
+  A Palermo (now) [Serie B]: seasons 3, entries 124, draws 144287/144287, bytes 144003/144017 157255/157239 159899/159891, rewrites article-news 308, intl 84 (3s)
+  A OB (now) [Danish Superliga]: seasons 3, entries 77, draws 126708/126708, bytes 133725/133725 147366/147366 151759/151759, rewrites article-board 2 (2s)
+  A Dundee (now) [Scottish Premiership]: seasons 3, entries 77, draws 127766/127766, bytes 136888/136888 147016/147016 152988/152988, rewrites none (2s)
+  A West Ham (now) [EFL Championship]: seasons 3, entries 134, draws 155130/155130, bytes 155066/155066 161127/161127 167420/167420, rewrites intl 61 (4s)
+  A Everton (era2005) [Premier League]: seasons 0, entries 37, draws 21252/21252, bytes -, rewrites intl 24, stopped: sacked at season 1 entry 37 (week 52) (1s)
+  A Leicester City (era2015) [Premier League]: seasons 1, entries 63, draws 34745/34745, bytes 93970/93992, rewrites intl 65, stopped: sacked at season 2 entry 22 (week 29) (1s)
+  A Bayern Munich (era2020) [Bundesliga]: seasons 3, entries 154, draws 81605/81605, bytes 106223/106245 112068/112068 118307/118329, rewrites staff 17, intl 138, drama 15 (3s)
+fleet D: 3 careers
+  D Arsenal (every man on level 9) [Premier League]: seasons 3, entries 148, draws 166744/166744, bytes 166508/166508 163584/163661 180185/180257, rewrites intl 92, drama 15, staff 42 (4s)
+  D Liverpool (every man on level 9) [Premier League]: seasons 0, entries 25, draws 30618/30618, bytes -, rewrites intl 18, stopped: sacked at season 1 entry 25 (week 31) (0s)
+  D Brentford (every man on level 9) [Premier League]: seasons 3, entries 134, draws 155638/155638, bytes 155731/155749 173944/173966 167625/167625, rewrites staff 58, intl 87, article-board 13 (3s)
+rewrites fired over 16 careers: intl 1170, staff 232, article-board 701, article-news 2229, drama 171
+cmCopyOnly1326: green. 16 careers, every entry equal on both trees but for the declared rewrites (intl 1170, staff 232, article-board 701, article-news 2229, drama 171), draws equal.

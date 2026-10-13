@@ -1,0 +1,19 @@
+cmCopyOnly1326: base /home/runner/work/ballpark-hero/ballpark-hero/.rb4, head /home/runner/work/ballpark-hero/ballpark-hero/.rb4 (the same engine: no rewrite may fire)
+  fleets A, 2 seasons a career; bare league names La Liga, Serie A, Ligue 1, Serie B, Ligue 2
+  active rewrites: none
+fleet A: 13 careers
+  A Liverpool (now) [Premier League]: seasons 2, entries 96, draws 109530/109530, bytes 154951/154951 174241/174241, rewrites none (3s)
+  A Barcelona (now) [La Liga]: seasons 2, entries 108, draws 112994/112994, bytes 165575/165575 173377/173377, rewrites none (3s)
+  A Real Madrid (now) [La Liga]: seasons 2, entries 109, draws 113851/113851, bytes 166568/166568 176772/176772, rewrites none (3s)
+  A Celta Vigo (now) [La Liga]: seasons 2, entries 83, draws 102592/102592, bytes 151509/151509 159761/159761, rewrites none (2s)
+  A Juventus (now) [Serie A]: seasons 2, entries 92, draws 107723/107723, bytes 155287/155287 173070/173070, rewrites none (2s)
+  A PSG (now) [Ligue 1]: seasons 2, entries 102, draws 110884/110884, bytes 162979/162979 171157/171157, rewrites none (2s)
+  A Palermo (now) [Serie B]: seasons 2, entries 83, draws 96169/96169, bytes 144003/144003 157255/157255, rewrites none (2s)
+  A OB (now) [Danish Superliga]: seasons 2, entries 51, draws 84135/84135, bytes 133725/133725 147366/147366, rewrites none (1s)
+  A Dundee (now) [Scottish Premiership]: seasons 2, entries 52, draws 85509/85509, bytes 136888/136888 147016/147016, rewrites none (1s)
+  A West Ham (now) [EFL Championship]: seasons 2, entries 92, draws 105329/105329, bytes 155066/155066 161122/161122, rewrites none (2s)
+  A Everton (era2005) [Premier League]: seasons 0, entries 37, draws 21252/21252, bytes -, rewrites none, stopped: sacked at season 1 entry 37 (week 52) (1s)
+  A Leicester City (era2015) [Premier League]: seasons 1, entries 63, draws 34745/34745, bytes 93961/93961, rewrites none, stopped: sacked at season 2 entry 22 (week 29) (1s)
+  A Bayern Munich (era2020) [Bundesliga]: seasons 2, entries 104, draws 54450/54450, bytes 106215/106215 112060/112060, rewrites none (1s)
+rewrites fired over 13 careers: none
+cmCopyOnly1326: green. 13 careers, every entry equal on both trees but for the declared rewrites (none), draws equal.
