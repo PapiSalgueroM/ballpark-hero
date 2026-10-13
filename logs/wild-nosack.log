@@ -1,0 +1,15 @@
+playWilderness: seed 2899200577 (the walk's own, from its file name). Replay with WILDERNESS_SEED=2899200577
+  control  2 sack site(s) in clubManager.ts; in dist/assets: clubManager-C6cMOZFg.js 2
+1) Take a job, then lose it
+  PASS  the career is running
+  PASS  the save was doctored to a board about to pull the trigger
+  first kick off at step 0: the page had drawn 4 times
+  block 1: steps 0 to 39, matches played 0 to 20, board confidence 0, presses that changed nothing 0
+  block 2: steps 40 to 79, matches played 20 to 39, board confidence 2.8999999999999995, presses that changed nothing 0
+  NOT sacked after 120 steps: matches played 58, board confidence 46.29999999999999, season 2 week 25, saved sacked flag false, presses that changed nothing in the last block 0
+  visible buttons: Back | Track stats | Managers | Board Under pressure | Fans Grumbling | Home | Squad | Tactics | Table | Market | Play Live | ⚡ Quick Sim | 📊 Match Centre: form, head to head, odds, team talk | 📋 BOARD 3 behind Contenders patience | 📩 INBOX 3 new Your assistant | 📅 CALENDAR L 0-1 Next: Hull City | 🏆 LEAGUE #9 Form: W L W L L | 🏅 CUPS Still alive FA Cup | 📊 STATS 28 goals Anthony Elanga leads with 8 | 💰 FINANCES -£4m projected Fans grumbling · prices, sponsor, the books | 🏗️ FACILITIES Level 7 · 6 · 6 · 6 Stadium, training, medical, dressing room | 🧑‍🏫 STAFF Level 7 · 5 · 6 · 7 Attack, defence, keepers, scouting | 🎖️ SKILLS Level 1 Tactics, recruitment, money, the press | ⚙️ OPTIONS £ · Normal Currency, the international job, haggling | 🧢 MANAGER 19W 21L 33% win rate | 🏥 TREATMENT All fit No injuries or bans | 🕵️ RIVAL WATCH Nottingham Forest They sit #7 | 🎙️ PRESS ROOM They want a word One question, one tap | 🤝 DRESSING ROOM Word kept Set everyone a role | 🎓 ACADEMY 2 on the books Recruitment 10/20 · 0 scouting
+  CAUGHT  the board ran out of patience and the wilderness opened
+  PASS  no real page errors on the walk (clean)
+  PASS  the sack rewrite landed on every site of every load (8 hit(s), 2 a load)
+
+playWilderness control nosack: all 1 guarded checks fired (mutations landed: {"sack":8})

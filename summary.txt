@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playNationJob exit=0 17s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+nation-nooffer exit=0 11s | playNationJob control nooffer: all 2 guarded checks fired (mutations landed: {"nationOffer":2})
+nation-twotiles exit=0 11s | playNationJob control twotiles: all 2 guarded checks fired (mutations landed: {"secondManagerTile":2})
+playWilderness exit=0 21s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+wild-nooffers exit=0 24s | playWilderness control nooffers: all 1 guarded checks fired (mutations landed: {"offerList":1})
+wild-nosack exit=0 100s | playWilderness control nosack: all 1 guarded checks fired (mutations landed: {"sack":8})
+playClubManager exit=0 289s | Played Club Manager through its own screens. 0 findings.
+cm-nobusiness exit=1 294s | playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager
