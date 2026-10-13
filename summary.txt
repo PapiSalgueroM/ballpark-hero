@@ -1,0 +1,7 @@
+earned exit=0 20s | simNbaEarnedDraft: green.
+vitest exit=0 22s |    Duration  21.09s (transform 4.82s, setup 1.88s, collect 14.29s, tests 23.85s, environment 12.20s, prepare 3.17s)
+tsc exit=0 92s | 
+diffproof exit=0 0s | diffproof-ok
+draftorder exit=0 8s | simGmDraftOrder: green. 603185 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+singles exit=0 96s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+earned-ctl exit=0 187s | simNbaEarnedDraft controls: all 19 fired, each in exactly its own sections.

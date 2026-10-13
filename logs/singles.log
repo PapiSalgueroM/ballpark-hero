@@ -1,0 +1,7 @@
+simGmPicks exit=0 | simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones an
+simDraftNight exit=0 | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+simEngineIds exit=0 | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+simInventedNames exit=0 | simInventedNames: green. Every invented man on this site is invented all the way down.
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 | No rival product names found. 0 findings.
+simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
