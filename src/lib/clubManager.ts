@@ -394,26 +394,34 @@ export function worldRosterXIAvg(career: CareerState, club: string): number | nu
 /* Release AZ fix (reviewer 1, MAJOR 1): buildMarket runs on every change of the save, and with a ledger this
    walked every club of the world each time. The list is kept per ledger object and world year, so a tap that
    changes no deal reads it back; it is shared like marketBase's, and buildMarket only ever filters it. */
-const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; out: MarketPlayer[] }>();
+const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; out: MarketPlayer[] }>();
 
+/* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
+   roster): in a career that plays the living world the market lists nobody at my own club. My club is my squad,
+   and buildMarket drops every man of my squad by name, so what the world roster still put at my club were men
+   who are not mine (the men a deep club's bake holds beyond the 26 a squad starts with, then the projection's
+   replacements): on sale from my own club, and named in the feed as signed from it. A career from before the
+   release keeps the projected world's market exactly as it was (ruling Y1). src/lib/clubManagerOwnClubLevel.test.ts
+   and scripts/simFreeAgents.mjs section 17 (FA_CONTROL=ownclub) hold it. */
 function worldMarket(career: CareerState): MarketPlayer[] {
   const fallback = marketBase(yearsOn(career), career.eraId, worldSeedOf(career));
   const current = refreshWorldRoster(career);
   const held = worldRosterView(current);
-  if (!held) return fallback;
+  if (!held) return worldSeedOf(career) === undefined ? fallback : fallback.filter(p => p.club !== career.clubName);
   const raw = current.worldRoster as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
   const hit = WORLD_MARKET_MEMO.get(raw);
-  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed) return hit.out;
+  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName) return hit.out;
   const clubs = new Set(fallback.map(p => p.club));
   for (const record of held.records) if (record.owner) clubs.add(record.owner);
   const out: MarketPlayer[] = [];
   for (const club of clubs) {
+    if (club === current.clubName) continue;
     for (const p of worldRosterFor(current, club)) out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
       price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined,
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
-  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, out });
+  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName, out });
   return out;
 }
 
