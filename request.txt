@@ -1,0 +1,3 @@
+#!build
+#!playwright
+realFixtures: mkdir -p cm-real-fixture-artifacts && FREE_KICK_FONT_CACHE=cm-real-fixture-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs && FREE_KICK_FONT_CACHE=cm-real-fixture-artifacts/font-cache NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" CI=1 node scripts/playCmRealFixtures.mjs
