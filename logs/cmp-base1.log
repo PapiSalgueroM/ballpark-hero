@@ -1,0 +1,3 @@
+  FAIL: could not check classic-8 candidates against player_market_values: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+51 harnesses not green.
