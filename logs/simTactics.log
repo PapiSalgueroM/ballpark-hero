@@ -1,0 +1,48 @@
+
+================ chromium ================
+
+1) Dragging a player across the pitch with a real pointer
+   ok   eleven tokens on the pitch  11 found
+   ok   every token sets touch-action none so the phone does not scroll instead  11/11
+   ok   the lifted token has no transition so it tracks the finger 1 to 1  duration 0s
+   ok   the token actually moves under the pointer mid drag  119px down the pitch
+   ok   the pitch tells you what the drop will do  "Drop to swap Mbappé with Valverde"
+   ok   mouse drag swapped the two players  slot 9 Mbappé -> Valverde, slot 6 Valverde -> Mbappé
+   ok   the swap moved the real player ids, not just the labels  p-federico-valverde / p-kylian-mbappe
+   ok   the drag does not leave the picker dialog open behind it  no dialog
+   ok   the swap survives leaving the tab and coming back, so it is in career state  slot 9 Valverde, slot 6 Mbappé
+
+2) The same drag as a touch gesture, which is what his traffic actually uses
+   ok   the token tracked the touch point mid gesture  moved 122px under the finger
+   ok   touch pointer drag swapped the two players  slot 1 Huijsen -> Rodrygo, slot 8 Rodrygo -> Huijsen
+
+3) The old tap to pick path, which has to keep working for anyone who cannot drag
+   ok   a tap with no movement still opens the squad picker  "Pick your CB"
+   ok   no exceptions thrown while dragging  clean
+
+4) Switching mentality moves the shape
+   ok   a fresh save opens on balanced  balanced line at 72%
+   ok   the shape is animated on transform and nothing else  transition-property transform
+   ok   the transition has a real duration  0.46s
+   ok   every one of the eleven moved when attacking was picked  11/11 transforms changed
+   ok   the back line stepped up the pitch  72% -> 64%
+   ok   each defender is at least 20px higher than he was  RB moved 42px up
+   ok   the wide players pushed out toward the touchlines  right winger 14px right, left winger -14px left
+   ok   the back line dropped back off balanced  72% -> 76%
+   ok   the deep block sits a long way behind the high line  64% vs 76%
+   ok   the striker came back to make the block compact  58px deeper
+   ok   and the wide men tucked in  right winger -19px narrower
+   ok   the line is labelled in plain football  "LOW BLOCK"
+   ok   balanced puts everyone exactly back where they started  all 11 match
+   ok   no exceptions thrown while switching mentality  clean
+
+5) prefers-reduced-motion jumps instead of sliding
+   ok   the transition is switched off entirely  duration 0s
+   ok   the shape is already at its final spot 60ms after the click  no slide
+   ok   and it did still move  positions changed
+   ok   the decorative flourish is hidden under reduced motion  0 visible
+   ok   dragging still works under reduced motion  Bellingham <-> Güler
+   ok   no exceptions under reduced motion  clean
+
+TACTICS ASSET LIMIT: 33 uncached external assets were aborted; their appearance is not verified: stylesheet: https://fonts.googleapis.com/css2, image: https://flagcdn.com/w80/es.png, image: https://flagcdn.com/w80/it.png, image: https://flagcdn.com/w80/de.png, image: https://flagcdn.com/w80/fr.png, image: https://flagcdn.com/w80/nl.png, image: https://flagcdn.com/w80/sa.png, image: https://flagcdn.com/w80/us.png, image: https://flagcdn.com/w80/pt.png, image: https://flagcdn.com/w80/gb-sct.png, image: https://flagcdn.com/w80/tr.png, image: https://flagcdn.com/w80/be.png, image: https://flagcdn.com/w80/at.png, image: https://flagcdn.com/w80/gr.png, image: https://flagcdn.com/w80/dk.png, image: https://flagcdn.com/w80/ch.png, image: https://flagcdn.com/w80/hr.png, image: https://flagcdn.com/w80/br.png, image: https://flagcdn.com/w80/mx.png, image: https://flagcdn.com/w80/au.png, image: https://flagcdn.com/w80/ru.png, image: https://flagcdn.com/w40/es.png, image: https://flagcdn.com/w40/fr.png, image: https://flagcdn.com/w40/br.png, image: https://flagcdn.com/w40/uy.png, image: https://flagcdn.com/w40/tr.png, image: https://flagcdn.com/w40/ci.png, image: https://flagcdn.com/w40/ma.png, image: https://flagcdn.com/w40/pt.png, image: https://flagcdn.com/w40/nl.png, image: https://flagcdn.com/w40/be.png, image: https://flagcdn.com/w40/ua.png, image: https://flagcdn.com/w40/de.png
+ALL TACTICS CHECKS PASSED
