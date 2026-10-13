@@ -1,0 +1,15 @@
+tsc exit=0 61s | 
+vitest-touched exit=0 4s |    Duration  3.20s (transform 601ms, setup 340ms, collect 1.68s, tests 2.59s, environment 2.16s, prepare 633ms)
+chips-control exit=0 3s | CHIPS CONTROL FIRED: exactly the 2 chip cases fail on the pre fix components
+focus-control exit=0 3s | FOCUS CONTROL FIRED: the 2 focus cases (and the new chips case) fail on the 942268ef components
+simReportRelay-off exit=0 0s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simReportRelay-oldkinds exit=1 0s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simReportContext exit=0 0s | simReportContext: all green
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simPlayerBingoHonours exit=0 8s | simPlayerBingoHonours PASS
+simSoccerLoanMinutes exit=0 50s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+simErrorBoundary exit=0 1s | simErrorBoundary: all green

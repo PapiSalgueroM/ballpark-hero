@@ -1,0 +1,6 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/reportDetails.test.tsx > game report > gives focus back to the Report a problem button when the form closes
+ FAIL  src/test/reportDetails.test.tsx > footer report > gives focus back to the Report a problem button when the form closes
+ FAIL  src/test/reportDetails.test.tsx > game report chips > offers Duplicate question by default and drops it when the page passes the sitewide list
+      Tests  3 failed | 16 passed (19)
+FOCUS CONTROL FIRED: the 2 focus cases (and the new chips case) fail on the 942268ef components
