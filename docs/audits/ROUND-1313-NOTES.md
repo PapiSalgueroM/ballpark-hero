@@ -207,13 +207,19 @@ Proof of step 1 (src at a064a170; the later commits of the step touch no src):
   The words, ready for that round (true of careerAwards.ts lines 111 to 123 and usCareerStatLine.ts lines 117
   to 127 on this branch):
   - MLB: "Your rival plays your position, and who had the better year is read off the two lines on the card. A
-    starter scores his strikeouts over 5, his wins times 2.2, and 22 for every run his ERA is under 3.80 (his
-    losses are on the line but do not count). A reliever scores saves times 1.5, holds times 1.1, strikeouts
-    over 4, and 26 for every run his ERA is under 3.60. A hitter scores home runs times 1.6, RBI over 3, and
-    320 for every point his average is over .240 (steals are not on the line, so they do not count)."
+    starter scores his strikeouts divided by 5, his wins times 2.2, and 22 for every run his ERA is under 3.80
+    (his losses are on the line but do not count). A reliever scores saves times 1.5, holds times 1.1,
+    strikeouts divided by 4, and 26 for every run his ERA is under 3.60. A hitter scores home runs times 1.6,
+    RBI divided by 3, and 0.32 for every point his average is over .240, so .281 (41 points over) is worth
+    13.12 (steals are not on the line, so they do not count)."
   - NHL: "Your rival plays your position, and who had the better year is read off the two lines on the card. A
-    skater is read on his points. A goalie scores his wins times 1.8, and 2,400 for every point his save
-    percentage is over .900."
+    skater is read on his points. A goalie scores his wins times 1.8, and 2.4 for every point his save
+    percentage is over .900, so .915 (15 points over) is worth 36."
+  - Fix pass (review finding 5 of the read lens): these sentences first said "320 for every point" and "2,400
+    for every point", which a reader who counts a point of average or of save percentage as .001 takes 1,000
+    times too big. The code and the worked examples were always right (0.041 times 320 is 13.12; 0.015 times
+    2,400 is 36). The brief's section 3.4 table carries the old words: the "?" round copies from here, not
+    from there.
   - The dead heat (advice 13): "If the two lines come out exactly level, the year goes to him." Whether a level
     year should go to nobody, or to goals in hockey, is the lead's (the rule is shared by all four sports).
   - Worked examples: a starter at 14-9, 3.41 ERA, 187 K scores 37.4 + 30.8 + 8.6 = 76.8; a hitter at .281, 24
