@@ -1,0 +1,7 @@
+vitest exit=0 3s |    Duration  2.32s (transform 743ms, setup 255ms, collect 1.11s, tests 293ms, environment 1.08s, prepare 430ms)
+earned exit=0 15s | simNbaEarnedDraft: green.
+ctl-rivalscout exit=1 15s | simNbaEarnedDraft: CONTROL rivalscout FIRED. Red in section 9 (2 failures).
+ctl-bigneed exit=1 12s | simNbaEarnedDraft: CONTROL bigneed FIRED. Red in section 9 (3 failures).
+ctl-reopen exit=1 15s | simNbaEarnedDraft: CONTROL reopen FIRED. Red in section 4 (30 failures).
+ctl-noneed exit=1 11s | simNbaEarnedDraft: CONTROL noneed FIRED. Red in section 9 (4 failures).
+tsc exit=0 73s | 
