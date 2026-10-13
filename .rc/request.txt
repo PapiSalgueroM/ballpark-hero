@@ -1,0 +1,4 @@
+awards: node scripts/simCareerAwardsNight.mjs
+seasonHistory: node scripts/simSoccerSeasonHistory.mjs
+derbyHistory: node scripts/simSoccerDerbyHistory.mjs
+vitest: node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts src/test/eventChoiceAfterReload.test.ts --testTimeout=300000 --hookTimeout=120000
