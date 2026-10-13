@@ -15,7 +15,7 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       ENGINES: chromium
-      AUTOCOMPLETE_TOUCH_PHASE: baseline
+      AUTOCOMPLETE_TOUCH_PHASE: fixed
       AUTOCOMPLETE_TOUCH_OUT: ${{ github.workspace }}/autocomplete-touch-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/autocomplete-touch-artifacts/font-cache
       PRERENDER_ONLY: /build-your-xi,/missing-xi
