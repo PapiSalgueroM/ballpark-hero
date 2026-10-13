@@ -57,6 +57,20 @@ lane's rc.sh kit; the request names are listed per step.
   findings at 1280 ("OVR" is cut, 24 of 18 px); scrollbox exit 1, 5 deskclip findings at 390 (the Milos Kerkez row
   cut by a 256 px box); truncate exit 1, 11 cut findings at 320 ("0 starts, 2 off the bench in last 6 · star man",
   261 of 116 px); smalltap exit 1, 69 tap findings at 390 (Release is 147.6 by 28 px).
+- r1325-final-fit on d9879cb0: Part 1 BASE 428 findings (cut 125, tap 252, deskclip 20, motion 2, heads 82), HEAD
+  0. Part 2: Liverpool 2026-27 at 390 and the Hertha book save at 320 played with the same presses (three Quick Sims
+  each) on a build of 8fea14e2 and of this tree: saves byte equal (82312 and 105186 chars), random draws equal (4901
+  and 4015); Everton's worst defeat "1-5 vs Newcastle" here, "5-1 vs Newcastle" on the base; nothing animating under
+  reduced motion; the engine chunks byte equal once the hashed chunk names they import are set aside (their names
+  differ because every chunk importing the entry is renamed by any page change).
+- r1325-final-a on d9879cb0: tsc, the six unit files, simCmTablesTruth and all four of its controls (nomark 30 red,
+  markall 21, defeatraw 7, drawinrender 10, none elsewhere), every reader sim of the four files with its controls,
+  simClubManagerSaveSize, simClubManagerSlots, simDailyDeals, simStorageWrites: all as designed.
+- r1325-final-w on d9879cb0: playReleaseClause, playCmDataOnDemand, playClubManager (0 findings), simRevealScroll,
+  sweepWeight, playGames and sweepGames (0 findings) green; playCmRealFixtures red exactly as on the base (it needs a
+  local artifact folder the runner lacks).
+- r1325-qa2 on d9879cb0: ten saves (the four old saves at four sizes and six hostile edits) through the four screens on
+  a served build: nothing drawn wrong, labels on real men only, defeats low first, anything else left as saved.
 - Weight, r1325-fit2 on e8bd574a (the base measured inside its own build): /club-manager 588.8K on the base and on
   this tree, /manager-hot-seat 606.1K on both, /deadline-day 616.2K on both. Every chunk is renamed between the two
   builds (a changed page renames the entry and so every chunk importing it); over all chunks the tree grows 1.17K gz.

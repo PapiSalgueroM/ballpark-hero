@@ -78,10 +78,10 @@ function sources(which) {
   const out = {};
   for (const f of FILES) {
     const rel = `${CM_DIR}/${f}.tsx`;
+    /* Line endings normalised on each read: the smalltap anchor runs across two lines and this checkout is CRLF. */
     out[f] = which === 'base'
-      ? execFileSync('git', ['show', `${BASE_SHA}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 })
-      : fs.readFileSync(path.join(ROOT, rel), 'utf8');
-    out[f] = out[f].replace(/\r\n/g, '\n');
+      ? execFileSync('git', ['show', `${BASE_SHA}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }).replace(/\r\n/g, '\n')
+      : fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
   }
   if (which === 'head' && CONTROL) {
     const c = CONTROLS[CONTROL];
