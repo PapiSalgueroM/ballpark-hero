@@ -1,0 +1,72 @@
+NEGATIVE CONTROL ON: the old goals lottery decides the months again (section 1 must fail)
+fleet: 400 careers a tree (seed offset 0, 5 seeds), 7056 seasons on this tree in 34 s, 7064 on the base
+1) Player of the Month reads the month's football, with the true year
+   this tree: 5193 months over 6656 seasons; rated 8.0+ 2.05 a season (669), 7.0 to 7.5 any 0.47 (1575); at 7.5 to 8.5 all 1.21: GK 0.36 (218), DEF 0.46 (389), MID 0.74 (240), ATT 2.16 (615)
+   base:      5094 months over 6664 seasons; rated 8.0+ 2.11 a season (621), 7.0 to 7.5 any 0.48 (1551); at 7.5 to 8.5 all 1.16: GK 0.4 (209), DEF 0.46 (367), MID 0.66 (264), ATT 2.08 (600)
+   under the floor and still won: 934 here, 976 on the base; 0 goal keepers rated 6.0 or less who won: 8 of 33 here, 12 of 35 on the base
+   month lines with the wrong year: 0 here, 2609 on the base; seasons whose lines and awards disagree: 0 here, 0 on the base
+  FAIL (section 1): 934 seasons under the floor (fewer than 10 games or rated under 6.8) won a month, for example CB 1996: 31 games rated 6.7, 1 won
+  FAIL (section 1): 8 seasons of a 0 goal keeper rated 6.0 or less won a month
+  FAIL (section 1): a season rated 7.0 to 7.5 wins a month 0.47 of the time, it must stay under 0.2
+  FAIL (section 1): GK wins 0.36 months a season at 7.5 to 8.5 against 1.21 for all four groups, outside 30 percent
+  FAIL (section 1): DEF wins 0.46 months a season at 7.5 to 8.5 against 1.21 for all four groups, outside 30 percent
+  FAIL (section 1): MID wins 0.74 months a season at 7.5 to 8.5 against 1.21 for all four groups, outside 30 percent
+  FAIL (section 1): ATT wins 2.16 months a season at 7.5 to 8.5 against 1.21 for all four groups, outside 30 percent
+   planted: a 0 goal keeper rated 6.0 over 10,000 identities won 0 months
+2) The month award and the world tick leave the season's draws where they were
+  FAIL (section 2): career 50000 (GK, 1990): step 3 (1992): Math.random count at the end of the month block 121 against 101
+  FAIL (section 2): career 50001 (GK, 1990): step 3 (1992): Math.random count at the end of the month block 124 against 104
+  FAIL (section 2): career 50002 (GK, 1990): step 3 (1992): Math.random count at the end of the month block 104 against 84
+  FAIL (section 2): career 50003 (GK, 1990): step 3 (1992): Math.random count at the end of the month block 100 against 80
+  FAIL (section 2): career 50004 (CB, 1990): step 3 (1992): Math.random count at the end of the month block 133 against 113
+  FAIL (section 2): career 50005 (CB, 1990): step 3 (1992): Math.random count at the end of the month block 209 against 189
+  FAIL (section 2): career 50006 (CB, 1990): step 3 (1992): Math.random count at the end of the month block 105 against 85
+  FAIL (section 2): career 50007 (CB, 1990): step 3 (1992): Math.random count at the end of the month block 101 against 81
+  FAIL (section 2): career 50008 (LB, 1990): step 5 (1993): Math.random count at the end of the month block 604 against 584
+  FAIL (section 2): career 50009 (LB, 1990): step 3 (1992): Math.random count at the end of the month block 219 against 199
+  FAIL (section 2): career 50010 (LB, 1990): step 3 (1992): Math.random count at the end of the month block 105 against 85
+  FAIL (section 2): career 50011 (LB, 1990): step 3 (1992): Math.random count at the end of the month block 105 against 85
+  FAIL (section 2): ... further failures in this section counted, not printed
+   200 careers in lockstep with the base: 616 steps, 408 seasons, 200 month blocks and 200 world ticks compared, 200 world records; 200 careers with a count, seed or record off the base
+   first fields to differ: events lastTournament intlHistory awards pendingBallonDor phone.feed phone.world 30; events lastTournament intlHistory pendingBallonDor phone.feed phone.world 24; events awards pendingBallonDor 15; events pendingNews lastTournament intlHistory pendingBallonDor phone.feed phone.world 11; events pendingNews lastTournament intlHistory awards pendingBallonDor phone.feed phone.world 11; pendingBallonDor 9; never differed 0; compared until a season's input differed in 0, by 
+3) The phone's world says nothing it cannot stand behind
+   this tree: 6061 seasons (4298 happened, 1763 to come), 46000 lines, 5264 champion lines in seasons to come, 2205 moves of generated men
+              real names in a past season 17118, past champions, transfers or scorers 29957, a missed summer's winner 1056, moves of real men 31890, real top scorers 10586, real men off their era club 63868, lines off the record 0
+   base:      6043 seasons, 45893 lines; real names in a past season 17093, past champions, transfers or scorers 29868, a missed summer's winner 1044, moves of real men 31902, real top scorers 10536, real men off their era club 63636, lines off the record 0
+   lines naming the player or his club: 316 here (the feed names his club: "🔄 DONE DEAL. Andrés Iniesta joins Chelsea from Barcelona. Fee around 110m."), 361 on the base (the feed names his club: "🔄 DONE DEAL. Christian Vieri joins AC Milan from Inter Milan. Fee around 65m.")
+  FAIL (section 3): 17118 findings of kind pastName, for example 1992: a real name in "🔄 DONE DEAL. Romário joins Benfica from PSV. Fee around 105m."
+  FAIL (section 3): 29957 findings of kind pastClaim, for example 1992: "🔄 DONE DEAL. Romário joins Benfica from PSV. Fee around 105m."
+  FAIL (section 3): 1056 findings of kind summer, for example 1992: a summer he missed, "🌍 Netherlands win the European Championship."
+  FAIL (section 3): 31890 findings of kind realMove, for example 1992: a real man moved, "🔄 DONE DEAL. Romário joins Benfica from PSV. Fee around 105m."
+  FAIL (section 3): 10586 findings of kind realTop, for example 1992: a real top scorer, "🥅 Ruud Gullit finished top scorer in Serie A on 19."
+  FAIL (section 3): 63868 findings of kind clubs, for example 1992: Romário sits at Benfica, his era pool says PSV
+  FAIL (section 3): 4298 findings of kind honest, for example the 1992 season has no honest line: ["🔄 DONE DEAL. Romário joins Benfica from PSV. Fee around 105m.","🔄 DONE DEAL. Raí joins Sporting CP from Sao Paulo. Fee around 65m.","🔄 DONE DEAL. Dennis Be
+  FAIL (section 3): 1763 findings of kind framing, for example the 2026 season does not open with its framing line on screen: ["🔄 DONE DEAL. Lamine Yamal joins Arsenal from Barcelona. Fee around 125m.","🔄 DONE DEAL. Mohamed Salah joins Cruzeiro from Trabzonspor. Fee around 100m.","🔄
+4) The phone's quiz asks about the world only where the world is the game's own
+   this tree: three questions in 6651 of 6656 seasons (1); world questions about a season that happened 7403, about a real man 4589, answers not in the save 0, world questions asked 10574
+   base:      three questions in 6659 of 6664 seasons (1); world questions about a season that happened 7377, about a real man 4561, answers not in the save 0
+     e.g. 1992: "Who were champions of Europe in 1992?" (Barcelona)
+     e.g. 1992: "How many did Ruud Gullit finish on in 1992?" (19)
+     e.g. 1992: "How many did Ruud Gullit finish on in 1992?"
+     e.g. 1993: "How many did Alan Shearer finish on in 1993?" (27)
+  FAIL (section 4): 7403 quiz questions about the world in a season that happened
+  FAIL (section 4): 4589 quiz questions about a real man's move or goals
+  FAIL (section 4): the quiz is ready in 1 of seasons against 1 on the base
+5) The season log and the International panel name a winner only where the rule allows
+   this tree: 3119 summers; winner lines missing where they belong 0, printed for a summer he missed 1047; kept for finals he played 1020, kept for a summer to come 693, held back 1047
+   base:      3133 summers; printed for a summer he missed that happened 1059
+     e.g. 1992 European Championship, he was not in the setup: "🌍 Netherlands won the European Championship."
+     e.g. 1994 World Cup, he was not in the setup: "🌍 Serbia won the World Cup."
+     e.g. 1996 European Championship, he was not in the setup: "🌍 France won the European Championship."
+  FAIL (section 5): 1047 summers he missed, that really happened, still name their winner in the season log
+   a past summer he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+  FAIL (section 5): a past summer he missed: champions is true, the rule says false
+  FAIL (section 5): a past summer he missed: bracket is true, the rule says false
+  FAIL (section 5): a past summer he missed: wonIt is true, the rule says false
+   a past summer he played: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   a summer to come he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   an old save's history, a missed 2010 last: champions line true, bracket tile true, last tile winner true (base true, true, true)
+  FAIL (section 5): an old save's history, a missed 2010 last: champions is true, the rule says false
+  FAIL (section 5): an old save's history, a missed 2010 last: bracket is true, the rule says false
+  FAIL (section 5): an old save's history, a missed 2010 last: wonIt is true, the rule says false
+FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 202, section 3: 8, section 4: 3, section 5: 7)

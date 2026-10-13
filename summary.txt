@@ -1,0 +1,13 @@
+vitest-unit exit=0 5s |    Duration  4.00s (transform 2.18s, setup 212ms, collect 3.43s, tests 355ms, environment 1.56s, prepare 468ms)
+ctl-goalsonly exit=1 75s | FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 202, section 3: 8, section 4: 3, section 5: 7)
+worldtruth exit=1 83s | simSoccerWorldTruth: 17 FAILURES (section 3: 8, section 4: 2, section 5: 7)
+tsc exit=0 96s | 
+ctl-nolegacy exit=1 69s | FIRED: WORLD_TRUTH_CONTROL=nolegacy failed section 2 (202 failures; section 2: 202, section 3: 8, section 4: 2, section 5: 7)
+ctl-seasonyear exit=1 84s | FIRED: WORLD_TRUTH_CONTROL=seasonyear failed section 1 (1 failures; section 1: 1, section 3: 8, section 4: 2, section 5: 7)
+ctl-extradraw exit=1 76s | FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 3: 8, section 4: 2, section 5: 7)
+simAwards exit=0 8s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simBallonDorFairness exit=0 4s | PASS: 100.0% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats
+simSoccerEventPromises exit=0 25s | simSoccerEventPromises: all sections green
+simCareerLifeCooldowns exit=0 64s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simSoccerDeckFairness exit=1 77s | simSoccerDeckFairness: 4 failures in section 8
+vitest-engine exit=0 104s |    Duration  103.07s (transform 9.81s, setup 4.45s, collect 47.35s, tests 195.19s, environment 32.77s, prepare 7.09s)

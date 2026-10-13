@@ -1,0 +1,39 @@
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8220 playing seasons, 7459 batches, 7459 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 87 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.006, 0.995, 1.005, 0.997, 0.992, 1.009, 0.987, 0.996, 1.008, 1.004; single cards 0.936 to 1.071 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 7459 papers printed 20 of the 23 stories under weight 1, 3412 prints against a fair 3387.597; REDEMPTION 0 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 180/179.51/2698; Followers After Viral Mo 0.5 1440/1395.719/6693; Booed By Own Fans After  0.7 320/303.192/777; Wants Out As Contract Ta 0.5 37/35.441/197; Out For Weeks With 0.5 11/6.432/36; Hits Out At Manager In S 0.3 11/13.119/116; Agent Demands Record Dea 0.4 48/46.64/1027; : Another Season Of Riva 0.5 44/39.479/639; M Bid For 0.7 433/446.227/3339; Available On Free Transf 0.5 100/90.377/704; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 204/213.633/1059; Never Celebrates, Never  0.9 67/66.498/539; Walks Disciplinary Tight 0.9 36/43.946/208; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 178/198.385/1940; 's Monster Contract 0.7 8/9.057/131; LEADER OF THE NATION: 0.6 184/189.757/2324; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 18/19.488/196; Is Football's Coldest Wa 0.6 2/1.171/11; 's Money Now Works Harde 0.5 90/89.112/1363; Refuses To Read The Cale 0.5 1/0.413/7
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+   eight seasons a save: the deck dealt 8 different batches on average, 0 of 100 saves under six; the paper printed one story all eight years in 1 of 76 saves with two or more stories
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 154/0/5989  4: 38/0/1921  7: 85/0/5989  9: 17/0/608  11: 28/0/1366  12: 12/0/485  15: 37/0/1166  17: 0/0/0  18: 6/0/246  19: 4/0/245
+   10 fixed rows asked of the engine and of this file's rules
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1440 times in 7459 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+   "the <nation> international": 0 stories say it of an uncapped player, 2 of a capped one
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 942 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+  FAIL (section 8): the inverse does not apply: the imports row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head 0ec5e87bcf39e88cef8babb16b8a5bde843e8d1862c5eb8e03233cba6e050ecc; inverse applied 0 of 16 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+  FAIL (section 8): the engine changes at head lines 5695 to 5710, outside every hunk this round may edit
+  FAIL (section 8): the engine changes at head lines 5712 to 5718, outside every hunk this round may edit
+  FAIL (section 8): the engine changes at head lines 5720 to 5720, outside every hunk this round may edit
+   72 diff hunks against the base, each checked against 6 regions
+9) What a narrating card or story prints is what the row holds
+   18 injuries read; card 11 and INJURY BLOW rendered for 18; the fleet dealt card 11 28, 12 12, 15 37, 19 4 times and printed INJURY BLOW 11, a move story 871 times, each read against its row
+simSoccerDeckFairness: 4 failures in section 8
