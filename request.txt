@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts src/components/nba-front-office src/components/front-office-shared src/lib/gmDraftNight.test.ts src/lib/gmDraftOrder.test.ts src/lib/gmLotteryNight.test.ts --testTimeout=300000 --hookTimeout=120000
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+earned-full: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_SETS=12 SIM_NBA_EARNED_DRAFT_SHARD=0/12 node scripts/simNbaEarnedDraft.mjs
+nbadesk: node scripts/simNbaGmDesk.mjs
+nbadesk-ctl: for m in coinflip shortscale norfa latetrade noguard droppick flatstaff flatgrowth nodefault pilefit noedgeround noedgepo noinjhook nomirror nostepien noruleblock sheetrepick dayonestature; do SIM_NBA_GM_DESK_CONTROL=$m node scripts/simNbaGmDesk.mjs > /tmp/d-$m.log 2>&1; echo "$m exit=$? $(tail -1 /tmp/d-$m.log | cut -c1-90)"; done
+capital-ctl: s=0; node scripts/simNbaDraftCapital.mjs > /tmp/c0.log 2>&1 || s=1; echo "normal exit=$s"; for m in capital human eligibility rivalConsume budget pending zeroPending restoreBudget legacyReplay counter roundOne complete pool recovery density five prospect legacyQuota available missing zeroBudget; do NBA_DRAFT_CAPITAL_CONTROL=$m node scripts/simNbaDraftCapital.mjs > /tmp/c-$m.log 2>&1; e=$?; echo "$m exit=$e $(grep -o '"failedIndices":\[[0-9,]*\]' /tmp/c-$m.log)"; [ $e -ne 0 ] && s=1; done; exit $s
+draftorder: node scripts/simGmDraftOrder.mjs
+draftorder-all: SIM_GM_DRAFT_ORDER_CONTROL=all node scripts/simGmDraftOrder.mjs
+singles: s=0; for h in simGmPicks simDraftNight simEngineIds simInventedNames simHarnessAnchors simNoRivalNames simStorageWrites; do node scripts/$h.mjs > /tmp/s-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/s-$h.log | cut -c1-120)"; [ $e -ne 0 ] && s=1; done; exit $s
+diffproof: git diff -U0 48cb9d4b -- src/lib/nbaFrontOffice.ts | grep -c '^-[^-]' | grep -qx 0 && ! git diff -U0 48cb9d4b -- src/lib/nbaFrontOffice.ts | grep -E '^\+.*p\.ovr = Math\.min\(p\.pot, p\.ovr \+ a \+ Math\.floor\(rng\(\) \* n\)\)' && git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts && git diff --stat 48cb9d4b -- src public index.html package.json package-lock.json vite.config.ts && git grep -l -w -E 'gmEarnedDraft|nbaEarnedDraft' -- src && git diff 48cb9d4b --stat -- scripts/simGmDraftOrder.mjs && echo diffproof-ok
