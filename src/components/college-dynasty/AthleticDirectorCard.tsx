@@ -49,9 +49,11 @@ export function SeatSlot({ block, view, offer, onOpen, onTake, onPass }: {
   if (tile) {
     return (
       <button
-        type="button" data-college-seat="tile" onClick={onOpen} aria-label="Open the athletic director's card"
+        type="button" data-college-seat="tile" onClick={onOpen}
         className={cn(SLOT, 'flex w-full flex-col justify-center gap-1 overflow-hidden rounded-2xl border border-gold/40 bg-card px-4 py-2 text-left hover:border-gold/70')}
       >
+        {/* No aria-label: it would replace the ask, trust and the live line for a screen reader. */}
+        <span className="sr-only">Open the athletic director's card. </span>
         <span className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground">
           <span>Athletic director</span>
           <span className={tile.trust <= 25 ? 'text-destructive' : 'text-foreground'}>Trust {tile.trust}</span>
@@ -82,38 +84,63 @@ export function SeatSlot({ block, view, offer, onOpen, onTake, onPass }: {
   );
 }
 
+/** The rules and the worked example behind the "?", over the card or the job market, with Back. */
+function SeatRules({ view, onBack }: { view: CollegeLeagueView; onBack: () => void }) {
+  const r = collegeSeatRules(view);
+  return (
+    <div data-college-seat="rules" className="cm-rise rounded-2xl border border-gold/40 bg-card p-4">
+      <button type="button" onClick={onBack} className={cn(TAP, 'inline-flex items-center gap-1.5 rounded-full px-2 text-xs font-semibold text-muted-foreground hover:text-foreground')}>
+        <ArrowLeft className="h-4 w-4" /> Back
+      </button>
+      <p className="mt-1 font-display text-base font-bold text-foreground">How the athletic director works</p>
+      <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs text-muted-foreground">
+        {r.rules.map((line, i) => <li key={i}>{line}</li>)}
+      </ul>
+      <p className="mt-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">A worked example</p>
+      <ol className="mt-1 list-decimal space-y-1 pl-5 text-xs text-muted-foreground">
+        {r.example.map((line, i) => <li key={i}>{line}</li>)}
+      </ol>
+    </div>
+  );
+}
+
+/** The "?" that opens the rules. */
+function RulesButton({ onClick, className }: { onClick: () => void; className?: string }) {
+  return (
+    <button type="button" onClick={onClick} aria-label="How the athletic director works" className={cn(TAP, 'inline-flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground', className)}>
+      <CircleHelp className="h-5 w-5" />
+    </button>
+  );
+}
+
+/** His record, one row a program: on the card and on the job market. */
+function StintRows({ block, view }: { block: CollegeSeatBlock; view: CollegeLeagueView }) {
+  return (
+    <div className="mt-1 max-h-40 space-y-1 overflow-y-auto">
+      {collegeStintRows(block, view).map((s, i) => (
+        <p key={`${s.team}:${s.since}:${i}`} className="flex flex-wrap items-center justify-between gap-x-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+          <span className="font-semibold text-foreground">{s.name}, since {s.since}</span>
+          <span className="shrink-0 text-muted-foreground">
+            {s.seasons} {s.seasons === 1 ? 'season' : 'seasons'}, {s.titles} {s.titles === 1 ? 'title' : 'titles'}{s.ended ? `, ${s.ended}` : ''}
+          </span>
+        </p>
+      ))}
+    </div>
+  );
+}
+
 /** The card, in place of the tab content: the ask, trust, the live line and the record, with its "?". */
 export function SeatCard({ block, view, onBack }: { block: CollegeSeatBlock; view: CollegeLeagueView; onBack: () => void }) {
   const [rules, setRules] = useState(false);
   const tile = collegeTileView(block, view);
-  const rows = collegeStintRows(block, view);
-  if (rules) {
-    const r = collegeSeatRules(view);
-    return (
-      <div data-college-seat="rules" className="cm-rise rounded-2xl border border-gold/40 bg-card p-4">
-        <button type="button" onClick={() => setRules(false)} className={cn(TAP, 'inline-flex items-center gap-1.5 rounded-full px-2 text-xs font-semibold text-muted-foreground hover:text-foreground')}>
-          <ArrowLeft className="h-4 w-4" /> Back
-        </button>
-        <p className="mt-1 font-display text-base font-bold text-foreground">How the athletic director works</p>
-        <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs text-muted-foreground">
-          {r.rules.map((line, i) => <li key={i}>{line}</li>)}
-        </ul>
-        <p className="mt-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">A worked example</p>
-        <ol className="mt-1 list-decimal space-y-1 pl-5 text-xs text-muted-foreground">
-          {r.example.map((line, i) => <li key={i}>{line}</li>)}
-        </ol>
-      </div>
-    );
-  }
+  if (rules) return <SeatRules view={view} onBack={() => setRules(false)} />;
   return (
     <div data-college-seat="card" className="cm-rise rounded-2xl border border-gold/40 bg-card p-4">
       <div className="flex items-center justify-between">
         <button type="button" onClick={onBack} className={cn(TAP, 'inline-flex items-center gap-1.5 rounded-full px-2 text-xs font-semibold text-muted-foreground hover:text-foreground')}>
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
-        <button type="button" onClick={() => setRules(true)} aria-label="How the athletic director works" className={cn(TAP, 'inline-flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground')}>
-          <CircleHelp className="h-5 w-5" />
-        </button>
+        <RulesButton onClick={() => setRules(true)} />
       </div>
       <p className="mt-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">{`The athletic director's ask, ${view.season}`}</p>
       {tile && (
@@ -125,16 +152,7 @@ export function SeatCard({ block, view, onBack }: { block: CollegeSeatBlock; vie
         </>
       )}
       <p className="mt-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Your record</p>
-      <div className="mt-1 max-h-40 space-y-1 overflow-y-auto">
-        {rows.map((s, i) => (
-          <p key={`${s.team}:${s.since}:${i}`} className="flex flex-wrap items-center justify-between gap-x-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
-            <span className="font-semibold text-foreground">{s.name}, since {s.since}</span>
-            <span className="shrink-0 text-muted-foreground">
-              {s.seasons} {s.seasons === 1 ? 'season' : 'seasons'}, {s.titles} {s.titles === 1 ? 'title' : 'titles'}{s.ended ? `, ${s.ended}` : ''}
-            </span>
-          </p>
-        ))}
-      </div>
+      <StintRows block={block} view={view} />
     </div>
   );
 }
@@ -187,12 +205,15 @@ export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }
   block: CollegeSeatBlock; view: CollegeLeagueView; market: CollegeMarket; canSit: boolean;
   onTake: (teamId: string) => void; onSit: () => void; onNew: () => void;
 }) {
-  const rows = collegeStintRows(block, view);
+  /* The rules are re-openable here too: a fired coach holds no card, and this is when they matter. */
+  const [rules, setRules] = useState(false);
   const champ = championOf(view, view.season);
   const champName = champ ? view.programs.find(p => p.id === champ)?.name ?? champ : null;
+  if (rules) return <SeatRules view={view} onBack={() => setRules(false)} />;
   return (
     <div data-college-seat="market" className="space-y-3">
-      <div className="cm-rise rounded-2xl border border-border bg-card p-4 text-center">
+      <div className="cm-rise relative rounded-2xl border border-border bg-card px-12 py-4 text-center">
+        <RulesButton onClick={() => setRules(true)} className="absolute right-1 top-1" />
         <p className="font-display text-lg font-bold text-foreground">{market.state === 'offers' ? 'The phone is ringing' : market.state === 'closed' ? 'The phone has stopped' : 'Out of work'}</p>
         <p className="mt-1 text-sm text-muted-foreground">{market.line}</p>
         {market.seasonsOut > 0 && champName && (
@@ -230,14 +251,7 @@ export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }
       </div>
       <div className="rounded-2xl border border-border bg-card p-3">
         <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Your record</p>
-        <div className="mt-1 max-h-40 space-y-1 overflow-y-auto">
-          {rows.map((s, i) => (
-            <p key={`${s.team}:${s.since}:${i}`} className="flex flex-wrap items-center justify-between gap-x-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
-              <span className="font-semibold text-foreground">{s.name}, since {s.since}</span>
-              <span className="shrink-0 text-muted-foreground">{s.seasons} {s.seasons === 1 ? 'season' : 'seasons'}, {s.titles} {s.titles === 1 ? 'title' : 'titles'}{s.ended ? `, ${s.ended}` : ''}</span>
-            </p>
-          ))}
-        </div>
+        <StintRows block={block} view={view} />
       </div>
     </div>
   );

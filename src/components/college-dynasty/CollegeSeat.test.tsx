@@ -172,6 +172,12 @@ describe('Round 1320: the athletic director on the college boards', () => {
       const market = txt(m.q('[data-college-seat="market"]')!);
       expect(market).toContain('let you go');
       expect(m.saved().phase).toBe('recap');
+      /* the rules reopen from the market, where a fired coach has no card to reach them from */
+      fireEvent.click(m.view.container.querySelector('[data-college-seat="market"] [aria-label="How the athletic director works"]')!);
+      expect(m.q('[data-college-seat="market"]')).toBeNull();
+      expect(txt(m.q('[data-college-seat="rules"]')!)).toContain('A program that let you go never calls again');
+      fireEvent.click(m.button(/Back$/));
+      expect(txt(m.q('[data-college-seat="market"]')!)).toBe(market);
       cleanup();
       const again = mount(sport, again0(sport));
       expect(txt(again.q('[data-college-seat="market"]')!)).toBe(market);
