@@ -1,0 +1,11 @@
+  PASS  B  banner-390 first row, an in page click: the page moved 0 px (scrollY 669 to 669)
+  PASS  B  banner-390 first row, an in page click: the day strip is wholly on screen (573 to 645 of 844)
+  PASS  B  banner-390 first row, an in page click: the tapped day is still on screen (279 px)
+  PASS  B  banner-390 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  banner-390 first row, an in page click: the strip clears the cookie banner (strip bottom 645, banner top 695)
+  PASS  B  banner-390 last row, a real click: the page moved 0 px (scrollY 669 to 669)
+  PASS  B  banner-390 last row, a real click: the day strip is wholly on screen (573 to 673 of 844)
+  PASS  B  banner-390 last row, a real click: the tapped day is still on screen (519 px)
+  PASS  B  banner-390 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  banner-390 last row, a real click: the strip clears the cookie banner (strip bottom 673, banner top 695)
+playCmHubLanding: green (B 65 pass 0 fail); the hub lands on the club on its first frame

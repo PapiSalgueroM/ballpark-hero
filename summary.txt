@@ -1,0 +1,9 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 64s | tsc exit 0
+unit exit=0 7s |       Tests  46 passed (46)
+walkB exit=0 22s | playCmHubLanding: green (B 65 pass 0 fail); the hub lands on the club on its first frame
+ctl-stale exit=1 22s | playCmHubLanding: CONTROL stale FIRED, 1 B check(s) went red, first: banner-390: the strip rides the foot once the banner is answered (bottom 683, foot 832, banner gone) 
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playCmRealFixtures-1 exit=1 2s | Node.js v24.21.0
+playCmRealFixtures-2 exit=1 2s | Node.js v24.21.0
+playCmRealFixtures-3 exit=1 2s | Node.js v24.21.0

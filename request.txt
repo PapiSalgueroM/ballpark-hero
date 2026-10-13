@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json > /tmp/tsc.log 2>&1; s=$?; grep -c "error TS" /tmp/tsc.log; tail -3 /tmp/tsc.log | cut -c1-200; echo "tsc exit $s"; exit $s
+unit: node_modules/.bin/vitest run src/test/clubManagerHubLines.test.ts src/test/useArrivalTop.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerDeskCues.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vt.log 2>&1; s=$?; grep -E "Test Files|Tests |FAIL" /tmp/vt.log | cut -c1-200 | head -12; exit $s
+walkB: RC_OUT="$RC_OUT/walkB" HEAD_URL=http://localhost:4173 HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs > /tmp/wb.log 2>&1; s=$?; grep "  FAIL" /tmp/wb.log | cut -c1-220 | head -10; grep -E "rides the foot|own place|banner" /tmp/wb.log | cut -c1-220 | head -10; tail -1 /tmp/wb.log | cut -c1-300; exit $s
+ctl-stale: RC_OUT="$RC_OUT/stale" HEAD_URL=http://localhost:4173 HUB_LANDING_SECTIONS=B HUB_LANDING_CONTROL=stale node scripts/playCmHubLanding.mjs > /tmp/cs.log 2>&1; s=$?; grep "  FAIL" /tmp/cs.log | cut -c1-220 | head -8; tail -1 /tmp/cs.log | cut -c1-300; exit $s
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2
+playCmRealFixtures-1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf1.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf1/report.json; tail -1 /tmp/rf1.log | cut -c1-250; exit $s
+playCmRealFixtures-2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf2 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf2.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf2/report.json; tail -1 /tmp/rf2.log | cut -c1-250; exit $s
+playCmRealFixtures-3: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf3 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf3.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf3/report.json; tail -1 /tmp/rf3.log | cut -c1-250; exit $s
