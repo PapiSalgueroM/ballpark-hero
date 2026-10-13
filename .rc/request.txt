@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+chunks-head: node .rc/x/chunks.mjs; node .rc/x/chunkpeek.mjs
+chunks-base: git worktree add -q /tmp/wb c5fc5470 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4192 > /dev/null 2>&1 &) && sleep 3 && X=$PWD/.rc/x && cd /tmp/wb && BASE=http://127.0.0.1:4192 node $X/chunks.mjs; node $X/chunkpeek.mjs
