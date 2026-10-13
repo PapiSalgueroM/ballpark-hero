@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { inverseCareerNextTen } from '../lib/careerNextTenAttribution1197.mjs';
 import { inverseVeteranPay, VETERAN_PAY_ADDITIONS } from '../lib/careerVeteranPay1262.mjs';
+import { inverseDeckFair, DECK_FAIR_ADDITIONS } from '../lib/careerDeckFair1327.mjs';
 assert(process.env.CI, 'Season history proof runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 /* Release AT: the base is the tree just before this round's own merge on the release line (f57763a6, Round 1192
@@ -35,7 +36,9 @@ export async function bundleSeasonHistory({ original = false, patch, without = [
      (scripts/lib/careerNextTenAttribution1197.mjs), after a control's own patch. Only the groups that compare with
      the base use such a bundle. */
   /* Release AW: the same copies take the veteran pay of Rounds 1262 to 1264 out too (scripts/lib/careerVeteranPay1262.mjs). */
-  const nextTen = [], veteranPay = [];
+  /* Round 1327: the same copies take the event deck's keyed draw and the paper's weighted draw out first, the newest
+     change first (scripts/lib/careerDeckFair1327.mjs), so the base's Math.random stream comes back. */
+  const nextTen = [], veteranPay = [], deckFair = [];
   const receipts = [], loaded = [], require = createRequire(path.join(ROOT, 'package.json'));
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'season-history-')), output = path.join(tmp, 'bundle.cjs');
   const stdin = "export * as soccer from './src/lib/soccerCareerEngine'; export * as reader from './src/lib/soccerSeasonCompetitions'; export * as ratings from './src/lib/careerSeasonRatings'; export * as fixtures from './src/test/fixtures/soccerSeasonCompetitions1173';" + (original ? '' : "export * as history from './src/lib/soccerCareerSeasonHistory';");
@@ -48,7 +51,7 @@ export async function bundleSeasonHistory({ original = false, patch, without = [
       source = source.replace(patch.from, patch.to); assert.notEqual(sha(source), before, patch.name + ': effective copied source change');
       receipts.push({ name: patch.name, file: rel, beforeSha256: before, afterSha256: sha(source), effective: true });
     }
-    if (!original && without.length) source = inverseVeteranPay(rel, inverseCareerNextTen(rel, source, nextTen, without), veteranPay);
+    if (!original && without.length) source = inverseVeteranPay(rel, inverseCareerNextTen(rel, inverseDeckFair(rel, source, deckFair), nextTen, without), veteranPay);
     loaded.push({ file: rel, beforeSha256: before, compiledSha256: sha(source), changed: before !== sha(source) });
     return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : rel.endsWith('.json') ? 'json' : 'ts' };
   }); } };
@@ -57,7 +60,8 @@ export async function bundleSeasonHistory({ original = false, patch, without = [
     if (patch) assert.equal(receipts.length, 1, 'Copied helper defect was loaded exactly once');
     if (!original) assert.deepEqual(nextTen.map(row => row.addition).sort(), [...without].sort(), 'Each addition of Rounds 1197 to 1208 asked for was taken out of the copy exactly once');
     if (!original) assert.deepEqual(veteranPay.map(row => row.addition).sort(), without.length ? [...VETERAN_PAY_ADDITIONS].sort() : [], 'The veteran pay of Release AW was taken out of every copy that is compared with the base, once, and out of no other');
-    return { ...require(output), receipts, loaded, nextTen, veteranPay };
+    if (!original) assert.deepEqual(deckFair.map(row => row.addition), without.length ? [...DECK_FAIR_ADDITIONS] : [], 'Round 1327 was taken out of every copy that is compared with the base, once, in order, and out of no other');
+    return { ...require(output), receipts, loaded, nextTen, veteranPay, deckFair };
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 }
 // Independent raw-save oracle. This deliberately imports no production season readers.

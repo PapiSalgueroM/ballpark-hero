@@ -219,6 +219,10 @@ import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAt
 /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. The attributed bundle
    takes that out of a copy of the contracts file too, at its one condition: scripts/lib/careerVeteranPay1262.mjs. */
 import { VETERAN_PAY_FILE, VETERAN_PAY_ADDITIONS, inverseVeteranPay } from './lib/careerVeteranPay1262.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves every seeded
+   career's Math.random from the first deck or paper on. The attributed engine takes that out first, the newest
+   change first: scripts/lib/careerDeckFair1327.mjs. */
+import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
 
 /* Release AT: two attributions meet in section 1. Release AQ replays the old fixture with the Soccer
    Career train (Rounds 1169 to 1178) taken out through these four lists. Rounds 1185 and 1187 replay it
@@ -393,7 +397,7 @@ function sourceHashes() {
   return result;
 }
 const proof = { control: CONTROL, base: careerDevelopmentBaseReceipt(), sourceBefore: sourceHashes(), sourceAfter: null,
-  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
+  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], deckFairAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
 const writeProof = (file, value) => fs.writeFileSync(path.join(ARTIFACTS, file), JSON.stringify(value, null, 2));
 
 /* The actual original tree is loaded independently. The sole page append is
@@ -443,7 +447,8 @@ export const cards = {
 async function attributedAwardsBundle() {
   const file = 'src/lib/soccerCareerEngine.ts';
   const authored = fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
-  let controlled = trainOutOf(file, authored);
+  let controlled = trainOutOf(file, inverseDeckFair(file, authored, proof.deckFairAttribution));
+  assert.deepEqual(proof.deckFairAttribution.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The copied engine receives Round 1327\'s inverse once, every row in order');
   for (const patch of patches.filter(p => p.file === file)) {
     assert.equal(controlled.split(patch.from).length, 2, 'The awards engine fault has one effective anchor');
     const before = controlled;
