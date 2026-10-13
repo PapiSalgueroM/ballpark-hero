@@ -1,0 +1,6 @@
+   × Player Bingo retained Vitinha identities and title seasons > rejects a namesake history row with attacking midfield position 6ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/playerBingoHonours.test.ts > Player Bingo retained Vitinha identities and title seasons > rejects a namesake history row with attacking midfield position
+      Tests  1 failed | 10 passed (11)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/playerBingoHonours.test.ts,title=src/test/playerBingoHonours.test.ts > Player Bingo retained Vitinha identities and title seasons > rejects a namesake history row with attacking midfield position,line=301,column=43::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/playerBingoHonours.test.ts:301:43%0A%0A
+OLD GUARD REPRODUCED: exactly the attacking midfield case fails on d2f65f10

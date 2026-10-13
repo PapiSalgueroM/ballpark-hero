@@ -1,0 +1,4 @@
+tsc exit=0 49s | 
+simPlayerBingoHonours exit=0 6s | simPlayerBingoHonours PASS
+simSoccerLoanMinutes exit=0 38s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+bingo-oldguard exit=0 1s | OLD GUARD REPRODUCED: exactly the attacking midfield case fails on d2f65f10
