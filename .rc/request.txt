@@ -1,0 +1,3 @@
+#!build
+#!serial
+sims1: ONLY=simCmInternationals,simCmLeaguePhase,simCmMatchCentre,simCmOwnGoals,simCmQuickLegs,simCmQuickSubs,simCmShootoutOrder,simCmStoppageTime,simCmVar,simContractPreview,simContracts,simCreateClub,simCup,simCustomClubValues,simDailyClubPool,simDealDepth,simEarlyReturnScope,simEra2005,simEra2010,simEra2015,simEra2020,simEraWorldTables,simExtraTime,simFinance,simFixtureBalance,simFlagshipWeight,simFootleLeagues,simFreeAgents,simGmBooks,simGmCalendar,simGmDealTableFixture,simGmStaff,simHalftime,simHeadlines,simHomeFront,simIntlFormatHistory,simJobMarket,simLiveMatch node scripts/runAllSims.mjs
