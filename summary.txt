@@ -1,0 +1,3 @@
+vitest exit=0 3s |    Duration  2.24s (transform 338ms, setup 91ms, collect 395ms, tests 319ms, environment 613ms, prepare 404ms)
+worldtruth-base exit=1 53s | simSoccerWorldTruth: 25 FAILURES (section 1: 8, section 3: 8, section 4: 2, section 5: 7)
+tsc exit=0 67s | 
