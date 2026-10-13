@@ -19,7 +19,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CM_LOCAL_ONLY: '1'
-      MANAGER_DEADLINE_PHASE: baseline
+      MANAGER_DEADLINE_PHASE: fixed
       MANAGER_DEADLINE_OUT: ${{ github.workspace }}/manager-deadline-artifacts
       MANAGER_DECISION_DEPTH_OUT: ${{ github.workspace }}/manager-deadline-artifacts/prior-decisions
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/manager-deadline-artifacts/font-cache

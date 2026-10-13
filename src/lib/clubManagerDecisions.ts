@@ -475,6 +475,9 @@ export function answerDecision(career: CareerState, id: string, optionIdx: numbe
     ...extra,
     decisions: desk.map(d => (d.id === id ? { ...d, options: [], resolved, ...(outcome ? { outcome } : {}) } : d)),
   });
+  if (item.kind === 'situation' && career.live) {
+    return close('The next match has already kicked off, so the reply window closed. Nothing changed.');
+  }
   const effect = opt.effect;
 
   if (effect.kind === 'acceptBan') {
