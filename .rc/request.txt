@@ -1,0 +1,6 @@
+#!serial
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simBoardObjectives-base: mkdir -p .tbo && git archive c9c77eba | tar -x -C .tbo && ln -s $PWD/node_modules .tbo/node_modules && cp scripts/simBoardObjectives.mjs .tbo/scripts/simBoardObjectives.mjs && node .tbo/scripts/simBoardObjectives.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shootout-newsdraw: node .rc/x/mut-newsdraw.mjs && node scripts/simCmShootoutOrder.mjs; s=$?; git checkout -- src scripts; exit $s
