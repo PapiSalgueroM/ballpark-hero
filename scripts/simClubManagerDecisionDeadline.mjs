@@ -46,7 +46,8 @@ const arm = CONTROL || PHASE, retained = path.join(OUT, arm);
 fs.mkdirSync(retained, { recursive: true });
 assert(!fs.existsSync(path.join(retained, 'source.json')), 'Refuse to replace an existing proof arm');
 for (const [file, contents] of sources) fs.writeFileSync(path.join(retained, path.basename(file) + '.before'), contents);
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'manager-decision-deadline-compiled-'));
+fs.mkdirSync(path.join(ROOT, 'tmp'), { recursive: true });
+const tmp = fs.mkdtempSync(path.join(ROOT, 'tmp/manager-decision-deadline-compiled-'));
 const changed = new Map(sources), edits = [];
 let outcome = {};
 function git(args) {
