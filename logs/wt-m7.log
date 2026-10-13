@@ -1,0 +1,6 @@
+M7: applied (return came.splice(i, 1)[0]; -> return came[i]; /* M7 */)
+   week 0: mid-2030-w0, mid-2030-w0-2
+   week 1: mid-2030-w1, mid-2030-w1-2
+   week 2: heavy-2030-w2, heavy-2030-w2-2
+   week 3: mid-2030-w3, mid-2030-w3-2
+rv1324wt: 1000 deals over 500 weeks (weights 1, 3 and 2, two a week), 193 weeks dealt one card twice

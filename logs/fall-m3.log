@@ -1,0 +1,6 @@
+M3: applied (if (clock - Math.min(at, clock) < restFor) rest[k] = Math.mi -> if (clock - at < restFor) rest[k] = at; /* M3 */)
+R rest on a falling clock: dealt 0:0 0:4 0:8; season 2 deals 0; book at the end {"role:star":8}
+R FAIL: the rest book entry from the end of season 1 sits in the future and holds the subject through season 2
+E expiry on a falling clock: 0:9:open 1:0:open 1:1:open 1:2:auto 1:3:auto 1:4:auto 1:5:auto 1:6:auto 1:7:auto 1:8:auto 1:9:auto
+E settled at 1:2:auto (rebased like the book: 1:2)
+rv1324fall: 1 failure(s)
