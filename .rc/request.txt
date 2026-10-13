@@ -1,0 +1,29 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base-m2-EXPECT-RED: mkdir -p .tb0 && git archive 79b08e00 src | tar -x -C .tb0 && CM_COPY_ROOT=$PWD/.tb0 node scripts/simCmCopy.mjs
+simCmCopy-article-EXPECT-RED: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+simCmCopy-drama-EXPECT-RED: CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+simCmCopy-intl-EXPECT-RED: CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+simCmCopy-staff-EXPECT-RED: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+simCmCopy-finance-EXPECT-RED: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+copyonly-ABCD-vs-m2: mkdir -p .tb1 && git archive 79b08e00 src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A,B,C,D
+copyonly-draw-EXPECT-RED: mkdir -p .tb2 && git archive 79b08e00 src | tar -x -C .tb2 && COPY_ONLY_CONTROL=draw node scripts/qa/cmCopyOnly1326.mjs --base .tb2 --fleet=A
+copyonly-word-EXPECT-RED: mkdir -p .tb4 && git archive 79b08e00 src | tar -x -C .tb4 && COPY_ONLY_CONTROL=word node scripts/qa/cmCopyOnly1326.mjs --base .tb4 --fleet=A
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+shootout-unsetpath-EXPECT-RED: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+simGmStaff-knownred: node scripts/simGmStaff.mjs
+simBoard: node scripts/simBoard.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simDailyDeals-bind-EXPECT-RED: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline-EXPECT-RED: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
