@@ -373,7 +373,7 @@ export function gmInboxWeek<S extends GmInboxHost>(
   s: S, seat: GmInboxSeat<S>, beat: string, facts: GmFacts, clock: number, rng: () => number,
 ): InboxMessage[] {
   const pack = seat.pack;
-  const inbox = [...(s.phoneInbox ?? [])];
+  const inbox: GmInboxMessage[] = [...(s.phoneInbox ?? [])];
   const used = [...(s.phoneUsedIds ?? [])];
   const last = { ...(s.gmInboxLast ?? {}) };
   /* The clock only ever rises. A seat that hands in one that fell (a week of
@@ -395,7 +395,7 @@ export function gmInboxWeek<S extends GmInboxHost>(
      this week. A card whose def is gone or no longer expires stays open, and
      a tick from the future is rebased like the book. */
   for (let i = 0; i < inbox.length; i++) {
-    const m = inbox[i] as GmInboxMessage;
+    const m = inbox[i];
     if (m.answered !== undefined || m.w === undefined) continue;
     const w = Math.min(m.w, clock);
     const ttl = pack.events.find(e => e.id === m.defId)?.expires;

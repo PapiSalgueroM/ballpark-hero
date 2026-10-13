@@ -146,3 +146,11 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   the top card's cooldown away as well (and keeps the weight 50): nfl_fan_night then takes 31.7% of 3,283 deals,
   ceiling 22.4%, section 10 red. A fact for W2, W3 and every pack round: in today's GM packs a weight barely moves
   anything; weights matter only where cards compete for the same week.
+
+### Step (d) proof on a runner (rc r1324-d, head 692f6cd1) and its one red
+
+- tsc exit 2: `gmInboxWeek` wrote `w` and `auto` into an array typed `InboxMessage[]` (two TS2353 errors at the
+  expiry lines). Fixed by typing the week's working list as `GmInboxMessage[]` (types only; nothing a desk deals can
+  move). Everything else on that head: vitest exit 0 (42 tests), simEventDeck exit 0, every deck control red on its
+  own section (expireoff and expirefx section 7, neutral section 8), simGmInbox equal to the base at seeds 1 to 3, all
+  fourteen of its controls red, simCareerInbox green and privatecap red, the five legal fences green.
