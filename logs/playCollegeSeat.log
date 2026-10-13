@@ -1,0 +1,34 @@
+   cfb-dynasty-320: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+   cfb-dynasty-320 first press: tile top 307 to 307, Play top 814 to 702, slot 128 to 128, scrollY 444 to 797
+  FAIL [S3] cfb-dynasty-320: the first press moved the tile or the Play button
+   cfb-dynasty-320 older save: slot 128 / 128 / 128, Play top 644 / 644 / 644
+   cfb-dynasty-390: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+   cfb-dynasty-390 first press: tile top 273 to 273, Play top 748 to 652, slot 128 to 128, scrollY 0 to 747
+  FAIL [S3] cfb-dynasty-390: the first press moved the tile or the Play button
+   cfb-dynasty-390 older save: slot 128 / 128 / 128, Play top 594 / 594 / 594
+   cfb-dynasty-1280: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+   cfb-dynasty-1280 first press: tile top 219 to 219, Play top 610 to 562, slot 128 to 128, scrollY 0 to 642
+  FAIL [S3] cfb-dynasty-1280: the first press moved the tile or the Play button
+   cfb-dynasty-1280 older save: slot 128 / 128 / 128, Play top 504 / 504 / 504
+   cbb-dynasty-320: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+   cbb-dynasty-320 first press: tile top 257 to 257, Play top 760 to 648, slot 128 to 128, scrollY 394 to 743
+  FAIL [S3] cbb-dynasty-320: the first press moved the tile or the Play button
+   cbb-dynasty-320 older save: slot 128 / 128 / 128, Play top 574 / 574 / 574
+  FAIL [S7] cbb-dynasty-320: a coach with three titles drew no offer to take
+   cbb-dynasty-390: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+   cbb-dynasty-390 first press: tile top 257 to 257, Play top 696 to 632, slot 128 to 128, scrollY 0 to 727
+  FAIL [S3] cbb-dynasty-390: the first press moved the tile or the Play button
+   cbb-dynasty-390 older save: slot 128 / 128 / 128, Play top 558 / 558 / 558
+  FAIL [S7] cbb-dynasty-390: a coach with three titles drew no offer to take
+   cbb-dynasty-1280: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+   cbb-dynasty-1280 first press: tile top 219 to 219, Play top 574 to 558, slot 128 to 128, scrollY 0 to 638
+  FAIL [S3] cbb-dynasty-1280: the first press moved the tile or the Play button
+   cbb-dynasty-1280 older save: slot 128 / 128 / 128, Play top 484 / 484 / 484
+  FAIL [S7] cbb-dynasty-1280: a coach with three titles drew no offer to take
+   /cfb-dynasty reduced motion: {"opacity":"1","transform":"none","running":0}
+   /cbb-dynasty reduced motion: {"opacity":"1","transform":"none","running":0}
+   /cfb-dynasty reduced motion, fired recap: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cfb-dynasty reduced motion, market: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cbb-dynasty reduced motion, fired recap: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cbb-dynasty reduced motion, market: [{"o":"1","t":"none","v":"visible","r":0}]
+playCollegeSeat: RED, 9 failures (S3 (6), S7 (3))

@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weigh exit=0 6s | weigh done
+playCollegeSeat exit=1 218s | playCollegeSeat: RED, 9 failures (S3 (6), S7 (3))
+playCollegeSeat-smalltap exit=1 218s | playCollegeSeat CONTROL smalltap FIRED: the 44 px check went red (red: S2 (12), S3 (24), S5 (4), S6 (6), S8 (6), S7 (3))
