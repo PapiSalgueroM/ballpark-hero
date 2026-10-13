@@ -1,0 +1,17 @@
+# Release BB, lane U2: the second half of 1313s simUsRivalSense controls
+rival-impuremlb: US_RIVAL_CONTROL=impuremlb node scripts/simUsRivalSense.mjs
+rival-impurenhl: US_RIVAL_CONTROL=impurenhl node scripts/simUsRivalSense.mjs
+rival-nofallbackmlb: US_RIVAL_CONTROL=nofallbackmlb node scripts/simUsRivalSense.mjs
+rival-nofallbacknhl: US_RIVAL_CONTROL=nofallbacknhl node scripts/simUsRivalSense.mjs
+rival-kindjob: US_RIVAL_CONTROL=kindjob node scripts/simUsRivalSense.mjs
+rival-oneslotmlb: US_RIVAL_CONTROL=oneslotmlb node scripts/simUsRivalSense.mjs
+rival-oneslotnhl: US_RIVAL_CONTROL=oneslotnhl node scripts/simUsRivalSense.mjs
+rival-nofloormlb: US_RIVAL_CONTROL=nofloormlb node scripts/simUsRivalSense.mjs
+rival-nofloornhl: US_RIVAL_CONTROL=nofloornhl node scripts/simUsRivalSense.mjs
+rival-drawsmlb: US_RIVAL_CONTROL=drawsmlb node scripts/simUsRivalSense.mjs
+rival-drawsnhl: US_RIVAL_CONTROL=drawsnhl node scripts/simUsRivalSense.mjs
+rival-onlyhimshut: US_RIVAL_CONTROL=onlyhimshut node scripts/simUsRivalSense.mjs
+rival-retiredlinemlb: US_RIVAL_CONTROL=retiredlinemlb node scripts/simUsRivalSense.mjs
+rival-retiredlinenhl: US_RIVAL_CONTROL=retiredlinenhl node scripts/simUsRivalSense.mjs
+rival-oldtallymlb: US_RIVAL_CONTROL=oldtallymlb node scripts/simUsRivalSense.mjs
+rival-oldtallynhl: US_RIVAL_CONTROL=oldtallynhl node scripts/simUsRivalSense.mjs
