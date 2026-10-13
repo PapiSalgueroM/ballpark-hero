@@ -1,0 +1,5 @@
+#!serial
+rules-head: node scripts/simCmLeagueRules.mjs
+rules-noprune: node .rc/x/fxmut.mjs noprune && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+rules-noguard: node .rc/x/fxmut.mjs noguard && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+rules-both: node .rc/x/fxmut.mjs noprune noguard && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
