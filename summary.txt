@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tt-soccer exit=1 140s | playTwoTabs: RED, 1 findings
+tt-cm exit=0 297s | playTwoTabs: green at 320x640, 390x844, 1280x900
+tt-nofence exit=1 493s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red

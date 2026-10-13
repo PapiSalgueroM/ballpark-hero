@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+tt-soccer: RC_OUT=$RC_OUT/soccer CASES=10,11,12,13,14 ENGINES=chromium node scripts/playTwoTabs.mjs
+tt-nofence: RC_OUT=$RC_OUT/nofence TWO_TABS_CONTROL=nofence ENGINES=chromium node scripts/playTwoTabs.mjs
+tt-cm: RC_OUT=$RC_OUT/cm CASES=1,2,3,4,5,6,7,8,9 ENGINES=chromium node scripts/playTwoTabs.mjs
