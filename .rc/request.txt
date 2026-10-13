@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+walk: node scripts/playSoccerEventCards.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerDilemmaTruth: node scripts/simCareerDilemmaTruth.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simClubCaptaincy: node scripts/simClubCaptaincy.mjs
+simInjuryArc: node scripts/simInjuryArc.mjs
+simInternational: node scripts/simInternational.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
