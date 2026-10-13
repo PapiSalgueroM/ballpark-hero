@@ -1,0 +1,20 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simRevealMoments: node scripts/simRevealMoments.mjs
+vitest-college: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+board: node scripts/simCollegeDynastyBoard.mjs
+board-cfbword-control: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+board-cbbword-control: COLLEGE_BOARD_CONTROL=cbbword node scripts/simCollegeDynastyBoard.mjs
+board-board-control: COLLEGE_BOARD_CONTROL=board node scripts/simCollegeDynastyBoard.mjs
+board-seatleak-control: COLLEGE_BOARD_CONTROL=seatleak node scripts/simCollegeDynastyBoard.mjs
+board-seatdraw-control: COLLEGE_BOARD_CONTROL=seatdraw node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked-control: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+board-seatoff-control: COLLEGE_BOARD_CONTROL=seatoff node scripts/simCollegeDynastyBoard.mjs
+playCollegeSeat: node scripts/playCollegeSeat.mjs
+smalltap-EXPECT-RED: SEAT_WALK_CONTROL=smalltap node scripts/playCollegeSeat.mjs; s=$?; echo "control pictures: $(ls $RC_OUT/control-smalltap | wc -l)"; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+playGames-cfb: ONLY=/cfb-dynasty node scripts/playGames.mjs
+playGames-cbb: ONLY=/cbb-dynasty node scripts/playGames.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
