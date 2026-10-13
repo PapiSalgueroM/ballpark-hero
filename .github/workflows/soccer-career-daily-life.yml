@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   verify:
@@ -17,7 +18,9 @@ jobs:
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
       SOCCER_ROUTINE_PHASE: fixed
-      SOCCER_BUILD_PHASE: baseline
+      SOCCER_BUILD_PHASE: fixed
+      SOCCER_BUILD_BASELINE_RUN: '38336065963'
+      SOCCER_BUILD_BASELINE_REPORT: ${{ github.workspace }}/soccer-build-baseline/build-lazy/baseline/report.json
       SOCCER_ROUTINE_OUT: ${{ github.workspace }}/soccer-routine-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/soccer-routine-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career
@@ -53,6 +56,9 @@ jobs:
             git diff --exit-code 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src/pages/SoccerCareer.tsx
           fi
           sha256sum scripts/playSoccerCareerBuildLazy.mjs >> "$SOCCER_ROUTINE_OUT/source-hashes.txt"
+          if test "$SOCCER_BUILD_PHASE" = fixed; then
+            sha256sum src/components/soccer-career/SoccerCareerBuildEditor.tsx >> "$SOCCER_ROUTINE_OUT/source-hashes.txt"
+          fi
           npm ci
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
@@ -98,6 +104,14 @@ jobs:
       - name: Actual career event browser journeys
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/browser.log"
+      - name: Restore the qualified creator baseline receipt
+        if: env.SOCCER_BUILD_PHASE == 'fixed'
+        uses: actions/download-artifact@v4
+        with:
+          name: soccer-routine-${{ env.SOCCER_BUILD_BASELINE_RUN }}
+          run-id: ${{ env.SOCCER_BUILD_BASELINE_RUN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: soccer-build-baseline
       - name: Actual creator build loading and callback journeys
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: |
@@ -137,6 +151,25 @@ jobs:
               assert.equal(new URL(load.url).pathname, '/' + report.markerAsset.file.slice('dist/'.length));
             }
           }
+          if (!baseline) {
+            const before = JSON.parse(fs.readFileSync(process.env.SOCCER_BUILD_BASELINE_REPORT));
+            assert.equal(before.sourceHead, '6ebe56db92ce4f2075582eb49899cb849f3cc739');
+            assert.equal(before.status, 'baseline-reproduced');
+            assert.equal(before.healthyFlows, 3);
+            assert.equal(before.eagerBuildFetches, 3);
+            assert.equal(before.failures, 0);
+            assert.equal(before.setupFailures, 0);
+            assert.equal(before.inventory.length, 9);
+            for (const row of report.cases) {
+              const previous = before.cases.find(candidate => candidate.width === row.width);
+              assert(previous);
+              assert.equal(row.stages.length, 1);
+              assert.equal(previous.stages.length, 1);
+              for (const key of ['generated', 'first', 'physique', 'carriedFrame', 'second', 'liveOvr', 'locked']) {
+                assert.deepEqual(row.stages[0][key], previous.stages[0][key], `${row.width}: ${key} differs from the qualified creator baseline`);
+              }
+            }
+          }
           console.log(baseline ? 'BASELINE: three healthy creator flows fetch the held editor asset before Customize.' : 'FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.');
           NODE
       - name: Existing page download budgets
@@ -153,7 +186,7 @@ jobs:
       - name: Related career and every rebuilt-site reader
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: |
-          ONLY=simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SOCCER_ROUTINE_OUT/related.log"
+          ONLY=simCreation,simAllocation,simFlagshipWeight,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SOCCER_ROUTINE_OUT/related.log"
       - name: Final source and package holds
         if: always()
         run: |
