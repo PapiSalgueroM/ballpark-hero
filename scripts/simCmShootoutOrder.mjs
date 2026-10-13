@@ -394,7 +394,30 @@ if (!WRITE_FIXTURE) {
      section 1. */
   const ownGoalCall = '  tagOwnGoals(state, live, fx, half, me.goals, oppGoals);\n';
   if (source.split(ownGoalCall).length - 1 !== 1) abort('Historical arm needs the one own goal call to take out');
-  const coachless = source.replace(header, header + '  return career;\n').replace(ownGoalCall, '');
+  let coachless = source.replace(header, header + '  return career;\n').replace(ownGoalCall, '');
+  /* Round 1326: and with that round's words put back. It changed what six
+     lines of this file say and nothing they draw: the board's three title labels
+     ("Win La Liga" for "Win the La Liga"), two weekly headlines that put "the"
+     before a league name, and a drama line that now opens every sentence on a
+     capital. The full content check below compares every string of the save
+     with an engine from before those words, so this arm writes the old words
+     back in memory, each anchor found exactly as often as it is listed or the
+     run aborts. What that buys is the same as the own goal cut above: every row
+     must still equal pre-1072 main in result, next draw and full content, so
+     everything else that round did is held to changing nothing at all. That
+     the words move no draw anywhere is scripts/qa/cmCopyOnly1326.mjs, which
+     compares every entry of 67 careers on the round's base and head. */
+  const R1326_WORDS = [
+    ['  return text.replace(/(^|[.?!] )([a-z])/g, (_m, lead: string, c: string) => lead + c.toUpperCase());\n',
+      '  return text.charAt(0).toUpperCase() + text.slice(1);\n', 1, 'dramaText (a capital after every full stop)'],
+    ['top ${toLeague(league.name)} on', 'top the ${league.name} on', 1, 'the weekly leaders headline'],
+    ['sharpest attack in ${toLeague(league.name)}:', 'sharpest attack in the ${league.name}:', 1, 'the weekly attack headline'],
+    ['label: `Win ${toLeague(league.name)}`', 'label: `Win the ${league.name}`', 3, "leagueDemand's three title labels"],
+  ];
+  for (const [now, was, times, what] of R1326_WORDS) {
+    if (coachless.split(now).length - 1 !== times) abort(`Historical arm needs Round 1326's ${what} exactly ${times} time(s) to put the old words back`);
+    coachless = coachless.split(now).join(was);
+  }
   fs.writeFileSync(historicalPath, coachless);
   historicalEnginePath = historicalPath;
   const baselineSource = execFileSync('git', ['show', '5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
