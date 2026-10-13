@@ -1,0 +1,7 @@
+#!serial
+vitest: node_modules/.bin/vitest run src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/useSaveFenceWatch.test.tsx --testTimeout=300000 --hookTimeout=120000
+M10: node .rc/x/mut.mjs M10 && node_modules/.bin/vitest run src/test/soccerCareerSaveFence.test.tsx --testTimeout=300000; s=$?; git checkout -- src; echo "MUT exit $s"; exit $s
+M11: node .rc/x/mut.mjs M11 && node_modules/.bin/vitest run src/test/soccerCareerSaveFence.test.tsx --testTimeout=300000; s=$?; git checkout -- src; echo "MUT exit $s"; exit $s
+M6: node .rc/x/mut.mjs M6 && SAVE_FENCE_SECTIONS=source node scripts/simSaveFence.mjs 2>&1 | tail -4; s=${PIPESTATUS[0]}; git checkout -- src; echo "MUT exit $s"; exit $s
+fence-adoptlate: SAVE_FENCE_CONTROL=adoptlate node scripts/simSaveFence.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+fence-rawsoccer: SAVE_FENCE_CONTROL=rawsoccer node scripts/simSaveFence.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}

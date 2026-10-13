@@ -1,0 +1,7 @@
+mutation M6 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED M6
+  96 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section source: 18 checks, 1 red
+simSaveFence: RED, 1 findings
+MUT exit 1

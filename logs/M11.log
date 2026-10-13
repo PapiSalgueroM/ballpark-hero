@@ -1,0 +1,45 @@
+mutation M11 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED M11
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 827[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22man old save with no fence key opens, plays, and is fenced from its first write[32m 160[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22manother tab playing on shows the notice at once, and a press forced past it writes nothing[32m 86[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22mwith no event at all, the press finds the move at write time and writes nothing[32m 56[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing[32m 177[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22mDelete unusable save in a stale tab deletes nothing[32m 121[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22mNew Career whose removal the browser refuses resets nothing and says so[32m 108[2mms[22m[39m
+[31m   [31m×[31m Soccer Career save fence[2m > [22mDelete unusable save whose removal the browser refuses keeps the save and says so[39m[32m 75[2mms[22m[39m
+[31m     → expected "spy" to be called with arguments: [ …(2) ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22ma hand edit of the save moves no generation: no notice, and the next press writes[32m 43[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveFence.test.tsx[2m > [22mSoccer Career save fence[2m > [22mDelete unusable save whose removal the browser refuses keeps the save and says so
+[31m[1mAssertionError[22m: expected "spy" to be called with arguments: [ …(2) ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/test/soccerCareerSaveFence.test.tsx:[2m193:25[22m[39m
+    [90m191| [39m    [34mrefuseSaveRemoval[39m()[33m;[39m
+    [90m192| [39m    act(() => { fireEvent.click(view.getByRole('button', { name: 'Dele…
+    [90m193| [39m    expect(toast.error).toHaveBeenCalledWith('Could not delete the sav…
+    [90m   | [39m                        [31m^[39m
+    [90m194| [39m    [34mexpect[39m(localStorage[33m.[39m[34mgetItem[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([32m'{broken'[39m)[33m;[39m
+    [90m195| [39m    expect(view.getByRole('button', { name: 'Delete unusable save' }))…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 20:56:56
+[2m   Duration [22m 3.80s[2m (transform 1.60s, setup 51ms, collect 2.21s, tests 827ms, environment 292ms, prepare 69ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveFence.test.tsx,title=src/test/soccerCareerSaveFence.test.tsx > Soccer Career save fence > Delete unusable save whose removal the browser refuses keeps the save and says so,line=193,column=25::AssertionError: expected "spy" to be called with arguments: [ …(2) ]%0A%0ANumber of calls: 0%0A%0A ❯ src/test/soccerCareerSaveFence.test.tsx:193:25%0A%0A
+MUT exit 1
