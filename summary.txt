@@ -1,0 +1,1 @@
+probe-head2 exit=0 63s | stripped {"clubs":80,"threw":0,"expiredInS2Pool":423,"carriedExInS3":420,"gap":106,"abovelevel":246,"belowe3":81,"meanLevel1":77.65,"meanLevel3":79.15,"meanE1":75.01,"mea

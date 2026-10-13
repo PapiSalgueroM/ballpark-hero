@@ -1,0 +1,8 @@
+Arsenal: seed 2025670891 level1 86.7 level3 88.1 e3 83 carried 6 gap 0
+Aston Villa: seed 3633442972 level1 83.7 level3 80.9 e3 70 carried 8 gap 1
+Bournemouth: seed 3630559099 level1 85.4 level3 80.5 e3 64 carried 8 gap 1
+Brentford: seed 4115771921 level1 82.5 level3 83.4 e3 79 carried 3 gap 0
+Brighton: seed 3378270566 level1 82.4 level3 84 e3 76 carried 4 gap 1
+Chelsea: seed 3930292221 level1 86.5 level3 84.3 e3 80 carried 6 gap 0
+seeded {"clubs":80,"threw":0,"expiredInS2Pool":423,"carriedExInS3":419,"gap":25,"abovelevel":352,"belowe3":80,"meanLevel1":77.65,"meanLevel3":74.49,"meanE1":75.01,"meanE3":68.47,"meanSquad3":23.2,"meanOthers3":79,"ledgers":80}
+stripped {"clubs":80,"threw":0,"expiredInS2Pool":423,"carriedExInS3":420,"gap":106,"abovelevel":246,"belowe3":81,"meanLevel1":77.65,"meanLevel3":79.15,"meanE1":75.01,"meanE3":68.47,"meanSquad3":23.2,"meanOthers3":79.1,"ledgers":0}
