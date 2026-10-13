@@ -1,0 +1,16 @@
+size-s1 exit=0 50s | simClubManagerSaveSize: all sections green
+size-s2 exit=0 51s | simClubManagerSaveSize: all sections green
+size-s0 exit=0 52s | simClubManagerSaveSize: all sections green
+size-s3 exit=0 49s | simClubManagerSaveSize: all sections green
+size-s4 exit=0 52s | simClubManagerSaveSize: all sections green
+size-s5 exit=0 54s | simClubManagerSaveSize: all sections green
+size-uncapped-s0 exit=1 57s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+size-uncapped-s1 exit=1 53s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+slots-s0 exit=0 52s | simClubManagerSlots: all sections green
+slots-s2 exit=0 53s | simClubManagerSlots: all sections green
+slots-s1 exit=0 57s | simClubManagerSlots: all sections green
+slots-s3 exit=0 56s | simClubManagerSlots: all sections green
+slots-s4 exit=0 56s | simClubManagerSlots: all sections green
+slots-dupe-s0 exit=1 53s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+slots-s5 exit=0 54s | simClubManagerSlots: all sections green
+slots-dupe-s1 exit=1 40s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
