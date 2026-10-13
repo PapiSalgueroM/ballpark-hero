@@ -1,0 +1,3287 @@
+{
+ "tag": "nfllong2",
+ "SPORT": "nfl",
+ "W": 390,
+ "H": 844,
+ "SEED": 6202,
+ "POS": "RB",
+ "steps": [
+  {
+   "t": 8,
+   "act": "enter the draft",
+   "text": "Enter the draft",
+   "scroll": [
+    644,
+    1098,
+    1098
+   ]
+  },
+  {
+   "t": 41,
+   "act": "play season 1",
+   "text": "Play the 2026 season",
+   "scroll": [
+    1093,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 46,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 51,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 52,
+   "act": "event option 0",
+   "text": "Lean in and sell the shirt yourself Fame and money",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 53,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 53,
+   "act": "event option 1",
+   "text": "Ask for the goal line work Morale +4, health -3",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 54,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 84,
+   "act": "play season 2",
+   "text": "Play the 2027 season",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 88,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 93,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 94,
+   "act": "event option 0",
+   "text": "Adapt and become a different player Rating up, identity cost",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 95,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 95,
+   "act": "event option 1",
+   "text": "Skip the voluntary part, report for minicamp Health +6, mora",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 96,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 96,
+   "act": "event option 1",
+   "text": "Buy one and actually run it One store, real work",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 97,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 127,
+   "act": "play season 3",
+   "text": "Play the 2028 season",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 131,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 136,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 137,
+   "act": "event option 1",
+   "text": "Finish all 4,000 yourself 1M clean, health -3",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 138,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 138,
+   "act": "event option 2",
+   "text": "Stay out of it No change",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 139,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 139,
+   "act": "event option 2",
+   "text": "Launch your own card brand Own the print run",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 140,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 170,
+   "act": "play season 4",
+   "text": "Play the 2029 season",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 172,
+   "act": "extension push",
+   "text": "Ask for more, once",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 173,
+   "act": "wheel spin",
+   "text": "Spin",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 177,
+   "act": "wheel continue",
+   "text": "Continue to the offers",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 178,
+   "act": "extension sign",
+   "text": "Sign it: 4 more years at $17.1M",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 182,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 213,
+   "act": "play season 5",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 217,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 222,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 223,
+   "act": "event option 2",
+   "text": "No. Warmups are sacred. Routine protected",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 224,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 224,
+   "act": "event option 1",
+   "text": "Real job, under a real agency Supervised, safer",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 225,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 225,
+   "act": "event option 1",
+   "text": "Ask for the goal line work Morale +4, health -3",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 226,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 256,
+   "act": "play season 6",
+   "text": "Play the 2030 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 260,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 262,
+   "act": "rivalry option",
+   "text": "📼 Send a highlight reel instead Fanbase +8",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 265,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 266,
+   "act": "event option 0",
+   "text": "Put in 3M Probably gone",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 267,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 267,
+   "act": "event option 0",
+   "text": "Build the facility, 3M Bricks and turf",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 268,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 268,
+   "act": "event option 2",
+   "text": "Get it in the first quarter, then sit Greedy but efficient",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 269,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 299,
+   "act": "play season 7",
+   "text": "Play the 2031 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 303,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 308,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 309,
+   "act": "event option 0",
+   "text": "Take the cover and the 4M Money, cursed",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 310,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 310,
+   "act": "event option 0",
+   "text": "Do the full four hours Money, sore hand",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 311,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 311,
+   "act": "event option 0",
+   "text": "Take the restructure Cap help, less cash",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 312,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 342,
+   "act": "play season 8",
+   "text": "Play the 2032 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 346,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 351,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 352,
+   "act": "event option 1",
+   "text": "Tell the room to ignore the owner Leadership, room steadies",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 353,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 353,
+   "act": "event option 2",
+   "text": "Move your locker across the room Coward, comfortable",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 354,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 354,
+   "act": "event option 1",
+   "text": "Pay the artist properly and fund three more murals Costs mon",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 355,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 359,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 390,
+   "act": "play season 9",
+   "text": "Play the 2033 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 393,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 398,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 399,
+   "act": "announce farewell",
+   "text": "🎤 Announce a farewell season Next season is your last, and ",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 400,
+   "act": "event option 0",
+   "text": "Short sleeves, no gloves, be a poster Legend, real body cost",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 400,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    405
+   ]
+  },
+  {
+   "t": 401,
+   "act": "event option 2",
+   "text": "Keep your head down, it is a business Morale -2",
+   "scroll": [
+    405,
+    405,
+    0
+   ]
+  },
+  {
+   "t": 401,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 402,
+   "act": "event option 1",
+   "text": "Do the long distance thing Flights and FaceTime",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 402,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 433,
+   "act": "play season 10",
+   "text": "Play the 2034 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 438,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 440,
+   "act": "rivalry option",
+   "text": "📰 Complain to the press Morale +2, Karma -6, otherwise Fanb",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 443,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 450,
+   "act": "review seasons",
+   "text": "Review seasons",
+   "scroll": [
+    875,
+    875,
+    0
+   ]
+  },
+  {
+   "t": 451,
+   "act": "back to retirement",
+   "text": "Back to retirement",
+   "scroll": [
+    0,
+    0,
+    481
+   ]
+  },
+  {
+   "t": 452,
+   "act": "start coaching",
+   "text": "Go after a coaching job",
+   "scroll": [
+    481,
+    481,
+    481
+   ]
+  },
+  {
+   "t": 455,
+   "act": "coach season",
+   "text": "Coach the 2035 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 457,
+   "act": "coach season",
+   "text": "Coach the 2036 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "first visit help",
+   "t": 6
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "create",
+   "t": 6
+  },
+  {
+   "overX": 0,
+   "scrollY": 1098,
+   "docH": 12635,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🎓 With pick 1, the Chicago Bears select Maximilian Okonkwo-Smith. [149<293]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub draft",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11912,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 45
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11869,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 50
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 52
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11876,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 52
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You trademarked it on a Tuesday and moved 90,000 shirts by Christmas.  [149<451]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 53
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11788,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 53
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got the short yardage carries, the ones that hurt and the ones tha [149<420]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s1",
+   "t": 54
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 88
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 92
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s2",
+   "t": 94
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12313,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You learned a job you never wanted and did it well. Rating +1 to 80, m [149<516]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s2",
+   "t": 95
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12545,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You did the schedule yourself every Sunday night. 0.9M in, 1.4M out ov [149<546]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s2",
+   "t": 97
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11802,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 131
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11869,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 135
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12218,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "event s3",
+   "t": 136
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12309,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You signed every one of them. Your hand did not work right for a week  [149<417]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s3",
+   "t": 138
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12545,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Your first print run sold out in ninety seconds. 0.8M in, 3.4M back. F [149<345]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s3",
+   "t": 140
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12537,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Your first print run sold out in ninety seconds. 0.8M in, 3.4M back. F [149<345]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "extension s4",
+   "t": 171
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12340,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Your first print run sold out in ninety seconds. 0.8M in, 3.4M back. F [149<345]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "wheel s4",
+   "t": 172
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12479,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Your first print run sold out in ninety seconds. 0.8M in, 3.4M back. F [149<345]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s4",
+   "t": 177
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11723,
+   "bad": [],
+   "trunc": [
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "Coach has me buried on the depth chart again man. Thinking about askin [302<569]",
+    "Congrats, you're a pro. Two shoe brands and a car dealership already c [302<745]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile Inbox s4",
+   "t": 179
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11753,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 216
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11869,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 221
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s5",
+   "t": 222
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12261,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You said your pregame is a religion and you do not do weddings. Rating [149<377]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s5",
+   "t": 224
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11753,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s6",
+   "t": 259
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12013,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s6",
+   "t": 261
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11953,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s6",
+   "t": 265
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📼 You sent four minutes of tape and no caption. It out-rated the show [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s6",
+   "t": 266
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "It was a Ponzi. Three million gone, along with the savings of nine tea [149<472]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s6",
+   "t": 267
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12545,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Record broken with nine minutes left in the first, hoodie on by the se [149<413]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s6",
+   "t": 269
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s7",
+   "t": 303
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s7",
+   "t": 307
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s7",
+   "t": 309
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12297,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "4M and your face on eleven million shelves. Fanbase +15, health -4, an [149<459]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s7",
+   "t": 310
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s8",
+   "t": 346
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s8",
+   "t": 350
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s8",
+   "t": 352
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You stood on a chair and told 52 grown men that no billionaire has eve [149<474]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s8",
+   "t": 353
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [
+    "They just called me up to the office and told me to bring my playbook. [302<664]",
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "Coach has me buried on the depth chart again man. Thinking about askin [302<569]",
+    "Congrats, you're a pro. Two shoe brands and a car dealership already c [302<745]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s8",
+   "t": 356
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s9",
+   "t": 393
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s9",
+   "t": 398
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12396,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s9",
+   "t": 399
+  },
+  {
+   "overX": 0,
+   "scrollY": 405,
+   "docH": 12360,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "That photograph of you steaming in the snow with bare arms hangs in ev [149<541]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s9",
+   "t": 400
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12680,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Nine months of Tuesday flights and 0.6M in charters. You kept your loc [149<365]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s9",
+   "t": 403
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11900,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s10",
+   "t": 438
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11996,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s10",
+   "t": 439
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11953,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s10",
+   "t": 443
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 13242,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "retired",
+   "t": 447
+  },
+  {
+   "overX": 0,
+   "scrollY": 875,
+   "docH": 12939,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "retired after hall",
+   "t": 449
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12111,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "retired review",
+   "t": 451
+  },
+  {
+   "overX": 0,
+   "scrollY": 481,
+   "docH": 12488,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "coach board",
+   "t": 453
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12354,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "coach season",
+   "t": 456
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12403,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "coach season",
+   "t": 459
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "id": "lifeA_micd_up",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nMic'd up goes nuclear\n\nThe league mic'd you up against a linebacker who had been talking all week. What you said back was on a t-shirt within 40 minutes and on a billboard by Thursday.\n\nLean in and sell the shirt yourself\nFame and money\nApologize to him privately\nClass, less noise\nNever explain it, ever\nMystique, zero comment",
+   "opts": [
+    "Lean in and sell the shirt yourself Fame and money",
+    "Apologize to him privately Class, less noise",
+    "Never explain it, ever Mystique, zero comment"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     77,
+     77
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s1",
+   "id": "lifeC_rb_committee",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nThe committee backfield\n\nThe coaches are splitting the carries this year. Fresh legs in December, they say. Fewer touches in September, you hear. Nobody in a committee leads the league in anything.\n\nBuy in and stay fresh\nHealth +6, fanbase -3\nAsk for the goal line work\nMorale +4, health -3\nComplain to the beat writers\nFanbase +4, morale -6",
+   "opts": [
+    "Buy in and stay fresh Health +6, fanbase -3",
+    "Ask for the goal line work Morale +4, health -3",
+    "Complain to the beat writers Fanbase +4, morale -6"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     77,
+     77
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeA_scheme_misfit",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe scheme does not fit you\n\nThey are running a system built for somebody else's running back. Your tape is going to look like a lie about how good you actually are.\n\nAdapt and become a different player\nRating up, identity cost\nBring tape to a meeting and make the case\nCould reshape the offense\nSay it publicly and force the issue\nLoud, expensive",
+   "opts": [
+    "Adapt and become a different player Rating up, identity cost",
+    "Bring tape to a meeting and make the case Could reshape the offense",
+    "Say it publicly and force the issue Loud, expensive"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     79,
+     80
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeC_voluntary_spring",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nVoluntary means voluntary\n\nThe spring workouts are voluntary. It says so in the labor deal. The minicamp at the end of them is not, and skipping that one costs real money. Your trainer back home wants you with him until camp.\n\nShow up for all of it\nMorale +5, health -2\nSkip the voluntary part, report for minicamp\nHealth +6, morale -3\nSkip all of it and pay the fines\nHealth +6, morale -6, net worth -0.1M",
+   "opts": [
+    "Show up for all of it Morale +5, health -2",
+    "Skip the voluntary part, report for minicamp Health +6, morale -3",
+    "Skip all of it and pay the fines Health +6, morale -6, net worth -0.1M"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeB_restaurantFranchise",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nWings at scale\n\nA franchise group wants you as a multi unit owner. The pitch deck says athlete equity nine separate times.\n\nThree locations, 2.4M\nWings at scale\nBuy one and actually run it\nOne store, real work\nLet your cousin run the register\nCash business, obviously",
+   "opts": [
+    "Three locations, 2.4M Wings at scale",
+    "Buy one and actually run it One store, real work",
+    "Let your cousin run the register Cash business, obviously"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "corr_memorabilia",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nSigned by somebody\n\nA memorabilia dealer wants 4,000 autographs in a weekend. Halfway through, your hand gives out and his assistant offers to finish them. Nobody would ever know.\n\nLet the assistant sign\n1.2M dirty, heat +10\nFinish all 4,000 yourself\n1M clean, health -3",
+   "opts": [
+    "Let the assistant sign 1.2M dirty, heat +10",
+    "Finish all 4,000 yourself 1M clean, health -3"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeC_ps_elevation",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nUp on Saturday, down on Monday\n\nThe team keeps calling the same practice squad kid up for game day and sending him back down the morning after. The rules only allow that so many times before they have to sign him for real or stop. The last one was last week. A coach asks what you think of him.\n\nVouch for him, loudly\nCoin flip: morale +7 or morale -3\nTell the truth: he is not ready yet\nMorale -2\nStay out of it\nNo change",
+   "opts": [
+    "Vouch for him, loudly Coin flip: morale +7 or morale -3",
+    "Tell the truth: he is not ready yet Morale -2",
+    "Stay out of it No change"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeB_tradingCards",
+   "text": "OFFSEASON, CARD 3 OF 3\n\n25,000 autographs in eleven weeks\n\nA card company has the contract drawn up. Your wrist is already suspicious of this arrangement.\n\nSign all 25,000\nWrist money\nSign 5,000 and price them like art\nScarcity play\nLaunch your own card brand\nOwn the print run",
+   "opts": [
+    "Sign all 25,000 Wrist money",
+    "Sign 5,000 and price them like art Scarcity play",
+    "Launch your own card brand Own the print run"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     14.3,
+     14.3
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s4",
+   "extension": "Chicago Bears\nLUKEWARM\n\n$15.8M\n\nA YEAR\n\n4\n\nYEARS\n\n-20%\n\nVS MARKET\n\nIt is an offer. It is not a compliment.\n\nBefore you push: Raise accepted 55% · Held 45% · Withdrawn 0%\n\nSign it: 4 more years at $15.8M\nAsk for more, once"
+  },
+  {
+   "tag": "s4",
+   "extension": "Chicago Bears\nLUKEWARM\n\n$17.1M\n\nA YEAR\n\n4\n\nYEARS\n\n-13%\n\nVS MARKET\n\nThey found the money. They usually do, for players like you.\n\nSign it: 4 more years at $17.1M\nYou have made your case"
+  },
+  {
+   "tag": "s5",
+   "id": "lifeB_stadiumProposal",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nHe wants you to carry the ring\n\nA season ticket holder has diagrammed a midfield proposal like a red zone play. He has sent you three versions of the diagram.\n\nFull production, jumbotron, everything\nEnormous, risky\nHand it over in the tunnel, no cameras\nSafe and kind\nNo. Warmups are sacred.\nRoutine protected",
+   "opts": [
+    "Full production, jumbotron, everything Enormous, risky",
+    "Hand it over in the tunnel, no cameras Safe and kind",
+    "No. Warmups are sacred. Routine protected"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     84,
+     85
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "lifeB_siblingManager",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nYour brother has business cards now\n\nThey say MANAGER in a font he chose himself. He has already told two brands he speaks for you.\n\nHire him, full trust\nFamily on payroll\nReal job, under a real agency\nSupervised, safer\nSay no, buy him a truck\nA no with a bow",
+   "opts": [
+    "Hire him, full trust Family on payroll",
+    "Real job, under a real agency Supervised, safer",
+    "Say no, buy him a truck A no with a bow"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     85,
+     85
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "lifeC_rb_committee",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe committee backfield\n\nThe coaches are splitting the carries this year. Fresh legs in December, they say. Fewer touches in September, you hear. Nobody in a committee leads the league in anything.\n\nBuy in and stay fresh\nHealth +8, fanbase -3\nAsk for the goal line work\nMorale +4, health -3\nComplain to the beat writers\nFanbase +4, morale -6",
+   "opts": [
+    "Buy in and stay fresh Health +8, fanbase -3",
+    "Ask for the goal line work Morale +4, health -3",
+    "Complain to the beat writers Fanbase +4, morale -6"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     85,
+     85
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n🎤\n\nTHE DEBATE SHOW\n\nA sports network offers $2M for one live hour: you against a panel arguing Emmett Kowalski is better. No script, one microphone.\n\nMaximilian Okonkwo-Smith\n86\nVS\nEmmett Kowalski\n83\n🔥 Go on and cook them\nNet worth +$2M, otherwise Fanbase +6\n35% chance a clip goes viral for the wrong reasons: Fanbase -8\n📼 Send a highlight reel instead\nFanbase +8\n😎 Decline. No debate.\nMorale +5, Karma +3"
+  },
+  {
+   "tag": "s6",
+   "id": "corr_ponzi_pitch",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe guy every athlete knows\n\nA financial advisor who somehow represents nine guys in your locker room promises 30 percent returns, guaranteed, in writing. Guaranteed is not a word that exists in investing.\n\nPut in 3M\nProbably gone\nAsk for audited statements\nHe disappears\nWarn the whole locker room\nSave everyone, make an enemy",
+   "opts": [
+    "Put in 3M Probably gone",
+    "Ask for audited statements He disappears",
+    "Warn the whole locker room Save everyone, make an enemy"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     86,
+     86
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeB_trainingAcademy",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nEvery parent in the area code\n\nThey all want their kid trained by you specifically. You could turn that into an actual building with your name on it.\n\nBuild the facility, 3M\nBricks and turf\nLicense your name to a chain\nPassive money\nFree camp every June instead\nNo revenue, huge love",
+   "opts": [
+    "Build the facility, 3M Bricks and turf",
+    "License your name to a chain Passive money",
+    "Free camp every June instead No revenue, huge love"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     86,
+     86
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeB_franchiseRecord",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nOne good day from the franchise record\n\nThe Chicago Bears record is right there with one game left in the regular season, and that game means nothing to anybody except you.\n\nPlay the whole game and take it\nRecord, real risk\nSit. The body is the point.\nRest\nGet it in the first quarter, then sit\nGreedy but efficient",
+   "opts": [
+    "Play the whole game and take it Record, real risk",
+    "Sit. The body is the point. Rest",
+    "Get it in the first quarter, then sit Greedy but efficient"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     86,
+     86
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "lifeB_gameCover",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThey want you on the cover\n\nThe video game called. Everyone you have ever met has already brought up the curse, unprompted, within one hour.\n\nTake the cover and the 4M\nMoney, cursed\nTake 3.5M, demand a curse clause\nLegally uncursed\nDecline, stay off the box\nSuperstition wins",
+   "opts": [
+    "Take the cover and the 4M Money, cursed",
+    "Take 3.5M, demand a curse clause Legally uncursed",
+    "Decline, stay off the box Superstition wins"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     86,
+     86
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "lifeA_card_show",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe card show\n\nFour hours in a folding chair in a convention center, 1,200 autographs, 90,000 dollars, and a man who genuinely wants you to sign a photograph of somebody else.\n\nDo the full four hours\nMoney, sore hand\nDo two hours, then free photos with every kid\nLess money, more love\nSkip it and rest\nRest and recovery",
+   "opts": [
+    "Do the full four hours Money, sore hand",
+    "Do two hours, then free photos with every kid Less money, more love",
+    "Skip it and rest Rest and recovery"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     86,
+     86
+    ],
+    "salary": [
+     17.1,
+     17.1
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "lifeB_capRestructure",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe cap guy has a slide with your name on it\n\nMoving 4.3M of your 17.1M gets them the pass rusher they have been chasing since March.\n\nTake the restructure\nCap help, less cash\nNo. You signed a contract.\nEvery dollar\nRestructure, but two more guaranteed years\nSecurity for cash",
+   "opts": [
+    "Take the restructure Cap help, less cash",
+    "No. You signed a contract. Every dollar",
+    "Restructure, but two more guaranteed years Security for cash"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     86,
+     86
+    ],
+    "salary": [
+     17.1,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "lifeA_playoff_ultimatum",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nPlayoffs or changes\n\nThe owner said it out loud at a fan event with a microphone in his hand. Everybody in the building heard the second half of that sentence and knew who it was about.\n\nTake the whole thing on your back\nRating and wear\nTell the room to ignore the owner\nLeadership, room steadies\nSay it right back to him in the media\nBold and expensive",
+   "opts": [
+    "Take the whole thing on your back Rating and wear",
+    "Tell the room to ignore the owner Leadership, room steadies",
+    "Say it right back to him in the media Bold and expensive"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     12.8,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "lifeB_lockerRoomGhost",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe equipment room is haunted\n\nThree rookies swear it is a linebacker from 1974. The equipment manager will not deny it, which is somehow much worse.\n\nSleep in the facility overnight\nContent, no sleep\nSage ceremony with a bluetooth speaker\nVibes restored\nMove your locker across the room\nCoward, comfortable",
+   "opts": [
+    "Sleep in the facility overnight Content, no sleep",
+    "Sage ceremony with a bluetooth speaker Vibes restored",
+    "Move your locker across the room Coward, comfortable"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     12.8,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "lifeA_fan_mural",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThey painted you on a wall\n\nThree stories tall on the side of a bakery two blocks from the stadium. The artist wants you at the unveiling. The bakery wants to name a donut after you.\n\nShow up and bring the whole offensive line\nCity love\nPay the artist properly and fund three more murals\nCosts money, deep love\nSkip it, you hate that stuff\nPrivate, small dip",
+   "opts": [
+    "Show up and bring the whole offensive line City love",
+    "Pay the artist properly and fund three more murals Costs money, deep love",
+    "Skip it, you hate that stuff Private, small dip"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     12.8,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s9",
+   "farewell": "Is it time?\n\nYou're 8 points off your best (86), and you're 30. People are starting to ask how long you keep going.\n\n👋 Retire now\nThis season was your last. The career ends here.\n💪 One more year\nPlay next season. Unless you play your way back up, this talk comes back after it.\n🎤 Announce a farewell season\nN",
+   "n": 1
+  },
+  {
+   "tag": "s9",
+   "id": "lifeA_snow_game",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe snow game\n\nEighteen inches on the field, no visible yard lines, and Chicago Bears fans getting paid by the hour to shovel out their own stadium. The league asks if you want it moved to a dome three states away.\n\nShort sleeves, no gloves, be a poster\nLegend, real body cost\nPlay it, but bundled up and smart\nWarm, still counts\nPlay, then pay the shovel crew double yourself\nMoney for city love",
+   "opts": [
+    "Short sleeves, no gloves, be a poster Legend, real body cost",
+    "Play it, but bundled up and smart Warm, still counts",
+    "Play, then pay the shovel crew double yourself Money for city love"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     12.8,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s9",
+   "id": "lifeC_final_cuts",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nCutdown day\n\nThe roster has to be down to the limit by the end of the day, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.\n\nCall him that night\nNo change\nTell the coaches they got it wrong\nCoin flip: no change or morale -4\nKeep your head down, it is a business\nMorale -2",
+   "opts": [
+    "Call him that night No change",
+    "Tell the coaches they got it wrong Coin flip: no change or morale -4",
+    "Keep your head down, it is a business Morale -2"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     12.8,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s9",
+   "id": "lifeB_partnerCity",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThey got the job\n\nYour partner just landed the role they have been chasing since college. It is in a city with a different team in it.\n\nAsk the front office to move you there\nTrade toward them\nDo the long distance thing\nFlights and FaceTime\nThey pause it for a year\nStability, quiet debt",
+   "opts": [
+    "Ask the front office to move you there Trade toward them",
+    "Do the long distance thing Flights and FaceTime",
+    "They pause it for a year Stability, quiet debt"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     12.8,
+     12.8
+    ],
+    "team": [
+     "CHI",
+     "CHI"
+    ]
+   }
+  },
+  {
+   "tag": "s10",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n💰\n\nTHE BIGGER DEAL\n\nEmmett Kowalski just signed the biggest deal anyone at your position has ever seen. Your phone has not stopped buzzing.\n\nMaximilian Okonkwo-Smith\n74\nVS\nEmmett Kowalski\n85\n👏 Congratulate him publicly\nFanbase +4, Karma +5, the feud cools\n🔥 Use it as fuel\nMorale +6, the feud heats up\n📰 Complain to the press\nMorale +2, Karma -6, otherwise Fanbase +3\n50% chance the fans side with him: Fanbase -6"
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nMic'd up goes nuclear\n\nYou chose: Lean in and sell the shirt yourself\n\nFanbase\n60 → \nto\n72\n+12\nCareer earnings\n$14.3M → \nto\n$15.9M\n+$1.6M\nCash\n$7M → \nto\n$8.6M\n+$1.6M\nContinue"
+  },
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe committee backfield\n\nYou chose: Ask for the goal line work\n\nHealth\n94 → \nto\n91\n-3\nMorale\n74 → \nto\n78\n+4\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nThe scheme does not fit you\n\nYou chose: Adapt and become a different player\n\nOVR\n79 → \nto\n80\n+1\nMorale\n80 → \nto\n75\n-5\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nVoluntary means voluntary\n\nYou chose: Skip the voluntary part, report for minicamp\n\nHealth\n91 → \nto\n97\n+6\nMorale\n75 → \nto\n72\n-3\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nWings at scale\n\nYou chose: Buy one and actually run it\n\nMorale\n72 → \nto\n67\n-5\nCash\n$15M → \nto\n$15.5M\n+$0.5M\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nSigned by somebody\n\nYou chose: Finish all 4,000 yourself\n\nHealth\n91 → \nto\n88\n-3\nCareer earnings\n$44.5M → \nto\n$45.5M\n+$1M\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nUp on Saturday, down on Monday\n\nYou chose: Stay out of it\n\nNo rating, money, team or status changes to show.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\n25,000 autographs in eleven weeks\n\nYou chose: Launch your own card brand\n\nFanbase\n80 → \nto\n90\n+10\nCash\n$21.9M → \nto\n$24.5M\n+$2.6M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nHe wants you to carry the ring\n\nYou chose: No. Warmups are sacred.\n\nOVR\n84 → \nto\n85\n+1\nMorale\n84 → \nto\n88\n+4\nFanbase\n93 → \nto\n89\n-4\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nYour brother has business cards now\n\nYou chose: Real job, under a real agency\n\nMorale\n88 → \nto\n94\n+6\nCash\n$32.2M → \nto\n$31.9M\n-$0.3M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nThe committee backfield\n\nYou chose: Ask for the goal line work\n\nHealth\n88 → \nto\n85\n-3\nMorale\n94 → \nto\n98\n+4\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe guy every athlete knows\n\nYou chose: Put in 3M\n\nMorale\n100 → \nto\n90\n-10\nCash\n$39.6M → \nto\n$36.6M\n-$3M\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nEvery parent in the area code\n\nYou chose: Build the facility, 3M\n\nMorale\n90 → \nto\n100\n+10\nFanbase\n97 → \nto\n100\n+3\nCash\n$36.6M → \nto\n$33.6M\n-$3M\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nOne good day from the franchise record\n\nYou chose: Get it in the first quarter, then sit\n\nHealth\n85 → \nto\n83\n-2\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nThey want you on the cover\n\nYou chose: Take the cover and the 4M\n\nHealth\n83 → \nto\n79\n-4\nMorale\n95 → \nto\n100\n+5\nCareer earnings\n$96.8M → \nto\n$100.8M\n+$4M\nCash\n$41.3M → \nto\n$45.3M\n+$4M\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nThe card show\n\nYou chose: Do the full four hours\n\nHealth\n79 → \nto\n78\n-1\nMorale\n100 → \nto\n98\n-2\nCareer earnings\n$100.8M → \nto\n$100.9M\n+$0.1M\nCash\n$45.3M → \nto\n$45.4M\n+$0.1M\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nThe cap guy has a slide with your name on it\n\nYou chose: Take the restructure\n\nMorale\n98 → \nto\n100\n+2\nAnnual salary\n$17.1M → \nto\n$12.8M\n-$4.3M\nContract years\n2 → \nto\n3\n+1\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nPlayoffs or changes\n\nYou chose: Tell the room to ignore the owner\n\nNo rating, money, team or status changes to show.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nThe equipment room is haunted\n\nYou chose: Move your locker across the room\n\nHealth\n78 → \nto\n81\n+3\nMorale\n100 → \nto\n97\n-3\nFanbase\n100 → \nto\n98\n-2\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nThey painted you on a wall\n\nYou chose: Pay the artist properly and fund three more murals\n\nMorale\n97 → \nto\n100\n+3\nFanbase\n98 → \nto\n100\n+2\nCash\n$51.2M → \nto\n$51M\n-$0.2M\nContinue"
+  },
+  {
+   "tag": "s9",
+   "txt": "YOUR DECISION\n\nThe snow game\n\nYou chose: Short sleeves, no gloves, be a poster\n\nHealth\n81 → \nto\n75\n-6\nMorale\n92 → \nto\n100\n+8\nContinue"
+  },
+  {
+   "tag": "s9",
+   "txt": "YOUR DECISION\n\nCutdown day\n\nYou chose: Keep your head down, it is a business\n\nMorale\n100 → \nto\n98\n-2\nContinue"
+  },
+  {
+   "tag": "s9",
+   "txt": "YOUR DECISION\n\nThey got the job\n\nYou chose: Do the long distance thing\n\nMorale\n98 → \nto\n92\n-6\nCash\n$56.8M → \nto\n$56.2M\n-$0.6M\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2026 SEASON\n\nChicago Bears · age 22 · RB\n\nLost the Conference Championship\n\n770 rush yds, 8 TD, 29 rec\n\n🚑 Missed 4 games hurt.\n\n📊 Playoffs: 3 games, 271 rush yds, 2 TD.\n\n🧊 January football suited you. You were the best player on the field.\n\n🪞 Emmett Kowalski went 1,003 rush yds, 9 TD, 38 rec and had the better year of the two of you. Head to head 0-1.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n😬\n\nRival Becomes Teammate\n\nEmmett Kowalski just signed with your team. The room just got a lot more interesting.\n\nThe feud cools, Morale +3, Fanbase +5\n\nMaximilian Okonkwo-Smith\n77\nVS\nEmmett Kowalski\n76\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 1,
+   "txt": "THE 2027 SEASON\n\nChicago Bears · age 23 · RB\n\nMissed the playoffs\n\n1,194 rush yds, 9 TD, 34 rec\n\n🪞 Emmett Kowalski went 1,097 rush yds, 11 TD, 41 rec. Nothing in it again. He leads the head to head 2-0.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🤬\n\nSideline Scuffle\n\nCameras catch you and Emmett Kowalski jawing at midfield after the whistle. It is the only clip anybody is talking about Monday.\n\nRivalry intensifies, Fanbase +3\n\nMaximilian Okonkwo-Smith\n79\nVS\nEmmett Kowalski\n78\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 1,
+   "txt": "THE 2028 SEASON\n\nChicago Bears · age 24 · RB\n\nMissed the playoffs\n\n537 rush yds, 4 TD, 18 rec\n\n🚑 Missed 8 games hurt.\n\n🪞 Emmett Kowalski went 1,176 rush yds, 10 TD, 38 rec and had the better year of the two of you. Head to head 0-3.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🏈\n\nHead to Head Win\n\nYour team beat Emmett Kowalski's team this season, and you had the better box score.\n\nFanbase +5, confidence boost\n\nMaximilian Okonkwo-Smith\n82\nVS\nEmmett Kowalski\n79\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 1,
+   "txt": "THE 2029 SEASON\n\nChicago Bears · age 25 · RB\n\nMissed the playoffs\n\n1,248 rush yds, 11 TD, 49 rec\n\n🪞 Emmett Kowalski went 1,231 rush yds, 9 TD, 38 rec. You had the better year. Head to head 1-3.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📉\n\nLosing the Head to Head\n\nEmmett Kowalski is pulling away in the head to head. Every broadcast mentions it now.\n\nMotivation surges\n\nMaximilian Okonkwo-Smith\n84\nVS\nEmmett Kowalski\n81\nContinue"
+  },
+  {
+   "tag": "s6",
+   "n": 1,
+   "txt": "THE 2030 SEASON\n\nChicago Bears · age 26 · RB\n\nMissed the playoffs\n\n1,621 rush yds, 12 TD, 54 rec\n\n🪞 Emmett Kowalski went 1,185 rush yds, 9 TD, 38 rec. You had the better year. Head to head 2-3.\n\nContinue"
+  },
+  {
+   "tag": "s6",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n🎤\n\nTHE DEBATE SHOW\n\nA sports network offers $2M for one live hour: you against a panel arguing Emmett Kowalski is better. No script, one microphone.\n\nMaximilian Okonkwo-Smith\n86\nVS\nEmmett Kowalski\n83\n\nYOU CHOSE: 📼 SEND A HIGHLIGHT REEL INSTEAD\n\n📼 You sent four minutes of tape and no caption. It out-rated the show.\n\nContinue"
+  },
+  {
+   "tag": "s7",
+   "n": 1,
+   "txt": "THE 2031 SEASON\n\nChicago Bears · age 27 · RB\n\nLost in the Wild Card round\n\n1,420 rush yds, 11 TD, 45 rec\n\n📊 Playoffs: 1 game, 74 rush yds, 1 TD.\n\n🪞 Emmett Kowalski went 1,050 rush yds, 8 TD, 34 rec. You had the better year. Head to head 3-3.\n\nContinue"
+  },
+  {
+   "tag": "s7",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📋\n\nRoster Squeeze\n\nWord around the building is the front office is choosing between you and Emmett Kowalski for the same cap space.\n\nMorale -5\n\nMaximilian Okonkwo-Smith\n86\nVS\nEmmett Kowalski\n84\nContinue"
+  },
+  {
+   "tag": "s8",
+   "n": 1,
+   "txt": "THE 2032 SEASON\n\nChicago Bears · age 28 · RB\n\nMissed the playoffs\n\n1,745 rush yds, 15 TD, 48 rec\n\n🪞 Emmett Kowalski went 1,313 rush yds, 10 TD, 43 rec. You had the better year. Head to head 4-3.\n\n📉 The dropoff is real: 86 to 81.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n👕\n\nThe Jersey Swap\n\nAfter a hard fought game, you and Emmett Kowalski trade jerseys at midfield. The photo is everywhere by Monday morning.\n\nFanbase +8, the feud softens\n\nMaximilian Okonkwo-Smith\n81\nVS\nEmmett Kowalski\n85\nContinue"
+  },
+  {
+   "tag": "s9",
+   "n": 1,
+   "txt": "THE 2033 SEASON\n\nChicago Bears · age 29 · RB\n\nMissed the playoffs\n\n1,411 rush yds, 13 TD, 45 rec\n\n🪞 Emmett Kowalski went 1,354 rush yds, 13 TD, 43 rec. Nothing in it again. You lead the head to head 5-3.\n\n📉 The dropoff is real: 81 to 78.\n\nContinue"
+  },
+  {
+   "tag": "s9",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📋\n\nRoster Squeeze\n\nWord around the building is the front office is choosing between you and Emmett Kowalski for the same cap space.\n\nMorale -5\n\nMaximilian Okonkwo-Smith\n78\nVS\nEmmett Kowalski\n85\nContinue"
+  },
+  {
+   "tag": "s10",
+   "n": 1,
+   "txt": "THE 2034 SEASON\n\nChicago Bears · age 30 · RB\n\nLost in the Wild Card round\n\n837 rush yds, 6 TD, 30 rec\n\nFarewell season\n\n🚑 Missed 6 games hurt.\n\n📊 Playoffs: 1 game, 53 rush yds, 0 TD.\n\n🪞 Emmett Kowalski went 1,804 rush yds, 16 TD, 51 rec and had the better year of the two of you. Head to head 5-4.\n\n📉 The dropoff is real: 78 to 74.\n\nContinue"
+  },
+  {
+   "tag": "s10",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n💰\n\nTHE BIGGER DEAL\n\nEmmett Kowalski just signed the biggest deal anyone at your position has ever seen. Your phone has not stopped buzzing.\n\nMaximilian Okonkwo-Smith\n74\nVS\nEmmett Kowalski\n85\n\nYOU CHOSE: 📰 COMPLAIN TO THE PRESS\n\n📰 You told reporters you are underpaid. Half the city agreed with you.\n\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2026,
+    "age": 22,
+    "ovr": 75,
+    "team": "CHI",
+    "salary": 14.3,
+    "cy": 4,
+    "morale": 70,
+    "fanbase": 55,
+    "health": 100,
+    "net": 0.6,
+    "summer": null,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2026 · age 22",
+    "OVR 75",
+    "$14.3M x4",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2026 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 0 rush yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 75 RB, age 22, 0 rings",
+    "💰 THE BANK $0.6M $14M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines 🎓 With pick 1, the Chicago Bears select Maximilian Okonkwo-Smith.",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 23,
+    "ovr": 77,
+    "team": "CHI",
+    "salary": 14.3,
+    "cy": 3,
+    "morale": 78,
+    "fanbase": 72,
+    "health": 91,
+    "net": 8.6,
+    "summer": null,
+    "last": {
+     "year": 2026,
+     "team": "CHI",
+     "age": 22,
+     "ovr": 75,
+     "games": 13,
+     "awards": [],
+     "teamResult": "Lost the Conference Championship",
+     "salary": 14.3,
+     "rushYds": 770,
+     "rushTd": 8,
+     "rec": 29,
+     "recYds": 266,
+     "poGames": 3,
+     "poLine": "271 rush yds, 2 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2027 · age 23",
+    "OVR 77",
+    "$14.3M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 770 rush yds",
+   "last": "Last season: 770 rush yds, 8 TD, 29 rec · Lost the Conference Championship",
+   "tiles": [
+    "📊 MY PLAYER OVR 77 RB, age 23, 0 rings",
+    "💰 THE BANK $8.6M $14M a year, 3 years left",
+    "📜 CAREER LOG 1 season 770 rush yds, 8 TD, 29 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You got the short yardage carries, the ones that hurt and the ones that count. Morale +4, health -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2028,
+    "age": 24,
+    "ovr": 80,
+    "team": "CHI",
+    "salary": 14.3,
+    "cy": 2,
+    "morale": 67,
+    "fanbase": 75,
+    "health": 97,
+    "net": 15.5,
+    "summer": null,
+    "last": {
+     "year": 2027,
+     "team": "CHI",
+     "age": 23,
+     "ovr": 77,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 14.3,
+     "rushYds": 1194,
+     "rushTd": 9,
+     "rec": 34,
+     "recYds": 248
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2028 · age 24",
+    "OVR 80",
+    "$14.3M x2",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2028 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,964 rush yds",
+   "last": "Last season: 1,194 rush yds, 9 TD, 34 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 80 RB, age 24, 0 rings",
+    "💰 THE BANK $16M $14M a year, 2 years left",
+    "📜 CAREER LOG 2 seasons 1,194 rush yds, 9 TD, 34 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines You did the schedule yourself every Sunday night. 0.9M in, 1.4M out over three years, morale -5 because payroll is not a hobby.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s3",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 25,
+    "ovr": 82,
+    "team": "CHI",
+    "salary": 14.3,
+    "cy": 1,
+    "morale": 76,
+    "fanbase": 90,
+    "health": 88,
+    "net": 24.5,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "CHI",
+     "age": 24,
+     "ovr": 80,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 14.3,
+     "rushYds": 537,
+     "rushTd": 4,
+     "rec": 18,
+     "recYds": 123
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2029 · age 25",
+    "OVR 82",
+    "$14.3M x1",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,501 rush yds",
+   "last": "Last season: 537 rush yds, 4 TD, 18 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 RB, age 25, 0 rings",
+    "💰 THE BANK $25M $14M a year, final year of the deal",
+    "📜 CAREER LOG 3 seasons 537 rush yds, 4 TD, 18 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines Your first print run sold out in ninety seconds. 0.8M in, 3.4M back. Fanbase +10.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s4",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 25,
+    "ovr": 82,
+    "team": "CHI",
+    "salary": 17.1,
+    "cy": 5,
+    "morale": 76,
+    "fanbase": 90,
+    "health": 88,
+    "net": 24.5,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "CHI",
+     "age": 24,
+     "ovr": 80,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 14.3,
+     "rushYds": 537,
+     "rushTd": 4,
+     "rec": 18,
+     "recYds": 123
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2029 · age 25",
+    "OVR 82",
+    "$17.1M x5",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,501 rush yds",
+   "last": "Last season: 537 rush yds, 4 TD, 18 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 RB, age 25, 0 rings",
+    "💰 THE BANK $25M $17M a year, 5 years left",
+    "📜 CAREER LOG 3 seasons 537 rush yds, 4 TD, 18 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines 🖊️ Extension signed: 4 more years at $17.1M a year.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s5",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 4,
+    "year": 2030,
+    "age": 26,
+    "ovr": 85,
+    "team": "CHI",
+    "salary": 17.1,
+    "cy": 4,
+    "morale": 98,
+    "fanbase": 89,
+    "health": 85,
+    "net": 31.9,
+    "summer": null,
+    "last": {
+     "year": 2029,
+     "team": "CHI",
+     "age": 25,
+     "ovr": 82,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 17.1,
+     "rushYds": 1248,
+     "rushTd": 11,
+     "rec": 49,
+     "recYds": 397
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2030 · age 26",
+    "OVR 85",
+    "$17.1M x4",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 3,749 rush yds",
+   "last": "Last season: 1,248 rush yds, 11 TD, 49 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 85 RB, age 26, 0 rings",
+    "💰 THE BANK $32M $17M a year, 4 years left",
+    "📜 CAREER LOG 4 seasons 1,248 rush yds, 11 TD, 49 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines You got the short yardage carries, the ones that hurt and the ones that count. Morale +4, health -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s6",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 5,
+    "year": 2031,
+    "age": 27,
+    "ovr": 86,
+    "team": "CHI",
+    "salary": 17.1,
+    "cy": 3,
+    "morale": 100,
+    "fanbase": 100,
+    "health": 83,
+    "net": 33.6,
+    "summer": null,
+    "last": {
+     "year": 2030,
+     "team": "CHI",
+     "age": 26,
+     "ovr": 85,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 17.1,
+     "rushYds": 1621,
+     "rushTd": 12,
+     "rec": 54,
+     "recYds": 491
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2031 · age 27",
+    "OVR 86",
+    "$17.1M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2031 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 5,370 rush yds",
+   "last": "Last season: 1,621 rush yds, 12 TD, 54 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 86 RB, age 27, 0 rings",
+    "💰 THE BANK $34M $17M a year, 3 years left",
+    "📜 CAREER LOG 5 seasons 1,621 rush yds, 12 TD, 54 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines Record broken with nine minutes left in the first, hoodie on by the second. Fanbase +8, health -2.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s7",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 6,
+    "year": 2032,
+    "age": 28,
+    "ovr": 86,
+    "team": "CHI",
+    "salary": 12.8,
+    "cy": 3,
+    "morale": 100,
+    "fanbase": 100,
+    "health": 78,
+    "net": 45.4,
+    "summer": null,
+    "last": {
+     "year": 2031,
+     "team": "CHI",
+     "age": 27,
+     "ovr": 86,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 17.1,
+     "rushYds": 1420,
+     "rushTd": 11,
+     "rec": 45,
+     "recYds": 295,
+     "poGames": 1,
+     "poLine": "74 rush yds, 1 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2032 · age 28",
+    "OVR 86",
+    "$12.8M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2032 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 6,790 rush yds",
+   "last": "Last season: 1,420 rush yds, 11 TD, 45 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 86 RB, age 28, 0 rings",
+    "💰 THE BANK $45M $13M a year, 3 years left",
+    "📜 CAREER LOG 6 seasons 1,420 rush yds, 11 TD, 45 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You took 4.3M less to sign a pass rusher. Salary now 12.8M, one extra year, fanbase +10.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s8",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 7,
+    "year": 2033,
+    "age": 29,
+    "ovr": 81,
+    "team": "CHI",
+    "salary": 12.8,
+    "cy": 2,
+    "morale": 100,
+    "fanbase": 100,
+    "health": 81,
+    "net": 51,
+    "summer": null,
+    "last": {
+     "year": 2032,
+     "team": "CHI",
+     "age": 28,
+     "ovr": 86,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 12.8,
+     "rushYds": 1745,
+     "rushTd": 15,
+     "rec": 48,
+     "recYds": 393
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2033 · age 29",
+    "OVR 81",
+    "$12.8M x2",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2033 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 8,535 rush yds",
+   "last": "Last season: 1,745 rush yds, 15 TD, 48 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 81 RB, age 29, 0 rings",
+    "💰 THE BANK $51M $13M a year, 2 years left",
+    "📜 CAREER LOG 7 seasons 1,745 rush yds, 15 TD, 48 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You paid her real money and commissioned three more walls, none of them of you. Net worth down 0.25M, fanbase +15, morale +5.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s9",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 8,
+    "year": 2034,
+    "age": 30,
+    "ovr": 78,
+    "team": "CHI",
+    "salary": 12.8,
+    "cy": 1,
+    "morale": 92,
+    "fanbase": 100,
+    "health": 75,
+    "net": 56.2,
+    "summer": null,
+    "last": {
+     "year": 2033,
+     "team": "CHI",
+     "age": 29,
+     "ovr": 81,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 12.8,
+     "rushYds": 1411,
+     "rushTd": 13,
+     "rec": 45,
+     "recYds": 355
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Chicago Bears",
+    "2034 · age 30",
+    "OVR 78",
+    "$12.8M x1",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2034 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 9,946 rush yds",
+   "last": "Last season: 1,411 rush yds, 13 TD, 45 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 78 RB, age 30, 0 rings",
+    "💰 THE BANK $56M $13M a year, final year of the deal",
+    "📜 CAREER LOG 8 seasons 1,411 rush yds, 13 TD, 45 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines Nine months of Tuesday flights and 0.6M in charters. You kept your locker. Morale -6.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s10",
+   "outcome": "retired",
+   "save": {
+    "phase": "retired",
+    "seasons": 9,
+    "year": 2035,
+    "age": 31,
+    "ovr": 74,
+    "team": "CHI",
+    "salary": 12.8,
+    "cy": 0,
+    "morale": 96,
+    "fanbase": 100,
+    "health": 66,
+    "net": 62,
+    "summer": null,
+    "last": {
+     "year": 2034,
+     "team": "CHI",
+     "age": 30,
+     "ovr": 78,
+     "games": 11,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 12.8,
+     "rushYds": 837,
+     "rushTd": 6,
+     "rec": 30,
+     "recYds": 211,
+     "poGames": 1,
+     "poLine": "53 rush yds, 0 TD"
+    }
+   },
+   "chips": [
+    "Legacy 189",
+    "No bust in Canton",
+    "Play Now",
+    "Play Now",
+    "Play Now"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": []
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s4",
+   "word": "Inbox",
+   "shot": "nfllong2-19-tile-inbox-s4.jpg",
+   "text": "Hub\n📱 Inbox\n🏠\nNeighbor\n🏟️ Playoffs, 2026\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n😤\nTeammate\n🏕️ Training camp, 2026\nCoach has me buried on the depth chart again man. Thinking about asking for a trade. What would you do?\n💼\nAgent\n🎓 Draft night, 2026\nCongrats, you're a pro. Two shoe brands and a car dealership already called. Line up the rookie deals now, or wait until you've played a snap?",
+   "backOk": true,
+   "scroll": [
+    135,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s8",
+   "word": "Inbox",
+   "shot": "nfllong2-27-tile-inbox-s8.jpg",
+   "text": "Hub\n📱 Inbox\n📦\nTeammate\n🏕️ Training camp, 2029\nThey just called me up to the office and told me to bring my playbook. Guess that's it for me here. Thanks for everything man.\n🏠\nNeighbor\n🏟️ Playoffs, 2026\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n😤\nTeammate\n🏕️ Training camp, 2026\nCoach has me buried on the depth chart again man. Thinking about asking for a trade. What would you do?\n💼\nAgent\n🎓 Draft night, 2026\nCongrats, you're a pro. Two shoe brands and a car dealership already called. Line up the rookie deals now, or wait until you've played a snap?",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [],
+ "stuck": [
+  {
+   "tag": "s1",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s1",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s2",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s3",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s5",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s7",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s8",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s9",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s10",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "pushed ext s4"
+ ],
+ "shots": [
+  "nfllong2-01-first-visit.jpg",
+  "nfllong2-02-create.jpg",
+  "nfllong2-03-create-filled.jpg",
+  "nfllong2-04-hub-draft.jpg",
+  "nfllong2-05-hub-draft-full.jpg",
+  "nfllong2-06-continue-s1-1.jpg",
+  "nfllong2-07-continue-s1-2.jpg",
+  "nfllong2-08-event-s1-1.jpg",
+  "nfllong2-09-outcome-s1.jpg",
+  "nfllong2-10-event-s1-2.jpg",
+  "nfllong2-11-outcome-s1.jpg",
+  "nfllong2-12-hub-s1.jpg",
+  "nfllong2-13-hub-s2.jpg",
+  "nfllong2-14-hub-s3.jpg",
+  "nfllong2-15-extension-s4.jpg",
+  "nfllong2-16-wheel-s4.jpg",
+  "nfllong2-17-wheel-result-s4.jpg",
+  "nfllong2-18-extension-s4.jpg",
+  "nfllong2-19-tile-inbox-s4.jpg",
+  "nfllong2-20-inbox-open.jpg",
+  "nfllong2-21-inbox-open.jpg",
+  "nfllong2-22-continue-s5-1.jpg",
+  "nfllong2-23-continue-s5-2.jpg",
+  "nfllong2-24-event-s5-1.jpg",
+  "nfllong2-25-event-s5-2.jpg",
+  "nfllong2-26-hub-s6.jpg",
+  "nfllong2-27-tile-inbox-s8.jpg",
+  "nfllong2-28-inbox-open.jpg",
+  "nfllong2-29-inbox-open.jpg",
+  "nfllong2-30-farewell-s9.jpg",
+  "nfllong2-31-hub-s9.jpg",
+  "nfllong2-32-continue-s10-1.jpg",
+  "nfllong2-33-rivalry-choice-s10.jpg",
+  "nfllong2-34-continue-s10-2.jpg",
+  "nfllong2-35-end-retired-s10.jpg",
+  "nfllong2-36-retired.jpg",
+  "nfllong2-37-hall-before-continue.jpg",
+  "nfllong2-38-retired-after-hall.jpg",
+  "nfllong2-39-retired-review.jpg",
+  "nfllong2-40-coach-board.jpg",
+  "nfllong2-41-coach-hired.jpg",
+  "nfllong2-42-coach-season-1.jpg",
+  "nfllong2-43-coach-season-2.jpg",
+  "nfllong2-44-final.jpg"
+ ],
+ "draft": {},
+ "reload": [],
+ "inbox": [
+  {
+   "rows": 3
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2026\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nStop by and sign itSend signed photos",
+   "answered": "Stop by and sign it"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2026\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nYou replied: Stop by and sign it",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📦 TEAMMATE\n\n🏕️ Training camp, 2029\n\nThey just called me up to the office and told me to bring my playbook. Guess that's it for me here. Thanks for everything man.\n\nCall him right nowTell him he'll land somewhereSay nothing",
+   "answered": "Call him right now"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📦 TEAMMATE\n\n🏕️ Training camp, 2029\n\nThey just called me up to the office and told me to bring my playbook. Guess that's it for me here. Thanks for everything man.\n\nYou replied: Call him right now",
+   "answered": false
+  }
+ ],
+ "practice": [],
+ "edge": [],
+ "programme": [],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏈 2026 The league as it is today. Full money, every current franchise",
+   "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers",
+   "QB",
+   "RB",
+   "WR",
+   "TE",
+   "LB",
+   "CB",
+   "EDGE",
+   "K",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.\nPick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.\nBuild your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.\nEnter the draft. Your hidden rating decides the slot, and a real team calls your name.\nCheck the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.\nPlay each season with one tap: yards, touchdowns, awards, how far the team went.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nWhen the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.\nMake up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.\nSpend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nFrom 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.\nCollect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts o",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏈 2026 The league as it is today. Full money, every current",
+  "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, th",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Bellcow Volume monster, wears down",
+  "Satellite Back Catches everything, shares the room",
+  "The Hammer Short yardage god"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "retired": {
+  "text": "Maximilian Okonkwo-Smith retires\n\nA long, proud career\n\n9 seasons, 0 rings, 0 MVPs, 0 All-Pro nods\n\n10,783 rushing yards, 89 touchdowns\n\n139M career earnings, drafted pick 1\n\n🏃 10,000 rushing yards · 🩺 Iron man · 🪙 First million\n\nLegacy 189\nNo bust in Canton\nNew career\n🌟\nNFL My Career\nOct 13, 2026\nRESULT\nlegacy 189\nDoUKnowBall\ndouknowball.com/nfl-my-career\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\n🗳️\n\nPRO FOOTBALL HALL OF FAME\n\nEligible from the Class of 2040.\n\nNever made the ballot.\n\nEligible after 5 seasons away from the game. Needs 80 percent of the vote.\n\nThe voters weigh the hardware first: rings, the major awards, All-Pro years. Then your seasons and rushing yards.\n\nContinue →\n\n🧢\n\nYou stopped playing. You did not stop working.\n\nGo after a job on a sideline. What you did in a jersey gets you in the room, and after that it is all on what you do in the chair. Winning a Super Bowl as a coach is a different thing entirely.\n\nGo after a coaching job\nReview seasons\n\nSEASON BY SEASON\n\n2026 · CHI · age 22\n770 rush yds, 8 TD, 29 rec\n2027 · CHI · age 23\n1,194 rush yds, 9 TD, 34 rec\n2028 · CHI · age 24\n537 rush yds, 4 TD, 18 rec\n2029 · CHI · age 25\n1,248 rush yds, 11 TD, 49 rec\n2030 · CHI · age 26\n1,621 rush yds, 12 TD, 54 rec\n2031 · CHI · age 27\n1,420 rush yds, 11 TD, 45 rec\n2032 · CHI · age 28\n1,745 rush yds, 15 TD, 48 rec\n2033 · CHI · age 29\n1,411 rush yds, 13 TD, 45 rec\n2034 · CHI · age 30\n837 rush yds, 6 TD, 30 rec",
+  "hall": "Maximilian Okonkwo-Smith retires\n\nA long, proud career\n\n9 seasons, 0 rings, 0 MVPs, 0 All-Pro nods\n\n10,783 rushing yards, 89 touchdowns\n\n139M career earnings, drafted pick 1\n\n🏃 10,000 rushing yards · 🩺 Iron man · 🪙 First million\n\nLegacy 189\nNo bust in Canton\nNew career\n🌟\nNFL My Career\nOct 13, 2026\nRESULT\nlegacy 189\nDoUKnowBall\ndouknowball.com/nfl-my-career\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\n🗳️\n\nPRO FOOTBALL HALL OF FAME\n\nEligible from the Class of 2040.\n\nNever made the ballot.\n\nEligible after 5 seasons away from the game. Needs 80 percent of the vote.\n\nThe voters weigh the hardware first: rings, the major awards, All-Pro years. Then your seasons and rushing yards.\n\nContinue →\n\n🧢\n\nYou stopped playing. You did not stop working.\n\nGo after a job on a sideline. What you did in a jersey gets you in the room, and after that it is all on what you do in the chair. Winning a Super Bowl as a coach is a different thing entirely.\n\nGo after a coaching job\nReview seasons\n\nSEASON BY SEASON\n\n2026 · CHI · age 22\n770 rush yds, 8 TD, 29 rec\n2027 · CHI · age 23\n1,194 rush yds, 9 TD, 34 rec\n2028 · CHI · age 24\n537 rush yds, 4 TD, 18 rec\n2029 · CHI · age 25\n1,248 rush yds, 11 TD, 49 rec\n2030 · CHI · age 26\n1,621 rush yds, 12 TD, 54 rec\n2031 · CHI · age 27\n1,420 rush yds, 11 TD, 45 rec\n2032 · CHI · age 28\n1,745 rush yds, 15 TD, 48 rec\n2033 · CHI · age 29\n1,411 rush yds, 13 TD, 45 rec\n2034 · CHI · age 30\n837 rush yds, 6 TD, 30 rec",
+  "coach": "🧢 Coach Maximilian Okonkwo-Smith\nOut of work\n2035\nStanding 53\n\n📪\n\nLooking for a job\n\n3 teams want to talk.\n\nMinnesota Vikings\nT4 Staff job\nOffensive Coordinator\nDo the work nobody sees and wait for your turn.\nA friend on the staff vouched for you. That is genuinely how most of these start.\nNew York Jets\nT4 Staff job\nSpecial Teams Coordinator\nDo the work nobody sees and wait for your turn.\nA friend on the staff vouched for you. That is genuinely how most of these start.\nBaltimore Ravens\nT4 Staff job\nSpecial Teams Coordinator\nFix one thing that is broken here and people will notice.\nA friend on the staff vouched for you. That is genuinely how most of these start.\nSit out the 2035 season\n📪\nOut Of Work\nNobody has hired you\n🗞️\nThe Market\n11 jobs open · 3 for you\n3\nWhere You Stand\n53 · can reach T4 Staff job\n📜\nCoaching Log\n0 seasons · 0-0\n\nLATEST\n\n3 teams want to talk.\n\nA seat on a staff, working for somebody else. That is where nearly every coach in the sport started.\n\nBack to the playing career",
+  "offer": "Minnesota Vikings T4 Staff job Offensive Coordinator Do the work nobody sees and wait for your turn. A friend on the staff vouched for you. That is genuinely ho",
+  "coached": 2,
+  "coachSeason1": "🧢 Coach Maximilian Okonkwo-Smith\nMinnesota Vikings\n2036\nStanding 55\n\nTHE 2035 SEASON\n\n9-8\n\nMinnesota Vikings went 9-8 and lost on Wild Card weekend.\n\nMinnesota Vikings: Minnesota Vikings went 9-8 and lost on Wild Card weekend.\n\nSafe · Winning teams keep their staffs together.\n\nCoach the 2036 season\n\n9-8 lifetime · 0 titles · chasing a Super Bowl\n\n🪑\nThe Job\nOffensive Coordinator · Safe\n🗞️\nThe Market\n11 jobs open · 0 for you\nWhere You Stand\n55 · can reach T4 Staff job\n📜\nCoaching Log\n1 season · 9-8\n\nLATEST\n\nMinnesota Vikings: Minnesota Vikings went 9-8 and lost on Wild Card weekend.\n\nYou took the Minnesota Vikings job as their Offensive Coordinator.\n\n3 teams want to talk.\n\nA short run at it. The sport is brutal about this.\n\nBack to the playing career",
+  "coachSeason2": "🧢 Coach Maximilian Okonkwo-Smith\nMinnesota Vikings\n2037\nStanding 61\n\nTHE 2036 SEASON\n\n9-8\n\nMinnesota Vikings went 9-8 and lost the Conference Championship.\n\nMinnesota Vikings: Minnesota Vikings went 9-8 and lost the Conference Championship.\n\nSafe · Winning teams keep their staffs together.\n\nCoach the 2037 season\n\n18-16 lifetime · 0 titles · chasing a Super Bowl\n\n🪑\nThe Job\nOffensive Coordinator · Safe\n🗞️\nThe Market\n11 jobs open · 0 for you\nWhere You Stand\n61 · can reach T4 Staff job\n📜\nCoaching Log\n2 seasons · 18-16\n\nLATEST\n\nMinnesota Vikings: Minnesota Vikings went 9-8 and lost the Conference Championship.\n\nMinnesota Vikings: Minnesota Vikings went 9-8 and lost on Wild Card weekend.\n\nYou took the Minnesota Vikings job as their Offensive Coordinator.\n\n3 teams want to talk.\n\nA short run at it. The sport is brutal about this.\n\nBack to the playing career"
+ },
+ "final": {
+  "save": {
+   "phase": "coach",
+   "seasons": 9,
+   "year": 2035,
+   "age": 31,
+   "ovr": 74,
+   "team": "CHI",
+   "salary": 12.8,
+   "cy": 0,
+   "morale": 96,
+   "fanbase": 100,
+   "health": 66,
+   "net": 62,
+   "summer": null,
+   "last": {
+    "year": 2034,
+    "team": "CHI",
+    "age": 30,
+    "ovr": 78,
+    "games": 11,
+    "awards": [],
+    "teamResult": "Lost in the Wild Card round",
+    "salary": 12.8,
+    "rushYds": 837,
+    "rushTd": 6,
+    "rec": 30,
+    "recYds": 211,
+    "poGames": 1,
+    "poLine": "53 rush yds, 0 TD"
+   }
+  },
+  "chips": {
+   "chips": [
+    "🧢 Coach Maximilian Okonkwo-Smith",
+    "Minnesota Vikings",
+    "2037",
+    "Standing 61",
+    "Play Now",
+    "Play Now",
+    "Play Now"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": []
+  },
+  "secs": 459
+ }
+}

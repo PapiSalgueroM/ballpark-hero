@@ -1,0 +1,58 @@
+[0s] walk nhllong2: http://localhost:4173/nhl-my-career at 390x844
+[8s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[8s] AUDIT hub draft trunc: 🎓 With pick 42, the Calgary Flames select Maximilian Okonkwo-Smith. [149<304]
+[44s] AUDIT event s1 trunc: 🪑 Another camp down the lineup. The gap is closing. [149<231]
+[46s] AUDIT event s1 trunc: You walked a reporter through every step on camera. Every rival crowd  [149<554]
+[47s] season 1: hub, seasons on save 0 -> 1, year 2027, age 20, ovr 70, team CGY, $0.9M x2, last {"year":2026,"team":"CGY","age":19,"ovr":68,"games":84,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":15,"assists":14,"points":2
+[47s] AUDIT hub s1 trunc: Offside by an inch, and you had already done the whole celebration. Mo [149<389]
+[89s] season 2: hub, seasons on save 1 -> 2, year 2028, age 21, ovr 72, team CGY, $0.9M x1, last {"year":2027,"team":"CGY","age":20,"ovr":70,"games":84,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":34,"assists":40,"points":7
+[89s] AUDIT hub s2 trunc: 🎙️ It LANDED. The clip runs all week and the city is yours (+8 fanbas [149<307]
+[131s] AUDIT event s3 trunc: You invented three details and now they are printed in the arena tour  [149<423]
+[132s] season 3: hub, seasons on save 2 -> 3, year 2029, age 22, ovr 74, team CGY, $0.9M x0, last {"year":2028,"team":"CGY","age":21,"ovr":72,"games":81,"awards":[],"teamResult":"Lost in Round 2","salary":0.9,"slate":84,"goals":14,"assists":18,"points":32,"p
+[132s] AUDIT hub s3 trunc: You called the coach yourself before he read it. Fanbase -3, morale +3 [149<407]
+[173s] season 4: hub, seasons on save 3 -> 3, year 2029, age 22, ovr 74, team CGY, $4.1M x4, last {"year":2028,"team":"CGY","age":21,"ovr":72,"games":81,"awards":[],"teamResult":"Lost in Round 2","salary":0.9,"slate":84,"goals":14,"assists":18,"points":32,"p
+[174s] AUDIT tile Inbox s4 trunc: Haven't heard from you since the road trip started sweetheart. Everyth [302<643]
+[174s] AUDIT tile Inbox s4 trunc: We want you for the World Juniors over the holidays. Your club has to  [302<554]
+[174s] AUDIT tile Inbox s4 trunc: I cried when they called your name. Your billet family called too, the [302<599]
+[215s] AUDIT event s5 trunc: You did not say one word and had the best two games of your life. Mora [149<454]
+[216s] season 5: hub, seasons on save 3 -> 4, year 2030, age 23, ovr 76, team CGY, $4.1M x3, last {"year":2029,"team":"CGY","age":22,"ovr":74,"games":83,"awards":[],"teamResult":"Lost in Round 2","salary":4.1,"slate":84,"goals":18,"assists":23,"points":41,"p
+[257s] AUDIT event s6 trunc: 💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]
+[258s] AUDIT event s6 trunc: 1.6M, a mailbox with your name on it and a neighborhood that brings yo [149<518]
+[259s] season 6: hub, seasons on save 4 -> 5, year 2031, age 24, ovr 77, team CGY, $4.1M x2, last {"year":2030,"team":"CGY","age":23,"ovr":76,"games":81,"awards":[],"teamResult":"Lost in Round 1","salary":4.1,"slate":84,"goals":20,"assists":27,"points":47,"p
+[259s] AUDIT hub s6 trunc: You sat and waited like a pro. The goal stood and the building got twi [149<400]
+[296s] AUDIT event s7 trunc: Three teams were quietly interested, and once word got around your own [149<592]
+[298s] season 7: hub, seasons on save 5 -> 6, year 2032, age 25, ovr 79, team CGY, $4.1M x1, last {"year":2031,"team":"CGY","age":24,"ovr":77,"games":82,"awards":[],"teamResult":"Lost in Round 1","salary":4.1,"slate":84,"goals":23,"assists":25,"points":48,"p
+[330s] AUDIT extension s8 trunc: Practice, bus, room, done, and the front door stayed shut. It was a go [149<589]
+[330s] AUDIT extension s8 no button in the viewport (scrollY 0)
+[347s] season 8: hub, seasons on save 6 -> 7, year 2033, age 26, ovr 81, team CGY, $4.1M x0, last {"year":2032,"team":"CGY","age":25,"ovr":79,"games":82,"awards":[],"teamResult":"Lost in Round 2","salary":4.1,"slate":84,"goals":22,"assists":18,"points":40,"p
+[348s] AUDIT tile Inbox s8 trunc: The whole family wants playoff tickets. All fourteen of us. Your uncle [302<469]
+[383s] AUDIT fa s9 trunc: 📱 Replied to Mom: Buy them all. Karma up. [149<189]
+[392s] season 9: hub, seasons on save 7 -> 7, year 2033, age 26, ovr 81, team CGY, $8.6M x4, last {"year":2032,"team":"CGY","age":25,"ovr":79,"games":82,"awards":[],"teamResult":"Lost in Round 2","salary":4.1,"slate":84,"goals":22,"assists":18,"points":40,"p
+[392s] AUDIT hub s9 trunc: ✍️ Re-signed with Calgary Flames: 8.6M x4. The city exhales. [149<268]
+[434s] season 10: hub, seasons on save 7 -> 8, year 2034, age 27, ovr 81, team CGY, $8.6M x3, last {"year":2033,"team":"CGY","age":26,"ovr":81,"games":84,"awards":[],"teamResult":"Lost in Round 2","salary":8.6,"slate":84,"goals":26,"assists":34,"points":60,"p
+[472s] AUDIT event s11 trunc: 750k, no meetings, no plaque. Net worth 12.35M, fanbase +4. [149<266]
+[474s] season 11: hub, seasons on save 8 -> 9, year 2035, age 28, ovr 81, team CGY, $8.6M x2, last {"year":2034,"team":"CGY","age":27,"ovr":81,"games":84,"awards":[],"teamResult":"Lost in Round 1","salary":8.6,"slate":84,"goals":22,"assists":24,"points":46,"p
+[516s] season 12: hub, seasons on save 9 -> 10, year 2036, age 29, ovr 81, team CGY, $8.6M x1, last {"year":2035,"team":"CGY","age":28,"ovr":81,"games":81,"awards":[],"teamResult":"Lost in Round 2","salary":8.6,"slate":84,"goals":17,"assists":24,"points":41,"p
+[516s] AUDIT hub s12 trunc: Same meal, 1,100 days running. Net worth +0.05M to 18.25M, morale +2,  [149<357]
+[517s] AUDIT tile Inbox s12 trunc: Playoff hockey. Everything since camp was for this. Players only meeti [302<550]
+[551s] AUDIT extension s13 trunc: 📱 Replied to Head coach: Speak from the heart. Karma up. [149<256]
+[559s] season 13: hub, seasons on save 10 -> 10, year 2036, age 29, ovr 81, team CGY, $6.7M x5, last {"year":2035,"team":"CGY","age":28,"ovr":81,"games":81,"awards":[],"teamResult":"Lost in Round 2","salary":8.6,"slate":84,"goals":17,"assists":24,"points":41,"p
+[601s] season 14: hub, seasons on save 10 -> 11, year 2037, age 30, ovr 81, team CGY, $7.1M x6, last {"year":2036,"team":"CGY","age":29,"ovr":81,"games":82,"awards":[],"teamResult":"Lost in Round 2","salary":6.7,"slate":84,"goals":28,"assists":30,"points":58,"p
+[641s] AUDIT event s15 trunc: 👏 You posted a congrats for Rowan Salvatore. Classy, and people notic [149<323]
+[642s] AUDIT event s15 trunc: Captain of Calgary Flames. You stood up in the room, said four sentenc [149<748]
+[645s] season 15: hub, seasons on save 11 -> 12, year 2038, age 31, ovr 81, team CGY, $7.1M x5, last {"year":2037,"team":"CGY","age":30,"ovr":81,"games":83,"awards":[],"teamResult":"Lost in Round 1","salary":7.1,"slate":84,"goals":28,"assists":33,"points":61,"p
+[687s] AUDIT event s16 trunc: The clips rip around the league group chats. [149<189]
+[688s] season 16: hub, seasons on save 12 -> 13, year 2039, age 32, ovr 81, team CGY, $7.1M x4, last {"year":2038,"team":"CGY","age":31,"ovr":81,"games":55,"awards":[],"teamResult":"Lost in Round 2","salary":7.1,"slate":84,"goals":17,"assists":23,"points":40,"p
+[689s] AUDIT tile Inbox s16 trunc: We'd love you on the morning show before Game 1. Ten minutes, fire the [302<424]
+[734s] AUDIT event s17 trunc: Full uniform, zero at bats, one very relieved general manager. Fanbase [149<443]
+[735s] season 17: hub, seasons on save 13 -> 14, year 2040, age 33, ovr 78, team CGY, $7.1M x3, last {"year":2039,"team":"CGY","age":32,"ovr":81,"games":83,"awards":[],"teamResult":"Lost the Conference Final","salary":7.1,"slate":84,"goals":18,"assists":23,"poi
+[776s] AUDIT event s18 trunc: A monthly flight and a permanent seat eight rows up. Net worth -0.25M  [149<404]
+[777s] season 18: hub, seasons on save 14 -> 15, year 2041, age 34, ovr 76, team CGY, $7.1M x2, last {"year":2040,"team":"CGY","age":33,"ovr":78,"games":83,"awards":[],"teamResult":"Missed the playoffs","salary":7.1,"slate":84,"goals":33,"assists":38,"points":7
+[777s] AUDIT hub s18 trunc: Three straight days of talk radio. Fanbase +5, morale -4, heat +6 to 6 [149<301]
+[818s] AUDIT event s19 trunc: 😈 You got your answer in on Rowan Salvatore, clean enough that the st [149<465]
+[819s] AUDIT event s19 trunc: Recovery bowls, meal prep, no sugar after noon. You showed up to camp  [149<629]
+[820s] season 19: hub, seasons on save 15 -> 16, year 2042, age 35, ovr 74, team CGY, $7.1M x1, last {"year":2041,"team":"CGY","age":34,"ovr":76,"games":84,"awards":[],"teamResult":"Missed the playoffs","salary":7.1,"slate":84,"goals":20,"assists":20,"points":4
+[856s] season 20: retired, seasons on save 16 -> 17, year 2043, age 36, ovr 72, team CGY, $7.1M x0, last {"year":2042,"team":"CGY","age":35,"ovr":74,"games":52,"awards":[],"teamResult":"Lost in Round 1","salary":7.1,"slate":84,"goals":17,"assists":22,"points":39,"p
+[871s] DONE nhllong2: seasons 17, events 45, curtains 29, page errors 0, console 1, stuck 25, shots 50
+[871s] event titles: The routine got out of hand x1 | Your goal is under review x4 | The accountability scrum x1 | The room is haunted, apparently x1 | The family group chat leaked x5 | Round two got personal x1 | A steakhouse with your name over the door x1 | Rent or buy in this city x1 | Waiver wire Saturday x1 | The documentary crew x1 | A teammate needs 300 grand x1 | Closing in on the franchise goals record x1 | Two sheets and a pro shop x1 | You are 29 and you cannot cook x1 | Expansion draft exposure x1 | The letter x1 | Summer plan x3 | The spicy podcast x1 | The charity softball game x1 | Your mom wants you closer to home x1 | The nutritionist versus the postgame pizza x1
+[871s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

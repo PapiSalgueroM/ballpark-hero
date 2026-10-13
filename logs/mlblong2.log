@@ -1,0 +1,74 @@
+[2s] walk mlblong2: http://localhost:4173/mlb-my-career at 390x844
+[6s] AUDIT first visit help small: SP 55x28
+[6s] AUDIT first visit help small: RP 55x28
+[6s] AUDIT first visit help small: C 55x28
+[6s] AUDIT first visit help small: 1B 55x28
+[6s] AUDIT first visit help small: 2B 55x28
+[6s] AUDIT first visit help small: 3B 55x28
+[6s] AUDIT first visit help small: SS 55x28
+[6s] AUDIT first visit help small: LF 55x28
+[6s] AUDIT first visit help small: CF 55x28
+[6s] AUDIT first visit help small: RF 55x28
+[6s] AUDIT first visit help small: DH 55x28
+[10s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[10s] AUDIT hub draft trunc: 🎓 With pick 17, the Kansas City Royals select Maximilian Okonkwo-Smit [149<317]
+[51s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 73, team KCR, $0.8M x5, last {"year":2026,"team":"KCR","age":21,"ovr":72,"games":158,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.261,"hr":21,"rbi":79,"sb":3,"doubles":29,
+[51s] AUDIT hub s1 trunc: You sat in every flight, laughed at everything, and lost 340 dollars t [149<452]
+[92s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 74, team KCR, $0.8M x4, last {"year":2027,"team":"KCR","age":22,"ovr":73,"games":159,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.277,"hr":24,"rbi":89,"sb":2,"doubles":39,
+[92s] AUDIT hub s2 trunc: 🎙️ It backfired. The clip runs all week for the wrong reasons (-8 fan [149<314]
+[127s] AUDIT event s3 trunc: 📊 Postseason: 7 games, 7 for 28 (.250), 1 HR. [149<202]
+[128s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 77, team KCR, $0.8M x3, last {"year":2028,"team":"KCR","age":23,"ovr":74,"games":159,"awards":[],"teamResult":"Lost the Division Series","salary":0.8,"avg":0.267,"hr":21,"rbi":74,"sb":3,"do
+[128s] AUDIT hub s3 trunc: Every meal for 200 days, cooked and packed. Net worth down 0.2M, healt [149<411]
+[170s] season 4: hub, seasons on save 3 -> 4, year 2030, age 25, ovr 79, team KCR, $0.8M x2, last {"year":2029,"team":"KCR","age":24,"ovr":77,"games":161,"awards":[],"teamResult":"Lost the Wild Card series","salary":0.8,"avg":0.274,"hr":24,"rbi":78,"sb":4,"d
+[171s] AUDIT tile Inbox s4 trunc: Last month of the season. I want you in there every night. How's the b [302<509]
+[171s] AUDIT tile Inbox s4 trunc: Tommy John's gone. Twelve months. Sitting in this hospital bed wonderi [302<622]
+[171s] AUDIT tile Inbox s4 trunc: The booster club wants to paint your number on the outfield fence at t [302<788]
+[210s] AUDIT event s5 trunc: 📊 Postseason: 8 games, 9 for 32 (.281), 1 HR. [149<203]
+[211s] AUDIT event s5 trunc: Two twenty minute phone calls and it never happened again. Morale +6,  [149<580]
+[212s] season 5: hub, seasons on save 4 -> 5, year 2031, age 26, ovr 81, team KCR, $0.8M x1, last {"year":2030,"team":"KCR","age":25,"ovr":79,"games":162,"awards":[],"teamResult":"Lost the Division Series","salary":0.8,"avg":0.281,"hr":25,"rbi":90,"sb":0,"do
+[243s] AUDIT extension s6 trunc: You wrote gift on the memo line so he could never carry it as a debt.  [149<447]
+[261s] AUDIT event s6 trunc: 🎙️ It LANDED. The clip runs all week and the city is yours (+8 fanbas [149<307]
+[263s] season 6: hub, seasons on save 5 -> 6, year 2032, age 27, ovr 82, team KCR, $0.8M x0, last {"year":2031,"team":"KCR","age":26,"ovr":81,"games":158,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.288,"hr":31,"rbi":96,"sb":1,"doubles":32,
+[263s] AUDIT hub s6 trunc: Rico has a bowl, a nameplate on the bullpen bench and an undefeated re [149<569]
+[304s] season 7: hub, seasons on save 6 -> 6, year 2032, age 27, ovr 82, team KCR, $21.9M x4, last {"year":2031,"team":"KCR","age":26,"ovr":81,"games":158,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.288,"hr":31,"rbi":96,"sb":1,"doubles":32,
+[344s] AUDIT event s8 trunc: 🧊 No ads, no posts. Just the numbers. [149<171]
+[345s] AUDIT event s8 trunc: A Saturday of tee work instead of a folding chair. Rating +1 to 84, he [149<325]
+[347s] season 8: hub, seasons on save 6 -> 7, year 2033, age 28, ovr 84, team KCR, $21.9M x3, last {"year":2032,"team":"KCR","age":27,"ovr":82,"games":161,"awards":[],"teamResult":"Missed October","salary":21.9,"avg":0.278,"hr":28,"rbi":100,"sb":5,"doubles":3
+[348s] AUDIT tile Inbox s8 trunc: October. Everything since spring was for this. Want to say something t [302<478]
+[392s] AUDIT event s9 trunc: The Tampa Bay Rays traded for you and extended you the same night. 26. [149<471]
+[394s] season 9: hub, seasons on save 7 -> 8, year 2034, age 29, ovr 84, team TBR, $26.3M x5, last {"year":2033,"team":"KCR","age":28,"ovr":84,"games":156,"awards":[],"teamResult":"Missed October","salary":21.9,"avg":0.304,"hr":31,"rbi":100,"sb":6,"doubles":3
+[394s] AUDIT hub s9 trunc: You never mentioned the clause once and kept every one of the 131.5M.  [149<453]
+[435s] AUDIT event s10 trunc: You posted about it eleven times for 0.2M and a small slice of paper.  [149<489]
+[437s] season 10: hub, seasons on save 8 -> 9, year 2035, age 30, ovr 85, team TBR, $26.3M x4, last {"year":2034,"team":"TBR","age":29,"ovr":84,"games":159,"awards":[],"teamResult":"Missed October","salary":26.3,"avg":0.283,"hr":30,"rbi":95,"sb":6,"doubles":41
+[472s] AUDIT event s11 trunc: 🪞 Devon Kowalski went 0.304, 31 HR. Nothing in it again. The head to  [149<393]
+[473s] AUDIT event s11 trunc: You left 2.5M on a table because of a curse you cannot prove exists. M [149<439]
+[475s] season 11: hub, seasons on save 9 -> 10, year 2036, age 31, ovr 85, team TBR, $26.3M x3, last {"year":2035,"team":"TBR","age":30,"ovr":85,"games":160,"awards":[],"teamResult":"Missed October","salary":26.3,"avg":0.303,"hr":31,"rbi":102,"sb":1,"doubles":3
+[517s] AUDIT event s12 trunc: Twenty two road cities, one very tired toddler, and a marriage that su [149<556]
+[519s] season 12: hub, seasons on save 10 -> 11, year 2037, age 32, ovr 85, team TBR, $26.3M x2, last {"year":2036,"team":"TBR","age":31,"ovr":85,"games":159,"awards":["Gold Glove","Silver Slugger"],"teamResult":"Missed October","salary":26.3,"avg":0.305,"hr":34
+[520s] AUDIT tile Inbox s12 trunc: Bat and glove deal on the table. Good money, but the brand got caught  [302<588]
+[566s] AUDIT event s13 trunc: Double the money and bats cut to a model that has not existed since 19 [149<504]
+[568s] season 13: hub, seasons on save 11 -> 12, year 2038, age 33, ovr 86, team Yomiuri Giants, $39.5M x2, last {"year":2037,"team":"TBR","age":32,"ovr":85,"games":157,"awards":["All-Star","Silver Slugger"],"teamResult":"Missed October","salary":26.3,"avg":0.296,"hr":38,"
+[577s] season 14: hub, seasons on save 12 -> 13, year 2039, age 34, ovr 86, team Yomiuri Giants, $39.5M x1, last {"year":2038,"team":"Yomiuri Giants","age":33,"ovr":86,"games":158,"awards":["Gold Glove","Silver Slugger"],"teamResult":"Missed October","salary":39.5,"avg":0.
+[579s] AUDIT extension s15 trunc: Every single day, no shortcuts. Your body held up all season. Morale - [149<352]
+[586s] season 15: hub, seasons on save 13 -> 13, year 2039, age 34, ovr 86, team Yomiuri Giants, $31.1M x3, last {"year":2038,"team":"Yomiuri Giants","age":33,"ovr":86,"games":158,"awards":["Gold Glove","Silver Slugger"],"teamResult":"Missed October","salary":39.5,"avg":0.
+[586s] AUDIT hub s15 trunc: 🖊️ Extension signed: 2 more years at $31.1M a year. [149<222]
+[598s] AUDIT event s16 trunc: 🎙️ Nobody remembers it tomorrow. [149<151]
+[600s] season 16: hub, seasons on save 13 -> 14, year 2040, age 35, ovr 84, team Yomiuri Giants, $31.1M x2, last {"year":2039,"team":"Yomiuri Giants","age":34,"ovr":86,"games":162,"awards":["All-Star","Gold Glove"],"teamResult":"Missed October","salary":31.1,"avg":0.314,"h
+[601s] AUDIT tile Inbox s16 trunc: Deadline is this week. Two clubs called asking about you. Want me to s [302<626]
+[614s] AUDIT event s17 trunc: 😈 You answered Devon Kowalski the right way, on the field, and stared [149<523]
+[615s] season 17: hub, seasons on save 14 -> 15, year 2041, age 36, ovr 83, team Yomiuri Giants, $31.1M x1, last {"year":2040,"team":"Yomiuri Giants","age":35,"ovr":84,"games":158,"awards":[],"teamResult":"Missed October","salary":31.1,"avg":0.276,"hr":25,"rbi":91,"sb":2,"
+[616s] AUDIT extension s18 trunc: Every person in that city can still do the line, including your teamma [149<516]
+[623s] season 18: hub, seasons on save 15 -> 15, year 2041, age 36, ovr 83, team Yomiuri Giants, $19.5M x2, last {"year":2040,"team":"Yomiuri Giants","age":35,"ovr":84,"games":158,"awards":[],"teamResult":"Missed October","salary":31.1,"avg":0.276,"hr":25,"rbi":91,"sb":2,"
+[623s] AUDIT hub s18 trunc: 🖊️ Extension signed: 1 more year at $19.5M a year. [149<218]
+[634s] AUDIT event s19 trunc: 💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]
+[635s] AUDIT event s19 trunc: Twenty six identical pairs, one very confused equipment staff, and a n [149<613]
+[637s] season 19: hub, seasons on save 15 -> 16, year 2042, age 37, ovr 80, team Yomiuri Giants, $19.5M x1, last {"year":2041,"team":"Yomiuri Giants","age":36,"ovr":83,"games":70,"awards":[],"teamResult":"Missed October","salary":19.5,"avg":0.305,"hr":15,"rbi":26,"sb":1,"d
+[650s] season 20: hub, seasons on save 16 -> 17, year 2043, age 38, ovr 74, team Yomiuri Giants, $19.5M x0, last {"year":2042,"team":"Yomiuri Giants","age":37,"ovr":80,"games":158,"awards":["Comeback Player of the Year"],"teamResult":"Missed October","salary":19.5,"avg":0.
+[651s] AUDIT tile Inbox s20 trunc: Your postgame comments about last night's umpiring went viral. We'd we [302<535]
+[655s] AUDIT fa s21 trunc: 📱 Replied to League office: Apologize properly. Karma up. [149<253]
+[664s] season 21: hub, seasons on save 17 -> 17, year 2043, age 38, ovr 74, team Yomiuri Giants, $9.5M x1, last {"year":2042,"team":"Yomiuri Giants","age":37,"ovr":80,"games":158,"awards":["Comeback Player of the Year"],"teamResult":"Missed October","salary":19.5,"avg":0.
+[664s] AUDIT hub s21 trunc: ✍️ Re-signed with Yomiuri Giants: 9.5M x1. The city exhales. [149<259]
+[675s] season 22: retired, seasons on save 17 -> 18, year 2044, age 39, ovr 70, team Yomiuri Giants, $9.5M x0, last {"year":2043,"team":"Yomiuri Giants","age":38,"ovr":74,"games":158,"awards":[],"teamResult":"Missed October","salary":9.5,"avg":0.284,"hr":26,"rbi":88,"sb":1,"d
+[693s] DONE mlblong2: seasons 18, events 54, curtains 32, page errors 0, console 1, stuck 20, shots 50
+[693s] event titles: The card game on the charter x1 | The accountability scrum x4 | The 11pm spread problem x1 | The socks x2 | The rivalry has a body count now x1 | The 40,000 dollar ask x3 | The aux cord war x1 | There is a raccoon living in the bullpen x1 | Four hours, one folding chair x1 | Bobblehead night x1 | The house for your mother x1 | Your agent needs an answer before July x1 | The mattress commercial x2 | The opt out is sitting right there x1 | Two guys with a bat knob sensor x1 | A country singer wants you in the video x1 | Your brother printed business cards x1 | The video game wants your face x1 | The clubhouse is haunted x1 | 4am, terminal C x1 | An academy with your name on the gate x1 | Winter plan x3 | The bat and glove meeting x1 | Japan is offering 39.5M a year x1 | They got the job x1 | A firm that specializes in Cooperstown x1 | Two hours before you can play x1 | A veteran spring x1
+[693s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

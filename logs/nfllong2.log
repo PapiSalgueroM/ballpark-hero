@@ -1,0 +1,34 @@
+[2s] walk nfllong2: http://localhost:4173/nfl-my-career at 390x844
+[10s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[10s] AUDIT hub draft trunc: 🎓 With pick 1, the Chicago Bears select Maximilian Okonkwo-Smith. [149<293]
+[53s] AUDIT event s1 trunc: You trademarked it on a Tuesday and moved 90,000 shirts by Christmas.  [149<451]
+[54s] season 1: hub, seasons on save 0 -> 1, year 2027, age 23, ovr 77, team CHI, $14.3M x3, last {"year":2026,"team":"CHI","age":22,"ovr":75,"games":13,"awards":[],"teamResult":"Lost the Conference Championship","salary":14.3,"rushYds":770,"rushTd":8,"rec":
+[54s] AUDIT hub s1 trunc: You got the short yardage carries, the ones that hurt and the ones tha [149<420]
+[95s] AUDIT event s2 trunc: You learned a job you never wanted and did it well. Rating +1 to 80, m [149<516]
+[97s] season 2: hub, seasons on save 1 -> 2, year 2028, age 24, ovr 80, team CHI, $14.3M x2, last {"year":2027,"team":"CHI","age":23,"ovr":77,"games":17,"awards":[],"teamResult":"Missed the playoffs","salary":14.3,"rushYds":1194,"rushTd":9,"rec":34,"recYds":
+[97s] AUDIT hub s2 trunc: You did the schedule yourself every Sunday night. 0.9M in, 1.4M out ov [149<546]
+[138s] AUDIT event s3 trunc: You signed every one of them. Your hand did not work right for a week  [149<417]
+[140s] season 3: hub, seasons on save 2 -> 3, year 2029, age 25, ovr 82, team CHI, $14.3M x1, last {"year":2028,"team":"CHI","age":24,"ovr":80,"games":9,"awards":[],"teamResult":"Missed the playoffs","salary":14.3,"rushYds":537,"rushTd":4,"rec":18,"recYds":12
+[140s] AUDIT hub s3 trunc: Your first print run sold out in ninety seconds. 0.8M in, 3.4M back. F [149<345]
+[178s] season 4: hub, seasons on save 3 -> 3, year 2029, age 25, ovr 82, team CHI, $17.1M x5, last {"year":2028,"team":"CHI","age":24,"ovr":80,"games":9,"awards":[],"teamResult":"Missed the playoffs","salary":14.3,"rushYds":537,"rushTd":4,"rec":18,"recYds":12
+[179s] AUDIT tile Inbox s4 trunc: The whole street put your number up in their windows. The kids made a  [302<548]
+[179s] AUDIT tile Inbox s4 trunc: Coach has me buried on the depth chart again man. Thinking about askin [302<569]
+[179s] AUDIT tile Inbox s4 trunc: Congrats, you're a pro. Two shoe brands and a car dealership already c [302<745]
+[224s] AUDIT event s5 trunc: You said your pregame is a religion and you do not do weddings. Rating [149<377]
+[226s] season 5: hub, seasons on save 3 -> 4, year 2030, age 26, ovr 85, team CHI, $17.1M x4, last {"year":2029,"team":"CHI","age":25,"ovr":82,"games":17,"awards":[],"teamResult":"Missed the playoffs","salary":17.1,"rushYds":1248,"rushTd":11,"rec":49,"recYds"
+[266s] AUDIT event s6 trunc: 📼 You sent four minutes of tape and no caption. It out-rated the show [149<300]
+[267s] AUDIT event s6 trunc: It was a Ponzi. Three million gone, along with the savings of nine tea [149<472]
+[269s] season 6: hub, seasons on save 4 -> 5, year 2031, age 27, ovr 86, team CHI, $17.1M x3, last {"year":2030,"team":"CHI","age":26,"ovr":85,"games":17,"awards":[],"teamResult":"Missed the playoffs","salary":17.1,"rushYds":1621,"rushTd":12,"rec":54,"recYds"
+[269s] AUDIT hub s6 trunc: Record broken with nine minutes left in the first, hoodie on by the se [149<413]
+[310s] AUDIT event s7 trunc: 4M and your face on eleven million shelves. Fanbase +15, health -4, an [149<459]
+[312s] season 7: hub, seasons on save 5 -> 6, year 2032, age 28, ovr 86, team CHI, $12.8M x3, last {"year":2031,"team":"CHI","age":27,"ovr":86,"games":17,"awards":[],"teamResult":"Lost in the Wild Card round","salary":17.1,"rushYds":1420,"rushTd":11,"rec":45,
+[353s] AUDIT event s8 trunc: You stood on a chair and told 52 grown men that no billionaire has eve [149<474]
+[355s] season 8: hub, seasons on save 6 -> 7, year 2033, age 29, ovr 81, team CHI, $12.8M x2, last {"year":2032,"team":"CHI","age":28,"ovr":86,"games":17,"awards":[],"teamResult":"Missed the playoffs","salary":12.8,"rushYds":1745,"rushTd":15,"rec":48,"recYds"
+[356s] AUDIT tile Inbox s8 trunc: They just called me up to the office and told me to bring my playbook. [302<664]
+[400s] AUDIT event s9 trunc: That photograph of you steaming in the snow with bare arms hangs in ev [149<541]
+[402s] season 9: hub, seasons on save 7 -> 8, year 2034, age 30, ovr 78, team CHI, $12.8M x1, last {"year":2033,"team":"CHI","age":29,"ovr":81,"games":17,"awards":[],"teamResult":"Missed the playoffs","salary":12.8,"rushYds":1411,"rushTd":13,"rec":45,"recYds"
+[403s] AUDIT hub s9 trunc: Nine months of Tuesday flights and 0.6M in charters. You kept your loc [149<365]
+[444s] season 10: retired, seasons on save 8 -> 9, year 2035, age 31, ovr 74, team CHI, $12.8M x0, last {"year":2034,"team":"CHI","age":30,"ovr":78,"games":11,"awards":[],"teamResult":"Lost in the Wild Card round","salary":12.8,"rushYds":837,"rushTd":6,"rec":30,"r
+[459s] DONE nfllong2: seasons 9, events 28, curtains 18, page errors 0, console 1, stuck 9, shots 44
+[459s] event titles: Mic'd up goes nuclear x1 | The committee backfield x2 | The scheme does not fit you x1 | Voluntary means voluntary x1 | Wings at scale x1 | Signed by somebody x1 | Up on Saturday, down on Monday x1 | 25,000 autographs in eleven weeks x1 | He wants you to carry the ring x1 | Your brother has business cards now x1 | The guy every athlete knows x1 | Every parent in the area code x1 | One good day from the franchise record x1 | They want you on the cover x1 | The card show x1 | The cap guy has a slide with your name on it x1 | Playoffs or changes x1 | The equipment room is haunted x1 | They painted you on a wall x1 | The snow game x1 | Cutdown day x1 | They got the job x1
+[459s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

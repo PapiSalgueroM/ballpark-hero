@@ -1,0 +1,62 @@
+[2s] walk nbalong2: http://localhost:4173/nba-my-career at 390x844
+[10s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[10s] AUDIT hub draft trunc: 🎓 With pick 60, the Orlando Magic select Maximilian Okonkwo-Smith. [149<301]
+[47s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 72, team ORL, $2.5M x3, last {"year":2026,"team":"ORL","age":21,"ovr":69,"games":82,"ppg":3.4,"rpg":1.3,"apg":1.3,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":19.4,"spg
+[47s] AUDIT hub s1 trunc: You started crashing every board and cutting every possession until th [149<591]
+[84s] AUDIT event s2 trunc: 🎙️ Nobody remembers it tomorrow. [149<151]
+[85s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 74, team ORL, $2.5M x2, last {"year":2027,"team":"ORL","age":22,"ovr":72,"games":81,"ppg":10.2,"rpg":3.1,"apg":5.6,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":28.9,"sp
+[85s] AUDIT hub s2 trunc: The 0.4M is gone but you sat in twelve real meetings and kept the hood [149<421]
+[125s] AUDIT event s3 trunc: 💸 You sent the check and skipped the cameras. The quiet kind of good. [149<312]
+[126s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 75, team ORL, $2.5M x1, last {"year":2028,"team":"ORL","age":23,"ovr":74,"games":81,"ppg":6.2,"rpg":2.2,"apg":2.9,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":24.3,"spg
+[167s] AUDIT event s4 trunc: 👏 You posted a congrats for Rhys Rylander. Classy, and people noticed [149<313]
+[168s] season 4: hub, seasons on save 3 -> 4, year 2030, age 25, ovr 76, team ORL, $2.5M x0, last {"year":2029,"team":"ORL","age":24,"ovr":75,"games":81,"ppg":8.7,"rpg":2.5,"apg":4.6,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":28,"spg":
+[169s] AUDIT tile Inbox s4 trunc: Summer league starts Friday. You're getting the ball a lot. Mistakes a [302<463]
+[169s] AUDIT tile Inbox s4 trunc: I don't have a contract, this week is the whole thing for me. If you s [302<527]
+[169s] AUDIT tile Inbox s4 trunc: Congrats, you're in the league. Two sneaker brands and a car dealershi [302<812]
+[204s] AUDIT fa s5 trunc: 📱 Replied to Summer league coach: Run the show. [149<219]
+[213s] season 5: hub, seasons on save 4 -> 4, year 2030, age 25, ovr 76, team ORL, $16.8M x4, last {"year":2029,"team":"ORL","age":24,"ovr":75,"games":81,"ppg":8.7,"rpg":2.5,"apg":4.6,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":28,"spg":
+[254s] season 6: hub, seasons on save 4 -> 5, year 2031, age 26, ovr 78, team ORL, $16.8M x3, last {"year":2030,"team":"ORL","age":25,"ovr":76,"games":81,"ppg":8,"rpg":2.5,"apg":3.7,"awards":[],"teamResult":"Missed the playoffs","salary":16.8,"mpg":26.9,"spg"
+[254s] AUDIT hub s6 trunc: Health +10. Load managed properly. [149<157]
+[295s] season 7: hub, seasons on save 5 -> 6, year 2032, age 27, ovr 79, team ORL, $16.8M x2, last {"year":2031,"team":"ORL","age":26,"ovr":78,"games":78,"ppg":8.3,"rpg":2.9,"apg":4.9,"awards":[],"teamResult":"Missed the playoffs","salary":16.8,"mpg":28.7,"sp
+[332s] AUDIT event s8 trunc: You skipped the folding chair and got 500 shots up instead. Rating +1  [149<375]
+[333s] season 8: hub, seasons on save 6 -> 7, year 2033, age 28, ovr 80, team ORL, $16.8M x1, last {"year":2032,"team":"ORL","age":27,"ovr":79,"games":78,"ppg":7.1,"rpg":2.4,"apg":4.1,"awards":[],"teamResult":"Missed the playoffs","salary":16.8,"mpg":27.9,"sp
+[334s] AUDIT tile Inbox s8 trunc: The court you grew up playing on is closing without funding. Two hundr [302<553]
+[369s] AUDIT extension s9 trunc: 📱 Replied to Community league: Fund it and rename it. Karma up. [149<285]
+[376s] season 9: hub, seasons on save 7 -> 7, year 2033, age 28, ovr 80, team ORL, $22.9M x4, last {"year":2032,"team":"ORL","age":27,"ovr":79,"games":78,"ppg":7.1,"rpg":2.4,"apg":4.1,"awards":[],"teamResult":"Missed the playoffs","salary":16.8,"mpg":27.9,"sp
+[376s] AUDIT hub s9 trunc: 🖊️ Extension signed: 3 more years at $22.9M a year. [149<226]
+[417s] AUDIT event s10 trunc: Three and a half million a year, guaranteed, whatever the shoe does. F [149<351]
+[419s] season 10: hub, seasons on save 7 -> 8, year 2034, age 29, ovr 80, team TOR, $22.9M x3, last {"year":2033,"team":"ORL","age":28,"ovr":80,"games":78,"ppg":10.2,"rpg":3.3,"apg":5.6,"awards":[],"teamResult":"Missed the playoffs","salary":22.9,"mpg":29.9,"s
+[460s] season 11: hub, seasons on save 8 -> 9, year 2035, age 30, ovr 80, team TOR, $22.9M x2, last {"year":2034,"team":"TOR","age":29,"ovr":80,"games":81,"ppg":13.8,"rpg":3.5,"apg":6.8,"awards":[],"teamResult":"Missed the playoffs","salary":22.9,"mpg":31.2,"s
+[503s] season 12: hub, seasons on save 9 -> 10, year 2036, age 31, ovr 80, team TOR, $22.9M x1, last {"year":2035,"team":"TOR","age":30,"ovr":80,"games":81,"ppg":12.3,"rpg":3.3,"apg":5.7,"awards":[],"teamResult":"Missed the playoffs","salary":22.9,"mpg":29.6,"s
+[503s] AUDIT hub s12 trunc: Ninety minutes, names, dates and one very specific timeout. Fanbase +1 [149<492]
+[504s] AUDIT tile Inbox s12 trunc: New tunnel fit idea for you. Bold. Might break the internet, might get [302<552]
+[552s] AUDIT event s13 trunc: Every home game there are twelve kids from your block sitting behind t [149<345]
+[553s] season 13: hub, seasons on save 10 -> 11, year 2037, age 32, ovr 80, team TOR, $22.9M x0, last {"year":2036,"team":"TOR","age":31,"ovr":80,"games":81,"ppg":7.9,"rpg":2.9,"apg":4.7,"awards":[],"teamResult":"Missed the playoffs","salary":22.9,"mpg":27.9,"sp
+[584s] AUDIT fa s14 trunc: Signature shoe talks. 5M endorsement banked. [149<201]
+[593s] season 14: hub, seasons on save 11 -> 11, year 2037, age 32, ovr 80, team TOR, $25.9M x2, last {"year":2036,"team":"TOR","age":31,"ovr":80,"games":81,"ppg":7.9,"rpg":2.9,"apg":4.7,"awards":[],"teamResult":"Missed the playoffs","salary":22.9,"mpg":27.9,"sp
+[634s] AUDIT event s15 trunc: The second place guy got it. He is doing fine. Morale -2, health +2. [149<287]
+[636s] season 15: hub, seasons on save 11 -> 12, year 2038, age 33, ovr 78, team TOR, $25.9M x1, last {"year":2037,"team":"TOR","age":32,"ovr":80,"games":81,"ppg":13.3,"rpg":3.2,"apg":6.2,"awards":[],"teamResult":"Missed the playoffs","salary":25.9,"mpg":29.9,"s
+[636s] AUDIT hub s15 trunc: Bandit lives in a state park now. Health +4, morale -4, fanbase -3, an [149<451]
+[677s] AUDIT event s16 trunc: 😈 You went right at Rhys Rylander the next time down and scored throu [149<474]
+[678s] AUDIT event s16 trunc: You cut the clips yourself. The room was quiet in the good way. Fanbas [149<368]
+[680s] season 16: hub, seasons on save 12 -> 13, year 2039, age 34, ovr 77, team TOR, $25.9M x0, last {"year":2038,"team":"TOR","age":33,"ovr":78,"games":80,"ppg":11.4,"rpg":3,"apg":5.9,"awards":[],"teamResult":"Lost in the first round","salary":25.9,"mpg":28.8,
+[681s] AUDIT tile Inbox s16 trunc: Preseason trip abroad this year. Long flight, big crowd, and a clinic  [302<548]
+[716s] AUDIT fa s17 trunc: 📱 Replied to Team PR: Run the clinic. Karma up. [149<210]
+[725s] season 17: hub, seasons on save 13 -> 13, year 2039, age 34, ovr 77, team TOR, $19.1M x1, last {"year":2038,"team":"TOR","age":33,"ovr":78,"games":80,"ppg":11.4,"rpg":3,"apg":5.9,"awards":[],"teamResult":"Lost in the first round","salary":25.9,"mpg":28.8,
+[768s] AUDIT event s18 trunc: Eleven months of grilled everything and zero joy. Health +11, rating + [149<494]
+[770s] season 18: hub, seasons on save 13 -> 14, year 2040, age 35, ovr 76, team TOR, $19.1M x0, last {"year":2039,"team":"TOR","age":34,"ovr":77,"games":80,"ppg":7.2,"rpg":2.6,"apg":4.4,"awards":[],"teamResult":"Missed the playoffs","salary":19.1,"mpg":27,"spg"
+[810s] season 19: hub, seasons on save 14 -> 14, year 2040, age 35, ovr 76, team TOR, $16.8M x1, last {"year":2039,"team":"TOR","age":34,"ovr":77,"games":80,"ppg":7.2,"rpg":2.6,"apg":4.4,"awards":[],"teamResult":"Missed the playoffs","salary":19.1,"mpg":27,"spg"
+[848s] AUDIT event s20 trunc: 0.4M a year for kits, buses and a coach for 90 kids. Fanbase +6, moral [149<330]
+[850s] season 20: hub, seasons on save 14 -> 15, year 2041, age 36, ovr 74, team TOR, $16.8M x0, last {"year":2040,"team":"TOR","age":35,"ovr":76,"games":80,"ppg":8.5,"rpg":2.5,"apg":4.7,"awards":[],"teamResult":"Missed the playoffs","salary":16.8,"mpg":27.3,"sp
+[851s] AUDIT tile Inbox s20 trunc: The number you want belongs to a guy who's been here six years. Ask hi [302<529]
+[886s] AUDIT fa s21 trunc: 📱 Replied to Equipment manager: Pick a new one. [149<218]
+[895s] season 21: hub, seasons on save 15 -> 15, year 2041, age 36, ovr 74, team TOR, $12.2M x1, last {"year":2040,"team":"TOR","age":35,"ovr":76,"games":80,"ppg":8.5,"rpg":2.5,"apg":4.7,"awards":[],"teamResult":"Missed the playoffs","salary":16.8,"mpg":27.3,"sp
+[895s] AUDIT hub s21 trunc: ✍️ Re-signed with Toronto Raptors: 12.2M x1. The city exhales. [149<269]
+[933s] AUDIT event s22 trunc: You had 18 at the half, a shower at 9:40 and a hospital wristband by 1 [149<596]
+[935s] season 22: hub, seasons on save 15 -> 16, year 2042, age 37, ovr 70, team TOR, $12.2M x0, last {"year":2041,"team":"TOR","age":36,"ovr":74,"games":78,"ppg":7.3,"rpg":2.5,"apg":4.4,"awards":[],"teamResult":"Missed the playoffs","salary":12.2,"mpg":27.2,"sp
+[966s] AUDIT fa s23 trunc: 0.5M for a sneaker ad co starring a man in a giant costume who is, it  [149<525]
+[975s] season 23: hub, seasons on save 16 -> 16, year 2042, age 37, ovr 70, team TOR, $3.2M x1, last {"year":2041,"team":"TOR","age":36,"ovr":74,"games":78,"ppg":7.3,"rpg":2.5,"apg":4.4,"awards":[],"teamResult":"Missed the playoffs","salary":12.2,"mpg":27.2,"sp
+[1016s] season 24: retired, seasons on save 16 -> 17, year 2043, age 38, ovr 66, team TOR, $3.2M x0, last {"year":2042,"team":"TOR","age":37,"ovr":70,"games":81,"ppg":5.5,"rpg":2,"apg":2.7,"awards":[],"teamResult":"Missed the playoffs","salary":3.2,"mpg":25.4,"spg":
+[1031s] DONE nbalong2: seasons 17, events 64, curtains 28, page errors 0, console 1, stuck 17, shots 50
+[1031s] event titles: He will not throw you the ball x1 | The accountability scrum x5 | A 26 year old in a 900 dollar hoodie x1 | Summer plan x3 | The celebrity game wants you as a captain x2 | The card show x1 | Your podcast did 11 million downloads on a laptop mic x1 | The signature shoe meeting x1 | They got the job x1 | Your contract makes the math work x1 | A reporter tweeted your name x1 | The coach who benched you got a new job x1 | Your player tickets x1 | The locker room votes you player rep x1 | The player option is 25.9M x1 | There is a raccoon above the film room x1 | He wants you to run the film session x1 | The house for your mother x1 | She keeps saying the word closer x1 | She banned the thing you love most x1 | A firm that specializes in Springfield x1 | A second division club in Spain wants your name on the letterhead x1 | Mic'd up, national game, no filter x1 | The minutes conversation x1 |
+[1031s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
