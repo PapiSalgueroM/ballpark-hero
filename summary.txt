@@ -1,0 +1,11 @@
+tsc exit=0 97s | 
+c-teamsheets-plain exit=1 177s | simCmLeagueBook: CONTROL teamsheets FIRED: section awards went red (1 failures) and no other section did (177s)
+c-bookleak-plain exit=1 188s | simCmLeagueBook: CONTROL bookleak FIRED: section facts went red (1 failures), with shapes, thin as it must and no other section did (188s)
+c-awardthin exit=1 79s | simCmLeagueBook: CONTROL awardthin FIRED: section awards went red (4 failures), with oldsave as it must and no other section did (80s)
+book-plain exit=0 75s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (75s)
+c-bookleak-full exit=1 185s | simCmLeagueBook: CONTROL bookleak FIRED: section facts went red (1 failures), with shapes, thin as it must and no other section did (185s)
+rivalNames exit=0 19s | No rival product names found. 0 findings.
+storageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+anchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+quotes exit=0 21s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+book-full exit=0 145s | simCmLeagueBook: green, 11 sections, 27 careers x 2 seasons (145s)

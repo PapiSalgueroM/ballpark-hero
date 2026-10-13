@@ -1,0 +1,12 @@
+# Round 1311 closing check fix2: type gate, the harness touched (simCmLeagueBook) with its two full fleet controls on plain lines, a default control, and the fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+c-bookleak-plain: BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+c-teamsheets-plain: BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+c-bookleak-full: BOOK_FLEET=full BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+c-awardthin: BOOK_CONTROL=awardthin node scripts/simCmLeagueBook.mjs
+book-plain: node scripts/simCmLeagueBook.mjs
+book-full: BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalNames: node scripts/simNoRivalNames.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
