@@ -1,0 +1,46 @@
+
+1. Every season balances to the $k, and 2. the ledger books what things cost
+   360 seasons, 360 of them carrying facility upkeep
+   ok   every closed season: income less costs equals the change in the kitty, to the $k
+   ok   every closed season's income and costs are the sums of their own lines
+   ok   payroll, dead money, staff, tax, upkeep and scouting are booked at exactly what they cost (upkeep recomputed here from the levels, nothing for a level 1 building)
+
+3. A bigger market earns more at equal results
+   big over middle: mean 1.2601, lowest 1.2525; middle over small: mean 1.2227, lowest 1.2147
+   ok   a big market out earns a middle one by 26.0% at equal results (band 1.15)
+   ok   a middle market out earns a small one by 22.3% at equal results (band 1.12)
+
+4. The best season's free operations money against FO_BEST_FREE_OPS_SHARE
+   nfl: free operations money 0.0792 caps a season at best; a good season's operating result 0.652 caps
+   nba: free operations money 0.0792 caps a season at best; a good season's operating result 0.596 caps
+   nhl: free operations money 0.0792 caps a season at best; a good season's operating result 0.595 caps
+   mlb: free operations money 0.0792 caps a season at best; a good season's operating result 0.496 caps
+   ok   every sport's best free operations money sits at or under the packs' declared 0.08 caps
+
+5. The ticket tiers match Club Manager's
+   ok   three tiers, [[0.8,1.06],[1,1],[1.3,0.91]], the same as Club Manager's
+
+0. Each sport's periods and home games are the engine's own
+   engine shapes: nfl 17, nba 20, nhl 20, mlb 27
+   ok   every sport ticks the engine's own periods, books its own home games, and its pack spreads upkeep over that season
+
+6. The operations budget: the carry, next season's budget, and the ceiling
+   576 seasons, 568 with a purchase, 498 opening on a carry, 0 where running costs alone overran (no purchase), worst purchase overrun none
+   ok   no season with a purchase ended over its budget plus carry (568 seasons): a building never eats the staff, scouts or upkeep money
+   ok   every summer carries budget plus carry less spend to the $k, an overrun as a debt
+   ok   every next season's budget is the market share of next season's cap moved by trust
+
+7. The ticket price moves trust once a season, by a point
+   ok   flicking the price earns nothing; the close moves trust a point for the tier held, never to the sack
+   chaotic seasons of section 1: 208 of 360 closed off standard prices, 0 moved trust by more than a point
+   ok   no chaotic season moved trust by more than a point at the close
+
+8. A trust cut after a building spree: the overrun is carried as a debt and blocks building until it is paid
+   26 cut seasons overran on running costs alone (big 0, middle 7, small 19); 41 seasons opened on a debt, 0 of them still bought; seasons back at full trust to clear the debt: big 1,1,1,1,1,1,1,1,1,1,1,1, middle 1,1,1,1,1,1,1,2,2,1,1,1, small 3,2,2,1,2,1,2,4,4,2,1,1
+   ok   every summer through the cut carries budget plus carry less spend to the $k: an overrun is a debt, never forgiven
+   ok   no building was started with money the debt had already spent
+   ok   the books show the budget net of the debt (budget plus carry), so the cut is on screen
+   ok   a seat whose debt eats its free money is refused all 48 buildings it could buy without the debt
+   ok   every seat back at full trust has paid the debt off within the 10 seasons it is given (measured at most 4)
+
+simGmBooks: ALL GREEN

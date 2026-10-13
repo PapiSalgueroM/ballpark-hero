@@ -1,0 +1,56 @@
+Round 582: the Stadium Tycoon league, at the hook's cadence (dt 0.2s)
+1) Promoted if and only if champion
+   55 titles and 55 promotions across 96 seasons; 41 seasons finished below the top and none of those went up
+2) Table integrity
+   60 matchday tables checked: every club played every matchday, points are 3W+D, goals balance, your row matches your match events
+3) Strength decides the title
+   title rate squad 30 100%, squad 0 15% (gap 0.85); neutral arm 18% vs 15% (gap 0.02)
+4) Pace against the first Sell up and the old ladder
+   median first promotion 10.50 min against first Sell up 13.37 min (promotion first in 10/10); before the league: 14.7 and 13.44
+5) No reroll across a reload
+   6 seasons reloaded mid-match finished with tables identical to the runs that never reloaded
+6) Migration from V1 saves
+   251 V1 saves from 0 to 250 home wins loaded into the division their win count reached, everything else as V1 loads it, and each loads back in V1 with its league
+7) Names
+   1470 leagues across 21 reps, 10 divisions and 7 seasons: names unique, short enough, from the bank, never one of 483 real clubs; the picker never offers a taken name
+8) Rebuild still plays the shared calendar
+   rebuildDeck imports the shared calendar, leagueCore imports nothing, 4 of 4 Rebuild harnesses green
+9) No wall: a club that can compete gets promoted in time
+   never promoted in three hours: squad 3 0/30, squad 6 0/30; median first promotion 21.0 and 21.0 min
+10) The loader keeps divisions, refuses doctored leagues, and ties go your way
+   a division 6 league reloads exactly, keeps its division with a bad field, a doctored Summit loads at the career best, an impossible table is refused, a kept name sticks, a dead heat goes your way
+
+control threshold: a club that did not win the league goes up when its home win count would have promoted it
+   ok, section 1 went red: a club that finished 3 went up
+
+control flat: the squad stops changing either side's scoring chance
+   ok, section 3 went red: a squad of 30 won 18% of titles and a squad of 0 won 15%, a gap of 0.02, under the 0.35 fence
+
+control doubleleg: the bottom divisions play home and away, a 21 minute season
+   ok, section 4 went red: the first promotion comes at a median 21.00 minutes, after the first reachable Sell up at 13.68
+
+control reroll: the other fixtures roll Math.random instead of the league's seeded stream
+   ok, section 5 went red: seed 1: reloading mid-match finished the season with a different table
+
+control spread: the league latch reads the spread save, which always carries a fresh bottom league
+   ok, section 6 went red: 6 home wins loaded into division 0, V1 had it in 1
+
+control globalclimb: opponents are strengthened by the career match count again, the first draft
+   ok, section 9 went red: a club with a squad of 3 never left the bottom league in 15 of 30 three hour runs
+
+control dropdivision: a league that fails a check is rebuilt from the old win count again
+   ok, section 10 went red: a division 6 league with one bad rival name reloaded in division 4
+
+control uncapped: a stored league above the career best is trusted
+   ok, section 10 went red: a save claiming The Summit on a career whose best is the bottom loaded in division 9
+
+control lopsided: a stored table that cannot add up is trusted
+   ok, section 10 went red: a table where every rival lost every match was accepted
+
+control nametie: a dead heat at the top is settled by name again
+   ok, section 10 went red: a dead heat at the top went to a rival on name
+
+simTycoonLeague: green.
+   Only the champion goes up, the tables add up, the squad decides the title, and a reload replays nothing.
+   A new club is promoted before its first Sell up and sooner than the old win count managed.
+   Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
