@@ -1,0 +1,2 @@
+own-test exit=0 4s |    Duration  3.00s (transform 1.34s, setup 54ms, collect 1.46s, tests 719ms, environment 307ms, prepare 161ms)
+own-test-pre-EXPECT-RED exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club 
