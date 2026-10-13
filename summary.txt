@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+desk exit=0 27s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing and shows what the board covers and what the kitty keeps, at 320, 390 and 1280.
+desk-cut exit=1 28s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+desk-small exit=1 28s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+playSponsors exit=0 16s | playSponsors: green. The desk offers three real deals and pays for the one you take.
+sweepWeight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+base-desk exit=2 38s | playCmFinanceDesk: could not run: nothing answered at http://127.0.0.1:4190. NOTHING WAS CHECKED.
