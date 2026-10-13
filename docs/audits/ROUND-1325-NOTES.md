@@ -16,6 +16,22 @@ lane's rc.sh kit; the request names are listed per step.
 1. cm p2. `lowFirst` in ClubManagerCareerPanel.tsx prints the two numbers low first; the career lines go from 10 to
    12 px. New src/test/cmTablesTruth.test.tsx (the fleet and section 4) and scripts/simCmTablesTruth.mjs.
 
+2. cm M9. `isRealPlayer` in SquadScreen.tsx beside MadeUpTag (`!p.generated && !p.isYouth && !p.academyGrad`, the
+   rule Release AZ's world roster uses for its own made up flag). Labels, each element carrying
+   `data-cm-deal-label`, every note `data-cm-deal-note`:
+   a. the desk note "A real player's wage and years left here are this game's numbers, not his real contract.",
+      shown when the Final year list or the Let somebody go list holds a real man (the two lists that print a wage
+      and years; the clause rows print neither, the free agent rows print the terms he asks of you);
+   b. the Final year sub line "22y · this game's deal: 44k a week, final year" for a real man, "19y · 13k a week,
+      final year" for a made up one;
+   c. the Let somebody go sub line "91 rated, this game's deal: 91k a week, 4 years left";
+   d. a line under the squad row detail's eight tiles, real men only, "His wage and years left are this game's
+      numbers, not his real contract." (not a ninth tile);
+   e. the squad foot "Wages and deal lengths are this game's numbers. No real player's real contract is in the game.";
+   f. the dressing room player view "CB · 34y · rated 85 · this game's wage 44k a week", wrapping, not truncating.
+   Not labelled, on purpose: the forecast boxes and Renew buttons, the clause rows, the free agent rows, the squad
+   list's Wage and Deal cells. Test sections 1, 2, 3, 5 and 6; controls nomark, markall, drawinrender.
+
 ## Owed
 - ClubManagerHelp.tsx line 53, "Every player is on a real deal.", is owed to Round F8a. Proposed words: "Every player
   is on a deal."

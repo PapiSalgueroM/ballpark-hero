@@ -7,6 +7,7 @@ import {
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, SquadRole } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { isRealPlayer } from '@/components/club-manager/SquadScreen';
 
 interface RolesScreenProps {
   career: CareerState;
@@ -44,6 +45,7 @@ function PlayerRow({ p, onOpen, showRole }: { p: CMPlayer; onOpen: () => void; s
   const of = (p.lastTen ?? []).length;
   return (
     <button
+      data-cm-room-row={p.id}
       onClick={onOpen}
       className="w-full flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0 text-left hover:bg-secondary/40 transition-colors rounded px-1"
     >
@@ -103,19 +105,21 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
     return (
       <div ref={detailRef} className="space-y-2">
         <button
+          data-cm-room-back="player"
           onClick={() => setOpenId(null)}
           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ChevronLeft className="w-3.5 h-3.5" /> {openRole ? ROLE_INFO[openRole].label : 'The dressing room'}
         </button>
 
-        <div className="bg-card border border-border rounded-xl p-3">
+        <div data-cm-room-player={open.id} className="bg-card border border-border rounded-xl p-3">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <div className="text-sm font-bold text-foreground truncate">{open.name}</div>
-              <div className="text-[10px] text-muted-foreground truncate">
+              <div className="text-sm font-bold text-foreground truncate" title={open.name}>{open.name}</div>
+              {/* Round 1325: wraps rather than cutting, and a real man's wage says it is this game's. */}
+              <div className="text-xs text-muted-foreground break-words">
                 {open.position} · {open.age}y · rated {open.rating}
-                {open.wage ? ` · ${open.wage}k a week` : ''}
+                {open.wage ? <> · {isRealPlayer(open) && <><span data-cm-deal-label>this game's wage</span>{' '}</>}{open.wage}k a week</> : ''}
               </div>
             </div>
             <div className="shrink-0 text-right">
@@ -183,6 +187,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
     return (
       <div ref={detailRef} className="space-y-2">
         <button
+          data-cm-room-back="rung"
           onClick={() => setOpenRole(null)}
           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
@@ -243,6 +248,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
           return (
             <button
               key={r}
+              data-cm-rung={r}
               onClick={() => setOpenRole(r)}
               className={cn(
                 'rounded-xl border p-3 text-left transition-all bg-card hover:border-primary hover:-translate-y-0.5',

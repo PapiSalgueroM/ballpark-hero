@@ -37,6 +37,17 @@ export function MadeUpTag({ className, title }: { className?: string; title?: st
   );
 }
 
+/**
+ * Round 1325: a real footballer, as opposed to a man this game made up: a
+ * generated player, a youth pad or a kid out of your academy. The game holds
+ * nobody's real contract, so a real man's wage and years left are this game's
+ * numbers, and every screen that prints them beside his name says so. A made
+ * up man needs no such line, because the whole of him is the game's already.
+ */
+export function isRealPlayer(p: CMPlayer): boolean {
+  return !p.generated && !p.isYouth && !p.academyGrad;
+}
+
 /** Round 505: the positions a man has learned on top of his own, as small chips. Only ever earned in this save. */
 export function SecondPositionChips({ p, className }: { p: CMPlayer; className?: string }) {
   const extra = p.secondaryPositions ?? [];
@@ -350,6 +361,12 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
         value={`${p.apps ?? 0} apps, ${p.seasonGoals}g ${p.seasonAssists}a`}
         sub={`${form === null ? 'No rating yet' : `Averaging ${form.toFixed(1)}`}${isBack ? `, ${p.cleanSheets ?? 0} clean sheets` : ''}${(p.seasonYellows ?? 0) > 0 ? `, ${p.seasonYellows} yellow` : ''}${(p.seasonReds ?? 0) > 0 ? `, ${p.seasonReds} red` : ''}`}
       />
+      {/* Round 1325: a line under the tiles, never a ninth tile. */}
+      {isRealPlayer(p) && (
+        <p data-cm-deal-label className="col-span-2 md:col-span-4 text-xs text-muted-foreground">
+          His wage and years left are this game's numbers, not his real contract.
+        </p>
+      )}
     </div>
   );
 }
@@ -598,6 +615,11 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
       <p className="text-[9px] text-muted-foreground pt-2">
         Tap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.
       </p>
+      {squad.some(isRealPlayer) && (
+        <p data-cm-deal-note="squad" className="text-xs text-muted-foreground pt-1">
+          Wages and deal lengths are this game's numbers. No real player's real contract is in the game.
+        </p>
+      )}
     </div>
   );
 }

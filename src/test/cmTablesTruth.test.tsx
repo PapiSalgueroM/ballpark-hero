@@ -112,6 +112,135 @@ const hooks = () => ({
   applyJob: vi.fn(), joinNow: vi.fn(), joinSummer: vi.fn(), updateManager: vi.fn(),
 });
 
+/* ---------------- walking the four screens ---------------- */
+
+/** Called at every state a walk reaches, with the screen's root and a word for where it is. */
+type Look = (root: HTMLElement, where: string) => void;
+const noLook: Look = () => {};
+const buttons = (root: HTMLElement) => [...root.querySelectorAll('button')];
+const attrOf = (root: HTMLElement, attr: string) => [...root.querySelectorAll(`[${attr}]`)].map(e => e.getAttribute(attr) as string);
+const byAttr = (root: HTMLElement, attr: string, value: string) => [...root.querySelectorAll(`[${attr}]`)].find(e => e.getAttribute(attr) === value) ?? null;
+
+/** Every non loan man in his final year, so the desk lists everybody it can. */
+const allFinal = (c: CareerState): CareerState => ({ ...c, squad: c.squad.map(p => (p.onLoan ? p : { ...p, contractYears: 1 })) });
+
+function walkDesk(c: CareerState, look: Look) {
+  const { container } = render(<ContractsCard career={c} onRenew={vi.fn()} onRenewWithClause={vi.fn()} onRelease={vi.fn()} onSignFreeAgent={vi.fn()} />);
+  look(container, 'desk');
+  for (let i = 0; i < 4; i++) {
+    const more = buttons(container).find(b => /^Show the other/.test(b.textContent ?? ''));
+    if (!more) break;
+    fireEvent.click(more);
+  }
+  look(container, 'desk, every list shown');
+  cleanup();
+}
+
+function walkSquad(c: CareerState, look: Look) {
+  const { container } = render(<SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={null} career={c} />);
+  look(container, 'squad');
+  for (const id of attrOf(container, 'data-cm-squad-row')) {
+    const row = byAttr(container, 'data-cm-squad-row', id);
+    const open = row?.querySelector('button');
+    if (open && open.getAttribute('aria-expanded') !== 'true') fireEvent.click(open);
+  }
+  look(container, 'squad, every row open');
+  cleanup();
+}
+
+function walkRoom(c: CareerState, look: Look) {
+  const { container } = render(<RolesScreen career={c} onSetRole={vi.fn()} />);
+  look(container, 'dressing room');
+  for (const rung of attrOf(container, 'data-cm-rung')) {
+    fireEvent.click(byAttr(container, 'data-cm-rung', rung) as HTMLElement);
+    look(container, `rung ${rung}`);
+    for (const id of attrOf(container, 'data-cm-room-row')) {
+      fireEvent.click(byAttr(container, 'data-cm-room-row', id) as HTMLElement);
+      look(container, `player ${id}`);
+      fireEvent.click(byAttr(container, 'data-cm-room-back', 'player') as HTMLElement);
+    }
+    fireEvent.click(byAttr(container, 'data-cm-room-back', 'rung') as HTMLElement);
+  }
+  cleanup();
+}
+
+function walkCard(c: CareerState, look: Look) {
+  const { container } = render(<ClubManagerCareerPanel c={c} g={hooks()} nationOffer={null} />);
+  look(container, 'career card');
+  cleanup();
+}
+
+/** Has this row got the line that says the numbers are this game's? Read off the element and its words both. */
+function labelled(row: Element): boolean {
+  const el = !!row.querySelector('[data-cm-deal-label]') || row.hasAttribute('data-cm-deal-label');
+  const words = /this game's (deal|wage|numbers)/.test(row.textContent ?? '');
+  expect(el, `the label element and its words disagree in "${(row.textContent ?? '').slice(0, 120)}"`).toBe(words);
+  return el;
+}
+
+describe('1 the contracts desk labels a real man\'s deal as this game\'s, and no made up man\'s', { timeout: 300000 }, () => {
+  it.each(FLEET)('%s', name => {
+    const base = career(name);
+    for (const c of [base, allFinal(base)]) {
+      let checked = 0;
+      walkDesk(c, (root, where) => {
+        if (where !== 'desk, every list shown') return;
+        const finals = c.squad.filter(p => !p.onLoan && (p.contractYears ?? 9) <= 1);
+        const leaving = c.squad.filter(p => !p.onLoan && !p.isYouth && p.age >= 20);
+        for (const p of finals) {
+          const row = byAttr(root, 'data-cm-final-year', p.id);
+          expect(row, `${p.name} has no final year row`).not.toBeNull();
+          expect(labelled(row!), `${kindOf(p)} ${p.name}, final year row`).toBe(isReal(p));
+          checked += 1;
+        }
+        for (const p of leaving) {
+          const row = byAttr(root, 'data-cm-release-row', p.id);
+          expect(row, `${p.name} has no Let somebody go row`).not.toBeNull();
+          expect(labelled(row!), `${kindOf(p)} ${p.name}, Let somebody go row`).toBe(isReal(p));
+          checked += 1;
+        }
+        const note = root.querySelector('[data-cm-deal-note="desk"]');
+        expect(!!note, 'the desk note shows exactly when a list holds a real man').toBe([...finals, ...leaving].some(isReal));
+      });
+      expect(checked).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('2 the squad list labels a real man\'s deal as this game\'s, and no made up man\'s', { timeout: 300000 }, () => {
+  it.each(FLEET)('%s', name => {
+    const c = career(name);
+    walkSquad(c, (root, where) => {
+      if (where !== 'squad, every row open') return;
+      for (const p of c.squad) {
+        const detail = byAttr(root, 'data-cm-squad-detail', p.id);
+        expect(detail, `${p.name}'s row did not open`).not.toBeNull();
+        expect(labelled(detail!), `${kindOf(p)} ${p.name}, squad row detail`).toBe(isReal(p));
+        expect(detail!.querySelectorAll('[data-cm-detail]')).toHaveLength(8);
+      }
+      expect(!!root.querySelector('[data-cm-deal-note="squad"]'), 'the squad note shows exactly when the squad holds a real man').toBe(c.squad.some(isReal));
+    });
+  });
+});
+
+describe('3 the dressing room labels a real man\'s wage as this game\'s, and no made up man\'s', { timeout: 300000 }, () => {
+  it.each(FLEET)('%s', name => {
+    const c = career(name);
+    const seen = new Set<string>();
+    walkRoom(c, (root, where) => {
+      if (!where.startsWith('player ')) return;
+      const id = where.slice('player '.length);
+      const card = root.querySelector('[data-cm-room-player]');
+      expect(card?.getAttribute('data-cm-room-player')).toBe(id);
+      const p = c.squad.find(x => x.id === id)!;
+      expect((p.wage ?? 0) > 0, `${p.name} has no wage to show`).toBe(true);
+      expect(labelled(card!), `${kindOf(p)} ${p.name}, dressing room`).toBe(isReal(p));
+      seen.add(id);
+    });
+    expect([...seen].sort()).toEqual(c.squad.map(p => p.id).sort());
+  });
+});
+
 /** The score a defeat should print: the same two numbers, the lower one first. */
 function ourScoreFirst(stored: string): string {
   const [a, b] = stored.split('-').map(Number);
@@ -165,6 +294,51 @@ describe('4 the worst defeat reads with our score first', () => {
     expect(a).not.toBe(b);
     expect(defeatLine(c)).toBe(`${ourScoreFirst(stored!.score)} vs ${stored!.opp}`);
   }, 120000);
+});
+
+/** Every screen and state this file walks, on one career. */
+function walkAll(c: CareerState, look: Look) {
+  walkDesk(c, look);
+  walkSquad(c, look);
+  walkRoom(c, look);
+  walkCard(c, look);
+}
+
+describe('5 rendering the four screens draws nothing and leaves the career byte equal', { timeout: 300000 }, () => {
+  it.each(FLEET)('%s', name => {
+    const base = career(name);
+    for (const [label, c, walk] of [['every screen', base, walkAll], ['the desk with everybody in his final year', allFinal(base), walkDesk]] as const) {
+      const before = JSON.stringify(c);
+      const was = Math.random;
+      let draws = 0;
+      Math.random = () => { draws += 1; return was(); };
+      try { walk(c, noLook); } finally { Math.random = was; }
+      expect(draws, `${label}: random draws while rendering`).toBe(0);
+      expect(JSON.stringify(c) === before, `${label}: the career changed while rendering`).toBe(true);
+    }
+  });
+});
+
+const BROKEN = /\bundefined\b|\bNaN\b|\[object Object\]|\bInfinity\b/;
+
+describe('6 nothing drawn reads undefined, NaN, [object Object] or Infinity', { timeout: 300000 }, () => {
+  it.each(FLEET)('%s', name => {
+    const base = career(name);
+    const bad: string[] = [];
+    let states = 0;
+    const look: Look = (root, where) => {
+      states += 1;
+      const texts = [root.textContent ?? '', ...[...root.querySelectorAll('[title]')].map(e => e.getAttribute('title') ?? '')];
+      for (const t of texts) {
+        const m = BROKEN.exec(t);
+        if (m) bad.push(`${where}: "${t.slice(Math.max(0, m.index - 60), m.index + 40)}"`);
+      }
+    };
+    walkAll(base, look);
+    walkDesk(allFinal(base), look);
+    expect(states).toBeGreaterThan(8);
+    expect(bad.slice(0, 5)).toEqual([]);
+  });
 });
 
 describe('the fleet', () => {

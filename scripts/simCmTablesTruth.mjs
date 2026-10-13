@@ -46,9 +46,9 @@ if (control && control !== 'all' && !CONTROLS[control]) {
   console.log(`FAIL: CM_TABLES_TRUTH_CONTROL=${control} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(2);
 }
-/* The suite holds this many cases: the fleet check, 4 old saves and 3 played seeds in section 4. A case that
-   stops running is a failure. */
-const EXPECTED_CASES = 8;
+/* The suite holds this many cases: the fleet check, ten careers in each of sections 1, 2, 3, 5 and 6, and 4 old
+   saves plus 3 played seeds in section 4. A case that stops running is a failure. */
+const EXPECTED_CASES = 58;
 
 const held = [TEST, SQUAD, PANEL].map(f => [f, fs.readFileSync(path.join(root, f))]);
 const parent = path.join(root, '.sim-control');

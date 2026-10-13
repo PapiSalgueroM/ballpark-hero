@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, renewContract, renewContractWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, freeAgentBlock, freeAgentTerms, releasePlayer, signFreeAgent } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, ReleaseBlock, FreeAgentBlock, FreeAgent } from '@/lib/clubManager';
-import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { ratingTint, MadeUpTag, isRealPlayer } from '@/components/club-manager/SquadScreen';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { DeskCueLine, useDeskCue } from '@/components/club-manager/deskCue';
 import type { DeskCueRead } from '@/components/club-manager/deskCue';
@@ -124,6 +124,10 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
   const pct = Math.round((bill / Math.max(1, cap)) * 100);
   const over = bill > cap;
   const expiring = expiringPlayers(career);
+  /* Round 619: who the Let somebody go list offers. Round 1325: the desk's
+     note shows when a list that prints a wage and years holds a real man. */
+  const releasable = career.squad.filter(p => !p.onLoan && !p.isYouth && p.age >= 20);
+  const deskHasReal = expiring.some(isRealPlayer) || (!!onRelease && releasable.some(isRealPlayer));
   const claused = career.squad
     .filter(p => !p.onLoan && (p.releaseClause ?? 0) > 0)
     .sort((a, b) => (sellValue(b) / (b.releaseClause as number)) - (sellValue(a) / (a.releaseClause as number)));
@@ -152,13 +156,14 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
     const affordable = terms.fee <= career.budget;
     const clauseAffordable = withClause.fee <= career.budget;
     return (
-      <div key={p.id} className="py-1.5 border-b border-border/30 last:border-0">
+      <div key={p.id} data-cm-final-year={p.id} className="py-1.5 border-b border-border/30 last:border-0">
         <div className="flex items-center gap-2">
           <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-foreground truncate">{p.name}</div>
-            <div className="text-[9px] text-muted-foreground">
-              {p.age}y · on {p.wage ?? 0}k a week · final year{(p.releaseClause ?? 0) > 0 ? ` · clause ${money(p.releaseClause as number)}` : ''}
+            <div className="text-xs text-foreground truncate" title={p.name}>{p.name}</div>
+            {/* Round 1325: a real man's wage and years are this game's, and the line says so. */}
+            <div className="text-xs text-muted-foreground break-words">
+              {p.age}y · {isRealPlayer(p) && <><span data-cm-deal-label>this game's deal</span>: </>}{p.wage ?? 0}k a week, final year{(p.releaseClause ?? 0) > 0 ? ` · clause ${money(p.releaseClause as number)}` : ''}
             </div>
           </div>
           <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
@@ -214,6 +219,11 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
       {over && (
         <p className="text-[10px] text-red-400">
           You are {pct - 100} percent over the wage budget. The board notice every week you stay there.
+        </p>
+      )}
+      {deskHasReal && (
+        <p data-cm-deal-note="desk" className="text-xs text-muted-foreground">
+          A real player's wage and years left here are this game's numbers, not his real contract.
         </p>
       )}
 
@@ -302,7 +312,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
             against the cap the whole time.
           </div>
           <div className="max-h-40 overflow-y-auto">
-            {career.squad.filter(p => !p.onLoan && !p.isYouth && p.age >= 20).map(p => {
+            {releasable.map(p => {
               const sev = severanceFor(career, p);
               /* Round 619 review: the engine's own refusal, so a button is
                  never live when pressing it would do nothing. */
@@ -312,12 +322,12 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                  written the moment it happens. */
               const confirming = confirmId === p.id && !block;
               return (
-                <div key={p.id} className="py-1 border-b border-border/30 last:border-0">
+                <div key={p.id} data-cm-release-row={p.id} className="py-1 border-b border-border/30 last:border-0">
                   <div className="flex items-center gap-2">
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs text-foreground truncate">{p.name}</div>
-                      <div className="text-[9px] text-muted-foreground">
-                        {p.rating} rated, {p.wage ?? 0}k a week, {p.contractYears ?? 0} year{(p.contractYears ?? 0) === 1 ? '' : 's'} left
+                      <div className="text-xs text-foreground truncate" title={p.name}>{p.name}</div>
+                      <div className="text-xs text-muted-foreground break-words">
+                        {p.rating} rated, {isRealPlayer(p) && <><span data-cm-deal-label>this game's deal</span>: </>}{p.wage ?? 0}k a week, {p.contractYears ?? 0} year{(p.contractYears ?? 0) === 1 ? '' : 's'} left
                       </div>
                     </div>
                     <button
