@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+land-seed exit=1 329s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
+land-bytes exit=1 331s | playSoccerLanding: RED, 1 finding(s)
+land-toasts exit=1 783s | playSoccerLanding: RED, 4 finding(s)

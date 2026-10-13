@@ -1,0 +1,72 @@
+== head 320x640
+   12 toast sample(s) of 6 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Nex
+     coverage contract signing: 1 sampled
+     coverage random event choice: 3 sampled
+     coverage transfer window choice: 0 sampled
+  FAIL [drive 320x640]: the toast audit never raised and sampled a transfer window choice toast (drive: youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events,
+     coverage phone purchase: 1 sampled
+     coverage social media post: 1 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 390x844
+   12 toast sample(s) of 6 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Nex
+     coverage contract signing: 1 sampled
+     coverage random event choice: 3 sampled
+     coverage transfer window choice: 0 sampled
+  FAIL [drive 390x844]: the toast audit never raised and sampled a transfer window choice toast (drive: youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events,
+     coverage phone purchase: 1 sampled
+     coverage social media post: 1 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 1280x900
+   12 toast sample(s) of 6 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Nex
+     coverage contract signing: 1 sampled
+     coverage random event choice: 3 sampled
+     coverage transfer window choice: 0 sampled
+  FAIL [drive 1280x900]: the toast audit never raised and sampled a transfer window choice toast (drive: youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events
+     coverage phone purchase: 1 sampled
+     coverage social media post: 1 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== base 320x640
+   14 toast sample(s) of 7 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Nex
+     coverage contract signing: 1 sampled
+     coverage random event choice: 3 sampled
+     coverage transfer window choice: 0 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 1 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== base 390x844
+   14 toast sample(s) of 7 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Nex
+     coverage contract signing: 1 sampled
+     coverage random event choice: 3 sampled
+     coverage transfer window choice: 0 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 1 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== base 1280x900
+   14 toast sample(s) of 7 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Nex
+     coverage contract signing: 1 sampled
+     coverage random event choice: 3 sampled
+     coverage transfer window choice: 0 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 1 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+  base toasts: the measurement sees the bug on the base (28 finding(s))
+  the base arm drive fell short, so the base comparison proves less than it says
+playSoccerLanding: RED, 4 finding(s)

@@ -1,0 +1,23 @@
+== head 320x640
+== head 390x844
+== head 1280x900
+== base 320x640
+== base 390x844
+== base 1280x900
+== bytes (390x844)
+   base on seed 1987332285: 122 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Next Season pr
+   head on seed 1987332285: 122 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Year or Next Season pr
+   bytes reached: three Next Seasons NO, a random event choice yes, a transfer window choice yes, a phone action yes
+  FAIL [drive 390x844]: the byte comparison never reached three Next Seasons (head drive: youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_wind
+  ok    bytes: 122 saves equal to the base byte for byte, through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, 120 steps, 2 Next Ye
+== bytes: old saves (realSaves, seeds 0 to 7, 390x844)
+   save 0 (playing, pressed "Next Season"): equal after the mount and after a press, fence 1 to 2
+   save 1 (playing, pressed "Next Season"): equal after the mount and after a press, fence 1 to 2
+   save 2 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 3 (transfer_window, pressed "null"): equal after the mount and after a press, fence 2 to 2
+   save 4 (playing, pressed "Next Season"): equal after the mount and after a press, fence 1 to 2
+   save 5 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 6 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 7 (transfer_window, pressed "null"): equal after the mount and after a press, fence 2 to 2
+  ok    bytes: 8 of 8 old saves load to the same career on head and the base, and head fences each one
+playSoccerLanding: RED, 1 finding(s)
