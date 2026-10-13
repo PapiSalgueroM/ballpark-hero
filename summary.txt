@@ -1,0 +1,6 @@
+vitest exit=0 2s |    Duration  2.08s (transform 423ms, setup 171ms, collect 871ms, tests 272ms, environment 1.22s, prepare 463ms)
+deck exit=0 88s | simEventDeck: green.
+tsc exit=0 96s | 
+deck-settledoff exit=1 93s | simEventDeck: 1 failure, red sections 7 (CONTROL=settledoff fired)
+deck-expireoff exit=1 62s | simEventDeck: 7 failures, red sections 7 (CONTROL=expireoff fired)
+deck-expirefx exit=1 59s | simEventDeck: 4 failures, red sections 7 (CONTROL=expirefx fired)
