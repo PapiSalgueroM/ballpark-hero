@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/rolesBrokenPromises.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+simContractPreview: node scripts/simContractPreview.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs
+simRoles: node scripts/simRoles.mjs
+simEras: node scripts/simEras.mjs
+simTransfers: node scripts/simTransfers.mjs
+simPress: node scripts/simPress.mjs
+simAcademy: node scripts/simAcademy.mjs
+simWilderness: node scripts/simWilderness.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
