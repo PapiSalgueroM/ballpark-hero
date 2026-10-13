@@ -1,0 +1,8 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCollegeDynastyBoard exit=0 10s | simCollegeDynastyBoard: all green
+vitest-college exit=0 10s |    Duration  9.49s (transform 883ms, setup 650ms, collect 3.81s, tests 13.27s, environment 4.22s, prepare 938ms)
+simWritesAreSent exit=1 15s | simWritesAreSent: 2 failures
+simResultMoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 74s | 
+playCollegeSeat exit=0 245s | playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
