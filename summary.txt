@@ -1,0 +1,24 @@
+tsc exit=0 145s | 
+diag exit=1 0s | Node.js v24.21.0
+simFreeAgents exit=0 178s | simFreeAgents: all sections passed
+fa-ownclub-EXPECT-RED exit=1 181s | simFreeAgents: 1 failure(s)
+fa-marketreleased-EXPECT-RED exit=1 184s | simFreeAgents: 1 failure(s)
+fa-buyreleased-EXPECT-RED exit=1 181s | simFreeAgents: 1 failure(s)
+fa-noreleasedlist-EXPECT-RED exit=1 181s | simFreeAgents: 2 failure(s)
+vitest-all exit=0 1064s |    Duration  1062.23s (transform 58.89s, setup 45.74s, collect 298.02s, tests 2275.86s, environment 327.23s, prepare 68.96s)
+simManagerWorldContinuity exit=0 1202s | Private world variation is measured, no historical fixture was re-recorded
+unseeded-guard-EXPECT-RED exit=3 185s | simCmUnseededWorld: CONTROL guard DID NOT FIRE as it must: deals red true, quiet red true
+simCmUnseededWorld exit=1 200s | simCmUnseededWorld: 98 FAILURE(S)
+simCmLedgerJourney exit=0 136s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simClubManagerSaveSize exit=0 61s | simClubManagerSaveSize: all sections green
+size-norepair-EXPECT-RED exit=1 63s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+size-deaddoor-EXPECT-RED exit=1 72s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=deaddoor turned section 8 red (10 failures) and nothing else
+simClubManagerSlots exit=0 65s | simClubManagerSlots: all sections green
+simCmLedgerBound exit=0 376s | simCmLedgerBound: green, all four sections held
+simClubManagerDecisions exit=0 19s | simClubManagerDecisions: 0 findings
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+slots-dupe-EXPECT-RED exit=1 69s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+bound-nocache-EXPECT-RED exit=1 975s | simCmLedgerBound: CONTROL nocache FIRED: section 1 red

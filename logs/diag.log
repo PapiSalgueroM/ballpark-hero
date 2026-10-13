@@ -1,0 +1,390 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Removing only the exact two additions restores the entire historical source
++ actual - expected
+... Skipped lines
+
+  '/*\n' +
+    ' * Round 928 harness: three manager slots in Club Manager, and a swap that can\n' +
+    ' * never cost a career.\n' +
+    ' *\n' +
+    " * src/lib/clubManagerSlots.ts keeps the career being played at the engine's\n" +
+...
+    ' *   SIM_SEED 1, 2 and 5 exercise the cut (188, 185, 180 and 190 rows).\n' +
++   ' *   Round 1311 moved BUDGET to 532,500 (a GitHub runner, remote check r1311-slots, 2026-10-12). The round\n' +
++   " *   keeps the league's awards on every season's record (the top scorer, most assists, most clean sheets)\n" +
++   ' *   and a team of the season on the newest five, about 4,900 characters a career at season 15. Default\n' +
++   " *   stream and SIM_SEED 1 to 5 on the round's head 8676802b: 507,107 / 505,205 / 504,692 / 504,795 /\n" +
++   ' *   506,197 / 505,887; on its base, origin/main 21941630, in the same check: 492,384 / 490,503 / 489,815 /\n' +
++   ' *   490,066 / 491,502 / 490,885 (already within 2,616 of the old 495,000). The dupe control leaves 570,310\n' +
++   ' *   on the head (551,383 on the base) and fired through the budget check on both. 532,500 sits 25,393 over\n' +
++   " *   the largest healthy total and 37,810 under the control's, the margins the old number was set with.\n" +
+    ' *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands\n' +
+    ' *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /\n' +
+    ' *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut\n' +
+    ' *     is exercised on every stream, and every other field comes back equal.\n' +
+    ' *\n' +
+...
+    'const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);\n' +
++   "const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)\n" +
+-   'const BUDGET = 495_000; // Round 1052, 27 leagues: measured healthy 466,396 to 470,019; actual duplicated career control 528,801 (was 470,000: healthy 442,058 to 444,992, control 501,773)\n' +
+    "const SAVE_KEY = 'dukb-club-manager-save';\n" +
+    "/* SIM_SEED re-roots every career's stream, to measure the fences on fresh\n" +
+    '   samples on purpose. The default is the stream the fences are judged on. */\n' +
+    'const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;\n' +
+    '\n' +
+...
+    '  const sources = [];\n' +
++   '  for (const { file, before } of sourceHash'... 27683 more characters
+-   '  for (const { file, before } of sourceHashes) {\n' +
+-   '    const bytes = fs.readFileSync(path.join(ROOT, file));\n' +
+-   '    const after = sha(bytes);\n' +
+-   '    sources.push({ file, before, after, held: before === after });\n' +
+-   '  }\n' +
+-   '  return sources;\n' +
+-   '};\n' +
+-   "if (CONTROL === 'decisioncontent' && process.env.CM_SLOTS_EVIDENCE_CHILD !== '1') {\n" +
+-   '  const runs = [];\n' +
+-   "  for (const name of ['', CONTROL]) {\n" +
+-   "    const childDir = path.join(evidenceDir, name || 'baseline');\n" +
+-   '    const run = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], { cwd: ROOT,\n' +
+-   "      env: { ...process.env, SLOTS_CONTROL: name, CM_SLOTS_EVIDENCE_CHILD: '1', CM_SLOTS_ARTIFACTS: childDir },\n" +
+-   "      encoding: 'utf8', timeout: 240000, maxBuffer: 16 * 1024 * 1024, windowsHide: true,\n" +
+-   '    });\n' +
+-   "    fs.writeFileSync(path.join(evidenceDir, `${name || 'baseline'}-runner.log`), `${run.stdout || ''}\\n${run.stderr || ''}`);\n" +
+-   '    let report = null;\n' +
+-   '    try { report = JSON.parse(fs.readFi'... 26803 more characters
+
+    at historicalHarnessContract (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/managerWorldSizeDiagnostic.mjs:97:10)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/managerWorldSizeDiagnostic.mjs:102:20
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/managerWorldSizeDiagnostic.mjs:100:98
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '/*\n' +
+    ' * Round 928 harness: three manager slots in Club Manager, and a swap that can\n' +
+    ' * never cost a career.\n' +
+    ' *\n' +
+    " * src/lib/clubManagerSlots.ts keeps the career being played at the engine's\n" +
+    ' * own SAVE_KEY and parks the other two, lean, under keys of their own. Every\n' +
+    ' * section below runs the REAL engine and the REAL slots module, bundled.\n' +
+    ' *\n' +
+    ' *   1) THREE CAREERS, ROUND ROBIN. Everton (today), Lincoln City (today, a\n' +
+    ' *      named manager, a padded squad and a league that promotes, so league\n' +
+    ' *      overrides are registered and must be cleared) and 2010-11 Barcelona\n' +
+    ' *      (an era save, whose squads are awaited before it opens, the way the\n' +
+    ' *      page awaits them). Twenty switches round robin with a full season\n' +
+    ' *      played after each. Every season of every career is digested and\n' +
+    ' *      compared with the same career played ALONE on the same seed, saved\n' +
+    ' *      and opened the single career way between seasons. The digest is the\n' +
+    ' *      whole career with one field left out: h2h, the one ledger the lean\n' +
+    ' *      shape cuts (to the six meetings per opponent the pre match facts read).\n' +
+    ' *      Anything that leaks between careers, or that parking loses, shows up\n' +
+    ' *      as a difference somewhere in the rest of the save.\n' +
+    ' *   2) THE BYTES. The three careers are played on, switching, to the final\n' +
+    ' *      whistle of season 15 each (where a save is biggest, before the summer\n' +
+    ' *      resets the in season ledgers), and everything Club Manager keeps on\n' +
+    ' *      the device (the active save, two parked ones, the index) must sit\n' +
+    ' *      under BUDGET.\n' +
+    ' *   3) A STORE THAT REFUSES. The swap is refused at each of its writes in\n' +
+    ' *      turn (the park, the index, the incoming career) and on a store whose\n' +
+    ' *      byte quota cannot hold the park. Every refusal answers false and\n' +
+    ' *      leaves every stored byte exactly as it was, so all three careers are\n' +
+    ' *      where they were. Then a roomy store, and the swap goes through with\n' +
+    ' *      all three careers still readable.\n' +
+    ' *   4) AN OLD SAVE. A save written before slots, alone at SAVE_KEY with no\n' +
+    ' *      index, reads as slot 1, and reading the slots writes nothing. Since\n' +
+    ' *      the second review the save is a lived in one (four seasons and\n' +
+    " *      fifteen matches of Everton, real meetings in its h2h, written by the engine's saveCareer),\n" +
+    ' *      it opens, and a trip through slot 2 and back returns every field but\n' +
+    ' *      h2h equal, with h2h the last six meetings per opponent.\n' +
+    ' *\n' +
+    ' * Negative controls (each rewrites a copy of the slots module, after\n' +
+    ' * asserting the text it rewrites is there exactly once, and must turn its\n' +
+    ' * own section red):\n' +
+    ' *   SLOTS_CONTROL=nopark      the swap never parks the outgoing career.\n' +
+    ' *                             Section 1 (careers lost on the first lap).\n' +
+    " *   SLOTS_CONTROL=dupe        the incoming career's parked copy is never\n" +
+    ' *                             dropped, so a whole career is stored twice.\n' +
+    ' *                             Section 2.\n' +
+    ' *   SLOTS_CONTROL=norollback  a refused incoming write leaves the park and\n' +
+    ' *                             the index moved. Section 3.\n' +
+    ' *   SLOTS_CONTROL=oldversion  the tiles accept another save version, so an\n' +
+    ' *                             old save no longer reads as slot 1. Section 4.\n' +
+    ' *   SLOTS_CONTROL=leanmore    the park drops the season history too, so the\n' +
+    ' *                             old save comes back changed. Section 4.\n' +
+    " *   SLOTS_CONTROL=decisioncontent the park changes a decision's words.\n" +
+    ' *                                Section 4 must read that roundtrip difference.\n' +
+    ' *\n' +
+    ' * MEASURED on the healthy engine, six streams (the default and SIM_SEED 1 to\n' +
+    ' * 5), 2026-10-06, Round 1072 automatic Quick Sim coaching:\n' +
+    ' *   section 1: 20 of 20 season digests identical on every stream.\n' +
+    ' *   section 2: everything Club Manager keeps on the device with three careers\n' +
+    ' *     at the final whistle of season 15 (one active and full, two parked and\n' +
+    ' *     lean): 444,005 / 444,634 / 442,415 / 444,992 / 442,545 / 442,058\n' +
+    ' *     characters. Exact pre-1072 main on the same harness: 439,821 / 439,872 /\n' +
+    ' *     440,871 / 440,150 / 439,884 / 438,756, so the old 440,000 fence already\n' +
+    ' *     failed on two streams after earlier engine growth. Coaching changes\n' +
+    ' *     existing squad and career outcomes, with four saved keys in both arms;\n' +
+    ' *     existing optional live:null adds only 36 characters across the careers.\n' +
+    ' *     Default keys: active Barcelona 109,938, Everton parked 169,315, Lincoln\n' +
+    ' *     City parked 164,721, index 31. The dupe control adds a lean 57,768 copy\n' +
+    ' *     of Barcelona, a fifth key, total 501,773.\n' +
+    ' *   BUDGET 470,000 sat 25,008 over the largest healthy total and 31,773\n' +
+    ' *   under what the dupe control leaves, against a spread of 2,934 between\n' +
+    ' *   healthy streams. For scale, simClubManagerSaveSize\n' +
+    ' *   works against a 5 MB origin quota, and three careers take under a fifth of it.\n' +
+    ' *   Round 1052 moved BUDGET to 495,000 (a GitHub runner, 2026-10-08). Every\n' +
+    ' *   one of the three careers carries the world, and the world had grown since\n' +
+    " *   the numbers above were taken: on that round's base (5ba57826, 26 leagues)\n" +
+    ' *   the default stream already stood at 464,279. With the Russian Premier\n' +
+    ' *   League as league 27 (1fa0a7a7), default stream and SIM_SEED 1 to 5:\n' +
+    ' *   469,468 / 470,019 / 466,396 / 467,431 / 469,767 / 468,078, so SIM_SEED 1\n' +
+    ' *   went over the old 470,000 by 19 characters on a healthy engine. The dupe\n' +
+    ' *   control on that tree leaves 528,801 across five keys and fired through\n' +
+    ' *   the budget check. 495,000 sits 24,981 over the largest healthy total and\n' +
+    " *   33,801 under the control's, the margins the old number was set with.\n" +
+    " *   Measured again at 183690a7 after the round's review added 46 men to\n" +
+    ' *   the Russian squads, default stream and SIM_SEED 1 to 5: 467,493 /\n' +
+    ' *   468,823 / 466,605 / 466,736 / 467,591 / 469,185; the dupe control\n' +
+    ' *   leaves 526,831 across five keys and fired through the budget check.\n' +
+    ' *   495,000 sits 25,815 over the largest healthy total and 31,831 under\n' +
+    " *   the control's, so it stays. On that tree SIM_SEED 3 and 4 are red in\n" +
+    ' *   section 4 by its own guard and nowhere else: the lived in Everton\n' +
+    ' *   save they draw (191 and 189 h2h rows) has met no opponent more than\n' +
+    ' *   six times, so the park cuts nothing and the section says the stream\n' +
+    ' *   reads nothing rather than passing on it. The default stream and\n' +
+    ' *   SIM_SEED 1, 2 and 5 exercise the cut (188, 185, 180 and 190 rows).\n' +
+    ' *   Round 1311 moved BUDGET to 532,500 (a GitHub runner, remote check r1311-slots, 2026-10-12). The round\n' +
+    " *   keeps the league's awards on every season's record (the top scorer, most assists, most clean sheets)\n" +
+    ' *   and a team of the season on the newest five, about 4,900 characters a career at season 15. Default\n' +
+    " *   stream and SIM_SEED 1 to 5 on the round's head 8676802b: 507,107 / 505,205 / 504,692 / 504,795 /\n" +
+    ' *   506,197 / 505,887; on its base, origin/main 21941630, in the same check: 492,384 / 490,503 / 489,815 /\n' +
+    ' *   490,066 / 491,502 / 490,885 (already within 2,616 of the old 495,000). The dupe control leaves 570,310\n' +
+    ' *   on the head (551,383 on the base) and fired through the budget check on both. 532,500 sits 25,393 over\n' +
+    " *   the largest healthy total and 37,810 under the control's, the margins the old number was set with.\n" +
+    ' *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands\n' +
+    ' *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /\n' +
+    ' *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut\n' +
+    ' *     is exercised on every stream, and every other field comes back equal.\n' +
+    ' *\n' +
+    ' * The digest renames the ids the engine builds from a module counter or the\n' +
+    ' * clock (see digest below). Those differ between any two runs of one career,\n' +
+    ' * slots or no slots, and the first draft of this file read them as a leak.\n' +
+    ' *\n' +
+    ' * Nothing here reads dist or the network; the clock reaches only the generated\n' +
+    ' * ids, which the digest renames.\n' +
+    ' * Run: node scripts/simClubManagerSlots.mjs\n' +
+    ' */\n' +
+    "import './lib/seedRandom.mjs';\n" +
+    "import { execSync, spawnSync } from 'node:child_process';\n" +
+    "import { createHash } from 'node:crypto';\n" +
+    "import os from 'node:os';\n" +
+    "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import { fileURLToPath, pathToFileURL } from 'node:url';\n" +
+    '\n' +
+    "const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');\n" +
+    "const ROOT_URL = ROOT.replaceAll('\\\\', '/');\n" +
+    "const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmSlots-')).replaceAll('\\\\', '/');\n" +
+    'const ENTRY = `${TMP}/entry.mjs`;\n' +
+    'const BUNDLE = `${TMP}/bundle.mjs`;\n' +
+    '\n' +
+    'const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);\n' +
+    'const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);\n' +
+    "const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)\n" +
+    "const SAVE_KEY = 'dukb-club-manager-save';\n" +
+    "/* SIM_SEED re-roots every career's stream, to measure the fences on fresh\n" +
+    '   samples on purpose. The default is the stream the fences are judged on. */\n' +
+    'const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;\n' +
+    '\n' +
+    "const CONTROL = process.env.SLOTS_CONTROL || '';\n" +
+    'const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 4 };\n' +
+    'if (CONTROL && !(CONTROL in OWN)) {\n' +
+    "  console.error(`SLOTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);\n" +
+    '  process.exit(1);\n' +
+    '}\n' +
+    "const evidenceDir = process.env.CM_SLOTS_ARTIFACTS || path.join(ROOT, 'cm-slots-artifacts');\n" +
+    'fs.mkdirSync(evidenceDir, { recursive: true });\n' +
+    "const sha = value => createHash('sha256').update(value).digest('hex');\n" +
+    'const sourceHashes = [];\n' +
+    "for (const file of ['src/lib/clubManager.ts', 'src/lib/clubManagerSlots.ts']) {\n" +
+    '  const bytes = fs.readFileSync(path.join(ROOT, file));\n' +
+    '  sourceHashes.push({ file, before: sha(bytes) });\n' +
+    '}\n' +
+    'const heldSources = () => {\n' +
+    '  const sources = [];\n' +
+    '  for (const { file, before } of sourceHash'... 27683 more characters,
+  expected: '/*\n' +
+    ' * Round 928 harness: three manager slots in Club Manager, and a swap that can\n' +
+    ' * never cost a career.\n' +
+    ' *\n' +
+    " * src/lib/clubManagerSlots.ts keeps the career being played at the engine's\n" +
+    ' * own SAVE_KEY and parks the other two, lean, under keys of their own. Every\n' +
+    ' * section below runs the REAL engine and the REAL slots module, bundled.\n' +
+    ' *\n' +
+    ' *   1) THREE CAREERS, ROUND ROBIN. Everton (today), Lincoln City (today, a\n' +
+    ' *      named manager, a padded squad and a league that promotes, so league\n' +
+    ' *      overrides are registered and must be cleared) and 2010-11 Barcelona\n' +
+    ' *      (an era save, whose squads are awaited before it opens, the way the\n' +
+    ' *      page awaits them). Twenty switches round robin with a full season\n' +
+    ' *      played after each. Every season of every career is digested and\n' +
+    ' *      compared with the same career played ALONE on the same seed, saved\n' +
+    ' *      and opened the single career way between seasons. The digest is the\n' +
+    ' *      whole career with one field left out: h2h, the one ledger the lean\n' +
+    ' *      shape cuts (to the six meetings per opponent the pre match facts read).\n' +
+    ' *      Anything that leaks between careers, or that parking loses, shows up\n' +
+    ' *      as a difference somewhere in the rest of the save.\n' +
+    ' *   2) THE BYTES. The three careers are played on, switching, to the final\n' +
+    ' *      whistle of season 15 each (where a save is biggest, before the summer\n' +
+    ' *      resets the in season ledgers), and everything Club Manager keeps on\n' +
+    ' *      the device (the active save, two parked ones, the index) must sit\n' +
+    ' *      under BUDGET.\n' +
+    ' *   3) A STORE THAT REFUSES. The swap is refused at each of its writes in\n' +
+    ' *      turn (the park, the index, the incoming career) and on a store whose\n' +
+    ' *      byte quota cannot hold the park. Every refusal answers false and\n' +
+    ' *      leaves every stored byte exactly as it was, so all three careers are\n' +
+    ' *      where they were. Then a roomy store, and the swap goes through with\n' +
+    ' *      all three careers still readable.\n' +
+    ' *   4) AN OLD SAVE. A save written before slots, alone at SAVE_KEY with no\n' +
+    ' *      index, reads as slot 1, and reading the slots writes nothing. Since\n' +
+    ' *      the second review the save is a lived in one (four seasons and\n' +
+    " *      fifteen matches of Everton, real meetings in its h2h, written by the engine's saveCareer),\n" +
+    ' *      it opens, and a trip through slot 2 and back returns every field but\n' +
+    ' *      h2h equal, with h2h the last six meetings per opponent.\n' +
+    ' *\n' +
+    ' * Negative controls (each rewrites a copy of the slots module, after\n' +
+    ' * asserting the text it rewrites is there exactly once, and must turn its\n' +
+    ' * own section red):\n' +
+    ' *   SLOTS_CONTROL=nopark      the swap never parks the outgoing career.\n' +
+    ' *                             Section 1 (careers lost on the first lap).\n' +
+    " *   SLOTS_CONTROL=dupe        the incoming career's parked copy is never\n" +
+    ' *                             dropped, so a whole career is stored twice.\n' +
+    ' *                             Section 2.\n' +
+    ' *   SLOTS_CONTROL=norollback  a refused incoming write leaves the park and\n' +
+    ' *                             the index moved. Section 3.\n' +
+    ' *   SLOTS_CONTROL=oldversion  the tiles accept another save version, so an\n' +
+    ' *                             old save no longer reads as slot 1. Section 4.\n' +
+    ' *   SLOTS_CONTROL=leanmore    the park drops the season history too, so the\n' +
+    ' *                             old save comes back changed. Section 4.\n' +
+    " *   SLOTS_CONTROL=decisioncontent the park changes a decision's words.\n" +
+    ' *                                Section 4 must read that roundtrip difference.\n' +
+    ' *\n' +
+    ' * MEASURED on the healthy engine, six streams (the default and SIM_SEED 1 to\n' +
+    ' * 5), 2026-10-06, Round 1072 automatic Quick Sim coaching:\n' +
+    ' *   section 1: 20 of 20 season digests identical on every stream.\n' +
+    ' *   section 2: everything Club Manager keeps on the device with three careers\n' +
+    ' *     at the final whistle of season 15 (one active and full, two parked and\n' +
+    ' *     lean): 444,005 / 444,634 / 442,415 / 444,992 / 442,545 / 442,058\n' +
+    ' *     characters. Exact pre-1072 main on the same harness: 439,821 / 439,872 /\n' +
+    ' *     440,871 / 440,150 / 439,884 / 438,756, so the old 440,000 fence already\n' +
+    ' *     failed on two streams after earlier engine growth. Coaching changes\n' +
+    ' *     existing squad and career outcomes, with four saved keys in both arms;\n' +
+    ' *     existing optional live:null adds only 36 characters across the careers.\n' +
+    ' *     Default keys: active Barcelona 109,938, Everton parked 169,315, Lincoln\n' +
+    ' *     City parked 164,721, index 31. The dupe control adds a lean 57,768 copy\n' +
+    ' *     of Barcelona, a fifth key, total 501,773.\n' +
+    ' *   BUDGET 470,000 sat 25,008 over the largest healthy total and 31,773\n' +
+    ' *   under what the dupe control leaves, against a spread of 2,934 between\n' +
+    ' *   healthy streams. For scale, simClubManagerSaveSize\n' +
+    ' *   works against a 5 MB origin quota, and three careers take under a fifth of it.\n' +
+    ' *   Round 1052 moved BUDGET to 495,000 (a GitHub runner, 2026-10-08). Every\n' +
+    ' *   one of the three careers carries the world, and the world had grown since\n' +
+    " *   the numbers above were taken: on that round's base (5ba57826, 26 leagues)\n" +
+    ' *   the default stream already stood at 464,279. With the Russian Premier\n' +
+    ' *   League as league 27 (1fa0a7a7), default stream and SIM_SEED 1 to 5:\n' +
+    ' *   469,468 / 470,019 / 466,396 / 467,431 / 469,767 / 468,078, so SIM_SEED 1\n' +
+    ' *   went over the old 470,000 by 19 characters on a healthy engine. The dupe\n' +
+    ' *   control on that tree leaves 528,801 across five keys and fired through\n' +
+    ' *   the budget check. 495,000 sits 24,981 over the largest healthy total and\n' +
+    " *   33,801 under the control's, the margins the old number was set with.\n" +
+    " *   Measured again at 183690a7 after the round's review added 46 men to\n" +
+    ' *   the Russian squads, default stream and SIM_SEED 1 to 5: 467,493 /\n' +
+    ' *   468,823 / 466,605 / 466,736 / 467,591 / 469,185; the dupe control\n' +
+    ' *   leaves 526,831 across five keys and fired through the budget check.\n' +
+    ' *   495,000 sits 25,815 over the largest healthy total and 31,831 under\n' +
+    " *   the control's, so it stays. On that tree SIM_SEED 3 and 4 are red in\n" +
+    ' *   section 4 by its own guard and nowhere else: the lived in Everton\n' +
+    ' *   save they draw (191 and 189 h2h rows) has met no opponent more than\n' +
+    ' *   six times, so the park cuts nothing and the section says the stream\n' +
+    ' *   reads nothing rather than passing on it. The default stream and\n' +
+    ' *   SIM_SEED 1, 2 and 5 exercise the cut (188, 185, 180 and 190 rows).\n' +
+    ' *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands\n' +
+    ' *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /\n' +
+    ' *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut\n' +
+    ' *     is exercised on every stream, and every other field comes back equal.\n' +
+    ' *\n' +
+    ' * The digest renames the ids the engine builds from a module counter or the\n' +
+    ' * clock (see digest below). Those differ between any two runs of one career,\n' +
+    ' * slots or no slots, and the first draft of this file read them as a leak.\n' +
+    ' *\n' +
+    ' * Nothing here reads dist or the network; the clock reaches only the generated\n' +
+    ' * ids, which the digest renames.\n' +
+    ' * Run: node scripts/simClubManagerSlots.mjs\n' +
+    ' */\n' +
+    "import './lib/seedRandom.mjs';\n" +
+    "import { execSync, spawnSync } from 'node:child_process';\n" +
+    "import { createHash } from 'node:crypto';\n" +
+    "import os from 'node:os';\n" +
+    "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import { fileURLToPath, pathToFileURL } from 'node:url';\n" +
+    '\n' +
+    "const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');\n" +
+    "const ROOT_URL = ROOT.replaceAll('\\\\', '/');\n" +
+    "const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmSlots-')).replaceAll('\\\\', '/');\n" +
+    'const ENTRY = `${TMP}/entry.mjs`;\n' +
+    'const BUNDLE = `${TMP}/bundle.mjs`;\n' +
+    '\n' +
+    'const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);\n' +
+    'const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);\n' +
+    'const BUDGET = 495_000; // Round 1052, 27 leagues: measured healthy 466,396 to 470,019; actual duplicated career control 528,801 (was 470,000: healthy 442,058 to 444,992, control 501,773)\n' +
+    "const SAVE_KEY = 'dukb-club-manager-save';\n" +
+    "/* SIM_SEED re-roots every career's stream, to measure the fences on fresh\n" +
+    '   samples on purpose. The default is the stream the fences are judged on. */\n' +
+    'const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;\n' +
+    '\n' +
+    "const CONTROL = process.env.SLOTS_CONTROL || '';\n" +
+    'const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 4 };\n' +
+    'if (CONTROL && !(CONTROL in OWN)) {\n' +
+    "  console.error(`SLOTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);\n" +
+    '  process.exit(1);\n' +
+    '}\n' +
+    "const evidenceDir = process.env.CM_SLOTS_ARTIFACTS || path.join(ROOT, 'cm-slots-artifacts');\n" +
+    'fs.mkdirSync(evidenceDir, { recursive: true });\n' +
+    "const sha = value => createHash('sha256').update(value).digest('hex');\n" +
+    'const sourceHashes = [];\n' +
+    "for (const file of ['src/lib/clubManager.ts', 'src/lib/clubManagerSlots.ts']) {\n" +
+    '  const bytes = fs.readFileSync(path.join(ROOT, file));\n' +
+    '  sourceHashes.push({ file, before: sha(bytes) });\n' +
+    '}\n' +
+    'const heldSources = () => {\n' +
+    '  const sources = [];\n' +
+    '  for (const { file, before } of sourceHashes) {\n' +
+    '    const bytes = fs.readFileSync(path.join(ROOT, file));\n' +
+    '    const after = sha(bytes);\n' +
+    '    sources.push({ file, before, after, held: before === after });\n' +
+    '  }\n' +
+    '  return sources;\n' +
+    '};\n' +
+    "if (CONTROL === 'decisioncontent' && process.env.CM_SLOTS_EVIDENCE_CHILD !== '1') {\n" +
+    '  const runs = [];\n' +
+    "  for (const name of ['', CONTROL]) {\n" +
+    "    const childDir = path.join(evidenceDir, name || 'baseline');\n" +
+    '    const run = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], { cwd: ROOT,\n' +
+    "      env: { ...process.env, SLOTS_CONTROL: name, CM_SLOTS_EVIDENCE_CHILD: '1', CM_SLOTS_ARTIFACTS: childDir },\n" +
+    "      encoding: 'utf8', timeout: 240000, maxBuffer: 16 * 1024 * 1024, windowsHide: true,\n" +
+    '    });\n' +
+    "    fs.writeFileSync(path.join(evidenceDir, `${name || 'baseline'}-runner.log`), `${run.stdout || ''}\\n${run.stderr || ''}`);\n" +
+    '    let report = null;\n' +
+    '    try { report = JSON.parse(fs.readFi'... 26803 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
