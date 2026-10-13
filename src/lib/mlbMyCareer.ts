@@ -735,10 +735,11 @@ export function mlbStatLineFor(x: MlbLineInput, rng: () => number): MlbStatLine 
     // saves, holds and a much lower ERA, with wins near zero.
     const apps = fullGames; // already an appearance count, see gamesFor
     full.era = Math.max(1.05, Math.round((4.9 - (form - 62) * 0.085 + rng() * 0.9) * 100) / 100);
-    // Round 97: this used to reach 149 strikeouts in a season, which no
-    // reliever in the one inning era has ever come close to (Josh Hader's
-    // 138 in 2019 is the modern high). A real reliever throws about 60
-    // innings, so the median lands near 70 and only the very best clear 120.
+    // Round 97: this used to reach 149 strikeouts in a season, far past a
+    // normal reliever's year (Josh Hader's 143 in 2018 was the most in the
+    // National League since Brad Lidge's 157 in 2004). A real reliever
+    // throws about 60 innings, so the median lands near 70 and only the
+    // very best clear 120.
     full.so = Math.max(20, Math.round(apps * (0.62 + (form - 62) * 0.031) + rng() * 12));
     full.wins = Math.max(0, Math.round(rng() * 6));
     full.lossesP = Math.max(0, Math.round(rng() * 5));
