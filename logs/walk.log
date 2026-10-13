@@ -1,0 +1,7 @@
+-nfl-my-career-320: smallest text base 10/10 px, head 10/10 px; overflow head 0/0
+-nfl-my-career-390: smallest text base 10/10 px, head 10/10 px; overflow head 0/0
+-nfl-my-career-1280: smallest text base 10/10 px, head 10/10 px; overflow head 0/0
+-nhl-my-career-320: smallest text base 10/10 px, head 10/10 px; overflow head 0/0
+-nhl-my-career-390: smallest text base 10/10 px, head 10/10 px; overflow head 0/0
+-nhl-my-career-1280: smallest text base 10/10 px, head 10/10 px; overflow head 0/0
+walk1332: 36 boxes compared head against base over 2 routes at 320, 390, 1280; all within 1 px, same text, same fonts, no sideways scroll

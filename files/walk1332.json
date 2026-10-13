@@ -1,0 +1,782 @@
+{
+ "base-nfl-my-career-320": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 288,
+    "h": 97,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 243,
+    "w": 288,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "base-nfl-my-career-390": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 358,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 223,
+    "w": 358,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "base-nfl-my-career-1280": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 320,
+    "y": 218,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 320,
+    "y": 275,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 320,
+    "y": 254,
+    "w": 640,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 320,
+    "y": 383,
+    "w": 640,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "base-nhl-my-career-320": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 288,
+    "h": 97,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 243,
+    "w": 288,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "base-nhl-my-career-390": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 358,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 223,
+    "w": 358,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "base-nhl-my-career-1280": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 320,
+    "y": 221,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 320,
+    "y": 278,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 320,
+    "y": 346,
+    "w": 640,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 320,
+    "y": 257,
+    "w": 640,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 320,
+    "y": 346,
+    "w": 640,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 320,
+    "y": 386,
+    "w": 640,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "head-nfl-my-career-320": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 288,
+    "h": 97,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 243,
+    "w": 288,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "head-nfl-my-career-390": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 358,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 223,
+    "w": 358,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "head-nfl-my-career-1280": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 320,
+    "y": 218,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 320,
+    "y": 275,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 320,
+    "y": 254,
+    "w": 640,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 320,
+    "y": 383,
+    "w": 640,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "head-nhl-my-career-320": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 288,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 288,
+    "h": 97,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 203,
+    "w": 288,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 243,
+    "w": 288,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "head-nhl-my-career-390": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 358,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 16,
+    "y": 94,
+    "w": 358,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 16,
+    "y": 223,
+    "w": 358,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ },
+ "head-nhl-my-career-1280": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 320,
+    "y": 221,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one still waiting on you.",
+    "fs": 16
+   },
+   {
+    "x": 320,
+    "y": 278,
+    "w": 640,
+    "h": 51,
+    "text": "📱Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "overflowList": 0,
+  "replied": [
+   {
+    "x": 320,
+    "y": 346,
+    "w": 640,
+    "h": 32,
+    "text": "You replied: Take the call",
+    "fs": 12
+   }
+  ],
+  "card": [
+   {
+    "x": 320,
+    "y": 257,
+    "w": 640,
+    "h": 77,
+    "text": "📱 Your agentThe walk wrote this one already answered.",
+    "fs": 16
+   }
+  ],
+  "settled": [],
+  "minFontAnswered": 10,
+  "buttons": [
+   {
+    "x": 320,
+    "y": 346,
+    "w": 640,
+    "h": 34,
+    "text": "Take the call",
+    "fs": 12
+   },
+   {
+    "x": 320,
+    "y": 386,
+    "w": 640,
+    "h": 34,
+    "text": "Let it ring",
+    "fs": 12
+   }
+  ],
+  "overflowOpen": 0,
+  "minFontOpen": 10
+ }
+}

@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 34s | base served: 200
+diststrings exit=0 0s | 519
+weight-head exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-base exit=1 26s | sweepWeight: 13 failures
+hub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+walk exit=0 88s | walk1332: 36 boxes compared head against base over 2 routes at 320, 390, 1280; all within 1 px, same text, same fonts, no sideways scroll

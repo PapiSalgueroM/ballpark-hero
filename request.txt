@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add -f .base 082fc277 > /dev/null 2>&1 && cd .base && ../node_modules/.bin/vite build --outDir ../dist-base --emptyOutDir > /tmp/basebuild.log 2>&1; s=$?; tail -3 /tmp/basebuild.log; cd .. && (nohup node scripts/lib/hostLikeServer.mjs dist-base 4174 > /tmp/base-server.log 2>&1 &) ; sleep 3; echo "base served: $(curl -s -o /dev/null -w '%{http_code}' http://localhost:4174/nfl-my-career)"; exit $s
+diststrings: for d in dist dist-base; do n=$(grep -l -E 'pack moves|has not registered|share the short key|cannot say who anyone is|not a declared slot|a meter the pack never moves|built in meter' $d/assets/*.js 2>/dev/null | wc -l); echo "$d: $n chunks carry an engine error string"; done; ls dist/assets/*.js | wc -l
+weight-head: node scripts/sweepWeight.mjs
+weight-base: BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+walk: cp .rc/x/walk1332.mjs scripts/walk1332.tmp.mjs && sed -i 's#../../scripts/lib/playwrightLoader.mjs#./lib/playwrightLoader.mjs#' scripts/walk1332.tmp.mjs && node scripts/walk1332.tmp.mjs; s=$?; rm -f scripts/walk1332.tmp.mjs; exit $s
