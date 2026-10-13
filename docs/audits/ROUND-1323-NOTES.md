@@ -74,8 +74,9 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
   ("One auth startup storage probe"), simWritesAreSent ("could not drive Guess the Nation"). Environment only:
   simPrerender (needs build:seo), simSchemaNames and simLeaderboardCaps (need the live database).
 - playSaveKeeper with a build of origin/main as KEEPER_BASE_DIST: journey K reports exactly one added key,
-  `dukb-fence:dukb-club-manager-save`, which is this round's key by design (green again once on main); its five
-  loss control FAILs need a build from before Round 1219. With KEEPER_NO_BASE=1 it is green.
+  `dukb-fence:dukb-club-manager-save`, which is this round's key by design; its five loss control FAILs need a
+  build from before Round 1219. With KEEPER_NO_BASE=1 it is green. (Corrected by the closing fixes below: the
+  gate's base is pinned before the keeper, so that red would NOT have gone away once on main.)
 - The whole runAllSims does not fit a remote check (712 harnesses against a 70 minute command cap). Every sim
   that reads a file this round touched (135) was run instead: by name above, and 104 through runAllSims ONLY lists
   (r1323-sims0, -sims1, -sims2): all green except simGmCalendar, simGmDealTableFixture, simGmStaff and
@@ -111,3 +112,18 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
 - Merged origin/main 36cc9ffe (Release BB): What's New keeps both entries; the appeal manifest took main's pins and
   the two hashes this round moves were retaken in commits of their own after the runner proof.
 - Full report: C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1323.md.
+
+## Closing fixes (2026-10-13, after the closing check verify-1323)
+
+- playSaveKeeper journey K: the release gate runs it with KEEPER_BASE_DIST built from fb8d6811, a build from
+  before the keeper that its base arm needs, so journey K compares every later build with that one for good. The
+  fence key would have read as an added key at every gate, not only until main carries it. The key is now named in
+  KEYS_ADDED_ON_PURPOSE in scripts/playSaveKeeper.mjs (exact name, with this round), every other added key still
+  fails, and the new control KEEPER_CONTROL=extrafence plants a key with the same prefix that is not on the list
+  and must fire. Proof on the runner: r1323-fz2a (the gate's recipe on this head, plus both journey K controls) and
+  r1323-fz2b (the harness as it was, the same recipe: red on the fence key alone). Full report:
+  C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix2-1323.md.
+- Not changed, by ruling: breakLoan has no squad floor (a 12 man squad loads as written; a transfer desk rule for a
+  later Club Manager round); /club-manager's thin headroom (inside its row; re-measure on any join with 1325, 1326
+  or 1328); src/lib/clubManagerLanding.ts stays a module of its own (only Club Manager files import
+  clubManagerSlots.ts, so the mark there would pull that file into /manager-hot-seat).
