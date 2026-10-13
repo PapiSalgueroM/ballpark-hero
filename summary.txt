@@ -1,0 +1,8 @@
+noConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+storageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+trustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+guideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+inventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+siteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+vitest-engine exit=0 4s |    Duration  3.19s (transform 1.53s, setup 307ms, collect 3.63s, tests 70ms, environment 1.89s, prepare 760ms)
+noQuotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
