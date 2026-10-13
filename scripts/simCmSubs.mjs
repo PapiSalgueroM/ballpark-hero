@@ -9,6 +9,13 @@
                a 2026-27 Liverpool match takes two at half time, then one each at 60, 70 and 80, and
                refuses a sixth; with one change at the break and three stoppages used, a change at a
                fourth minute is refused but a second change at the third stoppage's minute is taken.
+     opponent  over a quick sim fleet (2026-27 Liverpool, Barcelona and Bayern on the current rules and
+               again on the base rules, 2005-06 Everton and 2015-16 Real Madrid; SUBS_SEEDS seeds of
+               SUBS_MATCHES matches each), the other dugout never passes its rule's changes or stoppages,
+               and under five makes more changes than on the base rules by at least OPP_GAP.
+     coach     over the same fleet, the quick sim coach never passes the rule, writes no stoppage mark
+               under three, and keeps a change and a stoppage back with every change he makes for legs;
+               prints his mean changes a match under each rule (no real world average is claimed).
 
    Controls (SUBS_CONTROL=<name>), each asserting its anchor is present first and printing how many
    checks it turned red; a control that fires nothing is a failed run:
@@ -16,6 +23,8 @@
      oldcap     the rule answers three everywhere (the plan's control): the 2026 checks red.
      nostops    the stoppage check off: rule red.
      htstop     half time counts as a stoppage: rule red.
+     opproom    the other dugout's room back to MAX_HALFTIME_SUBS less the changes made: opponent red.
+     coachall   the coach keeps nothing back (his three keep back lines opened): coach red.
 
    Exit 0 green, 1 red or a control fired, 2 could not run, 3 a control did not fire. */
 import './lib/offlineTransport.cjs';
@@ -31,13 +40,23 @@ const ENGINE = 'src/lib/clubManager.ts';
 const LEDGER = 'scripts/data/cmSubsRuleSources.json';
 const CONTROL = process.env.SUBS_CONTROL ?? '';
 const partArg = process.argv.find(a => a.startsWith('--part='));
-const ALL_PARTS = ['ledger', 'rule'];
+const ALL_PARTS = ['ledger', 'rule', 'opponent', 'coach'];
+/** The engine sections past rule register here as they are defined below. */
+const SECTIONS = {};
 
 const CONTROLS = {
   onesource: { part: 'ledger' },
   oldcap: { part: 'rule', from: '  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));', to: '  return { subs: MAX_SUBS, stops: null, partial: false };' },
   nostops: { part: 'rule', from: '    if (inPlay && !sharesStop(live, m, p) && stopsUsed(live) >= rule!.stops!) return null;', to: '' },
   htstop: { part: 'rule', from: '  if (!live.h2Drawn && minute >= 46) return true;', to: '  if (false) return true;' },
+  opproom: { part: 'opponent', from: '  const room = rule.subs - made.length;', to: '  const room = MAX_HALFTIME_SUBS - made.length;' },
+  coachall: { part: 'coach', patches: [
+    ['    if (live.subsUsed >= rule.subs - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;',
+      '    if (live.subsUsed >= rule.subs || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;'],
+    ['    if (rule.stops !== null && (stopsLeftOf(state) ?? 0) - (isBreakChange(live, at) || sharesStop(live, at) ? 0 : 1) < 1) return false;',
+      '    if (rule.stops !== null && (stopsLeftOf(state) ?? 0) - (isBreakChange(live, at) || sharesStop(live, at) ? 0 : 1) < 0) return false;'],
+    ['if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null', 'if (state.live!.subsUsed >= rule.subs || (rule.stops !== null'],
+  ] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`unknown control ${CONTROL}`); process.exit(2); }
 const PARTS = CONTROL ? [CONTROLS[CONTROL].part] : partArg ? partArg.slice(7).split(',') : ALL_PARTS;
@@ -172,6 +191,102 @@ function ruleSection(cm) {
   check(P, '2020-21 La Liga plays five in three', ruleText(cm.matchRuleOf(ll20)) === '5/3', ruleText(cm.matchRuleOf(ll20)));
 }
 
+/* ---------------- the quick sim fleet (sections opponent and coach) ---------------- */
+/* Five change careers in 2026-27 (England, Spain, Germany), the same careers on the base rules, and two
+   three change eras. SEEDS and MATCHES are environment knobs; the bands below were set at the defaults. */
+const SEEDS = Number(process.env.SUBS_SEEDS ?? 3);
+const MATCHES = Number(process.env.SUBS_MATCHES ?? 14);
+const FIVE = [['Liverpool', null], ['Barcelona', null], ['Bayern Munich', null]];
+const THREE = [['Everton', 'era2005'], ['Real Madrid', 'era2015']];
+const fleetCache = new Map();
+const keyOf = (minute, plus) => `${minute}|${plus ?? 0}`;
+/** Every match of the fleet: the rule, my changes (with their stoppage marks), my injuries, their changes. */
+export function quickFleet(cm) {
+  if (fleetCache.has(cm)) return fleetCache.get(cm);
+  const careers = [];
+  for (let k = 0; k < SEEDS; k++) {
+    for (const [club, era] of FIVE) careers.push({ club, era, seed: 7100 + 37 * k, base: false, kind: 'five' });
+    for (const [club, era] of FIVE) careers.push({ club, era, seed: 7100 + 37 * k, base: true, kind: 'base' });
+    for (const [club, era] of THREE) careers.push({ club, era, seed: 7100 + 37 * k, base: false, kind: 'three' });
+  }
+  const rows = [];
+  for (const c of careers) {
+    let s = withSeed(c.seed, () => (c.era ? cm.startCareer(c.club, c.era) : cm.startCareer(c.club)));
+    if (c.base) s.matchRules = 'base';
+    let played = 0;
+    for (let i = 0; played < MATCHES && i < MATCHES * 4; i++) {
+      const r = withSeed(c.seed * 1000 + i, () => cm.playNextEntry(s));
+      if (r.kind === 'seasonOver') break;
+      if (r.kind !== 'halftime') { s = r.state; continue; }
+      const rule = cm.matchRuleOf(r.state);
+      const coached = withSeed(c.seed * 1000 + i + 500, () => cm.coachQuickMatch(r.state));
+      const live = coached.live;
+      const fin = withSeed(c.seed * 1000 + i + 700, () => cm.resumeMatch(coached));
+      rows.push({
+        kind: c.kind, club: c.club, rule, mine: live.subs ?? [],
+        injuries: [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])],
+        opp: fin.report?.detail?.oppSubs ?? [], named: !!live.oppXi,
+      });
+      s = fin.state;
+      played += 1;
+    }
+  }
+  fleetCache.set(cm, rows);
+  return rows;
+}
+const mean = xs => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
+
+/* Section opponent. Measured at the defaults (3 seeds, 14 matches): see OPP_GAP. */
+const OPP_GAP = Number(process.env.SUBS_OPP_GAP ?? 1.2);
+function opponentSection(cm) {
+  const P = 'opponent';
+  const rows = quickFleet(cm).filter(r => r.named);
+  let over = 0;
+  for (const r of rows) {
+    const stops = new Set(r.opp.map(s => s.minute)).size;
+    if (r.opp.length > r.rule.subs || (r.rule.stops !== null && stops > r.rule.stops)) over += 1;
+  }
+  check(P, 'the other dugout never passes its rule\'s changes or stoppages', over === 0, `${over} of ${rows.length} matches over`);
+  const five = rows.filter(r => r.kind === 'five'), base = rows.filter(r => r.kind === 'base');
+  const m5 = mean(five.map(r => r.opp.length)), m3 = mean(base.map(r => r.opp.length));
+  console.log(`   the other dugout: ${m5.toFixed(2)} changes a match under five (${five.length} matches), ${m3.toFixed(2)} on the base rules (${base.length})`);
+  check(P, `under five they make more changes than on the base rules, by at least ${OPP_GAP}`, five.length >= 20 && base.length >= 20 && m5 - m3 >= OPP_GAP, `gap ${(m5 - m3).toFixed(2)}`);
+  const fourPlus = five.filter(r => r.opp.length > 3).length;
+  check(P, 'under five some matches see a fourth or fifth change from them', fourPlus > 0, `${fourPlus} of ${five.length}`);
+  const doubled = five.filter(r => r.opp.length > new Set(r.opp.map(s => s.minute)).size).length;
+  console.log(`   ${fourPlus} of ${five.length} five change matches saw them make four or five; ${doubled} had a double change`);
+}
+
+/* Section coach. */
+function coachSection(cm) {
+  const P = 'coach';
+  const rows = quickFleet(cm);
+  let over = 0, kept = 0, marks = 0, legs = 0;
+  for (const r of rows) {
+    const stops = new Set(r.mine.filter(s => s.stop).map(s => keyOf(s.minute, s.plus))).size;
+    if (r.mine.length > r.rule.subs || (r.rule.stops !== null && stops > r.rule.stops)) over += 1;
+    if (r.rule.stops === null && r.mine.some(s => 'stop' in s)) marks += 1;
+    const seen = new Set();
+    r.mine.forEach((s, i) => {
+      if (s.stop) seen.add(keyOf(s.minute, s.plus));
+      const injured = r.injuries.some(j => j.id && j.id === s.offId && j.minute <= s.minute);
+      if (injured) return;
+      legs += 1;
+      /* A change at the break costs no stoppage, so only a change in play must leave one. */
+      if (i + 1 > r.rule.subs - 1 || (r.rule.stops !== null && s.stop && seen.size > r.rule.stops - 1)) kept += 1;
+    });
+  }
+  check(P, 'the coach never passes the rule\'s changes or stoppages', over === 0, `${over} of ${rows.length} matches over`);
+  check(P, 'a three change match carries no stoppage marks', marks === 0, `${marks} matches marked`);
+  check(P, 'every change he makes for legs keeps a change and a stoppage back', kept === 0 && legs > 0, `${kept} of ${legs} changes for legs kept nothing back`);
+  for (const kind of ['five', 'base', 'three']) {
+    const k = rows.filter(r => r.kind === kind);
+    console.log(`   the coach: ${mean(k.map(r => r.mine.length)).toFixed(2)} changes a match, ${kind} (${k.length} matches)`);
+  }
+}
+SECTIONS.opponent = opponentSection;
+SECTIONS.coach = coachSection;
+
 /* ---------------- main ---------------- */
 async function main() {
   const folder = await mkdtemp(path.join(os.tmpdir(), 'simCmSubs-'));
@@ -179,10 +294,10 @@ async function main() {
   const ledger = JSON.parse(await readFile(path.join(root, LEDGER), 'utf8'));
   let text = source;
   const spec = CONTROLS[CONTROL];
-  if (spec?.from !== undefined) {
-    const n = source.split(spec.from).length - 1;
+  for (const [from, to] of spec?.patches ?? (spec?.from !== undefined ? [[spec.from, spec.to]] : [])) {
+    const n = text.split(from).length - 1;
     if (n !== 1) { console.log(`control ${CONTROL}: its anchor is in the engine ${n} times, not once; could not run`); process.exit(2); }
-    text = source.replace(spec.from, spec.to);
+    text = text.replace(from, to);
   }
   if (CONTROL === 'onesource') {
     const fact = ledger.rows.find(r => r.league === 'premier')?.facts?.[0];
@@ -207,6 +322,4 @@ async function main() {
   console.log(`simCmSubs ${red.length ? 'RED' : 'GREEN'}: ${results.length - red.length} of ${results.length} checks green (parts ${PARTS.join(', ')})`);
   process.exit(red.length ? 1 : 0);
 }
-/** Sections added by later steps register here. */
-const SECTIONS = {};
 main().catch(e => { console.log(`simCmSubs could not run: ${e?.stack ?? e}`); process.exit(2); });

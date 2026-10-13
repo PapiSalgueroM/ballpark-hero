@@ -15014,23 +15014,45 @@ export function squadNumbers(career: CareerState, live: LiveMatch): Map<string, 
   return map;
 }
 
+/** Round 1331: the minutes of the other dugout's changes under a stoppage limit: at most stopsLeft
+ *  distinct minutes drawn, the changes past them joining those stoppages in order. */
+function stopMinutes(count: number, stopsLeft: number, lo: number, hi: number): number[] {
+  const k = Math.min(count, stopsLeft);
+  const stops = distinctMinutes(k, lo, hi, new Set());
+  const extra = count - k;
+  const out: number[] = [];
+  stops.forEach((m, i) => {
+    const n = 1 + Math.floor(extra / k) + (i < extra % k ? 1 : 0);
+    for (let j = 0; j < n; j++) out.push(m);
+  });
+  return out;
+}
+
 /**
  * The other dugout's substitutions for the minutes (from, to]: one to three
  * a match, from their own bench, like for like when the game is level, a
  * forward for a defender when they are behind and the reverse when they are
  * two clear. Subs already made at or before `from` are kept. A man is never
  * taken off before his last goal.
+ *
+ * Round 1331: the room and the count follow the match's rule. Under three the
+ * count is ri(1, 3) as it always was (the same draws, call for call); under five
+ * in three stoppages it is ri(3, 5), and the changes go on at most the
+ * stoppages they have left: that many minutes are drawn, and the changes past
+ * them join those stoppages in order (a double change), with no new draw.
  */
-function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: number[]): SubLine[] {
+function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: number[], rule: SubsRule): SubLine[] {
   const made = (live.oppSubs ?? []).filter(s => s.minute <= from);
-  const room = MAX_HALFTIME_SUBS - made.length;
+  const room = rule.subs - made.length;
   if (!live.oppXi || !live.oppBench || room <= 0) return made;
+  const stopsLeft = rule.stops === null ? null : rule.stops - new Set(made.map(s => s.minute)).size;
+  if (stopsLeft !== null && stopsLeft <= 0) return made;
   const len = (to - from) / 45;
   const lo = Math.max(from + 1, 56);
   /* Round 670: in extra time they may use whatever changes they have left. */
   const hi = from >= 90 ? to - 2 : Math.min(to, 88);
   if (lo > hi) return made;
-  const count = Math.min(room, Math.round(ri(1, 3) * len));
+  const count = Math.min(room, Math.round(ri(rule.subs - 2, rule.subs) * len));
   if (count <= 0) return made;
   const keep: LiveMatch = { ...live, oppSubs: made };
   const onPitch = oppOnPitchAt(keep, to);
@@ -15042,7 +15064,7 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   for (const c of cards) lastCard.set(c.name, Math.max(lastCard.get(c.name) ?? 0, c.minute));
   const myGoalMinutes = [...(live.h1My ?? []), ...(live.h2My ?? [])].map(g => g.minute);
   const theirGoalMinutes = [...(live.h1Opp ?? []).map(g => g.minute), ...(live.h2Opp ?? []).map(g => g.minute), ...oppGoalMinutes];
-  const minutes = distinctMinutes(count, lo, hi, new Set());
+  const minutes = stopsLeft === null ? distinctMinutes(count, lo, hi, new Set()) : stopMinutes(count, stopsLeft, lo, hi);
   const subs: SubLine[] = [];
   /* A man who has just come on is not hooked again in the same draw. */
   const cameOn = new Set<string>(made.map(s => s.on));
@@ -15412,7 +15434,7 @@ function drawSegment(
   let oppCards: CardLine[] = [];
   if (!oppStart) {
     oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board, state);
-    live.oppSubs = drawOppSubs(live, from, to, []);
+    live.oppSubs = drawOppSubs(live, from, to, [], matchRuleOf(state));
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
        stands), then their bookings off whoever is on their pitch at each
@@ -15425,7 +15447,7 @@ function drawSegment(
     oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name), hi);
     if (half === 1) live.h1OppCards = [...(live.h1OppCards ?? []), ...oppCards];
     else live.h2OppCards = [...(live.h2OppCards ?? []), ...oppCards];
-    live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes);
+    live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes, matchRuleOf(state));
     oppGoals = oppGoalMinutes.map(minute => {
       const there = oppAt(live, minute) ?? oppStart;
       const on = there.filter(p => p.p !== 'GK');
@@ -18873,8 +18895,14 @@ export function coachQuickMatch(career: CareerState): CareerState {
     const allowed = slot ? slot.allowed : out ? [out.position] : [];
     return p => gradeFit(heldPositions(p), allowed);
   };
+  /* Round 1331: the match's own rule. Under three he is the coach he always was, line for line. Under
+     five in three: at the break still up to two (a break costs no stoppage); at each look up to two
+     changes at the same minute (one stoppage), only while a change and a stoppage stay back for an
+     injury; and an injury at a minute with no stoppage left is not replaced (changeLive refuses it, and
+     the man plays on, as he does today with no change left). */
+  const rule = matchRuleOf(state);
   const injuriesThrough = (to: number) => {
-    while (state.live!.subsUsed < MAX_SUBS) {
+    while (state.live!.subsUsed < rule.subs) {
       const live = state.live!;
       const injury = [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]
         .map(line => ({ ...line, id: line.id ?? state.squad.find(p => p.name === line.name)?.id }))
@@ -18893,10 +18921,15 @@ export function coachQuickMatch(career: CareerState): CareerState {
   };
   /* Round 1146: legs, after the break. See QUICK_LEGS_WINDOWS for the rule. */
   const restLegs = (at: number) => {
+    for (let look = 0; look < (rule.stops === null ? 1 : 2); look++) if (!legsOnce(at)) return;
+  };
+  const legsOnce = (at: number): boolean => {
     const live = state.live!;
     /* One change stays back for an injury, as at the break, and so does one
        man: he never spends his last fit bench player on legs. */
-    if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;
+    if (live.subsUsed >= rule.subs - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;
+    /* Round 1331: and under a stoppage limit one stoppage stays back too. */
+    if (rule.stops !== null && (stopsLeftOf(state) ?? 0) - (isBreakChange(live, at) || sharesStop(live, at) ? 0 : 1) < 1) return false;
     const gone = liveGoneIds(live, at);
     const cameOn = new Set((live.subs ?? []).map(s => s.onId));
     const booked = new Set([...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'yellow' && c.minute <= at).map(c => c.id));
@@ -18917,16 +18950,19 @@ export function coachQuickMatch(career: CareerState): CareerState {
       const noWeaker = (p: CMPlayer): boolean => (liveElevenStrength(state, at, { outId: out.p.id, inId: p.id }) ?? 0) >= now;
       const coming = options.find(p => settled || noWeaker(p));
       if (!coming) continue;
-      state = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id }) ?? state;
-      return;
+      const next = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id });
+      state = next ?? state;
+      return !!next;
     }
+    return false;
   };
   ensureFirstHalf(state, entry, state.live!);
   injuriesThrough(45);
   if (!state.live!.h2Drawn) {
     // Keep one change for a later injury rather than spending all three at the break.
+    const atBreak = state.live!.subsUsed;
     for (const out of tiringAtHalftime(state)) {
-      if (state.live!.subsUsed >= MAX_SUBS - 1) break;
+      if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;
       if (liveGoneIds(state.live!, 46).has(out.id)) continue;
       const tiredFit = gradeFor(out.id);
       const coming = benchFor(state, out.id).find(p => (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
