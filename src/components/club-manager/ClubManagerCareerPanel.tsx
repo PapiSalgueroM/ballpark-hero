@@ -115,7 +115,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                 {!c.sacked && !c.wilderness && (
                   <JobHuntCard c={c} onApply={g.applyJob} onJoinNow={g.joinNow} onJoinSummer={g.joinSummer} />
                 )}
-                <div className="bg-card border border-border rounded-xl p-3">
+                <div data-cm-career-card className="bg-card border border-border rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
                   {/* Round 303: the created manager's card line. Absent spec, the
                       panel reads exactly as it always has. */}

@@ -103,7 +103,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
     const deserved = deservedRole(career, open);
     const insulted = standingGap(career, open) >= 2;
     return (
-      <div ref={detailRef} className="space-y-2">
+      <div ref={detailRef} data-cm-roles="player" className="space-y-2">
         <button
           data-cm-room-back="player"
           onClick={() => setOpenId(null)}
@@ -185,7 +185,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
   if (openRole) {
     const group = groups.find(g => g.role === openRole);
     return (
-      <div ref={detailRef} className="space-y-2">
+      <div ref={detailRef} data-cm-roles="rung" className="space-y-2">
         <button
           data-cm-room-back="rung"
           onClick={() => setOpenRole(null)}
@@ -214,7 +214,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
   const wantOut = career.squad.filter(p => p.wantsOut);
 
   return (
-    <div className="space-y-2">
+    <div data-cm-roles="front" className="space-y-2">
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
           <Users className="w-3 h-3" /> The dressing room
