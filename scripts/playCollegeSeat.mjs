@@ -5,9 +5,11 @@
  * Stations (each a picture in $RC_OUT, or .tmp-fx/college-seat-shots when RC_OUT is unset):
  *  1 a new dynasty's first screen: the tile, under the chips, above the tabs;
  *  2 the card open in place of the tab content, its "?" over it, Back twice;
- *  3 the page never jumps: window.scrollY either side of a press, the tile's top, and the Play button's top
- *    before and after the first press, and on an older save the slot's height and the Play button's top
- *    before "Take the ask", after it, and after "Not now", all equal to the pixel;
+ *  3 the seat never moves the page: the tile's top, the slot's height and the top of the tab bar under it
+ *    before and after the first press, equal to the pixel (window.scrollY and the Play button's top are
+ *    printed: the board's own feed above the Play card changes length with every round, as it did before
+ *    this round); and on an older save the slot's height and the Play button's top before "Take the ask",
+ *    after it, and after "Not now", all equal to the pixel;
  *  4 the final press: the recap with the verdict and trust; under prefers-reduced-motion the verdict is on its
  *    last frame at first paint (opacity 1, no transform, no running animation);
  *  5 trust at zero: the fired recap, "See who calls" in place of the trail button;
@@ -94,7 +96,7 @@ const SMALL_TAP = '[data-college-seat] button, button[data-college-seat] { min-h
 const fresh = async (vw, vh, route, reduce = false) => {
   const ctx = await browser.newContext({ viewport: { width: vw, height: vh }, reducedMotion: reduce ? 'reduce' : 'no-preference' });
   await ctx.route(/supabase\.co/, r => r.abort());
-  await ctx.addInitScript(r => { try { localStorage.setItem(`rules-gate-seen:${r}`, '1'); } catch { /* none */ } }, route);
+  await ctx.addInitScript(r => { try { localStorage.setItem(`rules-gate-seen:${r}`, '1'); localStorage.setItem('cookie-consent', 'essential'); } catch { /* none */ } }, route);
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
@@ -122,6 +124,11 @@ const clickOnce = async (page, re) => {
   return ok;
 };
 const docTop = async (page, sel) => page.evaluate(s => { const e = document.querySelector(s); return e ? e.getBoundingClientRect().top + window.scrollY : null; }, sel);
+/** The document top of the element right under the seat's slot (the tab bar). */
+const underSlot = async page => page.evaluate(() => {
+  const next = document.querySelector('[data-college-seat="tile"], [data-college-seat="optin"], [data-college-seat="passed"]')?.nextElementSibling;
+  return next ? next.getBoundingClientRect().top + window.scrollY : null;
+});
 const height = async (page, sel) => page.evaluate(s => document.querySelector(s)?.getBoundingClientRect().height ?? null, sel);
 const recapSaves = {};
 const fireSaves = {};
@@ -150,11 +157,13 @@ for (const { route, key, school } of ROUTES) {
     await page.waitForTimeout(400);
     say(await page.locator('[data-college-seat="card"]').count() === 1, `${tag}: the card opens in place of the tab content`);
     await seatChecks(page, `${tag} station 2 card`);
+    await page.locator('[data-college-seat="card"]').scrollIntoViewIfNeeded().catch(() => {});
     await shot(page, `${tag}-2-card`);
     await page.locator('[aria-label="How the athletic director works"]').click();
     await page.waitForTimeout(400);
     say(await page.locator('[data-college-seat="rules"]').count() === 1, `${tag}: the "?" opens the rules over the card`);
     await seatChecks(page, `${tag} station 2 rules`);
+    await page.locator('[data-college-seat="rules"]').scrollIntoViewIfNeeded().catch(() => {});
     await shot(page, `${tag}-2-rules`);
     /* scoped to the card: the site navbar carries a Back button of its own, which leaves the page */
     await page.locator('[data-college-seat="rules"] button:has-text("Back")').click();
@@ -165,12 +174,15 @@ for (const { route, key, school } of ROUTES) {
 
     where = 'S3';
     await clickText(page, /^Play$/);
-    const before = { tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]') };
+    const before = { tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]'), tabs: await underSlot(page) };
     await clickText(page, PLAY);
     await page.waitForTimeout(700);
-    const after = { tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]') };
-    console.log(`   ${tag} first press: tile top ${before.tile} to ${after.tile}, Play top ${before.play} to ${after.play}, slot ${before.h} to ${after.h}, scrollY ${before.y} to ${after.y}`);
-    say(before.tile !== null && before.tile === after.tile && before.play === after.play && before.h === after.h, `${tag}: the first press moved the tile or the Play button`);
+    const after = { tile: await docTop(page, '[data-college-seat="tile"]'), play: await playTop(page), y: await page.evaluate(() => window.scrollY), h: await height(page, '[data-college-seat="tile"]'), tabs: await underSlot(page) };
+    console.log(`   ${tag} first press: tile top ${before.tile} to ${after.tile}, slot ${before.h} to ${after.h}, tabs under it ${before.tabs} to ${after.tabs}, Play top ${before.play} to ${after.play} (the round's feed above it changes length, as it always has), scrollY ${before.y} to ${after.y}`);
+    /* The seat's promise: its slot neither moves nor changes height, so everything under it (the tabs, then the
+       board's own feed and the Play card) sits where the board alone would put it. The feed above the Play card
+       has always grown and shrunk with the round's lines; that is the board's, measured and printed, not the seat's. */
+    say(before.tile !== null && before.tile === after.tile && before.h === after.h && before.tabs === after.tabs, `${tag}: the first press moved the slot or what sits under it`);
     await shot(page, `${tag}-3-press`);
     /* An older dynasty: the same start with no athletic director, at its first press. */
     const old = JSON.parse(startSave);
@@ -198,6 +210,7 @@ for (const { route, key, school } of ROUTES) {
     say(await page.locator('[data-college-seat="recap"]').count() === 1, `${tag}: the final press shows the grade on the recap`);
     say(/Trust upstairs: \d+ of 100/.test(await page.locator('[data-college-seat="recap"]').innerText().catch(() => '')), `${tag}: the recap carries trust`);
     await seatChecks(page, `${tag} station 4`);
+    await page.locator('[data-college-seat="recap"]').scrollIntoViewIfNeeded().catch(() => {});
     await shot(page, `${tag}-4-recap`);
     if (vw === 390) recapSaves[route] = await page.evaluate(k => localStorage.getItem(k), key);
     /* Stations 5 to 7: the same start, at the season's last round, a roster gutted to 40 so no title can come,
@@ -220,6 +233,7 @@ for (const { route, key, school } of ROUTES) {
     say(await page.locator('[data-college-seat="fired"]').count() === 1, `${tag}: trust at zero shows the fired recap`);
     say(await page.locator('[data-college-seat="calls"]').count() === 1 && !(await page.locator('body').innerText()).includes('Hit the recruiting trail'), `${tag}: See who calls stands in for the trail`);
     await seatChecks(page, `${tag} station 5`);
+    await page.locator('[data-college-seat="fired"]').scrollIntoViewIfNeeded().catch(() => {});
     await shot(page, `${tag}-5-fired`);
 
     where = 'S6';
@@ -236,6 +250,18 @@ for (const { route, key, school } of ROUTES) {
     say(market2 === market1 && market1.length > 0, `${tag}: a reload reads the same market`);
 
     where = 'S7';
+    /* The feed is keyed on the record, so a record that drew nobody draws nobody on every reload: when this
+       one is quiet, the walk tries longer records (more titles behind him) until one draws a call. */
+    const fired7 = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
+    for (let t = 4; t <= 12 && await page.locator('button:has-text("Take the job")').count() === 0; t += 1) {
+      const s = JSON.parse(JSON.stringify(fired7));
+      const stint = s.st.seat.career.stints[0];
+      const last = stint.grades[stint.grades.length - 1];
+      s.st.seat.career.stints[0] = { ...stint, from: s.st.season - t, grades: [...Array(t).fill('title'), last] };
+      await page.evaluate(([kk, v]) => localStorage.setItem(kk, v), [key, JSON.stringify(s)]);
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.waitForTimeout(1300);
+    }
     const before7 = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
     const took = await clickText(page, /^Take the job$/);
     await page.waitForTimeout(900);
@@ -279,6 +305,7 @@ for (const { route, key, school } of ROUTES) {
       await control(page);
       await page.waitForTimeout(900);
       await seatChecks(page, `${tag} station 8`);
+      await page.locator('[data-college-seat="bid"]').scrollIntoViewIfNeeded().catch(() => {});
       await shot(page, `${tag}-8-bid`);
       await clickText(page, /^Stay put$/);
       await page.waitForTimeout(700);

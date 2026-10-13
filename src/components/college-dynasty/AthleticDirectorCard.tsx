@@ -24,7 +24,7 @@ import {
 } from '@/lib/collegeSeat';
 
 /** The slot's one height, every state, every width. */
-const SLOT = 'h-32';
+const SLOT = 'h-36';
 const TAP = 'min-h-11 min-w-11';
 
 function TrustBar({ trust }: { trust: number }) {
@@ -65,8 +65,8 @@ export function SeatSlot({ block, view, offer, onOpen, onTake, onPass }: {
   if (!block && offer) {
     return (
       <div data-college-seat="optin" className={cn(SLOT, 'flex flex-col justify-center gap-1.5 overflow-hidden rounded-2xl border border-gold/40 bg-card px-4 py-2')}>
-        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">An athletic director wants the job</p>
-        <p className="line-clamp-2 text-xs text-foreground">He grades every season. Trust at zero gets you let go, then the dynasty goes on through a job market or a year out.</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Athletic director</p>
+        <p className="line-clamp-3 text-xs text-foreground">He grades every season. Trust at zero gets you let go, and the dynasty goes on through a job market or a year out.</p>
         <span className="flex gap-2">
           <button type="button" onClick={onTake} className={cn(TAP, 'flex-1 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground hover:opacity-90')}>Take the ask</button>
           <button type="button" onClick={onPass} className={cn(TAP, 'flex-1 rounded-full border border-border bg-background px-3 text-xs font-semibold text-muted-foreground hover:text-foreground')}>Not now</button>
