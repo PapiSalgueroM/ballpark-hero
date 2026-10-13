@@ -6,8 +6,8 @@ import {
 import type { GmInboxHost, GmInboxPack } from './gmInbox';
 import { GM_INBOX_PACKS } from '@/data/gmInbox';
 import { keyedRng } from './keyedRng';
-import { gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
-import type { GmEventDef } from './gmInbox';
+import { gmExpiredLine, gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
+import type { GmEventDef, GmInboxMessage } from './gmInbox';
 import { onCooldown } from './careerEventDeck';
 
 interface Desk extends GmInboxHost {
@@ -378,5 +378,55 @@ describe('gmInbox deck rules', () => {
   it('the validator names an empty wording and a clock that is neither', () => {
     expect(gmPackProblems(deck([card('t', { texts: ['Fine.', ''] })])).join(' ')).toMatch(/empty wording/);
     expect(gmPackProblems(deck([card('t')], { clock: 'month' as 'week' })).join(' ')).toMatch(/neither week nor season/);
+  });
+
+  it('a card left open is settled on its neutral option at exactly w plus expires, and nothing moves', () => {
+    const e = card('x', { expires: 3, choices: [{ label: 'Push', reply: 'Push.', karma: 2 }, { label: 'Leave it', reply: 'Fine.', karma: 0 }] });
+    const p = deck([e], { cooldown: 50 });
+    const s = desk();
+    const seat = seatFor(p);
+    const [m] = gmInboxWeek(s, seat, 'a', {}, 5, () => 0) as GmInboxMessage[];
+    expect(m.w).toBe(5);
+    const before = JSON.stringify([s.trust, s.fans, s.cash, s.morale, s.recruit, s.out, s.rating]);
+    gmInboxWeek(s, seat, 'a', {}, 7, () => 0);
+    expect(s.phoneInbox![0].answered).toBeUndefined();
+    gmInboxWeek(s, seat, 'a', {}, 8, () => 0);
+    const settled = s.phoneInbox![0] as GmInboxMessage;
+    expect([settled.answered, settled.auto]).toEqual([1, true]);
+    expect(JSON.stringify([s.trust, s.fans, s.cash, s.morale, s.recruit, s.out, s.rating])).toBe(before);
+    expect(gmExpiredLine(settled, p)).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
+    expect(gmExpiredLine(m, p)).toBeNull();
+    expect(answerGmInbox(s, settled.id, 0, seat)).toBeNull();
+  });
+
+  it('a card whose def lost its expiry stays open, and a plain card carries no tick', () => {
+    const e = card('x', { expires: 2 });
+    const s = desk();
+    gmInboxWeek(s, seatFor(deck([e], { cooldown: 50 })), 'a', {}, 0, () => 0);
+    gmInboxWeek(s, seatFor(deck([card('x')], { cooldown: 50 })), 'a', {}, 9, () => 0);
+    expect(s.phoneInbox![0].answered).toBeUndefined();
+    const plain = desk();
+    gmInboxWeek(plain, seatFor(TOY), 'b', {}, 0, () => 0);
+    expect('w' in plain.phoneInbox![0]).toBe(false);
+  });
+
+  it('a bad tick or a bad auto bends the message, and the inbox resets alone', () => {
+    const s = desk();
+    gmInboxWeek(s, seatFor(deck([card('x', { expires: 2 })])), 'a', {}, 0, () => 0);
+    const keep = JSON.stringify(s.phoneInbox);
+    expect(JSON.stringify(repairGmInbox(JSON.parse(JSON.stringify(s))).phoneInbox)).toBe(keep);
+    for (const bent of [{ w: 'soon' }, { w: Infinity }, { auto: 1 }, { auto: true }]) {
+      const b = { ...s, phoneInbox: s.phoneInbox!.map(m => ({ ...m, ...bent })) as unknown as Desk['phoneInbox'] };
+      repairGmInbox(b);
+      expect(b.phoneInbox).toEqual([]);
+      expect(b.gmInboxLast).toEqual({ x: 0 });
+    }
+  });
+
+  it('the validator refuses an expiry that is not a whole tick, or one with nothing neutral to settle on', () => {
+    expect(gmPackProblems(deck([card('x', { expires: 0 })])).join(' ')).toMatch(/expires after 0/);
+    expect(gmPackProblems(deck([card('x', { expires: 1.5 })])).join(' ')).toMatch(/expires after 1.5/);
+    const hard = card('x', { expires: 2, choices: [{ label: 'Push', reply: 'Push.', karma: 2 }] });
+    expect(() => seatFor(deck([hard]))).toThrow(/no option that moves nothing/);
   });
 });

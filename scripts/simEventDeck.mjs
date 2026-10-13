@@ -45,6 +45,17 @@
         draws with and without wordings, the same key reads the same words,
         another key other words with the same deal, and every wording comes
         up at a measured share of its card's deals.
+     7) EXPIRY. FX_EXPIRE (expiries 2, 3, 4 and 6, neutral option second) on
+        20 silent ten season desks: every card is settled at exactly its
+        arrival plus its expiry on its neutral option with auto set, no meter
+        ever moves, the settled line names the neutral label with no dash,
+        the deck never freezes (a measured multiple of the deals the same
+        pack makes without expiry), and a card whose def lost its expiry
+        stays open.
+     8) NEUTRAL. Every card of every pack off NEUTRAL_BASELINE has an option
+        that moves nothing, every pack on it still lacks one somewhere (the
+        ratchet), gmPackProblems is empty for every pack the kit knows, and
+        bind refuses each fixture breakage.
      9) SEASON CLOCK. FX_SEASON over 2,000 random ledgers and seasons: the
         season deck holds out exactly what careerEventDeck's onCooldown holds
         out (and onCooldown its own written rule); a cooldown of N is back
@@ -67,6 +78,12 @@
      textrng    the wording drawn from the deck's rng; section 6 fails (and 1
                 would, if a recorded pack had wordings).
      seasonweek the season pack uses the week comparison; section 9 fails.
+     expireoff  the engine never settles an open card; section 7 fails.
+     expirefx   the engine settles on option 0 through the answer flow;
+                section 7 fails.
+     neutral    FX_NEUTRAL's one neutral option on its first card is given
+                trust 1 (a data change in the kit, not the engine); section
+                8 fails.
 
    Run: node scripts/simEventDeck.mjs
         SIM_EVENT_DECK_SHARD=nfl runs one seat's rows of section 1 only. */
@@ -85,7 +102,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'story', 'rest', 'textrng', 'seasonweek'];
+const CONTROLS = ['replay', 'weightoff', 'story', 'rest', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -114,6 +131,10 @@ const ENGINE_CONTROLS = {
   textrng: ["const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;",
     'const pick = alt > 0 ? Math.floor(rng() * (1 + alt)) : 0; /* textrng control */'],
   seasonweek: ["if (pack.clock === 'season') return !onCooldown(last, e, clock, pack.cooldown);", '/* seasonweek control */'],
+  expireoff: ['if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };',
+    'if (false) inbox[i] = m; /* expireoff control */'],
+  expirefx: ['if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };',
+    'if (ttl !== undefined && clock - w >= ttl) { answerInboxMessage(s, m.id, 0, seat); inbox[i] = { ...m, w, answered: 0, auto: true }; } /* expirefx control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -572,6 +593,112 @@ console.log('6) Texts: wordings move no deal and no draw, every wording comes up
   }
   const withTexts = Object.entries(ALL_PACKS).filter(([, p]) => p.events.some(e => e.texts)).map(([k, p]) => `${k} (${p.events.filter(e => e.texts).map(e => e.texts.length + 1).join(', ')} wordings)`);
   console.log(`   packs the kit knows that use texts: ${withTexts.length ? withTexts.join('; ') : 'none yet'}`);
+}
+
+/* ═══ 7. EXPIRY: a card left open is settled, moving nothing ═══ */
+
+console.log('7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes');
+const fxHard = (id, extra = {}) => fxCard(id, {
+  choices: [{ label: 'Act on it', reply: 'Done.', karma: 2, morale: 1 }, { label: 'Leave it', reply: 'Left.', karma: 0 }], ...extra,
+});
+const FX_EXPIRE = fxPack('fx_expire', [
+  fxHard('e2', { expires: 2 }), fxHard('e3', { expires: 3 }), fxHard('e4', { expires: 4 }), fxHard('e6', { expires: 6 }),
+], { chance: 0.5, cooldown: 3 });
+{
+  const ttl = new Map(FX_EXPIRE.events.map(e => [e.id, e.expires]));
+  const meters = s => JSON.stringify([s.morale, s.trust, s.fans, s.cash, s.recruit, s.out, s.rating]);
+  const calm = meters(newDesk());
+  const run = (pack, seed = SEED) => {
+    const bad = [];
+    let deals = 0;
+    let settled = 0;
+    let lastSeason = 0;
+    let line = null;
+    const seen = new Map();
+    const observe = w => {
+      if (w.season === 0 && w.week === 0) seen.clear();
+      deals += w.got.length;
+      if (w.season === SEASONS - 1) lastSeason += w.got.length;
+      if (meters(w.s) !== calm) bad.push(`desk ${w.desk} week ${w.clock}: a meter moved on a desk that never answers`);
+      for (const m of w.s.phoneInbox ?? []) {
+        if (!m.auto || seen.has(m.id)) continue;
+        seen.set(m.id, true);
+        settled++;
+        if (m.answered !== 1) bad.push(`${m.id}: settled on option ${m.answered}, the neutral one is 1`);
+        if (w.clock !== m.w + ttl.get(m.defId)) bad.push(`${m.id}: settled at week ${w.clock}, it arrived at ${m.w} and expires after ${ttl.get(m.defId)}`);
+        line = line ?? E.gmExpiredLine(m, pack);
+      }
+    };
+    for (let d = 0; d < DRIVES.SILENT.desks; d++) runDesk(pack, 'fx_expire', seed, 'SILENT', d, { observe });
+    return { bad, deals, settled, lastSeason, line };
+  };
+  const r = run(FX_EXPIRE);
+  const STILL = { ...FX_EXPIRE, events: FX_EXPIRE.events.map(({ expires, ...e }) => e) };
+  const still = run(STILL);
+  for (const b of r.bad.slice(0, 6)) console.error(`     ${b}`);
+  if (r.settled < 500) fail(7, `only ${r.settled} cards settled: nothing was tested`);
+  if (r.bad.length) fail(7, `${r.bad.length} expiry breaks on ${DRIVES.SILENT.desks} silent desks`);
+  else ok(`${r.settled} cards settled on ${DRIVES.SILENT.desks} silent desks, each at exactly w plus expires on its neutral option, no meter moved`);
+  const dash = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
+  if (!r.line || !r.line.includes('(Leave it)') || !r.line.includes('your assistant') || dash.some(d => r.line.includes(d))) fail(7, `the settled line reads "${r.line}"`);
+  else ok(`the settled line: ${r.line}`);
+  /* Measured 2026-10-13 at seeds 1 to 10: silent desks are dealt 44.75 to
+     45.42 times as many cards with expiry as without (without it every desk
+     freezes at three open). The floor of 30 sits well under that and far
+     over the expireoff control. */
+  const rise = r.deals / Math.max(1, still.deals);
+  const lineRise = `silent desks were dealt ${r.deals} cards, ${rise.toFixed(1)} times the ${still.deals} of the same pack without expiry, ${r.lastSeason} in the tenth season`;
+  if (rise < 30 || r.lastSeason === 0) fail(7, lineRise); else ok(lineRise);
+  if (MEASURE) console.log(`   measure: expiry rise at seeds 1 to 10: ${TEN.map(sd => (run(FX_EXPIRE, sd).deals / run(STILL, sd).deals).toFixed(2)).join(', ')}`);
+  /* A card whose def lost its expiry stays open: the manager answers it. */
+  const s = newDesk();
+  E.gmInboxWeek(s, E.bindGmInbox(FX_EXPIRE, BINDING), 'a', {}, 0, () => 0);
+  E.gmInboxWeek(s, E.bindGmInbox(STILL, BINDING), 'a', {}, 40, () => 0.99);
+  if (s.phoneInbox.length !== 1 || s.phoneInbox[0].answered !== undefined) fail(7, 'a card whose def lost its expiry was settled anyway');
+  else ok('a card whose def lost its expiry stays open for the manager');
+}
+
+/* ═══ 8. NEUTRAL: every new pack has an option that moves nothing ═══ */
+
+console.log('8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds');
+/* The seven GM packs were written before the rule and NOT ONE of their 54
+   cards has an option that moves nothing (their unit test asserts every
+   option moves something), and giving them one would move the recording.
+   A ratchet: a pack on this list may lack neutral options; any other pack
+   fails on its first card without one; a listed pack whose every card has
+   gained one fails until it leaves the list. */
+const NEUTRAL_BASELINE = ['afl', 'college', 'gym', 'mlb', 'nba', 'nfl', 'nhl'];
+const FX_NEUTRAL = fxPack('fx_neutral', [
+  fxHard('n1'), fxHard('n2'), fxCard('n3'),
+]);
+{
+  if (CONTROL === 'neutral') {
+    const c = FX_NEUTRAL.events[0].choices[1];
+    if (!c || c.karma !== 0 || E.gmNeutralIndex(FX_NEUTRAL.events[0].choices) !== 1) { console.error('neutral control: n1 has no neutral second option, refusing to run'); process.exit(2); }
+    c.karma = 1;
+  }
+  const FIXTURES = { FX_EXPIRE, FX_NEUTRAL };
+  const known = { ...ALL_PACKS, ...FIXTURES };
+  const bad = [];
+  for (const [k, p] of Object.entries(known)) {
+    const lacking = p.events.filter(e => E.gmNeutralIndex(e.choices) < 0).map(e => e.id);
+    if (NEUTRAL_BASELINE.includes(k)) { if (lacking.length === 0) bad.push(`${k} has a neutral option on every card now: take it off NEUTRAL_BASELINE`); }
+    else if (lacking.length) bad.push(`${k}: ${lacking[0]} has no option that moves nothing`);
+    for (const pr of E.gmPackProblems(p)) bad.push(`${k}: ${pr}`);
+  }
+  const missing = NEUTRAL_BASELINE.filter(k => !known[k]);
+  if (missing.length) bad.push(`NEUTRAL_BASELINE names packs the kit does not know: ${missing.join(', ')}`);
+  for (const b of bad.slice(0, 8)) console.error(`     ${b}`);
+  if (bad.length) fail(8, `${bad.length} neutral or pack problems`);
+  else ok(`${Object.keys(known).length} packs: the ${NEUTRAL_BASELINE.length} on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem`);
+  const breaks = [
+    ['a zero weight', fxPack('fx_break', [fxCard('b', { weight: 0 })]), /weight 0/],
+    ['an expiring card with nothing neutral', fxPack('fx_break', [fxCard('b', { expires: 2, choices: [{ label: 'Act on it', reply: 'Done.', karma: 2 }] })]), /moves nothing/],
+    ['an undeclared subject fact', fxPack('fx_break', [fxCard('b', { subject: { fact: 'nobody' } })]), /does not declare/],
+  ];
+  const held = breaks.filter(([, p, re]) => { try { E.bindGmInbox(p, BINDING); return false; } catch (err) { return re.test(String(err.message)); } });
+  if (held.length !== breaks.length) fail(8, `bind refused only ${held.length} of ${breaks.length} broken packs`);
+  else ok(`bind refuses ${breaks.map(b => b[0]).join(', ')}`);
 }
 
 /* ═══ 9. SEASON CLOCK: careerEventDeck's rule, and the week rule kept ═══ */

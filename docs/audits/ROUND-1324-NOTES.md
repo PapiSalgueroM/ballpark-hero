@@ -95,3 +95,28 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   with and without wordings the same 15,517 deals and 60,001 deck draws at seed 1; another key reads other words on
   6,483 weeks of the same deal. FX_SEASON: 3,336 of 12,000 cards held out, zero disagreements with onCooldown.
   Controls on this PC (shard afl): textrng red section 6, seasonweek red section 9 (864 disagreements).
+
+## Step (d): expiry and the neutral rule
+
+- `expires` (3.3.6): a message of such a card carries `w` (the tick it arrived) and, once settled, `auto: true`; no
+  other message gains either field (kit section 2 checks every GM desk state). At step (2) of the week, after both
+  books are rebased, an open message whose def still exists and still expires, with `clock - w >= expires`, is
+  replaced (never written into) by a copy answered on its neutral option with `auto` set. Nothing moves: it does not go
+  through the answer flow. It counts as answered from step (3), so its slot is free the same week and the kept cap
+  drops it first. A message whose def is gone or lost its expiry stays open; a `w` from the future is rebased.
+- Judgement call: the neutral index is read off the message's own saved choices, not the def's, because `answered`
+  indexes the saved choices; on a deal they are the same array, and if a later pack edit removed the neutral option
+  the message stays open (fail closed) instead of landing on a wrong option.
+- `gmExpiredLine(msg, pack)` returns `📨 <voice>: your assistant dealt with it (<neutral label>).` read off the saved
+  message (so a later pack edit never rewrites a line already on a desk); `pack` is accepted for the brief's call shape
+  and not read. Null for any message not settled this way.
+- `isMsg` in the repair accepts a finite `w` and `auto: true` on an answered message only; anything else bends the
+  message and the inbox resets alone (today's rule).
+- gmPackProblems names an `expires` that is not a whole number at or above 1, and an expiring card with no option
+  that moves nothing; bind refuses both.
+- NEUTRAL_BASELINE (kit section 8) holds the seven GM packs, whose 54 cards have no neutral option; every other pack
+  the kit knows (today the fixtures) must have one on every card.
+- Measured (kit, seeds 1 to 10): FX_EXPIRE on 20 silent desks, 2,634 cards settled at seed 1, every one at exactly
+  w plus expires on option 1 with no meter moved; silent desks dealt 44.75 to 45.42 times the cards of the same pack
+  without expiry (which freezes at three open), floor 30. Controls on this PC (shard afl): expireoff red section 7
+  (0 settled, 1.0 times), expirefx red section 7 (6,570 breaks), neutral red section 8.

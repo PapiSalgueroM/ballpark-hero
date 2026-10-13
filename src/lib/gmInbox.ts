@@ -47,8 +47,10 @@
    one week), and a subject with the pack's subjectRest (no one man is the
    subject twice inside the rest), wordings (texts, picked by a keyed draw,
    never the deck's), and a season clock (a between seasons deck counts its
-   cooldowns in seasons, careerEventDeck's rule). gmPackProblems is the one
-   place every pack check lives; bindGmInbox refuses a pack with any.
+   cooldowns in seasons, careerEventDeck's rule), and expiry (a card left
+   open too long is settled on its neutral option, moving nothing, so a busy
+   desk never freezes the deck). gmPackProblems is the one place every pack
+   check lives; bindGmInbox refuses a pack with any.
 
    A seat delivers through gmInboxWeek, never through careerInbox's own
    receive or deliver: those know nothing of conditions or cooldowns and
@@ -119,6 +121,16 @@ export interface GmEventDef extends Omit<InboxMessageDef, 'phase' | 'choices' | 
   /** More wordings of the same card: text is wording 0, these are 1 to n.
    *  The words only, never an option or a number. */
   texts?: string[];
+  /** Ticks it may sit open before the desk's staff settle it on its neutral
+   *  option, moving nothing. Needs a neutral option. */
+  expires?: number;
+}
+
+/** A delivered message. Only a card that expires carries w (the tick it
+ *  arrived) and, once settled for you, auto. */
+export interface GmInboxMessage extends InboxMessage {
+  w?: number;
+  auto?: true;
 }
 
 /** Words for the meters, so the card reads in the seat's own language. */
@@ -250,6 +262,8 @@ export function gmPackProblems(pack: GmInboxPack): string[] {
   if (pack.subjectRest !== undefined && !whole(pack.subjectRest, 0)) out.push(`subjectRest ${pack.subjectRest} is not a whole number`);
   if (pack.clock !== undefined && pack.clock !== 'week' && pack.clock !== 'season') out.push(`clock ${pack.clock} is neither week nor season`);
   for (const e of pack.events) {
+    if (e.expires !== undefined && !whole(e.expires, 1)) out.push(`${e.id} expires after ${e.expires}`);
+    else if (e.expires !== undefined && gmNeutralIndex(e.choices) < 0) out.push(`${e.id} expires with no option that moves nothing`);
     if (e.texts !== undefined && !(Array.isArray(e.texts) && e.texts.every(t => typeof t === 'string' && t.length > 0))) out.push(`${e.id} has an empty wording`);
     const w = e.weight;
     if (w !== undefined && !(typeof w === 'number' && Number.isFinite(w) && w > 0)) out.push(`${e.id} has weight ${w}`);
@@ -372,6 +386,20 @@ export function gmInboxWeek<S extends GmInboxHost>(
     rest = {};
     for (const [k, at] of Object.entries(s.gmInboxRest)) if (clock - Math.min(at, clock) < restFor) rest[k] = Math.min(at, clock);
   }
+  /* Expiry: a card left open its `expires` ticks is settled on its neutral
+     option and nothing moves (not through the answer flow, whose clamp could
+     move a meter). It counts as answered from here on, so its slot is free
+     this week. A card whose def is gone or no longer expires stays open, and
+     a tick from the future is rebased like the book. */
+  for (let i = 0; i < inbox.length; i++) {
+    const m = inbox[i] as GmInboxMessage;
+    if (m.answered !== undefined || m.w === undefined) continue;
+    const w = Math.min(m.w, clock);
+    const ttl = pack.events.find(e => e.id === m.defId)?.expires;
+    const n = gmNeutralIndex(m.choices);
+    if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };
+    else if (w !== m.w) inbox[i] = { ...m, w };
+  }
   const open = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));
   const came = gmEligible(pack, beat, facts, used, last, clock, rest).filter(e => rng() < (e.chance ?? pack.chance));
@@ -397,10 +425,11 @@ export function gmInboxWeek<S extends GmInboxHost>(
        The picked words are saved whole. */
     const alt = e.texts?.length ?? 0;
     const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;
-    const msg: InboxMessage = {
+    const msg: GmInboxMessage = {
       id, defId: e.id, from: e.from, emoji: e.emoji, text: pick > 0 ? e.texts![pick - 1] : e.text,
       year, choices: e.choices, beat: e.beat,
     };
+    if (e.expires !== undefined) msg.w = clock;
     inbox.push(msg);
     fresh.push(msg);
     if (e.oneShot) used.push(e.story ? bookKey(e) : e.id);
@@ -471,6 +500,16 @@ export function answerGmInbox<S extends GmInboxHost>(
   return `📨 ${msg.from}: ${c.label}.${fx.length ? ` ${fx.join(', ')}.` : ''}`;
 }
 
+/** The line a seat shows for a card the staff settled, null for any other.
+ *  The voice and the label are read off the saved message, so a later edit
+ *  of the pack never rewrites a line already on a desk; `pack` is accepted
+ *  for the call shape the deck's binders use. */
+export function gmExpiredLine(msg: InboxMessage, pack?: GmInboxPack): string | null {
+  const m = msg as GmInboxMessage;
+  const c = m.auto && m.answered !== undefined ? m.choices[m.answered] : undefined;
+  return c ? `📨 ${m.from}: your assistant dealt with it (${c.label}).` : null;
+}
+
 /** Open decisions sitting on the desk. */
 export function gmInboxOpen(s: GmInboxHost): number {
   return (s.phoneInbox ?? []).filter(m => m.answered === undefined).length;
@@ -480,11 +519,14 @@ export function gmInboxOpen(s: GmInboxHost): number {
 
 const isMsg = (m: unknown): m is InboxMessage => {
   const o = m as InboxMessage;
+  const g = m as GmInboxMessage;
   return !!o && typeof o === 'object' && typeof o.id === 'string' && typeof o.defId === 'string'
     && typeof o.from === 'string' && typeof o.text === 'string' && typeof o.year === 'number'
     && Array.isArray(o.choices) && o.choices.length > 0
     && o.choices.every(c => !!c && typeof c.label === 'string' && typeof c.karma === 'number' && Number.isFinite(c.karma))
-    && (o.answered === undefined || (Number.isInteger(o.answered) && o.answered >= 0 && o.answered < o.choices.length));
+    && (o.answered === undefined || (Number.isInteger(o.answered) && o.answered >= 0 && o.answered < o.choices.length))
+    && (g.w === undefined || (typeof g.w === 'number' && Number.isFinite(g.w)))
+    && (g.auto === undefined || (g.auto === true && o.answered !== undefined));
 };
 
 /**
