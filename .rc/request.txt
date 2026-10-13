@@ -1,0 +1,6 @@
+slots-head: node scripts/simClubManagerSlots.mjs
+slots-noown: R=$PWD; W=/tmp/w-slots-noown; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutNoOwn.mjs $W && cd $W && node scripts/simClubManagerSlots.mjs
+size-head: node scripts/simClubManagerSaveSize.mjs
+size-noown: R=$PWD; W=/tmp/w-size-noown; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutNoOwn.mjs $W && cd $W && node scripts/simClubManagerSaveSize.mjs
+slots-69cb: R=$PWD; W=/tmp/w-slots-69cb; git worktree add -q $W 69cb5fc8dae2a38c70e28d3ac833fe3ffbaa1377 && ln -s $R/node_modules $W/node_modules && cd $W && node scripts/simClubManagerSlots.mjs
+rules-noown: R=$PWD; W=/tmp/w-rules-noown; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutNoOwn.mjs $W && cd $W && node scripts/simCmLeagueRules.mjs
