@@ -1,0 +1,2 @@
+src/lib/gmInbox.ts(400,77): error TS2353: Object literal may only specify known properties, and 'w' does not exist in type 'InboxMessage'.
+src/lib/gmInbox.ts(401,44): error TS2353: Object literal may only specify known properties, and 'w' does not exist in type 'InboxMessage'.
