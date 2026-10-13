@@ -1,0 +1,16 @@
+1) articles: the board asks, the weekly news and the source
+   6181 labels read; title asks per league: Premier League 5, EFL Championship 1, La Liga 3, Serie A 5, Bundesliga 3, Ligue 1 3, Eredivisie 3, Saudi Pro League 2, MLS Eastern Conference 2, MLS Western Conference 2, Primeira Liga 3, Scottish Premiership 2, Süper Lig 3, 2. Bundesliga 1, Belgian Pro League 3, Austrian Bundesliga 2, Super League Greece 4, Danish Superliga 2, Swiss Super League 2, SuperSport HNL 4, Brasileirão Série A 4, Liga MX 2, A-League Men 2, Serie B 1, Ligue 2 1, Segunda División 1, Russian Premier League 5, era2010 Premier League 4, era2010 La Liga 4, era2010 Serie A 4, era2010 Bundesliga 4, era2010 Ligue 1 2, era2015 Premier League 4, era2015 La Liga 4, era2015 Serie A 4, era2015 Bundesliga 4, era2015 Ligue 1 2, era2005 Premier League 4, era2005 La Liga 4, era2005 Serie A 4, era2005 Bundesliga 3, era2005 Ligue 1 2, era2020 Premier League 4, era2020 La Liga 4, era2020 Serie A 4, era2020 Bundesliga 4, era2020 Ligue 1 4
+   Barcelona (La Liga): 48 headlines, 15 table lines, e.g. "📊 Atlético Madrid top La Liga on 9 points after 3 rounds."
+   Juventus (Serie A): 47 headlines, 15 table lines, e.g. "⚽ Roma have the sharpest attack in Serie A: 11 scored in 4 rounds."
+   PSG (Ligue 1): 40 headlines, 12 table lines, e.g. "📊 PSG top Ligue 1 on 9 points after 3 rounds."
+   source guard: 82 files, 3 league interpolations after "the", allowlisted 1 (the article belongs to "double"), 2 (the article belongs to "leaders")
+2) drama: every sentence of a drama line opens on a capital
+   the engine: 325 calls, 83 drama lines, every one of 21 entries landed
+   21 entries x 56 ordered pairs: 1176 lines read
+3) the break note and the calendar line: this calendar's rule, never football's
+   4 notes and 4 calendar lines read; e.g. "International window, 21 Sep to 6 Oct (up to 4 games for each country). This calendar plays on through it: your internationals go after your last game before it and come back tired for the next one."
+4) the staff approach: offers counted, the weeks given
+   2 left: "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 2 more offers this season."
+   1 left: "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 1 more offer this season."
+   0 left: "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. You have matched all the offers you can this season, so he goes in 2 weeks unless you let him go sooner."
+simCmCopy: green on this tree. Sections 1, 2, 3, 4: Club Manager says what it means.

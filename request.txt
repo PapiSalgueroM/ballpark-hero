@@ -1,0 +1,21 @@
+# Round 1326 steps 3 to 5 at ea84ed63: the step checks, all four fleets, the digest legs and the staff recording diff
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+copyonly-ABCD: mkdir -p .tb1 && git archive c9c77eba src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A,B,C,D
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .tb0 && git archive c9c77eba src | tar -x -C .tb0 && CM_COPY_ROOT=$PWD/.tb0 node scripts/simCmCopy.mjs
+simCmCopy-article: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+simCmCopy-drama: CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+simCmCopy-intl: CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+simCmCopy-staff: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+rules-baseleg: mkdir -p .tb3 && git archive c9c77eba src | tar -x -C .tb3 && CM_RULES_ROOT=$PWD/.tb3 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-head: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-write: mkdir -p .tw && git archive HEAD^ | tar -x -C .tw && cd .tw && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/"
+staff-rec-base: mkdir -p .tg0 && git archive c9c77eba | tar -x -C .tg0 && cd .tg0 && GM_STAFF_RECORD=1 node scripts/simGmStaff.mjs; cp scripts/data/cmStaffFixture.json "$RC_OUT/staff-base.json"
+staff-rec-head: mkdir -p .tg1 && git archive HEAD^ | tar -x -C .tg1 && cd .tg1 && GM_STAFF_RECORD=1 node scripts/simGmStaff.mjs; cp scripts/data/cmStaffFixture.json "$RC_OUT/staff-head.json"
+simGmStaff: node scripts/simGmStaff.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
