@@ -1,0 +1,5 @@
+diag: MANAGER_SIZE_DIAGNOSTICS=/tmp/diag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs > /tmp/diag.log 2>&1; s=$?; grep "^DIAGNOSTIC" /tmp/diag.log | cut -c1-240; tail -3 /tmp/diag.log | cut -c1-240; exit $s
+unseeded-m1: bash .rc/x/uns.sh d84d8328d4f4422cdf58b45f069a7c550638e54b /tmp/u1
+unseeded-m1-guard-EXPECT-RED: bash .rc/x/uns.sh d84d8328d4f4422cdf58b45f069a7c550638e54b /tmp/u2 guard
+unseeded-m1-noinverse-EXPECT-RED: bash .rc/x/uns.sh d84d8328d4f4422cdf58b45f069a7c550638e54b /tmp/u3 noinverse
+unseeded-final-vs36: bash .rc/x/uns.sh HEAD /tmp/u4

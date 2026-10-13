@@ -1,0 +1,8 @@
+at 1a5e7aeff base 36cc9ffe control '': exit 1, FAIL lines 25
+  FAIL quiet Brentford (now) (quiet, seed 6221057) at step 1 early-1: the state differs, aiHeadlines: base ...nderland have come in for Caspar Lammert. Match them or lose him: 2 matches left... this tree ...nderland have come in for Caspar Lammert, your lead s
+  FAIL quiet Brentford (now) (quiet, seed 6221058) at step 1 early-1: the state differs, aiHeadlines: base ...nderland have come in for Caspar Lammert. Match them or lose him: 2 matches left... this tree ...nderland have come in for Caspar Lammert, your lead s
+  FAIL quiet Brentford (now) (quiet, seed 6221059) at step 1 early-1: the state differs, aiHeadlines: base ...nderland have come in for Caspar Lammert. Match them or lose him: 2 matches left... this tree ...nderland have come in for Caspar Lammert, your lead s
+  FAIL quiet Cardiff City (now) (quiet, seed 6221057) at step 4 early-4: the state differs, inbox: base ...f protein cereal in the players lounge. your star man reckons it tastes like dry... this tree ...f protein cereal in the players lounge. Your star man re
+  FAIL quiet AC Horsens (now) (quiet, seed 6221057) at step 27 finish: the state differs, pendingSummary: base ...d) · £85m budget · the board wants: Win the Serie A"}],"seasonScore":48,"seasonS... this tree ...d) · £85m budget · the board wants: Win Ser
+  FAIL quiet AC Horsens (now) (quiet, seed 6221058) at step 27 rest-18: the state differs, approach: base ...ga · £89m budget · the board wants: Win the La Liga","week":35,"expiresWeek":40}... this tree ...ga · £89m budget · the board wants: Win La Liga"
+simCmUnseededWorld: 110 FAILURE(S)

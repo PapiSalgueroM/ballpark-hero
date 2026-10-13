@@ -1,0 +1,5 @@
+unseeded-m1-guard-EXPECT-RED exit=1 187s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+unseeded-m1 exit=0 199s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 36cc9ffe (state, draws and saved bytes at every step), and 15 new careers w
+unseeded-m1-noinverse-EXPECT-RED exit=1 43s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+unseeded-final-vs36 exit=1 157s | simCmUnseededWorld: 110 FAILURE(S)
+diag exit=0 523s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
