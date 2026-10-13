@@ -1,0 +1,13 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 34s | base server 200
+control-noscroll exit=1 20s | playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+control-nosticky exit=1 21s | playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (573 to 645 of 640) (B 50
+control-small exit=1 26s | playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 108 pass 57 fail)
+control-cut exit=1 26s | playCmHubLanding: CONTROL cut FIRED, 60 C check(s) went red, first: s320 Liverpool team: cut: Board wants line: "Board wants Win the Premier League" (242/40 wide, 17/17 t
+control-drift exit=1 132s | playCmHubLanding: CONTROL drift FIRED, 6 D check(s) went red, first: liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44 (D 6 pass 6 fai
+walk-base exit=1 41s | playCmHubLanding: 20 failure(s) (A 0 pass 8 fail, B 51 pass 12 fail, E 4 pass 0 fail)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures-1 exit=1 18s | Node.js v24.21.0
+playCmRealFixtures-2 exit=1 19s | Node.js v24.21.0
+playCmRealFixtures-3 exit=1 19s | Node.js v24.21.0

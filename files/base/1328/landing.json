@@ -1,0 +1,146 @@
+{
+ "landing": [
+  {
+   "id": "liverpool-take-390",
+   "scrollY": 1743,
+   "top": -1630,
+   "bottom": -1522,
+   "vh": 844
+  },
+  {
+   "id": "liverpool-skip-390",
+   "scrollY": 1794,
+   "top": -1681,
+   "bottom": -1573,
+   "vh": 844
+  },
+  {
+   "id": "celta-skip-320",
+   "scrollY": 2118,
+   "top": -2005,
+   "bottom": -1868,
+   "vh": 640
+  },
+  {
+   "id": "aberdeen-take-1280",
+   "scrollY": 1276,
+   "top": -1151,
+   "bottom": -1071,
+   "vh": 900
+  },
+  {
+   "id": "aberdeen-skip-1280",
+   "scrollY": 1276,
+   "top": -1151,
+   "bottom": -1071,
+   "vh": 900
+  },
+  {
+   "id": "everton2005-newyear-390",
+   "scrollY": 1826,
+   "top": -1713,
+   "bottom": -1608,
+   "vh": 844
+  },
+  {
+   "id": "liverpool-autumn-320",
+   "scrollY": 2231,
+   "top": -2118,
+   "bottom": -1981,
+   "vh": 640
+  },
+  {
+   "id": "liverpool-season2-390",
+   "scrollY": 882,
+   "top": -769,
+   "bottom": -643.5,
+   "vh": 844
+  }
+ ],
+ "fails": [
+  {
+   "section": "A",
+   "msg": "liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)"
+  },
+  {
+   "section": "A",
+   "msg": "liverpool-skip-390: hub header top -1681 px at scrollY 1794 on the first hub frame (screen 844 px)"
+  },
+  {
+   "section": "A",
+   "msg": "celta-skip-320: hub header top -2005 px at scrollY 2118 on the first hub frame (screen 640 px)"
+  },
+  {
+   "section": "A",
+   "msg": "aberdeen-take-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)"
+  },
+  {
+   "section": "A",
+   "msg": "aberdeen-skip-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)"
+  },
+  {
+   "section": "A",
+   "msg": "everton2005-newyear-390: hub header top -1713 px at scrollY 1826 on the first hub frame (screen 844 px)"
+  },
+  {
+   "section": "A",
+   "msg": "liverpool-autumn-320: hub header top -2118 px at scrollY 2231 on the first hub frame (screen 640 px)"
+  },
+  {
+   "section": "A",
+   "msg": "liverpool-season2-390: from scrollY 23218 at the review, hub header top -769 px on the first frame of season 2 (6 presses to the review)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the page moved 541 px (scrollY 643 to 1184)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the tapped day is still on screen (-42 px)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320: the calendar says neither Rest first nor Full training"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 first row, an in page click: the page moved 960 px (scrollY 182 to 1142)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 first row, an in page click: the tapped day is still on screen (-282 px)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390: the calendar says neither Rest first nor Full training"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 first row, an in page click: the page moved 870 px (scrollY 113 to 983)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 first row, an in page click: the tapped day is still on screen (-282 px)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280: the calendar says neither Rest first nor Full training"
+  }
+ ],
+ "counts": {
+  "B": 51,
+  "E": 4
+ }
+}
