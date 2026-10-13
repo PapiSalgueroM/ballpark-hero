@@ -1,0 +1,35 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=replay
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72521 events dealt, 340264 deck draws, 296 repeat ids suffixed on FALLEN desks (20.5 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+     nfl|1|FLEET: hash f1aa6f089d0b not c443aa155725, deck draws 11188 not 8476, deals 2783 not 2793, first desk that moved 0
+     nfl|1|SILENT: hash 1d7d3dff7540 not f4768176b0b9, deck draws 1635 not 1574, deals 60 not 60, first desk that moved 0
+     nfl|1|STUBBORN: hash d85403082cdc not f149a008fe2d, deck draws 2288 not 1693, deals 569 not 545, first desk that moved 0
+     nfl|1|FALLEN: hash cfe41d8563bd not 77803172be13, deck draws 728 not 531, deals 180 not 182, first desk that moved 0
+     nfl|2|FLEET: hash 8871e0717abc not a81402e0f7a7, deck draws 11286 not 8622, deals 2793 not 2815, first desk that moved 0
+     nfl|2|SILENT: hash e3453be6fb9a not a22ca112aec3, deck draws 1655 not 1601, deals 60 not 60, first desk that moved 1
+     nfl|2|STUBBORN: hash 8aa21901978f not 2b402024437a, deck draws 2200 not 1659, deals 536 not 534, first desk that moved 0
+     nfl|2|FALLEN: hash eafb63887f77 not 617ed95f2001, deck draws 701 not 535, deals 180 not 184, first desk that moved 0
+     nfl|3|FLEET: hash c49878c3dd9f not 89f7b691ca1a, deck draws 11463 not 8592, deals 2832 not 2824, first desk that moved 0
+     nfl|3|SILENT: hash e3a79b2a4b90 not 2278e547313f, deck draws 1621 not 1576, deals 60 not 60, first desk that moved 0
+     nfl|3|STUBBORN: hash 594d213cbfaa not bbbb4c85de09, deck draws 2272 not 1709, deals 559 not 565, first desk that moved 0
+     nfl|3|FALLEN: hash f2800c6a6323 not f739d6253a74, deck draws 749 not 552, deals 188 not 187, first desk that moved 0
+   FAIL 84 of 84 rows differ from the recording
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+   ok nfl seed 1 dealt the same 2783 events twice; seed 4 dealt another deck
+   ok all 212800 desk states of seed 1 repaired to themselves
+   ok 28 rows dealt byte equal with a reload between every two weeks
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+   FAIL every card at weight 1 moved the FLEET rows of nfl, nba, mlb, nhl, college, gym, afl
+   FAIL every card at weight 2.5 moved the FLEET rows of nfl, nba, mlb, nhl, college, gym, afl
+   ok FX_WEIGHT (weights 1 and 3): the light card took 0.2424 of 10000 deals (band 0.23 to 0.272)
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+   ok 6096 story cards over 100 ten season desks, no story twice in a week or inside a cooldown, the one shot story once a desk
+   ok without the story field the same cards dealt 10719, 1.76 times as many (floor 1.5)
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+   ok 13327 subject cards over 50 desks of 400 weeks, none inside its rest or twice in a week, the book never above 5 entries
+   ok subjectRest 0 deals exactly as no subjects (764 deals, 3566 draws) and writes no book
+   ok no GM desk gained gmInboxRest over section 2's 212800 states
+
+runtime 52.7 s
+simEventDeck: 3 failures, red sections 1, 3 (CONTROL=replay fired)
