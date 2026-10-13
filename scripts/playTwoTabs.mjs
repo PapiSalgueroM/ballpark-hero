@@ -550,9 +550,12 @@ async function caseBack(ctx, tag) {
     if (!into.hub) { fail(9, `${how}: tab A never reached the hub by ${into.how}`); await A.close(); continue; }
     if (live) {
       await A.locator('button:visible[data-cm-way="live"]').first().click({ timeout: 5000 }).catch(() => {});
-      const staged = await A.locator('[data-cm-live-stage]').first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
-      if (!staged) fail(9, 'tab A never put a live match on the stage');
+      const clock = A.locator('[data-cm-live-minute]').first();
+      const staged = await clock.waitFor({ state: 'attached', timeout: 15000 }).then(() => true).catch(() => false);
       await A.waitForTimeout(5000);
+      const minute = Number(await clock.getAttribute('data-cm-live-minute', { timeout: 2000 }).catch(() => null) ?? 0);
+      if (!staged || !(minute > 0)) fail(9, `tab A's live match never ran (stage ${staged}, minute ${minute})`);
+      else note(`tab A's live match is in minute ${minute}`);
     }
     const B = await newPage(ctx);
     await openCM(B);
