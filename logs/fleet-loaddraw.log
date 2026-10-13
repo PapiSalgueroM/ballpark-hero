@@ -1,0 +1,7 @@
+fleet: 3 careers x seeds 0 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/base2
+NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=loaddraw rewrote clubManager.ts in the fleet-head bundle
+  301 saves on head, 0 of them in a state a load repair fires on; 0 faces equal to the base commit's (both saves' bytes and the draw count)
+  FAIL [fleet]: head and base part: Everton (today) seed 0: head "start|0297393f9683a321|6b2386eccf6fbb76|707" base "start|0297393f9683a321|6b2386eccf6fbb76|706"
+  old saves: 4 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section fleet: 306 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=loaddraw fired 1 times and section fleet went red with 1 findings
