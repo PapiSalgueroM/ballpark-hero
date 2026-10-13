@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+readers2 exit=0 107s | simSaveKeeper exit=0 | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+readers1 exit=0 147s | simNbaOpeningRatings exit=0 | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historic
+fences exit=1 262s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and a
