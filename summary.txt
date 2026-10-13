@@ -1,0 +1,8 @@
+simBooks exit=0 15s | simBooks: green. Every number these games show agrees with every other number they show.
+simCmVarLedger exit=0 0s | simCmVarLedger: all 691 checks passed.
+simClubManager exit=0 41s | ALL CLUB MANAGER SIMS PASSED
+simCmLeagueRules exit=0 71s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+vitest-own exit=0 28s |    Duration  27.77s (transform 3.36s, setup 409ms, collect 7.97s, tests 30.03s, environment 2.63s, prepare 1.05s)
+tsc exit=0 100s | 
+dup-probe exit=0 5s | DUP done: 0 of 3 careers repeat a name
+simFreeAgents exit=0 93s | simFreeAgents: all sections passed
