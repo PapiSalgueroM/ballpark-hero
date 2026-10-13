@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildDraftOrder, draftRulesFor, draftSlots, earnedByStaff, earnedContinue, earnedDraftHeading, earnedDraftHelp,
-  earnedPick, lotteryChancesLine, lotteryRangeLine, openDraftNight, ordinal,
+  earnedPick, lotteryChancesLine, lotteryRangeLine, movePicks, newLedger, openDraftNight, ordinal, pickKey,
   type DraftSeason, type GmDraftHost, type GmDraftNight,
 } from './gmEarnedDraft';
-import { NBA_PICK_RULES, movePicks, newLedger, pickKey } from './gmPicks';
+import { nbaGamePickRules } from './nbaGmDesk';
 
-/* A toy league through the shared half, so the presses are proven before any sport binds them. The lift is reached
-   only through gmEarnedDraft's own re-exports. */
+/* A toy league through the shared half, so the presses are proven before any sport binds them. The lift, the pick
+   ledger of gmPicks included, is reached only through gmEarnedDraft's own re-exports (advice 17); the one lottery
+   table the game has comes from the NBA desk's pick rules, the ones its bind draws on. */
+const PICK_RULES = nbaGamePickRules();
 interface Man { id: string; name: string; pos: string; true: number; scout: number }
 interface Toy { markers: Record<string, number[]>; signed: { club: string; id: string; overall: number }[] }
 
@@ -17,7 +19,7 @@ const season: DraftSeason = {
   rows: CLUBS.map((id, i) => ({ id, wins: 12 + 2 * i, losses: 70 - 2 * i, made: i >= 14 })),
 };
 const rules = draftRulesFor('nba', 2027)!;
-const order = buildDraftOrder(season, rules, NBA_PICK_RULES);
+const order = buildDraftOrder(season, rules, PICK_RULES);
 
 const host: GmDraftHost<Toy, Man> = {
   consume(league, club, slot) {
@@ -41,7 +43,7 @@ const toyClass = (n: number): Man[] => Array.from({ length: n }, (_, i) => ({
 
 /** A night over a ledger with `moves` ([round, first owner, new holder]) and a league whose markers are the slots'. */
 function setUp(moves: [number, string, string][] = []): { night: GmDraftNight; league: Toy } {
-  let ledger = newLedger(CLUBS, 2026, NBA_PICK_RULES);
+  let ledger = newLedger(CLUBS, 2026, PICK_RULES);
   for (const [round, orig, to] of moves) ledger = movePicks(ledger, [pickKey({ year: 2026, round, orig })], to);
   const night = openDraftNight(order, draftSlots(order, ledger, 2026, 2), 2026);
   const markers: Record<string, number[]> = Object.fromEntries(CLUBS.map(c => [c, []]));
@@ -152,19 +154,19 @@ describe('the heading, from the slots', () => {
 describe('the worked example and the chances are computed from the night and the table', () => {
   it('his own pick: where it was seeded, how far it could move, where it landed', () => {
     for (const f of order.lottery!.field) {
-      const line = lotteryRangeLine(order, f.club, NBA_PICK_RULES.lottery)!;
+      const line = lotteryRangeLine(order, f.club, PICK_RULES.lottery)!;
       const hi = Math.min(order.lottery!.field.length, f.seed + order.lottery!.wins.length);
       expect(line).toBe(`Your club's own pick was seeded ${ordinal(f.seed)}: it could land anywhere from 1st to ${ordinal(hi)}, and it landed ${ordinal(firstOf(f.club))}.`);
     }
-    expect(lotteryRangeLine(order, order.first[29], NBA_PICK_RULES.lottery)).toBeNull();
+    expect(lotteryRangeLine(order, order.first[29], PICK_RULES.lottery)).toBeNull();
   });
 
   it('the chances line is the table, and the sport blocks come after the lottery blocks', () => {
-    const total = NBA_PICK_RULES.lottery!.odds.reduce((a, b) => a + b, 0);
-    const want = NBA_PICK_RULES.lottery!.odds.map(o => `${Math.round((o / total) * 1000) / 10}%`).join(', ');
-    expect(lotteryChancesLine(order, NBA_PICK_RULES.lottery)).toBe(`By the table, the chances at the first pick, worst record first: ${want}.`);
-    expect(lotteryChancesLine(order, { ...NBA_PICK_RULES.lottery!, table: 'another' })).toBeNull();
-    const help = earnedDraftHelp(setUp().night, rules, NBA_PICK_RULES.lottery, [{ heading: 'Ours', lines: ['One line.'] }, { heading: 'Empty', lines: [] }]);
+    const total = PICK_RULES.lottery!.odds.reduce((a, b) => a + b, 0);
+    const want = PICK_RULES.lottery!.odds.map(o => `${Math.round((o / total) * 1000) / 10}%`).join(', ');
+    expect(lotteryChancesLine(order, PICK_RULES.lottery)).toBe(`By the table, the chances at the first pick, worst record first: ${want}.`);
+    expect(lotteryChancesLine(order, { ...PICK_RULES.lottery!, table: 'another' })).toBeNull();
+    const help = earnedDraftHelp(setUp().night, rules, PICK_RULES.lottery, [{ heading: 'Ours', lines: ['One line.'] }, { heading: 'Empty', lines: [] }]);
     expect(help[help.length - 1]).toEqual({ heading: 'Ours', lines: ['One line.'] });
     expect(help.some(b => b.heading === 'Empty')).toBe(false);
     expect(help.findIndex(b => b.heading === 'The chances')).toBeLessThan(help.length - 1);

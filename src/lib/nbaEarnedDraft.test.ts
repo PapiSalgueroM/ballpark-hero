@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { NBA_ROUNDS, initNbaLeague, nbaProspectToPlayer, type NbaLeague, type NbaProspect, type SeriesResult } from './nbaFrontOffice';
 import { nbaContractsOf, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
 import { withGmBlock, type GmDesk } from './gmDesk';
-import { NBA_PICK_RULES, movePicks, pickKey } from './gmPicks';
+import { movePicks, pickKey } from './gmEarnedDraft';
 import { NBA_ROOKIE_SCALE_YEARS } from './gmContractRules';
 import {
   NBA_DRAFT_BLOCK, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost, nbaDraftNightOf,
@@ -213,8 +213,8 @@ describe('the "?" (correction 9)', () => {
   });
   it('prints no chance the table cannot compute', () => {
     const { night } = opened();
-    const total = NBA_PICK_RULES.lottery!.odds.reduce((a, b) => a + b, 0);
-    const table = new Set(NBA_PICK_RULES.lottery!.odds.map(o => Math.round((o / total) * 1000) / 10));
+    const total = nbaGamePickRules().lottery!.odds.reduce((a, b) => a + b, 0);
+    const table = new Set(nbaGamePickRules().lottery!.odds.map(o => Math.round((o / total) * 1000) / 10));
     const shown = nbaDraftHelp(night, ME).flatMap(b => b.lines).flatMap(l => [...l.matchAll(/(\d+(?:\.\d+)?)%/g)].map(m => Number(m[1])));
     expect(shown.length).toBeGreaterThan(10);
     for (const pct of shown) expect(table.has(pct)).toBe(true);

@@ -33,6 +33,7 @@ export type { DraftClubRow, DraftSeason, EarnedSlot, SavedDraftOrder } from './g
 export { lotteryNight, lotteryNightRule, ordinal } from './gmLotteryNight';
 export type { LotteryHelpBlock, LotteryNightView } from './gmLotteryNight';
 export type { GmDraftOrderRules } from '@/data/gmDraftOrder/rules';
+export { movePicks, newLedger, pickKey } from './gmPicks';
 export type { GmLotteryRules } from './gmPicks';
 
 /** Where the night stands after a press. */
