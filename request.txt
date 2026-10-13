@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit $s"; exit $s
+vitest: node_modules/.bin/vitest run src/test/useArrivalTop.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerWorldEditorPage.test.tsx --testTimeout=300000 --hookTimeout=120000
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+playClubManager: node scripts/playClubManager.mjs
