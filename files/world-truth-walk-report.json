@@ -1,0 +1,54 @@
+{
+  "site": "http://localhost:4173",
+  "control": null,
+  "runs": [
+    {
+      "tag": "320",
+      "steps": [
+        "A feed ok",
+        "A quiz ok",
+        "A story: 2 month lines",
+        "A story ok",
+        "B history broke",
+        "B card tiles qualifying/squad/matches widths 127/127/260 of 260",
+        "B card ok",
+        "C feed and bracket broke"
+      ]
+    },
+    {
+      "tag": "390",
+      "steps": [
+        "A feed ok",
+        "A quiz ok",
+        "A story: 2 month lines",
+        "A story ok",
+        "B history broke",
+        "B card tiles qualifying/squad/matches widths 162/162/330 of 330",
+        "B card ok",
+        "C feed and bracket broke"
+      ]
+    },
+    {
+      "tag": "1280",
+      "steps": [
+        "A feed ok",
+        "A quiz ok",
+        "A story: 2 month lines",
+        "A story ok",
+        "B history broke",
+        "B card tiles qualifying/squad/matches widths 339/339/684 of 684",
+        "B card ok",
+        "C feed and bracket broke"
+      ]
+    }
+  ],
+  "failures": [
+    "320 B history: page.waitForFunction: Timeout 30000ms exceeded.",
+    "320 C feed and bracket: page.waitForFunction: Timeout 30000ms exceeded.",
+    "390 B history: page.waitForFunction: Timeout 30000ms exceeded.",
+    "390 C feed and bracket: page.waitForFunction: Timeout 30000ms exceeded.",
+    "1280 B history: page.waitForFunction: Timeout 30000ms exceeded.",
+    "1280 C feed and bracket: page.waitForFunction: Timeout 30000ms exceeded."
+  ],
+  "knownSmall": []
+}
