@@ -1,0 +1,8 @@
+simCareerProgramme exit=1 3s | Node.js v24.21.0
+simCareerPressMarket exit=1 3s | Node.js v24.21.0
+simCareerTransferBrief exit=1 2s | Node.js v24.21.0
+simSoccerAgentReview exit=1 2s | Node.js v24.21.0
+simSoccerFarewell exit=1 2s | Node.js v24.21.0
+simSoccerInternationalReturn exit=1 2s | Node.js v24.21.0
+simSoccerVeteranTalks exit=0 53s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+simSoccerVeteranOffers exit=0 586s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms
