@@ -64,3 +64,22 @@ cfbDynasty.ts, cbbDynasty.ts, collegeProgram.ts, collegeRecruiting.ts, coachCall
 managerOffers.ts, keyedRng.ts, packs.ts, gmSport.ts, Celebration.tsx, CelebrationStyles.tsx, useRevealScroll.ts,
 continueSaves.ts, realSaves.mjs, front-office-shared, every front office board, the four gmDeskHost adapters,
 collegeDynastyFixture.json. gmSeat.ts and gmDeskHost.ts move only by the lift.
+
+## After the adversarial review (2026-10-13 UTC)
+
+Two lenses reviewed b670c2de (results-g/review-run-1320.md and review-read-1320.md). Fixed on the branch:
+- The market's double tap guard is cleared when a dynasty starts or resets; a second dynasty in one mount can
+  take its own bid (the board test, proven red with the clears removed).
+- "A program that let you go never calls again" is held: simCollegeSeat S5 tries every pair of programs on
+  keyed draws (46 of 1892 CFB markets and 52 of 1560 CBB markets meet the rule, 119 and 108 bids are dropped),
+  the controls allowfirer and bidfirer each remove one college filter alone, and collegeSeat.test.ts carries
+  both cases per sport.
+- The load bound for a coach who just moved (a stint from st.season + 1) is held by a unit case and by a reload
+  on the new trail after Take the job and after Go to.
+- His place in the rankings is checked against the engine's ranking (S1, control placeoff).
+- The board test's year out cannot skip itself, and its hostile list carries the two load rules it missed.
+- The tile's win total live line is in college words; the market has its own rules button; the tile's aria
+  label no longer hides its content; the new trail says where he coaches after a move; walk station 3 asserts
+  the Play button's move against the feed's and scrollY across Not now and Take the ask.
+Left for the lead: the tilt ruling (CFB as built, CBB's title ask), the fixed slot an older dynasty carries,
+and the What's New wording on a closed market (fixed in its own last commit; see fix-1320.md).

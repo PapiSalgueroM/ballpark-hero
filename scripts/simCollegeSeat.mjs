@@ -16,10 +16,13 @@
  *
  * Sections:
  *  S1 THE ASK. Every season start: the stored ask equals the harness's own oracle (seatMandate over the rank
- *     of the roster by the engine's strength, the defending champion's floor, and this game's tilt: in CBB a
- *     'respect' or 'rebuild' ask is lifted one step), in the pack's words, no raw placeholder, no dash, no
+ *     of the roster by the engine's strength, the defending champion's floor, and this game's tilt as BUILT
+ *     below: in CBB a 'respect' or 'rebuild' ask is lifted one step, in CFB every postseason ask, 'title',
+ *     'contend' and 'playoffs', is one step softer), in the pack's words, no raw placeholder, no dash, no
  *     'ownership' or 'franchise'. The first season of a job taken keeps that offer's ask. Prints how many
- *     season starts have a roster rank that differs from the prestige rank (must be above zero).
+ *     season starts have a roster rank that differs from the prestige rank (must be above zero). At the first
+ *     and the middle round of every season he holds the seat, his place (what the tile's live line reads
+ *     against the field) is where the engine's own ranking puts his program.
  *  S2 THE OUTCOME. Every graded season: the seat's outcome equals the harness's own reading of the engine's
  *     return (the field list, the game named for the final, the champion; for CBB the engine's myExit as a
  *     second witness), and the grade is gradeSeason's on it. Prints the grade shares per sport and ask tier,
@@ -63,9 +66,15 @@
  *   percent, 177 firings, 470 bids; CBB 13.3, 0.0, 0.9, 4.0 percent, 41 firings, 605 bids. With no football tilt
  *   (r1320-s1): CFB 87.1, 95.6, 67.1, 48.9 percent, 768 firings. S8 compared 57618 CFB and 72450 CBB rounds byte
  *   for byte. Every section counts and requires its own floor (firings, bids, feeds, years out, refusals above
- *   zero), so none can pass empty. The controls, each on seed 1 but allowfirer on all three, fired on r1320-s1c:
- *   rankbyprestige S1 2287, ccgcount S2 1266, flattrust S3 6201, firedends S4 244, allowfirer S5 5, anyseason S6
- *   985, bidtier S6 227, seatdraw S7, seatleak S8 4397, nextyear S9, yearoutskip SY 235.
+ *   zero), so none can pass empty. The controls, each on seed 1, fired on r1320-s1c: rankbyprestige S1 2287,
+ *   ccgcount S2 1266, flattrust S3 6201, firedends S4 244, anyseason S6 985, bidtier S6 227, seatdraw S7,
+ *   seatleak S8 4397, nextyear S9, yearoutskip SY 235.
+ *   After the review (r1320-fix-a, seeds 1,2,3, 248 s): S5's twice fired pairs met the wider rule in 46 of
+ *   1892 CFB markets and 52 of 1560 CBB markets, and 119 and 108 bids from a program that let him go were
+ *   dropped (keyed, the same on every seed), while the fleets met it 0 times; his place was checked 17202 and
+ *   17682 times. The controls added or narrowed then, on seed 1: allowfirer (the market filter alone) S5 198,
+ *   bidfirer (the bid filter alone) S5 229, placeoff S1 5714. allowfirer used to rewrite gmSeat's last program
+ *   rule as well and fired only on that rule, once over three seeds.
  */
 import fs from 'node:fs';
 import os from 'node:os';

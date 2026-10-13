@@ -114,8 +114,9 @@ export function rosterRank(view: CollegeLeagueView, id: string): number {
 
 /**
  * This game's change to the ladder, by sport and by the tier the ladder gives.
- * The ladder's fractions were set for pro leagues where 37 to 53 percent of the
- * teams make a postseason of series. College is neither:
+ * The ladder's fractions were set for pro leagues where 40 to 53 percent of the
+ * teams make a postseason of series (simGmSeat's leagues: MLB 12 of 30 to NBA 16
+ * of 30). College is neither:
  * - In college basketball 32 of the 40 programs make the national tournament,
  *   so a roster the ladder would ask only for a win total ('respect' or
  *   'rebuild') is asked one step more.
