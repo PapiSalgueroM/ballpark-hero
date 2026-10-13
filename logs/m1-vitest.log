@@ -1,0 +1,47 @@
+MUTATION M1 APPLIED to src/lib/soccerWorldTruth.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerWorldTruth.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 95[2mms[22m[39m
+[31m   [31m×[31m the boundary[2m > [22mholds the 2025-26 seasons and the 2026 summer as played, and nothing after[39m[32m 5[2mms[22m[39m
+[31m     → expected 2024 to be 2025 // Object.is equality[39m
+   [32m✓[39m the boundary[2m > [22mknows a summer at the finals from one at home, for every result the engine writes[32m 0[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mshows who won a tournament only for a summer still to come or finals he played[32m 0[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mnever hands a stage result to a summer played without him (the engine passes no form then)[32m 51[2mms[22m[39m
+   [32m✓[39m the boundary[2m > [22mwrites its feed lines in plain words with no dash[32m 1[2mms[22m[39m
+   [32m✓[39m the month and its year[2m > [22mputs August to December in the season year and January to May in the next[32m 0[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mgroups the ten positions exactly as the international squads do[32m 0[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mnever goes to a 6.0 keeper with no goals, nor to a season under ten games[32m 2[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mgoes to a keeper or a defender on his own football, and to a great season far more than a fair one[32m 16[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mnever wins more than four, keeps calendar order, and gives nothing in a month an injury took[32m 18[2mms[22m[39m
+   [32m✓[39m Player of the Month[2m > [22mis the same months for the same stream[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerWorldTruth.test.ts[2m > [22mthe boundary[2m > [22mholds the 2025-26 seasons and the 2026 summer as played, and nothing after
+[31m[1mAssertionError[22m: expected 2024 to be 2025 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2025[39m
+[31m+ 2024[39m
+
+[36m [2m❯[22m src/test/soccerWorldTruth.test.ts:[2m20:32[22m[39m
+    [90m 18| [39m[34mdescribe[39m([32m'the boundary'[39m[33m,[39m () [33m=>[39m {
+    [90m 19| [39m  it('holds the 2025-26 seasons and the 2026 summer as played, and not…
+    [90m 20| [39m    [34mexpect[39m([33mLAST_PLAYED_SEASON[39m)[33m.[39m[34mtoBe[39m([34m2025[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m 21| [39m    [34mexpect[39m([33mLAST_PLAYED_SUMMER[39m)[33m.[39m[34mtoBe[39m([34m2026[39m)[33m;[39m
+    [90m 22| [39m    [34mexpect[39m([33mLAST_REAL_YEAR[39m)[33m.[39m[34mtoBe[39m([34m2032[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 20:05:16
+[2m   Duration [22m 734ms[2m (transform 134ms, setup 31ms, collect 154ms, tests 95ms, environment 182ms, prepare 104ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerWorldTruth.test.ts,title=src/test/soccerWorldTruth.test.ts > the boundary > holds the 2025-26 seasons and the 2026 summer as played%2C and nothing after,line=20,column=32::AssertionError: expected 2024 to be 2025 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2025%0A+ 2024%0A%0A ❯ src/test/soccerWorldTruth.test.ts:20:32%0A%0A

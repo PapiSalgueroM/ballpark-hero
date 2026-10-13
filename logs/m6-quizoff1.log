@@ -1,0 +1,13 @@
+MUTATION M6 APPLIED to src/lib/soccerArcade.ts
+finished saves: this tree mean 57.4 KB, median 55.8 KB, the base mean 58.1 KB, median 56.8 KB (a reading, not a check)
+fleet: 400 careers a tree (seed offset 0, 5 seeds), 7075 seasons on this tree in 18 s, 7064 on the base
+1) Player of the Month reads the month's football, with the true year
+2) The month award and the world tick leave the season's draws where they were
+3) The phone's world says nothing it cannot stand behind
+4) The phone's quiz asks about the world only where the world is the game's own
+   this tree: three questions in 6675 of 6675 seasons (1); world questions about a season that happened 0, about a real man 0, answers not in the save 0, world questions asked 1904
+   base:      three questions in 6659 of 6664 seasons (1); world questions about a season that happened 7377, about a real man 4561, answers not in the save 0
+   old saves: 40 base careers at their 2028 world (40 holding a real man's move or tally) asked 120 questions here, 0 about a real man; 40 played a season on here, 0 threw, 0 grew a phone field, 0 real men left off their era club
+5) The season log and the International panel name a winner only where the rule allows
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+simSoccerWorldTruth: OK, every section green

@@ -1,0 +1,8 @@
+m1-vitest exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerWorldTruth.test.ts,title=src/test/soccerWorldTruth.test.ts > the boundary > holds the 2025-26 se
+m1-harness exit=0 38s | simSoccerWorldTruth: OK, every section green
+m2-reseat exit=1 37s | simSoccerWorldTruth: 1 FAILURES (section 3: 1)
+m3-legacy35 exit=0 8s | simSoccerWorldTruth: OK, every section green
+m4-quizgate exit=1 38s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+m5-feedoff1 exit=1 36s | simSoccerWorldTruth: 1 FAILURES (section 3: 1)
+m6-quizoff1 exit=0 37s | simSoccerWorldTruth: OK, every section green
+m7-logsummer exit=1 37s | simSoccerWorldTruth: 1 FAILURES (section 5: 1)
