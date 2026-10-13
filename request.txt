@@ -1,0 +1,20 @@
+#!serve
+#!playwright
+playClubManager: node scripts/playClubManager.mjs
+playCmLeagueFixtures: node scripts/playCmLeagueFixtures.mjs
+playEra2005: node scripts/playEra2005.mjs
+playClubManagerSlots: node scripts/playClubManagerSlots.mjs
+playClubManagerSaveLeave: node scripts/playClubManagerSaveLeave.mjs
+playClubManagerNewCountries: node scripts/playClubManagerNewCountries.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playSponsors: node scripts/playSponsors.mjs
+playInboxCard: node scripts/playInboxCard.mjs
+playNationJob: node scripts/playNationJob.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+playLightMode: node scripts/playLightMode.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+playCmQuickSubs: F="$PWD/.tmp-fx/fc4"; mkdir -p "$F" && FREE_KICK_FONT_CACHE="$F" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; FREE_KICK_FONT_CACHE="$F" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+playCmVar: F="$PWD/.tmp-fx/fc5"; mkdir -p "$F" && FREE_KICK_FONT_CACHE="$F" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; FREE_KICK_FONT_CACHE="$F" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+sweepPhone-cm: ROUTE=/club-manager node scripts/sweepPhone.mjs
+playGames-cm: ONLY=/club-manager node scripts/playGames.mjs
+sweepGames: ENGINES=chromium node scripts/sweepGames.mjs
