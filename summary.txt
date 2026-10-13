@@ -1,0 +1,11 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mut-m1 exit=0 7s | m1 SURVIVED: harness 0, vitest 0
+mut-m2 exit=1 6s | m2 CAUGHT: harness 1, vitest 0
+mut-m3 exit=0 6s | m3 SURVIVED: harness 0, vitest 0
+mut-m4 exit=0 8s | m4 SURVIVED: harness 0, vitest 0
+mut-m5 exit=0 6s | m5 SURVIVED: harness 0, vitest 0
+mut-m6 exit=1 6s | m6 CAUGHT: harness 0, vitest 1
+mut-m7 exit=1 6s | m7 CAUGHT: harness 1, vitest 0
+rerecord exit=0 1s | RERECORD from 48cb9d4b equals the committed fixture
+basebuild exit=0 23s | CMPDIST: byte identical modulo hashes, no new string shipped
+after exit=0 5s | simNbaEarnedDraft: green.

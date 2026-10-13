@@ -1,0 +1,9 @@
+MUTATION m2 APPLIED to src/lib/nbaFrontOffice.ts
+  FAIL [6]: men after today's twelve rated 66: 4512, the curve says 4071 (7.5 standard errors)
+  FAIL [6]: men after today's twelve rated 67: 4426, the curve says 4071 (6.0 standard errors)
+  FAIL [6]: men after today's twelve rated 68: 4514, the curve says 4071 (7.5 standard errors)
+  FAIL [6]: men after today's twelve rated 73: 5422, the curve says 5813 (5.5 standard errors)
+  FAIL [6]: men after today's twelve rated 74: 5419, the curve says 5813 (5.5 standard errors)
+  FAIL [6]: men after today's twelve rated 75: 5455, the curve says 5813 (5.0 standard errors)
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+m2 CAUGHT: harness 1, vitest 0

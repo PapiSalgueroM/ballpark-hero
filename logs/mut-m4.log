@@ -1,0 +1,9 @@
+MUTATION m4 APPLIED to src/lib/gmEarnedDraft.ts
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 8: green
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+m4 SURVIVED: harness 0, vitest 0
