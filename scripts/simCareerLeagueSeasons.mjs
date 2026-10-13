@@ -856,28 +856,50 @@ const r1327Out = { name: 'r1327out', setup(b) {
     return { contents: src, loader: 'ts' };
   });
 } };
-const r1329Rest = { name: 'r1329rest', setup(b) {
+const r1329RestFor = arm => ({ name: `r1329rest${arm}`, setup(b) {
   b.onLoad({ filter: /(soccerPhone|soccerArcade|InternationalPanel)\.tsx?$/ }, args => {
     const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
     if (!R1329_REST.includes(rel)) return undefined;
     const truth = [];
     const src = inverseWorldTruth(rel, readSrc(rel), truth);
     r1329Seen.push(...truth);
-    for (const receipt of truth) replayReceipt.inverses.push({ ...receipt, arm: '1327' });
+    for (const receipt of truth) replayReceipt.inverses.push({ ...receipt, arm });
     return { contents: src, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts' };
   });
-} };
+} });
 async function tree1327Out() {
   r1329Seen.length = 0;
-  const bundled = await bundle(ROOT, 'tree1327out', [r1327Out, r1329Rest, controlPlugin]);
+  const bundled = await bundle(ROOT, 'tree1327out', [r1327Out, r1329RestFor('1327'), controlPlugin]);
   const problem = worldTruthReceiptProblem(r1329Seen);
   if (problem) { console.error(`Round 1327 arm: ${problem}`); process.exit(2); }
+  return bundled;
+}
+/* Release BC put Round 1327 on main, so against a base that holds it the arm above, which takes 1327 out of this
+   tree as well, can never be equal, and a career Round 1329 moved fell through to the train's arm, whose stale
+   patch refuses (r1329-fx-f). This arm takes Round 1329 alone out of the engine, the phone, the quiz and the
+   panel, every row once, in order, with any control's edit riding along through readSrc; it is tried first, and
+   the 1327 arm stays for a base that holds neither round. */
+const r1329Engine = { name: 'r1329engine', setup(b) {
+  b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    const truth = [];
+    const src = inverseWorldTruth('src/lib/soccerCareerEngine.ts', readSrc('src/lib/soccerCareerEngine.ts'), truth);
+    r1329Seen.push(...truth);
+    for (const receipt of truth) replayReceipt.inverses.push({ ...receipt, arm: '1329' });
+    return { contents: src, loader: 'ts' };
+  });
+} };
+async function tree1329Out() {
+  r1329Seen.length = 0;
+  const bundled = await bundle(ROOT, 'tree1329out', [r1329Engine, r1329RestFor('1329'), controlPlugin]);
+  const problem = worldTruthReceiptProblem(r1329Seen);
+  if (problem) { console.error(`Round 1329 arm: ${problem}`); process.exit(2); }
   return bundled;
 }
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
-  let by1327 = 0; let Mout1327 = null;
+  let by1327 = 0; let Mout1327 = null; let by1329 = 0; let Mout1329 = null;
   let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0; let by1318 = 0;
   let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null; let Mout1318 = null;
   /* Release AQ: the Soccer Career train (Rounds 1169 to 1178) moves a career
@@ -931,6 +953,7 @@ if (baseRoot) {
     };
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) { same += 1; receipt.acceptedArm = 'raw'; }
+    else if (await tryArm('1329', Mout1329 ??= await tree1329Out())) { same += 1; by1329 += 1; }
     else if (await tryArm('1327', Mout1327 ??= await tree1327Out())) { same += 1; by1327 += 1; }
     else if (await tryArm('1318', Mout1318 ??= await bundle(ROOT, 'tree1318out', [r1318Out]))) { same += 1; by1318 += 1; console.log(`  career ${seed}: moved by the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 (equal to the base with them taken out)`); }
     else if (await tryArm('1041', Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]))) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
@@ -951,13 +974,14 @@ if (baseRoot) {
     if (base !== kept) pinsMove += 1;
   }
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
+  if (by1329) console.log(`  ${by1329} of the identical careers are identical only with Round 1329's world truth taken out`);
   if (by1327) console.log(`  ${by1327} of the identical careers are identical only with Round 1329's world truth and Round 1327's keyed deck and weighted paper taken out`);
   if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);
   if (byBoth) console.log(`  ${byBoth} of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once`);
   if (byTrain) console.log(`  ${byTrain} of the identical careers are identical only with the Soccer Career train (Rounds 1169 to 1178) taken out (${trainOut.seen().join(', ')} rewritten in memory)`);
   if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Rounds 1185 and 1187's form adjustment and whole Youth Mentor catalog restored, plus any explicitly named earlier inverse arms`);
   if (by1318) console.log(`  ${by1318} of them equal the base only with the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 taken out`);
-  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1327, by1318, by1041, by1100, by1052, byBoth, byTrain, by1185 };
+  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1329, by1327, by1318, by1041, by1100, by1052, byBoth, byTrain, by1185 };
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }

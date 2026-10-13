@@ -147,8 +147,10 @@ Final proof readings at the last head are in the closing report
   held equal to it for all ten positions by src/test/soccerWorldTruth.test.ts, so the engine keeps its one import
   line.
 - simCareerStoryRole and simSoccerCareerDevelopment take the engine's and the phone's rows only (their bundles load
-  neither the quiz nor the panel); simCareerLeagueSeasons' existing 1327 arm takes 1329 out first instead of a new
-  arm; simSoccerDeckFairness section 7 compares the base with this tree with 1329 taken out.
+  neither the quiz nor the panel); simCareerLeagueSeasons' existing 1327 arm takes 1329 out first, and since
+  Release BC put Round 1327 on main (its base is origin/main) a new 1329 arm, tried first, takes 1329 out alone
+  (without it a career 1329 moved fell through to the train's arm, whose stale patch refused: r1329-fx-f);
+  simSoccerDeckFairness section 7 compares the base with this tree with 1329 taken out.
 
 ## Owed
 - Small type this round shows but did not write (PhonePanel.tsx and InternationalPanel.tsx): the feed items at
