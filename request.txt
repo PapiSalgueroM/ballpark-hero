@@ -1,0 +1,12 @@
+#!playwright
+#!serial
+join: bash .rc/x/join1328.sh merge
+hub-before: bash .rc/x/join1328.sh build 4175 && HEAD_URL=http://localhost:4175 HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs
+seam: node .rc/x/seam1328.mjs seam && git diff --stat && git -c user.name=trial -c user.email=trial@invalid commit -q -am "trial seam" && echo committed
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubManagerHubLines.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs
+desk: bash .rc/x/join1328.sh build 4176 && BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 node scripts/playCmFinanceDesk.mjs
+hub: HEAD_URL=http://localhost:4176 HUB_LANDING_SECTIONS=CE node scripts/playCmHubLanding.mjs
+hub-tilectl: node .rc/x/seam1328.mjs tilectl && bash .rc/x/join1328.sh build 4177 && HEAD_URL=http://localhost:4177 HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs; s=$?; git checkout -- src/pages/ClubManager.tsx; exit $s

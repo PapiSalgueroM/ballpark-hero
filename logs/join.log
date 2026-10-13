@@ -1,0 +1,7 @@
+trial join: de3789b3ce32a2a29893d69d9427d471b1908842 with origin/r1328-cm-hub-landing a7076596d4c13bf252aa945d003fafd32fa42a13
+Auto-merging src/pages/WhatsNew.tsx
+CONFLICT (content): Merge conflict in src/pages/WhatsNew.tsx
+Automatic merge failed; fix conflicts and then commit the result.
+unmerged: src/pages/WhatsNew.tsx
+2
+joined at c3e131a6f8b334cff3780231cf2505955e6820f4
