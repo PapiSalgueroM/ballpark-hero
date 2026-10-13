@@ -1178,7 +1178,7 @@ const FX_REGISTRY = fxPack('fx_registry', [
     fxCh('Play him', { fx: { form: { who: 'captain', v: 0 } } })] }),
   fxCard('r5', { choices: [fxCh('Fine him', { fx: { fund: 0.5 } }), fxCh('Let it go')] }),
   fxCard('r6', { choices: [fxCh('Make the recruiting call', { recruit: 2, fx: { board: -1 } }), fxCh('Skip it')] }),
-], { pressure: { trust: 999, fans: 999, cash: 999, morale: 999, recruit: 999, board: 999, fund: 999, form: 999, ban: 999 } });
+], { pressure: { trust: 8, fans: 4, cash: 8, morale: 4, recruit: 8, board: 12, fund: 6, form: 8, ban: 12 } });
 if (runs(11)) {
   const pack = FX_REGISTRY;
   const T = Object.keys(pack.targets);
@@ -1509,7 +1509,7 @@ const FX_COMPACT = fxPack('fx_compact', [
   fxCard('k_slot', { text: '{player} has a matter for you this week.', texts: ['A matter about {player} needs a call.'], subject: { fact: 'man' } }),
   fxCard('k_rival', { text: 'The {opponent} matter needs a call before the weekend.' }),
   fxHard('k_exp', { expires: 3 }), fxCard('k_cool', { cooldown: 12 }),
-], { store: 'compact', chance: 0.6, cooldown: 4, subjectRest: 3, pressure: { trust: 999, morale: 999 },
+], { store: 'compact', chance: 0.6, cooldown: 4, subjectRest: 3, pressure: { trust: 40, morale: 20 },
   facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
   slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } } });
 const FX_COMPACT_SEASON = { ...FX_COMPACT, seat: 'fx_compact_season', clock: 'season', cooldown: 2 };
@@ -1541,6 +1541,9 @@ if (runs(13)) {
           const s = w.s;
           hI.update(`${w.got.map(m => `${m.id}|${m.text}`).join(',')}|${(s.phoneInbox ?? []).map(m => `${m.id}|${m.text}|${m.answered}|${m.auto}`).join(',')}|${w.lines.join('/')}|${meters(s)}\n`);
           hII.update(`${whole4(s)}|${w.lines.join('/')}|${meters(s)}\n`);
+          /* Decision 3e: a whole desk (every GM desk) never gains a field
+             this round adds; these are section 1's FLEET desks exactly. */
+          if (mode === 'whole' && (s.phoneInbox ?? []).some(m => 't' in m || 'sv' in m)) out.bad.push(`${tag} desk ${d} week ${w.clock}: a whole desk's message carries t or sv`);
           if (mode !== 'compact') return;
           out.weeks++;
           for (const m of w.got) book[keyOf(pack.events.find(e => e.id === m.defId))] = w.clock;
@@ -1735,7 +1738,30 @@ if (runs(14)) {
    real engine's meter harness) and fails on a meter it moves with no
    ceiling, or when BEST or WORST passes it either way. The seven GM packs
    predate the rule: their numbers are printed and written here, never
-   gated (ECONOMY_MEASURED). */
+   gated (ECONOMY_MEASURED).
+
+   ECONOMY_MEASURED 2026-10-13 on a runner (rc r1332-e-measure), BEST and
+   WORST a season, lowest to highest over seeds 1 to 10 (seed to seed
+   standard deviations 0.00 to 0.14):
+     nfl      cash +0.10..+0.14 / -1.09..-1.00, fans +5.19..+5.40 / -2.15..-2.00,
+              morale +4.38..+4.57 / -3.55..-3.42, trust +4.30..+4.42 / -3.75..-3.58
+     nba      cash +0.99..+1.08 / -0.33..-0.30, fans +2.41..+2.51 / -1.53..-1.40,
+              morale +2.27..+2.44 / -1.86..-1.74, trust +2.10..+2.28 / -1.64..-1.52
+     mlb      cash 0 / -0.72..-0.66, fans +3.77..+3.98 / -2.74..-2.53,
+              morale +1.82..+2.00 / -1.99..-1.83, trust +3.43..+3.56 / -1.70..-1.60
+     nhl      cash 0 / -0.51..-0.48, fans +3.19..+3.31 / -1.88..-1.76,
+              morale +1.55..+1.66 / -1.76..-1.66, trust +2.45..+2.62 / -1.71..-1.59
+     college  cash +1.35..+1.61 / -3.94..-3.63, fans +1.92..+2.05 / -1.06..-0.97,
+              morale +2.39..+2.52 / -2.15..-2.02, recruit +8.56..+8.95 / +0.34..+0.55,
+              trust +2.26..+2.43 / -4.69..-4.45
+     gym      cash +0.06..+0.07 / -0.06, trust +4.00..+4.20 / -3.21..-2.98
+     afl      morale +3.05..+3.21 / -0.91..-0.86, trust +1.30..+1.42 / -1.32..-1.20
+   The FX packs' ceilings (their own `pressure`) are each its highest
+   measured push (either way) rounded up with at least eight seed to seed
+   deviations of room: fx_registry ban 10.23 (12), board 10.25 (12), cash
+   6.88 (8), fans 3.44 (4), form 6.88 (8), fund 5.16 (6), morale 3.44 (4),
+   recruit 6.82 (8), trust 6.83 (8); fx_compact morale 19.39 (20), trust
+   38.79 (40). The pressure control multiplies fx_compact's moves by ten. */
 const ECONOMY_BASELINE = ['afl', 'college', 'gym', 'mlb', 'nba', 'nfl', 'nhl'];
 const ECONOMY_FX = {
   fx_registry: { pack: FX_REGISTRY, bind: { fx: FX_REGISTRY_DEF } },

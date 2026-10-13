@@ -820,3 +820,12 @@ describe('gmInbox Round 1332: a pack\'s declared pressure', () => {
     expect(gmPackProblems(FX_TOY, { ...FX_REG, trust: FX_REG.board }).join()).toMatch(/built in meter/);
   });
 });
+
+describe('gmInbox Round 1332: review fixes', () => {
+  it('a tagged card that names nobody it is about is refused', () => {
+    const tagged = SLOT_TOY.events.find(e => e.id === 'tagged')!;
+    const nobody = { ...tagged, text: 'Somebody was fined after a late night.', subject: undefined };
+    expect(gmPackProblems({ ...SLOT_TOY, events: [nobody] }).join()).toMatch(/names nobody it is about/);
+    expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...tagged, subject: undefined }] })).toEqual([]);
+  });
+});

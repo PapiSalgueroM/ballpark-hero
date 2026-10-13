@@ -443,6 +443,11 @@ export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, G
       out.push(`${e.id} has a brace where no slot is filled (its voice, beat, a label or a reply)`);
     }
     if (e.tag !== undefined && e.tag !== 'conduct' && e.tag !== 'private') out.push(`${e.id} has tag ${e.tag}, neither conduct nor private`);
+    /* A tagged card names who it is about (a subject or a person slot), or
+       the hold could never check that he is a generated man. */
+    if (e.tag !== undefined && e.subject === undefined && !cardSlots(e).some(n => has(slots, n) && slots[n].person)) {
+      out.push(`${e.id} is tagged ${e.tag} and names nobody it is about (no subject, no person slot)`);
+    }
     for (const c of e.choices) {
       for (const [k, raw] of Object.entries(c.fx ?? {})) {
         const def = has(reg, k) ? reg[k] : undefined;
