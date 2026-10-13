@@ -1,0 +1,4 @@
+simFreeAgents: node scripts/simFreeAgents.mjs
+fa-marketreleased-EXPECT-RED: FA_CONTROL=marketreleased node scripts/simFreeAgents.mjs
+fa-buyreleased-EXPECT-RED: FA_CONTROL=buyreleased node scripts/simFreeAgents.mjs
+fa-noreleasedlist-EXPECT-RED: FA_CONTROL=noreleasedlist node scripts/simFreeAgents.mjs

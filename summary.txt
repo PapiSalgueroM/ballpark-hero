@@ -1,0 +1,4 @@
+fa-marketreleased-EXPECT-RED exit=1 0s |    FAIL control marketreleased anchor appears 0 times in engine, so it would not change exactly one thing
+fa-buyreleased-EXPECT-RED exit=1 0s |    FAIL control buyreleased anchor appears 0 times in engine, so it would not change exactly one thing
+simFreeAgents exit=1 78s | simFreeAgents: 1 failure(s)
+fa-noreleasedlist-EXPECT-RED exit=1 78s | simFreeAgents: 3 failure(s)
