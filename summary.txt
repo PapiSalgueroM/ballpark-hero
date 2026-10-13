@@ -1,0 +1,5 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playClubManagerSaveLeave exit=0 21s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+weight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playClubManagerSlots exit=0 9s | playClubManagerSlots: green
+twoTabs exit=0 207s | playTwoTabs: green at 320x640, 390x844, 1280x900

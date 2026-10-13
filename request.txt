@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+twoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+weight: ENGINES=chromium node scripts/sweepWeight.mjs
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
