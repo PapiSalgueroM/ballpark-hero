@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -2 /tmp/basebuild.log | cut -c1-200; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+walk-full: RC_OUT="$RC_OUT/head" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs > /tmp/wf.log 2>&1; s=$?; grep "  FAIL" /tmp/wf.log | cut -c1-220 | head -12; grep -E "meters land late|rides the foot|Finances tile" /tmp/wf.log | cut -c1-200 | head -12; tail -1 /tmp/wf.log | cut -c1-300; exit $s
+ctl-noscroll: RC_OUT="$RC_OUT/noscroll" HUB_LANDING_CONTROL=noscroll HUB_LANDING_SECTIONS=A node scripts/playCmHubLanding.mjs > /tmp/c1.log 2>&1; s=$?; tail -1 /tmp/c1.log | cut -c1-300; exit $s
+ctl-nosticky: RC_OUT="$RC_OUT/nosticky" HUB_LANDING_CONTROL=nosticky HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs > /tmp/c2.log 2>&1; s=$?; tail -1 /tmp/c2.log | cut -c1-300; exit $s
+ctl-stale: RC_OUT="$RC_OUT/stale" HUB_LANDING_CONTROL=stale HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs > /tmp/c3.log 2>&1; s=$?; tail -1 /tmp/c3.log | cut -c1-300; exit $s
+ctl-small: RC_OUT="$RC_OUT/small" HUB_LANDING_CONTROL=small HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > /tmp/c4.log 2>&1; s=$?; tail -1 /tmp/c4.log | cut -c1-300; exit $s
+ctl-cut: RC_OUT="$RC_OUT/cut" HUB_LANDING_CONTROL=cut HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > /tmp/c5.log 2>&1; s=$?; tail -1 /tmp/c5.log | cut -c1-300; exit $s
+ctl-drift: RC_OUT="$RC_OUT/drift" HUB_LANDING_CONTROL=drift HUB_LANDING_SECTIONS=D HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs > /tmp/c6.log 2>&1; s=$?; tail -1 /tmp/c6.log | cut -c1-300; exit $s
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -2 /tmp/sf.log | cut -c1-300; exit $s
+playCmRealFixtures-1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf1.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf1/report.json; tail -1 /tmp/rf1.log | cut -c1-200; exit $s
+playCmRealFixtures-2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf2 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf2.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf2/report.json; tail -1 /tmp/rf2.log | cut -c1-200; exit $s
+playClubManager: node scripts/playClubManager.mjs > /tmp/pcm.log 2>&1; s=$?; grep -c "FAIL" /tmp/pcm.log; tail -2 /tmp/pcm.log | cut -c1-250; exit $s
+simRevealScroll: node scripts/simRevealScroll.mjs > /tmp/rs.log 2>&1; s=$?; grep -E "club-manager" /tmp/rs.log | cut -c1-200 | head -4; tail -2 /tmp/rs.log | cut -c1-250; exit $s
