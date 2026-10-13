@@ -1,0 +1,9 @@
+fixtures: Brighton 55818 chars, Everton 54091 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 390x844
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (390x844)
+   A held "Brighton week 1, 1 results, last Aston Villa 2-0"; B handed over "Brighton week 1, 1 results, last Aston Villa 2-0" and landed on something else; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 2-0"
+  FAIL [case 3]: the handover did not land: the save holds "Brighton week 1, 1 results, last Aston Villa 2-0", not Arsenal
+  FAIL [case 3]: tab A never showed the notice after the handover
+  FAIL [case 4]: the carry on landed on no hub
+cases red: 3, 4; pictures in /home/runner/work/_temp/rc-out/files
+CONTROL DID NOT FIRE: TWO_TABS_CONTROL=nolanding dropped no write

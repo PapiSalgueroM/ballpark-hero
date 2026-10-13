@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+twoTabs-nolanding exit=2 88s | CONTROL DID NOT FIRE: TWO_TABS_CONTROL=nolanding dropped no write
+twoTabs-nokeep exit=1 27s | CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 2 writes and turned case(s) 5 red
+twoTabs-nofence exit=1 145s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 25 writes and turned case(s) 1, 2, 3, 6 red
+twoTabs exit=1 455s | playTwoTabs: RED, 9 findings
