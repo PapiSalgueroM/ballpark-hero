@@ -19,7 +19,7 @@
  *     head sha256 1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef
  *     base sha256 44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900
  *   src/lib/soccerPhone.ts
- *     head sha256 8867992a7548521d81b6198d69d96243831f528c94cff5659c65ea3af5293556
+ *     head sha256 d7f3dd3784f08699af763eee7ac1cf5c960408fa7231940615901d3dbd36390b
  *     base sha256 43c30266828c0d6ed77fd061b29a0a14e70c44d73f157b859ef6f1c15a875000
  *   src/lib/soccerArcade.ts
  *     head sha256 9b6bb4f82528546cb3a0aead7e43b6f2f31388c308a9e799656b66a99e3786cd
@@ -44,7 +44,7 @@ export const WORLD_TRUTH_SHA256 = {
     "base": "44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900"
   },
   "src/lib/soccerPhone.ts": {
-    "head": "8867992a7548521d81b6198d69d96243831f528c94cff5659c65ea3af5293556",
+    "head": "d7f3dd3784f08699af763eee7ac1cf5c960408fa7231940615901d3dbd36390b",
     "base": "43c30266828c0d6ed77fd061b29a0a14e70c44d73f157b859ef6f1c15a875000"
   },
   "src/lib/soccerArcade.ts": {
@@ -77,7 +77,7 @@ const EDITS = [
     from: "  }\n\n  // Player of the Year (domestic)",
     to: "  }\n  \n  // Player of the Year (domestic)" },
   { name: "phone-1", file: "src/lib/soccerPhone.ts",
-    from: "import { cupFor, WORLD_LEAGUE_ASSOCIATION } from \"./soccerCareerCup\";\nimport { LAST_REAL_YEAR, seasonHappened, tournamentWinnerShown, feedPastSeasonLine, feedFutureSeasonLine } from \"./soccerWorldTruth\";\n",
+    from: "import { cupFor, WORLD_LEAGUE_ASSOCIATION } from \"./soccerCareerCup\";\nimport { LAST_REAL_YEAR, seasonHappened, summerHappened, feedPastSeasonLine, feedFutureSeasonLine } from \"./soccerWorldTruth\";\n",
     to: "import { cupFor, WORLD_LEAGUE_ASSOCIATION } from \"./soccerCareerCup\";\n" },
   { name: "phone-2", file: "src/lib/soccerPhone.ts",
     from: "\n/* LAST_REAL_YEAR (2032: past it the era pools run out of people who could\n   plausibly still be playing, so the world generates its own names) lives in\n   soccerWorldTruth.ts since Round 1329, so the quiz reads the same year. */\n",
@@ -98,7 +98,7 @@ const EDITS = [
     from: "    const goals = rng.int(st.baseGoals[0], st.baseGoals[1]);\n    /* Round 1329: both draws stay; a real man's tally is never made up. */\n    if (!realNames) topScorer = { who: st.name, club, goals, league: leagueOfClub(club, leagues) ?? \"the league\" };\n  }",
     to: "    const goals = rng.int(st.baseGoals[0], st.baseGoals[1]);\n    topScorer = { who: st.name, club, goals, league: leagueOfClub(club, leagues) ?? \"the league\" };\n  }" },
   { name: "phone-8", file: "src/lib/soccerPhone.ts",
-    from: "\n  /* Feed lines. Every one of them is read straight off `world`. Round 1329:\n     the feed is the world around him, so each line is a claim about the real\n     world. A season that really happened says so in one line and states\n     nothing about other people's results, which the game draws but cannot\n     stand behind (soccerWorldTruth.ts); a season of the game's own future\n     prints as before, under a line that says it is his world's. The feed is\n     shown newest first, so that line goes in last and sits on top of its\n     season. A tournament's winner is named only for a summer still to come or\n     finals he played. The rival's move is a generated man's, every year. */\n  const happened = seasonHappened(year);\n  const items: string[] = [];",
+    from: "\n  /* Feed lines. Every one of them is read straight off `world`. Round 1329:\n     the feed is the world around him, so each line is a claim about the real\n     world. A season that really happened says so in one line and states\n     nothing about other people's results, which the game draws but cannot\n     stand behind (soccerWorldTruth.ts); a season of the game's own future\n     prints as before, under a line that says it is his world's. The feed is\n     shown newest first, so that line goes in last and sits on top of its\n     season. A tournament's winner is named only for a summer still to come:\n     finals he played in a summer that happened are his story, told on his\n     International card and in his season log, never here as world news. The\n     rival's move is a generated man's, every year. */\n  const happened = seasonHappened(year);\n  const items: string[] = [];",
     to: "\n  /* Feed lines. Every one of them is read straight off `world`. */\n  const items: string[] = [];" },
   { name: "phone-9", file: "src/lib/soccerPhone.ts",
     from: "  const items: string[] = [];\n  if (!happened) {\n    for (const m of moves) {\n      items.push(`🔄 DONE DEAL. ${m.who} joins ${m.to} from ${m.from}. Fee around ${m.fee}m.`);\n    }\n  }",
@@ -107,7 +107,7 @@ const EDITS = [
     from: "  }\n  if (!happened) {\n    if (ucl !== s.currentClub) items.push(`⭐ ${ucl} are champions of Europe.`);\n    const titles = Object.entries(leagueWinners).filter(([, club]) => club !== s.currentClub);\n    for (const [lg, club] of titles.slice(0, 2)) {\n      items.push(`🏆 ${club} win ${leaguePhrase(lg)}.`);\n    }\n    if (topScorer && topScorer.club !== s.currentClub) {\n      const where = topScorer.league === \"the league\" ? \"his league\" : leaguePhrase(topScorer.league);\n      items.push(`🥅 ${topScorer.who} finished top scorer in ${where} on ${topScorer.goals}.`);\n    }\n  }",
     to: "  }\n  if (ucl !== s.currentClub) items.push(`⭐ ${ucl} are champions of Europe.`);\n  const titles = Object.entries(leagueWinners).filter(([, club]) => club !== s.currentClub);\n  for (const [lg, club] of titles.slice(0, 2)) {\n    items.push(`🏆 ${club} win ${leaguePhrase(lg)}.`);\n  }\n  if (topScorer && topScorer.club !== s.currentClub) {\n    const where = topScorer.league === \"the league\" ? \"his league\" : leaguePhrase(topScorer.league);\n    items.push(`🥅 ${topScorer.who} finished top scorer in ${where} on ${topScorer.goals}.`);\n  }" },
   { name: "phone-11", file: "src/lib/soccerPhone.ts",
-    from: "  }\n  const myFinals = (s.intlHistory ?? []).filter(h => h.year === year).pop()?.myResult ?? \"\";\n  if (intl && tournamentWinnerShown(year, myFinals)) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);\n  items.push(happened ? feedPastSeasonLine(year) : feedFutureSeasonLine(year));\n",
+    from: "  }\n  if (intl && !summerHappened(year)) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);\n  items.push(happened ? feedPastSeasonLine(year) : feedFutureSeasonLine(year));\n",
     to: "  }\n  if (intl) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);\n" },
   { name: "arcade-1", file: "src/lib/soccerArcade.ts",
     from: "import { phoneWorld } from \"./soccerPhone\";\nimport { LAST_REAL_YEAR, seasonHappened } from \"./soccerWorldTruth\";\n",

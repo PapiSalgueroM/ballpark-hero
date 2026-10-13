@@ -42,7 +42,7 @@ import type { CareerState } from "./soccerCareerEngine";
 import { getEraStars, getEraTopClubs, getEraLeagueClubs, getEraRivalName } from "./careerEras";
 import { leagueKeyInYear, ledgerLeague } from "./soccerCareerLeague";
 import { cupFor, WORLD_LEAGUE_ASSOCIATION } from "./soccerCareerCup";
-import { LAST_REAL_YEAR, seasonHappened, tournamentWinnerShown, feedPastSeasonLine, feedFutureSeasonLine } from "./soccerWorldTruth";
+import { LAST_REAL_YEAR, seasonHappened, summerHappened, feedPastSeasonLine, feedFutureSeasonLine } from "./soccerWorldTruth";
 
 /* ─── storage caps ─── */
 export const MAX_LINES = 6;    // lines kept per thread (three exchanges of history)
@@ -1751,8 +1751,10 @@ export function worldSeasonTick(
      stand behind (soccerWorldTruth.ts); a season of the game's own future
      prints as before, under a line that says it is his world's. The feed is
      shown newest first, so that line goes in last and sits on top of its
-     season. A tournament's winner is named only for a summer still to come or
-     finals he played. The rival's move is a generated man's, every year. */
+     season. A tournament's winner is named only for a summer still to come:
+     finals he played in a summer that happened are his story, told on his
+     International card and in his season log, never here as world news. The
+     rival's move is a generated man's, every year. */
   const happened = seasonHappened(year);
   const items: string[] = [];
   if (!happened) {
@@ -1774,8 +1776,7 @@ export function worldSeasonTick(
       items.push(`🥅 ${topScorer.who} finished top scorer in ${where} on ${topScorer.goals}.`);
     }
   }
-  const myFinals = (s.intlHistory ?? []).filter(h => h.year === year).pop()?.myResult ?? "";
-  if (intl && tournamentWinnerShown(year, myFinals)) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);
+  if (intl && !summerHappened(year)) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);
   items.push(happened ? feedPastSeasonLine(year) : feedFutureSeasonLine(year));
 
   p.feed = [...p.feed, ...items].slice(-MAX_FEED);

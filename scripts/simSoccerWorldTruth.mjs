@@ -37,8 +37,10 @@
  *      moves, scorer or feed, a nominee's club on the night).
  *   3  FEED. Over the fleet, every season that happened: no feed line holds a
  *      name from any era pool (1990 to 2032), no champion, Europe, cup,
- *      transfer or top scorer line, the honest line once, and a tournament
- *      line only for finals he played. Every later season shows its framing
+ *      transfer or top scorer line, the honest line once, and no tournament
+ *      winner line at all, not even for finals he played (those are his story,
+ *      told on his International card and in his season log, never as world
+ *      news: the review's finding 6). Every later season shows its framing
  *      line on top of its batch, and every line matches the record. A real man
  *      in phone.clubs is only ever at a club his era pool gave him.
  *   4  QUIZ. In a season that happened no question is about the world; a move
@@ -67,7 +69,7 @@
  *   extradraw   one extra draw in the world tick: section 2.
  *   realmoves   real men are moved between clubs again: section 3.
  *   pastchampions  a season that happened prints its champions: section 3.
- *   summer      the feed names the winner of a missed summer that happened: section 3.
+ *   summer      the feed names the winner of every summer that happened again: section 3.
  *   arcade      the quiz asks about the world of every season again: section 4.
  *   log         the season log names the winner of every summer again: section 5.
  *   outside     one constant of the transfer market changes, outside the hunks: section 6.
@@ -132,8 +134,8 @@ const CONTROLS = {
     edits: { [PHONE]: [['    if (realNames) continue;\n    p.clubs[st.name] = to;', '    p.clubs[st.name] = to;']] } },
   pastchampions: { breaks: '3', note: 'a season that happened prints its champions again',
     edits: { [PHONE]: [['  if (!happened) {\n    if (ucl !== s.currentClub)', '  if (true) {\n    if (ucl !== s.currentClub)']] } },
-  summer: { breaks: '3', note: 'the feed names the winner of a summer he missed that happened',
-    edits: { [PHONE]: [['  if (intl && tournamentWinnerShown(year, myFinals))', '  if (intl)']] } },
+  summer: { breaks: '3', note: 'the feed names the winner of every summer that happened again',
+    edits: { [PHONE]: [['  if (intl && !summerHappened(year))', '  if (intl)']] } },
   arcade: { breaks: '4', note: 'the quiz asks about the world of every season again',
     edits: { [ARCADE]: [['  if (w && !seasonHappened(w.year)) {', '  if (w) {'], ['    if (w.year > LAST_REAL_YEAR && w.moves.length >= 1) {', '    if (w.moves.length >= 1) {'], ['    if (w.year > LAST_REAL_YEAR && w.topScorer) {', '    if (w.topScorer) {']] } },
   outside: { breaks: '6', note: 'one constant of the transfer market changes, outside this round\'s hunks',
@@ -610,7 +612,8 @@ function feedAudit(recs) {
       if (happened && !(rv && rv[1] === r.rival) && ERA_NAMES.some(n => line.includes(n))) { a.pastName += 1; ex('pastName', `${r.year}: a real name in "${line}"`); }
       if (happened && (mv || eu || ti || tp)) { a.pastClaim += 1; ex('pastClaim', `${r.year}: "${line}"`); }
       if (!happened && (eu || ti)) a.futureClaims += 1;
-      if (su && !T.tournamentWinnerShown(r.year, r.hist ? r.hist.myResult : '')) { a.summer += 1; ex('summer', `${r.year}: a summer he missed, "${line}"`); }
+      /* The feed is world news: a summer that happened names no winner here, even finals he played. */
+      if (su && T.summerHappened(r.year)) { a.summer += 1; ex('summer', `${r.year}: a summer that happened (he was ${r.hist && r.hist.myResult ? r.hist.myResult : 'not there'}), "${line}"`); }
       if (mv) {
         if (!w.moves.some(x => x.who === mv[1] && x.to === mv[2] && x.from === mv[3] && String(x.fee) === mv[4])) a.record += 1;
         if (ERA.has(mv[1])) { a.realMove += 1; ex('realMove', `${r.year}: a real man moved, "${line}"`); } else a.generatedMoves += 1;
@@ -809,7 +812,7 @@ const REGIONS = {
     ['  /* Awards: Player of the Month. Round 1329:', '  // Player of the Year (domestic)'],
   ],
   [PHONE]: [
-    ['import { LAST_REAL_YEAR, seasonHappened, tournamentWinnerShown, feedPastSeasonLine, feedFutureSeasonLine } from "./soccerWorldTruth";', '/* ─── storage caps ─── */'],
+    ['import { LAST_REAL_YEAR, seasonHappened, summerHappened, feedPastSeasonLine, feedFutureSeasonLine } from "./soccerWorldTruth";', '/* ─── storage caps ─── */'],
     ['/* LAST_REAL_YEAR (2032:', 'function leagueOfClub('],
     ['export function worldSeasonTick(', '/** The feed, newest first, ready to print. */'],
   ],

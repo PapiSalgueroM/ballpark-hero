@@ -4,7 +4,8 @@
  * Saves are driven on this tree's engine in node (Math.random pinned per seed), then planted from a page where the
  * app does not run (robots.txt on the same origin) and the game is opened:
  *   A  a career in the early 2010s, mid way, with a Player of the Month won: the phone's SportsFeed shows the
- *      honest line and no real name, the Ball Quiz asks three questions and none about the world, and the Career
+ *      honest line, no real name and no winner of a summer that happened (finals he played included), the Ball
+ *      Quiz asks three questions and none about the world, and the Career
  *      Story prints every month with its own year.
  *   B  a career that missed the 2006 World Cup: the International card's history tile names no winner, the list
  *      prints "Watched from home" on that row, and the tournament card for a 2006 summer he missed (planted on
@@ -138,6 +139,13 @@ try {
       const named = ERA_NAMES.filter(n => lines.some(l => l.includes(n)));
       if (named.length) failNote(`${tag} A: the feed of a season that happened names ${named.slice(0, 3).join(', ')}`);
       if (/Quiet window/.test(text)) failNote(`${tag} A: the feed shows the empty state`);
+      /* The feed is world news: a summer that happened names no winner there, even finals he played (the
+         review's finding 6). Save A played at least one such summer, so this check has something to hold. */
+      const played = (saveA.intlHistory || []).filter(h => T.summerHappened(h.year) && T.playedFinals(h.myResult));
+      if (!played.length) failNote(`${tag} A: save A played no finals in a summer that happened, so the feed's winner rule is not tested`);
+      const winners = text.split('\n').map(l => l.trim()).filter(l => /^🌍 .+ win the .+\.$/u.test(l));
+      if (winners.length) failNote(`${tag} A: the feed names the winner of a summer that happened: ${winners.slice(0, 2).join(' | ')}`);
+      run.steps.push(`A feed: ${played.length} played summers (${played.map(h => `${h.year} ${h.myResult}`).join(', ')}), ${winners.length} winner lines`);
     });
     await step('A quiz', async () => {
       await page.locator('[data-phone-back]').first().click();
