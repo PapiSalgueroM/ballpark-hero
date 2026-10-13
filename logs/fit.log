@@ -1,0 +1,61 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+   the base is drawn with the base build's stylesheet (/tmp/b1325/dist/assets)
+PART 1 BASE (8fea14e2, expected red: the findings this round closes): 428 findings (cut 125, tap 252, deskclip 20, motion 2, heads 82)
+   cut at 320: squad liverpool: "Florian Wirtz" is cut (76 of 29 px wide)
+   cut at 320: squad liverpool: "Alexander Isak" is cut (89 of 29 px wide)
+   cut at 320: squad liverpool: "Dominik Szoboszlai" is cut (116 of 29 px wide)
+   cut at 320: squad liverpool: "Hugo Ekitiké" is cut (75 of 55 px wide)
+   cut at 320: squad liverpool: "Alexis Mac Allister" is cut (109 of 55 px wide)
+   cut at 320: squad liverpool: "Ryan Gravenberch" is cut (111 of 29 px wide)
+   cut at 320: squad liverpool: "Bradley Barcola" is cut (95 of 29 px wide)
+   cut at 320: squad liverpool: "Cody Gakpo" is cut (73 of 55 px wide)
+   tap at 320: squad: sort picker "RatingCeilingFormAgeWageYears leftWorthF" is 89 by 32 px
+   tap at 320: squad: sort direction "" is 32 by 32 px
+   tap at 320: desk liverpool: Release "Release, 46k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 43k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 40k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 37k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 36k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 33k x 108" is 126.3 by 27 px
+   deskclip at 320: desk liverpool: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · on 44k a week · fina)
+   deskclip at 320: desk liverpool: the free agent list shows fewer than three whole rows (256 px box)
+   deskclip at 320: desk liverpool, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · on 44k a week · fina)
+   deskclip at 320: desk liverpool, every list shown: the free agent list shows fewer than three whole rows (256 px box)
+   deskclip at 320: desk liverpoolAllFinal: a contract row is cut by a 256 px box that scrolls inside the card (CAMFlorian Wirtz22y · on 91k a week · fi)
+   deskclip at 320: desk liverpoolAllFinal: the free agent list shows fewer than three whole rows (256 px box)
+   deskclip at 320: desk liverpoolAllFinal, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (CAMFlorian Wirtz22y · on 91k a week · fi)
+   deskclip at 320: desk liverpoolAllFinal, every list shown: the free agent list shows fewer than three whole rows (256 px box)
+   motion at 390: room: a rung tile lifts -2px or animates under reduced motion
+   motion at 390: desk: the wage bar animates its width under reduced motion
+   heads at 768: squad liverpool: "OVR" is cut (24 of 18 px wide)
+   heads at 768: squad liverpool: "Mood" is cut (33 of 24 px wide)
+   heads at 768: squad liverpool sorted by pos: the pos head's word is cut (24 of 22 px)
+   heads at 768: squad liverpool sorted by pos: the mood head's word is cut (33 of 24 px)
+   heads at 768: squad liverpool sorted by name: the mood head's word is cut (33 of 24 px)
+   heads at 768: squad liverpool sorted by age: the age head's word is cut (24 of 14 px)
+   heads at 768: squad liverpool sorted by age: the mood head's word is cut (33 of 24 px)
+   heads at 768: squad liverpool sorted by ovr: the ovr head's word is cut (24 of 18 px)
+PART 1 HEAD: 0 findings (none)
+   note: base: the name column is 232 px at 768
+   note: head liverpoolAllFinal at 390: Show the other kept scrollY 525 to 525, row top 400 to 400
+   note: head: the name column is 140 px at 768
+   under 12 px, base>head, per screen and size: squad|320 171>171; desk liverpool|320 139>77; desk liverpoolAllFinal|320 461>376; room|320 29>14; card everton|320 11>6; card manager|320 15>13; card liverpool|320 8>6; squad|390 171>171; desk liverpool|390 139>77; desk liverpoolAllFinal|390 461>376; room|390 29>14; card everton|390 11>6; card manager|390 15>13; card liverpool|390 8>6; squad|768 312>312; desk liverpool|768 139>77; desk liverpoolAllFinal|768 461>376; room|768 29>14; card everton|768 11>6; card manager|768 15>13; card liverpool|768 8>6; squad|1280 312>312; desk liverpool|1280 139>77; desk liverpoolAllFinal|1280 461>376; room|1280 29>14; card everton|1280 11>6; card manager|1280 15>13; card liverpool|1280 8>6
+PART 1: green on this tree, every rule met at all four sizes
+PART 2: this tree at http://localhost:4173, the base at http://localhost:4174
+   comparator: a save altered by one byte is reported, an equal one is not
+   head Liverpool 2026-27 at 390: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4901 random draws; save 82312 chars
+   B Hertha at 320: "💀 Worst defeat: 2-3 vs Nürnberg"
+   head Hertha book save at 320: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4015 random draws; save 105186 chars
+   base Liverpool 2026-27 at 390: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4901 random draws; save 82312 chars
+   base Hertha book save at 320: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4015 random draws; save 105186 chars
+   D liverpool: the saves are byte equal, 82312 chars
+   D liverpool: 4901 random draws on both builds
+   D hertha: the saves are byte equal, 105186 chars
+   D hertha: 4015 random draws on both builds
+   B head Everton at 320: "💀 Worst defeat: 1-5 vs Newcastle"
+   B base Everton at 320: "💀 Worst defeat: 5-1 vs Newcastle"
+   C reduced motion: squad list 0 running (0 on the whole page), contracts desk 0 running (0 on the whole page), dressing room 0 running (0 on the whole page), career card 0 running (0 on the whole page)
+   E: the chunks holding the save key: base clubManager-D-vLrbID.js (786656 bytes), index-CdTRb3PV.js (794056 bytes), managerHotSeat-CM3KdIbI.js (31723 bytes); this tree clubManager-JC_QLPhG.js (786656 bytes), index-CpN5Teko.js (794056 bytes), managerHotSeat-CjM6iBCj.js (31723 bytes); same name and bytes as built: no
+   E: with the hashed chunk names set aside, the engine chunks are byte equal
+PART 2: green, labels and the low first defeat on the real page, nothing running under reduced motion, saves and draws equal
+Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
