@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit $s"; exit $s
+vitest: node_modules/.bin/vitest run src/test/clubManagerHubLines.test.ts src/test/useArrivalTop.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/clubManagerDeskCues.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vt.log 2>&1; s=$?; grep -E "Test Files|Tests |FAIL" /tmp/vt.log | cut -c1-200 | head -8; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs > /tmp/nr.log 2>&1; s=$?; tail -2 /tmp/nr.log | cut -c1-250; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs > /tmp/ha.log 2>&1; s=$?; tail -3 /tmp/ha.log | cut -c1-250; exit $s
+simStorageWrites: node scripts/simStorageWrites.mjs > /tmp/sw.log 2>&1; s=$?; tail -2 /tmp/sw.log | cut -c1-250; exit $s
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs > /tmp/er.log 2>&1; s=$?; tail -2 /tmp/er.log | cut -c1-250; exit $s
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs > /tmp/ms.log 2>&1; s=$?; tail -2 /tmp/ms.log | cut -c1-250; exit $s
+simCalendarCurrentDate: node scripts/simCalendarCurrentDate.mjs > /tmp/cd.log 2>&1; s=$?; tail -2 /tmp/cd.log | cut -c1-250; exit $s
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs > /tmp/cc.log 2>&1; s=$?; tail -2 /tmp/cc.log | cut -c1-250; exit $s
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs > /tmp/cf.log 2>&1; s=$?; tail -2 /tmp/cf.log | cut -c1-250; exit $s
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs > /tmp/ss.log 2>&1; s=$?; tail -2 /tmp/ss.log | cut -c1-250; exit $s
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs > /tmp/sl.log 2>&1; s=$?; tail -2 /tmp/sl.log | cut -c1-250; exit $s
+simDailyDeals: node scripts/simDailyDeals.mjs > /tmp/dd.log 2>&1; s=$?; tail -2 /tmp/dd.log | cut -c1-250; exit $s
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -a -iE "club-manager|hot-seat|deadline-day|over its|OVER" /tmp/w.log | cut -c1-260 | head -10; tail -2 /tmp/w.log | cut -c1-300; exit $s
