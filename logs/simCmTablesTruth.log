@@ -1,0 +1,3 @@
+   suite: 8 cases, 0 passed, 0 failed, 8 skipped, 6s
+FAIL suite: 8 cases skipped
+simCmTablesTruth: FAIL, cases red above

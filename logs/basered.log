@@ -1,0 +1,42 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmTablesTruth.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[33m8 skipped[39m[2m)[22m[32m 195[2mms[22m[39m
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mSevilla old save (Round 1052)
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mValencia second tier old save
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mEverton book save
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mHertha book save
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mBrentford after played matches, seed 1
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mBrentford after played matches, seed 2
+   [2m[90m↓[39m[22m 4 the worst defeat reads with our score first[2m > [22mBrentford after played matches, seed 3
+   [2m[90m↓[39m[22m the fleet[2m > [22mholds a real man, a youth pad, an academy graduate and a made up man
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmTablesTruth.test.tsx[2m [ src/test/cmTablesTruth.test.tsx ][22m
+[31m[1mError[22m: Club Manager: the era2005 squads are not loaded yet (await ensureEraRosters first)[39m
+[36m [2m❯[22m Module.eraRostersRaw src/lib/clubManagerEras.ts:[2m690:23[22m[39m
+    [90m688| [39m  [35mif[39m ([34misHistoricEra[39m(eraId)) {
+    [90m689| [39m    [35mconst[39m world [33m=[39m [33mHISTORIC_ROSTERS[39m[eraId[33m![39m][33m;[39m
+    [90m690| [39m    if (!world) throw new Error(`Club Manager: the ${eraId} squads are…
+    [90m   | [39m                      [31m^[39m
+    [90m691| [39m    [35mreturn[39m world[33m;[39m
+    [90m692| [39m  }
+[90m [2m❯[22m eraClubDefMap src/lib/clubManager.ts:[2m4212:19[22m[39m
+[90m [2m❯[22m eraClubDefFor src/lib/clubManager.ts:[2m4243:17[22m[39m
+[90m [2m❯[22m Module.startCareer src/lib/clubManager.ts:[2m17661:18[22m[39m
+[90m [2m❯[22m fn src/test/cmTablesTruth.test.tsx:[2m77:28[22m[39m
+[90m [2m❯[22m withSeed src/test/cmTablesTruth.test.tsx:[2m48:16[22m[39m
+[90m [2m❯[22m forEach src/test/cmTablesTruth.test.tsx:[2m103:46[22m[39m
+[90m [2m❯[22m src/test/cmTablesTruth.test.tsx:[2m103:9[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [33m8 skipped[39m[90m (8)[39m
+[2m   Start at [22m 04:34:11
+[2m   Duration [22m 5.38s[2m (transform 2.46s, setup 129ms, collect 3.35s, tests 195ms, environment 551ms, prepare 345ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerEras.ts,title=src/test/cmTablesTruth.test.tsx,line=690,column=23::Error: Club Manager: the era2005 squads are not loaded yet (await ensureEraRosters first)%0A ❯ Module.eraRostersRaw src/lib/clubManagerEras.ts:690:23%0A ❯ eraClubDefMap src/lib/clubManager.ts:4212:19%0A ❯ eraClubDefFor src/lib/clubManager.ts:4243:17%0A ❯ Module.startCareer src/lib/clubManager.ts:17661:18%0A ❯ fn src/test/cmTablesTruth.test.tsx:77:28%0A ❯ withSeed src/test/cmTablesTruth.test.tsx:48:16%0A ❯ forEach src/test/cmTablesTruth.test.tsx:103:46%0A ❯ src/test/cmTablesTruth.test.tsx:103:9%0A%0A
