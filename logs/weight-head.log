@@ -1,0 +1,24 @@
+1) Every page is inside its download budget
+  FAIL: /manager-hot-seat: 608K of gzipped JavaScript against a budget of 607K
+   /                   242K gz over   3 files (budget 243K, 242.1K to the tenth)
+   /club-manager       590K gz over  40 files (budget 590K, 590.4K to the tenth)
+   /soccer-career      823K gz over  45 files (budget 824K, 822.9K to the tenth)
+   /stadium-tycoon     299K gz over  23 files (budget 300K, 299.2K to the tenth)
+   /wonderkid-factory  273K gz over  19 files (budget 273K, 273.0K to the tenth)
+   /minefield          291K gz over  20 files (budget 291K, 290.9K to the tenth)
+   /footle             350K gz over  40 files (budget 350K, 349.9K to the tenth)
+   /nfl-my-career      483K gz over  47 files (budget 485K, 483.4K to the tenth)
+   /front-office       364K gz over  36 files (budget 366K, 364.2K to the tenth)
+   /soccer-grid        315K gz over  36 files (budget 315K, 315.0K to the tenth)
+   /leaderboard        250K gz over   9 files (budget 266K, 250.2K to the tenth)
+   /manager-hot-seat   608K gz over  42 files (budget 607K, 607.6K to the tenth)
+   /deadline-day       617K gz over  45 files (budget 617K, 616.7K to the tenth)
+   /transfer-path      376K gz over  40 files (budget 376K, 375.6K to the tenth)
+2) The two things Round 210 moved off the critical path stay off it
+   the screenshot library and the merged guide map are both off the critical path
+3) Every guide is still reachable, one sport at a time
+   132 guides across 13 sport files, every one of them routed
+4) The data these pages never read is in none of the files they fetch
+   10 probe sets (400 probes) all found in the build; 4 routes checked, 0 findings; /soccer-career still fetches the pools (SoccerCareer-B3IZuSDj.js)
+
+sweepWeight: 1 failure

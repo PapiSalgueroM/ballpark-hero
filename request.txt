@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weight-head: ENGINES=chromium node scripts/sweepWeight.mjs
+weight-base: git worktree add -q /tmp/bw 8fea14e2 && ln -s "$PWD/node_modules" /tmp/bw/node_modules && cd /tmp/bw && node_modules/.bin/vite build > /tmp/bw-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/bw/dist 4199 > /dev/null 2>&1 & sleep 4; BASE=http://localhost:4199 SWEEP_BASE=http://localhost:4199 ENGINES=chromium node scripts/sweepWeight.mjs; s=$?; kill %1 2>/dev/null; exit $s)
