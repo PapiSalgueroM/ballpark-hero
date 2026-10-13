@@ -114,6 +114,13 @@
  *   rivalscout   rivals choose on his scout's read, not the engine's grade (9)
  *   bigneed      the engine's need weight 20 instead of 2                 (9)
  *   sportname    the shared half names a sport (in memory)                (10)
+ *   foreignimport the shared half imports a module outside the lift      (10)
+ *   elevenhead   the class's head is eleven of today's men, not twelve    (6)
+ * Two checks have no control, on purpose: section 4's JSON round trip (the
+ * block is the lift's plain data, which no edit outside the lift can make
+ * change under JSON) and its swapped table (no press reads the table today,
+ * so nothing outside the lift can make it fail). They stay as tripwires for
+ * part B, which is the first to give a press a reason to read either.
  *
  * MEASURED 2026-10-12 (quick walk, fixed seeds, so the same on every run of
  * this commit), failures each control put in its sections on this PC:
@@ -220,6 +227,11 @@ const CONTROLS = {
   bigneed: { expect: [9], swaps: { engine: [['export const NBA_DRAFT_NEED_WEIGHT = 2;', 'export const NBA_DRAFT_NEED_WEIGHT = 20;']] } },
   /* the shared half names a sport (in memory, the shape of simGmDraftOrder's mounted control) */
   sportname: { expect: [10] },
+  /* the shared half imports a module outside the lift, one that names no sport (in memory), so the import
+     allowlist fires on its own and not the sport name check (review 2026-10-12) */
+  foreignimport: { expect: [10] },
+  /* the class's head is eleven of today's men, not twelve (review 2026-10-12, mutation m7) */
+  elevenhead: { expect: [6], swaps: { engine: [['  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(12, size));', '  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(11, size));']] } },
   /* the curve flattened: every band one range */
   flatclass: { expect: [6], swaps: { engine: [
     ['  { from: 13, to: 30, ovr: [72, 80] },', '  { from: 13, to: 30, ovr: [66, 80] },'],
@@ -888,7 +900,7 @@ open(9);
      nothing (control noneed) the three read 4.4, -0.1 and 0.9. */
   const NEED_FLOOR = 20;
   for (const [pos, v] of Object.entries(lift)) check(v.short > 0 && v.not > 0 && v.gap > NEED_FLOOR, `${pos}: a club short there takes one ${v.gap.toFixed(1)} points more often than one that is not (${v.short} and ${v.not} choices), floor ${NEED_FLOOR}`);
-  console.log(`   ${needRows.length} rival choices, ${needRows.length - offRule} of them the rule's man on the engine's grade; none passed a better grade by more than ${weight}; taken when short vs not, in points:${Object.entries(lift).map(([p, v]) => `${p} ${v.gap.toFixed(1)} (${v.short}/${v.not})`).join(', ')}`);
+  console.log(`   ${needRows.length} rival choices, ${needRows.length - offRule} of them the rule's man on the engine's grade; none passed a better grade by more than ${weight}; taken when short vs not, in points: ${Object.entries(lift).map(([p, v]) => `${p} ${v.gap.toFixed(1)} (${v.short}/${v.not})`).join(', ')}`);
 }
 
 open(10);
@@ -899,6 +911,7 @@ open(10);
   const raw = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
   let shared = strip(raw(FILES.shared));
   if (CONTROL === 'sportname') shared += "\nconst league = 'nba';\n";
+  if (CONTROL === 'foreignimport') shared += "\nimport { withGmBlock } from './gmDesk';\n";
   const ALLOWED = ['./gmDraftNight', './gmDraftOrder', './gmLotteryNight', './gmPicks', '@/data/gmDraftOrder/rules'];
   const froms = [...shared.matchAll(/\bfrom\s*['"]([^'"]+)['"]/g)].map(m => m[1]);
   check(froms.length > 0, `${FILES.shared} imports nothing this check can read`);
