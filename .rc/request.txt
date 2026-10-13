@@ -1,0 +1,20 @@
+simEras: node scripts/simEras.mjs
+simCmLeagueRules-plain: node scripts/simCmLeagueRules.mjs
+rules-seedout-vs-main: R=$PWD; W=/tmp/w-seedout; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && cd $W && node scripts/lib/cmWorldSeed1250.mjs --apply && git diff --stat && node scripts/simCmLeagueRules.mjs
+appeal1081-repinned: R=$PWD; W=/tmp/w-pin; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && cd $W && node $R/.rc/x/repin.mjs && node scripts/simManagerAppealIsolation.mjs
+book-full-s0: SEEDSET=0 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s1: SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s2: SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s3: SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-full-s4: SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-floor: BOOK_MEASURE=floor node scripts/simCmLeagueBook.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+boards-timing: node .rc/x/boardsTiming.mjs
+simHalftime-unseeded: node scripts/simHalftime.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simManagerEraWorldOracles: MANAGER_ERA_WORLD_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerEraWorldOracles.mjs
+managerRosterCacheControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs
+simBooks: node scripts/simBooks.mjs
