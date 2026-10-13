@@ -1,0 +1,9 @@
+simCmCopy exit=0 27s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simCmCopy-base exit=1 28s | simCmCopy: RED on /home/runner/work/ballpark-hero/ballpark-hero/.vb0, 193 failures
+ctl-staff exit=1 19s | simCmCopy: CONTROL staff FIRED (10 failures, as it must)
+ctl-summer exit=1 22s | simCmCopy: CONTROL summer FIRED (2 failures, as it must)
+vitest exit=0 7s |    Duration  5.84s (transform 2.57s, setup 165ms, collect 5.99s, tests 2.45s, environment 1.10s, prepare 439ms)
+ctl-walk exit=1 22s | simCmCopy: CONTROL walk FIRED (7 failures, as it must)
+simGmStaff exit=1 5s | GM STAFF: 40 failure(s)
+simClubManagerStaff exit=0 22s | simClubManagerStaff: PASS. Four made up men who cost what the desk says, lift only their own half of the pitch, tax nobody who ignores them, and can be taken off you.
+tsc exit=0 89s | 

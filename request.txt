@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .vb0 && git archive 36cc9ffe src | tar -x -C .vb0 && CM_COPY_ROOT=$PWD/.vb0 node scripts/simCmCopy.mjs
+ctl-staff: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+ctl-summer: CM_COPY_CONTROL=summer node scripts/simCmCopy.mjs --section=4
+ctl-walk: CM_COPY_CONTROL=walk node scripts/simCmCopy.mjs --section=4
+vitest: node_modules/.bin/vitest run src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts --testTimeout=300000 --hookTimeout=120000
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simGmStaff: node scripts/simGmStaff.mjs
