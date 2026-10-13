@@ -1,0 +1,9 @@
+#!serial
+m1-vitest: node .rc/x/r1329run-mut.mjs M1 && node_modules/.bin/vitest run src/test/soccerWorldTruth.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m1-harness: node .rc/x/r1329run-mut.mjs M1 && WORLD_TRUTH_ONLY=3,4 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-reseat: node .rc/x/r1329run-mut.mjs M2 && WORLD_TRUTH_ONLY=3 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-legacy35: node .rc/x/r1329run-mut.mjs M3 && WORLD_TRUTH_ONLY=2 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-quizgate: node .rc/x/r1329run-mut.mjs M4 && WORLD_TRUTH_ONLY=4 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-feedoff1: node .rc/x/r1329run-mut.mjs M5 && WORLD_TRUTH_ONLY=3 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m6-quizoff1: node .rc/x/r1329run-mut.mjs M6 && WORLD_TRUTH_ONLY=4 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+m7-logsummer: node .rc/x/r1329run-mut.mjs M7 && WORLD_TRUTH_ONLY=5 node scripts/simSoccerWorldTruth.mjs; s=$?; git checkout -- src scripts; exit $s
