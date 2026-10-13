@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmSubs: node scripts/simCmSubs.mjs
+subs-base: git worktree add -f /tmp/sb1 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb1 node scripts/simCmSubs.mjs --part=legacy,three,hotseat,press
+subs-pressold: SUBS_CONTROL=pressold node scripts/simCmSubs.mjs
+dailyDeals-print: node scripts/simDailyDeals.mjs --print
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
