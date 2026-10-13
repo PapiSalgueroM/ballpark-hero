@@ -1,0 +1,3 @@
+probe-head: FA_N=80 node .rc/x/faProbe.mjs
+probe-base: git worktree add -q /tmp/wb b6eb78e7 && cd /tmp/wb && ln -s $OLDPWD/node_modules node_modules && FA_N=80 node $OLDPWD/.rc/x/faProbe.mjs
+keane-head: node .rc/x/faProbe2.mjs

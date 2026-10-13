@@ -1,0 +1,6 @@
+seed 3240971741 season 1 pick Michael Keane
+ledger after release: version,eraId,records,packedRecords,packedFormat records Michael Keane:released:null:Everton
+market lists him, forgotten: false
+market lists him, forgotten and no ledger: true
+market lists him, forgotten and no seed: false
+market lists him with the list, no ledger: false
