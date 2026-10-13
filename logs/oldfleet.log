@@ -1,0 +1,21 @@
+bundle HEAD: 0 src files read at that commit
+bundle 48cb9d4b: 15 src files read at that commit
+nfl: 400 base saves continued; whole saves equal 400; season lines equal 400; top level keys that differ: none
+  ok   nfl: no base save throws when the head plays it on (0)
+  ok   nfl: 400 of 400 base saves continue byte equal on the head
+nba: 400 base saves continued; whole saves equal 400; season lines equal 400; top level keys that differ: none
+  ok   nba: no base save throws when the head plays it on (0)
+  ok   nba: 400 of 400 base saves continue byte equal on the head
+mlb: 400 base saves continued; whole saves equal 63; season lines equal 400; top level keys that differ: rival 337, pendingRivalryEvent 9
+  ok   mlb: no base save throws when the head plays it on (0)
+  ok   mlb: 400 of 400 base saves continue with every season line byte equal
+  ok   mlb: only the rival or a pending rivalry card differs (rival 337, pendingRivalryEvent 9)
+  ok   mlb: the rival's line after each of 806 judged seasons is his position's new shape (0 not)
+  ok   mlb: the tally grew by exactly one in each judged season (0 not)
+nhl: 400 base saves continued; whole saves equal 89; season lines equal 400; top level keys that differ: rival 311, pendingRivalryEvent 13
+  ok   nhl: no base save throws when the head plays it on (0)
+  ok   nhl: 400 of 400 base saves continue with every season line byte equal
+  ok   nhl: only the rival or a pending rivalry card differs (rival 311, pendingRivalryEvent 13)
+  ok   nhl: the rival's line after each of 615 judged seasons is his position's new shape (0 not)
+  ok   nhl: the tally grew by exactly one in each judged season (0 not)
+oldfleet: 14 checks, 0 failed
