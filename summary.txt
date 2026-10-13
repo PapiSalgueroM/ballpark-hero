@@ -1,0 +1,9 @@
+promises exit=0 28s | simSoccerEventPromises: all sections green
+fairness exit=0 71s | simSoccerDeckFairness: all sections green
+tsc exit=0 93s | 
+fair1 exit=0 67s | simSoccerDeckFairness: all sections green
+fair2 exit=0 70s | simSoccerDeckFairness: all sections green
+fair-nogate exit=1 68s | CONTROL nogate FIRED: section 4 failed (11 failures in all)
+fair-unit exit=1 69s | CONTROL unit FIRED: section 5 failed (1 failures in all)
+fair-poscode exit=1 54s | CONTROL poscode FIRED: section 6 failed (10 failures in all)
+fair-ranking exit=1 48s | CONTROL ranking FIRED: section 2 failed (8 failures in all)

@@ -1,0 +1,25 @@
+NEGATIVE CONTROL ON: the sensation story needs 1000000 on a field held in millions again (section 5 must fail)
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8224 playing seasons, 7468 batches, 7468 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 85 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.007, 0.992, 1.005, 0.998, 0.992, 1.011, 0.99, 0.993, 1.008, 1.003; single cards 0.924 to 1.061 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 7468 papers printed 19 of the 23 stories under weight 1, 2327 prints against a fair 2310.127; REDEMPTION 4 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 194/199.608/2762; Followers After Viral Mo 0.5 0/0/0; Booed By Own Fans After  0.7 379/352.495/786; Wants Out As Contract Ta 0.5 43/45.778/161; Out For Weeks With 0.5 11/7.251/37; Hits Out At Manager In S 0.3 24/21.173/86; Agent Demands Record Dea 0.4 44/49.42/1025; : Another Season Of Riva 0.5 64/40.112/586; M Bid For 0.7 505/527.345/3352; Available On Free Transf 0.5 129/113.249/747; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 264/268.48/1092; Never Celebrates, Never  0.9 77/80.022/583; Walks Disciplinary Tight 0.9 64/59.231/225; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 207/216.728/1975; 's Monster Contract 0.7 10/8.56/114; LEADER OF THE NATION: 0.6 189/199.999/2288; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 24/18.888/193; Is Football's Coldest Wa 0.6 2/1.387/18; 's Money Now Works Harde 0.5 96/99.954/1394; Refuses To Read The Cale 0.5 1/0.446/7
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 154/0/6011  4: 76/0/3801  7: 95/0/6011  9: 13/0/590  11: 28/0/1361  12: 13/0/482  15: 38/0/1267  17: 0/0/0  18: 8/0/248  19: 7/0/246
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 0 times in 7468 papers, 0 of them under a million
+  FAIL (section 5): the sensation story never printed in the fleet
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1228 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+CONTROL unit FIRED: section 5 failed (1 failures in all)

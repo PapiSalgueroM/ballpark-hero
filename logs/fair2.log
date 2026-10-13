@@ -1,0 +1,23 @@
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8097 playing seasons, 7367 batches, 7367 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 76 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.007, 0.997, 1.003, 0.996, 0.991, 1.012, 0.985, 1, 1.006, 1.004; single cards 0.94 to 1.061 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   3 stories eligible (weights 1 0.5 1); over 40000 papers the 0.5 story printed 7994 times, the weight 1 story 15978, others 16028: ratio 0.5 (sd 0.007)
+   the fleet's 7367 papers printed 20 of the 23 stories under weight 1, 3395 prints against a fair 3381.487; REDEMPTION 3 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 158/169.241/2574; Followers After Viral Mo 0.5 1433/1409.438/6606; Booed By Own Fans After  0.7 331/311.587/809; Wants Out As Contract Ta 0.5 35/34.205/199; Out For Weeks With 0.5 9/5.997/34; Hits Out At Manager In S 0.3 15/11.903/107; Agent Demands Record Dea 0.4 43/46.749/1049; : Another Season Of Riva 0.5 41/37.831/629; M Bid For 0.7 440/441.01/3276; Available On Free Transf 0.5 92/88.653/705; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 189/215.985/1118; Never Celebrates, Never  0.9 71/66.383/541; Walks Disciplinary Tight 0.9 40/46.634/208; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 204/209.619/1970; 's Monster Contract 0.7 10/8.574/131; LEADER OF THE NATION: 0.6 168/171.34/2154; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 23/16.409/173; Is Football's Coldest Wa 0.6 1/0.816/11; 's Money Now Works Harde 0.5 91/88.534/1385; Refuses To Read The Cale 0.5 1/0.58/11
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 147/0/5896  4: 94/0/3697  7: 74/0/5896  9: 20/0/599  11: 31/0/1410  12: 14/0/454  15: 40/0/1230  17: 0/0/0  18: 7/0/253  19: 5/0/232
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1433 times in 7367 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1186 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (2 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+simSoccerDeckFairness: all sections green
