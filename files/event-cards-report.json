@@ -1,0 +1,402 @@
+{
+  "site": "http://localhost:4173",
+  "cards": [
+    "Late Winner!",
+    "Puskas Nominee!",
+    "International Debut Goal!"
+  ],
+  "paper": "Walk 50001 Booed By Own Fans After Another Disappointing Display",
+  "runs": [
+    {
+      "tag": "320-still",
+      "steps": [
+        {
+          "card": "Late Winner!",
+          "buttons": [
+            75,
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Popularity +10, Social media +50k",
+            "11px Morale +10, Team chemistry boost"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "Puskas Nominee!",
+          "buttons": [
+            91
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Social media +100k, Market value +€4M"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "International Debut Goal!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Social media +75k, Popularity +10"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "paper": true,
+          "overflow": false,
+          "scrollY": 0
+        }
+      ]
+    },
+    {
+      "tag": "320-motion",
+      "steps": [
+        {
+          "card": "Late Winner!",
+          "buttons": [
+            75,
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Popularity +10, Social media +50k",
+            "11px Morale +10, Team chemistry boost"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "Puskas Nominee!",
+          "buttons": [
+            91
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Social media +100k, Market value +€4M"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "International Debut Goal!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Social media +75k, Popularity +10"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "paper": true,
+          "overflow": false,
+          "scrollY": 0
+        }
+      ]
+    },
+    {
+      "tag": "390-still",
+      "steps": [
+        {
+          "card": "Late Winner!",
+          "buttons": [
+            75,
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Popularity +10, Social media +50k",
+            "11px Morale +10, Team chemistry boost"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "Puskas Nominee!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Social media +100k, Market value +€4M"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "International Debut Goal!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Social media +75k, Popularity +10"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "paper": true,
+          "overflow": false,
+          "scrollY": 0
+        }
+      ]
+    },
+    {
+      "tag": "390-motion",
+      "steps": [
+        {
+          "card": "Late Winner!",
+          "buttons": [
+            75,
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Popularity +10, Social media +50k",
+            "11px Morale +10, Team chemistry boost"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "Puskas Nominee!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Social media +100k, Market value +€4M"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "card": "International Debut Goal!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Social media +75k, Popularity +10"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 399
+        },
+        {
+          "paper": true,
+          "overflow": false,
+          "scrollY": 0
+        }
+      ]
+    },
+    {
+      "tag": "1280-still",
+      "steps": [
+        {
+          "card": "Late Winner!",
+          "buttons": [
+            75,
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Popularity +10, Social media +50k",
+            "11px Morale +10, Team chemistry boost"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 263
+        },
+        {
+          "card": "Puskas Nominee!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Social media +100k, Market value +€4M"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 263
+        },
+        {
+          "card": "International Debut Goal!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Social media +75k, Popularity +10"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 263
+        },
+        {
+          "paper": true,
+          "overflow": false,
+          "scrollY": 0
+        }
+      ]
+    },
+    {
+      "tag": "1280-motion",
+      "steps": [
+        {
+          "card": "Late Winner!",
+          "buttons": [
+            75,
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Popularity +10, Social media +50k",
+            "11px Morale +10, Team chemistry boost"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 263
+        },
+        {
+          "card": "Puskas Nominee!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Social media +100k, Market value +€4M"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 263
+        },
+        {
+          "card": "International Debut Goal!",
+          "buttons": [
+            75
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Social media +75k, Popularity +10"
+          ],
+          "scrollBefore": 0,
+          "scrollAfter": 0,
+          "cardTop": 263
+        },
+        {
+          "paper": true,
+          "overflow": false,
+          "scrollY": 0
+        }
+      ]
+    }
+  ],
+  "failures": []
+}
