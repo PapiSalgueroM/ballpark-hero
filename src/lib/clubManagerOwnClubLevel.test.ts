@@ -52,7 +52,7 @@ describe("the manager's own club is read from his club, never the world roster",
     expect(worldRosterXIAvg(s, 'Everton')).toBe(base);
   });
 
-  it('his club strength at the summer rollover is the base read, so the free agent level and the board see it', () => {
+  it('his club strength at the summer rollover is the base read, so the free agent level rule reads the base', () => {
     const s = evertonWithoutHisBest();
     const next = withRoll(0.6, () => startNextSeason(s));
     expect(next.clubName).toBe('Everton');

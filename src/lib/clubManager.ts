@@ -381,7 +381,8 @@ function rosterXIAvg(roster: readonly ProjectedPlayer[]): number | null {
 /* Release AZ fix, the lead's ruling of 2026-10-12: the manager's OWN club is never read off the world roster.
    The ledger takes every man who left him off his club's world roster and adds nothing for the boys who replaced
    them, so a seeded career's club sank season by season (74.49 against 79.15 by season three) and took the free
-   agent level rule and the board's reading with it. His club reads the base's projection exactly as before
+   agent level rule with it (freeAgentClubLevel is the one reader of his club's strength in src: no board reads
+   it). His club reads the base's projection exactly as before
    PR224; the world roster serves the other clubs only. genClubStrengths and fillSquadGaps keep the same rule.
    projectedClubXIAvg is projectedXIAvg taken for the one club, so a seeded career never builds a second whole
    world for it. src/lib/clubManagerOwnClubLevel.test.ts holds it. */
