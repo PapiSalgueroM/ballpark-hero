@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-arcade: WORLD_TRUTH_CONTROL=arcade node scripts/simSoccerWorldTruth.mjs
+simMoney: node scripts/simMoney.mjs
+simMoney-base: git worktree add -q /tmp/base1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/base1329/node_modules && cd /tmp/base1329 && node scripts/simMoney.mjs
+vitest-unit: node_modules/.bin/vitest run src/test/soccerWorldTruth.test.ts src/test/internationalPanelTruth.test.tsx --testTimeout=300000 --hookTimeout=120000
