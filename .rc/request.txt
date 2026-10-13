@@ -1,0 +1,7 @@
+#!playwright
+fleet: git worktree add -q /tmp/f1 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+c-squadline: git worktree add -q /tmp/f2 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f2/node_modules && FENCE_BASE=/tmp/f2 SAVE_FENCE_CONTROL=squadline node scripts/simSaveFence.mjs
+c-budgetneg: git worktree add -q /tmp/f3 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f3/node_modules && FENCE_BASE=/tmp/f3 SAVE_FENCE_CONTROL=budgetneg node scripts/simSaveFence.mjs
+c-nofence: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+probe: git worktree add -q /tmp/pb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb node .rc/x/probeSquad.mjs
+walk9: npm run build > /tmp/b0.log 2>&1 && ENGINES=chromium CASES=9 node scripts/playTwoTabs.mjs
