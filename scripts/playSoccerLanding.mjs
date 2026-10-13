@@ -679,7 +679,9 @@ async function sectionToasts(ctx, arm, size) {
   const kinds = await drive(p, DRIVE_STEPS, async label => {
     await credit(label);
     if (shots < 8 && await p.locator('[data-sonner-toast]').count() > 0) { shots += 1; await shot(p, `${arm}-${size}-toast-${shots}`); }
-  }, prefer, async () => TOAST_KINDS.filter(k => k.required).every(k => raisedAt.some(k.test)));
+  /* On to three Next Seasons as well, so every season's cards and windows are
+     sampled, not only the first one's. */
+  }, prefer, async ({ nextSeasons }) => nextSeasons >= 3 && TOAST_KINDS.filter(k => k.required).every(k => raisedAt.some(k.test)));
   await p.waitForTimeout(600);
   await credit('after the drive');
   const audit = await p.evaluate(() => window.__toastAudit ?? []);
