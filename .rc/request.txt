@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simCmLeagueBookFacts.mjs
+facts-wiki: CM_FACTS_CONTROL=wiki node scripts/simCmLeagueBookFacts.mjs
+facts-bannedhost: CM_FACTS_CONTROL=bannedhost node scripts/simCmLeagueBookFacts.mjs
+facts-figure: CM_FACTS_CONTROL=figure node scripts/simCmLeagueBookFacts.mjs
+facts-onesource: CM_FACTS_CONTROL=onesource node scripts/simCmLeagueBookFacts.mjs
+facts-disagree: CM_FACTS_CONTROL=disagree node scripts/simCmLeagueBookFacts.mjs
+facts-receipt: CM_FACTS_CONTROL=receipt node scripts/simCmLeagueBookFacts.mjs
+facts-srcname: CM_FACTS_CONTROL=srcname node scripts/simCmLeagueBookFacts.mjs
+facts-dash: CM_FACTS_CONTROL=dash node scripts/simCmLeagueBookFacts.mjs
+facts-length: CM_FACTS_CONTROL=length node scripts/simCmLeagueBookFacts.mjs
+facts-samehost: CM_FACTS_CONTROL=samehost node scripts/simCmLeagueBookFacts.mjs
+facts-pausedrow: CM_FACTS_CONTROL=pausedrow node scripts/simCmLeagueBookFacts.mjs
+facts-staleowed: CM_FACTS_CONTROL=staleowed node scripts/simCmLeagueBookFacts.mjs
+facts-keeperowed: CM_FACTS_CONTROL=keeperowed node scripts/simCmLeagueBookFacts.mjs
+facts-seasontoken: CM_FACTS_CONTROL=seasontoken node scripts/simCmLeagueBookFacts.mjs
+facts-boundary: CM_FACTS_CONTROL=boundary node scripts/simCmLeagueBookFacts.mjs
+facts-wikimirror: CM_FACTS_CONTROL=wikimirror node scripts/simCmLeagueBookFacts.mjs
+facts-badurl: CM_FACTS_CONTROL=badurl node scripts/simCmLeagueBookFacts.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
