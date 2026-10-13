@@ -104,6 +104,9 @@
  *     on the screen. Asserted at 390 by 844 (ruling 2b), printed at 320 by
  *     640 and at 1280 (point 12 holds the reveal from sm up). Its proof is
  *     the board before the closing check built and walked: red at 19.
+ * Then a landscape phone, 844 by 390 (from sm up by its width), PRINTED
+ * only for the lead: the first press of a visit on a regular week, on Week
+ * 17 and on a playoff round, with where the buttons, the box and the chip sit.
  * Point 8 covers the bracket's faces too (its tie list and week chips are
  * the face's named scrollers).
  *
@@ -964,6 +967,37 @@ async function week17WatchRun(page, size) {
   await shot(page, size, '19-bye');
 }
 
+/* The closing check (the review's read minor 2, the first fix pass's minor 6, never measured before): a landscape
+   phone, 844 by 390, which is "from sm up" by its width. PRINTED ONLY, for the lead's ruling: after the first press of
+   a visit (a regular week, "Play Week 17", a playoff round) where the first button, the box, the back chip and his
+   result sit. The route mounts no sticky header (App.tsx's HEADER_PATHS), so the hook's top inset is 0 here and what
+   can lift the box's top off the screen is the end alignment of a span taller than the screen. */
+async function landscapePass(browser, size) {
+  console.log(`\n=== ${size.w} by ${size.h}, a landscape phone (printed for the lead) ===`);
+  const { ctx, page, errors } = await newPage(browser, size);
+  const line = async what => {
+    const p = await po(page);
+    const sy = await page.evaluate(() => Math.round(window.scrollY));
+    note(`${size.w}x${size.h}, ${what}: scrollY ${sy}, the first button from ${p.buttons[0]?.top} to ${p.buttons[0]?.bottom}, the box from ${p.box?.top} to ${p.box?.bottom}, the back chip ${p.back ? `from ${p.back.top} to ${p.back.bottom}` : 'not drawn'}, his result ${p.final ? `from ${p.final.top} to ${p.final.bottom}` : 'not drawn'}`);
+  };
+  await startFranchise(page);
+  await openWeek(page);
+  await pressAt(page, '[data-press="week"]');
+  await line('"Play Week 1", the first press of a visit');
+  await shot(page, size, 'L-week1');
+  await loadSave(page, FIXTURES.A);
+  await pressAt(page, '[data-press="week"]');
+  await line('"Play Week 17", the first press of a visit');
+  await shot(page, size, 'L-week17');
+  await loadSave(page, FIXTURES.B);
+  await pressAt(page, '[data-press="round"]');
+  await line('a playoff round, the first press of a visit');
+  await shot(page, size, 'L-round');
+  const real = realErrors(errors);
+  say(0, real.length === 0, `${size.w}x${size.h}, a landscape phone: no page error (${real.length ? real[0].slice(0, 160) : 'clean'})`);
+  await ctx.close();
+}
+
 /* 12's reveal at 1280 by 900 as well (the size the review measured the scroll of 0 to 778 at): the first press of a
    visit, a week (A) and then a playoff round (B, a new visit) */
 async function revealPass(browser, size) {
@@ -1064,6 +1098,7 @@ try {
   await ownerAndSeedWalk(browser, SIZES[1]);
   for (const size of SIZES) await playoffsWalk(browser, size);
   await revealPass(browser, { w: 1280, h: 900 });
+  await landscapePass(browser, { w: 844, h: 390 });
 } catch (e) {
   crashed = e;
 } finally {
