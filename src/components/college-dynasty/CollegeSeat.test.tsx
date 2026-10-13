@@ -196,6 +196,8 @@ describe('Round 1320: the athletic director on the college boards', () => {
       expect(after.st.myTeam).not.toBe(fired.st.myTeam);
       expect(sport.binding.view(after.st).programs.find((p: { id: string; name: string }) => p.id === after.st.myTeam).name).toBe(to);
       if ('lastRivalry' in after.st) expect(after.st.lastRivalry).toBeNull();
+      /* a reload on the new program's trail keeps him: the new stint starts the season after the one on record */
+      reloadOnTrail(sport, after);
       cleanup();
       /* the year out, from the same fired save */
       localStorage.clear();
@@ -255,6 +257,20 @@ describe('Round 1320: the athletic director on the college boards', () => {
     });
   }
 });
+
+/** A coach who just moved, reloaded on the new program's trail: st.season is still the season he left (the
+    offseason moves it), so his new stint starts one past it. The seat must survive the load and the offseason. */
+function reloadOnTrail(sport: Sport, moved: { phase: string; st: { myTeam: string; season: number; seat: { career: { stints: { from: number }[] } } } }) {
+  expect(moved.phase).toBe('recruit');
+  expect(moved.st.seat.career.stints.at(-1)!.from).toBe(moved.st.season + 1);
+  cleanup();
+  const back = mount(sport, moved);
+  fireEvent.click(back.button('Close the class, run it back'));
+  const next = back.saved();
+  expect(next.st.myTeam).toBe(moved.st.myTeam);
+  expect(next.st.seat?.career.stints.length, 'a reload on the trail after a move dropped the athletic director').toBe(moved.st.seat.career.stints.length);
+  expect(back.q('[data-college-seat="tile"]')).toBeTruthy();
+}
 
 /** The save as the board left it (the market is never saved, so this is the recap it opened from). */
 function again0(sport: Sport) {
@@ -317,6 +333,7 @@ describe('Round 1320: a buyout bid after a big year', () => {
       expect(after.st.seat.career.stints.length).toBe(2);
       expect(after.st.seat.career.stints[0].ended).toBe('poached');
       expect(after.st.seat.trust).toBe(60);
+      reloadOnTrail(sport, after);
       cleanup();
       const stay = mount(sport, save);
       fireEvent.click(stay.button('Stay put'));

@@ -195,6 +195,22 @@ describe('the save', () => {
     stranger.career.stints[0].team = 'nobody';
     expect(sanitizeCollegeSeat(stranger, { ...ctx, myTeam: 'nobody' })).toBeNull();
   });
+  it('keeps a coach who just moved: a job taken at a close starts the season after the one on record', () => {
+    /* Take the job (or Go to) at the close of 2026 writes a stint from 2027 while st.season is still 2026:
+       the trail does not move the season, the offseason does. A reload on that trail must keep him. */
+    const moved = good();
+    moved.career.stints = [
+      { team: 'p05', tier: 1, from: 2024, grades: ['missed', 'badly', 'badly'], ended: 'fired' },
+      { team: 'p00', tier: 1, from: 2027, grades: [] },
+    ];
+    moved.mandate = { ...moved.mandate, season: 2027 };
+    const kept = sanitizeCollegeSeat(moved, ctx);
+    expect(kept).not.toBeNull();
+    expect(kept!.career.stints[1].from).toBe(2027);
+    const tooLate = JSON.parse(JSON.stringify(moved));
+    tooLate.career.stints[1].from = 2028;
+    expect(sanitizeCollegeSeat(tooLate, ctx)).toBeNull();
+  });
   it('opens where the load rules say', () => {
     const seat = newCollegeSeat(view());
     const fired: CollegeSeatBlock = { ...seat, career: endSeatStint(seat.career, 'fired'), mandate: null };
