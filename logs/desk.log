@@ -1,0 +1,14 @@
+1) A fresh Liverpool career, 10 weeks by quick sim
+  ok    Liverpool, week 10 on disk, kitty 149.9m
+2) The desk at 320 by 640
+  ok    320x640: the desk opened with its top at 48px (scrollY 552 to 499)
+  320x640: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 1006 (on screen at 507), reads Kitty change | +£12.9m | +£63.6m; cover Board covers running costs | +£13.2m | +£71.2m
+2) The desk at 390 by 844
+  ok    390x844: the desk opened with its top at 96px (scrollY 434 to 434)
+  390x844: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 884 (on screen at 450), reads Kitty change | +£12.9m | +£63.6m; cover Board covers running costs | +£13.2m | +£71.2m
+2) The desk at 1280 by 900
+  ok    1280x900: the desk opened with its top at 229px (scrollY 317 to 317)
+  1280x900: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 870 (on screen at 553), reads Kitty change | +£12.9m | +£63.6m; cover Board covers running costs | +£13.2m | +£71.2m
+  pictures in /home/runner/work/_temp/rc-out/files
+
+playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty keeps, at 320, 390 and 1280.

@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+desk exit=0 28s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+desk-small exit=1 29s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+desk-cut exit=1 29s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+playSponsors exit=0 17s | playSponsors: green. The desk offers three real deals and pays for the one you take.
+desk-wrap exit=1 28s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+simResultMoment exit=0 5s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
