@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+flagshipAllchunks exit=1 1s | simFlagshipWeight: 4 failures
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
