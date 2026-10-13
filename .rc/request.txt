@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+twoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+twoTabs-nofence: SIZES=390x844 TWO_TABS_CONTROL=nofence ENGINES=chromium node scripts/playTwoTabs.mjs
+twoTabs-nolanding: SIZES=390x844 TWO_TABS_CONTROL=nolanding ENGINES=chromium node scripts/playTwoTabs.mjs
+twoTabs-nokeep: SIZES=390x844 TWO_TABS_CONTROL=nokeep ENGINES=chromium node scripts/playTwoTabs.mjs
