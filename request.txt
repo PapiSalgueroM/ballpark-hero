@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-outside: WORLD_TRUTH_CONTROL=outside WORLD_TRUTH_ONLY=6 node scripts/simSoccerWorldTruth.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerProgramme: CI=1 node scripts/simCareerProgramme.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs

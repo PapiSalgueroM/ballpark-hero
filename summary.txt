@@ -1,0 +1,10 @@
+ctl-outside exit=1 3s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 6: 3)
+simSoccerDeckFairness exit=1 71s | simSoccerDeckFairness: 8 failures in section 7
+worldtruth exit=0 83s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 104s | 
+simCareerLeagueFinish exit=0 23s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4825 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerLeagueSeasons exit=1 18s | Node.js v24.21.0
+simCareerSocialBrands exit=0 39s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerAwardsNight exit=0 102s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerProgramme exit=0 86s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+simCareerStoryRole exit=0 44s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
