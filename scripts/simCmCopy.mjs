@@ -42,9 +42,19 @@
       walkAtSummer, so approaches forced three, two and one weeks from the
       calendar's end must say the offer lapses exactly from two weeks out,
       and the rest of the season and the summer are played to prove it (he
-      walks, or he is still in his post). Control summer: that boundary one
-      week late. Control walk: walkAtSummer on, so the man the line says
-      stays is gone (the played half is not taken on trust).
+      walks, or he is still in his post). Then the same claim through the
+      engine's own call order: a seeded Liverpool season played to four
+      entries from its end, and from there season after season numbered anew
+      with every man on level 9, played out with playNextEntry, finishSeason
+      and startNextSeason: a line with no lapse sentence must see its man
+      gone before the summer, a line with it whose man is in his post at the
+      end must see him kept, and both kinds must be seen. Measured on
+      6b29e6e9 plus this check: 24 seasons, 4 gone, 2 kept, 1 with the
+      sentence whose man walked anyway (a bye week ticks one past its entry,
+      so the sentence shows a tick early there; it stays true, the season did
+      not end first). Control summer: that boundary one week late (FIRED 2).
+      Control walk: walkAtSummer on, so the man the line says stays is gone
+      (FIRED 7, the played half included).
    5. THE MONEY CARD (cm M14, the display half). FinancesScreen rendered with
       react-dom/server inside a MemoryRouter for a seeded Liverpool season at
       week 18, the same week with a made up 400m signing on the books (the
@@ -474,6 +484,60 @@ async function sectionStaff() {
     console.log(`   ${tag}: ${late ? 'lapses, he stays' : 'he goes'}: "${line.text}"`);
   }
   if (forced !== 6) fail(`the summer cases ran ${forced} of 6`);
+
+  /* The same claim through the engine's own call order (playNextEntry, quick
+     sim, then finishSeason and startNextSeason), so it holds for the real
+     ticks and not only for the week this harness sets. A seeded Liverpool
+     season is played to four entries from its end; from there each sample
+     takes another season number with every man on level 9 and plays the
+     season out and the summer. Every approach line with no lapse sentence
+     must see its man gone before the summer; every one with it whose man is
+     still in his post when the season ends must see him there in the new
+     season. Both kinds must be seen, or the check saw nothing. */
+  Math.random = seeded(hashKey('cm-copy|staff-play'));
+  let lead = cm.startCareer('Liverpool', 'now');
+  for (let i = 0; i < 300 && !lead.sacked && lead.week < lead.calendar.length - 4; i++) lead = cm.playNextEntry(lead, { skipHalftime: true }).state;
+  Math.random = REAL_RANDOM;
+  if (lead.sacked || lead.week < lead.calendar.length - 4) { fail(`the played summer check could not reach the season's last weeks (week ${lead.week} of ${lead.calendar.length}, sacked ${!!lead.sacked})`); return; }
+  const seen = { walked: 0, stayed: 0, vacuous: 0, wrong: 0, samples: 0 };
+  for (let n = 1; n <= 120 && seen.wrong < 2 && (seen.walked < 2 || seen.stayed < 2); n++) {
+    seen.samples += 1;
+    Math.random = seeded(hashKey(`cm-copy|staff-play|${n}`));
+    let s = structuredClone(lead);
+    s.season = 100 + n;
+    const desk = staff.ensureStaff(s);
+    for (const post of POSTS) if (desk[post]) desk[post] = { ...desk[post], level: 9, potential: 10, wage: staff.staffWage(9, false) };
+    desk.poach = null;
+    desk.matchesLeft = 2;
+    const lines = [];
+    for (let i = 0; i < 40; i++) {
+      const known = new Set(s.aiHeadlines ?? []);
+      const r = cm.playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      const d = staff.staffOf(s);
+      const line = (s.aiHeadlines ?? []).find(h => !known.has(h) && h.includes(' have come in for '));
+      if (line && d.poach) lines.push({ line, postId: d.poach.postId, id: d[d.poach.postId].id });
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+    if (s.sacked || s.week < s.calendar.length) { Math.random = REAL_RANDOM; continue; }
+    const atEnd = staff.staffOf(s);
+    const next = cm.startNextSeason(cm.finishSeason(s).state);
+    Math.random = REAL_RANDOM;
+    const after = staff.staffOf(next);
+    for (const a of lines) {
+      const lapse = a.line.includes(' If the season ends first, the offer lapses and he stays.');
+      const inPostAtEnd = atEnd[a.postId] && atEnd[a.postId].id === a.id;
+      const inPostAfter = after[a.postId] && after[a.postId].id === a.id;
+      if (!lapse && inPostAtEnd) { seen.wrong += 1; fail(`played, season ${s.season}: the line gave no lapse but the man was still in his post at the season's end: "${a.line}"`); }
+      else if (!lapse) seen.walked += 1;
+      else if (inPostAtEnd && !inPostAfter) { seen.wrong += 1; fail(`played, season ${s.season}: the line says he stays if the season ends first, but he is gone after the summer: "${a.line}"`); }
+      else if (inPostAtEnd) seen.stayed += 1;
+      else seen.vacuous += 1;
+    }
+  }
+  Math.random = REAL_RANDOM;
+  if (seen.walked < 1 || seen.stayed < 1) fail(`the played summer check saw ${seen.walked} line(s) without the lapse whose man walked and ${seen.stayed} with it whose man stayed: it needs both`);
+  console.log(`   played through the engine from ${lead.calendar.length - lead.week} entries out, ${seen.samples} season(s): ${seen.walked} approach(es) with no lapse and the man gone, ${seen.stayed} with the lapse and the man kept over the summer, ${seen.vacuous} with the lapse whose man walked anyway (the season did not end first)`);
 }
 
 function wantStaffLine(line, n, late) {
