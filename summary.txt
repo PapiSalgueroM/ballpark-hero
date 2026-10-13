@@ -1,0 +1,4 @@
+simSoccerLoanBite-strict26 exit=0 47s | control "strict26" fired: checks 3, 5 failed as expected
+simSoccerLoanBite-nofilter exit=0 51s | control "nofilter" fired: checks 2, 4, 5 failed as expected
+simSoccerLoanBite exit=0 381s | simSoccerLoanBite PASS
+vitest-all exit=0 435s |    Duration  434.92s (transform 27.45s, setup 16.91s, collect 124.21s, tests 924.24s, environment 134.50s, prepare 28.14s)
