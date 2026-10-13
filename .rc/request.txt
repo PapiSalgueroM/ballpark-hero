@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+promises: node scripts/simSoccerEventPromises.mjs
+fairness: node scripts/simSoccerDeckFairness.mjs
+fair1: SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs
+fair2: SEED_OFFSET=2 node scripts/simSoccerDeckFairness.mjs
+fair3: SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs
+fair4: SEED_OFFSET=4 node scripts/simSoccerDeckFairness.mjs
+fair-nogate: SIM_SOCCER_DECK_FAIRNESS_CONTROL=nogate node scripts/simSoccerDeckFairness.mjs
+fair-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+cool0: node scripts/simCareerLifeCooldowns.mjs
+vitestUnit: node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts src/test/eventChoiceAfterReload.test.ts src/test/soccerMoneyLineGrouped.test.ts --testTimeout=300000 --hookTimeout=120000
