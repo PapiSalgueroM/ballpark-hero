@@ -1,0 +1,272 @@
+{
+ "head": {
+  "era": {
+   "small": 23,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "nation": {
+   "small": 54,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "league": {
+   "small": 15,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "team": {
+   "small": 74,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "dugout": {
+   "small": 84,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "hub": {
+   "small": 53,
+   "font": [
+    "tile line: \"Elite patience\" at 11px",
+    "tile line: \"The board\" at 11px",
+    "tile line: \"Next: Everton\" at 11px",
+    "tile line: \"Form: W W W W L\" at 11px",
+    "tile line: \"FA Cup\" at 11px",
+    "tile line: \"Alexander Isak leads with 8\" at 11px",
+    "tile line: \"Kitty change, projected\" at 11px",
+    "tile line: \"Stadium, training, medical, more\" at 11px",
+    "tile line: \"Attack, defence, keepers, scouts\" at 11px",
+    "tile line: \"Seven skill trees to grow\" at 11px",
+    "tile line: \"Currency, nation job, haggling\" at 11px",
+    "tile line: \"67% win rate\" at 11px",
+    "tile line: \"No injuries or bans\" at 11px",
+    "tile line: \"They sit #17\" at 11px",
+    "tile line: \"One question, one tap\" at 11px",
+    "tile line: \"Jeremie Frimpong\" at 11px",
+    "tile line: \"Recruitment 13/20 · 0 scouting\" at 11px",
+    "tile line: \"12 players still improving\" at 11px",
+    "tile line: \"Latest transfers inside\" at 11px"
+   ],
+   "controls": [],
+   "sizes": [
+    "help button 44x44",
+    "Managers button 59x44",
+    "meter button 140x44",
+    "meter button 140x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small",
+   "cls": 0
+  },
+  "tiles": {
+   "Board": {
+    "value": "1 behind",
+    "sub": "Elite patience",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Inbox": {
+    "value": "1 new",
+    "sub": "The board",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Calendar": {
+    "value": "L 0-1",
+    "sub": "Next: Everton",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "League": {
+    "value": "#2",
+    "sub": "Form: W W W W L",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Cups": {
+    "value": "Still alive",
+    "sub": "FA Cup",
+    "h": 113,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Stats": {
+    "value": "18 goals",
+    "sub": "Alexander Isak leads with 8",
+    "h": 113,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Finances": {
+    "value": "+£63.8m",
+    "sub": "Kitty change, projected",
+    "h": 133,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Facilities": {
+    "value": "Level 9 · 8 · 8 · 8",
+    "sub": "Stadium, training, medical, more",
+    "h": 133,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Staff": {
+    "value": "Level 9 · 8 · 7 · 9",
+    "sub": "Attack, defence, keepers, scouts",
+    "h": 133,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Skills": {
+    "value": "Level 1",
+    "sub": "Seven skill trees to grow",
+    "h": 133,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Options": {
+    "value": "£ · Normal",
+    "sub": "Currency, nation job, haggling",
+    "h": 113,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Manager": {
+    "value": "8W 1D 3L",
+    "sub": "67% win rate",
+    "h": 113,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Treatment": {
+    "value": "All fit",
+    "sub": "No injuries or bans",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Rival watch": {
+    "value": "Everton",
+    "sub": "They sit #17",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Press room": {
+    "value": "They want a word",
+    "sub": "One question, one tap",
+    "h": 133,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Dressing room": {
+    "value": "2 unhappy",
+    "sub": "Jeremie Frimpong",
+    "h": 133,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Academy": {
+    "value": "Nobody yet",
+    "sub": "Recruitment 13/20 · 0 scouting",
+    "h": 133,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Training": {
+    "value": "Normal · Balanced",
+    "sub": "12 players still improving",
+    "h": 133,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Market": {
+    "value": "Window shut",
+    "sub": "Latest transfers inside",
+    "h": 113,
+    "valueLines": 1,
+    "subLines": 2
+   }
+  },
+  "calendar": {
+   "small": 100,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "previous month 44x44",
+    "next month 44x44",
+    "intensity button 83x171",
+    "intensity button 83x171",
+    "intensity button 83x171",
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "36x58",
+   "control": "small"
+  },
+  "training": {
+   "small": 57,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "errors": []
+ },
+ "base": null
+}

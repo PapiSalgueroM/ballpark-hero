@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit-base exit=0 35s | /tmp/wt-4175
+fit-part2 exit=0 231s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+hub-nosticky-EXPECT-RED exit=1 21s | playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (573 to 645 of 640) (B 52
+hub-small-EXPECT-RED exit=1 26s | playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 108 pass 57 fail)
+hub-cut-EXPECT-RED exit=1 26s | playCmHubLanding: CONTROL cut FIRED, 60 C check(s) went red, first: s320 Liverpool team: cut: Board wants line: "Board wants Win the Premier League" (242/40 wide, 17/17 t
