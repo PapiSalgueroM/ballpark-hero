@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+writes-head: node scripts/simWritesAreSent.mjs
+writes-base: git worktree add -q .rcb 8fea14e2 && cd .rcb && ../node_modules/.bin/vite build > /tmp/bb.log 2>&1 && node scripts/simWritesAreSent.mjs
