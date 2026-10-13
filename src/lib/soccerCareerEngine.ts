@@ -6734,7 +6734,10 @@ export function cardFitsSeason(id: number, state: CareerState): boolean {
     case 11: return typeof row.injury === "string" && row.injury.length > 0;
     /* 12 and 15 happen at the club he is at now, so the row must be that club's season (not a loan he has left) */
     case 12: return row.club === state.currentClub && typeof row.leagueFinish === "number" && typeof row.leagueSize === "number" && row.leagueFinish * 3 > row.leagueSize * 2;
-    case 15: return row.club === state.currentClub && typeof row.leagueApps === "number" && row.leagueApps * 2 < projectLeagueApps(99, 1, "", 0).max;
+    /* under half his division's league games: two against every other club when the row holds the division's size
+       (34 in an 18 club division, the count the season's own row is held to), else the top of the appearance band */
+    case 15: return row.club === state.currentClub && typeof row.leagueApps === "number"
+      && row.leagueApps * 2 < (typeof row.leagueSize === "number" && row.leagueSize > 1 ? 2 * (row.leagueSize - 1) : projectLeagueApps(99, 1, "", 0).max);
     case 18: return row.intApps > 0 && row.intGoals > 0 && !state.seasons.slice(0, -1).some(r => (r.intApps ?? 0) > 0);
     case 19: {
       const wc = tournamentForYear(state.nationality, row.year);

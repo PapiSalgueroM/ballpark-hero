@@ -46,7 +46,8 @@
  *      each of those cards but 17 fires; 17 never fires. Fixed rows the
  *      fleet cannot be relied on to reach are asked of the engine and of
  *      these rules directly: a season before the Puskas Award, and a bad
- *      finish or a short season at a loan club he has since left.
+ *      finish or a short season at a loan club he has since left, and
+ *      half a season in divisions of 18 and 24 clubs.
  *   5  SENSATION. The headline prints in the fleet, and only at a million
  *      followers or more (the figure it prints ends in M).
  *   6  WORDING. Every story the paper can print, rendered for every position:
@@ -266,7 +267,9 @@ function factsOf(M, s) {
     9: g(row?.redCards > 0),
     11: g(typeof row?.injury === 'string' && row.injury.length > 0),
     12: g(row?.club === s.currentClub && Number.isFinite(row?.leagueFinish) && Number.isFinite(row?.leagueSize) && row.leagueFinish * 3 > row.leagueSize * 2),
-    15: g(row?.club === s.currentClub && Number.isFinite(row?.leagueApps) && row.leagueApps * 2 < FULL_SEASON),
+    /* under half the division's league games: two against every other club when the row holds its size */
+    15: g(row?.club === s.currentClub && Number.isFinite(row?.leagueApps)
+      && row.leagueApps * 2 < (Number.isFinite(row.leagueSize) && row.leagueSize > 1 ? 2 * (row.leagueSize - 1) : FULL_SEASON)),
     17: false,
     18: g(row?.intApps > 0 && row?.intGoals > 0 && !s.seasons.slice(0, -1).some(r => (r.intApps ?? 0) > 0)),
     19: g(wc && wc.kind === 'World Cup' && row.tournament === wc.name && row.tournamentResult === 'Not Selected'),
@@ -604,6 +607,10 @@ console.log('4) Gates: a card that narrates the season fires only when the row h
     ['12, 18th of 20 at his club', 12, { leagueFinish: 18, leagueSize: 20 }, true],
     ['15, 8 league games at a loan club he has since left', 15, { club: 'A Loan Club He Left', leagueApps: 8 }, false],
     ['15, 8 league games at his club', 15, { leagueApps: 8 }, true],
+    ['15, 17 of an 18 club division\'s 34 league games', 15, { leagueApps: 17, leagueSize: 18 }, false],
+    ['15, 16 of an 18 club division\'s 34 league games', 15, { leagueApps: 16, leagueSize: 18 }, true],
+    ['15, 22 of a 24 club division\'s 46 league games', 15, { leagueApps: 22, leagueSize: 24 }, true],
+    ['15, 20 league games and no division size (the band\'s 38)', 15, { leagueApps: 20, leagueSize: undefined }, false],
   ];
   let asked = 0;
   for (const [what, id, over, want] of FIXTURES) {

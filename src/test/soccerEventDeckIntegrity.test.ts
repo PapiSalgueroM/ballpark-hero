@@ -83,6 +83,12 @@ describe('cards that narrate the season need the row to hold it', () => {
     expect(cardFitsSeason(15, career([row({ leagueApps: 25 })]))).toBe(false);
     expect(cardFitsSeason(15, career([row({ leagueApps: 12 })]))).toBe(true);
   });
+  it('15 reads half the division\'s league games when the row holds its size', () => {
+    expect(cardFitsSeason(15, career([row({ leagueApps: 17, leagueSize: 18 })]))).toBe(false);
+    expect(cardFitsSeason(15, career([row({ leagueApps: 16, leagueSize: 18 })]))).toBe(true);
+    expect(cardFitsSeason(15, career([row({ leagueApps: 22, leagueSize: 24 })]))).toBe(true);
+    expect(cardFitsSeason(15, career([row({ leagueApps: 20 })]))).toBe(false);
+  });
   it('12 and 15 are never dealt for a loan club he has already left', () => {
     expect(cardFitsSeason(12, career([row({ club: 'A Loan Club He Left', leagueFinish: 17, leagueSize: 20 })]))).toBe(false);
     expect(cardFitsSeason(15, career([row({ club: 'A Loan Club He Left', leagueApps: 12 })]))).toBe(false);
