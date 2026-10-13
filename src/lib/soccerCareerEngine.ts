@@ -6374,10 +6374,13 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 5, emoji: "👟", title: "Sponsorship Deal!", description: "A major sportswear brand offers you a sponsorship deal.",
       category: "positive", choices: [
+        /* The named deal pays every season's finish (calcSponsorshipIncome), into the bank and the
+           earnings record together. A lump into totalEarnings here counted year one twice in the
+           record and never reached the bank. */
         { label: "Sign with Vortex", emoji: "✔️", color: "bg-emerald-600", consequence: "+€2M/year income",
-          apply: s => { s.sponsorDeal = "Vortex"; s.totalEarnings += 2; s.events = [...s.events, "👟 Signed the Vortex boot deal"]; return s; } },
+          apply: s => { s.sponsorDeal = "Vortex"; s.events = [...s.events, "👟 Signed the Vortex boot deal"]; return s; } },
         { label: "Sign with Kinetiq", emoji: "✔️", color: "bg-blue-600", consequence: "+€1.5M/year income",
-          apply: s => { s.sponsorDeal = "Kinetiq"; s.totalEarnings += 1.5; s.events = [...s.events, "👟 Signed the Kinetiq boot deal"]; return s; } },
+          apply: s => { s.sponsorDeal = "Kinetiq"; s.events = [...s.events, "👟 Signed the Kinetiq boot deal"]; return s; } },
         { label: "Reject all offers", emoji: "✋", color: "bg-muted", consequence: "No deal, stay independent",
           apply: s => { s.events = [...s.events, "👟 Rejected sponsorship offers"]; return s; } },
       ] },

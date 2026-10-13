@@ -46,6 +46,8 @@
  *   breakapply   card 1's follower line comes out: section 1 fails.
  *   unannounced  card 5's reject choice bumps popularity: section 1 fails.
  *   reorder      card 13's first two choices swap places: section 3 fails.
+ *   firstyear    card 5's Vortex choice books the old lump into totalEarnings
+ *                again (counted year one twice): section 1 fails.
  *
  * Run: node scripts/simSoccerEventPromises.mjs
  * Reads no network: the bundle is local, offlineTransport blocks sockets.
@@ -96,6 +98,11 @@ const CONTROLS = {
   reorder: {
     swap: ['Apologize publicly', 'Deny it'],
     note: 'card 13 shows its first two choices the other way round', breaks: '3',
+  },
+  firstyear: {
+    from: 'apply: s => { s.sponsorDeal = "Vortex"; s.events',
+    to: 'apply: s => { s.sponsorDeal = "Vortex"; s.totalEarnings += 2; s.events',
+    note: 'card 5 signing Vortex puts the old year one lump back into totalEarnings', breaks: '1',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_SOCCER_EVENT_PROMISES_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
@@ -287,10 +294,13 @@ const FIELD = {
   'International career begins': { moves: ['internationalCareer', 'debutYear', 'debutAge'], ok: (b, a) => a.internationalCareer === true },
   'International career ends': { moves: ['internationalCareer', 'intRetired'], ok: (b, a) => a.internationalCareer === false && a.intRetired === true },
   'now in a relationship': { moves: ['hasRelationship'], ok: (b, a) => a.hasRelationship === true },
-  /* card 5: the deal pays its first year on signing (totalEarnings) and the
-     named brand pays the same every year after (calcSponsorshipIncome) */
-  '+€2M/year income': { moves: ['sponsorDeal', 'totalEarnings'], ok: (b, a) => a.sponsorDeal === 'Vortex' && near(a.totalEarnings - b.totalEarnings, 2) },
-  '+€1.5M/year income': { moves: ['sponsorDeal', 'totalEarnings'], ok: (b, a) => a.sponsorDeal === 'Kinetiq' && near(a.totalEarnings - b.totalEarnings, 1.5) },
+  /* card 5: the named brand pays every season's finish (calcSponsorshipIncome),
+     into netWorth and totalEarnings together. Since the closing fixes of
+     2026-10-13 signing moves the deal only: the old lump into totalEarnings
+     counted year one twice in the record (read review m2), and the two way
+     rule now fails it if it comes back (control firstyear). */
+  '+€2M/year income': { moves: ['sponsorDeal'], ok: (b, a) => a.sponsorDeal === 'Vortex' },
+  '+€1.5M/year income': { moves: ['sponsorDeal'], ok: (b, a) => a.sponsorDeal === 'Kinetiq' },
   '3-match ban next season': { moves: ['pendingSuspensionMatches'], ok: (b, a) => a.pendingSuspensionMatches - b.pendingSuspensionMatches === 3 },
   '4 fewer planned league games next season at this club': { moves: ['reducedRole'], ok: (b, a) => a.reducedRole === 1 },
   'Begin your saved academy mentorship': { moves: ['mentor'], ok: (b, a) => a.mentor === 1 },

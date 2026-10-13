@@ -129,7 +129,11 @@ where a clause had no field it is reworded to what is applied. No choice was add
 | 34 Attend the ceremony | Morale +10 hidden | "Legacy +8, Morale +10" | named |
 | 38 Pretend you didn't see it | Followers +200k hidden | "Followers +200k, it goes viral anyway" | named |
 
-Unchanged and judged kept: 5 (the deal pays its first year on signing and the brand every year after), 6, 10,
+Card 5 (closing fixes, 2026-10-13): signing no longer books a lump into `totalEarnings`. The named deal pays at
+every season's finish into the bank and the earnings record together, so the lump counted year one twice in the
+record and never reached the bank (read review m2). "+€2M/year income" and "+€1.5M/year income" now move the deal
+only; control `firstyear` puts the lump back and section 1 fails.
+Unchanged and judged kept: 6, 10,
 15, 16 (Release AW's veteran pay, not touched), 21, 22, 29. Clauses with no field come only from the harness's
 FLAVOR list, each with its verdict ("Status symbol", "No risk, no reward", "50% chance manager explains", ...).
 Controls: `breakapply` (card 1's follower line out) FIRED, `unannounced` (a popularity bump on card 5's reject) FIRED,
@@ -187,14 +191,15 @@ fires.
 
 ## The seventh inverse (design 3.4 (h)) and decision 3 (i)
 
-`scripts/lib/careerDeckFair1327.mjs`: 17 rows since the review fixes of 2026-10-13 (`imports`, `dilemma-comment`,
+`scripts/lib/careerDeckFair1327.mjs`: 16 rows since the closing fixes of 2026-10-13 (`imports`, `dilemma-comment`,
 `pickn`, `position-words`, `best-in-the-world-and-rumour`, `interview-to-injury-stories`, `bid-and-move-stories`,
-`academy-story`, `weighted-paper`, `cards-1-to-6`, `cards-7-to-10`, `cards-11-to-16`, `cards-17-to-22`,
-`cards-23-to-29`, `cards-30-to-40`, `deck-helpers-and-gate`, `keyed-pick`; the two paper stories the fixes reworded
-joined their neighbours' blocks), applied in order, each required exactly once at its turn. Applied to the head's
+`academy-story`, `weighted-paper`, `cards-1-to-10`, `cards-11-to-16`, `cards-17-to-22`,
+`cards-23-to-29`, `cards-30-to-40`, `deck-helpers-and-gate`, `keyed-pick`; the two paper stories the review fixes
+reworded joined their neighbours' blocks, and card 5's edit in the closing fixes joined `cards-1-to-6` and
+`cards-7-to-10` into one block), applied in order, each required exactly once at its turn. Applied to the head's
 engine they give the base's (c9c77eba, Release BB) engine byte for byte: base sha256
 `65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c`; head sha256
-`d4086c9bb824e30afdf54f56b87874be341b5b4a46e1e342f2a5968bca2fe802`. Regenerate after any engine edit with
+`44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900`. Regenerate after any engine edit with
 `node .tmp-fx/regen.mjs` in the r1327 worktree (untracked; it runs gen-inverse2.mjs and write-module.mjs from the
 same folder and names the rows by what they hold).
 simSoccerDeckFairness section 8 asserts it on every run
@@ -311,8 +316,8 @@ green: in its picker loop,
 10. soccerCareerMilestone.ts's performance set should read the position word, so the "Best In The World" story can
     drop its milestone branch.
 11. feeDescription (engine 4343) has no caller left; delete it in the next round that owns that hunk.
-12. Card 5's deal pays its first year on signing and the brand pays every year after, so year one is paid twice
-    (F14, money).
+12. FIXED in the closing fixes: card 5's signing lump into `totalEarnings` (year one counted twice in the record) is
+    gone; see the promise table.
 13. seasonCentreOwnGoals.test.tsx needs its bounded step past (above) before this branch can merge green. Done in
     the review fixes (8974536d), for the lead to rule on: the file is Round 1167's.
 14. The paper's weighted draw reads 0.48 to 0.493 of the weight 1 rate over five seeds where 0.5 is fair. Probed in
