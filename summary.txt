@@ -1,0 +1,10 @@
+wt-head exit=0 0s | rv1324wt: 1000 deals over 500 weeks (weights 1, 3 and 2, two a week), 0 weeks dealt one card twice
+wt-m7 exit=1 1s | rv1324wt: 1000 deals over 500 weeks (weights 1, 3 and 2, two a week), 193 weeks dealt one card twice
+seed11 exit=0 34s | simEventDeck: green.
+seed12 exit=0 34s | simEventDeck: green.
+seed13 exit=0 34s | simEventDeck: green.
+seed14 exit=0 34s | simEventDeck: green.
+seed15 exit=0 34s | simEventDeck: green.
+seed16 exit=0 34s | simEventDeck: green.
+seed17 exit=0 34s | simEventDeck: green.
+seed18 exit=0 33s | simEventDeck: green.
