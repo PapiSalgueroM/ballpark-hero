@@ -120,6 +120,7 @@ const FILES = {
 const EDITS = {
   rankbyprestige: ['S1', 'seat', 'return strengthRank(Object.fromEntries(view.programs.map(p => [p.id, p.strength])), id);',
     'return strengthRank(Object.fromEntries(view.programs.map(p => [p.id, p.prestige])), id);'],
+  placeoff: ['S1', 'cfbbind', '    place: cfbRankings(st).findIndex(t => t.id === st.myTeam) + 1,', '    place: cfbRankings(st).findIndex(t => t.id === st.myTeam),'],
   ccgcount: ['S2', 'cfbbind', '  bracketOf: recap => recap.bracket,', '  bracketOf: recap => [...(recap as unknown as { ccgs: CfbPlayoffGame[] }).ccgs, ...recap.bracket],'],
   flattrust: ['S3', 'seat', '  const grade = seatGrade(collegePack(view.sport), mandate, out);',
     "  const grade = { ...seatGrade(collegePack(view.sport), mandate, out), result: 'met' as const, trustDelta: 14 };"],
@@ -244,7 +245,7 @@ const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
 /* ---- each sport's steps, the descriptor's own (CfbDynastyBoard.tsx and CbbDynastyBoard.tsx) ---- */
 const sportsOf = ({ CFB, CBB, cfbSeatBinding, cbbSeatBinding }) => ({
   cfb: {
-    B: cfbSeatBinding, E: CFB, schools: CFB.CFB_SCHOOLS, rounds: CFB.CFB_ROUNDS,
+    B: cfbSeatBinding, E: CFB, schools: CFB.CFB_SCHOOLS, rounds: CFB.CFB_ROUNDS, rankings: st => CFB.cfbRankings(st),
     init: (id, rng) => CFB.initCfb(id, rng, { depth: true }),
     playRound: st => (rng => CFB.simCfbRound(st, rng)),
     closeSeason: (state, rng) => {
@@ -275,7 +276,7 @@ const sportsOf = ({ CFB, CBB, cfbSeatBinding, cbbSeatBinding }) => ({
     witness: () => null,
   },
   cbb: {
-    B: cbbSeatBinding, E: CBB, schools: CBB.CBB_SCHOOLS, rounds: CBB.CBB_ROUNDS,
+    B: cbbSeatBinding, E: CBB, schools: CBB.CBB_SCHOOLS, rounds: CBB.CBB_ROUNDS, rankings: st => CBB.cbbRankings(st),
     init: (id, rng) => CBB.initCbb(id, rng, { depth: true }),
     playRound: st => (rng => CBB.simCbbRound(st, rng)),
     closeSeason: (state, rng) => {
@@ -377,7 +378,7 @@ const seatCallSafe = fn => {
 /* ---- tallies ---- */
 const T = {};
 const tallyOf = sportId => (T[sportId] ??= {
-  dynasties: 0, seasonStarts: 0, askChecked: 0, takenAskKept: 0, rankDiffers: 0, graded: 0,
+  dynasties: 0, seasonStarts: 0, askChecked: 0, takenAskKept: 0, rankDiffers: 0, placeChecked: 0, graded: 0,
   grades: {}, firedBy: { askTier: {}, startTier: {} }, firstFeedClosed: {}, firings: 0,
   buckets: new Map(), feeds: 0, offers: 0, removed: 0, bids: 0, bidsDropped: 0, bigYears: { title: 0, overachieved: 0 },
   bidsAfter: { title: 0, overachieved: 0 }, moves: { bid: 0, market: 0 }, ended: 0,
@@ -455,6 +456,14 @@ function runDynasty(sportId, seed, index, team, startTier) {
           t.askChecked += 1;
           if (o.rank !== prestigeRank(sp.schools, st.myTeam)) t.rankDiffers += 1;
         }
+      }
+      if (st.seat && CS.holdsSeat(st.seat) && (st.round === 1 || st.round === Math.ceil(sp.rounds / 2))) {
+        /* his place, which the tile's live line reads against the field: the engine's own ranking, 1 = top */
+        check = 'S1';
+        const place = sp.B.view(st).place;
+        const ranked = sp.rankings(st);
+        ok(place >= 1 && ranked[place - 1]?.id === st.myTeam, () => `${sportId} season ${st.season} round ${st.round}: his place reads ${place}, the engine ranks ${st.myTeam} at ${ranked.findIndex(x => x.id === st.myTeam) + 1}`);
+        t.placeChecked += 1;
       }
       sp.playRound(st)(rng);
       if (twin) tw.playRound(twin)(twinRng);
@@ -753,8 +762,9 @@ const pct = (a, b) => (b ? `${((100 * a) / b).toFixed(1)}%` : 'n/a');
 
 begin('S1', "the ask is the roster's, in the pack's words");
 for (const [s, t] of Object.entries(T)) {
-  console.log(`   ${s}: ${t.seasonStarts} season starts, ${t.askChecked} against the oracle, ${t.takenAskKept} first seasons kept the offer's ask, ${t.rankDiffers} with a roster rank other than the prestige rank`);
+  console.log(`   ${s}: ${t.seasonStarts} season starts, ${t.askChecked} against the oracle, ${t.takenAskKept} first seasons kept the offer's ask, ${t.rankDiffers} with a roster rank other than the prestige rank; his place checked against the engine's ranking ${t.placeChecked} times`);
   ok(t.askChecked > 0 && t.rankDiffers > 0, `${s}: no season start where the roster rank differs from the prestige rank, so the ask's rank is untested`);
+  ok(t.placeChecked > 0, `${s}: his place was never checked`);
 }
 
 begin('S2', "the outcome is the engine's, and the grade is gradeSeason's");
