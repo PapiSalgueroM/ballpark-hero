@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs
+bingo-oldguard: git show d2f65f10:src/lib/playerBingo.ts > /tmp/pb.ts && cp /tmp/pb.ts src/lib/playerBingo.ts && NO_COLOR=1 node_modules/.bin/vitest run src/test/playerBingoHonours.test.ts --testTimeout=300000 > /tmp/pbo.log 2>&1; git checkout -- src/lib/playerBingo.ts; grep -E "Tests |FAIL|attacking" /tmp/pbo.log | head -8; grep -Eq "Tests +1 failed [|] 10 passed" /tmp/pbo.log && echo "OLD GUARD REPRODUCED: exactly the attacking midfield case fails on d2f65f10"
