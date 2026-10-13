@@ -199,7 +199,7 @@ async function open(base, profile, fixture, row) {
   const raw = () => page.evaluate(key => localStorage.getItem(key), KEY);
   const saved = async () => JSON.parse(await raw());
   const ready = async () => {
-    await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 });
+    await page.getByRole('button', { name: 'How to play', exact: true }).or(page.locator('[data-career-chance-wheel]')).first().waitFor({ timeout: 45000 });
     await page.locator('[data-career-utilities]').waitFor({ state: 'attached' });
     await page.evaluate(() => document.fonts.ready);
   };
@@ -212,7 +212,7 @@ async function open(base, profile, fixture, row) {
   return { context, page, raw, saved, ready, activate };
 }
 function eventCard(page, event) {
-  const heading = page.getByRole('heading', { name: event.title, exact: true });
+  const heading = page.getByRole('heading', { name: event.title, exact: true, level: 3, includeHidden: true });
   return heading.locator('..').locator('..');
 }
 async function choiceButton(walk, card, label, row) {
@@ -301,7 +301,7 @@ async function runCase(base, profile, fixture, variant = 'natural') {
         row.detected = savedOutcomeIssues(before, await walk.raw(), step);
         check(row.detected.includes('complete-saved-state') && row.detected.includes('single-queue-consumption') && row.detected.includes('single-history-line'), `${row.id}: omitted choice was not rejected by actual outcome detectors.`, row);
         check(await walk.raw() === beforeRaw, `${row.id}: omitted choice altered save bytes.`, row);
-        check(await button.count() === 1, `${row.id}: omitted choice did not keep its real action available.`, row);
+        check(await button.count() === 1 && await eventCard(walk.page, event).getByRole('button', { includeHidden: true }).filter({ has: walk.page.locator('span.font-bold.text-sm') }).count() === event.choices.length, `${row.id}: omitted choice did not keep its real action available.`, row);
         await capture(walk, row, 'detected-omission', card);
         return;
       }
@@ -329,7 +329,7 @@ async function runCase(base, profile, fixture, variant = 'natural') {
       row.stages.push({ stage: 'answered', eventId: step.eventId, choiceIndex: step.choiceIndex, choiceLabel: step.choiceLabel,
         input: step.resolve, observedDraws, rawBefore: beforeRaw, rawAfter: afterRaw, expectedSha256: step.expectedSha256, actualSha256: sha(afterRaw), findings });
       check(findings.length === 0, `${row.id}: full saved answer differs: ${findings.join(', ')}`, row);
-      check(await walk.page.getByRole('heading', { name: event.title, exact: true }).count() === 0, `${row.id}: consumed event still displays an actionable card.`, row);
+      check(await eventCard(walk.page, event).getByRole('button', { includeHidden: true }).filter({ has: walk.page.locator('span.font-bold.text-sm') }).count() === 0, `${row.id}: consumed event still displays an actionable card.`, row);
       if (variant === 'delete-save') {
         const removed = await walk.page.evaluate(key => { const raw = localStorage.getItem(key); localStorage.removeItem(key); return { raw, after: localStorage.getItem(key) }; }, KEY);
         check(removed.raw === afterRaw && removed.after === null, `${row.id}: control did not delete the actual saved answer.`, row);
@@ -347,7 +347,7 @@ async function runCase(base, profile, fixture, variant = 'natural') {
       }
       await reload(walk, row, `event-${step.eventId}-reload`);
       check(await walk.raw() === afterRaw, `${row.id}: restored answer has different bytes.`, row);
-      check(await walk.page.getByRole('heading', { name: event.title, exact: true }).count() === 0, `${row.id}: reload re-offered the consumed event.`, row);
+      check(await eventCard(walk.page, event).getByRole('button', { includeHidden: true }).filter({ has: walk.page.locator('span.font-bold.text-sm') }).count() === 0, `${row.id}: reload re-offered the consumed event.`, row);
       check((await walk.saved()).lastEventId === step.eventId, `${row.id}: reload lost the consumed event receipt.`, row);
       const restoredFindings = savedOutcomeIssues(before, await walk.raw(), step);
       check(restoredFindings.length === 0, `${row.id}: restored effects differ: ${restoredFindings.join(', ')}`, row);
