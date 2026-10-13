@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+distgrep-head: ls dist/assets/*.js | wc -l; n=$(grep -l "pack moves" dist/assets/*.js | wc -l); echo "head: $n chunks carry the bind error text"; test "$n" = 0
+basebuild: git worktree add -q .rcb 36cc9ffe && cd .rcb && ../node_modules/.bin/vite build > /tmp/basebuild.log 2>&1; s=$?; tail -2 /tmp/basebuild.log; n=$(grep -l "pack moves" dist/assets/*.js | wc -l); echo "base: $n chunks carry the bind error text"; test "$s" = 0 && test "$n" = 0
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wh.txt 2>&1; s=$?; cp /tmp/wh.txt "$RC_OUT/weight-head.txt"; grep -E "/front-office |/club-manager |/soccer-career " /tmp/wh.txt | head -6; tail -2 /tmp/wh.txt; exit $s
+weight-base: (node scripts/lib/hostLikeServer.mjs .rcb/dist 4174 > /tmp/s2.log 2>&1 &); sleep 3; BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wb.txt 2>&1; s=$?; cp /tmp/wb.txt "$RC_OUT/weight-base.txt"; grep -E "/front-office |/club-manager |/soccer-career " /tmp/wb.txt | head -6; tail -2 /tmp/wb.txt; exit $s
