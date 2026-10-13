@@ -1,0 +1,4 @@
+fairness exit=0 65s | simSoccerDeckFairness: all sections green
+fair3 exit=0 70s | simSoccerDeckFairness: all sections green
+fair-outside exit=1 71s | CONTROL outside FIRED: section 8 failed (67 failures in all)
+fair4 exit=0 49s | simSoccerDeckFairness: all sections green

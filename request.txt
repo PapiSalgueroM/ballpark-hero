@@ -1,0 +1,4 @@
+fairness: node scripts/simSoccerDeckFairness.mjs
+fair-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+fair3: SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs
+fair4: SEED_OFFSET=4 node scripts/simSoccerDeckFairness.mjs
