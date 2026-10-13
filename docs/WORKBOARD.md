@@ -1,3 +1,54 @@
+## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
+
+Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
+published 04:39 on 2026-10-13). Proof at 18:25: x-deployment-id carries 3cf3a2d7; /whats-new carries the new entries ("Club Manager: one tab at a time, and nothing you played gets lost", the athletic director, the world that remembers your deals); /, /club-manager, /soccer-career, /cfb-dynasty, /cbb-dynasty, /manager-hot-seat, /deadline-day and /whats-new answer 200; a browser read no console error on /club-manager, /cfb-dynasty and /soccer-career. The host showed the pushed commit by 18:22 (pushed 18:17:53) and the deploy waited for it.
+
+The owner asked on 2026-10-12 for the manager and career games to be fixed and made far deeper, Soccer Career and Club
+Manager first. This lane read both games, PLAYED them on runners (C:\Users\antho\dukb-handoff\2026-10-10\depth\: 97
+findings) and planned a program (depth\PLAN.md with its critic). Release BC is its first answer, nine pieces, each built,
+reviewed adversarially, fixed and closed, then joined on release-bc-gate (finish-BCG.md):
+- Round 1323. One tab wins: a stale second tab can no longer wipe a Club Manager career or replay a played match (a
+  shared save fence, a notice that asks you to reload, an unreadable save explained instead of dropped).
+- Release AZ (the other lane's PR224 and PR226, fixed by this lane). Club Manager: in a career started from now on, the
+  players you buy, sell or release stay where they went when you change jobs, and the world develops from your second
+  season; a career in progress plays on exactly as it was. This lane's fix: your own club is always read from your own
+  squad, never from the world ledger.
+- Round 1325. Club Manager's squad, roles and contract tables tell the truth (a real player's deal is never invented
+  and shown as fact; nothing cut off at 390 or 1280).
+- Round 1326. Club Manager's copy (no "Win the La Liga", the drama lines, the staff poach line, the finance desk leads
+  with the kitty's real change).
+- Round 1328. Every Club Manager career lands on the club, not in the guide text; the header and calendar fixed.
+- Round 1324. The shared event deck core (weights as shares, subject rest, story lines, wording variants, expiry): the
+  base every new event pack of the program stands on. Nothing a player sees yet.
+- Round 1327. Soccer Career: event cards, news and choices are drawn fairly (no biased shuffle, no strict ranking), and
+  no card promises a gain that never happens.
+- Round 1320. CFB and CBB Dynasty: an athletic director sets an ask each season, grades you, and a firing opens a job
+  market instead of ending the dynasty; a bigger program can call after a big year.
+- Round 1319. The engine of the US combine you run (nothing a player sees yet).
+
+GATE ON GITHUB RUNNERS on c28b078b (the join 9a540e83 plus four weight rows; the two save budgets left at main's numbers), eleven requests sent 15:2x: lane A 93 of 93, lane B 103 of 103, lane C 90 of 90 (the whole vitest suite, 7,864 tests), the sweep and play lane 20 of 20, the browser lanes 30 of 32 (playSoccerCareer check 6 on a blocked runner; playSeasonMoments a page load timeout, green alone 117 of 117 on rBC-rerun) and 38 of 38, the other lane's walks 19 of 20 (playCmRealFixtures, a known coin toss, green alone on rBC-rerun: 6 journeys at 2 sizes), the kits 40 of 40, Release BA's served walks 19 of 19, the special lines 97 with both controls of simDailyDeals FIRED and 88 quick controls each proven by its exit code and its own firing text, the live pass 18 of 18. No unexpected red. The committed head with the build output, c5534342, proven again on a plain build: rBC-pub 20 of 20.
+Budgets moved, each with its measured cause in the row: /club-manager 604, /manager-hot-seat 622, /deadline-day 632
+(Release AZ's world roster and lz-string, about 7.7K each), /soccer-career 830. The two save budgets stay at main's
+numbers (Slots 532,500, SaveSize 203,000; measured maxima 509,779 and 201,452). Build output: five files: /whats-new, /cfb-dynasty and /cbb-dynasty (the athletic director), scripts/data/lastmod.json and the sitemap (three pages that changed only their head tag order stay as committed).
+
+Known and left: Round 1324's panel half (a staff settled card and an expired line in the inbox panel) is owed to the next deck round; the hub tile and desk now read one kitty change (the join's seam); StaffScreen line 134 and 1326's coin toss note go to a later Club Manager round; SaveSize sits 1.5K under its budget (raising it needs the other lane's diagnostic contract); simMoney and simCreation are red for save size on main, and simMoney asserts on a max (a fence round); simGmStaff is red until Round 1316.
+
+### For Codex
+1. Release BC is on main at c5534342 and live. It holds your PR224 and PR226 (as Release AZ) with this lane's changes,
+   each owed back: Y1 (a career with no world seed never writes a ledger), Y2 (an unreadable ledger reads as absent,
+   clubManagerWorldRoster.ts line 187), Y3 (the dailies hold no seed), the own club fix (genClubStrengths takes myClub;
+   worldMarket and ClubDetailScreen read his own club from his squad in a seeded career), the namesake fix of the market,
+   your simEras edit dropped for Round 1304's oracle, the moved pins of your kits and diagnostic, and
+   scripts/lib/treeWithoutMerge.mjs (the base of simCmUnseededWorld and the continuity kit is now this tree without AZ).
+   Your three workflows (manager-world-continuity.yml and the others) still name the old base and unit counts: retire
+   or update them.
+2. Owed to you as guide sentences, then genSearchKeywords: the world that remembers your deals (clubManagement.ts); the
+   athletic director and the job market (college.ts 702 and 849, cfbDynasty.ts 35).
+3. This lane's commit 7d34f0ee changed one line of your playCmRealFixtures (the hub landing moved what it reads).
+4. Raising SIZE_BUDGET needs your managerWorldSizeDiagnostic's contract to know it: a round of this lane will propose
+   both together.
+5. Your PR249 and PR250 are seen and will be integrated when you mark them ready; the boundary of 2026-10-12 stands.
+
 ## Release BB LIVE, 2026-10-13 04:39 EDT: the NFL playoffs one round at a time, Club Manager's league leaders and awards, Ballon d'Or rivals who stay, a club loan that only goes where you will play, Report a problem on every game, the MLB and NHL rival on your own line
 
 Claude lane (session H). main c9c77eba, deployment f3407b80-12d4-452a-a813-0ac5631ae4a9, entry index-DaI30mwt.js (was index-Df_rcqsU.js, Release AY,
