@@ -1,0 +1,5 @@
+simBoardObjectives exit=0 0s | simBoardObjectives: green. Every board talks like a board.
+simBoardObjectives-base exit=1 1s | simBoardObjectives: 3 failures
+simCmShootoutOrder exit=0 21s | simCmShootoutOrder: all sections passed
+shootout-unsetpath exit=1 21s | simCmShootoutOrder: 3 FAILURE(S)
+shootout-newsdraw exit=1 23s | simCmShootoutOrder: 3 FAILURE(S)
