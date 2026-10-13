@@ -8,6 +8,10 @@
      period: accept week/round zero again, both period recovery cases fail.
    Each control requires exactly its targeted tests to fail on assertions.
    Run FRONT_OFFICE_SAVE_CONTROL=all to prove both controls after the green run.
+
+   Round 1309 added two NFL cases (38 in all): a save in its playoffs (a hub
+   save at Week 18 with its bracket) restores without a write, and one whose
+   season already has a champion is rejected with its delete button.
 */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -47,14 +51,14 @@ function run(control = '') {
   if (result.error) throw result.error;
   assert.ok(fs.existsSync(report), 'Vitest must produce an actual test report.');
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
-  assert.equal(json.numTotalTests, 36, 'The complete focused suite must run.');
+  assert.equal(json.numTotalTests, 38, 'The complete focused suite must run.');
   const failed = json.testResults.flatMap(file => file.assertionResults).filter(row => row.status === 'failed');
   if (!control) {
     assert.equal(result.status, 0, failed.map(row => row.fullName + ': ' + row.failureMessages[0]).join('\n'));
-    assert.equal(failed.length, 0); assert.equal(json.numPassedTests, 36);
-    console.log('Front Office save recovery: 36/36 actual component checks passed.');
-    console.log('Front Office save recovery: 12 current, older, draft, recap and ID-repair restore cases passed.');
-    console.log('Front Office save recovery: 20 nested-corruption cases retain raw bytes, reject before render and delete only their own save on request.');
+    assert.equal(failed.length, 0); assert.equal(json.numPassedTests, 38);
+    console.log('Front Office save recovery: 38/38 actual component checks passed.');
+    console.log('Front Office save recovery: 13 current, older, draft, recap, playoffs and ID-repair restore cases passed.');
+    console.log('Front Office save recovery: 21 nested-corruption cases retain raw bytes, reject before render and delete only their own save on request.');
     console.log('Front Office save recovery: four malformed-JSON and fresh-club recovery cases passed; fresh replacements preserve other game saves.');
   } else {
     assert.notEqual(result.status, 0, 'The control must make the test run fail.');

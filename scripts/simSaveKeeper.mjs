@@ -89,8 +89,9 @@
  *   partpress     the pressRoom row is left out                        (1)
  *   partgamelog   the NFL front office's gameLog row is left out       (1)
  *   partballon    the generatedBallonPool row is left out              (1)
+ *   partplayoffs  the NFL front office's playoffs row is left out      (1)
  * A control that fired exits 1 and its last line says FIRED. One that did not
- * fire, or could not run, exits 2 and says so. A green run exits 0. The nine
+ * fire, or could not run, exits 2 and says so. A green run exits 0. The ten
  * part controls must also fire on their OWN sentence (the failure that names
  * the part they left out as a version number with no row): the line before
  * FIRED prints it, and without it the control exits 2.
@@ -173,7 +174,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -491,7 +492,12 @@ const PART_VERSIONS = {
        refuses the part, the next night is the night of the same save without it and writes a fresh pool. */
     { at: ['generatedBallonPool', 'version'], current: 1, other: 'absent', reader: 'isGeneratedBallonPool, read in calculateBallonDor (src/lib/soccerCareerEngine.ts)' },
   ],
-  '/front-office': [{ at: ['gameLog', 'v'], current: 1, other: 'absent', reader: 'readGmGameLog (src/lib/gmGameLog.ts)' }],
+  '/front-office': [
+    { at: ['gameLog', 'v'], current: 1, other: 'absent', reader: 'readGmGameLog (src/lib/gmGameLog.ts)' },
+    /* Round 1309: the playoff bracket of a save in the NFL playoffs. With another number nothing of it is read: the
+       board plays a fresh unplayed bracket from the engine's own seeds, says so in the feed, and writes it at once. */
+    { at: ['playoffs', 'v'], current: 1, other: 'absent', reader: 'loadGmPostseason (src/lib/gmPostseason.ts)' },
+  ],
   '/nfl-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
   '/nba-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
   '/mlb-my-career': [{ at: ['prospect', 'v'], current: 1, other: 'refuses', reader: 'loadUsCareerProspect (src/lib/usCareerProspect.ts)' }],
@@ -505,6 +511,7 @@ const PART_CONTROLS = {
   partpress: ['/soccer-career', 'pressRoom.version'],
   partgamelog: ['/front-office', 'gameLog.v'],
   partballon: ['/soccer-career', 'generatedBallonPool.version'],
+  partplayoffs: ['/front-office', 'playoffs.v'],
 };
 if (PART_CONTROLS[CONTROL]) {
   const [route, where] = PART_CONTROLS[CONTROL];
@@ -885,7 +892,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };

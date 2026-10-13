@@ -73,19 +73,31 @@ import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/componen
    winner the engine decided, and his club's games of the season are kept in
    the save. Both are needed in the press's own tick, so they are static;
    the story of a game and its card are not imported here. */
-import { nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
-import { addToGmGameLog, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, type GmGameLog } from '@/lib/gmGameLog';
+import { nflIsRegular, nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
+import { addToGmGameLog, lastGmGame, readGmGameLog, GM_GAME_DAY_BOX, type GmGameDayMount, type GmGameLog } from '@/lib/gmGameLog';
+/* Round 1309: the playoffs a round at a time. A press and the load need the
+   bracket machine, the NFL's bracket data and its bind in the same tick, so
+   they are static; the bracket card and every word only it prints are not
+   imported here (they ride with the card's lazy chunk). */
+import { inGmPostseason, loadGmPostseason, type GmBracketMount } from '@/lib/gmPostseason';
+import { NFL_POSTSEASON, nflPlayTie, nflRoundsOf } from '@/lib/frontOfficePostseason';
+import {
+  bracketChampion, bracketPairings, bracketWeek, openBracket, playBracketAll, playBracketWeek, type BracketFormat, type GmBracketSave,
+} from '@/lib/gmBracket';
 /* Round 1307: the Game Day tile of the week box. The card, the story of a
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
    a lazy part must be the same component on every render. */
 import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
 const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
-/* What the tile says under the fixture on the final week, when nothing has
-   been told yet (a save from before the log that sits on Week 17). The
-   tile's own line offers a watch and a result in the box, and the final
-   week has neither: no Watch button, and its press goes to the recap. */
-const FINAL_WEEK_NOTE = 'No Watch on this one. The final week runs straight into the playoffs.';
+/* Round 1309: the bracket card, the face of the same box in the playoffs. Made
+   once at module level, so the card, its "?" and the ledger's week names are
+   one chunk the week box asks for. (Round 1307's note that the final week has
+   no Watch is gone: Week 17 has Watch now, and its press opens the bracket.) */
+const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'));
+/* the three button rows of the playoffs (Week 17, and a round): stacked under sm, three a row from sm up, each one
+   height whatever its words, so the box under them never moves from one round to the next */
+const PRESS_THREE = 'inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-bold leading-tight disabled:opacity-40 sm:h-14';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -93,6 +105,10 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'week' | 'standings';
 
 const SAVE_KEY = 'front-office-save-v1';
+
+/* Round 1309: trades are shut while the bracket is open, for every GM (with the desk on they already are: Week 18 is
+   past the deadline). Worded like the deadline's own line. */
+const PLAYOFF_TRADE_LINE = 'Trades are shut for the playoffs. Deals open again once the season is over.';
 
 const NFL_WORDS: FoSportWords = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
 
@@ -133,6 +149,10 @@ interface SaveShape {
      Absent on every older save, at the start of a franchise and of a season,
      and whenever it does not read whole: never null, never an empty log. */
   gameLog?: GmGameLog;
+  /* Round 1309: the playoff bracket (src/lib/gmBracket.ts), while the season
+     is in it: a hub save at Week 18 with no champion for its season. Absent
+     everywhere else, never null. Read through src/lib/gmPostseason.ts. */
+  playoffs?: GmBracketSave;
 }
 
 export default function FrontOfficeBoard() {
@@ -173,17 +193,13 @@ export default function FrontOfficeBoard() {
      are shut. It is let go at full time and at Results (the card says so),
      when he leaves the week box, and when the press played nothing. */
   const [held, setHeld] = useState<LeagueState | null>(null);
-  const hold = tab === 'week' && held && league && held !== league && league.season === held.season && league.week === held.week + 1 ? held : null;
+  /* Round 1309: a press in the playoffs leaves the week at 18 (and the title game puts it back to 17), so a hold of
+     the playoffs is any press after a league held past the last week, in the same season */
+  const hold = tab === 'week' && held && league && held !== league && league.season === held.season && (league.week === held.week + 1 || held.week > REGULAR_WEEKS) ? held : null;
   useEffect(() => { if (held && (tab !== 'week' || !league || league === held)) setHeld(null); }, [held, tab, league]);
   /* where the Game Day "?" is drawn: an empty element at the end of the week
      box, so the sheet lies over the whole box and takes none of its spacing */
   const [helpHost, setHelpHost] = useState<HTMLDivElement | null>(null);
-  /* The ref is on ONE wrapper that starts at the Game Day tile and holds the
-     league grid, so the thing pulled into view is his result and never the
-     grid alone; the key moves again at full time, so that is a reveal too. */
-  const revealRef = useRevealScroll<HTMLDivElement>(
-    `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}`,
-  );
   const [tradePartner, setTradePartner] = useState<string>('');
   // Round 82: trade finder
   const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
@@ -235,8 +251,62 @@ export default function FrontOfficeBoard() {
      round, so it is a ref and not state. */
   const gameLogLive = useRef<GmGameLog | null>(null);
   const setGameLog = (l: GmGameLog | null) => { gameLogLive.current = l; };
+  /* Round 1309: the bracket, while the season is in its playoffs. Every save
+     reads it from the ref (the log's pattern), so a roster move in the
+     middle of the playoffs saves the bracket with it; null keeps the key off
+     the save. `ask` is what the last button asked of playWeek. */
+  const [playoffs, setPlayoffsState] = useState<GmBracketSave | null>(null);
+  const playoffsLive = useRef<GmBracketSave | null>(null);
+  const setPlayoffs = (b: GmBracketSave | null) => { playoffsLive.current = b; setPlayoffsState(b); };
+  const ask = useRef<'week' | 'bracket' | 'round' | 'rest'>('week');
+  /* Round 1309, the mount. The bracket as it stood before a watched press,
+     beside `held` (never saved: a reload shows the result), so nothing drawn
+     while he watches reads the round's result. And what the box shows in the
+     bracket: null, the bracket; 'last', his last game of the log; a tie id,
+     his game of that tie. A press sets it (his game when the press logged
+     one, the bracket when it logged none: his bye, or he is out); "Your
+     game" on the bracket and the back chip under the box move it. */
+  const [heldBracket, setHeldBracket] = useState<GmBracketSave | null>(null);
+  /* Round 1309, the fix pass. The title game's press closes the season at once (closeSeason: the graded trust, the
+     press room, the finish), so while he WATCHES a playoff press the owner card's trust, the press card and the
+     finish are the ones from before it, taken with `held` (never saved), and the press card's answers wait for full
+     time. Tied to the league it was taken with, so the watch of another press never reads it. */
+  const [heldRoom, setHeldRoom] = useState<{ from: LeagueState; trust: number; presser: GmPresser | null; won: boolean } | null>(null);
+  const roomHeld = hold && heldRoom && heldRoom.from === hold ? heldRoom : null;
+  const [boxGame, setBoxGame] = useState<string | null>(null);
+  /* THE REVEAL (Round 1307, and Round 1309's ruling from its review). The key
+     moves at a press, at full time and when a playoff round is played, and
+     what is pulled into view is his result. UNDER sm (640 px) the element is
+     ONE wrapper that starts at the Game Day box, aligned to its top, as
+     shipped. FROM sm UP the ruling asks for the press buttons AND the whole
+     box on the screen after a press (a first press used to put the tile at
+     the top of the screen and Play and Watch above it). A wrapper starting at
+     the buttons does not get that (measured on r1309-d-walk at 1280 by 800:
+     its top at 410 counts as readable to the hook, so nothing moved and the
+     box ended 30 px under the fold), so from sm up the element is the box's
+     bottom edge (one pixel laid over it, no layout of its own) aligned to the
+     END: when the box's bottom is off the screen the page brings it to the
+     screen's bottom, and the buttons and the box, 420 px together, are then
+     on it. In the bracket the edge is the bottom of the row under the box
+     (the fix pass: the back chip there sat under the fold at 1280), so the
+     buttons, the box and the chip, 476 px, are on the screen together.
+     Which of the two is decided by the width the page loaded at, so a
+     window resized across sm changes no key and no option and scrolls
+     nothing (useRevealScroll.ts is not edited). */
+  const [wideAtLoad] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 640px)').matches);
+  /* The closing check of Round 1309 (ruling 2b, asserted at 390 by 844): under sm in the bracket the wrapper is still
+     the element, but when the hook has to move the page it aligns the wrapper's END (the hook honours that only when
+     the wrapper fits the screen, as the box does in the bracket, where no league grid is drawn). Top aligned, the box
+     went to the screen's top and the stacked buttons above it: after "Watch Week 17" the feed box arriving above the
+     week box left 126 px of the box readable, the hook fired, and the next press sat at -96. In the regular season
+     nothing changes (Round 1307's numbers). */
+  const inBracket = (!!playoffs && (league?.week ?? 0) > REGULAR_WEEKS) || (!!hold && !!heldBracket && hold.week > REGULAR_WEEKS);
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}:${playoffs?.played.length ?? 0}`,
+    wideAtLoad ? { block: 'end' } : inBracket ? { block: 'end' } : undefined,
+  );
 
-  useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
+  useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow, titles * 100 + seasonsPlayed * 5);
 
   /* Round 180: rank my roster against the league and let ownership set the ask.
      Round 192: the press tilt can move it one tier either way. */
@@ -261,6 +331,18 @@ export default function FrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureFoLeagueIds(s.league, s.draftClass);
+      /* Round 1309: a save in the playoffs (a hub save at Week 18 with no
+         champion for its season) plays on the bracket it holds, or on one
+         started again unplayed when it does not read (the feed says so).
+         Asked first, so a bracket is never opened on a save outside them,
+         and refused before any state is set: a hub save past the last week
+         with no bracket to play (its season already has a champion, or no
+         bracket can be made for it) opens on the save error screen, as every
+         unreadable save does. No repair. */
+      const bracketLoad = loadGmPostseason(NFL_POSTSEASON, s.league, s.league.season, inGmPostseason({
+        period: s.league.week, phase: s.phase, seasonHasChampion: s.league.champions.some(c => c.season === s.league.season),
+      }, NFL_POSTSEASON.bracketPeriod), s.playoffs);
+      if (s.phase === 'hub' && s.league.week > REGULAR_WEEKS && !(bracketLoad && bracketLoad.kind === 'bracket')) { setSaveError(true); return; }
       setLeague(s.league);
       setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0);
@@ -282,6 +364,19 @@ export default function FrontOfficeBoard() {
          club's, a damaged entry) is treated as absent. The save loads as it
          would without one and the next press starts a fresh log. */
       setGameLog(readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam));
+      /* Round 1309: the bracket the load handed over (null outside the
+         playoffs, whatever the save held: the key then goes at the next save).
+         A bracket started again keeps the log's regular season and drops its
+         playoff games in the same load, or the tile would show games of a
+         bracket that no longer exists and the round played again would log a
+         second game of his for it. That save is written at once. */
+      const bracketNow = bracketLoad && bracketLoad.kind === 'bracket' ? bracketLoad.repair : null;
+      setPlayoffs(bracketNow ? bracketNow.save : null);
+      if (bracketNow && bracketNow.rebuilt) {
+        const regular = (gameLogLive.current?.games ?? []).filter(nflIsRegular);
+        setGameLog(regular.length > 0 && gameLogLive.current ? { ...gameLogLive.current, games: regular } : null); /* the playoff games of a bracket started again */
+        setNewsFeed([`🔁 ${bracketNow.line}`]);
+      }
       /* Round 431: a reload on the recap screen used to replay the season.
          The save carried phase 'recap' with the league still at the final
          week and no postseason, this effect mapped it back to 'hub', the
@@ -297,6 +392,9 @@ export default function FrontOfficeBoard() {
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
       else openDraft(s.league, s.myTeam, s);
+      /* Round 1309: the bracket started again, and its log, go to storage now
+         (the save's own fields as the patch, as the draft's restore does) */
+      if (bracketNow && bracketNow.rebuilt) persist({ ...s }, s.league, s.myTeam);
     } catch { setSaveError(true); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -312,12 +410,15 @@ export default function FrontOfficeBoard() {
         ...(gmLive.current ? { gm: gmLive.current } : {}),
         ...patch,
         ...(gameLogLive.current ? { gameLog: gameLogLive.current } : {}),
+        ...(playoffsLive.current ? { playoffs: playoffsLive.current } : {}),
       };
       /* Round 1305: the log in a save is the one the reader read or a press
          built, and nothing else. A load that opens the draft hands the whole
          stored save in as its patch, so a log in it that did not read is
          dropped here and never goes back to storage unread. */
       if (!gameLogLive.current) delete base.gameLog;
+      /* Round 1309: the same for the bracket: the key is the ref's, or absent */
+      if (!playoffsLive.current) delete base.playoffs;
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
@@ -379,6 +480,7 @@ export default function FrontOfficeBoard() {
     setGm(openNflDesk(lg, abbr)); setGmOpen(null);
     /* Round 1305: the games of the club he ran before are not this club's season. */
     setGameLog(null); /* a new franchise */
+    setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
   };
 
@@ -484,6 +586,42 @@ export default function FrontOfficeBoard() {
     persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
   };
 
+  /* Round 1309: one press in the playoffs, a round (`all` false) or the rest
+     of them. Every game is played by nflPlayTie, which is runPlayoffs' own
+     game with the win and the loss taken back and told under its round's
+     name with the edges the desk gives, so the bracket a round at a time is
+     the one press path game for game, draw for draw and key for key
+     (scripts/simGmGameDay.mjs sections 11 and 13, and the twelve cases of
+     FrontOfficePostseason.test.tsx). Nothing else is drawn: no injury pass,
+     no computer moves, no healing, exactly as runPlayoffs. His games go into
+     the log; when the title game is in, the league goes back to Week 17,
+     the bracket leaves the save and the season closes through closeSeason.
+     Reached only through playWeek, below its mark and its guards. Declared
+     above playWeek on purpose (harnesses read playWeek as the text up to
+     the next component level const). */
+  const playPlayoffs = (all: boolean) => {
+    const before = playoffsLive.current;
+    const format = league ? NFL_POSTSEASON.formatFor(league.season) : null;
+    if (!league || !before || !format) return;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    const told: GmGameLog['games'] = [];
+    const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);
+    const after = all ? playBracketAll(format, before, play) : playBracketWeek(format, before, play);
+    setGameLog(addToGmGameLog(gameLogLive.current, lg.season, told.filter(g => g.home === myTeam || g.away === myTeam)));
+    setWeekResults([]);
+    setFeedSlam(null);
+    const champ = bracketChampion(format, after);
+    if (champ) {
+      lg.week = REGULAR_WEEKS;
+      setPlayoffs(null); /* the season is closed */
+      closeSeason(lg, nflRoundsOf(format, after), champ);
+      return;
+    }
+    setPlayoffs(after);
+    setLeague(lg);
+    persist({}, lg, myTeam);
+  };
+
   const playWeek = () => {
     if (!league || !my) return;
     /* Round 828 follow up: a full roster over 53 cuts down before it plays,
@@ -499,6 +637,15 @@ export default function FrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an 18th week. */
     if (league.champions.some(c => c.season === league.season)) return;
+    /* Round 1309: what the button asked (each button sets it), spent here.
+       In the playoffs a press plays a round, or the rest of them ("Sim the
+       rest"); past the last week nothing else is played. Two keys, one lock:
+       the bracket AND the week, so a bracket left on a ref can never play on
+       a league that has not finished its season. */
+    const asked = ask.current;
+    ask.current = 'week';
+    if (playoffsLive.current && league.week > REGULAR_WEEKS) { playPlayoffs(asked === 'rest'); return; }
+    if (league.week > REGULAR_WEEKS) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     /* Round 1019: with the desk on, the staff's edge and the trainer ride on
        the week; with it off the week is called exactly as before. */
@@ -526,14 +673,32 @@ export default function FrontOfficeBoard() {
     }
     if (nextGm !== gm) setGm(nextGm);
     const feed: string[] = [...deskLines];
+    /* Round 1309, the fix pass: "Play Week 17" opens a bracket where nobody heals, so a man hurt this week is out
+       for the playoffs whatever his count of weeks (the roster says the same); the old button's line is as it was */
+    const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';
     for (const inj of injuries.filter(i => i.team === myTeam)) {
-      feed.push(`🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
+      feed.push(outForPlayoffs ? `🚑 ${inj.player} is out for the playoffs.` : `🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
     }
     feed.push(...aiLog.slice(0, 2).map(l => `📰 ${l}`));
     setWeekResults(told.map(t => t.game));
     setNewsFeed(feed);
     setFeedSlam(null);
 
+    /* Round 1309: "Play Week 17" plays the week exactly as above, then
+       freezes the fourteen seeds as the engine seeds them, opens the year's
+       bracket and moves the league to Week 18, the engine's own "18 =
+       playoffs". Nothing of the playoffs is played and the season stays
+       open. The old button (`asked` 'week') runs the lines below to the
+       letter. */
+    const bracketFormat: BracketFormat | null = lg.week >= REGULAR_WEEKS && asked === 'bracket' ? NFL_POSTSEASON.formatFor(lg.season) : null;
+    if (bracketFormat) {
+      setPlayoffs(openBracket(bracketFormat, lg.season, NFL_POSTSEASON.seeds(lg)));
+      lg.week = REGULAR_WEEKS + 1;
+      setLeague(lg);
+      setGameLog(log);
+      persist({}, lg, myTeam);
+      return;
+    }
     if (lg.week >= REGULAR_WEEKS) {
       const { rounds, champion: champ } = runPlayoffs(lg.teams, Math.random, nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined);
       /* Round 1305: the thirteen playoff games are told the same way, each
@@ -836,7 +1001,9 @@ export default function FrontOfficeBoard() {
   };
   /* Round 1019: with the desk on, every trade path asks the deadline first. */
   const deadlineBlock = (): boolean => {
-    const why = gm && league ? nflDeadlineRefusal(league) : null;
+    const deadline = gm && league ? nflDeadlineRefusal(league) : null;
+    /* Round 1309: and the playoffs, desk or no desk */
+    const why = deadline ?? (playoffsLive.current && league && league.week > REGULAR_WEEKS ? PLAYOFF_TRADE_LINE : null);
     if (why) setNewsFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
     return !!why;
   };
@@ -957,6 +1124,7 @@ export default function FrontOfficeBoard() {
     setSeasonTradeLine(null);
     setGm(null); setGmOpen(null);
     setGameLog(null); /* abandoned */
+    setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: abandoned in the playoffs */
   };
 
   /* Round 1019: the desk boxes. The first tap on one, on a save from before
@@ -1043,7 +1211,9 @@ export default function FrontOfficeBoard() {
      because the recap mounts the re-sign desk too. */
   const conf = conferenceOf(myTeam);
   const confTable = standings(league.teams).filter(x => conferenceOf(x.abbr) === conf);
-  const myLast = weekResults.find(g => g.home === myTeam || g.away === myTeam);
+  /* Round 1309: his last result is the log's last game, on every week and in the playoffs (a reload used to empty
+     the play box until the next press, and the week's grid holds no playoff game) */
+  const myLast = lastGmGame(gameLogLive.current);
   /* Round 828: on a full roster the men on the chart's starting lines, hurt or
      not, are the ones the boxes talk about; the bench is counted, not quoted. */
   const deep = my.rosterDepth === 2;
@@ -1103,7 +1273,8 @@ export default function FrontOfficeBoard() {
   }
 
   /* ------------------------------ recap screen ------------------------------ */
-  if (phase === 'recap') {
+  /* Round 1309: not while he watches the title game; full time (or Results) lets the hold go and the recap comes */
+  if (phase === 'recap' && !hold) {
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
     /* Round 187: the verdict curtain. Every string below is exactly what
@@ -1420,7 +1591,7 @@ export default function FrontOfficeBoard() {
       <div className="flex items-center justify-between">
       <span className="min-w-0">
         <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
-          {p.name} {p.out > 0 ? `(out ${p.out}w)` : ''}
+          {p.name} {p.out > 0 ? (league.week > REGULAR_WEEKS ? '(out for the playoffs)' : `(out ${p.out}w)`) : ''}
         </span>
         <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}{noTape(p)}</span>
       </span>
@@ -1470,9 +1641,73 @@ export default function FrontOfficeBoard() {
   const seen = hold ?? league;
   const seenMy = seen.teams[myTeam] ?? my;
   const seenGame = hold ? hold.schedule[hold.week - 1]?.find(g => g.home === myTeam || g.away === myTeam) : myGameThisWeek;
+  /* Round 1309, the fix pass: the owner's trust and the press room as they stood before a watched playoff press (see `heldRoom`) */
+  const seenTrust = roomHeld ? roomHeld.trust : trust;
+  const seenPresser = roomHeld ? roomHeld.presser : presser;
   /* his seed today as the engine itself would seed the conference (division winners first, then three wild cards) */
   const seedsNow = conferenceSeeds(league.teams, conf);
-  const gameLogNow = gameLogLive.current;
+  /* Round 1309: the playoffs on the week box. The bracket as it is SEEN (while
+     he watches, as it stood before the press: Round 1307's rule for every
+     reader), the round to play next, and his tie in it when he has one (named
+     by the bracket data's own round: "AFC Wild Card"; null when he has the bye
+     or is out). */
+  const seenPlayoffs = hold ? heldBracket : playoffs;
+  const bracketFormat = seenPlayoffs ? NFL_POSTSEASON.formatFor(league.season) : null;
+  const bracketOpen = !!seenPlayoffs && seen.week > REGULAR_WEEKS;
+  const roundNow = ((): { round: string | null; mine: boolean } => {
+    const fmt = bracketFormat;
+    const w = fmt && seenPlayoffs ? bracketWeek(fmt, seenPlayoffs) : null;
+    const pairs = fmt && seenPlayoffs && w !== null ? bracketPairings(fmt, seenPlayoffs, w) : null;
+    const his = pairs ? pairs.find(p => p.homeId === myTeam || p.awayId === myTeam) ?? null : null;
+    return { round: his && fmt ? fmt.ties.find(x => x.id === his.id)?.round ?? null : null, mine: !!his };
+  })();
+  /* the row of the back chip (under the box from sm up, above it under sm): drawn for the whole bracket, and through the watch of the press that
+     opened it, so the box never moves when its face changes or a watch ends */
+  const bracketRow = bracketOpen || (!!playoffs && league.week > REGULAR_WEEKS);
+  /* his game of a tie, as its place in the log (-1: none): the game told under the tie's round between its two clubs */
+  const tieGameAt = (tieId: string): number => {
+    const tie = bracketFormat?.ties.find(x => x.id === tieId);
+    const p = seenPlayoffs?.played.find(x => x.id === tieId);
+    const games = gameLogLive.current?.games ?? [];
+    return tie && p ? games.findIndex(g => g.where === tie.round && (g.home === p.home || g.away === p.home) && (g.home === p.away || g.away === p.away)) : -1;
+  };
+  const openAt = bracketOpen && !hold && boxGame !== null && boxGame !== 'last' ? tieGameAt(boxGame) : -1;
+  /* the tile in the bracket is handed the log up to the game that is open, so it opens on that game */
+  const logOpen = gameLogLive.current && openAt >= 0 ? { ...gameLogLive.current, games: gameLogLive.current.games.slice(0, openAt + 1) } : null;
+  const gameLogNow = logOpen ?? gameLogLive.current;
+  /* the box's face: in the bracket, the bracket, unless a game of his is open or being watched */
+  const bracketFace = bracketOpen && !hold && (boxGame === null || (boxGame !== 'last' && openAt < 0));
+  /* The row of the back chip, drawn for the whole bracket. From sm up it sits under the box and carries the reveal's
+     edge (the fix pass: on the box's own edge the chip sat under the fold at 1280). Under sm (the closing check of
+     Round 1309) it sits ABOVE the box, between the press row and the reveal's wrapper, which still starts at the box:
+     under the box the chip was under the fold after a first press at 390 by 844 (984 to 1028), and above it the chip
+     is on the screen whenever the press buttons are. Which of the two is the width the page loaded at, as the
+     reveal's element is, so a window resized across sm moves nothing. */
+  const bracketBackRow = bracketRow ? (
+    <div className="relative flex h-11 items-center justify-start" data-bracket-row>
+      {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" data-reveal-edge />}
+      {bracketFace ? null : (
+        <button
+          type="button"
+          onClick={() => setBoxGame(null)}
+          disabled={!!hold}
+          data-bracket-back
+          className="inline-flex h-11 items-center gap-1 rounded-full border border-border bg-background px-4 text-xs font-bold text-foreground hover:border-primary disabled:opacity-40"
+        >
+          <ChevronLeft className="h-4 w-4" /> The bracket
+        </button>
+      )}
+    </div>
+  ) : null;
+  /* the presses that open the bracket or play in it: the box then shows his game when the press logged one (a Watch
+     runs it on the clock) and the bracket when it logged none (his bye, or he is out) */
+  const pressPlayoffs = (asked: 'bracket' | 'round' | 'rest', watch: boolean) => {
+    const before = gameLogLive.current?.games.length ?? 0;
+    if (watch) { setHeld(league); setHeldBracket(playoffs); setHeldRoom({ from: league, trust, presser, won: wonTitleNow }); }
+    ask.current = asked;
+    playWeek();
+    setBoxGame((gameLogLive.current?.games.length ?? 0) > before ? 'last' : null);
+  };
 
   return (
     <div className="space-y-4">
@@ -1480,7 +1715,7 @@ export default function FrontOfficeBoard() {
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold" style={{ background: t.color, color: '#fff' }}>{label(myTeam)}</span>
-        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-week-chip>{seen.season} · Week {seen.week}/{REGULAR_WEEKS}</span>
+        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-week-chip>{seen.season} · {seen.week > REGULAR_WEEKS ? 'Playoffs' : `Week ${seen.week}/${REGULAR_WEEKS}`}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground" data-record-chip>Record <b className="text-foreground">{seenMy.wins}-{seenMy.losses}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 5 ? 'text-destructive' : 'text-muted-foreground')}>
@@ -1492,7 +1727,7 @@ export default function FrontOfficeBoard() {
       {mandate && (
         <OwnerMandateCard
           mandate={mandate}
-          trust={trust}
+          trust={seenTrust}
           pace={seen.week > 1 && seen.week <= REGULAR_WEEKS
             ? mandatePace(mandate, seenMy.wins, (seen.week - 1) / REGULAR_WEEKS, conferenceSeeds(seen.teams, conferenceOf(myTeam)).includes(myTeam))
             : null}
@@ -1500,7 +1735,7 @@ export default function FrontOfficeBoard() {
       )}
 
       {/* Round 192: the introduction presser waits on the hub until answered. */}
-      {presser && <GmPressCard presser={presser} onAnswer={answerPress} />}
+      {seenPresser && <GmPressCard presser={seenPresser} onAnswer={answerPress} shut={!!roomHeld} />}
 
       {/* Round 204: boxes, not pills. Each one already tells you the thing
           you used to have to tap to find out. */}
@@ -1613,7 +1848,7 @@ export default function FrontOfficeBoard() {
                     >
                       <span className="min-w-0">
                         <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
-                          {i + 1}. {p.name}{p.out > 0 ? ` (out ${p.out}w)` : ''}
+                          {i + 1}. {p.name}{p.out > 0 ? (league.week > REGULAR_WEEKS ? ' (out for the playoffs)' : ` (out ${p.out}w)`) : ''}
                         </span>
                         <span className="block text-[10px] text-muted-foreground">{p.age}y · ${p.salary}M</span>
                       </span>
@@ -1631,7 +1866,7 @@ export default function FrontOfficeBoard() {
           {cutBlock && depthView === null && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           {overLimit > 0 && depthView === null && (
             <p data-over-limit className="mb-2 text-center text-[10px] text-destructive">
-              {overLimit} over the limit of {DEEP_ROSTER_MAX}. Cut {overLimit === 1 ? 'one man' : `${overLimit} men`} before Week {league.week}.
+              {overLimit} over the limit of {DEEP_ROSTER_MAX}. Cut {overLimit === 1 ? 'one man' : `${overLimit} men`} before {league.week > REGULAR_WEEKS ? 'the next round' : `Week ${league.week}`}.
             </p>
           )}
           {depthView === null && !deep && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
@@ -1874,7 +2109,12 @@ export default function FrontOfficeBoard() {
 
       {tab === 'week' && (
         <div className="relative rounded-2xl border border-gold/40 bg-card p-4 text-center space-y-3" data-week-box>
-          {seenGame ? (
+          {/* Round 1309: in the playoffs the line names his round, or says he has none */}
+          {bracketOpen ? (
+            <p className="text-sm text-foreground" data-week-matchup>
+              {roundNow.round ? `Your game: the ${roundNow.round}.` : 'No game for you this round. The playoffs play on.'}
+            </p>
+          ) : seenGame ? (
             <p className="text-sm text-foreground" data-week-matchup>
               Week {seen.week}: <b>{label(seenGame.away)}</b> at <b>{label(seenGame.home)}</b>
             </p>
@@ -1894,17 +2134,85 @@ export default function FrontOfficeBoard() {
               "whichever fits". Left to wrap, "Week 1" shared a row at 390 and
               "Week 2" did not, so the box grew a button row at the first
               press of a season and the tile moved as its result arrived. */}
-          <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
+          {/* Round 1309: Week 17 has "Play Week 17" first (it plays the week
+              and opens the bracket), "Watch Week 17" (the same press, his game
+              on the clock) and the old button last, in outline, word for word
+              and playing what it always played. In the playoffs: the round (his
+              tie's name when he plays in it), "Watch your game" when he plays
+              in it, and the rest. Every button says what it asks of playWeek.
+              The two rows of three are stacked under sm and three a row from
+              sm up, at one height (PRESS_THREE). */}
+          {bracketOpen ? (
+            <div className={cn('grid grid-cols-1 gap-2', roundNow.mine ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
+              <button
+                onClick={() => pressPlayoffs('round', false)}
+                disabled={overLimit > 0 || !!hold}
+                data-press="round"
+                className={cn(PRESS_THREE, 'bg-primary text-primary-foreground hover:opacity-90')}
+              >
+                <ShieldHalf className="h-4 w-4 shrink-0" /> {roundNow.round ? `Play the ${roundNow.round}` : 'Play the next round'}
+              </button>
+              {roundNow.mine && (
+                <button
+                  onClick={() => pressPlayoffs('round', true)}
+                  disabled={overLimit > 0 || !!hold}
+                  data-watch-round
+                  className={cn(PRESS_THREE, 'border border-primary text-primary hover:bg-primary/10')}
+                >
+                  Watch your game
+                </button>
+              )}
+              <button
+                onClick={() => pressPlayoffs('rest', false)}
+                disabled={overLimit > 0 || !!hold}
+                data-press="rest"
+                className={cn(PRESS_THREE, 'border border-border text-foreground hover:bg-muted/40')}
+              >
+                Sim the rest of the playoffs
+              </button>
+            </div>
+          ) : seen.week >= REGULAR_WEEKS ? (
+            <div className={cn('grid grid-cols-1 gap-2', seenGame ? 'sm:grid-cols-3' : 'sm:grid-cols-2')} data-press-row>
+              <button
+                onClick={() => pressPlayoffs('bracket', false)}
+                disabled={overLimit > 0 || !!hold}
+                data-press="week"
+                className={cn(PRESS_THREE, 'bg-primary text-primary-foreground hover:opacity-90')}
+              >
+                <ShieldHalf className="h-4 w-4 shrink-0" /> {`Play Week ${seen.week}`}
+              </button>
+              {seenGame && (
+                <button
+                  onClick={() => pressPlayoffs('bracket', true)}
+                  disabled={overLimit > 0 || !!hold}
+                  data-watch-week
+                  className={cn(PRESS_THREE, 'border border-primary text-primary hover:bg-primary/10')}
+                >
+                  Watch Week {seen.week}
+                </button>
+              )}
+              <button
+                onClick={() => { ask.current = 'week'; playWeek(); }}
+                disabled={overLimit > 0 || !!hold}
+                data-press="old"
+                className={cn(PRESS_THREE, 'border border-border text-foreground hover:bg-muted/40')}
+              >
+                Play the final week + playoffs
+              </button>
+            </div>
+          ) : (
+          <div className="flex flex-col items-center justify-center gap-2 sm:flex-row" data-press-row>
             <button
-              onClick={playWeek}
+              onClick={() => { ask.current = 'week'; playWeek(); }}
               disabled={overLimit > 0 || !!hold}
+              data-press="week"
               className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
             >
-              <ShieldHalf className="h-4 w-4" /> {seen.week >= REGULAR_WEEKS ? 'Play the final week + playoffs' : `Play Week ${seen.week}`}
+              <ShieldHalf className="h-4 w-4" /> {`Play Week ${seen.week}`}
             </button>
-            {seen.week < REGULAR_WEEKS && seenGame && (
+            {seenGame && (
               <button
-                onClick={() => { setHeld(league); playWeek(); }}
+                onClick={() => { ask.current = 'week'; setHeld(league); playWeek(); }}
                 disabled={overLimit > 0 || !!hold}
                 data-watch-week
                 className="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"
@@ -1913,9 +2221,25 @@ export default function FrontOfficeBoard() {
               </button>
             )}
           </div>
-          <div ref={revealRef} className="space-y-3">
+          )}
+          {!wideAtLoad && bracketBackRow}
+          <div ref={wideAtLoad ? undefined : revealRef} className="space-y-3">
             {/* the board owns the tile's box: the same height while the card loads, on every face and after every press */}
-            <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box>
+            {/* Round 1309: ONE BOX, TWO FACES. In the playoffs the box shows the bracket, or his game on the tile when a
+                press logged one or he opened one ("Your game"); the row of the back chip is under it from sm up, above it under sm. */}
+            <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
+              {/* from sm up, the reveal's element: the box's bottom edge, inside its border (laid ON the border it made the box scroll a pixel inside itself), with a one pixel scroll margin for the border (see the reveal) */}
+              {wideAtLoad && !bracketRow && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px scroll-mb-px" data-reveal-edge />}
+              {bracketFace && seenPlayoffs && bracketFormat ? (
+                <NflBracket
+                  format={bracketFormat}
+                  save={seenPlayoffs}
+                  my={myTeam}
+                  name={nickname}
+                  onOpenGame={tieId => setBoxGame(tieId)}
+                  helpHost={helpHost}
+                />
+              ) : (
               <NflGameDay
                 key={`${league.season}:${gameLogNow?.games.length ?? 0}`}
                 log={gameLogNow?.games ?? []}
@@ -1923,14 +2247,15 @@ export default function FrontOfficeBoard() {
                 name={nickname}
                 short={id => id}
                 next={hubFacts.nextOpponent}
-                nextNote={seen.week >= REGULAR_WEEKS ? FINAL_WEEK_NOTE : undefined}
                 mode={hold ? 'watch' : 'result'}
                 onWatched={() => setHeld(null)}
-                standing={{ table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
+                standing={bracketRow ? null : { table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
                 helpHost={helpHost}
               />
+              )}
             </div>
-          {weekResults.length > 0 && !hold && (
+            {wideAtLoad && bracketBackRow}
+          {weekResults.length > 0 && !hold && (!bracketRow) && (
             <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
               {weekResults.map((g, i) => {
                 const involved = g.home === myTeam || g.away === myTeam;
