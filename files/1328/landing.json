@@ -1,0 +1,32 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "D",
+   "msg": "liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44"
+  },
+  {
+   "section": "D",
+   "msg": "liverpool-take-seed1: Math.random draws 4762 on base, 4844 on head"
+  },
+  {
+   "section": "D",
+   "msg": "celta-skip-seed2: dukb-club-manager-save differs, $.budget: 18.55 against 18.63"
+  },
+  {
+   "section": "D",
+   "msg": "celta-skip-seed2: Math.random draws 4672 on base, 4663 on head"
+  },
+  {
+   "section": "D",
+   "msg": "everton2005-newyear-seed3: dukb-club-manager-save differs, $.budget: 17.82 against 17.88"
+  },
+  {
+   "section": "D",
+   "msg": "everton2005-newyear-seed3: Math.random draws 14150 on base, 13620 on head"
+  }
+ ],
+ "counts": {
+  "D": 6
+ }
+}

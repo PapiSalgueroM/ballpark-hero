@@ -1,0 +1,14 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl-noscroll exit=1 21s | playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+ctl-stale exit=1 22s | playCmHubLanding: CONTROL stale FIRED, 1 B check(s) went red, first: banner-390: the strip rides the foot once the banner is answered (bottom 683, foot 832, banner gone) 
+hub-tilectl-EXPECT-RED exit=1 61s | playCmHubLanding: 3 failure(s) (C 108 pass 3 fail)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures exit=0 4s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures-1 exit=0 25s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playCmRealFixtures-2 exit=0 26s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playNationJob exit=0 15s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+playClubManager exit=0 288s | Played Club Manager through its own screens. 0 findings.
+simRevealScroll exit=0 215s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job
+hub-base exit=0 35s | /tmp/wt-4174
+hub-walk-full exit=0 242s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its firs
+hub-drift-EXPECT-RED exit=1 132s | playCmHubLanding: CONTROL drift FIRED, 6 D check(s) went red, first: liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44 (D 6 pass 6 fai

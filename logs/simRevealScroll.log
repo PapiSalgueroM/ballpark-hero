@@ -1,0 +1,6 @@
+  PROOF   /club-manager    step  2  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  4  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  6  scrollY   384 ->   101 (-283)  panel top  -271 h   798 -> top    12  block=start  [🕰️ 2010-11 Prime Messi. Mourinho']
+  PROOF   /club-manager    step 12  scrollY   261 ->   101 (-160)  panel top  -148 h   798 -> top    12  block=start  [🦊 2015-16 The Leicester season. M]
+
+Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job.
