@@ -3,11 +3,12 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
-  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, yearsOn,
+  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, worldSeedOf, yearsOn,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf, sellValue,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
+import { worldRosterView } from '@/lib/clubManagerWorldRoster';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 interface ClubDetailScreenProps {
@@ -38,11 +39,21 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   /* Round 154: a club you founded has no projected world entry, its squad IS
      the save's squad, so the viewer reads that directly. */
   const isMyCustom = !!career.customClub && clubName === career.customClub.name;
+  /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read
+     from his squad, never the world roster): in a career that plays the living
+     world, my own club opened from a bracket or the world tables is my squad,
+     as a club I founded always was. Off the world roster it listed only the
+     men of my club who are NOT in my squad (the men a deep club's bake holds
+     beyond the 26 a squad starts with, then every replacement the projection
+     made up). A career from before the release reads the projected world here
+     exactly as it did (ruling Y1). src/test/clubDetailOwnClub.test.tsx holds
+     it. */
+  const fromMySquad = isMyCustom || (clubName === career.clubName && (worldSeedOf(career) !== undefined || worldRosterView(career) !== null));
   /* Round 640: a founder of a club founded above what its money buys sells
      at a fixed share of his value, so the viewer shows what a sale would pay
      (sellValue, the figure the transfer and contracts screens quote) beside
      what he is worth, for him and for the squad. */
-  const roster: { n: string; p: string; a: number; v: number; r: number; g?: boolean; s?: number }[] = isMyCustom
+  const roster: { n: string; p: string; a: number; v: number; r: number; g?: boolean; s?: number }[] = fromMySquad
     ? career.squad.map(p => ({
       n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating, g: p.generated,
       s: p.founderSaleRatio !== undefined ? sellValue(p) : undefined,
@@ -56,7 +67,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
     : [...oppRosterFor(career, clubName)].sort((a, b) => b.v - a.v);
   const saleRatioMen = isMyCustom && career.squad.some(p => p.founderSaleRatio !== undefined);
   const salePays = saleRatioMen ? career.squad.reduce((s, p) => s + sellValue(p), 0) : 0;
-  const xiAvg = isMyCustom
+  const xiAvg = fromMySquad
     ? (roster.length ? Math.round([...roster].sort((a, b) => b.r - a.r).slice(0, 11).reduce((s, p) => s + p.r, 0) / Math.min(11, roster.length)) : null)
     : worldRosterXIAvg(career, clubName);
   const squadValue = useMemo(() => roster.reduce((s, p) => s + p.v, 0), [roster]);
@@ -184,7 +195,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
             {saleRatioMen && ' You started with a better squad than your money buys, so the made up players marked "sells" go for less than they are worth: what a sale pays, the same figure the transfer screen quotes.'}
           </p>
         )}
-        {!isMyCustom && onYears > 0 && roster.length > 0 && (
+        {!fromMySquad && onYears > 0 && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">
             {worldSeasonLabel(career)} squad. Real players from August 2026 aged forward, with anyone who retired replaced by
             players this game made up, marked above.
