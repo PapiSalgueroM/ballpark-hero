@@ -3025,7 +3025,10 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">💰 Finances & Lifestyle</span>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* Round 1330: retired, the grid has three tiles (no wage), so three
+          columns from sm up and, on a phone, Followers takes the whole row
+          rather than sitting alone beside an empty cell. */}
+      <div className={`grid grid-cols-2 ${career.phase === "retired" ? "sm:grid-cols-3" : "sm:grid-cols-4"} gap-3`}>
         <div className="text-center bg-muted/20 rounded-lg p-2">
           <div className={`text-lg font-black ${nwColor}`}>{formatNetWorth(career.netWorth)}</div>
           <div className="text-[9px] text-muted-foreground">Net Worth</div>
@@ -3036,7 +3039,7 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
           </div>
           <div className="text-[9px] text-muted-foreground">Lifestyle</div>
         </div>
-        <div className="text-center bg-muted/20 rounded-lg p-2">
+        <div className={`text-center bg-muted/20 rounded-lg p-2 ${career.phase === "retired" ? "col-span-2 sm:col-span-1" : ""}`}>
           <div className="text-lg font-black text-blue-400">
             {formatFollowers(career.socialMediaFollowers)}
           </div>
