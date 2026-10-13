@@ -127,7 +127,7 @@ const CONTROLS = {
   seasonyear: { breaks: '1', note: 'every month is printed with the season\'s starting year again',
     edits: { [ENGINE]: [['  s.events.push(`🏆 Won Player of the Month (${month} ${monthYear(month, thisYear)})!`);', '  s.events.push(`🏆 Won Player of the Month (${month} ${thisYear})!`);']] } },
   nolegacy: { breaks: '2', note: 'the old lottery\'s Math.random calls are no longer made',
-    edits: { [ENGINE]: [['  legacyMonthDraws(season.goals);\n', '']] } },
+    edits: { [ENGINE]: [['  if (legacyMonthDraws(season.goals) < 0) s.events.push("");\n', '']] } },
   realmoves: { breaks: '3', note: 'real men are moved between clubs again',
     edits: { [PHONE]: [['    if (realNames) continue;\n    p.clubs[st.name] = to;', '    p.clubs[st.name] = to;']] } },
   pastchampions: { breaks: '3', note: 'a season that happened prints its champions again',

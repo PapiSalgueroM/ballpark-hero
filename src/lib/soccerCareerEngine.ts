@@ -5706,18 +5706,26 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      Math.random calls are still made, the same number in the same order, and
      thrown away: the Round 521 and Round 1041 rule, every branch draws exactly
      as before, so nothing later in the season moves. The award reads a stream
-     keyed to the career and the season instead. */
-  const legacyMonthDraws = (goals: number): void => {
-    let won = 0;
+     keyed to the career and the season instead. The production bundler
+     counts Math.random as pure and drops a draw whose result goes nowhere,
+     so every draw is summed and the sum feeds a branch it cannot rule out
+     (a sum of draws is never negative); without it the built game made 20
+     fewer draws than the engine (playSoccerCareerDepth, node 170, page 150). */
+  const legacyMonthDraws = (goals: number): number => {
+    let won = 0, total = 0;
     for (let m = 0; m < 10; m += 1) {
-      const monthGoals = Math.max(0, Math.round((goals / 10) + (Math.random() * 2 - 1)));
+      const swing = Math.random();
+      const monthGoals = Math.max(0, Math.round((goals / 10) + (swing * 2 - 1)));
       const chance = monthGoals >= 4 ? 0.75 : monthGoals >= 3 ? 0.5 : monthGoals >= 2 ? 0.25 : monthGoals >= 1 ? 0.1 : 0.02;
-      if (Math.random() < chance) won += 1;
+      const roll = Math.random();
+      if (roll < chance) won += 1;
+      total += swing + roll;
     }
-    if (goals >= 30) for (; won < 6; won += 1) rand(0, 9 - won);
-    if (goals >= 35) for (; won < 7; won += 1) rand(0, 9 - won);
+    if (goals >= 30) for (; won < 6; won += 1) total += rand(0, 9 - won);
+    if (goals >= 35) for (; won < 7; won += 1) total += rand(0, 9 - won);
+    return total;
   };
-  legacyMonthDraws(season.goals);
+  if (legacyMonthDraws(season.goals) < 0) s.events.push("");
   for (const month of monthAwards(season, s.position, keyedRng(`${soccerDeckIdentity(s)}|${season.year}|potm`))) {
     s.awards = [...s.awards, { year: thisYear, name: "Player of the Month", emoji: "🏆" }];
     s.events.push(`🏆 Won Player of the Month (${month} ${monthYear(month, thisYear)})!`);
