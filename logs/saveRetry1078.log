@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Retry performs exactly one write
+
+11 !== 9
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerCareerSaveRetry1078.mjs:247:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 11,
+  expected: 9,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
