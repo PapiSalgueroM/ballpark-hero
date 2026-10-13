@@ -1,0 +1,10 @@
+simCollegeDynastyBoard exit=0 11s | simCollegeDynastyBoard: all green
+vitest-seat exit=0 12s |    Duration  11.03s (transform 1.22s, setup 895ms, collect 4.39s, tests 14.70s, environment 5.46s, prepare 1.59s)
+simCollegeSeat-anchors exit=0 0s | simCollegeSeat anchors: 16 rewrites of 11 controls and 3 variants checked, 0 cannot run
+simNoInventedQuotes exit=0 28s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+tsc exit=0 87s | 
+simCollegeSeat exit=0 213s | simCollegeSeat: all sections green (S1 to S9 and SY)

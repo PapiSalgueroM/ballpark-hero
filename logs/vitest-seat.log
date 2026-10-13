@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m42 tests[22m[2m)[22m[33m 1653[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 1262[2mms[22m[39m
+ [32m✓[39m src/lib/gmSeat.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 3262[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 393[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 504[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: the live line follows the record, and the recap grades the year and moves trust [33m 379[2mms[22m[39m
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1153[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB Dynasty: the program layer on the board[2m > [22mplays a save from before assistant coaches existed without adding anything to it [33m 325[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 6746[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture [33m 3905[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 2832[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 931[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mplays a save from before coordinators existed without adding anything to it [33m 429[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 479[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 335[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m102 passed[39m[22m[90m (102)[39m
+[2m   Start at [22m 00:44:51
+[2m   Duration [22m 11.03s[2m (transform 1.22s, setup 895ms, collect 4.39s, tests 14.70s, environment 5.46s, prepare 1.59s)[22m
+
