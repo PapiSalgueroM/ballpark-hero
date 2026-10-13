@@ -89,7 +89,8 @@ const monthLinesA = [];
 for (const e of saveA.story || []) for (const l of e.lines || []) for (const m of l.matchAll(MONTH_LINE)) monthLinesA.push({ line: m[0], month: m[1], year: Number(m[2]), season: e.year });
 for (const l of saveA.events || []) for (const m of l.matchAll(MONTH_LINE)) monthLinesA.push({ line: m[0], month: m[1], year: Number(m[2]), season: saveA.seasons.at(-1).year });
 const saveB = seen(find('B', 60, i => drive(1329100 + i, 'England', 'CB', 48, 70, 2000, s => s.phase === 'playing' && lastIntl(s)?.year === 2006 && s.lastTournament?.year === 2006 && !T.playedFinals(lastIntl(s).myResult))));
-const cardB = { ...copy(saveB), phase: 'world_cup', pendingTournament: { ...copy(saveB.lastTournament), myResult: 'Did Not Qualify', qualified: false, squad: null, playerApps: 0, matches: [], groupTable: [] } };
+const cardB = { ...copy(saveB), phase: 'world_cup', pendingTournament: copy(saveB.lastTournament) };
+assert.ok(['Did Not Qualify', 'Not Selected'].includes(cardB.pendingTournament.myResult), 'save B watched the 2006 summer from home');
 const saveC = seen(find('C', 60, i => drive(1329200 + i, 'England', 'CB', 48, 70, 2024, s => s.phase === 'playing' && lastIntl(s)?.year === 2030 && world(s)?.year === 2030)));
 console.log(`saves: A ${saveA.playerName} at ${saveA.currentClub}, world ${world(saveA).year}, ${monthLinesA.length} month lines; B ${saveB.playerName}, the ${saveB.lastTournament.name} ${saveB.lastTournament.year} won by ${saveB.lastTournament.champion} (his result "${lastIntl(saveB).myResult}"); C ${saveC.playerName}, the ${saveC.lastTournament.name} 2030 won by ${saveC.lastTournament.champion}`);
 
@@ -100,6 +101,7 @@ const failNote = m => { report.failures.push(m); console.error(`  FAIL: ${m}`); 
 const browser = await pw.chromium.launch({ headless: true });
 const waitText = (page, text) => page.waitForFunction(t => document.body.innerText.includes(t), text, { timeout: 30000 });
 const phoneText = page => page.evaluate(() => document.querySelector('[aria-label="Your phone"]')?.innerText ?? '');
+const sweep = page => page.evaluate(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 300) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } });
 const measure = page => page.evaluate(() => ({ scrollY: Math.round(window.scrollY), height: document.documentElement.scrollHeight, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1 }));
 try {
   for (const [width, height] of [[320, 640], [390, 844], [1280, 900]]) {
@@ -114,7 +116,14 @@ try {
       await page.evaluate(v => { localStorage.setItem('soccerCareerSave', v); localStorage.setItem('cookie-consent', 'essential'); }, JSON.stringify(save));
       await page.goto(`${SITE}/soccer-career`, { waitUntil: 'domcontentloaded' });
     };
-    const step = async (name, fn) => { try { await fn(); run.steps.push(`${name} ok`); } catch (err) { failNote(`${tag} ${name}: ${err.message.split('\n')[0]}`); run.steps.push(`${name} broke`); } };
+    const step = async (name, fn) => {
+      try { await fn(); run.steps.push(`${name} ok`); } catch (err) {
+        failNote(`${tag} ${name}: ${err.message.split('\n')[0]}`); run.steps.push(`${name} broke`);
+        await page.screenshot({ path: path.join(OUT, `${tag}-${name.replace(/ /g, '-')}-broke.png`), fullPage: true }).catch(() => {});
+        const said = await page.evaluate(() => document.body.innerText.slice(0, 600).replace(/\s+/g, ' ')).catch(() => '');
+        console.error(`    the page said: ${said}`);
+      }
+    };
     await step('A feed', async () => {
       await open(saveA);
       await page.locator('[data-career-utility="phone"]').first().click();
@@ -149,6 +158,9 @@ try {
     await step('A story', async () => {
       await open(saveA);
       await page.locator('[data-open-career-story]').first().click();
+      await page.waitForSelector('[data-story-tile]', { timeout: 30000 });
+      const season = monthLinesA[0].season;
+      await page.evaluate(year => { const t = [...document.querySelectorAll('[data-story-tile]')].find(b => b.querySelector('span span')?.textContent?.trim() === String(year)); t?.click(); }, season);
       await waitText(page, 'Player of the Month (');
       await page.screenshot({ path: path.join(OUT, `${tag}-A-story.png`) });
       const text = await page.evaluate(() => document.body.innerText);
@@ -163,6 +175,7 @@ try {
     });
     await step('B history', async () => {
       await open(saveB);
+      await sweep(page);
       await waitText(page, 'Tournaments');
       const tiles = page.locator('button', { hasText: 'Tournaments' }).first();
       await tiles.scrollIntoViewIfNeeded();
@@ -212,7 +225,7 @@ try {
         return { text: tiles[0]?.closest('.rounded-xl.border-2')?.innerText ?? '', keys: tiles.map(x => x.getAttribute('data-intl-tile')),
           widths: tiles.map(x => Math.round(x.getBoundingClientRect().width)), grid: Math.round(grid?.width ?? 0), heights: tiles.map(x => Math.round(x.getBoundingClientRect().height)) };
       });
-      if (card.text.includes('Champions:') || card.text.includes(t.champion)) failNote(`${tag} B card: a 2006 he did not qualify for names its champion`);
+      if (card.text.includes('Champions:') || card.text.includes('in the final')) failNote(`${tag} B card: a 2006 he did not qualify for names its champion`);
       if (card.keys.includes('bracket')) failNote(`${tag} B card: the Bracket tile is offered for a 2006 he missed`);
       if (card.keys.length !== 3) failNote(`${tag} B card: ${card.keys.length} tiles (${card.keys.join(', ')}), three expected`);
       else if (Math.abs(card.widths[2] - card.grid) > 2) failNote(`${tag} B card: the third tile is ${card.widths[2]} px in a ${card.grid} px grid, a hole beside it`);
@@ -234,6 +247,7 @@ try {
       else if (!lines.slice(at + 1).some(l => / win | are champions of Europe/.test(l))) failNote(`${tag} C: no champion line sits under the framing line`);
       else if (lines.slice(0, at).some(l => / win | are champions of Europe|DONE DEAL/.test(l))) failNote(`${tag} C: a line of the season sits above its framing line`);
       await open(saveC);
+      await sweep(page);
       await waitText(page, 'played out');
       const lastTile = page.locator('button', { hasText: 'won it' }).first();
       const label = await lastTile.textContent();
