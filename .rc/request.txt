@@ -1,0 +1,10 @@
+eras5-9000: SEED_BASE=9000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-19000: SEED_BASE=19000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-29000: SEED_BASE=29000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-39000: SEED_BASE=39000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-49000: SEED_BASE=49000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-59000: SEED_BASE=59000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-69000: SEED_BASE=69000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-79000: SEED_BASE=79000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-89000: SEED_BASE=89000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-99000: SEED_BASE=99000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
