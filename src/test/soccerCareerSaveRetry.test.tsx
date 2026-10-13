@@ -54,6 +54,10 @@ import { toast } from 'sonner';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const KEY = 'soccerCareerSave', OTHER = 'other-career-save';
+/* Round 1330: the save fence's own key. A refused save puts it back as it was
+   (a removeItem when it was absent), so the removes below are narrowed to the
+   save's key and the fence key is checked to read what it read before. */
+const FENCE = 'dukb-fence:soccerCareerSave';
 const notice = 'Your latest progress could not be saved. Keep this tab open, then try again.';
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const read = (): E.CareerState => JSON.parse(localStorage.getItem(KEY)!);
@@ -124,7 +128,7 @@ describe('Soccer Career failed write recovery', () => {
     const m = mount(nativeCareer(), true); assertWarning(m.view);
     expect(m.view.container.textContent).toContain('Write Tester'); expect(m.view.queryByText('Create Your Player')).toBeNull();
     expect(localStorage.getItem(KEY)).toBe(m.raw); expect(localStorage.getItem(OTHER)).toBe('untouched progress');
-    expect(m.attempts).toHaveLength(1); expect(m.removes).not.toHaveBeenCalled();
+    expect(m.attempts).toHaveLength(1); expect(m.removes).not.toHaveBeenCalledWith(KEY); expect(localStorage.getItem(FENCE)).toBeNull();
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(notice); expect(recordCompletion).not.toHaveBeenCalled();
     act(() => { vi.advanceTimersByTime(30000); }); assertWarning(m.view); expect(m.attempts).toHaveLength(1);
   });
@@ -132,16 +136,17 @@ describe('Soccer Career failed write recovery', () => {
     const m = mount(nativeCareer(), true); clearReplayCounts();
     retry(m.view); retry(m.view); assertWarning(m.view);
     expect(m.attempts).toHaveLength(3); expect(new Set(m.attempts).size).toBe(1); expect(localStorage.getItem(KEY)).toBe(m.raw);
-    expect(m.removes).not.toHaveBeenCalled(); expect(toast.error).toHaveBeenCalledTimes(1); noReplay(); expect(recordCompletion).not.toHaveBeenCalled();
+    expect(m.removes).not.toHaveBeenCalledWith(KEY); expect(localStorage.getItem(FENCE)).toBeNull(); expect(toast.error).toHaveBeenCalledTimes(1); noReplay(); expect(recordCompletion).not.toHaveBeenCalled();
   });
   it('retries the actually earned training result exactly once and restores it on the next mount', async () => {
     const m = mount(), before = read(), oldBytes = localStorage.getItem(KEY), expected = copy(E.applyTrainingResult(copy(before), 'pace', 80));
-    m.refuse(true); await bankSprint(m.view); assertWarning(m.view);
+    const fenceBefore = localStorage.getItem(FENCE); expect(fenceBefore).not.toBeNull();
+    m.refuse(true); await bankSprint(m.view); assertWarning(m.view); expect(localStorage.getItem(FENCE)).toBe(fenceBefore);
     expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(JSON.parse(m.attempts[m.attempts.length - 1])).toEqual(expected);
     expect(expected.statBoostNextSeason.pace).toBe((before.statBoostNextSeason.pace || 0) + 2); const attempts = m.attempts.length;
     clearReplayCounts(); m.refuse(false); retry(m.view);
     expect(m.attempts).toHaveLength(attempts + 1); expect(read()).toEqual(expected); expect(warning(m.view)).toBeNull(); noReplay();
-    expect(recordCompletion).not.toHaveBeenCalled(); expect(m.removes).not.toHaveBeenCalled();
+    expect(recordCompletion).not.toHaveBeenCalled(); expect(m.removes).not.toHaveBeenCalledWith(KEY);
     m.view.unmount(); vi.restoreAllMocks(); vi.spyOn(Math, 'random').mockReturnValue(0.52);
     const restored = mount(read()); expect(read()).toEqual(expected); expect(warning(restored.view)).toBeNull();
     await openTraining(restored.view);
@@ -166,7 +171,7 @@ describe('Soccer Career failed write recovery', () => {
     const m = mount(nativeCareer(), true); assertWarning(m.view);
     fireEvent.click(m.view.getByRole('button', { name: /New Career/ }));
     fireEvent.click(m.view.getByRole('button', { name: 'Delete & Start Over' }));
-    expect(warning(m.view)).toBeNull(); expect(localStorage.getItem(KEY)).toBeNull(); expect(m.removes.mock.calls).toEqual([[KEY]]);
+    expect(warning(m.view)).toBeNull(); expect(localStorage.getItem(KEY)).toBeNull(); expect(m.removes.mock.calls.filter(call => call[0] !== FENCE)).toEqual([[KEY]]); expect(localStorage.getItem(FENCE)).not.toBeNull();
     fireEvent.change(m.view.getByPlaceholderText('Enter your player name...'), { target: { value: 'Replacement Tester' } });
     const selectors = m.view.container.querySelectorAll('select');
     for (const [index, value] of ['England', 'CM', '2020-24'].entries()) fireEvent.change(selectors[index], { target: { value } });

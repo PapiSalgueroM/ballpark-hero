@@ -19,11 +19,12 @@ const cases = {
   independent: 'retains an independent valid restore and earned engine baseline without mounting the page',
 };
 const controls = {
-  warning: { from: '} catch { setSaveFailed(true); }', to: '} catch { setSaveFailed(false); }', test: cases.initial },
-  memory: { from: '} catch { setSaveFailed(true); }', to: '} catch { setCareer(null); setSaveFailed(true); }', test: cases.initial },
-  disk: { from: '} catch { setSaveFailed(true); }', to: '} catch { localStorage.removeItem(SAVE_KEY); setSaveFailed(true); }', test: cases.initial },
+  /* Round 1330: the page writes through the save fence, so the failure branch is the fenced write's 'failed' answer. */
+  warning: { from: "if (saved === 'failed') { setSaveFailed(true); return; }", to: "if (saved === 'failed') { setSaveFailed(false); return; }", test: cases.initial },
+  memory: { from: "if (saved === 'failed') { setSaveFailed(true); return; }", to: "if (saved === 'failed') { setCareer(null); setSaveFailed(true); return; }", test: cases.initial },
+  disk: { from: "if (saved === 'failed') { setSaveFailed(true); return; }", to: "if (saved === 'failed') { localStorage.removeItem(SAVE_KEY); setSaveFailed(true); return; }", test: cases.initial },
   toast: { from: 'if (saveFailed) toast.error(', to: 'if (false) toast.error(', test: cases.initial },
-  repeatedToast: { from: '} catch { setSaveFailed(true); }', to: '} catch { toast.error("Save refused"); setSaveFailed(true); }', test: cases.repeat },
+  repeatedToast: { from: "if (saved === 'failed') { setSaveFailed(true); return; }", to: `if (saved === 'failed') { toast.error("Save refused"); setSaveFailed(true); return; }`, test: cases.repeat },
   stale: { from: 'localStorage.setItem(SAVE_KEY, JSON.stringify(career));', to: 'localStorage.setItem(SAVE_KEY, JSON.stringify(restoredSave.career));', test: cases.latest },
   staleCallback: { from: '  }, [career]);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', to: '  }, []);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', test: cases.training },
   automatic: { from: 'useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', to: 'useEffect(() => {}, [saveCurrentCareer]);', test: cases.initial },
@@ -31,7 +32,7 @@ const controls = {
   retryRng: { from: 'onClick={saveCurrentCareer}>Retry save</Button>', to: 'onClick={() => { Math.random(); saveCurrentCareer(); }}>Retry save</Button>', test: cases.repeat },
   retryReplay: { from: 'onClick={saveCurrentCareer}>Retry save</Button>', to: 'onClick={() => { setCareer(advanceYouthYear(career!, clubs)); }}>Retry save</Button>', test: cases.latest },
   retryCompletion: { from: 'onClick={saveCurrentCareer}>Retry save</Button>', to: 'onClick={() => { recordCompletion("/soccer-career", legacyScore); saveCurrentCareer(); }}>Retry save</Button>', test: cases.retirement },
-  clear: { from: 'localStorage.setItem(SAVE_KEY, JSON.stringify(career));\n      setSaveFailed(false);', to: 'localStorage.setItem(SAVE_KEY, JSON.stringify(career));\n      setSaveFailed(true);', test: cases.training },
+  clear: { from: "if (saved === 'failed') { setSaveFailed(true); return; }\n    setSaveFailed(false);", to: "if (saved === 'failed') { setSaveFailed(true); return; }\n    setSaveFailed(true);", test: cases.training },
   reset: { from: 'if (!career) { setSaveFailed(false); return; }', to: 'if (!career) { return; }', test: cases.reset },
   notice: { from: '<p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>', to: '<p className="flex-1">Saved.</p>', test: cases.initial },
   role: { from: 'role="alert" data-soccer-save-status="failed"', to: 'role="status" data-soccer-save-status="failed"', test: cases.initial },

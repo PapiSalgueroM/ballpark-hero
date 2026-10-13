@@ -22,7 +22,8 @@
  *   source  Every call in src (comments stripped, code only) that writes or
  *           removes the Club Manager save sits inside a saveFence.write, or is
  *           on the short ALLOWED list with its reason, and every allowed entry
- *           is still there.
+ *           is still there. Since Round 1330 the same for the Soccer Career
+ *           save (soccerCareerSave), with its own allowed list.
  *   fleet   The three careers simClubManagerSlots plays (Everton today, a
  *           padded Lincoln City with a named manager, 2010-11 Barcelona), plus
  *           the review's squeeze (Everton, at every window two loans in, loans
@@ -45,6 +46,8 @@
  *                                and the replays come back, tabs goes red.
  *   SAVE_FENCE_CONTROL=rawwrite  a raw SAVE_KEY setItem planted in an in memory
  *                                copy of clubManagerSlots.ts: source goes red.
+ *   SAVE_FENCE_CONTROL=rawsoccer (Round 1330) a raw SAVE_KEY setItem planted in an
+ *                                in memory copy of SoccerCareer.tsx: source red.
  *   SAVE_FENCE_CONTROL=loaddraw  one Math.random call inside loadCareer: the
  *                                draw count parts from the base, fleet red.
  *   SAVE_FENCE_CONTROL=repairall the budget repair runs on every load: the
@@ -61,7 +64,10 @@
  * the allowed list (3 entries); fleet 1938 saves, 0 in a state a repair fires
  * on, 1938 of 1938 faces equal to the base's, 465 squeezed saves under 14 men
  * (92 to 94 a seed), the negative budget opens at -2.5 with 0 draws, old saves
- * 4 of 4. Every check is an exact equality, so there is no band to set.
+ * 4 of 4. Round 1330 (r1330-sc-landing): source also finds the Soccer Career
+ * save written 3 times inside saveFence.write and 4 times on its allowed list
+ * (3 entries); rawsoccer fired once and turned source red with 1 finding.
+ * Every check is an exact equality, so there is no band to set.
  * Nothing here reads dist or the network.
  * Run: [FENCE_BASE=<worktree of the base commit>] [SAVE_FENCE_SECTIONS=tabs,source,fleet] node scripts/simSaveFence.mjs
  */
@@ -77,7 +83,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SAVE_KEY = 'dukb-club-manager-save';
 const FENCE_KEY = 'dukb-fence:dukb-club-manager-save';
 const CONTROL = process.env.SAVE_FENCE_CONTROL || '';
-const CONTROLS = { nofence: 'tabs', rawwrite: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
+const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`SAVE_FENCE_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 if (CONTROLS[CONTROL] === 'fleet' && !process.env.FENCE_BASE) { console.error(`control cannot run: SAVE_FENCE_CONTROL=${CONTROL} is judged against the base commit, set FENCE_BASE`); process.exit(1); }
 const WANT = (process.env.SAVE_FENCE_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : 'tabs,source,fleet')).split(',').map(s => s.trim()).filter(Boolean);
@@ -302,6 +308,18 @@ const ALLOWED = [
 ];
 const RAW_ANCHOR = 'export function deleteSlot(slot: number): void {\n';
 const RAW_PLANT = "  try { localStorage.setItem(SAVE_KEY, '{}'); } catch { /* planted */ }\n";
+/* Round 1330: Soccer Career's save is fenced too. The same generic writers
+   reach it by entry.saveKey (it is a registered long game in
+   src/data/continueSaves.ts), each safe for its own reason here. */
+const SOCCER_KEY = 'soccerCareerSave';
+const SOCCER_ALLOWED = [
+  { file: 'src/lib/brokenSaveRecovery.ts', fn: 'moveAside', reason: 'the error boundary\'s fresh start and the damaged tile\'s Clear: the bytes are copied aside first, then the page reloads or opens on the creation screen with no career in memory, and its next Begin Career writes through the fence (saveCareer) and stales every other tab' },
+  { file: 'src/lib/brokenSaveRecovery.ts', fn: 'restoreBackup', reason: 'a put back swaps before any career is in the page\'s memory; the next mount adopts, reads, and its mount write goes through the fence and stales every other tab' },
+  { file: 'src/lib/saveKeeper.ts', fn: 'applyPending', reason: 'the keeper applies a staged put back in main.tsx before React mounts; the page\'s mount write right after moves the generation' },
+];
+const SOCCER_RAW_FILE = 'src/pages/SoccerCareer.tsx';
+const SOCCER_RAW_ANCHOR = '  const handleBeginCareer = () => {\n';
+const SOCCER_RAW_PLANT = "    try { localStorage.setItem(SAVE_KEY, '{}'); } catch { /* planted */ }\n";
 function walkSrc(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
@@ -311,9 +329,11 @@ function walkSrc(dir, out = []) {
   return out;
 }
 function sectionSource() {
-  console.log('source: every call in src that writes the Club Manager save is fenced or allowed');
+  console.log('source: every call in src that writes the Club Manager save or the Soccer Career save is fenced or allowed');
   const seenAllowed = new Set();
+  const seenSoccerAllowed = new Set();
   let fenced = 0, generic = 0, scanned = 0;
+  let scFenced = 0, scGeneric = 0;
   for (const file of walkSrc(path.join(ROOT, 'src'))) {
     const rel = path.relative(ROOT, file).replaceAll('\\', '/');
     let text = lf(file);
@@ -323,18 +343,27 @@ function sectionSource() {
       text = text.replace(RAW_ANCHOR, RAW_ANCHOR + RAW_PLANT);
       fired += 1;
     }
+    if (CONTROL === 'rawsoccer' && rel === SOCCER_RAW_FILE) {
+      once(text, SOCCER_RAW_ANCHOR, rel);
+      if (text.includes(SOCCER_RAW_PLANT)) { console.error('control cannot run: the planted write is already in the file'); process.exit(1); }
+      text = text.replace(SOCCER_RAW_ANCHOR, SOCCER_RAW_ANCHOR + SOCCER_RAW_PLANT);
+      fired += 1;
+    }
     if (!/\.(setItem|removeItem)\(/.test(text)) continue;
     scanned += 1;
     const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
     const cmIds = new Set();
     if (/import\s*\{[^}]*\bSAVE_KEY\b[^}]*\}\s*from\s*'(@\/lib\/clubManager|\.\/clubManager)'/.test(text)) cmIds.add('SAVE_KEY');
+    const scIds = new Set();
     const decls = [];
     const collect = n => { if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer) decls.push(n); ts.forEachChild(n, collect); };
     collect(sf);
     for (const d of decls) if (d.initializer.getText(sf) === `'${SAVE_KEY}'`) cmIds.add(d.name.text);
+    for (const d of decls) if (ts.isStringLiteralLike(d.initializer) && d.initializer.text === SOCCER_KEY) scIds.add(d.name.text);
     for (const d of decls) {
       if (ts.isCallExpression(d.initializer) || ts.isArrowFunction(d.initializer) || ts.isFunctionExpression(d.initializer)) continue;
       if ([...cmIds].some(id => new RegExp(`\\b${id}\\b`).test(d.initializer.getText(sf)))) cmIds.add(d.name.text);
+      if ([...scIds].some(id => new RegExp(`\\b${id}\\b`).test(d.initializer.getText(sf)))) scIds.add(d.name.text);
     }
     const visit = node => {
       if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression)
@@ -342,10 +371,12 @@ function sectionSource() {
         const arg = node.arguments[0];
         const key = arg.getText(sf);
         const cm = (ts.isIdentifier(arg) && cmIds.has(key)) || key === `'${SAVE_KEY}'`;
+        const sc = (ts.isIdentifier(arg) && scIds.has(key)) || (ts.isStringLiteralLike(arg) && arg.text === SOCCER_KEY);
         /* A generic writer: a game's saveKey in a module that walks the
-           registered long games (src/data/continueSaves.ts), Club Manager among them. */
-        const gen = !cm && /(^|\.)saveKey$/.test(key) && /\b(ContinueSave|CONTINUE_SAVES)\b/.test(text);
-        if (cm || gen) {
+           registered long games (src/data/continueSaves.ts), Club Manager
+           and Soccer Career among them. */
+        const gen = !cm && !sc && /(^|\.)saveKey$/.test(key) && /\b(ContinueSave|CONTINUE_SAVES)\b/.test(text);
+        if (cm || sc || gen) {
           const names = [];
           let isFenced = false;
           for (let a = node.parent; a; a = a.parent) {
@@ -359,12 +390,23 @@ function sectionSource() {
           }
           const line = sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
           const where = `${rel}:${line} ${names[names.length - 1] ?? '(module)'} ${node.expression.name.text}(${key})`;
-          tick('source');
-          if (isFenced) fenced += 1;
-          else {
-            const allow = ALLOWED.find(e => e.file === rel && names.includes(e.fn));
-            if (allow) { generic += 1; seenAllowed.add(allow); }
-            else fail('source', `a write of the Club Manager save outside the fence and off the allowed list: ${where}`);
+          if (cm || gen) {
+            tick('source');
+            if (isFenced) fenced += 1;
+            else {
+              const allow = ALLOWED.find(e => e.file === rel && names.includes(e.fn));
+              if (allow) { generic += 1; seenAllowed.add(allow); }
+              else fail('source', `a write of the Club Manager save outside the fence and off the allowed list: ${where}`);
+            }
+          }
+          if (sc || gen) {
+            tick('source');
+            if (isFenced) scFenced += 1;
+            else {
+              const allow = SOCCER_ALLOWED.find(e => e.file === rel && names.includes(e.fn));
+              if (allow) { scGeneric += 1; seenSoccerAllowed.add(allow); }
+              else fail('source', `a write of the Soccer Career save outside the fence and off the allowed list: ${where}`);
+            }
           }
         }
       }
@@ -373,8 +415,11 @@ function sectionSource() {
     visit(sf);
   }
   for (const e of ALLOWED) if (!seenAllowed.has(e)) fail('source', `allowed entry ${e.file} ${e.fn} no longer writes the save: take it off the list`);
+  for (const e of SOCCER_ALLOWED) if (!seenSoccerAllowed.has(e)) fail('source', `Soccer Career allowed entry ${e.file} ${e.fn} no longer writes the save: take it off the list`);
   console.log(`  ${scanned} files write storage; ${fenced} writes of the save inside saveFence.write, ${generic} on the allowed list (${ALLOWED.length} entries, each still there)`);
+  console.log(`  Soccer Career: ${scFenced} writes of soccerCareerSave inside saveFence.write, ${scGeneric} on the allowed list (${SOCCER_ALLOWED.length} entries, each still there)`);
   if (fenced < 5) fail('source', `only ${fenced} fenced writes found; saveCareer (2), clearCareer, the swap and deleteSlot make 5`);
+  if (scFenced < 3) fail('source', `only ${scFenced} fenced Soccer Career writes found; saveCareer, clearCareer and deleteUnusableSave make 3`);
 }
 
 /* ---------- fleet: the save's bytes and the stream do not move ---------- */

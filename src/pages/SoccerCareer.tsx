@@ -131,6 +131,8 @@ import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
+import { saveFence } from '@/lib/saveFence';
+import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
@@ -887,6 +889,7 @@ function useFooterLift(enabled: boolean): number {
 
 /* ─── Main Component ─── */
 const SAVE_KEY = "soccerCareerSave";
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 
 export default function SoccerCareer() {
   const { user } = useAuth();
@@ -911,6 +914,13 @@ export default function SoccerCareer() {
      picker changes, and it costs nothing when nobody touches it. */
   const [, setCurrencyTick] = useState(0);
   const [restoredSave] = useState(() => {
+    /* Round 1330: one tab wins (src/lib/saveFence.ts). Adopt the save's
+       generation BEFORE it is read, so a write another tab lands between the
+       two leaves this page stale, never the other one. Never released: nothing
+       on this page writes the save once the page has gone, and the next mount
+       adopts again before it reads, while a release would turn a later write
+       of a remounted or retried tree into an unchecked claim. */
+    saveFence.adopt(SAVE_KEY);
     let saved: string | null;
     try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }
     if (saved === null) return { career: null, invalid: false };
@@ -1016,17 +1026,30 @@ export default function SoccerCareer() {
     setClubsLoading(false);
   }, []);
 
+  /* Round 1330: true once another tab has played this career on. Every write
+     is refused from then on and the page covers itself with a notice that
+     asks for a reload. Never saveFailed for it: the browser is fine, the
+     career is just newer somewhere else. */
+  const { moved: saveMoved, check: checkSaveMoved } = useSaveFenceWatch(SAVE_KEY);
   const saveCurrentCareer = useCallback(() => {
     if (!career) { setSaveFailed(false); return; }
-    try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(career));
-      setSaveFailed(false);
-    } catch { setSaveFailed(true); }
+    const saved = saveFence.write(SAVE_KEY, function saveCareer() {
+      try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(career));
+        return true;
+      } catch { return false; }
+    });
+    if (saved === 'moved') { checkSaveMoved(); return; }
+    if (saved === 'failed') { setSaveFailed(true); return; }
+    setSaveFailed(false);
   }, [career]);
   useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
   useEffect(() => {
     if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.");
   }, [saveFailed]);
+  /* Round 1330: a press can land before the other tab's storage event does, so
+     a toast may already be up claiming something the save refused. */
+  useEffect(() => { if (saveMoved) toast.dismiss(); }, [saveMoved]);
 
   const isFormValid = playerName.trim().length > 0 && nationality && position && era;
 
@@ -1417,7 +1440,13 @@ export default function SoccerCareer() {
   }, []);
 
   const handleConfirmNewCareer = () => {
-    localStorage.removeItem(SAVE_KEY);
+    /* Round 1330: through the fence, so a tab another tab has moved on clears
+       nothing; a refusal keeps everything as it is, like Delete unusable save. */
+    const cleared = saveFence.write(SAVE_KEY, function clearCareer() {
+      try { localStorage.removeItem(SAVE_KEY); return true; } catch { return false; }
+    });
+    if (cleared === 'moved') { checkSaveMoved(); return; }
+    if (cleared === 'failed') { toast.error('Could not delete the save. Try again.'); return; }
     setSaveError(false);
     setCareer(null);
     setPreviewStats(null);
@@ -1459,6 +1488,7 @@ export default function SoccerCareer() {
           ]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
               <p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>
@@ -1469,7 +1499,12 @@ export default function SoccerCareer() {
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
               <p>We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.</p>
               <Button variant="outline" onClick={() => {
-                try { localStorage.removeItem(SAVE_KEY); setSaveError(false); } catch { toast.error('Could not delete the save. Try again.'); }
+                const deleted = saveFence.write(SAVE_KEY, function deleteUnusableSave() {
+                  try { localStorage.removeItem(SAVE_KEY); return true; } catch { return false; }
+                });
+                if (deleted === 'moved') checkSaveMoved();
+                else if (deleted === 'written') setSaveError(false);
+                else toast.error('Could not delete the save. Try again.');
               }}>Delete unusable save</Button>
             </div>
           )}
