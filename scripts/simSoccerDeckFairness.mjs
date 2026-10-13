@@ -33,7 +33,8 @@
  *      0.9 to 1.1. Single cards are printed, not asserted (a max is noise).
  *   2  THE PAPER. A season where a weight 0.5 and a weight 1 story both
  *      qualify and the column takes the second slot (one story): the 0.5
- *      story prints at 0.4 to 0.6 of the weight 1 story's rate, 40,000 draws.
+ *      story prints at 0.44 to 0.56 of the weight 1 story's rate, 40,000
+ *      draws (readings beside PAPER_BAND).
  *      Across the fleet of section 4 the stories under weight 1 print.
  *   3  KEYED. On 200 mid career saves from the fleet, the deck makes exactly
  *      the Math.random calls the catalog build makes on its own, and the
@@ -472,7 +473,10 @@ if (crashes > 0) fail(`${crashes} fleet careers crashed`);
 
 SECTION = '2';
 console.log('2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story');
-const PAPER_BAND = [0.4, 0.6];
+/* Measured on the runner (r1327-g1, head d50c85d4) at seed offsets 0 to 4: 0.490, 0.480, 0.491, 0.493 and 0.489,
+   sd about 0.008 a run; on the base (the weight ranking) 0. The band keeps at least five sd from each edge: the lowest
+   reading 0.480 sits 0.040 above 0.44, the highest 0.493 sits 0.067 below 0.56. */
+const PAPER_BAND = [0.44, 0.56];
 const HALF = 'Reveals Secret To Success';
 const ONE = 'Named In Team Of The Season';
 const midOf = fleet.find(c => c.midSave)?.midSave;
