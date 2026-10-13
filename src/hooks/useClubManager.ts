@@ -126,6 +126,7 @@ import { saveFence, fenceKeyOf } from '@/lib/saveFence';
 import { SAVE_KEY } from '@/lib/clubManager';
 import { setAsideSave, browserStorage } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
+import { takeLandOnHub } from '@/lib/clubManagerSlots';
 
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
@@ -188,6 +189,8 @@ export function useClubManager() {
       /* Round 1323: BEFORE the save is read, so a write that lands between
          the two reads leaves this page stale, never the other tab. */
       saveFence.adopt(SAVE_KEY);
+      /* Round 1323: Hot Seat's carry on opens its career on the hub. */
+      if (takeLandOnHub()) goStraightIn.current = true;
       const saved = loadCareer();
       const views = readSlots();
       setSlots(views);
