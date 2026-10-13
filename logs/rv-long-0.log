@@ -1,0 +1,14 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":19,"free agent":12,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2046; largest 42 records
+TIME Everton now seed 101 season 1: 0 records; buildMarket 5 ms (stripped 2); matchday 16 ms (stripped 12)
+TIME Everton now seed 101 season 5: 16 records; buildMarket 2 ms (stripped 3); matchday 19 ms (stripped 12)
+TIME Everton now seed 101 season 10: 34 records; buildMarket 2 ms (stripped 2); matchday 17 ms (stripped 13)
+TIME Everton now seed 202 season 1: 0 records; buildMarket 2 ms (stripped 2); matchday 13 ms (stripped 10)
+TIME Everton now seed 202 season 5: 15 records; buildMarket 3 ms (stripped 3); matchday 15 ms (stripped 11)
+TIME Everton now seed 202 season 10: 39 records; buildMarket 2 ms (stripped 2); matchday 18 ms (stripped 11)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 2
+  Everton now seed 202 season 10 start: Alvaro Njoku is owned by my club in the ledger and is not in my squad
+  Everton now seed 202 season 10 start: Enrique Coelho is owned by my club in the ledger and is not in my squad
+ERROR: 0
+rvcmw-long: 2 findings

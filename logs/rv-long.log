@@ -1,0 +1,83 @@
+long seeded season 1: 152898 units, 154003 bytes, ledger 2 records 443 units 1086 bytes, elapsed 2 s
+long seeded season 2: 166971 units, 169100 bytes, ledger 6 records 992 units 2679 bytes, elapsed 4 s
+long seeded season 3: 170617 units, 173608 bytes, ledger 12 records 1446 units 3984 bytes, elapsed 6 s
+long seeded season 4: 177427 units, 180819 bytes, ledger 15 records 1628 units 4531 bytes, elapsed 8 s
+long seeded season 5: 183645 units, 187452 bytes, ledger 19 records 1850 units 5156 bytes, market 36 ms, an entry 24 ms, elapsed 11 s
+long seeded season 6: 190557 units, 194644 bytes, ledger 20 records 1975 units 5521 bytes, elapsed 15 s
+long seeded season 7: 195462 units, 199992 bytes, ledger 23 records 2212 units 6178 bytes, elapsed 19 s
+long seeded season 8: 192372 units, 196773 bytes, ledger 22 records 2163 units 6072 bytes, elapsed 21 s
+long seeded season 9: 195760 units, 200307 bytes, ledger 22 records 2256 units 6309 bytes, elapsed 24 s
+long seeded season 10: 194482 units, 198143 bytes, ledger 17 records 1791 units 5013 bytes, elapsed 27 s
+long seeded season 11: 194061 units, 197827 bytes, ledger 17 records 1824 units 5082 bytes, elapsed 31 s
+long seeded season 12: 195968 units, 199982 bytes, ledger 19 records 1974 units 5519 bytes, elapsed 36 s
+long seeded season 13: 193076 units, 197098 bytes, ledger 18 records 1983 units 5541 bytes, elapsed 41 s
+long seeded season 14: 193465 units, 197393 bytes, ledger 17 records 1932 units 5403 bytes, elapsed 46 s
+long seeded season 15: 195401 units, 199430 bytes, ledger 18 records 1975 units 5546 bytes, market 33 ms, an entry 23 ms, elapsed 52 s
+long seeded season 16: 194781 units, 198793 bytes, ledger 18 records 1953 units 5475 bytes, elapsed 56 s
+long seeded season 17: 193330 units, 197444 bytes, ledger 18 records 2011 units 5636 bytes, elapsed 60 s
+long seeded season 18: 191829 units, 195520 bytes, ledger 16 records 1794 units 5001 bytes, elapsed 64 s
+long seeded season 19: 193213 units, 196963 bytes, ledger 17 records 1856 units 5188 bytes, elapsed 68 s
+long seeded season 20: 194278 units, 198027 bytes, ledger 15 records 1788 units 5015 bytes, elapsed 74 s
+long seeded season 21: 194955 units, 198277 bytes, ledger 14 records 1609 units 4479 bytes, elapsed 82 s
+long seeded season 22: 194581 units, 198129 bytes, ledger 15 records 1697 units 4717 bytes, elapsed 89 s
+long seeded season 23: 191849 units, 194939 bytes, ledger 14 records 1485 units 4130 bytes, elapsed 95 s
+long seeded season 24: 194000 units, 197156 bytes, ledger 14 records 1499 units 4168 bytes, elapsed 102 s
+long seeded season 25: 195721 units, 199113 bytes, ledger 16 records 1691 units 4704 bytes, market 34 ms, an entry 23 ms, elapsed 111 s
+long seeded season 26: 194718 units, 197863 bytes, ledger 14 records 1498 units 4156 bytes, elapsed 119 s
+long seeded season 27: 195923 units, 199042 bytes, ledger 14 records 1496 units 4163 bytes, elapsed 127 s
+long seeded season 28: 196230 units, 199443 bytes, ledger 14 records 1567 units 4324 bytes, elapsed 135 s
+long seeded season 29: 194542 units, 197782 bytes, ledger 14 records 1565 units 4354 bytes, elapsed 142 s
+long seeded season 30: 197616 units, 200989 bytes, ledger 15 records 1638 units 4559 bytes, market 21 ms, an entry 22 ms, elapsed 149 s
+long seeded season 31: 195883 units, 199134 bytes, ledger 15 records 1575 units 4363 bytes, elapsed 157 s
+long seeded season 32: 195499 units, 198338 bytes, ledger 12 records 1370 units 3794 bytes, elapsed 163 s
+long seeded season 33: 195558 units, 197844 bytes, ledger 10 records 1043 units 2846 bytes, elapsed 171 s
+long seeded season 34: 196425 units, 199024 bytes, ledger 11 records 1248 units 3398 bytes, elapsed 180 s
+long seeded season 35: 195719 units, 198438 bytes, ledger 13 records 1301 units 3601 bytes, elapsed 190 s
+long seeded season 36: 196067 units, 198585 bytes, ledger 11 records 1162 units 3191 bytes, elapsed 197 s
+long seeded season 37: 196430 units, 199301 bytes, ledger 12 records 1351 units 3734 bytes, elapsed 208 s
+long seeded season 38: 196561 units, 199237 bytes, ledger 11 records 1247 units 3436 bytes, elapsed 216 s
+long seeded season 39: 196481 units, 199270 bytes, ledger 13 records 1347 units 3716 bytes, elapsed 223 s
+long seeded season 40: 196628 units, 199690 bytes, ledger 14 records 1440 units 4009 bytes, market 35 ms, an entry 21 ms, elapsed 233 s
+long inverse season 1: 152335 units, 152797 bytes, ledger 0 records 0 units 0 bytes, elapsed 234 s
+long inverse season 2: 164774 units, 165209 bytes, ledger 0 records 0 units 0 bytes, elapsed 236 s
+long inverse season 3: 167781 units, 168307 bytes, ledger 0 records 0 units 0 bytes, elapsed 237 s
+long inverse season 4: 177558 units, 178032 bytes, ledger 0 records 0 units 0 bytes, elapsed 238 s
+long inverse season 5: 183457 units, 183907 bytes, ledger 0 records 0 units 0 bytes, market 4 ms, an entry 37 ms, elapsed 240 s
+long inverse season 6: 190189 units, 190704 bytes, ledger 0 records 0 units 0 bytes, elapsed 242 s
+long inverse season 7: 191714 units, 192167 bytes, ledger 0 records 0 units 0 bytes, elapsed 244 s
+long inverse season 8: 193303 units, 193892 bytes, ledger 0 records 0 units 0 bytes, elapsed 246 s
+long inverse season 9: 193302 units, 193847 bytes, ledger 0 records 0 units 0 bytes, elapsed 248 s
+long inverse season 10: 194043 units, 194573 bytes, ledger 0 records 0 units 0 bytes, elapsed 250 s
+long inverse season 11: 192006 units, 192496 bytes, ledger 0 records 0 units 0 bytes, elapsed 253 s
+long inverse season 12: 192689 units, 193196 bytes, ledger 0 records 0 units 0 bytes, elapsed 254 s
+long inverse season 13: 191467 units, 191932 bytes, ledger 0 records 0 units 0 bytes, elapsed 257 s
+long inverse season 14: 190193 units, 190687 bytes, ledger 0 records 0 units 0 bytes, elapsed 259 s
+long inverse season 15: 190968 units, 191427 bytes, ledger 0 records 0 units 0 bytes, market 2 ms, an entry 10 ms, elapsed 261 s
+long inverse season 16: 192352 units, 192730 bytes, ledger 0 records 0 units 0 bytes, elapsed 264 s
+long inverse season 17: 192332 units, 192784 bytes, ledger 0 records 0 units 0 bytes, elapsed 266 s
+long inverse season 18: 191222 units, 191678 bytes, ledger 0 records 0 units 0 bytes, elapsed 269 s
+long inverse season 19: 192317 units, 192737 bytes, ledger 0 records 0 units 0 bytes, elapsed 272 s
+long inverse season 20: 192714 units, 193133 bytes, ledger 0 records 0 units 0 bytes, elapsed 275 s
+long inverse season 21: 192552 units, 193001 bytes, ledger 0 records 0 units 0 bytes, elapsed 279 s
+long inverse season 22: 193776 units, 194230 bytes, ledger 0 records 0 units 0 bytes, elapsed 282 s
+long inverse season 23: 192457 units, 192940 bytes, ledger 0 records 0 units 0 bytes, elapsed 285 s
+long inverse season 24: 192435 units, 192889 bytes, ledger 0 records 0 units 0 bytes, elapsed 288 s
+long inverse season 25: 192783 units, 193235 bytes, ledger 0 records 0 units 0 bytes, market 4 ms, an entry 9 ms, elapsed 291 s
+long inverse season 26: 191836 units, 192288 bytes, ledger 0 records 0 units 0 bytes, elapsed 294 s
+long inverse season 27: 192001 units, 192454 bytes, ledger 0 records 0 units 0 bytes, elapsed 296 s
+long inverse season 28: 191373 units, 191790 bytes, ledger 0 records 0 units 0 bytes, elapsed 299 s
+long inverse season 29: 192995 units, 193405 bytes, ledger 0 records 0 units 0 bytes, elapsed 303 s
+long inverse season 30: 193134 units, 193620 bytes, ledger 0 records 0 units 0 bytes, market 4 ms, an entry 17 ms, elapsed 307 s
+long inverse season 31: 192857 units, 193312 bytes, ledger 0 records 0 units 0 bytes, elapsed 312 s
+long inverse season 32: 194227 units, 194606 bytes, ledger 0 records 0 units 0 bytes, elapsed 314 s
+long inverse season 33: 192832 units, 193285 bytes, ledger 0 records 0 units 0 bytes, elapsed 318 s
+long inverse season 34: 193127 units, 193579 bytes, ledger 0 records 0 units 0 bytes, elapsed 323 s
+long inverse season 35: 193310 units, 193803 bytes, ledger 0 records 0 units 0 bytes, elapsed 328 s
+long inverse season 36: 194327 units, 194819 bytes, ledger 0 records 0 units 0 bytes, elapsed 332 s
+long inverse season 37: 194990 units, 195446 bytes, ledger 0 records 0 units 0 bytes, elapsed 337 s
+long inverse season 38: 195128 units, 195579 bytes, ledger 0 records 0 units 0 bytes, elapsed 341 s
+long inverse season 39: 194680 units, 195065 bytes, ledger 0 records 0 units 0 bytes, elapsed 347 s
+long inverse season 40: 194363 units, 194851 bytes, ledger 0 records 0 units 0 bytes, market 4 ms, an entry 16 ms, elapsed 352 s
+long: slope seasons 15 on, units a season: seeded 130, inverse 114
+coverage: {}
+rvSaves long: green in 352 s

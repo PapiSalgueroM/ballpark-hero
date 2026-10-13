@@ -1,0 +1,12 @@
+tsc exit=0 93s | 
+var-head exit=0 171s | simCmVar normal: actual review outcomes and full prior baseline passed.
+saveSize-s0 exit=0 64s | simClubManagerSaveSize: all sections green
+rv-long exit=0 354s | rvSaves long: green in 352 s
+saveSize-s2 exit=0 60s | simClubManagerSaveSize: all sections green
+simCmLedgerBound exit=0 393s | simCmLedgerBound: green, all four sections held
+saveSize-s3 exit=0 64s | simClubManagerSaveSize: all sections green
+saveSize-s4 exit=0 67s | simClubManagerSaveSize: all sections green
+saveSize-s5 exit=0 66s | simClubManagerSaveSize: all sections green
+saveSize-uncapped-s3-EXPECT-RED exit=1 65s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+rv-long-0 exit=1 53s | rvcmw-long: 2 findings
+rv-long-1 exit=1 58s | rvcmw-long: 3 findings

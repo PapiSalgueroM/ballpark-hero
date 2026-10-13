@@ -1,0 +1,666 @@
+{
+ "seeded": [
+  {
+   "season": 1,
+   "units": 152898,
+   "bytes": 154003,
+   "records": 2,
+   "ledgerUnits": 443,
+   "ledgerBytes": 1086
+  },
+  {
+   "season": 2,
+   "units": 166971,
+   "bytes": 169100,
+   "records": 6,
+   "ledgerUnits": 992,
+   "ledgerBytes": 2679
+  },
+  {
+   "season": 3,
+   "units": 170617,
+   "bytes": 173608,
+   "records": 12,
+   "ledgerUnits": 1446,
+   "ledgerBytes": 3984
+  },
+  {
+   "season": 4,
+   "units": 177427,
+   "bytes": 180819,
+   "records": 15,
+   "ledgerUnits": 1628,
+   "ledgerBytes": 4531
+  },
+  {
+   "season": 5,
+   "units": 183645,
+   "bytes": 187452,
+   "records": 19,
+   "ledgerUnits": 1850,
+   "ledgerBytes": 5156,
+   "marketMs": 36,
+   "entryMs": 24
+  },
+  {
+   "season": 6,
+   "units": 190557,
+   "bytes": 194644,
+   "records": 20,
+   "ledgerUnits": 1975,
+   "ledgerBytes": 5521
+  },
+  {
+   "season": 7,
+   "units": 195462,
+   "bytes": 199992,
+   "records": 23,
+   "ledgerUnits": 2212,
+   "ledgerBytes": 6178
+  },
+  {
+   "season": 8,
+   "units": 192372,
+   "bytes": 196773,
+   "records": 22,
+   "ledgerUnits": 2163,
+   "ledgerBytes": 6072
+  },
+  {
+   "season": 9,
+   "units": 195760,
+   "bytes": 200307,
+   "records": 22,
+   "ledgerUnits": 2256,
+   "ledgerBytes": 6309
+  },
+  {
+   "season": 10,
+   "units": 194482,
+   "bytes": 198143,
+   "records": 17,
+   "ledgerUnits": 1791,
+   "ledgerBytes": 5013
+  },
+  {
+   "season": 11,
+   "units": 194061,
+   "bytes": 197827,
+   "records": 17,
+   "ledgerUnits": 1824,
+   "ledgerBytes": 5082
+  },
+  {
+   "season": 12,
+   "units": 195968,
+   "bytes": 199982,
+   "records": 19,
+   "ledgerUnits": 1974,
+   "ledgerBytes": 5519
+  },
+  {
+   "season": 13,
+   "units": 193076,
+   "bytes": 197098,
+   "records": 18,
+   "ledgerUnits": 1983,
+   "ledgerBytes": 5541
+  },
+  {
+   "season": 14,
+   "units": 193465,
+   "bytes": 197393,
+   "records": 17,
+   "ledgerUnits": 1932,
+   "ledgerBytes": 5403
+  },
+  {
+   "season": 15,
+   "units": 195401,
+   "bytes": 199430,
+   "records": 18,
+   "ledgerUnits": 1975,
+   "ledgerBytes": 5546,
+   "marketMs": 33,
+   "entryMs": 23
+  },
+  {
+   "season": 16,
+   "units": 194781,
+   "bytes": 198793,
+   "records": 18,
+   "ledgerUnits": 1953,
+   "ledgerBytes": 5475
+  },
+  {
+   "season": 17,
+   "units": 193330,
+   "bytes": 197444,
+   "records": 18,
+   "ledgerUnits": 2011,
+   "ledgerBytes": 5636
+  },
+  {
+   "season": 18,
+   "units": 191829,
+   "bytes": 195520,
+   "records": 16,
+   "ledgerUnits": 1794,
+   "ledgerBytes": 5001
+  },
+  {
+   "season": 19,
+   "units": 193213,
+   "bytes": 196963,
+   "records": 17,
+   "ledgerUnits": 1856,
+   "ledgerBytes": 5188
+  },
+  {
+   "season": 20,
+   "units": 194278,
+   "bytes": 198027,
+   "records": 15,
+   "ledgerUnits": 1788,
+   "ledgerBytes": 5015
+  },
+  {
+   "season": 21,
+   "units": 194955,
+   "bytes": 198277,
+   "records": 14,
+   "ledgerUnits": 1609,
+   "ledgerBytes": 4479
+  },
+  {
+   "season": 22,
+   "units": 194581,
+   "bytes": 198129,
+   "records": 15,
+   "ledgerUnits": 1697,
+   "ledgerBytes": 4717
+  },
+  {
+   "season": 23,
+   "units": 191849,
+   "bytes": 194939,
+   "records": 14,
+   "ledgerUnits": 1485,
+   "ledgerBytes": 4130
+  },
+  {
+   "season": 24,
+   "units": 194000,
+   "bytes": 197156,
+   "records": 14,
+   "ledgerUnits": 1499,
+   "ledgerBytes": 4168
+  },
+  {
+   "season": 25,
+   "units": 195721,
+   "bytes": 199113,
+   "records": 16,
+   "ledgerUnits": 1691,
+   "ledgerBytes": 4704,
+   "marketMs": 34,
+   "entryMs": 23
+  },
+  {
+   "season": 26,
+   "units": 194718,
+   "bytes": 197863,
+   "records": 14,
+   "ledgerUnits": 1498,
+   "ledgerBytes": 4156
+  },
+  {
+   "season": 27,
+   "units": 195923,
+   "bytes": 199042,
+   "records": 14,
+   "ledgerUnits": 1496,
+   "ledgerBytes": 4163
+  },
+  {
+   "season": 28,
+   "units": 196230,
+   "bytes": 199443,
+   "records": 14,
+   "ledgerUnits": 1567,
+   "ledgerBytes": 4324
+  },
+  {
+   "season": 29,
+   "units": 194542,
+   "bytes": 197782,
+   "records": 14,
+   "ledgerUnits": 1565,
+   "ledgerBytes": 4354
+  },
+  {
+   "season": 30,
+   "units": 197616,
+   "bytes": 200989,
+   "records": 15,
+   "ledgerUnits": 1638,
+   "ledgerBytes": 4559,
+   "marketMs": 21,
+   "entryMs": 22
+  },
+  {
+   "season": 31,
+   "units": 195883,
+   "bytes": 199134,
+   "records": 15,
+   "ledgerUnits": 1575,
+   "ledgerBytes": 4363
+  },
+  {
+   "season": 32,
+   "units": 195499,
+   "bytes": 198338,
+   "records": 12,
+   "ledgerUnits": 1370,
+   "ledgerBytes": 3794
+  },
+  {
+   "season": 33,
+   "units": 195558,
+   "bytes": 197844,
+   "records": 10,
+   "ledgerUnits": 1043,
+   "ledgerBytes": 2846
+  },
+  {
+   "season": 34,
+   "units": 196425,
+   "bytes": 199024,
+   "records": 11,
+   "ledgerUnits": 1248,
+   "ledgerBytes": 3398
+  },
+  {
+   "season": 35,
+   "units": 195719,
+   "bytes": 198438,
+   "records": 13,
+   "ledgerUnits": 1301,
+   "ledgerBytes": 3601
+  },
+  {
+   "season": 36,
+   "units": 196067,
+   "bytes": 198585,
+   "records": 11,
+   "ledgerUnits": 1162,
+   "ledgerBytes": 3191
+  },
+  {
+   "season": 37,
+   "units": 196430,
+   "bytes": 199301,
+   "records": 12,
+   "ledgerUnits": 1351,
+   "ledgerBytes": 3734
+  },
+  {
+   "season": 38,
+   "units": 196561,
+   "bytes": 199237,
+   "records": 11,
+   "ledgerUnits": 1247,
+   "ledgerBytes": 3436
+  },
+  {
+   "season": 39,
+   "units": 196481,
+   "bytes": 199270,
+   "records": 13,
+   "ledgerUnits": 1347,
+   "ledgerBytes": 3716
+  },
+  {
+   "season": 40,
+   "units": 196628,
+   "bytes": 199690,
+   "records": 14,
+   "ledgerUnits": 1440,
+   "ledgerBytes": 4009,
+   "marketMs": 35,
+   "entryMs": 21
+  }
+ ],
+ "inverse": [
+  {
+   "season": 1,
+   "units": 152335,
+   "bytes": 152797,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 2,
+   "units": 164774,
+   "bytes": 165209,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 3,
+   "units": 167781,
+   "bytes": 168307,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 4,
+   "units": 177558,
+   "bytes": 178032,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 5,
+   "units": 183457,
+   "bytes": 183907,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0,
+   "marketMs": 4,
+   "entryMs": 37
+  },
+  {
+   "season": 6,
+   "units": 190189,
+   "bytes": 190704,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 7,
+   "units": 191714,
+   "bytes": 192167,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 8,
+   "units": 193303,
+   "bytes": 193892,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 9,
+   "units": 193302,
+   "bytes": 193847,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 10,
+   "units": 194043,
+   "bytes": 194573,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 11,
+   "units": 192006,
+   "bytes": 192496,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 12,
+   "units": 192689,
+   "bytes": 193196,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 13,
+   "units": 191467,
+   "bytes": 191932,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 14,
+   "units": 190193,
+   "bytes": 190687,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 15,
+   "units": 190968,
+   "bytes": 191427,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0,
+   "marketMs": 2,
+   "entryMs": 10
+  },
+  {
+   "season": 16,
+   "units": 192352,
+   "bytes": 192730,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 17,
+   "units": 192332,
+   "bytes": 192784,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 18,
+   "units": 191222,
+   "bytes": 191678,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 19,
+   "units": 192317,
+   "bytes": 192737,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 20,
+   "units": 192714,
+   "bytes": 193133,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 21,
+   "units": 192552,
+   "bytes": 193001,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 22,
+   "units": 193776,
+   "bytes": 194230,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 23,
+   "units": 192457,
+   "bytes": 192940,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 24,
+   "units": 192435,
+   "bytes": 192889,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 25,
+   "units": 192783,
+   "bytes": 193235,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0,
+   "marketMs": 4,
+   "entryMs": 9
+  },
+  {
+   "season": 26,
+   "units": 191836,
+   "bytes": 192288,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 27,
+   "units": 192001,
+   "bytes": 192454,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 28,
+   "units": 191373,
+   "bytes": 191790,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 29,
+   "units": 192995,
+   "bytes": 193405,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 30,
+   "units": 193134,
+   "bytes": 193620,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0,
+   "marketMs": 4,
+   "entryMs": 17
+  },
+  {
+   "season": 31,
+   "units": 192857,
+   "bytes": 193312,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 32,
+   "units": 194227,
+   "bytes": 194606,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 33,
+   "units": 192832,
+   "bytes": 193285,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 34,
+   "units": 193127,
+   "bytes": 193579,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 35,
+   "units": 193310,
+   "bytes": 193803,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 36,
+   "units": 194327,
+   "bytes": 194819,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 37,
+   "units": 194990,
+   "bytes": 195446,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 38,
+   "units": 195128,
+   "bytes": 195579,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 39,
+   "units": 194680,
+   "bytes": 195065,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0
+  },
+  {
+   "season": 40,
+   "units": 194363,
+   "bytes": 194851,
+   "records": 0,
+   "ledgerUnits": 0,
+   "ledgerBytes": 0,
+   "marketMs": 4,
+   "entryMs": 16
+  }
+ ]
+}

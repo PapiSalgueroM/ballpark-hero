@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rv-long: RV_PART=long RV_SEASONS=40 node .rc/x/rvSaves.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+var-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+saveSize-s0: node scripts/simClubManagerSaveSize.mjs
+saveSize-s2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-s3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-s4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-s5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped-s3-EXPECT-RED: SIM_SEED=3 SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+rv-long-0: RV_ONLY=0 node .rc/x/rvcmw-long.mjs
+rv-long-1: RV_ONLY=1 node .rc/x/rvcmw-long.mjs
