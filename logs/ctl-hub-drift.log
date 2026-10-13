@@ -1,0 +1,14 @@
+D. Must not move: base http://localhost:4174 against head http://localhost:4173
+  FAIL  D  liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44
+  FAIL  D  liverpool-take-seed1: Math.random draws 4762 on base, 4844 on head
+  PASS  D  liverpool-take-seed1: three Quick Sims on each build (3, 3)
+  PASS  D  liverpool-take-seed1: the same 28 presses on both builds
+  FAIL  D  celta-skip-seed2: dukb-club-manager-save differs, $.budget: 18.55 against 18.63
+  FAIL  D  celta-skip-seed2: Math.random draws 4672 on base, 4663 on head
+  PASS  D  celta-skip-seed2: three Quick Sims on each build (3, 3)
+  PASS  D  celta-skip-seed2: the same 28 presses on both builds
+  FAIL  D  everton2005-newyear-seed3: dukb-club-manager-save differs, $.budget: 17.82 against 17.88
+  FAIL  D  everton2005-newyear-seed3: Math.random draws 14150 on base, 13620 on head
+  PASS  D  everton2005-newyear-seed3: three Quick Sims on each build (3, 3)
+  PASS  D  everton2005-newyear-seed3: the same 28 presses on both builds
+playCmHubLanding: CONTROL drift FIRED, 6 D check(s) went red, first: liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44 (D 6 pass 6 fail)
