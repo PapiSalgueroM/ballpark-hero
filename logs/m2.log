@@ -1,0 +1,10 @@
+M2: applied (if (e.story) drop(came, x => bookKey(x) === bookKey(e)); -> /* M2: story sibling drop removed */)
+   FAIL 1833 story breaks over 100 desks
+simEventDeck: 1 failure, red sections 4
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox deck rules[2m > [22mcards of one story share one stamp and never land in one week
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (43)[39m
+simEventDeck: 1 failure, red sections 4
+simGmInbox: green.
+kit=1 gm=0 vitest=1
+VERDICT: CAUGHT

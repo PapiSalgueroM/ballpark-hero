@@ -1,0 +1,12 @@
+M3: applied (if (clock - Math.min(at, clock) < restFor) rest[k] = Math.mi -> if (clock - at < restFor) rest[k] = at; /* M3 */)
+   FAIL only 870 subject cards dealt on a falling clock: nothing was tested
+   FAIL 77794 subject rest breaks on a clock that falls every 20 weeks
+   FAIL one card about the captain on that clock: 4 deals over ten seasons, 31 expected (ticks 0, 6, 12, 18 and on)
+simEventDeck: 3 failures, red sections 5
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox deck rules, the review cases[2m > [22mon a clock that falls, the rest book is rebased like the cooldown book
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (43)[39m
+simEventDeck: 3 failures, red sections 5
+simGmInbox: green.
+kit=1 gm=0 vitest=1
+VERDICT: CAUGHT
