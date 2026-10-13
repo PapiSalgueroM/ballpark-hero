@@ -11,6 +11,19 @@ import EditManagerSheet from '@/components/club-manager/EditManagerSheet';
 import { huntBusy } from '@/lib/clubManagerJobHunt';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
 
+/* Round 1325: a score printed low number first. The save has kept the worst
+   defeat as the other side's goals first since Round 71, so "3-0 vs Manchester
+   City" read like a win. A defeat the engine keeps is never a shootout, so our
+   goals are always the lower number, whichever order a save holds them in.
+   Anything that is not two whole numbers comes back exactly as it was. */
+export function lowFirst(score: string): string {
+  const parts = score.split('-');
+  if (parts.length !== 2 || parts.some(x => x.trim() === '')) return score;
+  const [a, b] = parts.map(Number);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return score;
+  return `${Math.min(a, b)}-${Math.max(a, b)}`;
+}
+
 export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
   c: CareerState;
   g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>;
@@ -156,12 +169,12 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       <div className="text-[9px] text-muted-foreground">Trophies</div>
                     </div>
                   </div>
-                  <div className="space-y-0.5 text-[10px] text-muted-foreground">
+                  <div data-cm-career-lines className="space-y-0.5 text-xs text-muted-foreground">
                     {c.careerStats.biggestWin && (
                       <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
                     )}
                     {c.careerStats.biggestDefeat && (
-                      <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
+                      <p data-cm-worst-defeat>💀 Worst defeat: <span className="text-foreground font-semibold">{lowFirst(c.careerStats.biggestDefeat.score)}</span> vs {c.careerStats.biggestDefeat.opp}</p>
                     )}
                     {c.careerStats.mostExpensiveBuy && (
                       <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>
