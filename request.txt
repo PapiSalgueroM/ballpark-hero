@@ -1,0 +1,6 @@
+#!playwright
+pm-1313: bash .rc/x/attr4.sh 642292de simCareerPressMarket
+pm-HEAD: bash .rc/x/attr4.sh HEAD simCareerPressMarket
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs

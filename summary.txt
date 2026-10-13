@@ -1,0 +1,5 @@
+pm-1313 exit=1 5s | attr4 642292de simCareerPressMarket exit=1
+pm-HEAD exit=0 13s | attr4 HEAD simCareerPressMarket exit=0
+rival exit=0 22s | No rival product names found. 0 findings.
+anchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 82s | 
