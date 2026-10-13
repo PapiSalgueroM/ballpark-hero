@@ -1,0 +1,12 @@
+book-d0: git worktree add -q /tmp/b0 36cc9ffe && ln -s "$PWD/node_modules" /tmp/b0/node_modules && BOOK_BASE=/tmp/b0 SEEDSET=0 node scripts/simCmLeagueBook.mjs
+book-d1: git worktree add -q /tmp/b1 36cc9ffe && ln -s "$PWD/node_modules" /tmp/b1/node_modules && BOOK_BASE=/tmp/b1 SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-d2: git worktree add -q /tmp/b2 36cc9ffe && ln -s "$PWD/node_modules" /tmp/b2/node_modules && BOOK_BASE=/tmp/b2 SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-d3: git worktree add -q /tmp/b3 36cc9ffe && ln -s "$PWD/node_modules" /tmp/b3/node_modules && BOOK_BASE=/tmp/b3 SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-d4: git worktree add -q /tmp/b4 36cc9ffe && ln -s "$PWD/node_modules" /tmp/b4/node_modules && BOOK_BASE=/tmp/b4 SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f0: git worktree add -q /tmp/c0 36cc9ffe && ln -s "$PWD/node_modules" /tmp/c0/node_modules && BOOK_BASE=/tmp/c0 BOOK_FLEET=full SEEDSET=0 node scripts/simCmLeagueBook.mjs
+book-f1: git worktree add -q /tmp/c1 36cc9ffe && ln -s "$PWD/node_modules" /tmp/c1/node_modules && BOOK_BASE=/tmp/c1 BOOK_FLEET=full SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-f2: git worktree add -q /tmp/c2 36cc9ffe && ln -s "$PWD/node_modules" /tmp/c2/node_modules && BOOK_BASE=/tmp/c2 BOOK_FLEET=full SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-f3: git worktree add -q /tmp/c3 36cc9ffe && ln -s "$PWD/node_modules" /tmp/c3/node_modules && BOOK_BASE=/tmp/c3 BOOK_FLEET=full SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-f4: git worktree add -q /tmp/c4 36cc9ffe && ln -s "$PWD/node_modules" /tmp/c4/node_modules && BOOK_BASE=/tmp/c4 BOOK_FLEET=full SEEDSET=4 node scripts/simCmLeagueBook.mjs
+activity-head: node scripts/simActivityNotCompletion.mjs
+activity-main: R=$PWD; git worktree add -q /tmp/am 36cc9ffe && cd /tmp/am && ln -s "$R/node_modules" node_modules && node scripts/simActivityNotCompletion.mjs
