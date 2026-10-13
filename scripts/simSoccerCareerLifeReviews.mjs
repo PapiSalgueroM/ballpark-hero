@@ -262,7 +262,7 @@ try {
   const failed = cases.filter(test => test.status === 'failed');
   assert.deepEqual(failed.map(test => test.title).sort(), [...expected].sort(), 'Only intended source-caused failures may qualify');
   for (const test of failed) {
-    const cause = CONTROL === 'effect' ? /^AssertionError:.*expected 0 to be 1/s
+    const cause = CONTROL === 'effect' ? /^AssertionError:.*expected \+?0 to be 1/s
       : CONTROL === 'priority' || (OWNED.indexOf(test.title) < 2 && CONTROL !== 'missing') ? /^AssertionError:.*expected false to be true/s
         : /^AssertionError:.*life review 630 missing from actual (?:life catalog|picker).*to have a length of 1 but got \+0/s;
     assert(test.failureMessages.length > 0 && test.failureMessages.every(message => cause.test(message)), 'Every intended failure must have its specific assertion cause');
