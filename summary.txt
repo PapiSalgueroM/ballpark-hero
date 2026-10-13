@@ -1,0 +1,6 @@
+simActivityNotCompletion exit=0 7s | simActivityNotCompletion: all green
+simSaveRecovery exit=0 31s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simSaveFence exit=0 67s | simSaveFence: all green (tabs, source, fleet)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simSaveRetry exit=0 126s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+simCreation exit=1 436s | 1 FAILURES
